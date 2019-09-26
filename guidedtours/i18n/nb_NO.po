@@ -201,13 +201,13 @@ msgstr ""
 msgid "Edit documents"
 msgstr "Redigere dokumenter"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple emails"
-msgstr "Redigere flere eposter"
-
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Editing multiple contacts"
 msgstr "Redigere flere kontakter"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Editing multiple emails"
+msgstr "Redigere flere eposter"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -218,9 +218,14 @@ msgid "Editing settings"
 msgstr "Endre innstillinger"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "Enter the E-Mail text into the main area. If the text format was set to "
+#| "HTML in the options, you can format the E-Mail text. To do so select a "
+#| "text part and then click an icon in the formatting bar."
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTML "
-"in the options, you can format the E-Mail text. To do so select a text part "
+"Enter the email text into the main area. If the text format was set to HTML "
+"in the options, you can format the email text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
 "Skriv inn en eposttekst i hovedområdet. Hvis tekstformatet er satt til HTML "
@@ -257,13 +262,13 @@ msgstr "Skriv inn et emne, en startdato og beskrivelse."
 msgid "Entering billing information"
 msgstr "Legge til kostnads- og fakturadetaljer"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the email text"
-msgstr "Skrive inn epostteksten"
-
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
 msgstr "Legge inn detaljer om avtalen"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the email text"
+msgstr "Skrive inn epostteksten"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Entering the recipient's name"
@@ -331,8 +336,12 @@ msgid "How the settings are organized"
 msgstr "Hvordan innstillingene er organisert"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+#| "separate window."
 msgid ""
-"If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+"If double-clicking on an email in the list, the email is opened in a "
 "separate window."
 msgstr ""
 "Du kan dobbeltklikke en epost i listen for å åpne den i et eget vindu. "
@@ -342,9 +351,14 @@ msgid "If you no longer want to display a square, click the delete icon."
 msgstr "Hvis du ønsker å fjerne en widget, klikk på krysset."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "In order to edit multiple E-Mails at once, enable the checkboxes on the "
+#| "left side of the E-Mails. If the checkboxes are not displayed, click on "
+#| "View > Checkboxes on the right side of the toolbar."
 msgid ""
-"In order to edit multiple E-Mails at once, enable the checkboxes on the left "
-"side of the E-Mails. If the checkboxes are not displayed, click on View > "
+"In order to edit multiple emails at once, enable the checkboxes on the left "
+"side of the emails. If the checkboxes are not displayed, click on View > "
 "Checkboxes on the right side of the toolbar."
 msgstr ""
 "For å redigere flere eposter samtidig, klikk avkrysningsboksene på venstre "
@@ -528,8 +542,12 @@ msgid "The Portal"
 msgstr "Portalen"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "The Portal informs you about current E-Mails, appointments or social "
+#| "network news."
 msgid ""
-"The Portal informs you about current E-Mails, appointments or social network "
+"The Portal informs you about current emails, appointments or social network "
 "news."
 msgstr ""
 "Portalen gir deg oversikt over dine siste eposter, avtaler og oppgaver, med "
@@ -566,9 +584,13 @@ msgid "The list"
 msgstr "Elementlisten"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "The settings are organized in topics. Select the topic on the left side, "
+#| "e.g Basic settings or E-Mail."
 msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
-"Basic settings or E-Mail."
+"Basic settings or Mail."
 msgstr ""
 "Innstillingene er organisert i kategorier. Velg en kategori til venstre, f."
 "eks. \"Grunnleggende innstillinger\" eller \"Epost\"."
@@ -615,7 +637,7 @@ msgstr ""
 "For å bytte mellom forskjellige visninger, klikk \"Visning\" i "
 "verktøylinjen, og velg ønsket visning. "
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
+#: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/mail.js
 msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "For å opprette en ny epost, klikk \"Opprett\" i verktøylinjen."
 
@@ -731,8 +753,12 @@ msgid "To not miss the task, use the reminder function."
 msgstr "For å ikke glemme en oppgave kan du bruke påminnelsesfunksjonen."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open or close an E-Mail in a conversation, click on a free area in the "
+#| "header."
 msgid ""
-"To open or close an E-Mail in a conversation, click on a free area in the "
+"To open or close an email in a conversation, click on a free area in the "
 "header."
 msgstr ""
 "For å åpne eller lukke en epost i en samtale, klikk på et tomt område i "
@@ -747,9 +773,14 @@ msgstr ""
 "verktøylinjen."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the E-Mail settings, click the System menu icon on the upper "
+#| "right side of the menu bar. Select Settings. Click on E-Mail on the left "
+#| "side."
 msgid ""
-"To open the E-Mail settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on E-Mail on the left side."
+"To open the email settings, click the System menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
 "For å åpne epostinnstillingene, klikk systemmeny-ikonet øverst til høyre i "
 "menylinjen. Velg Innstillinger. Klikk deretter Epost på venstre side."
@@ -800,9 +831,13 @@ msgstr ""
 "høyre i verktøylinjen. "
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To send an E-Mail to the contact, click on an E-Mail address or on Send "
+#| "email in the toolbar."
 msgid ""
-"To send an E-Mail to the contact, click on an E-Mail address or on Send "
-"email in the toolbar."
+"To send an email to the contact, click on an email address or on Send email "
+"in the toolbar."
 msgstr ""
 "For å sende en epost til kontakten, klikk på en epostadresse, eller på "
 "\"Send epost\" i verktøylinjen. "

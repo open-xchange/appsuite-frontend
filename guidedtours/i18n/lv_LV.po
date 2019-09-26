@@ -14,223 +14,35 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
 "X-Generator: Poedit 2.1.1\n"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating a new appointment"
-msgstr "Jauna mītiņa izveide"
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Add another account"
+msgstr "Pievienot jaunu kontu"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "Jaunas mītiņa izveidošanai, rīkjoslā noklikšķiniet uz Jauns."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Entering the appointment's data"
-msgstr "Tikšanās datu ievadīšana"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"Enter the subject, the start and the end date of the appointment. Other "
-"details are optional."
-msgstr ""
-"Ievadiet mītiņa tēmu, kā arī sākuma un beigu datumus. Pārējā informācija ir "
-"papildus un nav obligāta."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating recurring appointments"
-msgstr "Atkārtotu tikšanos izveide"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"To create recurring appointments, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
-msgstr ""
-"Atkārtotu mītiņu izveidošanai aktivizējiet izvēlnes rūtiņu 'Atkārtot', kā "
-"rezultātā tiek uzrādītas atkārtojumu definēšanas funkcijas."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Inviting other participants"
-msgstr "Citu dalībnieku uzaicināšana"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. To avoid appointment conflicts, click on Find a free time at "
-"the upper right side."
-msgstr ""
-"Lai uzaicinātu citus dalībniekus ievadiet viņu vārdus laukā zem "
-"'Dalībnieki'. Lai izvairītos no mītiņu laiku konfliktiem noklikšķiniet uz "
-"'Atrast brīvu laiku' augšējā labajā malā."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Atgādinājuma funkciju lietošana"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Lai nenokavētu tikšanos, lietojiet atgādijnājuma funkcijas."
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Pievienot kodu teksta ziņojumā"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
 msgstr "Pielikumu pievienošana"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Further down you can add documents as attachments to the appointment."
-msgstr ""
-"Zemāk jūs variet mītiņu informācijai pievienot atbilstošus pievienojumus."
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Adding further details"
+msgstr "Pārejo detaļu pievienošana"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating the appointment"
-msgstr "Tikšanās izveide"
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Pievienot verifikācijas opciju"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create the appointment, click on Create at the lower left side."
-msgstr ""
-"Lai izveidotu mītiņu, noklikšķiniet uz 'Izveidot' kreisajā apakšējā malā."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
-msgid "Selecting a view"
-msgstr "Skata izvēle"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid ""
-"To select one of the views like Day, Month or List, click on View in the "
-"toolbar. Select a menu entry from the Layout section."
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
 msgstr ""
-"Lai izvēlētos vēlamo skata režīmu, kā, piemēram, diena, mēnesis vai "
-"saraksts, rīkjoslā noklikškiniet uz skata izvēles ikonas un izvēlieties "
-"atbilstošo režīmu."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "The calendar views"
-msgstr "Kalendāra skati"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"The calendar views display a calendar sheet with the appointments for the "
-"selected time range."
-msgstr ""
-"Kalendāra skati parāda kalendāra lapu izvēlētajam laika apgabalam ar tajā "
-"atzīmētiem mītiņiem."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "The List view"
-msgstr "Saraksta skats"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"The List view shows a list of the appointments in the current folder. If "
-"clicking on an appointment, the appointment's data and some functions are "
-"displayed in the Detail view."
-msgstr ""
-"Saraksta skatā tiek parādīti visi pašreizējā mapē esošie mītiņi. "
-"Noklikšķinot uz mītiņa ieraksta, detaļu skatā tiek parādīta mītiņa "
-"informācija un būtiskākās pārvaldības funkcijas."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Creating a new contact"
-msgstr "Jaunas kontaktpersonas izveide"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "To create a new contact, click on New > Add contact in the toolbar."
-msgstr ""
-"Jaunas kontaktpersonas izveidošanai rīkjoslā noklikšķiniet uz Jauns > "
-"Pievienot kontaktu."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Navigation bar"
-msgstr "Navigācijas josla"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"Click on a letter on the left side of the navigation bar in order to display "
-"the corresponding contacts from the selected address book."
-msgstr ""
-"Noklikšķiniet uz burta kreisajā malā novietotajā navigācijas joslā lai "
-"uzrādītu atbilstošās kontaktpersonas no izvēlētās adrešu grāmatas."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an email to a contact"
-msgstr "E-pasta nosūtīšana kontaktpersonai"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"To send an E-Mail to the contact, click on an E-Mail address or on Send "
-"email in the toolbar."
-msgstr ""
-"Lai kontaktpersonai nosūtītu e-pastu, noklikšķiniet uz atbilstošās e-pasta "
-"adreses vai rīkjoslā izvēlieties 'Sūtīt e-pastu'."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Editing multiple contacts"
-msgstr "Vairāku kontaktpersonu rediģēšana"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"To edit multiple contacts at once, enable the checkboxes on the left side of "
-"the contacts. If the checkboxes are not displayed, click on View > "
-"Checkboxes on the right side of the toolbar."
-msgstr ""
-"Lai rediģētu vairākas kontaktpersonas vienlaicīgi, aktivizējiet izvēles "
-"rūtiņas saraksta kreisajā malā.  Ja izvēles rūtiņas nav uzrādītas, "
-"noklikšķiniet uz Skats > Izveles rūtiņas rīkjoslas labajā malā."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "The Drive app"
-msgstr "Drive aplikācija"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Welcome to your cloud storage app. This Guided Tour will introduce you to "
-"your new online storage solution - your one point to access online stored "
-"files from all your accounts. This is where you can upload and save your "
-"files, share them and synchronize them with different devices.  "
-msgstr ""
-"Esiet sveicināti jūsu mākoņa glabātuves lietotnē. Šī ekskursija iepazīstinās "
-"jūs ar jauno tiešsaistes glabāšanas risinājumu - vienoto vietu tiešsaistes "
-"piekļuvei pie visiem jūsu failiem visos jūsu kontos. Šī ir vieta, kur jūs "
-"varat augšupielādēt un saglabāt failus, dalīties ar tiem un sinhronizēt tos "
-"ar citām ierīcēm. "
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Folder tree"
-msgstr "Mapju koks"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"On the left you can see the folder tree. It displays your folder structure "
-"and allows you to navigate to specific folders and subfolders. To make your "
-"life easier, we have already included folders for your Documents, Music, "
-"Pictures and Videos."
-msgstr ""
-"Kreisajā pusē jūs redzat mapju koku. Tas parāda jūsu mapju struktūru un ļauj "
-"jums pārvietoties uz konkrētām mapēm un apakšmapēm. Lai padarītu jūsu dzīvi "
-"ērtāku, mēs jau esam izveidojuši mapes jūsu dokumentiem, mūzikai, attēliem "
-"un video."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Folder content"
-msgstr "Mapes saturs"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Clicking on a folder displays all the subfolders, documents, media and other "
-"files that it contains."
-msgstr ""
-"Noklikšķinot uz mapes tiek parādītas visas apakšmapes, kā arī dokumenti, "
-"mediju un citi faili, kurus tā satur."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Select a view"
-msgstr "Skata izvēle"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Different views are available. Just select the one you like best."
-msgstr ""
-"Ir pieejami vairāki skata režīmi. Vienkārši izvēlieties kādu, kurš jums "
-"patīk vislabāk."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Toolbar"
-msgstr "Rīkjosla"
+"Papildus drošībai pieslēdzoties savam kontam, jūs tagad varat pieprasīt otro "
+"autorizācijas līdzekli kā, piemēram, teksta ziņojumu. Vai vēlaties tagad "
+"skatīt atbilstošo papildus informāciju?"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -240,60 +52,9 @@ msgstr ""
 "Augšpusē jūs redzat rīkjoslu ar daudzām funkcijām un papildu iespējām. Jūs "
 "varat viegli izveidot jaunas mapes, jaunus failus un veikt citas darbības."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Upload a new file"
-msgstr "Ielādēt jaunu failu"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
-msgstr ""
-"Lai augšupielādētu failu no jūsu ierīces, vienkārši noklikšķiniet uz "
-"Pievienot lokālo failu un izvēlieties failu, kuru vēlaties augšupielādēt. "
-"Pat vienkāršāk, jūs variet vienkārši pārvilkt un nomest failus no jūsu "
-"ierīces atbilstošajā Drive mapē. Augšupielādētie faili ir pieejami Drive "
-"visās ierīcēs."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Preview files"
-msgstr "Failu apskats"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Clicking on the view icon leads you to a preview of the selected file."
-msgstr ""
-"Noklikšķinot uz skata ikonas tiek parādīts izvēlētā faila priekšskatījums."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Preview mode"
-msgstr "Apskata režīms"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"From preview you can also select other options to help you manage and work "
-"on your files."
-msgstr ""
-"Priekšstatījuma skatā jūs varat veikt arī dažādas failu pārvaldīšanas "
-"darbības."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Share files"
-msgstr "Failu koplietošana"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Here you can share files with your colleagues and external contacts. You can "
-"also collaborate on a document and set different access rights."
-msgstr ""
-"Šeit jūs varat koplietot failus ar saviem kolēģiem un ārējām "
-"kontaktpersonām. Jūs varat arī sadarboties dokumentu rediģēšanā un iestatīt "
-"dažādas pieejas tiesības."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Sharing options"
-msgstr "Koplietošanas iestatījumi"
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Autentifikācijas pieprasījumi"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -309,24 +70,97 @@ msgstr ""
 "citiem apskatīt un lejupielādēt failus. Ja vēlaties, varat norādīt saišu "
 "derīguma termiņus un iestatīt piekļuves paroles."
 
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"Click on a letter on the left side of the navigation bar in order to display "
+"the corresponding contacts from the selected address book."
+msgstr ""
+"Noklikšķiniet uz burta kreisajā malā novietotajā navigācijas joslā lai "
+"uzrādītu atbilstošās kontaktpersonas no izvēlētās adrešu grāmatas."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+"Noklikšķinot uz mapes tiek parādītas visas apakšmapes, kā arī dokumenti, "
+"mediju un citi faili, kurus tā satur."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr ""
+"Noklikšķinot uz skata ikonas tiek parādīts izvēlētā faila priekšskatījums."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Closing a square"
+msgstr "Apskatlogu aizvēršana"
+
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Collaborating"
 msgstr "Kopdarbība"
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Sharing files by inviting people does not only offer your recipients the "
-"option to create and edit files. Internal and external participants are also "
-"able to collaborate with you on text documents and spreadsheets at the same "
-"time."
-msgstr ""
-"Koplietošana, izmantojot uzaicināšanu ļauj uzaicinātajām personām izveidot "
-"un rediģēt failus, kā arī vienlaicīgi kopēji sadarboties teksta dokumentu un "
-"izklājlapu izveidē un rediģēšanā."
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Composing a new email"
+msgstr "Jauna e-pasta sastādīšana"
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Edit documents"
-msgstr "Dokumentu rediģēšana"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating a new appointment"
+msgstr "Jauna mītiņa izveide"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Creating a new contact"
+msgstr "Jaunas kontaktpersonas izveide"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating a new task"
+msgstr "Jauna uzdevuma izveide"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Creating new items"
+msgstr "Jaunu vienību izveide"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating recurring appointments"
+msgstr "Atkārtotu tikšanos izveide"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating recurring tasks"
+msgstr "Atkārtotu uzdevumu izveide"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating the appointment"
+msgstr "Tikšanās izveide"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating the task"
+msgstr "Uzdevuma izveide"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Customizing the Portal"
+msgstr "Portāla pielāgošana"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Depending on the app, the toolbar contains various functions for creating, "
+"editing and organizing objects."
+msgstr ""
+"Atbilstoši katrai konkrētajai aplikācijai, rīkjosla satur dažādas funkcijas "
+"objektu izveidošanai, rediģēšanai un organizēšanai."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Detailed instructions for the single apps are located in System menu > Help."
+msgstr ""
+"Atsevišķo aplikāciju detalizētas instrukcijas ir atrodamas sistēmas izvēlnē "
+"> Palīgs."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
+"Ierīces pēc to pievienošanas var tikt noņemtas, ja tas ir nepieciešams.  "
+"Detalizēta informācija ir atrodama sistēmas palīgā."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -339,22 +173,18 @@ msgstr ""
 "versiju kontroli, saglabājot pieeju iepriekš``ejām dokumenta versijām."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "File details"
-msgstr "Faila detaļas"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"The file details side bar offers additional information about your files. "
-"Just enable the File details option from the View drop down menu and select "
-"a file to see the details."
+msgid "Different views are available. Just select the one you like best."
 msgstr ""
-"Faila detaļu blakusjosla parāda papildu informāciju apr izvēlētajiem "
-"failiem. lai to parādītu, aktivizējiet detalizētas informācijas parādīšanas "
-"iestatījumu skata režīma rīkjoslā."
+"Ir pieejami vairāki skata režīmi. Vienkārši izvēlieties kādu, kurš jums "
+"patīk vislabāk."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Add another account"
-msgstr "Pievienot jaunu kontu"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Displaying the help or the settings"
+msgstr "Palīga vai iestatījumu parādīšana"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Drag and drop"
+msgstr "Pārvikšana"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -366,172 +196,33 @@ msgstr ""
 "un kontiem un sinhronizēt tajās esošos failus. Lai pieslēgtos saviem kontiem "
 "citās mākoņa aplikācijās, noklikšķiniet uz atbilstošā logo."
 
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"Edit a setting on the right side. In most of the cases, the changes are "
+"activated immediately."
+msgstr ""
+"Veiciet atbilstošo iestatījumu rediģēšanu labās puses panelī. Vairumā "
+"gadījumu izmaiņas tiek tūlītēji aktivizētas."
+
 #: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "The Drive app tour.txt"
-msgstr "Drive aplikācija tour.txt"
+msgid "Edit documents"
+msgstr "Dokumentu rediģēšana"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Welcome to %s"
-msgstr "Esiet sveicināti %s"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"This guided tour will briefly introduce you to the product. Get more "
-"detailed information in the tours for the single apps or in the online help."
-msgstr ""
-"Šī ekskursija īsumā iepazīstinās jūs ar mūsu produktu. Detalizētāka "
-"informācija ir pieejama, izmantojot atsevišķo aplikāciju ekskursijas un "
-"tiešaistes palīdzību."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Launching an app"
-msgstr "Aplikācijas startēšana"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app click on an entry inside the app launcher menu."
-msgstr ""
-"Lai startētu aplikāciju, noklikšķiniet uz tās aplikāciju palaidēja izvēlnē."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Displaying the help or the settings"
-msgstr "Palīga vai iestatījumu parādīšana"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To display the help or the settings, click the System menu icon in the menu "
-"bar."
-msgstr ""
-"Lai parādītu palīgu vai iestatījumus, izmantojiet sistēmas ikonu izvēlņu "
-"joslas labajā malā."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Creating new items"
-msgstr "Jaunu vienību izveide"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr ""
-"Jauna e-pasta sastādīšanai noklikšķiniet uz e-pasta sastādīšanas ikonas "
-"rīkjoslā."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Opening or closing the folder tree"
-msgstr "Mapju koka atvēršana un aizvēršana"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To open or close the folder tree, click on View >  Folder view on the right "
-"side of the toolbar."
-msgstr ""
-"Mapju koka atvēršanai un aizvēršanai noklikšķiniet uz Skats > Mapes skats "
-"rīkoslas labajā malā."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Searching for objects"
-msgstr "Objektu meklēšana"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To search for objects, click the Search icon in the menu bar."
-msgstr "Obejktu meklēšanai noklikšķiniet uz meklēšanas ikonas rīkjoslā."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The toolbar"
-msgstr "Rīkjosla"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Depending on the app, the toolbar contains various functions for creating, "
-"editing and organizing objects."
-msgstr ""
-"Atbilstoši katrai konkrētajai aplikācijai, rīkjosla satur dažādas funkcijas "
-"objektu izveidošanai, rediģēšanai un organizēšanai."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The folder tree"
-msgstr "Mapju koks"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Use the folder tree to open the folder containing the objects that you want "
-"to view in the list."
-msgstr ""
-"Lai skatītu mapē esošo objektu sarakstu, izmantojiet mapju koku un "
-"izvēlieties jūs interesējošos mapi."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The list"
-msgstr "Saraksts"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Use the list to select an object, show its contents or activate functions."
-msgstr ""
-"Lai skatītu objkta saturu vai izpildītu funkcijas, izvēlieties atbilstošo "
-"objektu sarakstā."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The Detail view"
-msgstr "Detaļu skats"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The Detail view displays an object's content. Depending on the app, further "
-"functions for organizing objects can be found in the Detail view."
-msgstr ""
-"Detaļu skatā tiek uzrādīts objekta saturs. Atkarībā no aplikācijas, detaļu "
-"skatā var būt pieejamas arī papildus funkcijas objektu organizēšanai."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Further information"
-msgstr "Papildus informācija"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Detailed instructions for the single apps are located in System menu > Help."
-msgstr ""
-"Atsevišķo aplikāciju detalizētas instrukcijas ir atrodamas sistēmas izvēlnē "
-"> Palīgs."
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Editing multiple contacts"
+msgstr "Vairāku kontaktpersonu rediģēšana"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new email"
-msgstr "Jauna e-pasta sastādīšana"
+msgid "Editing multiple emails"
+msgstr "Vairāku e-apstu rediģēšana"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the recipient's name"
-msgstr "Saņēmēja vārda ievadīšana"
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Editing multiple tasks"
+msgstr "Vairāku uzdevumu rediģēšana"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"Enter the recipient's name into the recipients field. As soon as you typed "
-"the first letters, suggestions from the address books are displayed. To "
-"accept a recipient suggestion, click on it."
-msgstr ""
-"Saņēmēja laukā ievadiet saņēmēja vārdu. tikko kā būsit ievadījis dažus "
-"simbolus, tiks parādīti atbilstošie ieteikumi no adrešu grāmatas. Lai "
-"apstiprinātu kādu no ieteikumiem, noklikšķiniet uz tā."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the subject"
-msgstr "Tēmas ievadīšana"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Enter the subject into the subject field."
-msgstr "Tēmas laukā ievadīt ziņojuma tēmu."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Further functions"
-msgstr "Papildus funkcijas"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"In this area you can find further functions, e.g. for adding attachments."
-msgstr ""
-"Šajā apgabalā jūs varat atrast papildus funkcijas (piemēram, pielikumu "
-"pievienošanai)."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the email text"
-msgstr "Vēstules teksta ievadīšana"
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Editing settings"
+msgstr "Iestatījumu rediģēšana"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -545,34 +236,109 @@ msgstr ""
 "apgabalā."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the email"
-msgstr "E-pasta nosūtīšana"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the email, click on Send"
-msgstr "Lai nosūtītu e-pastu, noklikšķiniet uz Sūtīt"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your emails"
-msgstr "E-pasta šķirošana"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
-msgstr ""
-"E-pasta kārtošanai noklikšķiniet uz 'Kārtot pēc' un izvēlieties atbilstošo "
-"kritēriju."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To choose between the different views, click on View in the toolbar. Select "
-"a menu entry in the layout."
+"Enter the recipient's name into the recipients field. As soon as you typed "
+"the first letters, suggestions from the address books are displayed. To "
+"accept a recipient suggestion, click on it."
 msgstr ""
-"Lai pārslēgtos starp dažādiem skatiem, rīkjoslā ktivizējiet funkciju Skats "
-"un zvēlieties vēlamo režīmu."
+"Saņēmēja laukā ievadiet saņēmēja vārdu. tikko kā būsit ievadījis dažus "
+"simbolus, tiks parādīti atbilstošie ieteikumi no adrešu grāmatas. Lai "
+"apstiprinātu kādu no ieteikumiem, noklikšķiniet uz tā."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an email in a separate window"
-msgstr "E-pasta atvēršana atsevišķā logā"
+msgid "Enter the subject into the subject field."
+msgstr "Tēmas laukā ievadīt ziņojuma tēmu."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"Enter the subject, the start and the end date of the appointment. Other "
+"details are optional."
+msgstr ""
+"Ievadiet mītiņa tēmu, kā arī sākuma un beigu datumus. Pārējā informācija ir "
+"papildus un nav obligāta."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Enter the subject, the start date, and a description."
+msgstr "Ievadiet tēmu, sākuma datumu un aprakstu."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering billing information"
+msgstr "Norēķinu informācijas pievienošana"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Entering the appointment's data"
+msgstr "Tikšanās datu ievadīšana"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the email text"
+msgstr "Vēstules teksta ievadīšana"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the recipient's name"
+msgstr "Saņēmēja vārda ievadīšana"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the subject"
+msgstr "Tēmas ievadīšana"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering the task's data"
+msgstr "Uzdevuma datu ievadīšana"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "File details"
+msgstr "Faila detaļas"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder content"
+msgstr "Mapes saturs"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder tree"
+msgstr "Mapju koks"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
+msgstr ""
+"Priekšstatījuma skatā jūs varat veikt arī dažādas failu pārvaldīšanas "
+"darbības."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Further down you can add documents as attachments to the appointment."
+msgstr ""
+"Zemāk jūs variet mītiņu informācijai pievienot atbilstošus pievienojumus."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Further functions"
+msgstr "Papildus funkcijas"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Further information"
+msgstr "Papildus informācija"
+
+#. Tour name; general introduction
+#: apps/io.ox/tours/main.js module:io.ox/tours
+msgid "Getting started"
+msgstr "Iepazīstināšana"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Halo view"
+msgstr "Halo skats"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+"Šeit jūs varat koplietot failus ar saviem kolēģiem un ārējām "
+"kontaktpersonām. Jūs varat arī sadarboties dokumentu rediģēšanā un iestatīt "
+"dažādas pieejas tiesības."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "How the settings are organized"
+msgstr "Iestatījumu organizācija"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -582,33 +348,10 @@ msgstr ""
 "Ja e-pasta vēstuļu sarakstā uz kādas no vēstulēm tiek izpildīts "
 "dubultklikšķis, šī vēstule tiek atvērta atsevišķā logā."
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading email conversations"
-msgstr "E-pasta sarunu lasīšana"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "If you no longer want to display a square, click the delete icon."
 msgstr ""
-"Lai atvērtu vai aizvērtu e-pastu sarunā, noklikšķiniet uz brīvās (tukšās) "
-"vietas hederī."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Halo view"
-msgstr "Halo skats"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To receive information about the sender or other recipients, open the Halo "
-"view by clicking on a name."
-msgstr ""
-"Lai aplūkotu informāciju par sūtītāju vai citiem saņēmējiem atveriet Halo "
-"skatu, noklikšķinot uz atbisltošā vārda."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple emails"
-msgstr "Vairāku e-apstu rediģēšana"
+"Ja vairs nevēlaties parādīt kvadrātu, noklikšķiniet uz dzēšanas ikonas."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -621,48 +364,95 @@ msgstr ""
 "Skats > Izveles rūtiņas rīkjoslas labajā malā."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In this area you can find further functions, e.g. for adding attachments."
+msgstr ""
+"Šajā apgabalā jūs varat atrast papildus funkcijas (piemēram, pielikumu "
+"pievienošanai)."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Inviting other participants"
+msgstr "Citu dalībnieku uzaicināšana"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Launching an app"
+msgstr "Aplikācijas startēšana"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Navigation bar"
+msgstr "Navigācijas josla"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "Nākošais"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
+msgstr ""
+"Kreisajā pusē jūs redzat mapju koku. Tas parāda jūsu mapju struktūru un ļauj "
+"jums pārvietoties uz konkrētām mapēm un apakšmapēm. Lai padarītu jūsu dzīvi "
+"ērtāku, mēs jau esam izveidojuši mapes jūsu dokumentiem, mūzikai, attēliem "
+"un video."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Opening an email in a separate window"
+msgstr "E-pasta atvēršana atsevišķā logā"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Opening or closing the folder tree"
+msgstr "Mapju koka atvēršana un aizvēršana"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Opening the email settings"
 msgstr "E-pasta iestatījumu atvēršana"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To open the email settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on email on the left side."
-msgstr ""
-"Lai atvērtu e-pasta iestatījumus, noklikšķiniet uz Sistēmas ikonas izvēlnes "
-"joslas labajā malā un izvēlieties Iestatījumi. Pēc tam noklikšķiniet uz e-"
-"pasta izvēlnes."
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the help"
+msgstr "Palīga atvēršana"
 
-#. Tour name; general introduction
-#: apps/io.ox/tours/main.js module:io.ox/tours
-msgid "Getting started"
-msgstr "Iepazīstināšana"
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the settings"
+msgstr "Iestatījumu atvēršana"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview files"
+msgstr "Failu apskats"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview mode"
+msgstr "Apskata režīms"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Reading email conversations"
+msgstr "E-pasta sarunu lasīšana"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Reading the details"
+msgstr "Detaļu apskats"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Noņemšana"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Searching for objects"
+msgstr "Objektu meklēšana"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
 msgstr "Otrā faktora autentifikācija"
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"You can now add additional verification options to enhance the security of "
-"your account."
-msgstr ""
-"Tagad jūs varat pievienot papildus verifikācijas opcijas sava konta drošības "
-"līmeņa paaugstināšanai."
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Select a view"
+msgstr "Skata izvēle"
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Adding verification option"
-msgstr "Pievienot verifikācijas opciju"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Various options for additional verification depends on your installation."
-msgstr ""
-"Pieejamās papildus verifikācijas opcijas ir atkarīgas no jūsu instalācijas."
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Adding a code via text message"
-msgstr "Pievienot kodu teksta ziņojumā"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
+msgid "Selecting a view"
+msgstr "Skata izvēle"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid ""
@@ -672,47 +462,82 @@ msgstr ""
 "Piemēram, izvēloties kodu teksta ziņojumā, jums tiks prasīts telefona numurs "
 "koda nosūtīšanai."
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Authentication Requests"
-msgstr "Autentifikācijas pieprasījumi"
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Sending an email to a contact"
+msgstr "E-pasta nosūtīšana kontaktpersonai"
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sending the email"
+msgstr "E-pasta nosūtīšana"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Share files"
+msgstr "Failu koplietošana"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Then the next time you log in, you will have to verify your identitity by "
-"entering the number sent to your phone."
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
 msgstr ""
-"Nākamreiz pieslēdzoties jums tiks prasīts verificēt jūsu identitāti, ievadot "
-"uz jūsu telefonu nosūtīto kodu."
+"Koplietošana, izmantojot uzaicināšanu ļauj uzaicinātajām personām izveidot "
+"un rediģēt failus, kā arī vienlaicīgi kopēji sadarboties teksta dokumentu un "
+"izklājlapu izveidē un rediģēšanā."
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Removing"
-msgstr "Noņemšana"
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Sharing options"
+msgstr "Koplietošanas iestatījumi"
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Devices can be removed once added if you so choose.  See help for additional "
-"details."
-msgstr ""
-"Ierīces pēc to pievienošanas var tikt noņemtas, ja tas ir nepieciešams.  "
-"Detalizēta informācija ir atrodama sistēmas palīgā."
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Signing out"
+msgstr "Atslēgšanās no sistēmas"
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Next"
-msgstr "Nākošais"
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Sorting tasks"
+msgstr "Uzdevumu kārtošana"
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"As an additional security feature, you can now require a second method of "
-"authentication, such as a text message, before logging into your account.  "
-"Would you like to see some information on this now?"
-msgstr ""
-"Papildus drošībai pieslēdzoties savam kontam, jūs tagad varat pieprasīt otro "
-"autorizācijas līdzekli kā, piemēram, teksta ziņojumu. Vai vēlaties tagad "
-"skatīt atbilstošo papildus informāciju?"
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sorting your emails"
+msgstr "E-pasta šķirošana"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Start tour"
 msgstr "Uzsākt tūri"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The Detail view"
+msgstr "Detaļu skats"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"The Detail view displays an object's content. Depending on the app, further "
+"functions for organizing objects can be found in the Detail view."
+msgstr ""
+"Detaļu skatā tiek uzrādīts objekta saturs. Atkarībā no aplikācijas, detaļu "
+"skatā var būt pieejamas arī papildus funkcijas objektu organizēšanai."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app"
+msgstr "Drive aplikācija"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app tour.txt"
+msgstr "Drive aplikācija tour.txt"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "The List view"
+msgstr "Saraksta skats"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"The List view shows a list of the appointments in the current folder. If "
+"clicking on an appointment, the appointment's data and some functions are "
+"displayed in the Detail view."
+msgstr ""
+"Saraksta skatā tiek parādīti visi pašreizējā mapē esošie mītiņi. "
+"Noklikšķinot uz mītiņa ieraksta, detaļu skatā tiek parādīta mītiņa "
+"informācija un būtiskākās pārvaldības funkcijas."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
@@ -726,62 +551,35 @@ msgstr ""
 "Portāls informē jūs par pašreizējām e-pasta vēstulēm, uzdevumiem, mītiņiem "
 "un sociālo tīklu jaunumiem."
 
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Reading the details"
-msgstr "Detaļu apskats"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "The calendar views"
+msgstr "Kalendāra skati"
 
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "To read the details, click on an entry in a square."
-msgstr "Lai skatītu detaļas noklikšķiniet uz ieraksta apskatlogā."
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Drag and drop"
-msgstr "Pārvikšana"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
-"To change the layout, drag a square's title to another position and drop it "
-"there."
+"The calendar views display a calendar sheet with the appointments for the "
+"selected time range."
 msgstr ""
-"Lai izmainītu novietojumu, noklikšķiniet uz apskatloga nosaukuma un "
-"pārvelciet to uz citu vietu."
+"Kalendāra skati parāda kalendāra lapu izvēlētajam laika apgabalam ar tajā "
+"atzīmētiem mītiņiem."
 
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Closing a square"
-msgstr "Apskatlogu aizvēršana"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "If you no longer want to display a square, click the delete icon."
-msgstr ""
-"Ja vairs nevēlaties parādīt kvadrātu, noklikšķiniet uz dzēšanas ikonas."
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Customizing the Portal"
-msgstr "Portāla pielāgošana"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To display a square again or to display further information sources, click "
-"on Customize this page."
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
 msgstr ""
-"Lai parādītu apskatlogu vai informāciju no citiem avotiem noklikšķiniet uz "
-"'Pielāgot šo lapu'."
+"Faila detaļu blakusjosla parāda papildu informāciju apr izvēlētajiem "
+"failiem. lai to parādītu, aktivizējiet detalizētas informācijas parādīšanas "
+"iestatījumu skata režīma rīkjoslā."
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Opening the settings"
-msgstr "Iestatījumu atvēršana"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The folder tree"
+msgstr "Mapju koks"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"To open the settings, click the user image on the upper right side of the "
-"menu bar. Select Settings."
-msgstr ""
-"Lai atvērtu iestatījumus, noklikšķiniet uz lietotāja ikonas izvēļņu joslas "
-"augšējā labajā malā un izvēlieties iestatījumu izvēlni."
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "How the settings are organized"
-msgstr "Iestatījumu organizācija"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The list"
+msgstr "Saraksts"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -791,21 +589,191 @@ msgstr ""
 "Iestatījumi ir organizēti tematiskās sadaļās. Izvēlieties atbilstošo sadaļu "
 "(piemēram Pamata vai E-pasts)."
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Editing settings"
-msgstr "Iestatījumu rediģēšana"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The toolbar"
+msgstr "Rīkjosla"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid ""
-"Edit a setting on the right side. In most of the cases, the changes are "
-"activated immediately."
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
 msgstr ""
-"Veiciet atbilstošo iestatījumu rediģēšanu labās puses panelī. Vairumā "
-"gadījumu izmaiņas tiek tūlītēji aktivizētas."
+"Nākamreiz pieslēdzoties jums tiks prasīts verificēt jūsu identitāti, ievadot "
+"uz jūsu telefonu nosūtīto kodu."
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Opening the help"
-msgstr "Palīga atvēršana"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"This guided tour will briefly introduce you to the product. Get more "
+"detailed information in the tours for the single apps or in the online help."
+msgstr ""
+"Šī ekskursija īsumā iepazīstinās jūs ar mūsu produktu. Detalizētāka "
+"informācija ir pieejama, izmantojot atsevišķo aplikāciju ekskursijas un "
+"tiešaistes palīdzību."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To add further details, click on Expand form."
+msgstr "Lai pievienotu pārējās detaļas noklikšķiniet uz 'Atritināt formu'."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To change the layout, drag a square's title to another position and drop it "
+"there."
+msgstr ""
+"Lai izmainītu novietojumu, noklikšķiniet uz apskatloga nosaukuma un "
+"pārvelciet to uz citu vietu."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To choose between the different views, click on View in the toolbar. Select "
+"a menu entry in the layout."
+msgstr ""
+"Lai pārslēgtos starp dažādiem skatiem, rīkjoslā ktivizējiet funkciju Skats "
+"un zvēlieties vēlamo režīmu."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/mail.js
+msgid "To compose a new email, click on Compose in the toolbar."
+msgstr ""
+"Jauna e-pasta sastādīšanai noklikšķiniet uz e-pasta sastādīšanas ikonas "
+"rīkjoslā."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create a new appointment, click on New in the toolbar."
+msgstr "Jaunas mītiņa izveidošanai, rīkjoslā noklikšķiniet uz Jauns."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "To create a new contact, click on New > Add contact in the toolbar."
+msgstr ""
+"Jaunas kontaktpersonas izveidošanai rīkjoslā noklikšķiniet uz Jauns > "
+"Pievienot kontaktu."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create a new task, click on New in the toolbar."
+msgstr "Lai izveidotu jaunu uzdevumu, rīkjoslā noklikšķinet uz Jauns."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To create recurring appointments, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Atkārtotu mītiņu izveidošanai aktivizējiet izvēlnes rūtiņu 'Atkārtot', kā "
+"rezultātā tiek uzrādītas atkārtojumu definēšanas funkcijas."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To create recurring tasks, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Lai izveidotu atkārtotus uzdevumus aktivizējiet izvēlnes rūtiņu 'Atkārtot', "
+"kā rezultātā tiek uzrādītas atkārtojumu definēšanas funkcijas."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create the appointment, click on Create at the lower left side."
+msgstr ""
+"Lai izveidotu mītiņu, noklikšķiniet uz 'Izveidot' kreisajā apakšējā malā."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create the task, click on Create."
+msgstr "Lai izveidotu uzdevumu, noklikšķiniet uz Izveidot."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To display a square again or to display further information sources, click "
+"on Customize this page."
+msgstr ""
+"Lai parādītu apskatlogu vai informāciju no citiem avotiem noklikšķiniet uz "
+"'Pielāgot šo lapu'."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"To display the help or the settings, click the System menu icon in the menu "
+"bar."
+msgstr ""
+"Lai parādītu palīgu vai iestatījumus, izmantojiet sistēmas ikonu izvēlņu "
+"joslas labajā malā."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"To edit multiple contacts at once, enable the checkboxes on the left side of "
+"the contacts. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"Lai rediģētu vairākas kontaktpersonas vienlaicīgi, aktivizējiet izvēles "
+"rūtiņas saraksta kreisajā malā.  Ja izvēles rūtiņas nav uzrādītas, "
+"noklikšķiniet uz Skats > Izveles rūtiņas rīkjoslas labajā malā."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To edit multiple tasks at once, enable the checkboxes at the left side of "
+"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
+"on the right side of the toolbar."
+msgstr ""
+"Lai rediģētu vairākus uzdevumus vienlaicīgi aktivizējiet izvēles rūtiņas "
+"saraksta kreisajā malā. Ja izvēles rūtiņas nav uzrādītas, rīkjoslas labajā "
+"malā noklikšķiniet uz Skats > Izvēles rūtiņas."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To enter billing information, click on Show details."
+msgstr "Norēķinu informācijas ievadīšanai noklikšķiniet uz Rādīt dtaļas."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. To avoid appointment conflicts, click on Find a free time at "
+"the upper right side."
+msgstr ""
+"Lai uzaicinātu citus dalībniekus ievadiet viņu vārdus laukā zem "
+"'Dalībnieki'. Lai izvairītos no mītiņu laiku konfliktiem noklikšķiniet uz "
+"'Atrast brīvu laiku' augšējā labajā malā."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. You can add documents as attachment to the task."
+msgstr ""
+"Lai pievienotu citus dalībniekus ievadiet viņu vārdus laukā zem "
+"'Dalībnieki'. Uzdevumam var tikt pievienoti atbilstošie dokumenti."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To launch an app click on an entry inside the app launcher menu."
+msgstr ""
+"Lai startētu aplikāciju, noklikšķiniet uz tās aplikāciju palaidēja izvēlnē."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Lai nenokavētu tikšanos, lietojiet atgādijnājuma funkcijas."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To not miss the task, use the reminder function."
+msgstr "Lai nenokavētu uzdevumu izpildi, izmantojiet atgādinājuma funkcijas."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open or close an email in a conversation, click on a free area in the "
+"header."
+msgstr ""
+"Lai atvērtu vai aizvērtu e-pastu sarunā, noklikšķiniet uz brīvās (tukšās) "
+"vietas hederī."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"To open or close the folder tree, click on View >  Folder view on the right "
+"side of the toolbar."
+msgstr ""
+"Mapju koka atvēršanai un aizvēršanai noklikšķiniet uz Skats > Mapes skats "
+"rīkoslas labajā malā."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the email settings, click the System menu icon on the upper right "
+#| "side of the menu bar. Select Settings. Click on email on the left side."
+msgid ""
+"To open the email settings, click the System menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on Mail on the left side."
+msgstr ""
+"Lai atvērtu e-pasta iestatījumus, noklikšķiniet uz Sistēmas ikonas izvēlnes "
+"joslas labajā malā un izvēlieties Iestatījumi. Pēc tam noklikšķiniet uz e-"
+"pasta izvēlnes."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -821,8 +789,53 @@ msgstr ""
 "augšējā daļā."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Signing out"
-msgstr "Atslēgšanās no sistēmas"
+msgid ""
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
+msgstr ""
+"Lai atvērtu iestatījumus, noklikšķiniet uz lietotāja ikonas izvēļņu joslas "
+"augšējā labajā malā un izvēlieties iestatījumu izvēlni."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "To read the details, click on an entry in a square."
+msgstr "Lai skatītu detaļas noklikšķiniet uz ieraksta apskatlogā."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To receive information about the sender or other recipients, open the Halo "
+"view by clicking on a name."
+msgstr ""
+"Lai aplūkotu informāciju par sūtītāju vai citiem saņēmējiem atveriet Halo "
+"skatu, noklikšķinot uz atbisltošā vārda."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To search for objects, click the Search icon in the menu bar."
+msgstr "Obejktu meklēšanai noklikšķiniet uz meklēšanas ikonas rīkjoslā."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To select one of the views like Day, Month or List, click on View in the "
+"toolbar. Select a menu entry from the Layout section."
+msgstr ""
+"Lai izvēlētos vēlamo skata režīmu, kā, piemēram, diena, mēnesis vai "
+"saraksts, rīkjoslā noklikškiniet uz skata izvēles ikonas un izvēlieties "
+"atbilstošo režīmu."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To send an E-Mail to the contact, click on an E-Mail address or on Send "
+#| "email in the toolbar."
+msgid ""
+"To send an email to the contact, click on an email address or on Send email "
+"in the toolbar."
+msgstr ""
+"Lai kontaktpersonai nosūtītu e-pastu, noklikšķiniet uz atbilstošās e-pasta "
+"adreses vai rīkjoslā izvēlieties 'Sūtīt e-pastu'."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To send the email, click on Send"
+msgstr "Lai nosūtītu e-pastu, noklikšķiniet uz Sūtīt"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -839,81 +852,11 @@ msgstr ""
 "Lai atslēgtos, noklikšķiniet uz atslēgšanās ikonas izvēļņu joslas labajā "
 "malā."
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating a new task"
-msgstr "Jauna uzdevuma izveide"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "Lai izveidotu jaunu uzdevumu, rīkjoslā noklikšķinet uz Jauns."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Entering the task's data"
-msgstr "Uzdevuma datu ievadīšana"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Enter the subject, the start date, and a description."
-msgstr "Ievadiet tēmu, sākuma datumu un aprakstu."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Adding further details"
-msgstr "Pārejo detaļu pievienošana"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To add further details, click on Expand form."
-msgstr "Lai pievienotu pārējās detaļas noklikšķiniet uz 'Atritināt formu'."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating recurring tasks"
-msgstr "Atkārtotu uzdevumu izveide"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid ""
-"To create recurring tasks, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
-"Lai izveidotu atkārtotus uzdevumus aktivizējiet izvēlnes rūtiņu 'Atkārtot', "
-"kā rezultātā tiek uzrādītas atkārtojumu definēšanas funkcijas."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To not miss the task, use the reminder function."
-msgstr "Lai nenokavētu uzdevumu izpildi, izmantojiet atgādinājuma funkcijas."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Tracking the editing status"
-msgstr "Izpildes statusa sekošana"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To track the editing status, enter the current progress."
-msgstr "Lai sekotu izpildes statusam ievadiet pašreizējo progresu."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. You can add documents as attachment to the task."
-msgstr ""
-"Lai pievienotu citus dalībniekus ievadiet viņu vārdus laukā zem "
-"'Dalībnieki'. Uzdevumam var tikt pievienoti atbilstošie dokumenti."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Entering billing information"
-msgstr "Norēķinu informācijas pievienošana"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To enter billing information, click on Show details."
-msgstr "Norēķinu informācijas ievadīšanai noklikšķiniet uz Rādīt dtaļas."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating the task"
-msgstr "Uzdevuma izveide"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create the task, click on Create."
-msgstr "Lai izveidotu uzdevumu, noklikšķiniet uz Izveidot."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Sorting tasks"
-msgstr "Uzdevumu kārtošana"
+"E-pasta kārtošanai noklikšķiniet uz 'Kārtot pēc' un izvēlieties atbilstošo "
+"kritēriju."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
@@ -922,126 +865,83 @@ msgstr ""
 "kritēriju."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Editing multiple tasks"
-msgstr "Vairāku uzdevumu rediģēšana"
+msgid "To track the editing status, enter the current progress."
+msgstr "Lai sekotu izpildes statusam ievadiet pašreizējo progresu."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
+msgstr ""
+"Lai augšupielādētu failu no jūsu ierīces, vienkārši noklikšķiniet uz "
+"Pievienot lokālo failu un izvēlieties failu, kuru vēlaties augšupielādēt. "
+"Pat vienkāršāk, jūs variet vienkārši pārvilkt un nomest failus no jūsu "
+"ierīces atbilstošajā Drive mapē. Augšupielādētie faili ir pieejami Drive "
+"visās ierīcēs."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Toolbar"
+msgstr "Rīkjosla"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Tracking the editing status"
+msgstr "Izpildes statusa sekošana"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Upload a new file"
+msgstr "Ielādēt jaunu failu"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"To edit multiple tasks at once, enable the checkboxes at the left side of "
-"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
-"on the right side of the toolbar."
+"Use the folder tree to open the folder containing the objects that you want "
+"to view in the list."
 msgstr ""
-"Lai rediģētu vairākus uzdevumus vienlaicīgi aktivizējiet izvēles rūtiņas "
-"saraksta kreisajā malā. Ja izvēles rūtiņas nav uzrādītas, rīkjoslas labajā "
-"malā noklikšķiniet uz Skats > Izvēles rūtiņas."
+"Lai skatītu mapē esošo objektu sarakstu, izmantojiet mapju koku un "
+"izvēlieties jūs interesējošos mapi."
 
-#~ msgid "Sending an E-Mail to a contact"
-#~ msgstr "E-pasta nosūtīšana kontaktpersonai"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Use the list to select an object, show its contents or activate functions."
+msgstr ""
+"Lai skatītu objkta saturu vai izpildītu funkcijas, izvēlieties atbilstošo "
+"objektu sarakstā."
 
-#~ msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
-#~ msgstr ""
-#~ "Lai izveidotu jaunu e-pasta vēstuli, noklikšķiniet uz jauna e-pasta "
-#~ "ikonas rīkjoslā."
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Atgādinājuma funkciju lietošana"
 
-#~ msgid "Composing a new E-Mail"
-#~ msgstr "Jauna e-pasta sastādīšana"
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr ""
+"Pieejamās papildus verifikācijas opcijas ir atkarīgas no jūsu instalācijas."
 
-#~ msgid "To compose a new E-Mail, click on Compose in the toolbar."
-#~ msgstr ""
-#~ "Jauna e-pasta sastādīšanai noklikšķiniet uz e-pasta sastādīšanas ikonas "
-#~ "rīkjoslā."
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Welcome to %s"
+msgstr "Esiet sveicināti %s"
 
-#~ msgid "Entering the E-Mail text"
-#~ msgstr "Vēstules teksta ievadīšana"
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
+"Esiet sveicināti jūsu mākoņa glabātuves lietotnē. Šī ekskursija iepazīstinās "
+"jūs ar jauno tiešsaistes glabāšanas risinājumu - vienoto vietu tiešsaistes "
+"piekļuvei pie visiem jūsu failiem visos jūsu kontos. Šī ir vieta, kur jūs "
+"varat augšupielādēt un saglabāt failus, dalīties ar tiem un sinhronizēt tos "
+"ar citām ierīcēm. "
 
-#~ msgid ""
-#~ "Enter the E-Mail text into the main area. If the text format was set to "
-#~ "HTML in the options, you can format the E-Mail text. To do so select a "
-#~ "text part and then click an icon in the formatting bar."
-#~ msgstr ""
-#~ "Galvenajā apgabalā ievadiet e-pasta tekstu. Ja iestatījumos ziņojumiem ir "
-#~ "izvēlēts HTML formāts, jūs varat veikt e-pasta formatēšanu. Lai to "
-#~ "pveiktu, iezīmējiet teksta apgabalu un noklišķiniet atbilstošo ikonu "
-#~ "formatēšanas apgabalā."
-
-#~ msgid "Sending the E-Mail"
-#~ msgstr "E-pasta nosūtīšana"
-
-#~ msgid "To send the E-Mail, click on Send"
-#~ msgstr "Lai nosūtītu e-pastu, noklikšķiniet uz Sūtīt"
-
-#~ msgid "Sorting your E-Mails"
-#~ msgstr "E-pasta šķirošana"
-
-#~ msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
-#~ msgstr ""
-#~ "E-pasta kārtošanai noklikšķiniet uz 'Kārtot pēc' un izvēlieties "
-#~ "atbilstošo kritēriju."
-
-#~ msgid ""
-#~ "To choose between the different views. click on View in the toolbar. "
-#~ "Select a menu entry in the layout."
-#~ msgstr ""
-#~ "Lai pārslēgtos starp dažādiem skatiem, rīkjoslā ktivizējiet funkciju "
-#~ "Skats un zvēlieties vēlamo režīmu."
-
-#~ msgid "Opening an E-Mail in a separate window"
-#~ msgstr "E-pasta atvēršana atsevišķā logā"
-
-#~ msgid ""
-#~ "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
-#~ "separate window."
-#~ msgstr ""
-#~ "Ja e-pasta vēstuļu sarakstā uz kādas no vēstulēm tiek izpildīts "
-#~ "dubultklikšķis, šī vēstule tiek atvērta atsevišķā logā."
-
-#~ msgid "Reading E-Mail conversations"
-#~ msgstr "E-pasta sarunu lasīšana"
-
-#~ msgid ""
-#~ "To open or close an E-Mail in a conversation, click on a free area in the "
-#~ "header."
-#~ msgstr ""
-#~ "Lai atvērtu vai aizvērtu e-pastu sarunā, noklikšķiniet uz brīvās (tukšās) "
-#~ "vietas hederī."
-
-#~ msgid "Editing multiple E-Mails"
-#~ msgstr "Vairāku e-apstu rediģēšana"
-
-#~ msgid ""
-#~ "In order to edit multiple E-Mails at once, enable the checkboxes on the "
-#~ "left side of the E-Mails. If the checkboxes are not displayed, click on "
-#~ "View > Checkboxes on the right side of the toolbar."
-#~ msgstr ""
-#~ "Lai rediģētu vairākus e-pastus vienlaicīgi, aktivizējiet izvēles rūtiņas "
-#~ "saraksta kreisajā malā. Ja izvēles rūtiņas nav uzrādītas, noklikšķiniet "
-#~ "uz Skats > Izveles rūtiņas rīkjoslas labajā malā."
-
-#~ msgid "Opening the E-Mail settings"
-#~ msgstr "E-pasta iestatījumu atvēršana"
-
-#~ msgid ""
-#~ "To open the E-Mail settings, click the System menu icon on the upper "
-#~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
-#~ "side."
-#~ msgstr ""
-#~ "Lai atvērtu e-pasta iestatījumus, noklikšķiniet uz Sistēmas ikonas "
-#~ "izvēlnes joslas labajā malā un izvēlieties Iestatījumi. Pēc tam "
-#~ "noklikšķiniet uz e-pasta izvēlnes."
-
-#~ msgid ""
-#~ "The Portal informs you about current E-Mails, appointments or social "
-#~ "network news."
-#~ msgstr ""
-#~ "Portāls informē jūs par pašreizējām e-pasta vēstulēm, uzdevumiem, "
-#~ "mītiņiem un sociālo tīklu jaunumiem."
-
-#~ msgid ""
-#~ "The settings are organized in topics. Select the topic on the left side, "
-#~ "e.g Basic settings or E-Mail."
-#~ msgstr ""
-#~ "Iestatījumi ir organizēti tematiskās sadaļās. Izvēlieties atbilstošo "
-#~ "sadaļu (piemēram Pamata vai E-pasts)."
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Tagad jūs varat pievienot papildus verifikācijas opcijas sava konta drošības "
+"līmeņa paaugstināšanai."
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -2853,6 +2753,9 @@ msgstr ""
 #~ msgid "Compose new mail"
 #~ msgstr "Sastādīšana"
 
+#~ msgid "Composing a new E-Mail"
+#~ msgstr "Jauna e-pasta sastādīšana"
+
 #~ msgid "Conditions"
 #~ msgstr "Nosacījumi"
 
@@ -3936,6 +3839,9 @@ msgstr ""
 #~ msgid "Edit to set a name."
 #~ msgstr "Ievadiet nosaukumu."
 
+#~ msgid "Editing multiple E-Mails"
+#~ msgstr "Vairāku e-apstu rediģēšana"
+
 #~ msgid "Editor"
 #~ msgstr "Redaktors"
 
@@ -4153,6 +4059,16 @@ msgstr ""
 #~ "joslā."
 
 #~ msgid ""
+#~ "Enter the E-Mail text into the main area. If the text format was set to "
+#~ "HTML in the options, you can format the E-Mail text. To do so select a "
+#~ "text part and then click an icon in the formatting bar."
+#~ msgstr ""
+#~ "Galvenajā apgabalā ievadiet e-pasta tekstu. Ja iestatījumos ziņojumiem ir "
+#~ "izvēlēts HTML formāts, jūs varat veikt e-pasta formatēšanu. Lai to "
+#~ "pveiktu, iezīmējiet teksta apgabalu un noklišķiniet atbilstošo ikonu "
+#~ "formatēšanas apgabalā."
+
+#~ msgid ""
 #~ "Enter the recipient's name on the top left side. As soon as you typed the "
 #~ "first letters, suggestions from the address books are displayed. To "
 #~ "accept a recipient suggestion, click on it."
@@ -4169,6 +4085,9 @@ msgstr ""
 
 #~ msgid "Enter your version comment:"
 #~ msgstr "Ievadiet versijas komentāru:"
+
+#~ msgid "Entering the E-Mail text"
+#~ msgstr "Vēstules teksta ievadīšana"
 
 #~ msgid "Entire thread"
 #~ msgstr "Viss pavediens"
@@ -5005,6 +4924,13 @@ msgstr ""
 #~ "rīkjoslā noklikšķiniet uz 'Skatīt slaidrādi'."
 
 #~ msgid ""
+#~ "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+#~ "separate window."
+#~ msgstr ""
+#~ "Ja e-pasta vēstuļu sarakstā uz kādas no vēstulēm tiek izpildīts "
+#~ "dubultklikšķis, šī vēstule tiek atvērta atsevišķā logā."
+
+#~ msgid ""
 #~ "If the authorization expired or was revoked, you can repeat the "
 #~ "authorization process by clicking on the button below. The authorization "
 #~ "will proceed in a separate window."
@@ -5122,6 +5048,15 @@ msgstr ""
 #~ "Lai izvēlētajiem objektiem piešķirtu kategorijas, izmantojiet kontroles "
 #~ "laukus pa kreisi no kategorijām. Lai rediģētu kategorijas, izvēlieties "
 #~ "tās un lietojiet taustiņus labajā pusē."
+
+#~ msgid ""
+#~ "In order to edit multiple E-Mails at once, enable the checkboxes on the "
+#~ "left side of the E-Mails. If the checkboxes are not displayed, click on "
+#~ "View > Checkboxes on the right side of the toolbar."
+#~ msgstr ""
+#~ "Lai rediģētu vairākus e-pastus vienlaicīgi, aktivizējiet izvēles rūtiņas "
+#~ "saraksta kreisajā malā. Ja izvēles rūtiņas nav uzrādītas, noklikšķiniet "
+#~ "uz Skats > Izveles rūtiņas rīkjoslas labajā malā."
 
 #~ msgid "In progress"
 #~ msgstr "Apstrādē"
@@ -6637,6 +6572,12 @@ msgstr ""
 #~ msgid "Opening E-Mail threads"
 #~ msgstr "E-pasta sarunu atvēršana"
 
+#~ msgid "Opening an E-Mail in a separate window"
+#~ msgstr "E-pasta atvēršana atsevišķā logā"
+
+#~ msgid "Opening the E-Mail settings"
+#~ msgstr "E-pasta iestatījumu atvēršana"
+
 #~ msgid "Optional %d"
 #~ msgstr "Papildus %d"
 
@@ -7469,6 +7410,9 @@ msgstr ""
 #~ msgid "Read/Unread"
 #~ msgstr "Lasīts/Nelasīts"
 
+#~ msgid "Reading E-Mail conversations"
+#~ msgstr "E-pasta sarunu lasīšana"
+
 #~ msgid "Reauthorize"
 #~ msgstr "Pārautorizēties"
 
@@ -8044,6 +7988,12 @@ msgstr ""
 #~ msgid "Sender/From"
 #~ msgstr "Sūtītājs/No"
 
+#~ msgid "Sending an E-Mail to a contact"
+#~ msgstr "E-pasta nosūtīšana kontaktpersonai"
+
+#~ msgid "Sending the E-Mail"
+#~ msgstr "E-pasta nosūtīšana"
+
 #~ msgid "Senegal"
 #~ msgstr "Senegāla"
 
@@ -8426,6 +8376,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Diemžēl, mēs šeit nevaram palīdzēt. Jūsu pakalpojuma nodrošinātājam ir "
 #~ "jāiegūst LinkeIn atslēga ar tiesībām lasīt ziņojumus."
+
+#~ msgid "Sorting your E-Mails"
+#~ msgstr "E-pasta šķirošana"
 
 #~ msgid "Source"
 #~ msgstr "Avots"
@@ -8958,6 +8911,13 @@ msgstr ""
 #~ "Jauno objektu ikona parāda neizlasīto e-pastu vai citu jauno paziņojumu "
 #~ "skaitu. Noklikšķinot uz šīs ikonas tiek atvērts informatīvais apgabals."
 
+#~ msgid ""
+#~ "The Portal informs you about current E-Mails, appointments or social "
+#~ "network news."
+#~ msgstr ""
+#~ "Portāls informē jūs par pašreizējām e-pasta vēstulēm, uzdevumiem, "
+#~ "mītiņiem un sociālo tīklu jaunumiem."
+
 #~ msgid "The Tiles view"
 #~ msgstr "Flīžu skats"
 
@@ -9268,6 +9228,13 @@ msgstr ""
 
 #~ msgid "The setting has been saved."
 #~ msgstr "Iestatījums ir saglabāts"
+
+#~ msgid ""
+#~ "The settings are organized in topics. Select the topic on the left side, "
+#~ "e.g Basic settings or E-Mail."
+#~ msgstr ""
+#~ "Iestatījumi ir organizēti tematiskās sadaļās. Izvēlieties atbilstošo "
+#~ "sadaļu (piemēram Pamata vai E-pasts)."
 
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "
@@ -9642,6 +9609,23 @@ msgstr ""
 #~ "Lai manuāli pievienotu kontaktus vienkārši norādiet derīgu e-pasta adresi "
 #~ "(piem., john.doe@example.com or \"John Doe\" <jd@example.com>)"
 
+#~ msgid ""
+#~ "To choose between the different views. click on View in the toolbar. "
+#~ "Select a menu entry in the layout."
+#~ msgstr ""
+#~ "Lai pārslēgtos starp dažādiem skatiem, rīkjoslā ktivizējiet funkciju "
+#~ "Skats un zvēlieties vēlamo režīmu."
+
+#~ msgid "To compose a new E-Mail, click on Compose in the toolbar."
+#~ msgstr ""
+#~ "Jauna e-pasta sastādīšanai noklikšķiniet uz e-pasta sastādīšanas ikonas "
+#~ "rīkjoslā."
+
+#~ msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+#~ msgstr ""
+#~ "Lai izveidotu jaunu e-pasta vēstuli, noklikšķiniet uz jauna e-pasta "
+#~ "ikonas rīkjoslā."
+
 #~ msgid "To create a note, click on New > Add note in the toolbar."
 #~ msgstr ""
 #~ "Jaunas piezīmes izveidošanai rīkjoslā noklikšķiniet uz Jauns > Pievienot "
@@ -9670,6 +9654,22 @@ msgstr ""
 #~ "Lai palaistu lietotni, izmantojiet ātrās palaišanas ikonas izvēlnes "
 #~ "joslas kreisajā pusē vai noklikšķiniet uz ieraksta lietotņu palaišanas "
 #~ "izvēlnē."
+
+#~ msgid ""
+#~ "To open or close an E-Mail in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "Lai atvērtu vai aizvērtu e-pastu sarunā, noklikšķiniet uz brīvās (tukšās) "
+#~ "vietas hederī."
+
+#~ msgid ""
+#~ "To open the E-Mail settings, click the System menu icon on the upper "
+#~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
+#~ "side."
+#~ msgstr ""
+#~ "Lai atvērtu e-pasta iestatījumus, noklikšķiniet uz Sistēmas ikonas "
+#~ "izvēlnes joslas labajā malā un izvēlieties Iestatījumi. Pēc tam "
+#~ "noklikšķiniet uz e-pasta izvēlnes."
 
 #~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
@@ -9716,8 +9716,16 @@ msgstr ""
 #~ "Lai izvēlētos ikonu, saraksta vai apskatlapu skatu, rīkjoslā "
 #~ "noklikšķiniet uz skata izvēles ikonas."
 
+#~ msgid "To send the E-Mail, click on Send"
+#~ msgstr "Lai nosūtītu e-pastu, noklikšķiniet uz Sūtīt"
+
 #~ msgid "To send the E-Mail, click on Send on the upper right side."
 #~ msgstr "Lai nosūtītu vēstuli noklikšķiniet uz 'Sūtīt' augšējā labajā malā."
+
+#~ msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "E-pasta kārtošanai noklikšķiniet uz 'Kārtot pēc' un izvēlieties "
+#~ "atbilstošo kritēriju."
 
 #~ msgid "To upload a file, click on New > Upload new file in the toolbar."
 #~ msgstr ""

@@ -12,222 +12,35 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.1.1\n"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating a new appointment"
-msgstr "Yeni randevu oluşturma"
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Add another account"
+msgstr "Başka bir hesap ekleme"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr ""
-"Yeni randevu oluşturmak için araç çubuğundaki \"Yeni\" düğmesine tıklayın."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Entering the appointment's data"
-msgstr "Randevu bilgilerini girme"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"Enter the subject, the start and the end date of the appointment. Other "
-"details are optional."
-msgstr ""
-"Randevunun konusunu, başlangıç ve bitiş tarihlerini girin. Diğer ayrıntılar "
-"isteğe bağlıdır."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating recurring appointments"
-msgstr "Tekrarlanan randevular oluşturma"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"To create recurring appointments, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
-msgstr ""
-"Tekrarlanan randevular oluşturmak için \"Tekrarla\" seçeneğini "
-"etkinleştirin. Tekrarlama ile ilgili ayarlar karşınıza gelecektir."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Inviting other participants"
-msgstr "Diğer katılımcıları davet etme"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. To avoid appointment conflicts, click on Find a free time at "
-"the upper right side."
-msgstr ""
-"Diğer katılımcıları davet etmek için adlarını Katılımcılar alanına yazın. "
-"Randevu çakışmalarını önlemek için sağ üst taraftaki \"Boş zamanı bul\"a "
-"tıklayabilirsiniz."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Anımsatma işlevini kullanma"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Randevunuzu kaçırmamak için anımsatma işlevini kullanabilirsiniz."
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Kısa mesajla kod alma"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
 msgstr "Ek dosyalar ekleme"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Further down you can add documents as attachments to the appointment."
-msgstr "Randevuya dosya eki olarak belgeler ekleyebilirsiniz."
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Adding further details"
+msgstr "Diğer ayrıntıları ekleme"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating the appointment"
-msgstr "Randevuyu oluşturma"
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Doğrulama seçeneği ekleme"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create the appointment, click on Create at the lower left side."
-msgstr ""
-"Randevuyu oluşturmak için sol alt köşedeki \"Oluştur\" düğmesine tıklayın."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
-msgid "Selecting a view"
-msgstr "Görünüm seçme"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid ""
-"To select one of the views like Day, Month or List, click on View in the "
-"toolbar. Select a menu entry from the Layout section."
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
 msgstr ""
-"Gün, ay veya liste görünümlerinden birini seçmek için araç çubuğunda "
-"\"Görünüm\"e tıklayın. \"Düzen\" bölümünden bir istediğiniz öğeyi seçin."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "The calendar views"
-msgstr "Takvim görünümleri"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"The calendar views display a calendar sheet with the appointments for the "
-"selected time range."
-msgstr ""
-"Takvim görünümü, seçili zaman aralığındaki randevularınızı içeren bir takvim "
-"sayfası gösterir."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "The List view"
-msgstr "Liste görünümü"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"The List view shows a list of the appointments in the current folder. If "
-"clicking on an appointment, the appointment's data and some functions are "
-"displayed in the Detail view."
-msgstr ""
-"Liste görünümü, geçerli klasördeki randevuların listesini gösterir. Bir "
-"randevuya tıklarsanız o randevunun verileri ve bazı işlevleri Ayrıntı "
-"görünümünde görüntülenir."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Creating a new contact"
-msgstr "Yeni bir kişi oluşturma"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "To create a new contact, click on New > Add contact in the toolbar."
-msgstr ""
-"Yeni bir kişi oluşturmak için araç çubuğundaki \"Yeni > Kişi ekle\" "
-"düğmesine tıklayın."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Navigation bar"
-msgstr "Gezinti çubuğu"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"Click on a letter on the left side of the navigation bar in order to display "
-"the corresponding contacts from the selected address book."
-msgstr ""
-"Seçili adres defterinden ilgili kişileri görüntülemek için gezinme çubuğunun "
-"sol tarafındaki harflerden birine tıklayın."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an email to a contact"
-msgstr "Bir kişiye e-posta gönderme"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"To send an E-Mail to the contact, click on an E-Mail address or on Send "
-"email in the toolbar."
-msgstr ""
-"Bir kişiye e-posta göndermek için e-posta adresine tıklayın veya adres "
-"çubuğundaki \"E-posta gönder\" düğmesine tıklayın."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Editing multiple contacts"
-msgstr "Birden çok kişiyi düzenleme"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"To edit multiple contacts at once, enable the checkboxes on the left side of "
-"the contacts. If the checkboxes are not displayed, click on View > "
-"Checkboxes on the right side of the toolbar."
-msgstr ""
-"Aynı anda birden çok kişiyi düzenlemek isterseniz kişilerin sol tarafındaki "
-"onay kutularına tıklayın. Onay kutuları görünmüyorsa araç çubuğunun sağ "
-"tarafındaki \"Görünüm > Onay kutuları\"na tıklayın."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "The Drive app"
-msgstr "Drive uygulaması"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Welcome to your cloud storage app. This Guided Tour will introduce you to "
-"your new online storage solution - your one point to access online stored "
-"files from all your accounts. This is where you can upload and save your "
-"files, share them and synchronize them with different devices.  "
-msgstr ""
-"Bulut depolama uygulamanıza hoş geldiniz. Bu rehberli tur, yeni çevrimiçi "
-"depolama çözümünüze sizi tanıtacak. Artık tüm hesaplarınızda depolanan "
-"dosyalara tek bir noktadan ulaşabileceksiniz. Dosyalarınızı yüklemek, "
-"kaydetmek, paylaşmak ve farklı cihazlarla senkronize etmek için bu "
-"uygulamayı kullanabilirsiniz. "
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Folder tree"
-msgstr "Klasör ağacı"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"On the left you can see the folder tree. It displays your folder structure "
-"and allows you to navigate to specific folders and subfolders. To make your "
-"life easier, we have already included folders for your Documents, Music, "
-"Pictures and Videos."
-msgstr ""
-"Solda klasör ağacını görebilirsiniz. Klasör ağacında klasör yapınızı "
-"görebilir, istediğini klasör ve alt klasörlere gidebilirsiniz. İşinizi "
-"kolaylaştırmak amacıyla Belgeler, Müzik, Resimler ve Videolar klasörlerini "
-"sizin için oluşturduk."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Folder content"
-msgstr "Klasör içeriği"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Clicking on a folder displays all the subfolders, documents, media and other "
-"files that it contains."
-msgstr ""
-"Bir klasöre tıkladığınızda tüm alt klasörler, belgeler, medya dosyaları ve "
-"klasördeki diğer dosyalar görüntülenir."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Select a view"
-msgstr "Görünüm seçme"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Different views are available. Just select the one you like best."
-msgstr ""
-"Kullanabileceğiniz farklı görünümler var. Kendinize en uygun olanı "
-"seçebilirsiniz."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Toolbar"
-msgstr "Araç çubuğu"
+"Ek bir güvenlik özelliği olarak, artık hesabınıza giriş yaparken kısa "
+"mesajla kod alma gibi ikinci bir kimlik doğrulama yöntemi de "
+"kullanabilirsiniz.  Bu konuda bilgi almak ister misiniz?"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -237,60 +50,9 @@ msgstr ""
 "Üst tarafta birçok işlev ve ek seçenekler içeren araç çubuğunu bulacaksınız. "
 "Kolayca yeni klasörler ve dosyalar oluşturabilirsiniz."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Upload a new file"
-msgstr "Yeni dosya yükleme"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
-msgstr ""
-"Cihazınızda bulunan bir dosyayı yüklemek için \"Yerel dosya ekle\"ye "
-"tıklamanız ve yüklenecek dosyayı seçmeniz yeterlidir. Hatta yerel "
-"sürücünüzdeki dosyaları sürükleyip Drive'a bırakarak yüklemeniz de mümkün. "
-"Yüklediğiniz dosyalara daha sonra tüm cihazlarınızdan ulaşabilirsiniz."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Preview files"
-msgstr "Dosyaları öni zleme"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Clicking on the view icon leads you to a preview of the selected file."
-msgstr ""
-"\"Görüntüle\" simgesine tıkladığınızda seçili dosyanın ön izlemesini "
-"görebilirsiniz."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Preview mode"
-msgstr "Ön izleme modu"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"From preview you can also select other options to help you manage and work "
-"on your files."
-msgstr ""
-"Ön izleme ekranında dosyaları yönetmenize ve üzerlerinde çalışmanızı "
-"sağlayacak diğer seçenekleri de seçebilirsiniz."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Share files"
-msgstr "Dosyaları paylaşma"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Here you can share files with your colleagues and external contacts. You can "
-"also collaborate on a document and set different access rights."
-msgstr ""
-"Buradan iş arkadaşlarınızla ve başkalarıyla dosya paylaşabilirsiniz. Ayrıca "
-"bir belge üzerinde ortak çalışabilir ve farklı erişim hakları "
-"tanımlayabilirsiniz."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Sharing options"
-msgstr "Paylaşım seçenekleri"
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Kimlik doğrulama istekleri"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -306,24 +68,98 @@ msgstr ""
 "oluşturmanız yeterlidir. İsterseniz son kullanma tarihi ve parola koruması "
 "da ekleyebilirsiniz."
 
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"Click on a letter on the left side of the navigation bar in order to display "
+"the corresponding contacts from the selected address book."
+msgstr ""
+"Seçili adres defterinden ilgili kişileri görüntülemek için gezinme çubuğunun "
+"sol tarafındaki harflerden birine tıklayın."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+"Bir klasöre tıkladığınızda tüm alt klasörler, belgeler, medya dosyaları ve "
+"klasördeki diğer dosyalar görüntülenir."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr ""
+"\"Görüntüle\" simgesine tıkladığınızda seçili dosyanın ön izlemesini "
+"görebilirsiniz."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Closing a square"
+msgstr "Bir kareyi kapatma"
+
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Collaborating"
 msgstr "Birlikte çalışma"
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Sharing files by inviting people does not only offer your recipients the "
-"option to create and edit files. Internal and external participants are also "
-"able to collaborate with you on text documents and spreadsheets at the same "
-"time."
-msgstr ""
-"Kişileri davet ederek dosyaları paylaşmak, yalnızca alıcılarınıza dosya "
-"oluşturma ve düzenleme olanağı sağlamaz, iç ve dış katılımcılar aynı zamanda "
-"metin belgeleri ve hesap tabloları üzerinde sizinle aynı anda çalışabilir."
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Composing a new email"
+msgstr "Yeni e-posta yazma"
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Edit documents"
-msgstr "Belgeleri düzenleme"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating a new appointment"
+msgstr "Yeni randevu oluşturma"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Creating a new contact"
+msgstr "Yeni bir kişi oluşturma"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating a new task"
+msgstr "Yeni görev oluşturma"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Creating new items"
+msgstr "Yeni öğe oluşturma"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating recurring appointments"
+msgstr "Tekrarlanan randevular oluşturma"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating recurring tasks"
+msgstr "Yinelenen görevler oluşturma"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating the appointment"
+msgstr "Randevuyu oluşturma"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating the task"
+msgstr "Görevi oluşturma"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Customizing the Portal"
+msgstr "Portali özelleştirme"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Depending on the app, the toolbar contains various functions for creating, "
+"editing and organizing objects."
+msgstr ""
+"Uygulamaya bağlı olarak, araç çubuğu; nesneleri oluşturmak, düzenlemek ve "
+"organize etmek için çeşitli işlevler içerir."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Detailed instructions for the single apps are located in System menu > Help."
+msgstr ""
+"Her uygulamanın kendi yönergelerine Sistem menüsü > Yardım bölümünden "
+"ulaşabilirsiniz."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
+"Eklediğiniz cihazları istediğiniz zaman silebilirsiniz.  Ayrıntılı bilgi "
+"için yardım bölümümüze bakabilirsiniz."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -336,23 +172,18 @@ msgstr ""
 "ama gerektiğinde dosyanın önceki sürümlerine de ulaşabilirsiniz."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "File details"
-msgstr "Dosya ayrıntıları"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"The file details side bar offers additional information about your files. "
-"Just enable the File details option from the View drop down menu and select "
-"a file to see the details."
+msgid "Different views are available. Just select the one you like best."
 msgstr ""
-"\"Dosya ayrıntıları\" kenar çubuğu, dosyalarınıza ilişkin ek bilgiler sunar. "
-"\"Görünüm\" açılır menüsünden \"Dosya ayrıntıları\" seçeneğini "
-"etkinleştirdikten sonra ayrıntılarını görmek istediğiniz dosyayı seçmeniz "
-"yeterli."
+"Kullanabileceğiniz farklı görünümler var. Kendinize en uygun olanı "
+"seçebilirsiniz."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Add another account"
-msgstr "Başka bir hesap ekleme"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Displaying the help or the settings"
+msgstr "Yardımı veya ayarları görüntüleme"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Drag and drop"
+msgstr "Sürükle-bırak"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -364,170 +195,33 @@ msgstr ""
 "bulut depolama hesabınız varsa Drive ona da bağlanabilir. Mevcut "
 "verilerinize erişmek için uygun logoya tıklamanız yeterli."
 
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"Edit a setting on the right side. In most of the cases, the changes are "
+"activated immediately."
+msgstr ""
+"Sağ taraftan istediğiniz ayarı düzenleyin. Çoğu durumda değişiklikler hemen "
+"devreye girer."
+
 #: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "The Drive app tour.txt"
-msgstr "Drive uygulama turu.txt"
+msgid "Edit documents"
+msgstr "Belgeleri düzenleme"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Welcome to %s"
-msgstr "%s uygulamasına hoş geldiniz"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"This guided tour will briefly introduce you to the product. Get more "
-"detailed information in the tours for the single apps or in the online help."
-msgstr ""
-"Bu rehberli turda size sistemi kısaca tanıtacağız. Daha ayrıntılı bilgi için "
-"uygulamaların kendi turlarına veya çevrimiçi yardım sayfalarına "
-"bakabilirsiniz."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Launching an app"
-msgstr "Bir uygulamayı çalıştırma"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app click on an entry inside the app launcher menu."
-msgstr ""
-"Bir uygulamayı başlatmak için uygulama başlatıcısı menüsündeki ilgili öğeye "
-"tıklayın."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Displaying the help or the settings"
-msgstr "Yardımı veya ayarları görüntüleme"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To display the help or the settings, click the System menu icon in the menu "
-"bar."
-msgstr ""
-"Yardım sayfalarını veya ayarları görmek için menü çubuğundaki Sistem menü "
-"simgesine tıklayın."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Creating new items"
-msgstr "Yeni öğe oluşturma"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr ""
-"Yeni bir e-posta oluşturmak için araç çubuğundaki \"Oluştur\"a tıklayın."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Opening or closing the folder tree"
-msgstr "Klasör ağacını açma ve kapatma"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To open or close the folder tree, click on View >  Folder view on the right "
-"side of the toolbar."
-msgstr ""
-"Klasör ağacını açıp kapatmak için araç çubuğunun sağ tarafındaki \"Görünüm > "
-"Klasör görünümünü\"ne tıklayın."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Searching for objects"
-msgstr "Nesne arama"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To search for objects, click the Search icon in the menu bar."
-msgstr "Nesne aramak için menü çubuğundaki arama simgesine tıklayın."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The toolbar"
-msgstr "Araç çubuğu"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Depending on the app, the toolbar contains various functions for creating, "
-"editing and organizing objects."
-msgstr ""
-"Uygulamaya bağlı olarak, araç çubuğu; nesneleri oluşturmak, düzenlemek ve "
-"organize etmek için çeşitli işlevler içerir."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The folder tree"
-msgstr "Klasör ağacı"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Use the folder tree to open the folder containing the objects that you want "
-"to view in the list."
-msgstr ""
-"Listede görmek istediğiniz nesneleri içeren klasörü açmak için klasör "
-"ağacını kullanabilirsiniz."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The list"
-msgstr "Liste"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Use the list to select an object, show its contents or activate functions."
-msgstr ""
-"Bir nesneyi seçmek, nesnenin içeriğini görmek ve işlevleri etkinleştirmek "
-"için listeyi kullanabilirsiniz."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The Detail view"
-msgstr "Ayrıntı görünümü"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The Detail view displays an object's content. Depending on the app, further "
-"functions for organizing objects can be found in the Detail view."
-msgstr ""
-"Ayrıntı görünümünde nesnenin içeri görünür. Uygulamaya bağlı olarak, nesneyi "
-"düzenlemeye yarayan diğer işlevler de Ayrıntı görünümünde bulunabilir."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Further information"
-msgstr "Daha fazla bilgi"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Detailed instructions for the single apps are located in System menu > Help."
-msgstr ""
-"Her uygulamanın kendi yönergelerine Sistem menüsü > Yardım bölümünden "
-"ulaşabilirsiniz."
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Editing multiple contacts"
+msgstr "Birden çok kişiyi düzenleme"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new email"
-msgstr "Yeni e-posta yazma"
+msgid "Editing multiple emails"
+msgstr "Birden çok e-posta düzenleme"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the recipient's name"
-msgstr "Alıcının adını girme"
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Editing multiple tasks"
+msgstr "Birden çok görevi düzenleme"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"Enter the recipient's name into the recipients field. As soon as you typed "
-"the first letters, suggestions from the address books are displayed. To "
-"accept a recipient suggestion, click on it."
-msgstr ""
-"Alıcının adını \"Alıcılar\" alanına girin. İlk harfleri yazdığınızda adres "
-"defterinden öneriler görüntülenecektir. Önerilerden birini kabul etmek için "
-"üzerine tıklayabilirsiniz."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the subject"
-msgstr "Konuyu girme"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Enter the subject into the subject field."
-msgstr "Konunuzu konu alanına yazın."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Further functions"
-msgstr "Diğer işlevler"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"In this area you can find further functions, e.g. for adding attachments."
-msgstr "Bu alanda diğer işlevleri (örn. dosya ekleme) bulabilirsiniz."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the email text"
-msgstr "E-posta metnini yazma"
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Editing settings"
+msgstr "Ayarları düzeneleme"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -541,34 +235,108 @@ msgstr ""
 "simgeye tıklayın."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the email"
-msgstr "E-postayı gönderme"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the email, click on Send"
-msgstr "E-postayı göndermek için Gönder düğmesine tıklayın"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your emails"
-msgstr "E-postalarınızı sıralama"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
-msgstr ""
-"E-postaları sıralamak için \"Sırala\"ya tıklayın ve bir sıralama ölçütü "
-"seçin."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To choose between the different views, click on View in the toolbar. Select "
-"a menu entry in the layout."
+"Enter the recipient's name into the recipients field. As soon as you typed "
+"the first letters, suggestions from the address books are displayed. To "
+"accept a recipient suggestion, click on it."
 msgstr ""
-"Görünümler arasından seçim yapmak için araç çubuğundaki \"Görünüm\"e "
-"tıklayın ve \"Düzen\" menüsünden bir öğe seçin."
+"Alıcının adını \"Alıcılar\" alanına girin. İlk harfleri yazdığınızda adres "
+"defterinden öneriler görüntülenecektir. Önerilerden birini kabul etmek için "
+"üzerine tıklayabilirsiniz."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an email in a separate window"
-msgstr "E-postayı ayrı bir pencerede açma"
+msgid "Enter the subject into the subject field."
+msgstr "Konunuzu konu alanına yazın."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"Enter the subject, the start and the end date of the appointment. Other "
+"details are optional."
+msgstr ""
+"Randevunun konusunu, başlangıç ve bitiş tarihlerini girin. Diğer ayrıntılar "
+"isteğe bağlıdır."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Enter the subject, the start date, and a description."
+msgstr "Konuyu, başlangıç tarihini ve açıklamayı girin."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering billing information"
+msgstr "Fatura bilgilerini girme"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Entering the appointment's data"
+msgstr "Randevu bilgilerini girme"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the email text"
+msgstr "E-posta metnini yazma"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the recipient's name"
+msgstr "Alıcının adını girme"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the subject"
+msgstr "Konuyu girme"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering the task's data"
+msgstr "Görev bilgilerini girme"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "File details"
+msgstr "Dosya ayrıntıları"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder content"
+msgstr "Klasör içeriği"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder tree"
+msgstr "Klasör ağacı"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
+msgstr ""
+"Ön izleme ekranında dosyaları yönetmenize ve üzerlerinde çalışmanızı "
+"sağlayacak diğer seçenekleri de seçebilirsiniz."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Further down you can add documents as attachments to the appointment."
+msgstr "Randevuya dosya eki olarak belgeler ekleyebilirsiniz."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Further functions"
+msgstr "Diğer işlevler"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Further information"
+msgstr "Daha fazla bilgi"
+
+#. Tour name; general introduction
+#: apps/io.ox/tours/main.js module:io.ox/tours
+msgid "Getting started"
+msgstr "Başlarken"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Halo view"
+msgstr "Hale görünümü"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+"Buradan iş arkadaşlarınızla ve başkalarıyla dosya paylaşabilirsiniz. Ayrıca "
+"bir belge üzerinde ortak çalışabilir ve farklı erişim hakları "
+"tanımlayabilirsiniz."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "How the settings are organized"
+msgstr "Ayarların dağılımı"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -577,33 +345,10 @@ msgid ""
 msgstr ""
 "Listedeki bir e-postayı çift tıklarsanız e-posta ayrı bir pencerede açılır."
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading email conversations"
-msgstr "E-posta yazışmalarını okuma"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "If you no longer want to display a square, click the delete icon."
 msgstr ""
-"Bir e-posta yazışmasını açmak veya kapatmak için başlık kısmındaki boş bir "
-"alana tıklayın."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Halo view"
-msgstr "Hale görünümü"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To receive information about the sender or other recipients, open the Halo "
-"view by clicking on a name."
-msgstr ""
-"Gönderen veya diğer alıcılar hakkında bilgi almak için bir ada tıklayarak "
-"Hale görünümünü açabilirsiniz."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple emails"
-msgstr "Birden çok e-posta düzenleme"
+"Karelerden birini artık görmek istemiyorsanız silme simgesine tıklayın."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -616,49 +361,93 @@ msgstr ""
 "tarafındaki \"Görünüm > Onay kutuları\"na tıklayın."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In this area you can find further functions, e.g. for adding attachments."
+msgstr "Bu alanda diğer işlevleri (örn. dosya ekleme) bulabilirsiniz."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Inviting other participants"
+msgstr "Diğer katılımcıları davet etme"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Launching an app"
+msgstr "Bir uygulamayı çalıştırma"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Navigation bar"
+msgstr "Gezinti çubuğu"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "İleri"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
+msgstr ""
+"Solda klasör ağacını görebilirsiniz. Klasör ağacında klasör yapınızı "
+"görebilir, istediğini klasör ve alt klasörlere gidebilirsiniz. İşinizi "
+"kolaylaştırmak amacıyla Belgeler, Müzik, Resimler ve Videolar klasörlerini "
+"sizin için oluşturduk."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Opening an email in a separate window"
+msgstr "E-postayı ayrı bir pencerede açma"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Opening or closing the folder tree"
+msgstr "Klasör ağacını açma ve kapatma"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Opening the email settings"
 msgstr "E-posta ayarlarını açma"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To open the email settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on email on the left side."
-msgstr ""
-"E-posta ayarlarını açmak için menü çubuğunun sağ üst tarafındaki Sistem "
-"menüsü simgesine tıklayın, \"Ayarlar\"ı seçin, sol taraftaki \"E-posta\"ya "
-"tıklayın."
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the help"
+msgstr "Yardımı açma"
 
-#. Tour name; general introduction
-#: apps/io.ox/tours/main.js module:io.ox/tours
-msgid "Getting started"
-msgstr "Başlarken"
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the settings"
+msgstr "Ayarları açma"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview files"
+msgstr "Dosyaları öni zleme"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview mode"
+msgstr "Ön izleme modu"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Reading email conversations"
+msgstr "E-posta yazışmalarını okuma"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Reading the details"
+msgstr "Ayrıntıları okuma"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Kaldırma"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Searching for objects"
+msgstr "Nesne arama"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
 msgstr "Çift faktörlü doğrulama"
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"You can now add additional verification options to enhance the security of "
-"your account."
-msgstr ""
-"Hesap güvenliğinizi artırmak amacıyla artık ikinci bir doğrulama seçeneği "
-"ekleyebilirsiniz."
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Select a view"
+msgstr "Görünüm seçme"
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Adding verification option"
-msgstr "Doğrulama seçeneği ekleme"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Various options for additional verification depends on your installation."
-msgstr ""
-"Kurulumunuza bağlı olarak çeşitli ek doğrulama seçeneklerini "
-"kullanabilirsiniz."
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Adding a code via text message"
-msgstr "Kısa mesajla kod alma"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
+msgid "Selecting a view"
+msgstr "Görünüm seçme"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid ""
@@ -668,47 +457,82 @@ msgstr ""
 "Örneğin kısa mesaj yoluyla kod alma yöntemini seçerseniz telefon numaranız "
 "istenecektir."
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Authentication Requests"
-msgstr "Kimlik doğrulama istekleri"
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Sending an email to a contact"
+msgstr "Bir kişiye e-posta gönderme"
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sending the email"
+msgstr "E-postayı gönderme"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Share files"
+msgstr "Dosyaları paylaşma"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Then the next time you log in, you will have to verify your identitity by "
-"entering the number sent to your phone."
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
 msgstr ""
-"Bir sonraki girişinizde telefonunuza gönderilen kodu yazarak kimliğinizi "
-"doğrulamanız gerekecektir."
+"Kişileri davet ederek dosyaları paylaşmak, yalnızca alıcılarınıza dosya "
+"oluşturma ve düzenleme olanağı sağlamaz, iç ve dış katılımcılar aynı zamanda "
+"metin belgeleri ve hesap tabloları üzerinde sizinle aynı anda çalışabilir."
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Removing"
-msgstr "Kaldırma"
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Sharing options"
+msgstr "Paylaşım seçenekleri"
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Devices can be removed once added if you so choose.  See help for additional "
-"details."
-msgstr ""
-"Eklediğiniz cihazları istediğiniz zaman silebilirsiniz.  Ayrıntılı bilgi "
-"için yardım bölümümüze bakabilirsiniz."
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Signing out"
+msgstr "Çıkış yapma"
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Next"
-msgstr "İleri"
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Sorting tasks"
+msgstr "Görevleri sıralama"
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"As an additional security feature, you can now require a second method of "
-"authentication, such as a text message, before logging into your account.  "
-"Would you like to see some information on this now?"
-msgstr ""
-"Ek bir güvenlik özelliği olarak, artık hesabınıza giriş yaparken kısa "
-"mesajla kod alma gibi ikinci bir kimlik doğrulama yöntemi de "
-"kullanabilirsiniz.  Bu konuda bilgi almak ister misiniz?"
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sorting your emails"
+msgstr "E-postalarınızı sıralama"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Start tour"
 msgstr "Turu başlat"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The Detail view"
+msgstr "Ayrıntı görünümü"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"The Detail view displays an object's content. Depending on the app, further "
+"functions for organizing objects can be found in the Detail view."
+msgstr ""
+"Ayrıntı görünümünde nesnenin içeri görünür. Uygulamaya bağlı olarak, nesneyi "
+"düzenlemeye yarayan diğer işlevler de Ayrıntı görünümünde bulunabilir."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app"
+msgstr "Drive uygulaması"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app tour.txt"
+msgstr "Drive uygulama turu.txt"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "The List view"
+msgstr "Liste görünümü"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"The List view shows a list of the appointments in the current folder. If "
+"clicking on an appointment, the appointment's data and some functions are "
+"displayed in the Detail view."
+msgstr ""
+"Liste görünümü, geçerli klasördeki randevuların listesini gösterir. Bir "
+"randevuya tıklarsanız o randevunun verileri ve bazı işlevleri Ayrıntı "
+"görünümünde görüntülenir."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
@@ -722,62 +546,36 @@ msgstr ""
 "Portal, mevcut e-postalarınız, randevularınız veya sosyal ağ haberleri "
 "hakkında sizi bilgilendirir."
 
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Reading the details"
-msgstr "Ayrıntıları okuma"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "The calendar views"
+msgstr "Takvim görünümleri"
 
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "To read the details, click on an entry in a square."
-msgstr "Ayrıntıları okumak için karelerdeki girdilerden birine tıklayın."
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Drag and drop"
-msgstr "Sürükle-bırak"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
-"To change the layout, drag a square's title to another position and drop it "
-"there."
+"The calendar views display a calendar sheet with the appointments for the "
+"selected time range."
 msgstr ""
-"Düzeni değiştirmek için karelerin başlıklarını başka konumlara sürükleyip "
-"bırakabilirsiniz."
+"Takvim görünümü, seçili zaman aralığındaki randevularınızı içeren bir takvim "
+"sayfası gösterir."
 
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Closing a square"
-msgstr "Bir kareyi kapatma"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "If you no longer want to display a square, click the delete icon."
-msgstr ""
-"Karelerden birini artık görmek istemiyorsanız silme simgesine tıklayın."
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Customizing the Portal"
-msgstr "Portali özelleştirme"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To display a square again or to display further information sources, click "
-"on Customize this page."
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
 msgstr ""
-"Bir kareyi yeniden görmek veya daha fazla bilgi kaynağı görmek isterseniz "
-"\"Bu sayfayı özelleştir\"e tıklayın."
+"\"Dosya ayrıntıları\" kenar çubuğu, dosyalarınıza ilişkin ek bilgiler sunar. "
+"\"Görünüm\" açılır menüsünden \"Dosya ayrıntıları\" seçeneğini "
+"etkinleştirdikten sonra ayrıntılarını görmek istediğiniz dosyayı seçmeniz "
+"yeterli."
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Opening the settings"
-msgstr "Ayarları açma"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The folder tree"
+msgstr "Klasör ağacı"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"To open the settings, click the user image on the upper right side of the "
-"menu bar. Select Settings."
-msgstr ""
-"Ayarları açmak için menü çubuğunun sağ üst tarafındaki kullanıcı resminize "
-"tıklayın ve \"Ayarlar\"ı seçin."
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "How the settings are organized"
-msgstr "Ayarların dağılımı"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The list"
+msgstr "Liste"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -787,21 +585,194 @@ msgstr ""
 "Ayarlar konulara ayrılmıştır. Sol taraftan istediğiniz konuyu (örn. \"Temel "
 "ayarlar\" veya \"E-posta\") seçebilirsiniz."
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Editing settings"
-msgstr "Ayarları düzeneleme"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The toolbar"
+msgstr "Araç çubuğu"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid ""
-"Edit a setting on the right side. In most of the cases, the changes are "
-"activated immediately."
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
 msgstr ""
-"Sağ taraftan istediğiniz ayarı düzenleyin. Çoğu durumda değişiklikler hemen "
-"devreye girer."
+"Bir sonraki girişinizde telefonunuza gönderilen kodu yazarak kimliğinizi "
+"doğrulamanız gerekecektir."
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Opening the help"
-msgstr "Yardımı açma"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"This guided tour will briefly introduce you to the product. Get more "
+"detailed information in the tours for the single apps or in the online help."
+msgstr ""
+"Bu rehberli turda size sistemi kısaca tanıtacağız. Daha ayrıntılı bilgi için "
+"uygulamaların kendi turlarına veya çevrimiçi yardım sayfalarına "
+"bakabilirsiniz."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To add further details, click on Expand form."
+msgstr ""
+"Daha fazla ayrıntı eklemek isterseniz Formu genişlet düğmesine tıklayın."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To change the layout, drag a square's title to another position and drop it "
+"there."
+msgstr ""
+"Düzeni değiştirmek için karelerin başlıklarını başka konumlara sürükleyip "
+"bırakabilirsiniz."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To choose between the different views, click on View in the toolbar. Select "
+"a menu entry in the layout."
+msgstr ""
+"Görünümler arasından seçim yapmak için araç çubuğundaki \"Görünüm\"e "
+"tıklayın ve \"Düzen\" menüsünden bir öğe seçin."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/mail.js
+msgid "To compose a new email, click on Compose in the toolbar."
+msgstr ""
+"Yeni bir e-posta oluşturmak için araç çubuğundaki \"Oluştur\"a tıklayın."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create a new appointment, click on New in the toolbar."
+msgstr ""
+"Yeni randevu oluşturmak için araç çubuğundaki \"Yeni\" düğmesine tıklayın."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "To create a new contact, click on New > Add contact in the toolbar."
+msgstr ""
+"Yeni bir kişi oluşturmak için araç çubuğundaki \"Yeni > Kişi ekle\" "
+"düğmesine tıklayın."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create a new task, click on New in the toolbar."
+msgstr ""
+"Yeni bir görev oluşturmak için araç çubuğundaki Yeni düğmesine tıklayın."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To create recurring appointments, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Tekrarlanan randevular oluşturmak için \"Tekrarla\" seçeneğini "
+"etkinleştirin. Tekrarlama ile ilgili ayarlar karşınıza gelecektir."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To create recurring tasks, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Tekrarlanan görevler oluşturmak isterseniz \"Tekrarla\" seçeneğini "
+"etkinleştirin. Tekrarlama ile ilgili ayarlar karşınıza gelecektir."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create the appointment, click on Create at the lower left side."
+msgstr ""
+"Randevuyu oluşturmak için sol alt köşedeki \"Oluştur\" düğmesine tıklayın."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create the task, click on Create."
+msgstr "Görevi oluşturmak için Oluştur düğmesine tıklayın."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To display a square again or to display further information sources, click "
+"on Customize this page."
+msgstr ""
+"Bir kareyi yeniden görmek veya daha fazla bilgi kaynağı görmek isterseniz "
+"\"Bu sayfayı özelleştir\"e tıklayın."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"To display the help or the settings, click the System menu icon in the menu "
+"bar."
+msgstr ""
+"Yardım sayfalarını veya ayarları görmek için menü çubuğundaki Sistem menü "
+"simgesine tıklayın."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"To edit multiple contacts at once, enable the checkboxes on the left side of "
+"the contacts. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"Aynı anda birden çok kişiyi düzenlemek isterseniz kişilerin sol tarafındaki "
+"onay kutularına tıklayın. Onay kutuları görünmüyorsa araç çubuğunun sağ "
+"tarafındaki \"Görünüm > Onay kutuları\"na tıklayın."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To edit multiple tasks at once, enable the checkboxes at the left side of "
+"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
+"on the right side of the toolbar."
+msgstr ""
+"Birden çok görevi aynı anda düzenlemek için görevlerin sol tarafındaki onay "
+"kutularına tıklayın. Onay kutuları görünmüyorsa araç çubuğunun sağ "
+"tarafındaki \"Görünüm > Onay kutuları\"na tıklayın."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To enter billing information, click on Show details."
+msgstr "Fatura bilgilerini girmek için \"Ayrıntıları göster\"e tıklayın."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. To avoid appointment conflicts, click on Find a free time at "
+"the upper right side."
+msgstr ""
+"Diğer katılımcıları davet etmek için adlarını Katılımcılar alanına yazın. "
+"Randevu çakışmalarını önlemek için sağ üst taraftaki \"Boş zamanı bul\"a "
+"tıklayabilirsiniz."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. You can add documents as attachment to the task."
+msgstr ""
+"Başkalarını davet etmek isterseniz adlarını \"Katılımcılar\" alanına yazın. "
+"Göreve ek olarak dosya da ekleyebilirsiniz."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To launch an app click on an entry inside the app launcher menu."
+msgstr ""
+"Bir uygulamayı başlatmak için uygulama başlatıcısı menüsündeki ilgili öğeye "
+"tıklayın."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Randevunuzu kaçırmamak için anımsatma işlevini kullanabilirsiniz."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To not miss the task, use the reminder function."
+msgstr "Görevi kaçırmamak için anımsatıcı işlevini kullanabilirsiniz."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open or close an email in a conversation, click on a free area in the "
+"header."
+msgstr ""
+"Bir e-posta yazışmasını açmak veya kapatmak için başlık kısmındaki boş bir "
+"alana tıklayın."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"To open or close the folder tree, click on View >  Folder view on the right "
+"side of the toolbar."
+msgstr ""
+"Klasör ağacını açıp kapatmak için araç çubuğunun sağ tarafındaki \"Görünüm > "
+"Klasör görünümünü\"ne tıklayın."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the email settings, click the System menu icon on the upper right "
+#| "side of the menu bar. Select Settings. Click on email on the left side."
+msgid ""
+"To open the email settings, click the System menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on Mail on the left side."
+msgstr ""
+"E-posta ayarlarını açmak için menü çubuğunun sağ üst tarafındaki Sistem "
+"menüsü simgesine tıklayın, \"Ayarlar\"ı seçin, sol taraftaki \"E-posta\"ya "
+"tıklayın."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -816,8 +787,52 @@ msgstr ""
 "\"Başlangıç Sayfası\" veya \"İçindekiler\"e tıklayın."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Signing out"
-msgstr "Çıkış yapma"
+msgid ""
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
+msgstr ""
+"Ayarları açmak için menü çubuğunun sağ üst tarafındaki kullanıcı resminize "
+"tıklayın ve \"Ayarlar\"ı seçin."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "To read the details, click on an entry in a square."
+msgstr "Ayrıntıları okumak için karelerdeki girdilerden birine tıklayın."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To receive information about the sender or other recipients, open the Halo "
+"view by clicking on a name."
+msgstr ""
+"Gönderen veya diğer alıcılar hakkında bilgi almak için bir ada tıklayarak "
+"Hale görünümünü açabilirsiniz."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To search for objects, click the Search icon in the menu bar."
+msgstr "Nesne aramak için menü çubuğundaki arama simgesine tıklayın."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To select one of the views like Day, Month or List, click on View in the "
+"toolbar. Select a menu entry from the Layout section."
+msgstr ""
+"Gün, ay veya liste görünümlerinden birini seçmek için araç çubuğunda "
+"\"Görünüm\"e tıklayın. \"Düzen\" bölümünden bir istediğiniz öğeyi seçin."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To send an E-Mail to the contact, click on an E-Mail address or on Send "
+#| "email in the toolbar."
+msgid ""
+"To send an email to the contact, click on an email address or on Send email "
+"in the toolbar."
+msgstr ""
+"Bir kişiye e-posta göndermek için e-posta adresine tıklayın veya adres "
+"çubuğundaki \"E-posta gönder\" düğmesine tıklayın."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To send the email, click on Send"
+msgstr "E-postayı göndermek için Gönder düğmesine tıklayın"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -834,83 +849,11 @@ msgstr ""
 "Çıkış yapmak isterseniz menü çubuğunun sağ üst tarafındaki çıkış simgesine "
 "tıklayın."
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating a new task"
-msgstr "Yeni görev oluşturma"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
-"Yeni bir görev oluşturmak için araç çubuğundaki Yeni düğmesine tıklayın."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Entering the task's data"
-msgstr "Görev bilgilerini girme"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Enter the subject, the start date, and a description."
-msgstr "Konuyu, başlangıç tarihini ve açıklamayı girin."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Adding further details"
-msgstr "Diğer ayrıntıları ekleme"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To add further details, click on Expand form."
-msgstr ""
-"Daha fazla ayrıntı eklemek isterseniz Formu genişlet düğmesine tıklayın."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating recurring tasks"
-msgstr "Yinelenen görevler oluşturma"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid ""
-"To create recurring tasks, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
-msgstr ""
-"Tekrarlanan görevler oluşturmak isterseniz \"Tekrarla\" seçeneğini "
-"etkinleştirin. Tekrarlama ile ilgili ayarlar karşınıza gelecektir."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To not miss the task, use the reminder function."
-msgstr "Görevi kaçırmamak için anımsatıcı işlevini kullanabilirsiniz."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Tracking the editing status"
-msgstr "Düzenleme durumunu takip etme"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To track the editing status, enter the current progress."
-msgstr "Düzenleme durumunu takip etmek için geçerli ilerlemeyi girin."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. You can add documents as attachment to the task."
-msgstr ""
-"Başkalarını davet etmek isterseniz adlarını \"Katılımcılar\" alanına yazın. "
-"Göreve ek olarak dosya da ekleyebilirsiniz."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Entering billing information"
-msgstr "Fatura bilgilerini girme"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To enter billing information, click on Show details."
-msgstr "Fatura bilgilerini girmek için \"Ayrıntıları göster\"e tıklayın."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating the task"
-msgstr "Görevi oluşturma"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create the task, click on Create."
-msgstr "Görevi oluşturmak için Oluştur düğmesine tıklayın."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Sorting tasks"
-msgstr "Görevleri sıralama"
+"E-postaları sıralamak için \"Sırala\"ya tıklayın ve bir sıralama ölçütü "
+"seçin."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
@@ -918,36 +861,89 @@ msgstr ""
 "Görevleri sıralamak için \"Sırala\"ya tıklayıp bir sıralama ölçütü seçin."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Editing multiple tasks"
-msgstr "Birden çok görevi düzenleme"
+msgid "To track the editing status, enter the current progress."
+msgstr "Düzenleme durumunu takip etmek için geçerli ilerlemeyi girin."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
+msgstr ""
+"Cihazınızda bulunan bir dosyayı yüklemek için \"Yerel dosya ekle\"ye "
+"tıklamanız ve yüklenecek dosyayı seçmeniz yeterlidir. Hatta yerel "
+"sürücünüzdeki dosyaları sürükleyip Drive'a bırakarak yüklemeniz de mümkün. "
+"Yüklediğiniz dosyalara daha sonra tüm cihazlarınızdan ulaşabilirsiniz."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Toolbar"
+msgstr "Araç çubuğu"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Tracking the editing status"
+msgstr "Düzenleme durumunu takip etme"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Upload a new file"
+msgstr "Yeni dosya yükleme"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"To edit multiple tasks at once, enable the checkboxes at the left side of "
-"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
-"on the right side of the toolbar."
+"Use the folder tree to open the folder containing the objects that you want "
+"to view in the list."
 msgstr ""
-"Birden çok görevi aynı anda düzenlemek için görevlerin sol tarafındaki onay "
-"kutularına tıklayın. Onay kutuları görünmüyorsa araç çubuğunun sağ "
-"tarafındaki \"Görünüm > Onay kutuları\"na tıklayın."
+"Listede görmek istediğiniz nesneleri içeren klasörü açmak için klasör "
+"ağacını kullanabilirsiniz."
 
-#~ msgid "Sending an E-Mail to a contact"
-#~ msgstr "Bir kişiye e-posta gönderme"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Use the list to select an object, show its contents or activate functions."
+msgstr ""
+"Bir nesneyi seçmek, nesnenin içeriğini görmek ve işlevleri etkinleştirmek "
+"için listeyi kullanabilirsiniz."
 
-#~ msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
-#~ msgstr ""
-#~ "Yeni bir e-posta oluşturmak için araç çubuğundaki \"E-posta yaz\"a "
-#~ "tıklayın."
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Anımsatma işlevini kullanma"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr ""
+"Kurulumunuza bağlı olarak çeşitli ek doğrulama seçeneklerini "
+"kullanabilirsiniz."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Welcome to %s"
+msgstr "%s uygulamasına hoş geldiniz"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
+"Bulut depolama uygulamanıza hoş geldiniz. Bu rehberli tur, yeni çevrimiçi "
+"depolama çözümünüze sizi tanıtacak. Artık tüm hesaplarınızda depolanan "
+"dosyalara tek bir noktadan ulaşabileceksiniz. Dosyalarınızı yüklemek, "
+"kaydetmek, paylaşmak ve farklı cihazlarla senkronize etmek için bu "
+"uygulamayı kullanabilirsiniz. "
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Hesap güvenliğinizi artırmak amacıyla artık ikinci bir doğrulama seçeneği "
+"ekleyebilirsiniz."
 
 #~ msgid "Composing a new E-Mail"
 #~ msgstr "Yeni e-posta yazma"
 
-#~ msgid "To compose a new E-Mail, click on Compose in the toolbar."
-#~ msgstr ""
-#~ "Yeni bir e-posta oluşturmak için araç çubuğundaki \"Oluştur\"a tıklayın."
-
-#~ msgid "Entering the E-Mail text"
-#~ msgstr "E-posta metnini yazma"
+#~ msgid "Editing multiple E-Mails"
+#~ msgstr "Birden çok e-posta düzenleme"
 
 #~ msgid ""
 #~ "Enter the E-Mail text into the main area. If the text format was set to "
@@ -959,29 +955,8 @@ msgstr ""
 #~ "metnin istediğiniz kısmını işaretledikten sonra biçimlendirme çubuğundaki "
 #~ "bir simgeye tıklayın."
 
-#~ msgid "Sending the E-Mail"
-#~ msgstr "E-postayı gönderme"
-
-#~ msgid "To send the E-Mail, click on Send"
-#~ msgstr "E-postayı göndermek için Gönder düğmesine tıklayın"
-
-#~ msgid "Sorting your E-Mails"
-#~ msgstr "E-postalarınızı sıralama"
-
-#~ msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
-#~ msgstr ""
-#~ "E-postaları sıralamak için \"Sırala\"ya tıklayın ve bir sıralama ölçütü "
-#~ "seçin."
-
-#~ msgid ""
-#~ "To choose between the different views. click on View in the toolbar. "
-#~ "Select a menu entry in the layout."
-#~ msgstr ""
-#~ "Görünümler arasından seçim yapmak için araç çubuğundaki \"Görünüm\"e "
-#~ "tıklayın ve \"Düzen\" menüsünden bir öğe seçin."
-
-#~ msgid "Opening an E-Mail in a separate window"
-#~ msgstr "E-postayı ayrı bir pencerede açma"
+#~ msgid "Entering the E-Mail text"
+#~ msgstr "E-posta metnini yazma"
 
 #~ msgid ""
 #~ "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
@@ -989,19 +964,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Listedeki bir e-postayı çift tıklarsanız e-posta ayrı bir pencerede "
 #~ "açılır."
-
-#~ msgid "Reading E-Mail conversations"
-#~ msgstr "E-posta yazışmalarını okuma"
-
-#~ msgid ""
-#~ "To open or close an E-Mail in a conversation, click on a free area in the "
-#~ "header."
-#~ msgstr ""
-#~ "Bir e-posta yazışmasını açmak veya kapatmak için başlık kısmındaki boş "
-#~ "bir alana tıklayın."
-
-#~ msgid "Editing multiple E-Mails"
-#~ msgstr "Birden çok e-posta düzenleme"
 
 #~ msgid ""
 #~ "In order to edit multiple E-Mails at once, enable the checkboxes on the "
@@ -1012,17 +974,23 @@ msgstr ""
 #~ "tarafındaki onay kutularına tıklayın. Onay kutuları görünmüyorsa araç "
 #~ "çubuğunun sağ tarafındaki \"Görünüm > Onay kutuları\"na tıklayın."
 
+#~ msgid "Opening an E-Mail in a separate window"
+#~ msgstr "E-postayı ayrı bir pencerede açma"
+
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "E-posta ayarlarını açma"
 
-#~ msgid ""
-#~ "To open the E-Mail settings, click the System menu icon on the upper "
-#~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
-#~ "side."
-#~ msgstr ""
-#~ "E-posta ayarlarını açmak için menü çubuğunun sağ üst tarafındaki Sistem "
-#~ "menüsü simgesine tıklayın, \"Ayarlar\"ı seçin, sol taraftaki \"E-posta"
-#~ "\"ya tıklayın."
+#~ msgid "Reading E-Mail conversations"
+#~ msgstr "E-posta yazışmalarını okuma"
+
+#~ msgid "Sending an E-Mail to a contact"
+#~ msgstr "Bir kişiye e-posta gönderme"
+
+#~ msgid "Sending the E-Mail"
+#~ msgstr "E-postayı gönderme"
+
+#~ msgid "Sorting your E-Mails"
+#~ msgstr "E-postalarınızı sıralama"
 
 #~ msgid ""
 #~ "The Portal informs you about current E-Mails, appointments or social "
@@ -1037,3 +1005,43 @@ msgstr ""
 #~ msgstr ""
 #~ "Ayarlar konulara ayrılmıştır. Sol taraftan istediğiniz konuyu (örn. "
 #~ "\"Temel ayarlar\" veya \"E-posta\") seçebilirsiniz."
+
+#~ msgid ""
+#~ "To choose between the different views. click on View in the toolbar. "
+#~ "Select a menu entry in the layout."
+#~ msgstr ""
+#~ "Görünümler arasından seçim yapmak için araç çubuğundaki \"Görünüm\"e "
+#~ "tıklayın ve \"Düzen\" menüsünden bir öğe seçin."
+
+#~ msgid "To compose a new E-Mail, click on Compose in the toolbar."
+#~ msgstr ""
+#~ "Yeni bir e-posta oluşturmak için araç çubuğundaki \"Oluştur\"a tıklayın."
+
+#~ msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+#~ msgstr ""
+#~ "Yeni bir e-posta oluşturmak için araç çubuğundaki \"E-posta yaz\"a "
+#~ "tıklayın."
+
+#~ msgid ""
+#~ "To open or close an E-Mail in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "Bir e-posta yazışmasını açmak veya kapatmak için başlık kısmındaki boş "
+#~ "bir alana tıklayın."
+
+#~ msgid ""
+#~ "To open the E-Mail settings, click the System menu icon on the upper "
+#~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
+#~ "side."
+#~ msgstr ""
+#~ "E-posta ayarlarını açmak için menü çubuğunun sağ üst tarafındaki Sistem "
+#~ "menüsü simgesine tıklayın, \"Ayarlar\"ı seçin, sol taraftaki \"E-posta"
+#~ "\"ya tıklayın."
+
+#~ msgid "To send the E-Mail, click on Send"
+#~ msgstr "E-postayı göndermek için Gönder düğmesine tıklayın"
+
+#~ msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "E-postaları sıralamak için \"Sırala\"ya tıklayın ve bir sıralama ölçütü "
+#~ "seçin."

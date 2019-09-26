@@ -202,13 +202,13 @@ msgstr ""
 msgid "Edit documents"
 msgstr "Редактиране на документи"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple emails"
-msgstr "Редактиране на няколко електронни писма"
-
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Editing multiple contacts"
 msgstr "Редактиране на няколко контакта"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Editing multiple emails"
+msgstr "Редактиране на няколко електронни писма"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -219,9 +219,14 @@ msgid "Editing settings"
 msgstr "Редактиране на настройките"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "Enter the E-Mail text into the main area. If the text format was set to "
+#| "HTML in the options, you can format the E-Mail text. To do so select a "
+#| "text part and then click an icon in the formatting bar."
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTML "
-"in the options, you can format the E-Mail text. To do so select a text part "
+"Enter the email text into the main area. If the text format was set to HTML "
+"in the options, you can format the email text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
 "Въведете текста на електронната поща в главната област. Ако форматът на "
@@ -259,13 +264,13 @@ msgstr "Въведете обекта, началната дата и описа
 msgid "Entering billing information"
 msgstr "Въвеждане на информация за плащане"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the email text"
-msgstr "Въвеждане на текста на електронната поща"
-
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
 msgstr "Въвеждане на данните за събитие"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the email text"
+msgstr "Въвеждане на текста на електронната поща"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Entering the recipient's name"
@@ -334,8 +339,12 @@ msgid "How the settings are organized"
 msgstr "Как се организират настройките"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+#| "separate window."
 msgid ""
-"If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+"If double-clicking on an email in the list, the email is opened in a "
 "separate window."
 msgstr ""
 "Ако щракнете двукратно върху електронна поща в списъка, електронната поща се "
@@ -347,9 +356,14 @@ msgstr ""
 "Ако вече не искате да показвате квадрат, кликнете върху иконата за изтриване."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "In order to edit multiple E-Mails at once, enable the checkboxes on the "
+#| "left side of the E-Mails. If the checkboxes are not displayed, click on "
+#| "View > Checkboxes on the right side of the toolbar."
 msgid ""
-"In order to edit multiple E-Mails at once, enable the checkboxes on the left "
-"side of the E-Mails. If the checkboxes are not displayed, click on View > "
+"In order to edit multiple emails at once, enable the checkboxes on the left "
+"side of the emails. If the checkboxes are not displayed, click on View > "
 "Checkboxes on the right side of the toolbar."
 msgstr ""
 "За да редактирате едновременно няколко имейла, активирайте квадратчетата за "
@@ -537,8 +551,12 @@ msgid "The Portal"
 msgstr "Порталът"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "The Portal informs you about current E-Mails, appointments or social "
+#| "network news."
 msgid ""
-"The Portal informs you about current E-Mails, appointments or social network "
+"The Portal informs you about current emails, appointments or social network "
 "news."
 msgstr ""
 "Порталът ви информира за текущите имейли, срещи или новини в социалните "
@@ -575,9 +593,13 @@ msgid "The list"
 msgstr "Списъкът"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "The settings are organized in topics. Select the topic on the left side, "
+#| "e.g Basic settings or E-Mail."
 msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
-"Basic settings or E-Mail."
+"Basic settings or Mail."
 msgstr ""
 "Настройките са организирани по теми. Изберете темата отляво, например "
 "Основни настройки или Електронна поща."
@@ -627,7 +649,7 @@ msgstr ""
 "Да избирате между различните изгледи. Кликнете върху Изглед в лентата с "
 "инструменти. Изберете елемент от менюто в оформлението."
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
+#: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/mail.js
 msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "За да създадете нова електронна поща, кликнете върху \"Изготвяне\" в лентата "
@@ -749,8 +771,12 @@ msgid "To not miss the task, use the reminder function."
 msgstr "За да не пропуснете задачата, използвайте функцията за напомняне."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open or close an E-Mail in a conversation, click on a free area in the "
+#| "header."
 msgid ""
-"To open or close an E-Mail in a conversation, click on a free area in the "
+"To open or close an email in a conversation, click on a free area in the "
 "header."
 msgstr ""
 "За да отворите или затворите електронна поща в разговор, кликнете върху "
@@ -765,9 +791,14 @@ msgstr ""
 "върху Изглед> Преглед на папки от дясната страна на лентата с инструменти."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the E-Mail settings, click the System menu icon on the upper "
+#| "right side of the menu bar. Select Settings. Click on E-Mail on the left "
+#| "side."
 msgid ""
-"To open the E-Mail settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on E-Mail on the left side."
+"To open the email settings, click the System menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
 "За да отворите настройките за електронна поща, кликнете върху иконата на "
 "системното меню в горната дясна част на лентата с менюта. Изберете "
@@ -821,9 +852,13 @@ msgstr ""
 "Изглед в лентата с инструменти. Изберете запис от менюто от секцията Layout."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To send an E-Mail to the contact, click on an E-Mail address or on Send "
+#| "email in the toolbar."
 msgid ""
-"To send an E-Mail to the contact, click on an E-Mail address or on Send "
-"email in the toolbar."
+"To send an email to the contact, click on an email address or on Send email "
+"in the toolbar."
 msgstr ""
 "За да изпратите електронна поща на контакта, кликнете върху адрес на "
 "електронна поща или върху Изпращане на имейл в лентата с инструменти."

@@ -1150,6 +1150,13 @@ msgstr "新規参加者が追加されました。"
 msgid "Adding files with identical names"
 msgstr "同じ名前でファイルを追加する"
 
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Add verification option"
+msgid "Additional options"
+msgstr "検証オプションを追加"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Address"
@@ -1177,6 +1184,12 @@ msgstr "住所 (自宅)"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Address Other"
 msgstr "住所 (その他)"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Addressbook"
+msgid "Address book"
+msgstr "Addressbook"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Address book name"
@@ -1563,6 +1576,11 @@ msgstr "メッセージをアーカイブ"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Archive old messages"
 msgstr "古いメッセージをアーカイブ"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Archives larger than the selected size will be split into multiple files."
+msgstr ""
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
@@ -1958,7 +1976,8 @@ msgstr "CalDav/CardDav"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
+#: module:io.ox/mail apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Calendar"
 msgstr "カレンダー"
 
@@ -2020,6 +2039,12 @@ msgstr "カメラ %1$s"
 #: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Cancel"
 msgstr "キャンセル"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Slow requests"
+msgid "Cancel download request"
+msgstr "リクエストを表示"
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Cancel search"
@@ -3434,6 +3459,12 @@ msgid_plural "Distribution list with %1$d entries"
 msgstr[0] "メンバー数 1名の連絡先グループ"
 msgstr[1] "メンバー数 %1$d名の連絡先グループ"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to delete calendar \"%s\"?"
+msgid "Do you really want to cancel the current download request?"
+msgstr "カレンダー \"%s\" を削除しますか？"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -3655,6 +3686,7 @@ msgstr "ダウンロード"
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
 #: module:io.ox/core/boot apps/io.ox/notes/toolbar.js module:io.ox/notes
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
@@ -3664,6 +3696,13 @@ msgstr "ダウンロード"
 #. %1$s is the file size "Download 2mb" for example
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid "Download %1$s"
+msgstr "%1$s をダウンロード"
+
+#. %1$s: filename
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Download %1$s"
+msgid "Download %1$s."
 msgstr "%1$s をダウンロード"
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
@@ -3687,6 +3726,12 @@ msgstr "感染ファイルをダウンロード"
 msgid "Download installation file"
 msgstr "インストールファイルをダウンロード"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Enter personal data"
+msgid "Download personal data"
+msgstr "個人データを入力"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
@@ -3699,6 +3744,12 @@ msgstr "アプリケーションをダウンロード"
 #: apps/io.ox/core/download.js module:io.ox/core
 msgid "Download unscanned file"
 msgstr "スキャンされていないファイルをダウンロード"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Enter personal data"
+msgid "Download your personal data"
+msgstr "個人データを入力"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Downloads"
@@ -3727,7 +3778,7 @@ msgstr "ドラッグでウィジェットの順番を変更できます"
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: module:io.ox/settings apps/io.ox/settings/personalData/settings/pane.js
 msgctxt "app"
 msgid "Drive"
 msgstr "ドライブ"
@@ -4015,6 +4066,7 @@ msgstr "エディタ"
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Email"
 msgstr "メール"
 
@@ -5514,9 +5566,64 @@ msgstr "受信トレイ"
 msgid "Inbox categories"
 msgstr "受信トレイのカテゴリ"
 
+#. shown when a download of (cloud) drive files is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Keep all versions"
+msgid "Include all file versions"
+msgstr "すべてのバージョンを保持"
+
+#. shown when a download of contact data is requested
 #: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Include distribution lists"
 msgstr "連絡先グループを含める"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Shared address books"
+msgid "Included address books"
+msgstr "共有アドレス帳"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Add calendar"
+msgid "Included calendars"
+msgstr "カレンダーを追加"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Add folder"
+msgid "Included folders"
+msgstr "フォルダーを追加"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "show all my appointments from all calendars"
+msgid "Includes all appointments from your calendars as ical files."
+msgstr "カレンダー全体から自分のアポイントをすべて表示"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all contact data from your address books as vcard files."
+msgstr ""
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all emails from your primary mail account as eml files."
+msgstr ""
+
+#. %1$s is usually "Drive" (product name; might be customized)
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Discard mails from %1$s"
+msgid "Includes all files from %1$s."
+msgstr "%1$s からのメールを破棄"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all tasks as ical files."
+msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Incoming server"
@@ -5957,7 +6064,9 @@ msgid "List"
 msgstr "リスト"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-msgid "Listview"
+#, fuzzy
+#| msgid "Listview"
+msgid "List view"
 msgstr "リストビュー"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
@@ -5966,7 +6075,9 @@ msgstr "%1$s まで予定を読み込みます。"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Localpart"
+#, fuzzy
+#| msgid "Localpart"
+msgid "Local-part"
 msgstr "ローカル部"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -6301,6 +6412,12 @@ msgstr "次のワイルドカード条件に一致しない"
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
 msgid "Maximize"
 msgstr "最大化"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Mail size:"
+msgid "Maximum file size"
+msgstr "メールサイズ："
 
 #. In the context of resizing images before uploading them this text is used as a label for a dropdown
 #: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
@@ -7423,7 +7540,9 @@ msgstr "オプション 20"
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/sharing.js apps/io.ox/mail/compose/view.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "オプション"
 
@@ -8310,16 +8429,28 @@ msgstr "達成率は 0 から 100 までの数字を入力してください"
 msgid "Properties"
 msgstr "プロパティ"
 
+#. shown when a download of contact data is requested
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public address books"
 msgstr "パブリックアドレス帳"
 
+#. shown when a download of calendar data is requested
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public calendars"
 msgstr "パブリックカレンダー"
+
+#. shown when a download of (cloud) drive files is requested
+#. shown when a download of task data is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Public folder %s"
+msgid "Public folders"
+msgstr "パブリック フォルダー %s"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8844,6 +8975,16 @@ msgstr "メーリングリストに返信"
 msgid "Reply to sender"
 msgstr "差出人に返信"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Request download"
+msgstr ""
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Repeat new password"
+msgid "Request new download"
+msgstr "新しいパスワード (再入力)"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
 msgstr "開封確認メッセージを要求"
@@ -9248,6 +9389,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Select all"
 msgstr "すべて選択"
 
@@ -9537,8 +9679,10 @@ msgstr "共有の予定"
 msgid "Shared activity"
 msgstr "共有アクティビティ"
 
+#. shown when a download of contact data is requested
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared address books"
 msgstr "共有アドレス帳"
 
@@ -9546,11 +9690,21 @@ msgstr "共有アドレス帳"
 msgid "Shared by other users"
 msgstr "他のユーザーと共有"
 
+#. shown when a download of calendar data is requested
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared calendars"
 msgstr "共有カレンダー"
+
+#. shown when a download of (cloud) drive files is requested
+#. shown when a download of task data is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Share your folders"
+msgid "Shared folders"
+msgstr "このフォルダーを共有"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared tasks"
@@ -10331,6 +10485,7 @@ msgid "Task was already deleted!"
 msgstr "タスクは既に削除されています。"
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Tasks"
 msgstr "タスク"
 
@@ -10776,6 +10931,12 @@ msgstr "アカウントへアクセス可能な外部アプリケーション/�
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "まだ保存されていない変更があります。"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"There is currently an archive download available. By requesting a new "
+"download the current archive will be deleted and is no longer available."
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/types/defaultview.js module:io.ox/core
 msgid "There is no preview for this file type."
@@ -11363,6 +11524,12 @@ msgstr "合計: %1$d"
 msgid "Total: %1$s requests"
 msgstr "総数: %1$s 件のリクエスト"
 
+#. shown when a download of mail data is requested
+#. shown when a download of (cloud) drive files is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Trash folder"
+msgstr "ごみ箱フォルダー"
+
 #: apps/io.ox/settings/security/certificates/settings/pane.js
 #: module:io.ox/settings/certificates
 msgid "Trust"
@@ -11593,6 +11760,20 @@ msgstr "未読: %1$d"
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "保存されていない編集中のアイテムは失われます。ログアウトしますか?"
+
+#. shown when a download of calendar data is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "subscribe to calendar"
+msgid "Unsubscribed calendars"
+msgstr "カレンダーに登録"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Subscribe Folder"
+msgid "Unsubscribed folders"
+msgstr "フォルダーを登録"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
@@ -12217,6 +12398,12 @@ msgstr ""
 "ピー&ペーストできます。このリンクを持っている人はだれでも共有にアクセスできま"
 "す。"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"You can download a copy of your personal data from your account, if you want "
+"to save it or transfer it to another provider."
+msgstr ""
+
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "You can enable categories again via the view dropdown on the right"
 msgstr "カテゴリは右側のビュー ドロップダウンから再度有効にできます"
@@ -12439,6 +12626,13 @@ msgstr "%s のニュースフィード"
 msgid "Your IP address has changed"
 msgstr "IP アドレスが変更されました"
 
+#. header for zip archive download list
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Your name"
+msgid "Your archive"
+msgstr "名前"
+
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
 msgstr ""
@@ -12468,6 +12662,14 @@ msgstr "認証情報はセキュリティで保護された接続でのみ送信
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "現在のパスワード"
+
+#. %1$s: date and time when the download expires
+#. %1$s: date when the download was requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Your data archive %2$s from is ready for download. The download is available "
+"until %1$s."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
@@ -12531,6 +12733,13 @@ msgstr "繰り返しルールは開始日時に合っていません。"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule was changed automatically."
 msgstr "繰り返しルールは自動で変更されました。"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Your requested archive is currently being created. Depending on the size of "
+"the requested data this may take hours or days. You will be informed via "
+"email when your download is ready."
+msgstr ""
 
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
@@ -13782,9 +13991,6 @@ msgstr "ご利用のプラットフォーム"
 #~| msgid "Add files"
 #~ msgid "Add file"
 #~ msgstr "ファイルを追加"
-
-#~ msgid "Add folder"
-#~ msgstr "フォルダーを追加"
 
 #~ msgid "Add folder menu"
 #~ msgstr "フォルダー追加メニュー"
@@ -16323,9 +16529,6 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Enter general data"
 #~ msgstr "一般データを入力"
 
-#~ msgid "Enter personal data"
-#~ msgstr "個人データを入力"
-
 #~ msgid "Enter the E-Mail text below the subject."
 #~ msgstr "件名の下にメールの本文を入力してください。"
 
@@ -17799,9 +18002,6 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Mail saved as draft"
 #~ msgstr "メールの下書きを保存しました。"
 
-#~ msgid "Mail size:"
-#~ msgstr "メールサイズ："
-
 #~ msgid "Mail text"
 #~ msgstr "メールの本文"
 
@@ -19037,9 +19237,6 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Public contacts"
 #~ msgstr "パブリック連絡先"
 
-#~ msgid "Public folder %s"
-#~ msgstr "パブリック フォルダー %s"
-
 #~ msgid ""
 #~ "Public folders are available for all users or selected user groups as "
 #~ "determined by the administrator. The access rights can be denied for "
@@ -20116,9 +20313,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Subreddits"
 #~ msgstr "サブレディット"
-
-#~ msgid "Subscribe Folder"
-#~ msgstr "フォルダーを登録"
 
 #~ msgid "Subscribe contacts from LinkedIn, Facebook, Google..."
 #~ msgstr "LinkedIn、Facebook、Google...から連絡先を登録"
@@ -21347,9 +21541,6 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Tracking the editing status"
 #~ msgstr "進捗状況の記録"
 
-#~ msgid "Trash folder"
-#~ msgstr "ごみ箱フォルダー"
-
 #~ msgid "Trinidad and Tobago"
 #~ msgstr "トリニダードトバゴ"
 
@@ -22566,9 +22757,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "set the last used time range of the new view"
 #~ msgstr "前回使用された時間軸を新しいビューに設定する"
-
-#~ msgid "show all my appointments from all calendars"
-#~ msgstr "カレンダー全体から自分のアポイントをすべて表示"
 
 #~ msgid "show image"
 #~ msgstr "画像を表示"

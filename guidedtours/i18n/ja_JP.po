@@ -15,17 +15,231 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Generator: Poedit 2.1.1\n"
 
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Add another account"
+msgstr "別のアカウントを追加"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "テキストメッセージでコードを追加"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Adding attachments"
+msgstr "添付ファイルの追加"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Adding further details"
+msgstr "詳細情報の追加"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "検証オプションを追加"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+"追加のセキュリティとして、アカウントにログインする前にテキストメッセージなど"
+"の２つめの認証方法が必要です。これについて情報をご覧になりますか？"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
+msgstr ""
+"機能や追加のオプションのツールバーが上側に表示されます。新規フォルダーや新規"
+"ファイルなどが簡単に作成できます。"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "認証リクエスト"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use Invite "
+"people if you want to manage access rights and allow recipients to create "
+"and edit files. Or just get a link to let others view and download your "
+"files. You can use an expiration date and password protection if you like."
+msgstr ""
+"ファイルやフォルダーの共有方法を２つの方法から選びます。アクセス権限を管理"
+"し、宛先がファイルの作成や編集をできるようにしたい場合は、招待を使用します。"
+"または、リンクで他の人にファイルを表示したり、ダウンロードできるようにしま"
+"す。利用期限やパスワード保護を使用することもできます。"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"Click on a letter on the left side of the navigation bar in order to display "
+"the corresponding contacts from the selected address book."
+msgstr ""
+"選択したアドレス帳にある連絡先を表示するには、ナビゲーションバーの左側にある"
+"該当する文字をクリックします。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+"フォルダーをクリックすると、サブフォルダー、ドキュメント、メディア、その他の"
+"ファイルのすべてが表示されます。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr "ビューアイコンをクリックすると、選択したファイルをプレビューできます。"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Closing a square"
+msgstr "タイルを閉じる"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Collaborating"
+msgstr "共同編集"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Composing a new email"
+msgstr "新規メールの作成"
+
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "新規予定の作成"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "新規予定を作成するには、ツールバーで、[新規] をクリックします。"
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Creating a new contact"
+msgstr "新規連絡先の作成"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating a new task"
+msgstr "新規のタスクの作成"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Creating new items"
+msgstr "新規アイテムの作成"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Entering the appointment's data"
-msgstr "予定のデータの入力"
+msgid "Creating recurring appointments"
+msgstr "繰り返しの予定の作成"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating recurring tasks"
+msgstr "繰り返しのタスクの作成"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating the appointment"
+msgstr "予定の作成"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating the task"
+msgstr "タスクの作成"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Customizing the Portal"
+msgstr "ポータルのカスタマイズ"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Depending on the app, the toolbar contains various functions for creating, "
+"editing and organizing objects."
+msgstr ""
+"アプリケーションによっては、オブジェクトを作成、編集、整理するための機能が"
+"ツールバーに表示されます。"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Detailed instructions for the single apps are located in System menu > Help."
+msgstr ""
+"各アプリケーションの詳細な使用方法を表示するには、[システム　メニュー] → [ヘ"
+"ルプ] の順に選択します。"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
+"追加されたデバイスを削除することができます。削除する場合は選択してください。"
+"詳細についてはヘルプを参照してください。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
+msgstr ""
+"テキストドキュメントやスプレッドシートをオンラインで編集できると知っていまし"
+"たか？ドライブが自動で編集されたファイルを更新しますが、バージョン管理のおか"
+"げで元のファイルも利用可能です。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr "別の表示が利用できます。一番お気に入りの表示を選択してください。"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Displaying the help or the settings"
+msgstr "ヘルプや設定の表示"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Drag and drop"
+msgstr "ドラッグ アンド ドロップ"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
+msgstr ""
+"ファイルの保存や同期用にすでにクラウドストレージをお持ちの場合、ドライブに"
+"よって別のストレージソリューションに接続ができます。適切のロゴをクリックする"
+"だけで、既存のデータにアイクセスできます。"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"Edit a setting on the right side. In most of the cases, the changes are "
+"activated immediately."
+msgstr "右ペインで設定を編集します。通常変更はすぐに有効になります。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Edit documents"
+msgstr "ドキュメントを編集"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Editing multiple contacts"
+msgstr "複数の連絡先の編集"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Editing multiple emails"
+msgstr "複数のメールの編集"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Editing multiple tasks"
+msgstr "複数のタスクの編集"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Editing settings"
+msgstr "設定の編集"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"Enter the email text into the main area. If the text format was set to HTML "
+"in the options, you can format the email text. To do so select a text part "
+"and then click an icon in the formatting bar."
+msgstr ""
+"本文エリアにメールの本文を入力します。テキスト形式がオプションでHTMLに設定さ"
+"れると、メールテキストの形式ができます。テキストをフォーマットするには、テキ"
+"スト部分を選択して、書式バーのアイコンをクリックします。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"Enter the recipient's name into the recipients field. As soon as you typed "
+"the first letters, suggestions from the address books are displayed. To "
+"accept a recipient suggestion, click on it."
+msgstr ""
+"宛先フィールドに宛先の名前を入力します。最初の文字を打つとすぐに、アドレス帳"
+"から候補が表示されます。候補の宛先を選択するには、その候補をクリックしてくだ"
+"さい。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Enter the subject into the subject field."
+msgstr "件名フィールドに件名を入力します。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
@@ -34,79 +248,265 @@ msgid ""
 msgstr ""
 "件名、予定の開始日時と終了日時を入力します。その他の情報はオプションです。"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating recurring appointments"
-msgstr "繰り返しの予定の作成"
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Enter the subject, the start date, and a description."
+msgstr "件名、開始日時、説明を入力します。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering billing information"
+msgstr "支払条件の入力"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Entering the appointment's data"
+msgstr "予定のデータの入力"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the email text"
+msgstr "メールの本文の入力"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the recipient's name"
+msgstr "宛先の名前の入力"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the subject"
+msgstr "件名の入力"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering the task's data"
+msgstr "タスクのデータの入力"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "File details"
+msgstr "ファイルの詳細"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder content"
+msgstr "フォルダー内容"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder tree"
+msgstr "フォルダーツリー"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To create recurring appointments, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
+"From preview you can also select other options to help you manage and work "
+"on your files."
 msgstr ""
-"繰り返しの予定を作成するには、[繰り返しの予定] を有効にします。繰り返しのパラ"
-"メータを設定するための機能が表示されます。"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Inviting other participants"
-msgstr "予定への招待"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. To avoid appointment conflicts, click on Find a free time at "
-"the upper right side."
-msgstr ""
-"他の人に予定への招待するには、[参加者] の下にあるフィールドに招待する人の名前"
-"を入力します。予定の競合を避けるには、右上の [空き時間を検索] をクリックしま"
-"す。"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "アラーム機能の使用"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "予定を見逃さないようにするには、アラーム機能を使用します。"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Adding attachments"
-msgstr "添付ファイルの追加"
+"プレビューから他のオプションを選択して、ファイルの管理や作業を行えます。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
 msgstr "予定には、添付ファイルを追加することができます。"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating the appointment"
-msgstr "予定の作成"
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Further functions"
+msgstr "詳細機能"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create the appointment, click on Create at the lower left side."
-msgstr "予定を作成するには、左下の「作成」をクリックします。"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Further information"
+msgstr "詳細情報"
+
+#. Tour name; general introduction
+#: apps/io.ox/tours/main.js module:io.ox/tours
+msgid "Getting started"
+msgstr "はじめに"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Halo view"
+msgstr "ハロー ビュー"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+"ここでファイルを同僚や外部の連絡先と共有できます。また、ドキュメントを共同で"
+"作業したり、異なるアクセス権限を設定できます。"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "How the settings are organized"
+msgstr "設定の項目について"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"If double-clicking on an email in the list, the email is opened in a "
+"separate window."
+msgstr ""
+"一覧でメールをダブルクリックすると、別のウィンドウにメールが表示されます。"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "タイルを表示しない場合は、削除アイコンをクリックします。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In order to edit multiple emails at once, enable the checkboxes on the left "
+"side of the emails. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"複数のメールを一度に編集するには、メールの左側にあるチェックボックスを有効に"
+"します。チェックボックスが表示されていない場合は、ツールバーの右側にある "
+"[ビュー] → [チェックボックス] の順にクリックします。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In this area you can find further functions, e.g. for adding attachments."
+msgstr "このエリアには、添付ファイルの追加などの詳細機能があります。"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Inviting other participants"
+msgstr "予定への招待"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Launching an app"
+msgstr "アプリケーションの起動"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Navigation bar"
+msgstr "ナビゲーションバー"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "次へ"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
+msgstr ""
+"左側にフォルダーツリーが表示されます。フォルダー構造が表示され、特定のフォル"
+"ダーやサブフォルダー間を移動することができます。ドキュメントフォルダー、音楽"
+"フォルダー、画像フォルダーおよびビデオフォルダーを含めれば、より簡単に行えま"
+"す。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Opening an email in a separate window"
+msgstr "メールを別のウィンドウで開く"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Opening or closing the folder tree"
+msgstr "フォルダーツリーを開閉する"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Opening the email settings"
+msgstr "メール設定を開く"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the help"
+msgstr "ヘルプを開く"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the settings"
+msgstr "設定を開く"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview files"
+msgstr "ファイルのプレビュー"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview mode"
+msgstr "モードのプレビュー"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Reading email conversations"
+msgstr "メールスレッドの表示"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Reading the details"
+msgstr "詳細情報の閲覧"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "削除"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Searching for objects"
+msgstr "オブジェクトの検索"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "第２認証要素"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Select a view"
+msgstr "ビューの選択"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
 msgid "Selecting a view"
 msgstr "ビューの選択"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid ""
-"To select one of the views like Day, Month or List, click on View in the "
-"toolbar. Select a menu entry from the Layout section."
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
 msgstr ""
-"日ビュー、月ビュー、リストビューを選択するには、ツールバーのビューをクリック"
-"します。レイアウトセクションのメニュー入力を選択します。"
+"テキストメッセージでコードのオプションを選択すると、電話番号を尋ねられます。"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "The calendar views"
-msgstr "カレンダービュー"
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Sending an email to a contact"
+msgstr "連絡先へのメールの送信"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sending the email"
+msgstr "メールの送信"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Share files"
+msgstr "ファイルの共有"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"The calendar views display a calendar sheet with the appointments for the "
-"selected time range."
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
 msgstr ""
-"カレンダービューでは、選択された時間軸で、カレンダーシートに予定が表示されま"
-"す。"
+"招待をすることによるファイルの共有は、ファイルを作成および編集するオプション"
+"を宛先に与えるだけではありません。内部および外部参加者も共同して、テキストド"
+"キュメントやスプレッドシートを同時に作業することができます。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Sharing options"
+msgstr "共有オプション"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Signing out"
+msgstr "ログアウト"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Sorting tasks"
+msgstr "タスクのソート"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sorting your emails"
+msgstr "メールのソート"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "ツアーを開始"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The Detail view"
+msgstr "詳細ビュー"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"The Detail view displays an object's content. Depending on the app, further "
+"functions for organizing objects can be found in the Detail view."
+msgstr ""
+"詳細ビューには、オブジェクトの内容が表示されます。オブジェクトを整理するため"
+"の機能が詳細ビューに表示されます。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app"
+msgstr "ドライブアプリケーション"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app tour.txt"
+msgstr "ドライブアプリケーションツアー.txt"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The List view"
@@ -121,576 +521,6 @@ msgstr ""
 "リストビューには、現在のフォルダーにある予定の一覧が表示されます。予定をク"
 "リックすると、その予定のデータと機能が詳細ビューに表示されます。"
 
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Creating a new contact"
-msgstr "新規連絡先の作成"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "To create a new contact, click on New > Add contact in the toolbar."
-msgstr ""
-"新規の連絡先を作成するには、ツールバーで、[新規] → [連絡先を追加] の順にク"
-"リックします。"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Navigation bar"
-msgstr "ナビゲーションバー"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"Click on a letter on the left side of the navigation bar in order to display "
-"the corresponding contacts from the selected address book."
-msgstr ""
-"選択したアドレス帳にある連絡先を表示するには、ナビゲーションバーの左側にある"
-"該当する文字をクリックします。"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an email to a contact"
-msgstr "連絡先へのメールの送信"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"To send an E-Mail to the contact, click on an E-Mail address or on Send "
-"email in the toolbar."
-msgstr ""
-"連絡先にメールを送信するには、そのメールアドレスをクリックするか、ツールバー"
-"で、[メールを送信] をクリックします。"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Editing multiple contacts"
-msgstr "複数の連絡先の編集"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"To edit multiple contacts at once, enable the checkboxes on the left side of "
-"the contacts. If the checkboxes are not displayed, click on View > "
-"Checkboxes on the right side of the toolbar."
-msgstr ""
-"複数の連絡先を一度に編集するには、連絡先の左側にあるチェックボックスを有効に"
-"します。チェックボックスが表示されていない場合は、ツールバーの右側にある "
-"[ビュー] → [チェックボックス] の順にクリックします。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "The Drive app"
-msgstr "ドライブアプリケーション"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Welcome to your cloud storage app. This Guided Tour will introduce you to "
-"your new online storage solution - your one point to access online stored "
-"files from all your accounts. This is where you can upload and save your "
-"files, share them and synchronize them with different devices.  "
-msgstr ""
-"クラウドストーレージアプリケーションにようこそ本ガイドツアーでは、すべてのア"
-"カウントからオンラインで保存されたファイルにアクセスするポイントとなる、新し"
-"いオンラインストレージソリューションを紹介します。ここにファイルをアップロー"
-"ドしたり、保存したり、共有したり、他のデバイスと同期したりできます。  "
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Folder tree"
-msgstr "フォルダーツリー"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"On the left you can see the folder tree. It displays your folder structure "
-"and allows you to navigate to specific folders and subfolders. To make your "
-"life easier, we have already included folders for your Documents, Music, "
-"Pictures and Videos."
-msgstr ""
-"左側にフォルダーツリーが表示されます。フォルダー構造が表示され、特定のフォル"
-"ダーやサブフォルダー間を移動することができます。ドキュメントフォルダー、音楽"
-"フォルダー、画像フォルダーおよびビデオフォルダーを含めれば、より簡単に行えま"
-"す。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Folder content"
-msgstr "フォルダー内容"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Clicking on a folder displays all the subfolders, documents, media and other "
-"files that it contains."
-msgstr ""
-"フォルダーをクリックすると、サブフォルダー、ドキュメント、メディア、その他の"
-"ファイルのすべてが表示されます。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Select a view"
-msgstr "ビューの選択"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Different views are available. Just select the one you like best."
-msgstr "別の表示が利用できます。一番お気に入りの表示を選択してください。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Toolbar"
-msgstr "ツールバー"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"At the top you can find the toolbar with many functions and additional "
-"options. You can easily create new folders, new files and much more."
-msgstr ""
-"機能や追加のオプションのツールバーが上側に表示されます。新規フォルダーや新規"
-"ファイルなどが簡単に作成できます。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Upload a new file"
-msgstr "新規ファイルをアップロード"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
-msgstr ""
-"新規ファイルをローカルデバイスからアップロードするには、ローカルファイルを追"
-"加をクリックし、アップロードしたいファイルを選択します。ローカルデバイスから "
-"ドライブファイルをドラッグし、ここにドロップすると、さらに簡単に行えます。こ"
-"れで、アップロードファイルはすべてのご利用のデバイスの ドライブで利用できま"
-"す。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Preview files"
-msgstr "ファイルのプレビュー"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Clicking on the view icon leads you to a preview of the selected file."
-msgstr "ビューアイコンをクリックすると、選択したファイルをプレビューできます。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Preview mode"
-msgstr "モードのプレビュー"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"From preview you can also select other options to help you manage and work "
-"on your files."
-msgstr ""
-"プレビューから他のオプションを選択して、ファイルの管理や作業を行えます。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Share files"
-msgstr "ファイルの共有"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Here you can share files with your colleagues and external contacts. You can "
-"also collaborate on a document and set different access rights."
-msgstr ""
-"ここでファイルを同僚や外部の連絡先と共有できます。また、ドキュメントを共同で"
-"作業したり、異なるアクセス権限を設定できます。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Sharing options"
-msgstr "共有オプション"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Choose from two alternatives to share your files and folders. Use Invite "
-"people if you want to manage access rights and allow recipients to create "
-"and edit files. Or just get a link to let others view and download your "
-"files. You can use an expiration date and password protection if you like."
-msgstr ""
-"ファイルやフォルダーの共有方法を２つの方法から選びます。アクセス権限を管理"
-"し、宛先がファイルの作成や編集をできるようにしたい場合は、招待を使用します。"
-"または、リンクで他の人にファイルを表示したり、ダウンロードできるようにしま"
-"す。利用期限やパスワード保護を使用することもできます。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Collaborating"
-msgstr "共同編集"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Sharing files by inviting people does not only offer your recipients the "
-"option to create and edit files. Internal and external participants are also "
-"able to collaborate with you on text documents and spreadsheets at the same "
-"time."
-msgstr ""
-"招待をすることによるファイルの共有は、ファイルを作成および編集するオプション"
-"を宛先に与えるだけではありません。内部および外部参加者も共同して、テキストド"
-"キュメントやスプレッドシートを同時に作業することができます。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Edit documents"
-msgstr "ドキュメントを編集"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Did you know that you can edit text documents and spreadsheets online? Drive "
-"will automatically update your edited file, but thanks to versioning the "
-"original file stays available."
-msgstr ""
-"テキストドキュメントやスプレッドシートをオンラインで編集できると知っていまし"
-"たか？ドライブが自動で編集されたファイルを更新しますが、バージョン管理のおか"
-"げで元のファイルも利用可能です。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "File details"
-msgstr "ファイルの詳細"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"The file details side bar offers additional information about your files. "
-"Just enable the File details option from the View drop down menu and select "
-"a file to see the details."
-msgstr ""
-"ファイルの詳細サイドバーにファイルの追加情報が表示されます。ファイル詳細オプ"
-"ションをビュードロップダウンメニューから有効にし、ファイルを選択して詳細を表"
-"示します。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Add another account"
-msgstr "別のアカウントを追加"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Drive allows you to connect to other storage solutions if you already have a "
-"cloud storage account you use to save and sync your files. Simply click on "
-"the appropriate logo to access your existing data."
-msgstr ""
-"ファイルの保存や同期用にすでにクラウドストレージをお持ちの場合、ドライブに"
-"よって別のストレージソリューションに接続ができます。適切のロゴをクリックする"
-"だけで、既存のデータにアイクセスできます。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "The Drive app tour.txt"
-msgstr "ドライブアプリケーションツアー.txt"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Welcome to %s"
-msgstr "%s へようこそ"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"This guided tour will briefly introduce you to the product. Get more "
-"detailed information in the tours for the single apps or in the online help."
-msgstr ""
-"このガイドツアーでは、製品の概要をご紹介します。各アプリケーションのツアーや"
-"オンラインヘルプで詳細をご覧になれます。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Launching an app"
-msgstr "アプリケーションの起動"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app click on an entry inside the app launcher menu."
-msgstr ""
-"アプリケーションを起動するには、アプリケーションランチャーメニュー内の項目を"
-"クリックします。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Displaying the help or the settings"
-msgstr "ヘルプや設定の表示"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To display the help or the settings, click the System menu icon in the menu "
-"bar."
-msgstr ""
-"ヘルプや設定を表示するには、メニューバーで、システムメニューアイコンをクリッ"
-"クします。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Creating new items"
-msgstr "新規アイテムの作成"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr "新規メールを作成するには、ツールバーで [作成] をクリックします。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Opening or closing the folder tree"
-msgstr "フォルダーツリーを開閉する"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To open or close the folder tree, click on View >  Folder view on the right "
-"side of the toolbar."
-msgstr ""
-"フォルダーツリーを開いたり閉じるには、ツールバーの右側にある [ビュー] → [フォ"
-"ルダ ビュー] の順にクリックします。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Searching for objects"
-msgstr "オブジェクトの検索"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To search for objects, click the Search icon in the menu bar."
-msgstr ""
-"オブジェクトを検索するには、メニューバーで、検索アイコンをクリックします。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The toolbar"
-msgstr "ツールバー"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Depending on the app, the toolbar contains various functions for creating, "
-"editing and organizing objects."
-msgstr ""
-"アプリケーションによっては、オブジェクトを作成、編集、整理するための機能が"
-"ツールバーに表示されます。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The folder tree"
-msgstr "フォルダーツリー"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Use the folder tree to open the folder containing the objects that you want "
-"to view in the list."
-msgstr ""
-"目的のオブジェクトを一覧に表示するには、フォルダーツリーでそのオブジェクトが"
-"保存されているフォルダーを開きます。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The list"
-msgstr "リスト"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Use the list to select an object, show its contents or activate functions."
-msgstr ""
-"オブジェクトの選択やその内容の閲覧、機能を有効にするには、一覧でそのオブジェ"
-"クトを選択します。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The Detail view"
-msgstr "詳細ビュー"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The Detail view displays an object's content. Depending on the app, further "
-"functions for organizing objects can be found in the Detail view."
-msgstr ""
-"詳細ビューには、オブジェクトの内容が表示されます。オブジェクトを整理するため"
-"の機能が詳細ビューに表示されます。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Further information"
-msgstr "詳細情報"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Detailed instructions for the single apps are located in System menu > Help."
-msgstr ""
-"各アプリケーションの詳細な使用方法を表示するには、[システム　メニュー] → [ヘ"
-"ルプ] の順に選択します。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new email"
-msgstr "新規メールの作成"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the recipient's name"
-msgstr "宛先の名前の入力"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"Enter the recipient's name into the recipients field. As soon as you typed "
-"the first letters, suggestions from the address books are displayed. To "
-"accept a recipient suggestion, click on it."
-msgstr ""
-"宛先フィールドに宛先の名前を入力します。最初の文字を打つとすぐに、アドレス帳"
-"から候補が表示されます。候補の宛先を選択するには、その候補をクリックしてくだ"
-"さい。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the subject"
-msgstr "件名の入力"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Enter the subject into the subject field."
-msgstr "件名フィールドに件名を入力します。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Further functions"
-msgstr "詳細機能"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"In this area you can find further functions, e.g. for adding attachments."
-msgstr "このエリアには、添付ファイルの追加などの詳細機能があります。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the email text"
-msgstr "メールの本文の入力"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"Enter the email text into the main area. If the text format was set to HTML "
-"in the options, you can format the email text. To do so select a text part "
-"and then click an icon in the formatting bar."
-msgstr ""
-"本文エリアにメールの本文を入力します。テキスト形式がオプションでHTMLに設定さ"
-"れると、メールテキストの形式ができます。テキストをフォーマットするには、テキ"
-"スト部分を選択して、書式バーのアイコンをクリックします。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the email"
-msgstr "メールの送信"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the email, click on Send"
-msgstr "メールを送信するには、送信をクリックします。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your emails"
-msgstr "メールのソート"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
-msgstr ""
-"メールをソートするには、ソート条件をクリックします。ソート条件を選択します。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To choose between the different views, click on View in the toolbar. Select "
-"a menu entry in the layout."
-msgstr ""
-"ビューの選択は次で行えます。ツールバーで、ビューをクリックします。レイアウト"
-"のメニュー入力を選択します。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an email in a separate window"
-msgstr "メールを別のウィンドウで開く"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"If double-clicking on an email in the list, the email is opened in a "
-"separate window."
-msgstr ""
-"一覧でメールをダブルクリックすると、別のウィンドウにメールが表示されます。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading email conversations"
-msgstr "メールスレッドの表示"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
-msgstr ""
-"スレッドのメールを開いたり閉じるには、ヘッダの空いている領域をクリックしま"
-"す。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Halo view"
-msgstr "ハロー ビュー"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To receive information about the sender or other recipients, open the Halo "
-"view by clicking on a name."
-msgstr ""
-"差出人や宛先に関する情報を閲覧するには、その名前をクリックしてハロー ビューを"
-"開きます。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple emails"
-msgstr "複数のメールの編集"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"In order to edit multiple emails at once, enable the checkboxes on the left "
-"side of the emails. If the checkboxes are not displayed, click on View > "
-"Checkboxes on the right side of the toolbar."
-msgstr ""
-"複数のメールを一度に編集するには、メールの左側にあるチェックボックスを有効に"
-"します。チェックボックスが表示されていない場合は、ツールバーの右側にある "
-"[ビュー] → [チェックボックス] の順にクリックします。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the email settings"
-msgstr "メール設定を開く"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To open the email settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on email on the left side."
-msgstr ""
-"メール設定を表示するには、メニューバーの右上のシステムメニューアイコンをク"
-"リックします。設定 を選択します。左側のメールをクリックします。"
-
-#. Tour name; general introduction
-#: apps/io.ox/tours/main.js module:io.ox/tours
-msgid "Getting started"
-msgstr "はじめに"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Second Factor Authentication"
-msgstr "第２認証要素"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"You can now add additional verification options to enhance the security of "
-"your account."
-msgstr ""
-"検証オプションを追加して、お使いのアカウントのセキュリティを強化できます。"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Adding verification option"
-msgstr "検証オプションを追加"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Various options for additional verification depends on your installation."
-msgstr "追加できる検証オプションはインストールによって異なります。"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Adding a code via text message"
-msgstr "テキストメッセージでコードを追加"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Selecting the option for a code via text message, for example, will then ask "
-"you for a phone number."
-msgstr ""
-"テキストメッセージでコードのオプションを選択すると、電話番号を尋ねられます。"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Authentication Requests"
-msgstr "認証リクエスト"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Then the next time you log in, you will have to verify your identitity by "
-"entering the number sent to your phone."
-msgstr ""
-"次にログインした時に、電話番号に送信された番号を入力して認証しなければなりま"
-"せん。"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Removing"
-msgstr "削除"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Devices can be removed once added if you so choose.  See help for additional "
-"details."
-msgstr ""
-"追加されたデバイスを削除することができます。削除する場合は選択してください。"
-"詳細についてはヘルプを参照してください。"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Next"
-msgstr "次へ"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"As an additional security feature, you can now require a second method of "
-"authentication, such as a text message, before logging into your account.  "
-"Would you like to see some information on this now?"
-msgstr ""
-"追加のセキュリティとして、アカウントにログインする前にテキストメッセージなど"
-"の２つめの認証方法が必要です。これについて情報をご覧になりますか？"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Start tour"
-msgstr "ツアーを開始"
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "ポータル"
@@ -703,61 +533,35 @@ msgstr ""
 "ポータルでは、最新のメール、予定、ソーシャルネットワークニュースが表示されま"
 "す。"
 
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Reading the details"
-msgstr "詳細情報の閲覧"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "The calendar views"
+msgstr "カレンダービュー"
 
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "To read the details, click on an entry in a square."
-msgstr "詳細を閲覧するには、該当するタイルの項目をクリックします。"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Drag and drop"
-msgstr "ドラッグ アンド ドロップ"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
-"To change the layout, drag a square's title to another position and drop it "
-"there."
+"The calendar views display a calendar sheet with the appointments for the "
+"selected time range."
 msgstr ""
-"レイアウトを変更するには、タイルのタイトルをドラッグし、目的の位置にドロップ"
-"します。"
+"カレンダービューでは、選択された時間軸で、カレンダーシートに予定が表示されま"
+"す。"
 
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Closing a square"
-msgstr "タイルを閉じる"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "If you no longer want to display a square, click the delete icon."
-msgstr "タイルを表示しない場合は、削除アイコンをクリックします。"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Customizing the Portal"
-msgstr "ポータルのカスタマイズ"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To display a square again or to display further information sources, click "
-"on Customize this page."
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
 msgstr ""
-"タイルを再表示したり、他の情報ソースを表示するには、[このページをカスタマイ"
-"ズ] をクリックします。"
+"ファイルの詳細サイドバーにファイルの追加情報が表示されます。ファイル詳細オプ"
+"ションをビュードロップダウンメニューから有効にし、ファイルを選択して詳細を表"
+"示します。"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Opening the settings"
-msgstr "設定を開く"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The folder tree"
+msgstr "フォルダーツリー"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"To open the settings, click the user image on the upper right side of the "
-"menu bar. Select Settings."
-msgstr ""
-"設定を表示するには、メニューバーの右上のユーザーイメージをクリックします。設"
-"定 を選択します。"
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "How the settings are organized"
-msgstr "設定の項目について"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The list"
+msgstr "リスト"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -767,19 +571,187 @@ msgstr ""
 "設定はトピックで構成されています。左側にある、基本設定やメールなどのトピック"
 "を選択します。"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Editing settings"
-msgstr "設定の編集"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The toolbar"
+msgstr "ツールバー"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid ""
-"Edit a setting on the right side. In most of the cases, the changes are "
-"activated immediately."
-msgstr "右ペインで設定を編集します。通常変更はすぐに有効になります。"
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
+"次にログインした時に、電話番号に送信された番号を入力して認証しなければなりま"
+"せん。"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Opening the help"
-msgstr "ヘルプを開く"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"This guided tour will briefly introduce you to the product. Get more "
+"detailed information in the tours for the single apps or in the online help."
+msgstr ""
+"このガイドツアーでは、製品の概要をご紹介します。各アプリケーションのツアーや"
+"オンラインヘルプで詳細をご覧になれます。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To add further details, click on Expand form."
+msgstr "詳細情報を追加するには、[フォームを展開] をクリックします。"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To change the layout, drag a square's title to another position and drop it "
+"there."
+msgstr ""
+"レイアウトを変更するには、タイルのタイトルをドラッグし、目的の位置にドロップ"
+"します。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To choose between the different views, click on View in the toolbar. Select "
+"a menu entry in the layout."
+msgstr ""
+"ビューの選択は次で行えます。ツールバーで、ビューをクリックします。レイアウト"
+"のメニュー入力を選択します。"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/mail.js
+msgid "To compose a new email, click on Compose in the toolbar."
+msgstr "新規メールを作成するには、ツールバーで [作成] をクリックします。"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create a new appointment, click on New in the toolbar."
+msgstr "新規予定を作成するには、ツールバーで、[新規] をクリックします。"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "To create a new contact, click on New > Add contact in the toolbar."
+msgstr ""
+"新規の連絡先を作成するには、ツールバーで、[新規] → [連絡先を追加] の順にク"
+"リックします。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create a new task, click on New in the toolbar."
+msgstr "新規のタスクを作成するには、ツールバーで、[新規] をクリックします。"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To create recurring appointments, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"繰り返しの予定を作成するには、[繰り返しの予定] を有効にします。繰り返しのパラ"
+"メータを設定するための機能が表示されます。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To create recurring tasks, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"繰り返しのタスクを作成するには、[繰り返しの予定] を有効にします。繰り返しのパ"
+"ラメータを設定するための機能が表示されます。"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create the appointment, click on Create at the lower left side."
+msgstr "予定を作成するには、左下の「作成」をクリックします。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create the task, click on Create."
+msgstr "タスクの作成には、作成をクリックします。"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To display a square again or to display further information sources, click "
+"on Customize this page."
+msgstr ""
+"タイルを再表示したり、他の情報ソースを表示するには、[このページをカスタマイ"
+"ズ] をクリックします。"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"To display the help or the settings, click the System menu icon in the menu "
+"bar."
+msgstr ""
+"ヘルプや設定を表示するには、メニューバーで、システムメニューアイコンをクリッ"
+"クします。"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"To edit multiple contacts at once, enable the checkboxes on the left side of "
+"the contacts. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"複数の連絡先を一度に編集するには、連絡先の左側にあるチェックボックスを有効に"
+"します。チェックボックスが表示されていない場合は、ツールバーの右側にある "
+"[ビュー] → [チェックボックス] の順にクリックします。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To edit multiple tasks at once, enable the checkboxes at the left side of "
+"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
+"on the right side of the toolbar."
+msgstr ""
+"複数のタスクを一度に編集するには、メールの左側にあるチェックボックスを有効に"
+"します。チェックボックスが表示されていない場合は、ツールバーの右側にある "
+"[ビュー] → [チェックボックス] の順にクリックします。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To enter billing information, click on Show details."
+msgstr "支払条件を入力するには、[詳細を表示] をクリックします。"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. To avoid appointment conflicts, click on Find a free time at "
+"the upper right side."
+msgstr ""
+"他の人に予定への招待するには、[参加者] の下にあるフィールドに招待する人の名前"
+"を入力します。予定の競合を避けるには、右上の [空き時間を検索] をクリックしま"
+"す。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. You can add documents as attachment to the task."
+msgstr ""
+"他の人に予定への招待するには、[参加者] の下にあるフィールドに招待する人の名前"
+"を入力します。タスクにドキュメントを追加すれば、添付ファイルを作成できます。"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To launch an app click on an entry inside the app launcher menu."
+msgstr ""
+"アプリケーションを起動するには、アプリケーションランチャーメニュー内の項目を"
+"クリックします。"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "予定を見逃さないようにするには、アラーム機能を使用します。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To not miss the task, use the reminder function."
+msgstr "タスクを見逃さないようにするには、アラーム機能を使用します。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open or close an email in a conversation, click on a free area in the "
+"header."
+msgstr ""
+"スレッドのメールを開いたり閉じるには、ヘッダの空いている領域をクリックしま"
+"す。"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"To open or close the folder tree, click on View >  Folder view on the right "
+"side of the toolbar."
+msgstr ""
+"フォルダーツリーを開いたり閉じるには、ツールバーの右側にある [ビュー] → [フォ"
+"ルダ ビュー] の順にクリックします。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the email settings, click the System menu icon on the upper right "
+#| "side of the menu bar. Select Settings. Click on email on the left side."
+msgid ""
+"To open the email settings, click the System menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on Mail on the left side."
+msgstr ""
+"メール設定を表示するには、メニューバーの右上のシステムメニューアイコンをク"
+"リックします。設定 を選択します。左側のメールをクリックします。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -794,8 +766,53 @@ msgstr ""
 "リックします。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Signing out"
-msgstr "ログアウト"
+msgid ""
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
+msgstr ""
+"設定を表示するには、メニューバーの右上のユーザーイメージをクリックします。設"
+"定 を選択します。"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "To read the details, click on an entry in a square."
+msgstr "詳細を閲覧するには、該当するタイルの項目をクリックします。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To receive information about the sender or other recipients, open the Halo "
+"view by clicking on a name."
+msgstr ""
+"差出人や宛先に関する情報を閲覧するには、その名前をクリックしてハロー ビューを"
+"開きます。"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To search for objects, click the Search icon in the menu bar."
+msgstr ""
+"オブジェクトを検索するには、メニューバーで、検索アイコンをクリックします。"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To select one of the views like Day, Month or List, click on View in the "
+"toolbar. Select a menu entry from the Layout section."
+msgstr ""
+"日ビュー、月ビュー、リストビューを選択するには、ツールバーのビューをクリック"
+"します。レイアウトセクションのメニュー入力を選択します。"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To send an E-Mail to the contact, click on an E-Mail address or on Send "
+#| "email in the toolbar."
+msgid ""
+"To send an email to the contact, click on an email address or on Send email "
+"in the toolbar."
+msgstr ""
+"連絡先にメールを送信するには、そのメールアドレスをクリックするか、ツールバー"
+"で、[メールを送信] をクリックします。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To send the email, click on Send"
+msgstr "メールを送信するには、送信をクリックします。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -812,81 +829,10 @@ msgstr ""
 "ログアウトするには、メニューバーの右上のログアウトアイコンをクリックします。"
 "ログアウトを選択します。"
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating a new task"
-msgstr "新規のタスクの作成"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "新規のタスクを作成するには、ツールバーで、[新規] をクリックします。"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Entering the task's data"
-msgstr "タスクのデータの入力"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Enter the subject, the start date, and a description."
-msgstr "件名、開始日時、説明を入力します。"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Adding further details"
-msgstr "詳細情報の追加"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To add further details, click on Expand form."
-msgstr "詳細情報を追加するには、[フォームを展開] をクリックします。"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating recurring tasks"
-msgstr "繰り返しのタスクの作成"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid ""
-"To create recurring tasks, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
-"繰り返しのタスクを作成するには、[繰り返しの予定] を有効にします。繰り返しのパ"
-"ラメータを設定するための機能が表示されます。"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To not miss the task, use the reminder function."
-msgstr "タスクを見逃さないようにするには、アラーム機能を使用します。"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Tracking the editing status"
-msgstr "進捗状況の記録"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To track the editing status, enter the current progress."
-msgstr "進捗状況を記録するには、現在の達成率を入力します。"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. You can add documents as attachment to the task."
-msgstr ""
-"他の人に予定への招待するには、[参加者] の下にあるフィールドに招待する人の名前"
-"を入力します。タスクにドキュメントを追加すれば、添付ファイルを作成できます。"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Entering billing information"
-msgstr "支払条件の入力"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To enter billing information, click on Show details."
-msgstr "支払条件を入力するには、[詳細を表示] をクリックします。"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating the task"
-msgstr "タスクの作成"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create the task, click on Create."
-msgstr "タスクの作成には、作成をクリックします。"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Sorting tasks"
-msgstr "タスクのソート"
+"メールをソートするには、ソート条件をクリックします。ソート条件を選択します。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
@@ -894,121 +840,80 @@ msgstr ""
 "タスクをソートするには、ソート条件をクリックします。ソート条件を選択します。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Editing multiple tasks"
-msgstr "複数のタスクの編集"
+msgid "To track the editing status, enter the current progress."
+msgstr "進捗状況を記録するには、現在の達成率を入力します。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
+msgstr ""
+"新規ファイルをローカルデバイスからアップロードするには、ローカルファイルを追"
+"加をクリックし、アップロードしたいファイルを選択します。ローカルデバイスから "
+"ドライブファイルをドラッグし、ここにドロップすると、さらに簡単に行えます。こ"
+"れで、アップロードファイルはすべてのご利用のデバイスの ドライブで利用できま"
+"す。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Toolbar"
+msgstr "ツールバー"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Tracking the editing status"
+msgstr "進捗状況の記録"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Upload a new file"
+msgstr "新規ファイルをアップロード"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"To edit multiple tasks at once, enable the checkboxes at the left side of "
-"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
-"on the right side of the toolbar."
+"Use the folder tree to open the folder containing the objects that you want "
+"to view in the list."
 msgstr ""
-"複数のタスクを一度に編集するには、メールの左側にあるチェックボックスを有効に"
-"します。チェックボックスが表示されていない場合は、ツールバーの右側にある "
-"[ビュー] → [チェックボックス] の順にクリックします。"
+"目的のオブジェクトを一覧に表示するには、フォルダーツリーでそのオブジェクトが"
+"保存されているフォルダーを開きます。"
 
-#~ msgid "Sending an E-Mail to a contact"
-#~ msgstr "連絡先へのメールの送信"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Use the list to select an object, show its contents or activate functions."
+msgstr ""
+"オブジェクトの選択やその内容の閲覧、機能を有効にするには、一覧でそのオブジェ"
+"クトを選択します。"
 
-#~ msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
-#~ msgstr ""
-#~ "新規メールを作成するには、ツールバーの [新規メールを作成] をクリックしま"
-#~ "す。"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "アラーム機能の使用"
 
-#~ msgid "Composing a new E-Mail"
-#~ msgstr "新規メールの作成"
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr "追加できる検証オプションはインストールによって異なります。"
 
-#~ msgid "To compose a new E-Mail, click on Compose in the toolbar."
-#~ msgstr "新規メールを作成するには、ツールバーで [作成] をクリックします。"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Welcome to %s"
+msgstr "%s へようこそ"
 
-#~ msgid "Entering the E-Mail text"
-#~ msgstr "メールの本文の入力"
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
+"クラウドストーレージアプリケーションにようこそ本ガイドツアーでは、すべてのア"
+"カウントからオンラインで保存されたファイルにアクセスするポイントとなる、新し"
+"いオンラインストレージソリューションを紹介します。ここにファイルをアップロー"
+"ドしたり、保存したり、共有したり、他のデバイスと同期したりできます。  "
 
-#~ msgid ""
-#~ "Enter the E-Mail text into the main area. If the text format was set to "
-#~ "HTML in the options, you can format the E-Mail text. To do so select a "
-#~ "text part and then click an icon in the formatting bar."
-#~ msgstr ""
-#~ "本文エリアにメールの本文を入力します。テキスト形式がオプションでHTMLに設定"
-#~ "されると、メールテキストの形式ができます。テキストをフォーマットするには、"
-#~ "テキスト部分を選択して、書式バーのアイコンをクリックします。"
-
-#~ msgid "Sending the E-Mail"
-#~ msgstr "メールの送信"
-
-#~ msgid "To send the E-Mail, click on Send"
-#~ msgstr "メールを送信するには、送信をクリックします。"
-
-#~ msgid "Sorting your E-Mails"
-#~ msgstr "メールのソート"
-
-#~ msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
-#~ msgstr ""
-#~ "メールをソートするには、ソート条件をクリックします。ソート条件を選択しま"
-#~ "す。"
-
-#~ msgid ""
-#~ "To choose between the different views. click on View in the toolbar. "
-#~ "Select a menu entry in the layout."
-#~ msgstr ""
-#~ "ビューの選択は次で行えます。ツールバーで、ビューをクリックします。レイアウ"
-#~ "トのメニュー入力を選択します。"
-
-#~ msgid "Opening an E-Mail in a separate window"
-#~ msgstr "メールを別のウィンドウで開く"
-
-#~ msgid ""
-#~ "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
-#~ "separate window."
-#~ msgstr ""
-#~ "一覧でメールをダブルクリックすると、別のウィンドウにメールが表示されます。"
-
-#~ msgid "Reading E-Mail conversations"
-#~ msgstr "メールスレッドの表示"
-
-#~ msgid ""
-#~ "To open or close an E-Mail in a conversation, click on a free area in the "
-#~ "header."
-#~ msgstr ""
-#~ "スレッドのメールを開いたり閉じるには、ヘッダの空いている領域をクリックしま"
-#~ "す。"
-
-#~ msgid "Editing multiple E-Mails"
-#~ msgstr "複数のメールの編集"
-
-#~ msgid ""
-#~ "In order to edit multiple E-Mails at once, enable the checkboxes on the "
-#~ "left side of the E-Mails. If the checkboxes are not displayed, click on "
-#~ "View > Checkboxes on the right side of the toolbar."
-#~ msgstr ""
-#~ "複数のメールを一度に編集するには、メールの左側にあるチェックボックスを有効"
-#~ "にします。チェックボックスが表示されていない場合は、ツールバーの右側にあ"
-#~ "る [ビュー] → [チェックボックス] の順にクリックします。"
-
-#~ msgid "Opening the E-Mail settings"
-#~ msgstr "メール設定を開く"
-
-#~ msgid ""
-#~ "To open the E-Mail settings, click the System menu icon on the upper "
-#~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
-#~ "side."
-#~ msgstr ""
-#~ "メール設定を表示するには、メニューバーの右上のシステムメニューアイコンをク"
-#~ "リックします。設定 を選択します。左側のメールをクリックします。"
-
-#~ msgid ""
-#~ "The Portal informs you about current E-Mails, appointments or social "
-#~ "network news."
-#~ msgstr ""
-#~ "ポータルでは、最新のメール、予定、ソーシャルネットワークニュースが表示され"
-#~ "ます。"
-
-#~ msgid ""
-#~ "The settings are organized in topics. Select the topic on the left side, "
-#~ "e.g Basic settings or E-Mail."
-#~ msgstr ""
-#~ "設定はトピックで構成されています。左側にある、基本設定やメールなどのトピッ"
-#~ "クを選択します。"
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"検証オプションを追加して、お使いのアカウントのセキュリティを強化できます。"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -3439,6 +3344,9 @@ msgstr ""
 #~ msgid "Compose new mail"
 #~ msgstr "新規メールを作成"
 
+#~ msgid "Composing a new E-Mail"
+#~ msgstr "新規メールの作成"
+
 #~ msgid "Conditions"
 #~ msgstr "条件"
 
@@ -4594,6 +4502,9 @@ msgstr ""
 #~ msgid "Edit to set a name."
 #~ msgstr "編集して名前を設定"
 
+#~ msgid "Editing multiple E-Mails"
+#~ msgstr "複数のメールの編集"
+
 #~ msgid "Editor"
 #~ msgstr "エディタ"
 
@@ -4816,6 +4727,15 @@ msgstr ""
 #~ "HTML に設定されている場合は、メールの本文に書式を設定できます。"
 
 #~ msgid ""
+#~ "Enter the E-Mail text into the main area. If the text format was set to "
+#~ "HTML in the options, you can format the E-Mail text. To do so select a "
+#~ "text part and then click an icon in the formatting bar."
+#~ msgstr ""
+#~ "本文エリアにメールの本文を入力します。テキスト形式がオプションでHTMLに設定"
+#~ "されると、メールテキストの形式ができます。テキストをフォーマットするには、"
+#~ "テキスト部分を選択して、書式バーのアイコンをクリックします。"
+
+#~ msgid ""
 #~ "Enter the recipient's name on the top left side. As soon as you typed the "
 #~ "first letters, suggestions from the address books are displayed. To "
 #~ "accept a recipient suggestion, click on it."
@@ -4832,6 +4752,9 @@ msgstr ""
 
 #~ msgid "Enter your version comment:"
 #~ msgstr "バージョンに関するコメントを入力してください。"
+
+#~ msgid "Entering the E-Mail text"
+#~ msgstr "メールの本文の入力"
 
 #~ msgid "Entire thread"
 #~ msgstr "スレッド全体"
@@ -5815,6 +5738,12 @@ msgstr ""
 #~ "うには、ツールバーで、[スライドショーを表示] アイコンをクリックします。"
 
 #~ msgid ""
+#~ "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+#~ "separate window."
+#~ msgstr ""
+#~ "一覧でメールをダブルクリックすると、別のウィンドウにメールが表示されます。"
+
+#~ msgid ""
 #~ "If the authorization expired or was revoked, you can repeat the "
 #~ "authorization process by clicking on the button below. The authorization "
 #~ "will proceed in a separate window."
@@ -5927,6 +5856,15 @@ msgstr ""
 #~ "選択されたオブジェクトにカテゴリを割り当てるには、カテゴリの左側にあるコン"
 #~ "トロール フィールドを使用してください。カテゴリを編集するには、目的のカテ"
 #~ "ゴリを選択し、右側のボタンを使用してください。"
+
+#~ msgid ""
+#~ "In order to edit multiple E-Mails at once, enable the checkboxes on the "
+#~ "left side of the E-Mails. If the checkboxes are not displayed, click on "
+#~ "View > Checkboxes on the right side of the toolbar."
+#~ msgstr ""
+#~ "複数のメールを一度に編集するには、メールの左側にあるチェックボックスを有効"
+#~ "にします。チェックボックスが表示されていない場合は、ツールバーの右側にあ"
+#~ "る [ビュー] → [チェックボックス] の順にクリックします。"
 
 #~ msgid "In progress"
 #~ msgstr "進行中"
@@ -7530,6 +7468,12 @@ msgstr ""
 #~ msgid "Opening E-Mail threads"
 #~ msgstr "メール スレッドを開く"
 
+#~ msgid "Opening an E-Mail in a separate window"
+#~ msgstr "メールを別のウィンドウで開く"
+
+#~ msgid "Opening the E-Mail settings"
+#~ msgstr "メール設定を開く"
+
 #~ msgid "Optional %d"
 #~ msgstr "オプション %d"
 
@@ -8542,6 +8486,9 @@ msgstr ""
 #~ msgid "Read/Unread"
 #~ msgstr "既読/未読"
 
+#~ msgid "Reading E-Mail conversations"
+#~ msgstr "メールスレッドの表示"
+
 #~ msgid "Reauthorize"
 #~ msgstr "再認証"
 
@@ -9123,6 +9070,12 @@ msgstr ""
 #~ msgid "Sender/From"
 #~ msgstr "差出人"
 
+#~ msgid "Sending an E-Mail to a contact"
+#~ msgstr "連絡先へのメールの送信"
+
+#~ msgid "Sending the E-Mail"
+#~ msgstr "メールの送信"
+
 #~ msgid "Senegal"
 #~ msgstr "セネガル"
 
@@ -9542,6 +9495,9 @@ msgstr ""
 #~ msgstr ""
 #~ "メッセージを表示するためのキーをご利用のプロバイダが LinkedIn から入手する"
 #~ "必要があります。"
+
+#~ msgid "Sorting your E-Mails"
+#~ msgstr "メールのソート"
 
 #~ msgid "Source"
 #~ msgstr "ソース"
@@ -10156,6 +10112,13 @@ msgstr ""
 #~ "新規オブジェクト アイコンは、未読のメール/通知の数を表します。このアイコン"
 #~ "をクリックすると、情報エリアが表示されます。"
 
+#~ msgid ""
+#~ "The Portal informs you about current E-Mails, appointments or social "
+#~ "network news."
+#~ msgstr ""
+#~ "ポータルでは、最新のメール、予定、ソーシャルネットワークニュースが表示され"
+#~ "ます。"
+
 #~ msgid "The Tiles view"
 #~ msgstr "タイル ビュー"
 
@@ -10466,6 +10429,13 @@ msgstr ""
 
 #~ msgid "The setting has been saved."
 #~ msgstr "設定が保存されました。"
+
+#~ msgid ""
+#~ "The settings are organized in topics. Select the topic on the left side, "
+#~ "e.g Basic settings or E-Mail."
+#~ msgstr ""
+#~ "設定はトピックで構成されています。左側にある、基本設定やメールなどのトピッ"
+#~ "クを選択します。"
 
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "
@@ -10841,6 +10811,21 @@ msgstr ""
 #~ "参加者を手動で追加するには、有効なメール アドレスを入力してください (例:"
 #~ "john.doe@example.com または \"John Doe\" <jd@example.com>)。"
 
+#~ msgid ""
+#~ "To choose between the different views. click on View in the toolbar. "
+#~ "Select a menu entry in the layout."
+#~ msgstr ""
+#~ "ビューの選択は次で行えます。ツールバーで、ビューをクリックします。レイアウ"
+#~ "トのメニュー入力を選択します。"
+
+#~ msgid "To compose a new E-Mail, click on Compose in the toolbar."
+#~ msgstr "新規メールを作成するには、ツールバーで [作成] をクリックします。"
+
+#~ msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+#~ msgstr ""
+#~ "新規メールを作成するには、ツールバーの [新規メールを作成] をクリックしま"
+#~ "す。"
+
 #~ msgid "To create a note, click on New > Add note in the toolbar."
 #~ msgstr ""
 #~ "メモを作成するには、ツールバーで、[新規] → [メモを追加] をクリックします。"
@@ -10868,6 +10853,21 @@ msgstr ""
 #~ msgstr ""
 #~ "アプリケーションを起動するには、メニューバーの左側にあるクィックアイコンを"
 #~ "使用するか、アプリケーションランチャーメニュー内の項目をクリックします。"
+
+#~ msgid ""
+#~ "To open or close an E-Mail in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "スレッドのメールを開いたり閉じるには、ヘッダの空いている領域をクリックしま"
+#~ "す。"
+
+#~ msgid ""
+#~ "To open the E-Mail settings, click the System menu icon on the upper "
+#~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
+#~ "side."
+#~ msgstr ""
+#~ "メール設定を表示するには、メニューバーの右上のシステムメニューアイコンをク"
+#~ "リックします。設定 を選択します。左側のメールをクリックします。"
 
 #~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
@@ -10911,8 +10911,16 @@ msgstr ""
 #~ "リスト ビュー、アイコン ビュー、またはタイル ビューのいずれかを選択するに"
 #~ "は、ツールバー右側にある [ビュー] をクリックします。"
 
+#~ msgid "To send the E-Mail, click on Send"
+#~ msgstr "メールを送信するには、送信をクリックします。"
+
 #~ msgid "To send the E-Mail, click on Send on the upper right side."
 #~ msgstr "メールを送信するには、画面右上にある [送信] をクリックします。"
+
+#~ msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "メールをソートするには、ソート条件をクリックします。ソート条件を選択しま"
+#~ "す。"
 
 #~ msgid "To upload a file, click on New > Upload new file in the toolbar."
 #~ msgstr ""

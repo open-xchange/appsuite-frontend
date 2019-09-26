@@ -1160,6 +1160,13 @@ msgstr "Ajouté le nouveau participant"
 msgid "Adding files with identical names"
 msgstr "Ajouter des fichiers portant le même nom"
 
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Add verification option"
+msgid "Additional options"
+msgstr "Ajouter une option de vérification"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Address"
@@ -1187,6 +1194,12 @@ msgstr "Adresse privée"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Address Other"
 msgstr "Adresse autre"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Addressbook"
+msgid "Address book"
+msgstr "Addressbook"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Address book name"
@@ -1586,6 +1599,11 @@ msgstr "Archiver les messages"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Archive old messages"
 msgstr "Archiver les anciens messages"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Archives larger than the selected size will be split into multiple files."
+msgstr ""
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
@@ -2002,7 +2020,8 @@ msgstr "CalDav/CardDav"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
+#: module:io.ox/mail apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Calendar"
 msgstr "Agenda"
 
@@ -2064,6 +2083,12 @@ msgstr "Caméra %1$s"
 #: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Cancel"
 msgstr "Annuler"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Slow requests"
+msgid "Cancel download request"
+msgstr "Requêtes lentes"
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Cancel search"
@@ -3498,6 +3523,12 @@ msgid_plural "Distribution list with %1$d entries"
 msgstr[0] "Liste de diffusion comportant 1 élément"
 msgstr[1] "Liste de diffusion comportant %1$d éléments"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to delete calendar \"%s\"?"
+msgid "Do you really want to cancel the current download request?"
+msgstr "Souhaitez-vous réellement supprimer l'agenda \"%s\" ?"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -3732,6 +3763,7 @@ msgstr "Télécharger"
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
 #: module:io.ox/core/boot apps/io.ox/notes/toolbar.js module:io.ox/notes
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
@@ -3741,6 +3773,13 @@ msgstr "Télécharger"
 #. %1$s is the file size "Download 2mb" for example
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid "Download %1$s"
+msgstr "Télécharger %1$s"
+
+#. %1$s: filename
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Download %1$s"
+msgid "Download %1$s."
 msgstr "Télécharger %1$s"
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
@@ -3764,6 +3803,12 @@ msgstr "Télécharger le fichier infecté"
 msgid "Download installation file"
 msgstr "Télécharger le fichier d'installation"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Download entire folder"
+msgid "Download personal data"
+msgstr "Télécharger le dossier complet"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
@@ -3776,6 +3821,12 @@ msgstr "Télécharger l'application."
 #: apps/io.ox/core/download.js module:io.ox/core
 msgid "Download unscanned file"
 msgstr "Télécharger le fichier non analysé"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Couldn't load your contact data."
+msgid "Download your personal data"
+msgstr "Impossible de charger vos données de contact."
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Downloads"
@@ -3804,7 +3855,7 @@ msgstr "Faites glisser pour réordonner le composant graphique"
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: module:io.ox/settings apps/io.ox/settings/personalData/settings/pane.js
 msgctxt "app"
 msgid "Drive"
 msgstr "Drive"
@@ -4093,6 +4144,7 @@ msgstr "Éditeur"
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Email"
 msgstr "Courriel"
 
@@ -5627,9 +5679,64 @@ msgstr "Boîte de réception"
 msgid "Inbox categories"
 msgstr "Catégories de la boîte de réception"
 
+#. shown when a download of (cloud) drive files is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Keep all versions"
+msgid "Include all file versions"
+msgstr "Conserver toutes les versions"
+
+#. shown when a download of contact data is requested
 #: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Include distribution lists"
 msgstr "Y compris les listes de diffusion"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Shared address books"
+msgid "Included address books"
+msgstr "Carnets d'adresses partagés"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Add calendar"
+msgid "Included calendars"
+msgstr "Ajouter un agenda"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Add folder"
+msgid "Included folders"
+msgstr "Ajouter un dossier"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Show all my appointments from all calendars"
+msgid "Includes all appointments from your calendars as ical files."
+msgstr "Afficher tous mes rendez-vous provenant de tous les agendas"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all contact data from your address books as vcard files."
+msgstr ""
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all emails from your primary mail account as eml files."
+msgstr ""
+
+#. %1$s is usually "Drive" (product name; might be customized)
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Discard mails from %1$s"
+msgid "Includes all files from %1$s."
+msgstr "Supprimer les courriels provenant de %1$s"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all tasks as ical files."
+msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Incoming server"
@@ -6076,7 +6183,9 @@ msgid "List"
 msgstr "Liste"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-msgid "Listview"
+#, fuzzy
+#| msgid "Listview"
+msgid "List view"
 msgstr "Vue en liste"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
@@ -6085,7 +6194,9 @@ msgstr "Charger les rendez-vous jusque %1$s"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Localpart"
+#, fuzzy
+#| msgid "Localpart"
+msgid "Local-part"
 msgstr "Partie locale"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -6422,6 +6533,12 @@ msgstr "Ne correspond pas à"
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
 msgid "Maximize"
 msgstr "Agrandir"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Mail size:"
+msgid "Maximum file size"
+msgstr "Taille du courriel :"
 
 #. In the context of resizing images before uploading them this text is used as a label for a dropdown
 #: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
@@ -7550,7 +7667,9 @@ msgstr "Facultatif 20"
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/sharing.js apps/io.ox/mail/compose/view.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "Options"
 
@@ -8461,16 +8580,28 @@ msgstr "L'avancement doit être un nombre valide entre 0 et 100"
 msgid "Properties"
 msgstr "Propriétés"
 
+#. shown when a download of contact data is requested
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public address books"
 msgstr "Carnets d'adresses publics"
 
+#. shown when a download of calendar data is requested
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public calendars"
 msgstr "Agendas publics"
+
+#. shown when a download of (cloud) drive files is requested
+#. shown when a download of task data is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Publish folder"
+msgid "Public folders"
+msgstr "Publier le dossier"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -9009,6 +9140,16 @@ msgstr "Répondre à la liste de diffusion"
 msgid "Reply to sender"
 msgstr "Répondre à l'expéditeur"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Request download"
+msgstr ""
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Repeat new password"
+msgid "Request new download"
+msgstr "Répétez le nouveau mot de passe"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
 msgstr "Demander un accusé de réception"
@@ -9414,6 +9555,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Select all"
 msgstr "Tout sélectionner"
 
@@ -9703,8 +9845,10 @@ msgstr "Rendez-vous partagés"
 msgid "Shared activity"
 msgstr "Activité partagée"
 
+#. shown when a download of contact data is requested
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared address books"
 msgstr "Carnets d'adresses partagés"
 
@@ -9712,11 +9856,21 @@ msgstr "Carnets d'adresses partagés"
 msgid "Shared by other users"
 msgstr "Partagé par d'autres utilisateurs"
 
+#. shown when a download of calendar data is requested
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared calendars"
 msgstr "Agendas partagés"
+
+#. shown when a download of (cloud) drive files is requested
+#. shown when a download of task data is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Share your folders"
+msgid "Shared folders"
+msgstr "Partager vos dossiers"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared tasks"
@@ -10501,6 +10655,7 @@ msgid "Task was already deleted!"
 msgstr "La tâche était déjà supprimée."
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Tasks"
 msgstr "Tâches"
 
@@ -10973,6 +11128,12 @@ msgstr "Aucun service ou application externe ne peut accéder à votre compte."
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "Certaines modifications n'ont pas été enregistrées."
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"There is currently an archive download available. By requesting a new "
+"download the current archive will be deleted and is no longer available."
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/types/defaultview.js module:io.ox/core
 msgid "There is no preview for this file type."
@@ -11592,6 +11753,12 @@ msgstr "Total : %1$d"
 msgid "Total: %1$s requests"
 msgstr "Total : %1$s requêtes"
 
+#. shown when a download of mail data is requested
+#. shown when a download of (cloud) drive files is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Trash folder"
+msgstr "Dossier Corbeille"
+
 #: apps/io.ox/settings/security/certificates/settings/pane.js
 #: module:io.ox/settings/certificates
 msgid "Trust"
@@ -11829,6 +11996,20 @@ msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr ""
 "Les documents non enregistrés seront perdus. Voulez-vous vous déconnecter "
 "maintenant ?"
+
+#. shown when a download of calendar data is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Subscribe calendar"
+msgid "Unsubscribed calendars"
+msgstr "S'abonner à l'agenda"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Subscribe IMAP folders"
+msgid "Unsubscribed folders"
+msgstr "S'abonner à des dossiers IMAP"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
@@ -12470,6 +12651,12 @@ msgstr ""
 "messagerie instantanée ou dans un réseau social. Notez que toute personne "
 "connaissant ce lien peut accéder au partage."
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"You can download a copy of your personal data from your account, if you want "
+"to save it or transfer it to another provider."
+msgstr ""
+
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "You can enable categories again via the view dropdown on the right"
 msgstr ""
@@ -12720,6 +12907,13 @@ msgstr "Votre flux d'actualités %s"
 msgid "Your IP address has changed"
 msgstr "Votre adresse IP a changé"
 
+#. header for zip archive download list
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Your name"
+msgid "Your archive"
+msgstr "Votre nom"
+
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
 msgstr "Votre navigateur ne prend pas en charge le format audio de ce fichier."
@@ -12750,6 +12944,14 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Votre mot de passe actuel"
+
+#. %1$s: date and time when the download expires
+#. %1$s: date when the download was requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Your data archive %2$s from is ready for download. The download is available "
+"until %1$s."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
@@ -12814,6 +13016,13 @@ msgstr "Votre règle de répétition ne correspond pas à votre date de départ.
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule was changed automatically."
 msgstr "Votre règle de répétition a été modifiée automatiquement."
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Your requested archive is currently being created. Depending on the size of "
+"the requested data this may take hours or days. You will be informed via "
+"email when your download is ready."
+msgstr ""
 
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
@@ -13936,9 +14145,6 @@ msgstr "votre plate-forme"
 #~ msgid "Add feed"
 #~ msgstr "Ajouter un flux"
 
-#~ msgid "Add folder"
-#~ msgstr "Ajouter un dossier"
-
 #~ msgid "Add folder menu"
 #~ msgstr "Ajouter le menu des dossiers"
 
@@ -14490,9 +14696,6 @@ msgstr "votre plate-forme"
 
 #~ msgid "Couldn't load your auto forward."
 #~ msgstr "Impossible de charger votre transfert automatique."
-
-#~ msgid "Couldn't load your contact data."
-#~ msgstr "Impossible de charger vos données de contact."
 
 #~ msgid "Create Appointment"
 #~ msgstr "Créer un rendez-vous"
@@ -15653,9 +15856,6 @@ msgstr "votre plate-forme"
 #~ msgid "Mail saved as draft"
 #~ msgstr "Message enregistré en tant que brouillon"
 
-#~ msgid "Mail size:"
-#~ msgstr "Taille du courriel :"
-
 #~ msgid "Mail text"
 #~ msgstr "Texte du message"
 
@@ -16199,9 +16399,6 @@ msgstr "votre plate-forme"
 #~ msgid "Publish"
 #~ msgstr "Publier"
 
-#~ msgid "Publish folder"
-#~ msgstr "Publier le dossier"
-
 #~ msgid "Publish item"
 #~ msgstr "Publier l'élément"
 
@@ -16532,9 +16729,6 @@ msgstr "votre plate-forme"
 #~ "Afficher tous les messages. Remarque : les messages ne sont plus "
 #~ "regroupés par conversation."
 
-#~ msgid "Show all my appointments from all calendars"
-#~ msgstr "Afficher tous mes rendez-vous provenant de tous les agendas"
-
 #~ msgctxt "plural"
 #~ msgid "Show attachment"
 #~ msgid_plural "Show attachments"
@@ -16760,14 +16954,8 @@ msgstr "votre plate-forme"
 #~ msgid "Subreddits"
 #~ msgstr "Sous-forums Reddit"
 
-#~ msgid "Subscribe IMAP folders"
-#~ msgstr "S'abonner à des dossiers IMAP"
-
 #~ msgid "Subscribe address book"
 #~ msgstr "S'abonner au carnet d'adresses"
-
-#~ msgid "Subscribe calendar"
-#~ msgstr "S'abonner à l'agenda"
 
 #~ msgid ""
 #~ "Subscribing to items that are not delivered by another Open-Xchange "
@@ -17644,9 +17832,6 @@ msgstr "votre plate-forme"
 
 #~ msgid "Tracking the editing status"
 #~ msgstr "Suivre l'état d'avancement"
-
-#~ msgid "Trash folder"
-#~ msgstr "Dossier Corbeille"
 
 #~ msgid "Tweet"
 #~ msgstr "Tweet"

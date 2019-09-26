@@ -1153,6 +1153,13 @@ msgstr "Tilføjede den nye deltager"
 msgid "Adding files with identical names"
 msgstr "Tilføjer filer med identiske navne."
 
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Add verification option"
+msgid "Additional options"
+msgstr "Tilføj mulighed for verifikation"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Address"
@@ -1180,6 +1187,12 @@ msgstr "Hjemmeadresse"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Address Other"
 msgstr "Anden adresse"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Addressbook"
+msgid "Address book"
+msgstr "Adressebog"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Address book name"
@@ -1574,6 +1587,11 @@ msgstr "Arkivér beskeder"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Archive old messages"
 msgstr "Arkivér gamle beskeder"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Archives larger than the selected size will be split into multiple files."
+msgstr ""
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
@@ -1985,7 +2003,8 @@ msgstr "CalDav/CardDav"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
+#: module:io.ox/mail apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Calendar"
 msgstr "Kalender"
 
@@ -2047,6 +2066,12 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Cancel"
 msgstr "Annullér"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Slow requests"
+msgid "Cancel download request"
+msgstr "Langsomme forespørgsler"
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Cancel search"
@@ -3462,6 +3487,12 @@ msgid_plural "Distribution list with %1$d entries"
 msgstr[0] "Distributionsliste med en deltager"
 msgstr[1] "Distributionsliste med %1$d deltagere"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to delete calendar \"%s\"?"
+msgid "Do you really want to cancel the current download request?"
+msgstr "Vil du virkelig slette kalenderen »%s«?"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -3683,6 +3714,7 @@ msgstr "Hent"
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
 #: module:io.ox/core/boot apps/io.ox/notes/toolbar.js module:io.ox/notes
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
@@ -3692,6 +3724,13 @@ msgstr "Hent"
 #. %1$s is the file size "Download 2mb" for example
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid "Download %1$s"
+msgstr "Hent %1$s"
+
+#. %1$s: filename
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Download %1$s"
+msgid "Download %1$s."
 msgstr "Hent %1$s"
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
@@ -3715,6 +3754,12 @@ msgstr "Hent inficeret fil"
 msgid "Download installation file"
 msgstr "Hent installationsfil"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Download entire folder"
+msgid "Download personal data"
+msgstr "Hent hele mappen"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
@@ -3727,6 +3772,12 @@ msgstr "Hent programmet."
 #: apps/io.ox/core/download.js module:io.ox/core
 msgid "Download unscanned file"
 msgstr "Hent fil som ikke er blevet skannet"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Couldn't load your contact data."
+msgid "Download your personal data"
+msgstr "Dine kontaktdata kunne ikke indlæses."
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Downloads"
@@ -3755,7 +3806,7 @@ msgstr "Træk for omarrangere widget"
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: module:io.ox/settings apps/io.ox/settings/personalData/settings/pane.js
 msgctxt "app"
 msgid "Drive"
 msgstr "Drive"
@@ -4039,6 +4090,7 @@ msgstr "Editor"
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Email"
 msgstr "E-mail"
 
@@ -5555,9 +5607,64 @@ msgstr "Indbakke"
 msgid "Inbox categories"
 msgstr "Ind-bakke-kategorier"
 
+#. shown when a download of (cloud) drive files is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Keep all versions"
+msgid "Include all file versions"
+msgstr "Behold alle versioner"
+
+#. shown when a download of contact data is requested
 #: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Include distribution lists"
 msgstr "Inkludér distributionslister"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Shared address books"
+msgid "Included address books"
+msgstr "Delte adressebøger"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Add calendar"
+msgid "Included calendars"
+msgstr "Tilføj kalender"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Add folder"
+msgid "Included folders"
+msgstr "Tilføj mappe"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Show all my appointments from all calendars"
+msgid "Includes all appointments from your calendars as ical files."
+msgstr "Vis alle mine aftaler fra alle kalendere"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all contact data from your address books as vcard files."
+msgstr ""
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all emails from your primary mail account as eml files."
+msgstr ""
+
+#. %1$s is usually "Drive" (product name; might be customized)
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Discard mails from %1$s"
+msgid "Includes all files from %1$s."
+msgstr "Smid e-mails fra %1$s ud"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all tasks as ical files."
+msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Incoming server"
@@ -6000,7 +6107,9 @@ msgid "List"
 msgstr "Liste"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-msgid "Listview"
+#, fuzzy
+#| msgid "Listview"
+msgid "List view"
 msgstr "Listevisning"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
@@ -6009,7 +6118,9 @@ msgstr "Indlæs aftaler indtil %1$s"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Localpart"
+#, fuzzy
+#| msgid "Localpart"
+msgid "Local-part"
 msgstr "Lokal del"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -6345,6 +6456,12 @@ msgstr "Svarer ikke til"
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
 msgid "Maximize"
 msgstr "Maksimér"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Mail size:"
+msgid "Maximum file size"
+msgstr "Størrelse på e-mail:"
 
 #. In the context of resizing images before uploading them this text is used as a label for a dropdown
 #: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
@@ -7468,7 +7585,9 @@ msgstr "Valgfri 20"
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/sharing.js apps/io.ox/mail/compose/view.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "Indstillinger"
 
@@ -8364,16 +8483,28 @@ msgstr "Fremgang skal være et gyldigt nummer imellem 0 og 100"
 msgid "Properties"
 msgstr "Egenskaber"
 
+#. shown when a download of contact data is requested
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public address books"
 msgstr "Offentlige adressebøger"
 
+#. shown when a download of calendar data is requested
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public calendars"
 msgstr "Offentlige kalendre"
+
+#. shown when a download of (cloud) drive files is requested
+#. shown when a download of task data is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Publish folder"
+msgid "Public folders"
+msgstr "Udgiv mappe"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8908,6 +9039,16 @@ msgstr "Svar til postliste"
 msgid "Reply to sender"
 msgstr "Svar til afsender"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Request download"
+msgstr ""
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Repeat new password"
+msgid "Request new download"
+msgstr "Gentag ny adgangskode"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
 msgstr "Bed om kvittering ved levering"
@@ -9312,6 +9453,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Select all"
 msgstr "Vælg alle"
 
@@ -9601,8 +9743,10 @@ msgstr "Delte aftaler"
 msgid "Shared activity"
 msgstr "Delt aktivitet"
 
+#. shown when a download of contact data is requested
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared address books"
 msgstr "Delte adressebøger"
 
@@ -9610,11 +9754,21 @@ msgstr "Delte adressebøger"
 msgid "Shared by other users"
 msgstr "Delt med andre brugere"
 
+#. shown when a download of calendar data is requested
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared calendars"
 msgstr "Delte kalendre"
+
+#. shown when a download of (cloud) drive files is requested
+#. shown when a download of task data is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Share your folders"
+msgid "Shared folders"
+msgstr "Del dine mapper"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared tasks"
@@ -10396,6 +10550,7 @@ msgid "Task was already deleted!"
 msgstr "Opgaven var allerede slettet!"
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Tasks"
 msgstr "Opgaver"
 
@@ -10851,6 +11006,12 @@ msgstr "Ingen eksterne programmer eller tjenester kan tilgå dine data."
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "Der er ugemte ændringer."
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"There is currently an archive download available. By requesting a new "
+"download the current archive will be deleted and is no longer available."
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/types/defaultview.js module:io.ox/core
 msgid "There is no preview for this file type."
@@ -11443,6 +11604,12 @@ msgstr "Total: %1$d"
 msgid "Total: %1$s requests"
 msgstr "Total: %1$s forespørgsler"
 
+#. shown when a download of mail data is requested
+#. shown when a download of (cloud) drive files is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Trash folder"
+msgstr "Skrald mappe"
+
 #: apps/io.ox/settings/security/certificates/settings/pane.js
 #: module:io.ox/settings/certificates
 msgid "Trust"
@@ -11676,6 +11843,20 @@ msgstr "Ulæst: %1$d"
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Ugemte dokumenter vil gå tabt.  Vil du logge ud nu?"
+
+#. shown when a download of calendar data is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Subscribe calendar"
+msgid "Unsubscribed calendars"
+msgstr "Abonnér på kalender"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Subscribe IMAP folders"
+msgid "Unsubscribed folders"
+msgstr "Tilmeld IMAP mapper"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
@@ -12307,6 +12488,12 @@ msgstr ""
 "Du kan klippe-klistre denne URL i en e-mail, IM eller et socialt netværk.  "
 "Bemærk at hvem som helst der har denne URL kan tilgå delingen."
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"You can download a copy of your personal data from your account, if you want "
+"to save it or transfer it to another provider."
+msgstr ""
+
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "You can enable categories again via the view dropdown on the right"
 msgstr "Du kan slå kategorier til igen via dropdown-visningen til højre."
@@ -12545,6 +12732,13 @@ msgstr "Din %s-nyhedsstrøm"
 msgid "Your IP address has changed"
 msgstr "Din IP-adresse er blevet ændret"
 
+#. header for zip archive download list
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Your name"
+msgid "Your archive"
+msgstr "Dit navn"
+
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
 msgstr "Din browser understøtter ikke lydformatet i denne fil."
@@ -12572,6 +12766,14 @@ msgstr "Dine loginoplysninger vil kun blive sendt over en sikker forbindelse."
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Din nuværende adgangskode"
+
+#. %1$s: date and time when the download expires
+#. %1$s: date when the download was requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Your data archive %2$s from is ready for download. The download is available "
+"until %1$s."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
@@ -12637,6 +12839,13 @@ msgstr "Din regl om gentagelser passer ikke overens med din start-dato."
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule was changed automatically."
 msgstr "Din regl om gentagelser blev automatisk ændret."
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Your requested archive is currently being created. Depending on the size of "
+"the requested data this may take hours or days. You will be informed via "
+"email when your download is ready."
+msgstr ""
 
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
@@ -13677,9 +13886,6 @@ msgstr "din platform"
 #~ msgid "Add cipher code"
 #~ msgstr "Tilføj nøglekode"
 
-#~ msgid "Add folder"
-#~ msgstr "Tilføj mappe"
-
 #~ msgid "Add folder menu"
 #~ msgstr "Tilføj mappemnu"
 
@@ -14160,9 +14366,6 @@ msgstr "din platform"
 
 #~ msgid "Couldn't load your auto forward."
 #~ msgstr "Din automatiske videresendelse kunne ikke indlæses."
-
-#~ msgid "Couldn't load your contact data."
-#~ msgstr "Dine kontaktdata kunne ikke indlæses."
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Opret en %s-konto med dataene gemt her"
@@ -15143,9 +15346,6 @@ msgstr "din platform"
 #~ msgid "Mail saved as draft"
 #~ msgstr "E-mail gemt som kladde"
 
-#~ msgid "Mail size:"
-#~ msgstr "Størrelse på e-mail:"
-
 #~ msgid "Mail text"
 #~ msgstr "E-mail tekst"
 
@@ -15648,9 +15848,6 @@ msgstr "din platform"
 #~ msgid "Publish"
 #~ msgstr "Udgiv"
 
-#~ msgid "Publish folder"
-#~ msgstr "Udgiv mappe"
-
 #~ msgid "Publish item"
 #~ msgstr "Udgiv element"
 
@@ -15958,9 +16155,6 @@ msgstr "din platform"
 #~ msgstr ""
 #~ "Vis alle e-mails. Bemærk: E-mails er ikke længere samlet i samtaler."
 
-#~ msgid "Show all my appointments from all calendars"
-#~ msgstr "Vis alle mine aftaler fra alle kalendere"
-
 #~ msgctxt "plural"
 #~ msgid "Show attachment"
 #~ msgid_plural "Show attachments"
@@ -16139,14 +16333,8 @@ msgstr "din platform"
 #~ msgid "Start the presentation"
 #~ msgstr "Gå i gang med præsentationen"
 
-#~ msgid "Subscribe IMAP folders"
-#~ msgstr "Tilmeld IMAP mapper"
-
 #~ msgid "Subscribe address book"
 #~ msgstr "Abonnér på adressebog"
-
-#~ msgid "Subscribe calendar"
-#~ msgstr "Abonnér på kalender"
 
 #~ msgid ""
 #~ "Subscribing to items that are not delivered by another Open-Xchange "
@@ -16943,9 +17131,6 @@ msgstr "din platform"
 
 #~ msgid "Tracking the editing status"
 #~ msgstr "Sporer status på redigering"
-
-#~ msgid "Trash folder"
-#~ msgstr "Skrald mappe"
 
 #~ msgid "Tweet"
 #~ msgstr "Tweet"

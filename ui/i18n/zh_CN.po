@@ -1118,6 +1118,13 @@ msgstr "添加新参与者"
 msgid "Adding files with identical names"
 msgstr "添加带有独一名称的文件"
 
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Add verification option"
+msgid "Additional options"
+msgstr "添加验证选项"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Address"
@@ -1145,6 +1152,12 @@ msgstr "地址（住宅）"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Address Other"
 msgstr "地址（其他）"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Addressbook"
+msgid "Address book"
+msgstr "地址簿"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Address book name"
@@ -1525,6 +1538,11 @@ msgstr "归档信息"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Archive old messages"
 msgstr "归档旧消息"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Archives larger than the selected size will be split into multiple files."
+msgstr ""
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
@@ -1923,7 +1941,8 @@ msgstr "CalDav/CardDav"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
+#: module:io.ox/mail apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Calendar"
 msgstr "日历"
 
@@ -1985,6 +2004,12 @@ msgstr "照相机%1$s"
 #: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Cancel"
 msgstr "取消"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Slow requests"
+msgid "Cancel download request"
+msgstr "慢速请求"
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Cancel search"
@@ -3393,6 +3418,12 @@ msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
 msgstr[0] "带有 1 个项目的通讯组列表"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to delete calendar \"%s\"?"
+msgid "Do you really want to cancel the current download request?"
+msgstr "您确认要删除日历 \"%s\"？"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -3602,6 +3633,7 @@ msgstr "下载"
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
 #: module:io.ox/core/boot apps/io.ox/notes/toolbar.js module:io.ox/notes
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
@@ -3611,6 +3643,13 @@ msgstr "下载"
 #. %1$s is the file size "Download 2mb" for example
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid "Download %1$s"
+msgstr "下载 %1$s"
+
+#. %1$s: filename
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Download %1$s"
+msgid "Download %1$s."
 msgstr "下载 %1$s"
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
@@ -3634,6 +3673,12 @@ msgstr "下载受感染的文件"
 msgid "Download installation file"
 msgstr "下载安装文件"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Enter personal data"
+msgid "Download personal data"
+msgstr "输入个人数据"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
@@ -3646,6 +3691,12 @@ msgstr "下载应用程序"
 #: apps/io.ox/core/download.js module:io.ox/core
 msgid "Download unscanned file"
 msgstr "下载未扫描的文件"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Enter personal data"
+msgid "Download your personal data"
+msgstr "输入个人数据"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Downloads"
@@ -3674,7 +3725,7 @@ msgstr "以拖动重新排序小部件"
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: module:io.ox/settings apps/io.ox/settings/personalData/settings/pane.js
 msgctxt "app"
 msgid "Drive"
 msgstr "Drive"
@@ -3955,6 +4006,7 @@ msgstr "编辑器"
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Email"
 msgstr "电子邮件"
 
@@ -5435,9 +5487,64 @@ msgstr "收件箱"
 msgid "Inbox categories"
 msgstr "收件箱类别"
 
+#. shown when a download of (cloud) drive files is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Keep all versions"
+msgid "Include all file versions"
+msgstr "保留所有版本"
+
+#. shown when a download of contact data is requested
 #: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Include distribution lists"
 msgstr "包括通讯组列表"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Shared address books"
+msgid "Included address books"
+msgstr "已共享地址簿"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Add calendar"
+msgid "Included calendars"
+msgstr "添加日历"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Add folder"
+msgid "Included folders"
+msgstr "添加文件夹"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Show all my appointments from all calendars"
+msgid "Includes all appointments from your calendars as ical files."
+msgstr "从所有日历显示我所有的约会"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all contact data from your address books as vcard files."
+msgstr ""
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all emails from your primary mail account as eml files."
+msgstr ""
+
+#. %1$s is usually "Drive" (product name; might be customized)
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Discard mails from %1$s"
+msgid "Includes all files from %1$s."
+msgstr "丢弃来自 %1$s 的邮件"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all tasks as ical files."
+msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Incoming server"
@@ -5878,7 +5985,9 @@ msgid "List"
 msgstr "列表"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-msgid "Listview"
+#, fuzzy
+#| msgid "Listview"
+msgid "List view"
 msgstr "列表视图"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
@@ -5887,7 +5996,9 @@ msgstr "加载约会至 %1$s"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Localpart"
+#, fuzzy
+#| msgid "Localpart"
+msgid "Local-part"
 msgstr "本地部分"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -6223,6 +6334,12 @@ msgstr "不匹配"
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
 msgid "Maximize"
 msgstr "最大化"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Mail size:"
+msgid "Maximum file size"
+msgstr "邮件大小："
 
 #. In the context of resizing images before uploading them this text is used as a label for a dropdown
 #: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
@@ -7334,7 +7451,9 @@ msgstr "选项 20"
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/sharing.js apps/io.ox/mail/compose/view.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "选项"
 
@@ -8215,16 +8334,28 @@ msgstr "进度必须是 0 到 100 之间的有效数值"
 msgid "Properties"
 msgstr "属性"
 
+#. shown when a download of contact data is requested
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public address books"
 msgstr "公共地址簿"
 
+#. shown when a download of calendar data is requested
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public calendars"
 msgstr "公共日历"
+
+#. shown when a download of (cloud) drive files is requested
+#. shown when a download of task data is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Publish folder"
+msgid "Public folders"
+msgstr "发布文件夹"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8749,6 +8880,16 @@ msgstr "回复邮件列表"
 msgid "Reply to sender"
 msgstr "回复发信人"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Request download"
+msgstr ""
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Repeat new password"
+msgid "Request new download"
+msgstr "确认新密码"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
 msgstr "请求送达回执"
@@ -9151,6 +9292,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Select all"
 msgstr "选择所有"
 
@@ -9439,8 +9581,10 @@ msgstr "已分享约会"
 msgid "Shared activity"
 msgstr "已分享活动"
 
+#. shown when a download of contact data is requested
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared address books"
 msgstr "已共享地址簿"
 
@@ -9448,11 +9592,21 @@ msgstr "已共享地址簿"
 msgid "Shared by other users"
 msgstr "其他用户的分享"
 
+#. shown when a download of calendar data is requested
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared calendars"
 msgstr "已共享日历"
+
+#. shown when a download of (cloud) drive files is requested
+#. shown when a download of task data is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Share your folders"
+msgid "Shared folders"
+msgstr "分享你的文件夹"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared tasks"
@@ -10224,6 +10378,7 @@ msgid "Task was already deleted!"
 msgstr "任务已经删除！"
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Tasks"
 msgstr "任务"
 
@@ -10636,6 +10791,12 @@ msgstr "没有能够访问您户口的外部应用程序/服务。"
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "找到未保存更改。"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"There is currently an archive download available. By requesting a new "
+"download the current archive will be deleted and is no longer available."
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/types/defaultview.js module:io.ox/core
 msgid "There is no preview for this file type."
@@ -11194,6 +11355,12 @@ msgstr "总数： %1$s"
 msgid "Total: %1$s requests"
 msgstr "合共：%1$s 个请求"
 
+#. shown when a download of mail data is requested
+#. shown when a download of (cloud) drive files is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Trash folder"
+msgstr "垃圾文件夹"
+
 #: apps/io.ox/settings/security/certificates/settings/pane.js
 #: module:io.ox/settings/certificates
 msgid "Trust"
@@ -11422,6 +11589,20 @@ msgstr "未读：%1$d"
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "将会失去未保存的文档，您确定现在要注销？"
+
+#. shown when a download of calendar data is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Subscribe calendar"
+msgid "Unsubscribed calendars"
+msgstr "订阅日历"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Subscribe IMAP folders"
+msgid "Unsubscribed folders"
+msgstr "订阅 IMAP 文件夹"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
@@ -12035,6 +12216,12 @@ msgstr ""
 "您能复制和贴上此链接在电子邮件、即时通讯器、或社交网路里。请注意每一个有此链"
 "接的人皆能访问该分享。"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"You can download a copy of your personal data from your account, if you want "
+"to save it or transfer it to another provider."
+msgstr ""
+
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "You can enable categories again via the view dropdown on the right"
 msgstr "您能通过右边的视图下拉列表再次启用类别"
@@ -12257,6 +12444,13 @@ msgstr "您的 %s 新闻条目"
 msgid "Your IP address has changed"
 msgstr "您的 IP 地址已更改"
 
+#. header for zip archive download list
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Your name"
+msgid "Your archive"
+msgstr "您的名字"
+
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
 msgstr "您的浏览器不支持此文件的音频格式。"
@@ -12284,6 +12478,14 @@ msgstr "您的凭据将只会通过安全连接发送"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "您的当前密码"
+
+#. %1$s: date and time when the download expires
+#. %1$s: date when the download was requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Your data archive %2$s from is ready for download. The download is available "
+"until %1$s."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
@@ -12346,6 +12548,13 @@ msgstr "您重复规则不适合您的开始日期。"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule was changed automatically."
 msgstr "您的重复规则已自动更改。"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Your requested archive is currently being created. Depending on the size of "
+"the requested data this may take hours or days. You will be informed via "
+"email when your download is ready."
+msgstr ""
 
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
@@ -13567,9 +13776,6 @@ msgstr "您的平台"
 #~| msgid "Add files"
 #~ msgid "Add file"
 #~ msgstr "添加文件"
-
-#~ msgid "Add folder"
-#~ msgstr "添加文件夹"
 
 #~ msgid "Add folder menu"
 #~ msgstr "添加文件夹菜单"
@@ -15341,9 +15547,6 @@ msgstr "您的平台"
 #~ msgid "Enter general data"
 #~ msgstr "输入一般数据"
 
-#~ msgid "Enter personal data"
-#~ msgstr "输入个人数据"
-
 #~ msgid "Enter the E-Mail text below the subject."
 #~ msgstr "在主题下输入电子邮件文本。"
 
@@ -16232,9 +16435,6 @@ msgstr "您的平台"
 #~ msgid "Mail saved as draft"
 #~ msgstr "邮件已保存为草稿"
 
-#~ msgid "Mail size:"
-#~ msgstr "邮件大小："
-
 #~ msgid "Mail text"
 #~ msgstr "邮件正文"
 
@@ -16828,9 +17028,6 @@ msgstr "您的平台"
 #~ msgid "Publish"
 #~ msgstr "发布"
 
-#~ msgid "Publish folder"
-#~ msgstr "发布文件夹"
-
 #~ msgid "Publish item"
 #~ msgstr "发布项目"
 
@@ -17171,9 +17368,6 @@ msgstr "您的平台"
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr "显示所有邮件。备注：邮件不再以谈话分组。"
 
-#~ msgid "Show all my appointments from all calendars"
-#~ msgstr "从所有日历显示我所有的约会"
-
 #~ msgctxt "plural"
 #~ msgid "Show attachment"
 #~ msgid_plural "Show attachments"
@@ -17403,14 +17597,8 @@ msgstr "您的平台"
 #~ msgid "Subreddits"
 #~ msgstr "Subreddits"
 
-#~ msgid "Subscribe IMAP folders"
-#~ msgstr "订阅 IMAP 文件夹"
-
 #~ msgid "Subscribe address book"
 #~ msgstr "订阅地址簿"
-
-#~ msgid "Subscribe calendar"
-#~ msgstr "订阅日历"
 
 #~ msgid ""
 #~ "Subscribing to items that are not delivered by another Open-Xchange "
@@ -18181,9 +18369,6 @@ msgstr "您的平台"
 
 #~ msgid "Tracking the editing status"
 #~ msgstr "追踪编辑状态"
-
-#~ msgid "Trash folder"
-#~ msgstr "垃圾文件夹"
 
 #, fuzzy
 #~| msgid "Armenia"

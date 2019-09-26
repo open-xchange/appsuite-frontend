@@ -139,7 +139,7 @@ msgstr ""
 
 #: apps/io.ox/tours/contacts.js
 #: module:io.ox/tours
-msgid "To send an E-Mail to the contact, click on an E-Mail address or on Send email in the toolbar."
+msgid "To send an email to the contact, click on an email address or on Send email in the toolbar."
 msgstr ""
 
 #: apps/io.ox/tours/contacts.js
@@ -334,6 +334,7 @@ msgstr ""
 
 #: apps/io.ox/tours/intro.js
 #: module:io.ox/tours
+#: apps/io.ox/tours/mail.js
 msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 
@@ -524,7 +525,7 @@ msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "To open the email settings, click the System menu icon on the upper right side of the menu bar. Select Settings. Click on email on the left side."
+msgid "To open the email settings, click the System menu icon on the upper right side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
 
 #. Tour name; general introduction

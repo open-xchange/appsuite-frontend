@@ -1211,6 +1211,13 @@ msgstr "Uus osaleja lisatud"
 msgid "Adding files with identical names"
 msgstr "Identsete nimedega failide lisamine"
 
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Add condition"
+msgid "Additional options"
+msgstr "Lisa tingimus"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Address"
@@ -1238,6 +1245,11 @@ msgstr "Koduaadress"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Address Other"
 msgstr "Muu aadress"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "Address book"
+msgstr "Aadressiraamat"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #, fuzzy
@@ -1647,6 +1659,11 @@ msgstr "Sõnumite arhiveerimine"
 msgid "Archive old messages"
 msgstr "Sõnumite arhiveerimine"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Archives larger than the selected size will be split into multiple files."
+msgstr ""
+
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "Archiving messages ..."
@@ -2054,7 +2071,8 @@ msgstr ""
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
+#: module:io.ox/mail apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Calendar"
 msgstr "Kalender"
 
@@ -2120,6 +2138,12 @@ msgstr ""
 #: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Cancel"
 msgstr "Tühista"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Slow requests"
+msgid "Cancel download request"
+msgstr "Aeglased taotlused"
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Cancel search"
@@ -3577,6 +3601,11 @@ msgid_plural "Distribution list with %1$d entries"
 msgstr[0] "Leviloend 1 kirjega"
 msgstr[1] "Leviloend %1$d kirjega"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "Do you really want to cancel the current download request?"
+msgstr "Kas soovite tõesti kustutada kausta \"%s\"?"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -3805,6 +3834,7 @@ msgstr ""
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
 #: module:io.ox/core/boot apps/io.ox/notes/toolbar.js module:io.ox/notes
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
@@ -3815,6 +3845,13 @@ msgstr "Lae alla"
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid "Download %1$s"
 msgstr ""
+
+#. %1$s: filename
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Download %s"
+msgid "Download %1$s."
+msgstr "Lae alla %s"
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download %s"
@@ -3839,6 +3876,12 @@ msgstr "Lae alla kogu kaust"
 msgid "Download installation file"
 msgstr "Lae alla paigaldusfail"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Download entire folder"
+msgid "Download personal data"
+msgstr "Lae alla kogu kaust"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
@@ -3853,6 +3896,12 @@ msgstr "Lae rakendus alla."
 #| msgid "Download installation file"
 msgid "Download unscanned file"
 msgstr "Lae alla paigaldusfail"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Couldn't load your contact data."
+msgid "Download your personal data"
+msgstr "Teie kontaktandmete laadimine ebaõnnestus."
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Downloads"
@@ -3881,7 +3930,7 @@ msgstr "Lohistage vidina ümberjärjestamiseks"
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: module:io.ox/settings apps/io.ox/settings/personalData/settings/pane.js
 msgctxt "app"
 msgid "Drive"
 msgstr "Drive"
@@ -4169,6 +4218,7 @@ msgstr "Redaktor"
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Email"
 msgstr "E-post"
 
@@ -5702,9 +5752,62 @@ msgstr "Sisendkaust"
 msgid "Inbox categories"
 msgstr "Sisendkausta kategooriad"
 
+#. shown when a download of (cloud) drive files is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Delete version"
+msgid "Include all file versions"
+msgstr "Kustuta versioon"
+
+#. shown when a download of contact data is requested
 #: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Include distribution lists"
 msgstr "Kaasa leviloendid"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Shared address books"
+msgid "Included address books"
+msgstr "Jagatud aadressiraamatud"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Shared calendars"
+msgid "Included calendars"
+msgstr "Jagatud kalendrid"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Standard folders"
+msgid "Included folders"
+msgstr "Standardkaustad"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all appointments from your calendars as ical files."
+msgstr ""
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all contact data from your address books as vcard files."
+msgstr ""
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all emails from your primary mail account as eml files."
+msgstr ""
+
+#. %1$s is usually "Drive" (product name; might be customized)
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Discard mails from %1$s"
+msgid "Includes all files from %1$s."
+msgstr "Kustuta kirjad saatjalt %1$s"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all tasks as ical files."
+msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Incoming server"
@@ -6158,7 +6261,9 @@ msgid "List"
 msgstr "Loend"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-msgid "Listview"
+#, fuzzy
+#| msgid "Listview"
+msgid "List view"
 msgstr "Loendivaade"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
@@ -6167,7 +6272,9 @@ msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Localpart"
+#, fuzzy
+#| msgid "Localpart"
+msgid "Local-part"
 msgstr "Localpart"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -6506,6 +6613,11 @@ msgstr "Ei vasta"
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
 #, fuzzy
 msgid "Maximize"
+msgstr "Minimeeri"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "Maximum file size"
 msgstr "Minimeeri"
 
 #. In the context of resizing images before uploading them this text is used as a label for a dropdown
@@ -7647,7 +7759,9 @@ msgstr "Valikuline 20"
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/sharing.js apps/io.ox/mail/compose/view.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "Valikud"
 
@@ -8562,15 +8676,27 @@ msgstr "Edenemine peab olema kehtiv arv vahemikus 0-100"
 msgid "Properties"
 msgstr "Omadused"
 
+#. shown when a download of contact data is requested
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public address books"
 msgstr "Avalikud aadressiraamatud"
 
+#. shown when a download of calendar data is requested
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public calendars"
+msgstr "Avalikud kalendrid"
+
+#. shown when a download of (cloud) drive files is requested
+#. shown when a download of task data is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Public calendars"
+msgid "Public folders"
 msgstr "Avalikud kalendrid"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
@@ -9124,6 +9250,16 @@ msgstr "Vasta postiloendile"
 msgid "Reply to sender"
 msgstr "Vasta saatjale"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Request download"
+msgstr ""
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Repeat new password"
+msgid "Request new download"
+msgstr "Korrake uut parooli"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
 msgstr "Nõua lugemiskinnitust"
@@ -9529,6 +9665,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Select all"
 msgstr "Vali kõik"
 
@@ -9841,8 +9978,10 @@ msgstr "Jagatud kohtumised"
 msgid "Shared activity"
 msgstr "Jagatud tegevus"
 
+#. shown when a download of contact data is requested
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared address books"
 msgstr "Jagatud aadressiraamatud"
 
@@ -9850,11 +9989,21 @@ msgstr "Jagatud aadressiraamatud"
 msgid "Shared by other users"
 msgstr "Ühiskasutuses teiste kasutajatega"
 
+#. shown when a download of calendar data is requested
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared calendars"
 msgstr "Jagatud kalendrid"
+
+#. shown when a download of (cloud) drive files is requested
+#. shown when a download of task data is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Share your folders"
+msgid "Shared folders"
+msgstr "Jaga oma kaustu"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared tasks"
@@ -10658,6 +10807,7 @@ msgid "Task was already deleted!"
 msgstr "Ülesanne oli juba kustutatud!"
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Tasks"
 msgstr "Ülesanded"
 
@@ -11105,6 +11255,12 @@ msgstr "Teie kontole juurdepääsu omavad välised rakendused/teenused puuduvad.
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "Mõned muudatused on salvestamata."
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"There is currently an archive download available. By requesting a new "
+"download the current archive will be deleted and is no longer available."
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/types/defaultview.js module:io.ox/core
 msgid "There is no preview for this file type."
@@ -11681,6 +11837,14 @@ msgstr "Kokku: %1$d"
 msgid "Total: %1$s requests"
 msgstr "Kokku: %1$s taotlust"
 
+#. shown when a download of mail data is requested
+#. shown when a download of (cloud) drive files is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Create folder"
+msgid "Trash folder"
+msgstr "Lisa uus kaust"
+
 #: apps/io.ox/settings/security/certificates/settings/pane.js
 #: module:io.ox/settings/certificates
 msgid "Trust"
@@ -11922,6 +12086,20 @@ msgstr "Lugemata: %1$d"
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Salvestamata dokumendid lähevad kaduma. Kas soovite välja logida?"
+
+#. shown when a download of calendar data is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Subscribe calendar"
+msgid "Unsubscribed calendars"
+msgstr "Telli kalender"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Subscribe IMAP folders"
+msgid "Unsubscribed folders"
+msgstr "Telli IMAP kaustu"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
@@ -12556,6 +12734,12 @@ msgstr ""
 "sotsiaalvõrgustikku. Palun võtke arvesse, et igaüks pääseb selle lingiga "
 "jagatud sisule ligi."
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"You can download a copy of your personal data from your account, if you want "
+"to save it or transfer it to another provider."
+msgstr ""
+
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "You can enable categories again via the view dropdown on the right"
 msgstr "Kategooriaid saab uuesti lubada vaate rippmenüüst paremal"
@@ -12772,6 +12956,13 @@ msgstr "Teie %s uudisvoog"
 msgid "Your IP address has changed"
 msgstr "Teie IP-aadress on muutunud"
 
+#. header for zip archive download list
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Your name"
+msgid "Your archive"
+msgstr "Teie nimi"
+
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
 msgstr "Teie veebilehitseja ei toeta selle helifaili vormingut."
@@ -12799,6 +12990,14 @@ msgstr "Teie mandaat saadetakse ainult turvalise ühenduse kaudu"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Teie kehtiv parool"
+
+#. %1$s: date and time when the download expires
+#. %1$s: date when the download was requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Your data archive %2$s from is ready for download. The download is available "
+"until %1$s."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
@@ -12864,6 +13063,13 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule was changed automatically."
+msgstr ""
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Your requested archive is currently being created. Depending on the size of "
+"the requested data this may take hours or days. You will be informed via "
+"email when your download is ready."
 msgstr ""
 
 #. %1$s maximum file size
@@ -14018,9 +14224,6 @@ msgstr "teie platvorm"
 #~ msgid "Couldn't load your auto forward."
 #~ msgstr "Automaatse edasisaatmise laadimine ebaõnnestus."
 
-#~ msgid "Couldn't load your contact data."
-#~ msgstr "Teie kontaktandmete laadimine ebaõnnestus."
-
 #~ msgid "Create distibution list"
 #~ msgstr "Loo leviloend"
 
@@ -14715,9 +14918,6 @@ msgstr "teie platvorm"
 
 #~ msgid "Start the presentation"
 #~ msgstr "Esitluse käivitamine"
-
-#~ msgid "Subscribe IMAP folders"
-#~ msgstr "Telli IMAP kaustu"
 
 #~ msgid "Subscribe address book"
 #~ msgstr "Telli aadressiraamat"
