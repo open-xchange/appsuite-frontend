@@ -75,7 +75,6 @@ Scenario('[C85620] Global address book is the default folder - check first login
     I.logout();
 });
 
-
 Scenario('[C7355] - Create a new private folder', function (I) {
     const timestamp = Math.round(+new Date() / 1000);
     I.login('app=io.ox/contacts');

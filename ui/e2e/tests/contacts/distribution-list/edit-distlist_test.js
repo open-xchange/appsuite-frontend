@@ -24,7 +24,7 @@ After(async function (users) {
 
 var util = require('./util');
 
-Scenario('Add an existing distribution list @shaky', function (I) {
+Scenario('Add an existing distribution list', function (I) {
     const title = 'test distribution list one';
 
     util.start(I);

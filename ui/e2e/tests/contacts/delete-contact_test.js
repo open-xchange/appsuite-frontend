@@ -28,7 +28,6 @@ Scenario('[C7366] Multiple contacts', async function (I, search) {
         folder_id: await I.grabDefaultFolder('contacts'),
         first_name: testrailID,
         last_name: testrailID
-
     };
     await I.haveContact(contact);
     await I.haveContact(contact);

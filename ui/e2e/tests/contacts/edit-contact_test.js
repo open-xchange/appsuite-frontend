@@ -22,7 +22,6 @@ After(async function (users) {
 });
 
 // [C7359] is obsolete now
-// [C7361] is obsolete now
 
 function start(I) {
     I.login('app=io.ox/contacts');
@@ -301,7 +300,7 @@ Scenario('[C7360] Discard modification', async function (I) {
     I.dontSee('Holger');
 });
 
-Scenario('[C7358] Remove contact picture @shaky', async function (I, search) {
+Scenario('[C7358] Remove contact picture', async function (I, search) {
     const expect = require('chai').expect;
     const testrailID = 'C7358';
     const phone = '+4917113371337';
@@ -355,7 +354,7 @@ Scenario('[C7358] Remove contact picture @shaky', async function (I, search) {
     I.click('Save');
 });
 
-Scenario('[C7363] Add files to a contact @shaky', async function (I) {
+Scenario('[C7363] Add files to a contact', async function (I) {
     const testrailID = 'C7363';
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',
