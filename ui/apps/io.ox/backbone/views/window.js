@@ -191,6 +191,8 @@ define('io.ox/backbone/views/window', [
         },
 
         keepInWindow: function (usePadding) {
+            if (!this.$el.is(':visible')) return;
+
             // maybe an event, never use padding if that's the case
             if (!_.isBoolean(usePadding)) usePadding = false;
 
