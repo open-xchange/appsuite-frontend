@@ -64,9 +64,9 @@ define('io.ox/chat/extensions/register', [
         }
     });
 
-    ['online', 'absent', 'busy', 'offline'].forEach(function (state, index, arr) {
+    ['Online', 'Absent', 'Busy', 'Offline'].forEach(function (state, index, arr) {
         ext.point('io.ox/core/appcontrol/right/dropdown').extend({
-            id: 'chat/' + state,
+            id: 'chat/' + state.toLowerCase(),
             index: index + 1,
             extend: function () {
                 if (index === 0) {
@@ -74,8 +74,8 @@ define('io.ox/chat/extensions/register', [
                     this.$ul.find('.dropdown-header').last().attr('data-controller', 'chat');
                     this.$ul.find('[role="group"]').last().attr('data-controller', 'chat');
                 }
-                this.option('state', state, function () {
-                    return state + ' <span class="fa state ' + state + '"></span>';
+                this.option('state', state.toLowerCase(), function () {
+                    return '<span class="fa state large ' + state.toLowerCase() + '"></span> ' + state;
                 }, { radio: true, group: true });
                 if (index === arr.length - 1) {
                     this.divider();
@@ -97,21 +97,52 @@ define('io.ox/chat/extensions/register', [
     });
 
     //
-    // Contacts / Halo
+    // Contacts
     //
 
-    ext.point('io.ox/contacts/links/inline').extend({
+    ext.point('io.ox/contacts/toolbar/links').extend({
         id: 'start-chat',
-        index: 450,
+        index: 350,
         prio: 'hi',
         mobile: 'hi',
         title: 'Start chat',
         ref: 'io.ox/chat/actions/start-chat-from-contacts'
     });
 
-    ext.point('io.ox/contacts/toolbar/links').extend({
+    ext.point('io.ox/contacts/detail').extend({
+        id: 'chat',
+        index: 500,
+        draw: function (baton) {
+            var node;
+            this.append(
+                node = $('<section class="block">').append(
+                    $('<h2>').text('Recent chat messages'),
+                    $('<div class="ox-chat">')
+                ).hide()
+            );
+            data.chats.initialized.then(function () {
+                var room = data.chats.find(function (chat) {
+                    if (!chat.isPrivate()) return;
+                    return _(chat.get('members')).findWhere({ email: baton.data.email1 });
+                });
+                if (!room) return node.remove();
+                room.messages.fetch();
+                return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
+                    node.show().find('.ox-chat').append(
+                        new MessagesView({ collection: room.messages, limit: 10, markAsRead: false }).render().$el
+                    );
+                });
+            });
+        }
+    });
+
+    //
+    // Halo
+    //
+
+    ext.point('io.ox/contacts/links/inline').extend({
         id: 'start-chat',
-        index: 350,
+        index: 450,
         prio: 'hi',
         mobile: 'hi',
         title: 'Start chat',
@@ -141,7 +172,7 @@ define('io.ox/chat/extensions/register', [
                 room.messages.fetch();
                 return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
                     node.append(
-                        new MessagesView({ collection: room.messages, limit: 5, markAsRead: false }).render().$el
+                        new MessagesView({ collection: room.messages, limit: 10, markAsRead: false }).render().$el
                     ).show();
                 });
             });
@@ -189,7 +220,7 @@ define('io.ox/chat/extensions/register', [
     });
 
     ext.point('io.ox/calendar/detail').extend({
-        index: 900,
+        index: 750,
         id: 'chat',
         draw: function (baton) {
             var $fieldset = $('<fieldset class="details ox-chat embedded">').hide().append(
@@ -205,7 +236,7 @@ define('io.ox/chat/extensions/register', [
                 room.messages.fetch();
                 return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
                     $fieldset.append(
-                        new MessagesView({ collection: room.messages, limit: 5, markAsRead: false }).render().$el
+                        new MessagesView({ collection: room.messages, limit: 10, markAsRead: false }).render().$el
                     ).show();
                 });
             });
@@ -263,17 +294,17 @@ define('io.ox/chat/extensions/register', [
                     room = data.chats.findWhere({ reference: 'mail//' + reference });
                 if (!room) return;
 
-                $section.empty().show().css('background-color', '#FFF176').append(
-                    $('<div class="alert alert-error warnings">').append(
-                        'There is already a chat associated with this email',
-                        $('<button class="btn btn-link" data-cmd="show-chat">').attr('data-id', room.get('id')).append(
-                            $('<i class="fa fa-external-link">')
-                        ).click(function () {
+                $section.empty().show().css({ 'border-bottom': '1px solid #ddd', padding: '8px 40px' }).append(
+                    'There is already a chat associated with this email',
+                    $('<button class="btn btn-default" data-cmd="show-chat">')
+                        .attr('data-id', room.get('id'))
+                        .css('margin-left', '10px')
+                        .text('Open chat')
+                        .click(function () {
                             require(['io.ox/chat/events'], function (events) {
                                 events.trigger('cmd', { cmd: 'show-chat', id: room.get('id') });
                             });
                         })
-                    )
                 );
             }
 
@@ -333,10 +364,18 @@ define('io.ox/chat/extensions/register', [
         });
     }
 
-    function startGroupChat(data) {
-        require(['io.ox/chat/actions/openGroupDialog', 'io.ox/chat/events'], function (openGroupDialog, events) {
-            openGroupDialog(data).then(function (id) {
-                events.trigger('cmd', { cmd: 'show-chat', id: id });
+    function startGroupChat(opt) {
+        data.chats.initialized.then(function () {
+            var room = data.chats.findWhere({ reference: opt.reference });
+            if (!room) throw new Error('No room');
+            return require(['io.ox/chat/events']).then(function (events) {
+                events.trigger('cmd', { cmd: 'show-chat', id: room.get('id') });
+            });
+        }).catch(function () {
+            return require(['io.ox/chat/actions/openGroupDialog', 'io.ox/chat/events']).then(function (openGroupDialog, events) {
+                openGroupDialog(opt).then(function (id) {
+                    events.trigger('cmd', { cmd: 'show-chat', id: id });
+                });
             });
         });
     }
