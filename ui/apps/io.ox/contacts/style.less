@@ -182,6 +182,16 @@
         margin-bottom: 4px;
     }
 
+
+    section.contains-dropdown dd {
+        overflow: visible;
+    }
+
+    &.view dd, &.view address {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     /*.block {
 
         margin: 0 0 32px 0;
@@ -320,9 +330,12 @@
 
     h1 {
         font-size: 24px;
-        line-height: 24px;
+        // to stop descenders(Unterlängen) from being cut of
+        line-height: 28px;
         font-weight: normal;
         margin: 0 0 8px 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
         .first_name, .last_name {
             white-space: nowrap;
         }
@@ -344,6 +357,7 @@
 
 .distribution-list .contact-header {
     height: auto;
+    min-height: auto;
     margin-bottom: 32px;
 }
 
@@ -357,6 +371,7 @@
 
         h1 {
             font-size: 20px;
+            line-height: 24px;
         }
 
         .contact-photo {

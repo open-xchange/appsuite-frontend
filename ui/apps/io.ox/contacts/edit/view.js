@@ -393,6 +393,8 @@ define('io.ox/contacts/edit/view', [
                 if (this.visible[name]) return;
                 if (name === '-') dropdown.divider(); else dropdown.link(name, View.i18n[name]);
             }, this);
+            // hide/show dropdown bades on number of options left in the dropdown
+            dropdown.$el.toggle(!!dropdown.$ul.children().filter(':not(.divider)').length);
         },
 
         onAddField: function (dropdown, section, data) {
