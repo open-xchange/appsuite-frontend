@@ -192,6 +192,7 @@ Scenario('[C114349] Create folder within move dialog', async function (I, users)
     A.select(I, 1);
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/move');
     A.createFolderInDialog(I, subject);
+    I.waitForEnabled({ css: '.modal-footer .btn-primary[data-action="ok"]' });
     I.click('Move', '.folder-picker-dialog');
     I.waitForDetached('.folder-picker-dialog');
 
@@ -213,7 +214,9 @@ Scenario('[C114349] Create folder within copy dialog', async function (I, users)
     A.select(I, 1);
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/copy');
     A.createFolderInDialog(I, subject);
+    I.waitForEnabled({ css: '.modal-footer .btn-primary[data-action="ok"]' });
     I.click('Copy', '.folder-picker-dialog');
+    I.waitForDetached('.folder-picker-dialog');
 
     A.check(I, folder, 'Inbox');
     A.check(I, folder, subject);

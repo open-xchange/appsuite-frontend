@@ -243,6 +243,8 @@ Scenario('[C73919] Copy a shared file to another folder @shaky', async function 
     I.waitForElement({ css: '[aria-label="View details"]' });
     I.click('~View details');
     I.click('Shared files', '.detail-pane');
+    I.waitForDetached('.busy-indicator.io-ox-busy');
+    I.waitForText('document.txt');
     I.click(locate('.io-ox-files-main .list-view li').withText('document.txt'));
     I.see('Versions (2)', '.detail-pane');
     I.see('This file is shared with others', '.detail-pane');

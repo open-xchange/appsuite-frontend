@@ -58,6 +58,6 @@ Scenario('[C83383] mail folders using “Permisions” dialog @shaky', async (I,
         I.click('View folder');
     });
     I.waitForText('Empty', 5, '.list-view');
-    I.see(`${users[0].get('name')}`, '.folder-tree');
+    I.waitForText(`${users[0].get('name')}`, 10, '.folder-tree');
     I.see('Spam', '.folder-tree [data-id="default0/shared"]');
 });
