@@ -33,7 +33,8 @@ define('l10n/ja_JP/io.ox/register', [
             prepend(node, '.first_name', data.first_yomi);
             prepend(node, '.company', data.company_yomi);
         }
-        return node.contents();
+        // a11y does not like empty headings. Empty string works fine
+        return node.contents().length ? node.contents() : '';
     };
 
     function trim(data) {

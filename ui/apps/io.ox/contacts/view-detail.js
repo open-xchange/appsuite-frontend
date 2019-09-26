@@ -94,10 +94,10 @@ define('io.ox/contacts/view-detail', [
     //     );
     // }
 
-    function buildDropdown(container, title, data) {
-        var dropdown = new ActionDropdownView({ point: 'io.ox/core/tk/attachment/links', data: data, title: title });
-        container.append(dropdown.$el);
-    }
+    // function buildDropdown(container, title, data) {
+    //     var dropdown = new ActionDropdownView({ point: 'io.ox/core/tk/attachment/links', data: data, title: title });
+    //     container.append(dropdown.$el);
+    // }
 
     /*
      * Extensions
@@ -126,16 +126,15 @@ define('io.ox/contacts/view-detail', [
 
             if (baton.data.mark_as_distributionlist) return;
 
-            var $photo = $('<dt role="presentation">');
+            var $photo = $('<dt>');
             ext.point('io.ox/contacts/detail/photo').invoke('draw', $photo, baton);
 
-            var $summary = $('<dd class="contact-summary" role="presentation">');
+            var $summary = $('<dd class="contact-summary">');
             ext.point('io.ox/contacts/detail/summary').invoke('draw', $summary, baton);
 
             this.append(
                 // we use a definition list here to get exactily the same layout
-                // for screen reeader support we remove any semantics
-                $('<dl class="dl-horizontal contact-header" role="presentation">').append($photo, $summary)
+                $('<dl class="dl-horizontal contact-header">').append($photo, $summary)
             );
         }
     });
@@ -147,10 +146,16 @@ define('io.ox/contacts/view-detail', [
 
             if (!baton.data.mark_as_distributionlist) return;
 
+            var count = baton.data.number_of_distribution_list,
+                //#. %1$d is a number of members in distribution list
+                desc = count === 0 ?
+                    gt('Distribution list') :
+                    gt.format(gt.ngettext('Distribution list with 1 entry', 'Distribution list with %1$d entries', count), count);
+
             this.addClass('distribution-list').append(
                 $('<div class="contact-header">').append(
                     $('<h1 class="fullname">').text(util.getFullName(baton.data)),
-                    $('<h2>').text(gt('Distribution list'))
+                    $('<h2>').text(desc)
                 )
             );
         }
@@ -186,8 +191,11 @@ define('io.ox/contacts/view-detail', [
             index: 100,
             id: 'fullname',
             draw: function (baton) {
-                var options = { html: util.getFullNameWithFurigana(baton.data), tagName: 'h1 class="fullname"' };
-                this.append(coreUtil.renderPersonalName(options, baton.data));
+                var options = { html: util.getFullNameWithFurigana(baton.data), tagName: 'h1 class="fullname"' },
+                    node = coreUtil.renderPersonalName(options, baton.data);
+                // a11y: headings must not be empty
+                if (!node.text()) return;
+                this.append(node);
             }
         },
         {
@@ -200,6 +208,7 @@ define('io.ox/contacts/view-detail', [
                 if (!country) return;
                 var flag = flags[postalAddress.getCountryCode(country)];
                 if (!flag) return;
+                // h1.fullname maybe missing (a11y: headings must not be empty)
                 this.find('h1.fullname').append($.txt(' ' + flag));
             }
         },
@@ -207,10 +216,11 @@ define('io.ox/contacts/view-detail', [
             index: 200,
             id: 'business',
             draw: function (baton) {
+                var value = util.getSummaryBusiness(baton.data);
+                if (!value) return;
+                // a11y: headings must not be empty
                 this.append(
-                    $('<h2 class="business hidden-xs">').text(
-                        util.getSummaryBusiness(baton.data)
-                    )
+                    $('<h2 class="business hidden-xs">').text(value)
                 );
             }
         },
@@ -218,10 +228,11 @@ define('io.ox/contacts/view-detail', [
             index: 300,
             id: 'location',
             draw: function (baton) {
+                var value = util.getSummaryLocation(baton.data);
+                if (!value) return;
+                // a11y: headings must not be empty
                 this.append(
-                    $('<h2 class="location hidden-xs">').text(
-                        util.getSummaryLocation(baton.data)
-                    )
+                    $('<h2 class="location hidden-xs">').text(value)
                 );
             }
         }

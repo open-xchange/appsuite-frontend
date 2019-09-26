@@ -197,35 +197,35 @@ define('io.ox/contacts/edit/view', [
         },
 
         renderContactSummary: function () {
-
-            var $h1 = $('<h1>'),
+            var $container = $('<div class="contact-summary">'),
+                $h1 = $('<h1>'),
                 $h2 = $('<h2 class="business hidden-xs">'),
                 $h3 = $('<h2 class="location hidden-xs">');
 
-            this.listenTo(this.model, 'change:title change:first_name change:last_name change:company change:yomiFirstName change:yomiLastName change:yomiCompany', updateName);
-            this.listenTo(this.model, 'change:company change:department change:position', updateBusiness);
-            this.listenTo(this.model, 'change:city_home change:city_business change:country_home change:country_business', updateLocation);
+            this.listenTo(this.model, 'change:title change:first_name change:last_name change:company change:yomiFirstName change:yomiLastName change:yomiCompany', update);
+            this.listenTo(this.model, 'change:company change:department change:position', update);
+            this.listenTo(this.model, 'change:city_home change:city_business change:country_home change:country_business', update);
             // ... and for diabloc testers
-            this.listenTo(settings, 'change:fullNameFormat', updateName);
+            this.listenTo(settings, 'change:fullNameFormat', update);
 
-            updateName.call(this);
-            updateBusiness.call(this);
-            updateLocation.call(this);
+            update.call(this);
 
-            return $('<div class="contact-summary">').append($h1, $h2, $h3);
+            return $container;
 
-            function updateName() {
-                $h1.empty().append(
-                    util.getFullNameWithFurigana(this.model.toJSON())
+            function update() {
+                // a11y: headings must not be empty
+                var name = util.getFullNameWithFurigana(this.model.toJSON()),
+                    business = util.getSummaryBusiness(this.model.toJSON()),
+                    location = util.getSummaryLocation(this.model.toJSON());
+
+                $container.empty().append(
+                    name ?
+                        $h1.clone().append(name) : $(),
+                    business ?
+                        $h2.clone().text(business) : $(),
+                    location ?
+                        $h3.clone().text(location) : $()
                 );
-            }
-
-            function updateBusiness() {
-                $h2.text(util.getSummaryBusiness(this.model.toJSON()));
-            }
-
-            function updateLocation() {
-                $h3.text(util.getSummaryLocation(this.model.toJSON()));
             }
         },
 
