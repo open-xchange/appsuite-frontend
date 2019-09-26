@@ -48,7 +48,7 @@ module.exports = function (grunt) {
             config.prefixes[0] + 'apps/io.ox/office/tk/dom/definitions.less',
             config.prefixes[0] + 'apps/io.ox/office/tk/dom/icons/definitions.less',
             config.prefixes[0] + 'apps/io.ox/office/tk/dom/icons/docs-icons.less',
-            config.prefixes[0] + 'apps/io.ox/office/tk/dom/svg-sprite/docs-symbol.less',
+            config.prefixes[0] + 'apps/io.ox/office/debug/common/view/definitions.less',
             config.prefixes[0] + 'apps/oxguard/tour/style.less'
         ].map(function (fileName) {
             if (grunt.file.exists(fileName)) return;
