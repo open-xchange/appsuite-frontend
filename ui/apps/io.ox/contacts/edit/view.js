@@ -270,7 +270,7 @@ define('io.ox/contacts/edit/view', [
 
         renderTextField: function (name) {
             return this.renderField(name, function (guid) {
-                return new common.InputView({ name: name, model: this.model, id: guid }).render().$el;
+                return new common.InputView({ name: name, model: this.model, id: guid, validate: false }).render().$el;
             });
         },
 
@@ -282,7 +282,7 @@ define('io.ox/contacts/edit/view', [
 
         renderNote: function () {
             return this.renderField('note', function (guid) {
-                return new common.TextView({ name: 'note', model: this.model, id: guid }).render().$el;
+                return new common.TextView({ name: 'note', model: this.model, id: guid, validate: false }).render().$el;
             });
         },
 
@@ -718,7 +718,7 @@ define('io.ox/contacts/edit/view', [
             this.initialValues = _.omit(options, 'isUser');
             this.on('change:title change:first_name change:last_name change:company', _.debounce(this.deriveDisplayName));
             this.addDirtyCheck();
-            this.on('change', _.debounce(this.validateModel));
+            this.on('change', _.debounce(this.validate));
         },
 
         toJSON: function () {
@@ -757,10 +757,7 @@ define('io.ox/contacts/edit/view', [
 
         // add missing promise support
         save: function () {
-            this.validationError = this.validateModel();
-            if (this.validationError) return $.Deferred().reject(this.validationError);
-
-            var promise = Backbone.Model.prototype.save.call(this, arguments);
+            var promise = Backbone.Model.prototype.save.apply(this, arguments);
             return !promise ? $.Deferred().reject(this.validationError) : promise;
         },
 
@@ -833,11 +830,11 @@ define('io.ox/contacts/edit/view', [
             this._attachments = api.pendingAttachments[_.ecid(this.toJSON())] = value;
         },
 
-        // custom validate to ensure view and model are in sync
-        validateModel: function () {
+        validate: function () {
             var errors = this.validateFunctions(['validateLength', 'validateAddresses']);
-            _.each(this.toJSON(), function (value, name) {
-                this.trigger(errors[name] ? 'invalid:' + name : 'valid:' + name, errors[name]);
+            _(this.toJSON()).each(function (value, name) {
+                var error = errors[name];
+                this.trigger((error ? 'invalid' : 'valid') + ':' + name, error);
             }, this);
             return errors;
         },

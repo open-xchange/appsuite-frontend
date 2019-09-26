@@ -50,7 +50,7 @@ define('io.ox/backbone/mini-views/common', [
         // firefox does not trigger a change event if you drop text.
         events: _.device('firefox') ? { 'change': 'onChange', 'drop': 'onDrop', 'paste': 'onPaste' } : { 'blur': 'onChange', 'change': 'onChange', 'paste': 'onPaste' },
         onChange: function () {
-            this.model.set(this.name, this.$el.val(), { validate: true });
+            this.model.set(this.name, this.$el.val(), { validate: this.options.validate });
         },
         onDrop: firefoxDropHelper,
         onPaste: pasteHelper,
@@ -92,7 +92,7 @@ define('io.ox/backbone/mini-views/common', [
         onChange: function () {
             var value = this.$el.val();
             if (/^\*$/.test(value)) value = null;
-            this.model.set(this.name, value, { validate: true, _event: 'change' });
+            this.model.set(this.name, value, { validate: this.options.validate, _event: 'change' });
         },
         // paste doesn't trigger a change event
         onPaste: pasteHelper,
@@ -186,7 +186,7 @@ define('io.ox/backbone/mini-views/common', [
         // firefox does not trigger a change event if you drop text.
         events: _.device('firefox') ? { 'change': 'onChange', 'drop': 'onDrop' } : { 'change': 'onChange' },
         onChange: function () {
-            this.model.set(this.name, this.$el.val(), { validate: true });
+            this.model.set(this.name, this.$el.val(), { validate: this.options.validate });
         },
         onDrop: firefoxDropHelper,
         setup: function (options) {
