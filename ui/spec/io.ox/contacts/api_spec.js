@@ -48,7 +48,7 @@ define(['io.ox/contacts/api', 'io.ox/contacts/util'], function (api, util) {
         ///contacts/picture?action=get
         it('should consider width, height, and scaleType', function () {
             var url = api.pictureHalo($(), { folder_id: 6, id: 1337, width: 48, height: 48, scaleType: 'cover' }, { urlOnly: true });
-            expect(url).to.match(/\/contacts\/picture\?action=get&contact_id=1337&folder_id=6&width=\d+&height=\d+&scaleType=cover/);
+            expect(url).to.match(/\/contacts\/picture\?action=get&contact_id=1337&folder_id=6&sequence=\d+&width=\d+&height=\d+&scaleType=cover/);
             expect(url).to.contain('uniq=');
         });
 

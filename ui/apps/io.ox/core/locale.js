@@ -188,6 +188,7 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
             week: { dow: dow, doy: 7 + dow - doy }
         });
         ox.trigger('change:locale');
+        ox.trigger('change:locale:' + localeId);
         ox.trigger('change:locale:data');
     }
 

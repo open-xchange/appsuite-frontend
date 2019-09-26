@@ -169,7 +169,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
                 // skip duplicates (= same id)
                 if (has(id)) {
-                    if (ox.debug) console.warn('Extensions MUST HAVE unique identifiers! Point: %s ID: %s', this.id, extension.id);
+                    if (ox.debug && _.device('!karma')) console.warn('Extensions MUST HAVE unique identifiers! Point: %s ID: %s', this.id, extension.id);
                     return;
                 }
 
