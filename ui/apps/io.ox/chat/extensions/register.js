@@ -117,7 +117,7 @@ define('io.ox/chat/extensions/register', [
             this.append(
                 node = $('<section class="block">').append(
                     $('<h2>').text('Recent chat messages'),
-                    $('<div class="ox-chat">')
+                    $('<div class="ox-chat embedded">')
                 ).hide()
             );
             data.chats.initialized.then(function () {
