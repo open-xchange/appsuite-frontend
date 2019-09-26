@@ -119,6 +119,8 @@ define('io.ox/contacts/edit/main', [
                             def.reject();
                         })
                         .done(function () {
+                            // after inital fetch
+                            view.model.resetDirty();
                             win.idle();
                             view.render();
                             onRender();
@@ -190,6 +192,10 @@ define('io.ox/contacts/edit/main', [
                 point: model.toJSON(),
                 passPointOnGetApp: true
             };
+        };
+
+        app.failRestore = function (point) {
+            this.view.model.set(point).trigger('change:display_name');
         };
 
         app.getContextualHelp = function () {

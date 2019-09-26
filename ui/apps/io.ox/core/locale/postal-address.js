@@ -22,9 +22,12 @@ define('io.ox/core/locale/postal-address', [], function () {
     function format(data, type, cc) {
         type = type || 'home';
         return getAddress(data, type, cc)
-                // remove inline spaces caused by undefined variables
+                // ensure single spaces (handles undefined variables)
                 .replace(/( )+/g, ' ')
-                .replace(/(\n |\n)+/g, '\n').trim();
+                // trim each line
+                .replace(/(^ +| +$)+/gm, '')
+                // remove empty lines
+                .replace(/\n+/g, '\n').trim();
     }
 
     function getAddress(data, type, cc) {

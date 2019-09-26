@@ -578,7 +578,7 @@ define('io.ox/contacts/edit/view', [
 
 
     // add support for yomi fields (Japanese)
-    if (ox.locale === 'ja_JP') {
+    if (ox.locale === 'ja_JP' || settings.get('features/furigana', false)) {
         View.prototype.allFields.personal.fields
             .splice(1, 2, 'yomiLastName', 'last_name', 'yomiFirstName', 'first_name');
         View.prototype.allFields.business.fields.unshift('yomiCompany');
@@ -591,6 +591,9 @@ define('io.ox/contacts/edit/view', [
             reverse[field] = sectionName;
             all.push(field);
         });
+    });
+    _(View.prototype.sets).each(function (set) {
+        _(set).each(all.push.bind(all));
     });
 
     View.i18n = {
@@ -709,8 +712,10 @@ define('io.ox/contacts/edit/view', [
 
         initialize: function (options) {
             this.isUser = options.isUser;
+            this.initialValues = _.omit(options, 'isUser');
             this.on('change:title change:first_name change:last_name change:company', _.debounce(this.deriveDisplayName));
             this.addDirtyCheck();
+            this.on('change', _.debounce(this.validateModel));
         },
 
         toJSON: function () {
@@ -720,11 +725,15 @@ define('io.ox/contacts/edit/view', [
         },
 
         addDirtyCheck: function () {
-
-            var dirty = false;
+            // supports case: add to addressbook
+            var dirty = !_.isEmpty(_.omit(this.initialValues, 'id', 'folder_id'));
 
             this.isDirty = function () {
                 return dirty;
+            };
+
+            this.resetDirty = function () {
+                dirty = false;
             };
 
             this.on('change', function () {
@@ -745,15 +754,22 @@ define('io.ox/contacts/edit/view', [
 
         // add missing promise support
         save: function () {
-            var promise = Backbone.Model.prototype.save.apply(this, arguments);
+            this.validationError = this.validateModel();
+            if (this.validationError) return $.Deferred().reject(this.validationError);
+
+            var promise = Backbone.Model.prototype.save.call(this, arguments);
             return !promise ? $.Deferred().reject(this.validationError) : promise;
         },
 
         sync: function (method, module, options) {
-            console.log('sync', method, module);
             switch (method) {
                 case 'create':
-                    return $.when().done(options.success).fail(options.error);
+                    return create.call(this)
+                        .done(this.set.bind(this))
+                        .done(this.trigger.bind(this, 'save:success'))
+                        .fail(this.trigger.bind(this, 'save:fail'))
+                        .done(options.success)
+                        .fail(options.error);
                 case 'read':
                     return this.getApi().get(this.pick('id', 'folder_id'))
                         .done(function (data) {
@@ -769,12 +785,14 @@ define('io.ox/contacts/edit/view', [
                 // no default
             }
 
+            function create() {
+                var file = this.getFile();
+                return this.getApi().create(this.toJSON(), file);
+            }
+
             function update() {
-                var changes = this.getChanges(), file = this.getFile();
-                console.log('sync.update', changes, file);
-                if (file) {
-                    return this.getApi().editNewImage(this.pick('id', 'folder_id'), changes, file);
-                }
+                var changes = this.getChanges(), file = this.getFile(), attachments = this.attachments();
+                if (file) return this.getApi().editNewImage(this.pick('id', 'folder_id'), changes, file);
                 // we need both values to remove the image
                 if (changes.image1_url === '') changes.image1 = '';
                 // happy debugging: here it's folder, not folder_id, yay.
@@ -802,10 +820,6 @@ define('io.ox/contacts/edit/view', [
             return this.get('pictureFileEdited') || this.get('pictureFile') || undefined;
         },
 
-        validate: function () {
-            var r = this.validateFunctions(['validateLength', 'validateAddresses']);
-            console.log('validate', r);
-            return r;
         // track pending attachments
         attachments: function (value) {
             // getter
@@ -815,42 +829,50 @@ define('io.ox/contacts/edit/view', [
             // shared api variable as workaround for detail view (progrss bar in detail View)
             this._attachments = api.pendingAttachments[_.ecid(this.toJSON())] = value;
         },
+
+        // custom validate to ensure view and model are in sync
+        validateModel: function () {
+            var errors = this.validateFunctions(['validateLength', 'validateAddresses']);
+            _.each(this.toJSON(), function (value, name) {
+                this.trigger(errors[name] ? 'invalid:' + name : 'valid:' + name, errors[name]);
+            }, this);
+            return errors;
         },
 
         validateFunctions: function (array) {
-            // false means "good"
+            var errors = {},
+                attrs = this.toJSON();
             for (var i = 0, fn; fn = array[i]; i++) {
-                var result = this[fn]();
-                if (result) return result;
+                var result = this[fn](attrs);
+                if (result) _.extend(errors, result);
             }
-            return false;
+            // false means "good"
+            return _.isEmpty(errors) ? false : errors;
         },
 
-        validateArray: function (array, callback) {
+        validateArray: function (array, data, callback) {
             var invalid = false, attr = {};
             array.forEach(function (name) {
-                this.trigger('valid:' + name);
-                var value = this.get(name);
+                var value = data[name];
                 if (value === undefined || value === null) return;
                 var result = callback.call(this, name, value);
                 // false means "good"
                 if (!result) return;
                 invalid = true;
                 attr[name] = result;
-                this.trigger('invalid:' + name, result);
             }, this);
             return invalid && attr;
         },
 
-        validateLength: function () {
-            return this.validateArray(all, function (name, value) {
+        validateLength: function (data) {
+            return this.validateArray(_.flatten(all), data, function (name, value) {
                 if (String(value).length <= this.getMaxLength(name)) return;
-                return gt('This value is too long. The allowed length is %2$d characters.', this.getMaxLength(name));
+                return gt('This value is too long. The allowed length is %1$d characters.', this.getMaxLength(name));
             });
         },
 
-        validateAddresses: function () {
-            return this.validateArray(['email1', 'email2', 'email3'], function (name, value) {
+        validateAddresses: function (data) {
+            return this.validateArray(['email1', 'email2', 'email3'], data, function (name, value) {
                 if (coreUtil.isValidMailAddress(value)) return;
                 return gt('This is invalid email address.', View.i18n[name]);
             });

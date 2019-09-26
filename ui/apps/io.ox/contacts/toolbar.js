@@ -184,6 +184,9 @@ define('io.ox/contacts/toolbar', [
             app.getGrid().selection.on('change', function (e, list) {
                 app.updateToolbar(list);
             });
+            api.on('update', function () {
+                app.updateToolbar(app.getGrid().selection.get());
+            });
         }
     });
 
