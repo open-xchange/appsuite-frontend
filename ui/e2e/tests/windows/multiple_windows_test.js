@@ -48,8 +48,8 @@ Scenario('Opening multiple windows', async function (I, users) {
     I.click('Participants test', '.appointment');
     I.click(users[1].get('sur_name'), '.participants-view');
 
-    I.waitForVisible({ css: '[data-block="messaging"]' });
-    I.click(users[1].get('primaryEmail'), { css: '[data-block="messaging"]' });
+    I.waitForVisible({ css: '[data-block="communication"]' });
+    I.click(users[1].get('primaryEmail'), { css: '[data-block="communication"]' });
 
     const composeIndex = await I.grabCssPropertyFrom('.io-ox-mail-compose-window', 'z-index');
     const sidePopupIndizes = await I.grabCssPropertyFrom('.io-ox-sidepopup', 'z-index');

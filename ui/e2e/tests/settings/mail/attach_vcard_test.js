@@ -70,5 +70,4 @@ Scenario('[C7775] Append vCard when sending mail @shaky', async (I, users) => {
     I.wait(3);
     openMail(I, 'Katalog von Pearl');
     I.dontSee('1 attachment');
-
 });

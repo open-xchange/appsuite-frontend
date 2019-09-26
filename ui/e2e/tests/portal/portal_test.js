@@ -315,10 +315,10 @@ Scenario('[C7478] Add user data widget', async function (I, users) {
     I.waitForElement('.widget');
     I.waitForText('User data', undefined, '.widget .title');
     I.click('My contact data', '.widget');
-    I.waitForElement({ css: '.io-ox-contacts-edit-window.floating-window' });
-    I.waitForText(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, undefined, { css: '.io-ox-contacts-edit-window.floating-window .name' });
-    I.click('Discard', { css: '.floating-window.io-ox-contacts-edit-window' });
-    I.waitForDetached({ css: '.io-ox-contacts-edit-window.floating-window' });
+    I.waitForElement({ css: '.io-ox-contacts-edit-window' });
+    I.waitForText(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, undefined, { css: '.io-ox-contacts-edit-window .contact-summary' });
+    I.click('Discard', { css: '.io-ox-contacts-edit-window' });
+    I.waitForDetached({ css: '.io-ox-contacts-edit-window' });
     //Dirty ... I.click('My password', { css: '.io-ox-portal [data-widget-type="userSettings"] .action' }); is not working here
     I.click('My password', '.widget');
     I.waitForText('Change password', undefined, '.modal');

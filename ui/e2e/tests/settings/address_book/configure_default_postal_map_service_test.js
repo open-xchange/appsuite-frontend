@@ -27,6 +27,8 @@ After(async (users) => {
 });
 
 Scenario('[C85624] Configure postal addresses map service @shaky', async (I) =>{
+    await I.haveSetting('io.ox/tours//server/disableTours', true);
+    await I.haveSetting('io.ox/tours//whatsNew/neverShowAgain', true);
     await I.haveContact({
         folder_id: `${await I.grabDefaultFolder('contacts')}`,
         last_name: 'Bar',
@@ -40,10 +42,11 @@ Scenario('[C85624] Configure postal addresses map service @shaky', async (I) =>{
 
     I.login();
 
+    I.say('Google Maps');
     await verifyMapType(I, 'Google Maps', 'google.com', 'google');
-
+    I.say('Open Street Map');
     await verifyMapType(I, 'Open Street Map', 'openstreetmap.org', 'osm');
-
+    I.say('No link');
     await verifyMapType(I, 'No link', '', 'none');
 
     I.logout();
@@ -63,8 +66,8 @@ async function verifyMapType(I, mapName, link, value) {
     I.wait(1);
     I.checkOption(`input[value="${value}"]`);
     I.seeCheckboxIsChecked(`input[value="${value}"]`);
-    I.wait(1);
-    I.click('~Refresh');
+    I.wait(2);
+    I.retry(5).click('~Refresh', '.taskbar');
     I.waitForVisible('.fa-refresh.fa-spin');
     I.waitForDetached('.fa-refresh.fa-spin');
 
@@ -80,10 +83,7 @@ async function verifyMapType(I, mapName, link, value) {
 
     I.selectFolder('Contacts');
 
-    I.waitForVisible('~Bar, Foo');
-    I.click('~Bar, Foo');
-
-    I.waitForText('Home Address', undefined, '.contact-detail');
+    I.waitForText('Home address', 5, '.contact-detail');
 
     if (mapName !== 'No link') {
         I.waitForText('Open in ' + mapName);

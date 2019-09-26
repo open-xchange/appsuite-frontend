@@ -358,15 +358,22 @@ Scenario('[C7389] Send mail with attached vCard', function (I, users) {
     I.waitForElement('.smart-dropdown-container.open', 5);
     I.click('.smart-dropdown-container [data-action="io.ox/mail/attachment/actions/vcard"]');
     I.waitForElement('.io-ox-contacts-edit-window', 5);
+
+    //confirm dirtycheck is working properly
+    I.click('Discard');
+    I.waitForText('Do you really want to discard your changes?', 5, '.modal-dialog');
+    I.click('Cancel');
+    I.waitForDetached('.modal-dialog');
+
     I.click('Save');
     I.waitForDetached('.io-ox-contacts-edit-window', 5);
     I.openApp('Address Book');
     I.waitForVisible('.io-ox-contacts-window');
     I.selectFolder('Contacts');
-    I.waitForVisible('//*[contains(@class, "contact-grid-container")]//div[contains(text(), "' + users[0].userdata.primaryEmail + '")]/..');
-    I.retry(5).click('//*[contains(@class, "contact-grid-container")]//div[contains(text(), "' + users[0].userdata.primaryEmail + '")]/..');
+    I.waitForText(`${users[0].userdata.sur_name}`);
+    I.retry(5).click(locate('.contact').inside('.vgrid-scrollpane').withText(`${users[0].userdata.sur_name}`));
     I.waitForElement('[href="mailto:' + users[0].userdata.primaryEmail + '"]');
-    I.waitForText(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, 5, '.io-ox-contacts-window .header-name');
+    I.waitForText(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, 5, '.contact-detail.view .contact-header .fullname');
 });
 
 Scenario('[C7403] Forward a single mail @shaky', function (I, users) {

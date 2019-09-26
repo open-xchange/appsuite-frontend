@@ -21,83 +21,102 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario.skip('adds a contact with all fields', function (I) {
+Scenario('[C7354] With all available fields filled', function (I) {
+    function addContactsField(fieldType, field, input) {
+        I.click({ css: `div.dropdown[data-add="${fieldType}"] button` }, '.contact-edit');
+        //I.click(`Add ${fieldType}`);
+        I.waitForVisible('.dropdown-menu');
+        I.click(field);
+        I.waitForText(field, undefined, '.contact-edit');
+        if (input) I.pressKey(input);
+        I.wait(0.5);
+    }
+
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
-    I.waitForText('My address books');
-    I.doubleClick('~My address books');
-    I.click('~Contacts');
+    I.waitForVisible('.classic-toolbar [data-action]');
+    I.selectFolder('Contacts');
     I.waitForDetached('a.dropdown-toggle.disabled');
     // toolbar dropdown
-    I.click('New contact');
+    I.retry(5).click('New contact');
     // real action in dropdown
     I.waitForVisible('.dropdown-menu');
     I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
     I.waitForVisible('.io-ox-contacts-edit-window');
 
-    I.checkOption('Show all fields');
-    // personal information
-    I.fillField('Title', 'Sir');
+    //personal info
     I.fillField('First name', 'Richard');
     I.fillField('Last name', 'Petersen');
-    I.fillField('Middle name', 'Holger');
-    I.fillField('Suffix', 'Pro');
+    addContactsField('personal', 'Title', 'Sir');
+    addContactsField('personal', 'Middle name', 'Holger');
+    addContactsField('personal', 'Suffix', 'Pro');
+    addContactsField('personal', 'Birthday');
     I.selectOption('month', 'May');
     I.selectOption('date', '4');
     I.selectOption('year', '1957');
-    I.fillField('URL', 'my.homepage.com');
+    addContactsField('personal', 'URL', 'my.homepage.com');
+
     // job description
-    I.fillField('Profession', 'Developer');
-    I.fillField('Position', 'Senior Developer');
-    I.fillField('Department', 'Frontent');
+    I.fillField('Department', 'Frontend');
     I.fillField('Company', 'Open-Xchange');
-    I.fillField('Room number', '101');
-    // messaging
+    addContactsField('business', 'Profession', 'Developer');
+    addContactsField('business', 'Position', 'Senior Developer');
+    addContactsField('business', 'Room number', '101');
+
+    // communication
     I.fillField('Email 1', 'email1@test');
-    I.fillField('Email 2', 'email2@test');
-    I.fillField('Email 3', 'email3@test');
-    I.fillField('Instant Messenger 1', 'instantmessenger1');
-    I.fillField('Instant Messenger 2', 'instantmessenger2');
-    // phone and fax
     I.fillField('Cell phone', 'cell phone');
-    I.fillField('Cell phone (alt)', 'cell phone alt');
-    I.fillField('Phone (business)', 'phone business');
-    I.fillField('Phone (business alt)', 'phone business alt');
-    I.fillField('Phone (home)', 'phone home');
-    I.fillField('Phone (home alt)', 'phone home alt');
-    I.fillField('Phone (other)', 'phone other');
-    I.fillField('Fax', 'fax');
-    I.fillField('Fax (Home)', 'fax home');
+    addContactsField('communication', 'Email 2', 'email2@test');
+    addContactsField('communication', 'Email 3', 'email3@test');
+    addContactsField('communication', 'Instant Messenger 1', 'instantmessenger1');
+    addContactsField('communication', 'Instant Messenger 2', 'instantmessenger2');
+
+    // phone and fax
+    addContactsField('communication', 'Cell phone (alt)', 'cell phone alt');
+    addContactsField('communication', 'Phone (business)', 'phone business');
+    addContactsField('communication', 'Phone (business alt)', 'phone business alt');
+    addContactsField('communication', 'Phone (home)', 'phone home');
+    addContactsField('communication', 'Phone (home alt)', 'phone home alt');
+    addContactsField('communication', 'Phone (other)', 'phone other');
+    addContactsField('communication', 'Fax', 'fax');
+    addContactsField('communication', 'Fax (Home)', 'fax home');
+
     // home address
+    addContactsField('other', 'Home address');
     I.fillField('street_home', 'Home Street');
     I.fillField('postal_code_home', '12345');
     I.fillField('city_home', 'Home City');
     I.fillField('state_home', 'Home State');
     I.fillField('country_home', 'Home County');
+
     // business address
+    addContactsField('other', 'Business address');
     I.fillField('street_business', 'Business Street');
     I.fillField('postal_code_business', '23456');
     I.fillField('city_business', 'Business City');
     I.fillField('state_business', 'Business State');
     I.fillField('country_business', 'Business County');
+
     // other address
+    addContactsField('other', 'Other address');
     I.fillField('street_other', 'Other Street');
     I.fillField('postal_code_other', '34567');
     I.fillField('city_other', 'Other City');
     I.fillField('state_other', 'Other State');
     I.fillField('country_other', 'Other County');
+
     // coment
     I.fillField('note', 'a comment in the comment field');
 
     I.click('Save');
     I.waitForDetached('.io-ox-contacts-edit-window');
-
-    // wait for detail view
+    I.waitForElement('.fa-spin-paused');
+    //wait for detail view
     I.click('.io-ox-contacts-window .leftside');
     I.pressKey('End');
     I.pressKey('Enter');
     I.waitForVisible('.io-ox-contacts-window .leftside .vgrid-cell.selected');
+
     // personal information
     I.see('Sir');
     I.see('Richard');
@@ -109,7 +128,7 @@ Scenario.skip('adds a contact with all fields', function (I) {
     // job description
     I.see('Developer');
     I.see('Senior Developer');
-    I.see('Frontent');
+    I.see('Frontend');
     I.see('Open-Xchange');
     I.see('101');
     // mail and messaging
@@ -133,21 +152,37 @@ Scenario.skip('adds a contact with all fields', function (I) {
     I.see('Business City');
     I.see('Business State');
     I.see('12345');
-    I.see('BUSINESS COUNTY');
+    I.see('Business County');
     // home address
     I.see('Home Street');
     I.see('Home City');
     I.see('Home State');
     I.see('23456');
-    I.see('HOME COUNTY');
+    I.see('Home County');
     // other address
     I.see('Other Street');
     I.see('Other City');
     I.see('Other State');
     I.see('34567');
-    I.see('OTHER COUNTY');
+    I.see('Other County');
     // comment
     I.see('a comment in the comment field');
+});
 
-    I.logout();
+Scenario('Dirtycheck on creating contact', function (I) {
+
+    I.login('app=io.ox/contacts');
+    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+    I.waitForVisible('.classic-toolbar [data-action]');
+    I.selectFolder('Contacts');
+    I.waitForDetached('a.dropdown-toggle.disabled');
+    // toolbar dropdown
+    I.retry(5).click('New contact');
+    // real action in dropdown
+    I.waitForVisible('.dropdown-menu');
+    I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
+    I.waitForVisible('.io-ox-contacts-edit-window');
+
+    I.click('Discard');
+    I.dontSeeElement('.modal-dialog');
 });

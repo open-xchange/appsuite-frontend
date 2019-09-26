@@ -28,32 +28,24 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
     let url;
     // Alice shares a folder with 2 contacts
     session('Alice', async () => {
+        await I.haveContact({
+            display_name: 'Wonderland, Alice',
+            folder_id: await I.grabDefaultFolder('contacts'),
+            first_name: 'Alice',
+            last_name: 'Wonderland'
+        });
+        await I.haveContact({
+            display_name: 'Builder, Bob',
+            folder_id: await I.grabDefaultFolder('contacts'),
+            first_name: 'Bob',
+            last_name: 'Builder'
+        });
+
         I.login('app=io.ox/contacts');
         I.waitForText('My address books');
         I.doubleClick(locate('~My address books'));
         I.waitForText('Contacts', 5, '.folder-tree');
         I.selectFolder('Contacts');
-
-        // toolbar dropdown
-        I.waitToHide('a.dropdown-toggle.disabled');
-        I.retry(5).click('New contact');
-        // real action in dropdown
-        I.waitForVisible('.dropdown-menu');
-        I.retry(5).click('New contact', '[data-action="io.ox/contacts/actions/create"]');
-        I.waitForText('Create contact');
-        I.fillField('First name', 'Alice');
-        I.fillField('Last name', 'Wonderland');
-        I.click('Save');
-        I.waitToHide('.abs.window-blocker');
-        I.wait(1);
-        I.retry(5).click('New contact');
-        I.waitForVisible('.dropdown-menu');
-        I.retry(5).click('New contact', '[data-action="io.ox/contacts/actions/create"]');
-        I.waitForText('Create contact');
-        I.fillField('First name', 'Bob');
-        I.fillField('Last name', 'Builder');
-        I.click('Save');
-        I.waitToHide('.abs.window-blocker');
 
         I.click({ css: '.folder-tree [title="Actions for Contacts"]' });
         I.click(locate('a').withText('Permissions / Invite people').inside('.dropdown'));

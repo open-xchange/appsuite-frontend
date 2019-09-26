@@ -12,7 +12,7 @@
 
 /// <reference path="../../steps.d.ts" />
 
-Feature('Contacts > Global address book');
+Feature('Contacts > Folder');
 
 Before(async (users) => {
     await users.create();
@@ -73,4 +73,36 @@ Scenario('[C85620] Global address book is the default folder - check first login
     });
 
     I.logout();
+});
+
+
+Scenario('[C7355] - Create a new private folder', function (I) {
+    const timestamp = Math.round(+new Date() / 1000);
+    I.login('app=io.ox/contacts');
+    // wait for any contact to be rendered, this is the last thing happening on load.
+    I.waitForElement('.vgrid-cell.contact');
+    I.click('Add new address book');
+    I.waitForElement('.modal-open [data-point="io.ox/core/folder/add-popup"]');
+    I.fillField('[name="name"]', 'C7355 ' + timestamp);
+    I.click('[data-action="add"]');
+    I.waitForDetached('[data-point="io.ox/core/folder/add-popup"]');
+    I.selectFolder('C7355 ' + timestamp);
+    I.waitForText('C7355 ' + timestamp, '.folder-name');
+});
+
+Scenario('[C7356] - Create a new public folder', function (I) {
+    const timestamp = Math.round(+new Date() / 1000);
+    I.login('app=io.ox/contacts');
+    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+    I.waitForVisible('.classic-toolbar [data-action]');
+    I.waitForText('Add new address book');
+    I.click('Add new address book');
+    I.waitForElement('.modal-open [data-point="io.ox/core/folder/add-popup"]');
+    I.fillField('[name="name"]', 'C7356 ' + timestamp);
+    I.click('.modal-open .checkbox label');
+    I.click('[data-action="add"]');
+    I.waitForDetached('[data-point="io.ox/core/folder/add-popup"]');
+    I.selectFolder('C7356 ' + timestamp);
+    I.waitForText('C7356 ' + timestamp, '.folder-name');
+    I.waitForText('C7356 ' + timestamp, '[data-id="virtual/flat/contacts/public"] .folder-node');
 });

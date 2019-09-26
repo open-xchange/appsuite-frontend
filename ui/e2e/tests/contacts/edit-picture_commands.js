@@ -12,15 +12,16 @@
 
 let assert = require('assert');
 
-module.exports = function (I) {
+module.exports = function (I, DISPLAYNAME) {
 
     // topbar > contact image > my contact data
     function myContactData(op) {
         switch (op) {
             case 'open':
-                I.click('.contact-picture');
-                I.waitForVisible('.dropdown.open a[data-name="my-contact-data"]');
-                I.click('My contact data');
+                I.waitForVisible('.contact-picture');
+                I.retry(5).click('.contact-picture');
+                I.waitForText('My contact data', '.smart-dropdown-container');
+                I.click('My contact data', '.smart-dropdown-container');
                 I.waitForVisible('.io-ox-contacts-edit-window');
                 break;
             case 'discard':
@@ -28,23 +29,56 @@ module.exports = function (I) {
                 break;
             case 'save':
                 I.click('Save');
-                I.waitForInvisible('.edit-contact');
-                break;
-            case 'remove-image':
-                I.click('button.reset.close');
+                I.waitForInvisible('.contact-edit');
                 break;
             case 'discard-confirm':
                 I.waitForVisible('.modal-footer [data-action="delete"]');
                 I.click('.modal-footer [data-action="delete"]');
                 break;
             case 'check:empty-state':
-                I.seeElementInDOM('.add-img-text');
+                I.seeElementInDOM('.empty');
+                I.waitForText('Click to add photo', 20, '.contact-photo label');
                 break;
             case 'check:not:empty-state':
-                I.waitForInvisible('.add-img-text');
+                I.dontSeeElement('.empty');
                 break;
             default:
                 assert.fail('W.myContactData: unsupported command', op);
+                break;
+        }
+    }
+
+    // contacts > select contact > edit
+    function contactData(op) {
+        switch (op) {
+            case 'select':
+                I.click(locate('.contact').withText(DISPLAYNAME).inside('.vgrid-scrollpane-container'));
+                I.waitForText(DISPLAYNAME, 3, '.contact-detail');
+                break;
+            case 'edit':
+                I.clickToolbar('Edit');
+                I.waitForVisible('.io-ox-contacts-edit-window');
+                break;
+            case 'discard':
+                I.click('Discard');
+                break;
+            case 'save':
+                I.click('Save');
+                I.waitForInvisible('.contact-edit');
+                break;
+            case 'discard-confirm':
+                I.waitForVisible('.modal-footer [data-action="delete"]');
+                I.click('.modal-footer [data-action="delete"]');
+                break;
+            case 'check:empty-state':
+                I.seeElement('.contact-edit .empty');
+                //I.waitForText('Click to add photo', 20, '.contact-photo label');
+                break;
+            case 'check:not:empty-state':
+                I.dontSeeElement('.contact-edit .empty');
+                break;
+            default:
+                assert.fail('W.ContactData: unsupported command', op);
                 break;
         }
     }
@@ -53,24 +87,29 @@ module.exports = function (I) {
     function EditPicture(op) {
         switch (op) {
             case 'open':
-                I.click('.contact-picture-upload');
+                I.click('.contact-edit .contact-photo');
                 I.waitForVisible('.edit-picture');
                 break;
             case 'cancel':
                 I.click('Cancel');
                 break;
             case 'ok':
-                I.click('Ok');
+                I.click('Apply');
+                I.waitForInvisible('.edit-picture');
                 break;
             case 'upload':
                 // upload image (2.2 MB)
-                I.attachFile('.picture-upload-view input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+                I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+                break;
+            case 'remove-image':
+                I.click('Remove photo');
+                I.wait(0.5);
                 break;
             case 'check:empty-state':
-                I.seeElementInDOM('.empty-state');
+                I.seeElementInDOM('.edit-picture.empty');
                 break;
             case 'check:not:empty-state':
-                I.waitForInvisible('.empty-state');
+                I.waitForInvisible('.edit-picture.empty');
                 break;
             default:
                 assert.fail('W.EditPicture: unsupported command', op);
@@ -80,6 +119,7 @@ module.exports = function (I) {
 
     return {
         myContactData: myContactData,
+        contactData: contactData,
         EditPicture: EditPicture
     };
 };

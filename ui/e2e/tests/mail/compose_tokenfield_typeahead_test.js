@@ -37,7 +37,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('XXX Add without typeahead', async (I) => {
+Scenario('Add without typeahead', async (I) => {
     I.login('app=io.ox/mail');
     I.waitForText('Compose');
     I.click('Compose');
@@ -58,7 +58,7 @@ Scenario('XXX Add without typeahead', async (I) => {
     I.logout();
 });
 
-Scenario('XXX Add typeahed suggestion via autoselect', async (I, users) => {
+Scenario('Add typeahed suggestion via autoselect', async (I, users) => {
     const [user] = users;
     const firstname = user.get('display_name');
     const surname = user.get('sur_name');
@@ -144,7 +144,7 @@ Scenario('XXX Add typeahed suggestion via autoselect', async (I, users) => {
 //     I.logout();
 // });
 
-Scenario('XXX Add typeahead suggestion via keyboard', async (I, users) => {
+Scenario('Add typeahead suggestion via keyboard', async (I, users) => {
     const [user] = users;
 
     I.login('app=io.ox/mail');
@@ -186,7 +186,7 @@ Scenario('XXX Add typeahead suggestion via keyboard', async (I, users) => {
     I.logout();
 });
 
-Scenario('XXX Add typeahead suggestion via mouse', async (I, users) => {
+Scenario('Add typeahead suggestion via mouse', async (I, users) => {
     const [user] = users;
 
     I.login('app=io.ox/mail');

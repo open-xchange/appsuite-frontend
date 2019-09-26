@@ -9,10 +9,11 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
+/// <reference path="../../steps.d.ts" />
 
 const expect = require('chai').expect;
 
-Feature('Contacts');
+Feature('Contacts > Image');
 
 Before(async function (users) {
     await users.create();
@@ -22,77 +23,123 @@ After(async function (users) {
     await users.removeAll();
 });
 
-function prepare(user, I) {
-    I.login('app=io.ox/mail', { user });
-    I.waitForVisible('.io-ox-mail-window');
+function start(I) {
+    I.login('app=io.ox/contacts');
+    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+    I.waitForVisible('.classic-toolbar [data-action]');
+    I.selectFolder('Contacts');
+    I.waitForElement('.contact-grid-container');
+    I.waitForDetached('.classic-toolbar .disabled[data-dropdown="io.ox/contacts/toolbar/new"]', 5);
 }
 
-Scenario('User start with no picture', async function (I, users) {
-    const W = require('./edit-picture_commands')(I);
-    const [user] = users;
-    prepare(user, I);
+Scenario('Contact starts with no picture', async function (I) {
+    const FIRST = 'Jeff', LAST = 'Winger', DISPLAYNAME = `${LAST}, ${FIRST}`,
+        W = require('./edit-picture_commands')(I, DISPLAYNAME);
+    let image;
 
-    // toolbar
-    let [image] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
+    await I.haveContact({
+        display_name: DISPLAYNAME,
+        first_name: FIRST,
+        last_name: LAST,
+        folder_id: await I.grabDefaultFolder('contacts')
+    });
+
+    start(I);
+    // list and detail view
+    W.contactData('select');
+    [image] = await I.grabCssPropertyFrom('.vgrid-scrollpane-container .contact-photo', 'background-image');
     expect(image).is.equal('none');
+    [image] = await I.grabCssPropertyFrom('.contact-detail .contact-photo', 'background-image');
+    expect(image).is.equal('none');
+
     // edit contact data
-    W.myContactData('open');
-    W.myContactData('check:empty-state');
+    W.contactData('edit');
+    [image] = await I.grabCssPropertyFrom('.contact-edit .contact-photo', 'background-image');
+    expect(image).is.equal('none');
+
+    // edit picture
     W.EditPicture('open');
     W.EditPicture('check:empty-state');
     W.EditPicture('cancel');
-    W.myContactData('discard');
+    W.contactData('discard');
+    // do not show "do you really want to discard" modal cause nothing changed
+    I.waitForDetached(locate('.modal-dialog').as('"Dialog: Do you really want to discard?"'), 1);
 
     I.logout();
 });
 
 
-Scenario('User can upload and remove a picture', async function (I, users) {
-    const W = require('./edit-picture_commands')(I);
-    const [user] = users;
+Scenario('Contact can upload and remove a picture', async function (I) {
+    const FIRST = 'Britta', LAST = 'Perry', DISPLAYNAME = `${LAST}, ${FIRST}`,
+        W = require('./edit-picture_commands')(I, DISPLAYNAME);
+    let image;
 
-    prepare(user, I);
+    await I.haveContact({
+        display_name: DISPLAYNAME,
+        first_name: FIRST,
+        last_name: LAST,
+        folder_id: await I.grabDefaultFolder('contacts')
+    });
 
-    // user image in toolbar?
-    let [image1] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
-    expect(image1).is.equal('none');
+    start(I);
+    // list and detail view
+    W.contactData('select');
+    [image] = await I.grabCssPropertyFrom('.vgrid-scrollpane-container .contact-photo', 'background-image');
+    expect(image).is.equal('none');
+    [image] = await I.grabCssPropertyFrom('.contact-detail .contact-photo', 'background-image');
+    expect(image).is.equal('none');
 
-    // open and check empty-state
-    W.myContactData('open');
+    // edit contact data
+    W.contactData('edit');
+    [image] = await I.grabCssPropertyFrom('.contact-edit .contact-photo', 'background-image');
+    expect(image).is.equal('none');
+
+    // edit picture
     W.EditPicture('open');
+    W.EditPicture('check:empty-state');
     W.EditPicture('upload');
     W.EditPicture('check:not:empty-state');
     W.EditPicture('ok');
 
     // picture-uploader
-    W.myContactData('check:not:empty-state');
-    W.myContactData('save');
-    let [image2] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
-    expect(image2).to.not.be.empty;
+    W.contactData('check:not:empty-state');
+    W.contactData('save');
+    I.waitForVisible('.contact-picture');
 
+    // list and detail view
+    W.contactData('select');
+    [image] = await I.grabCssPropertyFrom('.vgrid-scrollpane-container .contact-photo', 'background-image');
+    expect(image).is.not.equal('none', 'List view photo missing');
+    [image] = await I.grabCssPropertyFrom('.contact-detail .contact-photo', 'background-image');
+    expect(image).is.not.equal('none', 'Detail view photo missing');
 
-    W.myContactData('open');
-    W.myContactData('remove-image');
-    W.myContactData('save');
+    W.contactData('edit');
+    W.EditPicture('open');
+    W.EditPicture('remove-image');
+    W.EditPicture('ok');
+    W.contactData('save');
     // user image in toolbar?
-    let [image3] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
-    expect(image3).is.equal('none');
+    I.waitForDetached('.vgrid-scrollpane-container .contact-photo:not(.empty)', 2);
+    [image] = await I.grabCssPropertyFrom('.vgrid-scrollpane-container .contact-photo', 'background-image');
+    expect(image).is.equal('none', 'Edit view photo still present');
+    I.waitForDetached('.contact-detail .contact-photo:not(.empty)', 2);
+    [image] = await I.grabCssPropertyFrom('.contact-detail .contact-photo', 'background-image');
+    expect(image).is.equal('none', 'Edit picture view photo still present');
 
     // check again
-    W.myContactData('open');
+    W.contactData('edit');
     W.EditPicture('open');
     W.EditPicture('check:empty-state');
     W.EditPicture('cancel');
-    W.myContactData('discard');
+    W.contactData('discard');
 
     I.logout();
 });
 
-Scenario('User can rotate a picture', async function (I, users) {
+Scenario('User can rotate a contact picture', async function (I) {
     const W = require('./edit-picture_commands')(I);
-    const [user] = users;
 
-    prepare(user, I);
+    start(I);
 
     // user image in toolbar?
     let [image] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
@@ -106,10 +153,10 @@ Scenario('User can rotate a picture', async function (I, users) {
 
     // rotate (portrait to landscape)
     let [height] = await I.grabAttributeFrom('.cr-image', 'height');
-    I.click('[data-action="rotate"]');
+    I.click('.inline-actions button[data-action="rotate-right"]');
     let [width] = await I.grabAttributeFrom('.cr-image', 'width');
     expect(height).to.be.equal(width);
-    W.EditPicture('check:empty-state');
+    W.EditPicture('check:not:empty-state');
     W.EditPicture('ok');
 
     //picture-uploader
