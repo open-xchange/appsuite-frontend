@@ -123,7 +123,8 @@ Scenario('[C208269] Edit users contact information @shaky', async (I) => {
     // takes an unknown moment until the image appears
     I.wait(1);
     let [rule] = await I.grabCssPropertyFrom('.contact-photo-upload .contact-photo', 'background-image');
-    expect(rule).to.match(/^url\("data:image\/png;base64/);
+    I.wait(5);
+    expect(rule).to.match(/^url\("data:image\/jpeg;base64/);
 
     I.click('Save', '.io-ox-contacts-edit-window');
     I.waitForDetached('.io-ox-contacts-edit-window');

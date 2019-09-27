@@ -339,7 +339,7 @@ Scenario('[C7358] Remove contact picture', async function (I, search) {
     search.doSearch(testrailID + ' ' + testrailID);
     I.click('[aria-label="' + testrailID + ', ' + testrailID + '"]');
     I.waitForElement('.contact-header');
-    I.waitForText(testrailID + ', ' + testrailID, 5, '.contact-header .header-name');
+    I.waitForText(testrailID + ', ' + testrailID, 5, '.contact-header .fullname');
 
     // remove contact photo
     I.clickToolbar('Edit');

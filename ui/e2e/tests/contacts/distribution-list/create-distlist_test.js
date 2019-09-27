@@ -51,7 +51,7 @@ Scenario('[C7372] Existing contact', async function (I, users) {
     await users.create();
     util.start(I);
 
-    I.click('New contact');
+    I.retry(5).click('New contact');
     I.waitForVisible('.dropdown-menu');
     I.click('New distribution list');
     I.waitForVisible('.floating-window-content');

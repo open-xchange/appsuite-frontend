@@ -197,24 +197,32 @@ Scenario('[C45040] Sort files', async (I) => {
     await I.haveFile(testFolder, 'e2e/media/files/generic/testpresentation.ppsm');
     prepare(I);
     I.selectFolder('Testfolder');
+    I.waitForText('document.txt', 5, '.list-view');
+
     // Begins with Name ascending order
+    I.say('Name > Ascending');
     checkFileOrder(I, ['document.txt', 'testdocument.odt', 'testdocument.rtf', 'testpresentation.ppsm']);
     I.clickToolbar('Sort by');
     I.click('Descending');
+    I.say('Name > Descending');
     checkFileOrder(I, ['testpresentation.ppsm', 'testdocument.rtf', 'testdocument.odt', 'document.txt']);
 
     I.clickToolbar('Sort by');
     I.click('Date');
+    I.say('Date > Descending');
     checkFileOrder(I, ['testpresentation.ppsm', 'testdocument.odt', 'testdocument.rtf', 'document.txt']);
     I.clickToolbar('Sort by');
     I.click('Ascending');
+    I.say('Date > Ascending');
     checkFileOrder(I, ['document.txt', 'testdocument.rtf', 'testdocument.odt', 'testpresentation.ppsm']);
 
     I.clickToolbar('Sort by');
     I.click('Size');
+    I.say('Size > Ascending');
     checkFileOrder(I, ['document.txt', 'testdocument.odt', 'testpresentation.ppsm', 'testdocument.rtf']);
     I.clickToolbar('Sort by');
     I.click('Descending');
+    I.say('Size > Descending');
     checkFileOrder(I, ['testdocument.rtf', 'testpresentation.ppsm', 'testdocument.odt', 'document.txt']);
 });
 

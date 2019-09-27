@@ -38,6 +38,6 @@ Scenario('adds an malicious attachment to a contact', async function (I) {
     I.click('~Contacts, 1 total'); // need to add "1 total" as this is part of the aria-label
 
     I.click('#io-ox-refresh-icon');
-    I.waitForVisible('.attachments-container');
+    I.waitForVisible('section[data-block="attachments"]');
     I.see('><img src=x onerror=alert(123)>');
 });

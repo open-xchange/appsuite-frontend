@@ -25,7 +25,8 @@ define('io.ox/contacts/edit/view', [
     'io.ox/contacts/widgets/pictureUpload',
     'settings!io.ox/core',
     'settings!io.ox/contacts',
-    'gettext!io.ox/contacts'
+    'gettext!io.ox/contacts',
+    'less!io.ox/contacts/style'
 ], function (ExtensibleView, common, Dropdown, Attachments, util, api, userApi, a11y, coreUtil, capabilities, PhotoUploadView, coreSettings, settings, gt) {
 
     'use strict';
