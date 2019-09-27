@@ -209,8 +209,7 @@ define('io.ox/mail/common-extensions', [
                         .data({ email: email, email1: email })
                         .append($('<span class="sr-only">').text(gt('From:')))
                         .append($('<span class="person-link person-from ellipsis">').text(name))
-                        .addClass((name === email && status) ? 'authenticity-sender ' + status : ''),
-                       '<div class="spacer">'
+                        .addClass((name === email && status) ? 'authenticity-sender ' + status : '')
                    );
 
                 // don't show email address on smartphones if status is pass or it's myself
@@ -246,6 +245,8 @@ define('io.ox/mail/common-extensions', [
                 // save space on mobile by showing address only for suspicious mails
                 if (_.device('smartphone') && name.indexOf('@') > -1) $el.addClass('show-address');
             });
+
+            $el.append('<div class="spacer">');
 
             this.append($el);
         },
