@@ -296,7 +296,7 @@ define('io.ox/settings/personalData/settings/pane', [
                     this.$el.append(
                         //#. %1$s: date and time when the download expires
                         //#. %1$s: date when the download was requested
-                        $('<label class="col-xs-12">').text(gt('Your data archive %2$s from is ready for download. The download is available until %1$s.', moment(this.model.get('avaiableUntil')).format('LLL'), moment(this.model.get('creationTime')).format('L'))),
+                        $('<label class="col-xs-12">').text(gt('Your data archive from %2$s is ready for download. The download is available until %1$s.', moment(this.model.get('avaiableUntil')).format('L'), moment(this.model.get('creationTime')).format('L'))),
                         $('<ul class="col-md-8 list-unstyled downloads">').append(
                             _(this.model.get('results')).map(function (file) {
                                 return $('<li class="file">')
