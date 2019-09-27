@@ -133,6 +133,25 @@ define('io.ox/settings/personalData/settings/pane', [
             // 2gb
             2147483648
         ],
+        ignoredErrors = [
+            // data export cancelled by user. (why does this error message exist? thats no error);
+            'GDPR-EXPORT-0013',
+            // no data export or it has already been completed (why does this error message exist? thats also no error)
+            'GDPR-EXPORT-0009'
+        ],
+        handleApiResult = function (apiResponse) {
+            if (apiResponse.error) {
+                if (!_(ignoredErrors).contains(apiResponse.code)) {
+                    yell(apiResponse);
+                }
+                // in case of error set status to none, so user can retry
+                apiResponse = { status: 'none' };
+            }
+
+            // check if this is [data, timestamp]
+            apiResponse = _.isArray(apiResponse) ? apiResponse[0] : apiResponse;
+            return apiResponse;
+        },
         deleteDialog = function (options) {
             var def = $.Deferred();
             new ModalDialog({ title: options.title })
@@ -261,7 +280,8 @@ define('io.ox/settings/personalData/settings/pane', [
             initialize: function () {
                 var self = this;
                 this.listenTo(api, 'updateStatus', function () {
-                    api.getAvailableDownloads().then(function (downloadStatus) {
+                    api.getAvailableDownloads().always(function (downloadStatus) {
+                        downloadStatus = handleApiResult(downloadStatus);
                         // update attributes
                         self.model.set(downloadStatus);
                         // remove attributes that are no longer there
@@ -330,20 +350,23 @@ define('io.ox/settings/personalData/settings/pane', [
         draw: function () {
             this.addClass('io-ox-personal-data-settings');
             var node = this;
-            $.when(api.getAvailableModules(), api.getAvailableDownloads()).then(function (availableModules, downloadStatus) {
-                // check if this is [data, timestamp]
-                downloadStatus = _.isArray(downloadStatus) ? downloadStatus[0] : downloadStatus;
+            //no when here, behavior in always callback would not work correctly.
+            api.getAvailableModules().then(function (availableModules) {
+                api.getAvailableDownloads().always(function (downloadStatus) {
 
-                var availableModulesModel = availableModulesModel || new Backbone.Model(availableModules),
-                    status = new Backbone.Model(downloadStatus),
-                    sdView = new selectDataView({ model: availableModulesModel, status: status }),
-                    dlView = new downloadView({ model: status });
+                    downloadStatus = handleApiResult(downloadStatus);
 
-                node.append(
-                    dlView.render().$el,
-                    sdView.render().$el
-                );
+                    var availableModulesModel = availableModulesModel || new Backbone.Model(availableModules),
+                        status = new Backbone.Model(downloadStatus),
+                        sdView = new selectDataView({ model: availableModulesModel, status: status }),
+                        dlView = new downloadView({ model: status });
 
+                    node.append(
+                        dlView.render().$el,
+                        sdView.render().$el
+                    );
+
+                });
             }, yell);
         }
     });
