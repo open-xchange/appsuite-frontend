@@ -711,6 +711,14 @@ define('io.ox/contacts/edit/view', [
         userfield20: gt('Optional 20')
     };
 
+    function transformValidation(errors) {
+        return {
+            error: _.map(errors, function (value, key) {
+                return (View.i18n[key] || key) + ': ' + value;
+            }).join('\n')
+        };
+    }
+
     View.ContactModel = Backbone.Model.extend({
 
         initialize: function (options) {
@@ -758,7 +766,7 @@ define('io.ox/contacts/edit/view', [
         // add missing promise support
         save: function () {
             var promise = Backbone.Model.prototype.save.apply(this, arguments);
-            return !promise ? $.Deferred().reject(this.validationError) : promise;
+            return !promise ? $.Deferred().reject(transformValidation(this.validationError)) : promise;
         },
 
         sync: function (method, module, options) {
