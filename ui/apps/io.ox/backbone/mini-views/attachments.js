@@ -66,21 +66,17 @@ define('io.ox/backbone/mini-views/attachments', [
 
         renderAttachment: function (attachment) {
 
-            var size = attachment.file_size > 0 ? strings.fileSize(attachment.file_size, 1) : '\u00A0';
+            var size = attachment.file_size > 0 ? strings.fileSize(attachment.file_size, 0) : '\u00A0';
             return $('<div class="attachment">').append(
-                $('<div class="row-1">').text(attachment.filename),
-                $('<div class="row-2">').append(
-                    $('<span class="filesize">').text(size)
+                $('<div class="file ellipsis">').append(
+                    $('<span class="filesize pull-right">').text(size),
+                    $('<span class="filename">').text(attachment.filename)
                 ),
                 $('<button type="button" class="btn btn-link remove">')
-                .attr({
-                    'title': gt('Remove attachment'),
-                    'aria-label': gt('Remove attachment') + ' ' + attachment.filename
-                })
-                .data(attachment)
-                .append(
-                    $('<i class="fa fa-minus-circle" aria-hidden="true">')
-                )
+                    .data(attachment)
+                    //#. %1$s is attachment file name
+                    .attr('title', gt('Remove attachment "%1$s"', attachment.filename))
+                    .append('<i class="fa fa-minus-circle" aria-hidden="true">')
             );
         },
 

@@ -248,20 +248,23 @@
     .attachment-list { margin-top: 2px; }
 
     .attachment-list .attachment {
-        position: relative;
-        margin-bottom: 8px;
 
         width: 100%;
-        float: left;
-        margin-right: 0;
+        position: relative;
+        margin-bottom: 4px;
+        padding-right: 40px;
 
-        .row-1, .row-2 {
-            height: 16px;
-            line-height: 16px;
+        .file {
+            padding: 8px 12px;
+            background: #f5f5f5;
+            border-radius: 4px;
         }
+
+        .filename {
+        }
+
         .filesize {
-            font-size: 13px;
-            color: #aaa;
+            color: #707070;
         }
 
         .remove {
@@ -270,7 +273,6 @@
             right: 0;
             bottom:  0;
             width: 2em;
-
             i.fa {
                 position: absolute;
                 top: 50%;
@@ -281,8 +283,6 @@
                 text-align: center;
             }
         }
-
-        .row-1, .row-2 { .ellipsis(); }
     }
 }
 
