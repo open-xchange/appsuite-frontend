@@ -23,11 +23,14 @@ define('io.ox/contacts/edit/view', [
     'io.ox/core/util',
     'io.ox/core/capabilities',
     'io.ox/contacts/widgets/pictureUpload',
+    'io.ox/core/yell',
+    'io.ox/core/extensions',
+    'io.ox/core/tk/upload',
     'settings!io.ox/core',
     'settings!io.ox/contacts',
     'gettext!io.ox/contacts',
     'less!io.ox/contacts/style'
-], function (ExtensibleView, common, Dropdown, Attachments, util, api, userApi, a11y, coreUtil, capabilities, PhotoUploadView, coreSettings, settings, gt) {
+], function (ExtensibleView, common, Dropdown, Attachments, util, api, userApi, a11y, coreUtil, capabilities, PhotoUploadView, yell, ext, upload, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -55,6 +58,8 @@ define('io.ox/contacts/edit/view', [
                 this.renderAllFields();
             },
             attachments: function () {
+                // Remove attachment handling when infostore is not present
+                if (!coreSettings.get('features/PIMAttachments', capabilities.has('filestore'))) return;
                 this.renderAttachments();
                 this.renderDropzone();
             },
@@ -74,100 +79,6 @@ define('io.ox/contacts/edit/view', [
                     )
                 )
             );
-        },
-
-        renderAttachments: function () {
-
-            // Remove attachment handling when infostore is not present
-            if (!coreSettings.get('features/PIMAttachments', capabilities.has('filestore'))) return;
-
-            function propagateAttachmentChange(model, errors) {
-                var id = model.get('id'),
-                    folder_id = model.get('folder_id'),
-                    // check for recently updated attachments
-                    useCache = !model.attachments();
-
-                // TODO: move to listview
-                if (errors.length > 0) {
-                    require(['io.ox/core/notifications'], function (notifications) {
-                        _(errors).each(function (error) {
-                            notifications.yell('error', error.error);
-                        });
-                    });
-                }
-
-                return api.get({ id: id, folder: folder_id }, useCache)
-                    .then(function (data) {
-                        if (useCache) return $.when();
-
-                        return $.when(
-                            api.caches.get.add(data),
-                            api.caches.all.grepRemove(folder_id + api.DELIM),
-                            api.caches.list.remove({ id: id, folder: folder_id }),
-                            api.clearFetchCache()
-                        )
-                        .done(function () {
-                            // to make the detailview remove the busy animation:
-                            api.trigger('update:' + _.ecid(data));
-                            api.trigger('refresh.list');
-                        });
-                    });
-            }
-            this.attachments = {
-                list: new Attachments.ListView({
-                    model: this.model,
-                    module: 7,
-                    changeCallback: propagateAttachmentChange
-                }),
-                upload: new Attachments.UploadView({
-                    model: this.model
-                })
-            };
-
-            this.$el.append(
-                $('<div class="section">').attr('data-section', 'attachments').append(
-                    this.renderField('attachments', function (guid) {
-                        return $('<span>').append(
-                            this.attachments.list.render().$el.attr('id', guid),
-                            this.attachments.upload.render().$el
-                        );
-                    })
-                )
-            );
-        },
-
-        renderDropzone: function () {
-            // Remove attachment handling when infostore is not present
-            if (!coreSettings.get('features/PIMAttachments', capabilities.has('filestore'))) return;
-
-            require(['io.ox/core/tk/upload', 'io.ox/core/extensions'], function (upload, ext) {
-                var POINTID = 'io.ox/contacts/edit/dnd/actions',
-                    SCROLLABLE = '.window-content',
-                    Dropzone = upload.dnd.FloatingDropzone.extend({
-                        getDimensions: function () {
-                            var node = this.$el.closest(SCROLLABLE),
-                                top = node.scrollTop(),
-                                height = node.outerHeight();
-                            return {
-                                'top': top,
-                                'bottom': 0,
-                                'height': height
-                            };
-                        }
-                    });
-
-                ext.point(POINTID).extend({
-                    id: 'attachment',
-                    index: 100,
-                    label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
-                    action: this.attachments.list.addFile.bind(this.attachments.list)
-                });
-
-                this.$el.parent().append(
-                    new Dropzone({ point: POINTID, scrollable: SCROLLABLE }).render().$el
-                );
-
-            }.bind(this));
         },
 
         renderFooter: function () {
@@ -396,6 +307,90 @@ define('io.ox/contacts/edit/view', [
             }, this);
             // hide/show dropdown bades on number of options left in the dropdown
             dropdown.$el.toggle(!!dropdown.$ul.children().filter(':not(.divider)').length);
+        },
+
+        renderAttachments: function () {
+
+            this.attachments = {
+                list: new Attachments.ListView({
+                    model: this.model,
+                    module: 7,
+                    changeCallback: propagateAttachmentChange
+                }),
+                upload: new Attachments.UploadView({
+                    model: this.model
+                })
+            };
+
+            this.$el.append(
+                $('<div class="section">').attr('data-section', 'attachments').append(
+                    this.renderField('attachments', function (guid) {
+                        return $('<span>').append(
+                            this.attachments.list.render().$el.attr('id', guid),
+                            this.attachments.upload.render().$el
+                        );
+                    })
+                )
+            );
+
+            function propagateAttachmentChange(model, errors) {
+
+                var id = model.get('id'),
+                    folder_id = model.get('folder_id'),
+                    // check for recently updated attachments
+                    useCache = !model.attachments();
+
+                // TODO: move to listview
+                if (errors.length > 0) {
+                    _(errors).each(function (error) {
+                        yell('error', error.error);
+                    });
+                }
+
+                return api.get({ id: id, folder: folder_id }, useCache).then(function (data) {
+                    if (useCache) return $.when();
+                    return $.when(
+                        api.caches.get.add(data),
+                        api.caches.all.grepRemove(folder_id + api.DELIM),
+                        api.caches.list.remove({ id: id, folder: folder_id }),
+                        api.clearFetchCache()
+                    )
+                    .done(function () {
+                        // to make the detailview remove the busy animation:
+                        api.trigger('update:' + _.ecid(data));
+                        api.trigger('refresh.list');
+                    });
+                });
+            }
+        },
+
+        renderDropzone: function () {
+
+            var POINTID = 'io.ox/contacts/edit/dnd/actions',
+                SCROLLABLE = '.window-content',
+                Dropzone = upload.dnd.FloatingDropzone.extend({
+                    getDimensions: function () {
+                        var node = this.$el.closest(SCROLLABLE),
+                            top = node.scrollTop(),
+                            height = node.outerHeight();
+                        return {
+                            'top': top,
+                            'bottom': 0,
+                            'height': height
+                        };
+                    }
+                });
+
+            ext.point(POINTID).extend({
+                id: 'attachment',
+                index: 100,
+                label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
+                action: this.attachments.list.addFile.bind(this.attachments.list)
+            });
+
+            this.$el.parent().append(
+                new Dropzone({ point: POINTID, scrollable: SCROLLABLE }).render().$el
+            );
         },
 
         onAddField: function (dropdown, section, data) {
