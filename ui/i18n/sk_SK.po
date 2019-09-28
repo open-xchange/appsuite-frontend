@@ -935,10 +935,21 @@ msgstr "Pridať ako verejný kalendár"
 msgid "Add as public folder"
 msgstr "Pridať ako verejný priečinok"
 
+#: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
+msgid "Add attachment"
+msgstr "Pridať prílohu"
+
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add attachments"
 msgstr "Pridať prílohy"
+
+#. Contact edit dialog. Business information.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Address Business"
+msgid "Add business info"
+msgstr "Adresa do práce"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
@@ -960,6 +971,12 @@ msgstr "Pridať člena"
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add contact/resource"
 msgstr "Pridať účastníkov/zdroje"
+
+#. Contact edit dialog.
+#. Short for: Add email address, phone number, fax number.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add email, phone, fax"
+msgstr ""
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Add files"
@@ -1046,6 +1063,20 @@ msgstr "Pridať účastníka"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Add people"
 msgstr "Pridať ľudí"
+
+#. Contact edit dialog. Personal information.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Personal information"
+msgid "Add personal info"
+msgstr "Osobné údaje"
+
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add to address book"
+msgid "Add postal address"
+msgstr "Pridať do adresára"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Add recipients ..."
@@ -1266,6 +1297,13 @@ msgstr "Po"
 msgid "After a number of occurrences"
 msgstr "Po počte opakovaní"
 
+#. %1$d is age in years (number)
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Unread: %1$d"
+msgid "Age: %1$d"
+msgstr "Neprečítaných: %1$d"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -1450,7 +1488,8 @@ msgstr "Vyskytla sa neznáma chyba"
 msgid "Android"
 msgstr "Android"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Anniversary"
 msgstr "Výročie"
 
@@ -1490,6 +1529,7 @@ msgstr ""
 "Aplikácia nemusí fungovať podľa očakávania, kým tento problém nevyriešite."
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main apps/io.ox/mail/compose/sharing.js
 #: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter.js
@@ -1650,7 +1690,8 @@ msgstr "vzostupne"
 msgid "Ask for mailto link registration"
 msgstr "Požiadať o registračný odkaz mailto"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Assistant"
 msgstr "Asistent"
 
@@ -1682,7 +1723,8 @@ msgstr[2] "Prílohy boli uložené"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/contacts/edit/view-form.js
-#: module:io.ox/contacts apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/contacts apps/io.ox/contacts/edit/view.js
+#: apps/io.ox/contacts/view-detail.js apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail apps/io.ox/mail/view-options.js
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
@@ -1894,6 +1936,11 @@ msgstr "Zvonček"
 msgid "Billing information"
 msgstr "Účtovacie informácie"
 
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Birthday"
+msgstr "Narodeniny"
+
 #. settings: context of a birthday calendar
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Birthday calendar"
@@ -1937,7 +1984,8 @@ msgstr "Modrá"
 msgid "Body"
 msgstr "Telo"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Branches"
 msgstr "Vetvy"
 
@@ -1961,16 +2009,17 @@ msgstr "Do práce"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Adresa do práce"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Business address"
 msgstr "Adresa do práce"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Business category"
 msgstr "Kategória spoločnosti"
 
@@ -2178,13 +2227,15 @@ msgid "Cc: %1$s"
 msgstr "Kópia: %1$s"
 
 #. vcard (electronic business card) field
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/print-details.js
+#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Mobil"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Cell phone (alt)"
 msgstr "Mobilný telefón (alt)"
 
@@ -2226,6 +2277,12 @@ msgstr "Zmeniť stav potvrdenia"
 msgid "Change confirmation status"
 msgstr "Zmeniť stav potvrdenia"
 
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Create contact"
+msgid "Change contact photo"
+msgstr "Vytvoriť kontakt"
+
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Change due date"
 msgstr "Zmeniť termín"
@@ -2250,6 +2307,12 @@ msgstr "Zmeniť heslo"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Change password and sign out"
 msgstr "Zmeniť heslo a odhlásiť sa"
+
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Change color"
+msgid "Change photo"
+msgstr "Zmeniť farbu"
 
 #: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
 #, fuzzy
@@ -2305,7 +2368,8 @@ msgstr "Znak"
 msgid "Checkboxes"
 msgstr "Zaškrtávacie políčka"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Children"
 msgstr "Deti"
 
@@ -2321,8 +2385,8 @@ msgstr "Chrome"
 msgid "Chromium"
 msgstr "Chromium"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/print.js
 msgid "City"
 msgstr "Mesto"
 
@@ -2354,6 +2418,12 @@ msgstr ""
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Click on the application that you would like to use."
 msgstr "Kliknite na aplikáciu, ktorú chcete použiť."
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Click to start video"
+msgid "Click to add photo"
+msgstr "Kliknutím spustíte video"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
@@ -2464,8 +2534,8 @@ msgstr "Čiarkami oddelený zoznam, napr. „example.org, alice@example.com“"
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
-#: apps/plugins/portal/xing/actions.js module:plugins/portal
+#: apps/io.ox/contacts/model.js apps/plugins/portal/xing/actions.js
+#: module:plugins/portal
 msgid "Comment"
 msgstr "Komentár"
 
@@ -2481,7 +2551,8 @@ msgstr "Komentáre"
 msgid "Comments and suggestions"
 msgstr "Komentáre a návrhy"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Commercial Register"
 msgstr "Obchodný register"
 
@@ -2509,7 +2580,8 @@ msgstr "Kompaktné"
 msgid "Companies"
 msgstr "Spoločnosti"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Company"
 msgstr "Spoločnosť"
 
@@ -2827,8 +2899,8 @@ msgid "Couldn't load your mail filter rules."
 msgstr "Nepodarilo sa načítať vaše pravidlá filtra pošty."
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/contacts/model.js
-#: module:io.ox/contacts
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/contacts/edit/view.js
+#: module:io.ox/contacts apps/io.ox/contacts/model.js
 msgid "Country"
 msgstr "Krajina"
 
@@ -2849,10 +2921,6 @@ msgstr "Vytvoriť celodennú schôdzku"
 #: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "Vytvoriť schôdzku"
-
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
-msgid "Create contact"
-msgstr "Vytvoriť kontakt"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
@@ -3039,9 +3107,8 @@ msgid "Date format"
 msgstr "Formát dátumu:"
 
 #. vcard (electronic business card) field
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
-#: module:plugins/portal
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Date of birth"
 msgstr "Dátum narodenia"
 
@@ -3307,8 +3374,8 @@ msgstr "Zmazané správy"
 msgid "Deleting messages on local storage also deletes them on server"
 msgstr "Zmazanie správ v lokálnom úložisku ich zmaže aj na serveri"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/print.js
 msgid "Department"
 msgstr "Oddelenie"
 
@@ -3438,8 +3505,8 @@ msgstr "Vypnuté"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/view-form.js apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
@@ -3479,7 +3546,8 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "Zahodiť správu"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Display name"
 msgstr "Zobrazené meno"
 
@@ -3869,7 +3937,8 @@ msgstr "Tento email importujete pretiahnutím sem"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr ""
 "Pretiahnutím súboru sem nahráte <b class=\"dndignore\">novú prílohu</b>"
@@ -4055,10 +4124,6 @@ msgstr "Upraviť rozpísané"
 msgid "Edit group"
 msgstr "Upraviť skupinu"
 
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Edit image"
-msgstr "Upraviť obrázok"
-
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Edit mail account"
 msgstr "Upraviť poštový účet"
@@ -4135,15 +4200,18 @@ msgstr "Editor"
 msgid "Email"
 msgstr "Email"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Email 1"
 msgstr "Email 1"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Email 2"
 msgstr "Email 2"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Email 3"
 msgstr "Email 3"
 
@@ -4194,11 +4262,13 @@ msgstr "Emaily boli presunuté"
 msgid "Employee"
 msgstr "Zamestnanec"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Employee ID"
 msgstr "ID zamestnanca"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Employee type"
 msgstr "Typ zamestnanca"
 
@@ -4699,15 +4769,18 @@ msgstr "Uložené medzi oblúbené"
 msgid "Favorites"
 msgstr "Obľúbené"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Fax"
 msgstr "Fax"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Fax (Home)"
 msgstr "Fax (domov)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Fax (alt)"
 msgstr "Fax (alt.)"
 
@@ -4857,9 +4930,10 @@ msgstr "Prvý deň týždňa"
 msgid "First day of the week: %1$s"
 msgstr "Prvý deň týždňa"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/plugins/portal/xing/register.js module:plugins/portal
-#: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/plugins/portal/xing/register.js
+#: module:plugins/portal apps/plugins/wizards/mandatory/main.js
+#: module:io.ox/wizards/firstStart
 msgid "First name"
 msgstr "Krstné meno"
 
@@ -4886,7 +4960,8 @@ msgid "Fit to screen width"
 msgstr "Prispôsobiť šírke obrazovky"
 
 #. Sort by messages which are flagged, "Flag" is used in dropdown
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
+#: apps/io.ox/mail/view-options.js
 msgid "Flag"
 msgstr "Označenie"
 
@@ -5113,18 +5188,15 @@ msgstr "Od:"
 msgid "From: %1$s"
 msgstr "Od: %1$s"
 
-#. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Furigana for company"
 msgstr "Furigana pre spoločnosť"
 
-#. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Furigana for first name"
 msgstr "Furigana pre krstné meno"
 
-#. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Furigana for last name"
 msgstr "Furigana pre priezvisko"
 
@@ -5455,11 +5527,11 @@ msgstr "Domov"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Adresa domov"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
 msgid "Home address"
 msgstr "Adresa domov"
 
@@ -5506,7 +5578,8 @@ msgstr "Stratil som svoje zariadenie"
 msgid "IMAP"
 msgstr "IMAP"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "IP phone"
 msgstr "IP telefón"
 
@@ -5582,7 +5655,8 @@ msgstr ""
 "Ignorovať existujúce schôdzky je užitočné napríklad pri importe kalendárov "
 "štátnych sviatkov."
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Image 1"
 msgstr "Obrázok 1"
 
@@ -5738,8 +5812,8 @@ msgstr "Nekonzistentné dátumy"
 msgid "Indigo"
 msgstr "Indigo"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts apps/io.ox/core/yell.js
-#: module:io.ox/core
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/core/yell.js module:io.ox/core
 msgid "Info"
 msgstr "Info"
 
@@ -5782,11 +5856,13 @@ msgstr "Nainštalovať"
 msgid "Installation"
 msgstr "Inštalácia"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Instant Messenger 1"
 msgstr "Rýchle správy (IM) 1"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Instant Messenger 2"
 msgstr "Rýchle správy (IM) 2"
 
@@ -5932,10 +6008,6 @@ msgstr "Položky bez súboru nie je možné stiahnuť."
 msgid "Japanese Carrier"
 msgstr "Japonský operátor"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Job"
-msgstr "Práca"
-
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Job description"
 msgstr "Popis práce"
@@ -6043,9 +6115,10 @@ msgstr "Včera"
 msgid "Last month"
 msgstr "Minulý mesiac"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/plugins/portal/xing/register.js module:plugins/portal
-#: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/plugins/portal/xing/register.js
+#: module:plugins/portal apps/plugins/wizards/mandatory/main.js
+#: module:io.ox/wizards/firstStart
 msgid "Last name"
 msgstr "Priezvisko"
 
@@ -6295,10 +6368,6 @@ msgstr "Emailová adresa"
 msgid "Mail address (mandatory)"
 msgstr "Emailová adresa (povinné)"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Mail and Messaging"
-msgstr "Pošta a posielanie správ"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Kvóta počtu správ emailu"
@@ -6385,7 +6454,8 @@ msgstr "Spravovať obľúbené"
 msgid "Manage signatures"
 msgstr "Spravovať podpisy"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Manager"
 msgstr "Nadriadený"
 
@@ -6406,7 +6476,8 @@ msgstr "Manuálne zadané"
 msgid "Marimba"
 msgstr "Marimba"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Marital status"
 msgstr "Rodinný stav"
 
@@ -6600,7 +6671,8 @@ msgstr "Posielanie správ"
 msgid "Microphone %1$s"
 msgstr "Mikrofón %1$s"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Middle name"
 msgstr "Stredné meno"
 
@@ -6626,11 +6698,6 @@ msgstr "Minimálna dĺžka hesla je %1$d."
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Minus"
 msgstr "Mínus"
-
-#. section name for contact fields in detail view
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Miscellaneous"
-msgstr "Rozličné"
 
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
@@ -6835,7 +6902,7 @@ msgstr "Moje úlohy"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
+#: apps/io.ox/contacts/print.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
 #: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -7064,7 +7131,8 @@ msgstr "Ďalší týždeň"
 msgid "Next year"
 msgstr "Ďalší rok"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Nickname"
 msgstr "Prezývka"
 
@@ -7271,6 +7339,15 @@ msgstr "Nezačaté"
 msgid "Note"
 msgstr "Poznámka"
 
+#. Notes on a contact in the address book.
+#. Like in "adding a note". "Notizen" in German, for example.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Note"
+msgctxt "contact"
+msgid "Note"
+msgstr "Poznámka"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "Poznámka o súboroch CSV:"
@@ -7400,7 +7477,6 @@ msgstr "Režime offline"
 msgid "Offline mode"
 msgstr "Režime offline"
 
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-folder-alarms.js
 #: apps/io.ox/calendar/actions/change-organizer.js
@@ -7558,83 +7634,103 @@ msgstr "Otvoriť/zatvoriť všetky správy"
 msgid "Opera"
 msgstr "Opera"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 01"
 msgstr "Voliteľné 01"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 02"
 msgstr "Voliteľné 02"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 03"
 msgstr "Voliteľné 03"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 04"
 msgstr "Voliteľné 04"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 05"
 msgstr "Voliteľné 05"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 06"
 msgstr "Voliteľné 06"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 07"
 msgstr "Voliteľné 07"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 08"
 msgstr "Voliteľné 08"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 09"
 msgstr "Voliteľné 09"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 10"
 msgstr "Voliteľné 10"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 11"
 msgstr "Voliteľné 11"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 12"
 msgstr "Voliteľné 12"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 13"
 msgstr "Voliteľné 13"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 14"
 msgstr "Voliteľné 14"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 15"
 msgstr "Voliteľné 15"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 16"
 msgstr "Voliteľné 16"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 17"
 msgstr "Voliteľné 17"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 18"
 msgstr "Voliteľné 18"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 19"
 msgstr "Voliteľné 19"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 20"
 msgstr "Voliteľné 20"
 
@@ -7689,11 +7785,11 @@ msgstr "Iné"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Iná adresa"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
 msgid "Other address"
 msgstr "Iné adresy"
 
@@ -7738,7 +7834,8 @@ msgstr "PDFs"
 msgid "Page %1$d of %2$d"
 msgstr "Strana %1$d z %2$d"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Pager"
 msgstr "Pager"
 
@@ -7860,10 +7957,6 @@ msgstr "Oprávnenia pre %1$s „%2$s“"
 msgid "Permissions:"
 msgstr "Oprávnenia:"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Personal"
-msgstr "Osobné"
-
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Personal calendar"
 msgstr "Osobný kalendár"
@@ -7892,35 +7985,43 @@ msgstr "Telefón"
 msgid "Phone & fax numbers"
 msgstr "Telefónne a faxové číslo"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (assistant)"
 msgstr "Telefón (asistent)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (business alt)"
 msgstr "Telefón (obchodný alt.)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (business)"
 msgstr "Telefón (obchodný)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (car)"
 msgstr "Telefón (auto)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (company)"
 msgstr "Telefón (spoločnosť)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (home alt)"
 msgstr "Telefón (alt. domov)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (home)"
 msgstr "Telefón (domov)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (other)"
 msgstr "Telefón (iný)"
 
@@ -7928,10 +8029,6 @@ msgstr "Telefón (iný)"
 #: apps/io.ox/contacts/print.js
 msgid "Phone list"
 msgstr "Telefónny zoznam"
-
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Phone numbers"
-msgstr "Telefónne čísla"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -8317,7 +8414,8 @@ msgstr "Nastavenia portálu"
 msgid "Portal widgets"
 msgstr "Widgety portálu"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Position"
 msgstr "Pozícia"
 
@@ -8332,7 +8430,8 @@ msgstr "Pozícia"
 msgid "Post a status update"
 msgstr "Poslať aktualizáciu stavu"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Postcode"
 msgstr "PSČ"
 
@@ -8482,7 +8581,6 @@ msgstr "Priorita"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/view-grid-template.js
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
@@ -8513,7 +8611,8 @@ msgstr "Pokračovať v spracovaní ďalších pravidiel"
 msgid "Process subsequent rules of %1$s"
 msgstr "Spracovať nasledovné pravidlá %1$s"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Profession"
 msgstr "Povolanie"
 
@@ -8951,7 +9050,6 @@ msgid "Reminder has been created"
 msgstr "Pripomienka bola vytvorená"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/contacts/widgets/pictureUpload.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
 #: module:io.ox/settings/certificates
@@ -8976,10 +9074,16 @@ msgstr "Odstrániť kľúčové slovo IMAP"
 msgid "Remove all reminders"
 msgstr "Odstrániť všetky pripomienky"
 
-#: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
-#: apps/io.ox/core/attachments/view.js apps/io.ox/core/tk/attachments.js
-#: apps/io.ox/core/tk/attachmentsUtil.js
+#: apps/io.ox/core/attachments/view.js module:io.ox/core
+#: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/attachmentsUtil.js
 msgid "Remove attachment"
+msgstr "Odstrániť prílohu"
+
+#. %1$s is attachment file name
+#: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Remove attachment"
+msgid "Remove attachment \"%1$s\""
 msgstr "Odstrániť prílohu"
 
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
@@ -9001,6 +9105,12 @@ msgstr "Odstrániť kontakt"
 msgid "Remove copy from server after retrieving a message"
 msgstr "Odstrániť kópiu zo servera po stiahnutí správy"
 
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Remove facet"
+msgid "Remove field"
+msgstr "Odstrániť filter"
+
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/contextmenu.js
@@ -9015,6 +9125,12 @@ msgstr "Odstrániť odkaz"
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid "Remove member"
 msgstr "Odstrániť člena"
+
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Remove picture"
+msgid "Remove photo"
+msgstr "Odstrániť obrázok"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Remove reminder"
@@ -9151,7 +9267,6 @@ msgstr "Obnoviť tento zoznam"
 msgid "Resolution"
 msgstr "Rozlíšenie"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/participants/chronos-views.js module:io.ox/core
 #: apps/io.ox/participants/views.js
 msgid "Resource"
@@ -9263,13 +9378,10 @@ msgstr "Zrušený prístup."
 msgid "Rich Text Area. Press ALT-F10 for toolbar"
 msgstr "Oblasť RTF. Panel nástrojov vyvoláte stlačením ALT-F10"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Room number"
 msgstr "Číslo izby"
-
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Rotate image"
-msgstr "Otočiť obrázok"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Rows"
@@ -9305,7 +9417,8 @@ msgstr "SSL/TLS"
 msgid "Safari"
 msgstr "Safari"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Sales Volume"
 msgstr "Objem predaja"
 
@@ -9321,7 +9434,7 @@ msgstr "Sobota"
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/settings/editLocale.js apps/io.ox/editor/main.js
@@ -9763,6 +9876,12 @@ msgstr "Nastaviť farbu"
 msgid "Set color flag"
 msgstr "Nastaviť príznak farby"
 
+#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Set color"
+msgid "Set color..."
+msgstr "Nastaviť farbu"
+
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 #: apps/io.ox/core/main/topbar_right.js
 #: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
@@ -9889,10 +10008,6 @@ msgstr "Zobraziť rozšírené voľby"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show all calendars"
 msgstr "Zobraziť všetky kalendáre"
-
-#: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-msgid "Show all fields"
-msgstr "Zobraziť všetky polia"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Show all images just once"
@@ -10150,10 +10265,6 @@ msgstr ""
 "Niektoré kontakty nebol pridané, pretože nemajú žiadne platné pole s e-"
 "mailom."
 
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
-msgid "Some fields contain invalid data"
-msgstr "Niektoré polia obsahujú neplatné údaje"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid ""
@@ -10244,7 +10355,8 @@ msgstr "Spam"
 msgid "Split"
 msgstr "Rozdeliť"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Spouse's name"
 msgstr "Názov partnera"
 
@@ -10340,7 +10452,8 @@ msgstr "začína"
 msgid "Starts with"
 msgstr "Začína na"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "State"
 msgstr "Štát"
 
@@ -10361,7 +10474,8 @@ msgstr "Zostať prihlásený"
 msgid "Stop slideshow"
 msgstr "Zastaviť prezentáciu"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Street"
 msgstr "Ulica"
 
@@ -10458,7 +10572,8 @@ msgstr "Úspešne ste znova autorizovali svoj účet %s."
 msgid "Successfully refreshed calendar"
 msgstr "Kalendár bol úspešne obnovený"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Suffix"
 msgstr "Prípona"
 
@@ -10520,7 +10635,8 @@ msgstr "Synchronizovať kalendár"
 msgid "Synchronize with your tablet or smartphone"
 msgstr "Synchronizácia s vaším tabletom alebo smartfónom"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "TAX ID"
 msgstr "Daňový ID"
 
@@ -10529,7 +10645,8 @@ msgstr "Daňový ID"
 msgid "TB"
 msgstr "TB"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
@@ -10569,11 +10686,8 @@ msgstr ""
 "obľúbených zariadení."
 
 #: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
-msgid "Take a photo"
-msgstr "Urobiť fotku"
-
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Take photo"
+msgid "Take a photo"
 msgstr "Urobiť fotku"
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
@@ -10643,23 +10757,28 @@ msgstr "Panel nástrojov Úlohy"
 msgid "Teal"
 msgstr "Modrozelená"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Telephone (ISDN)"
 msgstr "Telefón (ISDN)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Telephone callback"
 msgstr "Zavolanie naspäť telefónom"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Telephone primary"
 msgstr "Primárny telefón"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Telephone radio"
 msgstr "Rádiotelefón"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Telex"
 msgstr "Telex"
 
@@ -10833,6 +10952,18 @@ msgstr ""
 "Súbor „%1$s“ nie je možné nahrať, pretože prekračuje celkovú veľkosť príloh "
 "%2$s"
 
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid ""
+#| "This filetype is not supported as contact picture. Only image types (JPG, "
+#| "GIF, BMP or PNG) are supported."
+msgid ""
+"The file type \"%1$s\" cannot be used as a contact photo. Supported file "
+"types are JPEG, GIF, BMP, and PNG."
+msgstr ""
+"Tento typ súboru nie je podporovaný ako obrázok kontaktu. Sú podporované len "
+"obrázky (JPG, GIF, BMP alebo PNG)."
+
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
 msgstr "Prvých 90 dní je zadarmo."
@@ -10904,6 +11035,14 @@ msgstr[2] "Počet verzií je obmedzený na %1$d verzií."
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "The number of versions is not limited"
 msgstr "Počet verzií nie je obmedzený"
+
+#. %1$s maximum file size
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+msgid "The photo exceeds the allowed file size of %1$s"
+msgstr ""
+"Obrázok, ktorý ste zvolili, prekračuje maximálnu povolenú veľkosť súboru %1$s"
 
 #: apps/io.ox/files/api.js module:io.ox/files
 msgid "The provided filename exceeds the allowed length."
@@ -11356,14 +11495,6 @@ msgstr ""
 "Tento súbor bude zapísaný do vášho predvoleného priečinka, aby bolo možné "
 "upravovať ho"
 
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid ""
-"This filetype is not supported as contact picture. Only image types (JPG, "
-"GIF, BMP or PNG) are supported."
-msgstr ""
-"Tento typ súboru nie je podporovaný ako obrázok kontaktu. Sú podporované len "
-"obrázky (JPG, GIF, BMP alebo PNG)."
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "This folder has no publications"
 msgstr "Tento priečinok nemá žiadne publikácie"
@@ -11419,6 +11550,12 @@ msgstr "Jedná sa o štandardný priečinok, ktorý nemôže byť premenovaný."
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
 msgstr "Takto bude vyzerať text vašej správy."
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "This is not a valid email address"
+msgid "This is invalid email address."
+msgstr "Toto nie je platná emailová adresa"
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "This is not a valid email address"
@@ -11499,6 +11636,10 @@ msgstr "Táto úloha zatiaľ nemá členov"
 #: apps/io.ox/tasks/view-detail.js
 msgid "This task recurs"
 msgstr "Táto úloha sa opakuje"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "This value is too long. The allowed length is %1$d characters."
+msgstr ""
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid ""
@@ -11582,7 +11723,8 @@ msgstr "Časový limit"
 msgid "Title"
 msgstr "Názov"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgctxt "salutation"
 msgid "Title"
 msgstr "Titul"
@@ -11766,9 +11908,10 @@ msgstr "Typ"
 msgid "UI version"
 msgstr "Verzia používateľského rozhrania"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-#: apps/plugins/portal/rss/register.js module:io.ox/portal
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/onboarding/clients/config.js
+#: module:io.ox/core/onboarding apps/plugins/portal/rss/register.js
+#: module:io.ox/portal
 msgid "URL"
 msgstr "URL"
 
@@ -11847,6 +11990,13 @@ msgstr "Vrátené späť"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Unemployed"
 msgstr "Nezamestnaný"
+
+#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "verb"
+#| msgid "Unflag"
+msgid "Unflag"
+msgstr "Odznačiť"
 
 #. Verb: (to) unflag messages
 #: apps/io.ox/mail/contextmenu.js module:io.ox/mail apps/io.ox/mail/toolbar.js
@@ -11988,6 +12138,12 @@ msgstr "Nahrať"
 msgid "Upload Recovery File"
 msgstr "Nahrať obnovovací súbor"
 
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Upload a picture"
+msgid "Upload a photo"
+msgstr "Nahrať obrázok"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "Upload file"
@@ -11996,11 +12152,6 @@ msgstr "Nahrať nový súbor"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Upload files"
 msgstr "Nahrať súbory"
-
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-#: apps/io.ox/contacts/widgets/pictureUpload.js
-msgid "Upload image"
-msgstr "Nahrať obrázok"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 #, fuzzy
@@ -12869,7 +13020,7 @@ msgstr "Vaše aktuálne heslo"
 #. %1$s: date when the download was requested
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid ""
-"Your data archive %2$s from is ready for download. The download is available "
+"Your data archive from %2$s is ready for download. The download is available "
 "until %1$s."
 msgstr ""
 
@@ -12945,12 +13096,6 @@ msgid ""
 "the requested data this may take hours or days. You will be informed via "
 "email when your download is ready."
 msgstr ""
-
-#. %1$s maximum file size
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-msgstr ""
-"Obrázok, ktorý ste zvolili, prekračuje maximálnu povolenú veľkosť súboru %1$s"
 
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your session is expired"
@@ -14175,9 +14320,6 @@ msgstr "vaša platforma"
 #~ msgid "Add account"
 #~ msgstr "Pridať účet"
 
-#~ msgid "Add attachment"
-#~ msgstr "Pridať prílohu"
-
 #~ msgid "Add cipher code"
 #~ msgstr "Pridať kód šifry"
 
@@ -14707,9 +14849,6 @@ msgstr "vaša platforma"
 #~ msgid "Bhutan"
 #~ msgstr "Bhután"
 
-#~ msgid "Birthday"
-#~ msgstr "Narodeniny"
-
 #~ msgid "Birthday Appointment"
 #~ msgstr "Narodeninová schôdzka"
 
@@ -14912,9 +15051,6 @@ msgstr "vaša platforma"
 #~ msgid "Change View"
 #~ msgstr "Zmeniť zobrazenie"
 
-#~ msgid "Change color"
-#~ msgstr "Zmeniť farbu"
-
 #~ msgid "Change folder"
 #~ msgstr "Zmeniť priečinok"
 
@@ -15022,9 +15158,6 @@ msgstr "vaša platforma"
 
 #~ msgid "Click to select contacts"
 #~ msgstr "Kliknutím vyberiete kontakty"
-
-#~ msgid "Click to start video"
-#~ msgstr "Kliknutím spustíte video"
 
 #~ msgid "Click to upload image"
 #~ msgstr "Kliknite nahráte obrázok"
@@ -15910,6 +16043,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Edit feed"
 #~ msgstr "Upraviť kanál"
+
+#~ msgid "Edit image"
+#~ msgstr "Upraviť obrázok"
 
 #~ msgid "Editing multiple E-Mails"
 #~ msgstr "Úprava viacerých emailov"
@@ -17097,6 +17233,9 @@ msgstr "vaša platforma"
 #~ msgid "Jersey"
 #~ msgstr "Jersey"
 
+#~ msgid "Job"
+#~ msgstr "Práca"
+
 #~ msgid "Join"
 #~ msgstr "Pripojiť sa"
 
@@ -17353,6 +17492,9 @@ msgstr "vaša platforma"
 #~ msgid "Mail Thread Details"
 #~ msgstr "Podrobnosti poštového vlákna"
 
+#~ msgid "Mail and Messaging"
+#~ msgstr "Pošta a posielanie správ"
+
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Emailové a sociálne účty"
 
@@ -17493,6 +17635,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Minutes"
 #~ msgstr "Minúty"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Rozličné"
 
 #~ msgid "Mobile"
 #~ msgstr "Mobil"
@@ -18139,6 +18284,9 @@ msgstr "vaša platforma"
 #~ msgid "Permissions: %1$s"
 #~ msgstr "Oprávnenia"
 
+#~ msgid "Personal"
+#~ msgstr "Osobné"
+
 #~ msgid "Peru"
 #~ msgstr "Peru"
 
@@ -18177,6 +18325,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Phone alt"
 #~ msgstr "Alt. telefón"
+
+#~ msgid "Phone numbers"
+#~ msgstr "Telefónne čísla"
 
 #~ msgid "Phone:"
 #~ msgstr "Telefón:"
@@ -18585,14 +18736,8 @@ msgstr "vaša platforma"
 #~ msgid "Reminder:"
 #~ msgstr "Pripomenutie:"
 
-#~ msgid "Remove facet"
-#~ msgstr "Odstrániť filter"
-
 #~ msgid "Remove participant"
 #~ msgstr "Odstrániť účastníka"
-
-#~ msgid "Remove picture"
-#~ msgstr "Odstrániť obrázok"
 
 #, fuzzy
 #~| msgid "Remove from recipient list"
@@ -18663,6 +18808,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Room number:"
 #~ msgstr "Číslo izby:"
+
+#~ msgid "Rotate image"
+#~ msgstr "Otočiť obrázok"
 
 #~ msgid "Route Planning"
 #~ msgstr "Plánovanie trasy"
@@ -19072,6 +19220,9 @@ msgstr "vaša platforma"
 #~ msgid "Show Tabs for inbox"
 #~ msgstr "Zobraziť Karty doručenej pošty"
 
+#~ msgid "Show all fields"
+#~ msgstr "Zobraziť všetky polia"
+
 #~ msgid "Show all images for"
 #~ msgstr "Zobraziť všetky obrázky na"
 
@@ -19247,6 +19398,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Somalia"
 #~ msgstr "Somálsko"
+
+#~ msgid "Some fields contain invalid data"
+#~ msgstr "Niektoré polia obsahujú neplatné údaje"
 
 #~ msgid ""
 #~ "Some files cannot be uploaded because they exceed the maximum file size "
@@ -19602,6 +19756,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Tajikistan"
 #~ msgstr "Tadžikistan"
+
+#~ msgid "Take photo"
+#~ msgstr "Urobiť fotku"
 
 #~ msgid "Tanzania"
 #~ msgstr "Tanzánijská zjednotená republika"
@@ -20728,13 +20885,13 @@ msgstr "vaša platforma"
 #~ msgid "Upgrade to premium"
 #~ msgstr "Aktualizovať na premium"
 
-#~ msgid "Upload a picture"
-#~ msgstr "Nahrať obrázok"
-
 #, fuzzy
 #~| msgid "Upload local file"
 #~ msgid "Upload handling"
 #~ msgstr "Nahrať lokálny súbor"
+
+#~ msgid "Upload image"
+#~ msgstr "Nahrať obrázok"
 
 #~ msgid "Upload new file"
 #~ msgstr "Nahrať nový súbor"

@@ -932,10 +932,21 @@ msgstr "Добавить общий календарь"
 msgid "Add as public folder"
 msgstr "Добавить общую папку"
 
+#: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
+msgid "Add attachment"
+msgstr "Добавить вложение"
+
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add attachments"
 msgstr "Добавить вложения"
+
+#. Contact edit dialog. Business information.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Address Business"
+msgid "Add business info"
+msgstr "Адрес (рабочий)"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
@@ -957,6 +968,12 @@ msgstr "Добавить участника"
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add contact/resource"
 msgstr "Добавить участника/ресурс"
+
+#. Contact edit dialog.
+#. Short for: Add email address, phone number, fax number.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add email, phone, fax"
+msgstr ""
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Add files"
@@ -1043,6 +1060,20 @@ msgstr "Добавить участника"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Add people"
 msgstr "Добавить пользователей"
+
+#. Contact edit dialog. Personal information.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Personal information"
+msgid "Add personal info"
+msgstr "Личная информация"
+
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add to address book"
+msgid "Add postal address"
+msgstr "Добавить в адресную книгу"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Add recipients ..."
@@ -1259,6 +1290,13 @@ msgstr "После"
 msgid "After a number of occurrences"
 msgstr "После указанного числа повторов"
 
+#. %1$d is age in years (number)
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Unread: %1$d"
+msgid "Age: %1$d"
+msgstr "Непрочитанные: %1$d"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -1443,7 +1481,8 @@ msgstr "Произошла неизвестная ошибка"
 msgid "Android"
 msgstr "Android"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Anniversary"
 msgstr "Годовщина"
 
@@ -1482,6 +1521,7 @@ msgid "Application may not work as expected until this problem is solved."
 msgstr "Надо исправить ошибку, иначе работа приложения может быть нарушена."
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main apps/io.ox/mail/compose/sharing.js
 #: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter.js
@@ -1643,7 +1683,8 @@ msgstr "По возрастанию"
 msgid "Ask for mailto link registration"
 msgstr "Запрашивать регистрацию ссылок mailto"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Assistant"
 msgstr "Ассистент"
 
@@ -1674,7 +1715,8 @@ msgstr[2] "Вложения сохранены"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/contacts/edit/view-form.js
-#: module:io.ox/contacts apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/contacts apps/io.ox/contacts/edit/view.js
+#: apps/io.ox/contacts/view-detail.js apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail apps/io.ox/mail/view-options.js
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
@@ -1889,6 +1931,11 @@ msgstr "Колокольчик"
 msgid "Billing information"
 msgstr "Сведения об оплате"
 
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Birthday"
+msgstr "День рождения"
+
 #. settings: context of a birthday calendar
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Birthday calendar"
@@ -1932,7 +1979,8 @@ msgstr "Синий"
 msgid "Body"
 msgstr "Тело сообщения"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Branches"
 msgstr "Филиалы"
 
@@ -1956,16 +2004,17 @@ msgstr "Рабочий"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Рабочий адрес"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Business address"
 msgstr "Рабочий адрес"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Business category"
 msgstr "Бизнес-категория"
 
@@ -2172,13 +2221,15 @@ msgid "Cc: %1$s"
 msgstr "Копия: %1$s"
 
 #. vcard (electronic business card) field
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/print-details.js
+#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Мобильный"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Cell phone (alt)"
 msgstr "Мобильный (доп.)"
 
@@ -2220,6 +2271,12 @@ msgstr "Изменить статус подтверждения"
 msgid "Change confirmation status"
 msgstr "Изменить статус подтверждения"
 
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Create contact"
+msgid "Change contact photo"
+msgstr "Создать контакт"
+
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Change due date"
 msgstr "Изменить срок"
@@ -2244,6 +2301,12 @@ msgstr "Изменить пароль"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Change password and sign out"
 msgstr "Изменить пароль и выйти"
+
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Change color"
+msgid "Change photo"
+msgstr "Изменить цвет"
 
 #: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
 #, fuzzy
@@ -2299,7 +2362,8 @@ msgstr "Символы"
 msgid "Checkboxes"
 msgstr "Флажки"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Children"
 msgstr "Дети"
 
@@ -2315,8 +2379,8 @@ msgstr "Chrome"
 msgid "Chromium"
 msgstr "Chromium"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/print.js
 msgid "City"
 msgstr "Город"
 
@@ -2349,6 +2413,12 @@ msgstr ""
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Click on the application that you would like to use."
 msgstr "Щелкните на значке приложения, которое вы хотите запустить."
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Click to start video"
+msgid "Click to add photo"
+msgstr "Нажмите, чтобы начать воспроизведение видео"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
@@ -2459,8 +2529,8 @@ msgstr "Список через запятую, например: «example.org,
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
-#: apps/plugins/portal/xing/actions.js module:plugins/portal
+#: apps/io.ox/contacts/model.js apps/plugins/portal/xing/actions.js
+#: module:plugins/portal
 msgid "Comment"
 msgstr "Комментарий"
 
@@ -2476,7 +2546,8 @@ msgstr "Комментарии"
 msgid "Comments and suggestions"
 msgstr "Комментарии и предложения"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Commercial Register"
 msgstr "Реестр компаний"
 
@@ -2504,7 +2575,8 @@ msgstr "Компактно"
 msgid "Companies"
 msgstr "Компании"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Company"
 msgstr "Компания"
 
@@ -2821,8 +2893,8 @@ msgid "Couldn't load your mail filter rules."
 msgstr "Не удалось загрузить правила фильтра."
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/contacts/model.js
-#: module:io.ox/contacts
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/contacts/edit/view.js
+#: module:io.ox/contacts apps/io.ox/contacts/model.js
 msgid "Country"
 msgstr "Страна"
 
@@ -2843,10 +2915,6 @@ msgstr "Создать встречу на весь день"
 #: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "Создать встречу"
-
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
-msgid "Create contact"
-msgstr "Создать контакт"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
@@ -3031,9 +3099,8 @@ msgid "Date format"
 msgstr "Текстовый формат"
 
 #. vcard (electronic business card) field
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
-#: module:plugins/portal
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Date of birth"
 msgstr "Дата рождения"
 
@@ -3299,8 +3366,8 @@ msgstr "Удаленные"
 msgid "Deleting messages on local storage also deletes them on server"
 msgstr "При удалении сообщения удалять его с сервера"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/print.js
 msgid "Department"
 msgstr "Отдел"
 
@@ -3430,8 +3497,8 @@ msgstr "Отключено"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/view-form.js apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
@@ -3471,7 +3538,8 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "Удалить сообщение"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Display name"
 msgstr "Краткое имя"
 
@@ -3855,7 +3923,8 @@ msgstr "Перетащите сюда для импорта сообщения"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr "Перетащите сюда для добавления <b class=\"dndignore\">вложения</b>."
 
@@ -4043,10 +4112,6 @@ msgstr "Изменить шаблон"
 msgid "Edit group"
 msgstr "Изменить группу"
 
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Edit image"
-msgstr "Изменить изображение"
-
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Edit mail account"
 msgstr "Изменить почтовую учетную запись"
@@ -4123,15 +4188,18 @@ msgstr "Редактор"
 msgid "Email"
 msgstr "Email"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Email 1"
 msgstr "Эл. почта 1"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Email 2"
 msgstr "Эл. почта 2"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Email 3"
 msgstr "Эл. почта 3"
 
@@ -4181,11 +4249,13 @@ msgstr "Письма были перемещены"
 msgid "Employee"
 msgstr "Сотрудник"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Employee ID"
 msgstr "Идентификатор сотрудника"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Employee type"
 msgstr "Категория"
 
@@ -4680,15 +4750,18 @@ msgstr "В избранном"
 msgid "Favorites"
 msgstr "Избранное"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Fax"
 msgstr "Факс"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Fax (Home)"
 msgstr "Факс (дом.)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Fax (alt)"
 msgstr "Факс (доп.)"
 
@@ -4839,9 +4912,10 @@ msgstr "Первый день недели"
 msgid "First day of the week: %1$s"
 msgstr "Первый день недели"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/plugins/portal/xing/register.js module:plugins/portal
-#: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/plugins/portal/xing/register.js
+#: module:plugins/portal apps/plugins/wizards/mandatory/main.js
+#: module:io.ox/wizards/firstStart
 msgid "First name"
 msgstr "Имя"
 
@@ -4868,7 +4942,8 @@ msgid "Fit to screen width"
 msgstr "По ширине экрана"
 
 #. Sort by messages which are flagged, "Flag" is used in dropdown
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
+#: apps/io.ox/mail/view-options.js
 msgid "Flag"
 msgstr "Флаг"
 
@@ -5091,18 +5166,15 @@ msgstr "От"
 msgid "From: %1$s"
 msgstr "От: %1$s"
 
-#. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Furigana for company"
 msgstr "Фуригана для компании"
 
-#. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Furigana for first name"
 msgstr "Фуригана для имени"
 
-#. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Furigana for last name"
 msgstr "Фуригана для фамилии"
 
@@ -5433,11 +5505,11 @@ msgstr "Домашний"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Домашний адрес"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
 msgid "Home address"
 msgstr "Домашний адрес"
 
@@ -5484,7 +5556,8 @@ msgstr "Устройство утеряно"
 msgid "IMAP"
 msgstr "IMAP"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "IP phone"
 msgstr "IP-телефон"
 
@@ -5561,7 +5634,8 @@ msgid ""
 msgstr ""
 "Игнорирование событий подходит для импорта календаря праздничных дней и т.п."
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Image 1"
 msgstr "Изображение 1"
 
@@ -5717,8 +5791,8 @@ msgstr "Недопустимые даты"
 msgid "Indigo"
 msgstr "Индиго"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts apps/io.ox/core/yell.js
-#: module:io.ox/core
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/core/yell.js module:io.ox/core
 msgid "Info"
 msgstr "Информация"
 
@@ -5761,11 +5835,13 @@ msgstr "Установить"
 msgid "Installation"
 msgstr "Установка"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Instant Messenger 1"
 msgstr "Программа обмена сообщениями 1"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Instant Messenger 2"
 msgstr "Программа обмена сообщениями 2"
 
@@ -5910,10 +5986,6 @@ msgstr "Объекты без файла не могут быть скачаны
 msgid "Japanese Carrier"
 msgstr "Японский оператор"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Job"
-msgstr "Должность"
-
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Job description"
 msgstr "Описание должности"
@@ -6021,9 +6093,10 @@ msgstr "Последний день"
 msgid "Last month"
 msgstr "Прошлый месяц"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/plugins/portal/xing/register.js module:plugins/portal
-#: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/plugins/portal/xing/register.js
+#: module:plugins/portal apps/plugins/wizards/mandatory/main.js
+#: module:io.ox/wizards/firstStart
 msgid "Last name"
 msgstr "Фамилия"
 
@@ -6272,10 +6345,6 @@ msgstr "Почтовый адрес"
 msgid "Mail address (mandatory)"
 msgstr "Электронный адрес (обязательно)"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Mail and Messaging"
-msgstr "Почта и обмен сообщениями"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Квота сообщений"
@@ -6362,7 +6431,8 @@ msgstr "Управление избранным"
 msgid "Manage signatures"
 msgstr "Управление подписями"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Manager"
 msgstr "Менеджер"
 
@@ -6383,7 +6453,8 @@ msgstr "Ввести вручную"
 msgid "Marimba"
 msgstr "Ксилофон"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Marital status"
 msgstr "Семейное положение"
 
@@ -6577,7 +6648,8 @@ msgstr "Обмен сообщениями"
 msgid "Microphone %1$s"
 msgstr "Микрофон %1$s"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Middle name"
 msgstr "Отчество"
 
@@ -6603,11 +6675,6 @@ msgstr "Минимальная длина пароля: %1$d."
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Minus"
 msgstr "Минус"
-
-#. section name for contact fields in detail view
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Miscellaneous"
-msgstr "Другое"
 
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
@@ -6812,7 +6879,7 @@ msgstr "Мои задачи"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
+#: apps/io.ox/contacts/print.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
 #: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -7041,7 +7108,8 @@ msgstr "Следующая неделя"
 msgid "Next year"
 msgstr "Следующий год"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Nickname"
 msgstr "Псевдоним"
 
@@ -7248,6 +7316,15 @@ msgstr "Не началось"
 msgid "Note"
 msgstr "Примечание"
 
+#. Notes on a contact in the address book.
+#. Like in "adding a note". "Notizen" in German, for example.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Note"
+msgctxt "contact"
+msgid "Note"
+msgstr "Примечание"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "Примечание CSV:"
@@ -7378,7 +7455,6 @@ msgstr "Автономно"
 msgid "Offline mode"
 msgstr "Автономный режим"
 
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-folder-alarms.js
 #: apps/io.ox/calendar/actions/change-organizer.js
@@ -7533,83 +7609,103 @@ msgstr "Открыть/закрыть все сообщения"
 msgid "Opera"
 msgstr "Opera"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 01"
 msgstr "Дополнительно 01"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 02"
 msgstr "Дополнительно 02"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 03"
 msgstr "Дополнительно 03"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 04"
 msgstr "Дополнительно 04"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 05"
 msgstr "Дополнительно 05"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 06"
 msgstr "Дополнительно 06"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 07"
 msgstr "Дополнительно 07"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 08"
 msgstr "Дополнительно 08"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 09"
 msgstr "Дополнительно 09"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 10"
 msgstr "Дополнительно 10"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 11"
 msgstr "Дополнительно 11"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 12"
 msgstr "Дополнительно 12"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 13"
 msgstr "Дополнительно 13"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 14"
 msgstr "Дополнительно 14"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 15"
 msgstr "Дополнительно 15"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 16"
 msgstr "Дополнительно 16"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 17"
 msgstr "Дополнительно 17"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 18"
 msgstr "Дополнительно 18"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 19"
 msgstr "Дополнительно 19"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 20"
 msgstr "Дополнительно 20"
 
@@ -7664,11 +7760,11 @@ msgstr "Другое"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Другие адреса"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
 msgid "Other address"
 msgstr "Другие адреса"
 
@@ -7713,7 +7809,8 @@ msgstr "PDF"
 msgid "Page %1$d of %2$d"
 msgstr "%1$d из %2$d"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Pager"
 msgstr "Пейджер"
 
@@ -7835,10 +7932,6 @@ msgstr "Разрешения для %1$s «%2$s»"
 msgid "Permissions:"
 msgstr "Разрешения:"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Personal"
-msgstr "Личные данные"
-
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Personal calendar"
 msgstr "Персональный календарь"
@@ -7867,35 +7960,43 @@ msgstr "Телефон"
 msgid "Phone & fax numbers"
 msgstr "Телефоны и факс"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (assistant)"
 msgstr "Телефон (ассистент)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (business alt)"
 msgstr "Телефон (доп. рабочий)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (business)"
 msgstr "Телефон (рабочий)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (car)"
 msgstr "Телефон (авто)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (company)"
 msgstr "Телефон (служебный)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (home alt)"
 msgstr "Телефон (доп. домашний)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (home)"
 msgstr "Телефон (домашний)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (other)"
 msgstr "Телефон (другой)"
 
@@ -7903,10 +8004,6 @@ msgstr "Телефон (другой)"
 #: apps/io.ox/contacts/print.js
 msgid "Phone list"
 msgstr "Телефонный список"
-
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Phone numbers"
-msgstr "Телефоны"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -8289,7 +8386,8 @@ msgstr "Параметры портала"
 msgid "Portal widgets"
 msgstr "Виджеты портала"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Position"
 msgstr "Должность"
 
@@ -8304,7 +8402,8 @@ msgstr "Должность"
 msgid "Post a status update"
 msgstr "Опубликовать обновление статуса"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Postcode"
 msgstr "Индекс"
 
@@ -8454,7 +8553,6 @@ msgstr "Приоритет"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/view-grid-template.js
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
@@ -8485,7 +8583,8 @@ msgstr "Последовательная обработка"
 msgid "Process subsequent rules of %1$s"
 msgstr "Обработать последующие правила %1$s"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Profession"
 msgstr "Профессия"
 
@@ -8918,7 +9017,6 @@ msgid "Reminder has been created"
 msgstr "Напоминание создано"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/contacts/widgets/pictureUpload.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
 #: module:io.ox/settings/certificates
@@ -8943,10 +9041,16 @@ msgstr "Удалить ключевое слово IMAP"
 msgid "Remove all reminders"
 msgstr "Удалить все напоминания"
 
-#: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
-#: apps/io.ox/core/attachments/view.js apps/io.ox/core/tk/attachments.js
-#: apps/io.ox/core/tk/attachmentsUtil.js
+#: apps/io.ox/core/attachments/view.js module:io.ox/core
+#: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/attachmentsUtil.js
 msgid "Remove attachment"
+msgstr "Удалить вложение"
+
+#. %1$s is attachment file name
+#: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Remove attachment"
+msgid "Remove attachment \"%1$s\""
 msgstr "Удалить вложение"
 
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
@@ -8968,6 +9072,12 @@ msgstr "Удалить контакт"
 msgid "Remove copy from server after retrieving a message"
 msgstr "Удалить копию с сервера после получения сообщения"
 
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Remove facet"
+msgid "Remove field"
+msgstr "Удалить критерий"
+
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/contextmenu.js
@@ -8982,6 +9092,12 @@ msgstr "Удалить ссылку"
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid "Remove member"
 msgstr "Удалить участника"
+
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Remove contact"
+msgid "Remove photo"
+msgstr "Удалить контакт"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Remove reminder"
@@ -9118,7 +9234,6 @@ msgstr "Сбросить список"
 msgid "Resolution"
 msgstr "Разрешение"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/participants/chronos-views.js module:io.ox/core
 #: apps/io.ox/participants/views.js
 msgid "Resource"
@@ -9232,13 +9347,10 @@ msgstr ""
 "Область форматирования текста. Нажмите ALT+F10, чтобы открыть панель "
 "инструментов."
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Room number"
 msgstr "Кабинет"
-
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Rotate image"
-msgstr "Повернуть изображение"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Rows"
@@ -9274,7 +9386,8 @@ msgstr "SSL/TLS"
 msgid "Safari"
 msgstr "Safari"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Sales Volume"
 msgstr "Объем продаж"
 
@@ -9290,7 +9403,7 @@ msgstr "Суббота"
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/settings/editLocale.js apps/io.ox/editor/main.js
@@ -9732,6 +9845,12 @@ msgstr "Изменить цвет"
 msgid "Set color flag"
 msgstr "Настроить цвет флага"
 
+#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Set color"
+msgid "Set color..."
+msgstr "Изменить цвет"
+
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 #: apps/io.ox/core/main/topbar_right.js
 #: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
@@ -9858,10 +9977,6 @@ msgstr "Показать дополнительные параметры"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show all calendars"
 msgstr "Показать все календари"
-
-#: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-msgid "Show all fields"
-msgstr "Показать все поля"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Show all images just once"
@@ -10119,10 +10234,6 @@ msgstr ""
 "Не удалось добавить некоторые контакты, так как для них не указан адрес "
 "электронной почты."
 
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
-msgid "Some fields contain invalid data"
-msgstr "Поля содержат недопустимые данные"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid ""
@@ -10212,7 +10323,8 @@ msgstr "Спам"
 msgid "Split"
 msgstr "Разделить"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Spouse's name"
 msgstr "Супруг(а)"
 
@@ -10308,7 +10420,8 @@ msgstr "Начало:"
 msgid "Starts with"
 msgstr "Начинается с"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "State"
 msgstr "Регион"
 
@@ -10329,7 +10442,8 @@ msgstr "Не выходить"
 msgid "Stop slideshow"
 msgstr "Остановить слайд-шоу"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Street"
 msgstr "Адрес"
 
@@ -10426,7 +10540,8 @@ msgstr "Учетная запись %s авторизована повторно
 msgid "Successfully refreshed calendar"
 msgstr "Календарь обновлен"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Suffix"
 msgstr "Суффикс"
 
@@ -10489,7 +10604,8 @@ msgstr "Синхронизировать календарь"
 msgid "Synchronize with your tablet or smartphone"
 msgstr "Синхронизация с планшетом и смартфоном"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "TAX ID"
 msgstr "Налоговый код"
 
@@ -10498,7 +10614,8 @@ msgstr "Налоговый код"
 msgid "TB"
 msgstr "ТБ"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
@@ -10538,11 +10655,8 @@ msgstr ""
 "собой!"
 
 #: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
-msgid "Take a photo"
-msgstr "Сделать фотографию"
-
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Take photo"
+msgid "Take a photo"
 msgstr "Сделать фотографию"
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
@@ -10612,23 +10726,28 @@ msgstr "Панель задач"
 msgid "Teal"
 msgstr "Сине-зеленый"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Telephone (ISDN)"
 msgstr "Телефон (ISDN)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Telephone callback"
 msgstr "Телефон (обратный вызов)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Telephone primary"
 msgstr "Телефон (основной)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Telephone radio"
 msgstr "Телефон (радио)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Telex"
 msgstr "Телекс"
 
@@ -10796,6 +10915,18 @@ msgstr ""
 "Файл «%1$s» не может быть загружен, так как его размер превышает "
 "максимальный размер вложений, которые составляет %2$s"
 
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid ""
+#| "This filetype is not supported as contact picture. Only image types (JPG, "
+#| "GIF, BMP or PNG) are supported."
+msgid ""
+"The file type \"%1$s\" cannot be used as a contact photo. Supported file "
+"types are JPEG, GIF, BMP, and PNG."
+msgstr ""
+"Файлы этого типа не могут использоваться в качестве фотографии контакта. "
+"Используйте файлы JPG, GIF, BMP или PNG."
+
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
 msgstr "90 дней бесплатно."
@@ -10867,6 +10998,13 @@ msgstr[2] "Максимальное количество версий: %1$d"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "The number of versions is not limited"
 msgstr "Количество версий не ограничено"
+
+#. %1$s maximum file size
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+msgid "The photo exceeds the allowed file size of %1$s"
+msgstr "Изображение превышает максимально допустимый размер %1$s"
 
 #: apps/io.ox/files/api.js module:io.ox/files
 msgid "The provided filename exceeds the allowed length."
@@ -11305,14 +11443,6 @@ msgstr "Открыт совместный доступ к файлу"
 msgid "This file will be written in your default folder to allow editing"
 msgstr "Файл будет помещен в исходную папку, чтобы разрешить редактирование"
 
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid ""
-"This filetype is not supported as contact picture. Only image types (JPG, "
-"GIF, BMP or PNG) are supported."
-msgstr ""
-"Файлы этого типа не могут использоваться в качестве фотографии контакта. "
-"Используйте файлы JPG, GIF, BMP или PNG."
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "This folder has no publications"
 msgstr "Папка не содержит публикации"
@@ -11372,6 +11502,12 @@ msgstr "Эту папка не может быть переименована."
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
 msgstr "Вот как будет выглядеть текст вашего сообщения"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "This is not a valid email address"
+msgid "This is invalid email address."
+msgstr "Недопустимый электронный адрес"
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "This is not a valid email address"
@@ -11452,6 +11588,10 @@ msgstr "В этом задании пока никто не участвует"
 #: apps/io.ox/tasks/view-detail.js
 msgid "This task recurs"
 msgstr "Эта задача повторяется"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "This value is too long. The allowed length is %1$d characters."
+msgstr ""
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid ""
@@ -11534,7 +11674,8 @@ msgstr "Время ожидания"
 msgid "Title"
 msgstr "Обращение"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgctxt "salutation"
 msgid "Title"
 msgstr "Обращение"
@@ -11718,9 +11859,10 @@ msgstr "Тип"
 msgid "UI version"
 msgstr "Версия интерфейса"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-#: apps/plugins/portal/rss/register.js module:io.ox/portal
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/onboarding/clients/config.js
+#: module:io.ox/core/onboarding apps/plugins/portal/rss/register.js
+#: module:io.ox/portal
 msgid "URL"
 msgstr "URL"
 
@@ -11798,6 +11940,13 @@ msgstr "Отменено"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Unemployed"
 msgstr "Неработающий"
+
+#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "verb"
+#| msgid "Unflag"
+msgid "Unflag"
+msgstr "Снять пометку"
 
 #. Verb: (to) unflag messages
 #: apps/io.ox/mail/contextmenu.js module:io.ox/mail apps/io.ox/mail/toolbar.js
@@ -11939,6 +12088,12 @@ msgstr "Отправить"
 msgid "Upload Recovery File"
 msgstr "Загрузить файл восстановления"
 
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Take a photo"
+msgid "Upload a photo"
+msgstr "Сделать фотографию"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "Upload file"
@@ -11947,11 +12102,6 @@ msgstr "Добавить файл"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Upload files"
 msgstr "Загрузить файлы"
-
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-#: apps/io.ox/contacts/widgets/pictureUpload.js
-msgid "Upload image"
-msgstr "Добавить изображение"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 #, fuzzy
@@ -12814,7 +12964,7 @@ msgstr "Текущий пароль"
 #. %1$s: date when the download was requested
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid ""
-"Your data archive %2$s from is ready for download. The download is available "
+"Your data archive from %2$s is ready for download. The download is available "
 "until %1$s."
 msgstr ""
 
@@ -12888,11 +13038,6 @@ msgid ""
 "the requested data this may take hours or days. You will be informed via "
 "email when your download is ready."
 msgstr ""
-
-#. %1$s maximum file size
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-msgstr "Изображение превышает максимально допустимый размер %1$s"
 
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your session is expired"
@@ -13944,9 +14089,6 @@ msgstr "вашей платформы"
 #~ msgid "Add account"
 #~ msgstr "Добавить аккаунт"
 
-#~ msgid "Add attachment"
-#~ msgstr "Добавить вложение"
-
 #~ msgid "Add cipher code"
 #~ msgstr "Добавить код шифра"
 
@@ -14197,9 +14339,6 @@ msgstr "вашей платформы"
 #~ "Под получателем перечислены дополнительные функции (отправка копии другим "
 #~ "получателям, добавление вложений)."
 
-#~ msgid "Birthday"
-#~ msgstr "День рождения"
-
 #~ msgid "Blind copy (BCC) to"
 #~ msgstr "Скрытая копия (BCC):"
 
@@ -14251,9 +14390,6 @@ msgstr "вашей платформы"
 
 #~ msgid "Change View"
 #~ msgstr "Изменить вид"
-
-#~ msgid "Change color"
-#~ msgstr "Изменить цвет"
 
 #~ msgid "Change folder"
 #~ msgstr "Изменить папку"
@@ -14328,9 +14464,6 @@ msgstr "вашей платформы"
 
 #~ msgid "Click to select contacts"
 #~ msgstr "Нажмите для выбора контактов"
-
-#~ msgid "Click to start video"
-#~ msgstr "Нажмите, чтобы начать воспроизведение видео"
 
 #~ msgid "Click to upload image"
 #~ msgstr "Нажмите, чтобы отправить изображение."
@@ -14748,6 +14881,9 @@ msgstr "вашей платформы"
 #~ msgstr ""
 #~ "Настройки можно изменить в правой части. Обычно изменения вступают в силу "
 #~ "сразу."
+
+#~ msgid "Edit image"
+#~ msgstr "Изменить изображение"
 
 #~ msgid "Editing multiple E-Mails"
 #~ msgstr "Правка нескольких сообщений"
@@ -15324,6 +15460,9 @@ msgstr "вашей платформы"
 #~ msgid "January"
 #~ msgstr "Январь"
 
+#~ msgid "Job"
+#~ msgstr "Должность"
+
 #~ msgid "Join"
 #~ msgstr "Присоединиться"
 
@@ -15443,6 +15582,9 @@ msgstr "вашей платформы"
 #~ msgid "Mail Thread Details"
 #~ msgstr "Свойства обсуждения"
 
+#~ msgid "Mail and Messaging"
+#~ msgstr "Почта и обмен сообщениями"
+
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Учетные записи в социальных сетях и почта"
 
@@ -15511,6 +15653,9 @@ msgstr "вашей платформы"
 
 #~ msgid "Minutes"
 #~ msgstr "Минуты"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Другое"
 
 #~ msgid "Mobile"
 #~ msgstr "Мобильный"
@@ -15793,11 +15938,17 @@ msgstr "вашей платформы"
 #~ msgid "Permissions: %1$s"
 #~ msgstr "Права"
 
+#~ msgid "Personal"
+#~ msgstr "Личные данные"
+
 #~ msgid "Phone (private)"
 #~ msgstr "Телефон (личный)"
 
 #~ msgid "Phone alt"
 #~ msgstr "Телефон (доп.)"
+
+#~ msgid "Phone numbers"
+#~ msgstr "Телефоны"
 
 #~ msgid "Pick a time here"
 #~ msgstr "Выберите время"
@@ -16020,9 +16171,6 @@ msgstr "вашей платформы"
 #~ msgid "Remind me again %1$s"
 #~ msgstr "Напомнить снова %1$s"
 
-#~ msgid "Remove facet"
-#~ msgstr "Удалить критерий"
-
 #, fuzzy
 #~| msgid "Remove from recipient list"
 #~ msgid "Remove restore point: \"%1$s\""
@@ -16056,6 +16204,9 @@ msgstr "вашей платформы"
 #, fuzzy
 #~ msgid "Right"
 #~ msgstr "сегодня вечером"
+
+#~ msgid "Rotate image"
+#~ msgstr "Повернуть изображение"
 
 #~ msgid "Rule applies from"
 #~ msgstr "Правило применяется с"
@@ -16268,6 +16419,9 @@ msgstr "вашей платформы"
 #~ msgid "Show Tabs for inbox"
 #~ msgstr "Показать вкладки входящих"
 
+#~ msgid "Show all fields"
+#~ msgstr "Показать все поля"
+
 #~ msgid "Show all images for"
 #~ msgstr "Показать все изображения для"
 
@@ -16380,6 +16534,9 @@ msgstr "вашей платформы"
 #~ msgstr ""
 #~ "Учетные записи социальных сетей могут использоваться только для загрузки "
 #~ "контактов и календаря"
+
+#~ msgid "Some fields contain invalid data"
+#~ msgstr "Поля содержат недопустимые данные"
 
 #~ msgid ""
 #~ "Some files cannot be uploaded because they exceed the maximum file size "
@@ -16495,6 +16652,9 @@ msgstr "вашей платформы"
 
 #~ msgid "Tag mail with"
 #~ msgstr "Метка: "
+
+#~ msgid "Take photo"
+#~ msgstr "Сделать фотографию"
 
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "Приглашение задачи. %1$s %2$s %3$s. Чтобы открыть, нажмите [Enter]"
@@ -17329,6 +17489,9 @@ msgstr "вашей платформы"
 #~| msgid "Upload local file"
 #~ msgid "Upload handling"
 #~ msgstr "Добавить локальный файл"
+
+#~ msgid "Upload image"
+#~ msgstr "Добавить изображение"
 
 #~ msgid "Upload new file"
 #~ msgstr "Отправить новый файл"

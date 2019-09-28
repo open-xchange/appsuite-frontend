@@ -930,10 +930,21 @@ msgstr "Pievienot publisko kalendāru"
 msgid "Add as public folder"
 msgstr "Pievienot publisko mapi"
 
+#: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
+msgid "Add attachment"
+msgstr "Pievienot pielikumu"
+
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add attachments"
 msgstr "Pielikumu pievienošana"
+
+#. Contact edit dialog. Business information.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Address Business"
+msgid "Add business info"
+msgstr "Adrese (darba)"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
@@ -955,6 +966,12 @@ msgstr "Pievienot kontaktu"
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add contact/resource"
 msgstr "Pievienot dalībnieku/resursu"
+
+#. Contact edit dialog.
+#. Short for: Add email address, phone number, fax number.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add email, phone, fax"
+msgstr ""
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Add files"
@@ -1041,6 +1058,20 @@ msgstr "Pievienot dalībnieku"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Add people"
 msgstr "Pievienot cilvēkus"
+
+#. Contact edit dialog. Personal information.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Personal information"
+msgid "Add personal info"
+msgstr "Personīgā informācija"
+
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add to address book"
+msgid "Add postal address"
+msgstr "Pievienot adrešu grāmatai"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Add recipients ..."
@@ -1261,6 +1292,13 @@ msgstr "Pēc"
 msgid "After a number of occurrences"
 msgstr "Pēc atkārtojuma reizēm"
 
+#. %1$d is age in years (number)
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Unread: %1$d"
+msgid "Age: %1$d"
+msgstr "Nelasīts: %1$d"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -1448,7 +1486,8 @@ msgstr "Reģistrēta neatpazīta kļūda"
 msgid "Android"
 msgstr "Android"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Anniversary"
 msgstr "Dzimšanas diena"
 
@@ -1486,6 +1525,7 @@ msgstr ""
 "Aplikācija var nestrādāt kā paredzēts kamēr šī problēma nav atrisināta."
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main apps/io.ox/mail/compose/sharing.js
 #: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter.js
@@ -1646,7 +1686,8 @@ msgstr "Augoši"
 msgid "Ask for mailto link registration"
 msgstr "Lūgt saņēmēja saites reģistrēšanu"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Assistant"
 msgstr "Asistents"
 
@@ -1678,7 +1719,8 @@ msgstr[2] "Pievienojumi ir saglabāti"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/contacts/edit/view-form.js
-#: module:io.ox/contacts apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/contacts apps/io.ox/contacts/edit/view.js
+#: apps/io.ox/contacts/view-detail.js apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail apps/io.ox/mail/view-options.js
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
@@ -1884,6 +1926,11 @@ msgstr "Zvans"
 msgid "Billing information"
 msgstr "Rēķina informācija"
 
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Birthday"
+msgstr "Dzimšanas diena"
+
 #. settings: context of a birthday calendar
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Birthday calendar"
@@ -1927,7 +1974,8 @@ msgstr "Zils"
 msgid "Body"
 msgstr "Pamatdaļa"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Branches"
 msgstr "Zari"
 
@@ -1951,16 +1999,17 @@ msgstr "Bizness"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Darba adrese"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Business address"
 msgstr "Darba adrese"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Business category"
 msgstr "Biznesa kategorija"
 
@@ -2165,13 +2214,15 @@ msgid "Cc: %1$s"
 msgstr "Cc: %1$s"
 
 #. vcard (electronic business card) field
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/print-details.js
+#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Mob. telefons"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Cell phone (alt)"
 msgstr "Mob. telefons (alt.)"
 
@@ -2213,6 +2264,12 @@ msgstr "Izmaiņu apstiprinājuma statuss"
 msgid "Change confirmation status"
 msgstr "Izmaiņu apstiprinājuma statuss"
 
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Create contact"
+msgid "Change contact photo"
+msgstr "Izveidot kontaktu"
+
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Change due date"
 msgstr "Mainīt izpildes datumu"
@@ -2237,6 +2294,12 @@ msgstr "Paroles maiņa"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Change password and sign out"
 msgstr "Mainīt paroli un atslēgties"
+
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Change color"
+msgid "Change photo"
+msgstr "Mainīt krāsu"
 
 #: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
 #, fuzzy
@@ -2292,7 +2355,8 @@ msgstr "Simbols"
 msgid "Checkboxes"
 msgstr "Iezīmes"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Children"
 msgstr "Bērni"
 
@@ -2308,8 +2372,8 @@ msgstr "Chrome"
 msgid "Chromium"
 msgstr "Chromium"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/print.js
 msgid "City"
 msgstr "Pilsēta"
 
@@ -2342,6 +2406,12 @@ msgstr ""
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Click on the application that you would like to use."
 msgstr "Noklikšķiniet uz aplikācijas, kuru vēlaties izmantot."
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Click to start video"
+msgid "Click to add photo"
+msgstr "Noklikšķiniet, lai atskaņotu video"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
@@ -2452,8 +2522,8 @@ msgstr "Ar komatu atdalīts saraksts, piem. \"example.org, alice@example.com\""
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
-#: apps/plugins/portal/xing/actions.js module:plugins/portal
+#: apps/io.ox/contacts/model.js apps/plugins/portal/xing/actions.js
+#: module:plugins/portal
 msgid "Comment"
 msgstr "Komentārs"
 
@@ -2469,7 +2539,8 @@ msgstr "Komentāri"
 msgid "Comments and suggestions"
 msgstr "Komentāri un ietreikumi"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Commercial Register"
 msgstr "Komercreģistrs"
 
@@ -2497,7 +2568,8 @@ msgstr "Kompakts"
 msgid "Companies"
 msgstr "Uzņēmumi"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Company"
 msgstr "Uzņēmums"
 
@@ -2813,8 +2885,8 @@ msgid "Couldn't load your mail filter rules."
 msgstr "Nevar ielādēt jūsu pasta filtra noteikumus."
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/contacts/model.js
-#: module:io.ox/contacts
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/contacts/edit/view.js
+#: module:io.ox/contacts apps/io.ox/contacts/model.js
 msgid "Country"
 msgstr "Valsts"
 
@@ -2835,10 +2907,6 @@ msgstr "Izveidot visas dienas notikumu"
 #: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "Izveidot mītiņu"
-
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
-msgid "Create contact"
-msgstr "Izveidot kontaktu"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
@@ -3023,9 +3091,8 @@ msgid "Date format"
 msgstr "Datuma formāts:"
 
 #. vcard (electronic business card) field
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
-#: module:plugins/portal
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Date of birth"
 msgstr "Dzimšanas datums"
 
@@ -3291,8 +3358,8 @@ msgstr "Izdzēstie ziņojumi"
 msgid "Deleting messages on local storage also deletes them on server"
 msgstr "Ziņojumu dzēšana lokālajā glabātuvē izraisīs to dzēšanu arī uz servera"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/print.js
 msgid "Department"
 msgstr "Nodaļa"
 
@@ -3422,8 +3489,8 @@ msgstr "Atspējots"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/view-form.js apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
@@ -3463,7 +3530,8 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "Atsaukt ziņojumu"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Display name"
 msgstr "Uzrādes vārds"
 
@@ -3852,7 +3920,8 @@ msgstr "Lai importētu e-pastu, pārvelciet to šeit"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr ""
 "Pārvelciet šeit, lai augšupielādētu <b class=\"dndignore\">jaunu "
@@ -4042,10 +4111,6 @@ msgstr "Rediģēt melnrakstu"
 msgid "Edit group"
 msgstr "Rediģēt grupu"
 
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Edit image"
-msgstr "Rediģēt attēlu"
-
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Edit mail account"
 msgstr "Rediģēt pasta kontu"
@@ -4122,15 +4187,18 @@ msgstr "Redaktors"
 msgid "Email"
 msgstr "E-pasts"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Email 1"
 msgstr "E-pasts 1"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Email 2"
 msgstr "E-pasts 2"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Email 3"
 msgstr "E-pasts 3"
 
@@ -4182,11 +4250,13 @@ msgstr "E-pasti ir pārvietoti"
 msgid "Employee"
 msgstr "Darbinieks"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Employee ID"
 msgstr "Darbinieka ID"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Employee type"
 msgstr "Darbinieka tips"
 
@@ -4683,15 +4753,18 @@ msgstr "Pievienots izlasē"
 msgid "Favorites"
 msgstr "Izlase"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Fax"
 msgstr "Fakss"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Fax (Home)"
 msgstr "Fakss (māja)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Fax (alt)"
 msgstr "Fakss (alt.)"
 
@@ -4840,9 +4913,10 @@ msgstr "Nedēļas pirmā diena"
 msgid "First day of the week: %1$s"
 msgstr "Nedēļas pirmā diena"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/plugins/portal/xing/register.js module:plugins/portal
-#: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/plugins/portal/xing/register.js
+#: module:plugins/portal apps/plugins/wizards/mandatory/main.js
+#: module:io.ox/wizards/firstStart
 msgid "First name"
 msgstr "Vārds"
 
@@ -4869,7 +4943,8 @@ msgid "Fit to screen width"
 msgstr "Ekrāna platums"
 
 #. Sort by messages which are flagged, "Flag" is used in dropdown
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
+#: apps/io.ox/mail/view-options.js
 msgid "Flag"
 msgstr "Iezīme"
 
@@ -5095,18 +5170,15 @@ msgstr "Sūtītājs:"
 msgid "From: %1$s"
 msgstr "No: %1$s"
 
-#. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Furigana for company"
 msgstr "Uzņēmuma furigana"
 
-#. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Furigana for first name"
 msgstr "Vārda furigana"
 
-#. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Furigana for last name"
 msgstr "Uzvārda furigana"
 
@@ -5437,11 +5509,11 @@ msgstr "Mājas"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Mājas adrese"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
 msgid "Home address"
 msgstr "Mājas adreses"
 
@@ -5488,7 +5560,8 @@ msgstr "Ierīce ir pazaudēta"
 msgid "IMAP"
 msgstr "IMAP"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "IP phone"
 msgstr "IP telefons"
 
@@ -5562,7 +5635,8 @@ msgstr ""
 "Esošo mītiņu neievērošana ir piemērojama, piemēram, importējot publisko "
 "brīvdienu kalendārus."
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Image 1"
 msgstr "Attēls 1"
 
@@ -5713,8 +5787,8 @@ msgstr "Datumi nav saskanīgi"
 msgid "Indigo"
 msgstr "Indigo"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts apps/io.ox/core/yell.js
-#: module:io.ox/core
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/core/yell.js module:io.ox/core
 msgid "Info"
 msgstr "Informācija"
 
@@ -5757,11 +5831,13 @@ msgstr "Uzstādīt"
 msgid "Installation"
 msgstr "Uzstādīšana"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Instant Messenger 1"
 msgstr "Ziņapmaiņa 1"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Instant Messenger 2"
 msgstr "Ziņapmaiņa 2"
 
@@ -5907,10 +5983,6 @@ msgstr "Vienības bez failiem nevar tikt lejupielādētas."
 msgid "Japanese Carrier"
 msgstr "Japāņu nesējs"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Job"
-msgstr "Darbs"
-
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Job description"
 msgstr "Darba apsraksts"
@@ -6018,9 +6090,10 @@ msgstr "Pēdējā diena"
 msgid "Last month"
 msgstr "Pēdējais mēnesis"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/plugins/portal/xing/register.js module:plugins/portal
-#: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/plugins/portal/xing/register.js
+#: module:plugins/portal apps/plugins/wizards/mandatory/main.js
+#: module:io.ox/wizards/firstStart
 msgid "Last name"
 msgstr "Uzvārds"
 
@@ -6271,10 +6344,6 @@ msgstr "Pasta adrese"
 msgid "Mail address (mandatory)"
 msgstr "Pasta adrese (obligāta)"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Mail and Messaging"
-msgstr "Ziņapmaiņa"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Vēstuļu skaita kvota"
@@ -6359,7 +6428,8 @@ msgstr "Pārvaldīt izlases"
 msgid "Manage signatures"
 msgstr "Pārvaldīt parakstus"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Manager"
 msgstr "Menedžeris"
 
@@ -6380,7 +6450,8 @@ msgstr "Manuāla ievade"
 msgid "Marimba"
 msgstr "Marimba"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Marital status"
 msgstr "Ģimenes stāvoklis"
 
@@ -6574,7 +6645,8 @@ msgstr "Ziņotājs"
 msgid "Microphone %1$s"
 msgstr "Mikrofons %1$s"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Middle name"
 msgstr "Otrais vārds"
 
@@ -6600,11 +6672,6 @@ msgstr "Minimālais paroles garums ir %1$d."
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Minus"
 msgstr "Mīnus"
-
-#. section name for contact fields in detail view
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Miscellaneous"
-msgstr "Dažādi"
 
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
@@ -6809,7 +6876,7 @@ msgstr "Mani uzdevumi"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
+#: apps/io.ox/contacts/print.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
 #: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -7038,7 +7105,8 @@ msgstr "Nākošā nedēļa"
 msgid "Next year"
 msgstr "Nākošais gads"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Nickname"
 msgstr "Iesauka"
 
@@ -7245,6 +7313,15 @@ msgstr "Nav iesākts"
 msgid "Note"
 msgstr "Piezīme"
 
+#. Notes on a contact in the address book.
+#. Like in "adding a note". "Notizen" in German, for example.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Note"
+msgctxt "contact"
+msgid "Note"
+msgstr "Piezīme"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "Piezīme pie CSV failiem:"
@@ -7377,7 +7454,6 @@ msgstr "Bezsaiste"
 msgid "Offline mode"
 msgstr "Bezsaistes režīms"
 
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-folder-alarms.js
 #: apps/io.ox/calendar/actions/change-organizer.js
@@ -7534,83 +7610,103 @@ msgstr "Atvērt/aizvērt visus ziņojumus"
 msgid "Opera"
 msgstr "Opera"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 01"
 msgstr "Papildus 1"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 02"
 msgstr "Papildus 2"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 03"
 msgstr "Papildus 3"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 04"
 msgstr "Papildus 4"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 05"
 msgstr "Papildus 5"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 06"
 msgstr "Papildus 6"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 07"
 msgstr "Papildus 7"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 08"
 msgstr "Papildus 8"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 09"
 msgstr "Papildus 9"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 10"
 msgstr "Papildus 10"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 11"
 msgstr "Papildus 11"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 12"
 msgstr "Papildus 12"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 13"
 msgstr "Papildus 13"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 14"
 msgstr "Papildus 14"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 15"
 msgstr "Papildus 15"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 16"
 msgstr "Papildus 16"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 17"
 msgstr "Papildus 17"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 18"
 msgstr "Papildus 18"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 19"
 msgstr "Papildus 19"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Optional 20"
 msgstr "Papildus 20"
 
@@ -7665,11 +7761,11 @@ msgstr "Cits"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Cita adrese"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
 msgid "Other address"
 msgstr "Cita adrese"
 
@@ -7714,7 +7810,8 @@ msgstr "PDF"
 msgid "Page %1$d of %2$d"
 msgstr "Lapa %1$d no %2$d"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Pager"
 msgstr "Peidžeris"
 
@@ -7836,10 +7933,6 @@ msgstr "Tiesības %1$s \"%2$s\""
 msgid "Permissions:"
 msgstr "Tiesības:"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Personal"
-msgstr "Privāti"
-
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Personal calendar"
 msgstr "Personīgais kalendārs"
@@ -7869,35 +7962,43 @@ msgstr "Telefons"
 msgid "Phone & fax numbers"
 msgstr "Telefona un faksa numuri"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (assistant)"
 msgstr "Telefons (asistents)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (business alt)"
 msgstr "Telefons (bizness alt.)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (business)"
 msgstr "Telefons (bizness)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (car)"
 msgstr "Telefons (mašīnā)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (company)"
 msgstr "Telefons (uzņēmums)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (home alt)"
 msgstr "Telefons (mājas alt.)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (home)"
 msgstr "Telefons (mājas)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Phone (other)"
 msgstr "Telefons (cits)"
 
@@ -7905,10 +8006,6 @@ msgstr "Telefons (cits)"
 #: apps/io.ox/contacts/print.js
 msgid "Phone list"
 msgstr "Telefonu saraksts"
-
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Phone numbers"
-msgstr "Telefonu numuri"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -8286,7 +8383,8 @@ msgstr "Portāla iestatījumi"
 msgid "Portal widgets"
 msgstr "Portāla logrīki"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Position"
 msgstr "Pozīcija"
 
@@ -8301,7 +8399,8 @@ msgstr "Pozīcija"
 msgid "Post a status update"
 msgstr "Reģistrēt statusa jauniunājumu"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Postcode"
 msgstr "Pasta kods"
 
@@ -8451,7 +8550,6 @@ msgstr "Prioritāte"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/view-grid-template.js
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
@@ -8482,7 +8580,8 @@ msgstr "Apstrādāt nākamos noteikumus"
 msgid "Process subsequent rules of %1$s"
 msgstr "Apstrādāt turpmākos %1$s noteikumus"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Profession"
 msgstr "Profesija"
 
@@ -8920,7 +9019,6 @@ msgid "Reminder has been created"
 msgstr "Atgādinājums ir izveidots"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/contacts/widgets/pictureUpload.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
 #: module:io.ox/settings/certificates
@@ -8945,10 +9043,16 @@ msgstr "Noņemt IMAP atslēgvārdu"
 msgid "Remove all reminders"
 msgstr "Noņemt visus atgādinājumus"
 
-#: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
-#: apps/io.ox/core/attachments/view.js apps/io.ox/core/tk/attachments.js
-#: apps/io.ox/core/tk/attachmentsUtil.js
+#: apps/io.ox/core/attachments/view.js module:io.ox/core
+#: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/attachmentsUtil.js
 msgid "Remove attachment"
+msgstr "Noņemt pievienojumu"
+
+#. %1$s is attachment file name
+#: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Remove attachment"
+msgid "Remove attachment \"%1$s\""
 msgstr "Noņemt pievienojumu"
 
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
@@ -8970,6 +9074,12 @@ msgstr "Noņemt kontaktu"
 msgid "Remove copy from server after retrieving a message"
 msgstr "Noņemt kopiju no servera pēc ziņojuma nolasīšanas"
 
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Remove facet"
+msgid "Remove field"
+msgstr "Noņemt vienumu"
+
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/contextmenu.js
@@ -8984,6 +9094,12 @@ msgstr "Noņemt saiti"
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid "Remove member"
 msgstr "Noņemt dalībnieku"
+
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Remove picture"
+msgid "Remove photo"
+msgstr "Noņemt attēlu"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Remove reminder"
@@ -9120,7 +9236,6 @@ msgstr "Pārstatīt šo sarakstu"
 msgid "Resolution"
 msgstr "Izšķirtspēja"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/participants/chronos-views.js module:io.ox/core
 #: apps/io.ox/participants/views.js
 msgid "Resource"
@@ -9232,13 +9347,10 @@ msgstr "Atsaukt piekļuvi."
 msgid "Rich Text Area. Press ALT-F10 for toolbar"
 msgstr "Bagātīga teksta apgabals. Lai iegūtu rīkjoslu, piespiediet ALT-F10"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Room number"
 msgstr "Istabas numurs"
-
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Rotate image"
-msgstr "Rotēt attēlu"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Rows"
@@ -9274,7 +9386,8 @@ msgstr "SSL/TLS"
 msgid "Safari"
 msgstr "Safari"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Sales Volume"
 msgstr "Pārdošanas apjoms"
 
@@ -9290,7 +9403,7 @@ msgstr "Sestdienā"
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/settings/editLocale.js apps/io.ox/editor/main.js
@@ -9733,6 +9846,12 @@ msgstr "Iestatīt krāsu"
 msgid "Set color flag"
 msgstr "Iestatīt krāsas iezimi"
 
+#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Set color"
+msgid "Set color..."
+msgstr "Iestatīt krāsu"
+
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 #: apps/io.ox/core/main/topbar_right.js
 #: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
@@ -9859,10 +9978,6 @@ msgstr "Rādīt papildus iestatījumus"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show all calendars"
 msgstr "Rādīt visus kalendārus"
-
-#: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-msgid "Show all fields"
-msgstr "Rādīt visus laukus"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Show all images just once"
@@ -10120,10 +10235,6 @@ msgstr ""
 "Dažas kontaktpersonas nevar tikt pievienotas, jo tām nav derīga e-pasta "
 "lauka."
 
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
-msgid "Some fields contain invalid data"
-msgstr "Daži no laukiem satur nepareizus datus"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid ""
@@ -10211,7 +10322,8 @@ msgstr "Mēstules"
 msgid "Split"
 msgstr "Sadalīt"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Spouse's name"
 msgstr "Dzīvesbiedra vārds"
 
@@ -10307,7 +10419,8 @@ msgstr "Sākas"
 msgid "Starts with"
 msgstr "Sākas ar"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "State"
 msgstr "Rajons"
 
@@ -10328,7 +10441,8 @@ msgstr "Palikt iekšā"
 msgid "Stop slideshow"
 msgstr "Apturēt slaidrādi"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Street"
 msgstr "Iela"
 
@@ -10425,7 +10539,8 @@ msgstr "Veiksmīgi veikta atkārtota jūsu %s konta autorizēšana"
 msgid "Successfully refreshed calendar"
 msgstr "Kalendārs ir veiksmīgi jaunināts"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Suffix"
 msgstr "Sufikss"
 
@@ -10487,7 +10602,8 @@ msgstr "Sinhronizēt kalendāru"
 msgid "Synchronize with your tablet or smartphone"
 msgstr "Sinhronizēt ar planšetdatoru vai telefonu"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "TAX ID"
 msgstr "NOD. ID"
 
@@ -10496,7 +10612,8 @@ msgstr "NOD. ID"
 msgid "TB"
 msgstr "TB"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
@@ -10534,11 +10651,8 @@ msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
 msgstr "Ņemiet %1$s sev līdz! Aktuālā informācija vienmēr visās jūsu ierīcēs."
 
 #: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
-msgid "Take a photo"
-msgstr "Uzņemt fotoattēlu"
-
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Take photo"
+msgid "Take a photo"
 msgstr "Uzņemt fotoattēlu"
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
@@ -10608,23 +10722,28 @@ msgstr "Uzdevumu rīkjosla"
 msgid "Teal"
 msgstr "Zilganzaļš"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Telephone (ISDN)"
 msgstr "Telefons (ISDN)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Telephone callback"
 msgstr "Telefons (atzvans)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Telephone primary"
 msgstr "Telefons (primārais)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Telephone radio"
 msgstr "Telefons (radio)"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgid "Telex"
 msgstr "Telekss"
 
@@ -10801,6 +10920,18 @@ msgstr ""
 "Fails \"%1$s\" nevar tikt augšupielādēts, jo tas pārsniedz pievienojumu %2$s "
 "kvotas limitu"
 
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid ""
+#| "This filetype is not supported as contact picture. Only image types (JPG, "
+#| "GIF, BMP or PNG) are supported."
+msgid ""
+"The file type \"%1$s\" cannot be used as a contact photo. Supported file "
+"types are JPEG, GIF, BMP, and PNG."
+msgstr ""
+"Šī tipa faili netiek atbalstīti kā kontakta attēli. Atbalstīti tiek tikai "
+"attēlu faili ar tipu JPG, GIF, BMP vai PNG."
+
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
 msgstr "Pirmās 90 dienas ir bez maksas."
@@ -10869,6 +11000,13 @@ msgstr[2] "Versiju skaits ir ierobežots līdz %1$d versijām."
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "The number of versions is not limited"
 msgstr "Neierobežots versiju skaits"
+
+#. %1$s maximum file size
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+msgid "The photo exceeds the allowed file size of %1$s"
+msgstr "Jūsu izvēlētā attēla izmērs pārsniedz maksimāli pieļaujamo %1$s izmēru"
 
 #: apps/io.ox/files/api.js module:io.ox/files
 msgid "The provided filename exceeds the allowed length."
@@ -11304,14 +11442,6 @@ msgstr "Šis fails tiek koplietotas ar citiem"
 msgid "This file will be written in your default folder to allow editing"
 msgstr "Fails tiks ierakstīts jūsu noklusētajā mapē un varēs tikt rediģēts"
 
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid ""
-"This filetype is not supported as contact picture. Only image types (JPG, "
-"GIF, BMP or PNG) are supported."
-msgstr ""
-"Šī tipa faili netiek atbalstīti kā kontakta attēli. Atbalstīti tiek tikai "
-"attēlu faili ar tipu JPG, GIF, BMP vai PNG."
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "This folder has no publications"
 msgstr "Šai mapē nav publikāciju"
@@ -11366,6 +11496,12 @@ msgstr "Šī ir standarta mape, kura nevar tikt pārdēvēta."
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
 msgstr "Šādi izskatīsies jūsu ziņojuma teksts."
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#, fuzzy
+#| msgid "This is not a valid email address"
+msgid "This is invalid email address."
+msgstr "Šī nav derīga e-pasta adrese"
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "This is not a valid email address"
@@ -11449,6 +11585,10 @@ msgstr "Šim uzdevumam pagaidām nav dalībnieku"
 msgid "This task recurs"
 msgstr "Šis uzdevums atkārtojas"
 
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "This value is too long. The allowed length is %1$d characters."
+msgstr ""
+
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid ""
 "This widget is currently offline because the twitter rate limit exceeded."
@@ -11529,7 +11669,8 @@ msgstr "Taimauts"
 msgid "Title"
 msgstr "Nosaukums"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
 msgctxt "salutation"
 msgid "Title"
 msgstr "Virsraksts"
@@ -11712,9 +11853,10 @@ msgstr "Tips"
 msgid "UI version"
 msgstr "Interfeisa versija"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-#: apps/plugins/portal/rss/register.js module:io.ox/portal
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/onboarding/clients/config.js
+#: module:io.ox/core/onboarding apps/plugins/portal/rss/register.js
+#: module:io.ox/portal
 msgid "URL"
 msgstr "URL"
 
@@ -11792,6 +11934,13 @@ msgstr "Atsaukts"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Unemployed"
 msgstr "Bezdarbnieks"
+
+#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "verb"
+#| msgid "Unflag"
+msgid "Unflag"
+msgstr "Atsaukt iezīmi"
 
 #. Verb: (to) unflag messages
 #: apps/io.ox/mail/contextmenu.js module:io.ox/mail apps/io.ox/mail/toolbar.js
@@ -11933,6 +12082,12 @@ msgstr "Ielādēt"
 msgid "Upload Recovery File"
 msgstr "Augšupielādēt atgūšanas failu"
 
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Upload a picture"
+msgid "Upload a photo"
+msgstr "Ielādēt attēlu"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "Upload file"
@@ -11941,11 +12096,6 @@ msgstr "Ielādēt failu"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Upload files"
 msgstr "Augšupielādēt failus"
-
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-#: apps/io.ox/contacts/widgets/pictureUpload.js
-msgid "Upload image"
-msgstr "Ielādēt attēlu"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 #, fuzzy
@@ -12803,7 +12953,7 @@ msgstr "Jūsu pašreizējā parole"
 #. %1$s: date when the download was requested
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid ""
-"Your data archive %2$s from is ready for download. The download is available "
+"Your data archive from %2$s is ready for download. The download is available "
 "until %1$s."
 msgstr ""
 
@@ -12879,11 +13029,6 @@ msgid ""
 "the requested data this may take hours or days. You will be informed via "
 "email when your download is ready."
 msgstr ""
-
-#. %1$s maximum file size
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-msgstr "Jūsu izvēlētā attēla izmērs pārsniedz maksimāli pieļaujamo %1$s izmēru"
 
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your session is expired"
@@ -14116,9 +14261,6 @@ msgstr "jūsu platforma"
 #~ msgid "Add account"
 #~ msgstr "Pievienot kontu"
 
-#~ msgid "Add attachment"
-#~ msgstr "Pievienot pielikumu"
-
 #~ msgid "Add cipher code"
 #~ msgstr "Pievienot šifra kodu"
 
@@ -14670,9 +14812,6 @@ msgstr "jūsu platforma"
 #~ msgid "Bhutan"
 #~ msgstr "Butāna"
 
-#~ msgid "Birthday"
-#~ msgstr "Dzimšanas diena"
-
 #~ msgid "Birthday Appointment"
 #~ msgstr "Dzimšanas dienas atzīmēšana"
 
@@ -14873,9 +15012,6 @@ msgstr "jūsu platforma"
 #~ msgid "Change View"
 #~ msgstr "Mainīt skatu"
 
-#~ msgid "Change color"
-#~ msgstr "Mainīt krāsu"
-
 #~ msgid "Change folder"
 #~ msgstr "Mainīt mapi"
 
@@ -14986,9 +15122,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "Click to select contacts"
 #~ msgstr "Noklikšķiniet, lai izvēlētos kontaktus"
-
-#~ msgid "Click to start video"
-#~ msgstr "Noklikšķiniet, lai atskaņotu video"
 
 #~ msgid "Click to upload image"
 #~ msgstr "Noklikšķiniet, lai ielādētu attēlu"
@@ -15868,6 +16001,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Edit feed"
 #~ msgstr "Rediģēt avotu"
+
+#~ msgid "Edit image"
+#~ msgstr "Rediģēt attēlu"
 
 #~ msgid "Editing multiple E-Mails"
 #~ msgstr "Vairāku e-apstu rediģēšana"
@@ -17077,6 +17213,9 @@ msgstr "jūsu platforma"
 #~ msgid "Jersey"
 #~ msgstr "Džersija"
 
+#~ msgid "Job"
+#~ msgstr "Darbs"
+
 #~ msgid "Join"
 #~ msgstr "Pievienoties"
 
@@ -17330,6 +17469,9 @@ msgstr "jūsu platforma"
 #~ msgid "Mail Thread Details"
 #~ msgstr "Pasta sarakstes detaļas"
 
+#~ msgid "Mail and Messaging"
+#~ msgstr "Ziņapmaiņa"
+
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "E-pasta un sociālie konti"
 
@@ -17472,6 +17614,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Minutes"
 #~ msgstr "Minūtes"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Dažādi"
 
 #~ msgid "Mobile"
 #~ msgstr "Mobilais"
@@ -18119,6 +18264,9 @@ msgstr "jūsu platforma"
 #~ msgid "Permissions: %1$s"
 #~ msgstr "Tiesības"
 
+#~ msgid "Personal"
+#~ msgstr "Privāti"
+
 #~ msgid "Peru"
 #~ msgstr "Peru"
 
@@ -18157,6 +18305,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Phone alt"
 #~ msgstr "Telefons (alt.)"
+
+#~ msgid "Phone numbers"
+#~ msgstr "Telefonu numuri"
 
 #~ msgid "Phone:"
 #~ msgstr "Telefons:"
@@ -18566,14 +18717,8 @@ msgstr "jūsu platforma"
 #~ msgid "Reminder:"
 #~ msgstr "Atgādinājums:"
 
-#~ msgid "Remove facet"
-#~ msgstr "Noņemt vienumu"
-
 #~ msgid "Remove participant"
 #~ msgstr "Noņemt dalībnieku"
-
-#~ msgid "Remove picture"
-#~ msgstr "Noņemt attēlu"
 
 #, fuzzy
 #~| msgid "Remove from recipient list"
@@ -18645,6 +18790,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Room number:"
 #~ msgstr "Istabas numurs:"
+
+#~ msgid "Rotate image"
+#~ msgstr "Rotēt attēlu"
 
 #~ msgid "Route Planning"
 #~ msgstr "Maršruta plānošana"
@@ -19059,6 +19207,9 @@ msgstr "jūsu platforma"
 #~ msgid "Show Tabs for inbox"
 #~ msgstr "Rādīt vērtnes iesūtnē"
 
+#~ msgid "Show all fields"
+#~ msgstr "Rādīt visus laukus"
+
 #~ msgid "Show all images for"
 #~ msgstr "Rādīt visus attēlus"
 
@@ -19236,6 +19387,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Somalia"
 #~ msgstr "Somālija"
+
+#~ msgid "Some fields contain invalid data"
+#~ msgstr "Daži no laukiem satur nepareizus datus"
 
 #~ msgid ""
 #~ "Some files cannot be uploaded because they exceed the maximum file size "
@@ -19592,6 +19746,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Tajikistan"
 #~ msgstr "Tadžikistāna"
+
+#~ msgid "Take photo"
+#~ msgstr "Uzņemt fotoattēlu"
 
 #~ msgid "Tanzania"
 #~ msgstr "Tanzānija"
@@ -20763,13 +20920,13 @@ msgstr "jūsu platforma"
 #~ msgid "Upgrade to premium"
 #~ msgstr "Jaunināt uz premium versiju"
 
-#~ msgid "Upload a picture"
-#~ msgstr "Ielādēt attēlu"
-
 #, fuzzy
 #~| msgid "Upload local file"
 #~ msgid "Upload handling"
 #~ msgstr "Augšupielādēt lokālu failu"
+
+#~ msgid "Upload image"
+#~ msgstr "Ielādēt attēlu"
 
 #~ msgid "Upload new file"
 #~ msgstr "Ielādēt jaunu failu"
