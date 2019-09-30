@@ -178,7 +178,9 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     );
 
     function fnEditSignature(e, signature) {
-        signature = signature || { id: null, name: '', signature: '', misc: { insertion: 'below' } };
+        signature = signature || { id: null, name: '', signature: '', misc: {
+            insertion: settings.get('defaultSignaturePosition', 'below') }
+        };
 
         return new ModalDialog({
             width: 640,
