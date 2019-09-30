@@ -144,7 +144,8 @@ define('io.ox/settings/personalData/settings/pane', [
             // check if this is [data, timestamp]
             apiResponse = _.isArray(apiResponse) ? apiResponse[0] : apiResponse;
 
-            if (apiResponse.error || apiResponse.status === 'FAILED') {
+            // error, failed, aborted. Behavior is the same in all cases, just display view, so user can try again.
+            if (apiResponse.error || apiResponse.status === 'FAILED' || apiResponse.status === 'ABORTED') {
                 if (!_(ignoredErrors).contains(apiResponse.code)) {
                     yell(apiResponse);
                 }
@@ -248,6 +249,7 @@ define('io.ox/settings/personalData/settings/pane', [
                         break;
                     case 'PENDING':
                     case 'RUNNING':
+                    case 'PAUSED':
                         this.$el.addClass('disabled').find('.checkbox,a').addClass('disabled');
                         this.$el.find('input,select').attr('aria-disabled', true).prop('disabled', 'disabled');
                         this.$el.append($('<button type="button" class="btn btn-primary">').prop('disabled', 'disabled').text(gt('Request download')));
@@ -300,7 +302,7 @@ define('io.ox/settings/personalData/settings/pane', [
                 //#. header for zip archive download list
                 this.$el.append($('<h1 class="col-xs-12">').text(gt('Your archive')));
 
-                if (this.model.get('status') === 'PENDING' || this.model.get('status') === 'RUNNING') {
+                if (this.model.get('status') === 'PENDING' || this.model.get('status') === 'RUNNING' || this.model.get('status') === 'PAUSED') {
                     //#. %1$s: date and time the download was requested
                     this.$el.append(
                         $('<div class="col-xs-12">')
