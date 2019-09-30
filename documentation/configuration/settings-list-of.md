@@ -427,8 +427,8 @@ ID of default signature. Signatures are stored as Snippets on MW (DB)
 <config>io.ox/mail//defaultReplyForwardSignature=`<number>`</config>
 ID of default forward and reply signature. Fallback is value of 'defaultSignature'
 
-<config>io.ox/mail//defaultSignaturePosition=`<number>`</config>
-value is `above` or `below`
+<config>io.ox/mail//defaultSignaturePosition=`<string>`</config>
+value is `above` or `below` (default `below`)
 
 <config>io.ox/mail//mobileSignatureType=`<string>`</config>
 Value is `custom` or `none`. If `custom` is set, signature from `io.ox/mail//mobileSignature`is taken.
