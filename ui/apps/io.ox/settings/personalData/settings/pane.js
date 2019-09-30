@@ -140,7 +140,11 @@ define('io.ox/settings/personalData/settings/pane', [
             'GDPR-EXPORT-0009'
         ],
         handleApiResult = function (apiResponse) {
-            if (apiResponse.error) {
+
+            // check if this is [data, timestamp]
+            apiResponse = _.isArray(apiResponse) ? apiResponse[0] : apiResponse;
+
+            if (apiResponse.error || apiResponse.status === 'FAILED') {
                 if (!_(ignoredErrors).contains(apiResponse.code)) {
                     yell(apiResponse);
                 }
@@ -148,8 +152,6 @@ define('io.ox/settings/personalData/settings/pane', [
                 apiResponse = { status: 'none' };
             }
 
-            // check if this is [data, timestamp]
-            apiResponse = _.isArray(apiResponse) ? apiResponse[0] : apiResponse;
             return apiResponse;
         },
         deleteDialog = function (options) {
