@@ -129,6 +129,7 @@ define('io.ox/mail/compose/model', [
         quoteMessage: (function () {
             function mailAddress(item) {
                 if (item.length < 2) return item[0] || '';
+                if (!item[0]) return item[1];
                 return item[0] + ' <' + item[1] + '>';
             }
             return function (data) {
