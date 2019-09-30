@@ -1089,8 +1089,8 @@ define('io.ox/calendar/week/view', [
                     break;
                 }
 
-                // check if we have a node for this day, if not create one (we need one node for each day when an appointment spans multiple days)
-                node = node.get(maxCount) ? $(node.get(maxCount)) : node.clone();
+                // check if we have a node for this day, if not create one by cloning the first (we need one node for each day when an appointment spans multiple days)
+                node = node.get(maxCount) ? $(node.get(maxCount)) : $(node).first().clone();
 
                 node
                     .addClass(endLocal.diff(startLocal, 'minutes') < 120 / this.model.get('gridSize') ? 'no-wrap' : '')
