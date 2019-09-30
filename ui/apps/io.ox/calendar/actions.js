@@ -151,11 +151,11 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/create', {
         device: '!guest',
-        action: function (baton, obj) {
+        action: _.debounce(function (baton, obj) {
             ox.load(['io.ox/calendar/actions/create']).done(function (action) {
                 action(baton, obj);
             });
-        }
+        }, 500, true)
     });
 
     new Action('io.ox/calendar/detail/actions/changeAlarms', {
