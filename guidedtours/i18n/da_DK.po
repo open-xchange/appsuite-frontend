@@ -14,17 +14,238 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.1.1\n"
 
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Add another account"
+msgstr "Tilføj en anden konto"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Tilføj en kode via tekst besked"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Adding attachments"
+msgstr "Tilføjer vedhæftninger"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Adding further details"
+msgstr "Tilføj flere detaljer"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Tilføj indstilling til verifikation"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+"Som en ekstra sikkerhed, er det nu muligt at bruge en sekundær metode til "
+"godkendelse, som for eksempel en tekst besked, før der kan logges ind på din "
+"konto. Vil du se flere oplysninger?"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
+msgstr ""
+"Øverst kan du finde værktøjslinjen med mange funktioner og yderligere "
+"muligheder. Du kan let oprette nye mapper, nye filer og meget mere."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Forespørgsel på godkendelse"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use Invite "
+"people if you want to manage access rights and allow recipients to create "
+"and edit files. Or just get a link to let others view and download your "
+"files. You can use an expiration date and password protection if you like."
+msgstr ""
+"Vælg mellem to muligheder for at dele dine filer og mapper. Brug Invitér "
+"folk hvis du vil styre adgangsrettigheder, og vil give modtagere lov til at "
+"oprette og redigere filer. Eller bare få en URL og lad andre se og hente "
+"dine filer. Du kan bruge en udløbsdato og adgangskodebeskyttelse, hvis du "
+"ønsker det."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"Click on a letter on the left side of the navigation bar in order to display "
+"the corresponding contacts from the selected address book."
+msgstr ""
+"Tryk på et bogstav i venstre side af navigationslinjen, for at vise de "
+"tilhørende kontakter fra den valgte adressebog."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+"Når du klikker på en mappe bliver alle undermapper, dokumenter, og andre "
+"filer den indeholder vist."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr ""
+"Et klik på Vis ikonet leder dig til en forhåndsvisning af den valgte fil."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Closing a square"
+msgstr "Lukke en flise"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Collaborating"
+msgstr "Samarbejde"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Composing a new email"
+msgstr "Skriver en ny e-mail"
+
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "Opretter en ny aftale"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "For at oprette en aftale, klik på Ny i værktøjslinjen."
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Creating a new contact"
+msgstr "Opretter en ny kontakt"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating a new task"
+msgstr "Opretter en ny opgave"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Creating new items"
+msgstr "Lav nye elementer"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Entering the appointment's data"
-msgstr "Indtastning af aftalens data"
+msgid "Creating recurring appointments"
+msgstr "Opretter en ny gentagende aftale"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating recurring tasks"
+msgstr "Opretter gentagende opgaver"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating the appointment"
+msgstr "Opretter aftalen"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating the task"
+msgstr "Opretter opgaven"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Customizing the Portal"
+msgstr "Tilpasse Portalen"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Depending on the app, the toolbar contains various functions for creating, "
+"editing and organizing objects."
+msgstr ""
+"Afhængigt af programmet indeholder værktøjslinjen forskellige funktioner til "
+"at oprette, redigere og organisere objekter."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Detailed instructions for the single apps are located in System menu > Help."
+msgstr ""
+"Detaljerede instruktioner for de enkelte programmer kan findes i menuen "
+"System > Hjælp."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
+"Enheder kan fjernes igen når de er blevet tilføjet. Så hjælpen for flere "
+"detaljer."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
+msgstr ""
+"Vidste du at du kan redigere tekstdokumenter og regneark online? Drive vil "
+"automatisk opdatere din redigerede fil, men takket være versionsstyring vil "
+"den oprindelige udgave fortsat være tilgængelig."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr ""
+"Der er frit valg mellem forskellige visninger. Vælg den du synes bedst om."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Displaying the help or the settings"
+msgstr "Vis hjælp eller indstillinger"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Drag and drop"
+msgstr "Træk og slip"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
+msgstr ""
+"Drive giver dig mulighed for at forbinde til andre lagringsløsninger, hvis "
+"du allerede har en lagerkontor i skyen, som du bruger til at gemme og "
+"synkronisere dine filer. Klik på det relevante logo for at tilgå dine "
+"eksisterende data."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"Edit a setting on the right side. In most of the cases, the changes are "
+"activated immediately."
+msgstr ""
+"Redigér en indstilling i højre side. I de fleste tilfælde bliver ændringer "
+"aktiveret med det samme."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Edit documents"
+msgstr "Redigér dokumenter"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Editing multiple contacts"
+msgstr "Redigering af flere kontakter"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Editing multiple emails"
+msgstr "Redigering af flere e-mails"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Editing multiple tasks"
+msgstr "Redigering af flere opgaver"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Editing settings"
+msgstr "Redigere indstillinger"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"Enter the email text into the main area. If the text format was set to HTML "
+"in the options, you can format the email text. To do so select a text part "
+"and then click an icon in the formatting bar."
+msgstr ""
+"Skriv brødteksten i hovedfeltet. Hvis tekstformatet er sat til HTML i "
+"indstillingerne, så kan du formatere brødteksten. For at gøre dette, "
+"markeres et stykke tekst, og der klikkes på et ikon i formatteringslinjen."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"Enter the recipient's name into the recipients field. As soon as you typed "
+"the first letters, suggestions from the address books are displayed. To "
+"accept a recipient suggestion, click on it."
+msgstr ""
+"Skriv modtagerens navn i modtagerfeltet. Så snart du har tastet de første "
+"bogstaver, vil forslag fra adressebogen blive vist. Klik på et forslag for "
+"at bruge det."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Enter the subject into the subject field."
+msgstr "Skriv emnet i emnefeltet."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
@@ -34,77 +255,270 @@ msgstr ""
 "Indtast emnet samt start- og slutdatoen for aftalen. Andre detaljer er "
 "valgfrie."
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating recurring appointments"
-msgstr "Opretter en ny gentagende aftale"
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Enter the subject, the start date, and a description."
+msgstr "Indtast emnet, startdatoen og en beskrivelse."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering billing information"
+msgstr "Indtaster faktureringsoplysninger"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Entering the appointment's data"
+msgstr "Indtastning af aftalens data"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the email text"
+msgstr "Indtastning af e-mail-teksten"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the recipient's name"
+msgstr "Indtastning af modtagerens navn"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the subject"
+msgstr "Indtastning af emnet"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering the task's data"
+msgstr "Indtastning af en opgaves data"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "File details"
+msgstr "Fildetaljer"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder content"
+msgstr "Mappeindhold"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder tree"
+msgstr "Mappetræ"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To create recurring appointments, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
+"From preview you can also select other options to help you manage and work "
+"on your files."
 msgstr ""
-"For at oprette gentagende aftaler, aktivér gentagelse. Funktioner til at "
-"sætte parametrene for gentagelse er vist."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Inviting other participants"
-msgstr "Inviterer andre deltagere"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. To avoid appointment conflicts, click on Find a free time at "
-"the upper right side."
-msgstr ""
-"For at invitere andre deltagere, skriv deres navn i feltet under Deltagere. "
-"For at undgå konflikter med aftaler, klik på Find ledig tid øverst til højre."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Brug af funktionen til påmindelse"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Brug påmindelsesfunktionen, så du ikke kommer til at overse en aftale."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Adding attachments"
-msgstr "Tilføjer vedhæftninger"
+"Fra forhåndsvisning kan du også vælge andre muligheder, for at hjælpe dig "
+"med at håndtere og arbejde på dine filer."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
 msgstr "Længere nede kan du vedhæfte dokumenter til aftalen."
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating the appointment"
-msgstr "Opretter aftalen"
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Further functions"
+msgstr "Flere funktioner"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create the appointment, click on Create at the lower left side."
-msgstr "For at oprette en aftale, klik på Opret i nederste venstre side."
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Further information"
+msgstr "Yderligere information"
+
+#. Tour name; general introduction
+#: apps/io.ox/tours/main.js module:io.ox/tours
+msgid "Getting started"
+msgstr "Kom i gang"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Halo view"
+msgstr "Samlet visning"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+"Her kan du dele filer med dine kolleger og eksterne kontakter. Du kan også "
+"samarbejde om et dokument og sætte forskellige adgangsrettigheder."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "How the settings are organized"
+msgstr "Hvordan indstillingerne er organiseret"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"If double-clicking on an email in the list, the email is opened in a "
+"separate window."
+msgstr ""
+"Hvis du dobbeltklikker på en e-mail i listen, bliver den åbnet i et separat "
+"vindue."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "Hvis du ikke længere vil have et felt vist, så klik på ikonet slet."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In order to edit multiple emails at once, enable the checkboxes on the left "
+"side of the emails. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"For at redigere flere e-mails ad gangen, skal tjekboksen på venstre side af "
+"e-mailene markeres. Hvis tjekboksen ikke er synlig, klik Visning > Tjekbokse "
+"i højre side af værktøjslinjen."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In this area you can find further functions, e.g. for adding attachments."
+msgstr ""
+"I dette felt kan du finde yderligere funktioner, for eksempel til at "
+"vedhæfte filer."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Inviting other participants"
+msgstr "Inviterer andre deltagere"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Launching an app"
+msgstr "Start af et program"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Navigation bar"
+msgstr "Navigationslinje"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "Næste"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
+msgstr ""
+"Til venstre kan du se mappetræet. Det viser din mappestruktur og lader dig "
+"navigere til specifikke mapper og undermapper. For at gøre dit liv lettere, "
+"har vi allerede oprettet mapper til dine dokumenter, din musik, dine "
+"billeder og dine videoer."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Opening an email in a separate window"
+msgstr "Åbne en e-mail i et separat vindue"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Opening or closing the folder tree"
+msgstr "Åbning eller lukning af mappetræet"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Opening the email settings"
+msgstr "Åbner E-mail-indstillingerne"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the help"
+msgstr "Åbning af hjælp"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the settings"
+msgstr "Åbner indstillingerne"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview files"
+msgstr "Forhåndsvisning af filer"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview mode"
+msgstr "Forhåndsvisningsmodus"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Reading email conversations"
+msgstr "Læs e-mail-samtaler"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Reading the details"
+msgstr "Læser detaljerne"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Fjern"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Searching for objects"
+msgstr "Søger efter objekter"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "Tofaktorgodkendelse"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Select a view"
+msgstr "Vælg en visning"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
 msgid "Selecting a view"
 msgstr "Vælger en visning"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid ""
-"To select one of the views like Day, Month or List, click on View in the "
-"toolbar. Select a menu entry from the Layout section."
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
 msgstr ""
-"For at vælge en af visningerne Dag, Måned eller Liste, klik på Visning i "
-"værktøjslinjen. Vælg en menuindgang i Layout-gruppen."
+"Vælges indstillingen for kode via tekst besked, for eksempel, vil du blive "
+"spurgt om et telefonnummer."
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "The calendar views"
-msgstr "Kalendervisningerne"
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Sending an email to a contact"
+msgstr "Send en e-mail til en kontakt"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sending the email"
+msgstr "Sender e-mail'en"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Share files"
+msgstr "Del filer"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"The calendar views display a calendar sheet with the appointments for the "
-"selected time range."
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
 msgstr ""
-"Kalendervisningerne viser et kalenderark med aftaler for det valgte tidsrum."
+"Deling af filer ved at invitere folk giver ikke kun dine modtagere mulighed "
+"for at oprette og redigere filer. Interne og eksterne deltagere kan også "
+"samarbejde med dig om tekstdokumenter og regneark samtidig."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Sharing options"
+msgstr "Delingsindstillinger"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Signing out"
+msgstr "Logger ud"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Sorting tasks"
+msgstr "Sorterer opgaver"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sorting your emails"
+msgstr "Sortering af dine e-mails"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "Start rundvisning"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The Detail view"
+msgstr "Detaljevisningen"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"The Detail view displays an object's content. Depending on the app, further "
+"functions for organizing objects can be found in the Detail view."
+msgstr ""
+"Detaljevisningen viser et objekts indhold.  Afhængigt af programmet kan der "
+"findes flere funktioner til at organisere objekter i detaljevisningen."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app"
+msgstr "Drive-app'en"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app tour.txt"
+msgstr "The Drive app tour.txt"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The List view"
@@ -120,582 +534,6 @@ msgstr ""
 "klikker på en aftale bliver aftalens data og nogle funktioner vist i "
 "Detaljevisningen."
 
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Creating a new contact"
-msgstr "Opretter en ny kontakt"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "To create a new contact, click on New > Add contact in the toolbar."
-msgstr ""
-"For at oprette en ny kontakt, klikkes Ny > Tilføj kontakt i værktøjslinjen."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Navigation bar"
-msgstr "Navigationslinje"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"Click on a letter on the left side of the navigation bar in order to display "
-"the corresponding contacts from the selected address book."
-msgstr ""
-"Tryk på et bogstav i venstre side af navigationslinjen, for at vise de "
-"tilhørende kontakter fra den valgte adressebog."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an email to a contact"
-msgstr "Send en e-mail til en kontakt"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"To send an email to the contact, click on an email address or on Send email "
-"in the toolbar."
-msgstr ""
-"For at sende en e-mail til kontakten, klik på en e-mail-adresse eller på "
-"Send e-mail i værktøjslinjen."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Editing multiple contacts"
-msgstr "Redigering af flere kontakter"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"To edit multiple contacts at once, enable the checkboxes on the left side of "
-"the contacts. If the checkboxes are not displayed, click on View > "
-"Checkboxes on the right side of the toolbar."
-msgstr ""
-"For at redigere flere kontakter på én gang, markeres tjekboksene på venstre "
-"side af kontakterne. Hvis tjekboksene ikke er vist, klik Visning > Tjekbokse "
-"i højre side af værktøjslinjen."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "The Drive app"
-msgstr "Drive-app'en"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Welcome to your cloud storage app. This Guided Tour will introduce you to "
-"your new online storage solution - your one point to access online stored "
-"files from all your accounts. This is where you can upload and save your "
-"files, share them and synchronize them with different devices.  "
-msgstr ""
-"Velkommen til din lagerplads i skyen. Denne rundvisning vil introducere dig "
-"til din nye online lagerløsning - din ene adgangvej til lagrede filer fra "
-"alle dine konti. Her kan du overføre, dine filer, gemme dem, og synkronisere "
-"dem med forskellige enheder."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Folder tree"
-msgstr "Mappetræ"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"On the left you can see the folder tree. It displays your folder structure "
-"and allows you to navigate to specific folders and subfolders. To make your "
-"life easier, we have already included folders for your Documents, Music, "
-"Pictures and Videos."
-msgstr ""
-"Til venstre kan du se mappetræet. Det viser din mappestruktur og lader dig "
-"navigere til specifikke mapper og undermapper. For at gøre dit liv lettere, "
-"har vi allerede oprettet mapper til dine dokumenter, din musik, dine "
-"billeder og dine videoer."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Folder content"
-msgstr "Mappeindhold"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Clicking on a folder displays all the subfolders, documents, media and other "
-"files that it contains."
-msgstr ""
-"Når du klikker på en mappe bliver alle undermapper, dokumenter, og andre "
-"filer den indeholder vist."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Select a view"
-msgstr "Vælg en visning"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Different views are available. Just select the one you like best."
-msgstr ""
-"Der er frit valg mellem forskellige visninger. Vælg den du synes bedst om."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Toolbar"
-msgstr "Værktøjslinje"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"At the top you can find the toolbar with many functions and additional "
-"options. You can easily create new folders, new files and much more."
-msgstr ""
-"Øverst kan du finde værktøjslinjen med mange funktioner og yderligere "
-"muligheder. Du kan let oprette nye mapper, nye filer og meget mere."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Upload a new file"
-msgstr "Overfør en ny fil"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
-msgstr ""
-"For at overføre en ny fil fra din lokale enhed, klik på Tilføj lokal fil og "
-"vælg filen du gerne vil overføre. Det er endnu lettere, hvis du bare trækker "
-"filerne fra din lokale enhed og ind i Drive. Den overførte fil er nu "
-"tilgængelig i Drive på alle dine enheder."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Preview files"
-msgstr "Forhåndsvisning af filer"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Clicking on the view icon leads you to a preview of the selected file."
-msgstr ""
-"Et klik på Vis ikonet leder dig til en forhåndsvisning af den valgte fil."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Preview mode"
-msgstr "Forhåndsvisningsmodus"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"From preview you can also select other options to help you manage and work "
-"on your files."
-msgstr ""
-"Fra forhåndsvisning kan du også vælge andre muligheder, for at hjælpe dig "
-"med at håndtere og arbejde på dine filer."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Share files"
-msgstr "Del filer"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Here you can share files with your colleagues and external contacts. You can "
-"also collaborate on a document and set different access rights."
-msgstr ""
-"Her kan du dele filer med dine kolleger og eksterne kontakter. Du kan også "
-"samarbejde om et dokument og sætte forskellige adgangsrettigheder."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Sharing options"
-msgstr "Delingsindstillinger"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Choose from two alternatives to share your files and folders. Use Invite "
-"people if you want to manage access rights and allow recipients to create "
-"and edit files. Or just get a link to let others view and download your "
-"files. You can use an expiration date and password protection if you like."
-msgstr ""
-"Vælg mellem to muligheder for at dele dine filer og mapper. Brug Invitér "
-"folk hvis du vil styre adgangsrettigheder, og vil give modtagere lov til at "
-"oprette og redigere filer. Eller bare få en URL og lad andre se og hente "
-"dine filer. Du kan bruge en udløbsdato og adgangskodebeskyttelse, hvis du "
-"ønsker det."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Collaborating"
-msgstr "Samarbejde"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Sharing files by inviting people does not only offer your recipients the "
-"option to create and edit files. Internal and external participants are also "
-"able to collaborate with you on text documents and spreadsheets at the same "
-"time."
-msgstr ""
-"Deling af filer ved at invitere folk giver ikke kun dine modtagere mulighed "
-"for at oprette og redigere filer. Interne og eksterne deltagere kan også "
-"samarbejde med dig om tekstdokumenter og regneark samtidig."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Edit documents"
-msgstr "Redigér dokumenter"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Did you know that you can edit text documents and spreadsheets online? Drive "
-"will automatically update your edited file, but thanks to versioning the "
-"original file stays available."
-msgstr ""
-"Vidste du at du kan redigere tekstdokumenter og regneark online? Drive vil "
-"automatisk opdatere din redigerede fil, men takket være versionsstyring vil "
-"den oprindelige udgave fortsat være tilgængelig."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "File details"
-msgstr "Fildetaljer"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"The file details side bar offers additional information about your files. "
-"Just enable the File details option from the View drop down menu and select "
-"a file to see the details."
-msgstr ""
-"Søjlen Fildetaljer giver dig flere oplysninger om dine filer. Slå "
-"Fildetaljer til i menuen Visning og vælg en fil for at se detaljerne."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Add another account"
-msgstr "Tilføj en anden konto"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Drive allows you to connect to other storage solutions if you already have a "
-"cloud storage account you use to save and sync your files. Simply click on "
-"the appropriate logo to access your existing data."
-msgstr ""
-"Drive giver dig mulighed for at forbinde til andre lagringsløsninger, hvis "
-"du allerede har en lagerkontor i skyen, som du bruger til at gemme og "
-"synkronisere dine filer. Klik på det relevante logo for at tilgå dine "
-"eksisterende data."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "The Drive app tour.txt"
-msgstr "The Drive app tour.txt"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Welcome to %s"
-msgstr "Velkommen til %s"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"This guided tour will briefly introduce you to the product. Get more "
-"detailed information in the tours for the single apps or in the online help."
-msgstr ""
-"Denne guidede tur vil give dig en kort introduktion til produktet. Du kan få "
-"mere detaljerede oplysninger i turene for de enkelte programmer eller i "
-"hjælpen online."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Launching an app"
-msgstr "Start af et program"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app click on an entry inside the app launcher menu."
-msgstr "For at starte et program, klikkes der inde i programstarterens menu."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Displaying the help or the settings"
-msgstr "Vis hjælp eller indstillinger"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To display the help or the settings, click the System menu icon in the menu "
-"bar."
-msgstr ""
-"For at vise hjælpen eller indstillingerne, klik på menuikonet System i "
-"menulinjen."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Creating new items"
-msgstr "Lav nye elementer"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/mail.js
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr "For skrive en ny e-mail, klik på Skriv e-mail i værktøjslinjen."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Opening or closing the folder tree"
-msgstr "Åbning eller lukning af mappetræet"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To open or close the folder tree, click on View >  Folder view on the right "
-"side of the toolbar."
-msgstr ""
-"For et åbne eller lukke mappetræet, klik Visning > Mappevisning i højre side "
-"af værktøjslinjen."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Searching for objects"
-msgstr "Søger efter objekter"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To search for objects, click the Search icon in the menu bar."
-msgstr "For at søge efter objekter, klik på ikonet Søg i menulinjen."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The toolbar"
-msgstr "Værktøjslinjen"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Depending on the app, the toolbar contains various functions for creating, "
-"editing and organizing objects."
-msgstr ""
-"Afhængigt af programmet indeholder værktøjslinjen forskellige funktioner til "
-"at oprette, redigere og organisere objekter."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The folder tree"
-msgstr "Mappetræet"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Use the folder tree to open the folder containing the objects that you want "
-"to view in the list."
-msgstr ""
-"Brug mappetræet til at åbne mappen med de objekter, som du vil se i listen."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The list"
-msgstr "Listen"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Use the list to select an object, show its contents or activate functions."
-msgstr ""
-"Brug listen til at vælge et objekt, for at se dets indhold eller aktivere "
-"funktioner."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The Detail view"
-msgstr "Detaljevisningen"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The Detail view displays an object's content. Depending on the app, further "
-"functions for organizing objects can be found in the Detail view."
-msgstr ""
-"Detaljevisningen viser et objekts indhold.  Afhængigt af programmet kan der "
-"findes flere funktioner til at organisere objekter i detaljevisningen."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Further information"
-msgstr "Yderligere information"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Detailed instructions for the single apps are located in System menu > Help."
-msgstr ""
-"Detaljerede instruktioner for de enkelte programmer kan findes i menuen "
-"System > Hjælp."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new email"
-msgstr "Skriver en ny e-mail"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the recipient's name"
-msgstr "Indtastning af modtagerens navn"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"Enter the recipient's name into the recipients field. As soon as you typed "
-"the first letters, suggestions from the address books are displayed. To "
-"accept a recipient suggestion, click on it."
-msgstr ""
-"Skriv modtagerens navn i modtagerfeltet. Så snart du har tastet de første "
-"bogstaver, vil forslag fra adressebogen blive vist. Klik på et forslag for "
-"at bruge det."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the subject"
-msgstr "Indtastning af emnet"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Enter the subject into the subject field."
-msgstr "Skriv emnet i emnefeltet."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Further functions"
-msgstr "Flere funktioner"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"In this area you can find further functions, e.g. for adding attachments."
-msgstr ""
-"I dette felt kan du finde yderligere funktioner, for eksempel til at "
-"vedhæfte filer."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the email text"
-msgstr "Indtastning af e-mail-teksten"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"Enter the email text into the main area. If the text format was set to HTML "
-"in the options, you can format the email text. To do so select a text part "
-"and then click an icon in the formatting bar."
-msgstr ""
-"Skriv brødteksten i hovedfeltet. Hvis tekstformatet er sat til HTML i "
-"indstillingerne, så kan du formatere brødteksten. For at gøre dette, "
-"markeres et stykke tekst, og der klikkes på et ikon i formatteringslinjen."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the email"
-msgstr "Sender e-mail'en"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the email, click on Send"
-msgstr "For at sende e-mail'en, klik på »Send«."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your emails"
-msgstr "Sortering af dine e-mails"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
-msgstr ""
-"For at sortere e-mail, klik på Sortér efter. Vælg et sorteringskriterie."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To choose between the different views, click on View in the toolbar. Select "
-"a menu entry in the layout."
-msgstr ""
-"For at vælge mellem forskellige visninger, klik Visning i værktøjslinjen. "
-"Vælg en menuindgang i layoutet."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an email in a separate window"
-msgstr "Åbne en e-mail i et separat vindue"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"If double-clicking on an email in the list, the email is opened in a "
-"separate window."
-msgstr ""
-"Hvis du dobbeltklikker på en e-mail i listen, bliver den åbnet i et separat "
-"vindue."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading email conversations"
-msgstr "Læs e-mail-samtaler"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
-msgstr ""
-"For at åbne eller lukke en e-mail i en samtale, klik på et frit område i "
-"brevhovedet."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Halo view"
-msgstr "Samlet visning"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To receive information about the sender or other recipients, open the Halo "
-"view by clicking on a name."
-msgstr ""
-"For at hente information om afsenderen eller andre modtagere, åbn samlet "
-"visning ved at klikke på et navn."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple emails"
-msgstr "Redigering af flere e-mails"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"In order to edit multiple emails at once, enable the checkboxes on the left "
-"side of the emails. If the checkboxes are not displayed, click on View > "
-"Checkboxes on the right side of the toolbar."
-msgstr ""
-"For at redigere flere e-mails ad gangen, skal tjekboksen på venstre side af "
-"e-mailene markeres. Hvis tjekboksen ikke er synlig, klik Visning > Tjekbokse "
-"i højre side af værktøjslinjen."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the email settings"
-msgstr "Åbner E-mail-indstillingerne"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To open the email settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on Mail on the left side."
-msgstr ""
-"For at åbne indstillingerne til e-mail, klik på systemmenu-ikonet i øverste "
-"højre side af menulinjen. Vælg indstillinger. Klik på E-mail i venstre side."
-
-#. Tour name; general introduction
-#: apps/io.ox/tours/main.js module:io.ox/tours
-msgid "Getting started"
-msgstr "Kom i gang"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Second Factor Authentication"
-msgstr "Tofaktorgodkendelse"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"You can now add additional verification options to enhance the security of "
-"your account."
-msgstr ""
-"Du kan nu tilføje yderligere indstillinger til godkendelse for din konto, og "
-"forbedre dens sikkerhed."
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Adding verification option"
-msgstr "Tilføj indstilling til verifikation"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Various options for additional verification depends on your installation."
-msgstr ""
-"Indstillingerne til yderligere verifikation er  afhængig af din installation."
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Adding a code via text message"
-msgstr "Tilføj en kode via tekst besked"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Selecting the option for a code via text message, for example, will then ask "
-"you for a phone number."
-msgstr ""
-"Vælges indstillingen for kode via tekst besked, for eksempel, vil du blive "
-"spurgt om et telefonnummer."
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Authentication Requests"
-msgstr "Forespørgsel på godkendelse"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Then the next time you log in, you will have to verify your identitity by "
-"entering the number sent to your phone."
-msgstr ""
-"Næste gang du logger ind, skal du så verificere din identitet, ved at "
-"indtaste det nummer som bliver sendt til din telefon."
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Removing"
-msgstr "Fjern"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Devices can be removed once added if you so choose.  See help for additional "
-"details."
-msgstr ""
-"Enheder kan fjernes igen når de er blevet tilføjet. Så hjælpen for flere "
-"detaljer."
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Next"
-msgstr "Næste"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"As an additional security feature, you can now require a second method of "
-"authentication, such as a text message, before logging into your account.  "
-"Would you like to see some information on this now?"
-msgstr ""
-"Som en ekstra sikkerhed, er det nu muligt at bruge en sekundær metode til "
-"godkendelse, som for eksempel en tekst besked, før der kan logges ind på din "
-"konto. Vil du se flere oplysninger?"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Start tour"
-msgstr "Start rundvisning"
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "Portalen"
@@ -708,61 +546,33 @@ msgstr ""
 "Portalen informerer dig om aktuelle e-mails, aftaler eller nyheder på "
 "sociale netværk."
 
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Reading the details"
-msgstr "Læser detaljerne"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "The calendar views"
+msgstr "Kalendervisningerne"
 
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "To read the details, click on an entry in a square."
-msgstr "For at læse detaljerne, klik på et element i en flise."
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Drag and drop"
-msgstr "Træk og slip"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
-"To change the layout, drag a square's title to another position and drop it "
-"there."
+"The calendar views display a calendar sheet with the appointments for the "
+"selected time range."
 msgstr ""
-"For at ændre udseendet, træk en flises titel til en anden position, og slip "
-"den der."
+"Kalendervisningerne viser et kalenderark med aftaler for det valgte tidsrum."
 
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Closing a square"
-msgstr "Lukke en flise"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "If you no longer want to display a square, click the delete icon."
-msgstr "Hvis du ikke længere vil have et felt vist, så klik på ikonet slet."
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Customizing the Portal"
-msgstr "Tilpasse Portalen"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To display a square again or to display further information sources, click "
-"on Customize this page."
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
 msgstr ""
-"For at vise en flise igen, eller for at vise flere informationskilder, klik "
-"Tilpas denne side."
+"Søjlen Fildetaljer giver dig flere oplysninger om dine filer. Slå "
+"Fildetaljer til i menuen Visning og vælg en fil for at se detaljerne."
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Opening the settings"
-msgstr "Åbner indstillingerne"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The folder tree"
+msgstr "Mappetræet"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"To open the settings, click the user image on the upper right side of the "
-"menu bar. Select Settings."
-msgstr ""
-"For at åbne indstillingerne, klik på brugerbilledet øverst til højre på "
-"menubjælken og vælg Indstillinger."
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "How the settings are organized"
-msgstr "Hvordan indstillingerne er organiseret"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The list"
+msgstr "Listen"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -772,21 +582,180 @@ msgstr ""
 "Indstillingerne er organiserede i emner. Vælg et emne i venstre side, for "
 "eksempel Grundlæggende indstillinger eller E-mail."
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Editing settings"
-msgstr "Redigere indstillinger"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The toolbar"
+msgstr "Værktøjslinjen"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid ""
-"Edit a setting on the right side. In most of the cases, the changes are "
-"activated immediately."
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
 msgstr ""
-"Redigér en indstilling i højre side. I de fleste tilfælde bliver ændringer "
-"aktiveret med det samme."
+"Næste gang du logger ind, skal du så verificere din identitet, ved at "
+"indtaste det nummer som bliver sendt til din telefon."
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Opening the help"
-msgstr "Åbning af hjælp"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"This guided tour will briefly introduce you to the product. Get more "
+"detailed information in the tours for the single apps or in the online help."
+msgstr ""
+"Denne guidede tur vil give dig en kort introduktion til produktet. Du kan få "
+"mere detaljerede oplysninger i turene for de enkelte programmer eller i "
+"hjælpen online."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To add further details, click on Expand form."
+msgstr "For at tilføje flere detaljer, klikkes der på Udvid."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To change the layout, drag a square's title to another position and drop it "
+"there."
+msgstr ""
+"For at ændre udseendet, træk en flises titel til en anden position, og slip "
+"den der."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To choose between the different views, click on View in the toolbar. Select "
+"a menu entry in the layout."
+msgstr ""
+"For at vælge mellem forskellige visninger, klik Visning i værktøjslinjen. "
+"Vælg en menuindgang i layoutet."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/mail.js
+msgid "To compose a new email, click on Compose in the toolbar."
+msgstr "For skrive en ny e-mail, klik på Skriv e-mail i værktøjslinjen."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create a new appointment, click on New in the toolbar."
+msgstr "For at oprette en aftale, klik på Ny i værktøjslinjen."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "To create a new contact, click on New > Add contact in the toolbar."
+msgstr ""
+"For at oprette en ny kontakt, klikkes Ny > Tilføj kontakt i værktøjslinjen."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create a new task, click on New in the toolbar."
+msgstr "For at oprette en ny opgave, klik på Ny i værktøjslinjen."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To create recurring appointments, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"For at oprette gentagende aftaler, aktivér gentagelse. Funktioner til at "
+"sætte parametrene for gentagelse er vist."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To create recurring tasks, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"For at lave gentagene opgaver, aktivér gentagelse. Funktioner til at sætte "
+"parametrene for gentagelse er vist."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create the appointment, click on Create at the lower left side."
+msgstr "For at oprette en aftale, klik på Opret i nederste venstre side."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create the task, click on Create."
+msgstr "For at oprette opgaven, klik på Opret."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To display a square again or to display further information sources, click "
+"on Customize this page."
+msgstr ""
+"For at vise en flise igen, eller for at vise flere informationskilder, klik "
+"Tilpas denne side."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"To display the help or the settings, click the System menu icon in the menu "
+"bar."
+msgstr ""
+"For at vise hjælpen eller indstillingerne, klik på menuikonet System i "
+"menulinjen."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"To edit multiple contacts at once, enable the checkboxes on the left side of "
+"the contacts. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"For at redigere flere kontakter på én gang, markeres tjekboksene på venstre "
+"side af kontakterne. Hvis tjekboksene ikke er vist, klik Visning > Tjekbokse "
+"i højre side af værktøjslinjen."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To edit multiple tasks at once, enable the checkboxes at the left side of "
+"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
+"on the right side of the toolbar."
+msgstr ""
+"For at redigere flere opgaver på én gang, aktivér tjekboksene på venstre "
+"side af opgaverne. Hvis tjekboksene ikke er vist, klik på Visning > "
+"Tjekbokse i højre side af værktøjslinjen."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To enter billing information, click on Show details."
+msgstr "For at indtaste faktureringsoplysninger, klik på Vis detaljer."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. To avoid appointment conflicts, click on Find a free time at "
+"the upper right side."
+msgstr ""
+"For at invitere andre deltagere, skriv deres navn i feltet under Deltagere. "
+"For at undgå konflikter med aftaler, klik på Find ledig tid øverst til højre."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. You can add documents as attachment to the task."
+msgstr ""
+"For at invitere andre deltagere, indtast deres navne i feltet under "
+"Deltagere. Du kan tilføje dokumenter som vedhæftninger til opgaven."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To launch an app click on an entry inside the app launcher menu."
+msgstr "For at starte et program, klikkes der inde i programstarterens menu."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Brug påmindelsesfunktionen, så du ikke kommer til at overse en aftale."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To not miss the task, use the reminder function."
+msgstr "Brug påmindelsesfunktionen, så du ikke kommer til at overse en opgave."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open or close an email in a conversation, click on a free area in the "
+"header."
+msgstr ""
+"For at åbne eller lukke en e-mail i en samtale, klik på et frit område i "
+"brevhovedet."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"To open or close the folder tree, click on View >  Folder view on the right "
+"side of the toolbar."
+msgstr ""
+"For et åbne eller lukke mappetræet, klik Visning > Mappevisning i højre side "
+"af værktøjslinjen."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the System menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on Mail on the left side."
+msgstr ""
+"For at åbne indstillingerne til e-mail, klik på systemmenu-ikonet i øverste "
+"højre side af menulinjen. Vælg indstillinger. Klik på E-mail i venstre side."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -801,8 +770,48 @@ msgstr ""
 "vinduet."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Signing out"
-msgstr "Logger ud"
+msgid ""
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
+msgstr ""
+"For at åbne indstillingerne, klik på brugerbilledet øverst til højre på "
+"menubjælken og vælg Indstillinger."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "To read the details, click on an entry in a square."
+msgstr "For at læse detaljerne, klik på et element i en flise."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To receive information about the sender or other recipients, open the Halo "
+"view by clicking on a name."
+msgstr ""
+"For at hente information om afsenderen eller andre modtagere, åbn samlet "
+"visning ved at klikke på et navn."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To search for objects, click the Search icon in the menu bar."
+msgstr "For at søge efter objekter, klik på ikonet Søg i menulinjen."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To select one of the views like Day, Month or List, click on View in the "
+"toolbar. Select a menu entry from the Layout section."
+msgstr ""
+"For at vælge en af visningerne Dag, Måned eller Liste, klik på Visning i "
+"værktøjslinjen. Vælg en menuindgang i Layout-gruppen."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"To send an email to the contact, click on an email address or on Send email "
+"in the toolbar."
+msgstr ""
+"For at sende en e-mail til kontakten, klik på en e-mail-adresse eller på "
+"Send e-mail i værktøjslinjen."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To send the email, click on Send"
+msgstr "For at sende e-mail'en, klik på »Send«."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -817,81 +826,10 @@ msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr "For at logge ud, klik på ikonet log-ud øverst til højre i menubjælken."
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating a new task"
-msgstr "Opretter en ny opgave"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "For at oprette en ny opgave, klik på Ny i værktøjslinjen."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Entering the task's data"
-msgstr "Indtastning af en opgaves data"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Enter the subject, the start date, and a description."
-msgstr "Indtast emnet, startdatoen og en beskrivelse."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Adding further details"
-msgstr "Tilføj flere detaljer"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To add further details, click on Expand form."
-msgstr "For at tilføje flere detaljer, klikkes der på Udvid."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating recurring tasks"
-msgstr "Opretter gentagende opgaver"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid ""
-"To create recurring tasks, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
-"For at lave gentagene opgaver, aktivér gentagelse. Funktioner til at sætte "
-"parametrene for gentagelse er vist."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To not miss the task, use the reminder function."
-msgstr "Brug påmindelsesfunktionen, så du ikke kommer til at overse en opgave."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Tracking the editing status"
-msgstr "Sporer status på redigering"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To track the editing status, enter the current progress."
-msgstr "For at følge status på redigering, indtast den nuværende proces."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. You can add documents as attachment to the task."
-msgstr ""
-"For at invitere andre deltagere, indtast deres navne i feltet under "
-"Deltagere. Du kan tilføje dokumenter som vedhæftninger til opgaven."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Entering billing information"
-msgstr "Indtaster faktureringsoplysninger"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To enter billing information, click on Show details."
-msgstr "For at indtaste faktureringsoplysninger, klik på Vis detaljer."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating the task"
-msgstr "Opretter opgaven"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create the task, click on Create."
-msgstr "For at oprette opgaven, klik på Opret."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Sorting tasks"
-msgstr "Sorterer opgaver"
+"For at sortere e-mail, klik på Sortér efter. Vælg et sorteringskriterie."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
@@ -899,136 +837,80 @@ msgstr ""
 "For at sortere opgaver, klik på Sortér efter. Vælg et sorteringskriterie."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Editing multiple tasks"
-msgstr "Redigering af flere opgaver"
+msgid "To track the editing status, enter the current progress."
+msgstr "For at følge status på redigering, indtast den nuværende proces."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
+msgstr ""
+"For at overføre en ny fil fra din lokale enhed, klik på Tilføj lokal fil og "
+"vælg filen du gerne vil overføre. Det er endnu lettere, hvis du bare trækker "
+"filerne fra din lokale enhed og ind i Drive. Den overførte fil er nu "
+"tilgængelig i Drive på alle dine enheder."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Toolbar"
+msgstr "Værktøjslinje"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Tracking the editing status"
+msgstr "Sporer status på redigering"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Upload a new file"
+msgstr "Overfør en ny fil"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"To edit multiple tasks at once, enable the checkboxes at the left side of "
-"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
-"on the right side of the toolbar."
+"Use the folder tree to open the folder containing the objects that you want "
+"to view in the list."
 msgstr ""
-"For at redigere flere opgaver på én gang, aktivér tjekboksene på venstre "
-"side af opgaverne. Hvis tjekboksene ikke er vist, klik på Visning > "
-"Tjekbokse i højre side af værktøjslinjen."
+"Brug mappetræet til at åbne mappen med de objekter, som du vil se i listen."
 
-#~ msgid ""
-#~ "To send an E-Mail to the contact, click on an E-Mail address or on Send "
-#~ "email in the toolbar."
-#~ msgstr ""
-#~ "For at sende en e-mail til kontakten, klik på en e-mail-adresse eller på "
-#~ "Send e-mail i værktøjslinjen."
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Use the list to select an object, show its contents or activate functions."
+msgstr ""
+"Brug listen til at vælge et objekt, for at se dets indhold eller aktivere "
+"funktioner."
 
-#~ msgid ""
-#~ "To open the email settings, click the System menu icon on the upper right "
-#~ "side of the menu bar. Select Settings. Click on email on the left side."
-#~ msgstr ""
-#~ "For at åbne indstillingerne til e-mail, klik på systemmenu-ikonet i "
-#~ "øverste højre side af menulinjen. Vælg indstillinger. Klik på E-mail i "
-#~ "venstre side."
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Brug af funktionen til påmindelse"
 
-#~ msgid "Sending an E-Mail to a contact"
-#~ msgstr "Send en e-mail til en kontakt"
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr ""
+"Indstillingerne til yderligere verifikation er  afhængig af din installation."
 
-#~ msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
-#~ msgstr ""
-#~ "For at oprette en ny e-mail, klik på Skriv ny e-mail i værktøjslinjen."
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Welcome to %s"
+msgstr "Velkommen til %s"
 
-#~ msgid "Composing a new E-Mail"
-#~ msgstr "Skriver en ny e-mail"
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
+"Velkommen til din lagerplads i skyen. Denne rundvisning vil introducere dig "
+"til din nye online lagerløsning - din ene adgangvej til lagrede filer fra "
+"alle dine konti. Her kan du overføre, dine filer, gemme dem, og synkronisere "
+"dem med forskellige enheder."
 
-#~ msgid "To compose a new E-Mail, click on Compose in the toolbar."
-#~ msgstr "For skrive en ny e-mail, klik på Skriv e-mail i værktøjslinjen."
-
-#~ msgid "Entering the E-Mail text"
-#~ msgstr "Indtastning af e-mail-teksten"
-
-#~ msgid ""
-#~ "Enter the E-Mail text into the main area. If the text format was set to "
-#~ "HTML in the options, you can format the E-Mail text. To do so select a "
-#~ "text part and then click an icon in the formatting bar."
-#~ msgstr ""
-#~ "Skriv brødteksten i hovedfeltet. Hvis tekstformatet er sat til HTML i "
-#~ "indstillingerne, så kan du formatere brødteksten. For at gøre dette, "
-#~ "markeres et stykke tekst, og der klikkes på et ikon i formatteringslinjen."
-
-#~ msgid "Sending the E-Mail"
-#~ msgstr "Sender e-mail'en"
-
-#~ msgid "To send the E-Mail, click on Send"
-#~ msgstr "For at sende e-mail'en, klik på Send."
-
-#~ msgid "Sorting your E-Mails"
-#~ msgstr "Sortering af dine e-mails"
-
-#~ msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
-#~ msgstr ""
-#~ "For at sortere e-mail, klik på Sortér efter. Vælg et sorteringskriterie."
-
-#~ msgid ""
-#~ "To choose between the different views. click on View in the toolbar. "
-#~ "Select a menu entry in the layout."
-#~ msgstr ""
-#~ "For at vælge mellem forskellige visninger, klik Visning i værktøjslinjen. "
-#~ "Vælg en menuindgang i layoutet."
-
-#~ msgid "Opening an E-Mail in a separate window"
-#~ msgstr "Åbne en e-mail i et separat vindue"
-
-#~ msgid ""
-#~ "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
-#~ "separate window."
-#~ msgstr ""
-#~ "Hvis du dobbeltklikker på en e-mail i listen, bliver den åbnet i et "
-#~ "separat vindue."
-
-#~ msgid "Reading E-Mail conversations"
-#~ msgstr "Læs e-mail-samtaler"
-
-#~ msgid ""
-#~ "To open or close an E-Mail in a conversation, click on a free area in the "
-#~ "header."
-#~ msgstr ""
-#~ "For at åbne eller lukke en e-mail i en samtale, klik på et frit område i "
-#~ "brevhovedet."
-
-#~ msgid "Editing multiple E-Mails"
-#~ msgstr "Redigering af flere e-mails"
-
-#~ msgid ""
-#~ "In order to edit multiple E-Mails at once, enable the checkboxes on the "
-#~ "left side of the E-Mails. If the checkboxes are not displayed, click on "
-#~ "View > Checkboxes on the right side of the toolbar."
-#~ msgstr ""
-#~ "For at redigere flere e-mails ad gangen, skal tjekboksen på venstre side "
-#~ "af e-mailene markeres. Hvis tjekboksen ikke er synlig, klik Visning > "
-#~ "Tjekbokse i højre side af værktøjslinjen."
-
-#~ msgid "Opening the E-Mail settings"
-#~ msgstr "Åbner E-mail-indstillingerne"
-
-#~ msgid ""
-#~ "To open the E-Mail settings, click the System menu icon on the upper "
-#~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
-#~ "side."
-#~ msgstr ""
-#~ "For at åbne indstillingerne til e-mail, klik på systemmenu-ikonet i "
-#~ "øverste højre side af menulinjen. Vælg indstillinger. Klik på E-mail i "
-#~ "venstre side."
-
-#~ msgid ""
-#~ "The Portal informs you about current E-Mails, appointments or social "
-#~ "network news."
-#~ msgstr ""
-#~ "Portalen informerer dig om aktuelle e-mails, aftaler eller nyheder på "
-#~ "sociale netværk."
-
-#~ msgid ""
-#~ "The settings are organized in topics. Select the topic on the left side, "
-#~ "e.g Basic settings or E-Mail."
-#~ msgstr ""
-#~ "Indstillingerne er organiserede i emner. Vælg et emne i venstre side, for "
-#~ "eksempel Grundlæggende indstillinger eller E-mail."
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Du kan nu tilføje yderligere indstillinger til godkendelse for din konto, og "
+"forbedre dens sikkerhed."
 
 #~ msgid "%1$d %2$s"
 #~ msgstr "%1$d %2$s"
@@ -2010,6 +1892,9 @@ msgstr ""
 #~ msgid "Compose new mail"
 #~ msgstr "Skriv ny e-mail"
 
+#~ msgid "Composing a new E-Mail"
+#~ msgstr "Skriver en ny e-mail"
+
 #~ msgid "Conditions"
 #~ msgstr "Betingelser"
 
@@ -2574,6 +2459,9 @@ msgstr ""
 #~ msgid "Edit to set a name."
 #~ msgstr "Redigér for at vælge et navn."
 
+#~ msgid "Editing multiple E-Mails"
+#~ msgstr "Redigering af flere e-mails"
+
 #~ msgid "Editor"
 #~ msgstr "Editor"
 
@@ -2694,6 +2582,15 @@ msgstr ""
 #~ "markeres et stykke tekst, og der klikkes på et ikon i formateringslinjen."
 
 #~ msgid ""
+#~ "Enter the E-Mail text into the main area. If the text format was set to "
+#~ "HTML in the options, you can format the E-Mail text. To do so select a "
+#~ "text part and then click an icon in the formatting bar."
+#~ msgstr ""
+#~ "Skriv brødteksten i hovedfeltet. Hvis tekstformatet er sat til HTML i "
+#~ "indstillingerne, så kan du formatere brødteksten. For at gøre dette, "
+#~ "markeres et stykke tekst, og der klikkes på et ikon i formatteringslinjen."
+
+#~ msgid ""
 #~ "Enter the recipient's name on the top left side. As soon as you typed the "
 #~ "first letters, suggestions from the address books are displayed. To "
 #~ "accept a recipient suggestion, click on it."
@@ -2704,6 +2601,9 @@ msgstr ""
 
 #~ msgid "Enter the subject on the right side of the recipient."
 #~ msgstr "Indtast emnet på højre side af modtageren."
+
+#~ msgid "Entering the E-Mail text"
+#~ msgstr "Indtastning af e-mail-teksten"
 
 #~ msgid "Entire thread"
 #~ msgstr "Hele tråden"
@@ -3180,6 +3080,13 @@ msgstr ""
 #~ "For at gøre dette, klikkes på Diasshow i værktøjslinjen."
 
 #~ msgid ""
+#~ "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+#~ "separate window."
+#~ msgstr ""
+#~ "Hvis du dobbeltklikker på en e-mail i listen, bliver den åbnet i et "
+#~ "separat vindue."
+
+#~ msgid ""
 #~ "If you change the password, you will be signed out. Please ensure that "
 #~ "everything is closed and saved."
 #~ msgstr ""
@@ -3243,6 +3150,15 @@ msgstr ""
 #~ msgstr ""
 #~ "I tilfælde af nye underretninger, for eksempel en invitation til en "
 #~ "aftale, åbnes informationsområdet."
+
+#~ msgid ""
+#~ "In order to edit multiple E-Mails at once, enable the checkboxes on the "
+#~ "left side of the E-Mails. If the checkboxes are not displayed, click on "
+#~ "View > Checkboxes on the right side of the toolbar."
+#~ msgstr ""
+#~ "For at redigere flere e-mails ad gangen, skal tjekboksen på venstre side "
+#~ "af e-mailene markeres. Hvis tjekboksen ikke er synlig, klik Visning > "
+#~ "Tjekbokse i højre side af værktøjslinjen."
 
 #~ msgid "In progress"
 #~ msgstr "Undervejs"
@@ -4024,6 +3940,12 @@ msgstr ""
 #~ msgid "Opening E-Mail threads"
 #~ msgstr "Åbner e-mail tråde"
 
+#~ msgid "Opening an E-Mail in a separate window"
+#~ msgstr "Åbne en e-mail i et separat vindue"
+
+#~ msgid "Opening the E-Mail settings"
+#~ msgstr "Åbner E-mail-indstillingerne"
+
 #~ msgid "Optional 01"
 #~ msgstr "Valgfri 01"
 
@@ -4487,6 +4409,9 @@ msgstr ""
 #~ msgid "Read article on tumblr.com"
 #~ msgstr "Læs artikler op tumblr.com"
 
+#~ msgid "Reading E-Mail conversations"
+#~ msgstr "Læs e-mail-samtaler"
+
 #~ msgid "Reauthorize"
 #~ msgstr "Re-godkend"
 
@@ -4801,6 +4726,12 @@ msgstr ""
 #~ msgid "Sender/From"
 #~ msgstr "Sender/Fra"
 
+#~ msgid "Sending an E-Mail to a contact"
+#~ msgstr "Send en e-mail til en kontakt"
+
+#~ msgid "Sending the E-Mail"
+#~ msgstr "Sender e-mail'en"
+
 #~ msgid "Sent folder"
 #~ msgstr "Sendt mappe"
 
@@ -5065,6 +4996,9 @@ msgstr ""
 #~ "Beklager, men vi kan ikke hjælpe dig her. Din udbyder skal skaffe en "
 #~ "nøgle fra LinkedIn, med tilladelse til at læse beskeder."
 
+#~ msgid "Sorting your E-Mails"
+#~ msgstr "Sortering af dine e-mails"
+
 #~ msgid "Source"
 #~ msgstr "Kilde"
 
@@ -5291,6 +5225,13 @@ msgstr ""
 #~ msgstr ""
 #~ "Nye objekter-ikonet viser antallet af ulæste e-mails og andre "
 #~ "påmindelser. Hvis der klikkes på ikonet, åbner informationsområdet."
+
+#~ msgid ""
+#~ "The Portal informs you about current E-Mails, appointments or social "
+#~ "network news."
+#~ msgstr ""
+#~ "Portalen informerer dig om aktuelle e-mails, aftaler eller nyheder på "
+#~ "sociale netværk."
 
 #~ msgid "The Tiles view"
 #~ msgstr "Flisevisningen"
@@ -5537,6 +5478,13 @@ msgstr ""
 
 #~ msgid "The setting has been saved."
 #~ msgstr "Indstillingen er blevet gemt."
+
+#~ msgid ""
+#~ "The settings are organized in topics. Select the topic on the left side, "
+#~ "e.g Basic settings or E-Mail."
+#~ msgstr ""
+#~ "Indstillingerne er organiserede i emner. Vælg et emne i venstre side, for "
+#~ "eksempel Grundlæggende indstillinger eller E-mail."
 
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "
@@ -5825,6 +5773,20 @@ msgstr ""
 #~ "adresse (for eksempel john.doe@example.com eller \"John Doe\" <jd@example."
 #~ "com>)"
 
+#~ msgid ""
+#~ "To choose between the different views. click on View in the toolbar. "
+#~ "Select a menu entry in the layout."
+#~ msgstr ""
+#~ "For at vælge mellem forskellige visninger, klik Visning i værktøjslinjen. "
+#~ "Vælg en menuindgang i layoutet."
+
+#~ msgid "To compose a new E-Mail, click on Compose in the toolbar."
+#~ msgstr "For skrive en ny e-mail, klik på Skriv e-mail i værktøjslinjen."
+
+#~ msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+#~ msgstr ""
+#~ "For at oprette en ny e-mail, klik på Skriv ny e-mail i værktøjslinjen."
+
 #~ msgid "To create a note, click on New > Add note in the toolbar."
 #~ msgstr "For at oprette en note, klik på Ny > Tilføj note i værktøjslinjen."
 
@@ -5849,6 +5811,22 @@ msgstr ""
 #~ "menubjælken, eller klik på en app inde i app-starter-menuen."
 
 #~ msgid ""
+#~ "To open or close an E-Mail in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "For at åbne eller lukke en e-mail i en samtale, klik på et frit område i "
+#~ "brevhovedet."
+
+#~ msgid ""
+#~ "To open the E-Mail settings, click the System menu icon on the upper "
+#~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
+#~ "side."
+#~ msgstr ""
+#~ "For at åbne indstillingerne til e-mail, klik på systemmenu-ikonet i "
+#~ "øverste højre side af menulinjen. Vælg indstillinger. Klik på E-mail i "
+#~ "venstre side."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -5858,6 +5836,14 @@ msgstr ""
 #~ "øverste højre side af menulinjen. Vælg Indstillinger. Klik på E-mail i "
 #~ "venstre side.  For at vise alle indstillinger, slå Avancerede "
 #~ "indstillinger til i nederste venstre side."
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on email on the left side."
+#~ msgstr ""
+#~ "For at åbne indstillingerne til e-mail, klik på systemmenu-ikonet i "
+#~ "øverste højre side af menulinjen. Vælg indstillinger. Klik på E-mail i "
+#~ "venstre side."
 
 #, fuzzy
 #~ msgid ""
@@ -5892,8 +5878,22 @@ msgstr ""
 #~ "For at vælge en af visningerne Liste, Ikon eller Fliser, klik Visning i "
 #~ "højre side af værktøjslinjen."
 
+#~ msgid ""
+#~ "To send an E-Mail to the contact, click on an E-Mail address or on Send "
+#~ "email in the toolbar."
+#~ msgstr ""
+#~ "For at sende en e-mail til kontakten, klik på en e-mail-adresse eller på "
+#~ "Send e-mail i værktøjslinjen."
+
+#~ msgid "To send the E-Mail, click on Send"
+#~ msgstr "For at sende e-mail'en, klik på Send."
+
 #~ msgid "To send the E-Mail, click on Send on the upper right side."
 #~ msgstr "For at sende e-mail'en, klikkes der på Send i højre øverste hjørne."
+
+#~ msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "For at sortere e-mail, klik på Sortér efter. Vælg et sorteringskriterie."
 
 #~ msgid "To upload a file, click on New > Upload new file in the toolbar."
 #~ msgstr ""
