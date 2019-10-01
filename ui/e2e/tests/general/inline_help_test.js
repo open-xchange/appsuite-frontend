@@ -25,12 +25,12 @@ After(async (users) => {
 Scenario('[C274424] Inline Help', async (I) => {
     I.login();
 
-    await verifyHelp(I, 'Mail', '5.1. The E-Mail Components');
-    await verifyHelp(I, 'Calendar', '7.1. The Calendar Components');
-    await verifyHelp(I, 'Address Book', '6.1. The Address Book Components');
-    await verifyHelp(I, 'Drive', '9.1. The Drive Components');
-    await verifyHelp(I, 'Tasks', '8.1. The Tasks Components');
-    await verifyHelp(I, 'Portal', '4.1. The Portal Components');
+    await verifyHelp(I, 'Mail', '5.1. The E-Mail');
+    await verifyHelp(I, 'Calendar', '7.1. The Calendar');
+    await verifyHelp(I, 'Address Book', '6.1. The Address Book');
+    await verifyHelp(I, 'Drive', '9.1. The Drive');
+    await verifyHelp(I, 'Tasks', '8.1. The Tasks');
+    await verifyHelp(I, 'Portal', '4.1. The Portal');
 });
 
 async function verifyHelp(I, appName, expectedHelp) {
