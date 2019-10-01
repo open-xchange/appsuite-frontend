@@ -149,8 +149,8 @@ define('io.ox/settings/personalData/settings/pane', [
                 if (!_(ignoredErrors).contains(apiResponse.code)) {
                     yell(apiResponse);
                 }
-                // in case of error set status to none, so user can retry
-                apiResponse = { status: 'none' };
+                // in case of error set status to NONE, so user can retry
+                apiResponse = { status: 'NONE' };
             }
 
             return apiResponse;
@@ -241,10 +241,10 @@ define('io.ox/settings/personalData/settings/pane', [
 
                 // display the correct buttons depending on the current download state
                 switch (this.status.get('status')) {
-                    case 'none':
+                    case 'NONE':
                         this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Request download'))
                             .on('click', function () {
-                                api.requestDownload(self.getDownloadConfig()).fail(yell);
+                                api.requestDownload(self.getDownloadConfig(), true).fail(yell);
                             }));
                         break;
                     case 'PENDING':
@@ -297,7 +297,7 @@ define('io.ox/settings/personalData/settings/pane', [
                 });
             },
             render: function () {
-                this.$el.empty().toggle(this.model.get('status') !== 'none');
+                this.$el.empty().toggle(this.model.get('status') !== 'NONE');
 
                 //#. header for zip archive download list
                 this.$el.append($('<h1 class="col-xs-12">').text(gt('Your archive')));
