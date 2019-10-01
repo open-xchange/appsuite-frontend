@@ -124,9 +124,6 @@ define('io.ox/oauth/backbone', [
                             delete window['callback_' + callbackName];
                         });
                     }).then(function (response) {
-                        // FIXME: should the caller close the popup?
-                        popupWindow.close();
-
                         if (!response.data) {
                             // TODO handle a possible error object in response
                             return $.Deferred().reject();
@@ -149,7 +146,10 @@ define('io.ox/oauth/backbone', [
                             oauthAPI.accounts.add(model);
                             return res;
                         });
-                    }).done(options.success).fail(options.error);
+                    }).done(options.success).fail(options.error).always(function () {
+                        // FIXME: should the caller close the popup?
+                        popupWindow.close();
+                    });
                 case 'update':
                     return model.reauthorize({ force: false }).then(function () {
                         return http.PUT({
