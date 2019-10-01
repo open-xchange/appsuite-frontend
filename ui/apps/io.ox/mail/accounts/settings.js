@@ -157,6 +157,7 @@ define('io.ox/mail/accounts/settings', [
         index: 100,
         draw: function (baton) {
             var $el = this;
+            $el.empty().addClass('mail-account-dialog');
             require(['io.ox/oauth/keychain', 'io.ox/oauth/backbone']).then(function (oauthAPI, OAuth) {
                 var mailServices = new Backbone.Collection(oauthAPI.services.filter(function (service) {
                         return _(service.get('availableScopes')).contains('mail') &&
@@ -172,7 +173,7 @@ define('io.ox/mail/accounts/settings', [
                                     .any(oauthId)
                                     .value();
                             }, true);
-                    })), list = new OAuth.Views.ServicesListView({ collection: mailServices });
+                    })), list = new OAuth.Views.ServicesListView({ collection: mailServices, model: { mailService: true } });
 
                 if (mailServices.length === 0) {
                     baton.popup.getFooter().find('[data-action="add"]').show();
@@ -182,11 +183,12 @@ define('io.ox/mail/accounts/settings', [
                 }
                 mailServices.push({
                     id: 'mailwizard',
-                    displayName: gt('Other')
+                    type: 'wizard',
+                    displayName: gt('Add other mail account')
                 });
 
                 $el.append(
-                    $('<label>').text(gt('Please select your mail account provider')),
+                    $('<label>').text(gt('Please choose your mail account provider.')),
                     list.render().$el,
                     createUnifiedMailboxInput()
                 );
