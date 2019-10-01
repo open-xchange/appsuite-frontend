@@ -14,8 +14,9 @@
 define('io.ox/oauth/backbone', [
     'io.ox/core/http',
     'io.ox/core/yell',
+    'gettext!io.ox/oauth',
     'less!io.ox/oauth/style'
-], function (http, yell) {
+], function (http, yell, gt) {
     'use strict';
 
     var generateId = function () {
@@ -124,9 +125,6 @@ define('io.ox/oauth/backbone', [
                             delete window['callback_' + callbackName];
                         });
                     }).then(function (response) {
-                        // FIXME: should the caller close the popup?
-                        popupWindow.close();
-
                         if (!response.data) {
                             // TODO handle a possible error object in response
                             return $.Deferred().reject(response.error);
@@ -149,7 +147,10 @@ define('io.ox/oauth/backbone', [
                             oauthAPI.accounts.add(model);
                             return res;
                         });
-                    }).done(options.success).fail(options.error);
+                    }).done(options.success).fail(options.error).always(function () {
+                        // FIXME: should the caller close the popup?
+                        popupWindow.close();
+                    });
                 case 'update':
                     return model.reauthorize({ force: false }).then(function () {
                         return http.PUT({
@@ -246,6 +247,21 @@ define('io.ox/oauth/backbone', [
             return this;
         }
     });
+
+    var MailServiceItemView = ServiceItemView.extend({
+        render: function () {
+            var shortId = this.model.get('icon') || this.model.id.match(/\.?(\w*)$/)[1] || 'fallback';
+            var label = (this.model.get('displayName') === 'Google') ? gt('Sign in with Google. This will add your Gmail account.') : this.model.get('displayName');
+            this.$el.append(
+                $('<button type="button" class="btn btn-default">').data({ cid: this.model.cid }).append(
+                    $('<i class="service-icon fa">').addClass('logo-' + shortId)
+                ),
+                $('<div class="service-label">').text(label)
+            );
+            return this;
+        }
+    });
+
     var ServicesListView = Backbone.View.extend({
         tagName: 'ul',
         className: 'list-unstyled services-list-view',
@@ -256,11 +272,19 @@ define('io.ox/oauth/backbone', [
         ItemView: ServiceItemView,
         render: function () {
             var ItemView = this.ItemView;
+            var isMailService = this.model && this.model.mailService || false;
             this.$el.append(
                 this.collection.map(function (service) {
-                    var view = new ItemView({
-                        model: service
-                    });
+                    var view;
+                    if (isMailService) {
+                        view = new MailServiceItemView({
+                            model: service
+                        });
+                    } else {
+                        view = new ItemView({
+                            model: service
+                        });
+                    }
                     return view.render().$el;
                 })
             );
@@ -280,7 +304,8 @@ define('io.ox/oauth/backbone', [
         Account: Account,
         Views: {
             ServicesListView: ServicesListView,
-            ServiceItemView: ServiceItemView
+            ServiceItemView: ServiceItemView,
+            MailServiceItemView: MailServiceItemView
         }
     };
 });
