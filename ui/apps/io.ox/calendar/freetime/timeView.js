@@ -825,9 +825,13 @@ define('io.ox/calendar/freetime/timeView', [
                     endTime = Math.max(this.lassoStartTime, this.lassoEndTime),
                     attendees = this.model.get('attendees').toJSON();
 
+                // use correct timezone (view uses the timezone of the startdate, so this is also correct for the enddate)
+                startTime = this.parentView.parentModel ? moment.tz(startTime, this.parentView.parentModel.get('startDate').tzid) : moment(startTime);
+                endTime = this.parentView.parentModel ? moment.tz(endTime, this.parentView.parentModel.get('startDate').tzid) : moment(endTime);
+
                 // round to full minutes
-                startTime = moment(startTime).startOf('minute');
-                endTime = moment(endTime).startOf('minute');
+                startTime.startOf('minute');
+                endTime.startOf('minute');
 
                 // check if the lasso is a fullday appointment
                 if (startTime.valueOf() !== endTime.valueOf() && startTime.valueOf() === moment(startTime).startOf('day').valueOf() && endTime.valueOf() === moment(endTime).startOf('day').valueOf()) {
@@ -837,6 +841,9 @@ define('io.ox/calendar/freetime/timeView', [
                         attendees: attendees
                     };
                 }
+
+                // Endtimezone might be different so correct this if needed
+                if (this.parentView.parentModel) endTime.tz(this.parentView.parentModel.get('endDate').tzid);
 
                 return {
                     startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: startTime.tz() },
