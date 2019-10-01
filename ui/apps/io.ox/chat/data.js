@@ -21,7 +21,7 @@ define('io.ox/chat/data', [
 
     'use strict';
 
-    var chatHost = _.url.hash('chatHost'),
+    var chatHost =  _.url.hash('chatHost') || ox.serverConfig.chatHost,
         DEFAULT_LIMIT = 40;
 
     var data = {
