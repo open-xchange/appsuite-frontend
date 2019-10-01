@@ -282,7 +282,7 @@ define('io.ox/backbone/views/window', [
             $(container).append(this.$el);
             this.$el.focus();
             //if (backdrop.parents().length === 0) $('#io-ox-screens').append(backdrop);
-            this.activate();
+            this.activate({ firstTime: true });
             return this;
         },
 
@@ -329,6 +329,9 @@ define('io.ox/backbone/views/window', [
 
             if (this.model.get('lazy')) return this.model.set('lazy', false);
             this.keepInWindow();
+            if (e && e.firstTime && this.model.get('mode') === 'maximized') {
+                this.$el.css('top', Math.max(0, Math.min(32, $(container).height() - this.$el.height())));
+            }
             ox.trigger('change:document:title', this.model.get('title'));
         },
 
