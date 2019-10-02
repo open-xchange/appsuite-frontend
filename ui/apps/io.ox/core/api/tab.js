@@ -138,7 +138,7 @@ define('io.ox/core/api/tab', [
         openBlank: function (url) {
             var newWindow;
 
-            if (_.browser.chrome >= 72 || _.browser.edgechromium >= 77) {
+            if (_.device('noopener') || _.browser.edgechromium >= 77) {
                 newWindow = window.open('', '_blank');
                 newWindow.opener = null;
                 newWindow.location = url;

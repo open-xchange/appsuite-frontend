@@ -453,7 +453,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
         action: function (baton) {
             var documentPDFUrl = DocConverterUtils.getEncodedConverterUrl(baton.context.model);
-            if (_.browser.chrome >= 72) {
+            if (_.device('noopener')) {
                 window.open(documentPDFUrl, '_blank', 'noopener');
             } else {
                 blankshield.open(documentPDFUrl, '_blank');

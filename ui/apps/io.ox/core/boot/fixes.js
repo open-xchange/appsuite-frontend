@@ -54,7 +54,7 @@ define('io.ox/core/boot/fixes', [], function () {
     // See: https://mathiasbynens.github.io/rel-noopener/
     // and: https://github.com/danielstjules/blankshield
     $(document).on('click', 'a[rel="noopener"], area[target="_blank"]', function (e) {
-        if (_.browser.chrome >= 72) return;
+        if (_.device('noopener')) return;
         e.preventDefault();
         blankshield.open($(this).attr('href'));
     });
