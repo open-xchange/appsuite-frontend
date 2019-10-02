@@ -18,6 +18,14 @@ define('io.ox/dynamic-theme/register', [
         }
     });
 
+    // Legacy values from previous versions override new defaults
+    var legacy = {
+        topbarBackground: 'frameColor',
+        listSelectedFocus: 'selectionColor',
+        folderSelectedFocus: 'selectionColor'
+    };
+    for (var i in legacy) if (vars[legacy[i]]) vars[i] = vars[legacy[i]];
+
     if (typeof vars.logoHeight === 'number') vars.logoHeight += 'px';
     if (typeof vars.logoWidth === 'number') vars.logoWidth += 'px';
     less.setVars(vars);
