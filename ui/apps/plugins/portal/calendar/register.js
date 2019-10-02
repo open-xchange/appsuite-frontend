@@ -177,8 +177,15 @@ define('plugins/portal/calendar/register', [
         draw: function (baton) {
             var popup = this.busy();
             require(['io.ox/calendar/view-detail'], function (view) {
-                var model = baton.item;
-                popup.idle().append(view.draw(model.toJSON(), { deeplink: true }));
+                // model might contain only list request data yet. So get full appointment data
+                api.get(baton.item).then(function (model) {
+                    popup.idle().append(view.draw(model.toJSON(), { deeplink: true }));
+                }, function (error) {
+                    popup.close();
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell(error);
+                    });
+                });
             });
         },
 
