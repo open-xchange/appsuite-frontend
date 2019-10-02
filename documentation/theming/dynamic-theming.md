@@ -56,9 +56,11 @@ The package installs the file `/opt/open-xchange/etc/settings/open-xchange-dynam
 In the configuration file, each variable name must be preceded by '`io.ox/dynamic-theme//`'.
 When referring to the value of other variables on the right side of the equals sign,
 (like in the default value of `linkColor`) the variable names must be preceded by '`@io-ox-dynamic-theme-`'.
-The colors can be any CSS color. `headerLogo` and `logoURL` can be relative (to `/appsuite/`), or absolute.
+`headerLogo` and `logoURL` can be relative (to `/appsuite/`), or absolute.
 When using absolute URLs to point to different hosts, use the form `//hostname/path`
 to keep the protocol (HTTP or HTTPS) and avoid any unnecessary security warnings.
+
+The colors can be any CSS color, as long as the restriction of the "Dark/Light" column are respected. Colors marked "dark" specify dark backgrounds with white text/icons. If the specified color is too light, accessibility will suffer. Similarly for colors labeled "light".
 
 # Theming the Login Screen
 
