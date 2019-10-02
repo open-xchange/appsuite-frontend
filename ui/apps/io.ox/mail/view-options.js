@@ -357,7 +357,6 @@ define('io.ox/mail/view-options', [
                 $('<button type="button" class="btn btn-link toolbar-item pull-left" data-action="open-folder-view">').attr('aria-label', gt('Open folder view')).append(
                     $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view'))
                 )
-                .hide()
                 .on('click', { app: baton.app, state: true }, toggleFolderView)
             );
 
