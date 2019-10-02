@@ -419,6 +419,8 @@ define('io.ox/calendar/invitations/register', [
                 action(self.imip, {
                     api: {
                         checkConflicts: function () {
+                            if (_.isArray(self.options.conflicts)) return $.when(self.options.conflicts);
+
                             var conflicts = [];
                             // no need to check if appointment was declined
                             if (doConflictCheck) {
