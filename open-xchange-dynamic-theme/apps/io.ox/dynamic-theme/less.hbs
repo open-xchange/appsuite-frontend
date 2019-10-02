@@ -58,18 +58,18 @@ define('io.ox/dynamic-theme/less', [
                 if (!('console' in window) || !console.error) return;
                 console.error('Error in', name, e);
             }
+
+            function add_node() {
+                return nodes[name] = $('<style type="text/css">')
+                    .attr('data-dynamic-src', name)
+                    .insertAfter('#custom');
+            }
+            if (!header) return add_node();
+
             new less.Parser().parse(header + file, function (e, root) {
                 if (e) return error(e);
                 try {
-                    var css = root.toCSS(), node = nodes[name];
-                    if (node) {
-                        node.text(css);
-                    } else {
-                        nodes[name] = $('<style type="text/css">')
-                            .attr('data-dynamic-src', name)
-                            .text(css)
-                            .insertAfter('#custom');
-                    }
+                    (nodes[name] || add_node()).text(root.toCSS());
                 } catch (e) {
                     error(e);
                 }
