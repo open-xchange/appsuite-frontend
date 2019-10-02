@@ -5674,14 +5674,6 @@ msgstr "Em %1$d dias"
 msgid "In progress"
 msgstr "Em andamento"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"Em calendários compartilhados o compromisso é exibido como um horário "
-"simples parausuários não participantes."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 #, fuzzy
@@ -10813,23 +10805,6 @@ msgstr "O compromisso foi excluído"
 msgid "The appointment has been updated"
 msgstr "O compromisso foi atualizado"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"O compromisso não é visível para usuários não participantes em calendários "
-"compartilhados. O compromisso não é considerado para conflitos e não aparece "
-"na visualização da agenda. Esta opção não pode ser usada se o compromisso "
-"bloqueia os recursos."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr ""
-"O compromisso é visível para todos os usuários em calendários compartilhados."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12371,10 +12346,6 @@ msgstr "Visualizador"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Visibilidade"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Ajuda de visibilidade"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -16588,6 +16559,13 @@ msgstr "sua plataforma"
 #~ "clique no ícone no lado inferior esquerdo."
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "Em calendários compartilhados o compromisso é exibido como um horário "
+#~ "simples parausuários não participantes."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -19227,6 +19205,17 @@ msgstr "sua plataforma"
 #~ "da rede social."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "O compromisso não é visível para usuários não participantes em "
+#~ "calendários compartilhados. O compromisso não é considerado para "
+#~ "conflitos e não aparece na visualização da agenda. Esta opção não pode "
+#~ "ser usada se o compromisso bloqueia os recursos."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -19307,6 +19296,11 @@ msgstr "sua plataforma"
 #~ "data-attribute=\"day\">quarta-feira</a> <a href=\"#\" data-widget=\"number"
 #~ "\" data-attribute=\"interval\">a cada <span class=\"number-control\">2</"
 #~ "span> meses</a>. "
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr ""
+#~ "O compromisso é visível para todos os usuários em calendários "
+#~ "compartilhados."
 
 #~ msgid "The calendar views"
 #~ msgstr "As visualizações em calendário"
@@ -20360,6 +20354,9 @@ msgstr "sua plataforma"
 
 #~ msgid "Virgin Islands, British"
 #~ msgstr "Ilhas Virgens, Inglaterra"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Ajuda de visibilidade"
 
 #~ msgid "Visual effects"
 #~ msgstr "Efeitos visuais"

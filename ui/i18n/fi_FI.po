@@ -5620,14 +5620,6 @@ msgstr "%1$d päivän kuluttua"
 msgid "In progress"
 msgstr "Meneillään"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"Jaetuissa kalentereissa tapaaminen näkyy ei-osallistuville käyttäjille "
-"yksinkertaisena aikaikkunana."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 msgid ""
@@ -10732,22 +10724,6 @@ msgstr "Tapaaminen poistettu"
 msgid "The appointment has been updated"
 msgstr "Tapaaminen päivitetty"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Tapaaminen ei näy lainkaan ei-osallistuville käyttäjille jaetuissa "
-"kalentereissa. Tapaamisen yhteensopivuutta muiden tapaamisten kanssa ei "
-"arvioida eikä se näy aikataulunäkymässä. Tätä valintaa ei voida käyttää jos "
-"tapaaminen käyttää resursseja kuten neuvottelutilaa."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "Tapaaminen näkyy kaikille käyttäjille jaetuissa kalentereissa."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12256,10 +12232,6 @@ msgstr "Katselija"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Näkyvyys"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Näkyvyystuki"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -15071,6 +15043,13 @@ msgstr "alustasi"
 #~ "vasemmassa alareunassa."
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "Jaetuissa kalentereissa tapaaminen näkyy ei-osallistuville käyttäjille "
+#~ "yksinkertaisena aikaikkunana."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -16280,6 +16259,17 @@ msgstr "alustasi"
 #~ "ja some-uutisista."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Tapaaminen ei näy lainkaan ei-osallistuville käyttäjille jaetuissa "
+#~ "kalentereissa. Tapaamisen yhteensopivuutta muiden tapaamisten kanssa ei "
+#~ "arvioida eikä se näy aikataulunäkymässä. Tätä valintaa ei voida käyttää "
+#~ "jos tapaaminen käyttää resursseja kuten neuvottelutilaa."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -16358,6 +16348,9 @@ msgstr "alustasi"
 #~ "href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">toinen</a> "
 #~ "<a href=\"#\" data-widget=\"options\" data-attribute=\"day\">keskiviikko</"
 #~ "a>."
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "Tapaaminen näkyy kaikille käyttäjille jaetuissa kalentereissa."
 
 #~ msgid "The calendar views display a calendar sheet with the appointments."
 #~ msgstr "Kalenterinäkymät esittävät tapaamiset kalenterissa."
@@ -17109,6 +17102,9 @@ msgstr "alustasi"
 
 #~ msgid "Viewer Toolbar"
 #~ msgstr "Esikatselun työkalurivi"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Näkyvyystuki"
 
 #~ msgid "We could not verify that this email is really from %1$s."
 #~ msgstr ""

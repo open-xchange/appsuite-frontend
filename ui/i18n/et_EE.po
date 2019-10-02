@@ -5806,12 +5806,6 @@ msgstr "%1$d päeva pärast"
 msgid "In progress"
 msgstr "Pooleli"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 msgid ""
@@ -11039,19 +11033,6 @@ msgstr "Kohtumine on kustutatud"
 msgid "The appointment has been updated"
 msgstr "Kohtumine on värskendatud"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#, fuzzy
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "Kohtumised jagatud kalendrites"
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12575,10 +12556,6 @@ msgstr "Vaataja"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
 msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -15190,6 +15167,10 @@ msgstr "teie platvorm"
 #~ "attribute=\"day\">kolmapäeval</a> <a href=\"#\" data-widget=\"number\" "
 #~ "data-attribute=\"interval\">iga <span class=\"number-control\">2</span> "
 #~ "kuu järel</a>."
+
+#, fuzzy
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "Kohtumised jagatud kalendrites"
 
 #~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 #~ msgstr "Välja \"%1$s\" maksimaalne suurus, %2$d märki, on ületatud."

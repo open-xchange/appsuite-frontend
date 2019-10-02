@@ -5662,14 +5662,6 @@ msgstr "%1$d nap múlva"
 msgid "In progress"
 msgstr "Folyamatban"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"A megosztott naptárakban a találkozó egyszerű időrésként jelenik meg a nem "
-"látogató felhasználók számára."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 #, fuzzy
@@ -10800,22 +10792,6 @@ msgstr "A találkozó törölve"
 msgid "The appointment has been updated"
 msgstr "A találkozó frissítve"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"A találkozó egyáltalán nem látható a nem résztvevő felhasználók számára a "
-"megosztott naptárakban. A találkozót nem fog ütközést jelezni, és nem "
-"jelenik meg az ütemezési nézetben. Ez a lehetőség nem használható, ha a "
-"találkozó blokkolja az erőforrásokat."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "A találkozó látható a megosztott naptárak összes felhasználójánál."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12355,10 +12331,6 @@ msgstr "Olvasó"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Láthatóság"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Láthatósági súgó"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -14706,6 +14678,13 @@ msgstr "az Ön rendszere"
 #~ msgstr "Képméret:"
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "A megosztott naptárakban a találkozó egyszerű időrésként jelenik meg a "
+#~ "nem látogató felhasználók számára."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -15548,6 +15527,17 @@ msgstr "az Ön rendszere"
 #~ msgstr "A Drive app"
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "A találkozó egyáltalán nem látható a nem résztvevő felhasználók számára a "
+#~ "megosztott naptárakban. A találkozót nem fog ütközést jelezni, és nem "
+#~ "jelenik meg az ütemezési nézetben. Ez a lehetőség nem használható, ha a "
+#~ "találkozó blokkolja az erőforrásokat."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -15626,6 +15616,9 @@ msgstr "az Ön rendszere"
 #~ "\" data-widget=\"options\" data-attribute=\"ordinal\">második</a> <a href="
 #~ "\"#\" data-widget=\"options\" data-attribute=\"day\">szerdai</a> napján "
 #~ "ismétlődik."
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "A találkozó látható a megosztott naptárak összes felhasználójánál."
 
 #~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 #~ msgstr "A(z) \"%1$s\" mező elérte a maximális %2$d karakterszámot."
@@ -15978,6 +15971,9 @@ msgstr "az Ön rendszere"
 
 #~ msgid "Viewer Toolbar"
 #~ msgstr "Megjelenítő eszköztár"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Láthatósági súgó"
 
 #~ msgid "We could not verify that this email is really from %1$s."
 #~ msgstr "Nem tudtuk ellenőrizni, hogy ez az e-mail valóban %1$s küldte."

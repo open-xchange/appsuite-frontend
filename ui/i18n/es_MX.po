@@ -5684,14 +5684,6 @@ msgstr "En %1$d días"
 msgid "In progress"
 msgstr "En progreso"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"En calendarios compartidos, la cita se muestra como un bloque de tiempo "
-"sencillo para los usuarios que no asisten."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 #, fuzzy
@@ -10836,22 +10828,6 @@ msgstr "La cita ha sido borrada"
 msgid "The appointment has been updated"
 msgstr "La cita se ha actualizado"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"La cita no es visible en absoluto para los usuarios que no asisten de "
-"calendarios compartidos. La cita no se toma en consideración para "
-"conflictos, y no aparece en la vista de planificación. Esta opción no se "
-"puede usar si la cita bloquea recursos."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "La cita es visible para todos los usuarios de calendarios compartidos."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12394,10 +12370,6 @@ msgstr "Visor"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Visibilidad"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Ayuda de visibilidad"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -18815,6 +18787,13 @@ msgstr "su plataforma"
 #~ "verificación, haga clic en el icono de la parte inferior izquierda."
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "En calendarios compartidos, la cita se muestra como un bloque de tiempo "
+#~ "sencillo para los usuarios que no asisten."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -22205,6 +22184,17 @@ msgstr "su plataforma"
 #~ msgstr "La cita tiene una nueva descripción: %1$s."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "La cita no es visible en absoluto para los usuarios que no asisten de "
+#~ "calendarios compartidos. La cita no se toma en consideración para "
+#~ "conflictos, y no aparece en la vista de planificación. Esta opción no se "
+#~ "puede usar si la cita bloquea recursos."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -22283,6 +22273,10 @@ msgstr "su plataforma"
 #~ "attribute=\"day\">miércoles</a> <a href=\"#\" data-widget=\"number\" data-"
 #~ "attribute=\"interval\">de cada <span class=\"number-control\">2</span> "
 #~ "meses</a>. "
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr ""
+#~ "La cita es visible para todos los usuarios de calendarios compartidos."
 
 #~ msgid "The appointment takes place in a new location: %1$s."
 #~ msgstr "La cita tiene lugar en una nueva ubicación: %1$s."
@@ -23883,6 +23877,9 @@ msgstr "su plataforma"
 
 #~ msgid "Virgin Islands, British"
 #~ msgstr "Islas Vírgenes Británicas"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Ayuda de visibilidad"
 
 #~ msgid "Visual effects"
 #~ msgstr "Efectos visuales"

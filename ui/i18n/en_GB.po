@@ -5647,14 +5647,6 @@ msgstr "In %1$d days"
 msgid "In progress"
 msgstr "In progress"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 #, fuzzy
@@ -10774,22 +10766,6 @@ msgstr "The appointment has been deleted"
 msgid "The appointment has been updated"
 msgstr "The appointment has been updated"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used if the appointment blocks "
-"resources."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "The appointment is visible for all users in shared calendars."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12308,10 +12284,6 @@ msgstr "Viewer"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Visibility"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Visibility Help"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -15282,6 +15254,13 @@ msgstr "your platform"
 #~ "displayed, click the icon on the bottom left side."
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -16638,6 +16617,17 @@ msgstr "your platform"
 #~ "social network news."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used if the "
+#~ "appointment blocks resources."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -16718,6 +16708,9 @@ msgstr "your platform"
 #~ "\" data-attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number"
 #~ "\" data-attribute=\"interval\">every <span class=\"number-control\">2</"
 #~ "span> months</a>."
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "The appointment is visible for all users in shared calendars."
 
 #~ msgid "The calendar views display a calendar sheet with the appointments."
 #~ msgstr "The calendar views display a calendar sheet with the appointments."
@@ -17469,6 +17462,9 @@ msgstr "your platform"
 
 #~ msgid "Viewer Toolbar"
 #~ msgstr "Viewer Tool bar"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Visibility Help"
 
 #~ msgid "We could not verify that this email is really from %1$s."
 #~ msgstr "We could not verify that this e-mail is really from %1$s."

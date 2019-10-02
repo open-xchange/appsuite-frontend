@@ -5707,14 +5707,6 @@ msgstr "Za %1$d dni"
 msgid "In progress"
 msgstr "W trakcie wykonywania"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"W udostępnionych kalendarzach spotkanie jest wyświetlane jako prosty "
-"przedział czasu dla nieuczestniczących użytkowników."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 #, fuzzy
@@ -10853,24 +10845,6 @@ msgstr "Spotkanie zostało usunięte"
 msgid "The appointment has been updated"
 msgstr "Spotkanie zostało zaktualizowane"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Spotkanie nie jest w ogóle widoczne dla nieuczestniczących użytkowników w "
-"kalendarzach udostępnionych. Spotkanie nie jest brane pod uwagę w przypadku "
-"konfliktów i nie pojawia się w widoku harmonogramu. Tej opcji nie można "
-"użyć, jeśli spotkanie blokuje zasoby."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr ""
-"To spotkanie jest widoczne dla wszystkich użytkowników w udostępnionym "
-"kalendarzu."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12420,10 +12394,6 @@ msgstr "Przeglądający"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Widoczność"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Pomoc dotycząca widoczności"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -15435,6 +15405,13 @@ msgstr "Twoja platforma"
 #~ "dolnym rogu."
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "W udostępnionych kalendarzach spotkanie jest wyświetlane jako prosty "
+#~ "przedział czasu dla nieuczestniczących użytkowników."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -16819,6 +16796,17 @@ msgstr "Twoja platforma"
 #~ "spotkaniach i informacjach z sieci społecznościowej."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Spotkanie nie jest w ogóle widoczne dla nieuczestniczących użytkowników w "
+#~ "kalendarzach udostępnionych. Spotkanie nie jest brane pod uwagę w "
+#~ "przypadku konfliktów i nie pojawia się w widoku harmonogramu. Tej opcji "
+#~ "nie można użyć, jeśli spotkanie blokuje zasoby."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -16898,6 +16886,11 @@ msgstr "Twoja platforma"
 #~ "data-attribute=\"day\">środę</a> <a href=\"#\" data-widget=\"number\" "
 #~ "data-attribute=\"interval\">co <span class=\"number-control\">2</span> "
 #~ "miesiące</a>. "
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr ""
+#~ "To spotkanie jest widoczne dla wszystkich użytkowników w udostępnionym "
+#~ "kalendarzu."
 
 #~ msgid "The calendar views display a calendar sheet with the appointments."
 #~ msgstr "Widoki kalendarza przedstawiają arkusz kalendarza ze spotkaniami."
@@ -17685,6 +17678,9 @@ msgstr "Twoja platforma"
 
 #~ msgid "Viewer Toolbar"
 #~ msgstr "Pasek narzędzi przeglądarki"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Pomoc dotycząca widoczności"
 
 #~ msgid "We could not verify that this email is really from %1$s."
 #~ msgstr "Nie mogliśmy zweryfikować, czy ten e-mail naprawdę wysłano z: %1$s."

@@ -5711,14 +5711,6 @@ msgstr "Peste %1$d zile"
 msgid "In progress"
 msgstr "În curs"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"În calendarele partajate, întâlnirea este afișată ca spațiu obișnuit pentru "
-"utilizatorii care nu participă."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 #, fuzzy
@@ -10865,23 +10857,6 @@ msgstr "Întâlnirea a fost ștearsă"
 msgid "The appointment has been updated"
 msgstr "Întâlnirea a fost actualizată"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Întâlnirea nu este vizibilă pentru niciun utilizator din calendarele "
-"partajate. Întâlnirea nu este luată în considerare din cauza unor conflicte "
-"și nu apare în vederea programare. Această opțiune nu poate fi utilizată "
-"dacă întâlnirea blochează resurse."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr ""
-"Întâlnirea este vizibilă pentru toți utilizatorii din calendarele partajate."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12443,10 +12418,6 @@ msgstr "Vizualizare"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Vizibilitate"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Ajutor pentru vizibilitate"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -17068,6 +17039,13 @@ msgstr "platforma dumneavoastră"
 #~ "nu sunt afișate, apăsați pe pictograma din partea stângă jos."
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "În calendarele partajate, întâlnirea este afișată ca spațiu obișnuit "
+#~ "pentru utilizatorii care nu participă."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -20012,6 +19990,17 @@ msgstr "platforma dumneavoastră"
 #~ "rețelele sociale curente."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Întâlnirea nu este vizibilă pentru niciun utilizator din calendarele "
+#~ "partajate. Întâlnirea nu este luată în considerare din cauza unor "
+#~ "conflicte și nu apare în vederea programare. Această opțiune nu poate fi "
+#~ "utilizată dacă întâlnirea blochează resurse."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -20090,6 +20079,11 @@ msgstr "platforma dumneavoastră"
 #~ "attribute=\"day\">miercuri</a> <a href=\"#\" data-widget=\"number\" data-"
 #~ "attribute=\"interval\">o dată la <span class=\"number-control\">2</span> "
 #~ "luni</a>. "
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr ""
+#~ "Întâlnirea este vizibilă pentru toți utilizatorii din calendarele "
+#~ "partajate."
 
 #~ msgid "The calendar views"
 #~ msgstr "Vederile calendarului"
@@ -21214,6 +21208,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Virgin Islands, British"
 #~ msgstr "Insulele Virgine Britanice"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Ajutor pentru vizibilitate"
 
 #~ msgid "Visible folder"
 #~ msgstr "Dosar vizibil"

@@ -5811,12 +5811,6 @@ msgstr "Om %1$d dager"
 msgid "In progress"
 msgstr "Under behandling"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 msgid ""
@@ -11043,19 +11037,6 @@ msgstr "Avtalen ble slettet"
 msgid "The appointment has been updated"
 msgstr "Avtalen ble oppdatert"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#, fuzzy
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "Avtaler i delte kalendere"
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12587,10 +12568,6 @@ msgstr "Tilskuer"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
 msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -15637,6 +15614,10 @@ msgstr "plattformen din"
 #~ "attribute=\"day\">onsdag</a>en <a href=\"#\" data-widget=\"number\" data-"
 #~ "attribute=\"interval\">i hver <span class=\"number-control\">2</span>. "
 #~ "måned</a>."
+
+#, fuzzy
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "Avtaler i delte kalendere"
 
 #~ msgid "The character \" \" is not allowed."
 #~ msgstr "Tegnet \" \" er ikke tillatt."

@@ -5679,14 +5679,6 @@ msgstr "%1$d dienās"
 msgid "In progress"
 msgstr "Apstrādē"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"Visiem lietotājiem, kuri nav dalībnieki, mītiņš koplietojuma kalendāros ir "
-"redzams kā vienkāršs laika apgabals."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 msgid ""
@@ -10814,22 +10806,6 @@ msgstr "Mītiņš ir izdzēsts"
 msgid "The appointment has been updated"
 msgstr "Mītiņš ir jaunināts"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Visiem lietotājiem, kuri nav dalībnieki, mītiņš koplietojuma kalendāros nav "
-"redzams. Mītiņš netiek ņemts vērā laika apgabalu konfliktos un netiek "
-"uzrādīts plānošanas skatā. Šo opciju nevar izmantot gadījumos, ja mītiņš "
-"bloķē kādu no resursiem."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "Mītiņš ir redzams visiem lietotājiem koplietojuma kalendāros."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12351,10 +12327,6 @@ msgstr "Skatītājs"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Redzamība"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Redzamība palīgs"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -16964,6 +16936,13 @@ msgstr "jūsu platforma"
 #~ "noklikšķiniet uz ikonas apakšējā kreisajā malā."
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "Visiem lietotājiem, kuri nav dalībnieki, mītiņš koplietojuma kalendāros "
+#~ "ir redzams kā vienkāršs laika apgabals."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -19882,6 +19861,17 @@ msgstr "jūsu platforma"
 #~ "tikšanās reizēm un sociālo tīklu jaunumiem."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Visiem lietotājiem, kuri nav dalībnieki, mītiņš koplietojuma kalendāros "
+#~ "nav redzams. Mītiņš netiek ņemts vērā laika apgabalu konfliktos un netiek "
+#~ "uzrādīts plānošanas skatā. Šo opciju nevar izmantot gadījumos, ja mītiņš "
+#~ "bloķē kādu no resursiem."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -19961,6 +19951,9 @@ msgstr "jūsu platforma"
 #~ "data-attribute=\"day\"> trešdienā </a> <a href=\"#\" data-widget=\"number"
 #~ "\" data-attribute=\"interval\"> katrā <span class=\"number-control\">2</"
 #~ "span> mēnesī</a>. "
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "Mītiņš ir redzams visiem lietotājiem koplietojuma kalendāros."
 
 #~ msgid "The calendar views"
 #~ msgstr "Kalendāra skati"
@@ -21088,6 +21081,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Virgin Islands, British"
 #~ msgstr "Britu Virdžīnu salas"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Redzamība palīgs"
 
 #~ msgid "Visual effects"
 #~ msgstr "Vizuālie efekti"

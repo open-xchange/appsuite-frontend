@@ -5699,14 +5699,6 @@ msgstr "O %1$d dní"
 msgid "In progress"
 msgstr "Prebieha"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"Používateľom, ktorí sa schôdzky nezúčastnia sa v zdieľaných kalendároch "
-"schôdzka zobrazí ako jednoduchý časový blok."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 #, fuzzy
@@ -10849,22 +10841,6 @@ msgstr "Narodeninová schôdzka bola zmazaná"
 msgid "The appointment has been updated"
 msgstr "Schôdzka bola aktualizovaná"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Používatelia, ktorí sa schôdzky nezúčastnia v zdieľaných kalendároch "
-"schôdzku vôbec neuvidia. Schôdzka sa nebude zohľadňovať pri konfliktoch a "
-"nezobrazí sa v zobrazení plánovania. Túto voľbu nemožno použiť ak schôdzka "
-"blokuje zdroje."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "Schôdzka je viditeľná všetkým používateľom v zdieľaných kalendároch."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12407,10 +12383,6 @@ msgstr "Prehliadač"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Viditeľnosť"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Pomoc k viditeľnosti"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -16991,6 +16963,13 @@ msgstr "vaša platforma"
 #~ "ľavej strane."
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "Používateľom, ktorí sa schôdzky nezúčastnia sa v zdieľaných kalendároch "
+#~ "schôdzka zobrazí ako jednoduchý časový blok."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -19890,6 +19869,17 @@ msgstr "vaša platforma"
 #~ "sociálnych sieťach."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Používatelia, ktorí sa schôdzky nezúčastnia v zdieľaných kalendároch "
+#~ "schôdzku vôbec neuvidia. Schôdzka sa nebude zohľadňovať pri konfliktoch a "
+#~ "nezobrazí sa v zobrazení plánovania. Túto voľbu nemožno použiť ak "
+#~ "schôdzka blokuje zdroje."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -19968,6 +19958,10 @@ msgstr "vaša platforma"
 #~ "attribute=\"day\">stredu</a> <a href=\"#\" data-widget=\"number\" data-"
 #~ "attribute=\"interval\">každé <span class=\"number-control\">2</span> "
 #~ "mesiace</a>. "
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr ""
+#~ "Schôdzka je viditeľná všetkým používateľom v zdieľaných kalendároch."
 
 #~ msgid "The calendar views"
 #~ msgstr "Zobrazenia kalendára"
@@ -21053,6 +21047,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Virgin Islands, British"
 #~ msgstr "Panenské ostrovy, Britské"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Pomoc k viditeľnosti"
 
 #~ msgid "Visual effects"
 #~ msgstr "Vizuálne efekty"

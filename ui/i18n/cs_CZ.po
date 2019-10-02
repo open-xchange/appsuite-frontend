@@ -5676,14 +5676,6 @@ msgstr "Za %1$d dní"
 msgid "In progress"
 msgstr "Probíhá"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"Uživatelům, kteří se neúčastní, je ve sdílených kalendářích schůzka "
-"zobrazená jako časový interval."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 #, fuzzy
@@ -10817,22 +10809,6 @@ msgstr "Schůzka byla smazána"
 msgid "The appointment has been updated"
 msgstr "Schůzka byla aktualizována"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Uživatelům, kteří se neúčastní, není ve sdílených kalendářích schůzka "
-"viditelná vůbec. Schůzka není brána v potaz při vyhodnocování konfliktů a "
-"neukazuje se v plánovacím pohledu. Tuto možnost není možné použít, pokud "
-"schůzka blokuje zdroje."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "Schůzka je viditelná pro všechny uživatele ve sdílených kalendářích."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12354,10 +12330,6 @@ msgstr "Pozorovatel"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Viditelnost"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Nápověda pro viditelnost"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -18757,6 +18729,13 @@ msgstr "vaše platforma"
 #~ "dole."
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "Uživatelům, kteří se neúčastní, je ve sdílených kalendářích schůzka "
+#~ "zobrazená jako časový interval."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -22110,6 +22089,17 @@ msgstr "vaše platforma"
 #~ msgstr "Schůzka má nový popis: %1$s."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Uživatelům, kteří se neúčastní, není ve sdílených kalendářích schůzka "
+#~ "viditelná vůbec. Schůzka není brána v potaz při vyhodnocování konfliktů a "
+#~ "neukazuje se v plánovacím pohledu. Tuto možnost není možné použít, pokud "
+#~ "schůzka blokuje zdroje."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -22188,6 +22178,10 @@ msgstr "vaše platforma"
 #~ "attribute=\"day\">středu</a> <a href=\"#\" data-widget=\"number\" data-"
 #~ "attribute=\"interval\">každé <span class=\"number-control\">2</span> "
 #~ "měsíce</a>. "
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr ""
+#~ "Schůzka je viditelná pro všechny uživatele ve sdílených kalendářích."
 
 #~ msgid "The appointment takes place in a new location: %1$s."
 #~ msgstr "Schůzka proběhne na jiném místě: %1$s."
@@ -23762,6 +23756,9 @@ msgstr "vaše platforma"
 
 #~ msgid "Virgin Islands, British"
 #~ msgstr "Britské Panenské ostrovy"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Nápověda pro viditelnost"
 
 #~ msgid "Visual effects"
 #~ msgstr "Vzhledové efekty"

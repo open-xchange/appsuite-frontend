@@ -5623,14 +5623,6 @@ msgstr "%1$d gün sonra"
 msgid "In progress"
 msgstr "Devam ediyor"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"Paylaşılan takvimlerde randevu, katılmayan kullanıcılar için basit bir zaman "
-"dilimi olarak görüntülenir."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 msgid ""
@@ -10738,21 +10730,6 @@ msgstr "Randevu silindi"
 msgid "The appointment has been updated"
 msgstr "Randevu güncellenmdi"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Randevu, paylaşılan takvimlerdeki katılımcı olmayan kullanıcılara görünmez. "
-"Randevu, çakışmalara dahil edilmez ve planlama görünümünde görünmez. "
-"Randevunun engellediği kaynaklar varsa bu seçenek kullanılamaz."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "Randevu, paylaşılan takvimlerdeki tüm kullanıcılara görünür."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12263,10 +12240,6 @@ msgstr "Görüntüleyici"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Görünürlük"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Görünürlük yardımı"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -13812,6 +13785,13 @@ msgstr "platformunuz"
 #~ msgstr "Resim boyutu:"
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "Paylaşılan takvimlerde randevu, katılmayan kullanıcılar için basit bir "
+#~ "zaman dilimi olarak görüntülenir."
+
+#~ msgid ""
 #~ "In the event you lose or are unable to use your authentication device, "
 #~ "your account will be locked out unless you set up a recovery method.  We "
 #~ "strongly recommend that you do so now."
@@ -14046,6 +14026,19 @@ msgstr "platformunuz"
 #~ msgstr "Drive Uygulaması"
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Randevu, paylaşılan takvimlerdeki katılımcı olmayan kullanıcılara "
+#~ "görünmez. Randevu, çakışmalara dahil edilmez ve planlama görünümünde "
+#~ "görünmez. Randevunun engellediği kaynaklar varsa bu seçenek kullanılamaz."
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "Randevu, paylaşılan takvimlerdeki tüm kullanıcılara görünür."
+
+#~ msgid ""
 #~ "The files cannot be uploaded because each file exceeds the maximum file "
 #~ "size of %1$s"
 #~ msgstr ""
@@ -14127,6 +14120,9 @@ msgstr "platformunuz"
 
 #~ msgid "Viewer Toolbar"
 #~ msgstr "Görüntüleyici Araç Çubuğu"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Görünürlük yardımı"
 
 #~ msgid "Week that contains the first Thursday"
 #~ msgstr "İlk perşembeyi içeren hafta"

@@ -5530,12 +5530,6 @@ msgstr "%1$d 天内"
 msgid "In progress"
 msgstr "进行中"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr "在共享日历中，约会显示为非参与用户的简单时间插槽。"
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 #, fuzzy
@@ -10602,20 +10596,6 @@ msgstr "约会已删除"
 msgid "The appointment has been updated"
 msgstr "约会已更新"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"共享文件夹中的非参加用户的约会是不可见的。约会不考虑冲突，并且不会出现在排程"
-"视图中。如果约会封锁资源，此选项就不能使用。"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "对于共享日历中的所有用户，约会都是可见的。"
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12058,10 +12038,6 @@ msgstr "检视器"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "能见度"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "能见度帮助"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -16281,6 +16257,11 @@ msgstr "您的平台"
 #~ "单击左下方的图标。"
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr "在共享日历中，约会显示为非参与用户的简单时间插槽。"
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr "在共享文件夹中，约会显示为非参与用户的简单时间插槽。"
@@ -17908,6 +17889,15 @@ msgstr "您的平台"
 #~ msgstr "门户通知您有关电子邮件、约会、或社交网路新闻。"
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "共享文件夹中的非参加用户的约会是不可见的。约会不考虑冲突，并且不会出现在排"
+#~ "程视图中。如果约会封锁资源，此选项就不能使用。"
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -17983,6 +17973,9 @@ msgstr "您的平台"
 #~ "data-widget=\"options\" data-attribute=\"ordinal\">第二个</a><a href=\"#"
 #~ "\" data-widget=\"options\" data-attribute=\"day\">星期三</a><a href=\"#\" "
 #~ "data-widget=\"number\" data-attribute=\"interval\">重复，"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "对于共享日历中的所有用户，约会都是可见的。"
 
 #~ msgid "The calendar views"
 #~ msgstr "日历视图"
@@ -18679,6 +18672,9 @@ msgstr "您的平台"
 
 #~ msgid "Viewer Toolbar"
 #~ msgstr "检视器工具条"
+
+#~ msgid "Visibility Help"
+#~ msgstr "能见度帮助"
 
 #~ msgid "We could not verify that this email is really from %1$s."
 #~ msgstr "我们无法验证此电子邮件是否真的来自 %1$s。"

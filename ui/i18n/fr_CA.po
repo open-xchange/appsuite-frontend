@@ -5718,14 +5718,6 @@ msgstr "Dans %1$d jours"
 msgid "In progress"
 msgstr "En cours"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"Dans les agendas partagés, le rendez-vous est affiché sous la forme d'un "
-"simple créneau de temps pour les utilisateurs qui n'y participent pas."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 #, fuzzy
@@ -10884,25 +10876,6 @@ msgstr "Le rendez-vous a été supprimé"
 msgid "The appointment has been updated"
 msgstr "Le rendez-vous a été mis à jour"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Le rendez-vous n'est pas visible du tout dans les agendas partagés pour les "
-"utilisateurs n'y participant pas. Le rendez-vous n'est pas pris en compte "
-"pour la gestion des conflits et n'apparaît pas dans la vue de planification. "
-"Cette option ne peut pas être utilisée si le rendez-vous bloque des "
-"ressources."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr ""
-"Le rendez-vous est visible par tous les utilisateurs dans les agendas "
-"partagés."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12477,10 +12450,6 @@ msgstr "Lecteur"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Visibilité"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Aide sur la visibilité"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -15747,6 +15716,13 @@ msgstr "votre plate-forme"
 #~ "l'icône en bas à gauche."
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "Dans les agendas partagés, le rendez-vous est affiché sous la forme d'un "
+#~ "simple créneau de temps pour les utilisateurs qui n'y participent pas."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -17257,6 +17233,18 @@ msgstr "votre plate-forme"
 #~ "qui se passe sur les réseaux sociaux."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Le rendez-vous n'est pas visible du tout dans les agendas partagés pour "
+#~ "les utilisateurs n'y participant pas. Le rendez-vous n'est pas pris en "
+#~ "compte pour la gestion des conflits et n'apparaît pas dans la vue de "
+#~ "planification. Cette option ne peut pas être utilisée si le rendez-vous "
+#~ "bloque des ressources."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -17337,6 +17325,11 @@ msgstr "votre plate-forme"
 #~ "\"options\" data-attribute=\"day\">mercredi</a> <a href=\"#\" data-widget="
 #~ "\"number\" data-attribute=\"interval\">tous les <span class=\"number-"
 #~ "control\">2</span> mois</a>. "
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr ""
+#~ "Le rendez-vous est visible par tous les utilisateurs dans les agendas "
+#~ "partagés."
 
 #~ msgid "The calendar views display a calendar sheet with the appointments."
 #~ msgstr ""
@@ -18148,6 +18141,9 @@ msgstr "votre plate-forme"
 
 #~ msgid "Viewer Toolbar"
 #~ msgstr "Barre d'outils de l'afficheur"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Aide sur la visibilité"
 
 #~ msgid "We could not verify that this email is really from %1$s."
 #~ msgstr "Impossible de vérifier que ce courrier provienne bien de %1$s."

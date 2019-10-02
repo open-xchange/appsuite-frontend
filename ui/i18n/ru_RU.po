@@ -5678,14 +5678,6 @@ msgstr "Через %1$d д."
 msgid "In progress"
 msgstr "Выполняется"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"В совместных календарях пользователи, которые не пойдут на встречу, вместо "
-"встречи увидят обычный отрезок времени."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 #, fuzzy
@@ -10817,21 +10809,6 @@ msgstr "Встреча удалена"
 msgid "The appointment has been updated"
 msgstr "Встреча обновлена"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Эта встреча будет скрыта от пользователей, которые на неё не пойдут, не "
-"будет учитываться при поиске конфликтов и не будет показана в расписании "
-"(эта опция недоступна, если встреча блокирует ресурсы)."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "Встреча будет видна всем пользователям в совместных календарях."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12356,10 +12333,6 @@ msgstr "Просмотрели"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Видимость"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Справка по просмотру"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -15371,6 +15344,13 @@ msgstr "вашей платформы"
 #~ "флажков. Если флажки недоступны, нажмите значок в левом нижнем углу."
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "В совместных календарях пользователи, которые не пойдут на встречу, "
+#~ "вместо встречи увидят обычный отрезок времени."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -16741,6 +16721,16 @@ msgstr "вашей платформы"
 #~ "социальных сетей."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Эта встреча будет скрыта от пользователей, которые на неё не пойдут, не "
+#~ "будет учитываться при поиске конфликтов и не будет показана в расписании "
+#~ "(эта опция недоступна, если встреча блокирует ресурсы)."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -16819,6 +16809,9 @@ msgstr "вашей платформы"
 #~ "attribute=\"day\">среду</a> <a href=\"#\" data-widget=\"number\" data-"
 #~ "attribute=\"interval\">каждые <span class=\"number-control\">2</span> "
 #~ "месяца</a>."
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "Встреча будет видна всем пользователям в совместных календарях."
 
 #~ msgid "The calendar views display a calendar sheet with the appointments."
 #~ msgstr "В режиме календаря можно просмотреть назначенные встречи."
@@ -17585,6 +17578,9 @@ msgstr "вашей платформы"
 
 #~ msgid "Viewer Toolbar"
 #~ msgstr "Панель просмотра"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Справка по просмотру"
 
 #~ msgid "We could not verify that this email is really from %1$s."
 #~ msgstr "Мы не смогли подтвердить, что это письмо действительно от %1$s."

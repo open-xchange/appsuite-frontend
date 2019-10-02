@@ -5612,14 +5612,6 @@ msgstr "%1$d 日後"
 msgid "In progress"
 msgstr "作業中"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"共有カレンダーでは、参加しないユーザーには予定が単純なタイムスロットとして表"
-"示されます。"
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 msgid ""
@@ -10712,21 +10704,6 @@ msgstr "予定が削除されました。"
 msgid "The appointment has been updated"
 msgstr "予定が更新されました。"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"共有ｋ共有のカレンダーのすべてのユーザーが予定を全くみることができません。予"
-"定は競合とはみなされず、スケジューリング表示に表示されません。このオプション"
-"は、予定がリソースをブロックしている場合は使用できません。"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "共有カレンダーのすべてのユーザーが予定を見ることができます。"
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12232,10 +12209,6 @@ msgstr "閲覧者"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "可視性"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "表示ヘルプ"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -17576,6 +17549,13 @@ msgstr "ご利用のプラットフォーム"
 #~ "リックします。"
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "共有カレンダーでは、参加しないユーザーには予定が単純なタイムスロットとして"
+#~ "表示されます。"
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -20825,6 +20805,16 @@ msgstr "ご利用のプラットフォーム"
 #~ "す。"
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "共有ｋ共有のカレンダーのすべてのユーザーが予定を全くみることができません。"
+#~ "予定は競合とはみなされず、スケジューリング表示に表示されません。このオプ"
+#~ "ションは、予定がリソースをブロックしている場合は使用できません。"
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -20904,6 +20894,9 @@ msgstr "ご利用のプラットフォーム"
 #~ "a>の<a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">第２"
 #~ "</a><a href=\"#\" data-widget=\"options\" data-attribute=\"day\">水曜日</"
 #~ "a>に繰り返されます。"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "共有カレンダーのすべてのユーザーが予定を見ることができます。"
 
 #~ msgid "The appointment is visible for all users in shared folders."
 #~ msgstr "共有フォルダーのすべてのユーザーが予定を見ることができます。"
@@ -22062,6 +22055,9 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Virgin Islands, British"
 #~ msgstr "ヴァージン諸島 (英国)"
+
+#~ msgid "Visibility Help"
+#~ msgstr "表示ヘルプ"
 
 #~ msgid "Visual effects"
 #~ msgstr "視覚効果"

@@ -5564,12 +5564,6 @@ msgstr "%1$d 天內"
 msgid "In progress"
 msgstr "進行中"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr "在共享行事曆中，若使用者不會參加，約會將會顯示為簡單的時間帶。"
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 #, fuzzy
@@ -10647,20 +10641,6 @@ msgstr "已刪除約會"
 msgid "The appointment has been updated"
 msgstr "已更新約會"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"在共享行事曆中，若使用者不參與約會，就不會見到約會內容。不會在判斷約會衝突時"
-"考慮此類約會，也不會顯示在排程畫面中。若約會會使用資源，就無法使用此選項。"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "約會可被共享行事曆中的所有使用者看見。"
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12117,10 +12097,6 @@ msgstr "檢視者"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "可見度"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "可見度說明"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -16255,6 +16231,11 @@ msgstr "您的平台"
 #~ "示。"
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr "在共享行事曆中，若使用者不會參加，約會將會顯示為簡單的時間帶。"
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr "在共享資料夾中，對未參加的使用者來說約會就是一個簡單的時段。"
@@ -17857,6 +17838,16 @@ msgstr "您的平台"
 #~ msgstr "入口可通知您目前有什麼郵件、約會、或社交網路中的消息。"
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "在共享行事曆中，若使用者不參與約會，就不會見到約會內容。不會在判斷約會衝突"
+#~ "時考慮此類約會，也不會顯示在排程畫面中。若約會會使用資源，就無法使用此選"
+#~ "項。"
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -17932,6 +17923,9 @@ msgstr "您的平台"
 #~ "每<span class=\"number-control\">2</span> 月</a> 的 <a href=\"#\" data-"
 #~ "widget=\"options\" data-attribute=\"ordinal\">第二個</a> <a href=\"#\" "
 #~ "data-widget=\"options\" data-attribute=\"day\">週三</a>重複。 "
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "約會可被共享行事曆中的所有使用者看見。"
 
 #~ msgid "The calendar views"
 #~ msgstr "行事曆視圖"
@@ -18622,6 +18616,9 @@ msgstr "您的平台"
 
 #~ msgid "Viewer Toolbar"
 #~ msgstr "檢視器工具列"
+
+#~ msgid "Visibility Help"
+#~ msgstr "可見度說明"
 
 #~ msgid "We could not verify that this email is really from %1$s."
 #~ msgstr "我們無法確認這封郵件真的是來自 %1$s。"

@@ -5687,14 +5687,6 @@ msgstr "Over %1$d dagen"
 msgid "In progress"
 msgstr "Is bezig"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"In gedeelde agenda's wordt de afspraak getoond als een eenvoudige periode "
-"voor niet aanwezige gebruikers."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 #, fuzzy
@@ -10849,22 +10841,6 @@ msgstr "De afspraak is verwijderd"
 msgid "The appointment has been updated"
 msgstr "De afspraak is bijgewerkt"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"De afspraak is helemaal niet zichtbaar voor niet aanwezige gebruikers in "
-"gedeelde agenda's. Er wordt geen rekening gehouden met deze afspraak bij "
-"conflicten en verschijnt ook niet in het planningsoverzicht. Deze optie kan "
-"niet gebruikt worden als de afspraak bronnen blokkeert."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "De afspraak is zichtbaar voor alle gebruikers in gedeelde agenda's."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12418,10 +12394,6 @@ msgstr "Viewer"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Zichtbaarheid"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Zichtbaarheidshulp"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -15274,6 +15246,13 @@ msgstr "uw platform"
 #~ "onderkant klikken."
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "In gedeelde agenda's wordt de afspraak getoond als een eenvoudige periode "
+#~ "voor niet aanwezige gebruikers."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -16539,6 +16518,17 @@ msgstr "uw platform"
 #~ "nieuws uit uw sociale netwerk."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "De afspraak is helemaal niet zichtbaar voor niet aanwezige gebruikers in "
+#~ "gedeelde agenda's. Er wordt geen rekening gehouden met deze afspraak bij "
+#~ "conflicten en verschijnt ook niet in het planningsoverzicht. Deze optie "
+#~ "kan niet gebruikt worden als de afspraak bronnen blokkeert."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -16619,6 +16609,9 @@ msgstr "uw platform"
 #~ "data-attribute=\"day\">woensdag</a> <a href=\"#\" data-widget=\"number\" "
 #~ "data-attribute=\"interval\">elke <span class=\"number-control\">2</span> "
 #~ "maanden</a> herhaald."
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "De afspraak is zichtbaar voor alle gebruikers in gedeelde agenda's."
 
 #~ msgid "The calendar views display a calendar sheet with the appointments."
 #~ msgstr "De agendaoverzichten tonen een kalenderblad met de afspraken."
@@ -17371,6 +17364,9 @@ msgstr "uw platform"
 
 #~ msgid "Viewer Toolbar"
 #~ msgstr "Viewer Werkbalk"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Zichtbaarheidshulp"
 
 #~ msgid "We could not verify that this email is really from %1$s."
 #~ msgstr "We kunnen niet controleren dat dit bericht werkelijk van %1$s is."

@@ -5647,14 +5647,6 @@ msgstr "Om %1$d dage"
 msgid "In progress"
 msgstr "Undervejs"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"I delte kalendere bliver aftalen vist som et simpelt tidsrum for ikke-"
-"deltagende brugere."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 #, fuzzy
@@ -10777,22 +10769,6 @@ msgstr "Aftalen blev slettet"
 msgid "The appointment has been updated"
 msgstr "Aftalen blev opdateret"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Aftalen er overhovedet ikke synlig for ikke-deltagende brugere i delte "
-"kalendre.  Aftalen bliver ikke taget med, når der undersøges for "
-"planlægningskonflikter, og optræder ikke i planlægningsvisningen.  Dette er "
-"ikke en mulighed, hvis aftalen blokerer ressourcer."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "Aftalen er synlig for alle brugere i delte kalendre."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12317,10 +12293,6 @@ msgstr "Læser"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Synlighed"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Hjælp til synlighed"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -15271,6 +15243,13 @@ msgstr "din platform"
 #~ "nederst i venstre side."
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "I delte kalendere bliver aftalen vist som et simpelt tidsrum for ikke-"
+#~ "deltagende brugere."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -16615,6 +16594,17 @@ msgstr "din platform"
 #~ "sociale netværk."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Aftalen er overhovedet ikke synlig for ikke-deltagende brugere i delte "
+#~ "kalendre.  Aftalen bliver ikke taget med, når der undersøges for "
+#~ "planlægningskonflikter, og optræder ikke i planlægningsvisningen.  Dette "
+#~ "er ikke en mulighed, hvis aftalen blokerer ressourcer."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -16692,6 +16682,9 @@ msgstr "din platform"
 #~ "attribute=\"day\">onsdag</a> i <a href=\"#\" data-widget=\"number\" data-"
 #~ "attribute=\"interval\">hver <span class=\"number-control\">anden</span> "
 #~ "måned</a>."
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "Aftalen er synlig for alle brugere i delte kalendre."
 
 #~ msgid "The calendar views display a calendar sheet with the appointments."
 #~ msgstr "Kalendervisning viser et kalenderark med aftaler."
@@ -17432,6 +17425,9 @@ msgstr "din platform"
 
 #~ msgid "Viewer Toolbar"
 #~ msgstr "Fremviserværktøjslinje"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Hjælp til synlighed"
 
 #~ msgid "We could not verify that this email is really from %1$s."
 #~ msgstr "Vi kunne ikke verificere at beskeden virkelig er fra %1$s."

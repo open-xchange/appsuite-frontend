@@ -5646,14 +5646,6 @@ msgstr "Om %1$d dagar"
 msgid "In progress"
 msgstr "Arbetar"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"I delade kalendrar visas mötet som en enkel tidslucka för användare som inte "
-"deltar."
-
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 #, fuzzy
@@ -10769,22 +10761,6 @@ msgstr "Mötet har tagits bort"
 msgid "The appointment has been updated"
 msgstr "Mötet har uppdaterats"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Mötet är inte alls synligt i delade kalendrar för användare som inte deltar. "
-"Ingen hänsyn tas till mötet vid kontroller för krockar, och syns inte i "
-"schemaläggningsvyn. Detta alternativet kan inte användas om mötet blockerar "
-"resurser."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "Mötet är synligt för alla användare i delade kalendrar."
-
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
@@ -12309,10 +12285,6 @@ msgstr "Visare"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
 msgstr "Synlighet"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Hjälp om synlighet"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -16721,6 +16693,13 @@ msgstr "din plattform"
 #~ "till vänster."
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "I delade kalendrar visas mötet som en enkel tidslucka för användare som "
+#~ "inte deltar."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -19031,6 +19010,17 @@ msgstr "din plattform"
 #~ "Applikationen kunde inte bekräfta e-post-adressen från denna kontakt: %s"
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Mötet är inte alls synligt i delade kalendrar för användare som inte "
+#~ "deltar. Ingen hänsyn tas till mötet vid kontroller för krockar, och syns "
+#~ "inte i schemaläggningsvyn. Detta alternativet kan inte användas om mötet "
+#~ "blockerar resurser."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -19111,6 +19101,9 @@ msgstr "din plattform"
 #~ "attribute=\"day\">onsdagen</a> <a href=\"#\" data-widget=\"number\" data-"
 #~ "attribute=\"interval\">var <span class=\"number-control\">2</span>:a "
 #~ "månad</a>."
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "Mötet är synligt för alla användare i delade kalendrar."
 
 #~ msgid ""
 #~ "The attachment you requested no longer exists. Please refresh the view."
@@ -21050,6 +21043,9 @@ msgstr "din plattform"
 
 #~ msgid "Viewer Toolbar"
 #~ msgstr "Visarens verktygsfält"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Hjälp om synlighet"
 
 #~ msgid "Warnings when importing file: %i warnings"
 #~ msgstr "Varningar när fil importeras: %i varningar"
