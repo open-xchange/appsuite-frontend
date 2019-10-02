@@ -21,7 +21,7 @@ com.openexchange.capability.dynamic-theme=true
 ```
 
 When using the plugin, the actual theme should be the built-in default theme.
-To prevent all users from changing it and hide the theme selector in the preferences, set the property `io.ox/core//theme` to read-only. 
+To prevent all users from changing it and hide the theme selector in the preferences, set the property `io.ox/core//theme` to read-only.
 To do this, change the file `/opt/open-xchange/etc/meta/appsuite.yaml` as follows:
 
 ```yaml
@@ -29,14 +29,14 @@ io.ox/core//theme:
     protected: true
 ```
 
-If some users won't use dynamic themes, this approach won't work. Instead, the theme selector can be disabled an enabled by controlling the list of available themes. The theme selector is hidden if the list is empty. 
+If some users won't use dynamic themes, this approach won't work. Instead, the theme selector can be disabled an enabled by controlling the list of available themes. The theme selector is hidden if the list is empty.
 To be able to do that with the Configuration Cascade, the entire list of themes needs to be specified as a single JSON value, e.g. by changing the file `/opt/open-xchange/etc/settings/appsuite.properties` as follows:
 
 ```bash
 io.ox/core/settingOptions//themes={"default":"Default Theme"}
 ```
 
-Then, to hide the theme selector for users with a dynamic theme, use the Configuration Cascade to change the value to {}.
+Then, to hide the theme selector for users with a dynamic theme, use the Configuration Cascade to change the value to `{}`.
 
 # Specifying a Theme
 
@@ -69,3 +69,37 @@ When referring to the value of other variables on the right side of the equals s
 The colors can be any CSS color. `headerLogo` and `logoURL` can be relative (to `/appsuite/`), or absolute.
 When using absolute URLs to point to different hosts, use the form `//hostname/path`
 to keep the protocol (HTTP or HTTPS) and avoid any unnecessary security warnings.
+
+# Theming the Login Screen
+
+Since the login screen does not have access to a user's configuration before the user logs in, all configuration is done via `/opt/open-xchange/etc/as-config.yml`. The settings in the following table apply to the login screen:
+
+| Variable              | Default               | Dark/Light | Description
+| --------------------- | --------------------- | ---------- | -----------
+| `loginColor`          | `#1f3d66`             | dark       | Background color of the login screen.
+| `headerPrefixColor`   | `#6cbafc`             | light      | Text color of the "OX" prefix on the login screen.
+| `headerColor`         | `#fff`                | light      | Text color of the "App Suite" product name on the login screen.
+| `headerLogo`          |                       |            | URL of an image which replaces the "OX App Suite" header text on the login screen.
+
+Each of these settings should be placed under the key `dynamicTheme` like in the following example:
+
+```yaml
+default:
+  hosts: all
+  dynamicTheme:
+    loginColor: "#040"
+    headerPrefixColor: "#fff"
+```
+
+# Migration from 7.8
+
+The configuration settings have changed between versions 7.8 and 7.10. To avoid having to upgrade all context- and user-specific entries at once, some of the new settings will be overwritten by the corresponding old settings, if the old settings are present and non-empty.
+
+Since ConfigCascade only processes values which are present at the server level, a `.properties` file with the necessary legacy settings needs to be added in `/opt/open-xchange/etc/settings`:
+
+```properties
+io.ox/dynamic-theme//frameColor=
+io.ox/dynamic-theme//selectionColor=
+```
+
+The default values in the file need to be empty to allow them being overwritten with the new values once the settings of a user or a context have been upgraded. Any new global defaults should be specified using the new settings in `open-xchange-dynamic-theme.properties`.
