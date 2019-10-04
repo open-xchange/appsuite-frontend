@@ -320,7 +320,7 @@ define('io.ox/core/locale/meta', function () {
         // compare against existing locales
         var split = locale.split('-');
         locale = split[0] + '_' + (split[1] || split[0]).toUpperCase();
-        return locales[locales] || 'en_US';
+        return ([locale] in locales) ? locale : 'en_US';
     }
 
     function getValidDefaultLocale() {
