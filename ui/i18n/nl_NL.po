@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-08-19 14:02+0200\n"
+"PO-Revision-Date: 2019-10-04 09:46+0200\n"
 "Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -5061,10 +5061,14 @@ msgid "Connect this Device"
 msgstr "Koppel dit Apparaat"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
-msgid "Change password"
-msgstr "Wachtwoord wijzigen"
+msgid "Add login password"
+msgstr ""
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change login password"
+msgstr ""
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/help/center.js module:io.ox/help
@@ -5648,6 +5652,11 @@ msgstr "Pagina herladen"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Relogin"
 msgstr "Opnieuw aanmelden"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change password"
+msgstr "Wachtwoord wijzigen"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -8361,7 +8370,7 @@ msgstr ""
 #: apps/io.ox/mail/compose/view.js
 #, c-format
 msgid "Draft saved at %1$s"
-msgstr "Concept opgeslagen naar %1$s"
+msgstr "Concept opgeslagen om %1$s"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Mail has no recipient."
@@ -12242,6 +12251,10 @@ msgid "Are you sure you want to delete this Tweet?"
 msgstr "Weet u zeker dat u deze Tweet wilt wissen?"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Change password and sign out"
+msgstr "Wachtwoord wijzigen en afmelden"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Too short"
 msgstr "Wachtwoordkwaliteit: Te kort"
 
@@ -12315,10 +12328,6 @@ msgid ""
 msgstr ""
 "Als u uw wachtwoord verandert, wordt u afgemeld. Controleer of u alles heeft "
 "gesloten en opgeslagen."
-
-#: apps/plugins/portal/userSettings/register.js module:io.ox/core
-msgid "Change password and sign out"
-msgstr "Wachtwoord wijzigen en afmelden"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your new password may not be empty."
