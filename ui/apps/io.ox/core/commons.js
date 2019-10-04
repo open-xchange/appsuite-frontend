@@ -762,14 +762,13 @@ define('io.ox/core/commons', [
 
             update = function (e, changed) {
                 // id change?
-                if (changed && (changed.former_id || changed.id !== data.id)) {
+                if (changed && (changed.former_id || (changed.id && changed.id !== data.id))) {
                     data = changed;
                 }
 
                 if (getter = (getter || (api ? api.get : null))) {
                     // fallback for create trigger
-                    var createevent = !data.id;
-                    if (createevent) {
+                    if (!data.id) {
                         data.id = arguments[1].id;
                     }
                     // get fresh object
@@ -784,7 +783,12 @@ define('io.ox/core/commons', [
                         } else {
                             baton = data;
                         }
-                        baton.isCreateEvent = createevent;
+                        // if we have some additional update data for this change provide them to the handler
+                        if (changed && changed.updateData) {
+                            baton.updateData = changed.updateData;
+                        } else {
+                            delete baton.updateData;
+                        }
                         if (node) node.triggerHandler('redraw', baton);
                     });
                 }

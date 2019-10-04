@@ -327,7 +327,8 @@ define('io.ox/calendar/edit/main', [
                                             attachments: self.attachmentsFormData || [],
                                             checkConflicts: false,
                                             recurrenceRange: self.view.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
-                                            usedGroups: self.model._attendees.usedGroups
+                                            usedGroups: self.model._attendees.usedGroups,
+                                            showRecurrenceInfo: true
                                         })
                                     ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 }

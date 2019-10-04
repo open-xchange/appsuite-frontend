@@ -159,7 +159,8 @@ define('io.ox/calendar/edit/extensions', [
                                 recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
                                 attachments: attachments,
                                 checkConflicts: true,
-                                usedGroups: baton.model._attendees.usedGroups
+                                usedGroups: baton.model._attendees.usedGroups,
+                                showRecurrenceInfo: true
                             }),
                             delta = baton.app.getDelta();
                         api.update(delta, options).then(save, fail);

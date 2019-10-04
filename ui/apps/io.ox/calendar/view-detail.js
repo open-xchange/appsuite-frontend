@@ -113,10 +113,13 @@ define('io.ox/calendar/view-detail', [
         index: 450,
         id: 'recurrence-warning',
         draw: function (baton) {
+            // not an exception? return
             if (!(baton.data.recurrenceId && baton.data.id !== baton.data.seriesId)) return;
 
-            // use exact check for isCreateEvent === false here or the recurrence warning is drawn on initial drawing too
-            this.append($('<p class="alert alert-info recurrence-warning" role="alert">').text(gt('This appointment is an exception. Changing the exception does not affect the series.')).toggle(baton.isCreateEvent === false));
+            // additional information provided and info should be shown? Note: We dont want to show this all the time. it's just too annoying
+            if (baton.updateData && baton.updateData.showRecurrenceInfo) {
+                this.append($('<p class="alert alert-info recurrence-warning" role="alert">').text(gt('This appointment is an exception. Changing the exception does not affect the series.')));
+            }
         }
     });
 

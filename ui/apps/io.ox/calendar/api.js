@@ -30,7 +30,7 @@ define('io.ox/calendar/api', [
             return false;
         },
         // updates pool based on writing operations response (create update delete etc)
-        processResponse = function (response) {
+        processResponse = function (response, options) {
             if (!response) return;
 
             // post request responses are arrays with data and timestamp
@@ -61,7 +61,7 @@ define('io.ox/calendar/api', [
                     events.forEach(function (evt) {
                         evt.set(updates);
                         api.trigger('update', evt.attributes);
-                        api.trigger('update:' + util.cid(evt), evt.attributes);
+                        api.trigger('update:' + util.cid(evt), evt.attributes, { updateData: { showRecurrenceInfo: options && options.showRecurrenceInfo } });
                     });
 
                 } else {
@@ -80,7 +80,7 @@ define('io.ox/calendar/api', [
                     api.pool.propagateUpdate(event);
                 }
                 api.trigger('update', event);
-                api.trigger('update:' + util.cid(event), event);
+                api.trigger('update:' + util.cid(event), event, { updateData: { showRecurrenceInfo: options && options.showRecurrenceInfo } });
             });
 
 
@@ -434,22 +434,24 @@ define('io.ox/calendar/api', [
                         data: data
                     });
                 }
-                return def.then(processResponse)
-                    .then(function (data) {
-                        // post request responses are arrays with data and timestamp
-                        data = data.data || data;
+                return def.then(function (response) {
+                    processResponse(response, options);
+                    return response;
+                }).then(function (data) {
+                    // post request responses are arrays with data and timestamp
+                    data = data.data || data;
 
-                        api.getAlarms();
-                        // return conflicts or new model
-                        if (data.conflicts) {
-                            return data;
-                        }
+                    api.getAlarms();
+                    // return conflicts or new model
+                    if (data.conflicts) {
+                        return data;
+                    }
 
-                        var updated = data.updated ? data.updated[0] : undefined;
-                        if (!updated) return api.pool.getModel(util.cid(obj));
-                        if (isRecurrenceMaster(updated)) return api.pool.get('detail').add(data);
-                        return api.pool.getModel(updated);
-                    });
+                    var updated = data.updated ? data.updated[0] : undefined;
+                    if (!updated) return api.pool.getModel(util.cid(obj));
+                    if (isRecurrenceMaster(updated)) return api.pool.get('detail').add(data);
+                    return api.pool.getModel(updated);
+                });
             },
 
             remove: function (list, options) {
