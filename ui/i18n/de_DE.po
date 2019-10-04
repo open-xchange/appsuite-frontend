@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-08-19 13:38+0200\n"
+"PO-Revision-Date: 2019-10-04 10:14+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -3814,7 +3814,6 @@ msgstr "Privat"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "Weitere"
 
@@ -5210,10 +5209,14 @@ msgid "Connect this Device"
 msgstr "Dieses Gerät verbinden"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
-msgid "Change password"
-msgstr "Passwort ändern"
+msgid "Add login password"
+msgstr "Anmeldepasswort hinzufügen"
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change login password"
+msgstr "Anmeldepasswort ändern"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -5782,6 +5785,11 @@ msgstr "Seite neu laden"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Relogin"
 msgstr "Erneut anmelden"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change password"
+msgstr "Passwort ändern"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -7932,8 +7940,12 @@ msgid "Use unified mail for this account"
 msgstr "Unified Mail für diesen Account verwenden"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Please select your mail account provider"
-msgstr "Bitte wählen Sie Ihren E-Mail-Anbieter"
+msgid "Add other mail account"
+msgstr "Weiteres E-Mail-Konto hinzufügen"
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Please choose your mail account provider."
+msgstr "Bitte wählen Sie Ihren E-Mail-Anbieter."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10708,6 +10720,11 @@ msgstr "Neue Notiz"
 msgid "Send by mail"
 msgstr "Per E-Mail versenden"
 
+#: apps/io.ox/oauth/backbone.js module:io.ox/oauth
+msgid "Sign in with Google. This will add your Gmail account."
+msgstr ""
+"Melden Sie sich bei Google an. Dadurch wird Ihr Gmail-Konto hinzugefügt."
+
 #. %1$s is the display name of the account
 #. e.g. My Xing account
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -12916,6 +12933,10 @@ msgid "Are you sure you want to delete this Tweet?"
 msgstr "Wollen Sie diesen Tweet wirklich löschen?"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Change password and sign out"
+msgstr "Passwort ändern und abmelden"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Too short"
 msgstr "Passwortstärke: zu kurz"
 
@@ -12989,10 +13010,6 @@ msgid ""
 msgstr ""
 "Wenn Sie das Passwort ändern, werden Sie abgemeldet. Bitte stellen Sie "
 "sicher, dass alles geschlossen und gesichert ist. "
-
-#: apps/plugins/portal/userSettings/register.js module:io.ox/core
-msgid "Change password and sign out"
-msgstr "Passwort ändern und abmelden"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your new password may not be empty."
@@ -13200,6 +13217,9 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Please select your mail account provider"
+#~ msgstr "Bitte wählen Sie Ihren E-Mail-Anbieter"
 
 #~ msgid "Apps"
 #~ msgstr "Apps"
