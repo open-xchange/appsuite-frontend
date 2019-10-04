@@ -286,12 +286,20 @@ define('io.ox/core/folder/view', [
             // due to needed support for older androids we use click here
             tree.$el.on('click', '.folder', _.debounce(function (e) {
                 // use default behavior for arrow
-                if ($(e.target).is('.folder-arrow, .fa, .color-label')) return;
+
+                if (tree.module === 'calendar') {
+                    if ($(e.target).is('.folder-arrow, .fa, .color-label')) {
+                        return;
+                    } else if (!mobileSelectMode) {
+                        $(e.target).siblings().click();
+                        return;
+                    }
+                }
                 // use default behavior for non-selectable virtual folders
                 var targetFolder = $(e.target).closest('.folder'),
                     mobileSelectMode = app.props.get('mobileFolderSelectMode');
                 // edit mode?
-                if (mobileSelectMode === true) {
+                if (!!mobileSelectMode) {
                     // ignore selection of non-labels in mobile edit mode
                     if (!$(e.target).parent().hasClass('folder-label') || !$(e.target).closest('.folder').attr('data-contextmenu')) return;
                     return tree.dropdown.$('.dropdown-toggle').trigger('click', 'foldertree');
@@ -301,9 +309,10 @@ define('io.ox/core/folder/view', [
                 if (targetFolder.is('.virtual') && tree.selection.selectableVirtualFolders[targetFolder.data().id] !== true) return;
 
                 // default 'listView'
-                app.pages.changePage(options.firstResponder);
+                if (options.firstResponder) app.pages.changePage(options.firstResponder);
                 // callback for custom actions after pagechange
                 if (options.respondCallback) options.respondCallback();
+
             }, 10));
 
             if (id) {
