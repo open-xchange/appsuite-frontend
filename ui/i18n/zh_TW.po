@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-05-04 17:53+0800\n"
+"PO-Revision-Date: 2019-10-04 11:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.1.1\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,731,-1,-1,-1,-1,-1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
@@ -1995,6 +1995,7 @@ msgstr "蟲試"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Select all"
 msgstr "選擇全部"
 
@@ -2360,6 +2361,8 @@ msgid "New"
 msgstr "新增"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#. used as a verb here. label of a button to view attachments
+#. used as a verb here. label of a button to view files
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/files/actions.js
@@ -3288,7 +3291,6 @@ msgstr "用戶定義欄位"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
@@ -3746,7 +3748,6 @@ msgstr "住家"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "其他"
 
@@ -4916,8 +4917,8 @@ msgid "Navigate to:"
 msgstr "導航至:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
-msgid "Apps"
-msgstr "應用程式"
+msgid "All Applications"
+msgstr ""
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5088,10 +5089,14 @@ msgid "Connect this Device"
 msgstr "連線至此裝置"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
-msgid "Change password"
-msgstr "更改密碼"
+msgid "Add login password"
+msgstr ""
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change login password"
+msgstr ""
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -5644,6 +5649,11 @@ msgstr "重新載入頁面"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Relogin"
 msgstr "重新登入"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change password"
+msgstr "更改密碼"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -7722,8 +7732,12 @@ msgid "Use unified mail for this account"
 msgstr "為此帳戶使用統一郵件"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Please select your mail account provider"
-msgstr "請選擇您的郵件帳號提供者"
+msgid "Add other mail account"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Please choose your mail account provider."
+msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10389,6 +10403,10 @@ msgstr "新增筆記"
 msgid "Send by mail"
 msgstr "透過電子郵件寄送"
 
+#: apps/io.ox/oauth/backbone.js module:io.ox/oauth
+msgid "Sign in with Google. This will add your Gmail account."
+msgstr ""
+
 #. %1$s is the display name of the account
 #. e.g. My Xing account
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -11675,9 +11693,9 @@ msgstr "新增視窗"
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
-"Emails will appear in a new window. These windows can be maximized, "
+"E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
-msgstr "將在新視窗顯示郵件。可最大化、最小化或關閉這些視窗。"
+msgstr ""
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
@@ -12546,6 +12564,10 @@ msgid "Are you sure you want to delete this Tweet?"
 msgstr "確定要刪除此 Tweet 嗎？"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Change password and sign out"
+msgstr "更改密碼並登出"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Too short"
 msgstr "密碼強度: 太短"
 
@@ -12615,10 +12637,6 @@ msgid ""
 "If you change the password, you will be signed out. Please ensure that "
 "everything is closed and saved."
 msgstr "若您變更密碼將會被登出，請確保所有東西已關閉並儲存。"
-
-#: apps/plugins/portal/userSettings/register.js module:io.ox/core
-msgid "Change password and sign out"
-msgstr "更改密碼並登出"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your new password may not be empty."
@@ -12815,6 +12833,17 @@ msgstr "邀請至 %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "新增至 %s"
+
+#~ msgid "Apps"
+#~ msgstr "應用程式"
+
+#~ msgid "Please select your mail account provider"
+#~ msgstr "請選擇您的郵件帳號提供者"
+
+#~ msgid ""
+#~ "Emails will appear in a new window. These windows can be maximized, "
+#~ "minimized and closed."
+#~ msgstr "將在新視窗顯示郵件。可最大化、最小化或關閉這些視窗。"
 
 #~ msgid "Anti-Virus Warning"
 #~ msgstr "防毒軟體警告"

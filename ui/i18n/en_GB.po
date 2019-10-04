@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-05-08 20:10-0600\n"
+"PO-Revision-Date: 2019-10-04 11:23+0200\n"
 "Last-Translator: Timothy Friesen <timothy.friesen@gmail.com>\n"
 "Language-Team: English <en@workshop-chapina.com>\n"
 "Language: en_GB\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 18.12.3\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -2019,6 +2019,7 @@ msgstr "Retry"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Select all"
 msgstr "Select all"
 
@@ -2393,6 +2394,8 @@ msgid "New"
 msgstr "New"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#. used as a verb here. label of a button to view attachments
+#. used as a verb here. label of a button to view files
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/files/actions.js
@@ -3328,7 +3331,6 @@ msgstr "User fields"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
@@ -3788,7 +3790,6 @@ msgstr "Home"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "Other"
 
@@ -4976,8 +4977,8 @@ msgid "Navigate to:"
 msgstr "Navigate to:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
-msgid "Apps"
-msgstr "Apps"
+msgid "All Applications"
+msgstr ""
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5149,10 +5150,14 @@ msgid "Connect this Device"
 msgstr "Connect this Device"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
-msgid "Change password"
-msgstr "Change password"
+msgid "Add login password"
+msgstr ""
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change login password"
+msgstr ""
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -5715,6 +5720,11 @@ msgstr "Reload page"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Relogin"
 msgstr "Re-login"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change password"
+msgstr "Change password"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -7838,8 +7848,12 @@ msgid "Use unified mail for this account"
 msgstr "Use unified mail for this account"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Please select your mail account provider"
-msgstr "Please select your e-mail account provider"
+msgid "Add other mail account"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Please choose your mail account provider."
+msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10564,6 +10578,10 @@ msgstr "New note"
 msgid "Send by mail"
 msgstr "Send by mail"
 
+#: apps/io.ox/oauth/backbone.js module:io.ox/oauth
+msgid "Sign in with Google. This will add your Gmail account."
+msgstr ""
+
 #. %1$s is the display name of the account
 #. e.g. My Xing account
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -11867,11 +11885,9 @@ msgstr "New Windows"
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
-"Emails will appear in a new window. These windows can be maximized, "
+"E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
-"E-mail messages will appear in a new window. These windows can be maximized, "
-"minimized and closed."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
@@ -12749,6 +12765,10 @@ msgid "Are you sure you want to delete this Tweet?"
 msgstr "Are you sure you want to delete this Tweet?"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Change password and sign out"
+msgstr "Change password and sign out"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Too short"
 msgstr "Password strength: Too short"
 
@@ -12822,10 +12842,6 @@ msgid ""
 msgstr ""
 "If you change the password, you will be signed out. Please ensure that "
 "everything is closed and saved."
-
-#: apps/plugins/portal/userSettings/register.js module:io.ox/core
-msgid "Change password and sign out"
-msgstr "Change password and sign out"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your new password may not be empty."
@@ -13030,6 +13046,19 @@ msgstr "Invite to %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Add on %s"
+
+#~ msgid "Apps"
+#~ msgstr "Apps"
+
+#~ msgid "Please select your mail account provider"
+#~ msgstr "Please select your e-mail account provider"
+
+#~ msgid ""
+#~ "Emails will appear in a new window. These windows can be maximized, "
+#~ "minimized and closed."
+#~ msgstr ""
+#~ "E-mail messages will appear in a new window. These windows can be "
+#~ "maximized, minimized and closed."
 
 #~ msgid "Anti-Virus Warning"
 #~ msgstr "Anti-Virus Warning"

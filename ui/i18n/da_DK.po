@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-05-08 15:05+0200\n"
+"PO-Revision-Date: 2019-10-04 11:23+0200\n"
 "Last-Translator: Nicky Thomassen <nicky@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #
 #   Naming Conventions
@@ -2020,6 +2020,7 @@ msgstr "Prøv igen"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Select all"
 msgstr "Vælg alle"
 
@@ -2393,6 +2394,8 @@ msgid "New"
 msgstr "Ny"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#. used as a verb here. label of a button to view attachments
+#. used as a verb here. label of a button to view files
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/files/actions.js
@@ -3325,7 +3328,6 @@ msgstr "Brugerfelter"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
@@ -3785,7 +3787,6 @@ msgstr "Hjemme"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "Andet"
 
@@ -4981,8 +4982,8 @@ msgid "Navigate to:"
 msgstr "Navigér til:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
-msgid "Apps"
-msgstr "Apps"
+msgid "All Applications"
+msgstr ""
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5158,10 +5159,14 @@ msgid "Connect this Device"
 msgstr "Forbind denne enhed"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
-msgid "Change password"
-msgstr "Ændr adgangskode"
+msgid "Add login password"
+msgstr ""
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change login password"
+msgstr ""
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -5727,6 +5732,11 @@ msgstr "Genindlæs side"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Relogin"
 msgstr "Login igen"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change password"
+msgstr "Ændr adgangskode"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -7854,8 +7864,12 @@ msgid "Use unified mail for this account"
 msgstr "Brug forenet e-mail for denne konto"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Please select your mail account provider"
-msgstr "Vælg venligst din e-mail-udbyder."
+msgid "Add other mail account"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Please choose your mail account provider."
+msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10574,6 +10588,10 @@ msgstr "Ny note"
 msgid "Send by mail"
 msgstr "Send med e-mail"
 
+#: apps/io.ox/oauth/backbone.js module:io.ox/oauth
+msgid "Sign in with Google. This will add your Gmail account."
+msgstr ""
+
 #. %1$s is the display name of the account
 #. e.g. My Xing account
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -11874,11 +11892,9 @@ msgstr "Nye vinduer"
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
-"Emails will appear in a new window. These windows can be maximized, "
+"E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
-"Beskeder vil dukke op i et nyt vindue.  Disse vinduer kan maksimeres, "
-"minimeres og lukkes."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
@@ -12759,6 +12775,10 @@ msgid "Are you sure you want to delete this Tweet?"
 msgstr "Er du sikker på du vil slette denne tweet?"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Change password and sign out"
+msgstr "Ændr adgangskode og log ud"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Too short"
 msgstr "Styrke af adgangskode: For kort"
 
@@ -12832,10 +12852,6 @@ msgid ""
 msgstr ""
 "Hvis du ændrer adgangskoden, bliver du logget ud. Sørg venligst for at alt "
 "er gemt og lukket."
-
-#: apps/plugins/portal/userSettings/register.js module:io.ox/core
-msgid "Change password and sign out"
-msgstr "Ændr adgangskode og log ud"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your new password may not be empty."
@@ -13040,6 +13056,19 @@ msgstr "Invitér til %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Tilføj på %s"
+
+#~ msgid "Apps"
+#~ msgstr "Apps"
+
+#~ msgid "Please select your mail account provider"
+#~ msgstr "Vælg venligst din e-mail-udbyder."
+
+#~ msgid ""
+#~ "Emails will appear in a new window. These windows can be maximized, "
+#~ "minimized and closed."
+#~ msgstr ""
+#~ "Beskeder vil dukke op i et nyt vindue.  Disse vinduer kan maksimeres, "
+#~ "minimeres og lukkes."
 
 #~ msgid "Anti-Virus Warning"
 #~ msgstr "Advarsel fra antivirus"
