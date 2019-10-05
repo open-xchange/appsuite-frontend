@@ -2611,21 +2611,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/main.js
 #: module:io.ox/calendar
-#: apps/io.ox/contacts/main.js
-#: module:io.ox/contacts
-#: apps/io.ox/core/folder/tree.js
-#: module:io.ox/core
-#: apps/io.ox/core/folder/view.js
-#: apps/io.ox/files/filepicker.js
-#: module:io.ox/files
-#: apps/io.ox/files/main.js
-#: apps/io.ox/files/share/toolbar.js
-#: apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/main.js
-#: module:io.ox/mail
-#: apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
-msgid "Folders"
+msgid "Calendars"
 msgstr ""
 
 #. Used as button label for a navigation action, like the browser back button
@@ -2646,7 +2632,21 @@ msgstr ""
 
 #: apps/io.ox/calendar/main.js
 #: module:io.ox/calendar
-msgid "Calendars"
+#: apps/io.ox/contacts/main.js
+#: module:io.ox/contacts
+#: apps/io.ox/core/folder/tree.js
+#: module:io.ox/core
+#: apps/io.ox/core/folder/view.js
+#: apps/io.ox/files/filepicker.js
+#: module:io.ox/files
+#: apps/io.ox/files/main.js
+#: apps/io.ox/files/share/toolbar.js
+#: apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/main.js
+#: module:io.ox/mail
+#: apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
+msgid "Folders"
 msgstr ""
 
 #: apps/io.ox/calendar/main.js
