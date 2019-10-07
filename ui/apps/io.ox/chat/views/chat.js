@@ -387,6 +387,7 @@ define('io.ox/chat/views/chat', [
                 this.model.messages.reset();
                 this.model.messages.fetch();
             } else {
+                this.messagesView.onSeen();
                 this.scrollToBottom();
             }
         },
