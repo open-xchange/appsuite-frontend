@@ -719,7 +719,7 @@ define('io.ox/chat/data', [
                     else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
 
                     if (message.senderId.toString() !== data.user_id.toString()) {
-                    model.set({ modified: +moment(), unreadCount: model.get('unreadCount') + 1 });
+                        model.set({ modified: +moment(), unreadCount: model.get('unreadCount') + 1 });
                     }
 
                     newMessage.updateDelivery('client');
