@@ -92,6 +92,16 @@ define([
                 const launcherApps = apps.forLauncher();
                 expect(launcherApps).to.have.length(0);
             });
+
+            it('should list app which added itself', function () {
+                coreSettings.set('apps/list');
+                coreSettings.set('apps/blacklist');
+                apps.initialize();
+                apps.launcher.add('io.ox/test');
+                const launcherApps = apps.forLauncher();
+                expect(launcherApps).to.have.length(1);
+                expect(launcherApps[0].get('title'), 'title of the first app').to.equal('Testanwendung');
+            });
         });
 
         describe('launchers view', function () {
