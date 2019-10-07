@@ -28,7 +28,7 @@ define('io.ox/chat/views/fileList', [
         draw: function () {
             this.attr('data-prio', 'hi').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="close-chat">').append(
-                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), 'Back'
+                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), 'Chats'
                 )
             );
         }
@@ -50,7 +50,7 @@ define('io.ox/chat/views/fileList', [
         draw: function () {
             this.attr('data-prio', 'hi').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').append(
-                    $('<i class="fa fa-external-link" aria-hidden="true">')
+                    $('<i class="fa fa-window-maximize" aria-hidden="true">')
                 )
             );
         }

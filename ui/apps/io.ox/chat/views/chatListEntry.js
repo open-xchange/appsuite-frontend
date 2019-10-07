@@ -62,13 +62,13 @@ define('io.ox/chat/views/chatListEntry', [
                             $('<div class="last-modified">').text(model.getLastMessageDate())
                         ),
                         $('<div class="chats-row">').append(
-                            $('<div class="fa delivery">')
-                                .toggleClass('hidden', !isCurrentUser || isSystemMessage)
-                                .addClass(lastMessage.state || ''),
                             $('<div class="sender">')
                                 .toggleClass('hidden', isCurrentUser || isPrivate || isSystemMessage)
                                 .text(model.getLastSenderName() + ':'),
                             $('<div class="text-preview">').append(model.getLastMessage()),
+                            $('<div class="fa delivery">')
+                                .toggleClass('hidden', !isCurrentUser || isSystemMessage)
+                                .addClass(lastMessage.state || ''),
                             $('<div class="label-container">').append(
                                 $('<span class="label label-info">').text(model.get('unreadCount'))
                             )
