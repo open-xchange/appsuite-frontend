@@ -73,7 +73,7 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
                             $.txt("Gentleman")
                         ),
                         $('<label class="radio">').append(
-                            baton.form.female = $('<input type="radio" name="genderRadio" value="male">'),
+                            baton.form.female = $('<input type="radio" name="genderRadio" value="female">'),
                             $.txt("Lady")
                         )
                     )
@@ -85,7 +85,7 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             // reason to believe the state changed
             baton.helpers = {
                 updateState: function () {
-                    if (baton.form.male.attr("checked") === 'checked' || baton.form.female.attr("checked") === 'checked') {
+                    if (baton.form.male.is(':checked') || baton.form.female.is(':checked')) {
                         // One of the two was picked, so enable the next button
                         baton.buttons.enableNext();
                     } else {
@@ -96,7 +96,6 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             };
             baton.form.male.on('click', baton.helpers.updateState);
             baton.form.female.on('click', baton.helpers.updateState);
-
         },
 
         activate: function (baton) {
@@ -110,9 +109,9 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             // with the entered value, in this case we'll remember it in the wizards data section for inter-page stuff
 
             var gender = null;
-            if (baton.form.male.attr("checked") === 'checked') {
+            if (baton.form.male.is(':checked')) {
                 gender = 'male';
-            } else if (baton.form.female.attr("checked") === 'checked') {
+            } else if (baton.form.female.is(':checked')) {
                 gender = 'female';
             }
 
@@ -137,7 +136,7 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             // We will fetch the user data for our example.
             var def = $.Deferred();
 
-            require(["io.ox/core/api/user", "io.ox/backbone/basicModel", "io.ox/backbone/mini-views"], function (userAPI, Model, mini) {
+            require(["io.ox/core/api/user", "io.ox/backbone/basicModel", "io.ox/backbone/mini-views", "io.ox/contacts/util"], function (userAPI, Model, mini, contactUtil) {
                 // Alright, let's stick the APIs into our baton, we'll need these later
                 // This is also a nice little trick for loading APIs in the wizard framework.
                 baton.libraries = {
@@ -162,6 +161,14 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
                         }
                     }
                     baton.user.on('change', updateButtonState);
+
+                    // As of today we still have three fields in the contact data (firstname, lastname,
+                    // displayname). The displayname is used rarely in the UI but it still is as well
+                    // in some other places so we have to keep this in sync.
+                    function updateDisplayName() {
+                        baton.user.set('display_name', contactUtil.getFullName(this.toJSON()));
+                    }
+                    baton.user.on('change:title change:first_name change:last_name change:company', updateDisplayName);
 
                     updateButtonState();
 
