@@ -984,6 +984,19 @@
             margin-bottom: -8px;
             margin-right: 4px;
 
+            &:not(.preview) .thumbnail { background-image: none!important; }
+            &.preview .fallback-icon { display: none; }
+
+            .fallback-icon {
+                position: absolute;
+                top: 15px;
+                left: 15px;
+                font-size: 30px;
+                z-index: 1;
+                color: #aaa;
+                pointer-events: none;
+            }
+
             > .picture-uploader {
                 width: 60px;
                 height: 60px;
