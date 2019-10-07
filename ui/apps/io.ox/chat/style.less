@@ -67,6 +67,10 @@
         .resizebar { display: block; }
 
         .chats li:hover, .search-result li:hover { background-color: @backgroundColor; }
+
+        .more-dropdown {
+            float: right;
+        }
     }
 
     &:not(.columns) {
@@ -118,7 +122,7 @@
 
     .classic-toolbar {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
 
         button {
             background-size: cover;

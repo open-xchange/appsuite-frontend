@@ -515,11 +515,11 @@ define('io.ox/chat/main', [
         id: 'create',
         index: 100,
         prio: 'hi',
-        icon: 'fa fa-plus',
+        title: 'New Chat',
         dropdown: 'io.ox/chat/list/toolbar/create',
         caret: false,
         customize: function () {
-            this.siblings('.dropdown-menu').addClass('pull-right');
+            this.siblings('.dropdown-menu');
         }
     });
 
@@ -533,21 +533,6 @@ define('io.ox/chat/main', [
             this.attr('data-prio', 'hi').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').append(
                     $('<i class="fa fa-window-maximize" aria-hidden="true">')
-                )
-            );
-        }
-    });
-
-    ext.point('io.ox/chat/list/toolbar').extend({
-        id: 'close',
-        index: 300,
-        prio: 'hi',
-        mobile: 'lo',
-        custom: true,
-        draw: function () {
-            this.attr('data-prio', 'hi').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="discard-app">').append(
-                    $('<i class="fa fa-times" aria-hidden="true">')
                 )
             );
         }
