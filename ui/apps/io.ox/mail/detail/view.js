@@ -378,9 +378,10 @@ define('io.ox/mail/detail/view', [
             // "//:0" does not work for src as IE 11 goes crazy when loading the frame
             var iframe = $('<iframe src="" class="mail-detail-frame">').attr('title', gt('Email content')).on('load', function () {
                 iframe.contents().on('click', 'a[rel="noopener"], area[target="_blank"]', function (e) {
+                    if (_.device('noopener')) return;
                     // see bug 67365
                     var isDeepLink = ($(this).attr('class') || '').indexOf('deep-link') > -1;
-                    if (_.device('noopener') || isDeepLink) return;
+                    if (isDeepLink) return e.preventDefault();
                     e.preventDefault();
                     blankshield.open($(this).attr('href'));
                 });
