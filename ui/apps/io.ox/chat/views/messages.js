@@ -92,7 +92,9 @@ define('io.ox/chat/views/messages', [
                         $('<div class="body">')
                             .html(model.getBody())
                             .append(this.renderFoot(model))
-                    )
+                    ),
+                    //delivery state
+                    $('<div class="fa delivery">').addClass(model.get('state'))
                 );
 
             var date = this.renderDate(model);
@@ -104,9 +106,7 @@ define('io.ox/chat/views/messages', [
         renderFoot: function (model) {
             return $('<div class="foot">').append(
                 // time
-                $('<div class="time">').text(model.getTime()),
-                // delivery state
-                $('<div class="fa delivery">').addClass(model.get('state'))
+                $('<div class="time">').text(model.getTime())
             );
         },
 
