@@ -508,6 +508,21 @@ define('io.ox/calendar/edit/extensions', [
                                 }
                             });
                         });
+                    } else if (folderAPI.is('public', newModel) && !folderAPI.is('public', previousModel)) {
+                        // trigger redraw of attendees, organizer might be removable/not removable anymore
+                        self.model.getAttendees().trigger('reset');
+                    } else if (!folderAPI.is('public', newModel) && folderAPI.is('public', previousModel)) {
+                        var prevLength = self.model.getAttendees().length;
+                        self.model.setDefaultAttendees({ create: true, resetStates: !self.model.get('id') }).done(function () {
+                            // trigger reset to trigger a redrawing of all participants (avoid 2 organizers)
+                            self.model.getAttendees().trigger('reset');
+                            // no user added -> user was organizer before, no yell needed
+                            if (prevLength === self.model.getAttendees().length) return;
+
+                            require(['io.ox/core/yell'], function (yell) {
+                                yell('info', gt('You are no longer using a public calendar. You were added as organizer.'));
+                            });
+                        });
                     }
                 });
 
