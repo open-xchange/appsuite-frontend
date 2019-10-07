@@ -123,7 +123,9 @@ define('io.ox/chat/actions/openGroupDialog', [
             id: 'upload-group-picture',
             index: 250,
             customizeNode: function () {
+                var icon = this.model.get('type') === 'channel' ? 'fa-hashtag' : 'fa-group';
                 this.$el.addClass('contact-picture-upload f6-target');
+                this.$el.append($('<i class="fa fallback-icon">').addClass(icon));
             }
         });
 

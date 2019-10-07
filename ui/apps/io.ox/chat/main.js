@@ -132,7 +132,7 @@ define('io.ox/chat/main', [
                     {
                         help: false,
                         build: function () {
-                            this.$el.addClass('ox-chat-popup');
+                            this.$el.addClass('ox-private-chat-popup');
                         },
                         useGABOnly: true,
                         title: 'Start new conversation',
