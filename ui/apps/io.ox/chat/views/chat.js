@@ -370,7 +370,7 @@ define('io.ox/chat/views/chat', [
             e.preventDefault();
             var text = this.$editor.val();
             text = emoji(text);
-            this.onPostMessage(text);
+            if (text.trim().length > 0) this.onPostMessage(text);
             this.$editor.val('').focus();
         },
 
