@@ -41,7 +41,7 @@ define('io.ox/chat/views/messages', [
             }.bind(this));
             $(window).focus(function () {
                 this.hidden = false;
-                this.onSeen();
+                if (data.chats.getCurrent()) this.onSeen();
             }.bind(this));
 
             this.updateDelivery = _.debounce(this.updateDelivery.bind(this), 10);
