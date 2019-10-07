@@ -339,7 +339,7 @@ define('io.ox/chat/main', [
                 if ($(this).position().top < height) currentMessage = $(this);
             });
 
-            return currentMessage.attr('data-cid');
+            return currentMessage ? currentMessage.attr('data-cid') : undefined;
         },
 
         scrollToMessage: function (cid) {
