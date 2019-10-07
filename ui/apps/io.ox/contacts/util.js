@@ -424,7 +424,7 @@ define('io.ox/contacts/util', [
                 modulo = colors.length;
 
             return function (initials) {
-                if (!initials) return 'gray';
+                if (!initials) return colors[0];
                 return colors[initials[0].charCodeAt() % modulo];
             };
         }()),
