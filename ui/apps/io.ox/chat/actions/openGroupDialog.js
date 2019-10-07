@@ -58,12 +58,13 @@ define('io.ox/chat/actions/openGroupDialog', [
             details: function () {
                 var guidDescription = _.uniqueId('form-control-label-');
                 var guidTitle = _.uniqueId('form-control-label-');
+                var type = this.model.get('type') === 'group' ? 'Group' : 'Channel';
 
                 this.$body.append(
                     $('<div class="row">').append(
                         $('<div class="col-xs-12">').append(
                             $('<div class="form-group">').append(
-                                $('<label class="control-label">').attr('for', guidTitle).text('Group name'),
+                                $('<label class="control-label">').attr('for', guidTitle).text(type + ' name'),
                                 new mini.InputView({ id: guidTitle, model: this.model, name: 'title' }).render().$el
                             ),
                             $('<div class="form-group hidden">').append(
