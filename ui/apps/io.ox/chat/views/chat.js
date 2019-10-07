@@ -349,7 +349,6 @@ define('io.ox/chat/views/chat', [
                 }
             }
             scrollpane.scrollTop(position);
-            this.model.set('unreadCount', 0);
         },
 
         toggleAutoScroll: function (autoScroll) {

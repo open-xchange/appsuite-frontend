@@ -492,6 +492,7 @@ define('io.ox/chat/data', [
 
         model: ChatModel,
         comparator: 'modified',
+        currentChatId: undefined,
 
         url: function () {
             return data.API_ROOT + '/rooms';
@@ -552,8 +553,16 @@ define('io.ox/chat/data', [
 
         onChangeUnreadCount: function () {
             this.trigger('unseen', this.reduce(function (sum, model) {
-                return sum + (model.get('unreadCount') > 0 ? 1 : 0);
+                return sum + model.get('unreadCount');
             }, 0));
+        },
+
+        setCurrent: function (current) {
+            this.currentChatId = current;
+        },
+
+        getCurrent: function () {
+            return data.chats.get(this.currentChatId);
         },
 
         getOpen: function () {
@@ -685,8 +694,13 @@ define('io.ox/chat/data', [
                 room.messages.forEach(function (message) {
                     if (message.id > messageId) return;
                     if (message.get('state') === 'seen') return;
+                    if (message.get('state') === 'client' && state === 'server') return;
                     message.set('state', state);
                 });
+
+                if (state === 'seen') {
+                    room.set({ modified: +moment(), unreadCount: 0 });
+                }
             });
 
             socket.on('message:new', function (roomId, message) {
@@ -701,7 +715,10 @@ define('io.ox/chat/data', [
                     if (model.messages.nextComplete) model.messages.add(message);
                     else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
 
+                    if (message.senderId.toString() !== data.user_id.toString()) {
                     model.set({ modified: +moment(), unreadCount: model.get('unreadCount') + 1 });
+                    }
+
                     newMessage.updateDelivery('client');
                 });
             });
