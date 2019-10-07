@@ -30,8 +30,8 @@ upload:
   only:
     - develop
     - master
-    - master-*
-    - release-*
+    - /^master-/
+    - /^release-/
     - /^feature\//
     - /^bug\//
     - /^poc\//
