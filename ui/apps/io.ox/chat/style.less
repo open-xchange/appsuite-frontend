@@ -39,6 +39,8 @@
     }
 
     &.columns {
+        border-left: 2px solid @gray;
+
         .chat-leftside {
             flex: 1;
             width: 100%;
@@ -243,12 +245,12 @@
     }
 
     .navigation-actions {
-        padding-bottom: 8px;
+        padding-bottom: 16px;
 
         .btn-nav {
             position: relative;
             border: 0;
-            padding: 8px 16px 8px 50px;
+            padding: 8px 16px 8px 55px;
             line-height: 16px;
             display: block;
             width: 100%;
@@ -268,7 +270,7 @@
         .btn-icon {
             position: absolute;
             font-size: 20px;
-            left: 16px;
+            left: 21px;
         }
     }
 
@@ -343,6 +345,10 @@
         .delivery {
             margin-top: 5px;
             margin-right: 5px;
+
+            &.server {
+                margin-right: 0px;
+            }
         }
 
         .text-preview {
@@ -475,17 +481,11 @@
     }
 
     .date {
-        color:rgb(112, 112, 112);
         font-size: 12px;
+        color: @gray;
         text-align: center;
-        padding: 2px 10px 2px 10px;
-        margin-left: auto;
-        margin-right: auto;
         margin-bottom: 10px;
         margin-top: 10px;
-        width: fit-content;
-        border-radius: 4px;
-        border: 1px solid rgba(40,63,115, 0.2);
     }
 
     .message {
@@ -507,7 +507,7 @@
         &.text, &.file {
             .content {
                 background-color: #eee;
-                border-radius: 8px;
+                border-radius: 16px;
                 display: inline-block;
                 padding: 8px 16px;
             }
@@ -531,19 +531,23 @@
             animation-duration: 3s;
         }
         &.myself {
-            text-align: right;
             padding: 0 0 0 128px;
+            display: flex;
 
             .sender {
                 display: none;
             }
-            .time, .delivery {
-                color: #eee;;
+            .delivery.server, .delivery.client {
+                color: @gray;
+            }
+            .time {
+                color: #DBE9FD;
             }
             &.text, &.file {
                 .content {
                     color: #fff;
-                    background-color: @gray;
+                    background-color: @lightblue;
+                    margin-left: auto;
                 }
             }
             .body {
@@ -551,6 +555,8 @@
             }
             .delivery {
                 margin-left: 5px;
+                margin-top: auto;
+                margin-bottom: auto;
                 display: inline-block;
             }
             &.highlight .content{
@@ -599,21 +605,24 @@
         &.file {
             &.myself .body {
                 color: #fff;
-                background-color: @gray;
             }
 
             .icon { margin-right: 0.5em; }
             .download { margin-left: 0.5em; }
 
             &.myself .download {
-                color: lighten(@lightblue, 10%);
+                color: #fff;
             }
         }
         &.system {
             padding: 0 12px;
             margin-bottom: 16px;
+            font-size: 12px;
+            display: inline-block;
+            width: 100%;
+
             .body {
-                color: #707070;
+                color: @gray;
                 text-align: center;
             }
             .name {
@@ -711,7 +720,7 @@
         .ellipsis();
         &:focus, &:hover {
             color: white;
-            background-color: #707070;
+            background-color: @gray;
             .state {
                 border-color: rgba(0, 0, 0, 0.20);
             }
@@ -928,7 +937,7 @@
     }
 
     .typing .name {
-        color: #707070;
+        color: @gray;
         font-size: 13px;
         margin: 8px 0;
     }
