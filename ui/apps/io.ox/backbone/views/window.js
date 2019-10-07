@@ -152,7 +152,7 @@ define('io.ox/backbone/views/window', [
         renderControls: function () {
             var isNormal = this.model.get('mode') === 'normal';
             return $('<div class="controls" role="toolbar">').append(
-                this.model.get('stickable') ? $('<button type="button" class="btn btn-link" data-action="stick" tabindex="-1">').attr('aria-label', gt('Close')).append($('<i class="fa fa-external-link" aria-hidden="true">').attr('title', gt('Stick to the right side'))) : '',
+                this.model.get('stickable') ? $('<button type="button" class="btn btn-link" data-action="stick" tabindex="-1">').attr('aria-label', gt('Close')).append($('<i class="fa fa-window-maximize fa-rotate-90" aria-hidden="true">').attr('title', gt('Stick to the right side'))) : '',
                 //#. window resize
                 this.model.get('resizable') !== false ? $('<button type="button" class="btn btn-link" data-action="minimize">').attr('aria-label', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">').attr('title', gt('Minimize'))) : '',
                 //#. window resize
