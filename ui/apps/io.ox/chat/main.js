@@ -66,6 +66,13 @@ define('io.ox/chat/main', [
             this.listenTo(data.chats, 'unseen', function (count) {
                 this.setCount(count);
             });
+            this.listenTo(data.chats, 'add', function () {
+                var count = data.chats.reduce(function (sum, model) {
+                    return sum + model.get('unreadCount');
+                }, 0);
+
+                this.setCount(count);
+            });
             this.listenTo(this.model, {
                 'change:sticky': function () {
                     if (!this.model.get('sticky')) return;
@@ -174,6 +181,7 @@ define('io.ox/chat/main', [
             .on('continue', function () {
                 data.chats.get(groupId).destroy();
                 self.closeChat();
+                data.chats.setCurrent(undefined);
             })
             .open();
         },
@@ -193,11 +201,13 @@ define('io.ox/chat/main', [
         },
 
         showChat: function (id, opt) {
+            data.chats.setCurrent(id);
             var view = new ChatView(_.extend({ room: id }, _(opt).pick('messageId', 'reference')));
             this.showApp();
             this.$rightside.empty().append(view.render().$el);
             this.$body.addClass('open');
             view.scrollToBottom();
+            this.resetCount();
         },
 
         closeChat: function () {
@@ -205,6 +215,7 @@ define('io.ox/chat/main', [
                 new EmptyView().render().$el
             );
             this.$body.removeClass('open');
+            data.chats.setCurrent(undefined);
         },
 
         showRecentConversations: function () {
@@ -271,6 +282,11 @@ define('io.ox/chat/main', [
             items.eq(index).focus().click();
         },
 
+        resetCount: function () {
+            var model = data.chats.getCurrent();
+            model.set('unreadCount', 0);
+        },
+
         onOverlayEvent: function (e) {
             if ((e.type === 'click' && $(e.target).is('.overlay')) || e.which === 27) return this.closeFile();
             if (e.which !== 37 && e.which !== 39) return;
@@ -283,6 +299,7 @@ define('io.ox/chat/main', [
             if (!model) return;
             data.chats.toggleRecent(id);
             self.closeChat();
+            data.chats.setCurrent(undefined);
         },
 
         resubscribeChat: function (id, opt) {
