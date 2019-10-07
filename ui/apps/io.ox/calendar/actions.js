@@ -505,9 +505,9 @@ define('io.ox/calendar/actions', [
     }
 
     function supportsChangeStatus(f, baton) {
-        // no flags at all => public folder and user is no attendee or organizer
-        // Note: there is a possibility for imported events where the user is attendee but status flags are not set (the partstat attribute is missing). To cover this case we use the attende check as result and not just return false
-        if (!f.accepted && !f.declined && !f.tentative && !f.needs_action) return (f.attendee || f.organizer);
+        // no flags at all => public folder and user is no attendee. Not allowed to change attendee statuses
+        if (!f.accepted && !f.declined && !f.tentative && !f.needs_action) return false;
+
         // normal attendee or organizer
         if (f.attendee || f.organizer) return true;
         // in shared and public folders we also have to check if we have the permission to modify
