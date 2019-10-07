@@ -16,47 +16,23 @@ define('io.ox/chat/actions/openGroupDialog', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/modal',
     'io.ox/contacts/widgets/pictureUpload',
-    'io.ox/participants/add',
-    'io.ox/participants/views',
-    'io.ox/participants/model',
+    'io.ox/chat/views/members',
+    'io.ox/chat/views/addMember',
     'io.ox/backbone/views',
     'io.ox/backbone/mini-views',
-    'io.ox/contacts/api',
     'io.ox/chat/data'
-], function (ext, ModalDialog, PictureUpload, AddParticipantView, pViews, pModel, views, mini, contactsAPI, data) {
+], function (ext, ModalDialog, PictureUpload, MemberView, AddMemberView, views, mini, data) {
 
     'use strict';
 
     function open(obj) {
-        var userIds, originalModel,
-            model = data.chats.get(obj.id);
+        var model = data.chats.get(obj.id) || new Backbone.Model(obj);
+        var participants = model.members || new Backbone.Collection([data.users.getByMail(data.user.email)]);
+        var originalModel = model.has('id') ? model.clone() : new Backbone.Model();
 
-        if (model) {
-            userIds = model.members.map(function (user) {
-                return _.cid(user.get('cid'));
-            });
-        } else {
-            var mailAddresses = [data.user.email];
-            if (obj.members) mailAddresses.push.apply(mailAddresses, obj.members);
-            userIds = mailAddresses.map(function (address) {
-                var user = data.users.getByMail(address);
-                if (!user) return;
-                return _.cid(user.get('cid'));
-            });
-            userIds = _(userIds).chain().compact().unique().value();
-        }
+        model.set('type', model.get('type') || obj.type || 'group');
 
-        return contactsAPI.getList(userIds).then(function (users) {
-            model = model || new Backbone.Model(obj);
-            model.set('type', model.get('type') || obj.type || 'group');
-            var participants = new Backbone.Collection(users.map(function (user) {
-                return new pModel.Participant(user);
-            }));
-
-            originalModel = model.has('id') ? model.clone() : new Backbone.Model();
-
-            return openDialog(model, participants, originalModel);
-        });
+        return openDialog(model, participants, originalModel);
     }
 
     function openDialog(model, participants, originalModel) {
@@ -66,15 +42,16 @@ define('io.ox/chat/actions/openGroupDialog', [
             point: 'io.ox/chat/actions/openGroupDialog',
             model: model,
             collection: participants,
-            backdrop: true
+            backdrop: true,
+            width: 380
         })
         .extend({
             header: function () {
-                var title = this.model.get('id') ? 'Edit group' : 'Create new group';
+                var title = this.model.get('id') ? 'Edit group chat' : 'Create group chat';
                 if (this.model.get('type') === 'channel') title = this.model.get('id') ? 'Edit channel' : 'Create new channel';
 
                 var title_id = _.uniqueId('title');
-                this.$('.modal-header').append(
+                this.$('.modal-header').empty().append(
                     $('<h1 class="modal-title">').attr('id', title_id).text(title)
                 );
             },
@@ -83,13 +60,13 @@ define('io.ox/chat/actions/openGroupDialog', [
                 var guidTitle = _.uniqueId('form-control-label-');
 
                 this.$body.append(
-                    $('<div class="row details-container">').append(
-                        $('<div class="col-xs-6">').append(
+                    $('<div class="row">').append(
+                        $('<div class="col-xs-12">').append(
                             $('<div class="form-group">').append(
-                                $('<label class="control-label">').attr('for', guidTitle).text('Name'),
+                                $('<label class="control-label">').attr('for', guidTitle).text('Group name'),
                                 new mini.InputView({ id: guidTitle, model: this.model, name: 'title' }).render().$el
                             ),
-                            $('<div class="form-group">').append(
+                            $('<div class="form-group hidden">').append(
                                 $('<label class="control-label">').attr('for', guidDescription).text('Description'),
                                 new mini.TextView({ id: guidDescription, model: this.model, name: 'description' }).render().$el
                             )
@@ -100,32 +77,21 @@ define('io.ox/chat/actions/openGroupDialog', [
             participants: function () {
                 if (this.model.get('type') === 'channel') return;
 
-                var baton = new ext.Baton({ model: this.model });
-                this.collection = this.collection || new Backbone.Collection();
-
                 this.$body.append(
-                    new pViews.UserContainer({
-                        point: 'io.ox/chat/actions/openGroupDialog',
-                        model: this.model,
-                        baton: baton,
+                    new MemberView({
                         collection: this.collection
                     }).render().$el,
-                    new AddParticipantView({
-                        point: 'io.ox/chat/actions/openGroupDialog',
-                        collection: this.collection,
-                        scrollIntoView: true,
-                        apiOptions: {
-                            contacts: true,
-                            users: true
-                        } }).render().$el
+                    new AddMemberView({
+                        collection: this.collection
+                    }).render().$el
                 );
             }
         })
         .build(function () {
-            this.$el.addClass('ox-chat-popup');
+            this.$el.addClass('ox-chat-popup ox-chat');
         })
         .addCancelButton()
-        .addButton({ action: 'save', label: model.get('id') ? 'Edit' : 'Create' })
+        .addButton({ action: 'save', label: model.get('id') ? 'Edit chat' : 'Create chat' })
         .on('save', function () {
             var dataObj = this.model.toJSON();
             dataObj.members = this.collection.pluck('email1');
@@ -175,12 +141,9 @@ define('io.ox/chat/actions/openGroupDialog', [
         // need to use render function here because view encapsulation requires the draw function to be called
         // but dialogs invoke render
         render: function (baton) {
-            var container = this.$body.find('.details-container'),
-                elem = $('<div class="col-xs-6">');
+            var parent = this.$('.modal-header');
 
-            container.append(elem);
-
-            baton.extension.draw.call(elem, baton);
+            baton.extension.draw.call(parent, baton);
         }
     });
 
