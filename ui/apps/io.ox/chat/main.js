@@ -27,10 +27,11 @@ define('io.ox/chat/main', [
     'io.ox/contacts/api',
     'io.ox/backbone/views/toolbar',
     'io.ox/backbone/views/modal',
+    'io.ox/chat/views/avatar',
     'io.ox/chat/views/state',
     'settings!io.ox/core',
     'less!io.ox/chat/style'
-], function (ext, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, StateView, settings) {
+], function (ext, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, AvatarView, StateView, settings) {
 
     'use strict';
 
@@ -419,23 +420,14 @@ define('io.ox/chat/main', [
 
             data.session.connectSocket();
 
-            contactsAPI.on('reset:image update:image', updatePicture);
-
-            function updatePicture() {
-                $('.picture').replaceWith(
-                    contactsAPI.pictureHalo(
-                        $('<div class="picture" aria-hidden="true">'), { internal_userid: user.id }, { width: 40, height: 40 }
-                    )
-                );
-            }
-
             // start with BAD style and hard-code stuff
             this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('chat/width', 320)).append(
                 this.getResizeBar(),
                 $('<div class="chat-leftside">').append(
                     $('<div class="header">').append(
-                        contactsAPI.pictureHalo(
-                            $('<div class="picture" aria-hidden="true">'), { internal_userid: user.id }, { width: 40, height: 40 }
+                        $('<div class="picture">').append(
+                            new AvatarView({ model: user }).render().$el.width(48).height(48),
+                            new StateView({ model: user }).render().$el
                         ),
                         $('<div class="dropdown pull-right">').append(
                             $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
@@ -459,7 +451,6 @@ define('io.ox/chat/main', [
                                 )
                             )
                         ),
-                        new StateView({ model: user }).render().$el,
                         $('<div class="name">').text(user.getName())
                     ),
                     new ToolbarView({ point: 'io.ox/chat/list/toolbar', title: 'Chat actions' }).render(new ext.Baton()).$el,
