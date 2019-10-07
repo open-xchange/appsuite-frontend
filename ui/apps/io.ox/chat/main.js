@@ -133,6 +133,13 @@ define('io.ox/chat/main', [
                         help: false,
                         build: function () {
                             this.$el.addClass('ox-private-chat-popup');
+                            // super hacky, but works for the moment
+                            this.renderItems = _.wrap(this.renderItems, function (renderItems, list, options) {
+                                list = list.filter(function (data) {
+                                    return data.user_id !== ox.user_id;
+                                });
+                                return renderItems.call(this, list, options);
+                            });
                         },
                         useGABOnly: true,
                         title: 'Start new conversation',
