@@ -293,8 +293,8 @@ define('io.ox/chat/views/chat', [
                 $ul.append(renderItem('Leave group', { 'data-cmd': 'leave-group', 'data-id': this.model.id }));
             } else if (this.model.isChannel()) {
                 if (this.model.get('joined')) {
-                $ul.append(renderItem('Edit channel', { 'data-cmd': 'open-group-dialog', 'data-id': this.model.id }));
-                $ul.append(renderItem('Leave channel', { 'data-cmd': 'leave-channel', 'data-id': this.model.id }));
+                    $ul.append(renderItem('Edit channel', { 'data-cmd': 'open-group-dialog', 'data-id': this.model.id }));
+                    $ul.append(renderItem('Leave channel', { 'data-cmd': 'leave-channel', 'data-id': this.model.id }));
                 } else {
                     $ul.append(renderItem('Join channel', { 'data-cmd': 'join-channel', 'data-id': this.model.id }));
                 }

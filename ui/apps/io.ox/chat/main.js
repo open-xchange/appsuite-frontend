@@ -437,7 +437,7 @@ define('io.ox/chat/main', [
                                 $('<li class="dropdown-header" role="separator">').append('<span aria-hidden="true">').text('New'),
                                 $('<li>').append(
                                     $('<a href="#" role="button">')
-                                        .attr({ 'data-cmd': 'start-chat', 'data-id': this.model.id })
+                                    .attr({ 'data-cmd': 'start-chat', 'data-id': this.model.id })
                                         .text('Private chat')
                                 ),
                                 $('<li>').append(
