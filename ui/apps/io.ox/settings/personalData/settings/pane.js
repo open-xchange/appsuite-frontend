@@ -224,11 +224,11 @@ define('io.ox/settings/personalData/settings/pane', [
                 if (supportedFilesizes.length) {
                     this.$el.append(
                         $('<div class="form-group row">').append(
-                            $('<div class="col-md-12">').append(
+                            $('<div class="col-xs-12">').append(
                                 $('<label>').attr('for', 'personaldata-filesizepicker').text(gt('Maximum file size')),
                                 $('<div class="filepicker-description">').text(gt('Archives larger than the selected size will be split into multiple files.'))
                             ),
-                            $('<div class="col-md-6">').append(
+                            $('<div class="col-xs-12 col-md-6">').append(
                                 new mini.SelectView({ name: 'maxFileSize', id: 'personaldata-filesizepicker', model: self.model,
                                     list: _(supportedFilesizes).map(function (fileSize) {
                                         return { label: strings.fileSize(fileSize), value: fileSize };
@@ -325,7 +325,7 @@ define('io.ox/settings/personalData/settings/pane', [
                         //#. %1$s: date and time when the download expires
                         //#. %1$s: date when the download was requested
                         $('<label class="col-xs-12">').text(gt('Your data archive from %2$s is ready for download. The download is available until %1$s.', moment(this.model.get('availableUntil')).format('L'), moment(this.model.get('creationTime')).format('L'))),
-                        $('<ul class="col-md-8 list-unstyled downloads">').append(
+                        $('<ul class="col-xs-12 col-md-8 list-unstyled downloads">').append(
                             _(this.model.get('results')).map(function (file) {
                                 return $('<li class="file">')
                                     .append(
