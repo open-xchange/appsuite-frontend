@@ -47,10 +47,10 @@ define('io.ox/chat/views/launcher', ['io.ox/chat/data', 'less!io.ox/chat/style']
         onClick: function () {
             if ($('.ox-chat.columns').is(':visible')) $('div.ox-chat').hide();
             else {
-            require(['io.ox/chat/main'], function (win) {
-                win.showApp();
-            });
-        }
+                require(['io.ox/chat/main'], function (win) {
+                    win.showApp();
+                });
+            }
         }
 
     });
