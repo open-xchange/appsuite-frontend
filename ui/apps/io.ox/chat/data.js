@@ -332,6 +332,9 @@ define('io.ox/chat/data', [
                 this.trigger('after:' + type);
             }.bind(this));
         },
+        getLast: function () {
+            return this.models[this.models.length - 1];
+        },
         sync: function (method, collection, options) {
             if (method === 'read') {
                 var limit = Math.max(collection.length, DEFAULT_LIMIT);
