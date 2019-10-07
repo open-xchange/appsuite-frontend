@@ -25,10 +25,7 @@ define('io.ox/core/api/apps', [
         'io.ox/notes'
     ];
 
-    var blacklist = _.reduce(settings.get('apps/blacklist', '').split(','),
-        function (memo, id) { memo[id] = true; return memo; }, {});
-
-    function validApp(app) { return app && !blacklist[app.id]; }
+    function validApp(app) { return app && !this.blacklist[app.id]; }
 
     var AppID = Backbone.Model.extend({
         constructor: function AppID(id, options) {
@@ -40,6 +37,10 @@ define('io.ox/core/api/apps', [
 
     var AppsCollection = Backbone.Collection.extend({
         initialize: function () {
+            this.blacklist = _.reduce(
+                settings.get('apps/blacklist', '').split(','),
+                function (memo, id) { memo[id] = true; return memo; },
+                {});
             this.launcher = new LauncherCollection(defaultList);
             if (settings.contains('apps/list')) {
                 var list = settings.get('apps/list').split(',');
@@ -54,7 +55,7 @@ define('io.ox/core/api/apps', [
             }, this);
         },
         forLauncher: function getAppsForLauncher() {
-            return _.filter(this._launcher.map(this.get.bind(this)), validApp);
+            return _.filter(this._launcher.map(this.get.bind(this)), validApp, this);
         }
     });
 
