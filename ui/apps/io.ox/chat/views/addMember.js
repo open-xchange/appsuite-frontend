@@ -62,7 +62,7 @@ define('io.ox/chat/views/addMember', [
                     $('<a href="#" role="button" class="open-addressbook-popup">').append(
                         $('<i class="fa fa-address-book" aria-hidden="true">').attr('title', 'Select contacts')
                     ).attr('aria-label', 'Select contacts')
-                    .on('click', this.openAddressBookPicker)
+                    .on('click', this.openAddressBookPicker.bind(this))
                 )
             );
 
