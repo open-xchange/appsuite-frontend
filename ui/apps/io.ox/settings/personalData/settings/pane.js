@@ -244,7 +244,9 @@ define('io.ox/settings/personalData/settings/pane', [
                     case 'NONE':
                         this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Request download'))
                             .on('click', function () {
-                                api.requestDownload(self.getDownloadConfig(), true).fail(yell);
+                                api.requestDownload(self.getDownloadConfig(), true).done(function () {
+                                    yell('success', gt('Download requested'));
+                                }).fail(yell);
                             }));
                         break;
                     case 'PENDING':
@@ -259,7 +261,9 @@ define('io.ox/settings/personalData/settings/pane', [
                             .on('click', function () {
                                 deleteDialog({ title: gt('Request new download'), text: gt('There is currently an archive download available. By requesting a new download the current archive will be deleted and is no longer available.'), action: 'delete', label: gt('Request new download') }).then(function (action) {
                                     if (action === 'delete') {
-                                        api.requestDownload(self.getDownloadConfig(), true).fail(yell);
+                                        api.requestDownload(self.getDownloadConfig(), true).done(function () {
+                                            yell('success', gt('Download requested'));
+                                        }).fail(yell);
                                     }
                                 });
                             }));
