@@ -73,6 +73,10 @@
         .more-dropdown {
             float: right;
         }
+
+        .navigation-actions .btn-nav:hover {
+            background-color: #f5f5f5;
+        }
     }
 
     &:not(.columns) {
@@ -245,12 +249,13 @@
     }
 
     .navigation-actions {
+        padding-top: 8px;
         padding-bottom: 16px;
 
         .btn-nav {
             position: relative;
             border: 0;
-            padding: 8px 16px 8px 55px;
+            padding: 12px 16px 12px 55px;
             line-height: 16px;
             display: block;
             width: 100%;
@@ -258,6 +263,9 @@
             background-color: transparent;
             border-radius: 0;
             outline: 0;
+            &:hover {
+                background-color: #fff;
+            }
             &:focus {
                 background-color: #ddd;
             }
