@@ -7,6 +7,8 @@
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="google" value="notranslate">
         <meta name="robots" content="noindex, nofollow">
+        <!-- webmanifest -->
+        <link rel="manifest" href="<%= base %>/pwa/webmanifest.json">
         <!-- windows 8 icon to place homescreen tile -->
         <meta id="win8Icon" name="msapplication-TileImage" content="">
         <meta name="apple-mobile-web-app-capable" content="yes">
@@ -121,6 +123,17 @@
                 <div class="timeout"></div>
                 <div class="session"></div>
             </div>
+        </div>
+        <div id="io-ox-installer">
+            <button type="button" class="btn btn-link dismiss" tabindex="-1">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+            <div class="description">
+                Get our free app. It won't take up space on your phone.
+            </div>
+            <button class="btn btn-primary btn-sm install">
+                Install
+            </button>
         </div>
         <!-- Core Panel -->
         <div id="io-ox-core" class="abs unselectable" style="display: none">

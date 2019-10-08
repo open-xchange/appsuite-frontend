@@ -237,6 +237,27 @@ div.hopscotch-bubble {
     }
 }
 
+@installer-height: 40px;
+
+ #io-ox-installer {
+    padding: 6px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #b42369;
+    height: @installer-height;
+
+    .dismiss, .description {
+        color: #eee;
+    }
+    .description {
+        line-height: 28px;
+        .ellipsis();
+    }
+
+    // visibility
+    .installer-open & { display: hidden; }
+}
+
 #io-ox-core {
     // use explicit z-index (e.g. so that side-popups appear above)
     z-index: 0;
@@ -250,6 +271,9 @@ div.hopscotch-bubble {
 
     transition: filter 1s linear, opacity 1s linear;
 
+    .installer-open & {
+        top: @installer-height;
+    }
 }
 
 #io-ox-offline {

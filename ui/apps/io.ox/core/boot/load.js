@@ -144,6 +144,33 @@ define('io.ox/core/boot/load', [
                 ox.trigger('boot:fail');
             });
         }
+    }, {
+        id: 'standalone',
+        run: function () {
+
+            if (_.device('standalone')) return;
+
+            var match = _(['smartphone', 'tablet', 'desktop']).find(function (key) {
+                return _.device(key) && coreSettings.get('features/standalone/' + key, true);
+            });
+
+            if (!match) return;
+
+            if (!ox.deferredPrompt) {
+                window.addEventListener('beforeinstallprompt', function (evt) {
+                    ox.deferredPrompt = evt;
+                    show();
+                });
+            } else {
+                show();
+            }
+
+            function show() {
+                require(['io.ox/core/standalone'], function name(standalone) {
+                    standalone.show();
+                });
+            }
+        }
     }]);
 
     function loadUserTheme() {
