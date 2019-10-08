@@ -357,7 +357,7 @@ define('io.ox/chat/main', [
                 position = 0xFFFF,
                 elem = this.$body.find('[data-cid="' + cid + '"]'),
                 delta = elem.position().top - scrollpane.height() + elem.height(),
-                margin = elem.is(':last-child') ? 17 : 8;
+                margin = elem.is(':last-child') ? 25 : 8;
 
             position = scrollpane.scrollTop() + delta;
             scrollpane.scrollTop(position + margin);

@@ -199,6 +199,7 @@ define('io.ox/chat/data', [
                     oldHeight = placeholder.height();
                 placeholder.replaceWith($img);
                 $img.trigger('changeheight', { prev: oldHeight, value: $img.height() });
+                $($('.ox-chat').find('.scrollpane')).scrollTop(0xFFFF);
             }).attr('src', url)
             .attr({ 'data-cmd': 'show-message-file', 'data-id': this.get('roomId'), 'data-file-id': this.get('fileId') });
             return placeholder;
