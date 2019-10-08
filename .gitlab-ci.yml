@@ -112,6 +112,7 @@ test ui:
   only:
     changes:
       - ui/**/*
+  allow_failure: true
 
 run e2e tests:
   extends: .default_cache

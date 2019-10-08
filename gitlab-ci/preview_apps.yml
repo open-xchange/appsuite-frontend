@@ -15,7 +15,7 @@ deploy preview app:
   script:
     - docker pull $DOCKER_IMAGE
     - docker stop $CI_COMMIT_REF_SLUG || echo "Nothing to stop"
-    - counter=0; while [ $counter -lt 10 ]; do sleep 2; docker run --name $CI_COMMIT_REF_SLUG --rm -d -e SERVER=$SERVER $DOCKER_IMAGE && break || counter=$((counter+1)); done
+    - counter=0; while [ $counter -lt 10 ]; do sleep 2; docker run --name $CI_COMMIT_REF_SLUG --rm -d -e SERVER=$SERVER -l "traefik.domain=e2e.os.oxui.de" $DOCKER_IMAGE && break || counter=$((counter+1)); done
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: http://$CI_COMMIT_REF_SLUG.ui.cloud.open-xchange.com/appsuite/

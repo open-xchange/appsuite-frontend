@@ -1,4 +1,4 @@
-FROM gitlab.open-xchange.com:4567/frontend/dev_env:latest
+FROM gitlab.open-xchange.com:4567/frontend/dev_env:hackathon
 
 MAINTAINER Julian Bäume <julian.baeume@open-xchange.com>
 
