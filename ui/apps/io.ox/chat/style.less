@@ -28,8 +28,13 @@
 @red: #D32F2F;
 @blue: #3c73aa;
 @lightblue: #2196F3;
+@lightgray: #aaa;
 @gray: #707070;
 @black: #303030;
+
+.io-ox-windowmanager-sticky-panel.border-left {
+    border: none;
+}
 
 .ox-chat {
 
@@ -39,7 +44,7 @@
     }
 
     &.columns {
-        border-left: 2px solid @gray;
+        border-left: 2px solid @black;
 
         .chat-leftside {
             flex: 1;
@@ -255,7 +260,7 @@
         .btn-nav {
             position: relative;
             border: 0;
-            padding: 12px 16px 12px 55px;
+            padding: 12px 16px 12px 72px;
             line-height: 16px;
             display: block;
             width: 100%;
@@ -278,7 +283,7 @@
         .btn-icon {
             position: absolute;
             font-size: 20px;
-            left: 21px;
+            left: 27px;
         }
     }
 
@@ -323,6 +328,10 @@
                 .chats-row {
                     display: flex;
                     line-height: 17px;
+
+                    .label-info {
+                        background: @lightblue;
+                    }
                 }
             }
         }
@@ -350,8 +359,7 @@
         }
 
         .delivery {
-            margin-top: 5px;
-            margin-right: 5px;
+            margin: 5px 5px 0px 8px;
 
             &.server {
                 margin-right: 0px;
@@ -361,6 +369,7 @@
         .text-preview {
             flex: 1;
             .ellipsis();
+            padding-right: 8px;
 
             .icon {
                 margin-left: 0.3em;
@@ -427,7 +436,7 @@
         }
         .fa-group, .fa-hashtag {
             color: rgba(0, 0, 0, 0.6);
-            background-color: #eee;
+            background-color: #ddd;
             border-radius: 24px;
             font-size: 20px;
             width: @avatarSize;
@@ -488,7 +497,7 @@
     }
 
     .date {
-        font-size: 12px;
+        font-size: 13px;
         color: @gray;
         text-align: center;
         margin-bottom: 10px;
@@ -496,7 +505,7 @@
     }
 
     .message {
-        padding: 0 48px 0 64px;
+        padding: 0 48px 0 58px;
         margin-bottom: 8px;
         position: relative;
 
@@ -518,7 +527,7 @@
         &.text, &.file {
             .content {
                 background-color: #eee;
-                border-radius: 16px;
+                border-radius: 8px;
                 display: inline-block;
                 padding: 8px 16px;
             }
@@ -633,7 +642,7 @@
         &.system {
             padding: 0 12px;
             margin-bottom: 16px;
-            font-size: 12px;
+            font-size: 13px;
             display: inline-block;
             width: 100%;
 
@@ -765,7 +774,7 @@
         &.online { background-color: @green; }
         &.absent { background-color: @orange; }
         &.busy { background-color: @red; }
-        &.offline { background-color: @gray; }
+        &.offline { background-color: @lightgray; }
     }
 
     .channel-list {
