@@ -13677,6 +13677,11 @@ msgstr ""
 
 #: apps/io.ox/settings/personalData/settings/pane.js
 #: module:io.ox/core
+msgid "Download requested"
+msgstr ""
+
+#: apps/io.ox/settings/personalData/settings/pane.js
+#: module:io.ox/core
 msgid "Request new download"
 msgstr ""
 

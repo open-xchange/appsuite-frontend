@@ -3844,6 +3844,12 @@ msgstr "Telepítőfájl letöltése"
 msgid "Download personal data"
 msgstr "Teljes mappa letöltése"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Slow requests"
+msgid "Download requested"
+msgstr "Lassú kérések"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
