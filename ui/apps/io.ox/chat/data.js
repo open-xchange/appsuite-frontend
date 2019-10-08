@@ -409,7 +409,6 @@ define('io.ox/chat/data', [
             return date.calendar(null, {
                 sameDay: 'LT',
                 lastDay: '[Yesterday]',
-                lastWeek: '[Last] dddd',
                 sameElse: 'DD/MM/YYYY'
             });
         },
@@ -574,7 +573,7 @@ define('io.ox/chat/data', [
         },
 
         getHistory: function () {
-            return this.filter({ open: false, type: 'private' }).slice(0, 100);
+            return this.filter({ open: false }).slice(0, 100);
         },
 
         getChannels: function () {

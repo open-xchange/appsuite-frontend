@@ -64,16 +64,6 @@ define('io.ox/chat/main', [
 
             FloatingWindow.View.prototype.initialize.apply(this, arguments);
 
-            this.listenTo(data.chats, 'unseen', function (count) {
-                this.setCount(count);
-            });
-            this.listenTo(data.chats, 'add', function () {
-                var count = data.chats.reduce(function (sum, model) {
-                    return sum + model.get('unreadCount');
-                }, 0);
-
-                this.setCount(count);
-            });
             this.listenTo(this.model, {
                 'change:sticky': function () {
                     if (!this.model.get('sticky')) return;
@@ -588,7 +578,8 @@ define('io.ox/chat/main', [
         sticky: mode === 'sticky',
         stickable: true,
         resizable: false,
-        closable: true
+        closable: true,
+        size: 'width-lg'
     }).render().open();
 
     win.$body.parent().busy();

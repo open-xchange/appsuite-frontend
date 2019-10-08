@@ -34,6 +34,7 @@ define('io.ox/chat/views/members', [
         },
 
         renderEntry: function (model) {
+            if (model.get('id') === ox.user_id) return;
             return $('<li>').attr('data-id', model.get('id')).append(
                 $('<div class="picture">').append(
                     new AvatarView({ model: model }).render().$el,
@@ -51,7 +52,7 @@ define('io.ox/chat/views/members', [
 
         render: function () {
             this.$el.empty().append(
-                $('<legend>').text('Participants (' + this.collection.length + ')'),
+                $('<legend>').text('Participants (' + (this.collection.length - 1) + ')'),
                 $('<ul class="list-unstyled">').append(
                     this.collection.map(this.renderEntry.bind(this))
                 )

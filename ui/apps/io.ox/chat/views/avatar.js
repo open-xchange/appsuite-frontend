@@ -46,7 +46,7 @@ define('io.ox/chat/views/avatar', [
             var data = this.model.pick('id', 'first_name', 'last_name', 'image');
             this.$el
                 .text(data.image ? '' : util.getInitials(data))
-                .css('background-color', data.image ? '' : util.getInitialsColor(util.getInitials(data)))
+                .addClass(util.getInitialsColor(util.getInitials(data)))
                 .css('background-image', data.image ? 'url(api/image/user/picture?id=' + data.id + '&width=96&height=96&scaleType=cover)' : '');
         },
 
