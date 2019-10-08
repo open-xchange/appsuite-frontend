@@ -18,25 +18,39 @@ define('io.ox/chat/actions/openGroupDialog', [
     'io.ox/contacts/widgets/pictureUpload',
     'io.ox/chat/views/members',
     'io.ox/chat/views/addMember',
-    'io.ox/backbone/views',
     'io.ox/backbone/mini-views',
-    'io.ox/chat/data'
-], function (ext, ModalDialog, PictureUpload, MemberView, AddMemberView, views, mini, data) {
+    'io.ox/chat/data',
+    'less!io.ox/contacts/edit/style'
+], function (ext, ModalDialog, ImageUploadView, MemberView, AddMemberView, mini, data) {
 
     'use strict';
 
+    var PictureUpload = ImageUploadView.extend({
+
+        render: function () {
+            var result = ImageUploadView.prototype.render.call(this);
+
+            var icon = this.model.get('type') === 'channel' ? 'fa-hashtag' : 'fa-group';
+            this.$('.contact-photo').append($('<i class="fa fallback-icon">').addClass(icon));
+            this.$('input').attr('data-state', 'manual');
+
+            return result;
+        },
+
+        getImageUrl: function () {
+            var fileId = this.model.get('fileId');
+            return fileId ? data.API_ROOT + '/files/' + fileId + '/thumbnail' : undefined;
+        }
+
+    });
+
     function open(obj) {
+        var def = new $.Deferred();
         var model = data.chats.get(obj.id) || new Backbone.Model(obj);
         var participants = model.members || new Backbone.Collection([data.users.getByMail(data.user.email)]);
         var originalModel = model.has('id') ? model.clone() : new Backbone.Model();
 
         model.set('type', model.get('type') || obj.type || 'group');
-
-        return openDialog(model, participants, originalModel);
-    }
-
-    function openDialog(model, participants, originalModel) {
-        var def = new $.Deferred();
 
         new ModalDialog({
             point: 'io.ox/chat/actions/openGroupDialog',
@@ -52,7 +66,8 @@ define('io.ox/chat/actions/openGroupDialog', [
 
                 var title_id = _.uniqueId('title');
                 this.$('.modal-header').empty().append(
-                    $('<h1 class="modal-title">').attr('id', title_id).text(title)
+                    $('<h1 class="modal-title">').attr('id', title_id).text(title),
+                    new PictureUpload({ model: this.model }).render().$el
                 );
             },
             details: function () {
@@ -117,38 +132,6 @@ define('io.ox/chat/actions/openGroupDialog', [
 
         return def.promise();
     }
-
-    var point = views.point('io.ox/chat/actions/openGroupDialog'),
-        pictureUpload = new PictureUpload({
-            id: 'upload-group-picture',
-            index: 250,
-            customizeNode: function () {
-                var icon = this.model.get('type') === 'channel' ? 'fa-hashtag' : 'fa-group';
-                this.$el.addClass('contact-picture-upload f6-target');
-                this.$el.append($('<i class="fa fallback-icon">').addClass(icon));
-            }
-        });
-
-    pictureUpload.render = _.wrap(pictureUpload.render, function (render) {
-        render.call(this);
-        var fileId = this.model.get('fileId'),
-            imageUrl = fileId ? data.API_ROOT + '/files/' + fileId + '/thumbnail' : undefined;
-
-        if (imageUrl) this.setPreview(imageUrl);
-        this.fileInput.attr('data-state', 'manual');
-
-        return this;
-    });
-
-    point.extend(pictureUpload, {
-        // need to use render function here because view encapsulation requires the draw function to be called
-        // but dialogs invoke render
-        render: function (baton) {
-            var parent = this.$('.modal-header');
-
-            baton.extension.draw.call(parent, baton);
-        }
-    });
 
     return open;
 });
