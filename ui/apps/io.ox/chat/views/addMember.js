@@ -88,7 +88,7 @@ define('io.ox/chat/views/addMember', [
         },
 
         addParticipant: function (model) {
-            var email = model.get(model.get('field'));
+            var email = model.get(model.get('field')) || model.get('email');
             this.collection.add(data.users.getByMail(email));
         }
 
