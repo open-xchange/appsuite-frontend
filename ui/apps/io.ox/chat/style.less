@@ -23,7 +23,7 @@
 @borderColor: #ccc;
 
 // state colors
-@green: #529100;
+@green: #02ab07;
 @orange: #FB8C00;
 @red: #D32F2F;
 @blue: #3c73aa;
@@ -416,6 +416,16 @@
         color: rgba(0, 0, 0, 0.60);
         font-weight: bold;
         .flex-center();
+
+        &.gray { color: #000; }
+        &.red { background-color: #FFA0A5; }
+        &.orange { background-color: #FFA77B; }
+        &.yellow { background-color: #FFD23A; }
+        &.green { background-color: #BFDE45; }
+        &.cyan { background-color: #99E4FB; }
+        &.blue { background-color: #95CEFF; }
+        &.purple { background-color: #E5B0FF; }
+        &.pink { background-color: #FFC2DE; }
     }
 
     .chat-avatar {
@@ -484,13 +494,13 @@
             content: "\f00c"; // check
         }
         &.client:before {
-            letter-spacing: -8px;
+            letter-spacing: -6px;
             margin: 0 2px 0 -2px;
             content: "\f00c\f00c"; // check
         }
         &.seen:before {
             color: @lightblue;
-            letter-spacing: -8px;
+            letter-spacing: -6px;
             margin: 0 2px 0 -2px;
             content: "\f00c\f00c"; // check
         }
@@ -533,8 +543,9 @@
             }
         }
         .foot {
-            float: right;
-            margin: 5px 0px -10px 30px;
+            margin: -4px 0 -8px 0;
+            text-align: right;
+            font-size: 12px;
 
             > * { display: inline-block; }
         }
@@ -578,6 +589,7 @@
                 margin-top: auto;
                 margin-bottom: auto;
                 display: inline-block;
+                width: 12px;
             }
             &.highlight .content{
                 animation-name: highlightOwnMessage;
@@ -787,7 +799,7 @@
         .channel {
             position: relative;
             line-height: 16px;
-            padding: 11px 80px 13px 64px;
+            padding: 8px 80px 16px 64px;
             margin-bottom: 8px;
             cursor: pointer;
 
@@ -798,13 +810,13 @@
             }
             .title {
                 font-weight: bold;
-                display: inline-block;
+                display: block;
                 margin-right: 8px;
             }
             .members {
                 color: #777;
                 line-height: inherit;
-                display: inline-block;
+                display: block;
             }
             .btn-action {
                 position: absolute;
@@ -924,7 +936,7 @@
         }
     }
 
-    .btn-action.join {
+    .btn-action {
         color: @blue;
         border-color: @blue;
         background-color: fade(@blue, 5%);

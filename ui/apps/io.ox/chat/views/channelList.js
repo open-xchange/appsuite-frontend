@@ -105,7 +105,7 @@ define('io.ox/chat/views/channelList', [
                         .attr({ 'data-cmd': 'join-channel', 'data-id': model.get('id') })
                         .prop('disabled', isMember)
                         .toggleClass('join', !isMember)
-                        .toggleClass('btn-success', isMember)
+                        .toggleClass('hidden', isMember)
                         .append(isMember ? $('<i class="fa fa-check">') : 'Join')
                 );
         },

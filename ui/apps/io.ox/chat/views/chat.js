@@ -21,9 +21,8 @@ define('io.ox/chat/views/chat', [
     'io.ox/chat/views/reference-preview',
     'io.ox/chat/events',
     'io.ox/chat/data',
-    'io.ox/backbone/views/toolbar',
-    'io.ox/chat/emoji'
-], function (ext, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, ToolbarView, emoji) {
+    'io.ox/backbone/views/toolbar'
+], function (ext, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, ToolbarView) {
 
     'use strict';
 
@@ -120,7 +119,6 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function (baton) {
             var model = baton.model;
-            if (!model.isPrivate()) return;
             this.attr('data-prio', 'lo').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="unsubscribe-chat">').attr('data-id', model.id).text('Hide chat').on('click', events.forward)
             );
@@ -298,9 +296,9 @@ define('io.ox/chat/views/chat', [
                 } else {
                     $ul.append(renderItem('Join channel', { 'data-cmd': 'join-channel', 'data-id': this.model.id }));
                 }
-            } else if (this.model.isPrivate()) {
-                $ul.append(renderItem('Hide chat', { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
             }
+
+            $ul.append(renderItem('Hide chat', { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
 
             return $ul;
         },
@@ -369,7 +367,6 @@ define('io.ox/chat/views/chat', [
             }
             e.preventDefault();
             var text = this.$editor.val();
-            text = emoji(text);
             if (text.trim().length > 0) this.onPostMessage(text);
             this.$editor.val('').focus();
         },

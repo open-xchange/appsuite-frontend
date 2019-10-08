@@ -128,7 +128,6 @@ define('io.ox/chat/views/messages', [
             var formattedDate = date.calendar(null, {
                 sameDay: '[Today]',
                 lastDay: '[Yesterday]',
-                lastWeek: '[Last] dddd',
                 sameElse: 'LL'
             });
 

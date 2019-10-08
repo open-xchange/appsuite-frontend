@@ -420,7 +420,7 @@ define('io.ox/contacts/util', [
 
         getInitialsColor: (function () {
 
-            var colors = ['#FFE2E2', '#FDE2B9', '#FFEEB0', '#E6EFBD', '#CAF1D0', '#CCF4FF', '#CFE6FF', '#D4E0FD', '#D1D6FE', '#E2D0FF', '#F7CBF8', '#F7C7E0'],
+            var colors = ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple', 'pink'],
                 modulo = colors.length;
 
             return function (initials) {
