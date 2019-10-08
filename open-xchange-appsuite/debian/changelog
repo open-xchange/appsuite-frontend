@@ -1,3 +1,9 @@
+open-xchange-appsuite (7.10.1-21) stable; urgency=medium
+
+  * Build for patch 2019-10-14 (5438)
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 08 Oct 2019 11:45:45 +0000
+
 open-xchange-appsuite (7.10.1-20) stable; urgency=medium
 
   * Build for patch 2019-09-30 (5419)
