@@ -77,6 +77,9 @@ module.exports = function (grunt) {
                     {
                         src: 'src/ox.ejs',
                         dest: 'build/ox.js'
+                    }, {
+                        src: 'src/service-worker.js',
+                        dest: 'build/service-worker.js'
                     }
                 ]
             },

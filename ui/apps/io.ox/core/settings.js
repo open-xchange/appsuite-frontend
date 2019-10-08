@@ -406,10 +406,3 @@ define('io.ox/core/settings', [
         }
     };
 });
-
-// define corresponding plugin now (not earlier)
-(function () {
-    'use strict';
-    // just to fool build system.
-    window[0 || 'define']('settings', ['io.ox/core/settings'], _.identity);
-}());

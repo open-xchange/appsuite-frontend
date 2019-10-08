@@ -347,7 +347,7 @@ define('io.ox/core/locale/meta', function () {
         if (CLDRDefinitions[locale]) def.resolve(CLDRDefinitions[locale]);
 
         require([getCLDRDateFilePath(locale)], function (dateFormatData) {
-            CLDRDefinitions[locale] = JSON.parse(dateFormatData).main[mapToCLDRFiles[locale]].dates.calendars.gregorian;
+            CLDRDefinitions[locale] = dateFormatData.main[mapToCLDRFiles[locale]].dates.calendars.gregorian;
             def.resolve(CLDRDefinitions[locale]);
         });
 

@@ -127,13 +127,43 @@ $(window).on('load', function () {
         _.extend(window.require, require);
     }(window.require));
 
-    require(['io.ox/core/boot/fixes', 'io.ox/core/boot/main']).then(
-        function success(fixes, boot) {
-            boot.start();
-        },
-        function fail(e) {
-            console.error('Server down', e.message, e);
-            ox.trigger('server:down');
-        }
-    );
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js').then(function (registration) {
+            console.log('Service worker registration succeeded:', registration);
+            registration.addEventListener('updatefound', function () {
+                var installingWorker = registration.installing;
+                console.log('A new service worker is being installed', installingWorker);
+            });
+            return navigator.serviceWorker.ready;
+        }, function (error) {
+            console.log('Service worker registration failed:', error);
+        }).finally(boot);
+
+        navigator.serviceWorker.addEventListener('message', function (event) {
+            if (event.data.type === 'newversionready') {
+                console.log('Load the prumpt');
+            }
+        });
+    } else {
+        console.log('Service workers are not supported.');
+        boot();
+    }
+
+    function boot() {
+        require(['io.ox/core/boot/fixes', 'io.ox/core/boot/main']).then(
+            function success(fixes, boot) {
+                boot.start();
+            },
+            function fail(e) {
+                console.error('Server down', e.message, e);
+                ox.trigger('server:down');
+            }
+        );
+    }
+
+});
+
+window.addEventListener('beforeinstallprompt', function (evt) {
+    console.log('%c event', 'background: #222; color: #bada55', { evt: evt });
+    ox.deferredPrompt = evt;
 });

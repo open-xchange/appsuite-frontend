@@ -80,6 +80,7 @@ module.exports = function (grunt) {
             'precore.js'
         ],
         uglifySkipList = [
+            'service-worker.js',
             'apps/pdfjs-dist/build/pdf.js',
             'apps/pdfjs-dist/build/pdf.worker.js'
         ],
