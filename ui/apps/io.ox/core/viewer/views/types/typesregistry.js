@@ -12,7 +12,19 @@
  */
 define('io.ox/core/viewer/views/types/typesregistry', [
     'io.ox/core/capabilities',
-    'io.ox/core/extensions'
+    'io.ox/core/extensions',
+
+    // preload types, please have a look at function 'getModelType'
+    'io.ox/core/viewer/views/types/imageview',
+    'io.ox/core/viewer/views/types/documentview',
+    'io.ox/core/viewer/views/types/spreadsheetview',
+    'io.ox/core/viewer/views/types/contactview',
+    'io.ox/core/viewer/views/types/videoview',
+    'io.ox/core/viewer/views/types/audioview',
+    'io.ox/core/viewer/views/types/textview',
+    'io.ox/core/viewer/views/types/defaultview',
+    'io.ox/core/viewer/views/types/mailview'
+
 ], function (Capabilities, Ext) {
 
     'use strict';
@@ -101,9 +113,12 @@ define('io.ox/core/viewer/views/types/typesregistry', [
          *
          * @returns {jQuery.Promise}
          *  a Promise of a Deferred object that will be resolved with the
-         *  file type object it could be required; or rejected, in case of an error.
+         *  file type object; or rejected, in case of an error.
          */
         getModelType: function (model) {
+            // all types should be pre-loaded in this file, loading on demand for
+            // large file count can cause problems #67073 and flood require with pending requests,
+            // leave require here for now to be more robust e.g. in case of missed pre-load type
             return require(['io.ox/core/viewer/views/types/' + this.getTypeString(model)]);
         },
 
