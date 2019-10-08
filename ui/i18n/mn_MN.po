@@ -11337,7 +11337,7 @@ msgstr ""
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #, fuzzy
 #| msgid "Please enter a valid email address"
-msgid "This is invalid email address."
+msgid "This is an invalid email address."
 msgstr "Зөв электрон шууданг оруулна уу"
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain

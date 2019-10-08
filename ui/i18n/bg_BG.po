@@ -11694,7 +11694,7 @@ msgstr "Така ще изглежда текстът на съобщениет�
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #, fuzzy
 #| msgid "This is not a valid email address"
-msgid "This is invalid email address."
+msgid "This is an invalid email address."
 msgstr "Това е невалиден и-мейл адрес"
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain

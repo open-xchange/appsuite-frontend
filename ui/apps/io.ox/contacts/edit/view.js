@@ -879,7 +879,7 @@ define('io.ox/contacts/edit/view', [
         validateAddresses: function (data) {
             return this.validateArray(['email1', 'email2', 'email3'], data, function (name, value) {
                 if (coreUtil.isValidMailAddress(value)) return;
-                return gt('This is invalid email address.', View.i18n[name]);
+                return gt('This is an invalid email address.', View.i18n[name]);
             });
         },
 

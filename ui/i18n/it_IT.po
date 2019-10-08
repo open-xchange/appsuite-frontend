@@ -11519,7 +11519,7 @@ msgstr "Ecco come apparirà il testo del tuo messaggio."
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #, fuzzy
 #| msgid "This is not a valid email address"
-msgid "This is invalid email address."
+msgid "This is an invalid email address."
 msgstr "Non è un indirizzo di posta valido"
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
