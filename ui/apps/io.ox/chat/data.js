@@ -194,12 +194,14 @@ define('io.ox/chat/data', [
         getImage: function () {
             var url = data.API_ROOT + '/files/' + this.get('fileId') + '/thumbnail',
                 placeholder = $('<div class="placeholder">').busy();
+
+            if (_.isUndefined(this.get('fileId'))) return placeholder;
+
             $('<img>').on('load', function () {
                 var $img = $(this),
                     oldHeight = placeholder.height();
                 placeholder.replaceWith($img);
                 $img.trigger('changeheight', { prev: oldHeight, value: $img.height() });
-                $($('.ox-chat').find('.scrollpane')).scrollTop(0xFFFF);
             }).attr('src', url)
             .attr({ 'data-cmd': 'show-message-file', 'data-id': this.get('roomId'), 'data-file-id': this.get('fileId') });
             return placeholder;
