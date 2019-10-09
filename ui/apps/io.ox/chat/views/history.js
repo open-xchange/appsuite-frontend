@@ -70,6 +70,9 @@ define('io.ox/chat/views/history', [
                 'change:open': this.onChangeOpen,
                 'change': this.onChange
             });
+
+            // get fresh data
+            this.collection.fetch({ remove: false, data: { type: 'channel' } });
         },
 
         render: function () {
@@ -108,9 +111,11 @@ define('io.ox/chat/views/history', [
             return this.$('[data-cid="' + model.cid + '"]');
         },
 
-        onAdd: function () {
-
-        },
+        onAdd: _.debounce(function () {
+            this.$('.scrollpane ul').empty().append(
+                this.getItems().map(this.renderItem.bind(this))
+            );
+        }, 1),
 
         onRemove: function (model) {
             this.getNode(model).remove();
