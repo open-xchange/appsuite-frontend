@@ -411,6 +411,7 @@ define('io.ox/chat/data', [
             return date.calendar(null, {
                 sameDay: 'LT',
                 lastDay: '[Yesterday]',
+                lastWeek: 'DD/MM/YYYY',
                 sameElse: 'DD/MM/YYYY'
             });
         },
