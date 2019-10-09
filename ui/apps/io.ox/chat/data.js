@@ -361,7 +361,7 @@ define('io.ox/chat/data', [
 
         initialize: function (attr) {
             var self = this;
-            this.set('modified', +moment());
+            this.set('modified', +moment(this.get('modified')));
             this.unset('messages', { silent: true });
             this.members = new MemberCollection(attr.members, { parse: true, roomId: attr.id });
             this.messages = new MessageCollection([], { roomId: attr.id });
@@ -497,7 +497,7 @@ define('io.ox/chat/data', [
     var ChatCollection = Backbone.Collection.extend({
 
         model: ChatModel,
-        comparator: 'modified',
+        comparator: function (model) { return -model.get('modified'); },
         currentChatId: undefined,
 
         url: function () {
