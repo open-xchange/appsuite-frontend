@@ -47,7 +47,14 @@ define('io.ox/chat/actions/openGroupDialog', [
     function open(obj) {
         var def = new $.Deferred();
         var model = data.chats.get(obj.id) || new Backbone.Model(obj);
-        var participants = model.members || new Backbone.Collection([data.users.getByMail(data.user.email)]);
+        var members = [data.users.getByMail(data.user.email)];
+        if (obj.members) {
+            obj.members.forEach(function (email) {
+                var model = data.users.getByMail(email);
+                if (model) members.push(model);
+            });
+        }
+        var participants = model.members || new Backbone.Collection(members);
         var originalModel = model.has('id') ? model.clone() : new Backbone.Model();
 
         model.set('type', model.get('type') || obj.type || 'group');
