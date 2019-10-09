@@ -57,7 +57,7 @@ define('io.ox/chat/actions/openGroupDialog', [
             model: model,
             collection: participants,
             backdrop: true,
-            width: 380
+            width: model.get('type') === 'group' ? 420 : 380
         })
         .extend({
             header: function () {
