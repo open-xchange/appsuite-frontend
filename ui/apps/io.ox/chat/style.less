@@ -327,7 +327,7 @@
 
                 .chats-row {
                     display: flex;
-                    line-height: 17px;
+                    line-height: 16px;
 
                     .label-info {
                         background: @lightblue;
@@ -492,6 +492,7 @@
 
     .fa.delivery {
         font-size: 12px;
+        line-height: 9px;
 
         &.server:before {
             content: "\f00c"; // check
@@ -513,8 +514,9 @@
         font-size: 13px;
         color: @gray;
         text-align: center;
-        margin-bottom: 10px;
+        margin-bottom: 6px;
         margin-top: 10px;
+        line-height: 16px;
     }
 
     .message {
@@ -536,6 +538,9 @@
         }
         .sender {
             font-weight: bold;
+            line-height: 16px;
+            padding-top: 3px;
+            margin-bottom: 5px;
         }
         &.text, &.file {
             .content {
@@ -546,9 +551,19 @@
             }
         }
         .foot {
-            margin: -4px 0 -8px 0;
-            text-align: right;
-            font-size: 12px;
+            font-size: 11px;
+            float: right;
+            position: relative;
+            top: 7px;
+            left: 9px;
+            vertical-align: bottom;
+            line-height: 20px;
+
+            .time {
+                font-size: 10px;
+                display: inline-block;
+                margin-left: 8px;
+            }
 
             > * { display: inline-block; }
         }
@@ -628,13 +643,14 @@
 
             .foot {
                 position: absolute;
+                top: auto;
                 left: 0;
                 bottom: 0;
                 right: 0;
                 margin: 0;
                 padding: 0 0.5em;
                 text-align: right;
-                height: 1.6em;
+                height: 2em;
                 border-bottom-left-radius: 8px;
                 border-bottom-right-radius: 8px;
                 background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0) 100%);
