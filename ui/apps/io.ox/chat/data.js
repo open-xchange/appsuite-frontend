@@ -762,11 +762,19 @@ define('io.ox/chat/data', [
             return $.ajax({
                 url: data.SOCKET + '/auth/user',
                 xhrFields: { withCredentials: true }
-            }).then(function (user) {
-                data.user_id = user.id;
-                data.user = user;
-                this.initialized.resolve();
-                return user;
+            }).then(function (chatUser) {
+                return require(['io.ox/core/api/user']).then(function (userAPI) {
+                    return userAPI.get({ id: ox.user_id });
+                }).then(function (oxUser) {
+                    if (oxUser.email1 !== chatUser.email) {
+                        throw new Error('Chat email address and appsuite email address do not coincide');
+                    }
+
+                    data.user_id = chatUser.id;
+                    data.user = chatUser;
+                    this.initialized.resolve();
+                    return chatUser;
+                }.bind(this));
             }.bind(this));
         },
 
@@ -818,7 +826,15 @@ define('io.ox/chat/data', [
                 this.set('userId', user.id);
                 return user.id;
             }.bind(this));
+        },
+
+        logout: function () {
+            return $.ajax({
+                url: data.SOCKET + '/auth/logout',
+                xhrFields: { withCredentials: true }
+            });
         }
+
     });
 
     data.session = new SessionModel();
