@@ -50,6 +50,13 @@ define('io.ox/chat/main', [
         }
     });
 
+    ext.point('io.ox/core/logout').extend({
+        id: 'chat',
+        logout: function () {
+            return data.session.logout();
+        }
+    });
+
     var Window = FloatingWindow.View.extend({
 
         events: function () {
@@ -483,8 +490,8 @@ define('io.ox/chat/main', [
                             self.$body.empty().parent().busy();
                             data.session.login().then(function success() {
                                 self.draw();
-                            }, function fail() {
-                                self.drawAuthorizePane('Cannot connect. Please try again later.');
+                            }, function fail(err) {
+                                self.drawAuthorizePane(err.message || 'Cannot connect. Please try again later.');
                             }).always(function () {
                                 self.$body.parent().idle();
                             });
