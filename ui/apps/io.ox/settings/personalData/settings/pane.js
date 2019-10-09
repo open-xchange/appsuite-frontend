@@ -211,6 +211,8 @@ define('io.ox/settings/personalData/settings/pane', [
                         if (subOption === 'label' || subOption === 'description') return;
                         if (modules[moduleName][subOption].divider) dropdownView.divider();
                         if (modules[moduleName][subOption].header) dropdownView.header(modules[moduleName][subOption].header);
+                        // yes, include headers and dividers even if the first option is missing
+                        if (self.model.get(moduleName)[subOption] === undefined) return;
                         dropdownView.option(subOption, true, modules[moduleName][subOption].label);
                     });
 
@@ -218,7 +220,7 @@ define('io.ox/settings/personalData/settings/pane', [
                     // a11y does not like it when multiple nodes have the same name attribute, so despite all having the attribute name in the model ("enabled") we use different name attributes for the nodes
                     checkboxes.append(new mini.CustomCheckboxView({ name: 'enabled', nodeName: moduleName, label: modules[moduleName].label, model: self.models[moduleName] }).render().$el.addClass('main-option '),
                         $('<div class="description">').text(modules[moduleName].description),
-                        dropdownView.render().$el);
+                        dropdownView.$ul.find('a').length > 0 ? dropdownView.render().$el : '');
                 });
 
                 if (supportedFilesizes.length) {
