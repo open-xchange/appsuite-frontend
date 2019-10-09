@@ -109,14 +109,14 @@ define('io.ox/chat/extensions/register', [
         ref: 'io.ox/chat/actions/start-chat-from-contacts'
     });
 
-    ext.point('io.ox/contacts/detail').extend({
+    ext.point('io.ox/contacts/detail/content').extend({
         id: 'chat',
         index: 500,
         draw: function (baton) {
             var node;
             this.append(
                 node = $('<section class="block">').append(
-                    $('<h2>').text('Recent chat messages'),
+                    $('<h4>').text('Recent chat messages'),
                     $('<div class="ox-chat embedded">')
                 ).hide()
             );
