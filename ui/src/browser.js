@@ -48,15 +48,15 @@
 
     // supported browsers
     us.browserSupport = {
-        'Chrome':    70,
+        'Chrome':    74,
         'Safari':    11,
-        'Firefox':   60,
+        'Firefox':   66,
         'IE':        11
     };
 
     us.platformSupport = {
         'Android':  4.4,
-        'iOS':      9.0,
+        'iOS':      11.0,
         'WindowsPhone': 99.0 // special case to exclude WindowsPhone as a mobile platform
     };
 
