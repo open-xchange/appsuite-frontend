@@ -539,7 +539,7 @@ define('io.ox/chat/data', [
                 contentType: false,
                 xhrFields: { withCredentials: true }
             }).then(function (data) {
-                return collection.add(data, { merge: true });
+                return collection.add(data, { merge: true, parse: true })[0];
             });
         },
 
@@ -611,8 +611,9 @@ define('io.ox/chat/data', [
         },
 
         parse: function (array) {
+            array = [].concat(array);
             array.forEach(function (data) {
-                if (data.modified) data.modified = +moment(data.modified);
+                data.modified = +moment(data.modified);
             });
             return array;
         },
