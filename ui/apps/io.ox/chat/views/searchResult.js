@@ -75,7 +75,6 @@ define('io.ox/chat/views/searchResult', [
             var regexQuery = new RegExp('(\\b' + escape(query) + ')', 'ig');
             return data.chats.filter(function (model) {
                 var res =  regexQuery.test(model.get('title'));
-                console.log(model.get('title'), res);
                 return res;
             }).map(function (model) {
                 return model.clone();

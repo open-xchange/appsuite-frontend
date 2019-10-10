@@ -97,8 +97,9 @@ define('io.ox/chat/views/messages', [
                     $('<div class="fa delivery">').addClass(model.get('state'))
                 );
 
-            var date = this.renderDate(model);
+            if (model.get('id') === this.messageId) delete this.messageId;
 
+            var date = this.renderDate(model);
             if (date) return [date, message];
             return message;
         },
