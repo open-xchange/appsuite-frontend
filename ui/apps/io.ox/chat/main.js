@@ -175,11 +175,14 @@ define('io.ox/chat/main', [
         leaveGroup: function (groupId) {
             var self = this;
 
+            var type = 'group';
+            if (data.chats.get(groupId).isChannel()) type = 'channel';
+
             new ModalDialog({
                 point: 'io.ox/chat/actions/confirmLeavingGroup',
                 backdrop: true,
-                title: 'Leave group',
-                description: 'Do you really want to leave the group?'
+                title: 'Leave ' + type,
+                description: 'Do you really want to leave the ' + type + '?'
             })
             .addCancelButton({ left: true })
             .addButton({ action: 'continue', label: 'Yes' })
@@ -192,6 +195,7 @@ define('io.ox/chat/main', [
         },
 
         viewChannel: function (cmd) {
+            data.chats.setCurrent(cmd.id);
             this.showChat(cmd.id);
         },
 
@@ -318,13 +322,10 @@ define('io.ox/chat/main', [
             data.chats.setCurrent(undefined);
         },
 
-        resubscribeChat: function (id, opt) {
-            data.chats.toggleRecent(id);
-            var view = new ChatView(_.extend({ room: id }, _(opt).pick('messageId', 'reference')));
-            this.showApp();
-            this.$rightside.empty().append(view.render().$el);
-            this.$body.addClass('open');
-            view.scrollToBottom();
+        resubscribeChat: function (id) {
+            data.chats.toggleRecent(id).then(
+                this.showChat.bind(this, id)
+            );
         },
 
         toggleWindowMode: function (mode) {

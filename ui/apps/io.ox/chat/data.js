@@ -575,7 +575,14 @@ define('io.ox/chat/data', [
         },
 
         getHistory: function () {
-            return this.filter({ open: false }).slice(0, 100);
+            var list = [];
+            this.filter({ open: false }).forEach(function (chat) {
+                if (chat.isMember() || chat.isPrivate() || chat.get('joined')) {
+                    list.push(chat);
+                }
+            });
+
+            return list.slice(0, 100);
         },
 
         getChannels: function () {
@@ -862,7 +869,10 @@ define('io.ox/chat/data', [
             _(list)
             .map(function (email) {
                 var model = data.users.getByMail(email);
-                return '<span class="name">' + (model ? model.getName() : 'Unknown user') + '</span>';
+                var name = (model ? model.getName() : 'Unknown user');
+                if (email === data.user.email) name = 'You';
+
+                return '<span class="name">' + name + '</span>';
             })
             .sort()
         );
