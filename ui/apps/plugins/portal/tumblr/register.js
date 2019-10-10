@@ -30,6 +30,8 @@ define('plugins/portal/tumblr/register', [
         return;
     }
 
+    if (ox.debug) console.warn('Tumblr portal plugin is DEPRECATED with 7.10.3 and will be removed with 7.10.4 or at any random date later');
+
     ext.point('io.ox/portal/widget/tumblr').extend({
 
         title: 'Tumblr',
