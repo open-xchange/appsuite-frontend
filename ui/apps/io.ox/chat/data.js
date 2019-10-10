@@ -361,7 +361,7 @@ define('io.ox/chat/data', [
 
         initialize: function (attr) {
             var self = this;
-            this.set('modified', +moment(this.get('modified')));
+            this.on('change:modified', function () { console.log('change modified to ', this.get('modified')); });
             this.unset('messages', { silent: true });
             this.members = new MemberCollection(attr.members, { parse: true, roomId: attr.id });
             this.messages = new MessageCollection([], { roomId: attr.id });
@@ -594,7 +594,9 @@ define('io.ox/chat/data', [
                 method: 'GET',
                 url: this.url() + '/' + roomId,
                 xhrFields: { withCredentials: true }
-            }).then(this.add.bind(this));
+            }).then(function (data) {
+                this.add([data], { parse: true });
+            }.bind(this));
         },
 
         joinChannel: function (roomId) {
@@ -607,6 +609,13 @@ define('io.ox/chat/data', [
         leaveChannel: function (roomId) {
             var room = this.get(roomId);
             room.destroy();
+        },
+
+        parse: function (array) {
+            array.forEach(function (data) {
+                if (data.modified) data.modified = +moment(data.modified);
+            });
+            return array;
         },
 
         sync: function (method, model, options) {
@@ -704,9 +713,6 @@ define('io.ox/chat/data', [
                     message.set('state', state);
                 });
 
-                if (state === 'seen') {
-                    room.set({ modified: +moment(), unreadCount: 0 });
-                }
             });
 
             socket.on('message:new', function (roomId, message) {
