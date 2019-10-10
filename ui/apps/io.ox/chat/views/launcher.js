@@ -24,7 +24,7 @@ define('io.ox/chat/views/launcher', ['io.ox/chat/data', 'less!io.ox/chat/style']
         },
 
         initialize: function () {
-            this.$badge = $('<span class="badge">');
+            this.badge = this.$el.find('.chat-notification');
 
             this.listenTo(data.chats, 'add remove change:unreadCount', this.updateCounter);
         },
@@ -32,7 +32,7 @@ define('io.ox/chat/views/launcher', ['io.ox/chat/data', 'less!io.ox/chat/style']
         render: function () {
             this.$el.attr('tabindex', -1).empty().append(
                 $('<i class="fa fa-comment launcher-icon" aria-hidden="true">').attr('title', 'Chat'),
-                this.$badge
+                this.badge = $('<svg height="8" width="8" class="indicator chat-notification hidden" focusable="false"><circle cx="4" cy="4" r="4"></svg>')
             );
             return this;
         },
@@ -41,7 +41,9 @@ define('io.ox/chat/views/launcher', ['io.ox/chat/data', 'less!io.ox/chat/style']
             var count = data.chats.reduce(function (memo, model) {
                 return memo + (model.get('unreadCount') || 0);
             }, 0);
-            this.$badge.text(count || '');
+
+            if (count > 0) this.badge.toggleClass('hidden', false);
+            else this.badge.toggleClass('hidden', true);
         },
 
         onClick: function () {
