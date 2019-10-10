@@ -71,13 +71,25 @@ define('io.ox/chat/views/searchResult', [
             });
         },
 
+        searchTitles: function (query) {
+            var regexQuery = new RegExp('(\\b' + escape(query) + ')', 'ig');
+            return data.chats.filter(function (model) {
+                var res =  regexQuery.test(model.get('title'));
+                console.log(model.get('title'), res);
+                return res;
+            }).map(function (model) {
+                return model.clone();
+            });
+        },
+
         search: function (query) {
             if (!query) return this.collection.reset();
 
             $.when(
                 this.searchMessages(query),
-                this.searchAddresses(query)
-            ).then(function (messages, addresses) {
+                this.searchAddresses(query),
+                this.searchTitles(query)
+            ).then(function (messages, addresses, rooms) {
                 var ids = {},
                     chatsByMessage = messages.map(function (message) {
                         // find according room
@@ -106,7 +118,8 @@ define('io.ox/chat/views/searchResult', [
                     }).filter(function (room) {
                         return !ids[room.get('id')];
                     });
-                var models = [].concat(chatsByMessage).concat(chatsByAddress);
+
+                var models = [].concat(chatsByMessage).concat(chatsByAddress).concat(rooms);
                 models = _(models).compact();
                 this.collection.reset(models);
             }.bind(this));
