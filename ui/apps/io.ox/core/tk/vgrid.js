@@ -229,7 +229,8 @@ define('io.ox/core/tk/vgrid', [
             secondToolbar: false,
             swipeLeftHandler: false,
             swipeRightHandler: false,
-            containerLabel: gt('Multiselect')
+            containerLabel: gt('Multiselect'),
+            dividerThreshold: 0
         }, options || {});
 
         if (options.settings) {
@@ -378,6 +379,7 @@ define('io.ox/core/tk/vgrid', [
             hScrollToLabel,
             paintLabels,
             processLabels,
+            invisibleLabels = false,
             cloneRow,
             currentOffset = null,
             paint,
@@ -517,7 +519,7 @@ define('io.ox/core/tk/vgrid', [
                     obj.top = cumulatedLabelHeight + obj.pos * itemHeight;
                     node = labels.nodes.eq(i);
                     node.css({ top: obj.top + 'px' });
-                    height = (isVisible && node.outerHeight(true)) || labelHeight;
+                    height = invisibleLabels ? 0 : (isVisible && node.outerHeight(true)) || labelHeight;
                     cumulatedLabelHeight += (obj.height = height);
                 }
                 // add tail?
@@ -566,6 +568,9 @@ define('io.ox/core/tk/vgrid', [
                 index: {},
                 textIndex: {}
             };
+            // below minimum?
+            invisibleLabels = options.dividerThreshold && all.length < options.dividerThreshold;
+            node.toggleClass('invisible-labels', invisibleLabels);
             // loop
             var i = 0, $i = all.length + 1, current = '', tmp = '';
             for (; i < $i; i++) {
@@ -622,7 +627,7 @@ define('io.ox/core/tk/vgrid', [
                 for (i = 0, $i = data.length; i < $i; i++) {
                     // shift?
                     index = labels.index[offset + i];
-                    if (index !== undefined) {
+                    if (index !== undefined && !invisibleLabels) {
                         shift += labels.list[index].height || labelHeight;
                     }
                     row = pool[i];
