@@ -112,6 +112,7 @@ define('io.ox/chat/views/history', [
         },
 
         onAdd: _.debounce(function () {
+            if (this.disposed) return;
             this.$('.scrollpane ul').empty().append(
                 this.getItems().map(this.renderItem.bind(this))
             );
