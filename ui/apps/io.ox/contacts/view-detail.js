@@ -79,7 +79,7 @@ define('io.ox/contacts/view-detail', [
     // }
 
     function hideAddressBook() {
-        return ox.ui.apps._indexOf('io.ox/contacts') < 0;
+        return !ox.ui.apps.get('io.ox/contacts');
     }
 
     // function createText(format, classes) {
