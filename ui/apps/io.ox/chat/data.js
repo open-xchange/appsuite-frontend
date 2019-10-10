@@ -22,7 +22,7 @@ define('io.ox/chat/data', [
     'use strict';
 
     var chatHost =  _.url.hash('chatHost') || ox.serverConfig.chatHost,
-        DEFAULT_LIMIT = 40;
+        DEFAULT_LIMIT = 20;
 
     var data = {
         API_ROOT: 'https://' + chatHost + '/api',
@@ -332,7 +332,7 @@ define('io.ox/chat/data', [
                     this[params.direction + 'Complete'] = list.length < params.limit;
                     if (this[params.direction + 'Complete']) this.trigger('complete:' + params.direction);
                 }
-                this.trigger('after:' + type);
+                this.trigger('after:all after:' + type);
             }.bind(this));
         },
         getLast: function () {
@@ -361,7 +361,6 @@ define('io.ox/chat/data', [
 
         initialize: function (attr) {
             var self = this;
-            this.on('change:modified', function () { console.log('change modified to ', this.get('modified')); });
             this.unset('messages', { silent: true });
             this.members = new MemberCollection(attr.members, { parse: true, roomId: attr.id });
             this.messages = new MessageCollection([], { roomId: attr.id });

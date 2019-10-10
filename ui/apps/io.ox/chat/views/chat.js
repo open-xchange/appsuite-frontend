@@ -153,8 +153,9 @@ define('io.ox/chat/views/chat', [
             });
 
             this.listenTo(this.model.messages, {
-                'complete:prev': this.onComplete.bind(this, 'prev'),
-                'complete:next': this.onComplete.bind(this, 'next'),
+                'after:all': this.onUpdatePaginators.bind(this),
+                // 'complete:prev': this.onComplete.bind(this, 'prev'),
+                // 'complete:next': this.onComplete.bind(this, 'next'),
                 'paginate': this.toggleAutoScroll.bind(this, false)
             });
 
@@ -165,7 +166,7 @@ define('io.ox/chat/views/chat', [
 
             this.listenTo(events, 'cmd:remove-reference', this.onRemoveReference);
 
-            this.model.messages.messageId = this.messageId;
+            this.messagesView.messageId = this.messageId;
             // there are two cases when to reset the collection before usage
             // 1) We have a messageId but the requested messageId is not in the collection
             // 2) We don't have a messageId but the collection is not fully fetched
@@ -238,12 +239,12 @@ define('io.ox/chat/views/chat', [
                 ),
                 new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: 'Chat actions' }).render(new ext.Baton({ model: this.model })).$el,
                 this.$scrollpane = $('<div class="scrollpane">').on('scroll', $.proxy(this.onScroll, this)).append(
-                    this.$paginatePrev = $('<div class="paginate prev">').toggle(!this.model.messages.prevComplete),
+                    this.$paginatePrev = $('<div class="paginate prev">').hide(),
                     $('<div class="conversation">').append(
                         this.messagesView.render().$el,
                         this.typing.$el
                     ),
-                    this.$paginateNext = $('<div class="paginate next">').toggle(!this.model.messages.nextComplete)
+                    this.$paginateNext = $('<div class="paginate next">').hide()
                 ),
                 this.$referencePreview = this.reference ? new ReferencePreview({ reference: this.reference }).render().$el : undefined,
                 $('<div class="controls">').append(
@@ -254,6 +255,8 @@ define('io.ox/chat/views/chat', [
                     this.renderEditor()
                 )
             );
+
+            this.onUpdatePaginators();
 
             _.defer(function () {
                 if (this.$editor) this.$editor.focus();
@@ -458,13 +461,18 @@ define('io.ox/chat/views/chat', [
             return this.$scrollpane.scrollTop() + this.$scrollpane.height() < this.$scrollpane.prop('scrollHeight') - 50;
         },
 
+        onUpdatePaginators: function () {
+            this.$('.paginate.prev').idle().toggle(!this.model.messages.prevComplete && this.model.messages.length > 0);
+            this.$('.paginate.next').idle().toggle(!this.model.messages.nextComplete && this.model.messages.length > 0);
+        },
+
         onComplete: function (direction) {
             this.$('.paginate.' + direction).idle().hide();
         },
 
         onChangeHeight: function (e, opt) {
             var scrollpane = this.$scrollpane;
-            if ($(e.target).position().top > scrollpane.height()) return;
+            if ($(e.target).closest('.message').position().top > scrollpane.height()) return;
 
             // scroll to bottom again if height of image changes
             scrollpane.scrollTop(scrollpane.scrollTop() + opt.value - opt.prev);
