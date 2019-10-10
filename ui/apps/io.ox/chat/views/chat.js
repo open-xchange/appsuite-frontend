@@ -289,19 +289,22 @@ define('io.ox/chat/views/chat', [
                 );
             }
 
-            if (this.model.isGroup()) {
-                $ul.append(renderItem('Edit group', { 'data-cmd': 'open-group-dialog', 'data-id': this.model.id }));
-                $ul.append(renderItem('Leave group', { 'data-cmd': 'leave-group', 'data-id': this.model.id }));
-            } else if (this.model.isChannel()) {
-                if (this.model.get('joined')) {
-                    $ul.append(renderItem('Edit channel', { 'data-cmd': 'open-group-dialog', 'data-id': this.model.id }));
-                    $ul.append(renderItem('Leave channel', { 'data-cmd': 'leave-channel', 'data-id': this.model.id }));
-                } else {
-                    $ul.append(renderItem('Join channel', { 'data-cmd': 'join-channel', 'data-id': this.model.id }));
-                }
+            var type = 'chat';
+            if (this.model.isGroup()) type = 'group';
+            else if (this.model.isChannel()) type = 'channel';
+
+            if (this.model.isPrivate() && this.model.get('open')) {
+                $ul.append(renderItem('Hide chat', { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
+            } else if (!(this.model.isChannel() && !this.model.get('joined')) && this.model.get('open')) {
+                $ul.append(renderItem('Edit ' + type, { 'data-cmd': 'open-group-dialog', 'data-id': this.model.id }));
+                $ul.append(renderItem('Hide ' + type, { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
+            } else if (this.model.isChannel() && !this.model.get('joined')) {
+                $ul.append(renderItem('Join channel', { 'data-cmd': 'join-channel', 'data-id': this.model.id }));
             }
 
-            $ul.append(renderItem('Hide chat', { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
+            if (!this.model.isPrivate() && !(this.model.isChannel() && !this.model.get('joined'))) {
+                $ul.append(renderItem('Leave ' + type, { 'data-cmd': 'leave-group', 'data-id': this.model.id }));
+            }
 
             return $ul;
         },
