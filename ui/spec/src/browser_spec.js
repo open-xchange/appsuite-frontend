@@ -65,12 +65,12 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
                     });
                 }
                 if (b.platformSupport === true) {
-                    it('should check the mobile platform' + browser + ' ' + version + ' against AS support matrix', function () {
+                    it('should check the mobile platform ' + browser + ' ' + version + ' against AS support matrix', function () {
                         _.device.loadUA(userAgents.valid[browser][version]);
                         expect(window.isPlatformSupported()).to.be.true;
                     });
                 } else if (b.platformSupport === false) {
-                    it('should check the unsupported mobile platform' + browser + ' ' + version + ' against AS support matrix', function () {
+                    it('should check the unsupported mobile platform ' + browser + ' ' + version + ' against AS support matrix', function () {
                         _.device.loadUA(userAgents.valid[browser][version]);
                         expect(window.isPlatformSupported()).to.be.false;
                     });

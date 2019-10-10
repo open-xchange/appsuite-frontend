@@ -246,19 +246,19 @@ Scenario('Client-side validation returns visual feedback', async function (I) {
     I.waitForText(contact.display_name, undefined, '.contact-detail');
     I.retry(5).clickToolbar('Edit');
     I.waitForVisible('.io-ox-contacts-edit-window');
-    I.dontSee('This is invalid email address');
+    I.dontSee('This is an invalid email address');
 
     I.fillField('Email 1', 'email1@valid.com');
     I.fillField('Company', 'Dovecot');
-    I.dontSee('This is invalid email address');
+    I.dontSee('This is an invalid email address');
 
     I.fillField('Email 1', 'email2-invalid');
     I.fillField('Company', 'Open-Xchange');
-    I.see('This is invalid email address');
+    I.see('This is an invalid email address');
 
     I.fillField('Email 1', 'email3@valid.com');
     I.fillField('Company', 'Dovecot');
-    I.dontSee('This is invalid email address');
+    I.dontSee('This is an invalid email address');
 
     I.fillField('Email 1', 'email4-invalid');
     I.click('Save');

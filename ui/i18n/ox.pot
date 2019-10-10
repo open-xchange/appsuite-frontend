@@ -4802,7 +4802,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/edit/view.js
 #: module:io.ox/contacts
-msgid "This is invalid email address."
+msgid "This is an invalid email address."
 msgstr ""
 
 #: apps/io.ox/contacts/main.js
@@ -13673,11 +13673,6 @@ msgstr ""
 #: apps/io.ox/settings/personalData/settings/pane.js
 #: module:io.ox/core
 msgid "Request download"
-msgstr ""
-
-#: apps/io.ox/settings/personalData/settings/pane.js
-#: module:io.ox/core
-msgid "Download requested"
 msgstr ""
 
 #: apps/io.ox/settings/personalData/settings/pane.js

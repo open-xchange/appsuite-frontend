@@ -131,8 +131,9 @@ define('io.ox/core/locale/postal-address', [], function () {
 
     function getCountryCode(country) {
         country = $.trim(country).toLowerCase();
+        if (!country) return '';
         // order: en, de, fr, es, it
-        if (/^(germany|deutschland|allemange|alemania|germania|)$/.test(country)) return 'DE';
+        if (/^(germany|deutschland|allemange|alemania|germania)$/.test(country)) return 'DE';
         if (/^(united states|usa?|vereinigte staaten|(é|e)tats(-| )unis|estados unidos|stati uniti d.america)$/.test(country)) return 'US';
         if (/^(uk|united kingdom|great britain|großbritannien|royaume-?uni|reino unido|regno Unito)$/.test(country)) return 'GB';
         if (/^(france|frankreich|francia)$/.test(country)) return 'FR';

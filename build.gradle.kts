@@ -45,11 +45,13 @@ configure<com.openexchange.obs.gradle.plugin.BuildserviceExtension> {
     project(closureOf<com.openexchange.obs.gradle.plugin.Project> {
         val gitExtension = extensions.getByType(GitExtension::class.java)
         val versionTag = gitExtension.newestVersionTag
+        val branch = gitExtension.branchName
         val regex = Regex("[^A-Za-z0-9-_]")
         val extension = when {
             versionTag?.commitDistance == 0L -> "${versionTag.versionWithoutRevision}-rev${versionTag.revisionMajor}"
-            System.getenv("CI_COMMIT_REF_SLUG") != null -> System.getenv("CI_COMMIT_REF_SLUG")
-            else -> regex.replace(gitExtension.branchName, "_")
+            branch.startsWith("master") or branch.startsWith("release") -> branch
+            System.getenv("OBS_PROJECT_EXT") != null -> System.getenv("OBS_PROJECT_EXT")
+            else -> regex.replace(branch, "_")
         }
         name = "frontend-$extension"
         this.repositories(closureOf<NamedDomainObjectContainer<com.openexchange.obs.gradle.plugin.Repository>> {

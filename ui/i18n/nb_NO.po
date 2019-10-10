@@ -3955,12 +3955,6 @@ msgstr "Last ned installasjonsfilen"
 msgid "Download personal data"
 msgstr "Last ned hele mappen"
 
-#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Slow requests"
-msgid "Download requested"
-msgstr "Trege forespørsler"
-
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
@@ -11704,7 +11698,7 @@ msgstr "Slik vil meldingsteksten din se ut."
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #, fuzzy
 #| msgid "This is not a valid email address"
-msgid "This is invalid email address."
+msgid "This is an invalid email address."
 msgstr "Dette er ikke en gyldig e-postadresse"
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain

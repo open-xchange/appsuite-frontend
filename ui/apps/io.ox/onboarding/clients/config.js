@@ -57,7 +57,7 @@ define('io.ox/onboarding/clients/config', [
                 description: gt('Get your device configured by email.')
             },
             'download': {
-                description: gt('Let´s automatically configure your device, by clicking the button below.')
+                description: gt('iOS devices can be automatically configured by installing the configuration profile.')
             }
         },
 

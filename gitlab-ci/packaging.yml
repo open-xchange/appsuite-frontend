@@ -14,7 +14,8 @@ delete project on obs:
   before_script:
     - echo "${OBS_OSCRC}" >> ~/.oscrc
   script:
-    - osc rdelete -r frontend-${CI_COMMIT_REF_SLUG} -m "GitLab CI environment stopped"
+    - echo ${CI_COMMIT_REF_SLUG} | grep -e "^master" -e "^release" && export OBS_PROJECT=frontend-${CI_COMMIT_REF_NAME} || export OBS_PROJECT=frontend-${CI_COMMIT_REF_SLUG}
+    - osc rdelete -r ${OBS_PROJECT} -m "GitLab CI environment stopped"
   when: manual
   environment:
     name: packages/$CI_COMMIT_REF_NAME
@@ -23,6 +24,8 @@ delete project on obs:
 upload:
   image: gradle:5.5-jre8
   stage: deploy
+  variables:
+    OBS_PROJECT_EXT: $CI_COMMIT_REF_SLUG
   script:
     # only run subtasks for projects which have been build previously (contain some built project files)
     - export TASKS=$(ls */build/pkg -d | sed -E "s,([^\/ ]+)\/[^ ]+,:\1:upload,g")
@@ -30,8 +33,6 @@ upload:
   only:
     - develop
     - master
-    - master-*
-    - release-*
     - /^feature\//
     - /^bug\//
     - /^poc\//
@@ -46,3 +47,15 @@ upload:
     - build guidedtours
     - build spamexperts
     - build dynamic-theme
+
+upload stable:
+  extends: upload
+  variables:
+    OBS_PROJECT_EXT: $CI_COMMIT_REF_NAME
+  environment:
+    name: packages/$CI_COMMIT_REF_NAME
+    on_stop: "delete project on obs"
+    url: https://buildservice.open-xchange.com/frontend-$CI_COMMIT_REF_NAME/
+  only:
+    - /^master-/
+    - /^release-/

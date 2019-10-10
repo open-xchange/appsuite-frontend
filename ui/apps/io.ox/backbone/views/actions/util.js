@@ -217,6 +217,19 @@ define('io.ox/backbone/views/actions/util', [
             });
         },
 
+        injectCaption: function name(li) {
+            li = $(li);
+            var link = li.find('a'), id,
+                caption = util.createCaption(li.data('caption'));
+            // screenreader support
+            id = _.uniqueId('link-description-');
+            caption.attr('id', id);
+            link.attr('aria-describedby', id);
+            // ux convenience: retrigger clicks
+            caption.on('click', link.trigger.bind(link, 'click'));
+            caption.insertAfter(li);
+        },
+
         injectSectionDividers: function ($ul) {
             var section = null;
             // clean up first
@@ -226,7 +239,7 @@ define('io.ox/backbone/views/actions/util', [
             $ul.children().each(function (i, node) {
                 var data = $(node).data();
                 // add link caption?
-                if (data.caption) util.createCaption(data.caption).insertAfter(node);
+                if (data.caption) util.injectCaption(node);
                 if (data.section === section) return;
                 section = data.section;
                 // inject divider
