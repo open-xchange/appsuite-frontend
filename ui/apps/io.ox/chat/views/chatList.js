@@ -42,6 +42,8 @@ define('io.ox/chat/views/chatList', [
         },
 
         renderItem: function (model) {
+            var node = this.getNode(model);
+            if (node.length) return node;
             return new ChatListEntryView({ model: model }).render().$el;
         },
 
@@ -70,8 +72,9 @@ define('io.ox/chat/views/chatList', [
         onSort: _.debounce(function () {
             if (this.disposed) return;
 
-            this.$el.empty().append(
-                this.getItems().map(this.renderItem, this)
+            var items = this.getItems().map(this.renderItem, this);
+            this.$el.append(
+                items
             );
         }, 1),
 
@@ -96,7 +99,7 @@ define('io.ox/chat/views/chatList', [
 
         onChangeOpen: function (model, value) {
             if (value) {
-                this.onSort();
+                this.onAdd(this.model, this.collection, { changes: { added: [model] } });
             } else {
                 this.onRemove(model);
             }
