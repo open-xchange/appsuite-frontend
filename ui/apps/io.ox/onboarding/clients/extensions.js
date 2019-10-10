@@ -77,9 +77,9 @@ define('io.ox/onboarding/clients/extensions', [
         getToggleNode: function () {
             var id = _.uniqueId('description');
             return [
-                $('<div class="sr-only">').attr('id', id).text(gt('Show or hide actions for advanced users.')),
-                $('<a href="#" class="toggle-link" data-value="to-advanced">').attr('aria-describedby', id).text(gt('Expert user?')),
-                $('<a href="#" class="toggle-link" data-value="to-simple">').attr('aria-describedby', id).text(gt('Hide options for expert users.'))
+                $('<div class="sr-only">').attr('id', id).text(gt('Show or hide alternative options for advanced users.')),
+                $('<a href="#" class="toggle-link" data-value="to-advanced">').attr('aria-describedby', id).text(gt('Show more options')),
+                $('<a href="#" class="toggle-link" data-value="to-simple">').attr('aria-describedby', id).text(gt('Show less options'))
             ];
         },
 
@@ -440,7 +440,7 @@ define('io.ox/onboarding/clients/extensions', [
                         // action
                         $('<button type="button" class="btn btn-primary action-call">')
                             .attr('aria-describedby', ref)
-                            .text(gt('Configure now'))
+                            .text(gt('Download profile'))
                     )
                 );
             return this;
