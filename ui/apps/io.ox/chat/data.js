@@ -558,7 +558,7 @@ define('io.ox/chat/data', [
 
         onChangeUnreadCount: function () {
             this.trigger('unseen', this.reduce(function (sum, model) {
-                return sum + model.get('unreadCount');
+                if (!model.get('open')) return sum + model.get('unreadCount');
             }, 0));
         },
 
