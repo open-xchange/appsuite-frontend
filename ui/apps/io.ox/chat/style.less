@@ -179,6 +179,12 @@
             .picture(@pictureSize, @pictureSize);
             margin-right: 16px;
             float: left;
+            display: flex;
+
+            .avatar {
+                margin-top: auto;
+                margin-bottom: auto;
+            }
         }
 
         .btn-circle {
@@ -195,8 +201,8 @@
 
         .state {
             position: absolute;
-            left: @pictureSize;
-            top: @pictureSize + 16px - @stateSize;
+            left: 44px;
+            top: 48px;
         }
     }
 
@@ -795,7 +801,7 @@
             }
         }
         .state {
-            margin: 2px 4px -1px 0;
+            margin: 2px 4px -1px 4px;
         }
     }
 
@@ -916,6 +922,8 @@
                     border: 0;
                     background-size: cover;
                     background-color: #eee;
+                    background-position: center;
+
                     .icon { font-size: 32px; }
                     .filename {
                         position: absolute;
@@ -1052,6 +1060,7 @@
     position: absolute;
     left: 35px;
     top: 35px;
+    border: none;
 }
 
 .ox-chat-popup {
@@ -1256,4 +1265,8 @@ svg.chat-notification {
     circle {
         fill: #eb4400
     }
+}
+
+button.open-chat {
+    margin-bottom: 16px;
 }

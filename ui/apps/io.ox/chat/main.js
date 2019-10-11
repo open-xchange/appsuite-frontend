@@ -175,14 +175,11 @@ define('io.ox/chat/main', [
         leaveGroup: function (groupId) {
             var self = this;
 
-            var type = 'group';
-            if (data.chats.get(groupId).isChannel()) type = 'channel';
-
             new ModalDialog({
                 point: 'io.ox/chat/actions/confirmLeavingGroup',
                 backdrop: true,
-                title: 'Leave ' + type,
-                description: 'Do you really want to leave the ' + type + '?'
+                title: 'Leave chat',
+                description: 'Do you really want to leave the chat?'
             })
             .addCancelButton({ left: true })
             .addButton({ action: 'continue', label: 'Yes' })
@@ -424,7 +421,7 @@ define('io.ox/chat/main', [
                 $('<div class="chat-leftside">').append(
                     $('<div class="header">').append(
                         $('<div class="picture">').append(
-                            new AvatarView({ model: user }).render().$el.width(48).height(48),
+                            new AvatarView({ model: user }).render().$el,
                             new StateView({ model: user }).render().$el
                         ),
                         $('<div class="dropdown pull-right">').append(
