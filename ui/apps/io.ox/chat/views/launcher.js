@@ -39,7 +39,8 @@ define('io.ox/chat/views/launcher', ['io.ox/chat/data', 'less!io.ox/chat/style']
 
         updateCounter: function () {
             var count = data.chats.reduce(function (memo, model) {
-                if (!model.get('open')) return memo + (model.get('unreadCount') || 0);
+                if (!model.isOpen()) return memo;
+                return memo + model.get('unreadCount');
             }, 0);
 
             if (count > 0) this.badge.toggleClass('hidden', false);
