@@ -54,7 +54,7 @@ define('io.ox/chat/actions/openGroupDialog', [
                 if (model) members.push(model);
             });
         }
-        var participants = model.members || new Backbone.Collection(members);
+        var participants = model.members.clone() || new Backbone.Collection(members);
         var originalModel = model.has('id') ? model.clone() : new Backbone.Model();
 
         model.set('type', model.get('type') || obj.type || 'group');
