@@ -22,7 +22,8 @@ define('io.ox/chat/views/chatMember', ['io.ox/backbone/views/disposable', 'io.ox
 
         initialize: function () {
             this.listenTo(this.collection, {
-                add: this.onAdd
+                add: this.onAdd,
+                remove: this.onRemove
             });
         },
 
@@ -42,6 +43,10 @@ define('io.ox/chat/views/chatMember', ['io.ox/backbone/views/disposable', 'io.ox
             this.$el.append(
                 $('<li>').append(new BadgeView({ model: model }).render().$el)
             );
+        },
+
+        onRemove: function (model) {
+            this.$el.find('[data-email="' + model.get('email1') + '"]').parent().remove();
         }
     });
 

@@ -179,7 +179,7 @@ define('io.ox/chat/data', [
                 case 'removeMember':
                     return _.printf('%1$s removed %2$s from the conversation', getName(data.originator), getNames(data.removedMembers));
                 case 'changeGroupImage':
-                    return _.printf('%1$s changed the group image', getName(data.originator));
+                    return _.printf('%1$s changed the group image', getName(data.originator), data.fileId);
                 case 'changeTitle':
                     return _.printf('%1$s changed the group title to "%2$s"', getName(data.originator), data.title);
                 case 'changeDescription':
@@ -428,6 +428,29 @@ define('io.ox/chat/data', [
         isMember: function (email) {
             email = email || data.user.email;
             return !!_(this.get('members')).findWhere({ email: email });
+        },
+
+        checkForGroupUpdate: function (message, roomId) {
+            var update = JSON.parse(message.body);
+            var chat = data.chats.get(roomId);
+
+            if (update.type === 'removeMember') {
+                var updatedMembers = chat.get('members').filter(function (member) {
+                    if (!_.contains(update.removedMembers, member.email)) return member;
+                });
+                chat.set('members', updatedMembers);
+            }
+            if (update.type === 'addMember') {
+                var membersToAdd = update.addedMembers.map(function (email) { return { email: email }; });
+                chat.set('members', [].concat(chat.get('members').concat(membersToAdd)));
+            }
+            if (update.type === 'leftRoom') {
+                chat.set('members', _.reject(chat.get('members'), function (member) { return member.email === update.originator; }));
+            }
+
+            if (update.type = 'changeTitle') chat.set('title', update.title);
+            if (update.type = 'changeDescription') chat.set('descriptiom', update.description);
+            if (update.type = 'changeGroupImage') chat.set('fileId', update.fileId);
         },
 
         getLastSenderName: function () {
@@ -743,6 +766,8 @@ define('io.ox/chat/data', [
                     }
 
                     newMessage.updateDelivery('client');
+
+                    model.checkForGroupUpdate(message, roomId);
                 });
             });
 
