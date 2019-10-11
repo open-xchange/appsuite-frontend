@@ -36,7 +36,7 @@ define('io.ox/core/boot/load', [
     }, {
         id: 'i18n',
         run: function (baton) {
-            var language = locale.deriveSupportedLanguageFromLocale(ox.locale);
+            var language = locale.deriveSupportedLanguageFromLocale(baton && baton.sessionData && baton.sessionData.language || ox.locale);
             // apply session data (again) & page title
             if (baton.sessionData) session.set(baton.sessionData);
             ox.trigger('change:document:title');
