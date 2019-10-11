@@ -115,10 +115,10 @@ define('io.ox/chat/extensions/register', [
         id: 'chat',
         index: 500,
         draw: function (baton) {
-            var node;
+            var isHalo = !baton.app || baton.app.id !== 'io.ox/contacts', node;
             this.append(
                 node = $('<section class="block">').append(
-                    $('<h4>').text('Recent chat messages'),
+                    $('<h4>').text('Recent chat messages').addClass(isHalo ? 'widget-title clear-title' : ''),
                     $('<button class="btn btn-default">').text('Open conversation'),
                     $('<div class="ox-chat embedded">')
                 ).hide()
@@ -140,81 +140,6 @@ define('io.ox/chat/extensions/register', [
                         new MessagesView({ collection: room.messages, limit: 10, markAsRead: false }).render().$el
                     );
                 });
-            });
-        }
-    });
-
-    //
-    // Halo
-    //
-
-    ext.point('io.ox/contacts/links/inline').extend({
-        id: 'start-chat',
-        index: 450,
-        prio: 'hi',
-        mobile: 'hi',
-        title: 'Start chat',
-        ref: 'io.ox/chat/actions/start-chat-from-contacts'
-    });
-
-    ext.point('io.ox/halo/contact:renderer').extend({
-        id: 'chat',
-        index: '1000000',
-        handles: function (type) {
-            // looks like we belong to mail, but it works
-            return type === 'com.openexchange.halo.mail';
-        },
-        draw: function (baton) {
-            var node;
-            this.after(
-                node = $('<div class="ray" data-prodiver="com.openexchange.halo.chat">').append(
-                    $('<h2 class="widget-title clear-title">').text('Recent chat messages'),
-                    $('<button class="btn btn-default">').text('Open conversation'),
-                    $('<div class="ox-chat embedded">')
-                ).hide()
-            );
-            data.chats.initialized.then(function () {
-                var room = data.chats.find(function (chat) {
-                    if (!chat.isPrivate()) return;
-                    return _(chat.get('members')).findWhere({ email: baton.contact.email });
-                });
-                if (!room) return node.remove();
-                room.messages.fetch();
-                return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
-                    node.find('button').on('click', function () {
-                        require(['io.ox/chat/events'], function (events) {
-                            events.trigger('cmd', { cmd: 'show-chat', id: room.get('id') });
-                        });
-                    });
-                    node.find('.ox-chat').append(
-                        new MessagesView({ collection: room.messages, limit: 10, markAsRead: false }).render().$el
-                    ).show();
-                });
-            });
-        }
-    });
-
-    new Action('io.ox/chat/actions/start-chat-from-contacts', {
-        capabilities: 'chat',
-        collection: 'some',
-        matches: function (baton) {
-            return baton.data.length !== 1 || baton.data[0].internal_userid !== ox.user_id;
-        },
-        action: function (baton) {
-            var users = baton.data.filter(function (user) {
-                return user.internal_userid !== ox.user_id;
-            });
-
-            if (users.length === 1) {
-                var user = _(users).first();
-                startPrivateChat(user.email1 || user.email2 || user.email3);
-                return;
-            }
-
-            startGroupChat({
-                members: users.map(function (user) {
-                    return user.email1 || user.email2 || user.email3;
-                })
             });
         }
     });
