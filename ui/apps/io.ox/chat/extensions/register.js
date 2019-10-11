@@ -243,16 +243,16 @@ define('io.ox/chat/extensions/register', [
                 if (!room) return;
 
                 $section.empty().show().css({ 'border-bottom': '1px solid #ddd', padding: '8px 40px' }).append(
-                    'There is already a chat associated with this email',
-                    $('<button class="btn btn-default"" data-cmd="show-chat">')
+                    $('<button class="btn btn-default btn-sm" data-cmd="show-chat">')
                         .attr('data-id', room.get('id'))
-                        .css('margin-left', '10px')
-                        .text('Open chat')
+                        .css('margin-right', '10px')
+                        .text('Open conversation')
                         .click(function () {
                             require(['io.ox/chat/events'], function (events) {
                                 events.trigger('cmd', { cmd: 'show-chat', id: room.get('id') });
                             });
-                        })
+                        }),
+                    'There is already a chat associated with this email'
                 );
             }
 
