@@ -120,8 +120,8 @@ define('io.ox/chat/extensions/register', [
             this.append(
                 node = $('<section class="block">').append(
                     $('<h4>').text('Recent chat messages').addClass(isHalo ? 'widget-title clear-title' : ''),
-                    $('<button class="btn btn-default">').text('Open conversation'),
-                    $('<div class="ox-chat embedded">')
+                    $('<div class="ox-chat embedded">'),
+                    $('<button class="btn btn-default open-chat">').text('Open chat')
                 ).hide()
             );
             data.chats.initialized.then(function () {
@@ -206,8 +206,8 @@ define('io.ox/chat/extensions/register', [
                 $('<legend class="io-ox-label">').append(
                     $('<h2>').text('Recent chat messages')
                 ),
-                $('<button class="btn btn-default">').text('Open conversation'),
-                $('<div class="ox-chat embedded">')
+                $('<div class="ox-chat embedded">'),
+                $('<button class="btn btn-default open-chat">').text('Open chat')
             );
             this.append($fieldset);
             data.chats.initialized.then(function () {
@@ -284,7 +284,7 @@ define('io.ox/chat/extensions/register', [
                     $('<button class="btn btn-default btn-sm" data-cmd="show-chat">')
                         .attr('data-id', room.get('id'))
                         .css('margin-right', '10px')
-                        .text('Open conversation')
+                        .text('Open chat')
                         .click(function () {
                             require(['io.ox/chat/events'], function (events) {
                                 events.trigger('cmd', { cmd: 'show-chat', id: room.get('id') });
