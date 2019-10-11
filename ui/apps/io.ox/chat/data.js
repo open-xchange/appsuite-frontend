@@ -22,7 +22,7 @@ define('io.ox/chat/data', [
     'use strict';
 
     var chatHost =  _.url.hash('chatHost') || ox.serverConfig.chatHost,
-        DEFAULT_LIMIT = 20;
+        DEFAULT_LIMIT = 40;
 
     var data = {
         API_ROOT: 'https://' + chatHost + '/api',
