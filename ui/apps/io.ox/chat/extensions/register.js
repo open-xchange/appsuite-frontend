@@ -102,9 +102,9 @@ define('io.ox/chat/extensions/register', [
     // Contacts
     //
 
-    ext.point('io.ox/contacts/toolbar/links').extend({
+    ext.point('io.ox/contacts/links/inline').extend({
         id: 'start-chat',
-        index: 350,
+        index: 450,
         prio: 'hi',
         mobile: 'hi',
         title: 'Start chat',
@@ -141,6 +141,44 @@ define('io.ox/chat/extensions/register', [
                         new MessagesView({ collection: room.messages, limit: 10, markAsRead: false }).render().$el
                     );
                 });
+            });
+        }
+    });
+
+    //
+    // Halo
+    //
+
+    ext.point('io.ox/contacts/toolbar/links').extend({
+        id: 'start-chat',
+        index: 350,
+        prio: 'hi',
+        mobile: 'hi',
+        title: 'Start chat',
+        ref: 'io.ox/chat/actions/start-chat-from-contacts'
+    });
+
+    new Action('io.ox/chat/actions/start-chat-from-contacts', {
+        capabilities: 'chat',
+        collection: 'some',
+        matches: function (baton) {
+            return baton.data.length !== 1 || baton.data[0].internal_userid !== ox.user_id;
+        },
+        action: function (baton) {
+            var users = baton.data.filter(function (user) {
+                return user.internal_userid !== ox.user_id;
+            });
+
+            if (users.length === 1) {
+                var user = _(users).first();
+                startPrivateChat(user.email1 || user.email2 || user.email3);
+                return;
+            }
+
+            startGroupChat({
+                members: users.map(function (user) {
+                    return user.email1 || user.email2 || user.email3;
+                })
             });
         }
     });
