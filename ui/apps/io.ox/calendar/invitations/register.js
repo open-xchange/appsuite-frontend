@@ -837,7 +837,7 @@ define('io.ox/calendar/invitations/register', [
                 module = headers['X-Open-Xchange-Module'];
             if (!reminder || !module) return;
             reminder = reminder.split(/,\s*/);
-            return { module: module, folder_id: reminder[1], id: reminder[0] };
+            return { module: module, folder_id: reminder[1], id: reminder[0], sequence: reminder[2] };
         },
 
         getType: function () {
@@ -856,7 +856,7 @@ define('io.ox/calendar/invitations/register', [
                 cid = this.getCid(),
                 yell = this.options && this.options.yell;
             return require(['io.ox/calendar/api', 'io.ox/calendar/util', 'io.ox/backbone/mini-views/alarms']).then(function (api, util, AlarmsView) {
-                return api.resolve(cid.id, true).then(function (model) {
+                return api.resolve({ id: cid.id, sequence: cid.sequence }, true).then(function (model) {
                     if (self.disposed) return;
 
                     if (self.getType() === 'Deleted') {
