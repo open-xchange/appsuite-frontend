@@ -50,6 +50,10 @@ define('io.ox/chat/data', [
             return first || last || this.get('email') || '\u00a0';
         },
 
+        getEmail: function () {
+            return this.get('email1') || this.get('email2') || this.get('email3');
+        },
+
         getState: function () {
             return this.get('state') || 'offline';
         },
@@ -67,7 +71,7 @@ define('io.ox/chat/data', [
         fetchState: function () {
             if (this.has('state')) return;
             $.ajax({
-                url: data.API_ROOT + '/users/' + this.get('id') + '/state',
+                url: data.API_ROOT + '/users/' + this.getEmail() + '/state',
                 xhrFields: { withCredentials: true }
             }).done(function (state) { this.set('state', state); }.bind(this));
         }
