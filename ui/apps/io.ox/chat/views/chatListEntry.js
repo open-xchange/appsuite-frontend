@@ -91,7 +91,9 @@ define('io.ox/chat/views/chatListEntry', [
         onChangeLastMessage: function () {
             var model = this.model,
                 isCurrentUser = model.get('lastMessage').senderId.toString() === data.user_id.toString(),
-                isPrivate = model.get('type') === 'private';
+                isPrivate = model.get('type') === 'private',
+                lastMessage = model.get('lastMessage') || {},
+                isSystemMessage = lastMessage ? lastMessage.type === 'system' : false;
 
             this.$('.last-modified').text(model.getLastMessageDate());
             this.$('.text-preview').empty().append(model.getLastMessage());
@@ -100,8 +102,8 @@ define('io.ox/chat/views/chatListEntry', [
                 .removeClass('server client seen')
                 .addClass(model.get('lastMessage').state);
             this.$('.sender')
-                .toggleClass('hidden', isCurrentUser || isPrivate)
-                .text(model.getLastSenderName());
+                .toggleClass('hidden', isCurrentUser || isPrivate || isSystemMessage)
+                .text(model.getLastSenderName() + ':');
         }
 
     });
