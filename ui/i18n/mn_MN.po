@@ -2614,10 +2614,6 @@ msgstr "Өнгө"
 msgid "Configure categories"
 msgstr "Байршил"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Configure now"
-msgstr ""
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 msgid "Configure quick launchers"
@@ -3845,6 +3841,16 @@ msgstr ""
 msgid "Download personal data"
 msgstr ""
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+msgid "Download profile"
+msgstr "Зураг аплод хийхийн тулд дарна уу"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "Download requested"
+msgstr "Өнгө"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
@@ -4563,10 +4569,6 @@ msgstr ""
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Expand form"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Expert user?"
 msgstr ""
 
 #. label of a selectbox to select a time (1 day 1 month etc.) or "never"
@@ -5430,10 +5432,6 @@ msgstr ""
 msgid "Hide non-working time"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Hide options for expert users."
-msgstr ""
-
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
 msgstr ""
@@ -6090,11 +6088,6 @@ msgstr ""
 #. Contains: Arrows, numbers, symbols like play and fast-forward, copyright symbol
 #: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Letters • Symbols"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid ""
-"Let´s automatically configure your device, by clicking the button below."
 msgstr ""
 
 #. Emoji category
@@ -10013,9 +10006,19 @@ msgstr ""
 msgid "Show information about account recovery"
 msgstr ""
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+msgid "Show less options"
+msgstr "Үйлдлүүд"
+
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+msgid "Show more options"
+msgstr "Үйлдлүүд"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -10026,7 +10029,7 @@ msgid "Show next month"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Show or hide actions for advanced users."
+msgid "Show or hide alternative options for advanced users."
 msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
@@ -11330,15 +11333,15 @@ msgstr ""
 msgid "This is a standard folder, which can't be renamed."
 msgstr ""
 
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "This is how your message text will look like."
-msgstr ""
-
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #, fuzzy
 #| msgid "Please enter a valid email address"
 msgid "This is an invalid email address."
 msgstr "Зөв электрон шууданг оруулна уу"
+
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+msgid "This is how your message text will look like."
+msgstr ""
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "This is not a valid email address"
@@ -12462,6 +12465,10 @@ msgid "You are currently signed in with the following devices"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "You are no longer using a public calendar. You were added as organizer."
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "You are no longer using a shared calendar. You were added as organizer."
 msgstr ""
 
@@ -13173,6 +13180,12 @@ msgstr ""
 #. Context: Session Management. Active session on platform/os.
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "iOS"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid ""
+"iOS devices can be automatically configured by installing the configuration "
+"profile."
 msgstr ""
 
 #: apps/plugins/notifications/calendar/register.js

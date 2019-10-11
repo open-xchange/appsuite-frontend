@@ -2580,10 +2580,6 @@ msgstr "Konfiguroi %s"
 msgid "Configure categories"
 msgstr "Konfiguroi kategorioita"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Configure now"
-msgstr "Konfiguroi nyt"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Configure categories"
@@ -3810,6 +3806,18 @@ msgstr "Lataa Windows asennustiedosto"
 msgid "Download personal data"
 msgstr "Lataa koko kansio"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Download infected file"
+msgid "Download profile"
+msgstr "Lataa infektoitunut tiedosto"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Slow requests"
+msgid "Download requested"
+msgstr "Hitaat pyynnöt"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
@@ -4520,10 +4528,6 @@ msgstr "On olemassa"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Expand form"
 msgstr "Laajenna lomake"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Expert user?"
-msgstr "Asiantuntijakäyttäjä?"
 
 #. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -5399,10 +5403,6 @@ msgstr "Piilota yksityiskohdat"
 msgid "Hide non-working time"
 msgstr "Piilota työajan ulkopuolinen aika"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Hide options for expert users."
-msgstr "Näytä laajat vaihtoehdot."
-
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
 msgstr "Piilota pyynnön runko"
@@ -6070,11 +6070,6 @@ msgstr "Lue lisää"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Letters • Symbols"
 msgstr "Kirjaimet • Symbolit"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid ""
-"Let´s automatically configure your device, by clicking the button below."
-msgstr "Konfiguroi laitteesi automaattisesti napauttamalla allaolevaa nappia."
 
 #. Emoji category
 #. Japanese: 日常
@@ -9987,9 +9982,21 @@ msgstr "Näytä Drivessä"
 msgid "Show information about account recovery"
 msgstr "Näytä tilinpalautustiedot"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced options"
+msgid "Show less options"
+msgstr "Näytä lisävalinnat"
+
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Näytä luettelo"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Sort options"
+msgid "Show more options"
+msgstr "Lajitteluvaihtoehdot"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -10000,7 +10007,9 @@ msgid "Show next month"
 msgstr "Näytä seuraava kuukausi"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Show or hide actions for advanced users."
+#, fuzzy
+#| msgid "Show or hide actions for advanced users."
+msgid "Show or hide alternative options for advanced users."
 msgstr "Näytä tai piilota toiminnot edistyneemmille käyttäjille."
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
@@ -11376,15 +11385,15 @@ msgstr ""
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Tämä on standardikansio, jota ei voi uudelleennimetä."
 
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "This is how your message text will look like."
-msgstr "Viestitekstisi tulee näyttämään tältä."
-
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #, fuzzy
 #| msgid "This is not a valid email address"
 msgid "This is an invalid email address."
 msgstr "Tämä ei ole käypä sähköpostiosoite"
+
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+msgid "This is how your message text will look like."
+msgstr "Viestitekstisi tulee näyttämään tältä."
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "This is not a valid email address"
@@ -12520,6 +12529,13 @@ msgid "You are currently signed in with the following devices"
 msgstr "Olet kirjautuneena seuraaville laitteille"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid ""
+#| "You are no longer using a shared calendar. You were added as organizer."
+msgid "You are no longer using a public calendar. You were added as organizer."
+msgstr "Et käytää enää jaettua kalenteria. Sinut on lisätty järjestäjänä."
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "You are no longer using a shared calendar. You were added as organizer."
 msgstr "Et käytää enää jaettua kalenteria. Sinut on lisätty järjestäjänä."
 
@@ -13252,6 +13268,12 @@ msgstr "iKalenteri"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "iOS"
 msgstr "iOS"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid ""
+"iOS devices can be automatically configured by installing the configuration "
+"profile."
+msgstr ""
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
@@ -14279,6 +14301,9 @@ msgstr "alustasi"
 #~ msgid "Configure %1$s"
 #~ msgstr "Konfiguroi  %1$s"
 
+#~ msgid "Configure now"
+#~ msgstr "Konfiguroi nyt"
+
 #~ msgid "Configure your inbox tabs"
 #~ msgstr "Konfiguroi saapuneet-laatikkosi välilehdet"
 
@@ -14752,6 +14777,9 @@ msgstr "alustasi"
 #~ msgid "Expand timeframe by one month"
 #~ msgstr "Laajenna aikaväliä kuukaudella"
 
+#~ msgid "Expert user?"
+#~ msgstr "Asiantuntijakäyttäjä?"
+
 #~ msgid "Expiration: %1$d"
 #~ msgstr "Vanhentumisaika: %1$d"
 
@@ -14924,6 +14952,9 @@ msgstr "alustasi"
 
 #~ msgid "Hide names"
 #~ msgstr "Piilota nimet"
+
+#~ msgid "Hide options for expert users."
+#~ msgstr "Näytä laajat vaihtoehdot."
 
 #~ msgid "High contrast theme"
 #~ msgstr "Korkean kontrastin teema"
@@ -15196,6 +15227,11 @@ msgstr "alustasi"
 
 #~ msgid "Leave the presentation"
 #~ msgstr "Jätä esitys"
+
+#~ msgid ""
+#~ "Let´s automatically configure your device, by clicking the button below."
+#~ msgstr ""
+#~ "Konfiguroi laitteesi automaattisesti napauttamalla allaolevaa nappia."
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "Tykkäsit linkistä: %s"

@@ -2562,10 +2562,6 @@ msgstr "設定 %s"
 msgid "Configure categories"
 msgstr "設定分類"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Configure now"
-msgstr "立刻設定"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Configure categories"
@@ -3775,6 +3771,18 @@ msgstr "下載安裝檔"
 msgid "Download personal data"
 msgstr "輸入個人資料"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Download infected file"
+msgid "Download profile"
+msgstr "下載受感染的檔案"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Slow requests"
+msgid "Download requested"
+msgstr "慢速請求"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
@@ -4476,10 +4484,6 @@ msgstr "存在"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Expand form"
 msgstr "展開表單"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Expert user?"
-msgstr "進階使用者？"
 
 #. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -5345,10 +5349,6 @@ msgstr "隱藏詳情"
 msgid "Hide non-working time"
 msgstr "隱藏非工作時間"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Hide options for expert users."
-msgstr "隱藏進階選項。"
-
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
 msgstr "隱藏請求內容"
@@ -6018,11 +6018,6 @@ msgstr "了解更多"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Letters • Symbols"
 msgstr "書信‧符號"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid ""
-"Let´s automatically configure your device, by clicking the button below."
-msgstr "點擊下列按鈕，讓我們自動設定您的裝置，就這麼簡單！"
 
 #. Emoji category
 #. Japanese: 日常
@@ -9911,9 +9906,21 @@ msgstr "於雲端空間顯示"
 msgid "Show information about account recovery"
 msgstr "顯示帳號救援資訊"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced options"
+msgid "Show less options"
+msgstr "顯示進階設定"
+
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "顯示清單"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Sort options"
+msgid "Show more options"
+msgstr "排序選項"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -9924,7 +9931,9 @@ msgid "Show next month"
 msgstr "顯示下個月"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Show or hide actions for advanced users."
+#, fuzzy
+#| msgid "Show or hide actions for advanced users."
+msgid "Show or hide alternative options for advanced users."
 msgstr "顯示或隱藏進階使用者選項。"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
@@ -11256,17 +11265,17 @@ msgstr ""
 msgid "This is a standard folder, which can't be renamed."
 msgstr "這是標準資料夾，無法更名。"
 
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "This is how your message text will look like."
-msgstr ""
-"您的訊息文字將長得像這個樣子。\n"
-"This is how your message text will look like."
-
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #, fuzzy
 #| msgid "This is not a valid email address"
 msgid "This is an invalid email address."
 msgstr "這是無效的電子郵件位址"
+
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+msgid "This is how your message text will look like."
+msgstr ""
+"您的訊息文字將長得像這個樣子。\n"
+"This is how your message text will look like."
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "This is not a valid email address"
@@ -12379,6 +12388,13 @@ msgid "You are currently signed in with the following devices"
 msgstr "您目前正從下列裝置登入"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid ""
+#| "You are no longer using a shared calendar. You were added as organizer."
+msgid "You are no longer using a public calendar. You were added as organizer."
+msgstr "您不再使用共享行事曆，您已被新增為主辦人。"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "You are no longer using a shared calendar. You were added as organizer."
 msgstr "您不再使用共享行事曆，您已被新增為主辦人。"
 
@@ -13100,6 +13116,12 @@ msgstr "iCalendar"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "iOS"
 msgstr "iOS"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid ""
+"iOS devices can be automatically configured by installing the configuration "
+"profile."
+msgstr ""
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
@@ -14826,6 +14848,9 @@ msgstr "您的平台"
 #~ msgid "Configure %1$s"
 #~ msgstr "設定 %1$s"
 
+#~ msgid "Configure now"
+#~ msgstr "立刻設定"
+
 #~ msgid "Configure your inbox tabs"
 #~ msgstr "設定您的收件匣分頁"
 
@@ -15853,6 +15878,9 @@ msgstr "您的平台"
 #~ msgid "Expand timeframe by one month"
 #~ msgstr "展開時間範圍一個月"
 
+#~ msgid "Expert user?"
+#~ msgstr "進階使用者？"
+
 #~ msgid "Expiration: %1$d"
 #~ msgstr "過期於: %1$d"
 
@@ -16103,6 +16131,9 @@ msgstr "您的平台"
 
 #~ msgid "Hide names"
 #~ msgstr "隱藏名稱"
+
+#~ msgid "Hide options for expert users."
+#~ msgstr "隱藏進階選項。"
 
 #~ msgid "Hide side panel"
 #~ msgstr "隱藏側面板"
@@ -16447,6 +16478,10 @@ msgstr "您的平台"
 
 #~ msgid "Left aligned, text wraps at right side"
 #~ msgstr "靠左，文字於右邊換行"
+
+#~ msgid ""
+#~ "Let´s automatically configure your device, by clicking the button below."
+#~ msgstr "點擊下列按鈕，讓我們自動設定您的裝置，就這麼簡單！"
 
 #~ msgid "Lighter"
 #~ msgstr "更淡"

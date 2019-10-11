@@ -2624,10 +2624,6 @@ msgstr "Настроить %s"
 msgid "Configure categories"
 msgstr "Настроить категории"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Configure now"
-msgstr "Настроить"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Configure categories"
@@ -3854,6 +3850,18 @@ msgstr "Скачать установочный файл"
 msgid "Download personal data"
 msgstr "Скачать всю папку"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Download infected file"
+msgid "Download profile"
+msgstr "Скачать зараженный файл"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Slow requests"
+msgid "Download requested"
+msgstr "Медленные запросы"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
@@ -4573,10 +4581,6 @@ msgstr "Существует"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Expand form"
 msgstr "Развернуть"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Expert user?"
-msgstr "Эксперт?"
 
 #. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -5451,10 +5455,6 @@ msgstr "Скрыть подробности"
 msgid "Hide non-working time"
 msgstr "Скрыть нерабочее время"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Hide options for expert users."
-msgstr "Скрыть экспертные параметры"
-
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
 msgstr "Скрыть тело запроса"
@@ -6134,11 +6134,6 @@ msgstr "Узнать больше"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Letters • Symbols"
 msgstr "Буквы • Знаки"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid ""
-"Let´s automatically configure your device, by clicking the button below."
-msgstr "Чтобы автоматически настроить устройство, просто нажмите кнопку ниже."
 
 #. Emoji category
 #. Japanese: 日常
@@ -10066,9 +10061,21 @@ msgstr "Показать на Диске"
 msgid "Show information about account recovery"
 msgstr "Показать информацию о восстановлении аккаунта"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced options"
+msgid "Show less options"
+msgstr "Показать дополнительные параметры"
+
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Показать список"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Sort options"
+msgid "Show more options"
+msgstr "Параметры сортировки"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -10079,7 +10086,9 @@ msgid "Show next month"
 msgstr "Показать следующий месяц"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Show or hide actions for advanced users."
+#, fuzzy
+#| msgid "Show or hide actions for advanced users."
+msgid "Show or hide alternative options for advanced users."
 msgstr "Показать/Скрыть действия экспертного режима."
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
@@ -11476,15 +11485,15 @@ msgstr ""
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Эту папка не может быть переименована."
 
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "This is how your message text will look like."
-msgstr "Вот как будет выглядеть текст вашего сообщения"
-
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #, fuzzy
 #| msgid "This is not a valid email address"
 msgid "This is an invalid email address."
 msgstr "Недопустимый электронный адрес"
+
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+msgid "This is how your message text will look like."
+msgstr "Вот как будет выглядеть текст вашего сообщения"
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "This is not a valid email address"
@@ -12623,6 +12632,15 @@ msgid "You are currently signed in with the following devices"
 msgstr "Вы выполнили вход на следующих устройствах:"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid ""
+#| "You are no longer using a shared calendar. You were added as organizer."
+msgid "You are no longer using a public calendar. You were added as organizer."
+msgstr ""
+"Вы больше не используете совместный календарь. Вы были добавлены в качестве "
+"организатора."
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "You are no longer using a shared calendar. You were added as organizer."
 msgstr ""
 "Вы больше не используете совместный календарь. Вы были добавлены в качестве "
@@ -13366,6 +13384,12 @@ msgstr "iCalendar"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "iOS"
 msgstr "iOS"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid ""
+"iOS devices can be automatically configured by installing the configuration "
+"profile."
+msgstr ""
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
@@ -14499,6 +14523,9 @@ msgstr "вашей платформы"
 #~ msgid "Configure %1$s"
 #~ msgstr "Настроить %1$s"
 
+#~ msgid "Configure now"
+#~ msgstr "Настроить"
+
 #~ msgid "Configure your inbox tabs"
 #~ msgstr "Настроить вкладки входящих"
 
@@ -15023,6 +15050,9 @@ msgstr "вашей платформы"
 #~ msgid "Expand timeframe by one month"
 #~ msgstr "Добавить один месяц на шкалу времени"
 
+#~ msgid "Expert user?"
+#~ msgstr "Эксперт?"
+
 #~ msgid "Expiration: %1$d"
 #~ msgstr "Истекает: %1$d"
 
@@ -15228,6 +15258,9 @@ msgstr "вашей платформы"
 
 #~ msgid "Hide names"
 #~ msgstr "Скрыть имена"
+
+#~ msgid "Hide options for expert users."
+#~ msgstr "Скрыть экспертные параметры"
 
 #~ msgid "Hide side panel"
 #~ msgstr "Скрыть боковую панель"
@@ -15501,6 +15534,11 @@ msgstr "вашей платформы"
 
 #~ msgid "Leave the presentation"
 #~ msgstr "Покинуть презентацию"
+
+#~ msgid ""
+#~ "Let´s automatically configure your device, by clicking the button below."
+#~ msgstr ""
+#~ "Чтобы автоматически настроить устройство, просто нажмите кнопку ниже."
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "Понравилось: %s"

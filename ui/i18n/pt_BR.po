@@ -2615,10 +2615,6 @@ msgstr "Configurar %s"
 msgid "Configure categories"
 msgstr "Configurar categorias"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Configure now"
-msgstr "Configure agora"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Configure categories"
@@ -3851,6 +3847,18 @@ msgstr "Baixar arquivo de instalação"
 msgid "Download personal data"
 msgstr "Insira dados pessoais"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Download infected file"
+msgid "Download profile"
+msgstr "Baixar arquivo infectado"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Slow requests"
+msgid "Download requested"
+msgstr "Requisições lentas"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
@@ -4563,10 +4571,6 @@ msgstr "Existe"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Expand form"
 msgstr "Expandir formulário"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Expert user?"
-msgstr "Usuário avançado?"
 
 #. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -5449,10 +5453,6 @@ msgstr "Ocultar detalhes"
 msgid "Hide non-working time"
 msgstr "Ocultar folgas"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Hide options for expert users."
-msgstr "Esconder opções para usuários avançados."
-
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
 msgstr "Ocultar corpo da requisição"
@@ -6131,12 +6131,6 @@ msgstr "Saber mais"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Letters • Symbols"
 msgstr "Cartas • Símbolos"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid ""
-"Let´s automatically configure your device, by clicking the button below."
-msgstr ""
-"Configuraremos automaticamente seu dispositivo, basta clicar no botão abaixo."
 
 #. Emoji category
 #. Japanese: 日常
@@ -10065,9 +10059,21 @@ msgstr "Exibir no Drive"
 msgid "Show information about account recovery"
 msgstr "Exibir informações sobre a recuperação de conta"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced options"
+msgid "Show less options"
+msgstr "Exibir configurações avançadas"
+
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Exibir lista"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Sort options"
+msgid "Show more options"
+msgstr "Opções de classificação"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -10078,7 +10084,9 @@ msgid "Show next month"
 msgstr "Mostrar próximo mês"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Show or hide actions for advanced users."
+#, fuzzy
+#| msgid "Show or hide actions for advanced users."
+msgid "Show or hide alternative options for advanced users."
 msgstr "Exibir ou ocultar as ações para usuários avançados."
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
@@ -11486,15 +11494,15 @@ msgstr ""
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Esta é uma pasta padrão, que não pode ser renomeada."
 
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "This is how your message text will look like."
-msgstr "É assim que o texto da mensagem aparecerá."
-
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #, fuzzy
 #| msgid "This is not a valid email address"
 msgid "This is an invalid email address."
 msgstr "Este não é um endereço de e-mail válido"
+
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+msgid "This is how your message text will look like."
+msgstr "É assim que o texto da mensagem aparecerá."
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "This is not a valid email address"
@@ -12634,6 +12642,15 @@ msgid "You are currently signed in with the following devices"
 msgstr "Você está atualmente conectado com os seguintes dispositivos"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid ""
+#| "You are no longer using a shared calendar. You were added as organizer."
+msgid "You are no longer using a public calendar. You were added as organizer."
+msgstr ""
+"Você não está mais usando um calendário compartilhado. Você foi adicionado "
+"como organizador."
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "You are no longer using a shared calendar. You were added as organizer."
 msgstr ""
 "Você não está mais usando um calendário compartilhado. Você foi adicionado "
@@ -13386,6 +13403,12 @@ msgstr "iCalendar"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "iOS"
 msgstr "iOS"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid ""
+"iOS devices can be automatically configured by installing the configuration "
+"profile."
+msgstr ""
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
@@ -15020,6 +15043,9 @@ msgstr "sua plataforma"
 #~ msgid "Configure %1$s"
 #~ msgstr "Configurar %1$s"
 
+#~ msgid "Configure now"
+#~ msgstr "Configure agora"
+
 #~ msgid "Configure your inbox tabs"
 #~ msgstr "Configure suas abas da caixa de entrada"
 
@@ -15957,6 +15983,9 @@ msgstr "sua plataforma"
 #~ msgid "Expand timeframe by one month"
 #~ msgstr "Expandir prazo por um mês"
 
+#~ msgid "Expert user?"
+#~ msgstr "Usuário avançado?"
+
 #~ msgid "Expiration: %1$d"
 #~ msgstr "Expira em: %1$d"
 
@@ -16372,6 +16401,9 @@ msgstr "sua plataforma"
 
 #~ msgid "Hide non-working time in teamview"
 #~ msgstr "Ocultar folgas na visualização da equipe"
+
+#~ msgid "Hide options for expert users."
+#~ msgstr "Esconder opções para usuários avançados."
 
 #~ msgid "Hide side panel"
 #~ msgstr "Ocultar painel lateral"
@@ -16860,6 +16892,12 @@ msgstr "sua plataforma"
 
 #~ msgid "Lesotho"
 #~ msgstr "Lesoto"
+
+#~ msgid ""
+#~ "Let´s automatically configure your device, by clicking the button below."
+#~ msgstr ""
+#~ "Configuraremos automaticamente seu dispositivo, basta clicar no botão "
+#~ "abaixo."
 
 #~ msgid "Liberia"
 #~ msgstr "Libéria"

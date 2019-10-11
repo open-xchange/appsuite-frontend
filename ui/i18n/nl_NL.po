@@ -2621,10 +2621,6 @@ msgstr "Configureer %s"
 msgid "Configure categories"
 msgstr "Categorieën configureren"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Configure now"
-msgstr "Configureer nu"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Configure categories"
@@ -3854,6 +3850,18 @@ msgstr "Download installatiebestand"
 msgid "Download personal data"
 msgstr "Download de gehele map"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Download infected file"
+msgid "Download profile"
+msgstr "Geïnfecteerd bestand downloaden"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Slow requests"
+msgid "Download requested"
+msgstr "Langzame verzoeken"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
@@ -4576,10 +4584,6 @@ msgstr "Bestaat"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Expand form"
 msgstr "Formulier uitklappen"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Expert user?"
-msgstr "Geavanceerde gebruiker?"
 
 #. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -5462,10 +5466,6 @@ msgstr "Details verbergen"
 msgid "Hide non-working time"
 msgstr "Verberg vrijetijd"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Hide options for expert users."
-msgstr "Verberg de opties voor geavanceerde gebruikers."
-
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
 msgstr "Verberg aanvraag tekst"
@@ -6145,13 +6145,6 @@ msgstr "Leer meer"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Letters • Symbols"
 msgstr "Letters •  Symbolen"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid ""
-"Let´s automatically configure your device, by clicking the button below."
-msgstr ""
-"We gaan uw apparaat automatisch configureren als u op de knop hieronder "
-"klikt."
 
 #. Emoji category
 #. Japanese: 日常
@@ -10098,9 +10091,21 @@ msgstr "Toon in Drive"
 msgid "Show information about account recovery"
 msgstr "Toon informatie over account herstel"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced options"
+msgid "Show less options"
+msgstr "Toon geavanceerde instellingen"
+
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Toon lijst"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Sort options"
+msgid "Show more options"
+msgstr "Sorteer opties"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -10111,7 +10116,9 @@ msgid "Show next month"
 msgstr "Toon volgende maand"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Show or hide actions for advanced users."
+#, fuzzy
+#| msgid "Show or hide actions for advanced users."
+msgid "Show or hide alternative options for advanced users."
 msgstr ""
 "Klik om de acties voor geavanceerde gebruikers te tonen of te verbergen."
 
@@ -11530,15 +11537,15 @@ msgstr ""
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Dit is een standaard-map, deze kan niet hernoemd worden."
 
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "This is how your message text will look like."
-msgstr "Dit is hoe de tekst van uw bericht er uit zal zien."
-
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #, fuzzy
 #| msgid "This is not a valid email address"
 msgid "This is an invalid email address."
 msgstr "Dit is geen geldig e-mailadres"
+
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+msgid "This is how your message text will look like."
+msgstr "Dit is hoe de tekst van uw bericht er uit zal zien."
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "This is not a valid email address"
@@ -12683,6 +12690,14 @@ msgid "You are currently signed in with the following devices"
 msgstr "U bent momenteel aangemeld op de volgende apparaten"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid ""
+#| "You are no longer using a shared calendar. You were added as organizer."
+msgid "You are no longer using a public calendar. You were added as organizer."
+msgstr ""
+"U gebruikt geen gedeelde agenda meer. U bent toegevoegd als organisator."
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "You are no longer using a shared calendar. You were added as organizer."
 msgstr ""
 "U gebruikt geen gedeelde agenda meer. U bent toegevoegd als organisator."
@@ -13434,6 +13449,12 @@ msgstr "iCalendar"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "iOS"
 msgstr "iOS"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid ""
+"iOS devices can be automatically configured by installing the configuration "
+"profile."
+msgstr ""
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
@@ -14478,6 +14499,9 @@ msgstr "uw platform"
 #~ msgid "Configure %1$s"
 #~ msgstr "Configureer %1$s"
 
+#~ msgid "Configure now"
+#~ msgstr "Configureer nu"
+
 #~ msgid "Configure your inbox tabs"
 #~ msgstr "Configureer uw postvak IN tabbladen"
 
@@ -14960,6 +14984,9 @@ msgstr "uw platform"
 #~ msgid "Expand timeframe by one month"
 #~ msgstr "De periode uitbreiden met één maand"
 
+#~ msgid "Expert user?"
+#~ msgstr "Geavanceerde gebruiker?"
+
 #~ msgid "Expiration: %1$d"
 #~ msgstr "Verloopdatum: %1$d"
 
@@ -15131,6 +15158,9 @@ msgstr "uw platform"
 
 #~ msgid "Hide names"
 #~ msgstr "Namen verbergen"
+
+#~ msgid "Hide options for expert users."
+#~ msgstr "Verberg de opties voor geavanceerde gebruikers."
 
 #~ msgid "High contrast theme"
 #~ msgstr "Hoog-contrast thema"
@@ -15397,6 +15427,12 @@ msgstr "uw platform"
 
 #~ msgid "Leave the presentation"
 #~ msgstr "Verlaat de presentatie"
+
+#~ msgid ""
+#~ "Let´s automatically configure your device, by clicking the button below."
+#~ msgstr ""
+#~ "We gaan uw apparaat automatisch configureren als u op de knop hieronder "
+#~ "klikt."
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "Liked een link: %s"

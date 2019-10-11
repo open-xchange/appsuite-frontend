@@ -2118,6 +2118,11 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
+msgid "You are no longer using a public calendar. You were added as organizer."
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js
+#: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js
 #: module:io.ox/core
 msgid "My calendars"
@@ -12991,7 +12996,7 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js
 #: module:io.ox/core/onboarding
-msgid "Let´s automatically configure your device, by clicking the button below."
+msgid "iOS devices can be automatically configured by installing the configuration profile."
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js
@@ -13041,17 +13046,17 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "Show or hide actions for advanced users."
+msgid "Show or hide alternative options for advanced users."
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "Expert user?"
+msgid "Show more options"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "Hide options for expert users."
+msgid "Show less options"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
@@ -13082,7 +13087,7 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "Configure now"
+msgid "Download profile"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
@@ -13673,6 +13678,11 @@ msgstr ""
 #: apps/io.ox/settings/personalData/settings/pane.js
 #: module:io.ox/core
 msgid "Request download"
+msgstr ""
+
+#: apps/io.ox/settings/personalData/settings/pane.js
+#: module:io.ox/core
+msgid "Download requested"
 msgstr ""
 
 #: apps/io.ox/settings/personalData/settings/pane.js
