@@ -448,9 +448,9 @@ define('io.ox/chat/data', [
                 chat.set('members', _.reject(chat.get('members'), function (member) { return member.email === update.originator; }));
             }
 
-            if (update.type = 'changeTitle') chat.set('title', update.title);
-            if (update.type = 'changeDescription') chat.set('descriptiom', update.description);
-            if (update.type = 'changeGroupImage') chat.set('fileId', update.fileId);
+            if (update.type === 'changeTitle') chat.set('title', update.title);
+            if (update.type === 'changeDescription') chat.set('description', update.description);
+            if (update.type === 'changeGroupImage') chat.set('fileId', update.fileId);
         },
 
         getLastSenderName: function () {
@@ -767,7 +767,7 @@ define('io.ox/chat/data', [
 
                     newMessage.updateDelivery('client');
 
-                    model.checkForGroupUpdate(message, roomId);
+                    if (newMessage.get('type') === 'system') model.checkForGroupUpdate(message, roomId);
                 });
             });
 
