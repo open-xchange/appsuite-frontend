@@ -119,6 +119,7 @@ define('io.ox/chat/extensions/register', [
             this.append(
                 node = $('<section class="block">').append(
                     $('<h4>').text('Recent chat messages'),
+                    $('<button class="btn btn-default">').text('Open conversation'),
                     $('<div class="ox-chat embedded">')
                 ).hide()
             );
@@ -130,6 +131,11 @@ define('io.ox/chat/extensions/register', [
                 if (!room) return node.remove();
                 room.messages.fetch();
                 return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
+                    node.find('button').on('click', function () {
+                        require(['io.ox/chat/events'], function (events) {
+                            events.trigger('cmd', { cmd: 'show-chat', id: room.get('id') });
+                        });
+                    });
                     node.show().find('.ox-chat').append(
                         new MessagesView({ collection: room.messages, limit: 10, markAsRead: false }).render().$el
                     );
@@ -161,8 +167,10 @@ define('io.ox/chat/extensions/register', [
         draw: function (baton) {
             var node;
             this.after(
-                node = $('<div class="ray ox-chat embedded" data-prodiver="com.openexchange.halo.chat">').append(
-                    $('<h2 class="widget-title clear-title">').text('Recent chat messages')
+                node = $('<div class="ray" data-prodiver="com.openexchange.halo.chat">').append(
+                    $('<h2 class="widget-title clear-title">').text('Recent chat messages'),
+                    $('<button class="btn btn-default">').text('Open conversation'),
+                    $('<div class="ox-chat embedded">')
                 ).hide()
             );
             data.chats.initialized.then(function () {
@@ -173,7 +181,12 @@ define('io.ox/chat/extensions/register', [
                 if (!room) return node.remove();
                 room.messages.fetch();
                 return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
-                    node.append(
+                    node.find('button').on('click', function () {
+                        require(['io.ox/chat/events'], function (events) {
+                            events.trigger('cmd', { cmd: 'show-chat', id: room.get('id') });
+                        });
+                    });
+                    node.find('.ox-chat').append(
                         new MessagesView({ collection: room.messages, limit: 10, markAsRead: false }).render().$el
                     ).show();
                 });
@@ -225,10 +238,12 @@ define('io.ox/chat/extensions/register', [
         index: 750,
         id: 'chat',
         draw: function (baton) {
-            var $fieldset = $('<fieldset class="details ox-chat embedded">').hide().append(
+            var $fieldset = $('<fieldset class="details">').hide().append(
                 $('<legend class="io-ox-label">').append(
                     $('<h2>').text('Recent chat messages')
-                )
+                ),
+                $('<button class="btn btn-default">').text('Open conversation'),
+                $('<div class="ox-chat embedded">')
             );
             this.append($fieldset);
             data.chats.initialized.then(function () {
@@ -237,9 +252,14 @@ define('io.ox/chat/extensions/register', [
                 if (!room) return $fieldset.remove();
                 room.messages.fetch();
                 return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
-                    $fieldset.append(
+                    $fieldset.find('button').on('click', function () {
+                        require(['io.ox/chat/events'], function (events) {
+                            events.trigger('cmd', { cmd: 'show-chat', id: room.get('id') });
+                        });
+                    });
+                    $fieldset.show().find('.ox-chat').append(
                         new MessagesView({ collection: room.messages, limit: 10, markAsRead: false }).render().$el
-                    ).show();
+                    );
                 });
             });
         }
@@ -298,7 +318,7 @@ define('io.ox/chat/extensions/register', [
 
                 $section.empty().show().css({ 'border-bottom': '1px solid #ddd', padding: '8px 40px' }).append(
                     'There is already a chat associated with this email',
-                    $('<button class="btn btn-default" data-cmd="show-chat">')
+                    $('<button class="btn btn-default"" data-cmd="show-chat">')
                         .attr('data-id', room.get('id'))
                         .css('margin-left', '10px')
                         .text('Open chat')
