@@ -115,6 +115,7 @@ define('io.ox/chat/extensions/register', [
         id: 'chat',
         index: 500,
         draw: function (baton) {
+            if (baton.data.created_by === ox.user_id) return;
             var isHalo = !baton.app || baton.app.id !== 'io.ox/contacts', node;
             this.append(
                 node = $('<section class="block">').append(
