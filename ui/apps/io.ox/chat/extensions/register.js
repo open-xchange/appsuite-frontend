@@ -52,13 +52,15 @@ define('io.ox/chat/extensions/register', [
 
             this.model.on('change:state', function (model) {
                 var user = data.users.findWhere({ id: ox.user_id });
-                user.setState(model.get('state'));
+                if (!model.suppress) user.setState(model.get('state'));
             });
 
             data.users.initialized.then(function () {
                 var user = data.users.findWhere({ id: ox.user_id });
                 this.model.listenTo(user, 'change:state', function (user, state) {
+                    this.suppress = true;
                     this.set('state', state);
+                    delete this.suppress;
                 });
             }.bind(this));
         }
