@@ -1,5 +1,4 @@
 import com.openexchange.build.git.GitExtension
-import kotlin.collections.mapOf as kmapOf
 
 buildscript {
     repositories {
@@ -12,7 +11,7 @@ buildscript {
         classpath("com.openexchange.build", "gradle-git", "2.2.0")
         classpath("com.openexchange.build", "licensing")
         classpath("com.openexchange.build", "packaging", "3.1.0")
-        classpath("com.openexchange.build", "opensuse-build-service-client", "1.4.0")
+        classpath("com.openexchange.build", "opensuse-build-service-client", "1.5.0")
     }
 }
 
@@ -20,7 +19,7 @@ apply {
     plugin("com.openexchange.build.licensing")
     plugin("com.openexchange.build.install")
     plugin("com.openexchange.build.gradle-git")
-    plugin("com.openexchange.opensuse-build-service-client")
+    plugin("com.openexchange.build.opensuse-build-service-client")
 }
 
 subprojects {
@@ -42,7 +41,7 @@ configure<com.openexchange.obs.gradle.plugin.BuildserviceExtension> {
     url = "https://buildapi.open-xchange.com"
     login  = System.getenv("OBS_USERNAME")
     password = System.getenv("OBS_PASSWORD")
-    project(closureOf<com.openexchange.obs.gradle.plugin.Project> {
+    obsProject {
         val gitExtension = extensions.getByType(GitExtension::class.java)
         val versionTag = gitExtension.newestVersionTag
         val branch = gitExtension.branchName
@@ -54,27 +53,27 @@ configure<com.openexchange.obs.gradle.plugin.BuildserviceExtension> {
             else -> regex.replace(branch, "_")
         }
         name = "frontend-$extension"
-        this.repositories(closureOf<NamedDomainObjectContainer<com.openexchange.obs.gradle.plugin.Repository>> {
+        repositories {
             create("DebianStretch") {
-                depends(kmapOf("project" to "Debian:Stretch", "repository" to "standard"))
+                depends("Debian:Stretch", "standard")
             }
             create("DebianBuster") {
-                depends(kmapOf("project" to "Debian:Buster", "repository" to "standard"))
+                depends("Debian:Buster", "standard")
             }
             create("RHEL6") {
                 // TODO go down to the base RHEL 6 repository
-                depends(kmapOf("project" to "backend-master", "repository" to "RHEL6"))
+                depends("backend-master", "RHEL6")
             }
             create("RHEL7") {
                 // TODO go down to the base RHEL 7 repository
-                depends(kmapOf("project" to "backend-master", "repository" to "RHEL7"))
+                depends("backend-master", "RHEL7")
             }
             create("SLE_12") {
                 // TODO go to SP4
-                depends(kmapOf("project" to "backend-master", "repository" to "SLE_12"))
+                depends("backend-master", "SLE_12")
             }
-        })
-    })
+        }
+    }
 }
 
 configure<com.openexchange.build.install.extension.InstallExtension> {

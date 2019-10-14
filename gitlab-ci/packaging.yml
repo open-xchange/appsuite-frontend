@@ -29,7 +29,7 @@ upload:
   script:
     # only run subtasks for projects which have been build previously (contain some built project files)
     - export TASKS=$(ls */build/pkg -d | sed -E "s,([^\/ ]+)\/[^ ]+,:\1:upload,g")
-    - gradle --no-daemon $TASKS
+    - gradle --no-daemon $TASKS wait4Project
   only:
     - develop
     - master
