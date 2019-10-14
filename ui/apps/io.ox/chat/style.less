@@ -835,34 +835,6 @@
         .scrollpane {
             padding: 16px;
         }
-        .channel {
-            position: relative;
-            line-height: 16px;
-            padding: 8px 80px 16px 64px;
-            margin-bottom: 8px;
-            cursor: pointer;
-
-            .chat-avatar {
-                position: absolute;
-                left: 0;
-                top: 4px;
-            }
-            .title {
-                font-weight: bold;
-                display: block;
-                margin-right: 8px;
-            }
-            .members {
-                color: #777;
-                line-height: inherit;
-                display: block;
-            }
-            .btn-action {
-                position: absolute;
-                right: 0;
-                top: 13px;
-            }
-        }
     }
 
     .history {
@@ -871,37 +843,41 @@
 
         .scrollpane {
             padding: 16px;
-            li {
-                position: relative;
-                line-height: 16px;
-                padding: 11px 80px 13px 64px;
-                margin-bottom: 8px;
-            }
-            .chat-avatar {
-                position: absolute;
-                left: 0;
-                top: 4px;
-            }
-            .title {
-                font-weight: bold;
-                float: left;
-                .ellipsis();
-            }
-            .date {
-                color: @gray;
-                float: right;
-                margin: 0;
-            }
-            .body {
-                color: @gray;
-                clear: both;
-                .ellipsis();
-            }
-            .btn-action {
-                position: absolute;
-                right: 0;
-                top: 13px;
-            }
+        }
+    }
+
+    .channel, .history-list {
+        position: relative;
+        line-height: 16px;
+        padding: 8px 80px 16px 64px;
+        margin-bottom: 8px;
+        cursor: pointer;
+
+        .chat-avatar {
+            position: absolute;
+            left: 0;
+            top: 4px;
+        }
+        .title {
+            font-weight: bold;
+            display: block;
+            margin-right: 8px;
+        }
+        .body {
+            margin-right: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .members {
+            color: #777;
+            line-height: inherit;
+            display: block;
+        }
+        .btn-action {
+            position: absolute;
+            right: 0;
+            top: 11px;
         }
     }
 
