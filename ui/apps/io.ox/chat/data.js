@@ -47,7 +47,7 @@ define('io.ox/chat/data', [
         getName: function () {
             var first = $.trim(this.get('first_name')), last = $.trim(this.get('last_name'));
             if (first && last) return first + ' ' + last;
-            return first || last || this.get('email') || '\u00a0';
+            return first || last || this.get('email') || this.getEmail() || '\u00a0';
         },
 
         getEmail: function () {
