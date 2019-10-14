@@ -95,15 +95,19 @@ define('io.ox/chat/views/history', [
         },
 
         renderItem: function (model) {
-            return $('<li>')
+            return $('<li class="history-list">')
                 .attr('data-cid', model.cid)
                 .append(
                     new ChatAvatar({ model: model }).render().$el,
-                    $('<div class="title">').text(model.getTitle()),
-                    $('<div class="body">').append(model.getLastMessage()),
-                    $('<button type="button" class="btn btn-default btn-action" >')
-                        .attr({ 'data-cmd': 'open-chat', 'data-id': model.id })
-                        .text('Open')
+                    $('<div class="chats-container">').append(
+                        $('<div class="chats-row">').append(
+                            $('<div class="title">').text(model.getTitle()),
+                            $('<div class="body">').append(model.getLastMessage()),
+                            $('<button type="button" class="btn btn-default btn-action" >')
+                                .attr({ 'data-cmd': 'open-chat', 'data-id': model.id })
+                                .text('Open')
+                        )
+                    )
                 );
         },
 
