@@ -218,7 +218,10 @@ define('io.ox/chat/data', [
                 text: true
             }, opt);
 
-            var $elem = $('<div>').busy();
+            var $elem = $('<div class="placeholder">').busy();
+
+            if (_.isUndefined(this.get('fileId'))) return $elem;
+
             $.ajax({
                 url: data.API_ROOT + '/files/' + this.get('fileId'),
                 xhrFields: { withCredentials: true }
