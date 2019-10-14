@@ -34,7 +34,7 @@ define('io.ox/core/settings/defaults', function () {
         refreshInterval: 5 * 60000,
         design: 'primary',
         autoStart: 'io.ox/mail/main',
-        coloredIcons: true,
+        coloredIcons: false,
         autoOpenNotification: 'noEmail',
         autoLogout: 0,
         showDesktopNotifications: true,
