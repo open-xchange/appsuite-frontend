@@ -138,7 +138,14 @@ define('io.ox/chat/extensions/register', [
                         });
                     });
                     node.show().find('.ox-chat').append(
-                        new MessagesView({ collection: room.messages, limit: 10, markAsRead: false }).render().$el
+                        new MessagesView({
+                            collection: room.messages,
+                            limit: 10,
+                            markAsRead: false,
+                            filter: function (model) {
+                                return !model.isSystem();
+                            }
+                        }).render().$el
                     );
                 });
             });
@@ -222,7 +229,14 @@ define('io.ox/chat/extensions/register', [
                         });
                     });
                     $fieldset.show().find('.ox-chat').append(
-                        new MessagesView({ collection: room.messages, limit: 10, markAsRead: false }).render().$el
+                        new MessagesView({
+                            collection: room.messages,
+                            limit: 10,
+                            markAsRead: false,
+                            filter: function (model) {
+                                return !model.isSystem();
+                            }
+                        }).render().$el
                     );
                 });
             });

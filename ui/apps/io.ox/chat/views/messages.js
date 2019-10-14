@@ -68,7 +68,13 @@ define('io.ox/chat/views/messages', [
 
         render: function () {
             this.$el.empty().append(
-                _.flatten(this.collection.last(this.options.limit || Infinity).map(this.renderMessage, this))
+                this.collection
+                    .chain()
+                    .filter(this.options.filter)
+                    .last(this.options.limit || Infinity)
+                    .map(this.renderMessage, this)
+                    .flatten()
+                    .value()
             );
             return this;
         },
@@ -182,7 +188,7 @@ define('io.ox/chat/views/messages', [
 
             // special case when there is a limit. calculating diffs is too complicated
             // and it is fast enough to just rerender, if there is a limit
-            if (this.options.limit) return this.render();
+            if (this.options.limit || this.options.filter) return this.render();
 
             this.trigger('before:add', added);
 
