@@ -45,6 +45,7 @@ const A = {
         I.click('Add');
 
         I.waitForDetached('[data-point="io.ox/core/folder/add-popup"]');
+        I.wait(2);
         I.seeTextEquals(folder, '.folder-picker-dialog .selected:not(.disabled) .folder-label');
     },
     selectFolderInDialog: function (I, folder) {
