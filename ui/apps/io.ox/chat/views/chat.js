@@ -419,7 +419,6 @@ define('io.ox/chat/views/chat', [
                 this.model.messages.reset();
                 this.model.messages.fetch();
             } else {
-                this.messagesView.onSeen();
                 this.scrollToBottom();
             }
         },
@@ -481,13 +480,12 @@ define('io.ox/chat/views/chat', [
                 }
             }(this));
 
-            if (this.isScrolledToBottom()) {
-                this.markMessageAsRead();
-            }
+            this.markMessageAsRead();
         }, 300),
 
         markMessageAsRead: function () {
             if (this.hidden) return;
+            if (!this.isScrolledToBottom()) return;
             var message = this.model.messages.last();
             if (!message) return;
             if (message.get('state') !== 'seen') message.updateDelivery('seen');
