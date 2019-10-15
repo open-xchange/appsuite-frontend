@@ -41,6 +41,30 @@ define('io.ox/core/boot/login/openid', [
         }
     });
 
+    function oidcUrlFor(params) {
+        return [
+            ox.apiRoot,
+            ox.serverConfig.oidcPath,
+            '/init?',
+            $.param(params)
+        ].join('');
+    }
+
+    function waitForResponse() {
+        var def = new $.Deferred();
+        function listener(event) {
+            if (event.origin !== ox.abs) return;
+            def.resolve(event.data);
+            window.removeEventListener('message', listener);
+        }
+        window.addEventListener('message', listener, false);
+        window.setTimeout(function () {
+            if (def.state() === 'pending') def.reject({ reason: 'timeout' });
+            window.removeEventListener('message', listener);
+        }, 10000);
+        return def;
+    }
+
     if (ox.serverConfig.oidcLogin === true) {
         ext.point('io.ox/core/boot/login').extend({
             id: 'openid_connect',
@@ -48,8 +72,41 @@ define('io.ox/core/boot/login/openid', [
             login: function () {
                 return openIdConnectLogin({ flow: 'login' });
             },
-            relogin: function () {
-                return openIdConnectLogin({ flow: 'login' });
+            relogin: function silentRelogin(baton) {
+                var params = {
+                    flow: 'login',
+                    redirect: false,
+                    client: session.client(),
+                    version: session.version(),
+                    hash: '#login_type=propagateSession'
+                };
+                var url = oidcUrlFor(params);
+                var frame = $('iframe');
+                return $.ajax(url).then(function (res) {
+                    var def = $.Deferred();
+                    frame.one('load', _.debounce(function () {
+                        // try to fail early
+                        try {
+                            if (frame[0].contentDocument.body.innerHTML.length === 0) def.reject({ reason: 'relogin:failed' });
+                        } catch (e) {
+                            def.reject(e);
+                        }
+                    }, 500));
+                    frame.attr('src', res.redirect);
+                    waitForResponse().then(def.resolve, def.reject);
+                    return def;
+                }).then(function (session) {
+                    ox.session = session;
+                    baton.stopPropagation();
+                    baton.preventDefault();
+                    baton.data.reloginState = 'success';
+                    return { reason: 'relogin:success' };
+                }, function () {
+                    // if fetching the session timed out, may be show a popup to regain the session?
+
+                    // let some other extension handle this
+                    return $.when({ reason: 'relogin:continue' });
+                });
             }
         });
     }
@@ -67,12 +124,7 @@ define('io.ox/core/boot/login/openid', [
         };
         if (!_.isEmpty(location.hash)) params.hash = location.hash;
 
-        location.href = [
-            ox.apiRoot,
-            ox.serverConfig.oidcPath,
-            '/init?',
-            $.param(params)
-        ].join('');
+        location.href = oidcUrlFor(params);
         // defer "forever", since we are redirecting
         return $.Deferred();
     }

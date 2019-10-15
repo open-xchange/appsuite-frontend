@@ -187,24 +187,33 @@ define('io.ox/calendar/api', [
             },
 
             resolve: function (id, useCache) {
+                var sequence;
+                if (_.isObject(id)) {
+                    sequence = id.sequence;
+                    id = id.id;
+                }
                 if (useCache !== false) {
                     var collections = api.pool.getCollections(), model;
                     _(collections).find(function (data) {
                         var collection = data.collection;
                         model = collection.find(function (m) {
-                            return m.get('id') === id && !m.has('recurrenceId');
+                            return m.get('id') === id && !m.has('recurrenceId') && (sequence === undefined || m.get('sequence') === sequence);
                         });
                         return !!model;
                     });
                     if (model) return $.when(model);
                 }
+
+                var params = {
+                    action: 'resolve',
+                    id: id,
+                    fields: api.defaultFields
+                };
+                if (sequence !== undefined) params.sequence = sequence;
+
                 return http.GET({
                     module: 'chronos',
-                    params: {
-                        action: 'resolve',
-                        id: id,
-                        fields: api.defaultFields
-                    }
+                    params: params
                 }).then(function (data) {
                     if (isRecurrenceMaster(data)) return api.pool.get('detail').add(data);
                     api.pool.propagateAdd(data);

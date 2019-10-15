@@ -106,6 +106,8 @@ test ui:
   stage: test
   dependencies:
     - build ui
+  needs:
+    - build ui
   artifacts:
     reports:
       junit: ui/build/reports/unit/*/result.xml

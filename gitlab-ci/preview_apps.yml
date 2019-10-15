@@ -28,6 +28,8 @@ deploy preview app:
 stop_review:
   stage: cleanup
   dependencies: []
+  needs:
+    - deploy preview app
   variables:
     GIT_STRATEGY: none
     DOCKER_HOST: docker.ui.cloud.open-xchange.com

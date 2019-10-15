@@ -24,6 +24,7 @@
     @photoSize: 48px;
     @paddingLeft: @photoSize + 32;
     @checkboxWidth: 32px;
+    @paddingLabel: 32px;
 
     .vgrid-cell {
 
@@ -69,18 +70,16 @@
         }
 
         &.vgrid-label {
-            width: @photoSize;
-            font-size: @photoSize - 16px;
+            font-size: 24px;
             line-height: 1em;
-            text-align: center;
+            text-align: left;
             font-weight: bold;
             color: #333;
-            padding: 32px 0 16px 0;
-            margin-left: 16px;
+            padding: @paddingLabel 0 16px @paddingLabel;
             background-image: none;
             background-color: #fff;
             border-top: 0 none;
-            border-bottom: 0 none;
+            border-bottom: 1px solid #aaa;
             /* overflow and nowrap for longer labels (e.g. Japanese) */
             white-space: nowrap;
             overflow: visible;
@@ -93,7 +92,7 @@
     }
 
     &.editable .vgrid-cell.vgrid-label  {
-        margin-left: @checkboxWidth + 16;
+        padding-left: @checkboxWidth + @paddingLabel;
     }
 }
 

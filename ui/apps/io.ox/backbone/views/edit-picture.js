@@ -76,7 +76,7 @@ define('io.ox/backbone/views/edit-picture', [
                     var width = coreSettings.get('properties/contactImageMaxWidth', 500);
                     this.storeState();
                     this.$body
-                        .croppie('result', { type: 'blob', size: { width: width }, format: 'jpeg', quality: 1.0 })
+                        .croppie('result', { type: 'blob', size: { width: width }, format: 'jpeg', quality: 1.0, circle: false })
                         .then(function (blob) {
                             //store info
                             var scaled = new File([blob], 'cropped.jpeg', { type: 'image/jpeg' });
