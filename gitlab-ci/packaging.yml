@@ -26,6 +26,7 @@ upload:
   stage: deploy
   variables:
     OBS_PROJECT_EXT: $CI_COMMIT_REF_SLUG
+  timeout: 20m
   script:
     # only run subtasks for projects which have been build previously (contain some built project files)
     - export TASKS=$(ls */build/pkg -d | sed -E "s,([^\/ ]+)\/[^ ]+,:\1:upload,g")
