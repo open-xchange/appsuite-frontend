@@ -466,8 +466,12 @@ define('io.ox/chat/views/chat', [
         },
 
         onUpdatePaginators: function () {
+            var wasScrolledToBottom = this.isScrolledToBottom();
+
             this.$('.paginate.prev').idle().toggle(!this.model.messages.prevComplete && this.model.messages.length > 0);
             this.$('.paginate.next').idle().toggle(!this.model.messages.nextComplete && this.model.messages.length > 0);
+
+            if (wasScrolledToBottom && !this.isScrolledToBottom()) this.scrollToBottom();
         },
 
         onComplete: function (direction) {
