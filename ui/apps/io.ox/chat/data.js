@@ -744,6 +744,10 @@ define('io.ox/chat/data', [
                     room.set('lastMessage', lastMessage);
                 }
 
+                var message = room.messages.get(messageId);
+                if (!message) return;
+                if (message.get('senderId') !== data.user.id) return;
+
                 room.messages.forEach(function (message) {
                     if (message.id > messageId) return;
                     if (message.get('state') === 'seen') return;
