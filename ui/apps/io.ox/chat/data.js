@@ -447,6 +447,10 @@ define('io.ox/chat/data', [
                 var membersToAdd = update.addedMembers.map(function (email) { return { email: email }; });
                 chat.set('members', [].concat(chat.get('members').concat(membersToAdd)));
             }
+            if (update.type === 'joinMember') {
+                var members = update.members.map(function (email) { return { email: email }; });
+                chat.set('members', [].concat(chat.get('members').concat(members)));
+            }
             if (update.type === 'leftRoom') {
                 chat.set('members', _.reject(chat.get('members'), function (member) { return member.email === update.originator; }));
             }
