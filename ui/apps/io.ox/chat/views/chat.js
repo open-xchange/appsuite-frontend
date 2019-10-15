@@ -486,9 +486,13 @@ define('io.ox/chat/views/chat', [
         markMessageAsRead: function () {
             if (this.hidden) return;
             if (!this.isScrolledToBottom()) return;
-            var message = this.model.messages.last();
+            var lastIndex = this.model.messages.findLastIndex(function (message) {
+                    return message.get('senderId') !== data.user.id;
+                }),
+                message = this.model.messages.at(lastIndex);
             if (!message) return;
-            if (message.get('state') !== 'seen') message.updateDelivery('seen');
+            if (message.get('state') === 'seen') return;
+            message.updateDelivery('seen');
         },
 
         isJumpDownVisible: function () {
