@@ -291,7 +291,7 @@ define('io.ox/files/filepicker', [
             multiselect: true,
             width: window.innerWidth * 0.8 > 1300 ? 1300 : Math.round(window.innerWidth * 0.8), // limit width to 1300px
             uploadButton: false,
-            uploadButtonText: options.uploadButtonText || gt('Upload local file'),
+            uploadButtonText: gt('Upload local file'),
             tree: {
                 // must be noop (must return undefined!)
                 filter: $.noop
