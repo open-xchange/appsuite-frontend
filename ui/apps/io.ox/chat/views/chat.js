@@ -165,6 +165,8 @@ define('io.ox/chat/views/chat', [
                 'after:add': this.onAfterAdd
             });
 
+            this.on('dispoe', this.onDispose);
+
             this.listenTo(events, 'cmd:remove-reference', this.onRemoveReference);
 
             this.messagesView.messageId = this.messageId;
@@ -217,6 +219,25 @@ define('io.ox/chat/views/chat', [
 
             this.$editor = $();
             this.autoScroll = _.isUndefined(options.autoScroll) ? true : options.autoScroll;
+
+            this.onHide = this.onHide.bind(this);
+            this.onShow = this.onShow.bind(this);
+            $(window).on('blur', this.onHide);
+            $(window).on('focus', this.onShow);
+        },
+
+        onShow: function () {
+            this.hidden = false;
+            this.markMessageAsRead();
+        },
+
+        onHide: function () {
+            this.hidden = true;
+        },
+
+        onDispose: function () {
+            $(window).off('blur', this.onHide);
+            $(window).off('focus', this.onShow);
         },
 
         render: function () {
@@ -459,7 +480,18 @@ define('io.ox/chat/views/chat', [
                     });
                 }
             }(this));
+
+            if (this.isScrolledToBottom()) {
+                this.markMessageAsRead();
+            }
         }, 300),
+
+        markMessageAsRead: function () {
+            if (this.hidden) return;
+            var message = this.model.messages.last();
+            if (!message) return;
+            if (message.get('state') !== 'seen') message.updateDelivery('seen');
+        },
 
         isJumpDownVisible: function () {
             return this.$scrollpane.scrollTop() + this.$scrollpane.height() < this.$scrollpane.prop('scrollHeight') - 50;

@@ -41,29 +41,6 @@ define('io.ox/chat/views/messages', [
                 'change:time': this.onChangeTime,
                 'change:state': this.onChangeDelivery
             });
-
-            $(window).blur(function () {
-                this.hidden = true;
-            }.bind(this));
-            $(window).focus(function () {
-                this.hidden = false;
-                if (data.chats.getCurrent()) this.onSeen();
-            }.bind(this));
-
-            this.updateDelivery = _.debounce(this.updateDelivery.bind(this), 10);
-        },
-
-        initScrollListeners: function () {
-            $('html').keydown(function () {
-                this.userScroll = true;
-            }.bind(this));
-            $('.ox-chat').find('.scrollpane').bind('DOMMouseScroll mousewheel', function () {
-                this.userScroll = true;
-            }.bind(this));
-            $('.ox-chat').find('.scrollpane').scroll(function () {
-                if (this.userScroll) this.onSeen(true);
-                this.userScroll = false;
-            }.bind(this));
         },
 
         render: function () {
@@ -80,16 +57,6 @@ define('io.ox/chat/views/messages', [
         },
 
         renderMessage: function (model) {
-            this.initScrollListeners();
-
-            // mark message as seen as soon as it is rendered
-            if (this.options.markAsRead !== false && model.get('state') !== 'seen' && model.get('senderId').toString() !== data.user_id.toString()) {
-                if (this.hidden) {
-                    this.updateDelivery(model, 'client');
-                } else {
-                    this.updateDelivery(model, 'seen');
-                }
-            }
             var message = $('<div class="message">')
                 // here we use cid instead of id, since the id might be unknown
                 .attr('data-cid', model.cid)
@@ -147,31 +114,6 @@ define('io.ox/chat/views/messages', [
             });
 
             return $('<div class="date">').html(formattedDate);
-        },
-
-        updateDelivery: function (model, state) {
-            model.updateDelivery(state);
-        },
-
-        onSeen: function (wasScrolled) {
-            var chat = data.chats.getCurrent();
-            var message = chat.messages.getLast();
-
-            if (this.messageIsUnseen(message, wasScrolled)) {
-                this.updateDelivery(message, 'seen');
-                var currentChat = data.chats.getCurrent();
-                currentChat.set('unreadCount', 0);
-            }
-        },
-
-        messageIsUnseen: function (message, wasScrolled) {
-            if (!message || this.cid === null || message.get('state') === 'seen') return false;
-            if (message.get('senderId').toString() === data.user_id.toString()) return false;
-
-            var scrollpane = $('.ox-chat').find('.scrollpane');
-            if (scrollpane.scrollTop() + scrollpane.height() < scrollpane.prop('scrollHeight')) return false;
-
-            return !this.hidden || (this.hidden && wasScrolled === true);
         },
 
         onAdd: function (collection, options) {

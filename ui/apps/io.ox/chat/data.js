@@ -395,6 +395,11 @@ define('io.ox/chat/data', [
                     else updateLastMessage.call(this);
                 }
             }, 10));
+            this.listenTo(this.messages, 'change:state', _.debounce(function () {
+                var message = this.messages.last();
+                if (!message) return;
+                if (message.get('state') === 'seen') this.set('unreadCount', 0);
+            }.bind(this), 0));
         },
 
         getTitle: function () {
