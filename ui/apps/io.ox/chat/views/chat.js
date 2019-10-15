@@ -360,6 +360,8 @@ define('io.ox/chat/views/chat', [
 
             this.toggleAutoScroll(true);
             delete this.scrollInfo;
+
+            this.markMessageAsRead();
         },
 
         scrollToBottom: function () {
@@ -487,10 +489,10 @@ define('io.ox/chat/views/chat', [
             if (this.hidden) return;
             if (!this.isScrolledToBottom()) return;
             var lastIndex = this.model.messages.findLastIndex(function (message) {
-                    return message.get('senderId') !== data.user.id;
-                }),
-                message = this.model.messages.at(lastIndex);
-            if (!message) return;
+                return message.get('senderId') !== data.user.id;
+            });
+            if (lastIndex < 0) return;
+            var message = this.model.messages.at(lastIndex);
             if (message.get('state') === 'seen') return;
             message.updateDelivery('seen');
         },
