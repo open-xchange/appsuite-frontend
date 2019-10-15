@@ -67,7 +67,7 @@ function checkForFilteredMail(I) {
     I.see('foobar', '.subject');
 }
 
-Scenario('Refilter mails in INBOX folder', async (I, users) => {
+Scenario('[C290529] Refilter mails in INBOX folder', async (I, users) => {
     const [user] = users;
     await setup(I, user);
     await sampleRule(I);
@@ -80,7 +80,7 @@ Scenario('Refilter mails in INBOX folder', async (I, users) => {
     checkForFilteredMail(I);
 });
 
-Scenario('Create and apply new filter rule', async (I, users) => {
+Scenario('[C290530] Create and apply new filter rule', async (I, users) => {
     const [user] = users;
     await setup(I, user);
     extendedLogin(I);
@@ -110,7 +110,7 @@ Scenario('Create and apply new filter rule', async (I, users) => {
     checkForFilteredMail(I);
 });
 
-Scenario('Edit and apply existing filter rule', async (I, users) => {
+Scenario('[C290531] Edit and apply existing filter rule', async (I, users) => {
     const [user] = users;
     await setup(I, user);
     await sampleRule(I);
