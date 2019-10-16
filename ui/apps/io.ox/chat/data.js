@@ -499,7 +499,7 @@ define('io.ox/chat/data', [
             // add file
             if (file) formData.append('file', file);
 
-            var model = this.messages.add(attr);
+            var model = this.messages.add(attr, { merge: true });
             model.save(attr, {
                 data: formData,
                 processData: false,
@@ -775,8 +775,13 @@ define('io.ox/chat/data', [
                     var newMessage = new model.messages.model(message);
 
                     // either add message to chatroom or update last message manually
-                    if (model.messages.nextComplete) model.messages.add(message);
-                    else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
+                    if (model.messages.nextComplete) {
+                        // anticipate, whether this client was sending the last message and received a push notification before the message creation resolved
+                        var lastMessage = model.messages.last();
+                        if (!lastMessage || lastMessage.get('senderId') !== data.user.id || lastMessage.get('id')) {
+                            model.messages.add(message, { merge: true });
+                        }
+                    } else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
 
                     if (message.senderId.toString() !== data.user_id.toString()) {
                         model.set({ modified: +moment(), unreadCount: model.get('unreadCount') + 1 });
