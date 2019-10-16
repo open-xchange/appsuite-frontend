@@ -11859,7 +11859,7 @@ msgstr "上傳檔案"
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 #, fuzzy
 #| msgid "Upload local file"
-msgid "Upload local image"
+msgid "Upload local file"
 msgstr "上傳本機檔案"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js

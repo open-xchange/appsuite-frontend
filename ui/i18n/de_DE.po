@@ -11953,8 +11953,8 @@ msgid "Upload files"
 msgstr "Dateien hochladen"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
-msgid "Upload local image"
-msgstr "Lokales Bild hochladen"
+msgid "Upload local file"
+msgstr "Lokale Datei hochladen"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
@@ -19809,8 +19809,8 @@ msgstr "Ihre Plattform"
 #~ msgid "Upload image"
 #~ msgstr "Bild hochladen"
 
-#~ msgid "Upload local file"
-#~ msgstr "Lokale Datei hochladen"
+#~ msgid "Upload local image"
+#~ msgstr "Lokales Bild hochladen"
 
 #~ msgid "Upload new file"
 #~ msgstr "Neue Datei hochladen"

@@ -11990,7 +11990,7 @@ msgstr "Lataa tiedostoja"
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 #, fuzzy
 #| msgid "Upload local file"
-msgid "Upload local image"
+msgid "Upload local file"
 msgstr "Lataa paikallinen tiedosto"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js

@@ -11800,7 +11800,7 @@ msgstr "上传文件"
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 #, fuzzy
 #| msgid "Upload local file"
-msgid "Upload local image"
+msgid "Upload local file"
 msgstr "上载本地文件"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js

@@ -12089,7 +12089,7 @@ msgstr "Nahrát soubory"
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 #, fuzzy
 #| msgid "Upload local file"
-msgid "Upload local image"
+msgid "Upload local file"
 msgstr "Nahrát místní soubor"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js

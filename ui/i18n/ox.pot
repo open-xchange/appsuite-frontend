@@ -6933,22 +6933,12 @@ msgstr[1] ""
 
 #: apps/io.ox/core/relogin.js
 #: module:io.ox/core
-msgid "Your session is expired"
+msgid "You have to sign in again"
 msgstr ""
 
 #: apps/io.ox/core/relogin.js
 #: module:io.ox/core
 msgid "Please sign in again to continue"
-msgstr ""
-
-#: apps/io.ox/core/relogin.js
-#: module:io.ox/core
-msgid "Your IP address has changed"
-msgstr ""
-
-#: apps/io.ox/core/relogin.js
-#: module:io.ox/core
-msgid "You have to sign in again"
 msgstr ""
 
 #: apps/io.ox/core/relogin.js
@@ -6959,6 +6949,16 @@ msgstr ""
 #: apps/io.ox/core/relogin.js
 #: module:io.ox/core
 msgid "Failed to sign in"
+msgstr ""
+
+#: apps/io.ox/core/relogin.js
+#: module:io.ox/core
+msgid "Your IP address has changed"
+msgstr ""
+
+#: apps/io.ox/core/relogin.js
+#: module:io.ox/core
+msgid "Your session is expired"
 msgstr ""
 
 #. object permissions - read
@@ -8893,6 +8893,11 @@ msgstr ""
 
 #: apps/io.ox/files/filepicker.js
 #: module:io.ox/files
+msgid "Upload local file"
+msgstr ""
+
+#: apps/io.ox/files/filepicker.js
+#: module:io.ox/files
 #: apps/io.ox/files/main.js
 msgid "Files"
 msgstr ""
@@ -8903,11 +8908,6 @@ msgid "The uploaded file does not match the requested file type."
 msgid_plural "None of the uploaded files matches the requested file type."
 msgstr[0] ""
 msgstr[1] ""
-
-#: apps/io.ox/files/filepicker.js
-#: module:io.ox/files
-msgid "Upload local image"
-msgstr ""
 
 #: apps/io.ox/files/listview.js
 #: module:io.ox/files
