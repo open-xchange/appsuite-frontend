@@ -290,7 +290,9 @@ define('io.ox/chat/data', [
 
     var MessageCollection = Backbone.Collection.extend({
         model: MessageModel,
-        comparator: 'id',
+        comparator: function (a, b) {
+            return a.get('id') - b.get('id');
+        },
         initialize: function (models, options) {
             this.roomId = options.roomId;
         },
@@ -362,6 +364,10 @@ define('io.ox/chat/data', [
     // Chat
     //
 
+    // sockets and https-requests can cause strange race conditions when some messages are pushed faster via the socket than the http-request resolves
+    // therefore, we need to cache delivery updates for own messages which are not yet received
+    var deliveryUpdateCache = {};
+
     var ChatModel = Backbone.Model.extend({
 
         defaults: { open: true, type: 'group', unreadCount: 0 },
@@ -384,7 +390,10 @@ define('io.ox/chat/data', [
             this.listenTo(this.messages, 'add', _.debounce(function () {
                 function updateLastMessage() {
                     if (!this.messages.nextComplete) return;
-                    this.set('lastMessage', _.extend({}, this.get('lastMessage'), lastMessage.toJSON()));
+                    var lastMessage = this.messages.last();
+                    lastMessage = _.extend({}, this.get('lastMessage'), lastMessage.toJSON());
+                    if (deliveryUpdateCache[lastMessage.id]) lastMessage.state = deliveryUpdateCache[lastMessage.id];
+                    this.set('lastMessage', lastMessage);
                 }
 
                 var lastMessage = this.messages.last();
@@ -491,6 +500,9 @@ define('io.ox/chat/data', [
         },
 
         postMessage: function (attr, file) {
+            // make sure, senderId is set, such that this message can be identified as own message
+            attr.senderId = data.user.id;
+
             var formData = new FormData();
             _.each(attr, function (value, key) {
                 formData.append(key, value);
@@ -504,7 +516,12 @@ define('io.ox/chat/data', [
                 data: formData,
                 processData: false,
                 contentType: false,
-                xhrFields: { withCredentials: true }
+                xhrFields: { withCredentials: true },
+                success: function (model) {
+                    if (!deliveryUpdateCache[model.get('id')]) return;
+                    model.set('state', deliveryUpdateCache[model.get('id')]);
+                    delete deliveryUpdateCache[model.get('id')];
+                }
             });
             model.set('sent', moment().toISOString());
             this.set('modified', +moment());
@@ -754,7 +771,10 @@ define('io.ox/chat/data', [
                 }
 
                 var message = room.messages.get(messageId);
-                if (!message) return;
+                if (!message) {
+                    deliveryUpdateCache[messageId] = state;
+                    return;
+                }
                 if (message.get('senderId') !== data.user.id) return;
 
                 room.messages.forEach(function (message) {
@@ -772,15 +792,19 @@ define('io.ox/chat/data', [
                 // fetch room unless it's already known
                 data.chats.fetchUnlessExists(roomId).done(function (model) {
                     // add new message to room
+                    message.modified = +moment();
                     var newMessage = new model.messages.model(message);
 
                     // either add message to chatroom or update last message manually
                     if (model.messages.nextComplete) {
                         // anticipate, whether this client was sending the last message and received a push notification before the message creation resolved
-                        var lastMessage = model.messages.last();
-                        if (!lastMessage || lastMessage.get('senderId') !== data.user.id || lastMessage.get('id')) {
-                            model.messages.add(message, { merge: true });
-                        }
+                        var lastIndex = model.messages.findLastIndex(function (message) {
+                                return message.get('senderId') === data.user.id;
+                            }), lastMessage;
+                        if (lastIndex >= 0) lastMessage = model.messages.at(lastIndex);
+
+                        if (!lastMessage || newMessage.get('senderId') !== data.user.id || lastMessage.get('id')) model.messages.add(message, { merge: true });
+
                     } else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
 
                     if (message.senderId.toString() !== data.user_id.toString()) {

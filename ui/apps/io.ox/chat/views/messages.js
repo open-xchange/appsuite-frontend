@@ -135,11 +135,15 @@ define('io.ox/chat/views/messages', [
             this.trigger('before:add', added);
 
             added.forEach(function (model) {
-                var index = collection.indexOf(model);
-                if (index === 0) return this.$el.prepend(this.renderMessage(model));
+                var index = collection.indexOf(model), node = this.renderMessage(model);
+                if (index === 0) return this.$el.prepend(node);
+                if (index === collection.length - 1) return this.$el.append(node);
 
-                var prev = collection.at(index - 1);
-                this.$('[data-cid="' + prev.cid + '"]').after(this.renderMessage(model));
+                var prev = collection.at(index - 1), sibling = this.$('[data-cid="' + prev.cid + '"]');
+                if (sibling.length) return sibling.after(node);
+                var next = collection.at(index + 1);
+                sibling = this.$('[data-cid="' + next.cid + '"]');
+                if (sibling.length) return sibling.before(node);
             }.bind(this));
 
             this.trigger('after:add', added);
