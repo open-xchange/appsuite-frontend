@@ -47,6 +47,7 @@ module.exports.config = {
     include: {
         I: './e2e/actor',
         users: './e2e/users',
+        chatUsers: './e2e/chatUsers',
         contexts: './e2e/contexts',
         search: './e2e/actor_search'
     },

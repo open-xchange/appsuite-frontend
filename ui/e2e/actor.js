@@ -64,5 +64,16 @@ module.exports = actor({
         // save
         this.click('Create', '.io-ox-calendar-edit-window');
         this.waitForDetached('.io-ox-calendar-edit-window', 5);
+    },
+
+    logIntoChat(options) {
+        options = Object.assign({ }, options);
+        const user = options.user || require('codeceptjs').container.support('users')[0];
+
+        this.amOnPage('https://auth.chat.os.oxui.de/auth/realms/chat/account');
+        this.retry(5).fillField('Username or email', user.userdata.name);
+        this.fillField('Password', 'secret');
+        this.click('Log In');
+        this.wait(1);
     }
 });
