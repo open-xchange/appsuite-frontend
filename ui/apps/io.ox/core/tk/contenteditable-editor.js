@@ -20,11 +20,12 @@ define('io.ox/core/tk/contenteditable-editor', [
     'io.ox/core/tk/textproc',
     'io.ox/mail/api',
     'io.ox/mail/util',
+    'static/3rd.party/purify.min.js',
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'gettext!io.ox/core',
     'less!io.ox/core/tk/contenteditable-editor'
-], function (emoji, capabilities, ext, textproc, mailAPI, mailUtil, settings, mailSettings, gt) {
+], function (emoji, capabilities, ext, textproc, mailAPI, mailUtil, DOMPurify, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -83,23 +84,12 @@ define('io.ox/core/tk/contenteditable-editor', [
         draw: function (ed) {
             var sanitizeAttributes = function (e) {
                 if (!e.content) return;
-                var tmp = document.createElement('DIV');
-                tmp.innerHTML = e.content;
-                var nodes = tmp.querySelectorAll('*');
-                for (var i = 0; i < nodes.length; i++) {
-                    var node = nodes[i], ai = 0, attr;
-                    while (attr = node.attributes[ai++]) {
-                        if (/^on/i.test(attr.name)) { node.removeAttribute(attr.name); }
-                        if (attr.name === 'data-toggle') { node.removeAttribute(attr.name); }
-                    }
-                }
-                e.content = tmp.innerHTML;
-                tmp = null;
+                e.content = DOMPurify.sanitize(e.content);
             };
             if (ed.oxContext && ed.oxContext.signature) {
                 ed.on('BeforeSetContent', sanitizeAttributes);
             }
-
+            // see bug 48231 and 50849
             ed.on('PastePreProcess', sanitizeAttributes);
         }
     });
