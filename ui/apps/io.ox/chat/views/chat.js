@@ -155,8 +155,6 @@ define('io.ox/chat/views/chat', [
 
             this.listenTo(this.model.messages, {
                 'after:all': this.onUpdatePaginators.bind(this),
-                // 'complete:prev': this.onComplete.bind(this, 'prev'),
-                // 'complete:next': this.onComplete.bind(this, 'next'),
                 'paginate': this.toggleAutoScroll.bind(this, false)
             });
 
@@ -279,6 +277,7 @@ define('io.ox/chat/views/chat', [
             );
 
             this.onUpdatePaginators();
+            this.markMessageAsRead();
 
             _.defer(function () {
                 if (this.$editor) this.$editor.focus();
