@@ -76,10 +76,10 @@
     soap "^0.29.0"
     underscore "^1.9.1"
 
-"@open-xchange/hopscotch@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@open-xchange/hopscotch/-/hopscotch-0.0.1.tgz#33f6f97d9482540f47c58b32364af17c5a52c646"
-  integrity sha512-Az3RGojtxuUhuNz3HjfWdze9jfZy0hBV70YKbDnQCI+TQsV2Zcs9Ez4NT3yzEiqzHnOhoX6bj8pDHKLj66TN6Q==
+"@open-xchange/hopscotch@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@open-xchange/hopscotch/-/hopscotch-0.0.2.tgz#8c292ce48e86e8c06246e45f508647fc565841f7"
+  integrity sha512-q9BQFKlPnGFWVBpacaGiC2yQfP9b5M0wFElpKg7UWagjQWbVv9z09Ys6qm+WQcpxmgjgXf9SgMenwspytTAA7A==
 
 "@open-xchange/jquery-touch-events@1.0.8-1f5ad59":
   version "1.0.8-1f5ad59"
