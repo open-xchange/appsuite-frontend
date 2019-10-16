@@ -49,6 +49,7 @@
     "moment-range": "^4.0.2",
     "sinon": "^7.0.0",
     "sinon-chai": "^3.3.0",
+    "testrail-api": "1.3.5",
     "time-grunt": "^2.0.0",
     "webdriverio": "^5.11.10"
   },
@@ -81,7 +82,6 @@
     "resize-polyfill": "1.1.1",
     "socket.io-client": "2.2.0",
     "swiper": "4.3.3",
-    "testrail-api": "1.3.5",
     "tinymce": "4.9.4",
     "typeahead.js": "0.10.5",
     "u2f-api": "1.0.11",
