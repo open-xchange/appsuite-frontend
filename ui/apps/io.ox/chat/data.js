@@ -792,7 +792,6 @@ define('io.ox/chat/data', [
                 // fetch room unless it's already known
                 data.chats.fetchUnlessExists(roomId).done(function (model) {
                     // add new message to room
-                    message.modified = +moment();
                     var newMessage = new model.messages.model(message);
 
                     // either add message to chatroom or update last message manually

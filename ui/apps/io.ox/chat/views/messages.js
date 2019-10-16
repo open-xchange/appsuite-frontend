@@ -123,9 +123,12 @@ define('io.ox/chat/views/messages', [
             var lastAdded = added[added.length - 1];
             var firstPrev = collection.at(collection.indexOf(lastAdded) + 1);
             if (firstPrev && moment(lastAdded.get('sent')).startOf('day').isSame(moment(firstPrev.get('sent')).startOf('day'))) {
-                $('.messages').find('[data-cid=' + firstPrev.cid + ']')
-                    .prev().remove().end()
-                    .replaceWith(this.renderMessage(firstPrev));
+                var $firstPrev = $('.messages').find('[data-cid=' + firstPrev.cid + ']'),
+                    $daylabel = $firstPrev.prev();
+                if ($daylabel.hasClass('date')) {
+                    $daylabel.remove();
+                    $firstPrev.replaceWith(this.renderMessage(firstPrev));
+                }
             }
 
             // special case when there is a limit. calculating diffs is too complicated
