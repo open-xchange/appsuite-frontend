@@ -53,6 +53,7 @@ define('plugins/portal/userSettings/register', [
                 showStrength = settings.get('password/showStrength', true),
                 pwRegex = settings.get('password/regexp', '[^a-z0-9]'),
                 regexText = settings.get('password/special', '$, _, %'),
+                buttonText = gt('Change password and sign out'),
                 pwStrengths = [
                     { label: gt('Password strength: Too short'), color: 'bar-weak', barLength: '20%' }, //red
                     { label: gt('Password strength: Wrong length'), color: 'bar-weak', barLength: '20%' }, //red
@@ -63,9 +64,11 @@ define('plugins/portal/userSettings/register', [
                     { label: gt('Password strength: Very strong'), color: 'bar-strong', barLength: '100%' }, //green
                     { label: gt('Password strength: Legendary!'), color: 'bar-legendary', barLength: '100%' } //golden
                 ];
-
+            if (isGuest) {
+                buttonText = settings.get('password/emptyCurrent') ? gt('Add login password') : gt('Change login password');
+            }
             new dialogs.ModalDialog({ async: true, width: 500 })
-            .header($('<h4>').text(gt('Change password')))
+            .header($('<h4>').text(isGuest ? buttonText : gt('Change password')))
             .build(function () {
                 //#. %1$s are some example characters
                 //#, c-format
@@ -112,7 +115,8 @@ define('plugins/portal/userSettings/register', [
                 if (showStrength) newPass.on('keyup', updateStrength);
 
             })
-            .addPrimaryButton('change', isGuest ? gt('Change password') : gt('Change password and sign out'))
+
+            .addPrimaryButton('change', isGuest ? buttonText : gt('Change password and sign out'))
             .addButton('cancel', gt('Cancel'))
             .on('change', function (e, data, dialog) {
 

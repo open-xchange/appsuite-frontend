@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-05-04 22:05+0900\n"
+"PO-Revision-Date: 2019-10-04 11:26+0200\n"
 "Last-Translator: sandrine <sandrine@workshop-chapina.com>\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_CA\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 18.12.2\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -2037,6 +2037,7 @@ msgstr "Réessayer"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Select all"
 msgstr "Tout sélectionner"
 
@@ -2417,6 +2418,8 @@ msgid "New"
 msgstr "Nouveau"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#. used as a verb here. label of a button to view attachments
+#. used as a verb here. label of a button to view files
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/files/actions.js
@@ -3358,7 +3361,6 @@ msgstr "Champs définis par l'utilisateur"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
@@ -3819,7 +3821,6 @@ msgstr "Privé"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "Autre"
 
@@ -4302,8 +4303,7 @@ msgstr "Télécharger le fichier non analysé"
 #: apps/io.ox/core/download.js module:io.ox/core
 msgid "Unable to perform Anti-Virus check for the requested file(s)"
 msgstr ""
-"Impossible de réaliser l'analyse anti-virus pour le(s) "
-"fichier(s) demandé(s)"
+"Impossible de réaliser l'analyse anti-virus pour le(s) fichier(s) demandé(s)"
 
 #: apps/io.ox/core/download.js module:io.ox/core
 msgid "Malicious file detected"
@@ -5037,8 +5037,8 @@ msgid "Navigate to:"
 msgstr "Aller à :"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
-msgid "Apps"
-msgstr "Apps"
+msgid "All Applications"
+msgstr ""
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5220,10 +5220,14 @@ msgid "Connect this Device"
 msgstr "Connecter cet appareil"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
-msgid "Change password"
-msgstr "Changer le mot de passe"
+msgid "Add login password"
+msgstr ""
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change login password"
+msgstr ""
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -5794,6 +5798,11 @@ msgstr "Recharger la page"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Relogin"
 msgstr "Réauthentification"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change password"
+msgstr "Changer le mot de passe"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -7945,8 +7954,12 @@ msgid "Use unified mail for this account"
 msgstr "Utiliser la messagerie unifiée pour ce compte"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Please select your mail account provider"
-msgstr "Veuillez sélectionner votre fournisseur de compte de courrier"
+msgid "Add other mail account"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Please choose your mail account provider."
+msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10345,8 +10358,8 @@ msgid ""
 "There are no backup devices available for this account. Please notify "
 "support for help."
 msgstr ""
-"Aucun appareil de récupération n'est disponible pour ce compte. Veuillez "
-"en informer l'assistance pour obtenir de l'aide."
+"Aucun appareil de récupération n'est disponible pour ce compte. Veuillez en "
+"informer l'assistance pour obtenir de l'aide."
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid "Authentication failure. Please try reloading the page."
@@ -10426,8 +10439,8 @@ msgid ""
 msgstr ""
 "Si vous perdez votre appareil d'authentification ou que vous n'êtes plus en "
 "mesure de l'utiliser, votre compte sera verrouillé, sauf si vous configurez "
-"une méthode de récupération. Nous vous recommandons fortement "
-"de le faire dès maintenant."
+"une méthode de récupération. Nous vous recommandons fortement de le faire "
+"dès maintenant."
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
@@ -10483,8 +10496,8 @@ msgid ""
 "This is your recovery code. Please write it down, print it, or save the "
 "file. Be sure to save this in a secure location."
 msgstr ""
-"Ceci est votre code de récupération. Notez-le, imprimez-le ou "
-"enregistrez le fichier. Veillez à garder cette information en sécurité."
+"Ceci est votre code de récupération. Notez-le, imprimez-le ou enregistrez le "
+"fichier. Veillez à garder cette information en sécurité."
 
 #. this is a file name that stores the a long recovery code
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
@@ -10538,8 +10551,8 @@ msgstr "Confirmer le code"
 #: module:io.ox/core/boot
 msgid "Please enter the validation code we just sent to your device."
 msgstr ""
-"Veuillez saisir le code de validation que nous venons d'envoyer à votre"
-" appareil."
+"Veuillez saisir le code de validation que nous venons d'envoyer à votre "
+"appareil."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
@@ -10655,8 +10668,8 @@ msgid ""
 "verification code we sent to the phone *****%s."
 msgstr ""
 "Vous avez sécurisé votre compte au moyen d'une vérification en deux étapes. "
-"Veuillez saisir le code de vérification que nous avons envoyé au téléphone"
-" *****%s."
+"Veuillez saisir le code de vérification que nous avons envoyé au téléphone "
+"*****%s."
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
 msgid ""
@@ -10672,8 +10685,8 @@ msgid ""
 "authentication token to complete verification."
 msgstr ""
 "Vous avez sécurisé votre compte au moyen d'une vérification en deux étapes. "
-"Veuillez utiliser votre jeton d'authentification pour terminer la"
-" vérification."
+"Veuillez utiliser votre jeton d'authentification pour terminer la "
+"vérification."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
@@ -10681,8 +10694,8 @@ msgid ""
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr ""
 "Ce navigateur n'est pas compatible avec l'appareil d'authentification que "
-"vous avez configuré. Veuillez utiliser le navigateur Chrome, ou "
-"Firefox avec U2F activé."
+"vous avez configuré. Veuillez utiliser le navigateur Chrome, ou Firefox avec "
+"U2F activé."
 
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10690,9 +10703,8 @@ msgid ""
 "Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
 msgstr ""
-"Paramètres incorrects pour l'authentification avec cette clé. Il est possible"
-" que "
-"le domaine d'URL soit incorrect pour cette clé."
+"Paramètres incorrects pour l'authentification avec cette clé. Il est "
+"possible que le domaine d'URL soit incorrect pour cette clé."
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10703,8 +10715,8 @@ msgstr "Configuration non prise en charge"
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "This device is not eligible for this request. Wrong hardware key?"
 msgstr ""
-"Cet appareil n'est pas éligible pour cette requête. Clé de matériel"
-" incorrecte ?"
+"Cet appareil n'est pas éligible pour cette requête. Clé de matériel "
+"incorrecte ?"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "Timeout"
@@ -10731,6 +10743,10 @@ msgstr "Nouvelle note"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Envoyer par courrier"
+
+#: apps/io.ox/oauth/backbone.js module:io.ox/oauth
+msgid "Sign in with Google. This will add your Gmail account."
+msgstr ""
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
@@ -12048,11 +12064,9 @@ msgstr "Nouvelle fenêtre"
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
-"Emails will appear in a new window. These windows can be maximized, "
+"E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
-"Les courriels apparaîtront dans une nouvelle fenêtre. Ces fenêtres peuvent "
-"être agrandies, réduites et fermées."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
@@ -12941,6 +12955,10 @@ msgid "Are you sure you want to delete this Tweet?"
 msgstr "Êtes-vous sûr de vouloir supprimer ce microblogue Tweeter ?"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Change password and sign out"
+msgstr "Changer le mot de passe et se déconnecter"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Too short"
 msgstr "Robustesse du mot de passe : trop court"
 
@@ -13016,10 +13034,6 @@ msgid ""
 msgstr ""
 "Si vous changez le mot de passe, vous serez déconnecté. Veuillez vous "
 "assurer que tout est fermé et enregistré."
-
-#: apps/plugins/portal/userSettings/register.js module:io.ox/core
-msgid "Change password and sign out"
-msgstr "Changer le mot de passe et se déconnecter"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your new password may not be empty."
@@ -13233,6 +13247,19 @@ msgstr "Inviter à %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Ajouter à %s"
+
+#~ msgid "Apps"
+#~ msgstr "Apps"
+
+#~ msgid "Please select your mail account provider"
+#~ msgstr "Veuillez sélectionner votre fournisseur de compte de courrier"
+
+#~ msgid ""
+#~ "Emails will appear in a new window. These windows can be maximized, "
+#~ "minimized and closed."
+#~ msgstr ""
+#~ "Les courriels apparaîtront dans une nouvelle fenêtre. Ces fenêtres "
+#~ "peuvent être agrandies, réduites et fermées."
 
 #~ msgid "Anti-Virus Warning"
 #~ msgstr "Avertissement de l'anti-virus"

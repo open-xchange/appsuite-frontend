@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: info@open-xchange.com\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-05-03 21:24+0200\n"
+"PO-Revision-Date: 2019-10-04 11:26+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it_IT\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Lokalize 19.04.0\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -2026,6 +2026,7 @@ msgstr "Ritenta"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Select all"
 msgstr "Seleziona tutto"
 
@@ -2405,6 +2406,8 @@ msgid "New"
 msgstr "Nuovo"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#. used as a verb here. label of a button to view attachments
+#. used as a verb here. label of a button to view files
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/files/actions.js
@@ -3338,7 +3341,6 @@ msgstr "Campi dell'utente"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
@@ -3798,7 +3800,6 @@ msgstr "Casa"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "Altro"
 
@@ -5002,8 +5003,8 @@ msgid "Navigate to:"
 msgstr "Naviga su:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
-msgid "Apps"
-msgstr "Applicazioni"
+msgid "All Applications"
+msgstr ""
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5181,10 +5182,14 @@ msgid "Connect this Device"
 msgstr "Connetti questo dispositivo"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
-msgid "Change password"
-msgstr "Cambia la password"
+msgid "Add login password"
+msgstr ""
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change login password"
+msgstr ""
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -5755,6 +5760,11 @@ msgstr "Ricarica la pagina"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Relogin"
 msgstr "Nuovo accesso"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change password"
+msgstr "Cambia la password"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -7893,8 +7903,12 @@ msgid "Use unified mail for this account"
 msgstr "Usa la posta unificata per questo account"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Please select your mail account provider"
-msgstr "Seleziona il fornitore del tuo account di posta"
+msgid "Add other mail account"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Please choose your mail account provider."
+msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10273,9 +10287,8 @@ msgid ""
 "There are no backup devices available for this account. Please notify "
 "support for help."
 msgstr ""
-"Non ci sono dispositivi di backup disponibili per questo account. Invia una"
-" segnalazione al "
-"supporto per ricevere aiuto."
+"Non ci sono dispositivi di backup disponibili per questo account. Invia una "
+"segnalazione al supporto per ricevere aiuto."
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid "Authentication failure. Please try reloading the page."
@@ -10350,11 +10363,10 @@ msgid ""
 "account will be locked out unless you set up a recovery method. We strongly "
 "recommend that you do so now."
 msgstr ""
-"Nel caso in cui tu perda o non sia in grado di utilizzare il tuo dispositivo"
-" di autenticazione, "
-"il tuo account sarà bloccato, a meno che tu abbia configurato un metodo di"
-" ripristino. Ti "
-"consigliamo vivamente di farlo subito."
+"Nel caso in cui tu perda o non sia in grado di utilizzare il tuo dispositivo "
+"di autenticazione, il tuo account sarà bloccato, a meno che tu abbia "
+"configurato un metodo di ripristino. Ti consigliamo vivamente di farlo "
+"subito."
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
@@ -10463,7 +10475,8 @@ msgstr "Codice di conferma"
 #: module:io.ox/core/boot
 msgid "Please enter the validation code we just sent to your device."
 msgstr ""
-"Digita il codice di validazione che abbiamo appena inviato al tuo dispositivo."
+"Digita il codice di validazione che abbiamo appena inviato al tuo "
+"dispositivo."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
@@ -10497,8 +10510,8 @@ msgstr "Fai clic per copiare l'URL negli appunti"
 msgid ""
 "If scanning does not work, you may be able to enter the following setup code."
 msgstr ""
-"Se la scansione non funziona, potrai digitare il codice di configurazione"
-" seguente."
+"Se la scansione non funziona, potrai digitare il codice di configurazione "
+"seguente."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
@@ -10576,18 +10589,16 @@ msgid ""
 "You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
 msgstr ""
-"Hai migliorato la sicurezza del tuo account con la verifica in due fasi."
-" Digita "
-"il codice di verifica che abbiamo inviato al telefono *****%s."
+"Hai migliorato la sicurezza del tuo account con la verifica in due fasi. "
+"Digita il codice di verifica che abbiamo inviato al telefono *****%s."
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
 msgstr ""
-"Hai migliorato la sicurezza del tuo account con la verifica in due fasi."
-" Digita "
-"il codice di verifica dall'applicazione Autenticator."
+"Hai migliorato la sicurezza del tuo account con la verifica in due fasi. "
+"Digita il codice di verifica dall'applicazione Autenticator."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
@@ -10602,9 +10613,8 @@ msgid ""
 "This browser is not compatible with your configured authentication device. "
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr ""
-"Questo browser non è compatibile con il dispositivo di autenticazione che hai"
-" configurato. "
-"Utilizza il browser Chrome, o Firefox con U2F abilitato."
+"Questo browser non è compatibile con il dispositivo di autenticazione che "
+"hai configurato. Utilizza il browser Chrome, o Firefox con U2F abilitato."
 
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10612,9 +10622,8 @@ msgid ""
 "Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
 msgstr ""
-"Parametri errati per l'autenticazione con questa chiave. Dominio dell'URL"
-" probabilmente "
-"errato per questa chiave."
+"Parametri errati per l'autenticazione con questa chiave. Dominio dell'URL "
+"probabilmente errato per questa chiave."
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10651,6 +10660,10 @@ msgstr "Nuova nota"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Invia tramite posta"
+
+#: apps/io.ox/oauth/backbone.js module:io.ox/oauth
+msgid "Sign in with Google. This will add your Gmail account."
+msgstr ""
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
@@ -11963,11 +11976,9 @@ msgstr "Nuove finestre"
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
-"Emails will appear in a new window. These windows can be maximized, "
+"E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
-"I messaggi appariranno in una nuova finestra. Queste finestre possono essere "
-"massimizzate, minimizzate e chiuse."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
@@ -12854,6 +12865,10 @@ msgid "Are you sure you want to delete this Tweet?"
 msgstr "Sei sicuro di voler eliminare questo tweet?"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Change password and sign out"
+msgstr "Cambia la password e disconnettiti"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Too short"
 msgstr "Sicurezza della password: troppo breve"
 
@@ -12928,10 +12943,6 @@ msgid ""
 msgstr ""
 "Se cambi la password, sarai disconnesso. Assicurati che tutto sia stato "
 "chiuso e salvato."
-
-#: apps/plugins/portal/userSettings/register.js module:io.ox/core
-msgid "Change password and sign out"
-msgstr "Cambia la password e disconnettiti"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your new password may not be empty."
@@ -13142,6 +13153,19 @@ msgstr "Invita a %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Aggiungi su %s"
+
+#~ msgid "Apps"
+#~ msgstr "Applicazioni"
+
+#~ msgid "Please select your mail account provider"
+#~ msgstr "Seleziona il fornitore del tuo account di posta"
+
+#~ msgid ""
+#~ "Emails will appear in a new window. These windows can be maximized, "
+#~ "minimized and closed."
+#~ msgstr ""
+#~ "I messaggi appariranno in una nuova finestra. Queste finestre possono "
+#~ "essere massimizzate, minimizzate e chiuse."
 
 #~ msgid "Anti-Virus Warning"
 #~ msgstr "Avviso antivirus"

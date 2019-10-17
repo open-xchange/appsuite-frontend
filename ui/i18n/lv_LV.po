@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-29 12:03+0300\n"
+"PO-Revision-Date: 2019-10-04 11:28+0200\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -762,6 +762,10 @@ msgstr "Rotēt attēlu"
 #: apps/io.ox/calendar/actions/change-organizer.js
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "Labi"
@@ -2011,6 +2015,7 @@ msgstr "Vēlreiz"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Select all"
 msgstr "Izvēlēties visu"
 
@@ -2386,6 +2391,8 @@ msgid "New"
 msgstr "Jauns"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#. used as a verb here. label of a button to view attachments
+#. used as a verb here. label of a button to view files
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/files/actions.js
@@ -3332,7 +3339,6 @@ msgstr "Lietotāja definēts"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
@@ -3792,7 +3798,6 @@ msgstr "Mājas"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "Cits"
 
@@ -3968,6 +3973,11 @@ msgstr "Kopēt uz apsrakstu"
 msgid "Saved in:"
 msgstr "Saglabāts iekš:"
 
+#. %1$s maximum file size
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+msgstr "Jūsu izvēlētā attēla izmērs pārsniedz maksimāli pieļaujamo %1$s izmēru"
+
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid ""
 "This filetype is not supported as contact picture. Only image types (JPG, "
@@ -3975,11 +3985,6 @@ msgid ""
 msgstr ""
 "Šī tipa faili netiek atbalstīti kā kontakta attēli. Atbalstīti tiek tikai "
 "attēlu faili ar tipu JPG, GIF, BMP vai PNG."
-
-#. %1$s maximum file size
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-msgstr "Jūsu izvēlētā attēla izmērs pārsniedz maksimāli pieļaujamo %1$s izmēru"
 
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
@@ -4274,8 +4279,16 @@ msgid "Download unscanned file"
 msgstr "Lejupielādēt neskenētu failu"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-msgid "Anti-Virus Warning"
-msgstr "Anti-vīrusa brīdinājumus"
+msgid "Unable to perform Anti-Virus check for the requested file(s)"
+msgstr "Norādītajiem failiem nevar izpildīt anti-vīrusu pārbaudi"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Malicious file detected"
+msgstr "Atrasts bīstams fails"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Anti-Virus warning"
+msgstr ""
 
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
 msgid "Reset this list"
@@ -4992,6 +5005,10 @@ msgid "Navigate to:"
 msgstr "Pāriet uz:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "All Applications"
+msgstr ""
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
 msgstr "Pāriet uz galveno saturu"
 
@@ -5170,10 +5187,14 @@ msgid "Connect this Device"
 msgstr "Pieslēgt šo ierīci"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
-msgid "Change password"
-msgstr "Paroles maiņa"
+msgid "Add login password"
+msgstr ""
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change login password"
+msgstr ""
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -5742,6 +5763,11 @@ msgid "Relogin"
 msgstr "Pieslēgties no jauna"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change password"
+msgstr "Paroles maiņa"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
 msgstr "Tēma"
 
@@ -6059,10 +6085,6 @@ msgid "Don't remind me again"
 msgstr "Vairs neatgādināt"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 msgid "OK"
 msgstr "Labi"
 
@@ -7897,8 +7919,12 @@ msgid "Use unified mail for this account"
 msgstr "Šim kontam lietot vienoto pastu"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Please select your mail account provider"
-msgstr "Lūdzu izvēlieties savu pasta pakalpojumu nodrošinātāju"
+msgid "Add other mail account"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Please choose your mail account provider."
+msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10268,21 +10294,17 @@ msgstr "Google Authenticator"
 msgid "Recovery code"
 msgstr "Atgūšanas kods"
 
-#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
-msgid "UNKNOWN"
-msgstr "NEZINĀMS"
-
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid ""
-"There are no backup devices available for this account.  Please notify "
+"There are no backup devices available for this account. Please notify "
 "support for help."
 msgstr ""
 "Šim kontam nav pieejamas rezerves kopiju ierīces.  Lūdzu sazinieties ar "
 "atbalsta darbiniekiem."
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
-msgid "Authentication failure.  Please reload browser and try again."
-msgstr "Autorizācijas kļūda. Lūdzu pārstartējiet pārlūku un mēģiniet vēlreiz."
+msgid "Authentication failure. Please try reloading the page."
+msgstr "Autorizācijas kļūda. Lūdzu ielādējiet lapu vēlreiz."
 
 #: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
 #: apps/io.ox/multifactor/views/constants.js
@@ -10329,7 +10351,7 @@ msgstr "Lūdzu ievadiet ierīces telefona numuru."
 
 #. Catch all error when trying to set up a new 2step device
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-msgid "Something went wrong.  Please try again later."
+msgid "Something went wrong. Please try again later."
 msgstr "Reģistrēta kļūda.  Lūdzu mēģiniet vēlāk vēlreiz."
 
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
@@ -10350,7 +10372,7 @@ msgstr "Pievienot verifikācijas opciju"
 #: module:io.ox/core/boot
 msgid ""
 "In the event you lose or are unable to use your authentication device, your "
-"account will be locked out unless you set up a recovery method.  We strongly "
+"account will be locked out unless you set up a recovery method. We strongly "
 "recommend that you do so now."
 msgstr ""
 "Gadījumā, ja atgūšanas metode nebūs iestatīta un jūs pazaudēsiet vai "
@@ -10403,6 +10425,15 @@ msgstr "Nezināma sistēma"
 msgid "Recovery Code"
 msgstr "Atgūšanas kods"
 
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"This is your recovery code. Please write it down, print it, or save the "
+"file. Be sure to save this in a secure location."
+msgstr ""
+"Šis ir jūsu atgūšanas kods. Lūdzu pierakstiet to, izdrukājiet vai "
+"saglabājiet failā un glabājiet to drošā vietā."
+
 #. this is a file name that stores the a long recovery code
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
 #: module:io.ox/core/boot
@@ -10453,14 +10484,19 @@ msgstr "Apstiprināt kodu"
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
+msgid "Please enter the validation code we just sent to your device."
+msgstr "Lūdzu ievadiet validācijas kodu, kurš tika nosūtīts uz jūsu ierīci."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad input or server error.  Please try again."
+msgid "Bad input or server error. Please try again."
 msgstr "Nepareizs ievads vai servera kļūda.  Lūdzu mēģiniet vēlreiz."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad verification code.  Please try again"
+msgid "Bad verification code. Please try again"
 msgstr "Nepareizs verifikācijas kods.  Lūdzu mēģiniet vēlreiz."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
@@ -10470,13 +10506,18 @@ msgstr "Autentifikācijas reģistrācija"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
+msgid "Scan the QR code with your authenticator."
+msgstr "Ieskenējiet QR kodu, izmantojot savu autentifikatoru."
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
 msgid "Click to copy URL to clipboard"
 msgstr "Noklikšķiniet, lai kopētu starpliktuvē"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
 msgid ""
-"If scanning doesn't work, you may be able to enter the following setup code."
+"If scanning does not work, you may be able to enter the following setup code."
 msgstr ""
 "Ja skenēšana nedarbojas, jūs varat ievadīt sekojošo iiestatīšanas kodu."
 
@@ -10488,6 +10529,11 @@ msgid ""
 msgstr ""
 "Kad pabeigts, lūdzu ievadiet autentifikācijas kodu, lai pārliecinātos, ka "
 "viss ir pareizi konfigurēts."
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Please touch/activate your device"
+msgstr "Lūdzu aktivizējiet savu ierīci"
 
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
@@ -10514,6 +10560,10 @@ msgid "Upload Recovery File"
 msgstr "Augšupielādēt atgūšanas failu"
 
 #: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Please enter the recovery code"
+msgstr "Lūdzu ievadiet atgūšanas kodu"
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
 msgid "Next 4 characters of the backup string"
 msgstr "Rezerves teksta nākošie 4 simboli"
 
@@ -10538,20 +10588,20 @@ msgid "New code sent."
 msgstr "Jaunais kods ir nosūtīts."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
-msgid "A new code was sent to your SMS device.  Please enter the code."
+msgid "A new code was sent to your SMS device. Please enter the code."
 msgstr "Jaunais kods ir nosūtīts uz jūsu SMS ierīci.  Lūdzu ievadiet kodu."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
 msgstr ""
-"Jūsu konts ir aizsargāts ar divpakāpju verifikāciju.  Lūdzu ievadiet "
+"Jūsu konts ir aizsargāts ar divpakāpju verifikāciju. Lūdzu ievadiet "
 "verifikācijas kodu, kurš tika nosūtīts uz telefonu *****%s."
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
 msgstr ""
 "Jūsu konts ir aizsargāts ar divpakāpju verifikāciju.  Lūdzu ievadiet "
@@ -10559,15 +10609,15 @@ msgstr ""
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please use your "
+"You secured your account with 2-Step Verification. Please use your "
 "authentication token to complete verification."
 msgstr ""
-"Jūsu konts ir aizsargāts ar divpakāpju verifikāciju.  Lai pabeigtu "
+"Jūsu konts ir aizsargāts ar divpakāpju verifikāciju. Lai pabeigtu "
 "verifikāciju, lūdzu izmantojiet autentifikācijas žetonu."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"This browser is not compatible with your configured authentication device.  "
+"This browser is not compatible with your configured authentication device. "
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr ""
 "Šī pārlūka programma nav saderīga ar konfigurēto autentifikācijas ierīci. "
@@ -10576,10 +10626,10 @@ msgstr ""
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"Bad parameters for authenticating with this key.  Possibly wrong URL domain "
+"Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
 msgstr ""
-"Nepareizi parametri autentifikācijai ar šo atslēgu.  Iespējams, ka atslēgas "
+"Nepareizi parametri autentifikācijai ar šo atslēgu. Iespējams, ka atslēgas "
 "URL domēns nav pareizs."
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
@@ -10589,8 +10639,8 @@ msgstr "Konfigurācija netiek atbalstīta"
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "This device is not eligible for this request.  Wrong hardware key?"
-msgstr "Šī ierīce nav atbilstoša šim pieprasījumam.  Vai atslēga ir pareiza?"
+msgid "This device is not eligible for this request. Wrong hardware key?"
+msgstr "Šī ierīce nav atbilstoša šim pieprasījumam. Vai atslēga ir pareiza?"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "Timeout"
@@ -10598,7 +10648,7 @@ msgstr "Taimauts"
 
 #. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "Error authenticating.  Please reload browser and try again."
+msgid "Error authenticating. Please reload browser and try again."
 msgstr "Autorizācijas kļūda. Lūdzu pārstartējiet pārlūku un mēģiniet vēlreiz."
 
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
@@ -10616,6 +10666,10 @@ msgstr "Jauna piezīme"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Sūtīt ar pastu"
+
+#: apps/io.ox/oauth/backbone.js module:io.ox/oauth
+msgid "Sign in with Google. This will add your Gmail account."
+msgstr ""
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
@@ -11930,7 +11984,7 @@ msgstr "Jauni logi"
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
-"Emails will appear in a new window. These windows can be maximized, "
+"E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
 "E-pasta vēstules tiks uzrādītas jaunā logā. Šie logi var tikt maksimizēti, "
@@ -12814,6 +12868,10 @@ msgid "Are you sure you want to delete this Tweet?"
 msgstr "Vai tiešam vēlaties dzēst šo ziņu?"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Change password and sign out"
+msgstr "Mainīt paroli un atslēgties"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Too short"
 msgstr "Paroles drošums: Pārāk īsa"
 
@@ -12887,10 +12945,6 @@ msgid ""
 msgstr ""
 "Ja jūs izmainīsiet paroli, jūsu pieslēgums tiks pārtaukts. Lūdzu "
 "pārliecinieties, ka visas izmaiņas ir saglabātas."
-
-#: apps/plugins/portal/userSettings/register.js module:io.ox/core
-msgid "Change password and sign out"
-msgstr "Mainīt paroli un atslēgties"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your new password may not be empty."
@@ -13096,6 +13150,103 @@ msgstr "Uzaicināt %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pievienot %s"
+
+#~ msgid "Anti-Virus Warning"
+#~ msgstr "Anti-vīrusa brīdinājumus"
+
+#~ msgid "Please select your mail account provider"
+#~ msgstr "Lūdzu izvēlieties savu pasta pakalpojumu nodrošinātāju"
+
+#~ msgid "UNKNOWN"
+#~ msgstr "NEZINĀMS"
+
+#~ msgid ""
+#~ "There are no backup devices available for this account.  Please notify "
+#~ "support for help."
+#~ msgstr ""
+#~ "Šim kontam nav pieejamas rezerves kopiju ierīces.  Lūdzu sazinieties ar "
+#~ "atbalsta darbiniekiem."
+
+#~ msgid "Authentication failure.  Please reload browser and try again."
+#~ msgstr ""
+#~ "Autorizācijas kļūda. Lūdzu pārstartējiet pārlūku un mēģiniet vēlreiz."
+
+#~ msgid "Something went wrong.  Please try again later."
+#~ msgstr "Reģistrēta kļūda.  Lūdzu mēģiniet vēlāk vēlreiz."
+
+#~ msgid ""
+#~ "In the event you lose or are unable to use your authentication device, "
+#~ "your account will be locked out unless you set up a recovery method.  We "
+#~ "strongly recommend that you do so now."
+#~ msgstr ""
+#~ "Gadījumā, ja atgūšanas metode nebūs iestatīta un jūs pazaudēsiet vai "
+#~ "nevarēsiet izmantot autorizācijas ierīci, piekļuve jūsu kontam nebūs "
+#~ "iespējama. Mēs stingri rekomendējam tūlīt iestatīt atgūšanas metodi."
+
+#~ msgid "Bad input or server error.  Please try again."
+#~ msgstr "Nepareizs ievads vai servera kļūda.  Lūdzu mēģiniet vēlreiz."
+
+#~ msgid "Bad verification code.  Please try again"
+#~ msgstr "Nepareizs verifikācijas kods.  Lūdzu mēģiniet vēlreiz."
+
+#~ msgid ""
+#~ "If scanning doesn't work, you may be able to enter the following setup "
+#~ "code."
+#~ msgstr ""
+#~ "Ja skenēšana nedarbojas, jūs varat ievadīt sekojošo iiestatīšanas kodu."
+
+#~ msgid "A new code was sent to your SMS device.  Please enter the code."
+#~ msgstr "Jaunais kods ir nosūtīts uz jūsu SMS ierīci.  Lūdzu ievadiet kodu."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code we sent to the phone *****%s."
+#~ msgstr ""
+#~ "Jūsu konts ir aizsargāts ar divpakāpju verifikāciju.  Lūdzu ievadiet "
+#~ "verifikācijas kodu, kurš tika nosūtīts uz telefonu *****%s."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code from the Authenticator App."
+#~ msgstr ""
+#~ "Jūsu konts ir aizsargāts ar divpakāpju verifikāciju.  Lūdzu ievadiet "
+#~ "verifikācijas kodu no autentifikācijas aplikācijas."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please use your "
+#~ "authentication token to complete verification."
+#~ msgstr ""
+#~ "Jūsu konts ir aizsargāts ar divpakāpju verifikāciju.  Lai pabeigtu "
+#~ "verifikāciju, lūdzu izmantojiet autentifikācijas žetonu."
+
+#~ msgid ""
+#~ "This browser is not compatible with your configured authentication "
+#~ "device.  Please use Chrome browser, or Firefox with U2F enabled."
+#~ msgstr ""
+#~ "Šī pārlūka programma nav saderīga ar konfigurēto autentifikācijas ierīci. "
+#~ "Lūdzu izmantojiet Chrome pārlūku, vai arī Firefox ar iespējotu U2F."
+
+#~ msgid ""
+#~ "Bad parameters for authenticating with this key.  Possibly wrong URL "
+#~ "domain for this key."
+#~ msgstr ""
+#~ "Nepareizi parametri autentifikācijai ar šo atslēgu.  Iespējams, ka "
+#~ "atslēgas URL domēns nav pareizs."
+
+#~ msgid "This device is not eligible for this request.  Wrong hardware key?"
+#~ msgstr ""
+#~ "Šī ierīce nav atbilstoša šim pieprasījumam.  Vai atslēga ir pareiza?"
+
+#~ msgid "Error authenticating.  Please reload browser and try again."
+#~ msgstr ""
+#~ "Autorizācijas kļūda. Lūdzu pārstartējiet pārlūku un mēģiniet vēlreiz."
+
+#~ msgid ""
+#~ "Emails will appear in a new window. These windows can be maximized, "
+#~ "minimized and closed."
+#~ msgstr ""
+#~ "E-pasta vēstules tiks uzrādītas jaunā logā. Šie logi var tikt "
+#~ "maksimizēti, minimizēti un aizvērti."
 
 #~ msgid "Please leave a comment for other participants."
 #~ msgstr "Lūdzu, atstājiet komentāru citiem dalībniekiem."

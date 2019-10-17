@@ -197,7 +197,7 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/print', {
         device: '!smartphone',
-        collection: 'some && (read || toplevel)',
+        collection: 'some && (read || !toplevel)',
         action: function (baton) {
             print.request('io.ox/mail/print', baton.array());
         }

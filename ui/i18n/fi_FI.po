@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-18 18:31+0300\n"
+"PO-Revision-Date: 2019-10-04 11:25+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.5\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -761,6 +761,10 @@ msgstr "Pyöräytä kuvaa"
 #: apps/io.ox/calendar/actions/change-organizer.js
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "Ok"
@@ -2007,6 +2011,7 @@ msgstr "Yritä uudelleen"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Select all"
 msgstr "Valitse kaikki"
 
@@ -2380,6 +2385,8 @@ msgid "New"
 msgstr "Uusi"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#. used as a verb here. label of a button to view attachments
+#. used as a verb here. label of a button to view files
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/files/actions.js
@@ -3311,7 +3318,6 @@ msgstr "Käyttäjän kentät"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
@@ -3772,7 +3778,6 @@ msgstr "Koti"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "Muu"
 
@@ -3943,6 +3948,11 @@ msgstr "Kopioi kuvaukseen"
 msgid "Saved in:"
 msgstr "Tallennettu:"
 
+#. %1$s maximum file size
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+msgstr "Valitsemasi kuva ylittää suurimman sallitun tiedostokoon %1$s"
+
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid ""
 "This filetype is not supported as contact picture. Only image types (JPG, "
@@ -3950,11 +3960,6 @@ msgid ""
 msgstr ""
 "Tätä tiedostotyyppiä ei tueta yhteystietokuvana. Vain kuvatiedostoja (JPG, "
 "GIF, BMP ja PNG) tuetaan."
-
-#. %1$s maximum file size
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-msgstr "Valitsemasi kuva ylittää suurimman sallitun tiedostokoon %1$s"
 
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
@@ -4245,8 +4250,16 @@ msgid "Download unscanned file"
 msgstr "Lataa skannaamaton tiedosto"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-msgid "Anti-Virus Warning"
-msgstr "Virusvaroitus"
+msgid "Unable to perform Anti-Virus check for the requested file(s)"
+msgstr "Virustarkastusta ei voitu suorittaa pyydety(i)lle tiedosto(i)lle"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Malicious file detected"
+msgstr "Haitallinen tiedosto havaittu"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Anti-Virus warning"
+msgstr ""
 
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
 msgid "Reset this list"
@@ -4962,6 +4975,10 @@ msgid "Navigate to:"
 msgstr "Siirry kohteeseen:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "All Applications"
+msgstr ""
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
 msgstr "Ohita ja siirry pääsisältöön"
 
@@ -5131,10 +5148,14 @@ msgid "Connect this Device"
 msgstr "Liitä tämä laite"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
-msgid "Change password"
-msgstr "Vaihda salasana"
+msgid "Add login password"
+msgstr ""
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change login password"
+msgstr ""
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -5702,6 +5723,11 @@ msgid "Relogin"
 msgstr "Kirjaudu sisään"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change password"
+msgstr "Vaihda salasana"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
 msgstr "Teema"
 
@@ -6019,10 +6045,6 @@ msgid "Don't remind me again"
 msgstr "Älä muistuta minua uudestaan"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 msgid "OK"
 msgstr "OK"
 
@@ -7831,8 +7853,12 @@ msgid "Use unified mail for this account"
 msgstr "Käytä tälle tilille yhtenäistä postia"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Please select your mail account provider"
-msgstr "Valitse sähköpostitilisi tarjoaja"
+msgid "Add other mail account"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Please choose your mail account provider."
+msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10177,20 +10203,16 @@ msgstr "Google-varmentaja"
 msgid "Recovery code"
 msgstr "Palautuskoodi"
 
-#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
-msgid "UNKNOWN"
-msgstr "Tuntematon"
-
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid ""
-"There are no backup devices available for this account.  Please notify "
+"There are no backup devices available for this account. Please notify "
 "support for help."
 msgstr ""
 "Tätä tiliä varten ei ole saatavilla varmuuslaitteita. Pyydä apua tuesta."
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
-msgid "Authentication failure.  Please reload browser and try again."
-msgstr "Todennus epäonnistui. Lataa selain uudestaan ja yritä uudelleen."
+msgid "Authentication failure. Please try reloading the page."
+msgstr "Todennus epäonnistui. Lataa sivu uudestaan."
 
 #: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
 #: apps/io.ox/multifactor/views/constants.js
@@ -10237,7 +10259,7 @@ msgstr "Ole hyvä ja syötä laitteen puhelinnumero."
 
 #. Catch all error when trying to set up a new 2step device
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-msgid "Something went wrong.  Please try again later."
+msgid "Something went wrong. Please try again later."
 msgstr "Jokin meni vikaan. Yritä myöhemmin uudelleen."
 
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
@@ -10258,7 +10280,7 @@ msgstr "Lisää todennusvaihtoehto"
 #: module:io.ox/core/boot
 msgid ""
 "In the event you lose or are unable to use your authentication device, your "
-"account will be locked out unless you set up a recovery method.  We strongly "
+"account will be locked out unless you set up a recovery method. We strongly "
 "recommend that you do so now."
 msgstr ""
 "Mikäli kadotat todennuslaitteesi tai et voi käyttää sitä, tilisi lukitaan "
@@ -10311,6 +10333,15 @@ msgstr "Tuntematon järjestelmä"
 msgid "Recovery Code"
 msgstr "Palautuskoodi"
 
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"This is your recovery code. Please write it down, print it, or save the "
+"file. Be sure to save this in a secure location."
+msgstr ""
+"Tämä on palautuskoodisi. Kirjoita se ylös, tulosta se tai tallenna tiedosto. "
+"Säilytä tieto turvallisessa paikassa."
+
 #. this is a file name that stores the a long recovery code
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
 #: module:io.ox/core/boot
@@ -10361,14 +10392,19 @@ msgstr "Vahvista koodi"
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
+msgid "Please enter the validation code we just sent to your device."
+msgstr "Kirjoita palautuskoodi, jonka lähetettiin juuri laitteellesi."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad input or server error.  Please try again."
+msgid "Bad input or server error. Please try again."
 msgstr "Huono syöte tai palvelinvirhe. Yritä myöhemmin uudelleen."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad verification code.  Please try again"
+msgid "Bad verification code. Please try again"
 msgstr "Huono todennuskoodi. Yritä uudelleen"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
@@ -10378,15 +10414,21 @@ msgstr "Varmentajan rekisteröinti"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
+msgid "Scan the QR code with your authenticator."
+msgstr "Skannaa QR-koodi vahvistajallasi."
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
 msgid "Click to copy URL to clipboard"
 msgstr "Napauta ja kopioi URL leikepöydälle"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
 msgid ""
-"If scanning doesn't work, you may be able to enter the following setup code."
+"If scanning does not work, you may be able to enter the following setup code."
 msgstr ""
-"Mikäli skannaus ei toimi, saatat pystyä kirjoittamaan seuraavan asetuskoodin."
+"Jos skannaaminen ei onnistu, saattaa olla mahdollista kirjoittaa seuraava "
+"asetuskoodi."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
@@ -10396,6 +10438,11 @@ msgid ""
 msgstr ""
 "Kun olet valmis, syötä varmennuskoodi jolla vahvistat, että konfigurointi on "
 "tehty oikein."
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Please touch/activate your device"
+msgstr "Kosketa/käynnistä laitteesi"
 
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
@@ -10422,6 +10469,10 @@ msgid "Upload Recovery File"
 msgstr "Lataa palautustiedosto"
 
 #: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Please enter the recovery code"
+msgstr "Kirjoita palautuskoodi"
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
 msgid "Next 4 characters of the backup string"
 msgstr "Varmuuskopiojonon seuraavat neljä merkkiä"
 
@@ -10446,12 +10497,12 @@ msgid "New code sent."
 msgstr "Uusi koodi lähetetty."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
-msgid "A new code was sent to your SMS device.  Please enter the code."
-msgstr "Uusi koodi lähetettiin SMS-laitteeseesi. Kirjoita koodi."
+msgid "A new code was sent to your SMS device. Please enter the code."
+msgstr "SMS-laitteellesi lähetettiin uusi koodi. Syötä vastaanottamasi koodi."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
 msgstr ""
 "Suojasit tilisi kaksivaiheisella vahvistuksella. Kirjoita vahvistuskoodi, "
@@ -10459,32 +10510,32 @@ msgstr ""
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
 msgstr ""
-"Suojaisit tilisi kaksivaiheisella vahvistuksella. Kirjoita Authenticator App-"
+"Suojasit tilisi kaksivaiheisella vahvistuksella. Kirjoita Authenticator App-"
 "sovelluksesta saamasi vahvistuskoodi."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please use your "
+"You secured your account with 2-Step Verification. Please use your "
 "authentication token to complete verification."
 msgstr ""
-"Suojaisit tilisi kaksivaiheisella vahvistuksella. Käytä varmistuslipuketta "
+"Suojasit tilisi kaksivaiheisella vahvistuksella. Käytä varmistuslipuketta "
 "vahvistuksen loppuunviemiseksi."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"This browser is not compatible with your configured authentication device.  "
+"This browser is not compatible with your configured authentication device. "
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr ""
-"Selain ei ole yhteensopiva varmennuslaitteeksi konfiguroidun laitteen "
-"kanssa. Käytä Chrome-selainta tai Firefoxiä U2F päällekytkettynä."
+"Selain ei ole yhteensopiva varmennuslaitteeksi määritetyn laitteen kanssa. "
+"Käytä Chrome-selainta tai Firefoxia U2F päällekytkettynä."
 
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"Bad parameters for authenticating with this key.  Possibly wrong URL domain "
+"Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
 msgstr ""
 "Parametriongelma tällä avaimella varmennettaessa. Mahdollisesti väärä URL-"
@@ -10497,7 +10548,7 @@ msgstr "Konfiguraatiota ei tueta"
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "This device is not eligible for this request.  Wrong hardware key?"
+msgid "This device is not eligible for this request. Wrong hardware key?"
 msgstr "Tämä laite ei ole kelvollinen tätä pyyntöä varten. Väärä laiteavain?"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10506,7 +10557,7 @@ msgstr "Aikakatkaisu"
 
 #. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "Error authenticating.  Please reload browser and try again."
+msgid "Error authenticating. Please reload browser and try again."
 msgstr "Todennus epäonnistui. Lataa selain uudestaan ja yritä uudelleen."
 
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
@@ -10524,6 +10575,10 @@ msgstr "Uusi huomautus"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Lähetä postitse"
+
+#: apps/io.ox/oauth/backbone.js module:io.ox/oauth
+msgid "Sign in with Google. This will add your Gmail account."
+msgstr ""
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
@@ -11827,7 +11882,7 @@ msgstr "Uusi Windows"
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
-"Emails will appear in a new window. These windows can be maximized, "
+"E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
 "Sähköpostit näkyvät uudessa ikkunassa. Näitä voidaan suurentaa, pienentää "
@@ -12710,6 +12765,10 @@ msgid "Are you sure you want to delete this Tweet?"
 msgstr "Oletko varma että haluat poistaa tämän tweetin?"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Change password and sign out"
+msgstr "Vaihda salasana ja kirjaudu ulos"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Too short"
 msgstr "Salasanan vahvuus: Liian lyhyt"
 
@@ -12783,10 +12842,6 @@ msgid ""
 msgstr ""
 "Jos muutat salasanaa, sinut kirjataan ulos. Varmista, että kaikki "
 "keskeneräinen on suljettu ja tallennettu."
-
-#: apps/plugins/portal/userSettings/register.js module:io.ox/core
-msgid "Change password and sign out"
-msgstr "Vaihda salasana ja kirjaudu ulos"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your new password may not be empty."
@@ -12992,6 +13047,101 @@ msgstr "Kutsu %s:in"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s lisää"
+
+#~ msgid "Anti-Virus Warning"
+#~ msgstr "Virusvaroitus"
+
+#~ msgid "Please select your mail account provider"
+#~ msgstr "Valitse sähköpostitilisi tarjoaja"
+
+#~ msgid "UNKNOWN"
+#~ msgstr "Tuntematon"
+
+#~ msgid ""
+#~ "There are no backup devices available for this account.  Please notify "
+#~ "support for help."
+#~ msgstr ""
+#~ "Tätä tiliä varten ei ole saatavilla varmuuslaitteita. Pyydä apua tuesta."
+
+#~ msgid "Authentication failure.  Please reload browser and try again."
+#~ msgstr "Todennus epäonnistui. Lataa selain uudestaan ja yritä uudelleen."
+
+#~ msgid "Something went wrong.  Please try again later."
+#~ msgstr "Jokin meni vikaan. Yritä myöhemmin uudelleen."
+
+#~ msgid ""
+#~ "In the event you lose or are unable to use your authentication device, "
+#~ "your account will be locked out unless you set up a recovery method.  We "
+#~ "strongly recommend that you do so now."
+#~ msgstr ""
+#~ "Mikäli kadotat todennuslaitteesi tai et voi käyttää sitä, tilisi lukitaan "
+#~ "ellet aseta sille palautusmenetelmää. Suosittelemme, että asetat "
+#~ "tilillesi palautusmenetelmän nyt."
+
+#~ msgid "Bad input or server error.  Please try again."
+#~ msgstr "Huono syöte tai palvelinvirhe. Yritä myöhemmin uudelleen."
+
+#~ msgid "Bad verification code.  Please try again"
+#~ msgstr "Huono todennuskoodi. Yritä uudelleen"
+
+#~ msgid ""
+#~ "If scanning doesn't work, you may be able to enter the following setup "
+#~ "code."
+#~ msgstr ""
+#~ "Mikäli skannaus ei toimi, saatat pystyä kirjoittamaan seuraavan "
+#~ "asetuskoodin."
+
+#~ msgid "A new code was sent to your SMS device.  Please enter the code."
+#~ msgstr "Uusi koodi lähetettiin SMS-laitteeseesi. Kirjoita koodi."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code we sent to the phone *****%s."
+#~ msgstr ""
+#~ "Suojasit tilisi kaksivaiheisella vahvistuksella. Kirjoita vahvistuskoodi, "
+#~ "jonka lähetimme puhelimeen *****%s."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code from the Authenticator App."
+#~ msgstr ""
+#~ "Suojaisit tilisi kaksivaiheisella vahvistuksella. Kirjoita Authenticator "
+#~ "App-sovelluksesta saamasi vahvistuskoodi."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please use your "
+#~ "authentication token to complete verification."
+#~ msgstr ""
+#~ "Suojaisit tilisi kaksivaiheisella vahvistuksella. Käytä "
+#~ "varmistuslipuketta vahvistuksen loppuunviemiseksi."
+
+#~ msgid ""
+#~ "This browser is not compatible with your configured authentication "
+#~ "device.  Please use Chrome browser, or Firefox with U2F enabled."
+#~ msgstr ""
+#~ "Selain ei ole yhteensopiva varmennuslaitteeksi konfiguroidun laitteen "
+#~ "kanssa. Käytä Chrome-selainta tai Firefoxiä U2F päällekytkettynä."
+
+#~ msgid ""
+#~ "Bad parameters for authenticating with this key.  Possibly wrong URL "
+#~ "domain for this key."
+#~ msgstr ""
+#~ "Parametriongelma tällä avaimella varmennettaessa. Mahdollisesti väärä URL-"
+#~ "verkkotunnus tälle avaimelle."
+
+#~ msgid "This device is not eligible for this request.  Wrong hardware key?"
+#~ msgstr ""
+#~ "Tämä laite ei ole kelvollinen tätä pyyntöä varten. Väärä laiteavain?"
+
+#~ msgid "Error authenticating.  Please reload browser and try again."
+#~ msgstr "Todennus epäonnistui. Lataa selain uudestaan ja yritä uudelleen."
+
+#~ msgid ""
+#~ "Emails will appear in a new window. These windows can be maximized, "
+#~ "minimized and closed."
+#~ msgstr ""
+#~ "Sähköpostit näkyvät uudessa ikkunassa. Näitä voidaan suurentaa, pienentää "
+#~ "tai sulkea."
 
 #~ msgid "Please leave a comment for other participants."
 #~ msgstr "Jätä viesti muille osallistujille."
