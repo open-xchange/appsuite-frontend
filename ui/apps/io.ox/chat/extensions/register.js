@@ -14,8 +14,9 @@
 define('io.ox/chat/extensions/register', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/actions/util',
+    'io.ox/core/capabilities',
     'io.ox/chat/data'
-], function (ext, actionsUtil, data) {
+], function (ext, actionsUtil, capabilities, data) {
 
     'use strict';
 
@@ -24,6 +25,21 @@ define('io.ox/chat/extensions/register', [
     //
     // Topbar
     //
+
+    ext.point('io.ox/core/appcontrol/right').extend({
+        id: 'chat',
+        index: 125,
+        draw: function () {
+            if (!capabilities.has('chat')) return;
+
+            var node = $('<li role="presentation" class="launcher">').hide();
+            this.append(node);
+
+            require(['io.ox/chat/views/launcher'], function (ChatIcon) {
+                node.show().append(new ChatIcon().render().$el);
+            });
+        }
+    });
 
     ext.point('io.ox/core/appcontrol/right').extend({
         id: 'online-state',
