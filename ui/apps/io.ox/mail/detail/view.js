@@ -341,6 +341,11 @@ define('io.ox/mail/detail/view', [
                 // must have tabindex=-1, otherwise tabindex inside Shadow DOM doesn't work
                 $body = $('<section class="body user-select-text focusable" tabindex="-1">')
             );
+
+            // table layout does not work in IE11 you will get resizing issues with big pictures and/or ads
+            // block seems to work fine. IE strikes again
+            if (_.device('ie && ie <= 11')) $body.css('display', 'block');
+
             // rendering mails in chrome is slow if we do not use a shadow dom
             if ($body[0].createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
                 $body[0].createShadowRoot();
