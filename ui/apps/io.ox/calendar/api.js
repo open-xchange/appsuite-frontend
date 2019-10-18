@@ -125,32 +125,42 @@ define('io.ox/calendar/api', [
                     });
                     return opt;
                 }
+                function merge(data1, data2) {
+                    return _(data1)
+                        .chain()
+                        .union(data2)
+                        .uniq(function (event) { return util.cid(event); })
+                        .compact()
+                        .value();
+                }
                 return function request(opt, method) {
                     method = method || 'GET';
                     return http[method](opt).then(function (result) {
                         if (_.isArray(result)) {
+                            var error;
                             result.forEach(function (r) {
                                 if (r.error) {
                                     ox.trigger('http:error:' + r.error.code, r.error);
+                                    error = r.error;
                                 }
                             });
+                            if (error) throw error;
                         }
                         return result;
-                    }, function (err) {
+                    }).catch(function (err) {
                         if (err.code !== 'CAL-5072') throw err;
 
-                        var start = moment(opt.params.rangeStart),
-                            end = moment(opt.params.rangeEnd),
+                        var start = moment(opt.params.rangeStart).utc(),
+                            end = moment(opt.params.rangeEnd).utc(),
                             middle = moment(start).add(end.diff(start, 'ms') / 2, 'ms');
 
                         return request(getParams(opt, start, middle), method).then(function (data1) {
                             return request(getParams(opt, middle, end), method).then(function (data2) {
-                                return _(data1)
-                                    .chain()
-                                    .union(data2)
-                                    .uniq(function (event) { return util.cid(event); })
-                                    .compact()
-                                    .value();
+                                if (!_.isArray(data1)) return merge(data1, data2);
+                                data1.forEach(function (d, index) {
+                                    d.events = merge(d.events, data2[index].events);
+                                });
+                                return data1;
                             });
                         });
                     });

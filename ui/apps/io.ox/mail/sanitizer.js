@@ -39,7 +39,7 @@ define('io.ox/mail/sanitizer', [
         // dompurify removes the title tag but keeps the text in it, creating strange artefacts
         if (currentNode.tagName === 'TITLE') currentNode.innerHTML = '';
         // add a class namespace to style nodes so that they overrule our stylesheets without !important
-        if (currentNode.tagName === 'STYLE') {
+        if (currentNode.tagName === 'STYLE' && currentNode.sheet && currentNode.sheet.cssRules) {
             var rules = '';
             _(currentNode.sheet.cssRules).each(function (rule) {
                 rules = rules + '.mail-detail-content ' + rule.cssText + ' ';

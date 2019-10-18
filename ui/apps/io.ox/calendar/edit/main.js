@@ -150,7 +150,9 @@ define('io.ox/calendar/edit/main', [
                         });
 
                         // restore points give their old initial model data as options. This way the dirty check stays correct
-                        self.initialModelData = opt.initialModelData || self.model.toJSON();
+
+                        // use deepclone so we dont have accidental references
+                        self.initialModelData = _.deepClone(opt.initialModelData || self.model.toJSON());
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
                         //used by guided tours so they can show the next step when everything is ready

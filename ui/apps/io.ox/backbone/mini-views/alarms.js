@@ -327,7 +327,8 @@ define('io.ox/backbone/mini-views/alarms', [
 
             require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                 var model = {}, alarmView;
-                model[self.attribute] = self.model.get(self.attribute);
+                // deepclone is needed here or the models are not detached and the attribute is bound by reference
+                model[self.attribute] = _.deepClone(self.model.get(self.attribute));
                 alarmView = new alarmsView({ model: new Backbone.Model(model), attribute: self.attribute });
                 new ModalDialog({
                     title: gt('Edit reminders'),
