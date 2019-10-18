@@ -137,7 +137,6 @@
                 // may be not the case if a menu point is added after menu was
                 // initial moved to the body by the code above
                 var menu = $parent.data('menu');
-                console.log(menu);
                 if (!menu.find('[data-action="close-menu"]').parent().is(':last-child')) {
                     menu.find('[data-action="close-menu"]').parent().appendTo(menu);
                 }
@@ -248,7 +247,10 @@
     function onFocusOut() {
         var self = this;
         _.defer(function () {
-            if (!$.contains(self, document.activeElement)) clearMenus();
+            if (!$.contains(self, document.activeElement)) {
+                if (phone) _.debounce(clearMenus, 50); // mystical fix for 67512
+                else clearMenus();
+            }
         });
     }
 
