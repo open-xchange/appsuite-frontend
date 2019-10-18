@@ -280,6 +280,7 @@
         padding: @default-padding;
         background-color: #fff;
         display: none;
+        overflow: hidden;
         width: 100%;
         cursor: default;
         &.loading { min-height: 80px; }
@@ -294,7 +295,7 @@
         &.notifications,
         &.error { display: block; }
         // for proper overflow behavior (see bug 45248)
-        &.body { display: table; }
+        &.body { display: block; }
         &.attachments:empty { display: none;  }
     }
 

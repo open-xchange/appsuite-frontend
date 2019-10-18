@@ -23,8 +23,11 @@
 
     position: relative;
 
-    // use display: table to cover padding/margin/float issues at the bottom
-    display: table;
+    // was table previously to cover padding/margin/float issues at the bottom
+    // caused other issues, block + auto overflow-x worked better
+    display: block;
+    overflow-x: auto;
+    overflow-y: hidden;
 
     // TODO: remove / temp. fix for sanitized HTML
     padding: 0;
