@@ -31,19 +31,17 @@ Scenario('[7772] Contact collection when sending mail', async (I) => {
     I.click('Automatically collect contacts in the folder "Collected addresses" while sending');
 
     I.openApp('Mail');
-    I.waitForText('Compose');
+    I.waitForText('Compose', '.classic-toolbar');
     I.retry(5).clickToolbar('Compose');
 
     I.waitForFocus('[placeholder="To"]');
     I.fillField('To', 'urbi@orbi.vat');
     I.fillField('Subject', 'Richtig gutes zeug');
     I.click('Send');
-    I.wait(2);
     I.waitForVisible('#io-ox-launcher');
 
     I.openApp('Address Book');
     I.click('#io-ox-refresh-icon');
-    I.wait(2);
     I.waitForText('My address books');
     I.doubleClick('~My address books');
 

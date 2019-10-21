@@ -33,8 +33,7 @@ Scenario('[C7380] Send saved draft mail @shaky', function (I, users) {
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
     I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    I.waitForFocus('[placeholder="To"]');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailId + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, '' + text);
@@ -42,21 +41,20 @@ Scenario('[C7380] Send saved draft mail @shaky', function (I, users) {
     I.click('Discard');
     I.waitForElement('.io-ox-dialog-wrapper .modal-backdrop');
     I.click('Save as draft');
-    I.wait(1);
     I.waitForDetached('.io-ox-dialog-wrapper .modal-backdrop');
     I.selectFolder('Drafts');
-    I.waitForText('' + testrailId + ' - ' + subject, undefined, '.subject');
+    I.waitForText(testrailId + ' - ' + subject, undefined, '.subject');
     I.doubleClick('.list-item[aria-label*="' + testrailId + ' - ' + subject + '"]');
     I.see(testrailId + ' - ' + subject);
     I.see(text);
-    I.wait(3);
+    I.waitForText('Send');
     I.click('Send');
-    I.wait(3);
+    I.waitForDetached('.io-ox-dialog-wrapper .modal-backdrop');
     I.logout();
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.doubleClick('[title="' + testrailId + ' - ' + timestamp + '"]');
+    I.doubleClick({ css: '[title="' + testrailId + ' - ' + timestamp + '"]' });
     I.see(testrailId + ' - ' + timestamp);
 });
 
@@ -68,8 +66,7 @@ Scenario('[C7381] Send email to multiple recipients', function (I, users) {
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
     I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    I.waitForFocus('[placeholder="To"]');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.pressKey('Enter');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[2].userdata.primaryEmail);
@@ -84,19 +81,19 @@ Scenario('[C7381] Send email to multiple recipients', function (I, users) {
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.doubleClick({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
     I.see(testrailID + ' - ' + timestamp);
     I.logout();
     I.login('app=io.ox/mail', { user: users[2] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.doubleClick({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
     I.see(testrailID + ' - ' + timestamp);
     I.logout();
     I.login('app=io.ox/mail', { user: users[3] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.doubleClick({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
     I.see(testrailID + ' - ' + timestamp);
 });
 
@@ -108,8 +105,7 @@ Scenario('[C7382] Compose plain text mail', function (I, users) {
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
     I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    I.waitForFocus('[placeholder="To"]');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
@@ -119,7 +115,7 @@ Scenario('[C7382] Compose plain text mail', function (I, users) {
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.doubleClick({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
     I.see(testrailID + ' - ' + timestamp);
 });
 
@@ -131,7 +127,7 @@ Scenario('[C7384] Save draft', function (I, users) {
     I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.waitForFocus('[placeholder="To"]');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailid + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, '' + text);
@@ -140,9 +136,9 @@ Scenario('[C7384] Save draft', function (I, users) {
     I.waitForElement('.io-ox-dialog-wrapper .modal-backdrop');
     I.click('Save as draft');
     I.waitForDetached('.io-ox-dialog-wrapper .modal-backdrop');
-    I.wait(1);
+    //I.wait(1);
     I.selectFolder('Drafts');
-    I.waitForText('' + testrailid + ' - ' + subject, undefined, '.subject');
+    I.waitForText(testrailid + ' - ' + subject, undefined, '.subject');
     I.doubleClick('.list-item[aria-label*="' + testrailid + ' - ' + subject + '"]');
     I.see(testrailid + ' - ' + subject);
     I.see(text);
@@ -156,8 +152,7 @@ Scenario('[C7385] Write mail to BCC recipients', function (I, users) {
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
     I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.waitForElement('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 5);
+    I.waitForFocus('[placeholder="To"]');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.click({ css: '.recipient-actions button[data-type="bcc"]' });
     I.waitForElement({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
@@ -170,18 +165,18 @@ Scenario('[C7385] Write mail to BCC recipients', function (I, users) {
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
     I.waitForText(testrailID);
-    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.click({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
     I.waitForText(users[0].userdata.primaryEmail, 5, '.detail-view-header');
-    I.waitForElement('[title="' + users[1].userdata.primaryEmail + '"]', 5, '.detail-view-header');
+    I.waitForElement({ css: '[title="' + users[1].userdata.primaryEmail + '"]' }, 5, '.detail-view-header');
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
     I.logout();
     I.login('app=io.ox/mail', { user: users[2] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
     I.waitForText(testrailID + ' - ' + timestamp);
-    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.click({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
     I.waitForText(users[0].userdata.primaryEmail, 5, '.detail-view-header');
-    I.waitForElement('[title="' + users[1].userdata.primaryEmail + '"]', 5, '.detail-view-header');
+    I.waitForElement({ css: '[title="' + users[1].userdata.primaryEmail + '"]' }, 5, '.detail-view-header');
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
 });
 
@@ -193,8 +188,7 @@ Scenario('[C7386] Write mail to CC recipients @shaky', function (I, users) {
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
     I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    I.waitForFocus('[placeholder="To"]');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.click('CC');
     I.fillField('.io-ox-mail-compose [placeholder="CC"]', users[2].userdata.primaryEmail);
@@ -209,39 +203,39 @@ Scenario('[C7386] Write mail to CC recipients @shaky', function (I, users) {
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.click({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
     I.waitForText(users[0].userdata.primaryEmail, 5, '.detail-view-header');
-    I.waitForElement('[title="' + users[1].userdata.primaryEmail + '"]', 5, '.detail-view-header');
-    I.waitForElement('[title="' + users[2].userdata.primaryEmail + '"]', 5, '.detail-view-header');
-    I.waitForElement('[title="' + users[3].userdata.primaryEmail + '"]', 5, '.detail-view-header');
+    I.waitForElement({ css: '[title="' + users[1].userdata.primaryEmail + '"]' }, 5, '.detail-view-header');
+    I.waitForElement({ css: '[title="' + users[2].userdata.primaryEmail + '"]' }, 5, '.detail-view-header');
+    I.waitForElement({ css: '[title="' + users[3].userdata.primaryEmail + '"]' }, 5, '.detail-view-header');
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
     I.logout();
     I.login('app=io.ox/mail', { user: users[2] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.click({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
     I.waitForText(users[0].userdata.primaryEmail, 5, '.detail-view-header');
-    I.waitForElement('[title="' + users[1].userdata.primaryEmail + '"]', 5, '.detail-view-header');
-    I.waitForElement('[title="' + users[2].userdata.primaryEmail + '"]', 5, '.detail-view-header');
-    I.waitForElement('[title="' + users[3].userdata.primaryEmail + '"]', 5, '.detail-view-header');
+    I.waitForElement({ css: '[title="' + users[1].userdata.primaryEmail + '"]' }, 5, '.detail-view-header');
+    I.waitForElement({ css: '[title="' + users[2].userdata.primaryEmail + '"]' }, 5, '.detail-view-header');
+    I.waitForElement({ css: '[title="' + users[3].userdata.primaryEmail + '"]' }, 5, '.detail-view-header');
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
     I.logout();
     I.login('app=io.ox/mail', { user: users[3] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.click({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
     I.waitForText(users[0].userdata.primaryEmail, 5, '.detail-view-header');
-    I.waitForElement('[title="' + users[1].userdata.primaryEmail + '"]', 5, '.detail-view-header');
-    I.waitForElement('[title="' + users[2].userdata.primaryEmail + '"]', 5, '.detail-view-header');
-    I.waitForElement('[title="' + users[3].userdata.primaryEmail + '"]', 5, '.detail-view-header');
+    I.waitForElement({ css: '[title="' + users[1].userdata.primaryEmail + '"]' }, 5, '.detail-view-header');
+    I.waitForElement({ css: '[title="' + users[2].userdata.primaryEmail + '"]' }, 5, '.detail-view-header');
+    I.waitForElement({ css: '[title="' + users[3].userdata.primaryEmail + '"]' }, 5, '.detail-view-header');
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
 });
 
 function addFile(I, path) {
     var ext = path.match(/\.(.{3,4})$/)[1];
-    I.attachFile('input[type=file]', path);
+    I.attachFile({ css: 'input[type=file]' }, path);
     I.waitForText(ext.toUpperCase(), 5, '.inline-items.preview');
-    I.wait(1);
+    //I.wait(1);
 }
 
 Scenario('[C7387] Send mail with attachment from upload @shaky', function (I, users) {
@@ -252,13 +246,13 @@ Scenario('[C7387] Send mail with attachment from upload @shaky', function (I, us
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
     I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-
+    I.waitForFocus('[placeholder="To"]');
     within('.io-ox-mail-compose-window', function () {
         I.say('Fill TO and SUBJECT', 'blue');
-        I.fillField('div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
-        I.wait(1);
-        I.fillField('[name="subject"]', '' + testrailID + ' - ' + timestamp);
+        I.fillField({ css: 'div[data-extension-id="to"] input.tt-input' }, users[1].userdata.primaryEmail);
+        I.pressKey('Enter');
+        I.fillField({ css: '[name="subject"]' }, '' + testrailID + ' - ' + timestamp);
+        I.pressKey('Enter');
         I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
         I.say('Add attachments', 'blue');
         addFile(I, 'e2e/media/files/generic/testdocument.odt');
@@ -279,7 +273,7 @@ Scenario('[C7387] Send mail with attachment from upload @shaky', function (I, us
 
     I.say('Open mail as floating window', 'blue');
     I.waitForText(testrailID + ' - ' + timestamp);
-    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.click({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
     I.say('Show attachments as list', 'blue');
     I.click('.toggle-details[aria-expanded="false"]');
     I.waitForVisible('.list-container');
@@ -299,7 +293,7 @@ Scenario('[C7388] Send mail with different priorities', function (I, users) {
     let priorities = ['High', 'Normal', 'Low'];
     priorities.forEach(function (priorities, i) {
         I.clickToolbar('Compose');
-        I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+        I.waitForFocus('[placeholder="To"]');
         I.click('Options');
         I.waitForElement('.dropdown.open .dropdown-menu', 5);
         if (i === 0) I.click('High');
@@ -307,8 +301,9 @@ Scenario('[C7388] Send mail with different priorities', function (I, users) {
         else if (i === 2) I.click('Low');
         I.waitForDetached('.dropdown.open .dropdown-menu', 5);
         I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
-        I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp + ' Priority: ' + priorities + '');
-        I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
+        I.pressKey('Enter');
+        I.fillField('.io-ox-mail-compose [name="subject"]', testrailID + ' - ' + timestamp + ' Priority: ' + priorities + '');
+        I.fillField({ css: 'textarea.plain-text' }, testrailID + ' - ' + timestamp);
         I.click('Send');
         I.waitForDetached('.io-ox-mail-compose');
     });
@@ -318,10 +313,10 @@ Scenario('[C7388] Send mail with different priorities', function (I, users) {
     I.waitForVisible('.selected .contextmenu-control');
     I.waitForVisible('.leftside .list-view', 5);
     priorities.forEach(function (priorities, i) {
-        I.waitForText('' + testrailID + ' - ' + timestamp + ' Priority: ' + priorities + '', 5, '.io-ox-mail-window .subject .drag-title');
+        I.waitForText(testrailID + ' - ' + timestamp + ' Priority: ' + priorities + '', 5, '.io-ox-mail-window .subject .drag-title');
         I.click({ css: '[title="' + testrailID + ' - ' + timestamp + ' Priority: ' + priorities + '"]' });
         I.waitForElement('.mail-detail-pane.selection-one', 5);
-        I.waitForText('' + testrailID + ' - ' + timestamp + ' Priority: ' + priorities + '', 5, '.thread-view-header .subject');
+        I.waitForText(testrailID + ' - ' + timestamp + ' Priority: ' + priorities + '', 5, '.thread-view-header .subject');
         if (i === 0) I.waitForElement('.mail-detail-pane.selection-one .priority .high', 5);
         else if (i === 2) I.waitForElement('.mail-detail-pane.selection-one .priority .low', 5);
         //TODO: dont see element .low .high for normal mails !
@@ -336,21 +331,21 @@ Scenario('[C7389] Send mail with attached vCard', function (I, users) {
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
     I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.waitForFocus('[placeholder="To"]');
     I.waitForText('Options', 5, '.io-ox-mail-compose .dropdown-label');
     I.click('Options');
     I.click('Attach Vcard');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
-    I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
-    I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
+    I.fillField('.io-ox-mail-compose [name="subject"]', testrailID + ' - ' + timestamp);
+    I.fillField({ css: 'textarea.plain-text' }, testrailID + ' - ' + timestamp);
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose');
     I.logout();
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.waitForVisible('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.retry(5).click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForVisible({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
+    I.retry(5).click({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
     I.waitForElement('.io-ox-mail-window .toggle-details', 5);
     I.click('.io-ox-mail-window .toggle-details');
     I.waitForElement('.list-container .dropdown-toggle[data-dropdown="io.ox/mail/attachment/links"]', 5);
@@ -372,7 +367,7 @@ Scenario('[C7389] Send mail with attached vCard', function (I, users) {
     I.selectFolder('Contacts');
     I.waitForText(`${users[0].userdata.sur_name}`);
     I.retry(5).click(locate('.contact').inside('.vgrid-scrollpane').withText(`${users[0].userdata.sur_name}`));
-    I.waitForElement('[href="mailto:' + users[0].userdata.primaryEmail + '"]');
+    I.waitForElement({ css: '[href="mailto:' + users[0].userdata.primaryEmail + '"]' });
     I.waitForText(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, 5, '.contact-detail.view .contact-header .fullname');
 });
 
@@ -389,7 +384,7 @@ Scenario('[C7403] Forward a single mail @shaky', function (I, users) {
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', userB.userdata.primaryEmail);
-    I.wait(1);
+    I.pressKey('Enter');
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
     I.click('Send');
@@ -401,13 +396,13 @@ Scenario('[C7403] Forward a single mail @shaky', function (I, users) {
     I.login('app=io.ox/mail', { user: userB });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.click({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.thread-view-header .subject');
     I.clickToolbar('Forward');
     I.waitForVisible('.io-ox-mail-compose');
     I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', userC.userdata.primaryEmail);
-    I.wait(1);
+    I.pressKey('Enter');
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose');
     I.waitForDetached('.launcher .fa-spin');
@@ -418,7 +413,7 @@ Scenario('[C7403] Forward a single mail @shaky', function (I, users) {
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
     I.waitForText('Fwd: ' + testrailID + ' - ' + timestamp);
-    I.click('[title="Fwd: ' + testrailID + ' - ' + timestamp + '"]');
+    I.click({ css: '[title="Fwd: ' + testrailID + ' - ' + timestamp + '"]' });
     I.waitForText('Fwd: ' + testrailID + ' - ' + timestamp, 5, '.thread-view-header .subject');
 });
 
@@ -432,7 +427,7 @@ Scenario('[C7404] Reply to single mail', function (I, users) {
     I.clickToolbar('Compose');
     I.waitForElement('.io-ox-mail-compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.waitForElement('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
+    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
@@ -442,7 +437,7 @@ Scenario('[C7404] Reply to single mail', function (I, users) {
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.click({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
     I.waitForText(users[0].userdata.primaryEmail, 5, '.detail-view-header');
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
     I.clickToolbar('Reply');
@@ -453,7 +448,7 @@ Scenario('[C7404] Reply to single mail', function (I, users) {
     I.login('app=io.ox/mail', { user: users[0] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.click('[title="Re: ' + testrailID + ' - ' + timestamp + '"]');
+    I.click({ css: '[title="Re: ' + testrailID + ' - ' + timestamp + '"]' });
     I.waitForText('Re: ' + testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
 });
 
@@ -466,10 +461,11 @@ Scenario('[C8816] Cancel mail compose', function (I, users) {
     I.waitForVisible('.io-ox-mail-window');
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
-    I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
-    I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
+    I.pressKey('Enter');
+    I.fillField('.io-ox-mail-compose [name="subject"]', testrailID + ' - ' + timestamp);
+    I.fillField({ css: 'textarea.plain-text' }, testrailID + ' - ' + timestamp);
     I.click('Discard');
     I.waitForElement('.io-ox-dialog-wrapper');
     I.see('Do you really want to discard your message?');
@@ -487,32 +483,31 @@ Scenario('[C8820] Forward attachments @shaky', function (I, users) {
     //login user 1 and send mail with attachements
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.waitForVisible('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
+    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user2.userdata.primaryEmail);
-    I.wait(1);
-    I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
-    I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
+    I.pressKey('Enter');
+    I.fillField('.io-ox-mail-compose [name="subject"]', testrailID + ' - ' + timestamp);
+    I.fillField({ css: 'textarea.plain-text' }, testrailID + ' - ' + timestamp);
     I.attachFile('.io-ox-mail-compose-window input[type=file]', 'e2e/media/files/generic/testdocument.odt');
-    I.waitForElement('//div[contains(@class, "mail-attachment-list")]//div[contains(@class, "preview-container")]//span[contains(@class, "file")]/../div[contains(text(), "odt")]');
+    I.waitForElement({ xpath: '//div[contains(@class, "mail-attachment-list")]//div[contains(@class, "preview-container")]//span[contains(@class, "file")]/../div[contains(text(), "odt")]' });
     I.attachFile('.io-ox-mail-compose-window input[type=file]', 'e2e/media/files/generic/testdocument.rtf');
-    I.waitForElement('//div[contains(@class, "mail-attachment-list")]//div[contains(@class, "preview-container")]//span[contains(@class, "file")]/../div[contains(text(), "rtf")]');
+    I.waitForElement({ xpath: '//div[contains(@class, "mail-attachment-list")]//div[contains(@class, "preview-container")]//span[contains(@class, "file")]/../div[contains(text(), "rtf")]' });
     I.attachFile('.io-ox-mail-compose-window input[type=file]', 'e2e/media/files/generic/testpresentation.ppsm');
-    I.waitForElement('//div[contains(@class, "mail-attachment-list")]//div[contains(@class, "preview-container")]//span[contains(@class, "file")]/../div[contains(text(), "ppsm")]');
+    I.waitForElement({ xpath: '//div[contains(@class, "mail-attachment-list")]//div[contains(@class, "preview-container")]//span[contains(@class, "file")]/../div[contains(text(), "ppsm")]' });
     I.attachFile('.io-ox-mail-compose-window input[type=file]', 'e2e/media/files/generic/testspreadsheed.xlsm');
-    I.waitForElement('//div[contains(@class, "mail-attachment-list")]//div[contains(@class, "preview-container")]//span[contains(@class, "file")]/../div[contains(text(), "xlsm")]');
+    I.waitForElement({ xpath: '//div[contains(@class, "mail-attachment-list")]//div[contains(@class, "preview-container")]//span[contains(@class, "file")]/../div[contains(text(), "xlsm")]' });
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose');
     I.selectFolder('Sent');
-    I.waitForVisible(`div[title="${user2.userdata.primaryEmail}"]`);
-    I.wait(1);
+    I.waitForVisible({ css: `div[title="${user2.userdata.primaryEmail}"]` });
     I.logout();
 
     //login user 2, check mail and forward to user 3
     I.login('app=io.ox/mail', { user: user2 });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.waitForVisible('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForVisible({ xpath: '[title="' + testrailID + ' - ' + timestamp + '"]' });
+    I.click({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
     I.waitForElement('.attachments .toggle-details', 5);
     I.click('.attachments .toggle-details');
     I.waitForElement('.mail-attachment-list.open');
@@ -522,9 +517,9 @@ Scenario('[C8820] Forward attachments @shaky', function (I, users) {
     I.waitForElement('.mail-attachment-list.open [title="testspreadsheed.xlsm"]');
     I.waitForText(testrailID + ' - ' + timestamp, undefined, '.mail-detail-pane .subject');
     I.clickToolbar('Forward');
-    I.waitForVisible('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
+    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user3.userdata.primaryEmail);
-    I.wait(1);
+    I.pressKey('Enter');
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose');
     I.logout();
@@ -533,8 +528,8 @@ Scenario('[C8820] Forward attachments @shaky', function (I, users) {
     I.login('app=io.ox/mail', { user: user3 });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.waitForVisible('[title="Fwd: ' + testrailID + ' - ' + timestamp + '"]');
-    I.retry(5).click('[title="Fwd: ' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForVisible({ css: '[title="Fwd: ' + testrailID + ' - ' + timestamp + '"]' });
+    I.retry(5).click({ css: '[title="Fwd: ' + testrailID + ' - ' + timestamp + '"]' });
     I.waitForElement('.attachments .toggle-details');
     I.click('.attachments .toggle-details');
     I.waitForElement('.mail-attachment-list.open');
@@ -609,7 +604,7 @@ Scenario('[C8831] Add recipient manually', async function (I, users) {
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose.container', 5);
     I.waitForVisible('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
-    I.click('button[data-action="maximize"]');
+    I.click({ css: 'button[data-action="maximize"]' });
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 'super01@ox.com');
     I.click('.io-ox-mail-compose .plain-text');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 'super02@ox.com');
@@ -702,14 +697,14 @@ Scenario('[C12120] Recipient cartridge', async function (I, users) {
     const fields = ['to', 'cc', 'bcc'];
     fields.forEach(function (field) {
         within('.io-ox-mail-compose div[data-extension-id="' + field + '"]', function () {
-            I.fillField(' input.tt-input', users[1].userdata.primaryEmail);
+            I.fillField({ css: 'input.tt-input' }, users[1].userdata.primaryEmail);
             I.waitForElement('.tt-dropdown-menu .tt-suggestions');
             I.pressKey('Enter');
-            I.fillField('input.tt-input', 'super@ox.com');
+            I.fillField({ css: 'input.tt-input' }, 'super@ox.com');
             I.pressKey('Enter');
-            I.seeNumberOfElements('div.token', 2);
-            I.waitForText(users[1].userdata.given_name + ' ' + users[1].userdata.sur_name, 5, 'div.token');
-            I.waitForText('super@ox.com', 5, 'div.token');
+            I.seeNumberOfElements({ css: 'div.token' }, 2);
+            I.waitForText(users[1].userdata.given_name + ' ' + users[1].userdata.sur_name, 5, { css: 'div.token' });
+            I.waitForText('super@ox.com', 5, { css: 'div.token' });
         });
     });
 });
@@ -737,10 +732,10 @@ Scenario('[C83384] Automatically bcc all messages', async function (I) {
     I.haveSetting('io.ox/mail//autobcc', 'super01@ox.com');
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
-    I.waitForElement('[data-id="virtual/settings/io.ox/mail"]');
+    I.waitForElement({ css: '[data-id="virtual/settings/io.ox/mail"]' });
     I.selectFolder('Compose');
     I.waitForVisible('.io-ox-settings-window [data-point="io.ox/mail/settings/compose/settings/detail/view"]', 5);
-    I.seeInField('[data-point="io.ox/mail/settings/compose/settings/detail/view"] [name="autobcc"]', 'super01@ox.com');
+    I.seeInField({ css: '[data-point="io.ox/mail/settings/compose/settings/detail/view"] [name="autobcc"]' }, 'super01@ox.com');
     I.openApp('Mail');
     I.waitForVisible('.io-ox-mail-window');
     I.clickToolbar('Compose');
@@ -756,8 +751,8 @@ Scenario('[C101615] Emojis', async function (I, users) {
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
     I.selectFolder('Inbox');
-    I.waitForElement('[title="😉✌️❤️"]');
-    I.click('[title="😉✌️❤️"]');
+    I.waitForElement({ css: '[title="😉✌️❤️"]' });
+    I.click({ css: '[title="😉✌️❤️"]' });
     I.waitForText('😉✌️❤️', 5, '.mail-detail-pane .subject');
     within({ frame: '.mail-detail-pane .mail-detail-frame' }, () => {
         I.waitForText('😉✌️❤️', 5, '.mail-detail-content p');
@@ -775,7 +770,7 @@ Scenario('[C101620] Very long TO field', async function (I, users) {
     I.seeCssPropertiesOnElements('.mail-detail-pane .recipients', { 'overflow': 'hidden' });
     I.seeCssPropertiesOnElements('.mail-detail-pane .recipients', { 'text-overflow': 'ellipsis' });
     //TODO: Width is not 100% when get css property?
-    I.doubleClick('[title="Very long TO field"]');
+    I.doubleClick({ css: '[title="Very long TO field"]' });
     I.waitForElement('.window-container-center .detail-view-app .thread-view-list');
     I.seeCssPropertiesOnElements('.floating-window-content .recipients', { 'overflow': 'hidden' });
     I.seeCssPropertiesOnElements('.floating-window-content .recipients', { 'text-overflow': 'ellipsis' });
@@ -889,6 +884,6 @@ Scenario('[C274142]- Disable autoselect in mail list layout', async function (I,
     }
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
-    I.see(mailcount, '[data-contextmenu-id="default0/INBOX"][data-model="default0/INBOX"] .folder-counter');
-    I.dontSeeElement('[data-ref="io.ox/mail/listview"] [aria-selected="true"]');
+    I.see(mailcount, { css: '[data-contextmenu-id="default0/INBOX"][data-model="default0/INBOX"] .folder-counter' });
+    I.dontSeeElement({ css: '[data-ref="io.ox/mail/listview"] [aria-selected="true"]' });
 });

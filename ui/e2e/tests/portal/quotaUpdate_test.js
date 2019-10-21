@@ -73,7 +73,5 @@ Scenario('[C7495] Quota update', async (I, users, contexts) => {
     //Verify quota is updated
     assert.isAbove(quotaAfter, quotaBefore, 'Oops');
     assert.isAtLeast(progressAfter, progressBefore, 'Oops'); //(>=)
-
-    I.logout();
 });
 

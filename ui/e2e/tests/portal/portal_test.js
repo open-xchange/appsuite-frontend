@@ -91,8 +91,8 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
     I.click('.item', '.widget[aria-label="Inbox"]');
     I.waitForElement('.io-ox-sidepopup', 5);
     I.waitForText(testrailID + ' - ' + testrailName, 5, '.io-ox-sidepopup-pane .subject');
-    I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane .person-from');
-    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane .address');
+    I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane');
+    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane');
     I.click('.item', '.widget[aria-label="Inbox"]');
     I.waitForDetached('.io-ox-sidepopup', 5);
 
@@ -156,7 +156,7 @@ Scenario('[C7472] Check if the portalpage is up to date', async function (I, use
         I.click('#io-ox-refresh-icon', '.taskbar');
         I.waitForElement('.launcher .fa-spin-paused', 5);
         I.wait(0.5);
-        element = await I.grabNumberOfVisibleElements('[aria-label="Inbox"] .item .person');
+        element = await I.grabNumberOfVisibleElements({ css: '[aria-label="Inbox"] .item .person' });
         if (!retries) assert.fail('Timeout waiting for element');
     }
     //Verifiy Inbox Widget
@@ -164,11 +164,10 @@ Scenario('[C7472] Check if the portalpage is up to date', async function (I, use
     I.click('.item', '.widget[aria-label="Inbox"]');
     I.waitForElement('.io-ox-sidepopup', 5);
     I.waitForText(testrailID + ' - ' + testrailName, 5, '.io-ox-sidepopup-pane .subject');
-    I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane .person-from');
-    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane .address');
+    I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane');
+    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane');
     I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup', 5);
-    I.logout();
     //TODO: Same for appointments, tasks birthdays and latest files.
 });
 
@@ -187,8 +186,8 @@ Scenario('[C7482] Add a mail to portal', async function (I, users) {
     I.waitForVisible('.io-ox-mail-window');
     I.waitForText('C7482 - Add a mail to portal', 5, { css: '.drag-title' });
     I.click('C7482 - Add a mail to portal', { css: '.drag-title' });
-    I.waitForElement('article.mail-detail', 5);
-    I.click('[aria-label="Mail Toolbar"] [data-action="more"]');
+    I.waitForElement({ css: 'article.mail-detail' }, 5);
+    I.click({ css: '[aria-label="Mail Toolbar"] [data-action="more"]' });
     I.waitForElement('.dropdown.open [data-action="io.ox/mail/actions/add-to-portal"]', 5);
     I.click('.dropdown.open [data-action="io.ox/mail/actions/add-to-portal"]');
     I.openApp('Portal');
@@ -198,8 +197,8 @@ Scenario('[C7482] Add a mail to portal', async function (I, users) {
     I.click('.item', '.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"]');
     I.waitForElement('.io-ox-sidepopup', 5);
     I.waitForText(testrailID + ' - ' + testrailName, 5, '.io-ox-sidepopup-pane .subject');
-    I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane .person-from');
-    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane .address');
+    I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane');
+    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane');
     I.click('.item', '.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"]');
     I.waitForDetached('.io-ox-sidepopup', 5);
 });
@@ -303,7 +302,6 @@ Scenario('[C7477] Add appointment widget', async function (I, users) {
     I.waitForText(testrailID, 5, '.io-ox-sidepopup-pane div.location');
     I.click('.item', '.widget[aria-label="Appointments"]');
     I.waitForDetached('.io-ox-sidepopup', 5);
-    I.logout();
 });
 
 Scenario('[C7478] Add user data widget', async function (I, users) {

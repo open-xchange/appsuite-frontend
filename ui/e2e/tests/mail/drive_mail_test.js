@@ -37,8 +37,7 @@ Scenario('[C85691] Cloud icon is used for drive-mail', async function (I, users)
     I.fillField('Subject', 'Git Gud');
 
     I.attachFile('.io-ox-mail-compose-window input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
-
-    I.click('Use Drive Mail');
+    I.click('Use Drive Mail', '.share-attachments');
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose-window');
 
@@ -62,6 +61,7 @@ Scenario('[C85685] Send drive-mail to internal recipient', async (I, users) => {
         mailText = 'WE NEED TO TALK ASAP!';
     I.waitForFocus('input[placeholder="To"]');
     I.fillField('To', robin.userdata.primaryEmail);
+    I.pressKey('Enter');
     I.fillField('Subject', subject);
     await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
         I.click('.default-style');
@@ -81,7 +81,7 @@ Scenario('[C85685] Send drive-mail to internal recipient', async (I, users) => {
     I.waitForText('Use Drive Mail', undefined, '.io-ox-mail-compose-window');
 
     // 5. Click "Drive Mail" to enable Drive Mail
-    I.click('Use Drive Mail', undefined, '.io-ox-mail-compose-window');
+    I.click('Use Drive Mail', '.share-attachments');
 
     // Expected Result: Drive Mail will get enabled and further options are shown.
     I.waitForText('Options', undefined, '.io-ox-mail-compose-window .attachments');
@@ -141,11 +141,12 @@ Scenario('[C85690] Expire date can be forced @shaky', async function (I, users) 
 
     I.waitForFocus('input[placeholder="To"]');
     I.fillField('To', users[1].get('primaryEmail'));
+    I.pressKey('Enter');
     I.fillField('Subject', 'Plus Ultra!');
 
     I.attachFile('.io-ox-mail-compose-window input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
 
-    I.click('Use Drive Mail');
+    I.click('Use Drive Mail', '.share-attachments');
     I.click('Options', '.mail-attachment-list');
     ['1 day', '1 week', '1 month', '3 months', '6 months', '1 year'].forEach((val) => {
         I.see(val);

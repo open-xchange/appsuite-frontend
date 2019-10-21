@@ -42,7 +42,7 @@ Scenario('[C114352] Create folder in copy/move dialog @shaky', async (I, users) 
 
     // 3. Open context menu and select "Move"
 
-    I.click('[data-original-title="More actions"]');
+    I.click({ css: '[data-original-title="More actions"]' });
     I.waitForVisible('.smart-dropdown-container');
 
     I.click('Move');
@@ -56,7 +56,7 @@ Scenario('[C114352] Create folder in copy/move dialog @shaky', async (I, users) 
 
     // 5. Choose a name and hit "Add"
 
-    I.fillField('[data-point="io.ox/core/folder/add-popup"] input', 'Foobar');
+    I.fillField({ css: '[data-point="io.ox/core/folder/add-popup"] input' }, 'Foobar');
     I.click('Add');
     I.waitForText('Move');
     I.see('Foobar');
@@ -64,7 +64,7 @@ Scenario('[C114352] Create folder in copy/move dialog @shaky', async (I, users) 
     // 6. Select the new folder and "Move"
 
     // Folder is already selected by default.
-    I.click('Move', '[data-point="io.ox/core/folder/picker"]');
+    I.click('Move', { css: '[data-point="io.ox/core/folder/picker"]' });
     I.wait(1);
     I.doubleClick('.list-item[aria-label*="Foobar"]');
     I.wait(2);
@@ -88,7 +88,7 @@ Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', a
 
     const myFiles = await I.grabDefaultFolder('infostore', { user: users[0] });
 
-    const folderA = await I.haveFolder({ title: 'folderA', module: 'infostore',parent: myFiles });
+    const folderA = await I.haveFolder({ title: 'folderA', module: 'infostore', parent: myFiles });
     const folderB = await I.haveFolder({ title: 'folderB', module: 'infostore', parent: folderA });
     await I.haveFolder({ title: 'folderC', module: 'infostore', parent: folderB });
 
@@ -172,7 +172,7 @@ Scenario('[C257247] Restore deleted items @shaky', async (I, users) => {
     I.click('.list-item[aria-label*="testfolder"]');
     I.waitForVisible('~Details');
 
-    I.click('[data-original-title="More actions"]');
+    I.click({ css: '[data-original-title="More actions"]' });
     I.waitForVisible('.smart-dropdown-container');
     I.see('Restore');
 
@@ -205,7 +205,7 @@ Scenario('[C257247] Restore deleted items @shaky', async (I, users) => {
     I.click('.list-item[aria-label*="testdocument.odt"]');
     I.waitForVisible('~Details');
 
-    I.click('[data-original-title="More actions"]');
+    I.click({ css: '[data-original-title="More actions"]' });
     I.waitForVisible('.smart-dropdown-container');
     I.see('Restore');
 

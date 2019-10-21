@@ -50,20 +50,20 @@ Scenario('[C104269] Import App Suite CSV', async (I) => {
 
         var values = ['Title', 'Company', 'Department', 'Position', 'im1'];
         values.forEach(function (name) {
-            I.seeElement('//dd[text()="' + name + '"]');
+            I.seeElement({ xpath: '//dd[text()="' + name + '"]' });
         });
 
         var age = moment().diff('2016-01-01', 'years');
-        I.seeElement(`//dd[text()="1/1/2016 (Age: ${age})"]`);
+        I.seeElement({ xpath: `//dd[text()="1/1/2016 (Age: ${age})"]` });
 
         var links = ['123 phone-home', '123 cell', 'mail1@example.com', 'mail2@example.com'];
         links.forEach(function (name) {
-            I.seeElement('//dd/a[text()="' + name + '"]');
+            I.seeElement({ xpath: '//dd/a[text()="' + name + '"]' });
         });
 
         var addresses = ['Street Home', '12345', 'Town Home', 'State Home', 'Country Home'];
         addresses.forEach(function (name) {
-            I.seeElement('//address[contains(text(), "' + name + '")]');
+            I.seeElement({ xpath: '//address[contains(text(), "' + name + '")]' });
         });
 
         // comment
@@ -303,8 +303,8 @@ Scenario('[C104269] Import App Suite CSV', async (I) => {
 
     function clickToolbarAction(action) {
         action = '[data-action="' + action + '"]';
-        I.waitForElement(action + ':not(.disabled)');
-        I.click(action);
+        I.waitForElement({ css: action + ':not(.disabled)' });
+        I.click({ css: action });
     }
 
     async function hasContactImage() {

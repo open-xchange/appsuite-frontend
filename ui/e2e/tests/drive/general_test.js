@@ -36,7 +36,7 @@ Scenario('[C8362] Add note', (I) => {
     prepare(I);
     I.clickToolbar('New');
     I.click('Add note');
-    I.waitForElement('input[type="text"].title');
+    I.waitForElement({ css: 'input[type="text"].title' });
     I.fillField('Title', 'Test title');
     I.fillField('Note', 'Test body');
     I.click('Save');
@@ -298,7 +298,7 @@ Scenario('[C45042] Filter files', async (I) => {
     I.clickToolbar('Select');
     // Read comment at the beginning of the scenario to find out why
     // the following selector is so clunky
-    I.click('a[data-name="filter"][data-value="all"]');
+    I.click({ css: 'a[data-name="filter"][data-value="all"]' });
     I.waitForText('document.doc', 5, '.file-list-view');
     I.waitNumberOfVisibleElements('.file-list-view .list-item', 22);
 });

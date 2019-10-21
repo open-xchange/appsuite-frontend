@@ -25,7 +25,7 @@ After(async function (users) {
 Scenario('Create never ending appointment and check display in several views @shaky', async function (I) {
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     // toggle weeks to activate caching
     I.clickToolbar('View');

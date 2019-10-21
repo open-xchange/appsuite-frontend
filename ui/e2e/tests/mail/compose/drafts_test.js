@@ -56,12 +56,10 @@ Scenario('[C114967] Draft is created automatically on logout', async function (I
     I.login('app=io.ox/mail');
 
     I.waitForText(mailSubject, undefined, '#io-ox-taskbar');
-    I.click('[data-action="restore"]', '#io-ox-taskbar');
+    I.click({ css: '[data-action="restore"]' }, '#io-ox-taskbar');
     I.waitForFocus('input[placeholder="To"]');
 
     await within({ frame: iframeLocator }, async () => {
         I.see(defaultText);
     });
-
-    I.logout();
 });

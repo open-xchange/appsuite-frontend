@@ -35,8 +35,8 @@ Scenario('[C163026] Change \'from\' display name when sending a mail', async (I,
     I.click(user.get('primaryEmail'));
     I.click('Edit names');
 
-    I.waitForElement('input[name=overwrite]');
-    I.click('input[name=overwrite]');
+    I.waitForElement({ css: 'input[name=overwrite]' });
+    I.click({ css: 'input[name=overwrite]' });
     I.fillField('name', 'Entropy McDuck');
     I.click('Save');
     I.waitForDetached('io-ox-dialog-popup');
@@ -49,6 +49,6 @@ Scenario('[C163026] Change \'from\' display name when sending a mail', async (I,
     I.click('Show names');
 
     // Close the dropdown
-    I.click('div.smart-dropdown-container');
+    I.click({ css: 'div.smart-dropdown-container' });
     I.dontSee('Entropy McDuck');
 });

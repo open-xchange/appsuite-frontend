@@ -29,11 +29,10 @@ Scenario('[C7354] With all available fields filled', function (I) {
         I.click(field);
         I.waitForText(field, undefined, '.contact-edit');
         if (input) I.pressKey(input);
-        I.wait(0.5);
     }
 
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/contacts"]' });
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
     I.waitForDetached('a.dropdown-toggle.disabled');
@@ -41,7 +40,7 @@ Scenario('[C7354] With all available fields filled', function (I) {
     I.retry(5).click('New contact');
     // real action in dropdown
     I.waitForVisible('.dropdown-menu');
-    I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
+    I.click('New contact', { css: '[data-action="io.ox/contacts/actions/create"]' });
     I.waitForVisible('.io-ox-contacts-edit-window');
 
     //personal info
@@ -172,7 +171,7 @@ Scenario('[C7354] With all available fields filled', function (I) {
 Scenario('Dirtycheck on creating contact', function (I) {
 
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/contacts"]' });
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
     I.waitForDetached('a.dropdown-toggle.disabled');
@@ -180,7 +179,7 @@ Scenario('Dirtycheck on creating contact', function (I) {
     I.retry(5).click('New contact');
     // real action in dropdown
     I.waitForVisible('.dropdown-menu');
-    I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
+    I.click('New contact', { css: '[data-action="io.ox/contacts/actions/create"]' });
     I.waitForVisible('.io-ox-contacts-edit-window');
 
     I.click('Discard');

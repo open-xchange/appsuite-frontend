@@ -83,7 +83,7 @@ Scenario('[C8375] Public files: Move a file', async (I) => {
 
 Scenario('[C8376] Add a subfolder', async (I) => {
     prepare(I);
-    I.click('[title="Actions for My files"]');
+    I.click({ css: '[title="Actions for My files"]' });
     I.click('Add new folder', '.smart-dropdown-container');
     I.waitForText('Add new folder', 5, '.modal-dialog');
     I.fillField('Folder name', 'Testfolder');
@@ -142,8 +142,8 @@ Scenario('[C8377] Invite a person @shaky', (I, users) => {
         I.selectFolder(users[0].get('name'));
         I.waitForElement(locate('.filename').withText('Music').inside('.list-view'));
         I.doubleClick(locate('.filename').withText('Music').inside('.list-view'));
-        I.click('[title="Actions for Music"]');
-        I.click('[data-action="invite"]', '.smart-dropdown-container');
+        I.click({ css: '[title="Actions for Music"]' });
+        I.click({ css: '[data-action="invite"]' }, '.smart-dropdown-container');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.waitForText('Viewer', 2, '.permissions-view');
         I.click('Close');
@@ -171,8 +171,8 @@ Scenario('[C8377] Invite a person @shaky', (I, users) => {
         I.selectFolder('Public files');
         I.waitForText(publicFolderName, 5, '.list-view');
         I.selectFolder(publicFolderName);
-        I.click('[title="Actions for ' + publicFolderName + '"]');
-        I.click('[data-action="invite"]', '.smart-dropdown-container');
+        I.click({ css: '[title="Actions for ' + publicFolderName + '"]' });
+        I.click({ css: '[data-action="invite"]' }, '.smart-dropdown-container');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.see('Viewer', '.permissions-view .row .role');
     });
@@ -219,7 +219,7 @@ Scenario('[C8378] Invite a group', async (I, users) => {
         I.waitForElement('.file-list-view.complete');
         I.waitForText(folderName, 2, '.folder-tree');
         I.see(folderName, '.folder-tree');
-        I.click('[title="Actions for ' + folderName + '"]');
+        I.click({ css: '[title="Actions for ' + folderName + '"]' });
         I.waitForElement('.smart-dropdown-container [data-action="invite"]');
         I.click('.smart-dropdown-container [data-action="invite"]');
         I.waitForElement(locate('.permissions-view .row').at(2));
@@ -381,8 +381,8 @@ Scenario('[C8386] Uninvite a group', async (I, users) => {
         I.waitForElement('.file-list-view.complete');
         I.waitForText(folderName, 2, '.folder-tree');
         I.see(folderName, '.folder-tree');
-        I.click('[title="Actions for ' + folderName + '"]');
-        I.click('[data-action="invite"]', '.smart-dropdown-container');
+        I.click({ css: '[title="Actions for ' + folderName + '"]' });
+        I.click({ css: '[data-action="invite"]' }, '.smart-dropdown-container');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.see('Author', '.permissions-view .row .role');
         I.click('Close', '.modal-dialog');
@@ -392,7 +392,7 @@ Scenario('[C8386] Uninvite a group', async (I, users) => {
         I.clickToolbar('Share');
         I.waitForText('Invite people');
         I.click('Invite people', '.dropdown.open');
-        I.click('button[title=Actions]', '.modal-dialog');
+        I.click({ css: 'button[title=Actions]' }, '.modal-dialog');
         I.waitForText('Revoke access');
         I.click('Revoke access');
         I.click('Share', '.modal-dialog');
@@ -408,7 +408,7 @@ Scenario('[C8386] Uninvite a group', async (I, users) => {
 
 });
 
-Scenario('[C8387] Rename a folder', async (I, users) => {
+Scenario('[C8387] Rename a folder', async (I) => {
     // Testrail description:
     // A custom folder in Drive exists.
     // 1. Switch to drive, select a non -default folder
@@ -421,7 +421,7 @@ Scenario('[C8387] Rename a folder', async (I, users) => {
     const folderName = 'C8387';
     const folder = await I.haveFolder({ title: folderName, module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
     prepare(I, folder);
-    I.click('[title="Actions for ' + folderName + '"]');
+    I.click({ css: '[title="Actions for ' + folderName + '"]' });
     I.click('Rename', '.smart-dropdown-container');
     I.waitForText('Rename folder');
     // A11y issue here: There is no label for this input present
@@ -431,8 +431,8 @@ Scenario('[C8387] Rename a folder', async (I, users) => {
     ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {
         I.selectFolder(f);
         I.waitForElement('.file-list-view.complete');
-        I.waitForElement('[title="Actions for ' + f + '"]');
-        I.click('[title="Actions for ' + f + '"]');
+        I.waitForElement({ css: '[title="Actions for ' + f + '"]' });
+        I.click({ css: '[title="Actions for ' + f + '"]' });
         I.waitForText('Add new folder', '.smart-dopdown-container');
         I.dontSee('Rename', '.smart-dropdown-container');
         I.pressKey('Escape');
@@ -440,7 +440,7 @@ Scenario('[C8387] Rename a folder', async (I, users) => {
 
 });
 
-Scenario('[C8388] Delete a folder', async (I, users) => {
+Scenario('[C8388] Delete a folder', async (I) => {
     // Testrail description:
     // A custom folder exists in Drive
     // 1. Choose a custom folder
@@ -451,7 +451,7 @@ Scenario('[C8388] Delete a folder', async (I, users) => {
     const folderName = 'C8388';
     const folder = await I.haveFolder({ title: folderName, module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
     prepare(I, folder);
-    I.click('[title="Actions for ' + folderName + '"]');
+    I.click({ css: '[title="Actions for ' + folderName + '"]' });
     I.click('Delete', '.smart-dropdown-container');
     I.waitForText('Do you really want to delete folder "' + folderName + '"?');
     I.click('Delete', '.modal-footer');
@@ -460,15 +460,15 @@ Scenario('[C8388] Delete a folder', async (I, users) => {
     ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {
         I.selectFolder(f);
         I.waitForElement('.file-list-view.complete');
-        I.waitForElement('[title="Actions for ' + f + '"]');
-        I.click('[title="Actions for ' + f + '"]');
+        I.waitForElement({ css: '[title="Actions for ' + f + '"]' });
+        I.click({ css: '[title="Actions for ' + f + '"]' });
         I.waitForText('Add new folder', '.smart-dropdown-container');
         I.dontSee('Delete', '.smart-dropdown-container');
         I.pressKey('Escape');
     });
 });
 
-Scenario('[C8389] Move a folder', async (I, users) => {
+Scenario('[C8389] Move a folder', async (I) => {
     // Testrail description:
     // A folder hierarchy e.g.: My files Subfolder a SubSubFolder 1 Subfolder b
     // 1. Choose a folder
@@ -497,8 +497,8 @@ Scenario('[C8389] Move a folder', async (I, users) => {
     ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {
         I.selectFolder(f);
         I.waitForElement('.file-list-view.complete');
-        I.waitForElement('[title="Actions for ' + f + '"]');
-        I.click('[title="Actions for ' + f + '"]');
+        I.waitForElement({ css: '[title="Actions for ' + f + '"]' });
+        I.click({ css: '[title="Actions for ' + f + '"]' });
         I.waitForText('Add new folder');
         I.dontSee('Move', '.smart-dropdown-container');
         I.pressKey('Escape');

@@ -57,7 +57,7 @@ Scenario('Create appointments with participants who will accept/decline/accept t
 
     // login new user1 for accept
     I.login('app=io.ox/calendar', { user: users[1] });
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     I.selectFolder('Calendar');
 
@@ -67,7 +67,7 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
 
-    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/changestatus"]');
+    I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
     I.waitForElement('.modal-dialog');
 
@@ -87,7 +87,7 @@ Scenario('Create appointments with participants who will accept/decline/accept t
 
     // login new user2 for decline
     I.login('app=io.ox/calendar', { user: users[2] });
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     I.selectFolder('Calendar');
 
@@ -97,7 +97,7 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
 
-    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/changestatus"]');
+    I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
     I.waitForElement('.modal-dialog');
 
@@ -117,7 +117,7 @@ Scenario('Create appointments with participants who will accept/decline/accept t
 
     // login new user3 for accept tentative
     I.login('app=io.ox/calendar', { user: users[3] });
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     I.selectFolder('Calendar');
 
@@ -127,7 +127,7 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
 
-    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/changestatus"]');
+    I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
     I.waitForElement('.modal-dialog');
 
@@ -141,7 +141,7 @@ Scenario('Create appointments with participants who will accept/decline/accept t
 
     // login owner
     I.login('app=io.ox/calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     I.selectFolder('Calendar');
     I.clickToolbar('View');

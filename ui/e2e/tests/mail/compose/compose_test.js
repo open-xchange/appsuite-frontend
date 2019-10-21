@@ -112,8 +112,6 @@ Scenario('Compose and discard with/without prompts', async function (I, users) {
     ));
     I.click('Discard');
     I.dontSee('Do you really want to discard your message?');
-
-    I.logout();
 });
 
 Scenario('Compose mail with different attachments', async function (I, users) {
@@ -187,9 +185,6 @@ Scenario('Compose mail with different attachments', async function (I, users) {
     I.see('Testsubject', '.mail-detail-pane');
     I.waitForVisible('.attachments');
     I.see('2 attachments'); // has 2 attachments as one of the attachments is inline
-
-    I.logout();
-
 });
 
 Scenario('Compose with inline image, which is removed again', async function (I, users) {
@@ -222,8 +217,6 @@ Scenario('Compose with inline image, which is removed again', async function (I,
     I.see('Testsubject', '.mail-detail-pane');
     I.waitForVisible('.mail-detail-frame');
     I.dontSeeElement('.attachments');
-
-    I.logout();
 });
 
 Scenario('Compose with drivemail attachment and edit draft @shaky', async function (I, users) {
@@ -335,8 +328,6 @@ Scenario('Compose with drivemail attachment and edit draft @shaky', async functi
     I.switchTo('.mail-detail-frame');
     I.see('Testdocument.txt');
     I.switchTo();
-
-    I.logout();
 });
 
 Scenario('Compose mail with vcard and read receipt', async function (I, users) {
@@ -357,8 +348,7 @@ Scenario('Compose mail with vcard and read receipt', async function (I, users) {
     I.click('Options');
     I.click('Request read receipt');
     I.click('Send');
-    I.waitForInvisible('floating-window');
-    I.wait(1);
+    I.waitForInvisible('.floating-window');
 
     I.logout();
 
@@ -371,17 +361,15 @@ Scenario('Compose mail with vcard and read receipt', async function (I, users) {
     I.waitForVisible('.attachments');
     I.see('1 attachment');
 
-    I.logout();
+    // I.logout();
 
-    I.login('app=io.ox/mail');
+    // I.login('app=io.ox/mail');
 
     // TODO check read aknowledgement
     // I.waitForVisible({ css: 'li.unread' }); // wait for one unread mail
     // I.click({ css: 'li.unread' });
     // I.waitForVisible('.mail-detail-pane .subject');
     // I.see('Read acknowledgement', '.mail-detail-pane');
-
-    I.logout();
 });
 
 Scenario('Compose mail, refresh and continue work at restore point', async function (I, users) {
@@ -408,6 +396,4 @@ Scenario('Compose mail, refresh and continue work at restore point', async funct
 
     I.seeInField('Subject', 'Testsubject');
     I.seeInField({ css: 'textarea.plain-text' }, 'Testcontent');
-
-    I.logout();
 });

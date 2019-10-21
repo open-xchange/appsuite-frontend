@@ -69,6 +69,4 @@ Scenario('[C83388] Visual indicator for blocked images', async function (I, user
         const [rule] = await I.grabCssPropertyFrom('img[data-original-src], img[src]', 'background-image');
         expect(rule).not.to.contain(style);
     });
-
-    I.logout();
 });

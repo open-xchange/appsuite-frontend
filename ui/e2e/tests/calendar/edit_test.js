@@ -73,10 +73,10 @@ Scenario('[C7449] Move appointment to folder', async function (I) {
 
     // disable the other folder
     I.wait(1);
-    I.waitForElement('[aria-label="New calendar"][aria-checked="true"]');
+    I.waitForElement({ css: '[aria-label="New calendar"][aria-checked="true"]' });
     I.waitForElement('~New calendar', '.selected');
-    I.click('[title="New calendar"] .color-label');
-    I.waitForElement('[aria-label="New calendar"][aria-checked="false"]');
+    I.click({ css: '[title="New calendar"] .color-label' });
+    I.waitForElement({ css: '[aria-label="New calendar"][aria-checked="false"]' });
 
     // open all views and verify that the appointment is gone
     ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
@@ -87,8 +87,8 @@ Scenario('[C7449] Move appointment to folder', async function (I) {
     });
 
     // enable the other folder
-    I.click('[title="New calendar"] .color-label');
-    I.waitForElement('[aria-label="New calendar"][aria-checked="true"]');
+    I.click({ css: '[title="New calendar"] .color-label' });
+    I.waitForElement({ css: '[aria-label="New calendar"][aria-checked="true"]' });
 
     // open all views and verify that the appointment is there again
     ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
@@ -256,7 +256,7 @@ Scenario('[C7465] Edit appointment in shared folder as author', async function (
     I.waitForElement('.folder[data-id="virtual/flat/event/shared"]');
     // switch on New calendar
     I.click('.folder[data-id="virtual/flat/event/shared"] .folder-arrow');
-    I.click(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New calendar"] .color-label`);
+    I.click({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New calendar"] .color-label` });
     I.click('~Next Week', '.page.current');
 
     I.waitForText('Testappointment');
@@ -328,7 +328,7 @@ Scenario('[C234659] Split appointment series', async function (I, users) {
     I.seeNumberOfElements('.appointment', 5);
 
     // click on the second .appointment
-    I.click('(//div[@class="appointment-content"])[2]');
+    I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
     I.waitForVisible('.io-ox-sidepopup .inline-toolbar-container');
 
     I.click('Edit');
@@ -349,7 +349,7 @@ Scenario('[C234659] Split appointment series', async function (I, users) {
     I.dontSee(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, '.io-ox-sidepopup');
     I.click('~Close', '.io-ox-sidepopup');
 
-    I.click('(//div[@class="appointment-content"])[2]');
+    I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
     I.waitForVisible('.io-ox-sidepopup');
     I.see(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, '.io-ox-sidepopup');
 });
@@ -393,7 +393,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
     I.seeNumberOfElements('.appointment', 5);
 
     // click on the second .appointment and edit it
-    I.click('(//div[@class="appointment-content"])[2]');
+    I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
     I.waitForVisible('.io-ox-sidepopup');
 
     I.waitForText('Edit', undefined, '.io-ox-sidepopup');
@@ -428,7 +428,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
     I.waitForText('Changedsubject', undefined, '.io-ox-sidepopup');
     I.click('~Close', '.io-ox-sidepopup');
 
-    I.click('(//div[@class="appointment-content"])[2]');
+    I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
     I.waitForVisible('.io-ox-sidepopup');
     I.waitForText('Changedsubject', undefined, '.io-ox-sidepopup');
 
@@ -476,10 +476,10 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
     }, { user: users[1] });
     I.login('app=io.ox/calendar', { user: users[1] });
 
-    I.waitForElement('[data-id="virtual/flat/event/shared"]');
+    I.waitForElement({ css: '[data-id="virtual/flat/event/shared"]' });
     // switch on New calendar
     I.doubleClick('~Shared calendars');
-    I.click(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New calendar"] .color-label`);
+    I.click({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New calendar"] .color-label` });
 
     I.waitForText('Testappointment');
 
@@ -612,7 +612,7 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
     I.login('app=io.ox/calendar');
 
     I.waitForText('Testsubject');
-    I.click('(//div[@class="appointment-content"])[2]');
+    I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
     I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Details');
     I.see(`Organizer ${users[0].userdata.display_name}`, '.io-ox-sidepopup');
@@ -637,7 +637,7 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
     I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup');
 
-    I.click('(//div[@class="appointment-content"])[2]');
+    I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
     I.waitForVisible('.io-ox-sidepopup');
     I.click('Details');
     I.waitForText(`Organizer ${users[1].userdata.display_name}`, '.io-ox-sidepopup');
@@ -779,7 +779,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
 
     I.waitForVisible('.page.current .appointment');
     time.add(2, 'days');
-    I.see('Testappointment', `[id="${time.format('YYYY-M-D')}"]`);
+    I.see('Testappointment', { css: `[id="${time.format('YYYY-M-D')}"]` });
 
     time.add(1, 'day');
     I.dragAndDrop(locate('.page.current .appointment'), `[id="${time.format('YYYY-M-D')}"]`);
@@ -787,7 +787,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     I.click('Edit series');
 
     I.waitForInvisible('.page.current .appointment.io-ox-busy');
-    I.see('Testappointment', `[id="${time.format('YYYY-M-D')}"]`);
+    I.see('Testappointment', { css: `[id="${time.format('YYYY-M-D')}"]` });
 });
 
 Scenario('[C7453] Edit appointment, set the all day checkmark', async function (I) {
@@ -911,22 +911,22 @@ Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, use
     }, { user: users[0] });
 
     I.login('app=io.ox/calendar&perspective=week:week');
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
     I.waitForElement(appointmentSelector, 5);
     I.click(appointmentSelector);
     I.waitForElement('.io-ox-sidepopup', 5);
     I.waitForText('Edit', 5, '.io-ox-sidepopup');
     I.click('Edit');
-    I.waitForElement('[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit', 5);
-    I.waitForVisible('[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit', 5);
+    I.waitForElement({ css: '[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit' }, 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit' }, 5);
     I.uncheckOption({ css: 'input[name="allDay"]' });
     I.click('~Start time');
     I.click({ css: '[data-attribute="startDate"] [data-value="12:00 PM"]' }, '.dropdown-menu.calendaredit');
     I.click('~End time');
     I.click({ css: '[data-attribute="endDate"] [data-value="1:00 PM"]' });
     I.click('Save');
-    I.waitForDetached('[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit');
+    I.waitForDetached({ css: '[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit' });
     I.waitForElement(appointmentSelector, 5);
     I.click(appointmentSelector);
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
@@ -987,22 +987,22 @@ Scenario('[C7462] Remove a participant', async function (I, users) {
         ]
     }, { user: users[0] });
     I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
     I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
     I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
     I.waitForVisible('.io-ox-calendar-main .io-ox-sidepopup');
-    I.waitForElement('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.waitForElement({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
     I.waitForElement('.io-ox-sidepopup-pane a[title="' + users[1].userdata.primaryEmail + '"]');
-    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.click({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
     I.waitForVisible('.io-ox-calendar-edit.container');
-    I.waitForElement('//a[contains(text(),"' + users[1].userdata.primaryEmail + '")]/../../a[contains(@class, "remove")]');
-    I.click('//a[contains(text(),"' + users[1].userdata.primaryEmail + '")]/../../a[contains(@class, "remove")]');
-    I.waitForDetached('//a[contains(text(),"' + users[1].userdata.primaryEmail + '")]/../../a[contains(@class, "remove")]');
+    I.waitForElement({ xpath: '//a[contains(text(),"' + users[1].userdata.primaryEmail + '")]/../../a[contains(@class, "remove")]' });
+    I.click({ xpath: '//a[contains(text(),"' + users[1].userdata.primaryEmail + '")]/../../a[contains(@class, "remove")]' });
+    I.waitForDetached({ xpath: '//a[contains(text(),"' + users[1].userdata.primaryEmail + '")]/../../a[contains(@class, "remove")]' });
     I.click('Save');
     I.waitForDetached('.floating-window-content');
     I.waitForVisible('.io-ox-calendar-main .io-ox-sidepopup');
-    I.waitForElement('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.waitForElement({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
     I.waitForText('Participants');
     I.dontSeeElement('.io-ox-sidepopup-pane a[title="' + users[1].userdata.primaryEmail + '"]');
     I.logout();
@@ -1092,8 +1092,8 @@ Scenario('[C7461] Add a participant/ressource @shaky', async function (I, users)
             I.waitForVisible('.io-ox-sidepopup');
             I.see(subject, '.io-ox-sidepopup');
         }
-        I.seeElement('a[aria-label="unconfirmed 4"]');
-        I.seeElement('a[aria-label="accepted 1"]');
+        I.seeElement({ css: 'a[aria-label="unconfirmed 4"]' });
+        I.seeElement({ css: 'a[aria-label="accepted 1"]' });
         [
             `${userA.userdata.sur_name}, ${userA.userdata.given_name}`,
             `${userB.userdata.sur_name}, ${userB.userdata.given_name}`,
@@ -1131,7 +1131,7 @@ Scenario('[C7461] Add a participant/ressource @shaky', async function (I, users)
     I.click('#io-ox-refresh-icon');
     I.waitForElement('#io-ox-refresh-icon .fa-spin');
     I.waitForDetached('#io-ox-refresh-icon .fa-spin');
-    I.retry().waitForElement(`span[title="New appointment: ${subject}"]`);
+    I.retry().waitForElement({ css: `span[title="New appointment: ${subject}"]` });
 
     // clean up groups and resources
     await I.dontHaveResource(resourceName);
@@ -1359,10 +1359,10 @@ Scenario('[C7459] Remove attachments @shaky', async function (I) {
     I.see('Attachments', '.io-ox-calendar-edit-window');
 
     // Expected Result: The attachments are not longer shown at the edit dialog
-    I.click('a[title="Remove attachment"]', locate('div.file').withDescendant(locate('div').withText('testdocument.odt')));
+    I.click({ css: 'a[title="Remove attachment"]' }, locate('div.file').withDescendant(locate('div').withText('testdocument.odt')));
     I.dontSee('testdocument.odt', '.io-ox-calendar-edit-window');
     I.see('testdocument.rtf', '.io-ox-calendar-edit-window');
-    I.click('a[title="Remove attachment"]', locate('div.file').withDescendant(locate('div').withText('testdocument.rtf')));
+    I.click({ css: 'a[title="Remove attachment"]' }, locate('div.file').withDescendant(locate('div').withText('testdocument.rtf')));
     I.dontSee('testdocument.odt', '.io-ox-calendar-edit-window');
     I.dontSee('testdocument.rtf', '.io-ox-calendar-edit-window');
 
@@ -1488,14 +1488,14 @@ Scenario('[C7463] Remove a resource', async function (I, users) {
         ]
     }, { user: users[0] });
     I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
     I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
-    I.waitForElement('[data-action="io.ox/calendar/detail/actions/edit"]', 5);
+    I.waitForElement({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' }, 5);
     expect(await I.grabNumberOfVisibleElements(locate('.halo-resource-link').inside('.participant-list').withText(JSON.stringify(resource.display_name)))).to.equal(1);
-    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.click({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
     I.waitForElement(locate('.participant-name').withText(JSON.stringify(resource.display_name)));
     expect(await I.grabNumberOfVisibleElements(locate('.participant-name').withText(JSON.stringify(resource.display_name)))).to.equal(1);
     I.click(locate('.removable .remove').inside('.participant-wrapper').withText(JSON.stringify(resource.display_name)));

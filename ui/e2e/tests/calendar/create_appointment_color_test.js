@@ -39,7 +39,7 @@ let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) 
         I.click(startTime);
     }
     if (color) {
-        I.click('Appointment color');
+        I.click('Appointment color', '.color-picker-dropdown');
         I.waitForVisible('.io-ox-calendar-color-picker-container');
         I.click(locate('a')
             .inside('.smart-dropdown-container.dropdown.open')
@@ -77,16 +77,16 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     I.click('.fa.fa-caret-right');
     I.selectFolder('New calendar');
     I.click(selectInsideFolder('a'));
-    I.waitForText('Permissions');
-    I.click('Permissions');
+    I.waitForText('Permissions / Invite people');
+    I.click('Permissions / Invite people');
     I.waitForFocus('.form-control.tt-input');
     I.fillField('.form-control.tt-input', user_b.get('primaryEmail'));
     I.pressKey('Enter');
     I.click('Save');
     I.waitToHide('Permissions');
     //create 2 test appointments with different colors
-    createAppointment({ subject: 'testing is fun', folder: 'New calendar', startTime: '8:00', color: 'dark green' });
-    createAppointment({ subject: 'testing is awesome', folder: 'New calendar', startTime: '10:00', color: 'dark cyan' });
+    createAppointment({ subject: 'testing is fun', folder: 'New calendar', startTime: '8:00 AM', color: 'dark green' });
+    createAppointment({ subject: 'testing is awesome', folder: 'New calendar', startTime: '10:00 AM', color: 'dark cyan' });
     I.logout();
     //login user b
     I.waitForVisible('#io-ox-login-screen');

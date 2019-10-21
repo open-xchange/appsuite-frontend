@@ -39,7 +39,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     });
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     I.clickToolbar('View');
     I.click('Workweek');
@@ -64,7 +64,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/edit"]');
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.click('Appointment color');
+    I.click('Appointment color', '.color-picker-dropdown');
     I.click('dark red');
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
@@ -81,7 +81,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     I.waitForText('Edit', 5, '.io-ox-sidepopup');
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.click('Appointment color');
+    I.click('Appointment color', '.color-picker-dropdown');
     I.click('Use calendar color');
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
@@ -127,7 +127,7 @@ Scenario('Changing calendar color should change appointment color that uses cale
     });
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     I.clickToolbar('View');
     I.click('Workweek');
@@ -142,15 +142,15 @@ Scenario('Changing calendar color should change appointment color that uses cale
     I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/edit"]');
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.click('Appointment color');
-    const [darkRed] = await I.grabCssPropertyFrom('a[title="dark red"] > i', 'background-color');
+    I.click('Appointment color', '.color-picker-dropdown');
+    const [darkRed] = await I.grabCssPropertyFrom({ css: 'a[title="dark red"] > i' }, 'background-color');
     I.click('dark red');
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
     // change calendar color to dark green
     I.click('.folder-options');
-    const [darkGreen] = await I.grabCssPropertyFrom('a[title="dark green"] > i', 'background-color');
+    const [darkGreen] = await I.grabCssPropertyFrom({ css: 'a[title="dark green"] > i' }, 'background-color');
     I.click('dark green');
 
     // click some stuff
@@ -159,7 +159,7 @@ Scenario('Changing calendar color should change appointment color that uses cale
     I.waitForText('test appointment one', 5, '.workweek');
 
     // get folder color
-    const [folderColor] = await I.grabCssPropertyFrom('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label', 'background-color');
+    const [folderColor] = await I.grabCssPropertyFrom({ css: 'li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label' }, 'background-color');
     // get appointment colors
     const [appointmentOneColor] = await I.grabCssPropertyFrom('.workweek .appointment[aria-label*="test appointment one"]', 'background-color');
     const [appointmentTwoColor] = await I.grabCssPropertyFrom('.workweek .appointment[aria-label*="test appointment two"]', 'background-color');

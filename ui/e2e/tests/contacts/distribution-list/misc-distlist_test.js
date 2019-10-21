@@ -44,7 +44,7 @@ Scenario('Add external participant as contact', function (I) {
     I.click('Add to address book', '.io-ox-sidepopup');
 
     I.waitForVisible('.io-ox-contacts-edit-window');
-    I.waitForVisible('[name="last_name"]');
+    I.waitForVisible({ css: '[name="last_name"]' });
 
     //confirm dirtycheck is working properly
     I.click('Discard', '.io-ox-contacts-edit-window');
@@ -93,8 +93,8 @@ Scenario('[C7376] Send a mail to list', async function (I, users) {
         I.login('app=io.ox/mail', { user: user });
         I.selectFolder('Inbox');
         I.waitForVisible('.selected .contextmenu-control');
-        I.waitForElement('[title="' + display_name + '"]');
-        I.click('[title="' + display_name + '"]');
+        I.waitForElement({ css: '[title="' + display_name + '"]' });
+        I.click({ css: '[title="' + display_name + '"]' });
         I.waitForText(display_name, 5, '.mail-detail-pane .subject');
         I.logout();
     });

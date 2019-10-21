@@ -50,8 +50,8 @@ Scenario('Contacts - Modal Dialog - New address book (with exceptions)', async (
 Scenario('Contacts - Modal Dialog - Import', async (I) => {
 
     prepare(I);
-    I.waitForElement('[title="Actions for Contacts"]');
-    I.click('*[title="Actions for Contacts"]');
+    I.waitForElement({ css: '[title="Actions for Contacts"]' });
+    I.click({ css: '*[title="Actions for Contacts"]' });
     I.waitForText('Import');
     I.click('Import');
     I.waitForElement('h1.modal-title');
@@ -72,8 +72,8 @@ Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions) @shaky
     ] };
 
     prepare(I);
-    I.waitForVisible('[title="Actions for Contacts"]');
-    I.click('*[title="Actions for Contacts"]');
+    I.waitForVisible({ css: '[title="Actions for Contacts"]' });
+    I.click({ css: '*[title="Actions for Contacts"]' });
     I.waitForText('Create sharing link');
     I.click('Create sharing link');
     I.waitForVisible('h1.modal-title');

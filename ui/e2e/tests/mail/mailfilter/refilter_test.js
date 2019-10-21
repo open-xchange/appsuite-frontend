@@ -32,15 +32,15 @@ function sampleRule(I) {
     return I.haveMailFilterRule({
         id: 0,
         position: 0,
-        rulename: "no foobar in inbox",
+        rulename: 'no foobar in inbox',
         active: true,
         flags: [],
         test: {
-            id: "subject",
-            comparison: "contains",
-            values: ["foobar"]
+            id: 'subject',
+            comparison: 'contains',
+            values: ['foobar']
         },
-        actioncmds: [{ id: "move", into :"default0/INBOX/foo" }]
+        actioncmds: [{ id: 'move', into: 'default0/INBOX/foo' }]
     });
 }
 

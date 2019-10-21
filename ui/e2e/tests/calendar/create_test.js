@@ -40,7 +40,7 @@ Scenario('Create appointment with all fields', async function (I) {
 
     I.click('~Next Week', '.page.current');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'test title');
@@ -48,7 +48,7 @@ Scenario('Create appointment with all fields', async function (I) {
     I.selectOption('Visibility', 'Private');
 
     I.click('~Start time');
-    I.click('12:00 PM', 'fieldset[data-attribute="startDate"]');
+    I.click('12:00 PM', { css: 'fieldset[data-attribute="startDate"]' });
 
     I.click('Create');
     I.waitForDetached('.io-ox-calendar-edit-window');
@@ -110,15 +110,15 @@ Scenario('Create appointment with all fields', async function (I) {
 
 Scenario('fullday appointments', async function (I) {
     I.login('app=io.ox/calendar');
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
     I.clickToolbar('View');
     I.click('Week');
     I.wait(1);
-    I.clickToolbar('New');
-    I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
+    I.clickToolbar('New appointment');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar/edit"]' });
     I.fillField('Subject', 'Fullday test');
-    I.click('All day', '.checkbox > label');
+    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('All day').as('All day'), '.checkbox > label');
 
     I.click('~Date (M/D/YYYY)');
     I.pressKey(['Control', 'a']);
@@ -146,10 +146,10 @@ Scenario('fullday appointments', async function (I) {
 //See Bug 64409
 Scenario('Enter start time and press enter key', function (I) {
     I.login('app=io.ox/calendar');
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
-    I.clickToolbar('New');
-    I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
+    I.clickToolbar('New appointment');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar/edit"]' });
 
     I.click('~Start time');
     I.clearField('~Start time');
@@ -206,7 +206,7 @@ var checkInAllViews = async function (I, subject, location) {
 Scenario('[C7411] Discard appointment during the creation', function (I) {
     const time = moment().format('YYYY-MM-DD HH:mm');
     I.login('app=io.ox/calendar');
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForText('Subject');
     I.fillField('Subject', 'Testappointment ' + time);
     I.fillField('Location', 'TestLocation');
@@ -253,8 +253,8 @@ Scenario.skip('[C7412] Create private appointment @contentReview @bug', async fu
 
     I.login('app=io.ox/calendar', { user: users[1] });
     I.doubleClick('~Shared calendars');
-    I.waitForVisible(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${title}"]`);
-    I.doubleClick(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${title}"]`);
+    I.waitForVisible({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${title}"]` });
+    I.doubleClick({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${title}"]` });
     ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
@@ -273,7 +273,7 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
 
     I.login('app=io.ox/calendar');
     I.waitForElement('.classic-toolbar');
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForText('Subject');
     I.fillField('Subject', 'Testappointment');
 
@@ -282,7 +282,7 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
     I.pressKey(date.format('l'));
     I.pressKey('Enter');
 
-    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'), '.io-ox-calendar-edit-window');
     I.click(`Every ${date.format('dddd')}.`);
 
     I.waitForElement('.modal-dialog');
@@ -341,7 +341,7 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
     if (date.month() === 10) date.add(1, 'week'); // special cases
 
     I.login('app=io.ox/calendar');
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForText('Subject');
     I.fillField('Subject', 'Testappointment');
 
@@ -350,7 +350,7 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
     I.pressKey(date.format('l'));
     I.pressKey('Enter');
 
-    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'), '.io-ox-calendar-edit-window');
     I.click(`Every ${date.format('dddd')}.`);
 
     I.waitForElement('.modal-dialog');
@@ -359,7 +359,7 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
     I.waitForText('Weekday');
     // check option doesn't work, not sure why
     //I.checkOption('Weekday');
-    I.click('input[value="weekday"]');
+    I.click({ css: 'input[value="weekday"]' });
     I.see('Every year on the first Sunday in December.');
 
     I.click('Apply', '.modal-dialog');
@@ -419,7 +419,7 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
     // and select the correct date
     I.retry(5).click(`~${date.format('l, dddd')}, CW ${date.week()}`, '.window-sidepanel');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForText('Subject');
     I.fillField('Subject', 'Testappointment');
 
@@ -428,7 +428,7 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
     I.pressKey(date.format('l'));
     I.pressKey('Enter');
 
-    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'), '.io-ox-calendar-edit-window');
     I.click(`Every ${date.format('dddd')}.`);
 
     I.waitForElement('.modal-dialog');
@@ -488,7 +488,7 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
     // and select the correct date
     I.retry(5).click(`~${date.format('l, dddd')}, CW ${date.week()}`, '.window-sidepanel');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForText('Subject');
     I.fillField('Subject', 'Testappointment');
 
@@ -497,7 +497,7 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
     I.pressKey(date.format('l'));
     I.pressKey('Enter');
 
-    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'), '.io-ox-calendar-edit-window');
     I.click(`Every ${date.format('dddd')}.`);
 
     I.waitForElement('.modal-dialog');
@@ -506,7 +506,7 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
     I.waitForText('Weekday');
     // check option doesn't work, not sure why
     //I.checkOption('Weekday');
-    I.click('input[value="weekday"]');
+    I.click({ css: 'input[value="weekday"]' });
     I.see('Every month on the second Monday.');
 
     I.click('Apply', '.modal-dialog');
@@ -555,7 +555,7 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
     // and select the correct date
     I.retry(5).click(`~${date.format('l, dddd')}, CW ${date.week()}`, '.window-sidepanel');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForText('Subject');
     I.fillField('Subject', 'Testappointment');
 
@@ -564,7 +564,7 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
     I.pressKey(date.format('l'));
     I.pressKey('Enter');
 
-    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'), '.io-ox-calendar-edit-window');
     I.click(`Every ${date.format('dddd')}.`);
 
     I.waitForElement('.modal-dialog');
@@ -638,7 +638,7 @@ Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thu
     // and select the correct date
     I.retry(5).click(`~${date.format('l, dddd')}, CW ${date.week()}`, '.window-sidepanel');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForText('Subject');
     I.fillField('Subject', 'Testappointment');
 
@@ -649,7 +649,7 @@ Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thu
     I.pressKey('Enter');
 
     I.waitForInvisible('.date-picker.open');
-    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'), '.io-ox-calendar-edit-window');
     I.click('Every Tuesday.');
 
     I.waitForElement('.modal-dialog');
@@ -695,7 +695,7 @@ Scenario('[C7423] Create daily recurring appointment every day ends after 5', as
     I.retry(5).click('~Go to next month', '.window-sidepanel');
     I.click(`~${date.format('l, dddd')}, CW ${date.week()}`, '.window-sidepanel');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForText('Subject');
     I.fillField('Subject', 'Testappointment');
 
@@ -705,7 +705,7 @@ Scenario('[C7423] Create daily recurring appointment every day ends after 5', as
     I.pressKey('Enter');
     I.waitForDetached('.date-picker.open');
 
-    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'), '.io-ox-calendar-edit-window');
     I.click('Every Monday.');
 
     I.waitForElement('.modal-dialog');
@@ -762,7 +762,7 @@ Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12',
     I.click(`~${date.format('l, dddd')}, CW ${date.week()}`, '.window-sidepanel');
 
     I.waitForDetached(locate('#io-ox-refresh-icon .fa-spin'));
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForText('Subject');
     I.fillField('Subject', 'Testappointment');
 
@@ -771,7 +771,7 @@ Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12',
     I.pressKey(date.format('l'));
     I.pressKey('Enter');
 
-    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'), '.io-ox-calendar-edit-window');
     I.click('Every Monday.');
 
     I.waitForElement('.modal-dialog');
@@ -842,7 +842,7 @@ Scenario('[C271749] Show prompt on event creation in public calendar', async fun
 
     // Open create new appointment dialog
     I.doubleClick(locate('~Public calendars'));
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
 
     // Check dialog on event creation in public calendars'
     I.waitForText('Appointments in public calendars');
@@ -867,9 +867,9 @@ Scenario('[C274537] Support use-count calculation on Appointment create with Gro
         await I.haveGroup(group, { user: users[0] });
     }
     I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForElement('.io-ox-calendar-edit [name="summary"]');
     I.fillField('.io-ox-calendar-edit [name="summary"]', testrailID);
     I.fillField('.add-participant.tt-input', timestamp + '-00');
@@ -886,12 +886,12 @@ Scenario('[C274537] Support use-count calculation on Appointment create with Gro
     expect(result1[2]).to.equal(timestamp + '-003');
     I.clearField('.add-participant.tt-input');
     I.fillField('.add-participant.tt-input', timestamp + '-003');
-    I.waitForElement('//div[@class="participant-name"]//strong[@class="tt-highlight"][contains(text(),"' + timestamp + '-003")]');
-    I.click('//div[@class="participant-name"]//strong[@class="tt-highlight"][contains(text(),"' + timestamp + '-003")]');
+    I.waitForElement({ xpath: '//div[@class="participant-name"]//strong[@class="tt-highlight"][contains(text(),"' + timestamp + '-003")]' });
+    I.click({ xpath: '//div[@class="participant-name"]//strong[@class="tt-highlight"][contains(text(),"' + timestamp + '-003")]' });
     I.click('Create');
     I.waitForDetached('.io-ox-calendar-edit [name="summary"]');
     I.waitForElement('.appointment-container [aria-label="' + testrailID + '"]', 5);
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForElement('.io-ox-calendar-edit [name="summary"]');
     I.fillField('.io-ox-calendar-edit [name="summary"]', testrailID);
     I.fillField('.add-participant.tt-input', timestamp + '-00');
@@ -939,7 +939,7 @@ Scenario('[C274516] Follow up should also propose a future date for appointments
     }, { user: users[0] });
 
     I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
     I.waitForElement('.next');
     I.waitForVisible('.next');
@@ -951,8 +951,8 @@ Scenario('[C274516] Follow up should also propose a future date for appointments
     I.click('Follow-up');
     I.waitForElement('.io-ox-calendar-edit', 5);
     I.waitForVisible('.io-ox-calendar-edit', 5);
-    let startDate = await I.grabAttributeFrom('[data-attribute="startDate"] .datepicker-day-field', 'value');
-    let endDate = await I.grabAttributeFrom('[data-attribute="endDate"] .datepicker-day-field', 'value');
+    let startDate = await I.grabAttributeFrom({ css: '[data-attribute="startDate"] .datepicker-day-field' }, 'value');
+    let endDate = await I.grabAttributeFrom({ css: '[data-attribute="endDate"] .datepicker-day-field' }, 'value');
     expect(startDate.toString()).to.equal(moment().add(2, 'week').format('M/D/YYYY'));
     expect(endDate.toString()).to.equal(moment().add(2, 'week').format('M/D/YYYY'));
     I.click('Create');
@@ -1004,12 +1004,12 @@ Scenario('[C274515] Attendees are not allowed to change their own permission sta
 
     I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[1] });
     I.login('app=io.ox/calendar', { user: users[1] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
     I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
-    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.click({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
     I.waitForElement('.io-ox-calendar-edit.container');
     I.waitForVisible('.io-ox-calendar-edit.container');
     I.waitForElement('.disabled.attendee-change-checkbox', 5);
@@ -1048,7 +1048,7 @@ Scenario('[C274484] Attendees can change the appointment', async function (I, us
         ]
     }, { user: users[0] });
     I.login('app=io.ox/calendar', { user: users[1] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
     I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
@@ -1061,7 +1061,7 @@ Scenario('[C274484] Attendees can change the appointment', async function (I, us
     I.click('Save');
     I.logout();
     I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
     I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
@@ -1074,7 +1074,7 @@ Scenario('[C7428] Create appointment with internal participants', async function
     I.login('app=io.ox/calendar&perspective="week:day"');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'Einkaufen');
@@ -1121,7 +1121,7 @@ Scenario('[C7425] Create appointment with a group', async function (I, users) {
     I.login('app=io.ox/calendar&perspective=week:day');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'Ich war hier');
@@ -1231,20 +1231,20 @@ Scenario('[C7430] Create appointment via Icon', async function (I) {
     I.login('app=io.ox/calendar&perspective="week:day"');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'Einkaufen');
     I.fillField('Location', 'Wursttheke');
 
-    I.click('[data-attribute="startDate"] .datepicker-day-field');
+    I.click({ css: '[data-attribute="startDate"] .datepicker-day-field' });
     I.pressKey(['Control', 'a']);
     I.pressKey(moment().format('M/D/YYYY'));
 
     I.pressKey('Enter');
 
     I.click('~Start time');
-    I.click('12:00 PM', 'fieldset[data-attribute="startDate"]');
+    I.click('12:00 PM', { css: 'fieldset[data-attribute="startDate"]' });
 
     I.click('Create');
 
@@ -1309,8 +1309,8 @@ Scenario('[C256455] Create all-day appointment via date label', async function (
         I.fillField('Subject', 'Grillen');
         I.fillField('Location', 'Olpe');
 
-        I.seeCheckboxIsChecked('[name="allDay"]');
-        I.seeInField('[data-attribute="startDate"] .datepicker-day-field', startDate.format('M/D/YYYY'));
+        I.seeCheckboxIsChecked({ css: '[name="allDay"]' });
+        I.seeInField({ css: '[data-attribute="startDate"] .datepicker-day-field' }, startDate.format('M/D/YYYY'));
 
         I.click('Create');
         I.waitForVisible('.appointment');
@@ -1337,7 +1337,7 @@ Scenario('[C7436] Create appointment without any infos', async function (I) {
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.click('Create');
@@ -1351,7 +1351,7 @@ Scenario('[C7440] Start/End date autoadjustment', async function (I) {
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     // strings are usually the same, but if this test is run around midnight, we may get a one day difference, so we must calculate that
@@ -1361,10 +1361,10 @@ Scenario('[C7440] Start/End date autoadjustment', async function (I) {
         diff = startDate.diff(moment(endString, 'M/D/YYYY'), 'days'),
         check = async function (direction, toChange) {
             // start today
-            I.click('[data-attribute="' + toChange + '"] .datepicker-day-field');
+            I.click({ css: '[data-attribute="' + toChange + '"] .datepicker-day-field' });
             I.click('.date-picker.open .btn-today');
             // change month
-            I.click('[data-attribute="' + toChange + '"] .datepicker-day-field');
+            I.click({ css: '[data-attribute="' + toChange + '"] .datepicker-day-field' });
             I.click('.date-picker.open .btn-' + direction);
             // quite funny selector but this makes sure we don't click on one of the greyed out days of last month (:not selector does not work...)
             I.click('.date-picker.open tr:first-child .date:last-child');
@@ -1372,8 +1372,8 @@ Scenario('[C7440] Start/End date autoadjustment', async function (I) {
             I.wait(1);
 
             //check if the fields are updated to the expected values
-            [startString] = await I.grabValueFrom('[data-attribute="startDate"] .datepicker-day-field');
-            [endString] = await I.grabValueFrom('[data-attribute="endDate"] .datepicker-day-field');
+            [startString] = await I.grabValueFrom({ css: '[data-attribute="startDate"] .datepicker-day-field' });
+            [endString] = await I.grabValueFrom({ css: '[data-attribute="endDate"] .datepicker-day-field' });
             expect(moment(startString, 'M/D/YYYY').add(diff, 'days').format('M/D/YYYY')).to.equal(endString);
         };
 
@@ -1385,17 +1385,17 @@ Scenario('[C7440] Start/End date autoadjustment', async function (I) {
     // end date next is special, startDate must stay the same endDate must be updated
 
     // start today
-    I.click('[data-attribute="endDate"] .datepicker-day-field');
+    I.click({ css: '[data-attribute="endDate"] .datepicker-day-field' });
     I.click('.date-picker.open .btn-today');
     // change month
-    I.click('[data-attribute="endDate"] .datepicker-day-field');
+    I.click({ css: '[data-attribute="endDate"] .datepicker-day-field' });
     I.click('.date-picker.open .btn-next');
     // quite funny selector but this makes sure we don't click on one of the greyed out days of last month (:not selector does not work...)
     I.click('.date-picker.open tr:first-child .date:last-child');
 
     I.wait(1);
-    var [newStartString] = await I.grabValueFrom('[data-attribute="startDate"] .datepicker-day-field'),
-        [newEndString] = await I.grabValueFrom('[data-attribute="endDate"] .datepicker-day-field');
+    var [newStartString] = await I.grabValueFrom({ css: '[data-attribute="startDate"] .datepicker-day-field' }),
+        [newEndString] = await I.grabValueFrom({ css: '[data-attribute="endDate"] .datepicker-day-field' });
     expect(newStartString).to.equal(startString);
     expect(newEndString).to.not.equal(endString);
 });
@@ -1405,20 +1405,20 @@ Scenario('[C7441] Start/End time autocompletion', async function (I) {
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.click('[data-attribute="startDate"] .time-field');
+    I.click({ css: '[data-attribute="startDate"] .time-field' });
     I.click('12:00 PM');
 
     var check = async function (time, toChange, expectedStartTime, expectedEndTime) {
         // start today
-        I.click('[data-attribute="' + toChange + '"] .time-field');
-        I.click(time, '[data-attribute="' + toChange + '"]');
+        I.click({ css: '[data-attribute="' + toChange + '"] .time-field' });
+        I.click(time, { css: '[data-attribute="' + toChange + '"]' });
 
         //check if the fields are updated to the expected values
-        expect((await I.grabValueFrom('[data-attribute="startDate"] .time-field'))[0]).to.equal(expectedStartTime);
-        expect((await I.grabValueFrom('[data-attribute="endDate"] .time-field'))[0]).to.equal(expectedEndTime);
+        expect((await I.grabValueFrom({ css: '[data-attribute="startDate"] .time-field' }))[0]).to.equal(expectedStartTime);
+        expect((await I.grabValueFrom({ css: '[data-attribute="endDate"] .time-field' }))[0]).to.equal(expectedEndTime);
     };
 
     await check('1:00 PM', 'startDate', '1:00 PM', '2:00 PM');
@@ -1432,19 +1432,19 @@ Scenario('[C7442] Set date from date-picker', async function (I) {
     I.login('app=io.ox/calendar&perspective=week:day');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', '2. Weihnachten');
     I.fillField('Location', 'Nordpol');
 
     // same starting point everytime, today would make this too difficult
-    I.click('[data-attribute="startDate"] .datepicker-day-field');
+    I.click({ css: '[data-attribute="startDate"] .datepicker-day-field' });
     I.pressKey(['Control', 'a']);
     I.pressKey('3/3/2019');
     I.pressKey('Enter');
 
-    I.click('[data-attribute="startDate"] .datepicker-day-field');
+    I.click({ css: '[data-attribute="startDate"] .datepicker-day-field' });
     I.seeElement('.date-picker.open');
 
     // month
@@ -1507,7 +1507,7 @@ Scenario('[C7442] Set date from date-picker', async function (I) {
     I.click('.date-picker.open tr:first-child td:first-child');
     I.click('.date-picker.open tr:first-child td:nth-child(2)');
 
-    I.seeInField('[data-attribute="startDate"] .datepicker-day-field', '12/26/1999');
+    I.seeInField({ css: '[data-attribute="startDate"] .datepicker-day-field' }, '12/26/1999');
 
     I.click('Create');
 
@@ -1533,7 +1533,7 @@ Scenario('[C7413] Create appointment with an attachment', async function (I) {
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
     // 1. Click to the "New" icon at the top left
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     // 2. Enter a title and location
@@ -1595,7 +1595,7 @@ Scenario('[C274406] Change organizer of appointment with external attendees', as
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', subject);
@@ -1618,7 +1618,7 @@ Scenario('[C274406] Change organizer of appointment with external attendees', as
     I.click('Edit');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.click('Repeat');
+    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'));
 
     I.click('Save');
 
@@ -1684,8 +1684,8 @@ Scenario.skip('[C274651] Create secret appointment @contentReview', async functi
     }, { user: users[0] });
     I.login('app=io.ox/calendar', { user: users[1] });
     I.doubleClick('~Shared calendars');
-    I.waitForVisible(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]`);
-    I.doubleClick(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]`);
+    I.waitForVisible({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]` });
+    I.doubleClick({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]` });
     ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
@@ -1726,9 +1726,9 @@ Scenario('[C7414] Create two appointments at the same time (one is shown as free
         ]
     }, { user: users[0] });
     I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForElement('.io-ox-calendar-edit [name="summary"]');
     I.fillField('.io-ox-calendar-edit [name="summary"]', testrailID);
     I.fillField('.io-ox-calendar-edit [name="location"]', testrailID);
@@ -1769,10 +1769,10 @@ Scenario('[C7415] Create two reserved appointments at the same time', async func
     }, { user: users[0] });
 
     I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
     expect(await I.grabNumberOfVisibleElements(`.appointment-container [aria-label="${testrailID}, ${testrailID}"]`)).to.equal(1);
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForElement('.io-ox-calendar-edit [name="summary"]');
     I.fillField('.io-ox-calendar-edit [name="summary"]', testrailID);
     I.fillField('.io-ox-calendar-edit [name="location"]', testrailID);
@@ -1792,21 +1792,21 @@ Scenario('[C7446] Create recurring whole-day appointment', async function (I, us
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
     I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForElement('.io-ox-calendar-edit [name="summary"]');
     I.fillField('.io-ox-calendar-edit [name="summary"]', 'Birthday of Linus Torvalds');
     I.fillField('.io-ox-calendar-edit [name="location"]', 'Helsinki Imbiss');
     I.fillField('.io-ox-calendar-edit [name="description"]', 'Buy some gifts');
-    I.click('All day');
-    I.click('[data-attribute="startDate"] .datepicker-day-field');
+    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('All day').as('All day'), '.io-ox-calendar-edit');
+    I.click({ css: '[data-attribute="startDate"] .datepicker-day-field' });
     I.pressKey(['Control', 'a']);
     I.pressKey(['Backspace']);
-    I.fillField('[data-attribute="startDate"] .datepicker-day-field', '12/28/1969');
+    I.fillField({ css: '[data-attribute="startDate"] .datepicker-day-field' }, '12/28/1969');
     I.pressKey('Enter');
     //recurrence
-    I.click('Repeat');
+    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'), '.io-ox-calendar-edit');
     I.click('.recurrence-view button');
     I.waitForVisible('.recurrence-view-dialog');
     I.selectOption('.recurrence-view-dialog [name="recurrence_type"]', 'Yearly');
@@ -1839,30 +1839,30 @@ Scenario('[C7447] Private appointment with participants', async function (I, use
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
     I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForElement('.io-ox-calendar-edit [name="summary"]');
     I.fillField('.io-ox-calendar-edit [name="summary"]', 'Private appointment with participants');
     I.fillField('.io-ox-calendar-edit [name="location"]', 'PrivateRoom');
     I.fillField('input.add-participant.tt-input', users[1].userdata.primaryEmail);
     I.pressKey('Enter');
-    I.selectOption('[data-extension-id="private_flag"] select', 'Private');
+    I.selectOption({ css: '[data-extension-id="private_flag"] select' }, 'Private');
     I.click('Create');
     ['Week', 'Day', 'Month', 'List'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
         if (view === 'Week') {
-            I.waitForVisible('[data-page-id="io.ox/calendar/week:week');
+            I.waitForVisible({ css: '[data-page-id="io.ox/calendar/week:week' });
             I.waitForVisible('.reserved.private[aria-label="Private appointment with participants, PrivateRoom"] .appointment-content');
         } else if (view === 'Day') {
-            I.waitForVisible('[data-page-id="io.ox/calendar/week:day');
+            I.waitForVisible({ css: '[data-page-id="io.ox/calendar/week:day' });
             I.waitForVisible('.reserved.private[aria-label="Private appointment with participants, PrivateRoom"] .appointment-content');
         } else if (view === 'Month') {
-            I.waitForVisible('[data-page-id="io.ox/calendar/month"]');
+            I.waitForVisible({ css: '[data-page-id="io.ox/calendar/month"]' });
             I.waitForVisible('.reserved.private[aria-label="Private appointment with participants, PrivateRoom"] .appointment-content');
         } else if (view === 'List') {
-            I.waitForVisible('[data-page-id="io.ox/calendar/list"]');
+            I.waitForVisible({ css: '[data-page-id="io.ox/calendar/list"]' });
             I.waitForVisible(locate('.reserved.list-item-content').withText('Private appointment with participants'));
         }
     });
@@ -1877,7 +1877,7 @@ Scenario('[C7448] Cannot create private appointment', async function (I, users) 
         permissions = [{ entity: users[0].userdata.id, bits: 403710016, group: false }, { user: users[1], access: 'author' }];
     await I.haveFolder({ title, permissions, module: 'event', parent });
     I.login('app=io.ox/calendar', { user: users[1] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
 
     // do a refresh, might mitigate a situation where the folder is not yet there
@@ -1887,7 +1887,7 @@ Scenario('[C7448] Cannot create private appointment', async function (I, users) 
 
     I.waitForText('Shared calendars');
     I.selectFolder(title);
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForText('Appointments in shared calendars');
     I.click('On behalf of the owner');
     I.waitForElement('.io-ox-calendar-edit [name="summary"]');
@@ -1925,12 +1925,12 @@ Scenario('[C234658] Create appointments and show this in cumulatively view', asy
         await I.haveAppointment(appointment);
     }
     I.login('app=io.ox/calendar');
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
     I.seeNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 0);
-    I.click(`[data-id="virtual/flat/event/private"] [title="${testrailID} - 0"] .color-label`);
+    I.click({ css: `[data-id="virtual/flat/event/private"] [title="${testrailID} - 0"] .color-label` });
     I.waitNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 1);
-    I.click(`[data-id="virtual/flat/event/private"] [title="${testrailID} - 1"] .color-label`);
+    I.click({ css: `[data-id="virtual/flat/event/private"] [title="${testrailID} - 1"] .color-label` });
     I.waitNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 2);
 });
 
@@ -1960,7 +1960,7 @@ Scenario('[C265153] Create appointment with a link in the description', async fu
     };
     await I.haveAppointment(appointment, { user: users[0] });
     I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
     I.waitForElement('.appointment-container [aria-label="C265153, C265153"]');
     I.click('.appointment-container [aria-label="C265153, C265153"]');
@@ -1981,7 +1981,7 @@ Scenario('Prevent XSS in folder dropdown', async function (I) {
     W.myContactData('save');
 
     I.openApp('Calendar');
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.logout();

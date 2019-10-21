@@ -99,7 +99,7 @@ Scenario('Mail - Modal Dialog - New folder (with exceptions)', async (I) => {
     I.login('app=io.ox/mail');
     I.waitForElement('.mail-detail-pane');
     I.waitForText('Inbox');
-    I.click('*[title="Actions for Inbox"]');
+    I.click({ css: '*[title="Actions for Inbox"]' });
     I.waitForText('Add new folder');
     I.click('Add new folder');
     I.waitForElement('h1.modal-title');
@@ -116,7 +116,7 @@ Scenario('Mail - Modal Dialog - Permissions (with exceptions)', async (I) => {
     I.login('app=io.ox/mail');
     I.waitForElement('.mail-detail-pane');
     I.waitForText('Inbox');
-    I.click('*[title="Actions for Inbox"]');
+    I.click({ css: '*[title="Actions for Inbox"]' });
     I.waitForText('Permissions');
     I.click('Permissions');
     I.waitForElement('h1.modal-title');

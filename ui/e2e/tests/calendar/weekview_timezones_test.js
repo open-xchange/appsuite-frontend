@@ -36,11 +36,11 @@ Scenario('Create appointment and switch timezones', async function (I) {
     });
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     // check in view
     I.waitForVisible('.workweek .title');
-    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "workweek")]//div[@class="title" and text()="test timezones"]', 1);
+    I.seeNumberOfElements({ xpath: '//div[contains(concat(" ", @class, " "), "workweek")]//div[@class="title" and text()="test timezones"]' }, 1);
 
     // switch to settings
     I.click('~Settings', '#io-ox-settings-topbar-icon');
@@ -116,7 +116,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
 
     // inspect in calendar app
     I.openApp('Calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     I.seeNumberOfElements('.workweek .week-container-label', 1);
     I.dontSee('JST', '.workweek');
@@ -135,7 +135,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
 
     // switch to calendar
     I.openApp('Calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     I.seeNumberOfElements('.workweek .weekday', 3);
 });

@@ -34,12 +34,12 @@ Scenario('checks if an auto forward rule is correctly listet after a status upda
 
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
-    I.waitForElement('[data-id="virtual/settings/io.ox/mail"]');
+    I.waitForElement({ css: '[data-id="virtual/settings/io.ox/mail"]' });
 
     I.selectFolder('Mail');
 
     I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mail-settings h1');
-    I.waitForVisible('[data-action="edit-auto-forward"] .fa-toggle-on');
+    I.waitForVisible({ css: '[data-action="edit-auto-forward"] .fa-toggle-on' });
     I.click('Auto forward ...');
 
     I.waitForElement('.modal-dialog');
@@ -70,11 +70,11 @@ Scenario('checks if an avacation notice rule is correctly listet after a status 
 
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
-    I.waitForElement('[data-id="virtual/settings/io.ox/mail"]');
+    I.waitForElement({ css: '[data-id="virtual/settings/io.ox/mail"]' });
 
     I.selectFolder('Mail');
     I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mail-settings h1');
-    I.waitForVisible('[data-action="edit-vacation-notice"] .fa-toggle-on');
+    I.waitForVisible({ css: '[data-action="edit-vacation-notice"] .fa-toggle-on' });
 
     I.click('Vacation notice ...');
 

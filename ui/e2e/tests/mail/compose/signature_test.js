@@ -86,15 +86,15 @@ Scenario('[C265555] Change the Signature', async function (I) {
     within({ frame: '#mce_0_ifr' }, () => {
         I.waitForText(firstSignatureContent);
     });
-    I.fillField('input[type="email"].token-input.tt-input', 'foo@bar');
+    I.fillField({ css: 'input[type="email"].token-input.tt-input' }, 'foo@bar');
     I.wait(1);
-    I.fillField('input[name="subject"]', 'test subject');
+    I.fillField({ css: 'input[name="subject"]' }, 'test subject');
     I.click('Discard');
     I.click('Save as draft');
     I.wait(1);
     I.selectFolder('Drafts');
     I.waitForText('test subject');
-    I.click('li[data-index="0"]');
+    I.click({ css: 'li[data-index="0"]' });
     I.clickToolbar({ css: '.io-ox-mail-window .classic-toolbar [data-action="more"]' });
     I.click('Move', '.dropdown.open .dropdown-menu');
     I.waitForVisible('.modal-footer');
@@ -102,7 +102,7 @@ Scenario('[C265555] Change the Signature', async function (I) {
     I.dontSee('test subject');
     I.selectFolder('Inbox');
     I.waitForText('test subject');
-    I.click('li[data-index="0"]');
+    I.click({ css: 'li[data-index="0"]' });
     I.clickToolbar('~Reply to sender');
     I.waitForVisible('.io-ox-mail-compose-window');
     within({ frame: '#mce_1_ifr' }, () => {

@@ -45,7 +45,7 @@ Scenario('[C83387] Create mail filter based on moving mail', async (I, users) =>
     // 4. Go to Mail module and select the previous send mail
 
     I.login('app=io.ox/mail');
-    I.waitForVisible('[data-ref="io.ox/mail/listview"]');
+    I.waitForVisible({ css: '[data-ref="io.ox/mail/listview"]' });
     I.click('.list-item[aria-label*="Subject#1"]');
 
     // 5. Open context menu either in detailed view or in top bar
@@ -68,11 +68,11 @@ Scenario('[C83387] Create mail filter based on moving mail', async (I, users) =>
             .withText('Trash')
             .inside('.folder-picker-dialog'));
 
-    I.waitForEnabled('[data-action="ok"]');
+    I.waitForEnabled({ css: '[data-action="ok"]' });
 
     // 9. Hit "Move"
 
-    I.click('[data-action="ok"]');
+    I.click({ css: '[data-action="ok"]' });
     I.waitForText('Create new rule');
 
     // 10. Set a name for the filter
@@ -82,10 +82,10 @@ Scenario('[C83387] Create mail filter based on moving mail', async (I, users) =>
 
     I.see('Address', '.tests');
     I.see('Is exactly', '.tests');
-    I.seeInField('[id*="address"]', users[1].get('primaryEmail'));
+    I.seeInField({ css: '[id*="address"]' }, users[1].get('primaryEmail'));
 
     I.see('File into', '.actions');
-    I.seeInField('[id*="move"]', 'Trash');
+    I.seeInField({ css: '[id*="move"]' }, 'Trash');
 
     // 11. Save filter
     I.click('Save');

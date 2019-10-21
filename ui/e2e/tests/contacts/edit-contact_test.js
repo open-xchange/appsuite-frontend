@@ -25,7 +25,7 @@ After(async function (users) {
 
 function start(I) {
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/contacts"]' });
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
     I.waitForElement('.contact-grid-container');
@@ -56,7 +56,7 @@ Scenario('[C7361] Edit partial data of a contact', async function (I) {
     I.click(locate('.contact').withText(contact.display_name).inside('.vgrid-scrollpane-container'));
     I.waitForText('+4917113371337', 5, '.contact-detail');
 
-    I.clickToolbar('Edit');
+    I.clickToolbar('~Edit contact');
     I.waitForVisible('.io-ox-contacts-edit-window');
     I.fillField('cellular_telephone1', '+3913371337');
     I.fillField('street_home', '+3913371337');

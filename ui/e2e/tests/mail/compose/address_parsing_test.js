@@ -31,7 +31,7 @@ Scenario('[C114353] Mail address parsing supports multiple delimiters @shaky', a
     I.click('Compose');
 
     // no better approach yet. I.waitForMailCompose() might be a good one
-    I.waitForElement('button[data-action="send"]:not(.disabled)');
+    I.waitForElement({ css: 'button[data-action="send"]:not(.disabled)' });
     I.wait(1);
 
     // Copy multiple addresses delimited by commas into the address field

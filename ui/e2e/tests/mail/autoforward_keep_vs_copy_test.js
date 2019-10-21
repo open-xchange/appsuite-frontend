@@ -34,12 +34,12 @@ Scenario('checks if an auto forward rule with copy statement is handled correctl
 
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
-    I.waitForElement('[data-id="virtual/settings/io.ox/mail"]');
+    I.waitForElement({ css: '[data-id="virtual/settings/io.ox/mail"]' });
 
     I.selectFolder('Mail');
 
     I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mail-settings h1');
-    I.waitForVisible('[data-action="edit-auto-forward"] .fa-toggle-on');
+    I.waitForVisible({ css: '[data-action="edit-auto-forward"] .fa-toggle-on' });
     I.click('Auto forward ...');
 
     I.waitForElement('.modal-dialog');
@@ -65,12 +65,12 @@ Scenario('checks if an auto forward rule with keep statement is handled correctl
 
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
-    I.waitForElement('[data-id="virtual/settings/io.ox/mail"]');
+    I.waitForElement({ css: '[data-id="virtual/settings/io.ox/mail"]' });
 
     I.selectFolder('Mail');
 
     I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mail-settings h1');
-    I.waitForVisible('[data-action="edit-auto-forward"] .fa-toggle-on');
+    I.waitForVisible({ css: '[data-action="edit-auto-forward"] .fa-toggle-on' });
     I.click('Auto forward ...');
 
     I.waitForElement('.modal-dialog');
@@ -88,12 +88,12 @@ Scenario('checks if an auto forward rule with keep statement is written correctl
 
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
-    I.waitForElement('[data-id="virtual/settings/io.ox/mail"]');
+    I.waitForElement({ css: '[data-id="virtual/settings/io.ox/mail"]' });
 
     I.selectFolder('Mail');
 
     I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mail-settings h1');
-    I.waitForElement('[data-action="edit-auto-forward"]');
+    I.waitForElement({ css: '[data-action="edit-auto-forward"]' });
     I.click('Auto forward ...');
 
     I.waitForElement('.modal-dialog');
@@ -107,7 +107,7 @@ Scenario('checks if an auto forward rule with keep statement is written correctl
     I.click('Apply changes', '.modal-dialog');
     I.waitForInvisible('.modal-dialog');
 
-    I.waitForVisible('[data-action="edit-auto-forward"] .fa-toggle-on');
+    I.waitForVisible({ css: '[data-action="edit-auto-forward"] .fa-toggle-on' });
     I.click('Auto forward ...');
     I.waitForElement('.modal-dialog');
     I.seeCheckboxIsChecked('Keep a copy of the message');
@@ -121,12 +121,12 @@ Scenario('checks if an auto forward rule with copy statement is written correctl
 
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
-    I.waitForElement('[data-id="virtual/settings/io.ox/mail"]');
+    I.waitForElement({ css: '[data-id="virtual/settings/io.ox/mail"]' });
 
     I.selectFolder('Mail');
 
     I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mail-settings h1');
-    I.waitForElement('[data-action="edit-auto-forward"]');
+    I.waitForElement({ css: '[data-action="edit-auto-forward"]' });
     I.click('Auto forward ...');
 
     I.waitForElement('.modal-dialog');
@@ -140,7 +140,7 @@ Scenario('checks if an auto forward rule with copy statement is written correctl
     I.click('Apply changes', '.modal-dialog');
     I.waitForInvisible('.modal-dialog');
 
-    I.waitForVisible('[data-action="edit-auto-forward"] .fa-toggle-on');
+    I.waitForVisible({ css: '[data-action="edit-auto-forward"] .fa-toggle-on' });
     I.click('Auto forward ...');
     I.waitForElement('.modal-dialog');
     I.seeCheckboxIsChecked('Keep a copy of the message');

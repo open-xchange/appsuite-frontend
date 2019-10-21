@@ -53,7 +53,7 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users)
     // Mark unread
     rightClick();
     clickAction('io.ox/mail/actions/mark-unread');
-    I.waitForElement('a.unread-toggle[aria-label="Mark as read"]');
+    I.waitForElement({ css: 'a.unread-toggle[aria-label="Mark as read"]' });
 
     // View source
     rightClick();
@@ -70,7 +70,7 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users)
     // Reply
     rightClick();
     clickAction('io.ox/mail/actions/reply');
-    I.waitForElement('button[data-action="discard"]:not(.disabled)');
+    I.waitForElement({ css: 'button[data-action="discard"]:not(.disabled)' });
     I.seeInField('subject', 'Re: ' + subject);
     // no better approach yet. I.waitForMailCompose() might be a good one
     I.wait(1);

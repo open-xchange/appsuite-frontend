@@ -13,7 +13,6 @@
 
 /// <reference path="../../steps.d.ts" />
 var fs = require('fs');
-const { expect } = require('chai');
 
 Feature('Drive');
 
@@ -38,7 +37,7 @@ Scenario('[C7886] Enable hidden folders and files', async function (I) {
     I.click('#io-ox-settings-topbar-icon');
     I.waitForVisible('.settings-detail-pane');
     I.click('.folder-node[title="Drive"]');
-    I.waitForVisible('[data-point="io.ox/files/settings/detail/view"]');
+    I.waitForVisible({ css: '[data-point="io.ox/files/settings/detail/view"]' });
     I.click('Show hidden files and folders');
     I.openApp('Drive');
     I.waitForElement('.list-view.complete');
@@ -62,7 +61,7 @@ Scenario('[C7887] Disable hidden folders and files', async function (I) {
     I.click('#io-ox-settings-topbar-icon');
     I.waitForVisible('.folder-node[title="Drive"]');
     I.click('.folder-node[title="Drive"]');
-    I.waitForVisible('[data-point="io.ox/files/settings/detail/view"]');
+    I.waitForVisible({ css: '[data-point="io.ox/files/settings/detail/view"]' });
     I.click('Show hidden files and folders');
     I.openApp('Drive');
     I.waitForElement('.list-view.complete');
@@ -76,7 +75,7 @@ Scenario('[C7887] Disable hidden folders and files', async function (I) {
 Scenario('[C45046] Upload new version', async function (I) {
     //Generate TXT file for upload
     let timestamp1 = Math.round(+new Date() / 1000);
-    await fs.promises.writeFile('build/e2e/C45046.txt', timestamp1)
+    await fs.promises.writeFile('build/e2e/C45046.txt', timestamp1);
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
     await I.haveFile(infostoreFolderID, 'build/e2e/C45046.txt');
     I.login('app=io.ox/files');
@@ -142,13 +141,13 @@ Scenario('[C45061] Delete file versions', async function (I) {
     I.waitForElement(locate('.io-ox-viewer .viewer-fileversions').withText('Versions (5)'));
     I.click(locate('.io-ox-viewer .viewer-fileversions').withText('Versions (5)'));
     I.click(locate('.io-ox-viewer table.versiontable tr.version:nth-child(4) .dropdown-toggle'));
-    I.click('//div[@class="dropdown open"]//a[@href="#"][contains(text(),"View this version")]/..');
+    I.click({ xpath: '//div[@class="dropdown open"]//a[@href="#"][contains(text(),"View this version")]/..' });
     I.waitForText('file 4', 5, '.plain-text');
     I.click(locate('.io-ox-viewer table.versiontable tr.version:nth-child(4) .dropdown-toggle'));
-    I.click('//div[@class="dropdown open"]//a[@href="#"][contains(text(),"Delete version")]/..');
+    I.click({ xpath: '//div[@class="dropdown open"]//a[@href="#"][contains(text(),"Delete version")]/..' });
     I.click('Delete version', '.modal-footer');
     I.waitForDetached(locate('.io-ox-viewer .viewer-fileversions').withText('Versions (5)'));
-    I.see('Versions (4)', '.io-ox-viewer .viewer-fileversions')
+    I.see('Versions (4)', '.io-ox-viewer .viewer-fileversions');
 });
 
 Scenario.skip('[C45062] Change current file version @contentReview', async function (I) {

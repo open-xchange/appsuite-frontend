@@ -113,8 +113,6 @@ Scenario('Compose new mail with signature above correctly placed and changed', a
     I.click('Discard');
     I.click('Discard message');
     I.waitForVisible('.io-ox-mail-window');
-
-    I.logout();
 });
 
 Scenario('Compose new mail with signature below correctly placed initially', async function (I) {
@@ -137,8 +135,6 @@ Scenario('Compose new mail with signature below correctly placed initially', asy
     // discard mail
     I.click('Discard');
     I.waitForVisible('.io-ox-mail-window');
-
-    I.logout();
 });
 
 Scenario('Reply to mail with signature above correctly placed and changed', async function (I, users) {
@@ -191,8 +187,6 @@ Scenario('Reply to mail with signature above correctly placed and changed', asyn
     I.click('Discard');
     I.click('Discard message');
     I.waitForVisible('.io-ox-mail-window');
-
-    I.logout();
 });
 
 Scenario('reply to mail with signature below correctly placed initially', async function (I, users) {
@@ -225,6 +219,4 @@ Scenario('reply to mail with signature below correctly placed initially', async 
     // discard mail
     I.click('Discard');
     I.waitForVisible('.io-ox-mail-window');
-
-    I.logout();
 });

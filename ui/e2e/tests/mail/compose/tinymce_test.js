@@ -75,7 +75,7 @@ Scenario('Use default font style in replies', async function (I, users) {
 
     I.waitForText(mailSubject, 2);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
 
     I.see('Reply');
     I.click('Reply');
@@ -84,7 +84,7 @@ Scenario('Use default font style in replies', async function (I, users) {
     I.waitForFocus(iframeLocator);
     await within({ frame: iframeLocator }, async () => {
         I.pressKey(defaultText);
-        I.seeElementInDOM('span[style="font-family: helvetica;"]');
+        I.seeElementInDOM({ css: 'span[style="font-family: helvetica;"]' });
     });
 });
 
@@ -230,7 +230,7 @@ Scenario('[C7392] Send mail with different text highlighting', async function (I
     // Open the mail
     I.waitForText(mailSubject, 2);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
 
     await within({ frame: '.mail-detail-frame' }, async () => {
         expect(await I.grabAttributeFrom(locate('div').withText(defaultText), 'style')).to.have.lengthOf(0);
@@ -320,7 +320,7 @@ Scenario('[C7393] Send mail with bullet point and numbering - bullet points', as
     // Open the mail
     I.waitForText(mailSubject);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
 
     within({ frame: '.mail-detail-frame' }, () => {
         I.seeElement(locate('div').withText(defaultText));
@@ -405,7 +405,7 @@ Scenario('[C7393] Send mail with bullet point and numbering - numbering', async 
     // Open the mail
     I.waitForText(mailSubject);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
 
     await within({ frame: '.mail-detail-frame' }, async () => {
         I.seeElement(locate('div').withText(defaultText));
@@ -446,7 +446,7 @@ Scenario('[C7394] Send mail with different text alignments', async function (I, 
     I.wait(0.5);
 
     // Fill out to and subject
-    I.waitForVisible('div.row[data-extension-id="to"]');
+    I.waitForVisible({ css: 'div.row[data-extension-id="to"]' });
     I.fillField('To', recipient.get('primaryEmail'));
     I.wait(0.5);
     I.fillField('Subject', mailSubject);
@@ -505,7 +505,7 @@ Scenario('[C7394] Send mail with different text alignments', async function (I, 
     // Open the mail
     I.waitForText(mailSubject);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
 
     await within({ frame: '.mail-detail-frame' }, async () => {
         I.waitForElement(locate('div').withText(defaultText));
@@ -607,7 +607,7 @@ Scenario('[C7395] Send mail with text indentations', async function (I, users) {
     // Open the mail
     I.waitForText(mailSubject);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
 
     await within({ frame: '.mail-detail-frame' }, async () => {
         expect(await I.grabCssPropertyFrom(locate('div').withText(defaultText), 'padding-left')).to.include('0px');
@@ -733,7 +733,7 @@ Scenario('[C7396] Send mail with different text fonts @shaky', async function (I
     // Open the mail
     I.waitForText(mailSubject, 2);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
 
     await within({ frame: '.mail-detail-frame' }, async () => {
         const styleDefault = await I.grabAttributeFrom(locate('div').withText(defaultText), 'style');
@@ -846,9 +846,9 @@ Scenario('[C7397] Send mail with different text styles @shaky', async function (
 
     // open mail source dialog
     I.click('~More actions', '.detail-view-header');
-    I.waitForVisible('[data-action="io.ox/mail/actions/source"]', 'body > .dropdown');
-    I.click('[data-action="io.ox/mail/actions/source"]', 'body > .dropdown');
-    I.waitForVisible('textarea.mail-source-view');
+    I.waitForVisible({ css: '[data-action="io.ox/mail/actions/source"]' }, { css: 'body > .dropdown' });
+    I.click({ css: '[data-action="io.ox/mail/actions/source"]' }, { css: 'body > .dropdown' });
+    I.waitForVisible({ css: 'textarea.mail-source-view' });
 
     // check mail source of recently sent mail (Last of C7383)
     let [source] = await I.grabValueFrom('body .mail-source-view');
@@ -866,7 +866,7 @@ Scenario('[C7397] Send mail with different text styles @shaky', async function (
     // Open the mail
     I.waitForText(mailSubject, 2);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
 
     await within({ frame: '.mail-detail-frame' }, async () => {
         I.waitForElement(locate('div').withText(defaultText));
@@ -962,7 +962,7 @@ Scenario('[C7398] Send mail with different text sizes', async function (I, users
     // Open the mail
     I.waitForText(mailSubject, 2);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
 
     await within({ frame: '.mail-detail-frame' }, async () => {
         const styleDefault = await I.grabAttributeFrom(locate('div').withText(defaultText), 'style');
@@ -992,7 +992,7 @@ Scenario('[C7399] Send mail with different text colours @shaky', async function 
     const selectColor = (action) => {
         I.click(locate('.mce-open').inside('~Text color'));
         I.waitForElement('.mce-floatpanel .mce-colorbutton-grid');
-        I.click('div[title="' + action + '"]');
+        I.click({ css: 'div[title="' + action + '"]' });
         I.waitForInvisible('.mce-floatpanel .mce-colorbutton-grid');
     };
     let [sender, recipient] = users;
@@ -1072,7 +1072,7 @@ Scenario('[C7399] Send mail with different text colours @shaky', async function 
     // Open the mail
     I.waitForText(mailSubject, 2);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
 
     await within({ frame: '.mail-detail-frame' }, async () => {
         const rgbBlack = '0,0,0,1';
@@ -1120,7 +1120,7 @@ const selectFont = (I, font) => {
 const selectColor = (I, color) => {
     I.click(locate('.mce-open').inside('~Text color'));
     I.waitForElement('.mce-floatpanel .mce-colorbutton-grid');
-    I.click('div[title="' + color + '"]');
+    I.click({ css: 'div[title="' + color + '"]' });
     I.waitForInvisible('.mce-floatpanel .mce-colorbutton-grid');
 };
 
@@ -1204,7 +1204,7 @@ Scenario('[C7400] Send mail with multiple different text formatting - set before
     // Open the mail
     I.waitForText(mailSubject);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
 
     await within({ frame: '.mail-detail-frame' }, async () => {
 
@@ -1290,7 +1290,7 @@ Scenario('[C7400] Send mail with multiple different text formatting - set after 
     // Open the mail
     I.waitForText(mailSubject);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
 
     await within({ frame: '.mail-detail-frame' }, async () => {
 

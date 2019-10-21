@@ -34,7 +34,7 @@ Scenario('[C7369] by Name', async function (I, search) {
     I.haveContact(contact);
 
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/contacts"]' });
 
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
@@ -59,7 +59,7 @@ Scenario('[C7370] by Phone numbers', async function (I, search) {
     await I.haveContact(contact);
 
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/contacts"]' });
 
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
@@ -92,7 +92,7 @@ Scenario('[C7371] by Addresses', async function (I, search) {
     await I.haveContact(contact);
 
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/contacts"]' });
 
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');

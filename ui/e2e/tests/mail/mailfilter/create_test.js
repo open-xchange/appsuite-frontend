@@ -444,9 +444,9 @@ Scenario('[C83386] Create mail filter based on mail', async function (I, users) 
     I.click('Select folder');
     I.waitForElement('.folder-picker-dialog');
 
-    I.waitForElement('[data-id="default0/INBOX/Trash"]', '.folder-picker-dialog');
-    I.click('[data-id="default0/INBOX/Trash"]', '.folder-picker-dialog');
-    I.waitForElement('[data-id="default0/INBOX/Trash"].selected', '.folder-picker-dialog');
+    I.waitForElement({ css: '[data-id="default0/INBOX/Trash"]' }, '.folder-picker-dialog');
+    I.click({ css: '[data-id="default0/INBOX/Trash"]' }, '.folder-picker-dialog');
+    I.waitForElement({ css: '[data-id="default0/INBOX/Trash"].selected' }, '.folder-picker-dialog');
     I.wait(1);
     I.click('Ok');
     // save the form
@@ -496,7 +496,7 @@ Scenario('[C274412] Filter mail by size', async function (I, users) {
 
             // add condition
             I.click('Add condition');
-            I.click('[data-value="size"');
+            I.click({ css: '[data-value="size"' });
 
             // add action
             I.click('Add action');

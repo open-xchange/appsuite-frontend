@@ -23,7 +23,7 @@ After(async function (users) {
 
 function start(I) {
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/contacts"]' });
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
     I.waitForDetached('a.dropdown-toggle.disabled');

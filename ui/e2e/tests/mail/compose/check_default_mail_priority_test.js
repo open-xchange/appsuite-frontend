@@ -36,5 +36,5 @@ Scenario('[C8819] Default mail priority', async (I) => {
     //Check default mail priority
     I.seeElement(locate('~Priority Normal').withDescendant('i.fa-check'));
     I.click('Normal');
-    I.logout();
+    // I.logout();
 });

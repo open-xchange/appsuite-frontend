@@ -55,6 +55,4 @@ Scenario('[C7819] Color quotes on reply', async (I, users) => {
         [rule] = await I.grabCssPropertyFrom('blockquote blockquote blockquote', 'color');
         expect(rule).to.equal('rgba(221, 8, 128, 1)');
     });
-
-    I.logout();
 });

@@ -56,15 +56,15 @@ function addToField(I, user, field) {
 }
 
 function seeToken(I, user, field) {
-    I.see(getDisplayName(user), field ? `[data-extension-id="${field}"] .token-label` : '.token-label');
+    I.see(getDisplayName(user), field ? { css: `[data-extension-id="${field}"] .token-label` } : '.token-label');
 }
 
 function seeTokenAtPosition(I, user, field, position) {
-    I.see(getDisplayName(user), field ? `[data-extension-id="${field}"] .token:nth-of-type(${position}) .token-label` : '.token-label');
+    I.see(getDisplayName(user), field ? { css: `[data-extension-id="${field}"] .token:nth-of-type(${position}) .token-label` } : '.token-label');
 }
 
 function moveTo(I, user, target) {
-    I.dragAndDrop(getTokenSelector(I, user), `[data-extension-id="${target}"] .token-input`);
+    I.dragAndDrop(getTokenSelector(I, user), { css: `[data-extension-id="${target}"] .token-input` });
     seeToken(I, user, target);
 }
 

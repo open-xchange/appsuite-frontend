@@ -35,13 +35,11 @@ Scenario('[C274424] Inline Help', async (I) => {
 
 async function verifyHelp(I, appName, expectedHelp) {
     I.openApp(appName);
-    I.wait(3);
     I.click('.io-ox-context-help');
     await within({ frame: '.floating-window .inline-help-iframe' }, async () => {
         I.see(expectedHelp);
         I.click('Table Of Contents');
-        I.wait(1);
-        I.see('User Guide');
+        I.waitForText('User Guide');
     });
     I.click('.floating-window [data-action="close"]');
 }

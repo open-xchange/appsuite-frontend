@@ -167,8 +167,8 @@ Scenario('[C7374] Change name', async function (I, users) {
     });
     // edit name
     I.clickToolbar('Edit');
-    I.waitForElement('[name="display_name"]');
-    I.fillField('[name="display_name"]', new_name);
+    I.waitForElement({ css: '[name="display_name"]' });
+    I.fillField({ css: '[name="display_name"]' }, new_name);
     I.click('Save');
     // select and check
     I.retry(5).click(`~${new_name}`);
@@ -187,7 +187,7 @@ Scenario('[C7375] Move list', async function (I, users) {
 
     I.click('Add new address book');
     I.waitForElement('.modal-body');
-    I.fillField('[placeholder="New address book"][type="text"]', testrailID);
+    I.fillField({ css: '[placeholder="New address book"][type="text"]' }, testrailID);
     I.click('Add');
     I.waitForDetached('.modal-body');
     I.waitForElement(`~${display_name}`);
@@ -202,7 +202,7 @@ Scenario('[C7375] Move list', async function (I, users) {
     I.click(`.modal [aria-label="${testrailID}"]`);
     I.waitForEnabled('.modal button.btn-primary');
     I.click('Move', '.modal');
-    I.waitForDetached('.modal,.launcher-icon.fa-refresh.fa-spin');
+    I.waitForDetached('.modal.launcher-icon.fa-refresh.fa-spin');
     I.selectFolder('Contacts');
     I.waitForDetached(`~${display_name}`);
     I.selectFolder(testrailID);

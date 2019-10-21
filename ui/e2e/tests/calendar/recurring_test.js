@@ -7,7 +7,7 @@
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  * © 2018 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
+ * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
 const moment = require('moment');
@@ -31,7 +31,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     });
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     // create in Day view
     I.selectFolder('Calendar');
@@ -92,7 +92,7 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     // login new user1 for accept
     I.login('app=io.ox/calendar', { user: users[1] });
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     I.selectFolder('Calendar');
 
@@ -108,7 +108,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.see('test recurring', '.rightside');
     I.see('invite location', '.rightside');
 
-    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/changestatus"]');
+    I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
 
     I.waitForElement('.modal-dialog');
@@ -123,7 +123,7 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     // login owner
     I.login('app=io.ox/calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     I.selectFolder('Calendar');
     I.clickToolbar('View');
@@ -142,13 +142,13 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.waitForElement('.rightside .participant a.accepted[title="' + users[1].userdata.primaryEmail + '"]');
 
     // edit
-    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/edit"]');
-    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
+    I.click({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
     I.waitForVisible('.modal-dialog');
     I.click('Cancel', '.modal-dialog');
 
     // TODO: Needs a fix. "All future appointments" is wrong since apppointment has flag "first_occurence"
-    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.click({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
     I.waitForVisible('.modal-dialog');
     I.click('Edit all future appointments', '.modal-dialog');
 
@@ -170,8 +170,8 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     I.click({ xpath: '//div[text()="test recurring edit"]' });
 
-    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/edit"]');
-    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
+    I.click({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
 
     I.waitForVisible('.modal-dialog');
     I.click('Edit this appointment', '.modal-dialog');
@@ -182,12 +182,12 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window');
 
-    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit new"]', 1);
-    I.click('//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit new"]');
+    I.seeNumberOfElements({ xpath: '//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit new"]' }, 1);
+    I.click({ xpath: '//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit new"]' });
 
     //edit exeption
-    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/edit"]');
-    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
+    I.click({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
 
     I.waitForVisible('.modal-dialog');
     I.click('Edit this appointment', '.modal-dialog');
@@ -198,18 +198,18 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window');
 
-    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit new edit"]', 1);
-    I.click('//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit new edit"]');
+    I.seeNumberOfElements({ xpath: '//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit new edit"]' }, 1);
+    I.click({ xpath: '//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit new edit"]' });
 
-    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/delete"]');
-    I.click('[data-action="io.ox/calendar/detail/actions/delete"]');
+    I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/delete"]' });
+    I.click({ css: '[data-action="io.ox/calendar/detail/actions/delete"]' });
 
     I.waitForVisible('.modal-dialog');
     I.click('Delete this appointment', '.modal-dialog');
 
     I.waitForDetached('.modal-dialog');
 
-    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit"]', 3);
+    I.seeNumberOfElements({ xpath: '//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit"]' }, 3);
 
     // check in Month view
     /*
@@ -238,7 +238,7 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     // login new user1 for decline
     I.login('app=io.ox/calendar', { user: users[1] });
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     I.selectFolder('Calendar');
 
@@ -254,7 +254,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.see('test recurring edit', '.rightside');
     I.see('invite location', '.rightside');
 
-    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/changestatus"]');
+    I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
 
     I.waitForVisible('.modal-dialog');
@@ -269,7 +269,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.seeNumberOfElements('.list-view .appointment .declined', 3);
 
     I.click({ xpath: '//div[text()="test recurring edit"]' });
-    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/changestatus"]');
+    I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
 
     I.waitForVisible('.modal-dialog');

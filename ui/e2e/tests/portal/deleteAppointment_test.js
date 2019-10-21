@@ -81,8 +81,8 @@ Scenario('[C7491] Delete an appointment', async (I) => {
     I.waitForText('Delete', undefined, '.io-ox-sidepopup');
 
     I.click('Delete', '.io-ox-sidepopup');
-    I.waitForVisible('.modal-dialog');
-    I.retry(5).click('Delete', '.modal-dialog');
+    I.waitForText('Delete', '.modal-dialog');
+    I.click('Delete', '.modal-dialog');
 
     // Verify the popup closes itself and the widget updates its list of appointments
     I.waitForDetached('.modal-dialog');

@@ -47,7 +47,5 @@ Scenario('[C101624] Parsing CSS in HTML mails', async function (I) {
     await within({ frame: '.mail-detail-frame' }, async function () {
         I.seeTextEquals('BODY 1', 'body');
     });
-
-    I.logout();
 });
 

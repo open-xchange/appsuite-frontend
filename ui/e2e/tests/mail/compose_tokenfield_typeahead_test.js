@@ -42,7 +42,7 @@ Scenario('Add without typeahead', async (I) => {
     I.waitForText('Compose');
     I.click('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
 
     await addToken('pierce@ox-e2e-backend.novalocal', 'Enter', 'pierce@ox-e2e-backend.novalocal');
 
@@ -70,7 +70,7 @@ Scenario('Add typeahed suggestion via autoselect', async (I, users) => {
     I.waitForText('Compose');
     I.click('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
 
     // fully matches mail address
     await addToken(mail, 'Enter', label);
@@ -102,8 +102,6 @@ Scenario('Add typeahed suggestion via autoselect', async (I, users) => {
         I.pressKey(['Command', 'a']);
         I.pressKey('Backspace');
     }
-
-    I.logout();
 });
 
 // see bug 65012 for details and why this test still breaks
@@ -156,7 +154,7 @@ Scenario('Add typeahead suggestion via keyboard', async (I, users) => {
     I.waitForText('Compose');
     I.click('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
 
     // autocomplete via autocomplete hint
     await addToken(partialName, 'Tab', name, { hover: true });
@@ -182,8 +180,6 @@ Scenario('Add typeahead suggestion via keyboard', async (I, users) => {
         I.pressKey(['Command', 'a']);
         I.pressKey('Backspace');
     }
-
-    I.logout();
 });
 
 Scenario('Add typeahead suggestion via mouse', async (I, users) => {
@@ -197,7 +193,7 @@ Scenario('Add typeahead suggestion via mouse', async (I, users) => {
     I.waitForText('Compose');
     I.click('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
 
     // autocomplete via select second suggestion
     I.fillField('To', name);
@@ -211,6 +207,4 @@ Scenario('Add typeahead suggestion via mouse', async (I, users) => {
     I.waitForText(target, 2, '.tokenfield.to');
     I.pressKey(['Command', 'a']);
     I.pressKey('Backspace');
-
-    I.logout();
 });

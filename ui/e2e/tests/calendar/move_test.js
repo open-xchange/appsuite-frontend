@@ -58,9 +58,9 @@ Scenario('Move event to different folder @shaky', async function (I) {
 
     I.waitForElement('.folder-picker-dialog');
 
-    I.waitForElement('[data-id="virtual/flat/event/private"] .folder-arrow', '.folder-picker-dialog');
+    I.waitForElement({ css: '[data-id="virtual/flat/event/private"] .folder-arrow' }, '.folder-picker-dialog');
 
-    I.click('[data-id="virtual/flat/event/private"] .folder-arrow', '.folder-picker-dialog');
+    I.click({ css: '[data-id="virtual/flat/event/private"] .folder-arrow' }, '.folder-picker-dialog');
     I.waitForText(movefolder, '.folder-picker-dialog .selectable');
 
     I.click(locate('.folder-picker-dialog .selectable').find('~New calendar'));
@@ -71,6 +71,6 @@ Scenario('Move event to different folder @shaky', async function (I) {
     I.waitForDetached('.folder-picker-dialog');
     I.waitForVisible('.weekview-container.week .appointment');
     I.seeElement('.weekview-container.week .appointment');
-    I.seeElement('[aria-label="New calendar"][aria-checked="true"]');
+    I.seeElement({ css: '[aria-label="New calendar"][aria-checked="true"]' });
 
 });

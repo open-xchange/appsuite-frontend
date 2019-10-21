@@ -33,7 +33,7 @@ Scenario('[C274425] Month label in Calendar week view', async function (I, users
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
     I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.retry(5).executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2019-05-01"))');
     expect(await I.grabTextFrom('.weekview-container .header .info')).to.equal('April - May 2019 CW 18');
     I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-01-01"))');
@@ -357,8 +357,8 @@ Scenario('[C252158] All my public appointments @shaky', (I, users) => {
     I.wait(1);
     I.click('.fa.fa-caret-right', '~Public calendars');
     I.selectFolder('Cal#A');
-    I.waitForVisible('a[title="Actions for Cal#A"]');
-    I.click('a[title="Actions for Cal#A"]');
+    I.waitForVisible({ css: 'a[title="Actions for Cal#A"]' });
+    I.click({ css: 'a[title="Actions for Cal#A"]' });
     I.waitForText('Permissions');
     I.wait(1);
     I.click('Permissions');
@@ -395,30 +395,30 @@ Scenario('[C252158] All my public appointments @shaky', (I, users) => {
     // 6. User#B: Enable "All my public appointments" view and disable Cal#A
     I.waitForVisible('~Public calendars');
     I.click('.fa.fa-caret-right', '~Public calendars');
-    I.seeElement('div[title="All my public appointments"] .color-label.selected');
-    I.dontSeeElement('div[title="Cal#A"] .color-label.selected');
+    I.seeElement({ css: 'div[title="All my public appointments"] .color-label.selected' });
+    I.dontSeeElement({ css: 'div[title="Cal#A"] .color-label.selected' });
 
     // Expected Result: The appointment from step 4 is shown
     I.waitForText(subject, 5, '.appointment');
 
     // 7. User#B: Enable "All my public appointments" view and enable Cal#A
-    I.click('.color-label', 'div[title="Cal#A"]');
-    I.seeElement('div[title="Cal#A"] .color-label.selected');
+    I.click('.color-label', { css: 'div[title="Cal#A"]' });
+    I.seeElement({ css: 'div[title="Cal#A"] .color-label.selected' });
 
     // Expected Result: The appointment from step 4 is shown only once.
     I.waitForText(subject, 5, '.appointment');
     I.seeNumberOfElements(`.appointment[aria-label="${subject}"]`, 1);
 
     // 8. User#B: Disable "All my public appointments" view and enable Cal#A
-    I.click('.color-label', 'div[title="All my public appointments"]');
-    I.dontSeeElement('div[title="All my public appointments"] .color-label.selected');
+    I.click('.color-label', { css: 'div[title="All my public appointments"]' });
+    I.dontSeeElement({ css: 'div[title="All my public appointments"] .color-label.selected' });
 
     // Expected Result: The appointment from step 4 is shown
     I.waitForText(subject, 5, '.appointment');
 
     // 9. User#B: Disable "All my public appointments" view and disbale Cal#A
-    I.click('.color-label', 'div[title="Cal#A"]');
-    I.dontSeeElement('div[title="Cal#A"] .color-label.selected');
+    I.click('.color-label', { css: 'div[title="Cal#A"]' });
+    I.dontSeeElement({ css: 'div[title="Cal#A"] .color-label.selected' });
 
     // Expected Result: The appointment from step 4 is not shown
     I.seeNumberOfElements(`.appointment[aria-label="${subject}"]`, 0);
@@ -473,8 +473,8 @@ Scenario('[C265147] Appointment organizer should be marked in attendee list', as
 
     // Expected Result: User#A is set as Organizer
     const organizerLocator = locate('li.participant')
-        .withDescendant(`a[title="${userA.userdata.primaryEmail}"]`)
-        .withDescendant('span.organizer-container');
+        .withDescendant({ css: `a[title="${userA.userdata.primaryEmail}"]` })
+        .withDescendant({ css: 'span.organizer-container' });
     I.seeElement(organizerLocator);
 });
 
@@ -523,12 +523,12 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
 
     I.waitForText('Subscribe shared calendars');
 
-    I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="subscribed"]'));
-    I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="com.openexchange.calendar.extendedProperties"]'));
+    I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="subscribed"]' }));
+    I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="com.openexchange.calendar.extendedProperties"]' }));
 
     I.click(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('.checkbox'));
-    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="subscribed"]'));
-    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="com.openexchange.calendar.extendedProperties"]'));
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="subscribed"]' }));
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="com.openexchange.calendar.extendedProperties"]' }));
 
     I.click('Save');
     I.waitForDetached('.modal-dialog');
@@ -540,14 +540,14 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
 
     I.waitForText('Subscribe shared calendars');
 
-    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="subscribed"]'));
-    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="com.openexchange.calendar.extendedProperties"]'));
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="subscribed"]' }));
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="com.openexchange.calendar.extendedProperties"]' }));
 
     I.click(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('.checkbox'));
-    I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="subscribed"]'));
-    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="com.openexchange.calendar.extendedProperties"]'));
+    I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="subscribed"]' }));
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="com.openexchange.calendar.extendedProperties"]' }));
 
-    I.click(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('label').withText('Sync via DAV'));
+    I.click(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'label' }).withText('Sync via DAV'));
 
     I.click('Save');
     I.waitForDetached('.modal-dialog');

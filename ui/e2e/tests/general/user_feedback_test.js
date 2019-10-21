@@ -51,11 +51,11 @@ Scenario('[C125004] App aware user feedback', function (I) {
     testFeedback('io.ox/files');
 
     I.openApp('Address Book');
-    I.waitForVisible('div[data-app-name="io.ox/contacts"]');
+    I.waitForVisible({ css: 'div[data-app-name="io.ox/contacts"]' });
     testFeedback('io.ox/contacts');
 
     I.openApp('Calendar');
-    I.waitForVisible('div[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: 'div[data-app-name="io.ox/calendar"]' });
     testFeedback('io.ox/calendar');
 
     I.openApp('Portal');
@@ -63,7 +63,7 @@ Scenario('[C125004] App aware user feedback', function (I) {
     testFeedback();
 
     I.openApp('Tasks');
-    I.waitForVisible('div[data-app-name="io.ox/tasks"]');
+    I.waitForVisible({ css: 'div[data-app-name="io.ox/tasks"]' });
     testFeedback();
 
 
@@ -74,7 +74,7 @@ Scenario('[C125005] Provide user feedback', function (I) {
     const appArr = ['Mail', 'General', 'Calendar', 'Address Book', 'Drive'];
     const giveFeedback = (app) => {
         I.click('~Feedback');
-        I.waitForVisible('select.feedback-select-box');
+        I.waitForVisible({ css: 'select.feedback-select-box' });
         I.waitForText('Please rate the following application:');
         I.see(app);
         I.selectOption('.feedback-select-box', app);

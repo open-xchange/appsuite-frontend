@@ -31,13 +31,13 @@ Scenario('adds an malicious attachment to a contact', async function (I) {
     );
 
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/contacts"]' });
 
     I.waitForText('My address books');
     I.doubleClick('~My address books');
     I.click('~Contacts, 1 total'); // need to add "1 total" as this is part of the aria-label
 
     I.click('#io-ox-refresh-icon');
-    I.waitForVisible('section[data-block="attachments"]');
+    I.waitForVisible({ css: 'section[data-block="attachments"]' });
     I.see('><img src=x onerror=alert(123)>');
 });

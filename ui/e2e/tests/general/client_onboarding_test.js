@@ -110,8 +110,8 @@ Scenario('[C73776] Mail Configuration', async function (I, users) {
     I.waitForText('What type of device do you want to configure?');
     I.click('iPhone');
     I.see('Mail');
-    let emailId = await I.grabValueFrom('input[name=email]');
-    I.seeInField('input[name=email]', users[0].get('primaryEmail'));
+    let emailId = await I.grabValueFrom({ css: 'input[name=email]' });
+    I.seeInField({ css: 'input[name=email]' }, users[0].get('primaryEmail'));
     I.clearField('email');
     I.fillField('email', emailId);
     I.clearField('email');
