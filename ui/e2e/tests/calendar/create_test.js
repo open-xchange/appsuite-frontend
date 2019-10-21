@@ -174,16 +174,16 @@ var checkInAllViews = async function (I, subject, location) {
     I.click('Day', '.smart-dropdown-container');
 
 
-    I.waitForText(subject, '.weekview-container.day');
-    I.waitForText(location, '.weekview-container.day');
+    I.waitForText(subject, 5, '.weekview-container.day');
+    I.waitForText(location, 5, '.weekview-container.day');
 
     // // 2) week view
     I.clickToolbar('View');
     I.click('Week', '.smart-dropdown-container');
     I.wait(1);
 
-    I.waitForText(subject, '.weekview-container.week');
-    I.waitForText(location, '.weekview-container.week');
+    I.waitForText(subject, 5, '.weekview-container.week');
+    I.waitForText(location, 5, '.weekview-container.week');
 
     // // 3) month view
     I.clickToolbar('View');
@@ -191,15 +191,15 @@ var checkInAllViews = async function (I, subject, location) {
     I.wait(1);
 
     // don't look for location in month view (usually subject is too long so location is out of view)
-    I.waitForText(subject, '.month-view-container');
+    I.waitForText(subject, 5, '.month-view-container');
 
     // // 4) list view
     I.clickToolbar('View');
     I.click('List', '.smart-dropdown-container');
     I.wait(1);
 
-    I.waitForText(subject, '.calendar-list-view');
-    I.waitForText(location, '.calendar-list-view');
+    I.waitForText(subject, 5, '.calendar-list-view');
+    I.waitForText(location, 5, '.calendar-list-view');
 
 };
 

@@ -20,7 +20,7 @@ module.exports = function (I, DISPLAYNAME) {
             case 'open':
                 I.waitForVisible('.contact-picture');
                 I.retry(5).click('.contact-picture');
-                I.waitForText('My contact data', '.smart-dropdown-container');
+                I.waitForText('My contact data', 5, '.smart-dropdown-container');
                 I.click('My contact data', '.smart-dropdown-container');
                 I.waitForVisible('.io-ox-contacts-edit-window');
                 break;
