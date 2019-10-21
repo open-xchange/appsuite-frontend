@@ -4,7 +4,7 @@ var defaultContext;
 // please create .env file based on .evn-example
 require('dotenv').config();
 
-['LAUNCH_URL', 'SELENIUM_HOST', 'PROVISIONING_URL', 'CONTEXT_ID'].forEach(function notdefined(key) {
+['LAUNCH_URL', 'PROVISIONING_URL', 'CONTEXT_ID'].forEach(function notdefined(key) {
     if (process.env[key]) return;
     console.error('\x1b[31m', `ERROR: Missing value for environment variable '${key}'. Please specify a '.env' file analog to '.env-example'.`);
     process.exit();
@@ -15,24 +15,19 @@ module.exports.config = {
     timeout: 10000,
     output: './build/e2e/',
     helpers: {
-        WebDriver: {
+        Puppeteer: {
             url: process.env.LAUNCH_URL,
-            host: process.env.SELENIUM_HOST,
             smartWait: 1000,
-            waitForTimeout: 30000,
+            waitForTimeout: 5000,
             browser: 'chrome',
             restart: true,
-            windowSize: 'maximize',
+            windowSize: '1280x1024',
             uniqueScreenshotNames: true,
-            desiredCapabilities: {
-                browserName: 'chrome',
-                chromeOptions: {
-                    args: ['no-sandbox']
-                }
-            },
             timeouts: {
                 script: 5000
-            }
+            },
+            // set HEADLESS=false in your terminal to show chrome window
+            show: process.env.HEADLESS ? process.env.HEADLESS === 'false' : false
         },
         OpenXchange: {
             require: './e2e/helper',
@@ -178,3 +173,11 @@ module.exports.config = {
     },
     name: 'App Suite Core UI'
 };
+
+if (process.env.CHROME_ARGS) {
+    Object.assign(module.exports.config.helpers.Puppeteer, {
+        chrome: {
+            args: process.env.CHROME_ARGS.split(' ')
+        }
+    });
+}
