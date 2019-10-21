@@ -13,7 +13,7 @@
 
 /// <reference path="../../steps.d.ts" />
 
-Feature('Mail > move and copy');
+Feature('Mail > Move/Copy');
 
 Before(async function (I, users) {
     await users.create();

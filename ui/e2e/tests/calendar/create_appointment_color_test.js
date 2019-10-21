@@ -14,7 +14,7 @@
 /// <reference path="../../steps.d.ts" />
 
 const expect = require('chai').expect;
-Feature('Calendar Create');
+Feature('Calendar > Create');
 
 Before(async (users) => {
     await users.create();
