@@ -15,12 +15,9 @@ const { expect } = require('chai');
 
 function prepare(I) {
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
     I.waitForText('My address books');
     I.doubleClick('~My address books');
     I.click('~Contacts');
-    I.waitForDetached('.classic-toolbar [data-dropdown="io.ox/contacts/toolbar/new"].disabled');
 }
 
 Scenario('Contacts - List view w/o contact', async (I) => {
@@ -85,33 +82,21 @@ Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions) @shaky
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });
 
-Scenario('Contacts - New contact window', async (I) => {
+Scenario('Contacts - New contact window', async (I, contacts) => {
 
     prepare(I);
-    I.waitForDetached('a.dropdown-toggle.disabled');
-    // toolbar dropdown
-    I.retry(5).click('New contact');
-    // real action in dropdown
-    I.waitForVisible('.dropdown-menu');
-    I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
-    I.waitForText('Add personal info');
+    contacts.newContact();
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Contacts - New distribution list window (with exceptions)', async (I) => {
+Scenario('Contacts - New distribution list window (with exceptions)', async (I, contacts) => {
     // Exceptions:
     // Typeahead missing label (critical)
     const excludes = { exclude: [['.tt-hint'], ['.tt-input']] };
 
     prepare(I);
-    I.waitForElement('[title="Actions for Contacts"]');
-    I.waitForDetached('a.dropdown-toggle.disabled');
-    I.waitForDetached('.classic-toolbar .disabled[data-dropdown="io.ox/contacts/toolbar/new"]', 5);
-    I.click('New contact');
-    I.waitForVisible('.dropdown-menu');
-    I.click('New distribution list');
-    I.waitForText('Participants');
+    contacts.newDistributionlist();
 
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });
