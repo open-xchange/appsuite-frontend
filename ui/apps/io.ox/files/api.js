@@ -1175,6 +1175,11 @@ define('io.ox/files/api', [
         });
     };
 
+    // Handler to trigger a refresh of the listViews debounced
+    var debounceRefreshListViews = _.debounce(function () {
+        api.trigger('refresh:listviews');
+    }, 0);
+
     //
     // Respond to folder API
     //
@@ -1200,6 +1205,7 @@ define('io.ox/files/api', [
                     collection.expired = true;
                 });
             }
+            debounceRefreshListViews();
         },
         // sync with folder API
         'before:remove before:move': function (data) {
