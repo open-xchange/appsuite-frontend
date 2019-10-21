@@ -30,7 +30,7 @@ Scenario('[7772] Contact collection when sending mail', async (I) => {
     I.waitForVisible('.io-ox-mail-settings');
     I.click('Automatically collect contacts in the folder "Collected addresses" while sending');
 
-    I.click('Mail');
+    I.openApp('Mail');
     I.waitForText('Compose');
     I.retry(5).clickToolbar('Compose');
 

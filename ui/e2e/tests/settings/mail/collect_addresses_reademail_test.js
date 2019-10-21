@@ -37,7 +37,7 @@ Scenario('[7773] Contact collection when reading mail', async (I, users) => {
     I.waitForVisible('.io-ox-mail-settings');
     I.click('Automatically collect contacts in the folder "Collected addresses" while reading');
 
-    I.click('Mail');
+    I.openApp('Mail');
     I.waitForText('Richtig gutes Zeug');
     I.click('.list-item.selectable');
     I.waitForVisible('h1.subject');
