@@ -268,7 +268,7 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
     I.see('17', '.weekview-container .weekview-toolbar .weekday');
 });
 
-Scenario('[C244785] Open event from invite notification in calendar @shaky', async (I, users) => {
+Scenario('[C244785] Open event from invite notification in calendar', async (I, users) => {
     const [userA, userB] = users;
 
     await I.haveSetting({ 'io.ox/core': { autoOpenNotification: false } }, { user: userB });
@@ -334,7 +334,7 @@ Scenario('[C244785] Open event from invite notification in calendar @shaky', asy
     I.see(`${userB.userdata.sur_name}, ${userB.userdata.given_name}`, '.io-ox-sidepopup');
 });
 
-Scenario('[C252158] All my public appointments @shaky', (I, users) => {
+Scenario('[C252158] All my public appointments', (I, users) => {
     const [userA, userB] = users;
 
     // 1. User#A: Login and go to Calendar

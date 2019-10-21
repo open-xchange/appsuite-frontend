@@ -97,7 +97,7 @@ Scenario('[C114381] Sender address is shown in tooltip @shaky', async function (
     I.logout();
 });
 
-Scenario('remove mail from thread @shaky', async (I, users) => {
+Scenario('remove mail from thread', async (I, users) => {
     I.haveSetting('io.ox/mail//viewOptions', {
         'default0/INBOX': {
             order: 'desc',

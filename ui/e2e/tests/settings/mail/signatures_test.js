@@ -109,7 +109,7 @@ Scenario('[C7766] Create new signature', function (I) {
 
 });
 
-Scenario('[C7767] Define signature position @shaky', async function (I, users) {
+Scenario('[C7767] Define signature position', async function (I, users) {
     const [user] = users;
     await I.haveMail({
         attachments: [{

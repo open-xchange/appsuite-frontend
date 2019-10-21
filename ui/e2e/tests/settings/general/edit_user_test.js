@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C208269] Edit users contact information @shaky', async (I) => {
+Scenario('[C208269] Edit users contact information', async (I) => {
 
     function addContactsField(fieldType, field, input) {
         I.click({ css: `div.dropdown[data-add="${fieldType}"] button` }, '.contact-edit');

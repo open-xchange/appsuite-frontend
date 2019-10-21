@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C248441] Configure to show/hide birthday calendar @shaky', async function (I) {
+Scenario('[C248441] Configure to show/hide birthday calendar', async function (I) {
     I.login();
     I.click('~Settings', '#io-ox-settings-topbar-icon');
 

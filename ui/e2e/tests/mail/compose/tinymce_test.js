@@ -619,7 +619,7 @@ Scenario('[C7395] Send mail with text indentations', async function (I, users) {
     });
 });
 
-Scenario('[C7396] Send mail with different text fonts @shaky', async function (I, users) {
+Scenario('[C7396] Send mail with different text fonts', async function (I, users) {
 
     const selectFont = (action) => {
         I.click(locate('button').inside('~Font Family'));
@@ -731,7 +731,7 @@ Scenario('[C7396] Send mail with different text fonts @shaky', async function (I
     I.login('app=io.ox/mail', { user: recipient });
 
     // Open the mail
-    I.waitForText(mailSubject, 2);
+    I.waitForText(mailSubject);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
     I.waitForVisible({ css: 'iframe.mail-detail-frame' });
 
@@ -759,7 +759,7 @@ Scenario('[C7396] Send mail with different text fonts @shaky', async function (I
 });
 
 // combined with [C7383] Compose HTML mail
-Scenario('[C7397] Send mail with different text styles @shaky', async function (I, users) {
+Scenario('[C7397] Send mail with different text styles', async function (I, users) {
 
     const selectHeading = (action) => {
         I.click(locate('button').withChild(locate('span').withText('Formats')));

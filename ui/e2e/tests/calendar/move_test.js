@@ -24,7 +24,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Move event to different folder @shaky', async function (I) {
+Scenario('Move event to different folder', async function (I) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, viewView: 'week:week' }

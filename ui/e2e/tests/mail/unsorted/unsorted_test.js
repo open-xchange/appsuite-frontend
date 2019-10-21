@@ -23,7 +23,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7380] Send saved draft mail @shaky', function (I, users) {
+Scenario('[C7380] Send saved draft mail', function (I, users) {
     const [user] = users;
     var testrailId = 'C7380';
     var text = Math.round(+new Date() / 1000);
@@ -180,7 +180,7 @@ Scenario('[C7385] Write mail to BCC recipients', function (I, users) {
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
 });
 
-Scenario('[C7386] Write mail to CC recipients @shaky', function (I, users) {
+Scenario('[C7386] Write mail to CC recipients', function (I, users) {
     let [user] = users;
     var testrailID = 'C7386';
     var timestamp = Math.round(+new Date() / 1000);
@@ -238,7 +238,7 @@ function addFile(I, path) {
     //I.wait(1);
 }
 
-Scenario('[C7387] Send mail with attachment from upload @shaky', function (I, users) {
+Scenario('[C7387] Send mail with attachment from upload', function (I, users) {
     let [user] = users;
     var testrailID = 'C7387';
     var timestamp = Math.round(+new Date() / 1000);
@@ -371,7 +371,7 @@ Scenario('[C7389] Send mail with attached vCard', function (I, users) {
     I.waitForText(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, 5, '.contact-detail.view .contact-header .fullname');
 });
 
-Scenario('[C7403] Forward a single mail @shaky', function (I, users) {
+Scenario('[C7403] Forward a single mail', function (I, users) {
     let [userA, userB, userC] = users,
         testrailID = 'C7403',
         timestamp = Math.round(+new Date() / 1000);
@@ -472,7 +472,7 @@ Scenario('[C8816] Cancel mail compose', function (I, users) {
     I.click('Discard message');
 });
 
-Scenario('[C8820] Forward attachments @shaky', function (I, users) {
+Scenario('[C8820] Forward attachments', function (I, users) {
     let [user, user2, user3] = users;
     var testrailID = 'C8820';
     var timestamp = Math.round(+new Date() / 1000);

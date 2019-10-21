@@ -997,7 +997,7 @@ Scenario('[C7462] Remove a participant', async function (I, users) {
     I.dontSeeElement('.io-ox-sidepopup-pane a[title="' + users[1].userdata.primaryEmail + '"]');
 });
 
-Scenario('[C7461] Add a participant/ressource @shaky', async function (I, users) {
+Scenario('[C7461] Add a participant/ressource', async function (I, users) {
     await users.create();
     await users.create();
     const [userA, userB, weebl, bob] = users;
@@ -1305,7 +1305,7 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
     I.waitForText('2:00 PM');
 });
 
-Scenario('[C7459] Remove attachments @shaky', async function (I) {
+Scenario('[C7459] Remove attachments', async function (I) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
