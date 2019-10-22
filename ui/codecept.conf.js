@@ -49,6 +49,7 @@ module.exports.config = {
         users: './e2e/users',
         contexts: './e2e/contexts',
         search: './e2e/actor_search',
+        portal: './e2e/pageobjects/portal',
         contacts: './e2e/pageobjects/contacts'
     },
     bootstrap: function (done) {
