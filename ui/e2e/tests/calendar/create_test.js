@@ -191,7 +191,7 @@ var checkInAllViews = async function (I, subject, location) {
     I.wait(1);
 
     // don't look for location in month view (usually subject is too long so location is out of view)
-    I.waitForText(subject, 5, '.month-view-container');
+    I.waitForText(subject, 5, '.monthview-container');
 
     // // 4) list view
     I.clickToolbar('View');
