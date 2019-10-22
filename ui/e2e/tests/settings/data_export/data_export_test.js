@@ -10,6 +10,8 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
+/// <reference path="../../../steps.d.ts" />
+
 Feature('Settings > Data export (GDPR)');
 
 Before(async function (users) {
@@ -77,6 +79,39 @@ Scenario('request a new download and cancel it', async function (I) {
         I.dontSeeElement('input:disabled');
         I.dontSeeElement('input:disabled');
     });
+
+    I.logout();
+});
+
+Scenario('open direct link to data export settings page', async function (I) {
+    I.login('app=io.ox/settings&folder=virtual/settings/personaldata');
+    I.waitForVisible('*[data-app-name="io.ox/settings"]');
+
+    //list view
+    I.waitForText('Download personal data', 5);
+
+    // no click here, direct link should do the work
+
+    // detail view
+    I.waitForText('Download your personal data', 5);
+
+    I.logout();
+});
+
+Scenario('show only available options', async function (I, users) {
+    await I.dontHaveCapability('tasks', users[0]);
+    I.login('app=io.ox/settings');
+    I.waitForVisible('*[data-app-name="io.ox/settings"]');
+
+    I.waitForText('Download personal data', 5);
+
+    I.click('Download personal data');
+    I.waitForText('Download your personal data');
+
+    //check if calendar module is correctly missing
+    I.dontSee('Tasks', '.io-ox-personal-data-settings label');
+
+    // sub options cannot be tested with capabilities alone, options must be removed in config
 
     I.logout();
 });
