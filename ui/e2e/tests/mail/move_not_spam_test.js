@@ -13,7 +13,7 @@
 
 /// <reference path="../../steps.d.ts" />
 
-Feature('Mail > Spam');
+Feature('Mail > mark as not spam and move to inbox');
 
 Before(async function (I, users) {
     const user = users.getRandom();

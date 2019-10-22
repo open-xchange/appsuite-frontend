@@ -10,7 +10,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-Feature('Calendar > Create');
+Feature('Calendar Create');
 
 Before(async function (users) {
     await users.create();

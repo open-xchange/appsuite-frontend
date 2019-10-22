@@ -11,7 +11,7 @@
 */
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Mailfilter > Apply to folder');
+Feature('Mailfilter > Apply filter rule to a folder');
 
 Before(async (users) => {
     await users.create();

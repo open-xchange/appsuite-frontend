@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Mail Compose > Tokenfield/Typeahed');
+Feature('Mail Compose Tokenfield/Typeahed');
 
 Before(async function (I, users) {
     await users.create();

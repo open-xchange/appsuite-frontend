@@ -1,6 +1,6 @@
 /// <reference path="../../steps.d.ts" />
 
-Feature('Login > Switch translations');
+Feature('Login: Switch translations');
 
 Before(async (users) => {
     await users.create();

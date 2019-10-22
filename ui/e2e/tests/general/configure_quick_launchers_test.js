@@ -12,7 +12,7 @@
  */
 
 /// <reference path="../../steps.d.ts" />
-Feature('General > Configure quick launchers');
+Feature('General > Configure quick launchers ');
 
 Before(async (users) => {
     await users.create();

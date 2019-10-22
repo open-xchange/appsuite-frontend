@@ -12,7 +12,7 @@
 
 const moment = require('moment-timezone');
 
-Feature('Calendar > Create');
+Feature('Calendar Create');
 
 Before(async function (users) {
     await users.create();

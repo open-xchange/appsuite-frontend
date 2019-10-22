@@ -12,7 +12,7 @@
 
 /// <reference path="../../steps.d.ts" />
 
-Feature('General > Inline help');
+Feature('General > Inline Help');
 
 Before(async (users) => {
     await users.create();

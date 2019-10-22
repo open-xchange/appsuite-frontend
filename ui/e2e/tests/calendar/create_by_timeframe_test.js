@@ -16,7 +16,7 @@
 const moment = require('moment');
 const expect = require('chai').expect;
 
-Feature('Calendar > Create');
+Feature('Calendar Create');
 
 Before(async (users) => {
     await users.create();
