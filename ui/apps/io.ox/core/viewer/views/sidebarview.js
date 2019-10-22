@@ -18,7 +18,7 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/dropzone',
     'io.ox/core/capabilities',
     'io.ox/core/viewer/settings',
-    'io.ox/core/viewer/views/types/typesregistry',
+    'io.ox/core/viewer/views/types/typesutil',
     'io.ox/core/viewer/views/document/thumbnailview',
     'io.ox/core/viewer/views/sidebar/fileinfoview',
     'io.ox/core/viewer/views/sidebar/filedescriptionview',
@@ -28,7 +28,7 @@ define('io.ox/core/viewer/views/sidebarview', [
     'gettext!io.ox/core/viewer',
     // prefetch cause all views need the base view
     'io.ox/core/viewer/views/sidebar/panelbaseview'
-], function (DisposableView, Util, FilesAPI, folderApi, Dropzone, Capabilities, ViewerSettings, TypesRegistry, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt) {
+], function (DisposableView, Util, FilesAPI, folderApi, Dropzone, Capabilities, ViewerSettings, TypesUtil, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt) {
 
     'use strict';
 
@@ -317,7 +317,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             this.model = model;
 
             // show tab navigation in office standalone mode
-            if (this.standalone && !_.device('smartphone') && TypesRegistry.isDocumentType(model)) {
+            if (this.standalone && !_.device('smartphone') && TypesUtil.isDocumentType(model)) {
                 this.$('.viewer-sidebar-tabs').removeClass('hidden');
                 var lastActivatedThumbnail = ViewerSettings.getSidebarActiveTab();
                 this.activateTab(lastActivatedThumbnail);

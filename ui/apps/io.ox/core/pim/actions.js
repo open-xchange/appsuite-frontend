@@ -18,7 +18,7 @@ define('io.ox/core/pim/actions', [
     'io.ox/core/yell',
     'io.ox/core/extensions',
     'io.ox/backbone/views/actions/util',
-    'io.ox/core/viewer/views/types/typesregistry',
+    'io.ox/core/viewer/views/types/typesutil',
     'gettext!io.ox/core'
 ], function (attachmentAPI, downloadAPI, filesAPI, yell, ext, actionsUtil, viewerTypes, gt) {
 

@@ -22,7 +22,7 @@ define('io.ox/mail/actions', [
     'io.ox/core/print',
     'io.ox/core/api/account',
     'io.ox/core/notifications',
-    'io.ox/core/viewer/views/types/typesregistry',
+    'io.ox/core/viewer/views/types/typesutil',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
 ], function (ext, actionsUtil, api, util, filesAPI, folderAPI, print, account, notifications, viewerTypes, settings, gt) {
