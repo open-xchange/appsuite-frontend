@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-10-17 08:21+0200\n"
+"PO-Revision-Date: 2019-10-21 21:27+0200\n"
 "Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -9433,7 +9433,7 @@ msgstr "Voorwaarde toevoegen"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Body"
-msgstr "Broodtekst"
+msgstr "Berichtinhoud"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -10757,7 +10757,7 @@ msgstr "Authenticatie is opnieuw noodzakelijk voor deze actie"
 
 #: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
 msgid "Select 2-Step Verification Method"
-msgstr "Selecteer 2-Staps Verificatiemethode"
+msgstr "Selecteer 2-Stappen Verificatiemethode"
 
 #: apps/io.ox/multifactor/views/selectDeviceView.js module:io.ox/core/boot
 msgid "Please select a device to use for additional authentication"
