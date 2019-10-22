@@ -42,7 +42,8 @@
         chromeIOS,
         firefoxIOS,
         browserLC = {},
-        isTouch;
+        isTouch,
+        nativeNoopener;
 
     // supported browsers
     us.browserSupport = {
@@ -216,6 +217,9 @@
 
     isTouch = checkTouch();
 
+    // https://mathiasbynens.github.io/rel-noopener/
+    nativeNoopener = us.browser.chrome >= 72 || us.browser.safari >= 13;
+
     // do media queries here
     // TODO define sizes to match pads and phones
     var queries = {
@@ -302,6 +306,7 @@
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
             misc.touch = isTouch;
+            misc.noopener = nativeNoopener;
             misc.standalone = standalone;
             misc.emoji = underscoreExtends.hasNativeEmoji();
             misc.reload = (window.performance && window.performance.navigation.type === 1);
