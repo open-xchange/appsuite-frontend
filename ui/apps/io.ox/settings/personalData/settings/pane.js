@@ -75,13 +75,6 @@ define('io.ox/settings/personalData/settings/pane', [
                 'includeShared': {
                     //#. shown when a download of contact data is requested
                     'label': gt('Shared address books')
-                },
-                'includeDistributionLists': {
-                    //#. header for a dropdown
-                    'header': gt('Additional options'),
-                    divider: true,
-                    //#. shown when a download of contact data is requested
-                    'label': gt('Include distribution lists')
                 }
             },
             'infostore': {
@@ -381,5 +374,10 @@ define('io.ox/settings/personalData/settings/pane', [
         }
     });
 
-    return true;
+    // not actually used elsewhere, just return them to make unit tests easier
+    return {
+        handleApiResult: handleApiResult,
+        downloadView: downloadView,
+        selectDataView: selectDataView
+    };
 });
