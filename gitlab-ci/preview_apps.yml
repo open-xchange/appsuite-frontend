@@ -9,17 +9,19 @@ deploy preview app:
   dependencies: []
   variables:
     GIT_STRATEGY: none
-    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_HOST: 10.42.23.2
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-    SERVER: http://10.20.28.164/appsuite/
+    SERVER: http://10.42.23.3/appsuite/
   script:
     - docker pull $DOCKER_IMAGE
     - docker stop $CI_COMMIT_REF_SLUG || echo "Nothing to stop"
-    - counter=0; while [ $counter -lt 10 ]; do sleep 2; docker run --name $CI_COMMIT_REF_SLUG --rm -d -e SERVER=$SERVER $DOCKER_IMAGE && break || counter=$((counter+1)); done
+    - counter=0; while [ $counter -lt 10 ]; do sleep 2; docker run --name $CI_COMMIT_REF_SLUG --rm -d -e SERVER=$SERVER -l traefik.domain=e2e.demo.oxui.de $DOCKER_IMAGE && break || counter=$((counter+1)); done
   environment:
     name: review/$CI_COMMIT_REF_NAME
-    url: http://$CI_COMMIT_REF_SLUG.ui.cloud.open-xchange.com/appsuite/
+    url: http://$CI_COMMIT_REF_SLUG.e2e.demo.oxui.de/appsuite/
     on_stop: stop_review
+  tags:
+    - testing
   only:
     - /^feature\//
     - /^bug\//
@@ -32,10 +34,12 @@ stop_review:
     - deploy preview app
   variables:
     GIT_STRATEGY: none
-    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_HOST: 10.42.23.2
   script:
     - docker stop $CI_COMMIT_REF_SLUG
   when: manual
+  tags:
+    - testing
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop

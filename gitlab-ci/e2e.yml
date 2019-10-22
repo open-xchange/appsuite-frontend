@@ -5,16 +5,18 @@ deploy e2e dev server:
   stage: deploy
   dependencies: []
   variables:
-    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_HOST: 10.42.23.2
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     CONTAINER_NAME: e2e-develop
-    SERVER: http://10.20.28.164/appsuite/
+    SERVER: http://10.42.23.3/appsuite/
+  tags:
+    - testing
   script:
     - docker stop $CONTAINER_NAME || true
     - docker wait $CONTAINER_NAME || true
     - docker rm $CONTAINER_NAME || true
     - docker pull $DOCKER_IMAGE
-    - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e $DOCKER_IMAGE e2e
+    - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e -l traefik.domain=e2e.demo.oxui.de $DOCKER_IMAGE e2e
     - docker container cp ui/e2e/fixtures $CONTAINER_NAME:/app/build/e2e
     - docker container start $CONTAINER_NAME
   only:
@@ -24,15 +26,17 @@ deploy e2e testserver:
   stage: deploy
   dependencies: []
   variables:
-    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_HOST: 10.42.23.2
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     CONTAINER_NAME: e2e_$CI_PIPELINE_ID
-    SERVER: http://10.20.28.164/appsuite/
+    SERVER: http://10.42.23.3/appsuite/
   script:
     - docker pull $DOCKER_IMAGE
-    - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e $DOCKER_IMAGE e2e
+    - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e -l traefik.domain=e2e.demo.oxui.de $DOCKER_IMAGE e2e
     - docker container cp ui/e2e/fixtures $CONTAINER_NAME:/app/build/e2e
     - docker container start $CONTAINER_NAME
+  tags:
+    - testing
   only:
     changes:
       - ui/**/*
@@ -47,8 +51,8 @@ run e2e tests:
   needs:
     - deploy e2e testserver
   variables:
-    LAUNCH_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/appsuite/
-    PROVISIONING_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/
+    LAUNCH_URL: http://e2e-$CI_PIPELINE_ID.e2e.demo.oxui.de/appsuite/
+    PROVISIONING_URL: http://10.42.23.3/
     CONTEXT_ID: $CI_JOB_ID
     CHROME_ARGS: '--no-sandbox'
     PARTITIONS: '@shaky ^Accessibility ^Contacts ^Login ^Mail\sCompose ^Calendar(:|\s>) ^Calendar\s[^>] ^Mail\s> ^Drive ^Portal ^Sharing ^General ^Settings ^Tasks ^Mailfilter'
@@ -65,7 +69,7 @@ run e2e tests:
     - if [ ${CI_NODE_INDEX} -ne "1" ]; then PATTERN+="\s?((?!"; PATTERN+=${PARTITIONS[0]}; PATTERN+=").)*$"; fi;
     - yarn e2e -g "$PATTERN" || [ "$CI_NODE_INDEX" -eq "1" ];
   tags:
-    - e2e
+    - testing
   parallel: 15
   artifacts:
     when: always
@@ -92,7 +96,7 @@ generate e2e report:
     # fail if there are no test results, prevents history from getting lost in some cases
     - find ui/build/e2e/ -name *.xml > /dev/null
     # fetch current version of history
-    - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/history.tar -q -O - | tar x &>/dev/null && mv ui/build/allure-report/history ui/build/e2e/ || echo "No history found"
+    - wget http://reports.demo.oxui.de/$CI_COMMIT_REF_SLUG/history.tar -q -O - | tar x &>/dev/null && mv ui/build/allure-report/history ui/build/e2e/ || echo "No history found"
     - allure generate ui/build/e2e/ -o ui/build/allure-report/$CI_PIPELINE_ID
     # preserve well-known location to bookmark/link to at latest
     - cp -r ui/build/allure-report/$CI_PIPELINE_ID/history ui/build/allure-report/
@@ -118,7 +122,7 @@ generate e2e report:
 publish e2e report:
   stage: cleanup
   variables:
-    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_HOST: 10.42.23.2
     GIT_STRATEGY: none
   dependencies:
     - generate e2e report
@@ -132,9 +136,11 @@ publish e2e report:
     - docker exec reports ln -sf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
   environment:
     name: reports/$CI_COMMIT_REF_SLUG
-    url: http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/
+    url: http://reports.demo.oxui.de/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/
     on_stop: remove e2e report
   when: always
+  tags:
+    - testing
   only:
     refs:
       - develop
@@ -150,7 +156,7 @@ remove e2e report:
   stage: cleanup
   dependencies: []
   variables:
-    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_HOST: 10.42.23.2
     GIT_STRATEGY: none
   script:
     - docker exec reports rm -rf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG
@@ -158,6 +164,8 @@ remove e2e report:
     name: reports/$CI_COMMIT_REF_SLUG
     action: stop
   when: manual
+  tags:
+    - testing
   except:
     refs:
       - develop
@@ -172,7 +180,7 @@ stop e2e testserver:
     - run e2e tests
   variables:
     GIT_STRATEGY: none
-    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_HOST: 10.42.23.2
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     CONTAINER_NAME: e2e_$CI_PIPELINE_ID
   script:
@@ -180,6 +188,8 @@ stop e2e testserver:
     - docker container wait $CONTAINER_NAME || true
     - docker container rm $CONTAINER_NAME || true
   when: always
+  tags:
+    - testing
   only:
     changes:
       - ui/**/*
