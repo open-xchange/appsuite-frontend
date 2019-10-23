@@ -341,7 +341,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             index: 100,
             render: function () {
                 this.$el.addClass('io-ox-signature-settings').append(
-                    util.header(gt('Signatures'))
+                    util.header(_.device('smartphone') ? gt('Signature') : gt('Signatures'))
                 );
             }
         },
