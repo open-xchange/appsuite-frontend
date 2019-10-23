@@ -37,8 +37,16 @@ define('io.ox/settings/personalData/settings/pane', [
                 'includeTrash': {
                     //#. header for a dropdown
                     'header': gt('Included folders'),
-                    //#. shown when a download of mail data is requested
+                    //#. shown when a download of mail data is requested (has header "Included folders ...")
                     'label': gt('Trash folder')
+                },
+                'includePublic':  {
+                    //#. shown when a download of mail data is requested (has header "Included folders ...")
+                    'label': gt('Public folders')
+                },
+                'includeShared': {
+                    //#. shown when a download of mail data is requested (has header "Included folders ...")
+                    'label': gt('Shared folders')
                 },
                 'includeUnsubscribed': {
                     //#. shown when a download of mail data is requested (has header "Included folders ...")
@@ -51,15 +59,15 @@ define('io.ox/settings/personalData/settings/pane', [
                 'includePublic': {
                     //#. header for a dropdown
                     'header': gt('Included calendars'),
-                    //#. shown when a download of calendar data is requested
+                    //#. shown when a download of calendar data is requested (has header "Included calendars ...")
                     'label': gt('Public calendars')
                 },
                 'includeShared': {
-                    //#. shown when a download of calendar data is requested
+                    //#. shown when a download of calendar data is requested (has header "Included calendars ...")
                     'label': gt('Shared calendars')
                 },
                 'includeUnsubscribed': {
-                    //#. shown when a download of calendar data is requested (has header "Included folders ...")
+                    //#. shown when a download of calendar data is requested (has header "Included calendars ...")
                     'label': gt('Unsubscribed calendars')
                 }
             },
@@ -69,11 +77,11 @@ define('io.ox/settings/personalData/settings/pane', [
                 'includePublic': {
                     //#. header for a dropdown
                     'header': gt('Included address books'),
-                    //#. shown when a download of contact data is requested
+                    //#. shown when a download of contact data is requested (has header "Included address books ...")
                     'label': gt('Public address books')
                 },
                 'includeShared': {
-                    //#. shown when a download of contact data is requested
+                    //#. shown when a download of contact data is requested (has header "Included address books ...")
                     'label': gt('Shared address books')
                 }
             },
@@ -84,15 +92,15 @@ define('io.ox/settings/personalData/settings/pane', [
                 'includeTrash':  {
                     //#. header for a dropdown
                     'header': gt('Included folders'),
-                    //#. shown when a download of (cloud) drive files is requested
+                    //#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
                     'label': gt('Trash folder')
                 },
                 'includePublic':  {
-                    //#. shown when a download of (cloud) drive files is requested
+                    //#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
                     'label': gt('Public folders')
                 },
                 'includeShared': {
-                    //#. shown when a download of (cloud) drive files is requested
+                    //#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
                     'label': gt('Shared folders')
                 },
                 'includeAllVersions': {
@@ -109,11 +117,11 @@ define('io.ox/settings/personalData/settings/pane', [
                 'includePublic':  {
                     //#. header for a dropdown
                     'header': gt('Included folders'),
-                    //#. shown when a download of task data is requested
+                    //#. shown when a download of task data is requested (has header "Included folders ...")
                     'label': gt('Public folders')
                 },
                 'includeShared': {
-                    //#. shown when a download of task data is requested
+                    //#. shown when a download of task data is requested (has header "Included folders ...")
                     'label': gt('Shared folders')
                 }
             }
