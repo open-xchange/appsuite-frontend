@@ -45,19 +45,11 @@ Scenario('[C7789] Delete filter rule @contentReview', async function (I, users) 
         }]
     }, { user: users[0] });
 
-    I.login('app=io.ox/settings', { user: users[0] });
-    I.waitForVisible('.io-ox-settings-main');
-    I.selectFolder('Mail');
-    I.waitForVisible('.rightside h1');
-
-    // open mailfilter settings
-    I.selectFolder('Filter Rules');
-
-    // checks the h1
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mailfilter-settings h1');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+    I.waitForVisible('.settings-detail-pane .io-ox-mailfilter-settings h1');
     I.see('Mail Filter Rules');
-    I.seeElement('[title="Remove Redirect mails with subject Test subject to ' + users[2].get('primaryEmail') + '"]', '.settings-list-view');
-    I.click('[title="Remove Redirect mails with subject Test subject to ' + users[2].get('primaryEmail') + '"]', '.settings-list-view');
+
+    I.click('.settings-list-view [title="Remove Redirect mails with subject Test subject to ' + users[2].get('primaryEmail') + '"]');
     I.waitForElement('.modal-dialog');
     I.see('Do you really want to delete this filter rule?');
     I.click('Delete');
@@ -78,7 +70,7 @@ Scenario('[C7789] Delete filter rule @contentReview', async function (I, users) 
     I.seeInField({ css: 'textarea.plain-text' }, 'Test text');
 
     I.click('Send');
-    I.waitForElement('~Sent, 1 total');
+    I.waitForElement('~Sent, 1 total', 30);
 
     I.logout();
 

@@ -66,7 +66,7 @@ Scenario('[C7801] Keep filtered mail', async function (I, users) {
     createFilterRule(I, 'C7801', 'Keep');
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
 
@@ -80,8 +80,8 @@ Scenario('[C7801] Keep filtered mail', async function (I, users) {
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
     I.click('Send');
-    I.waitForElement('~Sent, 1 total');
-    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.waitForElement('~Sent, 1 total', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total', 30);
     I.see('C7801', '.subject');
 });
 
@@ -108,13 +108,13 @@ Scenario('[C7802] Discard filtered mail', async function (I, users) {
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
     I.click('Send');
-    I.waitForElement('~Sent, 1 total');
+    I.waitForElement('~Sent, 1 total', 30);
     I.wait(1);
     I.seeElement('~Inbox');
 
 });
 
-Scenario('[C7803] Redirect filtered mail @shaky', async function (I, users) {
+Scenario('[C7803] Redirect filtered mail', async function (I, users) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -124,7 +124,7 @@ Scenario('[C7803] Redirect filtered mail @shaky', async function (I, users) {
     I.fillField('to', users[1].get('primaryEmail'));
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
 
@@ -139,13 +139,13 @@ Scenario('[C7803] Redirect filtered mail @shaky', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total');
+    I.waitForElement('~Sent, 1 total', 30);
     I.wait(1);
     I.seeElement('~Inbox');
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[1] });
-    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.waitForElement('~Inbox, 1 unread, 1 total', 30);
     I.waitForText('TestCase0388', 5, '.subject');
 
 });
@@ -163,16 +163,16 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
     I.click('Select folder');
     I.waitForVisible(locate('.folder-picker-dialog [data-id="virtual/myfolders"] .folder-arrow'));
 
-    I.click('[data-id="virtual/myfolders"] .folder-arrow', '.folder-picker-dialog');
-    I.waitForVisible(`[data-id="default0/INBOX/${folder}"]`, 5);
-    I.click(`[data-id="default0/INBOX/${folder}"]`, '.folder-picker-dialog');
-    I.waitForVisible(`[data-id="default0/INBOX/${folder}"].selected`, 5);
+    I.click('.folder-picker-dialog [data-id="virtual/myfolders"] .folder-arrow');
+    I.waitForVisible(`.folder-picker-dialog [data-id="default0/INBOX/${folder}"]`, 5);
+    I.click(`.folder-picker-dialog [data-id="default0/INBOX/${folder}"]`);
+    I.waitForVisible(`.folder-picker-dialog [data-id="default0/INBOX/${folder}"].selected`, 5);
     I.wait(1);
     I.click('Ok');
 
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
 
@@ -187,15 +187,15 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForVisible('~Sent, 1 total');
+    I.waitForVisible('~Sent, 1 total', 30);
     I.wait(1);
-    I.waitForVisible('~Inbox');
-    I.click('[data-id="virtual/myfolders"] .folder-arrow', '.io-ox-mail-window .window-sidepanel');
-    I.waitForVisible(`[data-id="default0/INBOX/${folder}"]`, 5);
-    I.click(`[data-id="default0/INBOX/${folder}"]`, '.io-ox-mail-window .window-sidepanel');
-    I.waitForVisible(`[data-id="default0/INBOX/${folder}"].selected`, 5);
+    I.waitForVisible('~Inbox', 30);
+    I.click('.io-ox-mail-window .window-sidepanel [data-id="virtual/myfolders"] .folder-arrow');
+    I.waitForVisible(`.io-ox-mail-window .window-sidepanel [data-id="default0/INBOX/${folder}"]`, 5);
+    I.click(`.io-ox-mail-window .window-sidepanel [data-id="default0/INBOX/${folder}"]`);
+    I.waitForVisible(`.io-ox-mail-window .window-sidepanel [data-id="default0/INBOX/${folder}"].selected`, 5);
     I.wait(1);
-    I.waitForVisible('~TestCase0389, 1 unread');
+    I.waitForVisible('~TestCase0389, 1 unread', 30);
     I.see('TestCase0389', '.subject');
 
 });
@@ -245,7 +245,7 @@ Scenario('[C7806] Mark mail as filtered mail', async function (I, users) {
 
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
 
@@ -260,9 +260,8 @@ Scenario('[C7806] Mark mail as filtered mail', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total');
-    I.wait(1);
-    I.waitForElement('~Inbox, 1 total');
+    I.waitForElement('~Sent, 1 total', 30);
+    I.waitForElement('~Inbox, 1 total', 30);
 
 });
 
@@ -276,7 +275,7 @@ Scenario('[C7807] Tag mail with filtered mail', async function (I, users) {
 
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
 
@@ -291,9 +290,9 @@ Scenario('[C7807] Tag mail with filtered mail', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total');
-    I.waitForElement('~Inbox, 1 unread, 1 total');
-    I.seeElement('.vsplit .flag_1');
+    I.waitForElement('~Sent, 1 total', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total', 30);
+    I.waitForElement('.vsplit .flag_1', 30);
 
 });
 
@@ -310,7 +309,7 @@ Scenario('[C7809] Mark mail as deleted filtered mail', async function (I, users)
 
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
 
@@ -325,8 +324,8 @@ Scenario('[C7809] Mark mail as deleted filtered mail', async function (I, users)
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total');
-    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.waitForElement('~Sent, 1 total', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total', 30);
     I.see('TestCase0394', '.unread.deleted .subject');
 
 });

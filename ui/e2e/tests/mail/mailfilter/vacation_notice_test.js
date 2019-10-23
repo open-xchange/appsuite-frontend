@@ -28,19 +28,13 @@ Scenario('[C7785] Set vacation notice', async function (I, users) {
         'io.ox/mail': { messageFormat: 'text' }
     }, { user: users[1] });
 
-    I.login('app=io.ox/settings', { user: users[0] });
-    I.waitForVisible('.rightside h1');
-    I.see('Basic settings', '.rightside h1');
-
-    I.waitForElement('li[data-id="virtual/settings/io.ox/mail"]');
-    I.selectFolder('Mail');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mail');
     I.waitForVisible('.rightside .io-ox-mail-settings');
     I.see('Mail', '.rightside h1');
 
-    I.waitForVisible('[data-action="edit-vacation-notice"]');
-    I.see('Vacation notice ...', '[data-action="edit-vacation-notice"]');
+    I.waitForVisible('.form-group.buttons [data-action="edit-vacation-notice"]');
     I.click('Vacation notice ...', '.form-group.buttons [data-action="edit-vacation-notice"]');
-    I.waitForElement('[data-point="io.ox/mail/vacation-notice/edit"]');
+    I.waitForElement('.modal');
 
     // check for all expexted elements
     I.seeElement('.modal-header input[name="active"]');
@@ -50,30 +44,30 @@ Scenario('[C7785] Set vacation notice', async function (I, users) {
     I.see('Apply changes', '.modal-footer');
 
     // form elements
-    I.seeElement('input[name="activateTimeFrame"][disabled]');
-    I.seeElement('input[name="dateFrom"][disabled]');
-    I.seeElement('input[name="dateUntil"][disabled]');
-    I.seeElement('input[name="subject"][disabled]');
-    I.seeElement('textarea[name="text"][disabled]');
+    I.seeElement('.modal input[name="activateTimeFrame"][disabled]');
+    I.seeElement('.modal input[name="dateFrom"][disabled]');
+    I.seeElement('.modal input[name="dateUntil"][disabled]');
+    I.seeElement('.modal input[name="subject"][disabled]');
+    I.seeElement('.modal textarea[name="text"][disabled]');
     I.see('Show advanced options');
 
     // enable
     I.click('.modal-header .checkbox.switch.large');
 
 
-    I.seeElement('input[name="activateTimeFrame"]:not([disabled])');
-    I.seeElement('input[name="subject"]:not([disabled])');
-    I.seeElement('textarea[name="text"]:not([disabled])');
+    I.seeElement('.modal input[name="activateTimeFrame"]:not([disabled])');
+    I.seeElement('.modal input[name="subject"]:not([disabled])');
+    I.seeElement('.modal textarea[name="text"]:not([disabled])');
 
-    I.fillField('input[name="subject"]', 'Vacation subject');
-    I.fillField('textarea[name="text"]', 'Vacation text');
+    I.fillField('.modal input[name="subject"]', 'Vacation subject');
+    I.fillField('.modal textarea[name="text"]', 'Vacation text');
 
     I.click('Apply changes');
 
-    I.see('Vacation notice ...', '[data-action="edit-vacation-notice"]');
+    I.see('Vacation notice ...', '.settings-detail-pane [data-action="edit-vacation-notice"]');
 
-    I.waitForElement('[data-action="edit-vacation-notice"] .fa-toggle-on');
-    I.waitForInvisible('[data-point="io.ox/mail/vacation-notice/edit"]');
+    I.waitForElement('.settings-detail-pane [data-action="edit-vacation-notice"] .fa-toggle-on');
+    I.waitForDetached('.modal');
 
     I.logout();
 
@@ -89,7 +83,7 @@ Scenario('[C7785] Set vacation notice', async function (I, users) {
     I.seeInField({ css: 'textarea.plain-text' }, 'Test text');
 
     I.click('Send');
-    I.waitForElement('~Sent, 1 total');
+    I.waitForElement('~Sent, 1 total', 30);
 
     I.logout();
 
@@ -127,8 +121,8 @@ Scenario('[C163027] User gets notified if a vacation notice is avtive (banner in
     });
 
     I.login('app=io.ox/mail');
-    I.waitForElement('[data-action="edit-vacation-notice"]');
-    I.see('Your vacation notice is active');
+    I.waitForElement('.window-body .leftside .alert');
+    I.see('Your vacation notice is active', '.window-body .leftside .alert');
 });
 
 Scenario('[C110281] Vacation notice is time zone capable', async function (I, users) {
@@ -141,33 +135,27 @@ Scenario('[C110281] Vacation notice is time zone capable', async function (I, us
         'io.ox/core': { timezone: 'Pacific/Kiritimati' }
     }, { user: users[1] });
 
-    I.login('app=io.ox/settings', { user: users[1] });
-    I.waitForVisible('.rightside h1');
-    I.see('Basic settings', '.rightside h1');
-
-    I.waitForElement('li[data-id="virtual/settings/io.ox/mail"]');
-    I.selectFolder('Mail');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mail', { user: users[1] });
     I.waitForVisible('.rightside .io-ox-mail-settings');
     I.see('Mail', '.rightside h1');
 
-    I.waitForVisible('[data-action="edit-vacation-notice"]');
-    I.see('Vacation notice ...', '[data-action="edit-vacation-notice"]');
+    I.waitForVisible('.form-group.buttons [data-action="edit-vacation-notice"]');
     I.click('Vacation notice ...', '.form-group.buttons [data-action="edit-vacation-notice"]');
-    I.waitForElement('[data-point="io.ox/mail/vacation-notice/edit"]');
+    I.waitForElement('.modal');
 
     // enable
     I.click('.modal-header .checkbox.switch.large');
 
-    I.fillField('input[name="subject"]', 'Vacation subject');
-    I.fillField('textarea[name="text"]', 'Vacation text');
+    I.fillField('.modal input[name="subject"]', 'Vacation subject');
+    I.fillField('.modal textarea[name="text"]', 'Vacation text');
 
     I.click('Send vacation notice during this time only');
     I.click('Apply changes');
 
-    I.see('Vacation notice ...', '[data-action="edit-vacation-notice"]');
+    I.see('Vacation notice ...', '.form-group.buttons [data-action="edit-vacation-notice"]');
 
-    I.waitForElement('[data-action="edit-vacation-notice"] .fa-toggle-on');
-    I.waitForInvisible('[data-point="io.ox/mail/vacation-notice/edit"]');
+    I.waitForElement('.form-group.buttons [data-action="edit-vacation-notice"] .fa-toggle-on');
+    I.waitForDetached('.modal');
 
     I.logout();
 
@@ -185,8 +173,8 @@ Scenario('[C110281] Vacation notice is time zone capable', async function (I, us
     I.click('Send');
 
     // check for mail
-    I.waitForElement('~Sent, 1 total');
-    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.waitForElement('~Sent, 1 total', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total', 30);
 
     I.waitForVisible('.io-ox-mail-window .leftside ul li.unread');
     I.click('.io-ox-mail-window .leftside ul li.unread');
