@@ -68,7 +68,7 @@ define('io.ox/backbone/views/window', [
             return el;
         },
         render: function () {
-            $('#io-ox-taskbar-container').empty().append(this.$el);
+            $('#io-ox-taskbar-container').empty().attr('aria-label', gt('Minimized windows')).append(this.$el);
             return this;
         }
     });

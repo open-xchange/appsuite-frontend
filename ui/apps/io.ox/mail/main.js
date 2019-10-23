@@ -1681,6 +1681,7 @@ define('io.ox/mail/main', [
         },
 
         'a11y': function (app) {
+            app.listView.$el.attr('aria-label', gt('List view'));
             // mail list: focus mail detail view on <enter>
             // mail list: focus folder on <escape>
             app.listView.$el.on('keydown', '.list-item', function (e) {

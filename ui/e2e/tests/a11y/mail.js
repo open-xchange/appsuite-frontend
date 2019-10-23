@@ -15,14 +15,14 @@ const { expect } = require('chai');
 
 Scenario('Mail - Vertical view w/o mail', async (I) => {
     I.login('app=io.ox/mail');
-    I.waitForElement('.mail-detail-pane');
+    I.waitForText('Empty', 5, '.list-view');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
 Scenario('Mail - Compact view w/o mail', async (I) => {
     I.login('app=io.ox/mail');
-    I.waitForElement('.mail-detail-pane');
+    I.waitForText('Empty', 5, '.list-view');
 
     I.clickToolbar('View');
     I.click('Compact');
@@ -32,7 +32,7 @@ Scenario('Mail - Compact view w/o mail', async (I) => {
 
 Scenario('Mail - Horizontal view w/o mail', async (I) => {
     I.login('app=io.ox/mail');
-    I.waitForElement('.mail-detail-pane');
+    I.waitForText('Empty', 5, '.list-view');
 
     I.clickToolbar('View');
     I.click('Horizontal');
@@ -42,7 +42,7 @@ Scenario('Mail - Horizontal view w/o mail', async (I) => {
 
 Scenario('Mail - List view w/o mail', async (I) => {
     I.login('app=io.ox/mail');
-    I.waitForElement('.mail-detail-pane');
+    I.waitForText('Empty', 5, '.list-view');
 
     I.clickToolbar('View');
     I.click('List');

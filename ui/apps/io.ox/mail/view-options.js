@@ -377,9 +377,13 @@ define('io.ox/mail/view-options', [
         id: 'toggle-folderview',
         index: 1000,
         draw: function (baton) {
+            var guid = _.uniqueId('control');
             this.addClass('bottom-toolbar').append(
-                $('<div class="generic-toolbar bottom visual-focus" role="region">').append(
-                    $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view')).append(
+                $('<div class="generic-toolbar bottom visual-focus" role="region">').attr('aria-labelledby', guid).append(
+                    $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr({
+                        id: guid,
+                        'aria-label': gt('Close folder view')
+                    }).append(
                         $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                     ).on('click', { app: baton.app, state: false }, toggleFolderView)
                 )
