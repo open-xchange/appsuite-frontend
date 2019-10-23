@@ -12,7 +12,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Calendar Import');
+Feature('Calendar > Import');
 
 Before(async (users) => {
     await users.create();

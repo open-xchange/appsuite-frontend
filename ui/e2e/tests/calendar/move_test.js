@@ -14,7 +14,7 @@
 
 const moment = require('moment');
 
-Feature('Calendar Actions');
+Feature('Calendar > Actions');
 
 Before(async function (users) {
     await users.create();

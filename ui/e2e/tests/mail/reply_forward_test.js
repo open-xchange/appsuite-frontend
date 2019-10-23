@@ -12,7 +12,7 @@
 
 /// <reference path="../../steps.d.ts" />
 
-Feature('Mail > Reply / Forward');
+Feature('Mail > Reply/Forward');
 
 Before(async (users) => {
     await users.create(); // Recipient
