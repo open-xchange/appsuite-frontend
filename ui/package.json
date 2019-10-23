@@ -16,7 +16,7 @@
     "@open-xchange/codecept-helper": "0.2.0",
     "@open-xchange/shared-grunt-config": "^0.15.0-pre5",
     "assemble-less": "^0.7.0",
-    "axe-core": "^3.2.2",
+    "axe-core": "3.3.2",
     "chai": "^4.0.2",
     "codeceptjs": "^2.2.0",
     "dotenv": "^8.0.0",
