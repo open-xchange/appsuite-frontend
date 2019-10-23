@@ -1381,6 +1381,12 @@ define('io.ox/files/main', [
             api.on('remove:file', function () {
                 // trigger scroll after remove, if files were removed with select all we need to trigger a redraw or we get an empty view
                 app.listView.$el.trigger('scroll');
+
+                // When a file is removed the trash collection must be updated for showing the correct contextmenu entries
+                var id = settings.get('folder/trash');
+                if (id) {
+                    folderAPI.get(id, { cache: false });
+                }
             });
         },
 
