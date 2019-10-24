@@ -91,7 +91,9 @@ Scenario('[C7492] Birthday', async (I) => {
         I.see(contact.first_name, detail);
         I.see('Birthday', detail);
         I.seeElement('.close', detail);
-        I.click('.close', locate('.io-ox-sidepopup').withText('Saved in'));
+        var topSidepopup = locate('.window-container-center .io-ox-sidepopup').at(2);
+        I.waitForText('Saved in', topSidepopup);
+        I.click('.close', topSidepopup);
         I.waitForDetached('~Contact Details');
     });
 
