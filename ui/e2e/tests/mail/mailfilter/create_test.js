@@ -182,7 +182,7 @@ Scenario('[C7810] Filter mail using contains', async function (I, users) {
     I.waitForElement('~Sent, 2 total', 30);
     I.waitForElement('~Inbox, 2 unread, 2 total', 30);
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCasexxx0395'));
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCasexxx0395'), 30);
     I.waitForElement(locate('.list-item-row').withChild(':not(.flag_1)').withText('xxxTestCase0395xxx'));
 });
 
@@ -223,7 +223,7 @@ Scenario('[C7811] Filter mail using is exactly', async function (I, users) {
     I.waitForElement('~Sent, 2 total', 30);
     I.waitForElement('~Inbox, 2 unread, 2 total', 30);
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0396'));
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0396'), 30);
     I.waitForElement(locate('.list-item-row').withChild(':not(.flag_1)').withText('xxxTestCase0396xxx'));
 
 });
@@ -265,7 +265,7 @@ Scenario('[C7812] Filter mail using matches', async function (I, users) {
     I.waitForElement('~Sent, 2 total', 30);
     I.waitForElement('~Inbox, 2 unread, 2 total', 30);
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('xxxTestCase0397xxx'));
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('xxxTestCase0397xxx'), 30);
     I.waitForElement(locate('.list-item-row').withChild(':not(.flag_1)').withText('xxx0397xxx'));
 
 });
@@ -307,7 +307,7 @@ Scenario('[C7813] Filter mail using regex', async function (I, users) {
     I.waitForElement('~Sent, 2 total', 30);
     I.waitForElement('~Inbox, 2 unread, 2 total', 30);
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0398xxx'));
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0398xxx'), 30);
     I.waitForElement(locate('.list-item-row').withChild(':not(.flag_1)').withText('xxxTestCase398xxx'));
 
 });
@@ -362,7 +362,7 @@ Scenario('[C7814] Filter mail using IsBiggerThan', async function (I, users) {
     I.waitForElement('~Sent, 1 total', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total', 30);
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0400'));
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0400'), 30);
 });
 
 Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users) {
@@ -398,7 +398,7 @@ Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users) {
 
     I.waitForElement('~Sent, 1 total', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total', 30);
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0401'));
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0401'), 30);
 });
 
 Scenario('[C83386] Create mail filter based on mail', async function (I, users) {
@@ -542,7 +542,7 @@ Scenario('[C274412] Filter mail by size', async function (I, users) {
     I.waitForElement('~Inbox, 1 unread, 1 total', 30);
     I.see('C274412', '.subject');
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('C274412'));
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('C274412'), 30);
     I.click(locate('.list-item-row').withChild('.flag_1').withText('C274412'));
 
     I.waitForElement('.inline-toolbar-container [data-action="io.ox/mail/actions/delete"]');
@@ -570,7 +570,7 @@ Scenario('[C274412] Filter mail by size', async function (I, users) {
     I.waitForElement('~Inbox, 1 unread, 1 total', 30);
     I.see('C274412', '.subject');
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('C274412'));
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('C274412'), 30);
     I.click(locate('.list-item-row').withChild('.flag_1').withText('C274412'));
 
     I.waitForElement('.inline-toolbar-container [data-action="io.ox/mail/actions/delete"]');
@@ -598,5 +598,5 @@ Scenario('[C274412] Filter mail by size', async function (I, users) {
     I.waitForElement('~Inbox, 1 unread, 1 total', 30);
     I.see('C274412', '.subject');
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('C274412'));
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('C274412'), 30);
 });
