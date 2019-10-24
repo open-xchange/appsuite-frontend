@@ -24,10 +24,11 @@ After(async function (users) {
 
 var util = require('./util');
 
-Scenario('Add an existing distribution list', function (I) {
+Scenario('Add an existing distribution list', function (I, contacts) {
     const title = 'test distribution list one';
 
-    util.start(I);
+    I.login('app=io.ox/contacts');
+    contacts.waitForApp();
 
     // create new address book
     I.waitForText('Add new address book', 5);
@@ -40,12 +41,9 @@ Scenario('Add an existing distribution list', function (I) {
     // create distribution list
     I.selectFolder('test address book');
     I.waitForText('Empty'); // Empty in list view
-    I.waitForText('New contact');
-    I.waitForDetached('a.dropdown-toggle.disabled');
-    I.click('New contact');
-    I.waitForVisible('.dropdown-menu');
-    I.click('New distribution list');
-    I.waitForVisible('.io-ox-contacts-distrib-window');
+
+    contacts.newDistributionlist();
+
     I.fillField('Name', title);
     I.fillField('Add contact', 'testdude1@test.case');
     I.pressKey('Enter');
@@ -57,13 +55,10 @@ Scenario('Add an existing distribution list', function (I) {
     I.pressKey('Enter');
     I.click('Create list');
     I.waitForDetached('.io-ox-contacts-distrib-window');
-    I.waitForText(title, undefined, '.vgrid-cell');
+    I.waitForText(title, undefined, '.contact-detail');
 
     // create second list
-    I.click('New contact');
-    I.waitForVisible('.dropdown-menu');
-    I.click('New distribution list');
-    I.waitForVisible('.io-ox-contacts-distrib-window', 5);
+    contacts.newDistributionlist();
     I.fillField('Name', 'test distribution list two');
 
     // search in address book for distribution list one
@@ -96,25 +91,26 @@ Scenario('Add an existing distribution list', function (I) {
     I.waitForDetached('.io-ox-contacts-distrib-window', 5);
 
     I.see('test distribution list two');
-
-    I.logout();
 });
 
-Scenario('[C7373] Update members', async function (I, users) {
-    await users.create();
-    await users.create();
+Scenario('[C7373] Update members', async function (I, users, contacts) {
+    await Promise.all([
+        users.create(),
+        users.create()
+    ]);
+
     const display_name = await util.createDistributionList(I, users, 'C7373');
-    util.start(I);
+
+    I.login('app=io.ox/contacts');
+    contacts.waitForApp();
 
     // check preconditon
-    I.waitForElement(`~${display_name}`);
-    I.click(`~${display_name}`);
+    contacts.selectContact(display_name);
     I.waitForText(display_name, 5, util.TITLE_SELECTOR);
     I.waitForText(`Distribution list with ${users.length} entries`, 5, util.SUBTITLE_SELECTOR);
     users.forEach(function name(user) {
-        I.seeElement(locate('.participant-email a').withText(user.userdata.primaryEmail));
+        I.waitForElement('.contact-detail .participant-email [href="mailto:' + user.userdata.primaryEmail + '"]');
     });
-
     // add 5th contact
     I.clickToolbar('Edit');
     I.waitForElement('.form-control.add-participant.tt-input');
@@ -122,6 +118,8 @@ Scenario('[C7373] Update members', async function (I, users) {
     I.pressKey('Enter');
     I.click('Save');
     I.waitForDetached('.floating-window');
+    I.waitForText('Distribution list has been saved');
+    I.waitForDetached('.io-ox-alert');
     // check
     I.waitForText(display_name, 5, util.TITLE_SELECTOR);
     I.waitForText(`Distribution list with ${users.length + 1} entries`, 5, util.SUBTITLE_SELECTOR);
@@ -137,6 +135,8 @@ Scenario('[C7373] Update members', async function (I, users) {
     I.click(removeButton);
     I.click('Save');
     I.waitForDetached('.floating-window');
+    I.waitForText('Distribution list has been saved');
+    I.waitForDetached('.io-ox-alert');
 
     // check
     I.waitForText(display_name, 5, util.TITLE_SELECTOR);
@@ -151,15 +151,17 @@ Scenario('[C7373] Update members', async function (I, users) {
     I.see('john.doe@open-xchange.com');
 });
 
-Scenario('[C7374] Change name', async function (I, users) {
+Scenario('[C7374] Change name', async function (I, users, contacts) {
     await users.create();
     const testrailID = 'C7374',
         display_name = await util.createDistributionList(I, users, testrailID),
         new_name = `${display_name} - ${testrailID}`;
-    util.start(I);
+
+    I.login('app=io.ox/contacts');
+    contacts.waitForApp();
+
     // check precondition
-    I.waitForElement(`~${display_name}`);
-    I.click(`~${display_name}`);
+    contacts.selectContact(display_name);
     I.waitForText(display_name, 5, util.TITLE_SELECTOR);
     I.waitForText(`Distribution list with ${users.length} entries`, 5, util.SUBTITLE_SELECTOR);
     users.forEach(function name(user) {
@@ -170,8 +172,11 @@ Scenario('[C7374] Change name', async function (I, users) {
     I.waitForElement({ css: '[name="display_name"]' });
     I.fillField({ css: '[name="display_name"]' }, new_name);
     I.click('Save');
+    I.waitForDetached('.floating-window');
+    I.waitForText('Distribution list has been saved');
+    I.waitForDetached('.io-ox-alert');
     // select and check
-    I.retry(5).click(`~${new_name}`);
+    contacts.selectContact(new_name);
     I.waitForText(new_name, 5, util.TITLE_SELECTOR);
     I.see(`Distribution list with ${users.length} entries`, util.SUBTITLE_SELECTOR);
     users.forEach(function name(user) {
@@ -179,20 +184,15 @@ Scenario('[C7374] Change name', async function (I, users) {
     });
 });
 
-Scenario('[C7375] Move list', async function (I, users) {
+Scenario('[C7375] Move list', async function (I, users, contacts) {
     await users.create();
     const testrailID = 'C7375',
         display_name = await util.createDistributionList(I, users, testrailID);
-    util.start(I);
 
-    I.click('Add new address book');
-    I.waitForElement('.modal-body');
-    I.fillField({ css: '[placeholder="New address book"][type="text"]' }, testrailID);
-    I.click('Add');
-    I.waitForDetached('.modal-body');
-    I.waitForElement(`~${display_name}`);
-    I.retry(3).click(`~${display_name}`);
-
+    I.login('app=io.ox/contacts');
+    contacts.waitForApp();
+    contacts.newAddressbook(testrailID);
+    contacts.selectContact(display_name);
     I.clickToolbar('~More actions');
     I.click('Move');
     I.waitForText('Move', 5, '.modal-open .modal-title');
@@ -206,8 +206,7 @@ Scenario('[C7375] Move list', async function (I, users) {
     I.selectFolder('Contacts');
     I.waitForDetached(`~${display_name}`);
     I.selectFolder(testrailID);
-    I.waitForElement(`~${display_name}`);
-    I.retry(3).click(`~${display_name}`);
+    contacts.selectContact(display_name);
     I.waitForText(display_name, 5, util.TITLE_SELECTOR);
     I.waitForText(`Distribution list with ${users.length} entries`, 5, util.SUBTITLE_SELECTOR);
 
@@ -216,20 +215,17 @@ Scenario('[C7375] Move list', async function (I, users) {
     });
 });
 
-Scenario('[C7377] Copy list', async function (I, users) {
+Scenario('[C7377] Copy list', async function (I, users, contacts) {
     await users.create();
     const testrailID = 'C7377',
         display_name =  await util.createDistributionList(I, users, testrailID);
-    util.start(I);
 
-    I.click('Add new address book');
-    I.waitForElement('.modal-body');
-    I.fillField('Address book name', testrailID);
-    I.click('Add');
-    I.waitForDetached('.modal-body');
-    I.waitForElement(`~${display_name}`);
-    I.click(`~${display_name}`);
-    I.waitForText(display_name, 5, util.TITLE_SELECTOR);
+    I.login('app=io.ox/contacts');
+
+    contacts.waitForApp();
+    contacts.newAddressbook(testrailID);
+    contacts.selectContact(display_name);
+
     I.waitForText(`Distribution list with ${users.length} entries`, 5, util.SUBTITLE_SELECTOR);
     users.forEach(function name(user) {
         I.waitForElement('.contact-detail .participant-email [href="mailto:' + user.userdata.primaryEmail + '"]');

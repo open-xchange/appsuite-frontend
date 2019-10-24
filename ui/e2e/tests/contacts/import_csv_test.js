@@ -25,7 +25,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C104269] Import App Suite CSV', async (I) => {
+Scenario('[C104269] Import App Suite CSV', async (I, contacts) => {
 // this scenario also covers:
 // [C104268] Import App Suite vCard
 // [C104277] Import Outlook vCard
@@ -38,7 +38,7 @@ Scenario('[C104269] Import App Suite CSV', async (I) => {
 
     await I.haveSetting({ 'io.ox/contacts': { startInGlobalAddressbook: false } });
     I.login('app=io.ox/contacts');
-    I.waitForText('No elements selected');
+    contacts.waitForApp();
 
     // do everything twice
     ['csv', 'vcf'].forEach(function (type) {
@@ -309,7 +309,8 @@ Scenario('[C104269] Import App Suite CSV', async (I) => {
 
     async function hasContactImage() {
         I.wait(1);
-        var [rule] = await I.grabCssPropertyFrom('.contact-header .contact-photo', 'background-image');
+        var rule = await I.grabCssPropertyFrom('.contact-header .contact-photo', 'backgroundImage');
+        rule = Array.isArray(rule) ? rule[0] : rule;
         expect(rule).not.to.match(/fallback/);
         expect(rule).to.match(/^url\(/);
     }

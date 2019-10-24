@@ -17,16 +17,6 @@ module.exports = {
 
     SUBTITLE_SELECTOR: '.contact-detail .contact-header h2',
 
-    start: function (I) {
-        I.login('app=io.ox/contacts');
-        I.waitForVisible({ css: '*[data-app-name="io.ox/contacts"]' });
-        I.waitForVisible('.classic-toolbar [data-action]');
-        I.selectFolder('Contacts');
-        I.waitForElement('.contact-grid-container');
-        I.waitForDetached('.classic-toolbar .disabled[data-dropdown="io.ox/contacts/toolbar/new"]', 5);
-        I.waitForDetached('a.dropdown-toggle.disabled');
-    },
-
     uniqueName: function (testrailID) {
         const timestamp = Math.round(+new Date() / 1000);
         return `${testrailID} - ${timestamp}`;
@@ -38,7 +28,7 @@ module.exports = {
             display_name = this.uniqueName(testrailID),
             distribution_list = [];
         // create contacts based on userdata
-        users.forEach(async function (user) {
+        await Promise.all(users.map(async function (user) {
             let contact = await I.haveContact({
                 display_name: user.userdata.fullname,
                 last_name: user.userdata.sur_name,
@@ -52,7 +42,7 @@ module.exports = {
                 mail: user.userdata.primaryEmail,
                 mail_field: 1
             });
-        });
+        }));
         // create distribution list
         await I.haveContact({
             display_name: display_name,

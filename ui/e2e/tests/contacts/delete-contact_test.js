@@ -21,7 +21,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7366] Multiple contacts', async function (I, search) {
+Scenario('[C7366] Multiple contacts', async function (I, search, contacts) {
     const testrailID = 'C7366';
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',
@@ -29,18 +29,18 @@ Scenario('[C7366] Multiple contacts', async function (I, search) {
         first_name: testrailID,
         last_name: testrailID
     };
-    await I.haveContact(contact);
-    await I.haveContact(contact);
+    await Promise.all([
+        I.haveContact(contact),
+        I.haveContact(contact)
+    ]);
+
     I.login('app=io.ox/contacts');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/contacts"]' });
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
+    contacts.waitForApp();
+
     search.doSearch(testrailID + ' ' + testrailID);
     I.click('~' + testrailID + ', ' + testrailID);
     I.waitForElement('.fa-spin-paused');
-    I.pressKey(['\uE009', 'a']);
-    //I.pressKey(['Control', 'a']);
+    I.click('.select-all');
     I.waitForElement('.fa-spin-paused');
     I.clickToolbar('Delete');
     I.waitForVisible('.modal-dialog');
@@ -48,27 +48,25 @@ Scenario('[C7366] Multiple contacts', async function (I, search) {
     I.dontSee('C7367, C7367');
 });
 
-Scenario('[C7367] Single Contact', async function (I) {
-    const testrailID = 'C7367';
-    const contact = {
-        display_name: testrailID + ', ' + testrailID,
-        folder_id: await I.grabDefaultFolder('contacts'),
-        first_name: testrailID,
-        last_name: testrailID
+Scenario('[C7367] Single Contact', async function (I, contacts) {
+    const testrailID = 'C7367',
+        displayName = testrailID + ', ' + testrailID,
+        contact = {
+            display_name: displayName,
+            folder_id: await I.grabDefaultFolder('contacts'),
+            first_name: testrailID,
+            last_name: testrailID
+        };
 
-    };
     await I.haveContact(contact);
+
     I.login('app=io.ox/contacts');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/contacts"]' });
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.waitForElement('~' + testrailID + ', ' + testrailID);
-    I.click('~' + testrailID + ', ' + testrailID);
-    I.waitForElement('.contact-header');
-    I.waitForText(testrailID + ', ' + testrailID, 5, '.contact-header .fullname');
-    I.clickToolbar('~Delete contact');
+    contacts.waitForApp();
+    contacts.selectContact(displayName);
+
+    I.clickToolbar('Delete');
     I.waitForVisible('.modal-dialog');
     I.click('.btn.btn-primary', '.modal-footer');
     I.waitForDetached('.modal-dialog');
-    I.waitForDetached('~' + testrailID + ', ' + testrailID);
+    I.waitForDetached({ css: '[aria-label="' + displayName + '"]' });
 });

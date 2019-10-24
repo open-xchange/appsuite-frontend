@@ -50,7 +50,8 @@ module.exports.config = {
         contexts: './e2e/contexts',
         search: './e2e/actor_search',
         portal: './e2e/pageobjects/portal',
-        contacts: './e2e/pageobjects/contacts'
+        contacts: './e2e/pageobjects/contacts',
+        mail: './e2e/pageobjects/mail'
     },
     bootstrap: function (done) {
         // setup chai

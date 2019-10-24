@@ -21,12 +21,12 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C8817] - Send E-Mail to contact', function (I, users, search) {
+Scenario('[C8817] - Send E-Mail to contact', function (I, users, search, contacts) {
     const testrailID = 'C8817';
     const subject = Math.round(+new Date() / 1000);
     I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/contacts');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/contacts"]' });
+    contacts.waitForApp();
     search.doSearch(users[0].userdata.primaryEmail);
     I.waitForElement({ css: '[href="mailto:' + users[0].userdata.primaryEmail + '"]' });
     I.click({ css: '[href="mailto:' + users[0].userdata.primaryEmail + '"]' });

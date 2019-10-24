@@ -23,16 +23,14 @@ After(async function (users) {
 
 const util = require('./util');
 
-Scenario('External mail address', function (I) {
+Scenario('External mail address', function (I, contacts) {
     const name = 'Testlist',
         mail = 'test@tester.com';
-    util.start(I);
 
-    // toolbar dropdown
-    I.click('New contact');
-    I.waitForVisible('.dropdown-menu');
-    I.click('New distribution list');
-    I.waitForVisible('.io-ox-contacts-distrib-window');
+    I.login('app=io.ox/contacts');
+    contacts.waitForApp();
+    contacts.newDistributionlist();
+
     I.fillField('Name', name);
     I.fillField('Add contact', mail);
     I.pressKey('Enter');
@@ -44,17 +42,18 @@ Scenario('External mail address', function (I) {
     I.waitForElement(`.contact-detail .participant-email [href="mailto:${mail}"]`);
 });
 
-Scenario('[C7372] Existing contact', async function (I, users) {
+Scenario('[C7372] Existing contact', async function (I, users, contacts) {
     const display_name = util.uniqueName('C7372');
-    // more users please
-    await users.create();
-    await users.create();
-    util.start(I);
 
-    I.retry(5).click('New contact');
-    I.waitForVisible('.dropdown-menu');
-    I.click('New distribution list');
-    I.waitForVisible('.floating-window-content');
+    await Promise.all([
+        users.create(),
+        users.create()
+    ]);
+
+    I.login('app=io.ox/contacts');
+    contacts.waitForApp();
+    contacts.newDistributionlist();
+
     I.fillField('Name', display_name);
     users.forEach(function (user) {
         I.fillField('Add contact', user.userdata.primaryEmail);
@@ -63,6 +62,8 @@ Scenario('[C7372] Existing contact', async function (I, users) {
     });
     I.click('Create list');
     I.waitForDetached('.floating-window-content');
+    I.waitForText('Distribution list has been saved');
+    I.waitForDetached('.io-ox-alert');
     I.waitForElement(`~${display_name}`);
     I.doubleClick(`~${display_name}`);
     I.waitForText(display_name);

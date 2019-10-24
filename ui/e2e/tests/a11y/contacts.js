@@ -85,6 +85,7 @@ Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions) @shaky
 Scenario('Contacts - New contact window', async (I, contacts) => {
 
     prepare(I);
+    contacts.waitForApp();
     contacts.newContact();
 
     expect(await I.grabAxeReport()).to.be.accessible;
@@ -96,6 +97,7 @@ Scenario('Contacts - New distribution list window (with exceptions)', async (I, 
     const excludes = { exclude: [['.tt-hint'], ['.tt-input']] };
 
     prepare(I);
+    contacts.waitForApp();
     contacts.newDistributionlist();
 
     expect(await I.grabAxeReport(excludes)).to.be.accessible;

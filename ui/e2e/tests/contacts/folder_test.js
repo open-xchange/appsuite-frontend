@@ -71,37 +71,16 @@ Scenario('[C85620] Global address book is the default folder - check first login
     await I.executeScript(function () {
         return require('io.ox/core/capabilities').has('gab');
     });
-
-    I.logout();
 });
 
-Scenario('[C7355] - Create a new private folder', function (I) {
-    const timestamp = Math.round(+new Date() / 1000);
+Scenario('[C7355] - Create a new private folder @incomplete', function (I, contacts) {
+    const name = 'C7355 ' + Math.round(+new Date() / 1000);
     I.login('app=io.ox/contacts');
-    // wait for any contact to be rendered, this is the last thing happening on load.
-    I.waitForElement('.vgrid-cell.contact');
-    I.click('Add new address book');
-    I.waitForElement('.modal-open [data-point="io.ox/core/folder/add-popup"]');
-    I.fillField({ css: '[name="name"]' }, 'C7355 ' + timestamp);
-    I.click({ css: '[data-action="add"]' });
-    I.waitForDetached({ css: '[data-point="io.ox/core/folder/add-popup"]' });
-    I.selectFolder('C7355 ' + timestamp);
-    I.waitForText('C7355 ' + timestamp, '.folder-name');
+    contacts.waitForApp();
+    contacts.newAddressbook(name);
+    I.selectFolder(name);
 });
 
-Scenario('[C7356] - Create a new public folder', function (I) {
-    const timestamp = Math.round(+new Date() / 1000);
-    I.login('app=io.ox/contacts');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/contacts"]' });
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.waitForText('Add new address book');
-    I.click('Add new address book');
-    I.waitForElement('.modal-open [data-point="io.ox/core/folder/add-popup"]');
-    I.fillField({ css: '[name="name"]' }, 'C7356 ' + timestamp);
-    I.click('.modal-open .checkbox label');
-    I.click({ css: '[data-action="add"]' });
-    I.waitForDetached({ css: '[data-point="io.ox/core/folder/add-popup"]' });
-    I.selectFolder('C7356 ' + timestamp);
-    I.waitForText('C7356 ' + timestamp, '.folder-name');
-    I.waitForText('C7356 ' + timestamp, { css: '[data-id="virtual/flat/contacts/public"] .folder-node' });
+Scenario.skip('[C7356] - Create a new public folder @incomplete', function () {
+    // deleted - rewrite this
 });
