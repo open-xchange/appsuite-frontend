@@ -21,7 +21,7 @@ const changeSubscription = (I, toggle) => {
     I.click('.modal-dialog .folder-arrow');
     I.waitForText('Krawall');
     if (toggle) {
-        I.click('[value="default0/INBOX/Krawall"]');
+        I.click('.folder [value="default0/INBOX/Krawall"]');
     }
     I.click('Save');
     I.waitForDetached('.modal-dialog');
@@ -36,7 +36,7 @@ const prepare = async (I) => {
 const goToMail = (I) => {
     I.openApp('Mail');
     I.waitForText('Inbox');
-    I.doubleClick('[data-model="virtual/myfolders"]');
+    I.doubleClick('.tree-container [data-model="virtual/myfolders"]');
     I.waitForText('Remmidemmi');
 };
 

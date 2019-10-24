@@ -12,8 +12,6 @@
  */
 ///  <reference path="../../steps.d.ts" />
 
-const expect = require('chai').expect;
-
 Feature('Mailfilter');
 
 Before(async function (users) {
@@ -70,7 +68,7 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.see('From', '.list-title');
     I.see('Contains', '.dropdown-label');
     I.seeElement('.io-ox-mailfilter-edit [data-test-id="0"] .row.has-error');
-    I.seeAttributesOnElements('.modal button[data-action="save"]', { disabled: true });
+    I.seeElement('.modal button[data-action="save"][disabled]');
     I.fillField('values', 'Test Value');
     I.dontSeeElement('.io-ox-mailfilter-edit [data-test-id="0"] .row.has-error');
     I.seeElement('.modal button[data-action="save"]');
@@ -84,14 +82,15 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.see('continue if any of these conditions are met');
 
     // add a test inside the nested condition
-    I.click('Add condition', 'li.nestedrule');
+    I.click('Add condition', { css: 'li.nestedrule' });
     I.click('From', '.smart-dropdown-container');
 
     // condition and all components visible?
     I.see('From', '.io-ox-mailfilter-edit .nested[data-test-id="1_0"] .list-title');
-    I.seeAttributesOnElements('.modal button[data-action="save"]', { disabled: true });
+    I.seeElement('.modal button[data-action="save"][disabled]');
     I.fillField('.io-ox-mailfilter-edit [data-test-id="1_0"] input[name="values"]', 'Test Value');
-    I.seeAttributesOnElements('.modal button[data-action="save"]', { disabled: null });
+    I.dontSeeElement('.modal button[data-action="save"][disabled]');
+    I.seeElement('.modal button[data-action="save"]');
 
     // add an action which includes the folder picker
     I.click('Add action');
@@ -110,6 +109,7 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.click('Create folder', '.modal[data-point="io.ox/core/folder/picker"]');
 
     // cancel the add popup
+    I.waitForElement('.modal[data-point="io.ox/core/folder/add-popup"]');
     I.waitForText('Add new folder', '.modal[data-point="io.ox/core/folder/add-popup"]');
     I.click('Cancel', '.modal[data-point="io.ox/core/folder/add-popup"]');
 
@@ -320,56 +320,56 @@ Scenario('adds and removes Mail Filter Rules with modified config', function (I,
 
     // open the second rule
     I.click('Edit', '.io-ox-mailfilter-settings li[data-id="1"]');
-    I.waitForElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
-    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]', 'rule with discard');
+    I.waitForElement({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]' });
+    I.seeInField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]' }, 'rule with discard');
 
     // check if all components are present as expected if an usupported comparison is involved
-    I.see('From', 'li[data-test-id="0"] .list-title');
-    I.see('contains', 'li[data-test-id="0"] .dropdownlink span.unsupported');
+    I.see('From', { css: 'li[data-test-id="0"] .list-title' });
+    I.see('contains', { css: 'li[data-test-id="0"] .dropdownlink span.unsupported' });
     I.click('contains');
     I.dontSee('contains', '.dropdown-menu');
     I.see('Contains not', '.dropdown-menu');
     I.click('Contains not');
-    I.dontSeeElement('li[data-test-id="0"] .dropdownlink span.unsupported');
-    I.see('Contains not', 'li[data-test-id="0"] .dropdownlink span');
+    I.dontSeeElement({ css: 'li[data-test-id="0"] .dropdownlink span.unsupported' });
+    I.see('Contains not', { css: 'li[data-test-id="0"] .dropdownlink span' });
     I.dontSeeCheckboxIsChecked('Process subsequent rules');
 
     // check input handling for exists comparison for single test
     I.click('Contains not');
     I.click('Exists');
-    I.seeElement('li[data-test-id="0"] input:disabled');
-    I.seeInField('[data-test-id="0"] input[name="values"]', '');
+    I.seeElement({ css: 'li[data-test-id="0"] input:disabled' });
+    I.seeInField({ css: '[data-test-id="0"] input[name="values"]' }, '');
     I.click('Exists');
     I.click('Contains not');
-    I.dontSeeElement('li[data-test-id="0"] input:disabled');
-    I.seeElement('li[data-test-id="0"] .row.has-error');
-    I.seeElement('li[data-test-id="0"] .row.has-error');
-    I.fillField('[data-test-id="0"] input[name="values"]', 'Test Value');
-    I.dontSeeElement('li[data-test-id="0"] .row.has-error');
+    I.dontSeeElement({ css: 'li[data-test-id="0"] input:disabled' });
+    I.seeElement({ css: 'li[data-test-id="0"] .row.has-error' });
+    I.seeElement({ css: 'li[data-test-id="0"] .row.has-error' });
+    I.fillField({ css: '[data-test-id="0"] input[name="values"]' }, 'Test Value');
+    I.dontSeeElement({ css: 'li[data-test-id="0"] .row.has-error' });
 
     // add condition
     I.click('Add condition');
     I.click('To');
-    I.seeElement('li[data-test-id="1"] .row.has-error');
-    I.fillField('[data-test-id="1"] input[name="values"]', 'Test Value');
-    I.dontSeeElement('li[data-test-id="1"] .row.has-error');
+    I.seeElement({ css: 'li[data-test-id="1"] .row.has-error' });
+    I.fillField({ css: '[data-test-id="1"] input[name="values"]' }, 'Test Value');
+    I.dontSeeElement({ css: 'li[data-test-id="1"] .row.has-error' });
 
     // remove first condition and check
     I.click({ css: 'li[data-test-id="0"] [data-action="remove-test"]' });
-    I.see('To', 'li[data-test-id="0"]');
+    I.see('To', { css: 'li[data-test-id="0"]' });
 
     // for header
     I.click('Add condition');
     I.click('Header');
-    I.seeElement('li[data-test-id="1"] .row.has-error input[name="headers"]');
-    I.seeElement('li[data-test-id="1"] .row.has-error input[name="values"]');
-    I.fillField('li[data-test-id="1"] input[name="headers"]', 'Test Value');
-    I.dontSeeElement('li[data-test-id="1"] .row.has-error input[name="headers"]');
-    I.fillField('li[data-test-id="1"] input[name="values"]', 'Test Value');
-    I.dontSeeElement('li[data-test-id="1"] .row.has-error input[name="values"]');
+    I.seeElement({ css: 'li[data-test-id="1"] .row.has-error input[name="headers"]' });
+    I.seeElement({ css: 'li[data-test-id="1"] .row.has-error input[name="values"]' });
+    I.fillField({ css: 'li[data-test-id="1"] input[name="headers"]' }, 'Test Value');
+    I.dontSeeElement({ css: 'li[data-test-id="1"] .row.has-error input[name="headers"]' });
+    I.fillField({ css: 'li[data-test-id="1"] input[name="values"]' }, 'Test Value');
+    I.dontSeeElement({ css: 'li[data-test-id="1"] .row.has-error input[name="values"]' });
     I.click('Regex', { css: 'li[data-test-id="1"]' });
     I.click('Exists', '.smart-dropdown-container .dropdown-menu');
-    I.seeElement('li[data-test-id="1"] input[name="values"]:disabled');
+    I.seeElement({ css: 'li[data-test-id="1"] input[name="values"]:disabled' });
     I.seeInField({ css: '[data-test-id="1"] input[name="values"]' }, '');
 
     // action redirect is limitd to MAXREDIRECTS?
@@ -390,20 +390,20 @@ Scenario('adds and removes Mail Filter Rules with modified config', function (I,
     // open the second rule
     I.waitForVisible('.io-ox-mailfilter-settings li[data-id="2"] [data-action="edit"]');
     I.click('Edit', '.io-ox-mailfilter-settings li[data-id="2"]');
-    I.waitForElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+    I.waitForElement({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]' });
     I.seeInField('rulename', 'New rule');
 
     // check if all components are present as expected if an usupported comparison is involved and switched to "exist"
-    I.see('From', 'li[data-test-id="0"]');
-    I.see('contains', 'li[data-test-id="0"] .dropdownlink span.unsupported');
-    I.see('Header', 'li[data-test-id="1"]');
-    I.see('matches', 'li[data-test-id="1"] .dropdownlink span.unsupported');
-    I.click('matches', 'li[data-test-id="1"]');
+    I.see('From', { css: 'li[data-test-id="0"]' });
+    I.see('contains', { css: 'li[data-test-id="0"] .dropdownlink span.unsupported' });
+    I.see('Header', { css: 'li[data-test-id="1"]' });
+    I.see('matches', { css: 'li[data-test-id="1"] .dropdownlink span.unsupported' });
+    I.click('matches', { css: 'li[data-test-id="1"]' });
     I.click('Exists', '.smart-dropdown-container');
-    I.dontSeeElement('li[data-test-id="1"] .dropdownlink span.unsupported');
+    I.dontSeeElement({ css: 'li[data-test-id="1"] .dropdownlink span.unsupported' });
     I.see('Exists', { css: 'li[data-test-id="1"] .dropdownlink' });
-    I.dontSeeElement('li[data-test-id="1"] input[name="headers"]:disabled');
-    I.seeElement('li[data-test-id="1"] input[name="values"]:disabled');
+    I.dontSeeElement({ css: 'li[data-test-id="1"] input[name="headers"]:disabled' });
+    I.seeElement({ css: 'li[data-test-id="1"] input[name="values"]:disabled' });
 
     I.click('Cancel');
 });
@@ -427,62 +427,62 @@ Scenario('checks if the size test is correctly displayed', function (I) {
     I.seeElement('.io-ox-mailfilter-settings li[data-id="0"] [data-action="edit"]');
 
     I.click('Edit', '.io-ox-mailfilter-settings li[data-id="0"]');
-    I.waitForElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
-    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]', 'rule with size b');
+    I.waitForElement({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]' });
+    I.seeInField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]' }, 'rule with size b');
 
-    I.see('Size', 'li[data-test-id="0"] .list-title');
+    I.see('Size', { css: 'li[data-test-id="0"] .list-title' });
 
-    I.see('Is bigger than', 'li[data-test-id="0"] :not(.no-padding-left) .dropdownlink span');
-    I.seeInField('[data-test-id="0"] input[name="sizeValue"]', '20');
-    I.see('Byte', 'li[data-test-id="0"] .no-padding-left .dropdownlink span');
+    I.see('Is bigger than', { css: 'li[data-test-id="0"] :not(.no-padding-left) .dropdownlink span' });
+    I.seeInField({ css: '[data-test-id="0"] input[name="sizeValue"]' }, '20');
+    I.see('Byte', { css: 'li[data-test-id="0"] .no-padding-left .dropdownlink span' });
     I.dontSeeCheckboxIsChecked('Process subsequent rules');
 
-    I.click('Cancel', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
-    I.waitForDetached('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+    I.click('Cancel', { css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]' });
+    I.waitForDetached({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]' });
 
     I.seeElement('.io-ox-mailfilter-settings li[data-id="1"] [data-action="edit"]');
 
     I.click('Edit', '.io-ox-mailfilter-settings li[data-id="1"]');
-    I.waitForElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
-    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]', 'rule with size kb');
+    I.waitForElement({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]' });
+    I.seeInField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]' }, 'rule with size kb');
 
-    I.see('Is bigger than', 'li[data-test-id="0"] :not(.no-padding-left) .dropdownlink span');
-    I.seeInField('[data-test-id="0"] input[name="sizeValue"]', '20');
-    I.see('kB', 'li[data-test-id="0"] .no-padding-left .dropdownlink span');
+    I.see('Is bigger than', { css: 'li[data-test-id="0"] :not(.no-padding-left) .dropdownlink span' });
+    I.seeInField({ css: '[data-test-id="0"] input[name="sizeValue"]' }, '20');
+    I.see('kB', { css: 'li[data-test-id="0"] .no-padding-left .dropdownlink span' });
     I.dontSeeCheckboxIsChecked('Process subsequent rules');
 
-    I.click('Cancel', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
-    I.waitForDetached('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+    I.click('Cancel', { css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]' });
+    I.waitForDetached({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]' });
 
     I.seeElement('.io-ox-mailfilter-settings li[data-id="2"] [data-action="edit"]');
 
     I.click('Edit', '.io-ox-mailfilter-settings li[data-id="2"]');
-    I.waitForElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
-    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]', 'rule with size mb');
+    I.waitForElement({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]' });
+    I.seeInField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]' }, 'rule with size mb');
 
     I.see('Size', 'li[data-test-id="0"] .list-title');
 
-    I.see('Is bigger than', 'li[data-test-id="0"] :not(.no-padding-left) .dropdownlink span');
-    I.seeInField('[data-test-id="0"] input[name="sizeValue"]', '20');
-    I.see('MB', 'li[data-test-id="0"] .no-padding-left .dropdownlink span');
+    I.see('Is bigger than', { css: 'li[data-test-id="0"] :not(.no-padding-left) .dropdownlink span' });
+    I.seeInField({ css: '[data-test-id="0"] input[name="sizeValue"]' }, '20');
+    I.see('MB', { css: 'li[data-test-id="0"] .no-padding-left .dropdownlink span' });
     I.dontSeeCheckboxIsChecked('Process subsequent rules');
 
-    I.click('Cancel', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
-    I.waitForDetached('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+    I.click('Cancel', { css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]' });
+    I.waitForDetached({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]' });
 
     I.seeElement('.io-ox-mailfilter-settings li[data-id="3"] [data-action="edit"]');
 
     I.click('Edit', '.io-ox-mailfilter-settings li[data-id="3"]');
-    I.waitForElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
-    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]', 'rule with size gb');
+    I.waitForElement({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]' });
+    I.seeInField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]' }, 'rule with size gb');
 
     I.see('Size', 'li[data-test-id="0"] .list-title');
 
-    I.see('Is bigger than', 'li[data-test-id="0"] :not(.no-padding-left) .dropdownlink span');
-    I.seeInField('[data-test-id="0"] input[name="sizeValue"]', '1');
-    I.see('GB', 'li[data-test-id="0"] .no-padding-left .dropdownlink span');
+    I.see('Is bigger than', { css: 'li[data-test-id="0"] :not(.no-padding-left) .dropdownlink span' });
+    I.seeInField({ css: '[data-test-id="0"] input[name="sizeValue"]' }, '1');
+    I.see('GB', { css: 'li[data-test-id="0"] .no-padding-left .dropdownlink span' });
     I.dontSeeCheckboxIsChecked('Process subsequent rules');
 
-    I.click('Cancel', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
-    I.waitForDetached('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+    I.click('Cancel', { css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]' });
+    I.waitForDetached({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]' });
 });

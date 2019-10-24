@@ -25,15 +25,15 @@ Scenario('adds and removes a vacation notice', function (I) {
     I.waitForVisible('.rightside h1');
     I.see('Basic settings', '.rightside h1');
 
-    I.waitForElement('li[data-id="virtual/settings/io.ox/mail"]');
+    I.waitForElement('.tree-container li[data-id="virtual/settings/io.ox/mail"]');
     I.selectFolder('Mail');
     I.waitForVisible('.rightside  .io-ox-mail-settings');
     I.see('Mail', '.rightside h1');
 
-    I.waitForVisible('[data-action="edit-vacation-notice"]');
-    I.see('Vacation notice ...', '[data-action="edit-vacation-notice"]');
-    I.click('Vacation notice ...', '.form-group.buttons [data-action="edit-vacation-notice"]');
-    I.waitForElement('[data-point="io.ox/mail/vacation-notice/edit"]');
+    I.waitForVisible('.settings-detail-pane [data-action="edit-vacation-notice"]');
+    I.see('Vacation notice ...', '.settings-detail-pane [data-action="edit-vacation-notice"]');
+    I.click('Vacation notice ...', '.settings-detail-pane [data-action="edit-vacation-notice"]');
+    I.waitForElement('.modal[data-point="io.ox/mail/vacation-notice/edit"]');
 
     // check for all expexted elements
     I.seeElement('.modal-header input[name="active"]');
@@ -43,54 +43,54 @@ Scenario('adds and removes a vacation notice', function (I) {
     I.see('Apply changes', '.modal-footer');
 
     // form elements
-    I.seeElement('input[name="activateTimeFrame"][disabled]');
-    I.seeElement('input[name="dateFrom"][disabled]');
-    I.seeElement('input[name="dateUntil"][disabled]');
-    I.seeElement('input[name="subject"][disabled]');
-    I.seeElement('textarea[name="text"][disabled]');
+    I.seeElement('.modal input[name="activateTimeFrame"][disabled]');
+    I.seeElement('.modal input[name="dateFrom"][disabled]');
+    I.seeElement('.modal input[name="dateUntil"][disabled]');
+    I.seeElement('.modal input[name="subject"][disabled]');
+    I.seeElement('.modal textarea[name="text"][disabled]');
     I.see('Show advanced options');
 
     // enable
     I.click('.modal-header .checkbox.switch.large');
 
 
-    I.seeElement('input[name="activateTimeFrame"]:not([disabled])');
-    I.seeElement('input[name="subject"]:not([disabled])');
-    I.seeElement('textarea[name="text"]:not([disabled])');
+    I.seeElement('.modal input[name="activateTimeFrame"]:not([disabled])');
+    I.seeElement('.modal input[name="subject"]:not([disabled])');
+    I.seeElement('.modal textarea[name="text"]:not([disabled])');
 
-    I.fillField('input[name="subject"]', 'Subject');
-    I.fillField('textarea[name="text"]', 'Text');
+    I.fillField('.modal input[name="subject"]', 'Subject');
+    I.fillField('.modal textarea[name="text"]', 'Text');
 
     I.click('.modal-footer button[data-action="save"]');
 
-    I.see('Vacation notice ...', '[data-action="edit-vacation-notice"]');
+    I.see('Vacation notice ...', '.settings-detail-pane [data-action="edit-vacation-notice"]');
 
-    I.waitForElement('[data-action="edit-vacation-notice"] .fa-toggle-on');
-    I.waitForInvisible('[data-point="io.ox/mail/vacation-notice/edit"]');
+    I.waitForElement('.settings-detail-pane [data-action="edit-vacation-notice"] .fa-toggle-on');
+    I.waitForInvisible('.modal[data-point="io.ox/mail/vacation-notice/edit"]');
 
     // check notification in mail
     I.openApp('Mail');
     I.waitForElement('.window-container.io-ox-mail-window');
-    I.waitForElement('a[data-action="edit-vacation-notice"]');
-    I.seeElement('a[data-action="edit-vacation-notice"]');
-    I.see('Your vacation notice is active', 'a[data-action="edit-vacation-notice"]');
+    I.waitForElement('.alert a[data-action="edit-vacation-notice"]');
+    I.seeElement('.alert a[data-action="edit-vacation-notice"]');
+    I.see('Your vacation notice is active', '.alert a[data-action="edit-vacation-notice"]');
 
-    I.click('a[data-action="edit-vacation-notice"]');
-    I.waitForElement('[data-point="io.ox/mail/vacation-notice/edit"]');
+    I.click('.alert a[data-action="edit-vacation-notice"]');
+    I.waitForElement('.modal[data-point="io.ox/mail/vacation-notice/edit"]');
 
-    I.seeInField('input[name="subject"]', 'Subject');
-    I.seeInField('textarea[name="text"]', 'Text');
+    I.seeInField('.modal input[name="subject"]', 'Subject');
+    I.seeInField('.modal textarea[name="text"]', 'Text');
 
-    I.seeElement('input[name="dateFrom"][disabled]');
-    I.seeElement('input[name="dateUntil"][disabled]');
+    I.seeElement('.modal input[name="dateFrom"][disabled]');
+    I.seeElement('.modal input[name="dateUntil"][disabled]');
 
     I.click('Send vacation notice during this time only');
 
-    I.waitForElement('input[name="dateFrom"]:not([disabled])');
-    I.seeElement('input[name="dateFrom"]:not([disabled])');
+    I.waitForElement('.modal input[name="dateFrom"]:not([disabled])');
+    I.seeElement('.modal input[name="dateFrom"]:not([disabled])');
 
-    I.waitForElement('input[name="dateUntil"]:not([disabled])');
-    I.seeElement('input[name="dateUntil"]:not([disabled])');
+    I.waitForElement('.modal input[name="dateUntil"]:not([disabled])');
+    I.seeElement('.modal input[name="dateUntil"]:not([disabled])');
 
     I.click('Cancel', '.modal-footer');
 });

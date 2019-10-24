@@ -34,27 +34,26 @@ const A = {
     },
     clickMoreAction: function (I, toolbar, action) {
         I.click('~More actions', toolbar);
-        I.waitForVisible(`[data-action="${action}"]`, 'body > .dropdown');
-        I.click(`[data-action="${action}"]`, 'body > .dropdown');
+        I.waitForVisible(`.dropdown-menu [data-action="${action}"]`, 'body > .dropdown');
+        I.click(`.dropdown-menu [data-action="${action}"]`, 'body > .dropdown');
     },
     createFolderInDialog: function (I, folder) {
         I.waitForVisible('.folder-picker-dialog');
         I.click('Create folder', '.folder-picker-dialog');
-        I.waitForElement('[data-point="io.ox/core/folder/add-popup"]');
+        I.waitForElement('.modal[data-point="io.ox/core/folder/add-popup"]');
         I.fillField('Folder name', folder);
         I.click('Add');
 
-        I.waitForDetached('[data-point="io.ox/core/folder/add-popup"]');
-        I.wait(2);
-        I.seeTextEquals(folder, '.folder-picker-dialog .selected:not(.disabled) .folder-label');
+        I.waitForDetached('.modal[data-point="io.ox/core/folder/add-popup"]');
+        I.waitForText(folder, undefined, '.folder-picker-dialog .selected:not(.disabled) .folder-label');
     },
     selectFolderInDialog: function (I, folder) {
         // toogle 'myfolders'
-        I.click('[data-id="virtual/myfolders"] .folder-arrow', '.folder-picker-dialog');
-        I.waitForElement(`[data-id="default0/INBOX/${folder}"]`, '.folder-picker-dialog');
-        I.click(`[data-id="default0/INBOX/${folder}"]`, '.folder-picker-dialog');
-        I.waitForElement(`[data-id="default0/INBOX/${folder}"].selected`, '.folder-picker-dialog');
-        I.wait(1);
+        I.click('.folder[data-id="virtual/myfolders"] .folder-arrow', '.folder-picker-dialog');
+        I.waitForElement(`.folder[data-id="default0/INBOX/${folder}"]`, '.folder-picker-dialog');
+        I.click(`.folder[data-id="default0/INBOX/${folder}"]`, '.folder-picker-dialog');
+        I.waitForElement(`.folder[data-id="default0/INBOX/${folder}"].selected`, '.folder-picker-dialog');
+        I.waitForEnabled('.folder-picker-dialog button[data-action="ok"]');
     },
     isEmpty: function (I, folder) {
         I.selectFolder(folder);
@@ -185,7 +184,6 @@ Scenario('[C114349] Create folder within move dialog', async function (I, users)
     A.select(I, 1);
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/move');
     A.createFolderInDialog(I, subject);
-    I.waitForEnabled({ css: '.modal-footer .btn-primary[data-action="ok"]' });
     I.click('Move', '.folder-picker-dialog');
     I.waitForDetached('.folder-picker-dialog');
 
@@ -205,7 +203,6 @@ Scenario('[C114349] Create folder within copy dialog', async function (I, users)
     A.select(I, 1);
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/copy');
     A.createFolderInDialog(I, subject);
-    I.waitForEnabled({ css: '.modal-footer .btn-primary[data-action="ok"]' });
     I.click('Copy', '.folder-picker-dialog');
     I.waitForDetached('.folder-picker-dialog');
 

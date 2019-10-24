@@ -29,19 +29,19 @@ Scenario('[C110279] Primary mail account name can be changed', async function (I
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/settings/accounts');
 
     I.say(`rename to "${name}"`, 'blue');
-    I.waitForVisible('a[data-action="edit"]');
-    I.click('Edit', 'a[data-action="edit"]');
+    I.waitForVisible('.io-ox-accounts-settings a[data-action="edit"]');
+    I.click('Edit', '.io-ox-accounts-settings a[data-action="edit"]');
     I.waitForElement('.modal-body input[name="name"]');
     I.fillField('Account name', name);
     I.click('Save');
     I.waitForDetached('.modal-body');
 
     I.say('check list item title', 'blue');
-    I.seeTextEquals(name, '[data-id="mail0"] .list-item-title');
+    I.seeTextEquals(name, '.io-ox-accounts-settings [data-id="mail0"] .list-item-title');
 
     I.say('check mail folder view', 'blue');
     I.openApp('Mail');
     I.waitForVisible('.tree-container');
     I.waitForText(name);
-    I.seeTextEquals(name, '[data-id= "virtual/myfolders"] > .folder-node .folder-label');
+    I.seeTextEquals(name, '.tree-container [data-id= "virtual/myfolders"] > .folder-node .folder-label');
 });

@@ -35,7 +35,7 @@ Scenario('[C7866] Set all-day appointments to be marked as free @shaky', async f
     // Make sure setting is set correctly
     I.click('~Settings', '#io-ox-settings-topbar-icon');
 
-    I.waitForVisible('div[data-point="io.ox/core/settings/detail/view"]');
+    I.waitForVisible('.settings-container');
     I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
     I.waitForElement('.alarms-link-view .btn-link');
     I.dontSeeCheckboxIsChecked('Mark all day appointments as free');
@@ -46,23 +46,23 @@ Scenario('[C7866] Set all-day appointments to be marked as free @shaky', async f
     I.waitForText('Subject');
     I.fillField('summary', reservedappointmentsubject);
     I.fillField('location', location);
-    I.click('All day');
+    I.click('All day', '.io-ox-calendar-edit-window');
     I.fillField('description', description);
     I.dontSeeCheckboxIsChecked('transp');
-    I.click('Create');
-    I.waitForElement('div.appointment.reserved');
+    I.click('Create', '.io-ox-calendar-edit-window');
+    I.waitForElement('.appointment.reserved');
 
     // Change setting
     I.click('~Settings', '#io-ox-settings-topbar-icon');
-    I.waitForVisible('div[data-point="io.ox/calendar/settings/detail/view"]');
+    I.waitForVisible('.io-ox-calendar-settings');
     I.waitForElement('.alarms-link-view .btn-link');
-    I.click('Mark all day appointments as free');
+    I.click('Mark all day appointments as free', '.io-ox-calendar-settings');
 
     // Create new all day appointment and see if it is marked as free
     I.openApp('Calendar');
     I.waitForVisible('.weekview-toolbar');
     // Have to click on today button for setting to work
-    I.click('button.weekday.today');
+    I.click('button.weekday.today', '.weekview-toolbar');
     I.waitForText('Subject');
     I.fillField('summary', freeappointmentsubject);
     I.fillField('location', location);

@@ -16,7 +16,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Settings > Address Book');
+Feature('Settings > Address Bookasd');
 
 Before(async (users) => {
     await users.create();
@@ -55,32 +55,27 @@ async function verifyMapType(I, mapName, link, value) {
     I.click('~Settings', '#io-ox-settings-topbar-icon');
 
     // Select address book settings
+    I.waitForElement('.folder-node');
     I.waitForText('Address Book', 5, '.folder-node');
     I.selectFolder('Address Book');
-    I.waitForText('Address Book', 5, '[data-app-name="io.ox/settings"]');
+    I.waitForText('Address Book', 5, '.io-ox-settings-main[data-app-name="io.ox/settings"]');
 
-    I.see('Link postal addresses with map service');
+    I.waitForText('Link postal addresses with map service');
     I.waitForText(mapName);
-    I.wait(1);
-    I.checkOption(`input[value="${value}"]`);
-    I.seeCheckboxIsChecked(`input[value="${value}"]`);
-    I.wait(2);
-    I.retry(5).click('~Refresh', '.taskbar');
-    I.waitForVisible('.fa-refresh.fa-spin');
-    I.waitForDetached('.fa-refresh.fa-spin');
+    I.checkOption(`.io-ox-contacts-settings input[value="${value}"]`);
+    I.seeCheckboxIsChecked(`.io-ox-contacts-settings input[value="${value}"]`);
 
     // Verify the displayed style
     I.openApp('Address Book');
     I.waitForVisible('[data-app-name="io.ox/contacts"]');
 
-    I.refreshPage();
-    I.waitForVisible('[data-app-name="io.ox/contacts"]');
+    I.selectFolder('Contacts');
 
     I.waitForVisible('.fa-refresh.fa-spin');
     I.waitForDetached('.fa-refresh.fa-spin');
 
-    I.selectFolder('Contacts');
-
+    I.click('Bar, Foo', '.contact');
+    I.waitForElement('.contact-detail');
     I.waitForText('Home address', 5, '.contact-detail');
 
     if (mapName !== 'No link') {

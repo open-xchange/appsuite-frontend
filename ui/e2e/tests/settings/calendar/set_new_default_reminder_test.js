@@ -31,7 +31,8 @@ Scenario('[C7867] Set new default reminder @shaky', async function (I) {
 
     // Default reminder
     I.click('~Settings', '#io-ox-settings-topbar-icon');
-    I.waitForVisible('li[data-id="virtual/settings/io.ox/calendar"]');
+    I.waitForVisible('.folder li[data-id="virtual/settings/io.ox/calendar"]');
+    // I.waitForVisible('.tree-container > li[data-id="virtual/settings/io.ox/calendar"]');
     I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
     I.waitForElement('.alarms-link-view .btn-link');
 
@@ -42,7 +43,7 @@ Scenario('[C7867] Set new default reminder @shaky', async function (I) {
         .find('button')
     );
     I.waitForText('Edit reminders');
-    I.click('Add reminder');
+    I.click('Add reminder', '.modal-dialog');
     I.selectOption('.alarm-action', alaramNotification);
     I.selectOption('.alarm-time', alaramTime);
     I.selectOption('.alarm-related', alaramRelated);

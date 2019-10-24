@@ -30,17 +30,17 @@ Scenario('[C7862] Configure display name representation', async (I) => {
     await I.haveContact({ folder_id: folder, first_name: firstName, last_name: lastName });
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/contacts']);
-    I.waitForVisible({ css: 'div[data-point="io.ox/contacts/settings/detail/view"]' });
+    I.waitForVisible({ css: '.io-ox-contacts-settings' });
 
     // go into settings and change display style of contacts
-    I.waitForText('Address Book', 10, 'div[data-point="io.ox/contacts/settings/detail/view"]');
-    I.waitForText('Display of names');
-    I.click('First name Last name');
+    I.waitForText('Address Book', 10, '.io-ox-contacts-settings');
+    I.waitForText('Display of names', undefined, '.io-ox-contacts-settings');
+    I.click('First name Last name', '.io-ox-contacts-settings');
 
     // Verify the displayed style
     I.openApp('Address Book');
-    I.waitForVisible('[data-app-name="io.ox/contacts"]');
-    I.waitForText('My address books');
+    I.waitForVisible('.io-ox-contacts-window');
+    I.waitForElement('~My address books');
     I.selectFolder('Contacts');
 
     I.waitForElement('.contact-grid-container');
@@ -56,16 +56,16 @@ Scenario('[C7862] Configure display name representation', async (I) => {
     // Select address book settings
     I.waitForText('Address Book', 5, '.folder-node');
     I.selectFolder('Address Book');
-    I.waitForText('Address Book', 5, '[data-app-name="io.ox/settings"]');
+    I.waitForText('Address Book', 5, '.io-ox-contacts-settings');
 
     I.waitForText('Display of names');
     I.click('Last name, First name');
 
     // Go back to contacts app and verify it
     I.openApp('Address Book');
-    I.waitForVisible('[data-app-name="io.ox/contacts"]');
+    I.waitForVisible('.io-ox-contacts-window');
     I.selectFolder('Contacts');
     I.waitForElement('.contact-grid-container');
-    I.waitForText('Bar, Foo');
+    I.waitForText('Bar, Foo', undefined, '.contact-detail');
     I.click('Bar, Foo', '.fullname');
 });
