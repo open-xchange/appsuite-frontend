@@ -27,8 +27,6 @@ define('io.ox/settings/personalData/settings/pane', [
 
     'use strict';
 
-    if (!capabilities.has('dataexport')) return;
-
     // same structure as api response
     var modules = {
             'mail': {
