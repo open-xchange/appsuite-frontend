@@ -48,7 +48,7 @@ define(['io.ox/settings/personalData/settings/pane'], function (pane) {
         maxFileSize: 2147483648
     };
 
-    describe.only('Data export (GDPR)', function () {
+    describe('Data export (GDPR)', function () {
 
         describe('should', function () {
             beforeEach(function () {
