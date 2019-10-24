@@ -91,7 +91,7 @@ Scenario('[C8376] Add a subfolder', async (I) => {
     I.waitForText('Testfolder', 5, '.file-list-view');
 });
 
-Scenario('[C8377] Invite a person @shaky', (I, users) => {
+Scenario('[C8377] Invite a person', (I, users) => {
     function share(publicFolder) {
         I.clickToolbar('Share');
         I.click('Invite people');
@@ -111,7 +111,9 @@ Scenario('[C8377] Invite a person @shaky', (I, users) => {
         I.dontSee('Guest', '.permissions-view');
         I.seeNumberOfElements('.permissions-view .permission.row', 2);
         I.click('Author');
-        I.waitForText('Viewer', 1, '.dropdown');
+        I.waitForVisible(locate('a')
+            .withAttr({ 'data-value': 'viewer' })
+            .inside({ css: '.dropdown-menu' }));
         I.click('Viewer');
         I.click('Share', '.modal');
         I.waitToHide('.modal');

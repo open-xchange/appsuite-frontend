@@ -49,7 +49,7 @@ async function getTooltipValue(I, opt) {
     return [].concat(tooltips)[0];
 }
 
-Scenario('[C114381] Sender address is shown in tooltip @shaky', async function (I, users) {
+Scenario('[C114381] Sender address is shown in tooltip', async function (I, users) {
     const user1 = users[0];
     const user2 = users[1];
 
@@ -76,8 +76,7 @@ Scenario('[C114381] Sender address is shown in tooltip @shaky', async function (
 
     I.say('Check to in "drafts"', 'blue');
     I.selectFolder('Drafts');
-    I.waitForVisible('.leftside .list-view .list-item .from');
-    I.see('C114381:draft');
+    I.waitForText('C114381:draft', 5, '.leftside .list-view .list-item .subject');
     let to2 = await getTooltipValue(I, { locator: '.leftside .list-view .list-item .from', attribute: 'title' });
     expect(to2).to.be.equal(user2.get('primaryEmail'));
 
