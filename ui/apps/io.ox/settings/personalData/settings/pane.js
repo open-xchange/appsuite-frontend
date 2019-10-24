@@ -346,7 +346,7 @@ define('io.ox/settings/personalData/settings/pane', [
             }
         });
 
-    if (!capabilities.has('dataexport'))  {
+    if (!capabilities.has('dataexport')) {
         return {
             handleApiResult: handleApiResult,
             downloadView: downloadView,
