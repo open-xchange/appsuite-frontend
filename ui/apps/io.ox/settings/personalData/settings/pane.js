@@ -346,6 +346,14 @@ define('io.ox/settings/personalData/settings/pane', [
             }
         });
 
+    if (!capabilities.has('dataexport'))  {
+        return {
+            handleApiResult: handleApiResult,
+            downloadView: downloadView,
+            selectDataView: selectDataView
+        };
+    }
+
     ext.point('io.ox/settings/pane/personalData').extend({
         id: 'personaldata',
         title: gt('Download personal data'),
