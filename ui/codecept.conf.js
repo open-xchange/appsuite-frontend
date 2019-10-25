@@ -53,7 +53,8 @@ module.exports.config = {
         calendar: './e2e/pageobjects/calendar',
         contactpicker: './e2e/pageobjects/contact-picker',
         mail: './e2e/pageobjects/mail',
-        portal: './e2e/pageobjects/portal'
+        portal: './e2e/pageobjects/portal',
+        drive: './e2e/pageobjects/drive'
     },
     bootstrap: function (done) {
         // setup chai

@@ -64,5 +64,18 @@ module.exports = actor({
         // save
         this.click('Create', '.io-ox-calendar-edit-window');
         this.waitForDetached('.io-ox-calendar-edit-window', 5);
+    },
+
+    waitForNetworkTraffic() {
+        this.waitForElement('.fa-spin.fa-refresh');
+        this.waitForElement('.fa-spin-paused.fa-refresh');
+    },
+
+    triggerRefresh() {
+        this.executeScript(function () {
+            ox.trigger('refresh^');
+        });
+        this.waitForElement('.fa-spin.fa-refresh');
+        this.waitForElement('.fa-spin-paused.fa-refresh');
     }
 });

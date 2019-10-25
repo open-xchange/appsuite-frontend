@@ -1,7 +1,6 @@
 const Helper = require('@open-xchange/codecept-helper').helper,
     axe = require('axe-core');
 const { util } = require('@open-xchange/codecept-helper');
-const assert = require('assert');
 
 function assertElementExists(res, locator, prefixMessage = 'Element', postfixMessage = 'was not found by text|CSS|XPath') {
     if (!res || res.length === 0) {

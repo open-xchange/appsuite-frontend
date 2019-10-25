@@ -23,17 +23,18 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C114352] Create folder in copy/move dialog', async (I, users) => {
+Scenario('[C114352] Create folder in copy/move dialog', async (I, users, drive) => {
 
     // Preconditions: At least one file in Drive
 
     const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
 
-    I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
 
     // 1. Go to Drive
 
     I.login('app=io.ox/files');
+    drive.waitForApp();
 
     // 2. Select any file
 
@@ -58,21 +59,19 @@ Scenario('[C114352] Create folder in copy/move dialog', async (I, users) => {
 
     I.fillField({ css: '[data-point="io.ox/core/folder/add-popup"] input' }, 'Foobar');
     I.click('Add');
-    I.waitForText('Move');
-    I.see('Foobar');
-
+    I.waitForText('Move', 'modal-footer');
+    I.see('Foobar', '.modal-body');
     // 6. Select the new folder and "Move"
-
     // Folder is already selected by default.
-    I.click('Move', { css: '[data-point="io.ox/core/folder/picker"]' });
     I.wait(1);
-    I.doubleClick('.list-item[aria-label*="Foobar"]');
-    I.wait(2);
-    I.see('testdocument.odt');
-
+    I.click('Move', '.modal-footer');
+    I.waitForText('File has been moved');
+    I.waitForInvisible('File has been moved');
+    I.selectFolder('Foobar');
+    I.waitForText('testdocument.odt', 5, '.list-view');
 });
 
-Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', async (I, users) => {
+Scenario.skip('[C265694] Hidden parent folder hierarchy for anonymous guest users @rewrite', async (I, users) => {
 
     /*
      * Preconditions:
@@ -140,7 +139,7 @@ Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', a
 
 });
 
-Scenario('[C257247] Restore deleted items', async (I, users) => {
+Scenario('[C257247] Restore deleted items', async (I, users, drive) => {
 
     // Preconditions: At least one file and one folder in Drive
 
@@ -150,6 +149,7 @@ Scenario('[C257247] Restore deleted items', async (I, users) => {
     I.haveFolder({ title: 'testfolder', module: 'infostore', parent: infostoreFolderID });
 
     I.login('app=io.ox/files');
+    drive.waitForApp();
 
     // 1. Delete the folder
 
@@ -180,6 +180,7 @@ Scenario('[C257247] Restore deleted items', async (I, users) => {
     I.waitForVisible('.io-ox-alert-info');
     I.see('Restored into folder:');
     I.see('Drive/My files');
+    I.click('.io-ox-alert-info .close');
     I.waitForInvisible('.io-ox-alert-info');
 
     I.selectFolder('My files');
@@ -213,10 +214,12 @@ Scenario('[C257247] Restore deleted items', async (I, users) => {
     I.waitForVisible('.io-ox-alert-info');
     I.see('Restored into folder:');
     I.see('Drive/My files');
+    I.click('.io-ox-alert-info .close');
     I.waitForInvisible('.io-ox-alert-info');
 
     I.selectFolder('My files');
-    I.wait(1); // Wait for thre list view to refresh
-    I.see('testdocument.odt');
+    I.wait(1); // I know this is ridiculous
+    I.triggerRefresh();
+    I.waitForText('testdocument.odt', 5, '.list-view');
 
 });

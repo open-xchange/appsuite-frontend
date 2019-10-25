@@ -19,11 +19,6 @@ const fs = require('fs'),
 
 Feature('Drive > General');
 
-const prepare = (I, folder) => {
-    I.login('app=io.ox/files' + (folder ? '&folder=' + folder : ''));
-    I.waitForVisible('.file-list-view.complete');
-};
-
 Before(async (I, users) => {
     await users.create();
 });
@@ -32,8 +27,9 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C8362] Add note', (I) => {
-    prepare(I);
+Scenario('[C8362] Add note', (I, drive) => {
+    I.login('app=io.ox/files');
+    drive.waitForApp();
     I.clickToolbar('New');
     I.click('Add note');
     I.waitForElement({ css: 'input[type="text"].title' });
@@ -48,8 +44,9 @@ Scenario('[C8362] Add note', (I) => {
 });
 
 // Bug: File input is not selectable (display: none), which is also a pot. a11y bug
-Scenario.skip('[C8364] Upload new file', (I) => {
-    prepare(I);
+Scenario.skip('[C8364] Upload new file', (I, drive) => {
+    I.login('app=io.ox/files');
+    drive.waitForApp();
     I.clickToolbar('New');
     I.waitForText('Upload files');
     I.click('Upload files');
@@ -58,10 +55,11 @@ Scenario.skip('[C8364] Upload new file', (I) => {
 });
 
 // Note: This is not accessible H4 and textarea does not have a label
-Scenario('[C8366] Edit description', async (I) => {
+Scenario('[C8366] Edit description', async (I, drive) => {
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
-    prepare(I);
+    I.login('app=io.ox/files');
+    drive.waitForApp();
     I.waitForText('document.txt', 1, '.file-list-view');
     I.click(locate('li.list-item').withText('document.txt'));
     I.waitForText('Add a description');
@@ -90,10 +88,12 @@ const checkIfFoldersExist = (I, layout) => {
     I.see('Videos', layout);
 };
 
-Scenario('[C8368] View change', async (I) => {
+// TODO: Bug in Drive Icon View has html entities in it.
+Scenario.skip('[C8368] View change @addbug', async (I, drive) => {
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
-    prepare(I);
+    I.login('app=io.ox/files');
+    drive.waitForApp();
     checkIfFoldersExist(I);
     I.see('document.txt');
 
@@ -123,7 +123,7 @@ const searchFor = (I, query) => {
     I.waitForDetached('.busy-indicator.io-ox-busy');
 };
 
-Scenario('[C8369] Search', async (I) => {
+Scenario('[C8369] Search', async (I, drive) => {
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
     const testFolder = await I.haveFolder({ title: 'Testfolder', module: 'infostore', parent: folder });
@@ -131,7 +131,8 @@ Scenario('[C8369] Search', async (I) => {
     await I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.rtf');
     await I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.odt');
     await I.haveFile(testFolder, 'e2e/media/files/generic/testpresentation.ppsm');
-    prepare(I);
+    I.login('app=io.ox/files');
+    drive.waitForApp();
     I.selectFolder('Testfolder');
     searchFor(I, 'document.txt');
     I.waitNumberOfVisibleElements('.file-list-view .list-item', 1);
@@ -143,10 +144,11 @@ Scenario('[C8369] Search', async (I) => {
     I.waitNumberOfVisibleElements('.file-list-view .list-item', 4);
 });
 
-Scenario('[C8371] Delete file', async (I) => {
+Scenario('[C8371] Delete file', async (I, drive) => {
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
-    prepare(I);
+    I.login('app=io.ox/files');
+    drive.waitForApp();
     I.waitForText('document.txt', undefined, '.file-list-view');
     I.click(locate('li.list-item').withText('document.txt'));
     I.clickToolbar('~Delete');
@@ -167,20 +169,21 @@ Scenario.skip('[C8372] Upload a 0KB file', () => {
     // Also drag and drop testing is quite complicated and not sure if at all possible atm
 });
 
-Scenario('[C45039] Breadcrumb navigation', async (I) => {
+Scenario('[C45039] Breadcrumb navigation', async (I, drive) => {
     const parent = await I.haveFolder({ title: 'Folders', module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
-    await I.haveFolder({ title: 'subfolder_1', module: 'infostore', parent });
-    await I.haveFolder({ title: 'subfolder_2', module: 'infostore', parent });
-    const subFolder = await I.haveFolder({ title: 'subfolder_3', module: 'infostore', parent });
-    const subsubFolder = await I.haveFolder({ title: 'subsubfolder_1', module: 'infostore', parent: subFolder });
-    await I.haveFolder({ title: 'subsubfolder_2', module: 'infostore', parent: subFolder });
-    prepare(I, subsubFolder);
-    I.retry(5).click('subfolder_3', '.breadcrumb-view');
-    I.waitForText('subsubfolder_1', 1, '.list-view');
-    I.waitForText('subsubfolder_2', 1, '.list-view');
-    I.click('Drive', '.breadcrumb-view');
-    I.waitForText('Drive', 1, '.breadcrumb-view');
-    I.waitForText('Public files', 1, '.list-view');
+    await I.haveFolder({ title: 'subfolder1', module: 'infostore', parent });
+    await I.haveFolder({ title: 'subfolder2', module: 'infostore', parent });
+    const subFolder = await I.haveFolder({ title: 'subfolder3', module: 'infostore', parent });
+    const subsubFolder = await I.haveFolder({ title: 'subsubfolder1', module: 'infostore', parent: subFolder });
+    await I.haveFolder({ title: 'subsubfolder2', module: 'infostore', parent: subFolder });
+    I.login('app=io.ox/files&folder=' + subsubFolder);
+    drive.waitForApp();
+    I.retry(5).click('subfolder3', '.breadcrumb-view');
+    I.waitForText('subsubfolder1', 5, '.list-view');
+    I.waitForText('subsubfolder2', 5, '.list-view');
+    I.retry(5).click('Drive', '.breadcrumb-view');
+    I.waitForText('Drive', 5, '.breadcrumb-view');
+    I.waitForText('Public files', 5, '.list-view');
     I.doubleClick('Public files', '.list-view');
 });
 
@@ -188,14 +191,15 @@ const checkFileOrder = (I, files) => {
     files.forEach((name, index) => { I.see(name, '.list-item:nth-child(' + (index + 2) + ')'); });
 };
 
-Scenario('[C45040] Sort files', async (I) => {
+Scenario('[C45040] Sort files', async (I, drive) => {
     const folder = await I.grabDefaultFolder('infostore');
     const testFolder = await I.haveFolder({ title: 'Testfolder', module: 'infostore', parent: folder });
     await I.haveFile(testFolder, 'e2e/media/files/0kb/document.txt');
     await I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.rtf');
     await I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.odt');
     await I.haveFile(testFolder, 'e2e/media/files/generic/testpresentation.ppsm');
-    prepare(I);
+    I.login('app=io.ox/files');
+    drive.waitForApp();
     I.selectFolder('Testfolder');
     I.waitForText('document.txt', 5, '.list-view');
 
@@ -226,7 +230,7 @@ Scenario('[C45040] Sort files', async (I) => {
     checkFileOrder(I, ['testdocument.rtf', 'testpresentation.ppsm', 'testdocument.odt', 'document.txt']);
 });
 
-Scenario('[C45041] Select files', async (I) => {
+Scenario('[C45041] Select files', async (I, drive) => {
     const testFolder = await I.haveFolder({ title: 'Selecttest', module: 'infostore', parent: await I.grabDefaultFolder('infostore') }),
         filePath = 'e2e/media/files/0kb/',
         files = await readdir(filePath);
@@ -236,7 +240,8 @@ Scenario('[C45041] Select files', async (I) => {
     files.forEach((name) => {
         if (name !== '.DS_Store') I.haveFile(testFolder, filePath + name);
     });
-    prepare(I);
+    I.login('app=io.ox/files');
+    drive.waitForApp();
     I.selectFolder('Selecttest');
 
     I.clickToolbar('Select');
@@ -253,7 +258,7 @@ Scenario('[C45041] Select files', async (I) => {
     I.dontSeeElementInDOM('.file-list-view .list-item.selected');
 });
 
-Scenario('[C45042] Filter files', async (I) => {
+Scenario('[C45042] Filter files', async (I, drive) => {
     // BUG: This menu should be grouped as it has 2 sets of menuitemradios
     // to make matters worse there are two "All" menuitems without a relation
     // to a group.
@@ -265,7 +270,8 @@ Scenario('[C45042] Filter files', async (I) => {
     files.forEach((name) => {
         if (name !== '.DS_Store') I.haveFile(testFolder, filePath + name);
     });
-    prepare(I);
+    I.login('app=io.ox/files');
+    drive.waitForApp();
     I.selectFolder('Filtertest');
     I.clickToolbar('Select');
     I.click('PDFs');
