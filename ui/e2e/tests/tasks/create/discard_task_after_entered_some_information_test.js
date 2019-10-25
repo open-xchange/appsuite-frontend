@@ -23,15 +23,13 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7736] Discard Task after entered some information', async (I) => {
+Scenario('[C7736] Discard Task after entered some information', async (I, tasks) => {
 
     // 1. Create a new task and enter a title and then discard this task.
 
     I.login('app=io.ox/tasks');
-    I.waitForVisible('[data-app-name="io.ox/tasks"]');
-
-    I.clickToolbar('New task');
-    I.waitForVisible('[data-app-name="io.ox/tasks/edit"]');
+    tasks.waitForApp();
+    tasks.newTask();
 
     I.fillField('.title-field', 'Foobar');
 

@@ -16,15 +16,17 @@
 Feature('Tasks > Edit');
 
 Before(async (users) => {
-    await users.create();
-    await users.create();
+    await Promise.all([
+        users.create(),
+        users.create()
+    ]);
 });
 
 After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C125311] Change confimation status as participant', async function (I, users) {
+Scenario('[C125311] Change confimation status as participant', async function (I, users, tasks, mail) {
 
     I.haveSetting('io.ox/core//autoOpenNotification', false, { user: users[1] });
     I.haveSetting('io.ox/calendar//deleteInvitationMailAfterAction', false, { user: users[1] });
@@ -32,14 +34,13 @@ Scenario('[C125311] Change confimation status as participant', async function (I
     // 1. Login as User#A
 
     I.login('app=io.ox/tasks', { user: users[0] });
-    I.waitForVisible('[data-app-name="io.ox/tasks"]');
+    tasks.waitForApp();
 
     // 2. Create a new task and add another user to the task
 
-    I.clickToolbar('New task');
-    I.waitForVisible('[data-app-name="io.ox/tasks/edit"]');
+    tasks.newTask();
 
-    I.fillField('Subject', 'Yo, I\'ll tell you what I want, what I really really want');
+    I.fillField('Subject', 'Where is the money Lebowski?');
     I.click('Expand form');
     I.fillField('Add contact …', users[1].get('primaryEmail'));
     I.pressKey('Enter');
@@ -51,29 +52,12 @@ Scenario('[C125311] Change confimation status as participant', async function (I
     // 3. Login as User#B and verify a notification has been received
 
     I.login('app=io.ox/mail', { user: users[1] });
-    I.waitForVisible('[data-ref="io.ox/mail/listview"]');
-
-    let mailCount = await I.grabNumberOfVisibleElements('.list-item');
-    let retries = 6;
-
-    while (mailCount < 1) {
-        if (retries > 0) {
-            I.waitForElement('#io-ox-refresh-icon', 5, '.taskbar');
-            I.click('#io-ox-refresh-icon', '.taskbar');
-            I.waitForElement('.launcher .fa-spin-paused', 5);
-            I.wait(60);
-            console.log('No mail(s) found. Waiting 1 minute ...');
-            mailCount = await I.grabNumberOfVisibleElements('.list-item');
-            retries--;
-        } else {
-            console.log('Timeout exceeded. No mails found.');
-            break;
-        }
-    }
+    mail.waitForApp();
+    I.triggerRefresh();
 
     // 4. Open notification mail
 
-    I.click('.list-item[aria-label*="Yo, I\'ll tell you what I want, what I really really want"]');
+    mail.selectMail('Where is the money Lebowski?');
     I.waitForVisible('.notifications');
 
     // 5. Set the task status alternating to 'Accepted', 'Tentative' and 'Declined'
@@ -86,18 +70,17 @@ Scenario('[C125311] Change confimation status as participant', async function (I
     let actions = ['Tentative', 'Decline', 'Accept'];
 
     actions.forEach(function (action) {
-
         I.click('~More actions', '.io-ox-sidepopup');
-        I.waitForVisible('.smart-dropdown-container');
-        I.click('Change confirmation status');
+        I.waitForVisible('.dropdown.open');
+        I.click('Change confirmation status', '.dropdown.open .dropdown-menu');
         I.waitForText('Change confirmation status');
         I.click(action);
-        // wait until sidepopup got updated
-        I.wait(1);
+        I.waitForDetached('.participant-list');
+        I.waitForElement('.participant-list');
 
-        if (action === 'Tentative') I.waitForVisible('.fa-question-circle');
-        if (action === 'Decline') I.waitForVisible('.fa-times');
-        if (action === 'Accept') I.waitForVisible('.fa-check');
+        if (action === 'Tentative') I.waitForElement('.status.tentative');
+        if (action === 'Decline') I.waitForElement('.status .fa-times');
+        if (action === 'Accept') I.waitForElement('.status .fa-check');
 
     });
 });

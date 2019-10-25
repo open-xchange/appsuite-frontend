@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7737] Create Task from email', async (I, users) => {
+Scenario('[C7737] Create Task from email', async (I, users, mail) => {
 
     // Precondition: Have an email from an other user in the inbox.
 
@@ -41,35 +41,19 @@ Scenario('[C7737] Create Task from email', async (I, users) => {
     // 1. Switch to Mail
 
     I.login('app=io.ox/mail');
-    I.waitForVisible('[data-ref="io.ox/mail/listview"]');
-
-    let mailCount = await I.grabNumberOfVisibleElements('.list-item');
-    let retries = 6;
-
-    while (mailCount < 1) {
-        if (retries > 0) {
-            I.waitForElement('#io-ox-refresh-icon', 5, '.taskbar');
-            I.click('#io-ox-refresh-icon', '.taskbar');
-            I.waitForElement('.launcher .fa-spin-paused', 5);
-            I.wait(60);
-            console.log('No mail(s) found. Waiting 1 minute ...');
-            mailCount = await I.grabNumberOfVisibleElements('.list-item');
-            retries--;
-        } else {
-            console.log('Timeout exceeded. No mails found.');
-            break;
-        }
-    }
+    mail.waitForApp();
+    I.triggerRefresh();
 
     // 2. Mark an email from an other user andclick "more" "Reminder"
+    mail.selectMail('Deutscher Meister 1.FC Köln');
+    I.waitForFocus('.list-item.selected');
 
-    I.click('.list-item[aria-label*="Deutscher Meister 1.FC Köln"]');
-    I.waitForVisible('~More actions');
+    I.waitForVisible('~More actions', 5, '.mail-detail-pane');
 
-    I.click('~More actions');
-    I.waitForVisible('.smart-dropdown-container');
+    I.click('~More actions', '.mail-detail-pane');
+    I.waitForElement('.dropdown.open');
 
-    I.click('Reminder', '.smart-dropdown-container');
+    I.click('Reminder', '.dropdown.open .dropdown-menu');
     I.waitForText('Remind me');
 
     // 3. Enter a Subject, a note and set the Reminder to "in 5 minutes", click "Create reminder"
