@@ -28,7 +28,7 @@ Scenario('[7772] Contact collection when sending mail', async (I) => {
 
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mail');
     I.waitForVisible('.io-ox-mail-settings');
-    I.click('Automatically collect contacts in the folder "Collected addresses" while sending');
+    I.checkOption('Automatically collect contacts in the folder "Collected addresses" while sending');
 
     I.openApp('Mail');
     I.waitForText('Compose', '.classic-toolbar');

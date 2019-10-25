@@ -33,14 +33,14 @@ Scenario('[C208269] Edit users contact information', async (I) => {
         I.click(field);
         I.waitForText(field, undefined, '.contact-edit');
         if (input) I.pressKey(input);
-        I.wait(0.5);
+        I.pressKey('Enter');
     }
 
     var lastname = `C208269-${Math.round(+new Date() / 1000)}`;
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     // wait for form (the button we're interesting in has no meta data)
-    I.waitForElement('select[name="language"]');
+    I.waitForElement({ css: 'select[name="language"]' });
     I.click('My contact data ...');
     // floating window opens
     I.waitForElement('.contact-edit');
@@ -70,7 +70,7 @@ Scenario('[C208269] Edit users contact information', async (I) => {
 
     // communication
     I.fillField('Cell phone', 'cell phone');
-    var prop = await I.grabAttributeFrom('input[name="email1"]', 'readonly');
+    var prop = await I.grabAttributeFrom({ css: 'input[name="email1"]' }, 'readonly');
     expect(prop.toString()).to.contain('true');
     addContactsField('communication', 'Email 2', 'email2@test');
     addContactsField('communication', 'Email 3', 'email3@test');
@@ -121,9 +121,9 @@ Scenario('[C208269] Edit users contact information', async (I) => {
     I.click('Apply');
     I.waitForDetached('.modal-dialog');
     // takes an unknown moment until the image appears
-    I.wait(1);
+    I.waitForVisible('.contact-photo-upload .contact-photo', 1);
     let [rule] = await I.grabCssPropertyFrom('.contact-photo-upload .contact-photo', 'background-image');
-    I.wait(5);
+    // I.wait(5);
     expect(rule).to.match(/^url\("data:image\/jpeg;base64/);
 
     I.click('Save', '.io-ox-contacts-edit-window');
@@ -148,7 +148,7 @@ Scenario('[C208269] Edit users contact information', async (I) => {
 
     // check picture
     I.waitForElement(locate('.contact-detail h1 .last_name').withText(lastname).as('Detail view heading'));
-    I.wait(1);
+    I.waitForVisible('.contact-photo', 1);
     [rule] = await I.grabCssPropertyFrom('.contact-photo', 'background-image');
     expect(rule).not.to.match(/fallback/);
     expect(rule).to.match(/^url\(/);
@@ -157,52 +157,52 @@ Scenario('[C208269] Edit users contact information', async (I) => {
     expect(rule).to.match(/^url\(/);
 
     // personal information
-    I.see('Sir');
-    I.see('Richard');
-    I.see(lastname);
-    I.see('Holger');
-    I.see('Pro');
-    I.see('5/4/1957');
-    I.see('http://my.homepage.com');
+    I.see('Sir', '.contact-detail.view');
+    I.see('Richard', '.contact-detail.view');
+    I.see(lastname, '.contact-detail.view');
+    I.see('Holger', '.contact-detail.view');
+    I.see('Pro', '.contact-detail.view');
+    I.see('5/4/1957', '.contact-detail.view');
+    I.see('http://my.homepage.com', '.contact-detail.view');
     // job description
-    I.see('Developer');
-    I.see('Senior Developer');
-    I.see('Frontend');
-    I.see('Open-Xchange');
-    I.see('101');
+    I.see('Developer', '.contact-detail.view');
+    I.see('Senior Developer', '.contact-detail.view');
+    I.see('Frontend', '.contact-detail.view');
+    I.see('Open-Xchange', '.contact-detail.view');
+    I.see('101', '.contact-detail.view');
     // mail and messaging
-    I.see('email2@test');
-    I.see('email3@test');
-    I.see('instantmessenger1');
-    I.see('instantmessenger2');
+    I.see('email2@test', '.contact-detail.view');
+    I.see('email3@test', '.contact-detail.view');
+    I.see('instantmessenger1', '.contact-detail.view');
+    I.see('instantmessenger2', '.contact-detail.view');
     // phone numbers
-    I.see('cell phone');
-    I.see('cell phone alt');
-    I.see('phone business');
-    I.see('phone business alt');
-    I.see('phone home');
-    I.see('phone home alt');
-    I.see('phone other');
-    I.see('fax');
-    I.see('fax home');
+    I.see('cell phone', '.contact-detail.view');
+    I.see('cell phone alt', '.contact-detail.view');
+    I.see('phone business', '.contact-detail.view');
+    I.see('phone business alt', '.contact-detail.view');
+    I.see('phone home', '.contact-detail.view');
+    I.see('phone home alt', '.contact-detail.view');
+    I.see('phone other', '.contact-detail.view');
+    I.see('fax', '.contact-detail.view');
+    I.see('fax home', '.contact-detail.view');
     // business address
-    I.see('Business Street');
-    I.see('Business City');
-    I.see('Business State');
-    I.see('12345');
-    I.see('Business County');
+    I.see('Business Street', '.contact-detail.view');
+    I.see('Business City', '.contact-detail.view');
+    I.see('Business State', '.contact-detail.view');
+    I.see('12345', '.contact-detail.view');
+    I.see('Business County', '.contact-detail.view');
     // home address
-    I.see('Home Street');
-    I.see('Home City');
-    I.see('Home State');
-    I.see('23456');
-    I.see('Home County');
+    I.see('Home Street', '.contact-detail.view');
+    I.see('Home City', '.contact-detail.view');
+    I.see('Home State', '.contact-detail.view');
+    I.see('23456', '.contact-detail.view');
+    I.see('Home County', '.contact-detail.view');
     // other address
-    I.see('Other Street');
-    I.see('Other City');
-    I.see('Other State');
-    I.see('34567');
-    I.see('Other County');
+    I.see('Other Street', '.contact-detail.view');
+    I.see('Other City', '.contact-detail.view');
+    I.see('Other State', '.contact-detail.view');
+    I.see('34567', '.contact-detail.view');
+    I.see('Other County', '.contact-detail.view');
     // comment
-    I.see('a comment in the comment field');
+    I.see('a comment in the comment field', '.contact-detail.view');
 });
