@@ -109,7 +109,4 @@ Scenario('check auto select behavior in list view', async (I, users) => {
     I.click('Vertical');
     I.waitForText('Second mail!', 5, '.subject');
     I.waitForElement('.list-item.selected [title="Second mail!"]');
-
-    I.logout();
-
 });

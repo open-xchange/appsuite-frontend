@@ -106,8 +106,6 @@ Scenario('[C7407] Move mail from inbox to a sub-folder', async function (I, user
 
     A.isEmpty(I, 'Inbox');
     A.check(I, subject, folder);
-
-    I.logout();
 });
 
 Scenario('[C7408] Move several mails from inbox to a sub-folder', async function (I, users) {
@@ -130,8 +128,6 @@ Scenario('[C7408] Move several mails from inbox to a sub-folder', async function
 
     A.isEmpty(I, 'Inbox');
     A.check(I, subjects, folder);
-
-    I.logout();
 });
 
 Scenario('[C7409] Copy mail from inbox to a sub-folder', async function (I, users) {
@@ -153,8 +149,6 @@ Scenario('[C7409] Copy mail from inbox to a sub-folder', async function (I, user
 
     A.check(I, subject, 'Inbox');
     A.check(I, subject, folder);
-
-    I.logout();
 });
 
 Scenario('[C7410] Copy several mails from inbox to a sub-folder', async function (I, users) {
@@ -177,8 +171,6 @@ Scenario('[C7410] Copy several mails from inbox to a sub-folder', async function
 
     A.check(I, subjects, 'Inbox');
     A.check(I, subjects, folder);
-
-    I.logout();
 });
 
 Scenario('[C114349] Create folder within move dialog', async function (I, users) {
@@ -199,8 +191,6 @@ Scenario('[C114349] Create folder within move dialog', async function (I, users)
 
     A.isEmpty(I, 'Inbox');
     A.check(I, folder, subject);
-
-    I.logout();
 });
 
 Scenario('[C114349] Create folder within copy dialog', async function (I, users) {
@@ -221,6 +211,4 @@ Scenario('[C114349] Create folder within copy dialog', async function (I, users)
 
     A.check(I, folder, 'Inbox');
     A.check(I, folder, subject);
-
-    I.logout();
 });

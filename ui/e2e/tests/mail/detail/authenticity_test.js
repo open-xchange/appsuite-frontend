@@ -56,5 +56,4 @@ Scenario.skip('Authenticity', async (I) => {
         I.wait(1);
     });
 
-    I.logout();
 });

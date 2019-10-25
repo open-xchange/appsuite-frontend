@@ -51,8 +51,6 @@ Scenario('checks if an auto forward rule is correctly listet after a status upda
     I.selectFolder('Filter Rules');
     I.waitForElement('.io-ox-settings-window .io-ox-mailfilter-settings');
     I.waitForElement('.io-ox-mailfilter-settings .settings-list-item.disabled');
-
-    I.logout();
 });
 
 Scenario('checks if an avacation notice rule is correctly listet after a status update', function (I, users) {
@@ -87,6 +85,4 @@ Scenario('checks if an avacation notice rule is correctly listet after a status 
     I.selectFolder('Filter Rules');
     I.waitForElement('.io-ox-settings-window .io-ox-mailfilter-settings');
     I.waitForElement('.io-ox-mailfilter-settings .settings-list-item.disabled');
-
-    I.logout();
 });

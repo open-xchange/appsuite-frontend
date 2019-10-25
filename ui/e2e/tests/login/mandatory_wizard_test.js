@@ -50,5 +50,4 @@ Scenario('[C7341] Use first run mandatory wizard', async function (I, users) {
     I.waitForText('My contact data');
     I.seeInField('first_name', first_name);
     I.seeInField('last_name', last_name);
-    I.logout();
 });

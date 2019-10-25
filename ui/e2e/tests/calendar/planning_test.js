@@ -58,8 +58,6 @@ Scenario('use planning view opened from edit view', async function (I) {
     I.waitForValue({ css: '[data-attribute="endDate"] .time-field' }, '1:00 PM');
 
     I.click('Create');
-
-    I.logout();
 });
 
 Scenario('use planning view as Standalone app', async function (I) {
@@ -99,8 +97,6 @@ Scenario('use planning view as Standalone app', async function (I) {
     I.see('testdude1');
 
     I.click('Create');
-
-    I.logout();
 });
 
 Scenario('test planning view lasso', async function (I) {
@@ -133,8 +129,6 @@ Scenario('test planning view lasso', async function (I) {
     I.waitForValue({ css: '[data-attribute="endDate"] .time-field' }, '2:30 PM');
 
     I.click('Create');
-
-    I.logout();
 });
 
 Scenario('create distributionlist from planning view', async function (I) {
@@ -160,8 +154,6 @@ Scenario('create distributionlist from planning view', async function (I) {
     I.click('Create list', '.io-ox-contacts-distrib-window');
 
     I.click('.scheduling-app-close');
-
-    I.logout();
 });
 
 Scenario('check planning view options and minimizing behavior', async function (I) {
@@ -202,8 +194,6 @@ Scenario('check planning view options and minimizing behavior', async function (
     I.waitForVisible('.freetime-view-body');
 
     I.click('.scheduling-app-close');
-
-    I.logout();
 });
 
 var addAttendee = function (I, name, context) {

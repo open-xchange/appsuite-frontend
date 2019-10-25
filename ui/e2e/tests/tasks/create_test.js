@@ -91,6 +91,4 @@ Scenario('create complete task', async function (I) {
 
     I.see('External participants');
     I.see('testdude1 <testdude1@test.test>');
-
-    I.logout();
 });

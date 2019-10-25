@@ -44,6 +44,4 @@ Scenario('[C110279] Primary mail account name can be changed', async function (I
     I.waitForVisible('.tree-container');
     I.waitForText(name);
     I.seeTextEquals(name, '[data-id= "virtual/myfolders"] > .folder-node .folder-label');
-
-    I.logout();
 });

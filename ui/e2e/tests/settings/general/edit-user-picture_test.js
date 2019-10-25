@@ -42,8 +42,6 @@ Scenario('User start with no picture', async function (I, users) {
     W.EditPicture('check:empty-state');
     W.EditPicture('cancel');
     W.myContactData('discard');
-
-    I.logout();
 });
 
 Scenario('User can upload and remove a picture', async function (I, users) {
@@ -86,8 +84,6 @@ Scenario('User can upload and remove a picture', async function (I, users) {
     W.EditPicture('check:empty-state');
     W.EditPicture('cancel');
     W.myContactData('discard');
-
-    I.logout();
 });
 
 Scenario('User can rotate her/his picture', async function (I, users) {
@@ -118,6 +114,4 @@ Scenario('User can rotate her/his picture', async function (I, users) {
     //picture-uploader
     W.myContactData('discard');
     W.myContactData('discard-confirm');
-
-    I.logout();
 });

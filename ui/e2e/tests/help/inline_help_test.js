@@ -35,8 +35,6 @@ Scenario('Open the help app in a floating window', async function (I) {
 
     I.click('~Close', '.io-ox-help-window');
     I.waitForDetached('.io-io-help-window', 5);
-
-    I.logout();
 });
 
 Scenario('Open the help app in a modal', async function (I) {
@@ -61,8 +59,6 @@ Scenario('Open the help app in a modal', async function (I) {
 
     I.click('Cancel', '.modal.addressbook-popup');
     I.waitForDetached('.modal.addressbook-popup', 5);
-
-    I.logout();
 });
 
 Scenario('Check help window for supposed language', async function (I) {
@@ -109,9 +105,4 @@ Scenario('Check help window for supposed language', async function (I) {
         //close help window
         I.click(languages[id][3], '.io-ox-help-window');
     }
-
-    I.logout();
-
 });
-
-

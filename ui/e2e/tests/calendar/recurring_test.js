@@ -281,7 +281,4 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     I.seeNumberOfElements('.list-view .appointment .tentative', 1);
     I.seeNumberOfElements('.list-view .appointment .declined', 2);
-
-    I.logout();
-
 });

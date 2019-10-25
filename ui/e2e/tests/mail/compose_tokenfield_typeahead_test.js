@@ -54,8 +54,6 @@ Scenario('Add without typeahead', async (I) => {
         I.pressKey(['Command', 'a']);
         I.pressKey('Backspace');
     }
-
-    I.logout();
 });
 
 Scenario('Add typeahed suggestion via autoselect', async (I, users) => {
@@ -138,8 +136,6 @@ Scenario('Add typeahed suggestion via autoselect', async (I, users) => {
 //         I.pressKey(['Command', 'a']);
 //         I.pressKey('Backspace');
 //     }
-
-//     I.logout();
 // });
 
 Scenario('Add typeahead suggestion via keyboard', async (I, users) => {

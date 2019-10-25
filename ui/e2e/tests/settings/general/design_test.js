@@ -50,5 +50,4 @@ Scenario('[C244801] Set design @shaky', async (I) => {
     else if (h >= 9) design = 'dawn';
     else if (h >= 6) design = 'twilight';
     I.waitForElement('html.design-' + design);
-    I.logout();
 });

@@ -227,9 +227,6 @@ Scenario.skip('[C85632] Move mails to another category', async function (I, user
 
     // TODO: add missing steps that involves drag and drop
     await I.dragAndDrop(item, target);
-    I.wait(2);
-
-    I.logout();
 });
 
 function reply(I, user) {
@@ -284,6 +281,4 @@ Scenario.skip('[C96951] Conversations', async function (I, users) {
     I.say('Check Thread in "promotion"', 'blue');
     I.click({ css: '[data-id="promotion"]' }, SELECTORS.toolbar);
     I.see('6', '.list-view .thread-size');
-
-    I.logout();
 });

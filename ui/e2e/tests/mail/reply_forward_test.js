@@ -112,7 +112,6 @@ Scenario('[C7402] Mark one single mail as read or unread', async (I, users) => {
     I.dontSeeElement('article.mail-item.unread'); // Detail View
     I.dontSeeElement(locate('.seen-unseen-indicator').inside(
         locate('.list-item').withText('Hail Eris'))); // List
-    I.logout();
 });
 
 Scenario('[C8818] Reply all', async (I, users) => {
@@ -151,13 +150,11 @@ Scenario('[C8818] Reply all', async (I, users) => {
     I.click('Send');
     I.waitForInvisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.logout();
     // Verify the mail arrived at the other accounts
     [sender, cc].forEach(function (current_user) {
+        I.logout();
         I.login('app=io.ox/mail', { user: current_user });
         I.waitForText('Re: Hail Eris', 5);
-        I.logout();
     });
-
 
 });

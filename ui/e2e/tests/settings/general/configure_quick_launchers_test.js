@@ -67,5 +67,4 @@ Scenario('[C287803] Configure quick launchers', function (I) {
     I.seeElement('~Address Book', '#io-ox-quicklaunch');
     I.seeElement('~Tasks', '#io-ox-quicklaunch');
     I.seeElement('~Portal', '#io-ox-quicklaunch');
-    I.logout();
 });

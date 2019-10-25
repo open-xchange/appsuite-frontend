@@ -46,8 +46,8 @@ Scenario('[C7405] - Delete E-Mail', function (I, users) {
     I.retry(5).dontSee(testrailID + ' - ' + timestamp);
     I.selectFolder('Trash');
     I.retry(5).see(testrailID + ' - ' + timestamp);
-    I.logout();
 });
+
 Scenario('[C7406] - Delete several E-Mails', async function (I, users) {
     const [user] = users,
         testrailID = 'C7406',

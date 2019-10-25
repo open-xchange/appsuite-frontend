@@ -66,6 +66,4 @@ Scenario('check actions', async function (I) {
     I.click('Delete', '.modal-footer');
     I.waitForVisible('.summary.empty');
     I.waitForDetached('.modal-backdrop.in');
-
-    I.logout();
 });

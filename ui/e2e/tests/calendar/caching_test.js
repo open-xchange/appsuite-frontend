@@ -114,7 +114,4 @@ Scenario('Create never ending appointment and check display in several views @sh
 
     I.waitForText('test caching', undefined, '.monthview-container .appointment .title');
     I.seeNumberOfElements('.monthview-container .day:not(.out) .appointment .title', moment().add(2, 'months').daysInMonth());
-
-    I.logout();
-
 });

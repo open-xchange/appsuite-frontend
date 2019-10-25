@@ -30,7 +30,6 @@ Scenario('[C7343] Launch "Portal" application', async function (I) {
     I.waitForElement('.launcher-dropdown');
     I.click('Portal');
     I.waitForElement('.greeting-phrase');
-    I.logout();
 });
 
 Scenario('[C7344] Launch "E-Mail" application', async function (I) {

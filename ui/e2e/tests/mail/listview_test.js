@@ -171,6 +171,4 @@ Scenario('remove mail from thread @shaky', async (I, users) => {
     I.seeNumberOfVisibleElements('.list-view .selectable', 2);
     I.clickToolbar('~Delete');
     I.seeNumberOfVisibleElements('.list-view .selectable', 1);
-
-    I.logout();
 });

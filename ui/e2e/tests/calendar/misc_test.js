@@ -38,7 +38,6 @@ Scenario('[C274425] Month label in Calendar week view', async function (I, users
     expect(await I.grabTextFrom('.weekview-container .header .info')).to.equal('April - May 2019 CW 18');
     I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-01-01"))');
     expect(await I.grabTextFrom('.weekview-container .header .info')).to.equal('December 2019 - January 2020 CW 1');
-    I.logout();
 });
 
 Scenario('[C207509] Year view', async (I) => {

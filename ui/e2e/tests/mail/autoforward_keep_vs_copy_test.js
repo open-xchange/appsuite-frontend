@@ -47,7 +47,6 @@ Scenario('checks if an auto forward rule with copy statement is handled correctl
 
     I.click('Cancel', '.modal-dialog');
     I.waitForInvisible('.modal-dialog');
-    I.logout();
 });
 
 Scenario('checks if an auto forward rule with keep statement is handled correctly', function (I) {
@@ -78,7 +77,6 @@ Scenario('checks if an auto forward rule with keep statement is handled correctl
 
     I.click('Cancel', '.modal-dialog');
     I.waitForInvisible('.modal-dialog');
-    I.logout();
 });
 
 Scenario('checks if an auto forward rule with keep statement is written correctly', function (I, users) {
@@ -113,8 +111,6 @@ Scenario('checks if an auto forward rule with keep statement is written correctl
     I.seeCheckboxIsChecked('Keep a copy of the message');
     I.click('Cancel', '.modal-dialog');
     I.waitForInvisible('.modal-dialog');
-
-    I.logout();
 });
 
 Scenario('checks if an auto forward rule with copy statement is written correctly', function (I) {
@@ -146,6 +142,4 @@ Scenario('checks if an auto forward rule with copy statement is written correctl
     I.seeCheckboxIsChecked('Keep a copy of the message');
     I.click('Cancel', '.modal-dialog');
     I.waitForInvisible('.modal-dialog');
-
-    I.logout();
 });

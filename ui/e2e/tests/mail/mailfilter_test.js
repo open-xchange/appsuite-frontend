@@ -280,8 +280,6 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.click('.modal-dialog button[data-action="delete"]');
 
     I.waitForVisible('.settings-detail-pane .hint');
-
-    I.logout();
 });
 
 Scenario('adds and removes Mail Filter Rules with modified config', function (I, users) {
@@ -408,8 +406,6 @@ Scenario('adds and removes Mail Filter Rules with modified config', function (I,
     I.seeElement('li[data-test-id="1"] input[name="values"]:disabled');
 
     I.click('Cancel');
-
-    I.logout();
 });
 
 Scenario('checks if the size test is correctly displayed', function (I) {
@@ -489,6 +485,4 @@ Scenario('checks if the size test is correctly displayed', function (I) {
 
     I.click('Cancel', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
     I.waitForDetached('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
-
-    I.logout();
 });

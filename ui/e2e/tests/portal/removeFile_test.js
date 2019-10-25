@@ -54,6 +54,4 @@ Scenario('[C7486] Remove a file', async (I, users) => {
     I.click('Customize this page');
     I.waitForText('Portal settings');
     I.dontSee('testdocument.odt');
-
-    I.logout();
 });

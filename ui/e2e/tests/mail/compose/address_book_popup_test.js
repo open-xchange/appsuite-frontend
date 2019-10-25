@@ -79,11 +79,10 @@ Scenario('[C85622] Address Book Popup', async (I, users) => {
     I.click('Send');
     I.waitForInvisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.logout();
     // Verify the mail arrived at the other accounts
     [users[1], users[2], users[3]].forEach(function (current_user) {
+        I.logout();
         I.login('app=io.ox/mail', { user: current_user });
         I.waitForText('Hail Eris! All Hail Discordia!', 5);
-        I.logout();
     });
 });

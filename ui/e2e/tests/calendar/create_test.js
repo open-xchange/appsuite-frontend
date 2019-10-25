@@ -103,9 +103,6 @@ Scenario('Create appointment with all fields', async function (I) {
     I.waitForVisible('.modal-dialog .modal-footer');
     I.click('Delete', '.modal-dialog .modal-footer');
     I.waitForDetached(appointment);
-
-    I.logout();
-
 });
 
 Scenario('fullday appointments', async function (I) {
@@ -139,8 +136,6 @@ Scenario('fullday appointments', async function (I) {
     I.click('Delete', '.io-ox-sidepopup .calendar-detail');
     I.waitForText('Delete');
     I.click('Delete', '.modal-dialog .modal-footer');
-
-    I.logout();
 });
 
 //See Bug 64409
@@ -157,7 +152,6 @@ Scenario('Enter start time and press enter key', function (I) {
     I.pressKey('Enter');
 
     I.waitForValue('~Start time', '9:52 AM');
-    I.logout();
 });
 
 var addAttendee = function (I, name, context) {
@@ -968,7 +962,6 @@ Scenario('[C274516] Follow up should also propose a future date for appointments
     I.click(appointmentSelector, '.appointment-panel');
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
     expect(await I.grabTextFrom('.io-ox-sidepopup-pane .date-time')).to.equal(moment().add(2, 'week').format('ddd') + ', ' + moment().add(2, 'week').format('M/D/YYYY') + '   Whole day');
-    I.logout();
 });
 
 Scenario('[C274515] Attendees are not allowed to change their own permission status', async function (I, users) {
@@ -1013,7 +1006,6 @@ Scenario('[C274515] Attendees are not allowed to change their own permission sta
     I.waitForElement('.io-ox-calendar-edit.container');
     I.waitForVisible('.io-ox-calendar-edit.container');
     I.waitForElement('.disabled.attendee-change-checkbox', 5);
-    I.logout();
 });
 
 Scenario('[C274484] Attendees can change the appointment', async function (I, users) {
@@ -1328,8 +1320,6 @@ Scenario('[C256455] Create all-day appointment via date label', async function (
     I.wait(1);
 
     await createOnfirstDay();
-
-    I.logout();
 });
 
 Scenario('[C7436] Create appointment without any infos', async function (I) {
@@ -1983,6 +1973,4 @@ Scenario('Prevent XSS in folder dropdown', async function (I) {
     I.openApp('Calendar');
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
-
-    I.logout();
 });

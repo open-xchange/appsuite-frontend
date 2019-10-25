@@ -114,5 +114,4 @@ Scenario('[C125003] Disable user feedback dialog', async function (I) {
     I.waitForText('No message selected');
     I.wait(1);
     I.dontSee('Feedback');
-    I.logout();
 });

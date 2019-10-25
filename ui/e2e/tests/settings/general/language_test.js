@@ -52,5 +52,4 @@ Scenario('[C7757] Set langugae', (I) => {
     // last time
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     I.waitForText(previous);
-    I.logout();
 });

@@ -68,6 +68,4 @@ Scenario('[C7862] Configure display name representation', async (I) => {
     I.waitForElement('.contact-grid-container');
     I.waitForText('Bar, Foo');
     I.click('Bar, Foo', '.fullname');
-
-    I.logout();
 });

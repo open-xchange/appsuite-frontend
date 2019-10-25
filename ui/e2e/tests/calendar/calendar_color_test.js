@@ -100,9 +100,6 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     I.click('Delete', '.modal-dialog');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-dialog-sidepopup');
-
-    I.logout();
-
 });
 
 Scenario('Changing calendar color should change appointment color that uses calendar color', async function (I, users) {
@@ -167,7 +164,4 @@ Scenario('Changing calendar color should change appointment color that uses cale
     expect(folderColor, 'folderColor equals darkGreen').equal(darkGreen);
     expect(appointmentOneColor, 'appointment one color equals darkRed').equal(darkRed);
     expect(appointmentTwoColor, 'appointment two color equals darkGreen').equal(darkGreen);
-
-    I.logout();
-
 });

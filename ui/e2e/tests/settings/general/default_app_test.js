@@ -43,5 +43,4 @@ Scenario('[C7761] Define default app after login', async (I) => {
     I.login();
     I.waitForInvisible('#background-loader');
     I.dontSeeElement('.window-container');
-    I.logout();
 });

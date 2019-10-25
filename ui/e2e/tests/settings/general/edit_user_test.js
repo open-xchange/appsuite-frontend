@@ -205,6 +205,4 @@ Scenario('[C208269] Edit users contact information @shaky', async (I) => {
     I.see('Other County');
     // comment
     I.see('a comment in the comment field');
-
-    I.logout();
 });

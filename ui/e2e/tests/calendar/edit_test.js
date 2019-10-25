@@ -209,8 +209,6 @@ Scenario('[C7464] Change appointment in shared folder as guest', async function 
     I.doubleClick('.appointment');
     I.wait(1);
     I.dontSeeElement('.io-ox-calendar-edit-window');
-
-    I.logout();
 });
 
 Scenario('[C7465] Edit appointment in shared folder as author', async function (I, users) {
@@ -284,8 +282,6 @@ Scenario('[C7465] Edit appointment in shared folder as author', async function (
         I.see('Changedlocation');
         I.see('Changeddescription');
     });
-
-    I.logout();
 });
 
 Scenario('[C234659] Split appointment series', async function (I, users) {
@@ -495,9 +491,6 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
     I.waitForDetached('.io-ox-sidepopup');
 
     I.waitForInvisible('.appointment');
-
-    I.logout();
-
 });
 
 Scenario('[C7470] Delete a recurring appointment', async function (I) {
@@ -544,9 +537,6 @@ Scenario('[C7470] Delete a recurring appointment', async function (I) {
         I.click(view);
         I.dontSee('.appointment', '.page.current');
     });
-
-    I.logout();
-
 });
 
 Scenario('[C274402] Change organizer of appointment with internal attendees', async function (I, users) {
@@ -1005,7 +995,6 @@ Scenario('[C7462] Remove a participant', async function (I, users) {
     I.waitForElement({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
     I.waitForText('Participants');
     I.dontSeeElement('.io-ox-sidepopup-pane a[title="' + users[1].userdata.primaryEmail + '"]');
-    I.logout();
 });
 
 Scenario('[C7461] Add a participant/ressource @shaky', async function (I, users) {

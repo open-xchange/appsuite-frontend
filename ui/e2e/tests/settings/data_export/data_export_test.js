@@ -79,8 +79,6 @@ Scenario('request a new download and cancel it', async function (I) {
         I.dontSeeElement('input:disabled');
         I.dontSeeElement('input:disabled');
     });
-
-    I.logout();
 });
 
 Scenario('open direct link to data export settings page', async function (I) {
@@ -94,8 +92,6 @@ Scenario('open direct link to data export settings page', async function (I) {
 
     // detail view
     I.waitForText('Download your personal data', 5);
-
-    I.logout();
 });
 
 Scenario('show only available options', async function (I, users) {
@@ -112,6 +108,4 @@ Scenario('show only available options', async function (I, users) {
     I.dontSee('Tasks', '.io-ox-personal-data-settings label');
 
     // sub options cannot be tested with capabilities alone, options must be removed in config
-
-    I.logout();
 });

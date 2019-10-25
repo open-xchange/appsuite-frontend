@@ -162,7 +162,4 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.waitForElement('.rightside .participant a.declined[title="' + users[2].userdata.primaryEmail + '"]');
     // accept tentative
     I.waitForElement('.rightside .participant a.tentative[title="' + users[3].userdata.primaryEmail + '"]');
-
-    I.logout();
-
 });

@@ -48,8 +48,6 @@ Scenario('[C85624] Configure postal addresses map service @shaky', async (I) =>{
     await verifyMapType(I, 'Open Street Map', 'openstreetmap.org', 'osm');
     I.say('No link');
     await verifyMapType(I, 'No link', '', 'none');
-
-    I.logout();
 });
 
 async function verifyMapType(I, mapName, link, value) {

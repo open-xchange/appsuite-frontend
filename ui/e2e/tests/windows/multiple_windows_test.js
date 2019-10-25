@@ -61,6 +61,4 @@ Scenario('Opening multiple windows', async function (I, users) {
     I.waitForInvisible('.window-blocker.io-ox-busy');
 
     I.click('Discard');
-
-    I.logout();
 });

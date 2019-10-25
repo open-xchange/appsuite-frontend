@@ -42,7 +42,6 @@ Scenario('[C7730] Create a private Task with participant', async function (I, us
     I.click('Create');
     I.waitForElement('div .message[role="alert"]', 5);
     I.see('Tasks with private flag cannot be delegated.');
-    I.logout();
 });
 
 Scenario('[C7728] Create simple Task', async function (I) {
@@ -66,8 +65,6 @@ Scenario('[C7728] Create simple Task', async function (I) {
     I.dontSeeElement({ css: '[title="High priority"]' });
     I.dontSeeElement({ css: '[title="Low priority"]' });
     I.see('Not started');
-
-    I.logout();
 });
 
 Scenario('[C7732] Create a Task in a shared folder without rights', async function (I, users) {
@@ -170,8 +167,6 @@ Scenario('[C7727] Create task with all fields', async function (I) {
 
     I.see('External participants');
     I.see('testdude1 <testdude1@test.test>');
-
-    I.logout();
 });
 
 Scenario('[C7729] Create Task with participants', async function (I, users) {
@@ -227,7 +222,6 @@ Scenario('[C7734] Create Task without any information', async function (I) {
     I.clickToolbar('New task');
     I.waitForVisible('.io-ox-tasks-edit-window');
     I.seeElement('.floating-window-content .btn-primary[disabled=""][data-action="save"]');
-    I.logout();
 });
 
 Scenario('[C7733] Set Task startdate behind due date', async function (I) {
@@ -255,7 +249,6 @@ Scenario('[C7733] Set Task startdate behind due date', async function (I) {
     I.retry(5).seeTextEquals('The dialog contains invalid data', '[role="alert"] div');
     I.retry(5).seeTextEquals('The start date must be before the due date.', '[data-attribute="start_time"] div.error');
     I.retry(5).seeTextEquals('The due date must not be before the start date.', '[data-attribute="end_time"] div.error');
-    I.logout();
 });
 
 Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
