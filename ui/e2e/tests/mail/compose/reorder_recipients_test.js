@@ -26,103 +26,68 @@ After(async (users) => {
     await users.removeAll();
 });
 
-function prepare(I) {
-    // Open the mail composer
-    I.retry(5).click('Compose');
-    I.waitForVisible('.io-ox-mail-compose .contenteditable-editor');
-    I.waitForFocus('input[placeholder="To"]');
-    I.click('~Maximize');
-    // Fill out to and subject
-    I.click('CC');
-    I.click('BCC');
-}
-
-function getDisplayName(user) {
-    return `${user.get('given_name')} ${user.get('sur_name')}`;
-}
-
-function getTokenSelector(I, user) {
-    return `~${getDisplayName(user)} ${user.get('primaryEmail')}. Press backspace to delete.`;
-}
-
-function addToField(I, user, field) {
-    if (field === 'to') field = 'To';
-    if (field === 'cc') field = 'CC';
-    if (field === 'bcc') field = 'BCC';
-    I.fillField(field, user.get('primaryEmail'));
-    I.waitForVisible('.tt-dropdown-menu');
-    I.pressKey('Enter');
-    seeToken(I, user, field.toLowerCase());
-}
-
-function seeToken(I, user, field) {
-    I.see(getDisplayName(user), field ? { css: `[data-extension-id="${field}"] .token-label` } : '.token-label');
-}
-
-function seeTokenAtPosition(I, user, field, position) {
-    I.see(getDisplayName(user), field ? { css: `[data-extension-id="${field}"] .token:nth-of-type(${position}) .token-label` } : '.token-label');
-}
-
-function moveTo(I, user, target) {
-    I.dragAndDrop(getTokenSelector(I, user), { css: `[data-extension-id="${target}"] .token-input` });
-    seeToken(I, user, target);
-}
-
-function moveBefore(I, user1, user2) {
-    I.dragAndDrop(getTokenSelector(I, user1), getTokenSelector(I, user2));
-    seeToken(I, user1);
-    seeToken(I, user2);
-}
-
-Scenario('[C8832] Re-order recipients', async function (I, users) {
+Scenario('[C8832] Re-order recipients', async function (I, users, mail) {
 
     let [sender, recipient1, recipient2, recipient3, recipient4] = users;
 
     const mailSubject = 'C8832 Move recipients between between field';
+    const tokenLabelFor = user => `${user.get('given_name')} ${user.get('sur_name')}`;
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
 
     I.login('app=io.ox/mail', { user: sender });
-
-    prepare(I);
+    mail.newMail();
+    I.click('~Maximize');
+    I.click('CC');
+    I.click('BCC');
 
     I.fillField('Subject', mailSubject);
 
     // add a recipient for all fields
-    addToField(I, recipient1, 'to');
-    addToField(I, recipient2, 'cc');
-    addToField(I, recipient3, 'bcc');
+    I.fillField('To', recipient1.get('primaryEmail'));
+    I.waitForVisible('.tt-dropdown-menu');
+    I.pressKey('Enter');
+    I.see(tokenLabelFor(recipient1), { css: '[data-extension-id="to"] .token' });
+    I.fillField('CC', recipient2.get('primaryEmail'));
+    I.waitForVisible('.tt-dropdown-menu');
+    I.pressKey('Enter');
+    I.see(tokenLabelFor(recipient2), { css: '[data-extension-id="cc"] .token' });
+    I.fillField('BCC', recipient3.get('primaryEmail'));
+    I.waitForVisible('.tt-dropdown-menu');
+    I.pressKey('Enter');
+    I.see(tokenLabelFor(recipient3), { css: '[data-extension-id="bcc"] .token' });
 
     // move around
-    addToField(I, recipient4, 'bcc');
-    seeTokenAtPosition(I, recipient4, 'bcc', 2);
-    moveTo(I, recipient4, 'cc');
-    seeTokenAtPosition(I, recipient4, 'cc', 2);
-    moveTo(I, recipient4, 'bcc');
-    seeTokenAtPosition(I, recipient4, 'bcc', 2);
-    moveTo(I, recipient4, 'to');
-    seeTokenAtPosition(I, recipient4, 'to', 2);
+    I.fillField('BCC', recipient4.get('primaryEmail'));
+    I.waitForVisible('.tt-dropdown-menu');
+    I.pressKey('Enter');
+    I.see(tokenLabelFor(recipient4), { css: '[data-extension-id="bcc"] .token:nth-of-type(2)' });
+    I.dragAndDrop({ css: '[data-extension-id="bcc"] .token:nth-of-type(2)' }, { css: '[data-extension-id="cc"] .token-input' });
+    I.dontSeeElement({ css: '[data-extension-id="bcc"] .token:nth-of-type(2)' });
+    I.see(tokenLabelFor(recipient4), { css: '[data-extension-id="cc"] .token:nth-of-type(2)' });
+    I.dragAndDrop({ css: '[data-extension-id="cc"] .token:nth-of-type(2)' }, { css: '[data-extension-id="bcc"] .token-input' });
+    I.dontSeeElement({ css: '[data-extension-id="cc"] .token:nth-of-type(2)' });
+    I.see(tokenLabelFor(recipient4), { css: '[data-extension-id="bcc"] .token:nth-of-type(2)' });
+    I.dragAndDrop({ css: '[data-extension-id="bcc"] .token:nth-of-type(2)' }, { css: '[data-extension-id="to"] .token-input' });
+    I.see(tokenLabelFor(recipient4), { css: '[data-extension-id="to"] .token:nth-of-type(2)' });
+    I.see(tokenLabelFor(recipient1), { css: '[data-extension-id="to"] .token:nth-of-type(1)' });
 
     // drag to first position in field
-    moveBefore(I, recipient4, recipient1);
-    seeTokenAtPosition(I, recipient4, 'to', 1);
+    I.dragAndDrop({ css: '[data-extension-id="to"] .token:nth-of-type(2)' }, { css: '[data-extension-id="to"] .token:nth-of-type(1)' });
+    I.see(tokenLabelFor(recipient4), { css: '[data-extension-id="to"] .token:nth-of-type(1)' });
+    I.see(tokenLabelFor(recipient1), { css: '[data-extension-id="to"] .token:nth-of-type(2)' });
 
     // send the mail
-    I.click('Send');
-
-    // let's stick around a bit for sending to finish
-    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.send();
 
     // open detail view of sent mail
     I.selectFolder('Sent');
-    I.waitForText(mailSubject);
-    I.click(mailSubject, '.list-item.selectable');
+    mail.selectMail(mailSubject);
 
     // check recipients
     I.click('.show-all-recipients');
-    I.see(getDisplayName(recipient1), '.person-to');
-    I.see(getDisplayName(recipient4), '.person-to');
-    I.see(getDisplayName(recipient2), '.person-cc');
-    I.see(getDisplayName(recipient3), '.person-bcc');
+    I.see(tokenLabelFor(recipient1), '.person-to');
+    I.see(tokenLabelFor(recipient4), '.person-to');
+    I.see(tokenLabelFor(recipient2), '.person-cc');
+    I.see(tokenLabelFor(recipient3), '.person-bcc');
 });

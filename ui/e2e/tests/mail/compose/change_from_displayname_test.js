@@ -21,15 +21,12 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C163026] Change \'from\' display name when sending a mail', async (I, users) => {
+Scenario('[C163026] Change \'from\' display name when sending a mail', async (I, users, mail) => {
     let [user] = users;
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
     // Log in and switch to mail app
     I.login('app=io.ox/mail');
-    I.waitForText('Compose');
-    I.click('Compose');
-    // Wait for the compose dialog
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    mail.newMail();
 
     // Navigate to the name change dialog
     I.click(user.get('primaryEmail'));

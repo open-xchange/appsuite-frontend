@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7391] Send mail with attachment from Drive', async (I, users) => {
+Scenario('[C7391] Send mail with attachment from Drive', async (I, users, mail) => {
     let [sender, recipient] = users;
     // Log in and navigate to mail app
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
@@ -37,21 +37,14 @@ Scenario('[C7391] Send mail with attachment from Drive', async (I, users) => {
         });
     });
     // Open Compose
-    I.waitForText('Compose');
-    I.click('Compose');
-    // Wait for the compose dialog
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    mail.newMail();
 
-    // Pick Recipient
-    I.wait(1); // wait for autofocus
     I.fillField('To', recipient.get('primaryEmail'));
-
-    // Add Subject
     I.fillField('Subject', 'Principia Discordia');
 
-    // Open Filepicker
     I.click('Attachments');
-    I.click('Add from Drive');
+    I.waitForElement('.dropdown.open');
+    I.click('Add from Drive', '.dropdown.open .dropdown-menu');
 
     // Click on the file. Not really necessary since it's the only file and auto-selected
     // Still I don't think the test should fail if it isn't autoselected, so we click on it
@@ -64,11 +57,8 @@ Scenario('[C7391] Send mail with attachment from Drive', async (I, users) => {
     // Wait for the filepicker to close
     I.waitForDetached('.io-ox-fileselection');
     // Send
-    I.click('Send');
+    mail.send();
 
-    // Let's stick around a bit for sending to finish
-    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(2);
     I.logout();
     /////////////////// Continue as 'recipient' ///////////////////////
     // Log in as second user and navigate to mail app
@@ -76,14 +66,14 @@ Scenario('[C7391] Send mail with attachment from Drive', async (I, users) => {
 
     I.waitForText('Principia Discordia');
     // Open mail
-    I.click(locate('.list-item').withText('Principia Discordia').inside('.list-view'));
+    mail.selectMail('Principia Discordia');
     // Verify Attachment
     I.waitForText('1 attachment');
     I.click('1 attachment');
     I.see('Principia.txt');
     // Let's view the content
     I.click('Principia.txt');
-    I.waitForElement('.smart-dropdown-container');
-    I.click(locate('li').withText('View').inside('.smart-dropdown-container'));
-    I.waitForText('fnord', 10); // Only the enlightened will see 'fnord', so this might fail on an unenlightened computer. Introduce it to Discordianism prior to running the test.
+    I.waitForElement('.dropdown.open');
+    I.click('View', '.dropdown.open .dropdown-menu');
+    I.waitForText('fnord', 20); // Only the enlightened will see 'fnord', so this might fail on an unenlightened computer. Introduce it to Discordianism prior to running the test.
 });
