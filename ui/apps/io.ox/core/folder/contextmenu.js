@@ -221,7 +221,7 @@ define('io.ox/core/folder/contextmenu', [
                     data: baton.data,
                     enabled: true,
                     handler: handler,
-                    text: gt('Change reminder')
+                    text: gt('Change reminders')
                 });
             };
         }()),
