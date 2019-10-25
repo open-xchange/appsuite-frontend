@@ -71,7 +71,8 @@ _generated PIWIK script_
 _appsuite property_
 
 ```javascript
-    io.ox/core//tracking/piwik/url=https://metrics.example.com/piwik/
+    io.ox/core//tracking/piwik/url/lib=https://metrics.example.com/piwik/piwik.js
+    io.ox/core//tracking/piwik/url/api=https://metrics.example.com/piwik/piwik.php
 ```
 
 ### siteId
