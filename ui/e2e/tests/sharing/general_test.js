@@ -40,7 +40,7 @@ Scenario('[C45021] Generate simple link for sharing', async function (I) {
     I.see('Music', '.folder-tree .selected');
 });
 
-Scenario('[C252159] Generate link for sharing including subfolders @shaky', async function (I) {
+Scenario('[C252159] Generate link for sharing including subfolders', async function (I) {
     I.login('app=io.ox/files');
     const myfiles = locate('.folder-tree .folder-label').withText('My files');
     I.waitForElement(myfiles);
@@ -93,7 +93,7 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
     I.see('Music', '.folder-tree .selected');
 });
 
-Scenario('[C83385] Copy to clipboard @shaky', async function (I) {
+Scenario('[C83385] Copy to clipboard', async function (I) {
     I.login('app=io.ox/files');
     const myfiles = locate('.folder-tree .folder-label').withText('My files');
     I.waitForElement(myfiles);
@@ -118,7 +118,7 @@ Scenario('[C83385] Copy to clipboard @shaky', async function (I) {
     I.waitForText('Music');
 });
 
-Scenario('[C85625] My Shares default sort order @shaky', async function (I, users) {
+Scenario('[C85625] My Shares default sort order', async function (I) {
     function share(I, item) {
         I.retry(5).click(locate('li.list-item').withText(item));
         I.clickToolbar('Share');

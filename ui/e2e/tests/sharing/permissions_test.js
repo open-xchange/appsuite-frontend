@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C45032] Edit Permissions at "My shares" @shaky', async function (I, users) {
+Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users) {
     session('Alice', () => {
         I.login('app=io.ox/files');
 
@@ -118,7 +118,7 @@ Scenario('[C45032] Edit Permissions at "My shares" @shaky', async function (I, u
     });
 });
 
-Scenario('[C107063] Revoke Permissions at "My shares" @shaky', async function (I, users) {
+Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users) {
     session('Alice', () => {
         I.login('app=io.ox/files');
 
@@ -182,7 +182,7 @@ Scenario('[C107063] Revoke Permissions at "My shares" @shaky', async function (I
     });
 });
 
-Scenario('[C73919] Copy a shared file to another folder @shaky', async function (I, users) {
+Scenario('[C73919] Copy a shared file to another folder', async function (I, users) {
     // the test case also shares with an external user, this is left out for now.
 
     const folder = await I.grabDefaultFolder('infostore');
@@ -192,12 +192,13 @@ Scenario('[C73919] Copy a shared file to another folder @shaky', async function 
 
     I.click(locate('.list-view li').withText('document.txt'));
     I.clickToolbar('~View');
-    I.waitForElement('.io-ox-viewer');
-    I.waitForText('Upload');
+    I.waitForVisible('.io-ox-viewer');
+    I.waitForEnabled({ css: '.io-ox-viewer input.file-input' });
     I.attachFile('.io-ox-viewer input.file-input', 'e2e/media/files/0kb/document.txt');
     I.click('Upload');
     I.waitForText('Versions (2)');
     I.clickToolbar('~Close viewer');
+    I.waitForDetached('.io-ox-viewer');
     I.see('Versions (2)', '.detail-pane');
 
     //I.shareFile
@@ -213,17 +214,20 @@ Scenario('[C73919] Copy a shared file to another folder @shaky', async function 
     I.click({ css: 'button[data-action="select"]' });
     I.waitForElement(locate('.permissions-view .row').at(1));
     I.click('Share', '.modal');
-
     I.see('This file is shared with others', '.detail-pane');
 
     I.clickToolbar('~More actions');
     I.click('Copy');
     I.waitForText('Copy', 5, '.modal');
     I.pressKey('Arrow_Down');
+    I.click('Documents', '.modal');
+    I.waitForElement(locate('li.selected').withAttr({ 'aria-label': 'Documents' }).inside('.modal-body'));
     I.click('Copy', '.modal');
     I.waitForText('File has been copied', 5);
 
     I.selectFolder('Documents');
+    I.waitForText('document.txt', 5, '.list-view');
+    I.waitForDetached('#io-ox-refresh-icon .fa-spin');
     I.click(locate('.list-view li').withText('document.txt'));
     I.see('Upload new version', '.detail-pane');
     I.dontSee('Versions (2)', '.detail-pane');

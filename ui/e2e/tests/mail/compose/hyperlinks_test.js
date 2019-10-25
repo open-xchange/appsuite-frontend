@@ -114,7 +114,7 @@ Scenario('[C8823] Send Mail with Hyperlink by typing the link', function (I) {
     });
 });
 
-Scenario('[C8824] Remove hyperlinks @shaky', async function (I) {
+Scenario('[C8824] Remove hyperlinks', async function (I) {
     const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
     const defaultText = 'Dies ist ein testlink http://example.com.';
 

@@ -58,7 +58,7 @@ Scenario.skip('[C8364] Upload new file', (I) => {
 });
 
 // Note: This is not accessible H4 and textarea does not have a label
-Scenario('[C8366] Edit description @shaky', async (I) => {
+Scenario('[C8366] Edit description', async (I) => {
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
     prepare(I);

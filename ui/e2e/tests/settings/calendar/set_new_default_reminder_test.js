@@ -23,7 +23,7 @@ After(async (users) => {
 });
 
 
-Scenario('[C7867] Set new default reminder @shaky', async function (I) {
+Scenario('[C7867] Set new default reminder', async function (I) {
     const alaramNotification = 'Notification';
     const alaramTime = '45 minutes';
     const alaramRelated = 'before start';

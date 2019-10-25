@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C125311] Change confimation status as participant @shaky', async function (I, users) {
+Scenario('[C125311] Change confimation status as participant', async function (I, users) {
 
     I.haveSetting('io.ox/core//autoOpenNotification', false, { user: users[1] });
     I.haveSetting('io.ox/calendar//deleteInvitationMailAfterAction', false, { user: users[1] });

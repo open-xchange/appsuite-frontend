@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7866] Set all-day appointments to be marked as free @shaky', async function (I) {
+Scenario('[C7866] Set all-day appointments to be marked as free', async function (I) {
 
     const freeappointmentsubject = 'Free Appt',
         reservedappointmentsubject = 'Reserved Appt',
@@ -46,7 +46,7 @@ Scenario('[C7866] Set all-day appointments to be marked as free @shaky', async f
     I.waitForText('Subject');
     I.fillField('summary', reservedappointmentsubject);
     I.fillField('location', location);
-    I.click('All day', '.io-ox-calendar-edit-window');
+    I.checkOption('All day');
     I.fillField('description', description);
     I.dontSeeCheckboxIsChecked('transp');
     I.click('Create', '.io-ox-calendar-edit-window');

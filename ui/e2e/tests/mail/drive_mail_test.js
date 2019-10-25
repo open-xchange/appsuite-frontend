@@ -127,7 +127,7 @@ Scenario('[C85685] Send drive-mail to internal recipient', async (I, users) => {
     // TODO: check if a download helper is feasible
 });
 
-Scenario('[C85690] Expire date can be forced @shaky', async function (I, users) {
+Scenario('[C85690] Expire date can be forced', async function (I, users) {
 
     I.login('app=io.ox/mail');
     I.waitForElement('.io-ox-mail-window');
