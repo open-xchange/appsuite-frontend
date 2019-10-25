@@ -297,7 +297,8 @@ define('io.ox/core/api/user', [
     // auto-inject user_id to guarantee client-side caching
     var getUser = api.get;
     api.get = function () {
-        if (!arguments.length) return getUser({ id: ox.user_id });
+        // no arguments, empty object or no id
+        if (!arguments.length || _.isEmpty(arguments) || (_.isObject(arguments[0]) && arguments[0].id === undefined)) return getUser({ id: ox.user_id });
         return getUser.apply(this, arguments);
     };
 
