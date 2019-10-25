@@ -40,9 +40,9 @@ let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) 
     }
     if (color) {
         I.click('Appointment color', '.color-picker-dropdown');
-        I.waitForVisible('.io-ox-calendar-color-picker-container');
+        I.waitForElement('.color-picker-dropdown.open');
         I.click(locate('a')
-            .inside('.smart-dropdown-container.dropdown.open')
+            .inside('.color-picker-dropdown.open')
                 .withAttr({ title: color }));
     }
 
@@ -71,7 +71,7 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     I.waitForVisible('.modal-body');
     I.checkOption('Add as public calendar');
     I.click('Add');
-    I.waitForVisible('#io-ox-core');
+    I.waitToHide('.modal');
     I.wait(1);
     // give user b permissions
     I.click('.fa.fa-caret-right');
@@ -99,6 +99,8 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     I.see('testing is fun', '.workweek .appointment .title-container');
     I.see('testing is awesome', '.workweek .appointment .title-container');
     //see if appointment colors still drawn with customized color (See Bug 65410)
-    const appointmentColors = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
+    const appointmentColors = (await I.grabCssPropertyFrom('.workweek .appointment', 'backgroundColor'))
+        // webdriver resolves with rgba, puppeteer with rgb for some reason
+        .map(c => c.indexOf('rgba') === 0 ? c : c.replace('rgb', 'rgba').replace(')', ', 1)'));
     expect(appointmentColors).to.deep.equal(['rgba(55, 107, 39, 1)', 'rgba(57, 109, 123, 1)']);
 });
