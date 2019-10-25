@@ -24,7 +24,7 @@ After(async (users) => {
 
 const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
 
-Scenario('[C114967] Draft is created automatically on logout', async function (I) {
+Scenario('[C114967] Draft is created automatically on logout', async function (I, mail) {
 
     const mailSubject = 'C114967';
     const defaultText = 'Draft is created automatically on logout';
@@ -33,18 +33,15 @@ Scenario('[C114967] Draft is created automatically on logout', async function (I
 
     I.login('app=io.ox/mail');
 
-    // Open the mail composer
-    I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    mail.newMail();
 
     // Fill out to and subject
-    I.waitForFocus('input[placeholder="To"]');
     I.fillField('Subject', mailSubject);
 
     // Write some text with the default settings
     await within({ frame: iframeLocator }, async () => {
         I.click('.default-style');
-        I.pressKey(defaultText);
+        I.fillField({ css: 'body' }, defaultText);
         I.pressKey('Enter');
         I.pressKey('Enter');
     });
@@ -54,12 +51,13 @@ Scenario('[C114967] Draft is created automatically on logout', async function (I
     I.logout();
 
     I.login('app=io.ox/mail');
+    mail.waitForApp();
 
-    I.waitForText(mailSubject, undefined, '#io-ox-taskbar');
-    I.click({ css: '[data-action="restore"]' }, '#io-ox-taskbar');
-    I.waitForFocus('input[placeholder="To"]');
+    I.waitForText(mailSubject, 5, '#io-ox-taskbar');
+    I.click(mailSubject, '#io-ox-taskbar');
+    I.waitForElement(iframeLocator, 10);
 
     await within({ frame: iframeLocator }, async () => {
-        I.see(defaultText);
+        I.waitForText(defaultText, 5, { css: 'body' });
     });
 });

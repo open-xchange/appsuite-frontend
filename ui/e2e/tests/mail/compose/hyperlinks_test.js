@@ -24,16 +24,14 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C8821] Send mail with Hyperlink', function (I) {
+Scenario('[C8821] Send mail with Hyperlink', function (I, mail) {
 
     let hyperLink = 'https://foo.bar';
     let linkText = 'appsuite link';
     I.login('app=io.ox/mail');
-    I.clickToolbar('Compose');
-    I.waitForFocus('input[type="email"].token-input.tt-input');
-    I.fillField({ css: 'input[type="email"].token-input.tt-input' }, 'foo@bar');
-    I.wait(1);
-    I.fillField({ css: 'input[name="subject"]' }, 'test subject');
+    mail.newMail();
+    I.fillField('To', 'foo@bar');
+    I.fillField('Subject', 'test subject');
     I.click({ css: 'i.mce-i-link' });
     I.waitForVisible('.mce-reset');
     I.fillField('.mce-combobox input.mce-textbox', hyperLink);
@@ -49,26 +47,24 @@ Scenario('[C8821] Send mail with Hyperlink', function (I) {
     I.seeInField('.mce-combobox input.mce-textbox', hyperLink);
     I.seeInField({ css: 'input.mce-last' }, linkText);
     I.click('Ok');
-    I.click('Send');
-    I.wait(1);
+    mail.send();
     I.selectFolder('Sent');
-    I.waitForText('test subject');
-    I.click({ css: 'li[data-index="0"]' });
+    I.waitForText('test subject', 30, '.list-view li[data-index="0"]');
+    I.click('.list-view li[data-index="0"]');
     I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, () => {
         I.waitForText(linkText);
         I.click(linkText);
     });
-    I.amOnPage(hyperLink);
+    I.switchToNextTab();
+    I.seeInTitle('foo.bar');
 });
 
-Scenario('[C8822] Send Mail with Hyperlink from existing text', function (I) {
+Scenario('[C8822] Send Mail with Hyperlink from existing text', function (I, mail) {
     I.login('app=io.ox/mail');
-    I.clickToolbar('Compose');
-    I.waitForFocus('input[type="email"].token-input.tt-input');
-    I.fillField({ css: 'input[type="email"].token-input.tt-input' }, 'foo@bar');
-    I.wait(1);
-    I.fillField({ css: 'input[name="subject"]' }, 'test subject');
+    mail.newMail();
+    I.fillField('To', 'foo@bar');
+    I.fillField('Subject', 'test subject');
     within({ frame: '#mce_0_ifr' }, () => {
         I.fillField('.mce-content-body', 'testlink');
         I.doubleClick({ css: 'div.default-style' });
@@ -80,57 +76,51 @@ Scenario('[C8822] Send Mail with Hyperlink from existing text', function (I) {
     within({ frame: '#mce_0_ifr' }, () => {
         I.seeElement('a');
     });
-    I.click('Send');
-    I.wait(1);
+    mail.send();
     I.selectFolder('Sent');
-    I.waitForText('test subject');
-    I.click({ css: 'li[data-index="0"]' });
+    I.waitForText('test subject', 30, '.list-view li[data-index="0"]');
+    I.click('.list-view li[data-index="0"]');
     I.waitForText('testlink', '.rightside.mail-detail-pane .body.user-select-text');
 });
 
-Scenario('[C8823] Send Mail with Hyperlink by typing the link', function (I) {
+Scenario('[C8823] Send Mail with Hyperlink by typing the link', function (I, mail) {
     // test String has to contain whitespace at the end for URL converting to work
     const testText = 'Some test text https://foo.bar  ';
     I.login('app=io.ox/mail');
-    I.clickToolbar('Compose');
-    I.waitForFocus('input[type="email"].token-input.tt-input');
-    I.fillField({ css: 'input[type="email"].token-input.tt-input' }, 'foo@bar');
-    I.wait(1);
-    I.fillField({ css: 'input[name="subject"]' }, 'test subject');
+    mail.newMail();
+    I.fillField('To', 'foo@bar');
+    I.fillField('Subject', 'test subject');
     I.wait(0.5);
     within({ frame: '#mce_0_ifr' }, () => {
         I.fillField('.mce-content-body', testText);
         I.seeElement('a');
     });
-    I.click('Send');
-    I.wait(1);
+    mail.send();
     I.selectFolder('Sent');
-    I.waitForText('test subject');
-    I.click({ css: 'li[data-index="0"]' });
+    I.waitForText('test subject', 30, '.list-view li[data-index="0"]');
+    I.click('.list-view li[data-index="0"]');
     I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, () => {
-        I.waitForText(testText);
+        I.waitForText(testText.trim());
         I.seeElement({ css: 'a[href="https://foo.bar"]' });
     });
 });
 
-Scenario('[C8824] Remove hyperlinks', async function (I) {
+Scenario('[C8824] Remove hyperlinks', async function (I, mail) {
     const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
     const defaultText = 'Dies ist ein testlink http://example.com.';
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
 
     I.login('app=io.ox/mail');
+    mail.newMail();
 
-    I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
     I.click('~Maximize');
 
-    I.waitForFocus('input[placeholder="To"]');
     // Write some text with the default settings
     await within({ frame: iframeLocator }, async () => {
         I.click('.default-style');
-        I.pressKey(defaultText);
+        I.fillField({ css: 'body' }, defaultText);
         I.pressKey('Enter');
         I.see('http://example.com', 'a');
         I.pressKey('ArrowLeft');
@@ -139,8 +129,7 @@ Scenario('[C8824] Remove hyperlinks', async function (I) {
     });
 
     I.click('.mce-btn[data-name="link"]');
-    I.pressKey(['Control', 'a']);
-    I.pressKey('Delete');
+    I.fillField('Url', '');
     I.pressKey('Enter');
 
     await within({ frame: iframeLocator }, async () => {

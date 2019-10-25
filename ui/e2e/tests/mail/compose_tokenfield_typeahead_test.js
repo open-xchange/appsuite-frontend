@@ -37,12 +37,9 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Add without typeahead', async (I) => {
+Scenario('Add without typeahead', async (I, mail) => {
     I.login('app=io.ox/mail');
-    I.waitForText('Compose');
-    I.click('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
+    mail.newMail();
 
     await addToken('pierce@ox-e2e-backend.novalocal', 'Enter', 'pierce@ox-e2e-backend.novalocal');
 
@@ -56,23 +53,19 @@ Scenario('Add without typeahead', async (I) => {
     }
 });
 
-Scenario('Add typeahed suggestion via autoselect', async (I, users) => {
+Scenario('Add typeahed suggestion via autoselect', async (I, users, mail) => {
     const [user] = users;
     const firstname = user.get('display_name');
     const surname = user.get('sur_name');
-    const mail = user.get('primaryEmail');
+    const email = user.get('primaryEmail');
     const label = `User ${surname}`;
 
     I.login('app=io.ox/mail');
-
-    I.waitForText('Compose');
-    I.click('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
+    mail.newMail();
 
     // fully matches mail address
-    await addToken(mail, 'Enter', label);
-    await addToken(mail, 'Tab', label);
+    await addToken(email, 'Enter', label);
+    await addToken(email, 'Tab', label);
     // fully matches label
     await addToken(label.slice(0, 10), 'Enter', label);
     await addToken(label.slice(0, 10), 'Tab', label);
@@ -80,8 +73,8 @@ Scenario('Add typeahed suggestion via autoselect', async (I, users) => {
     await addToken(firstname, 'Enter', label);
     await addToken(firstname, 'Tab', label);
     // startsWith: mail address
-    await addToken(mail.slice(0, 10), 'Enter', label);
-    await addToken(mail.slice(0, 10), 'Tab', label);
+    await addToken(email.slice(0, 10), 'Enter', label);
+    await addToken(email.slice(0, 10), 'Tab', label);
 
     async function addToken(query, key, result) {
         // enter term, wait for typeahead and hit key
@@ -138,19 +131,15 @@ Scenario('Add typeahed suggestion via autoselect', async (I, users) => {
 //     }
 // });
 
-Scenario('Add typeahead suggestion via keyboard', async (I, users) => {
+Scenario('Add typeahead suggestion via keyboard', async (I, users, mail) => {
     const [user] = users;
 
     I.login('app=io.ox/mail');
+    mail.newMail();
 
     let displayName = user.get('display_name'),
         partialName = displayName.substring(0, displayName.length - 1),
         name = user.get('sur_name');
-
-    I.waitForText('Compose');
-    I.click('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
 
     // autocomplete via autocomplete hint
     await addToken(partialName, 'Tab', name, { hover: true });
@@ -178,18 +167,14 @@ Scenario('Add typeahead suggestion via keyboard', async (I, users) => {
     }
 });
 
-Scenario('Add typeahead suggestion via mouse', async (I, users) => {
+Scenario('Add typeahead suggestion via mouse', async (I, users, mail) => {
     const [user] = users;
 
     I.login('app=io.ox/mail');
+    mail.newMail();
 
     let name = user.get('sur_name'),
         target = 'Sister ' + name;
-
-    I.waitForText('Compose');
-    I.click('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
 
     // autocomplete via select second suggestion
     I.fillField('To', name);

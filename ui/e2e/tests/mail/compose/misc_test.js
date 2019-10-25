@@ -24,21 +24,19 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C12122] Auto-size recipient fields', async function (I) {
+Scenario('[C12122] Auto-size recipient fields', async function (I, mail) {
 
     let height;
 
     I.login('app=io.ox/mail');
-
-    I.retry(5).click('Compose');
-    I.waitForElement({ css: '[placeholder="To"]' });
+    mail.newMail();
 
     height = await I.grabCssPropertyFrom({ css: '[data-extension-id="to"]' }, 'height');
     expect(parseInt(height, 10)).to.be.lessThan(35);
 
-    I.retry(5).click({ css: '[placeholder="To"]' });
+    I.click({ css: '[placeholder="To"]' });
     for (let i = 0; i < 5; i++) {
-        I.pressKey(`testmail${i}@testmail.com`);
+        I.fillField('To', `testmail${i}@testmail.com`);
         I.pressKey('Enter');
         I.wait(0.2);
     }

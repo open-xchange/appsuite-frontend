@@ -66,12 +66,13 @@ Scenario('Compose plain text mail', function (I, users) {
 
     // 4) Send the E-Mail and check it as recipient
     I.click('Send');
-    I.waitForVisible('.io-ox-mail-window .leftside ul li.unread');
+    I.waitForVisible('.io-ox-mail-window .leftside ul li.unread', 30);
     I.click('.io-ox-mail-window .leftside ul li.unread');
     I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
     I.see('Test subject', '.mail-detail-pane');
 
     // 4.1) Assert body content
+    I.waitForElement('.mail-detail-frame');
     I.switchTo('.mail-detail-frame');
     I.see('Test text');
     I.switchTo();
@@ -83,6 +84,7 @@ Scenario('Compose plain text mail', function (I, users) {
     I.see('Test subject', '.mail-detail-pane');
 
     // 5.1) Assert body content
+    I.waitForElement('.mail-detail-frame');
     I.switchTo('.mail-detail-frame');
     I.see('Test text');
     I.switchTo();

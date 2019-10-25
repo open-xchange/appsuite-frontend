@@ -21,19 +21,16 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C8819] Default mail priority', async (I) => {
+Scenario('[C8819] Default mail priority', async (I, mail) => {
     // Preparation
     // Suppress mailto: popup
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
     // Log in and switch to mail app
     I.login('app=io.ox/mail');
-    I.waitForText('Compose');
-    I.click('Compose');
-    // Wait for the compose dialog
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    mail.newMail();
     // Click 'Options' Dropdown
     I.click('Options');
     //Check default mail priority
-    I.seeElement(locate('~Priority Normal').withDescendant('i.fa-check'));
+    I.waitForElement(locate('~Priority Normal').withDescendant('i.fa-check'));
     I.click('Normal');
 });
