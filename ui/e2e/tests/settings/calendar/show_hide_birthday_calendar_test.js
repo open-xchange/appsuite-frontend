@@ -28,7 +28,6 @@ Scenario('[C248441] Configure to show/hide birthday calendar', async function (I
 
     // Check whether birthday calendar is shown on Calendar App
     I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
-    I.waitForElement('[name="birthday"]');
     I.waitForText('Show birthday calendar');
     I.seeCheckboxIsChecked('birthday');
     I.openApp('Calendar');
@@ -36,7 +35,7 @@ Scenario('[C248441] Configure to show/hide birthday calendar', async function (I
 
     // Check whether birthday calendar is not shown on Calendar App
     I.click('~Settings', '#io-ox-settings-topbar-icon');
-    I.click('Show birthday calendar');
+    I.uncheckOption('Show birthday calendar');
     I.openApp('Calendar');
     I.waitForText('My calendars');
     I.dontSee('Birthdays');

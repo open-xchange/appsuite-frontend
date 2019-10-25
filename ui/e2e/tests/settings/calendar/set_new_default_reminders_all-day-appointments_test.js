@@ -48,7 +48,7 @@ Scenario('[C244799] Set new default reminder for all-day appointments', async fu
     // verify reminder is set as a notification to 1 day before start by default.
     I.openApp('Calendar');
     I.clickToolbar('New appointment');
-    I.waitForText('Subject');
+    I.waitForText('Subject', 30, '.io-ox-calendar-edit');
     I.fillField('summary', 'subject');
     I.fillField('location', 'Dortmund');
     I.checkOption('All day');

@@ -33,7 +33,7 @@ Scenario('[C7865] Configure to show/hide declined appointments', async (I) => {
     I.fillField('Location', 'test location');
 
     I.click('~Start time');
-    I.click('1:00 PM', 'fieldset[data-attribute="startDate"]');
+    I.click('1:00 PM');
 
     I.click('Create');
     I.waitForDetached('.io-ox-calendar-edit-window');
@@ -45,7 +45,7 @@ Scenario('[C7865] Configure to show/hide declined appointments', async (I) => {
     I.fillField('Location', 'test location');
 
     I.click('~Start time');
-    I.click('2:00 PM', 'fieldset[data-attribute="startDate"]');
+    I.click('2:00 PM');
 
     I.click('Create');
     I.waitForDetached('.io-ox-calendar-edit-window');
@@ -56,7 +56,7 @@ Scenario('[C7865] Configure to show/hide declined appointments', async (I) => {
     I.logout();
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/calendar');
     I.waitForText('Show declined appointments');
-    I.click('Show declined appointments');
+    I.uncheckOption('Show declined appointments');
     I.openApp('Calendar');
     I.dontSee('Appointment 2');
 

@@ -43,7 +43,7 @@ Scenario('[C7866] Set all-day appointments to be marked as free', async function
     // Create all day appointment and dont mark as free
     I.openApp('Calendar');
     I.clickToolbar('New appointment');
-    I.waitForText('Subject');
+    I.waitForText('Subject', 30, '.io-ox-calendar-edit');
     I.fillField('summary', reservedappointmentsubject);
     I.fillField('location', location);
     I.checkOption('All day');
@@ -62,13 +62,13 @@ Scenario('[C7866] Set all-day appointments to be marked as free', async function
     I.openApp('Calendar');
     I.waitForVisible('.weekview-toolbar');
     // Have to click on today button for setting to work
-    I.click('button.weekday.today', '.weekview-toolbar');
-    I.waitForText('Subject');
+    I.click('.weekday.today', '.weekview-toolbar');
+    I.waitForText('Subject', 30, '.io-ox-calendar-edit');
     I.fillField('summary', freeappointmentsubject);
     I.fillField('location', location);
     I.fillField('description', description);
     I.seeCheckboxIsChecked('allDay');
     I.seeCheckboxIsChecked('transp');
     I.click('Create');
-    I.waitForElement('div.appointment.free');
+    I.waitForElement('.appointment.free');
 });

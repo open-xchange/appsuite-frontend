@@ -16,7 +16,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Settings > Address Bookasd');
+Feature('Settings > Address Book');
 
 Before(async (users) => {
     await users.create();
@@ -67,7 +67,7 @@ async function verifyMapType(I, mapName, link, value) {
 
     // Verify the displayed style
     I.openApp('Address Book');
-    I.waitForVisible('[data-app-name="io.ox/contacts"]');
+    I.waitForVisible('.io-ox-contacts-window[data-app-name="io.ox/contacts"]');
 
     I.selectFolder('Contacts');
 
@@ -80,7 +80,7 @@ async function verifyMapType(I, mapName, link, value) {
 
     if (mapName !== 'No link') {
         I.waitForText('Open in ' + mapName);
-        expect((await I.grabAttributeFrom('a.maps-service', 'href')).join()).to.include(link);
+        expect((await I.grabAttributeFrom({ css: 'a.maps-service' }, 'href')).join()).to.include(link);
     } else {
         I.dontSee('Open in');
     }

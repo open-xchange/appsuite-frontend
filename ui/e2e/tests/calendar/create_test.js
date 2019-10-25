@@ -115,7 +115,7 @@ Scenario('fullday appointments', async function (I) {
     I.clickToolbar('New appointment');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar/edit"]' });
     I.fillField('Subject', 'Fullday test');
-    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('All day').as('All day'), '.checkbox > label');
+    I.checkOption('All day');
 
     I.click('~Date (M/D/YYYY)');
     I.pressKey(['Control', 'a']);
@@ -1785,7 +1785,7 @@ Scenario('[C7446] Create recurring whole-day appointment', async function (I, us
     I.fillField('.io-ox-calendar-edit [name="summary"]', 'Birthday of Linus Torvalds');
     I.fillField('.io-ox-calendar-edit [name="location"]', 'Helsinki Imbiss');
     I.fillField('.io-ox-calendar-edit [name="description"]', 'Buy some gifts');
-    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('All day').as('All day'), '.io-ox-calendar-edit');
+    I.checkOption('All day');
     I.click({ css: '[data-attribute="startDate"] .datepicker-day-field' });
     I.pressKey(['Control', 'a']);
     I.pressKey(['Backspace']);

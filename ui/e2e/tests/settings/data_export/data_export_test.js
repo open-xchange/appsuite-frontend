@@ -24,7 +24,7 @@ After(async function (users) {
 
 Scenario('request a new download and cancel it', async function (I) {
     I.login('app=io.ox/settings');
-    I.waitForVisible('*[data-app-name="io.ox/settings"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/settings"]' });
 
     I.waitForText('Download personal data', 5);
 
@@ -55,12 +55,13 @@ Scenario('request a new download and cancel it', async function (I) {
 
         I.click('Request download');
 
-        I.wait(1);
-
         // check if view switches correctly and buttons are disabled
-        I.see('Your requested archive is currently being created. Depending on the size of the requested data this may take hours or days. You will be informed via email when your download is ready.');
+        I.waitForText(
+            'Your requested archive is currently being created. Depending on the size of the requested data this may take hours or days. You will be informed via email when your download is ready.',
+            1,
+            '.personal-data-download-view'
+        );
 
-        I.seeElement('input:disabled');
         I.seeElement('input:disabled');
 
         // cancel again, we don't want to clutter the filesystem
@@ -70,20 +71,17 @@ Scenario('request a new download and cancel it', async function (I) {
     I.waitForText('Do you really want to cancel the current download request?', 5);
     I.click('Cancel download request', '.modal-dialog');
 
-    I.wait(1);
-
     within('.io-ox-personal-data-settings', () => {
         // check if view switches correctly and buttons are enabled again
-        I.dontSee('Your requested archive is currently being created. Depending on the size of the requested data this may take hours or days. You will be informed via email when your download is ready.');
+        I.waitForInvisible('.personal-data-download-view', 1);
 
-        I.dontSeeElement('input:disabled');
         I.dontSeeElement('input:disabled');
     });
 });
 
 Scenario('open direct link to data export settings page', async function (I) {
     I.login('app=io.ox/settings&folder=virtual/settings/personaldata');
-    I.waitForVisible('*[data-app-name="io.ox/settings"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/settings"]' });
 
     //list view
     I.waitForText('Download personal data', 5);
@@ -97,7 +95,7 @@ Scenario('open direct link to data export settings page', async function (I) {
 Scenario('show only available options', async function (I, users) {
     await I.dontHaveCapability('tasks', users[0]);
     I.login('app=io.ox/settings');
-    I.waitForVisible('*[data-app-name="io.ox/settings"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/settings"]' });
 
     I.waitForText('Download personal data', 5);
 

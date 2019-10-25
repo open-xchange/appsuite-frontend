@@ -52,7 +52,7 @@ Scenario('[C7867] Set new default reminder', async function (I) {
 
     // Check whether Notify 45 minutes before start is shown on appoitment creation window
     I.clickToolbar('New appointment');
-    I.waitForText('Subject');
+    I.waitForText('Subject', 30, '.io-ox-calendar-edit');
     I.see('Notify 45 minutes before start.');
 });
 

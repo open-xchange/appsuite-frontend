@@ -59,7 +59,7 @@ Scenario('[C7862] Configure display name representation', async (I) => {
     I.waitForText('Address Book', 5, '.io-ox-contacts-settings');
 
     I.waitForText('Display of names');
-    I.click('Last name, First name');
+    I.click('Last name, First name', '.io-ox-contacts-settings');
 
     // Go back to contacts app and verify it
     I.openApp('Address Book');
