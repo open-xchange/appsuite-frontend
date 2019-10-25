@@ -49,9 +49,11 @@ module.exports.config = {
         users: './e2e/users',
         contexts: './e2e/contexts',
         search: './e2e/actor_search',
-        portal: './e2e/pageobjects/portal',
         contacts: './e2e/pageobjects/contacts',
-        mail: './e2e/pageobjects/mail'
+        calendar: './e2e/pageobjects/calendar',
+        contactpicker: './e2e/pageobjects/contact-picker',
+        mail: './e2e/pageobjects/mail',
+        portal: './e2e/pageobjects/portal'
     },
     bootstrap: function (done) {
         // setup chai
