@@ -228,6 +228,7 @@ Scenario('[C73919] Copy a shared file to another folder', async function (I, use
     I.selectFolder('Documents');
     I.waitForText('document.txt', 5, '.list-view');
     I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+    I.waitForVisible(locate('.io-ox-files-main .list-view li').withText('document.txt'));
     I.click(locate('.list-view li').withText('document.txt'));
     I.see('Upload new version', '.detail-pane');
     I.dontSee('Versions (2)', '.detail-pane');
@@ -257,13 +258,15 @@ Scenario('[C73919] Copy a shared file to another folder', async function (I, use
     I.click(locate('.dropdown.open.more-dropdown li').withText('Copy'));
     I.waitForText('Copy', 5, '.modal');
     I.pressKey('Arrow_Down');
+    I.click('Documents', '.modal');
+    I.waitForElement(locate('li.selected').withAttr({ 'aria-label': 'Documents' }).inside('.modal-body'));
     I.click('Copy', '.modal');
     I.waitForText('File has been copied', 5);
 
     I.selectFolder('My files');
     I.waitForElement('.io-ox-files-main .list-view.complete');
     I.selectFolder('Documents');
-    I.waitForElement(locate('.io-ox-files-main .list-view li').withText('document.txt'));
+    I.waitForVisible(locate('.io-ox-files-main .list-view li').withText('document.txt'));
     I.click(locate('.io-ox-files-main .list-view li').withText('document.txt'));
     I.waitForText('Upload new version', 5, '.detail-pane');
     I.dontSee('Versions (2)', '.detail-pane');

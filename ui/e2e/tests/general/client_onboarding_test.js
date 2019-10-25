@@ -26,9 +26,12 @@ After(async (users) => {
 Scenario('[C73767] Platform Availability', function (I) {
 
     I.login();
+    I.waitForVisible('#io-ox-topbar-dropdown-icon');
     I.click('#io-ox-topbar-dropdown-icon');
-    I.wait(1);
-    I.click('Connect your Device');
+    I.waitForVisible(locate('a')
+        .withAttr({ 'data-action': 'client-onboarding' })
+        .inside('#topbar-settings-dropdown'));
+    I.click('Connect your Device', '#topbar-settings-dropdown');
     I.waitForText('Please select the platform of your device.');
     I.see('Windows');
     I.see('Android');
@@ -38,9 +41,12 @@ Scenario('[C73767] Platform Availability', function (I) {
 Scenario('[C73768] Device Availability', function (I) {
 
     I.login();
+    I.waitForVisible('#io-ox-topbar-dropdown-icon');
     I.click('#io-ox-topbar-dropdown-icon');
-    I.wait(1);
-    I.click('Connect your Device');
+    I.waitForVisible(locate('a')
+        .withAttr({ 'data-action': 'client-onboarding' })
+        .inside('#topbar-settings-dropdown'));
+    I.click('Connect your Device', '#topbar-settings-dropdown');
     I.waitForText('Please select the platform of your device.');
     I.click('Apple');
     I.waitForText('What type of device do you want to configure?');
@@ -61,9 +67,12 @@ Scenario('[C73768] Device Availability', function (I) {
 Scenario('[C73769] Application Availability', function (I) {
 
     I.login();
+    I.waitForVisible('#io-ox-topbar-dropdown-icon');
     I.click('#io-ox-topbar-dropdown-icon');
-    I.wait(1);
-    I.click('Connect your Device');
+    I.waitForVisible(locate('a')
+        .withAttr({ 'data-action': 'client-onboarding' })
+        .inside('#topbar-settings-dropdown'));
+    I.click('Connect your Device', '#topbar-settings-dropdown');
     I.waitForText('Please select the platform of your device.');
     I.click('Apple');
     I.waitForText('What type of device do you want to configure?');
@@ -102,20 +111,24 @@ Scenario('[C73769] Application Availability', function (I) {
 Scenario('[C73776] Mail Configuration', async function (I, users) {
 
     I.login();
+    I.waitForVisible('#io-ox-topbar-dropdown-icon');
     I.click('#io-ox-topbar-dropdown-icon');
-    I.wait(1);
-    I.click('Connect your Device');
+    I.waitForVisible(locate('a')
+        .withAttr({ 'data-action': 'client-onboarding' })
+        .inside('#topbar-settings-dropdown'));
+    I.click('Connect your Device', '#topbar-settings-dropdown');
     I.waitForText('Please select the platform of your device.');
     I.click('Apple');
     I.waitForText('What type of device do you want to configure?');
     I.click('iPhone');
     I.see('Mail');
     let emailId = await I.grabValueFrom({ css: 'input[name=email]' });
+    emailId = Array.isArray(emailId) ? emailId[0] : emailId;
     I.seeInField({ css: 'input[name=email]' }, users[0].get('primaryEmail'));
     I.clearField('email');
     I.fillField('email', emailId);
     I.clearField('email');
-    let emailwithOutDomain = emailId[0].substring(1, emailId[0].indexOf('@') + 1);
+    let emailwithOutDomain = emailId.substring(1, emailId.indexOf('@') + 1);
     I.fillField('email', emailwithOutDomain);
     I.click('Send');
     I.waitForText('Unexpected error: Missing domain');
@@ -123,5 +136,5 @@ Scenario('[C73776] Mail Configuration', async function (I, users) {
     I.seeElement(locate('//button').withText('Send').as('disabled'));
     I.fillField('email', 'eahmed@open-xchange.com');
     I.click('Send');
-    I.seeElement('.fa-check.button-clicked');
+    I.waitForElement('.fa-check.button-clicked');
 });

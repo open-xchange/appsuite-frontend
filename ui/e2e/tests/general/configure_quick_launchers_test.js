@@ -24,9 +24,9 @@ After(async (users) => {
 
 Scenario('[C287801] Configure quick launchers', function (I) {
     I.login();
-    I.seeElement('~Mail', '#io-ox-quicklaunch');
-    I.seeElement('~Calendar', '#io-ox-quicklaunch');
-    I.seeElement('~Drive', '#io-ox-quicklaunch');
+    I.waitForElement('~Mail', '#io-ox-quicklaunch');
+    I.waitForElement('~Calendar', '#io-ox-quicklaunch');
+    I.waitForVisible('~Drive', '#io-ox-quicklaunch');
     I.rightClick('#io-ox-quicklaunch');
     I.waitForText('Change quick launch icons');
     I.see('Position 1');
