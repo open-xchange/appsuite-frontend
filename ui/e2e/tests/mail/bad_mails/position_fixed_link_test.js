@@ -22,26 +22,27 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C101618] Link with position: fixed; should not cover the whole UI', async (I) => {
+Scenario('[C101618] Link with position: fixed; should not cover the whole UI', async (I, mail) => {
 
     const DESCRIPTION = 'Link with position: fixed; should not cover the whole UI';
 
-    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
-    await I.haveSetting('io.ox/mail//allowHtmlImages', true);
-
-    await I.haveMail({
-        folder: 'default0/INBOX',
-        path: 'e2e/media/mails/c101618.eml'
-    });
+    await Promise.all([
+        I.haveSetting('io.ox/mail//features/registerProtocolHandler', false),
+        I.haveSetting('io.ox/mail//allowHtmlImages', true),
+        I.haveMail({
+            folder: 'default0/INBOX',
+            path: 'e2e/media/mails/c101618.eml'
+        })
+    ]);
 
     I.login('app=io.ox/mail');
-    I.waitForText(DESCRIPTION);
-    I.click(DESCRIPTION, '.list-item.selectable');
+    mail.waitForApp();
+    mail.selectMail(DESCRIPTION);
 
+    I.waitForElement('.mail-detail-frame');
     await within({ frame: '.mail-detail-frame' }, async () => {
         const SELECTOR = '.mail-detail-content a';
         I.waitForElement(SELECTOR);
-        I.wait(1);
         // click-jacking-element overlaps this one
         I.see('Click will be highjacked');
         //I.click('Click will be highjacked');

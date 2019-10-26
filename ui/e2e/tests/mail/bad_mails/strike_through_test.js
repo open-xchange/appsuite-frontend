@@ -22,20 +22,23 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C101617] Mail with <strike> element </strike>', async (I, users) => {
+Scenario('[C101617] Mail with <strike> element </strike>', async (I, users, mail) => {
     const user = users[0];
 
-    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
-
-    await I.haveMail({
-        folder: 'default0/INBOX',
-        path: 'e2e/media/mails/c101617.eml'
-    }, { user });
+    await Promise.all([
+        I.haveSetting('io.ox/mail//features/registerProtocolHandler', false),
+        I.haveMail({
+            folder: 'default0/INBOX',
+            path: 'e2e/media/mails/c101617.eml'
+        })
+    ]);
 
     I.login('app=io.ox/mail');
-    I.waitForText('mail with <strike> element </strike>');
-    I.click('mail with <strike> element </strike>', '.list-item.selectable');
+    mail.waitForApp();
+    mail.selectMail('mail with <strike> element </strike>');
+    I.waitForElement('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, () => {
+        I.waitForElement('.mail-detail-content .e2e');
         I.seeCssPropertiesOnElements('.mail-detail-content .e2e', { 'text-decoration-line': 'line-through' });
     });
 });

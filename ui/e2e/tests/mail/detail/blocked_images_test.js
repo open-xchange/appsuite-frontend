@@ -40,23 +40,26 @@ function getTestMail(user, content) {
     };
 }
 
-Scenario('[C83388] Visual indicator for blocked images', async function (I, users) {
-    I.haveSetting('io.ox/mail//allowHtmlImages', false);
+Scenario('[C83388] Visual indicator for blocked images', async function (I, users, mail) {
     // dependes on mail?action=get-param "view: noimg"
     let [user] = users;
     const style = 'repeating-linear-gradient';
-    await I.haveMail(getTestMail(user, '<p style="background-color:#ccc"><img src="/appsuite/apps/themes/default/logo.png" height="200" width="200" src="" alt="C83388"></p>'));
-    I.login('app=io.ox/mail');
+    await Promise.all([
+        I.haveSetting('io.ox/mail//allowHtmlImages', false),
+        I.haveMail(getTestMail(user, '<p style="background-color:#ccc"><img src="/appsuite/apps/themes/default/logo.png" height="200" width="200" src="" alt="C83388"></p>'))
+    ]);
 
-    I.waitForVisible('.io-ox-mail-window');
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
     // click on first email
-    I.click('.io-ox-mail-window .leftside ul li.list-item');
-    I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
+    mail.selectMail('Mail Detail Misc');
 
     I.say('check image placeholder style', 'blue');
-    within({ frame: '.mail-detail-frame' }, async function () {
+    I.waitForElement('.mail-detail-frame');
+    await within({ frame: '.mail-detail-frame' }, async function () {
         // check for 'stripes style"
-        const [rule] = await I.grabCssPropertyFrom('img[data-original-src], img[src]', 'background-image');
+        let rule = await I.grabCssPropertyFrom('img[data-original-src], img[src]', 'backgroundImage');
+        rule = Array.isArray(rule) ? rule[0] : rule;
         expect(rule).to.contain(style);
     });
 
@@ -64,9 +67,11 @@ Scenario('[C83388] Visual indicator for blocked images', async function (I, user
     I.click('.external-images > button');
 
     I.say('check image', 'blue');
-    within({ frame: '.mail-detail-frame' }, async function () {
+    I.waitForElement('.mail-detail-frame');
+    await within({ frame: '.mail-detail-frame' }, async function () {
         // check for 'stripes style"
-        const [rule] = await I.grabCssPropertyFrom('img[data-original-src], img[src]', 'background-image');
+        let rule = await I.grabCssPropertyFrom('img[data-original-src], img[src]', 'backgroundImage');
+        rule = Array.isArray(rule) ? rule[0] : rule;
         expect(rule).not.to.contain(style);
     });
 });
