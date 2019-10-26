@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7819] Color quotes on reply', async (I, users) => {
+Scenario('[C7819] Color quotes on reply', async (I, users, mail) => {
 
     var icke = users[0].userdata.email1;
 
@@ -40,19 +40,24 @@ Scenario('[C7819] Color quotes on reply', async (I, users) => {
     });
 
     I.login('app=io.ox/mail');
+    mail.waitForApp();
 
     // wait for first email
-    var firstItem = '.list-view .list-item';
-    I.waitForElement(firstItem);
-    I.click(firstItem);
-    I.waitForVisible('.thread-view.list-view .list-item');
+    mail.selectMail('RE: Color quotes on reply');
 
+    I.waitForElement('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, async function () {
-        var [rule] = await I.grabCssPropertyFrom('blockquote', 'color');
+        let rule = await I.grabCssPropertyFrom('blockquote', 'color');
+        rule = Array.isArray(rule) ? rule : [rule];
+        [rule] = rule.map(c => c.indexOf('rgba') === 0 ? c : c.replace('rgb', 'rgba').replace(')', ', 1)'));
         expect(rule).to.equal('rgba(85, 85, 85, 1)');
-        [rule] = await I.grabCssPropertyFrom('blockquote blockquote', 'color');
+        rule = await I.grabCssPropertyFrom('blockquote blockquote', 'color');
+        rule = Array.isArray(rule) ? rule : [rule];
+        [rule] = rule.map(c => c.indexOf('rgba') === 0 ? c : c.replace('rgb', 'rgba').replace(')', ', 1)'));
         expect(rule).to.equal('rgba(40, 63, 115, 1)');
-        [rule] = await I.grabCssPropertyFrom('blockquote blockquote blockquote', 'color');
+        rule = await I.grabCssPropertyFrom('blockquote blockquote blockquote', 'color');
+        rule = Array.isArray(rule) ? rule : [rule];
+        [rule] = rule.map(c => c.indexOf('rgba') === 0 ? c : c.replace('rgb', 'rgba').replace(')', ', 1)'));
         expect(rule).to.equal('rgba(221, 8, 128, 1)');
     });
 });
