@@ -920,9 +920,7 @@ Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, use
     I.waitForElement(appointmentSelector, 5);
     I.click(appointmentSelector);
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
-    const newTime = momentRange().add(1, 'hours');
-    expect(await I.grabTextFrom('.io-ox-sidepopup-pane .date-time')).to
-        .equal(`${newTime.format('ddd')}, ${newTime.format('M/D/YYYY')}   12:00 – 1:00 PMCEST`);
+    I.waitForText('12:00 – 1:00 PM');
 });
 
 Scenario('[C7462] Remove a participant', async function (I, users) {
@@ -1154,7 +1152,7 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
 
     I.click(summary, '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
-    I.waitForText('11:00 – 1:00 PMCEST');
+    I.waitForText('11:00 – 1:00 PM');
     I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup');
     I.dragAndDrop('.appointment .resizable-s', '.day .timeslot:nth-child(28)');
@@ -1162,7 +1160,7 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
 
     I.click(summary, '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
-    I.waitForText('11:00 – 2:00 PMCEST');
+    I.waitForText('11:00 – 2:00 PM');
     I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup');
 
@@ -1170,13 +1168,13 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
     I.click('Week', '.smart-dropdown-container');
 
     I.click('.io-ox-pagecontroller.current .appointment');
-    I.waitForText('11:00 – 2:00 PMCEST');
+    I.waitForText('11:00 – 2:00 PM');
 
     I.clickToolbar('View');
     I.click('Month', '.smart-dropdown-container');
 
     I.click('.io-ox-pagecontroller.current .appointment');
-    I.waitForText('11:00 – 2:00 PMCEST');
+    I.waitForText('11:00 – 2:00 PM');
 
     I.clickToolbar('View');
     I.click('List', '.smart-dropdown-container');
@@ -1283,19 +1281,19 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
 
     I.click(summary, '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
-    I.waitForText('1:00 – 2:00 PMCEST');
+    I.waitForText('1:00 – 2:00 PM');
 
     I.clickToolbar('View');
     I.click('Week', '.smart-dropdown-container');
 
     I.click('.io-ox-pagecontroller.current .appointment');
-    I.waitForText('1:00 – 2:00 PMCEST');
+    I.waitForText('1:00 – 2:00 PM');
 
     I.clickToolbar('View');
     I.click('Month', '.smart-dropdown-container');
 
     I.click('.io-ox-pagecontroller.current .appointment');
-    I.waitForText('1:00 – 2:00 PMCEST');
+    I.waitForText('1:00 – 2:00 PM');
 
     I.clickToolbar('View');
     I.click('List', '.smart-dropdown-container');
