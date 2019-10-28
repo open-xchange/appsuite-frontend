@@ -27,12 +27,8 @@ Scenario('[C7869] Set new start and end of working time', async function (I) {
     const workingStartTime = '7:00 AM';
     const workingEndTime = '9:00 AM';
 
-    I.login();
-    I.click('~Settings', '#io-ox-settings-topbar-icon');
-
-    I.waitForVisible({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
-    I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
-    I.waitForText('Calendar', undefined, 'h1');
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/calendar']);
+    I.waitForText('Start of working time');
     I.selectOption('#settings-startTime', workingStartTime);
     I.selectOption('#settings-endTime', workingEndTime);
     I.openApp('Calendar');

@@ -30,10 +30,7 @@ Scenario('[C7867] Set new default reminder', async function (I) {
     I.login();
 
     // Default reminder
-    I.click('~Settings', '#io-ox-settings-topbar-icon');
-    I.waitForVisible('.folder li[data-id="virtual/settings/io.ox/calendar"]');
-    // I.waitForVisible('.tree-container > li[data-id="virtual/settings/io.ox/calendar"]');
-    I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
+    I.openApp('Settings', { folder: 'virtual/settings/io.ox/calendar' });
     I.waitForElement('.alarms-link-view .btn-link');
 
     //I.click('.alarms-link-view .btn-link');

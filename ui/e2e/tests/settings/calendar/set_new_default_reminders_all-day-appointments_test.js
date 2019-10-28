@@ -29,8 +29,7 @@ Scenario('[C244799] Set new default reminder for all-day appointments', async fu
     I.login();
 
     // Default reminder
-    I.click('~Settings', '#io-ox-settings-topbar-icon');
-    I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
+    I.openApp('Settings', { folder: 'virtual/settings/io.ox/calendar' });
     I.waitForElement('.alarms-link-view .btn-link');
     I.click(
         locate('.form-group')
@@ -54,6 +53,7 @@ Scenario('[C244799] Set new default reminder for all-day appointments', async fu
     I.checkOption('All day');
     I.fillField('description', 'description');
     I.click('Create');
+    I.waitForDetached('.io-ox-calendar-edit');
 
     I.waitForText('subject', '.appointment-content');
     I.click('subject', '.appointment-content');

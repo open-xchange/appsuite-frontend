@@ -14,7 +14,7 @@ module.exports = {
     },
     selectTask(id) {
         const item = locate('.vgrid-cell').withText(id);
-        I.waitForElement(item)
+        I.waitForElement(item);
         I.click(item);
         I.waitForFocus('.vgrid-cell.selected');
     },

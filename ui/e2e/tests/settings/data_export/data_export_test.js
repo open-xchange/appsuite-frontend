@@ -24,7 +24,6 @@ After(async function (users) {
 
 Scenario('request a new download and cancel it', async function (I) {
     I.login('app=io.ox/settings');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/settings"]' });
 
     I.waitForText('Download personal data', 5);
 
@@ -81,7 +80,6 @@ Scenario('request a new download and cancel it', async function (I) {
 
 Scenario('open direct link to data export settings page', async function (I) {
     I.login('app=io.ox/settings&folder=virtual/settings/personaldata');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/settings"]' });
 
     //list view
     I.waitForText('Download personal data', 5);
@@ -95,7 +93,6 @@ Scenario('open direct link to data export settings page', async function (I) {
 Scenario('show only available options', async function (I, users) {
     await I.dontHaveCapability('tasks', users[0]);
     I.login('app=io.ox/settings');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/settings"]' });
 
     I.waitForText('Download personal data', 5);
 

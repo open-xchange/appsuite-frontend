@@ -171,35 +171,35 @@ Scenario('[C7472] Check if the portalpage is up to date', async function (I, use
     //TODO: Same for appointments, tasks birthdays and latest files.
 });
 
-Scenario('[C7482] Add a mail to portal', async function (I, users) {
+Scenario('[C7482] Add a mail to portal', async function (I, users, mail) {
     // TODO: Need to add Appointment, latest file(upload?)
     //const moment = require('moment');
-    let testrailID = 'C7482';
-    let testrailName = 'Add a mail to portal';
+    const testrailID = 'C7482',
+        testrailName = 'Add a mail to portal',
+        testSubject = testrailID + ' - ' + testrailName;
     await I.haveMail({
         from: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]],
         sendtype: 0,
-        subject: testrailID + ' - ' + testrailName,
+        subject: testSubject,
         to: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]]
     });
     I.login('app=io.ox/mail', { user: users[0] });
-    I.waitForVisible('.io-ox-mail-window');
-    I.waitForText('C7482 - Add a mail to portal', 5, { css: '.drag-title' });
-    I.click('C7482 - Add a mail to portal', { css: '.drag-title' });
-    I.waitForElement({ css: 'article.mail-detail' }, 5);
-    I.click({ css: '[aria-label="Mail Toolbar"] [data-action="more"]' });
-    I.waitForElement('.dropdown.open [data-action="io.ox/mail/actions/add-to-portal"]', 5);
-    I.click('.dropdown.open [data-action="io.ox/mail/actions/add-to-portal"]');
+    mail.waitForApp();
+    mail.selectMail(testSubject);
+    I.waitForElement('.mail-detail');
+    I.click('~More actions', '.mail-detail-pane');
+    I.waitForElement('.dropdown.open', 5);
+    I.click('Add to portal', '.dropdown.open .dropdown-menu');
     I.openApp('Portal');
     I.waitForVisible('.io-ox-portal-window');
-    I.waitForElement('.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"] .item', 5);
-    I.waitForText(testrailID + ' - ' + testrailName, 5, '.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"] .title');
-    I.click('.item', '.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"]');
+    I.waitForElement('.io-ox-portal [aria-label="' + testSubject + '"] .item', 5);
+    I.waitForText(testSubject, 5, '.io-ox-portal [aria-label="' + testSubject + '"] .title');
+    I.click('.item', '.io-ox-portal [aria-label="' + testSubject + '"]');
     I.waitForElement('.io-ox-sidepopup', 5);
-    I.waitForText(testrailID + ' - ' + testrailName, 5, '.io-ox-sidepopup-pane .subject');
+    I.waitForText(testSubject, 5, '.io-ox-sidepopup-pane .subject');
     I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane');
     I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane');
-    I.click('.item', '.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"]');
+    I.click('.item', '.io-ox-portal [aria-label="' + testSubject + '"]');
     I.waitForDetached('.io-ox-sidepopup', 5);
 });
 

@@ -52,20 +52,23 @@ Scenario('[C7738] Edit task with all fields filled', async function (I, tasks) {
 
     I.login('app=io.ox/tasks');
     tasks.waitForApp();
-    I.see('Estimated duration in minutes', '.task-details');
-    I.see('1337', '.task-details');
-    I.see('Actual duration in minutes', '.task-details');
-    I.see('1336', '.task-details');
-    I.see('Estimated costs', '.task-details');
-    I.see('€1,335', '.task-details');
-    I.see('Actual costs', '.task-details');
-    I.see('€1,334', '.task-details');
-    I.see('Distance', '.task-details');
-    I.see('1337mm', '.task-details');
-    I.see('Billing information', '.task-details');
-    I.see('Don not know any Bill', '.task-details');
-    I.see('Companies', '.task-details');
-    I.see('Open-Xchange GmbH', '.task-details');
+    I.waitForElement('.task-details');
+    within('.task-details', () => {
+        I.see('Estimated duration in minutes');
+        I.see('1337');
+        I.see('Actual duration in minutes');
+        I.see('1336');
+        I.see('Estimated costs');
+        I.see('€1,335');
+        I.see('Actual costs');
+        I.see('€1,334');
+        I.see('Distance');
+        I.see('1337mm');
+        I.see('Billing information');
+        I.see('Don not know any Bill');
+        I.see('Companies');
+        I.see('Open-Xchange GmbH');
+    });
 
     tasks.editTask();
     I.fillField('Estimated duration in minutes', '1339');
@@ -78,21 +81,24 @@ Scenario('[C7738] Edit task with all fields filled', async function (I, tasks) {
     I.fillField('Companies', 'Open-Xchange Inc.');
     tasks.save();
 
-    I.dontSee('1337');
-    I.dontSee('1336');
-    I.dontSee('€1,335');
-    I.dontSee('€1,334');
-    I.dontSee('1337mm');
-    I.dontSee('Don not know any Bill');
-    I.dontSee('Open-Xchange GmbH');
-    I.see('1339');
-    I.see('1338');
-    I.see('RUB');
-    I.see('1,339.00');
-    I.see('1,338.00');
-    I.see('1338mm');
-    I.see('Yes, i know any Bill');
-    I.see('Open-Xchange Inc.');
+    I.waitForElement('.task-details');
+    within('.task-details', () => {
+        I.dontSee('1337');
+        I.dontSee('1336');
+        I.dontSee('€1,335');
+        I.dontSee('€1,334');
+        I.dontSee('1337mm');
+        I.dontSee('Don not know any Bill');
+        I.dontSee('Open-Xchange GmbH');
+        I.see('1339');
+        I.see('1338');
+        I.see('RUB');
+        I.see('1,339.00');
+        I.see('1,338.00');
+        I.see('1338mm');
+        I.see('Yes, i know any Bill');
+        I.see('Open-Xchange Inc.');
+    });
 });
 
 Scenario('[C7739] Change tasks due date in dropdown', async function (I, tasks) {

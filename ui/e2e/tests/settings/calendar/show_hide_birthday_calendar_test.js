@@ -24,20 +24,18 @@ After(async (users) => {
 
 Scenario('[C248441] Configure to show/hide birthday calendar', async function (I) {
     I.login();
-    I.click('~Settings', '#io-ox-settings-topbar-icon');
+    I.openApp('Settings', { folder: 'virtual/settings/io.ox/calendar' });
 
     // Check whether birthday calendar is shown on Calendar App
-    I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
     I.waitForText('Show birthday calendar');
     I.seeCheckboxIsChecked('birthday');
     I.openApp('Calendar');
     I.waitForText('Birthdays');
 
     // Check whether birthday calendar is not shown on Calendar App
-    I.click('~Settings', '#io-ox-settings-topbar-icon');
+    I.openApp('Settings', { folder: 'virtual/settings/io.ox/calendar' });
     I.uncheckOption('Show birthday calendar');
     I.openApp('Calendar');
     I.waitForText('My calendars');
-    I.dontSee('Birthdays');
-
+    I.waitForInvisible('Birthdays');
 });

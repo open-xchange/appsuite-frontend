@@ -35,9 +35,13 @@ Scenario('[C110279] Primary mail account name can be changed', async function (I
     I.fillField('Account name', name);
     I.click('Save');
     I.waitForDetached('.modal-body');
+    I.waitForText('Account updated');
+    I.waitForElement('.close', '.io-ox-alert');
+    I.click('.close', '.io-ox-alert');
+    I.waitForDetached('.io-ox-alert');
 
     I.say('check list item title', 'blue');
-    I.seeTextEquals(name, '.io-ox-accounts-settings [data-id="mail0"] .list-item-title');
+    I.waitForText(name, '.list-item-title');
 
     I.say('check mail folder view', 'blue');
     I.openApp('Mail');

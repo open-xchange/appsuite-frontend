@@ -1,4 +1,4 @@
-const { I, users, contactpicker } = inject();
+const { I, contactpicker } = inject();
 
 
 module.exports = {
@@ -13,6 +13,12 @@ module.exports = {
         monthview: locate({ css: '.monthview-container' }).as('Month View'),
         yearview: locate({ css: '.year-view' }).as('Year View'),
         listview: locate({ css: '.calendar-list-view' }).as('List View')
+    },
+
+    waitForApp() {
+        I.waitForNetworkTraffic();
+        I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
+        I.waitForVisible(locate({ css: '*[data-app-name="io.ox/calendar"]' }).as('Calendar container'));
     },
 
     ready() {

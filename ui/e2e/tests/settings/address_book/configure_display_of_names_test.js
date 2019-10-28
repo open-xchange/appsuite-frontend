@@ -23,14 +23,14 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7862] Configure display name representation', async (I) => {
+Scenario('[C7862] Configure display name representation', async (I, contacts) => {
     const folder = await I.grabDefaultFolder('contacts'),
         firstName = 'Foo',
         lastName = 'Bar';
     await I.haveContact({ folder_id: folder, first_name: firstName, last_name: lastName });
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/contacts']);
-    I.waitForVisible({ css: '.io-ox-contacts-settings' });
+    I.waitForVisible('.io-ox-contacts-settings');
 
     // go into settings and change display style of contacts
     I.waitForText('Address Book', 10, '.io-ox-contacts-settings');
@@ -39,11 +39,9 @@ Scenario('[C7862] Configure display name representation', async (I) => {
 
     // Verify the displayed style
     I.openApp('Address Book');
-    I.waitForVisible('.io-ox-contacts-window');
-    I.waitForElement('~My address books');
-    I.selectFolder('Contacts');
-
+    contacts.waitForApp();
     I.waitForElement('.contact-grid-container');
+
     const firstNameLocator = locate('.first_name').withText(firstName),
         lastNameLocator = locate('.last_name').withText(lastName),
         nameLocator = firstNameLocator.before(lastNameLocator);
@@ -51,21 +49,14 @@ Scenario('[C7862] Configure display name representation', async (I) => {
     I.click(nameLocator, '.fullname');
 
     // Go back to settings and switch to other display style
-    I.click('~Settings', '#io-ox-settings-topbar-icon');
-
-    // Select address book settings
-    I.waitForText('Address Book', 5, '.folder-node');
-    I.selectFolder('Address Book');
-    I.waitForText('Address Book', 5, '.io-ox-contacts-settings');
+    I.openApp('Settings', { folder: 'virtual/settings/io.ox/contacts' });
 
     I.waitForText('Display of names');
     I.click('Last name, First name', '.io-ox-contacts-settings');
 
     // Go back to contacts app and verify it
     I.openApp('Address Book');
-    I.waitForVisible('.io-ox-contacts-window');
-    I.selectFolder('Contacts');
-    I.waitForElement('.contact-grid-container');
+    contacts.waitForApp();
     I.waitForText('Bar, Foo', undefined, '.contact-detail');
     I.click('Bar, Foo', '.fullname');
 });
