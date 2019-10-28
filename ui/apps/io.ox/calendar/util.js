@@ -1397,9 +1397,9 @@ define('io.ox/calendar/util', [
         cleanupAttendees: function (attendees) {
             // clean up attendees (remove confirmation status comments etc)
             return _(attendees).map(function (attendee) {
-                var temp = _(attendee).pick('cn', 'cuType', 'email', 'uri', 'entity', 'contact');
+                var temp = _(attendee).pick('cn', 'cuType', 'email', 'uri', 'entity', 'contact', 'resource');
                 // resources are always set to accepted
-                if (temp.cn === 'RESOURCE') {
+                if (temp.cuType === 'RESOURCE') {
                     temp.partStat = 'ACCEPTED';
                     if (attendee.comment) temp.comment = attendee.comment;
                 } else {
