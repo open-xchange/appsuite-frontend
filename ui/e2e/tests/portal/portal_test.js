@@ -50,7 +50,7 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
         end_time: moment().add(2, 'days').valueOf(),
         days: 2
     };
-    I.haveTask(task, { user: users[0] });
+    await I.haveTask(task, { user: users[0] });
 
     //Create Contact
     const contact = {
@@ -61,14 +61,14 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
         birthday: moment().add(2, 'days').valueOf()
 
     };
-    I.haveContact(contact, { user: users[0] });
+    await I.haveContact(contact, { user: users[0] });
     //Upload File to Infostore
     const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
     await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
 
     //Create Appointment
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
-    I.haveAppointment({
+    await I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
         summary: testrailID,
         location: testrailID,

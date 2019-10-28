@@ -29,7 +29,7 @@ Scenario('[C7738] Edit task with all fields filled', async function (I, tasks) {
     const testrailID = 'C7738',
         testrailName = 'Edit task with all fields filled';
 
-    I.haveTask({
+    await I.haveTask({
         title: testrailID,
         status: '1',
         percent_completed: '0',
@@ -52,25 +52,22 @@ Scenario('[C7738] Edit task with all fields filled', async function (I, tasks) {
 
     I.login('app=io.ox/tasks');
     tasks.waitForApp();
+    I.see('Estimated duration in minutes', '.task-details');
+    I.see('1337', '.task-details');
+    I.see('Actual duration in minutes', '.task-details');
+    I.see('1336', '.task-details');
+    I.see('Estimated costs', '.task-details');
+    I.see('€1,335', '.task-details');
+    I.see('Actual costs', '.task-details');
+    I.see('€1,334', '.task-details');
+    I.see('Distance', '.task-details');
+    I.see('1337mm', '.task-details');
+    I.see('Billing information', '.task-details');
+    I.see('Don not know any Bill', '.task-details');
+    I.see('Companies', '.task-details');
+    I.see('Open-Xchange GmbH', '.task-details');
 
-    I.waitForElement('.tasks-detailview', 5);
-    I.see('Estimated duration in minutes');
-    I.see('1337');
-    I.see('Actual duration in minutes');
-    I.see('1336');
-    I.see('Estimated costs');
-    I.see('€1,335');
-    I.see('Actual costs');
-    I.see('€1,334');
-    I.see('Distance');
-    I.see('1337mm');
-    I.see('Billing information');
-    I.see('Don not know any Bill');
-    I.see('Companies');
-    I.see('Open-Xchange GmbH');
-
-    I.clickToolbar('Edit');
-    I.waitForElement('.io-ox-tasks-edit', 5);
+    tasks.editTask();
     I.fillField('Estimated duration in minutes', '1339');
     I.fillField('Actual duration in minutes', '1338');
     I.fillField('Estimated costs', '1339');
@@ -79,9 +76,8 @@ Scenario('[C7738] Edit task with all fields filled', async function (I, tasks) {
     I.fillField('Distance', '1338mm');
     I.fillField('Billing information', 'Yes, i know any Bill');
     I.fillField('Companies', 'Open-Xchange Inc.');
-    I.click('Save');
-    I.waitForDetached('.io-ox-tasks-edit', 5);
-    I.waitForElement('.tasks-detailview');
+    tasks.save();
+
     I.dontSee('1337');
     I.dontSee('1336');
     I.dontSee('€1,335');
@@ -125,14 +121,10 @@ Scenario('[C7740] Edit Task', async function (I, tasks) {
     await I.haveTask({ title: testrailID, folder_id: await I.grabDefaultFolder('tasks'), note: 'Edit Task' });
     I.login('app=io.ox/tasks');
     tasks.waitForApp();
-    I.waitForElement('.tasks-detailview', 5);
-    I.clickToolbar('Edit');
-    I.waitForElement('.io-ox-tasks-edit', 5);
-
+    tasks.editTask();
     I.fillField('Subject', testrailID + ' - 2');
     I.waitForText(testrailID + ' - 2', 5, '.floating-window-content .title');
-    I.click('Save');
-    I.waitForDetached('.io-ox-tasks-edit', 5);
+    tasks.save();
     I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
     I.waitForText(testrailID + ' - 2', 5, '[role="navigation"] .title');
 });
@@ -272,7 +264,9 @@ Scenario('[C7746] Move several tasks to an other folder at the same time', async
         testrailName = 'Move several tasks to an other folder at the same time',
         numberOfTasks = 3,
         taskDefaultFolder = await I.grabDefaultFolder('tasks'),
-        promises = [];
+        promises = [
+            I.haveFolder({ module: 'tasks', title: testrailID, parent: taskDefaultFolder })
+        ];
 
     for (let i = 1; i <= numberOfTasks; i++) {
         promises.push(
@@ -280,13 +274,13 @@ Scenario('[C7746] Move several tasks to an other folder at the same time', async
         );
     }
     await Promise.all(promises);
-    await I.haveFolder({ module: 'tasks', title: testrailID, parent: taskDefaultFolder });
 
     I.login('app=io.ox/tasks');
     tasks.waitForApp();
-    I.waitForElement('.tasks-detailview', 5);
-    I.click('[aria-label="Tasks toolbar"] .btn[title="Select all"]');
-    I.seeNumberOfElements('li.selected.vgrid-cell', numberOfTasks);
+    I.waitForElement('.vgrid-cell.selected.tasks');
+    I.waitForElement('.tasks-detailview');
+    I.click('.select-all');
+    I.seeNumberOfElements('.vgrid-cell.selected', numberOfTasks);
     I.waitForText(numberOfTasks + ' items selected', 5, '.task-detail-container .message');
 
     I.clickToolbar('~More actions');
@@ -302,12 +296,12 @@ Scenario('[C7746] Move several tasks to an other folder at the same time', async
     I.triggerRefresh();
     I.selectFolder(testrailID);
     tasks.waitForApp();
+    I.waitForElement('.vgrid-cell.selected.tasks');
     I.waitForElement('.tasks-detailview');
-
     for (let i = 1; i <= numberOfTasks; i++) {
         const id = `${testrailID} - ${i}`;
-        I.waitForText(id, 5, '.vgrid-cell');
-        I.click(id, '.vgrid-cell');
+        I.see(id, '.vgrid-cell');
+        tasks.selectTask(id);
         I.waitForText(id, 2, '.tasks-detailview');
     }
 });
@@ -320,14 +314,13 @@ Scenario('[C7747] Add an attachment to a Task', async function (I, tasks) {
     I.login('app=io.ox/tasks');
     tasks.waitForApp();
     I.waitForElement('.tasks-detailview', 5);
-    I.clickToolbar('Edit');
-    I.waitForElement('.io-ox-tasks-edit', 5);
+    tasks.editTask();
     I.click('Expand form');
 
     I.attachFile('[data-app-name="io.ox/tasks/edit"] input[type="file"]', 'e2e/media/files/generic/testdocument.odt');
     I.waitForElement('.file.io-ox-core-tk-attachment', 5);
     I.seeNumberOfElements('.file.io-ox-core-tk-attachment', 1);
-    I.click('Save');
+    tasks.save();
     I.waitForText(testrailID, 10, '.tasks-detailview .title');
     I.waitForText('Attachments', 10, '.tasks-detailview .attachments');
     I.waitForText('testdocument.odt', 10, '.tasks-detailview [data-dropdown="io.ox/core/tk/attachment/links"]');
@@ -346,17 +339,13 @@ Scenario('[C7748] Remove an attachment from a Task', async function (I, tasks) {
     I.waitForText(testrailID, 10, '.tasks-detailview .title');
     I.waitForText('Attachments', 10, '.tasks-detailview .attachments');
     I.waitForText('testdocument.odt', 10, '.tasks-detailview [data-dropdown="io.ox/core/tk/attachment/links"]');
-    I.clickToolbar('Edit');
-    I.waitForElement('[data-app-name="io.ox/tasks/edit"]', 5);
-    I.waitForElement('.floating-window-content .container.io-ox-tasks-edit', 5);
+    tasks.editTask();
     I.waitForElement('.file.io-ox-core-tk-attachment', 5);
     I.seeNumberOfElements('.file.io-ox-core-tk-attachment', 1);
     I.click('.io-ox-core-tk-attachment-list .remove');
     I.waitForDetached('.file.io-ox-core-tk-attachment', 5);
     I.seeNumberOfElements('.file.io-ox-core-tk-attachment', 0);
-    I.click('Save');
-    I.waitForDetached('.io-ox-tasks-edit', 5);
-    I.waitForElement('.tasks-detailview', 5);
+    tasks.save();
     I.waitForText(testrailID, 10, '.tasks-detailview .title');
     I.waitForDetached('.tasks-detailview .attachments-container');
 });
@@ -382,23 +371,21 @@ Scenario('[C7749] Edit existing Task as participant', async function (I, users, 
     tasks.waitForApp();
     I.waitForText(testrailID, 5, '.window-body');
     I.waitForText(testrailID, 5, '.tasks-detailview .title');
-    I.clickToolbar('Edit');
-    I.waitForElement('[data-app-name="io.ox/tasks/edit"]', 5);
-    I.waitForElement('.io-ox-tasks-edit', 5);
+    tasks.editTask();
     I.fillField('Subject', testrailID + ' - 2');
     I.fillField('Description', testrailName + ' - 2');
-    I.click('Save');
+    tasks.save();
     I.waitForText(testrailID + ' - 2', 5, '.window-body');
     I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
     I.logout();
 
     I.login('app=io.ox/tasks');
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    tasks.waitForApp();
     I.waitForText(testrailID + ' - 2', 5, '.window-body');
     I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
 });
 
-Scenario('[C7750] Edit existing Task in a shared folder', async function (I, users) {
+Scenario('[C7750] Edit existing Task in a shared folder', async function (I, users, tasks) {
     const testrailID = 'C7750',
         testrailName = 'Edit existing Task in a shared folder',
         folder_id = await I.haveFolder({
@@ -427,34 +414,33 @@ Scenario('[C7750] Edit existing Task in a shared folder', async function (I, use
 
     function waitAndCheck(id, text) {
         text = text ? id + text : id;
-        I.waitForVisible('*[data-app-name="io.ox/tasks"]');
         I.waitForText('My tasks');
         I.selectFolder(id);
-        I.waitForText(testrailID, undefined, 'li.tasks.even');
-        I.click('li.tasks.even[data-index="0"]');
+        I.waitForText(testrailID, undefined, '.tasks.even');
+        I.click('.tasks.even[data-index="0"]');
         I.waitForText(text, 15, '.window-body');
         I.waitForText(text, 15, '.tasks-detailview .title');
     }
 
     I.login('app=io.ox/tasks', { user: users[1] });
+    tasks.waitForApp();
     waitAndCheck(testrailID);
-    I.clickToolbar('Edit');
-    I.waitForElement('[data-app-name="io.ox/tasks/edit"]', 5);
+    tasks.editTask();
     I.waitForElement('.floating-window-content .container.io-ox-tasks-edit', 5);
     I.fillField('Subject', testrailID + ' - 2');
     I.fillField('Description', testrailName + ' - 2');
-    I.click('Save');
-    I.waitForDetached('.io-ox-tasks-edit,.launcher-icon.fa-refresh.fa-spin');
+    tasks.save();
     waitAndCheck(testrailID, ' - 2');
     I.logout();
 
     I.login('app=io.ox/tasks');
+    tasks.waitForApp();
     waitAndCheck(testrailID, ' - 2');
 });
 
-Scenario('[C7751] Close Task with the X', function (I) {
+Scenario('[C7751] Close Task with the X', function (I, tasks) {
     I.login('app=io.ox/tasks');
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    tasks.waitForApp();
     I.clickToolbar('New task');
     I.waitForVisible('.io-ox-tasks-edit-window');
     I.see('Create');
@@ -464,13 +450,13 @@ Scenario('[C7751] Close Task with the X', function (I) {
     I.waitForDetached('.io-ox-tasks-edit-window');
 });
 
-Scenario('[C7752] Close Task with the X after adding some information', function (I) {
+Scenario('[C7752] Close Task with the X after adding some information', function (I, tasks) {
     const testrailID = 'C7752',
         testrailName = 'Close Task with the X after adding some information';
     I.login('app=io.ox/tasks');
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-    I.clickToolbar('New task');
-    I.waitForVisible('.io-ox-tasks-edit-window');
+    tasks.waitForApp();
+    tasks.newTask();
+
     I.fillField('Subject', testrailID);
     I.fillField('Description', testrailName);
     I.click('Discard');
