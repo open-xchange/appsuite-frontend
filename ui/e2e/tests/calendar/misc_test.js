@@ -326,8 +326,8 @@ Scenario('[C244785] Open event from invite notification in calendar', async (I, 
     I.see(`${startTime.format('ddd, M/D/YYYY')}`, '.io-ox-sidepopup .date');
 
     // Have to check since transition times are shown differently
-    isTransitionTime() ? I.see(`${startTime.format('h:mm')} ${startTime.format('A')} – ${endTime.format('h:mm')} ${endTime.format('A')}CEST`) :
-        I.see(`${startTime.format('h:mm')} – ${endTime.format('h:mm')} ${startTime.format('A')}CEST`);
+    isTransitionTime() ? I.see(`${startTime.format('h:mm')} ${startTime.format('A')} – ${endTime.format('h:mm')} ${endTime.format('A')}`) :
+        I.see(`${startTime.format('h:mm')} – ${endTime.format('h:mm')} ${startTime.format('A')}`);
 
     //I.see(`${startTime.format('h:mm')} – ${endTime.format('h:mm')} ${startTime.format('A')}CEST`, '.io-ox-sidepopup .time');
     I.see(`${userA.userdata.sur_name}, ${userA.userdata.given_name}`, '.io-ox-sidepopup');
