@@ -95,18 +95,25 @@ define('io.ox/mail/compose/model', [
             return this.save(_.device('smartphone'));
         },
 
-        send: function () {
+        sendOrSave: function (method) {
+            var data = this.toJSON(),
+                files = (data.attachments || []).filter(function (attachment) {
+                    return attachment.group === 'localFile';
+                }).map(function (attachment) {
+                    return attachment.originalFile;
+                });
             this.destroyed = true;
-            return composeAPI.space.send(this.get('id'), this.toJSON()).fail(function () {
+            return composeAPI.space[method](this.get('id'), data, files).fail(function () {
                 this.destroyed = false;
             }.bind(this));
         },
 
+        send: function () {
+            return this.sendOrSave('send');
+        },
+
         saveDraft: function () {
-            this.destroyed = true;
-            return composeAPI.space.save(this.get('id'), this.toJSON()).fail(function () {
-                this.destroyed = false;
-            }.bind(this));
+            return this.sendOrSave('save');
         },
 
         attachFiles: function (files) {
