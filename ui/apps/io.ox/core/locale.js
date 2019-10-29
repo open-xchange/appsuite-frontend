@@ -156,7 +156,7 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
             data = moment.localeData(id),
             dow = data.firstDayOfWeek();
         localeDefinitions[localeId] = {
-            timeLong: data.longDateFormat('LTS'),
+            timeLong: meta.translateMomentToCLDR(data.longDateFormat('LTS')),
             date: meta.translateMomentToCLDR(data.longDateFormat('L')),
             number: getDefaultNumberFormat(localeId),
             firstDayOfWeek: meta.weekday.name(dow),
