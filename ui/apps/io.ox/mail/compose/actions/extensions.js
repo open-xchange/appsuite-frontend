@@ -13,14 +13,24 @@
  */
 
 define('io.ox/mail/compose/actions/extensions', [
+    'io.ox/mail/actions/attachmentEmpty',
     'io.ox/mail/actions/attachmentQuota',
     'io.ox/mail/api',
     'io.ox/mail/compose/api',
     'gettext!io.ox/mail'
-], function (attachmentQuota, mailAPI, composeAPI, gt) {
+], function (attachmentEmpty, attachmentQuota, mailAPI, composeAPI, gt) {
     'use strict';
 
     var api = {};
+
+    api.emptyAttachmentCheck = function (baton) {
+        var files = baton.model.get('attachments').pluck('originalFile');
+        return attachmentEmpty.emptinessCheck(files).then(_.identity, function () {
+            baton.stopPropagation();
+            throw arguments;
+        });
+    };
+
 
     api.waitForPendingUploads = function (baton) {
         var deferreds = baton.model.get('attachments')
