@@ -872,8 +872,10 @@ define('io.ox/mail/api', [
 
     function handleSpam(list, state) {
         prepareRemove(list);
-        // reset spam folder; we assume that the spam handler will move the message to the spam folder
-        resetFolderByType('spam');
+        // reset spam or inbox folder; we assume that the spam handler will move the message to the spam or inbox folder
+        if (state) resetFolderByType('spam');
+        else resetFolderByType('inbox');
+
         http.pause();
         _(list).map(function (item) {
             return http.PUT({
