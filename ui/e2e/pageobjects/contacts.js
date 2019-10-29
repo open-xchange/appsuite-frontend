@@ -43,5 +43,18 @@ module.exports = {
         I.click(field);
         I.waitForText(field, 30, '.contact-edit');
         if (input) I.fillField(field, input);
+    },
+    editMyContact() {
+        I.waitForVisible('.contact-picture');
+        I.click('.contact-picture');
+        I.waitForText('My contact data', 5, '.dropdown.open .dropdown-menu');
+        I.click('My contact data', '.dropdown.open .dropdown-menu');
+        I.waitForVisible('.io-ox-contacts-edit-window');
+    },
+    editMyContactPhoto() {
+        this.editMyContact();
+        I.waitForElement('.contact-edit .contact-photo');
+        I.click('.contact-edit .contact-photo');
+        I.waitForVisible('.edit-picture');
     }
 };

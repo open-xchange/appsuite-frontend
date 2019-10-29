@@ -194,13 +194,16 @@ const checkFileOrder = (I, files) => {
 Scenario('[C45040] Sort files', async (I, drive) => {
     const folder = await I.grabDefaultFolder('infostore');
     const testFolder = await I.haveFolder({ title: 'Testfolder', module: 'infostore', parent: folder });
-    await I.haveFile(testFolder, 'e2e/media/files/0kb/document.txt');
-    await I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.rtf');
-    await I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.odt');
-    await I.haveFile(testFolder, 'e2e/media/files/generic/testpresentation.ppsm');
+    await Promise.all([
+        I.haveFile(testFolder, 'e2e/media/files/0kb/document.txt'),
+        I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.rtf'),
+        I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.odt'),
+        I.haveFile(testFolder, 'e2e/media/files/generic/testpresentation.ppsm')
+    ]);
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.selectFolder('Testfolder');
+    I.waitForDetached('.io-ox-busy');
     I.waitForText('document.txt', 5, '.list-view');
 
     // Begins with Name ascending order
@@ -208,24 +211,29 @@ Scenario('[C45040] Sort files', async (I, drive) => {
     checkFileOrder(I, ['document.txt', 'testdocument.odt', 'testdocument.rtf', 'testpresentation.ppsm']);
     I.clickToolbar('Sort by');
     I.click('Descending');
+    I.waitForDetached('.io-ox-busy');
     I.say('Name > Descending');
     checkFileOrder(I, ['testpresentation.ppsm', 'testdocument.rtf', 'testdocument.odt', 'document.txt']);
 
     I.clickToolbar('Sort by');
     I.click('Date');
+    I.waitForDetached('.io-ox-busy');
     I.say('Date > Descending');
     checkFileOrder(I, ['testpresentation.ppsm', 'testdocument.odt', 'testdocument.rtf', 'document.txt']);
     I.clickToolbar('Sort by');
     I.click('Ascending');
+    I.waitForDetached('.io-ox-busy');
     I.say('Date > Ascending');
     checkFileOrder(I, ['document.txt', 'testdocument.rtf', 'testdocument.odt', 'testpresentation.ppsm']);
 
     I.clickToolbar('Sort by');
     I.click('Size');
+    I.waitForDetached('.io-ox-busy');
     I.say('Size > Ascending');
     checkFileOrder(I, ['document.txt', 'testdocument.odt', 'testpresentation.ppsm', 'testdocument.rtf']);
     I.clickToolbar('Sort by');
     I.click('Descending');
+    I.waitForDetached('.io-ox-busy');
     I.say('Size > Descending');
     checkFileOrder(I, ['testdocument.rtf', 'testpresentation.ppsm', 'testdocument.odt', 'document.txt']);
 });

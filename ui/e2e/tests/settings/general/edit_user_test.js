@@ -27,12 +27,12 @@ After(async (users) => {
 Scenario('[C208269] Edit users contact information', async (I) => {
 
     function addContactsField(fieldType, field, input) {
-        I.click({ css: `div.dropdown[data-add="${fieldType}"] button` }, '.contact-edit');
+        I.click({ css: `.dropdown[data-add="${fieldType}"] button` }, '.contact-edit');
         //I.click(`Add ${fieldType}`);
-        I.waitForVisible('.dropdown-menu');
+        I.waitForVisible('.dropdown.open .dropdown-menu');
         I.click(field);
         I.waitForText(field, undefined, '.contact-edit');
-        if (input) I.pressKey(input);
+        if (input) I.fillField(field, input);
         I.pressKey('Enter');
     }
 
@@ -71,6 +71,7 @@ Scenario('[C208269] Edit users contact information', async (I) => {
     // communication
     I.fillField('Cell phone', 'cell phone');
     var prop = await I.grabAttributeFrom({ css: 'input[name="email1"]' }, 'readonly');
+    if (prop === 'readonly') prop = 'true';
     expect(prop.toString()).to.contain('true');
     addContactsField('communication', 'Email 2', 'email2@test');
     addContactsField('communication', 'Email 3', 'email3@test');
@@ -122,9 +123,8 @@ Scenario('[C208269] Edit users contact information', async (I) => {
     I.waitForDetached('.modal-dialog');
     // takes an unknown moment until the image appears
     I.waitForVisible('.contact-photo-upload .contact-photo', 1);
-    let [rule] = await I.grabCssPropertyFrom('.contact-photo-upload .contact-photo', 'background-image');
-    // I.wait(5);
-    expect(rule).to.match(/^url\("data:image\/jpeg;base64/);
+    let image = await I.grabBackgroundImageFrom('.contact-photo-upload .contact-photo');
+    expect(image).to.match(/^url\("data:image\/jpeg;base64/);
 
     I.click('Save', '.io-ox-contacts-edit-window');
     I.waitForDetached('.io-ox-contacts-edit-window');
@@ -149,12 +149,12 @@ Scenario('[C208269] Edit users contact information', async (I) => {
     // check picture
     I.waitForElement(locate('.contact-detail h1 .last_name').withText(lastname).as('Detail view heading'));
     I.waitForVisible('.contact-photo', 1);
-    [rule] = await I.grabCssPropertyFrom('.contact-photo', 'background-image');
-    expect(rule).not.to.match(/fallback/);
-    expect(rule).to.match(/^url\(/);
+    image = await I.grabBackgroundImageFrom('.contact-photo');
+    expect(image).not.to.match(/fallback/);
+    expect(image).to.match(/^url\(/);
     // also check picture in topbar
-    [rule] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
-    expect(rule).to.match(/^url\(/);
+    image = await I.grabBackgroundImageFrom('#io-ox-topbar-dropdown-icon .contact-picture');
+    expect(image).to.match(/^url\(/);
 
     // personal information
     I.see('Sir', '.contact-detail.view');
