@@ -141,7 +141,8 @@ define('io.ox/mail/compose/api', [
             formData.append('JSON', JSON.stringify(data));
 
             (attachments || []).forEach(function (attachment, index) {
-                formData.append('file_' + index, attachment);
+                if (attachment.name) formData.append('file_' + index, attachment, attachment.name);
+                else formData.append('file_' + index, attachment);
             });
 
             var def = http.UPLOAD({
@@ -174,7 +175,8 @@ define('io.ox/mail/compose/api', [
             formData.append('JSON', JSON.stringify(data));
 
             (attachments || []).forEach(function (attachment, index) {
-                formData.append('file_' + index, attachment);
+                if (attachment.name) formData.append('file_' + index, attachment, attachment.name);
+                else formData.append('file_' + index, attachment);
             });
 
             return http.UPLOAD({

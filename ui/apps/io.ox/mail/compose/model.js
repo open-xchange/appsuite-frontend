@@ -97,17 +97,21 @@ define('io.ox/mail/compose/model', [
 
         sendOrSave: function (method) {
             var data = this.toJSON(),
-                files = (data.attachments || []).filter(function (attachment) {
-                    return attachment.group === 'localFile';
-                }).map(function (attachment) {
-                    return attachment.originalFile;
+                getFiles = (this.get('attachments') || []).filter(function (model) {
+                    return model.get('group') === 'localFile';
+                }).map(function (model) {
+                    if (model.resized) return model.resized;
+                    return model.get('originalFile');
                 });
             // remove attachments meta as it contains a lot of overhead like base64 encoded preview urls
             data.attachments.forEach(function (attachment) {
                 delete attachment.meta;
             });
             this.destroyed = true;
-            return composeAPI.space[method](this.get('id'), data, files).fail(function () {
+            return $.when.apply($, getFiles).then(function () {
+                var files = _(arguments).toArray();
+                return composeAPI.space[method](this.get('id'), data, files);
+            }.bind(this)).fail(function () {
                 this.destroyed = false;
             }.bind(this));
         },
