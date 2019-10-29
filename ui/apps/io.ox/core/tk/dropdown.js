@@ -136,7 +136,6 @@
                 // may be not the case if a menu point is added after menu was
                 // initial moved to the body by the code above
                 var menu = $parent.data('menu');
-                console.log(menu);
                 if (!menu.find('[data-action="close-menu"]').parent().is(':last-child')) {
                     menu.find('[data-action="close-menu"]').parent().appendTo(menu);
                 }

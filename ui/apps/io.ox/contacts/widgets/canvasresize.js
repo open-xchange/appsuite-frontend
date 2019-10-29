@@ -54,7 +54,8 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/core/tk/image-util'], func
     function createCanvas(width, height) {
         // disable offscreenCanvas on current Chrome due to
         // https://bugs.chromium.org/p/chromium/issues/detail?id=1012036
-        if (_.browser.chrome < 77 && self.OffscreenCanvas) return new self.OffscreenCanvas(width, height);
+        var badChromeVersion = _.browser.chrome && _.browser.chrome >= 77;
+        if (!badChromeVersion && self.OffscreenCanvas) return new self.OffscreenCanvas(width, height);
         var canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
@@ -318,8 +319,12 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/core/tk/image-util'], func
 
             options.exif = img.exif;
 
+            // disable webworker for imageResize on current Chrome due to
+            // https://bugs.chromium.org/p/chromium/issues/detail?id=1012036
+            var badChromeVersion = _.browser.chrome && _.browser.chrome >= 77;
+
             // do not use webworker if offscreencanvas is not available
-            if (!self.OffscreenCanvas || !self.ImageBitmap) return resize({ img: img, options: options }, $.noop);
+            if (badChromeVersion || !self.OffscreenCanvas || !self.ImageBitmap) return resize({ img: img, options: options }, $.noop);
 
             return worker.invoke('resize', { img: img, options: _.omit(options, 'callback') }).then(function (data) {
                 if (self.ImageBitmap && data instanceof self.ImageBitmap) {
