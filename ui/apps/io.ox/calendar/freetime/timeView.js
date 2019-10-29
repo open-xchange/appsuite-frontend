@@ -718,9 +718,7 @@ define('io.ox/calendar/freetime/timeView', [
             }
 
             // we may encounter a daylight saving time change here. We need to calculate the offset change correctly
-            var prevOffset = start._offset;
-
-            return start.add(millisecondsFromDayStart, 'milliseconds').add(prevOffset - start._offset, 'minutes').valueOf();
+            return start.add(millisecondsFromDayStart, 'milliseconds').add(moment(start).startOf('day')._offset - start._offset, 'minutes').valueOf();
         },
 
         setToGrid: function (coord) {
