@@ -716,7 +716,11 @@ define('io.ox/calendar/freetime/timeView', [
             if (inverse ? !this.model.get('onlyWorkingHours') : this.model.get('onlyWorkingHours')) {
                 start.add(this.model.get('startHour'), 'hours');
             }
-            return start.valueOf() + millisecondsFromDayStart;
+
+            // we may encounter a daylight saving time change here. We need to calculate the offset change correctly
+            var prevOffset = start._offset;
+
+            return start.add(millisecondsFromDayStart, 'milliseconds').add(prevOffset - start._offset, 'minutes').valueOf();
         },
 
         setToGrid: function (coord) {
