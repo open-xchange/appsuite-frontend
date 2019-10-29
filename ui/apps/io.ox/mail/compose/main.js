@@ -258,6 +258,8 @@ define('io.ox/mail/compose/main', [
             var def = $.Deferred();
             obj = _.extend({}, obj);
 
+            if (obj.type === 'edit') app.cid = 'io.ox/mail/compose:' + _.cid(obj.original) + ':' + obj.type;
+
             // Set window and toolbars invisible initially
             win.nodes.header.addClass('sr-only');
             win.nodes.body.addClass('sr-only');
@@ -319,8 +321,11 @@ define('io.ox/mail/compose/main', [
 
         getApp: createInstance,
 
-        reuse: function () {
-            // disable reuse since a floating window is never reused
+        reuse: function (method, data) {
+            // only reuse for draft edit
+            if (data && data.type === 'edit') {
+                return ox.ui.App.reuse('io.ox/mail/compose:' + _.cid(data.original) + ':edit');
+            }
             return false;
         }
     };
