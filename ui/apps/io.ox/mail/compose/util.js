@@ -32,11 +32,12 @@ define('io.ox/mail/compose/util', [
                 contentDisposition = (opt.contentDisposition || 'attachment').toLowerCase(),
                 attachment = opt.attachment,
                 data = opt.origin,
-                def;
+                def,
+                instantAttachmentUpload = settings.get('features/instantAttachmentUpload', true) || contentDisposition === 'inline';
 
             function process() {
                 if (!data) return;
-                if (settings.get('features/instantAttachmentUpload', true) === false) return;
+                if (instantAttachmentUpload === false) return;
 
                 def = composeAPI.space.attachments[attachment.has('id') ? 'update' : 'add'](space, data, contentDisposition, attachment.get('id'));
                 data = undefined;
@@ -70,7 +71,7 @@ define('io.ox/mail/compose/util', [
                 });
                 var isResizableImage = resize.matches('type', data.file) &&
                     resize.matches('size', data.file) &&
-                    settings.get('features/instantAttachmentUpload', true) !== false;
+                    instantAttachmentUpload !== false;
 
                 attachment.on('destroy', function () {
                     data = undefined;

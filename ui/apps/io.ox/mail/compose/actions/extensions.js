@@ -24,7 +24,7 @@ define('io.ox/mail/compose/actions/extensions', [
     var api = {};
 
     api.emptyAttachmentCheck = function (baton) {
-        var files = baton.model.get('attachments').pluck('originalFile');
+        var files = baton.model.get('attachments').chain().pluck('originalFile').compact().value();
         return attachmentEmpty.emptinessCheck(files).then(_.identity, function () {
             baton.stopPropagation();
             throw arguments;
