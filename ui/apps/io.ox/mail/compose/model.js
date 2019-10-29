@@ -102,6 +102,10 @@ define('io.ox/mail/compose/model', [
                 }).map(function (attachment) {
                     return attachment.originalFile;
                 });
+            // remove attachments meta as it contains a lot of overhead like base64 encoded preview urls
+            data.attachments.forEach(function (attachment) {
+                delete attachment.meta;
+            });
             this.destroyed = true;
             return composeAPI.space[method](this.get('id'), data, files).fail(function () {
                 this.destroyed = false;
