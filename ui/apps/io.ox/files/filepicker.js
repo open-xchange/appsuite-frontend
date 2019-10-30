@@ -698,7 +698,10 @@ define('io.ox/files/filepicker', [
                 }
             },
             cancel: options.cancel,
-            close: options.close
+            close: function () {
+                if (_.isFunction(options.close)) options.close();
+                if (def.state() === 'pending') def.reject();
+            }
         });
 
         return def.promise();
