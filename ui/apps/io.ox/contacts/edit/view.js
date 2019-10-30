@@ -74,7 +74,7 @@ define('io.ox/contacts/edit/view', [
                     $('<div class="col-xs-3 col-sm-4">').append(
                         this.renderContactPhoto()
                     ),
-                    $('<div class="col-xs-9 col-sm-8 height-100">').append(
+                    $('<div class="col-xs-9 col-sm-6 height-100">').append(
                         this.renderContactSummary()
                     )
                 )
