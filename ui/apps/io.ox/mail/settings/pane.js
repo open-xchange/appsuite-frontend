@@ -19,9 +19,10 @@ define('io.ox/mail/settings/pane', [
     'io.ox/core/notifications',
     'io.ox/mail/mailfilter/vacationnotice/model',
     'io.ox/mail/mailfilter/autoforward/model',
+    'io.ox/core/api/mailfilter',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (ext, ExtensibleView, capabilities, util, notifications, vacationNoticeModel, autoforwardModel, settings, gt) {
+], function (ext, ExtensibleView, capabilities, util, notifications, vacationNoticeModel, autoforwardModel, mailfilter, settings, gt) {
 
     'use strict';
 
@@ -196,29 +197,35 @@ define('io.ox/mail/settings/pane', [
 
                 if (!capabilities.has('mailfilter_v2')) return;
 
-                this.append(
-                    $('<button type="button" class="btn btn-default" data-action="edit-vacation-notice">')
-                    .append(
-                        $('<i class="fa fa-toggle-on" aria-hidden="true">').hide(),
-                        $.txt(gt('Vacation notice') + ' ...')
-                    )
-                    .on('click', openDialog)
-                );
+                this.append($('<span id="vacation-placeholder">'));
 
-                // check whether it's active
-                var model = new vacationNoticeModel();
-                model.fetch().done(updateToggle.bind(this, model));
-                ox.on('mail:change:vacation-notice', updateToggle.bind(this));
+                mailfilter.getConfig().then(function (e) {
+                    if (!_(e.actioncmds).findWhere({ id: 'vacation' })) return;
 
-                function updateToggle(model) {
-                    this.find('[data-action="edit-vacation-notice"] .fa-toggle-on').toggle(model.get('active'));
-                }
+                    $('#vacation-placeholder').replaceWith(
+                        $('<button type="button" class="btn btn-default" data-action="edit-vacation-notice">')
+                        .append(
+                            $('<i class="fa fa-toggle-on" aria-hidden="true">').hide(),
+                            $.txt(gt('Vacation notice') + ' ...')
+                        )
+                        .on('click', openDialog)
+                    );
 
-                function openDialog() {
-                    ox.load(['io.ox/mail/mailfilter/vacationnotice/view']).done(function (view) {
-                        view.open();
-                    });
-                }
+                    // check whether it's active
+                    var model = new vacationNoticeModel();
+                    model.fetch().done(updateToggle.bind(this, model));
+                    ox.on('mail:change:vacation-notice', updateToggle.bind(this));
+
+                    function updateToggle(model) {
+                        this.find('[data-action="edit-vacation-notice"] .fa-toggle-on').toggle(model.get('active'));
+                    }
+
+                    function openDialog() {
+                        ox.load(['io.ox/mail/mailfilter/vacationnotice/view']).done(function (view) {
+                            view.open();
+                        });
+                    }
+                });
             }
         },
         //
