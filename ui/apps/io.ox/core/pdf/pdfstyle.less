@@ -125,7 +125,8 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7") 0 0 repeat;
+        /* bug #67856; looks like the less parser has problems with the base64 !?
+        background: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7") 0 0 repeat; */
 
         &:hover {
             opacity: 0.2;
@@ -155,7 +156,7 @@
         margin-left: 5px;
         cursor: pointer;
         word-wrap: break-word;
-        
+
         h1 {
             font-size: 1em;
             border-bottom: 1px solid #000000;
