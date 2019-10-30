@@ -1,6 +1,5 @@
 
 const actor = require('@open-xchange/codecept-helper').actor;
-const expect = require('chai').expect;
 
 module.exports = actor({
     //remove previously created appointments by appointment title
@@ -84,5 +83,16 @@ module.exports = actor({
         let backgroundImage = await this.grabCssPropertyFrom(selector, 'backgroundImage');
         backgroundImage = Array.isArray(backgroundImage) ? backgroundImage[0] : backgroundImage;
         return backgroundImage ? backgroundImage : 'none';
+    },
+
+    clickDropdown(text) {
+        this.waitForText(text, 5, '.dropdown.open .dropdown-menu');
+        this.click(text, '.dropdown.open .dropdown-menu');
+    },
+
+    openFolderMenu(folderName) {
+        const item = `.folder-tree .contextmenu-control[title*="${folderName}"]`;
+        this.waitForElement(item);
+        this.click(item);
     }
 });

@@ -24,20 +24,22 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users) {
+Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, drive) {
     session('Alice', () => {
         I.login('app=io.ox/files');
-
+        drive.waitForApp();
         I.waitForText('My shares');
         I.selectFolder('My shares');
+        drive.waitForApp();
         // sometimes this is not fast enough and there are 4 objects
-        I.retry(5).seeNumberOfElements('.list-view li.list-item', 0);
+        I.seeNumberOfElements('.list-view li.list-item', 0);
 
         //I.shareFolder('Music');
         I.click('My files', '.folder-tree');
         I.selectFolder('Music');
+        drive.waitForApp();
         I.clickToolbar('Share');
-        I.click('Invite people');
+        I.clickDropdown('Invite people');
         I.waitForText('Share folder');
         I.click('Send notification by email');
         I.dontSeeCheckboxIsChecked('Send notification by email');
@@ -65,8 +67,10 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users) {
 
     session('Bob', () => {
         I.login('app=io.ox/files', { user: users[1] });
+        drive.waitForApp();
         I.waitForText('Shared files', 5, '.folder-tree');
         I.selectFolder('Shared files');
+        drive.waitForApp();
         I.waitForText(users[0].get('name'));
         I.selectFolder(users[0].get('name'));
         I.waitForText('Music', 5, '.list-view');
@@ -118,11 +122,10 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users) {
     });
 });
 
-Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users) {
+Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users, drive) {
     session('Alice', () => {
         I.login('app=io.ox/files');
-
-        I.waitForElement('.io-ox-files-main .list-view.complete');
+        drive.waitForApp();
         I.selectFolder('My shares');
         // sometimes this is not fast enough and there are 4 objects
         I.retry(3).seeNumberOfElements('.list-view li.list-item', 0);

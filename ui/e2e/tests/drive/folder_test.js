@@ -73,8 +73,7 @@ Scenario('[C8375] Public files: Move a file', async (I, drive) => {
     I.waitForText('document.txt', undefined, '.file-list-view');
     I.click(locate('li.list-item').withText('document.txt'));
     I.clickToolbar('~More actions');
-    I.waitForText('Move');
-    I.click('Move', '.dropdown.open .dropdown-menu');
+    I.clickDropdown('Move');
     I.waitForText('Public files', undefined, '.folder-picker-dialog');
     I.click('~Public files', '.folder-picker-dialog');
     I.waitForElement('.modal-footer .btn[data-action="ok"][disabled]');
@@ -83,9 +82,8 @@ Scenario('[C8375] Public files: Move a file', async (I, drive) => {
 Scenario('[C8376] Add a subfolder', async (I, drive) => {
     I.login('app=io.ox/files');
     drive.waitForApp();
-    I.click('.contextmenu-control[title="Actions for My files"]', '.folder-tree');
-    I.waitForText('Add new folder', 5, '.dropdown.open .dropdown-menu');
-    I.click('Add new folder', '.dropdown.open .dropdown-menu');
+    I.openFolderMenu('My files');
+    I.clickDropdown('Add new folder');
     I.waitForText('Add new folder', 5, '.modal-dialog');
     I.fillField('Folder name', 'Testfolder');
     I.click('Add', '.modal-footer');
@@ -113,8 +111,7 @@ Scenario('[C8377] Invite a person', (I, users, drive) => {
         I.dontSee('Guest', '.permissions-view');
         I.seeNumberOfElements('.permissions-view .permission.row', 2);
         I.click('Author');
-        I.waitForText('Viewer', 5, '.dropdown.open .dropdown-menu');
-        I.click('Viewer', '.dropdown.open .dropdown-menu');
+        I.clickDropdown('Viewer');
         I.click('Share', '.modal');
         I.waitToHide('.modal');
     }
@@ -129,7 +126,7 @@ Scenario('[C8377] Invite a person', (I, users, drive) => {
         I.click('My files', '.folder-tree');
         I.selectFolder('Music');
         share();
-        I.waitForElement('.file-list-view.complete');
+        drive.waitForApp();
         I.selectFolder('My shares');
         I.waitForElement(locate('.displayname').withText('Music').inside('.list-view'));
         I.seeNumberOfElements('.list-view li.list-item', 1);
@@ -138,15 +135,13 @@ Scenario('[C8377] Invite a person', (I, users, drive) => {
     session('Bob', () => {
         I.login('app=io.ox/files', { user: users[1] });
         drive.waitForApp();
-        I.waitForText('Shared files', 5, '.folder-tree');
-        I.waitForElement('.file-list-view.complete');
         I.selectFolder('Shared files');
         I.waitForText(users[0].get('name'));
         I.selectFolder(users[0].get('name'));
         I.waitForElement(locate('.filename').withText('Music').inside('.list-view'));
         I.doubleClick(locate('.filename').withText('Music').inside('.list-view'));
-        I.click('.contextmenu-control[title="Actions for Music"]');
-        I.click('Permissions / Invite people', '.dropdown.open .dropdown-menu');
+        I.openFolderMenu('Music');
+        I.clickDropdown('Permissions / Invite people');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.waitForText('Viewer', 2, '.permissions-view');
         I.click('Close');
@@ -159,12 +154,12 @@ Scenario('[C8377] Invite a person', (I, users, drive) => {
         I.waitForText('Public files', 5, '.folder-tree');
         I.selectFolder('Public files');
         I.clickToolbar('New');
-        I.click('Add new folder', '.dropdown.open');
+        I.clickDropdown('Add new folder');
         I.waitForText('Add new folder', 1, '.modal-dialog');
         I.fillField('Folder name', publicFolderName);
         I.pressKey('Enter');
-
-        I.waitForElement('.file-list-view.complete');
+        I.waitForDetached('.modal');
+        drive.waitForApp();
         I.selectFolder(publicFolderName);
         share(true);
     });
@@ -174,8 +169,8 @@ Scenario('[C8377] Invite a person', (I, users, drive) => {
         I.selectFolder('Public files');
         I.waitForText(publicFolderName, 5, '.list-view');
         I.selectFolder(publicFolderName);
-        I.click(`.contextmenu-control[title="Actions for ${publicFolderName}"]`);
-        I.click('Permissions / Invite people', '.dropdown.open .dropdown-menu');
+        I.openFolderMenu(publicFolderName);
+        I.clickDropdown('Permissions / Invite people');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.see('Viewer', '.permissions-view .row .role');
     });
@@ -207,8 +202,7 @@ Scenario('[C8378] Invite a group', async (I, users, drive) => {
     I.login('app=io.ox/files&folder=' + folder, { user: users[0] });
     drive.waitForApp();
     I.clickToolbar('Share');
-    I.waitForText('Invite people', '.dropdown.open .dropdown-menu');
-    I.click('Invite people', '.dropdown.open .dropdown-menu');
+    I.clickDropdown('Invite people');
     I.waitForText('Send notification by email');
     I.click('Send notification by email');
     I.fillField('input.tt-input', groupName);
@@ -222,10 +216,8 @@ Scenario('[C8378] Invite a group', async (I, users, drive) => {
         I.logout();
         I.login('app=io.ox/files&folder=' + folder, { user: users[i] });
         drive.waitForApp();
-        I.waitForText(folderName, 2, '.folder-tree');
-        I.click(`.contextmenu-control[title="Actions for ${folderName}"]`);
-        I.waitForText('Permissions / Invite people', 5, '.dropdown.open .dropdown-menu');
-        I.click('Permissions / Invite people', '.dropdown.open .dropdown-menu');
+        I.openFolderMenu(folderName);
+        I.clickDropdown('Permissions / Invite people');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.see('Author', '.permissions-view .row .role');
         I.click('Close', '.modal-dialog');
@@ -256,8 +248,7 @@ Scenario('[C8381] Lock a file', async (I, users, drive) => {
     I.waitForElement(locate('.filename').withText('document.txt').inside('.list-view'));
     I.click(locate('.filename').withText('document.txt').inside('.list-view'));
     I.clickToolbar('~More actions');
-    I.waitForText('Lock');
-    I.click('Lock', '.smart-dropdown-container');
+    I.clickDropdown('Lock');
     I.waitForText('document.txt (Locked)');
     I.logout();
 
@@ -299,8 +290,7 @@ Scenario('[C8383] Unlock a file', async (I, users, drive) => {
     I.waitForElement(locate('.filename').withText('document.txt (Locked)').inside('.list-view'));
     I.click(locate('.filename').withText('document.txt').inside('.list-view'));
     I.clickToolbar('~More actions');
-    I.waitForText('Unlock', '.dropdown.open .dropdown-menu');
-    I.click('Unlock', '.dropdown.open .dropdown-menu');
+    I.clickDropdown('Unlock');
     I.waitForText('document.txt');
     I.dontSee('Locked');
     I.logout();
@@ -340,10 +330,7 @@ Scenario('[C8385] Uninvite a person', async (I, users, drive) => {
     });
 
     session('Bob', () => {
-        I.click('#io-ox-refresh-icon');
-        I.waitForElement('#io-ox-refresh-icon .fa-spin');
-        I.waitForDetached('#io-ox-refresh-icon .fa-spin');
-
+        I.triggerRefresh();
         I.dontSee('Shared files', '.folder-tree');
     });
 });
@@ -374,8 +361,7 @@ Scenario('[C8386] Uninvite a group', async (I, users, drive) => {
         I.login('app=io.ox/files&folder=' + folder, { user: users[0] });
         drive.waitForApp();
         I.clickToolbar('Share');
-        I.waitForText('Invite people');
-        I.click('Invite people', '.dropdown.open');
+        I.clickDropdown('Invite people');
         I.waitForText('Send notification by email');
         I.click('Send notification by email');
         I.fillField('input.tt-input', groupName);
@@ -388,10 +374,8 @@ Scenario('[C8386] Uninvite a group', async (I, users, drive) => {
     session('Bob', () => {
         I.login('app=io.ox/files&folder=' + folder, { user: users[1] });
         drive.waitForApp();
-        I.waitForText(folderName, 2, '.folder-tree');
-        I.see(folderName, '.folder-tree');
-        I.click({ css: '[title="Actions for ' + folderName + '"]' });
-        I.click({ css: '[data-action="invite"]' }, '.smart-dropdown-container');
+        I.openFolderMenu(folderName);
+        I.clickDropdown('Permissions / Invite people');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.see('Author', '.permissions-view .row .role');
         I.click('Close', '.modal-dialog');
@@ -399,12 +383,11 @@ Scenario('[C8386] Uninvite a group', async (I, users, drive) => {
 
     session('Alice', () => {
         I.clickToolbar('Share');
-        I.waitForText('Invite people');
+        I.waitForText('Invite people', 5, '.dropdown.open');
         I.click('Invite people', '.dropdown.open');
-        I.waitForElement({ css: 'button[title=Actions]' }, '.modal-dialog');
-        I.click({ css: 'button[title=Actions]' }, '.modal-dialog');
-        I.waitForText('Revoke access', '.dropdown.open .dropdown-menu');
-        I.click('Revoke access', '.dropdown.open .dropdown-menu');
+        I.waitForElement('.modal-dialog .btn[title="Actions"]');
+        I.click('.modal-dialog .btn[title="Actions"]');
+        I.clickDropdown('Revoke access');
         I.click('Share', '.modal-dialog');
     });
 
@@ -431,10 +414,8 @@ Scenario('[C8387] Rename a folder', async (I, drive) => {
 
     I.login('app=io.ox/files&folder=' + folder);
     drive.waitForApp();
-    const actionsButton = '.folder-tree .folder-options[title="Actions for ' + folderName + '"]';
-    I.waitForElement(actionsButton);
-    I.click(actionsButton);
-    I.click('Rename', '.smart-dropdown-container');
+    I.openFolderMenu(folderName);
+    I.clickDropdown('Rename');
     I.waitForText('Rename folder');
     // A11y issue here: There is no label for this input present
     I.fillField('.modal-body input[type="text"]', 'C8387-renamed');
@@ -442,11 +423,9 @@ Scenario('[C8387] Rename a folder', async (I, drive) => {
     I.waitForDetached('.modal-footer');
     ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {
         I.selectFolder(f);
-        I.waitForElement('.file-list-view.complete');
-        I.waitForElement({ css: '[title="Actions for ' + f + '"]' });
-        I.click({ css: '[title="Actions for ' + f + '"]' });
-        I.waitForText('Add new folder', '.smart-dopdown-container');
-        I.dontSee('Rename', '.smart-dropdown-container');
+        I.openFolderMenu(f);
+        I.waitForText('Add new folder', 5, '.dropdown.open .dropdown-menu');
+        I.dontSee('Rename', '.dropdown.open .dropdown-menu');
         I.pressKey('Escape');
     });
 
@@ -464,21 +443,17 @@ Scenario('[C8388] Delete a folder', async (I, drive) => {
     const folder = await I.haveFolder({ title: folderName, module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
     I.login('app=io.ox/files&folder=' + folder);
     drive.waitForApp();
-    const actionsButton = '.folder-tree .folder-options[title="Actions for ' + folderName + '"]';
-    I.waitForElement(actionsButton);
-    I.click(actionsButton);
-    I.click('Delete', '.smart-dropdown-container');
+    I.openFolderMenu(folderName);
+    I.clickDropdown('Delete');
     I.waitForText('Do you really want to delete folder "' + folderName + '"?');
     I.click('Delete', '.modal-footer');
     I.waitForDetached('.modal-footer');
     I.waitForInvisible(folderName);
     ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {
         I.selectFolder(f);
-        I.waitForElement('.file-list-view.complete');
-        I.waitForElement({ css: '[title="Actions for ' + f + '"]' });
-        I.click({ css: '[title="Actions for ' + f + '"]' });
-        I.waitForText('Add new folder', '.smart-dropdown-container');
-        I.dontSee('Delete', '.smart-dropdown-container');
+        I.openFolderMenu(f);
+        I.waitForText('Add new folder', '.dropdown.open .dropdown-menu');
+        I.dontSee('Delete', '.dropdown.open .dropdown-menu');
         I.pressKey('Escape');
     });
 });
@@ -505,8 +480,7 @@ Scenario('[C8389] Move a folder', async (I, drive) => {
     I.waitForElement(locate('.filename').withText('SubSubFolder 1').inside('.list-view'));
     I.click(locate('.filename').withText('SubSubFolder 1').inside('.list-view'));
     I.clickToolbar('~More actions');
-    I.waitForText('Move', 2, '.smart-dropdown-container');
-    I.click('Move', '.smart-dropdown-container');
+    I.clickDropdown('Move');
     I.click('~Subfolder b', '.modal-dialog .tree-container');
     I.click('Move', '.modal-dialog');
     I.waitForText('File has been moved');
@@ -515,11 +489,9 @@ Scenario('[C8389] Move a folder', async (I, drive) => {
     I.waitForElement(locate('.filename').withText('SubSubFolder 1').inside('.list-view'));
     ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {
         I.selectFolder(f);
-        I.waitForElement('.file-list-view.complete');
-        I.waitForElement({ css: '[title="Actions for ' + f + '"]' });
-        I.click({ css: '[title="Actions for ' + f + '"]' });
-        I.waitForText('Add new folder');
-        I.dontSee('Move', '.smart-dropdown-container');
+        I.openFolderMenu(f);
+        I.waitForText('Add new folder', '.dropdown.open .dropdown-menu');
+        I.dontSee('Move', '.dropdown.open .dropdown-menu');
         I.pressKey('Escape');
     });
 });
@@ -531,11 +503,15 @@ Scenario('[C8390] Folder tree', async (I, drive) => {
     // 2. Open every subfolder
     // 3. Close every subfolder
     const folder = await I.haveFolder({ title: 'Folders', module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
-    await I.haveFolder({ title: 'subfolder_1', module: 'infostore', parent: folder });
-    await I.haveFolder({ title: 'subfolder_2', module: 'infostore', parent: folder });
+    await Promise.all([
+        I.haveFolder({ title: 'subfolder_1', module: 'infostore', parent: folder }),
+        I.haveFolder({ title: 'subfolder_2', module: 'infostore', parent: folder })
+    ]);
     const subFolder = await I.haveFolder({ title: 'subfolder_3', module: 'infostore', parent: folder });
-    await I.haveFolder({ title: 'subsubfolder_1', module: 'infostore', parent: subFolder });
-    await I.haveFolder({ title: 'subsubfolder_2', module: 'infostore', parent: subFolder });
+    await Promise.all([
+        I.haveFolder({ title: 'subsubfolder_1', module: 'infostore', parent: subFolder }),
+        I.haveFolder({ title: 'subsubfolder_2', module: 'infostore', parent: subFolder })
+    ]);
     I.login('app=io.ox/files');
     drive.waitForApp();
     const myfiles = locate('.folder-tree .folder-label').withText('My files');

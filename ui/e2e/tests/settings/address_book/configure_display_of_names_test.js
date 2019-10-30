@@ -27,6 +27,7 @@ Scenario('[C7862] Configure display name representation', async (I, contacts) =>
     const folder = await I.grabDefaultFolder('contacts'),
         firstName = 'Foo',
         lastName = 'Bar';
+
     await I.haveContact({ folder_id: folder, first_name: firstName, last_name: lastName });
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/contacts']);
@@ -42,11 +43,9 @@ Scenario('[C7862] Configure display name representation', async (I, contacts) =>
     contacts.waitForApp();
     I.waitForElement('.contact-grid-container');
 
-    const firstNameLocator = locate('.first_name').withText(firstName),
-        lastNameLocator = locate('.last_name').withText(lastName),
-        nameLocator = firstNameLocator.before(lastNameLocator);
-    I.waitForVisible(nameLocator, 5, '.fullname');
-    I.click(nameLocator, '.fullname');
+    const firstNameLocator = locate('.first_name').withText(firstName).inside('.contact-detail'),
+        lastNameLocator = locate('.last_name').withText(lastName).inside('.contact-detail');
+    I.waitForVisible(firstNameLocator.before(lastNameLocator), 5, '.fullname');
 
     // Go back to settings and switch to other display style
     I.openApp('Settings', { folder: 'virtual/settings/io.ox/contacts' });
@@ -57,6 +56,5 @@ Scenario('[C7862] Configure display name representation', async (I, contacts) =>
     // Go back to contacts app and verify it
     I.openApp('Address Book');
     contacts.waitForApp();
-    I.waitForText('Bar, Foo', undefined, '.contact-detail');
-    I.click('Bar, Foo', '.fullname');
+    I.waitForVisible(lastNameLocator.before(firstNameLocator), 5, '.fullname');
 });

@@ -117,21 +117,20 @@ Scenario.skip('[C104305] calendar folders using “Permisions” dialog and shar
     session('Alice', () => {
         I.click({ css: `.folder-tree [title="Actions for ${users[0].get('sur_name')}, ${users[0].get('given_name')}"]` });
         I.click(locate('a').withText('Permissions / Invite people').inside('.dropdown'));
+        I.clickDropdown('Permissions / Invite people');
         I.click(locate({ css: 'button[title="Actions"]' }).inside('.modal'));
         I.click('Revoke access');
         I.click('Save');
         I.waitToHide('.modal');
 
         I.click({ css: `.folder-tree [title="Actions for ${users[0].get('sur_name')}, ${users[0].get('given_name')}"]` });
-        I.click(locate('a').withText('Create sharing link').inside('.dropdown'));
+        I.clickDropdown('Create sharing link');
         I.waitForText('Sharing link created for folder');
         I.click('Remove link');
     });
 
     session('Bob', () => {
-        I.click('#io-ox-refresh-icon');
-        I.waitForElement('#io-ox-refresh-icon .fa-spin');
-        I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+        I.triggerRefresh();
 
         I.seeNumberOfElements(locate('.appointment').inside('.io-ox-calendar-main'), 0);
         I.dontSee('simple appointment 1', '.io-ox-calendar-main');

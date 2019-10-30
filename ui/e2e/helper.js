@@ -76,6 +76,12 @@ class MyHelper extends Helper {
         return response.data;
     }
 
+    async allowClipboardRead() {
+        const { browser, config } = this.helpers['Puppeteer'];
+        const context = browser.defaultBrowserContext();
+        context.overridePermissions(config.url.replace(/\/appsuite\//, ''), ['clipboard-read']);
+    }
+
 }
 
 module.exports = MyHelper;

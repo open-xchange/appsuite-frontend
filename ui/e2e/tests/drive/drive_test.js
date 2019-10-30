@@ -25,10 +25,12 @@ After(async (users) => {
 });
 
 Scenario('[C7886] Enable hidden folders and files', async function (I, drive) {
-    await I.haveSetting('io.ox/files//showHidden', true);
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
-    await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/.hiddenfile.dat');
-    await I.haveFolder({ title: '.hiddenfolder', module: 'infostore', parent: infostoreFolderID });
+    await Promise.all([
+        I.haveSetting('io.ox/files//showHidden', true),
+        I.haveFile(infostoreFolderID, 'e2e/media/files/generic/.hiddenfile.dat'),
+        I.haveFolder({ title: '.hiddenfolder', module: 'infostore', parent: infostoreFolderID })
+    ]);
     I.login('app=io.ox/files');
     drive.waitForApp();
     //check for hidden file and folder
@@ -48,9 +50,9 @@ Scenario('[C7886] Enable hidden folders and files', async function (I, drive) {
 });
 
 Scenario('[C7887] Disable hidden folders and files', async function (I, drive) {
-    await I.haveSetting('io.ox/files//showHidden', false);
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
     await Promise.all([
+        I.haveSetting('io.ox/files//showHidden', false),
         I.haveFile(infostoreFolderID, 'e2e/media/files/generic/.hiddenfile.dat'),
         I.haveFolder({ title: '.hiddenfolder', module: 'infostore', parent: infostoreFolderID })
     ]);
@@ -95,15 +97,14 @@ Scenario('[C45046] Upload new version', async function (I, drive) {
 });
 
 Scenario('[C45048] Edit description', async function (I, drive) {
-    const infostoreFolderID = await I.grabDefaultFolder('infostore');
-    await I.haveFile(infostoreFolderID, { content: 'file', name: 'C45048.txt' });
+    await I.haveFile(await I.grabDefaultFolder('infostore'), { content: 'file', name: 'C45048.txt' });
 
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.click(locate('.filename').withText('C45048.txt'));
     I.clickToolbar('~View');
     drive.waitForViewer();
-    I.waitForText('file', '.plain-text');
+    I.waitForText('file', 5, '.plain-text');
     I.click('.io-ox-viewer .description-button');
     I.fillField('.modal-body textarea', 'C45048');
     I.click('Save');
@@ -112,8 +113,7 @@ Scenario('[C45048] Edit description', async function (I, drive) {
 });
 
 Scenario('[C45052] Delete file', async function (I, users, drive) {
-    const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
-    await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.odt');
     I.login('app=io.ox/files', { user: users[0] });
     drive.waitForApp();
     I.waitForElement(locate('.filename').withText('testdocument.odt'));
@@ -141,51 +141,51 @@ Scenario('[C45061] Delete file versions', async function (I, drive) {
     I.click(locate('.io-ox-viewer .viewer-fileversions').withText('Versions (5)'));
     I.waitForElement('.io-ox-viewer table.versiontable tr.version:nth-child(4) .dropdown-toggle');
     I.click('.io-ox-viewer table.versiontable tr.version:nth-child(4) .dropdown-toggle');
-    I.click('View this version', '.dropdown.open');
+    I.clickDropdown('View this version');
     I.waitForText('file 4', 5, '.plain-text');
     I.waitForElement('.io-ox-viewer table.versiontable tr.version:nth-child(4) .dropdown-toggle');
     I.click('.io-ox-viewer table.versiontable tr.version:nth-child(4) .dropdown-toggle');
-    I.click('Delete version', '.dropdown.open');
+    I.clickDropdown('Delete version');
     I.click('Delete version', '.modal-footer');
     I.waitForDetached(locate('.io-ox-viewer .viewer-fileversions').withText('Versions (5)'));
     I.see('Versions (4)', '.io-ox-viewer .viewer-fileversions');
 });
 
-Scenario.skip('[C45062] Change current file version @contentReview', async function (I, drive) {
+Scenario('[C45062] Change current file version', async function (I, drive) {
     //Generate TXT file for upload
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
 
-    for (let i = 0; i < 5; i++) {
-        await I.haveFile(infostoreFolderID, { content: `file ${i + 1}`, name: 'C45062.txt' });
-    }
+    await Promise.all([...Array(5).keys()].map(i => {
+        I.haveFile(infostoreFolderID, { content: `file ${i + 1}`, name: 'C45062.txt' });
+    }));
+
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.click(locate('.filename').withText('C45062.txt'));
     I.clickToolbar('~View');
     I.waitForText('Versions (5)', 5, '.io-ox-viewer .viewer-fileversions');
     I.click('Versions (5)', '.io-ox-viewer .viewer-fileversions');
+    I.waitForElement(locate('.io-ox-viewer table.versiontable tr.version:nth-child(4) .dropdown-toggle'));
     I.click(locate('.io-ox-viewer table.versiontable tr.version:nth-child(4) .dropdown-toggle'));
-    I.waitForText('View this version', 5, '.dropdown.open');
-    I.click('View this version', '.dropdown.open');
+    I.clickDropdown('View this version');
     I.waitForText('file 4', 5, '.plain-text');
     I.click(locate('.io-ox-viewer table.versiontable tr.version:nth-child(4) .dropdown-toggle'));
-    I.waitForText('Make this the current version', 5, '.dropdown.open');
-    I.click('Make this the current version', '.dropdown.open');
+    I.clickDropdown('Make this the current version');
     // I really don't know what to wait for. Version table "flickers" during reordering. Wait for it to finish.
     I.wait(2);
     I.click('.io-ox-viewer .current.dropdown-toggle');
-    I.waitForText('View this version', 5, '.dropdown.open');
-    I.click('View this version', '.dropdown.open');
+    I.clickDropdown('View this version');
     I.waitForText('file 4', 5, '.plain-text');
 });
 
-Scenario.skip('[C45063] Delete current file version @contentReview', async function (I, drive) {
+Scenario('[C45063] Delete current file version', async function (I, drive) {
     //Generate TXT file for upload
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
 
-    for (let i = 0; i < 5; i++) {
-        await I.haveFile(infostoreFolderID, { content: `file ${i + 1}`, name: 'C45063.txt' });
-    }
+    await Promise.all([...Array(5).keys()].map(i => {
+        I.haveFile(infostoreFolderID, { content: `file ${i + 1}`, name: 'C45063.txt' });
+    }));
+
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.click(locate('.filename').withText('C45063.txt'));
@@ -193,13 +193,13 @@ Scenario.skip('[C45063] Delete current file version @contentReview', async funct
     I.waitForElement('.io-ox-viewer');
     I.waitForElement(locate('.io-ox-viewer .viewer-fileversions').withText('Versions (5)'));
     I.click('Versions (5)', '.io-ox-viewer .viewer-fileversions');
-    I.click(locate('.io-ox-viewer table.versiontable tr.version:nth-child(4) .dropdown-toggle'));
-    I.waitForText('View this version', 5, '.dropdown.open');
-    I.click('View this version', '.dropdown.open');
-    I.waitForText('file 1', 5, '.plain-text');
-    I.click(locate('.io-ox-viewer table.versiontable tr.version:nth-child(4) .dropdown-toggle'));
-    I.waitForText('Delete version', 5, '.dropdown.open');
-    I.click('Delete version', '.dropdown.open');
+    const dropdownToggle = locate('.io-ox-viewer table.versiontable tr.version:nth-child(4) .dropdown-toggle');
+    I.waitForElement(dropdownToggle);
+    I.click(dropdownToggle);
+    I.clickDropdown('View this version');
+    I.waitForText('file 4', 5, '.plain-text');
+    I.click(dropdownToggle);
+    I.clickDropdown('Delete version');
     I.waitForElement('.modal');
     I.click('Delete version', '.modal-footer');
     I.waitForDetached(locate('.io-ox-viewer .viewer-fileversions').withText('Versions (5)'));

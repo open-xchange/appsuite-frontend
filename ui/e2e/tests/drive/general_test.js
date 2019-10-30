@@ -56,8 +56,7 @@ Scenario.skip('[C8364] Upload new file', (I, drive) => {
 
 // Note: This is not accessible H4 and textarea does not have a label
 Scenario('[C8366] Edit description', async (I, drive) => {
-    const folder = await I.grabDefaultFolder('infostore');
-    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.waitForText('document.txt', 1, '.file-list-view');
@@ -89,27 +88,26 @@ const checkIfFoldersExist = (I, layout) => {
 };
 
 // TODO: Bug in Drive Icon View has html entities in it.
-Scenario.skip('[C8368] View change @addbug', async (I, drive) => {
-    const folder = await I.grabDefaultFolder('infostore');
-    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+Scenario.skip('[C8368] View change @bug', async (I, drive) => {
+    await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
     checkIfFoldersExist(I);
     I.see('document.txt');
 
     I.clickToolbar('View');
-    I.click('Icons');
+    I.clickDropdown('Icons');
     I.waitForElement('.file-list-view.complete.grid-layout');
     checkIfFoldersExist(I, '.grid-layout');
     I.see('document');
 
     I.clickToolbar('View');
-    I.click('Tiles');
+    I.clickDropdown('Tiles');
     I.waitForElement('.file-list-view.complete.tile-layout');
     checkIfFoldersExist(I, '.tile-layout');
 
     I.clickToolbar('View');
-    I.click('List');
+    I.clickDropdown('List');
     I.waitForElement('.file-list-view.complete');
     checkIfFoldersExist(I);
     I.see('document.txt');
@@ -127,10 +125,12 @@ Scenario('[C8369] Search', async (I, drive) => {
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
     const testFolder = await I.haveFolder({ title: 'Testfolder', module: 'infostore', parent: folder });
-    await I.haveFile(testFolder, 'e2e/media/files/0kb/document.txt');
-    await I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.rtf');
-    await I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.odt');
-    await I.haveFile(testFolder, 'e2e/media/files/generic/testpresentation.ppsm');
+    await Promise.all([
+        I.haveFile(testFolder, 'e2e/media/files/0kb/document.txt'),
+        I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.rtf'),
+        I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.odt'),
+        I.haveFile(testFolder, 'e2e/media/files/generic/testpresentation.ppsm')
+    ]);
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.selectFolder('Testfolder');
@@ -161,12 +161,6 @@ Scenario('[C8371] Delete file', async (I, drive) => {
     I.waitForText('Do you really want to delete this item?');
     I.click('Delete');
     I.waitForDetached(locate('li.list-item').withText('document.txt'));
-});
-
-Scenario.skip('[C8372] Upload a 0KB file', () => {
-    // Bug: see C8364
-    // TODO: Evaluate if this is needed, see C8364
-    // Also drag and drop testing is quite complicated and not sure if at all possible atm
 });
 
 Scenario('[C45039] Breadcrumb navigation', async (I, drive) => {

@@ -31,8 +31,8 @@ Scenario('[C7341] Use first run mandatory wizard', async function (I, users) {
 
     I.amOnPage('/');
     I.wait(1);
-    I.fillField('User name', `${users[0].get('name')}@${users[0].context.id}`);
-    I.fillField('Password', users[0].get('password'));
+    I.fillField('User name', `${user.get('name')}@${user.context.id}`);
+    I.fillField('Password', user.get('password'));
     I.click('Sign in');
     I.waitForText('Welcome to OX App Suite');
     I.click('Start tour');
@@ -43,8 +43,9 @@ Scenario('[C7341] Use first run mandatory wizard', async function (I, users) {
     I.click('Next');
     I.click('Finish');
     I.waitForVisible('#io-ox-launcher');
+    I.waitForNetworkTraffic();
     I.waitForVisible('.contact-picture');
-    I.retry(5).click('.contact-picture');
+    I.click('.contact-picture');
     I.waitForText('My contact data');
     I.click('My contact data');
     I.waitForText('My contact data');
