@@ -22,9 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C101617] Mail with <strike> element </strike>', async (I, users, mail) => {
-    const user = users[0];
-
+Scenario('[C101617] Mail with <strike> element </strike>', async (I, mail) => {
     await Promise.all([
         I.haveSetting('io.ox/mail//features/registerProtocolHandler', false),
         I.haveMail({

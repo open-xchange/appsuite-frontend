@@ -28,7 +28,7 @@ const A = {
     check: function (I, subjects, folder) {
         subjects = [].concat(subjects);
         I.selectFolder(folder);
-        I.waitNumberOfVisibleElements('.list-view li.list-item', subjects.length)
+        I.waitNumberOfVisibleElements('.list-view li.list-item', subjects.length);
         subjects.forEach(function (subject) {
             I.see(subject, '.list-view .subject');
         });

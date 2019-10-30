@@ -26,7 +26,6 @@ After(async (users) => {
 });
 
 
-
 Scenario('[C7336] Successful Login', function (I, users) {
     I.amOnPage('/');
     I.setCookie({ name: 'locale', value: 'en_US' });
@@ -63,8 +62,9 @@ Scenario('[C7339] Stay signed in checkbox', async function (I, users) {
     let cookies = await I.grabCookie(),
         secretCookie = cookies.filter(c => c.name.indexOf('open-xchange-secret') === 0)[0];
 
+    const hasProperty = (o, p) => Object.prototype.hasOwnProperty.call(o, p);
     // webdriver sets "expiry" and puppeteer sets "expires"
-    const expiresWithSession = c => c.hasOwnProperty('expires') ? c.expires < 0 : !c.hasOwnProperty('expiry');
+    const expiresWithSession = c => hasProperty(c, 'expires') ? c.expires < 0 : !hasProperty(c, 'expiry');
 
     expect(expiresWithSession(secretCookie), 'browser session cookies do expire with session').to.equal(false);
     I.refreshPage();

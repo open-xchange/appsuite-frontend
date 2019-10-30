@@ -38,7 +38,7 @@ Scenario('[OXUI-700] for guest users with password', async (I, users) => {
     I.click('Close');
     I.waitToHide('Create sharing link');
     I.logout();
-    I.amOnPage(url.replace(/^https?:\/\/[^\/]+\//, '../'));
+    I.amOnPage(url.replace(/^https?:\/\/[^/]+\//, '../'));
     I.waitForFocus('#io-ox-login-password');
     I.click('#io-ox-languages .dropup > a');
     I.click('Deutsch (Deutschland)');
