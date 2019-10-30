@@ -65,7 +65,7 @@ Scenario('[C7354] With all available fields filled', function (I, contacts) {
     contacts.addContactsField('communication', 'Fax (Home)', 'fax home');
 
     // home address
-    contacts.addContactsField('other', 'Home address');
+    contacts.addContactsField('addresses', 'Home address');
     I.fillField('street_home', 'Home Street');
     I.fillField('postal_code_home', '12345');
     I.fillField('city_home', 'Home City');
@@ -73,7 +73,7 @@ Scenario('[C7354] With all available fields filled', function (I, contacts) {
     I.fillField('country_home', 'Home County');
 
     // business address
-    contacts.addContactsField('other', 'Business address');
+    contacts.addContactsField('addresses', 'Business address');
     I.fillField('street_business', 'Business Street');
     I.fillField('postal_code_business', '23456');
     I.fillField('city_business', 'Business City');
@@ -81,7 +81,7 @@ Scenario('[C7354] With all available fields filled', function (I, contacts) {
     I.fillField('country_business', 'Business County');
 
     // other address
-    contacts.addContactsField('other', 'Other address');
+    contacts.addContactsField('addresses', 'Other address');
     I.fillField('street_other', 'Other Street');
     I.fillField('postal_code_other', '34567');
     I.fillField('city_other', 'Other City');

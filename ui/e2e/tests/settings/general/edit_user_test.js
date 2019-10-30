@@ -89,7 +89,7 @@ Scenario('[C208269] Edit users contact information', async (I) => {
     addContactsField('communication', 'Fax (Home)', 'fax home');
 
     // home address
-    addContactsField('other', 'Home address');
+    addContactsField('addresses', 'Home address');
     I.fillField('street_home', 'Home Street');
     I.fillField('postal_code_home', '12345');
     I.fillField('city_home', 'Home City');
@@ -97,7 +97,7 @@ Scenario('[C208269] Edit users contact information', async (I) => {
     I.fillField('country_home', 'Home County');
 
     // business address
-    addContactsField('other', 'Business address');
+    addContactsField('addresses', 'Business address');
     I.fillField('street_business', 'Business Street');
     I.fillField('postal_code_business', '23456');
     I.fillField('city_business', 'Business City');
@@ -105,7 +105,7 @@ Scenario('[C208269] Edit users contact information', async (I) => {
     I.fillField('country_business', 'Business County');
 
     // other address
-    addContactsField('other', 'Other address');
+    addContactsField('addresses', 'Other address');
     I.fillField('street_other', 'Other Street');
     I.fillField('postal_code_other', '34567');
     I.fillField('city_other', 'Other City');

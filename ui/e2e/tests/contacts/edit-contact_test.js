@@ -129,7 +129,7 @@ Scenario('[C7362] Edit full data of a contact', async function (I, contacts) {
     I.fillField('country_home', 'Home County');
 
     // business address
-    contacts.addContactsField('other', 'Business address');
+    contacts.addContactsField('addresses', 'Business address');
     I.fillField('street_business', 'Business Street');
     I.fillField('postal_code_business', '23456');
     I.fillField('city_business', 'Business City');
@@ -137,7 +137,7 @@ Scenario('[C7362] Edit full data of a contact', async function (I, contacts) {
     I.fillField('country_business', 'Business County');
 
     // other address
-    contacts.addContactsField('other', 'Other address');
+    contacts.addContactsField('addresses', 'Other address');
     I.fillField('street_other', 'Other Street');
     I.fillField('postal_code_other', '34567');
     I.fillField('city_other', 'Other City');

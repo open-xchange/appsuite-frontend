@@ -24,9 +24,12 @@ define('io.ox/contacts/edit/main', [
     'io.ox/core/a11y',
     'io.ox/core/yell',
     'io.ox/backbone/views/modal',
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/util',
     // 'settings!io.ox/core',
     'less!io.ox/contacts/edit/style'
-], function (View, gt, upload, userApi, ext, util, capabilities, notifications, coreUtil, a11y, yell, ModalDialog) {
+    // todo: check this unused dependencies (may register extension points etc)
+], function (View, gt, upload, userApi, ext, util, capabilities, notifications, coreUtil, a11y, yell, ModalDialog, folderApi, folderUtils) {
 
     'use strict';
 
@@ -62,97 +65,100 @@ define('io.ox/contacts/edit/main', [
                 data = { id: app.getState().id, folder_id: app.getState().folder };
             }
 
-            var isNewContact = !data.id,
-                // check whether we edit some contact or the current user
-                isUser = String(data.folder_id) === '6' && String(data.id) === String(ox.user_id),
-                view = app.view = new View({ data: data, isUser: isUser });
+            folderApi.get(data.folder_id).always(function (folderData) {
+                var isNewContact = !data.id,
+                    // check whether we edit some contact or the current user
+                    isUser = String(data.folder_id) === '6' && String(data.id) === String(ox.user_id),
+                    isPublic = folderData && !folderData.error && folderUtils.is('public', folderData),
+                    view = app.view = new View({ data: data, isUser: isUser, isPublic: isPublic });
 
-            if (isUser) {
-                app.setTitle(gt('My contact data'));
-            } else {
-                app.setTitle(isNewContact ? gt('New contact') : gt('Edit contact'));
-                view.listenTo(view.model, 'change:display_name', function () {
-                    app.setTitle(util.getFullName(this.model.toJSON()) || (isNewContact ? gt('New contact') : gt('Edit Contact')));
-                });
-            }
-
-            win.nodes.main.append(view.$el);
-
-            win.setHeader(
-                $('<div class="header">').append(
-                    $('<button type="button" class="btn btn-primary save" data-action="save">')
-                        .text(gt('Save'))
-                        .on('click', function () {
-                            win.busy();
-                            view.model.save().then(
-                                function success() {
-                                    win.idle();
-                                    app.quit();
-                                },
-                                function fail(e) {
-                                    win.idle();
-                                    notifications.yell(e);
-                                }
-                            );
-                        }),
-                    $('<button type="button" class="btn btn-default discard" data-action="discard">')
-                        .text(gt('Discard'))
-                        .on('click', function () {
-                            app.quit();
-                        })
-                )
-            );
-
-            win.show(onWindowShow);
-
-            function onWindowShow() {
-
-                if (isNewContact) {
-                    view.render();
-                    onRender();
+                if (isUser) {
+                    app.setTitle(gt('My contact data'));
                 } else {
-                    win.busy();
-                    view.model.fetch(data)
-                        .fail(function (e) {
-                            yell(e);
-                            app.quit();
-                            def.reject();
-                        })
-                        .done(function () {
-                            // after inital fetch
-                            view.model.resetDirty();
-                            win.idle();
-                            view.render();
-                            onRender();
-                        });
-                }
-            }
-
-            function onRender() {
-
-                // if edit mode
-                if (data.id) {
-                    app.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
+                    app.setTitle(isNewContact ? gt('New contact') : gt('Edit contact'));
+                    view.listenTo(view.model, 'change:display_name', function () {
+                        app.setTitle(util.getFullName(this.model.toJSON()) || (isNewContact ? gt('New contact') : gt('Edit Contact')));
+                    });
                 }
 
-                // no autofocus on smartphone and for iOS in special (see bug #36921)
-                if (_.device('!smartphone && !iOS')) {
-                    a11y.getTabbable(view.$el).first().focus();
+                win.nodes.main.append(view.$el);
+
+                win.setHeader(
+                    $('<div class="header">').append(
+                        $('<button type="button" class="btn btn-primary save" data-action="save">')
+                            .text(gt('Save'))
+                            .on('click', function () {
+                                win.busy();
+                                view.model.save().then(
+                                    function success() {
+                                        win.idle();
+                                        app.quit();
+                                    },
+                                    function fail(e) {
+                                        win.idle();
+                                        notifications.yell(e);
+                                    }
+                                );
+                            }),
+                        $('<button type="button" class="btn btn-default discard" data-action="discard">')
+                            .text(gt('Discard'))
+                            .on('click', function () {
+                                app.quit();
+                            })
+                    )
+                );
+
+                win.show(onWindowShow);
+
+                function onWindowShow() {
+
+                    if (isNewContact) {
+                        view.render();
+                        onRender();
+                    } else {
+                        win.busy();
+                        view.model.fetch(data)
+                            .fail(function (e) {
+                                yell(e);
+                                app.quit();
+                                def.reject();
+                            })
+                            .done(function () {
+                                // after inital fetch
+                                view.model.resetDirty();
+                                win.idle();
+                                view.render();
+                                onRender();
+                            });
+                    }
                 }
 
-                def.resolve();
-            }
+                function onRender() {
 
-            // TODO (pre-hardeing)
-            // - fail save & restore -> DONE
-            // - support for Furigana -> DONE
-            // - support for YOMI fields -> DONE
-            // - fix "display_name only" contacts, e.g. in collected addresses folder -> DONE
-            // - too much code for disabling "Save"; just show it (cp. https://axesslab.com/disabled-buttons-suck/) -> DONE
-            // - a11y (make automated audits happy) -> DONE
-            // - Smartphone support (it looks okay) -> DONE
-            // - check server-side errors
-            // - support for PIM attachments
+                    // if edit mode
+                    if (data.id) {
+                        app.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
+                    }
+
+                    // no autofocus on smartphone and for iOS in special (see bug #36921)
+                    if (_.device('!smartphone && !iOS')) {
+                        a11y.getTabbable(view.$el).first().focus();
+                    }
+
+                    def.resolve();
+                }
+
+                // TODO (pre-hardeing)
+                // - fail save & restore -> DONE
+                // - support for Furigana -> DONE
+                // - support for YOMI fields -> DONE
+                // - fix "display_name only" contacts, e.g. in collected addresses folder -> DONE
+                // - too much code for disabling "Save"; just show it (cp. https://axesslab.com/disabled-buttons-suck/) -> DONE
+                // - a11y (make automated audits happy) -> DONE
+                // - Smartphone support (it looks okay) -> DONE
+                // - check server-side errors
+                // - support for PIM attachments
+            });
 
             return def;
         });
