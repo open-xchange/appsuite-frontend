@@ -17,7 +17,6 @@ Feature('General > User feedback');
 
 Before(async (users) => {
     await users.create();
-    await users.create();
 });
 
 After(async (users) => {
@@ -26,22 +25,21 @@ After(async (users) => {
 
 Scenario('[C125002] Enable user feedback dialog', function (I) {
     I.login();
-    I.click({ css: '[aria-label="Feedback"]' });
-    I.see('Please rate the following application:');
+    I.waitForNetworkTraffic();
+    I.click('.feedback-button');
+    I.waitForText('Please rate the following application', 5, '.modal');
     I.grabTitle('#star-rating');
 });
 
 Scenario('[C125004] App aware user feedback', function (I) {
-    const feedBackBox = '.feedback-select-box';
-    const feedBackText = 'Please rate the following application:';
 
     function testFeedback(appType = 'general') {
-        I.click('~Feedback');
-        I.waitForText(feedBackText);
-        I.waitForValue(feedBackBox, appType);
+        I.waitForNetworkTraffic();
+        I.click('.feedback-button');
+        I.waitForText('Please rate the following application:', 5, '.modal');
+        I.waitForValue('.feedback-select-box', appType);
         I.click('Cancel');
     }
-
 
     I.login('app=io.ox/mail');
     testFeedback('io.ox/mail');
@@ -73,7 +71,7 @@ Scenario('[C125005] Provide user feedback', function (I) {
 
     const appArr = ['Mail', 'General', 'Calendar', 'Address Book', 'Drive'];
     const giveFeedback = (app) => {
-        I.click('~Feedback');
+        I.click('.feedback-button');
         I.waitForVisible({ css: 'select.feedback-select-box' });
         I.waitForText('Please rate the following application:');
         I.see(app);
@@ -89,6 +87,7 @@ Scenario('[C125005] Provide user feedback', function (I) {
     };
 
     I.login();
+    I.waitForNetworkTraffic();
     I.waitForVisible('~Feedback');
     //Open Feedback dialog and rate each app in turn
     appArr.forEach(giveFeedback);

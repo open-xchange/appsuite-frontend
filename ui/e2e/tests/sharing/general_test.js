@@ -101,7 +101,7 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
     I.see('Music', '.folder-tree .selected');
 });
 
-Scenario('[C83385] Copy to clipboard', async function (I, drive) {
+Scenario('[C83385] Copy to clipboard @puppeteer', async function (I, drive) {
     await I.allowClipboardRead();
     I.login('app=io.ox/files');
     drive.waitForApp();

@@ -165,18 +165,23 @@ Scenario('[C8371] Delete file', async (I, drive) => {
 
 Scenario('[C45039] Breadcrumb navigation', async (I, drive) => {
     const parent = await I.haveFolder({ title: 'Folders', module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
-    await I.haveFolder({ title: 'subfolder1', module: 'infostore', parent });
-    await I.haveFolder({ title: 'subfolder2', module: 'infostore', parent });
+    await Promise.all([
+        I.haveFolder({ title: 'subfolder1', module: 'infostore', parent }),
+        I.haveFolder({ title: 'subfolder2', module: 'infostore', parent })
+    ]);
     const subFolder = await I.haveFolder({ title: 'subfolder3', module: 'infostore', parent });
     const subsubFolder = await I.haveFolder({ title: 'subsubfolder1', module: 'infostore', parent: subFolder });
     await I.haveFolder({ title: 'subsubfolder2', module: 'infostore', parent: subFolder });
     I.login('app=io.ox/files&folder=' + subsubFolder);
     drive.waitForApp();
-    I.retry(5).click('subfolder3', '.breadcrumb-view');
+    I.waitForText('subfolder3', 5, '.breadcrumb-view');
+    I.click('subfolder3', '.breadcrumb-view');
+    drive.waitForApp();
     I.waitForText('subsubfolder1', 5, '.list-view');
     I.waitForText('subsubfolder2', 5, '.list-view');
-    I.retry(5).click('Drive', '.breadcrumb-view');
-    I.waitForText('Drive', 5, '.breadcrumb-view');
+    I.click('subsubfolder2', '.list-view');
+    I.click('Drive', '.breadcrumb-view');
+    drive.waitForApp();
     I.waitForText('Public files', 5, '.list-view');
     I.doubleClick('Public files', '.list-view');
 });

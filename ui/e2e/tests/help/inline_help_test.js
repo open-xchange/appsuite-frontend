@@ -37,16 +37,11 @@ Scenario('Open the help app in a floating window', async function (I) {
     I.waitForDetached('.io-io-help-window', 5);
 });
 
-Scenario('Open the help app in a modal', async function (I) {
+Scenario('Open the help app in a modal', async function (I, mail) {
     I.login('app=io.ox/mail');
-    I.waitForVisible({ css: '[data-app-name="io.ox/mail"]' }, 5);
+    mail.waitForApp();
+    mail.newMail();
 
-    I.click('Compose');
-    I.retry().waitForVisible('.io-ox-mail-compose-window', 5);
-    I.see('Compose', '.io-ox-mail-compose-window');
-
-    I.waitForVisible({ css: 'div[data-extension-id="to"]' }, 5);
-    I.wait(1);
     I.click('~Select contacts');
     I.waitForVisible('.modal.addressbook-popup', 5);
 
@@ -61,7 +56,7 @@ Scenario('Open the help app in a modal', async function (I) {
     I.waitForDetached('.modal.addressbook-popup', 5);
 });
 
-Scenario('Check help window for supposed language', async function (I) {
+Scenario('Check help window for supposed language', function (I) {
 
     // check major languages
     var languages = {
@@ -81,6 +76,7 @@ Scenario('Check help window for supposed language', async function (I) {
     };
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
+    I.waitForNetworkTraffic();
 
     for (const id in languages) {
         //Select language
@@ -90,19 +86,21 @@ Scenario('Check help window for supposed language', async function (I) {
         // wait for "yell" so that the change arrived at server
         I.waitForVisible('.io-ox-alert', 30);
         I.refreshPage();
+        I.refreshPage();
+        I.waitForNetworkTraffic();
 
         //open help window
-        I.waitForElement('#io-ox-context-help-icon', 20);
-        I.click('#io-ox-context-help-icon');
-        I.waitForElement('.inline-help-iframe', 20);
+        I.click('.io-ox-context-help');
+        I.waitForElement('.io-ox-help-window');
 
         //check language in help window
-        I.waitForElement(locate('.inline-help-iframe').withAttr({ src: languages[id][0] }));
-        await within({ frame: '.inline-help-iframe' }, () => {
-            I.see(languages[id][2]);
+        I.waitForElement(locate('.inline-help-iframe').withAttr({ src: languages[id][0] }).inside('.io-ox-help-window'), 10);
+        within({ frame: '.inline-help-iframe' }, () => {
+            I.waitForText(languages[id][2], 20);
         });
 
         //close help window
         I.click(languages[id][3], '.io-ox-help-window');
+        I.waitForDetached('.io-ox-help-window');
     }
 });

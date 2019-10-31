@@ -2,9 +2,9 @@ const { I } = inject();
 
 module.exports = {
     waitForApp() {
-        I.waitForElement('.fa-spin.fa-refresh');
-        I.waitForElement('.fa-spin-paused.fa-refresh');
+        I.waitForNetworkTraffic();
         I.selectFolder('Contacts');
+        I.triggerRefresh();
         I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
     },
     selectContact(text) {
