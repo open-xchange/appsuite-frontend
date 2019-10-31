@@ -51,14 +51,11 @@ Scenario('Opening multiple windows', async function (I, users, calendar) {
     I.waitForVisible({ css: '[data-block="communication"]' });
     I.click(users[1].get('primaryEmail'), { css: '[data-block="communication"]' });
 
+    I.waitForNetworkTraffic();
+
     const composeIndex = await I.grabCssPropertyFrom('.io-ox-mail-compose-window', 'zIndex');
     const sidePopupIndizes = await I.grabCssPropertyFrom('.io-ox-sidepopup', 'zIndex');
     sidePopupIndizes.map(s => Number.parseInt(s, 10)).forEach(function (sidePopupIndex) {
         expect(Number.parseInt(composeIndex, 10)).to.be.above(sidePopupIndex);
     });
-
-    I.waitForVisible('.window-blocker.io-ox-busy');
-    I.waitForInvisible('.window-blocker.io-ox-busy');
-
-    I.click('Discard');
 });

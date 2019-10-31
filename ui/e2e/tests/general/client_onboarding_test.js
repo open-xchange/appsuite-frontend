@@ -111,12 +111,13 @@ Scenario('[C73769] Application Availability', function (I) {
 Scenario('[C73776] Mail Configuration', async function (I, users) {
 
     I.login();
+    I.waitForNetworkTraffic();
     I.waitForVisible('#io-ox-topbar-dropdown-icon');
     I.click('#io-ox-topbar-dropdown-icon');
     I.waitForVisible(locate('a')
         .withAttr({ 'data-action': 'client-onboarding' })
         .inside('#topbar-settings-dropdown'));
-    I.click('Connect your Device', '#topbar-settings-dropdown');
+    I.clickDropdown('Connect your Device');
     I.waitForText('Please select the platform of your device.');
     I.click('Apple');
     I.waitForText('What type of device do you want to configure?');
