@@ -202,9 +202,7 @@ define.async('io.ox/mail/settings/pane', [
 
                 if (!capabilities.has('mailfilter_v2') || !hasVacationNoticeAction) return;
 
-                this.append($('<span id="vacation-placeholder">'));
-
-                $('#vacation-placeholder').replaceWith(
+                this.append(
                     $('<button type="button" class="btn btn-default" data-action="edit-vacation-notice">')
                     .append(
                         $('<i class="fa fa-toggle-on" aria-hidden="true">').hide(),
