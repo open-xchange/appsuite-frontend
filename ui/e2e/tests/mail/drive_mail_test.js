@@ -25,21 +25,16 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C85691] Cloud icon is used for drive-mail', async function (I, users) {
+Scenario('[C85691] Cloud icon is used for drive-mail', async function (I, users, mail) {
     I.login('app=io.ox/mail');
-    I.waitForElement('.io-ox-mail-window');
+    mail.newMail();
 
-    I.clickToolbar('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
-
-    I.waitForFocus('input[placeholder="To"]');
     I.fillField('To', users[1].get('primaryEmail'));
     I.fillField('Subject', 'Git Gud');
 
     I.attachFile('.io-ox-mail-compose-window input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
     I.click('Use Drive Mail', '.share-attachments');
-    I.click('Send');
-    I.waitForDetached('.io-ox-mail-compose-window');
+    mail.send();
 
     I.logout();
     I.login('app=io.ox/mail', { user: users[1] });
@@ -48,24 +43,20 @@ Scenario('[C85691] Cloud icon is used for drive-mail', async function (I, users)
     I.seeElement('.fa-cloud-download.is-shared-attachement');
 });
 
-Scenario('[C85685] Send drive-mail to internal recipient', async (I, users) => {
+Scenario('[C85685] Send drive-mail to internal recipient', async (I, users, mail) => {
     const [batman, robin] = users;
 
     // 1. Go to Mail -> Compose
     I.login('app=io.ox/mail', { user: batman });
-    I.waitForVisible({ css: '*[data-app-name="io.ox/mail"]' });
-    I.click('Compose');
+    mail.newMail();
 
     // 2. Add internal recipient, subject and mail text
     const subject = 'About the Batcave',
         mailText = 'WE NEED TO TALK ASAP!';
-    I.waitForFocus('input[placeholder="To"]');
     I.fillField('To', robin.userdata.primaryEmail);
-    I.pressKey('Enter');
     I.fillField('Subject', subject);
     await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
-        I.click('.default-style');
-        I.pressKey(mailText);
+        I.fillField('body', mailText);
         I.pressKey('Enter');
         I.pressKey('Enter');
     });
@@ -87,9 +78,7 @@ Scenario('[C85685] Send drive-mail to internal recipient', async (I, users) => {
     I.waitForText('Options', undefined, '.io-ox-mail-compose-window .attachments');
     I.seeCheckboxIsChecked('.io-ox-mail-compose-window .share-attachments input[type="checkbox"]');
 
-    // 6. Send the mail
-    I.click('Send', '.io-ox-mail-compose-window');
-    I.waitForDetached('.io-ox-mail-compose-window');
+    mail.send();
 
     // Expected Result: Mail gets sent successfully
     I.selectFolder('Sent');
@@ -110,38 +99,32 @@ Scenario('[C85685] Send drive-mail to internal recipient', async (I, users) => {
 
     // 8. Verify the mail as the recipient
     I.login('app=io.ox/mail', { user: robin });
-    I.waitForVisible({ css: '*[data-app-name="io.ox/mail"]' });
-    I.waitForText(subject);
-    I.click(locate('.list-item').withText(subject), '.list-view');
+    mail.selectMail(subject);
 
     // Expected Result: Above the content an information is shown that the sender has shared some files with you plus a link to that files
     I.see(`${batman.userdata.given_name} ${batman.userdata.sur_name} has shared the following file with you:`);
     I.see(batFile);
 
+    I.waitForElement('.mail-detail-frame');
     // 9. Verify link redirects you to the files and the files are accessible.
     await within({ frame: '.mail-detail-frame' }, async () => {
         I.click('View file');
     });
-    I.switchToNextTab();
-    I.waitForText(batFile, undefined, '.file-list-view');
+    I.waitForText(batFile, 30, '.list-view');
     // TODO: check if a download helper is feasible
 });
 
-Scenario('[C85690] Expire date can be forced', async function (I, users) {
+Scenario('[C85690] Expire date can be forced', async function (I, users, mail) {
 
     I.login('app=io.ox/mail');
-    I.waitForElement('.io-ox-mail-window');
-
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose .contenteditable-editor');
-
-    I.executeScript(function () {
+    mail.waitForApp();
+    // TODO: find a better way to do provisioning here.
+    await I.executeScript(function () {
         require('settings!io.ox/mail').set('compose/shareAttachments/requiredExpiration', true);
     });
+    mail.newMail();
 
-    I.waitForFocus('input[placeholder="To"]');
     I.fillField('To', users[1].get('primaryEmail'));
-    I.pressKey('Enter');
     I.fillField('Subject', 'Plus Ultra!');
 
     I.attachFile('.io-ox-mail-compose-window input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
@@ -155,8 +138,7 @@ Scenario('[C85690] Expire date can be forced', async function (I, users) {
     I.dontSee('Never');
     I.selectOption('#expiration-select-box', '1 day');
     I.click('Apply');
-    I.click('Send');
-    I.dontSee('.io-ox-mail-compose .contenteditable-editor');
+    mail.send();
 
     I.openApp('Drive');
     const locateClickableFolder = (text) => locate('li.list-item.selectable').withDescendant(locate('div').withText(text));
