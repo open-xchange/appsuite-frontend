@@ -466,14 +466,23 @@ define('io.ox/calendar/week/view', [
         },
 
         drawDropdown: (function () {
-            var self;
+            var self, hasDouble;
+
             function drawOption() {
                 // this = timezone name (string)
-                // must use start of view to get correct daylight saving timezone names (cet vs cest)
-                var timezone = moment(self.model.get('startDate')).tz(this);
-                return [
-                    $('<span class="offset">').text(timezone.format('Z')),
-                    $('<span class="timezone-abbr">').text(timezone.zoneAbbr()),
+                // we may have a daylight saving change
+                var startTimezone = moment(self.model.get('startDate')).tz(this),
+                    endTimezone = moment(self.model.get('startDate')).add(Math.max(0, self.model.get('numColumns') - 1), 'days').endOf('day').tz(this);
+
+                if (startTimezone.zoneAbbr() !== endTimezone.zoneAbbr()) hasDouble = true;
+
+                return startTimezone.zoneAbbr() === endTimezone.zoneAbbr() ? [
+                    $('<span class="offset">').text(startTimezone.format('Z')),
+                    $('<span class="timezone-abbr">').text(startTimezone.zoneAbbr()),
+                    _.escape(this)
+                ] : [
+                    $('<span class="offset">').text(startTimezone.format('Z') + '/' + endTimezone.format('Z')),
+                    $('<span class="timezone-abbr">').text(startTimezone.zoneAbbr() + '/' + endTimezone.zoneAbbr()),
                     _.escape(this)
                 ];
             }
@@ -493,6 +502,7 @@ define('io.ox/calendar/week/view', [
 
             return function () {
                 self = this;
+
                 var list = _.intersection(
                         settings.get('favoriteTimezones', []),
                         settings.get('renderTimezones', [])
@@ -500,15 +510,19 @@ define('io.ox/calendar/week/view', [
                     favorites = _(settings.get('favoriteTimezones', [])).chain().map(function (fav) {
                         return [fav, list.indexOf(fav) >= 0];
                     }).object().value(),
+                    // we may have a daylight saving change
+                    startTimezone = moment(self.model.get('startDate')).tz(coreSettings.get('timezone')),
+                    endTimezone = moment(self.model.get('startDate')).add(Math.max(0, self.model.get('numColumns') - 1), 'days').endOf('day').tz(coreSettings.get('timezone')),
                     model = new TimezoneModel(favorites),
                     dropdown = new Dropdown({
                         className: 'dropdown timezone-label-dropdown',
                         model: model,
                         // must use start of view to get correct daylight saving timezone names (cet vs cest)
-                        label: moment(self.model.get('startDate')).tz(coreSettings.get('timezone')).zoneAbbr(),
+                        label: startTimezone.zoneAbbr() === endTimezone.zoneAbbr() ? startTimezone.zoneAbbr() : startTimezone.zoneAbbr() + '/' + endTimezone.zoneAbbr(),
                         tagName: 'div'
                     }),
                     render = function () {
+                        hasDouble = false;
                         dropdown.header(gt('Standard timezone'))
                             .option('default', true, drawOption.bind(coreSettings.get('timezone')));
 
@@ -532,6 +546,8 @@ define('io.ox/calendar/week/view', [
                                 this.setSettingsPane(options);
                             });
                         });
+
+                        dropdown.$el.toggleClass('double', hasDouble);
                     };
 
                 render();
@@ -551,7 +567,10 @@ define('io.ox/calendar/week/view', [
 
                 // update on startdate change to get daylight savings right
                 this.model.on('change:startDate', function () {
-                    dropdown.$el.find('.dropdown-label').empty().append(moment(self.model.get('startDate')).tz(coreSettings.get('timezone')).zoneAbbr(), $('<i class="fa fa-caret-down" aria-hidden="true">'));
+                    var startTimezone = moment(self.model.get('startDate')).tz(coreSettings.get('timezone')),
+                        endTimezone = moment(self.model.get('startDate')).add(Math.max(0, self.model.get('numColumns') - 1), 'days').endOf('day').tz(coreSettings.get('timezone'));
+
+                    dropdown.$el.find('.dropdown-label').empty().append(startTimezone.zoneAbbr() === endTimezone.zoneAbbr() ? startTimezone.zoneAbbr() : startTimezone.zoneAbbr() + '/' + endTimezone.zoneAbbr(), $('<i class="fa fa-caret-down" aria-hidden="true">'));
                     dropdown.$ul.empty();
                     render();
                 });
@@ -1092,10 +1111,13 @@ define('io.ox/calendar/week/view', [
                 // check if we have a node for this day, if not create one by cloning the first (we need one node for each day when an appointment spans multiple days)
                 node = node.get(maxCount) ? $(node.get(maxCount)) : $(node).first().clone();
 
+                // daylight saving time change?
+                var offset = this.model.get('startDate')._offset - startLocal._offset;
+
                 node
                     .addClass(endLocal.diff(startLocal, 'minutes') < 120 / this.model.get('gridSize') ? 'no-wrap' : '')
                     .css({
-                        top: startLocal.diff(moment(start), 'minutes') / 24 / 60 * 100 + '%',
+                        top: (Math.max(0, startLocal.diff(moment(start), 'minutes') - offset)) / 24 / 60 * 100 + '%',
                         height: 'calc( ' + endLocal.diff(startLocal, 'minutes') / 24 / 60 * 100 + '% - 2px)',
                         lineHeight: this.opt.minCellHeight + 'px'
                     });
