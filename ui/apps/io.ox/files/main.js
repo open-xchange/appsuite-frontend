@@ -737,8 +737,22 @@ define('io.ox/files/main', [
                     app.settings.set('showCheckboxes', data.checkboxes);
                 }
                 app.settings.set('showDetails', data.details);
-                app.settings.save();
+                app.settings.save().fail(function (e) {
+                    if (e.code !== 'SVL-0011' && _.keys(app.settings.get('viewOptions')).length < 2500) return;
+
+                    return app.settings
+                        .set('viewOptions', {})
+                        .set(['viewOptions', folder], { sort: data.sort, order: data.order, layout: data.layout })
+                        .save();
+                });
             }, 500));
+            app.listenTo(folderAPI, 'remove:infostore', function (folder) {
+                // garbage collect viewOptions when removing folders
+                // or we'll end up with Bug 66217
+                var viewOptions = app.settings.get('viewOptions', {});
+                delete viewOptions[folder.id];
+                app.settings.set('viewOptions', viewOptions).save();
+            });
         },
 
         /*
