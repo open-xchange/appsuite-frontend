@@ -481,7 +481,8 @@ Scenario('[C8389] Move a folder', async (I, drive) => {
     I.click(locate('.filename').withText('SubSubFolder 1').inside('.list-view'));
     I.clickToolbar('~More actions');
     I.clickDropdown('Move');
-    I.click('~Subfolder b', '.modal-dialog .tree-container');
+    I.waitForElement('.modal-dialog .tree-container [aria-label="Subfolder b"]');
+    I.click('.modal-dialog .tree-container [aria-label="Subfolder b"]');
     I.click('Move', '.modal-dialog');
     I.waitForText('File has been moved');
     I.waitForInvisible('File has been moved');
@@ -490,7 +491,7 @@ Scenario('[C8389] Move a folder', async (I, drive) => {
     ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {
         I.selectFolder(f);
         I.openFolderMenu(f);
-        I.waitForText('Add new folder', '.dropdown.open .dropdown-menu');
+        I.waitForElement('.dropdown.open .dropdown-menu');
         I.dontSee('Move', '.dropdown.open .dropdown-menu');
         I.pressKey('Escape');
     });
