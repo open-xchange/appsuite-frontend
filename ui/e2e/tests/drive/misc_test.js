@@ -194,3 +194,18 @@ Scenario('[C257247] Restore deleted items', async (I, drive) => {
     I.waitForText('testdocument.odt', 5, '.list-view');
 
 });
+
+Scenario('Logout right before running into error storing data in JSLob', async (I) => {
+    await I.haveSetting('io.ox/files//viewOptions',
+        [...Array(2500)]
+        .map(() => ({ sort: 702, order: 'ASC', layout: 'list' }))
+        .reduce(function (acc, val, ix) {
+            acc[ix + 50] = val;
+            return acc;
+        }, {})
+    );
+    I.login('app=io.ox/files');
+    I.clickToolbar('Sort by');
+    I.clickDropdown('Date');
+    I.logout();
+});
