@@ -85,6 +85,19 @@ define('io.ox/core/tk/contenteditable-editor', [
         }
     });
 
+    // see Bug 67872
+    // fixes ios iframe focus bug
+    ext.point(POINT + '/setup').extend({
+        id: 'ios-focus',
+        index: INDEX += 100,
+        draw: function (ed) {
+            if (_.device('!tablet && ios >= 13')) return;
+            ed.on('touchstart', function () {
+                if (!$(document.activeElement).is('iframe')) $(document.activeElement).blur();
+            });
+        }
+    });
+
     /*
     // disabled for 7.10.1, will be removed with 7.10.2
     ext.point(POINT + '/options').extend({
