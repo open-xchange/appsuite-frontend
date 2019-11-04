@@ -48,8 +48,8 @@ Scenario('[C114352] Create folder in copy/move dialog', async (I, users, drive) 
     // 5. Choose a name and hit "Add"
     I.fillField({ css: '[data-point="io.ox/core/folder/add-popup"] input' }, 'Foobar');
     I.click('Add');
-    I.waitForText('Move', 'modal-footer');
-    I.see('Foobar', '.modal-body');
+    I.waitForText('Move', 5, '.modal-footer');
+    I.waitForText('Foobar', 5, '.modal-body .selected');
     // 6. Select the new folder and "Move"
     // Folder is already selected by default.
     I.wait(1);
