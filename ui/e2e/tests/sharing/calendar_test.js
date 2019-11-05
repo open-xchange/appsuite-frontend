@@ -26,51 +26,60 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario.skip('[C104305] calendar folders using “Permisions” dialog and sharing link', async (I, users) => {
+Scenario('[C104305] calendar folders using “Permisions” dialog and sharing link', async (I, users, calendar) => {
     let url;
     // Alice shares a folder with 2 appointments
     session('Alice', async () => {
         I.login('app=io.ox/calendar');
-        I.clickToolbar('New appointment');
-        I.waitForText('Subject');
+        calendar.newAppointment();
         I.fillField('Subject', 'simple appointment 1');
         I.click('Create');
         I.waitToHide('.io-ox-calendar-edit');
-        I.click('~Close');
-        I.clickToolbar('New appointment');
-        I.waitForText('Subject');
+        calendar.newAppointment();
         I.fillField('Subject', 'simple appointment 2');
         // select tomorrow
-        I.click('~Date (M/D/YYYY)');
-        I.pressKey(['Control', 'a']);
-        I.pressKey(moment().add(1, 'day').format('l'));
+        await calendar.setDate('startDate', moment().add(1, 'day'));
         I.click('Create');
         I.waitToHide('.io-ox-calendar-edit');
-        I.click('~Close');
 
-        I.click({ css: `.folder-tree [title="Actions for ${users[0].get('sur_name')}, ${users[0].get('given_name')}"]` });
-        I.click(locate('a').withText('Permissions / Invite people').inside('.dropdown'));
+        I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
+        I.clickDropdown('Permissions / Invite people');
 
+        I.waitForElement('.modal');
         I.click('~Select contacts');
         I.waitForElement('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));
         I.waitForText(users[1].get('name'), 5, '.address-picker');
         I.click('.address-picker .list-item');
         I.click({ css: 'button[data-action="select"]' });
+        I.waitForDetached('.address-picker');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.click('Author');
-        I.waitForText('Viewer', '.dropdown');
-        I.click('Viewer');
+        I.clickDropdown('Viewer');
 
         I.click('Save', '.modal');
         I.waitToHide('.modal');
 
         I.click({ css: `.folder-tree [title="Actions for ${users[0].get('sur_name')}, ${users[0].get('given_name')}"]` });
         I.click(locate('a').withText('Create sharing link').inside('.dropdown'));
-        I.waitForText('Sharing link created for folder');
-        [url] = await I.grabValueFrom('.share-wizard input[type="text"]');
+        I.waitForFocus('.share-wizard input[type="text"]');
+        url = await I.grabValueFrom('.share-wizard input[type="text"]');
+        url = Array.isArray(url) ? url[0] : url;
         I.click('Close');
     });
+
+    const checkSharedCalendarFolder = () => {
+        I.waitForText('simple appointment 1');
+        I.waitForText(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
+        I.seeNumberOfElements('.appointment', 2);
+        I.see('simple appointment 2');
+
+        // check for missing edit rights
+        I.click(locate('.appointment').at(1));
+        I.waitForElement('.io-ox-sidepopup');
+        I.dontSee('Edit', '.io-ox-sidepopup');
+        I.click('~Close', '.io-ox-sidepopup');
+    };
 
     // Bob receives the share
     session('Bob', () => {
@@ -82,50 +91,29 @@ Scenario.skip('[C104305] calendar folders using “Permisions” dialog and shar
             I.waitForText('View calendar');
             I.click('View calendar');
         });
-
-        // FIXME: this is currently broken, needs manual intervention
-        // eslint-disable-next-line no-undef
-        pause();
-        // </FIXME>
-        I.waitForText('simple appointment 1', 30, '.io-ox-calendar-main');
-        I.see(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`, '.folder-tree');
-        I.seeNumberOfElements(locate('.appointment').inside('.io-ox-calendar-main'), 2);
-        I.see('simple appointment 2', '.io-ox-calendar-main');
-
-        // check for missing edit rights
-        I.click(locate('.appointment').at(1));
-        I.waitForElement('.io-ox-sidepopup');
-        I.dontSee('Edit', '.io-ox-sidepopup');
-        I.click('~Close', '.io-ox-sidepopup');
+        I.waitForElement('.io-ox-calendar-main');
+        within('.io-ox-calendar-main', checkSharedCalendarFolder);
     });
 
     // Eve uses external link to shared folder
     session('Eve', () => {
         I.amOnPage(url);
-        I.waitForText('simple appointment 1', 5, '.io-ox-calendar-main');
-        I.see(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`, '.folder-tree');
-        I.seeNumberOfElements('.io-ox-calendar-main .appointment', 2);
-        I.see('simple appointment 2');
-
-        // check for missing edit rights
-        I.click(locate('.appointment').at(1));
-        I.waitForElement('.io-ox-sidepopup');
-        I.dontSee('Edit', '.io-ox-sidepopup');
-        I.click('~Close', '.io-ox-sidepopup');
+        I.waitForElement('.io-ox-calendar-main', 30);
+        within('.io-ox-calendar-main', checkSharedCalendarFolder);
     });
 
     session('Alice', () => {
-        I.click({ css: `.folder-tree [title="Actions for ${users[0].get('sur_name')}, ${users[0].get('given_name')}"]` });
-        I.click(locate('a').withText('Permissions / Invite people').inside('.dropdown'));
+        I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
         I.clickDropdown('Permissions / Invite people');
+        I.waitForElement('.modal');
         I.click(locate({ css: 'button[title="Actions"]' }).inside('.modal'));
         I.click('Revoke access');
         I.click('Save');
         I.waitToHide('.modal');
 
-        I.click({ css: `.folder-tree [title="Actions for ${users[0].get('sur_name')}, ${users[0].get('given_name')}"]` });
+        I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
         I.clickDropdown('Create sharing link');
-        I.waitForText('Sharing link created for folder');
+        I.waitForFocus('.share-wizard input[type="text"]');
         I.click('Remove link');
     });
 

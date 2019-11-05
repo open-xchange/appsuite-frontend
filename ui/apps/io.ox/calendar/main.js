@@ -383,7 +383,7 @@ define('io.ox/calendar/main', [
 
         'multi-folder-selection': function (app) {
             addFolderSelectSupport(app);
-            app.on('folder:change', function () {
+            app.on('folders:change', function () {
                 app.folders.reset();
             });
             app.folderView.tree.on('dblclick', function (e, folder) {
@@ -526,8 +526,6 @@ define('io.ox/calendar/main', [
                     left = state ? gt('Edit') : gt('Cancel');
                 app.props.set('mobileFolderSelectMode', !state);
                 app.pages.getNavbar('folderTree').setLeft(left);
-                //debugger;
-                console.log('state', state);
                 app.pages.getNavbar('folderTree').$el.find('.right').toggle(!!state);
                 page.toggleClass('mobile-edit-mode', !state);
             };
@@ -960,7 +958,6 @@ define('io.ox/calendar/main', [
         win.addClass('io-ox-calendar-main');
 
         // go!
-        var defaultFolder  = options.folder || folderAPI.getDefaultFolder('calendar');
         if (!options.folder && capabilities.has('guest')) {
             // try to select the first shared folder available
             if (folderAPI.getFlatCollection('calendar', 'shared').fetched) {
@@ -972,10 +969,11 @@ define('io.ox/calendar/main', [
                 });
             }
         } else {
-            addFolderSupport(defaultFolder);
+            addFolderSupport(options.folder);
         }
 
         function addFolderSupport(folder) {
+            folder = folder || folderAPI.getDefaultFolder('calendar');
             commons.addFolderSupport(app, null, 'calendar', folder)
                 .always(function () {
                     app.mediate();
