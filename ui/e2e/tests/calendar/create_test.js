@@ -721,9 +721,8 @@ Scenario('[C274516] Follow up should also propose a future date for appointments
     I.click('.next');
     I.waitForElement(appointmentSelector, 5, '.appointment-panel');
     I.click(appointmentSelector, '.appointment-panel');
-    I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
-    I.see(`${date.format('ddd')}, ${date.format('l')}`);
-    I.see('Whole day');
+    I.waitForText(`${date.format('ddd')}, ${date.format('l')}`, 10, '.io-ox-sidepopup');
+    I.see('Whole day', '.io-ox-sidepopup');
 });
 
 Scenario('[C274515] Attendees are not allowed to change their own permission status', async function (I, users, calendar) {

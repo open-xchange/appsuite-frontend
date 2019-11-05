@@ -83,7 +83,7 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     I.fillField('.form-control.tt-input', user_b.get('primaryEmail'));
     I.pressKey('Enter');
     I.click('Save');
-    I.waitToHide('Permissions');
+    I.waitForDetached('.modal');
     //create 2 test appointments with different colors
     createAppointment({ subject: 'testing is fun', folder: 'New calendar', startTime: '8:00 AM', color: 'dark green' });
     createAppointment({ subject: 'testing is awesome', folder: 'New calendar', startTime: '10:00 AM', color: 'dark cyan' });
