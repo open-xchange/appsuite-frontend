@@ -50,13 +50,14 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
         I.waitForText(users[1].get('primaryEmail'));
         I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
         I.click({ css: 'button[data-action="select"]' });
+        I.waitForDetached('.address-picker');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.dontSee('Guest', '.permissions-view');
         I.seeNumberOfElements('.permissions-view .permission.row', 2);
         I.click('Author');
-        I.waitForText('Viewer', '.dropdown');
-        I.click('Viewer');
+        I.clickDropdown('Viewer');
         I.click('Share', '.modal');
+        I.waitForDetached('.modal');
 
         I.selectFolder('My shares');
         I.waitForElement(locate('.displayname').withText('Music').inside('.list-view'));
@@ -85,40 +86,32 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
         I.click('Send notification by email');
         I.dontSeeCheckboxIsChecked('Send notification by email');
         I.click('Details', locate('.permissions-view .row').at(2));
-        I.waitForText('Create objects and subfolders', '.dropdown');
+        I.clickDropdown('Create objects and subfolders');
 
-        // I.click('Create objects and subfolders', '.dropdown.open'); - doesn't work, so we need to:
-        I.click(locate('li').at(3), '.dropdown.open [aria-label="Folder"]');
         //close the dropdown
         I.click('.smart-dropdown-container');
 
         I.click('Share', '.modal');
+        I.waitForDetached('.modal');
     });
 
     session('Bob', () => {
-        I.click('#io-ox-refresh-icon');
-        I.waitForElement('#io-ox-refresh-icon .fa-spin');
-        I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+        I.triggerRefresh();
 
         I.selectFolder('Music');
         I.clickToolbar('New');
-        I.click('Add new folder');
+        I.clickDropdown('Add new folder');
         I.waitForText('Add new folder');
         I.fillField('Folder name', 'Hello from Bob');
         I.click('Add');
     });
 
     session('Alice', () => {
-        I.selectFolder('My folders');
-        I.waitForElement('.io-ox-files-main .list-view.complete');
         I.selectFolder('Music');
 
-        //I.refreshData, triggerRefresh, …
-        I.click('#io-ox-refresh-icon');
-        I.waitForElement('#io-ox-refresh-icon .fa-spin');
-        I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+        I.triggerRefresh();
 
-        I.see('Hello from Bob', '.list-view');
+        I.waitForText('Hello from Bob');
     });
 });
 
@@ -131,10 +124,9 @@ Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users
         I.retry(3).seeNumberOfElements('.list-view li.list-item', 0);
 
         //I.shareFolder('Music');
-        I.click('My files', '.folder-tree');
         I.selectFolder('Music');
         I.clickToolbar('Share');
-        I.click('Invite people');
+        I.clickDropdown('Invite people');
         I.waitForText('Share folder');
         I.click('Send notification by email');
         I.dontSeeCheckboxIsChecked('Send notification by email');
@@ -145,13 +137,14 @@ Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users
         I.waitForText(users[1].get('primaryEmail'));
         I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
         I.click({ css: 'button[data-action="select"]' });
+        I.waitForDetached('.address-picker');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.dontSee('Guest', '.permissions-view');
         I.seeNumberOfElements('.permissions-view .permission.row', 2);
         I.click('Author');
-        I.waitForText('Viewer', '.dropdown');
-        I.click('Viewer');
+        I.clickDropdown('Viewer');
         I.click('Share', '.modal');
+        I.waitForDetached('.modal');
 
         I.selectFolder('My shares');
         I.waitForElement(locate('.displayname').withText('Music').inside('.list-view'));
@@ -163,9 +156,7 @@ Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users
 
     session('Bob', () => {
         I.login('app=io.ox/files', { user: users[1] });
-        I.waitForText('Shared files', 5, '.folder-tree');
-        I.selectFolder('Shared files');
-        I.waitForText(users[0].get('name'));
+        drive.waitForApp();
         I.selectFolder(users[0].get('name'));
         I.waitForText('Music', 5, '.list-view');
     });
@@ -176,11 +167,9 @@ Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users
     });
 
     session('Bob', () => {
-        I.click('#io-ox-refresh-icon');
-        I.waitForElement('#io-ox-refresh-icon .fa-spin');
-        I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+        I.triggerRefresh();
 
-        I.dontSee('Shared files', '.folder-tree');
+        I.waitForInvisible('Shared files', 5, '.folder-tree');
         //I.dontSee('Music', '.list-view');
     });
 });
@@ -217,6 +206,7 @@ Scenario('[C73919] Copy a shared file to another folder', async function (I, use
     I.click({ css: 'button[data-action="select"]' });
     I.waitForElement(locate('.permissions-view .row').at(1));
     I.click('Share', '.modal');
+    I.waitForDetached('.modal');
     I.see('This file is shared with others', '.detail-pane');
 
     I.clickToolbar('~More actions');

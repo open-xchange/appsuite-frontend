@@ -50,13 +50,13 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         I.waitForText(users[1].get('primaryEmail'));
         I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
         I.click({ css: 'button[data-action="select"]' });
+        I.waitForDetached('.address-picer');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.click('Author');
-        I.waitForText('Viewer', '.dropdown');
-        I.click('Viewer');
+        I.clickDropdown('Viewer');
 
         I.click('Save', '.modal');
-        I.waitToHide('.modal');
+        I.waitForDetached('.modal');
 
         I.openFolderMenu('Contacts');
         I.clickDropdown('Create sharing link');
@@ -92,10 +92,10 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
     // Eve uses external link to shared folder
     session('Eve', () => {
         I.amOnPage(url);
-        I.waitForNetworkTraffic();
+        contacts.waitForApp();
         I.waitForText(`${users[0].get('sur_name')}, ${users[0].get('given_name')}: Contacts`, 5, '.folder-tree');
         // I.seeNumberOfElements(locate('.contact.vgrid-cell').inside('.io-ox-contacts-window'), 4);
-        I.see('Builder', '.vgrid');
+        I.waitForText('Builder', 5, '.vgrid');
         I.see('Wonderland', '.vgrid');
 
         // check for missing edit rights
