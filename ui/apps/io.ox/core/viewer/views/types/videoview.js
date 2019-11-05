@@ -41,7 +41,7 @@ define('io.ox/core/viewer/views/types/videoview', [
          */
         render: function () {
 
-            var video = $('<video controls="true" class="viewer-displayer-item viewer-displayer-video player-hidden">'),
+            var video = $('<video controls="true" disablepictureinpicture="true" controlslist="nodownload" class="viewer-displayer-item viewer-displayer-video player-hidden">'),
                 previewUrl = this.getPreviewUrl() || '',
                 contentType = this.model.get('file_mimetype') || '';
 
