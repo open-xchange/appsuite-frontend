@@ -358,10 +358,6 @@ define('io.ox/files/filepicker', [
             filesPane.addClass('singleselect');
         }
 
-        if (_.device('!desktop')) {
-            options.uploadButton = false;
-        }
-
         function toggleOkButton(state) {
             $('[data-action="ok"]', filesPane.closest('.add-infostore-file')).prop('disabled', !state);
         }
