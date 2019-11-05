@@ -2,37 +2,58 @@
 title: Trigger
 ---
 
-# Custom trigger
+# Available triggers
 
-This sections lists custom triggers and how they can be configured.
+This sections lists default triggers and how they can be configured.
 
+## Menu bar / Topbar
 
-| ID                          | Configuration                              | Text | Default capabilities              | Description                                                                                                                                                                                                                                                                                                                                                                                              |
-| --------------------------- | ----------------------------------- | ----- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| secondary-launcher          | icon, color                         | title | active_sync or caldav or carddav  | This trigger is located in the secondary toolbar next to the notification or app launcher. Icon, text and color can be customized. Due to space limitations, the trigger is not shown on mobile devices.                                                                                                                                             |
-| folderview/mail             | icon, color                         | title | active_sync                       | This trigger is located below the folderview of the mail app/module.                                                                                                                                                                                                                                                                                                                                                   |
-| folderview/mail/bottom^1      | color                               | title | active_sync                       | This trigger is located at the bottom of the folderview of the mail app/module in the premium area. This trigger is styled as button with the default text 'Try now' and has no icon by default.                                                                                                                                                                                                              |
-| folderview/contacts         | icon, color                         | title | carddav                           | This trigger is located below the folderview of the addressbook app/module.                                                                                                                                                                                                                                                                                                                                        |
-| folderview/contacts/bottom^1  | color                               | title | carddav                           | This trigger is located at the bottom of the folderview of the contacts app/module in the premium area. This trigger is styled as button with the default text 'Try now' and has no icon by default.                                                                                                                                                                                                          |
-| folderview/calendar         | icon, color                         | title | caldav                            | This trigger is located below the folderview of the calendar app/module.                                                                                                                                                                                                                                                                                                                                            |
-| folderview/calendar/bottom^1  | color                               | title | caldav                            | This trigger is located at the bottom of the folderview of the calendar app/module in the premium area. This trigger is styled as button with the default text 'Try now' and has no icon by default.                                                                                                                                                                                                          |
-| folderview/infostore/bottom^1 | color                               | title | boxcom or google or msliveconnect | This trigger is located at the bottom of the folderview of the drive app/module in the premium area. This trigger is styled as button with the default text 'Try now' and has no icon by default.                                                                                                                                                                                                             |
-| topbar-dropdown             | icon, color                         | title | active_sync or caldav or carddav  | This trigger is located on the first position of the dropdown in the secondary toolbar. It contains text and an icon.                                                                                                                                                                                                                                                                                  |
-| portal-widget               | imageURL, removable (boolean), icon | title | active_sync or caldav or carddav  | This trigger adds a draggable portal widget with default text to the OX App Suite portal. You can add a background image with 'imageURL'; If no image is used, the widget displays the text centered with a customizable space separated list of font-awesome icons. This widget is not removable by default; you have to  set ‘removable’ to true. |
-| mail-folderview-quota       | upsellLimit, icon, color            | title | active_sync or caldav or carddav  | This trigger is appended below the folderview and has no icon by default. You can set the upsell limit in Bytes. If the maximum mail quota is larger than upsell limit, the trigger will not be shown.                                                                                                                                                  |
+| ID                            | Configurable Properties     | Default capabilities             | On Mobile | Description                                                         |
+|-------------------------------|-----------------------------|----------------------------------|-----------|---------------------------------------------------------------------|
+| quick-launchers               | enabled                     |                                  |           | Part of quick launch icon of an app.                                |
+| app-launcher                  | enabled                     |                                  | shown     | Part of an app icon within app launcher dropdown menu.              |
+| secondary-launcher            | enabled, icon, color, title | active_sync or caldav or carddav |           | Part of secondary toolbar next to the notification or app launcher. |
+| topbar-dropdown               | enabled, icon, color, title | active_sync or caldav or carddav | shown     | Part of main toolbar's dropdown as first entry.                     |
 
-^1 These upsell trigger are placed inside the premium area at the bottom of the folderview. Therefore, these upsell trigger are only shown if the premium area is enabled.
+Note: In case you want to add quicklauncher entries for promoted apps please take a look at the [following settings section]({{ site.baseurl }}/ui/configuration/settings-list-of.html#topbar-apps)
+
+## Folder View
+
+**General**
+
+| ID                            | Configurable Properties             | Default capabilities              | On Mobile | Description                                                                                                                                                                                           |
+|-------------------------------|-------------------------------------|-----------------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| mail-folderview-quota         | enabled, icon, color, upsellLimit   | active_sync or caldav or carddav  | shown     | Located below the folderview without an icon by default. You can set the upsell limit in Bytes. If the maximum mail quota is larger than upsell limit, the trigger will not be shown.                 |
+| folderview/mail               | enabled, icon, color, title         | active_sync                       | shown     | Located below the folderview of the mail app/module.                                                                                                                                                  |
+| folderview/contacts           | enabled, icon, color, title         | carddav                           | shown     | Located below the folderview of the addressbook app/module.                                                                                                                                           |
+| folderview/calendar           | enabled, icon, color, title         | caldav                            | shown     | Located below the folderview of the calendar app/module.                                                                                                                                              |
+
+**Premium Area**
+
+Note: These upsell trigger are placed inside the premium area at the bottom of the folderview. Therefore, these upsell trigger are only shown if the premium area is enabled.
 You can enable it by setting *io.ox/core//upsell/premium/folderView/visible=true*
 
-**Note**: Please see upsell tools for more features that can be used as trigger for upsell.
+| ID                            | Configurable Properties             | Default capabilities              | On Mobile | Description                                                                                                                                                                                           |
+|-------------------------------|-------------------------------------|-----------------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| folderview/mail/bottom        | enabled, color, title               | active_sync                       | shown     | Default text 'Try now' and has no icon by default.                                                                                                                                                    |
+| folderview/contacts/bottom    | enabled, color, title               | carddav                           | shown     | Default text 'Try now' and has no icon by default.                                                                                                                                                    |
+| folderview/calendar/bottom    | enabled, color, title               | caldav                            | shown     | Default text 'Try now' and has no icon by default.                                                                                                                                                    |
+| folderview/infostore/bottom   | enabled, color, title               | boxcom or google or msliveconnect | shown     | Default text 'Try now' and has no icon by default.                                                                                                                                                    |
 
+## Misc
 
+| ID                            | Configurable Properties             | Default capabilities              | On Mobile | Description                                                                                                                                                                                           |
+|-------------------------------|-------------------------------------|-----------------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| client.onboarding             | enabled, icon, color                |                                   | shown     | Part of "Connect your device" wizard                                                                                                                                                                  |
+| portal-widget                 | enabled, icon, imageURL, removable  | active_sync or caldav or carddav  | shown     | A draggable portal widget. You can add a background image with 'imageURL'. If no image is used, the widget displays the text centered with a customizable space separated list of font-awesome icons. |
+
+Note: Please see upsell tools for more features that can be used as trigger for upsell.
 
 # Visibility of trigger
 
 The OX App Suite provides several upsell trigger which can be configured via settings, since upsell trigger compared to the usual links would require custom UI development.
 
-If you configure the upsell settings, the custom upsell trigger will be enabled by default. Those trigger will appear when the expression of required [capability](../customize/manifests.html#capabilities) is not satisfied and the required set of upsell trigger is satisfied.
+If you configure the upsell settings, the common upsell trigger will be enabled by default. Those trigger will appear when the expression of required [capability](../customize/manifests.html#capabilities) is not satisfied and the required set of upsell trigger is satisfied.
 
 To clearify, when triggers are shown or not, we proceed with an example:
 A hoster can provide a custom upsell trigger in the secondary toolbar (next to the app launcher). This upsell trigger should promote a premium account to the user and has the default requirement of *active_sync* or *caldav* or *carddav*.
