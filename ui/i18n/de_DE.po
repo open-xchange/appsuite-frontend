@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-10-24 14:41+0200\n"
+"PO-Revision-Date: 2019-11-05 11:21+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -44,6 +44,10 @@ msgstr "Audio"
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Mail"
 msgstr "Mail"
+
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "SMS"
+msgstr "SMS"
 
 #. Used in a selectbox when the reminder for an appointment is before the start time
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
@@ -1062,9 +1066,11 @@ msgid "Change status"
 msgstr "Status ändern"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-alarms.js
+#: apps/io.ox/calendar/actions/change-folder-alarms.js
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-msgid "Change reminder"
-msgstr "Erinnerung ändern"
+msgid "Change reminders"
+msgstr "Erinnerungen ändern"
 
 #. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -1175,11 +1181,6 @@ msgstr "Termin ändern"
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Change series"
 msgstr "Serie ändern"
-
-#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/change-folder-alarms.js
-msgid "Change reminders"
-msgstr "Erinnerungen ändern"
 
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -13565,6 +13566,9 @@ msgstr "Einladen zu %s"
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
 
+#~ msgid "Change reminder"
+#~ msgstr "Erinnerung ändern"
+
 #~ msgid "Upload local image"
 #~ msgstr "Lokales Bild hochladen"
 
@@ -18021,11 +18025,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Rwanda"
 #~ msgstr "Ruanda"
-
-#, fuzzy
-#~| msgid "RSS"
-#~ msgid "SMS"
-#~ msgstr "RSS"
 
 #~ msgid "SMTP Login"
 #~ msgstr "SMTP-Login"
