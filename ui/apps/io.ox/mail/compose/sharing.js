@@ -206,6 +206,7 @@ define('io.ox/mail/compose/sharing', [
 
             this.sharingModel = new Backbone.Model(data);
             this.listenTo(this.model.get('attachments'), 'add remove reset change:size', this.updateVisibility);
+            this.listenTo(this.model, 'change:sharedAttachments', this.syncToSharingModel);
             this.listenTo(this.sharingModel, 'change:enabled', this.updateVisibility);
             this.listenTo(this.sharingModel, 'change:enabled', this.syncToMailModel);
         },
@@ -213,7 +214,7 @@ define('io.ox/mail/compose/sharing', [
         updateVisibility: function () {
             if (!this.optionsButton) return;
 
-            if (mailSettings.get('compose/shareAttachments/threshold', 0) > 0) {
+            if (!this.model.saving && mailSettings.get('compose/shareAttachments/threshold', 0) > 0) {
                 var actualAttachmentSize = this.model.get('attachments').getSize();
                 if (actualAttachmentSize > mailSettings.get('compose/shareAttachments/threshold', 0) && this.sharingModel.get('enabled') === false) {
                     //#. %1$s is usually "Drive Mail" (product name; might be customized)
@@ -225,6 +226,12 @@ define('io.ox/mail/compose/sharing', [
             this.$el.toggle(!!this.model.get('attachments').getValidModels().length);
             // is active
             this.optionsButton.toggleClass('hidden', !this.sharingModel.get('enabled'));
+        },
+
+        syncToSharingModel: function () {
+            var sharedAttachments = this.model.get('sharedAttachments');
+            if (mailSettings.get('compose/shareAttachments/forceAutoDelete', false)) sharedAttachments.autodelete = true;
+            this.sharingModel.set(sharedAttachments);
         },
 
         syncToMailModel: function () {

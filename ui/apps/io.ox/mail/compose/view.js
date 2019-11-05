@@ -689,9 +689,13 @@ define('io.ox/mail/compose/view', [
                 point = ext.point('io.ox/mail/compose/actions/send');
 
             win.busy();
+            this.model.saving = true;
 
             return point.cascade(this, baton).then(function () {
-            }).always(win.idle.bind(win));
+            }).always(function () {
+                if (this.model) this.model.saving = false;
+                win.idle();
+            }.bind(this));
         },
 
         toggleTokenfield: function (e) {

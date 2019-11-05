@@ -116,9 +116,9 @@ define('io.ox/mail/compose/actions/send', [
             perform: extensions.removeUnusedInlineImages
         },
         {
-            id: 'check:attachment-publishmailattachments',
+            id: 'check-for-auto-enabled-drive-mail',
             index: 800,
-            perform: extensions.publishMailAttachments
+            perform: extensions.checkForAutoEnabledDriveMail({ yell: true, restoreWindow: true, stopPropagation: true, removeQueue: true })
         },
         {
             id: 'send',
