@@ -10,8 +10,8 @@ This sections lists default triggers and how they can be configured.
 
 | ID                            | Configurable Properties     | Default capabilities             | On Mobile | Description                                                         |
 |-------------------------------|-----------------------------|----------------------------------|-----------|---------------------------------------------------------------------|
-| quick-launchers               | enabled                     |                                  |           | Part of quick launch icon of an app.                                |
-| app-launcher                  | enabled                     |                                  | shown     | Part of an app icon within app launcher dropdown menu.              |
+| quick-launchers               | none                        |                                  |           | Part of quick launch icon of an app.                                |
+| app-launcher                  | none                        |                                  | shown     | Part of an app icon within app launcher dropdown menu.              |
 | secondary-launcher            | enabled, icon, color, title | active_sync or caldav or carddav |           | Part of secondary toolbar next to the notification or app launcher. |
 | topbar-dropdown               | enabled, icon, color, title | active_sync or caldav or carddav | shown     | Part of main toolbar's dropdown as first entry.                     |
 
