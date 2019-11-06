@@ -70,9 +70,6 @@ define('io.ox/core/tk/contenteditable-editor', [
                 if (!e.content) return;
                 e.content = DOMPurify.sanitize(e.content);
             };
-            if (ed.oxContext && ed.oxContext.signature) {
-                ed.on('BeforeSetContent', sanitizeAttributes);
-            }
             // see bug 48231 and 50849
             ed.on('PastePreProcess', sanitizeAttributes);
         }
