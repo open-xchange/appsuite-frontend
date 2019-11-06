@@ -9,13 +9,13 @@
 <link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.7.1. 建立新規則">
 <link rel="next" href="ox.appsuite.user.sect.email.mailfilter.action.html" title="5.7.3. 新增操作">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律聲明">
-<link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
-<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <script src="../../../help/jquery.min.js"></script> 
-
-   <script src="../../../help/bootstrap.min.js"></script> 
-</head>
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
@@ -61,7 +61,9 @@
 <p>在這個例子中，將會驗證電子郵件的主旨是否與參數的內容 (「議程」) 完全相同。關於如何使用主旨過濾郵件的更多範例：</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p role="presentation">條件：「包含」如果主題包含變量中的字符，則符合條件。例如: 參數為「議程」。</p>
+<p role="presentation">條件：「包含」</p>
+<p role="presentation">如果主旨包含參數中的文字，就符合條件。</p>
+<p role="presentation">例如：參數為「議程」。</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">主題「議程」符合條件。</p></li>
 <li class="listitem"><p role="presentation">主題「會議議程」也符合條件。</p></li>
@@ -70,14 +72,18 @@
             </p>
 </li>
 <li class="listitem">
-<p role="presentation">條件：「符合」如果主旨與變量中的字符完全相同，則符合條件。字符串可以包含通配符。例如: 參數為「議程」。*" 是表示任意字符的特殊符號。</p>
+<p role="presentation">條件：「符合」</p>
+<p role="presentation">如果主旨與參數中的文字完全相同，才符合條件。字串可以包含萬用字元。</p>
+<p role="presentation">例如：參數為「議程*」。「*」是表示任意字符的特殊符號。</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">主題「議程」符合條件。</p></li>
 <li class="listitem"><p role="presentation">主題「會議議程」不符合條件。</p></li>
 </ul>
 </li>
 <li class="listitem">
-<p role="presentation">標準：「正則匹配」 如果主題包含變量中的正則表達式提供的字符，則符合條件。正則表達式允許複雜的請求。可在網路上的相應網站中找到更多資訊。以下非常簡單的正則表達式可以洞察主題。例如: 參數為 "organi(z|s)ation"。表達式 "(z|s)" 表示字符 "z" 或 "s"。</p>
+<p role="presentation">條件：「Regex」</p>
+<p role="presentation">如果主旨符合參數中正則表達式計算結果，就符合條件。正則表達式允許複雜的請求。可在網路上的相應網站中找到更多資訊。以下非常簡單的正則表達式可以洞察主題。</p>
+<p role="presentation">例如：變量為 "organi(z|s)ation"。表達式 "(z|s)" 表示字符 "z" 或 "s"。</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">主題「議程」符合條件。</p></li>
 <li class="listitem"><p role="presentation">主題 "organisation" 也符合條件。</p></li>

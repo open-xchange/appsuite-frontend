@@ -607,19 +607,6 @@ define('io.ox/mail/detail/view', [
                 this.model.previous('attachments')[0].content !== this.model.get('attachments')[0].content) this.onChangeContent();
         },
 
-        onChangeSecurity: function () {
-            if (_.device('small')) return;  // Need to redraw action links on desktop only
-            var data = this.model.toJSON(),
-                baton = ext.Baton({
-                    view: this,
-                    model: this.model,
-                    data: data,
-                    attachments: util.getAttachments(data)
-                }),
-                node = this.$el.find('header.detail-view-header').empty();
-            ext.point('io.ox/mail/detail/header').invoke('draw', node, baton);
-        },
-
         getEmptyBodyNode: function () {
             return this.$el.find('section.body').empty();
         },
@@ -731,8 +718,6 @@ define('io.ox/mail/detail/view', [
             this.onChangeSubject();
             this.onChangeAttachments();
             this.onChangeContent();
-
-            if (capabilities.has('guard') && data && (data.security || data.security_info)) this.onChangeSecurity();
 
             // process unseen flag
             if (unseen) {

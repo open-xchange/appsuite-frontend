@@ -120,6 +120,8 @@ define('io.ox/backbone/mini-views/settings-list-view', [
         },
 
         renderChildViews: function () {
+            if (this.disposed) return;
+
             var self = this,
                 list = this.collection.filter(this.opt.filter);
 

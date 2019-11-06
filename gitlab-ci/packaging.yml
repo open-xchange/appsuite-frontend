@@ -61,3 +61,4 @@ upload stable:
   only:
     - /^master-/
     - /^release-/
+    - tags

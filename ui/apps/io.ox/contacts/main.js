@@ -955,7 +955,8 @@ define('io.ox/contacts/main', [
             settings: settings,
             hideTopbar: _.device('smartphone'),
             hideToolbar: _.device('smartphone'),
-            containerLabel: gt('Contact list. Select a contact to view details.')
+            containerLabel: gt('Contact list. Select a contact to view details.'),
+            dividerThreshold: settings.get('dividerThreshold', 30)
             //swipeRightHandler: swipeRightHandler,
         });
 

@@ -47,8 +47,8 @@ Scenario('[C7758] Set timezone', async (I, users) => {
 
     for (var id in timezones) {
         I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
-        I.waitForElement('select[name="timezone"]');
-        I.selectOption('select[name="timezone"]', id);
+        I.waitForElement({ css: 'select[name="timezone"]' });
+        I.selectOption({ css: 'select[name="timezone"]' }, id);
         I.waitForVisible('.io-ox-alert');
         I.logout();
         I.login(['app=io.ox/calendar&perspective=month']);

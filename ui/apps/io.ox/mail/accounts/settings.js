@@ -179,8 +179,11 @@ define('io.ox/mail/accounts/settings', [
                     list.render().$el,
                     createUnifiedMailboxInput()
                 );
+
                 // this code block runs deferred, need to focus the first element, again
                 a11y.getTabbable($el).first().focus();
+                // ensure modal's 'compact layout' for empty bodys get's removed
+                $el.closest('.modal').removeClass('compact');
 
                 list.listenTo(list, 'select', function (service) {
                     if (service.get('type') === 'wizard') return;

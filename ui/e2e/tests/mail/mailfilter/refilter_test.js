@@ -11,7 +11,7 @@
 */
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Mailfilter > Apply filter rule to a folder');
+Feature('Mailfilter > Apply to folder');
 
 Before(async (users) => {
     await users.create();
@@ -32,15 +32,15 @@ function sampleRule(I) {
     return I.haveMailFilterRule({
         id: 0,
         position: 0,
-        rulename: "no foobar in inbox",
+        rulename: 'no foobar in inbox',
         active: true,
         flags: [],
         test: {
-            id: "subject",
-            comparison: "contains",
-            values: ["foobar"]
+            id: 'subject',
+            comparison: 'contains',
+            values: ['foobar']
         },
-        actioncmds: [{ id: "move", into :"default0/INBOX/foo" }]
+        actioncmds: [{ id: 'move', into: 'default0/INBOX/foo' }]
     });
 }
 
@@ -48,11 +48,8 @@ function extendedLogin(I) {
     I.login();
     I.waitForText('nothing special');
     I.see('foobar', '.subject');
-    I.openApp('Settings');
-    I.selectFolder('Mail');
-    I.waitForText('Mail', 5, 'h1');
-    I.selectFolder('Filter Rules');
-    I.waitForText('Add new rule');
+    I.openApp('Settings', { folder: 'virtual/settings/io.ox/mailfilter' });
+    I.waitForText('Add new rule', 30, '.settings-detail-pane');
 }
 
 function checkForFilteredMail(I) {
@@ -74,7 +71,7 @@ Scenario('[C290529] Refilter mails in INBOX folder', async (I, users) => {
     extendedLogin(I);
 
     I.click('Apply');
-    I.waitForElement(locate('.folder.selected').withText('Inbox'));
+    I.waitForElement(locate('.modal .folder.selected').withText('Inbox'));
     I.click('Ok');
 
     checkForFilteredMail(I);
@@ -104,7 +101,7 @@ Scenario('[C290530] Create and apply new filter rule', async (I, users) => {
     I.click('Ok');
 
     I.click('Save and apply');
-    I.waitForVisible(locate('.folder.selected').withText('Inbox'));
+    I.waitForVisible(locate('.modal .folder.selected').withText('Inbox'));
     I.click('Ok');
 
     checkForFilteredMail(I);
@@ -120,7 +117,7 @@ Scenario('[C290531] Edit and apply existing filter rule', async (I, users) => {
     I.fillField('Rule name', 'no foo in inbox');
     I.fillField('Subject Contains', 'foo');
     I.click('Save and apply');
-    I.waitForVisible(locate('.folder.selected').withText('Inbox'));
+    I.waitForVisible(locate('.modal .folder.selected').withText('Inbox'));
     I.click('Ok');
 
     checkForFilteredMail(I);

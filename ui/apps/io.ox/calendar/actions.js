@@ -553,7 +553,7 @@ define('io.ox/calendar/actions', [
             prio: 'hi',
             mobile: 'lo',
             id: 'changereminder',
-            title: gt('Change reminder'),
+            title: gt('Change reminders'),
             ref: 'io.ox/calendar/detail/actions/changeAlarms'
         },
         {

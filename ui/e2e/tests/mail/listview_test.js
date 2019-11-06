@@ -49,7 +49,7 @@ async function getTooltipValue(I, opt) {
     return [].concat(tooltips)[0];
 }
 
-Scenario('[C114381] Sender address is shown in tooltip @shaky', async function (I, users) {
+Scenario('[C114381] Sender address is shown in tooltip', async function (I, users) {
     const user1 = users[0];
     const user2 = users[1];
 
@@ -76,8 +76,7 @@ Scenario('[C114381] Sender address is shown in tooltip @shaky', async function (
 
     I.say('Check to in "drafts"', 'blue');
     I.selectFolder('Drafts');
-    I.waitForVisible('.leftside .list-view .list-item .from');
-    I.see('C114381:draft');
+    I.waitForText('C114381:draft', 5, '.leftside .list-view .list-item .subject');
     let to2 = await getTooltipValue(I, { locator: '.leftside .list-view .list-item .from', attribute: 'title' });
     expect(to2).to.be.equal(user2.get('primaryEmail'));
 
@@ -97,7 +96,7 @@ Scenario('[C114381] Sender address is shown in tooltip @shaky', async function (
     I.logout();
 });
 
-Scenario('remove mail from thread @shaky', async (I, users) => {
+Scenario('remove mail from thread', async (I, users) => {
     I.haveSetting('io.ox/mail//viewOptions', {
         'default0/INBOX': {
             order: 'desc',
@@ -171,6 +170,4 @@ Scenario('remove mail from thread @shaky', async (I, users) => {
     I.seeNumberOfVisibleElements('.list-view .selectable', 2);
     I.clickToolbar('~Delete');
     I.seeNumberOfVisibleElements('.list-view .selectable', 1);
-
-    I.logout();
 });

@@ -14,23 +14,23 @@
 Feature('Tasks > Create');
 
 Before(async (users) => {
-    await users.create();
-    await users.create();
-    await users.create();
+    await Promise.all([
+        users.create(),
+        users.create(),
+        users.create()
+    ]);
 });
 After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7730] Create a private Task with participant', async function (I, users) {
-    let testrailID = 'C7730';
-    let testrailName = 'Create a private Task with participant';
+Scenario('[C7730] Create a private Task with participant', async function (I, users, tasks) {
+    const testrailID = 'C7730',
+        testrailName = 'Create a private Task with participant';
 
     I.login('app=io.ox/tasks');
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-
-    I.clickToolbar('New task');
-    I.waitForVisible('.io-ox-tasks-edit-window');
+    tasks.waitForApp();
+    tasks.newTask();
 
     I.fillField('Subject', testrailID);
     I.fillField('Description', testrailName);
@@ -40,39 +40,32 @@ Scenario('[C7730] Create a private Task with participant', async function (I, us
     I.pressKey('Enter');
     I.waitForElement(locate('.participant-email').withText(users[1].userdata.primaryEmail).inside('.participant-wrapper'));
     I.click('Create');
-    I.waitForElement('div .message[role="alert"]', 5);
+    I.waitForElement('.message[role="alert"]', 5);
     I.see('Tasks with private flag cannot be delegated.');
-    I.logout();
 });
 
-Scenario('[C7728] Create simple Task', async function (I) {
-    let testrailID = 'C7728';
-    let testrailName = 'Create simple Task';
-    I.login('app=io.ox/tasks');
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+Scenario('[C7728] Create simple Task', async function (I, tasks) {
+    const testrailID = 'C7728',
+        testrailName = 'Create simple Task';
 
-    I.clickToolbar('New task');
-    I.waitForVisible('.io-ox-tasks-edit-window', 5);
+    I.login('app=io.ox/tasks');
+    tasks.waitForApp();
+    tasks.newTask();
 
     I.fillField('Subject', testrailID);
     I.fillField('Description', testrailName);
 
-    I.click('Create');
+    tasks.create();
 
-    I.seeElement('.tasks-detailview');
-
-    I.see(testrailID);
-    I.see(testrailName);
+    I.see(testrailID, '.tasks-detailview');
+    I.see(testrailName, '.tasks-detailview');
     I.dontSeeElement({ css: '[title="High priority"]' });
     I.dontSeeElement({ css: '[title="Low priority"]' });
     I.see('Not started');
-
-    I.logout();
 });
 
-Scenario('[C7732] Create a Task in a shared folder without rights', async function (I, users) {
-    let testrailID = 'C7732';
-
+Scenario('[C7732] Create a Task in a shared folder without rights', async function (I, users, tasks) {
+    const testrailID = 'C7732';
     const folder = {
         module: 'tasks',
         subscribed: 1,
@@ -91,21 +84,21 @@ Scenario('[C7732] Create a Task in a shared folder without rights', async functi
         parent: await I.grabDefaultFolder('tasks')
     };
     I.haveFolder(folder, { user: users[0] });
+
     I.login('app=io.ox/tasks', { user: users[1] });
+    tasks.waitForApp();
     I.waitForText('Empty');
     I.selectFolder(testrailID);
     I.waitForText(testrailID, 5, '.folder-name');
-    I.seeElement(locate('.classic-toolbar .disabled').withText('New').as('disabled "New" button in toolbar'));
+    I.waitForElement(locate('.classic-toolbar .disabled').withText('New').as('disabled "New" button in toolbar'));
 });
 
-Scenario('[C7727] Create task with all fields', async function (I) {
-    let testrailID = 'C7727';
-    let testrailName = 'Create task with all fields';
+Scenario('[C7727] Create task with all fields', async function (I, tasks) {
+    const testrailID = 'C7727';
+    const testrailName = 'Create task with all fields';
     I.login('app=io.ox/tasks');
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-
-    I.clickToolbar('New task');
-    I.waitForVisible('.io-ox-tasks-edit-window');
+    tasks.waitForApp();
+    tasks.newTask();
 
     I.fillField('Subject', testrailID);
     I.fillField('Description', testrailName);
@@ -138,9 +131,7 @@ Scenario('[C7727] Create task with all fields', async function (I) {
     I.fillField({ css: '[name="billing_information"]' }, "Don't know any Bill");
     I.fillField({ css: '[name="companies"]' }, 'Wurst Inc.');
 
-    I.click('Create');
-
-    I.seeElement('.tasks-detailview');
+    tasks.create();
 
     I.seeElement({ css: '[title="High priority"]' });
     I.see(testrailID);
@@ -170,17 +161,15 @@ Scenario('[C7727] Create task with all fields', async function (I) {
 
     I.see('External participants');
     I.see('testdude1 <testdude1@test.test>');
-
-    I.logout();
 });
 
-Scenario('[C7729] Create Task with participants', async function (I, users) {
-    let testrailID = 'C7729';
-    let testrailName = 'Create Task with participants';
+Scenario('[C7729] Create Task with participants', async function (I, users, tasks) {
+    const testrailID = 'C7729';
+    const testrailName = 'Create Task with participants';
+
     I.login('app=io.ox/tasks');
-    I.waitForElement('.classic-toolbar');
-    I.clickToolbar('New task');
-    I.waitForVisible('.io-ox-tasks-edit-window');
+    tasks.waitForApp();
+    tasks.newTask();
     I.fillField('Subject', testrailID);
     I.fillField('Description', testrailName);
     I.click('Expand form');
@@ -190,75 +179,68 @@ Scenario('[C7729] Create Task with participants', async function (I, users) {
     I.fillField('Add contact', users[2].userdata.primaryEmail);
     I.pressKey('Enter');
     I.waitForText('Participants (2)');
-    I.click('Create');
-    I.waitForDetached('.floating-window-content');
-    I.seeElement('.tasks-detailview');
-    I.see(testrailID);
-    I.see(testrailName);
+
+    tasks.create();
+    I.see(testrailID, '.tasks-detailview');
+    I.see(testrailName, '.tasks-detailview');
     I.dontSeeElement({ css: '[title="High priority"]' });
     I.dontSeeElement({ css: '[title="Low priority"]' });
     I.see('Not started');
-    I.seeElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
-    I.seeElement('.participant-list .participant [title="' + users[2].userdata.primaryEmail + '"]');
+    I.waitForElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
+    I.waitForElement('.participant-list .participant [title="' + users[2].userdata.primaryEmail + '"]');
     I.logout();
+
     I.login('app=io.ox/tasks', { user: users[1] });
-    I.waitForElement('.tasks-detailview');
-    I.see(testrailID);
-    I.see(testrailName);
+    tasks.waitForApp();
+    I.see(testrailID, '.tasks-detailview');
+    I.see(testrailName, '.tasks-detailview');
     I.dontSeeElement({ css: '[title="High priority"]' });
     I.dontSeeElement({ css: '[title="Low priority"]' });
     I.see('Not started');
-    I.seeElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
-    I.seeElement('.participant-list .participant [title="' + users[2].userdata.primaryEmail + '"]');
+    I.waitForElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
+    I.waitForElement('.participant-list .participant [title="' + users[2].userdata.primaryEmail + '"]');
     I.logout();
+
     I.login('app=io.ox/tasks', { user: users[2] });
-    I.waitForElement('.tasks-detailview');
-    I.see(testrailID);
-    I.see(testrailName);
+    tasks.waitForApp();
+    I.see(testrailID, '.tasks-detailview');
+    I.see(testrailName, '.tasks-detailview');
     I.dontSeeElement({ css: '[title="High priority"]' });
     I.dontSeeElement({ css: '[title="Low priority"]' });
     I.see('Not started');
-    I.seeElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
-    I.seeElement('.participant-list .participant [title="' + users[2].userdata.primaryEmail + '"]');
+    I.waitForElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
+    I.waitForElement('.participant-list .participant [title="' + users[2].userdata.primaryEmail + '"]');
 });
-Scenario('[C7734] Create Task without any information', async function (I) {
+Scenario('[C7734] Create Task without any information', function (I, tasks) {
     I.login('app=io.ox/tasks');
-    I.waitForElement('.classic-toolbar');
-    I.clickToolbar('New task');
-    I.waitForVisible('.io-ox-tasks-edit-window');
+    tasks.waitForApp();
+    tasks.newTask();
     I.seeElement('.floating-window-content .btn-primary[disabled=""][data-action="save"]');
-    I.logout();
 });
 
-Scenario('[C7733] Set Task startdate behind due date', async function (I) {
-    let testrailID = 'C7733';
-    let testrailName = 'Set Task startdate behind due date';
+Scenario('[C7733] Set Task startdate behind due date', async function (I, tasks) {
+    const testrailID = 'C7733';
+    const testrailName = 'Set Task startdate behind due date';
+
     I.login('app=io.ox/tasks');
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-
-    I.clickToolbar('New task');
-    I.waitForVisible('.io-ox-tasks-edit-window');
-
+    tasks.waitForApp();
+    tasks.newTask();
     I.fillField('Subject', testrailID);
     I.fillField('Description', testrailName);
-
     I.click('Expand form');
-
     I.click('All day');
     I.fillField({ css: '[data-attribute="start_time"] .datepicker-day-field' }, '12/14/2114');
     I.click({ css: '[data-attribute="start_time"] .time-field' });
     I.fillField({ css: '[data-attribute="start_time"] .time-field' }, '12:00 PM');
-
     I.fillField({ css: '[data-attribute="end_time"] .datepicker-day-field' }, '12/13/2114');
     I.click({ css: '[data-attribute="end_time"] .time-field' });
     I.click('Create');
     I.retry(5).seeTextEquals('The dialog contains invalid data', '[role="alert"] div');
     I.retry(5).seeTextEquals('The start date must be before the due date.', '[data-attribute="start_time"] div.error');
     I.retry(5).seeTextEquals('The due date must not be before the start date.', '[data-attribute="end_time"] div.error');
-    I.logout();
 });
 
-Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
+Scenario('[C7731] Create a Task in a shared folder', async function (I, users, tasks) {
     const id = 'C7731',
         desc = 'Create a Task in a shared folder',
         sharedFolder = await I.haveFolder({
@@ -282,7 +264,7 @@ Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
     const checkTask = () => {
         I.waitForText(id, 5, '.vgrid-cell');
         I.click(id, '.vgrid-cell');
-        I.waitForText(id, 2, 'h1');
+        I.waitForText(id, 2, '.tasks-detailview');
         I.see('Not started', '.vgrid-cell');
         I.dontSee('Due', '.info-panel');
         ['Low', 'Medium', 'High'].forEach(priority => {
@@ -291,16 +273,18 @@ Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
     };
 
     I.login('app=io.ox/tasks&folder=' + sharedFolder, { user: users[1] });
-    I.waitForText('New task');
-    I.clickToolbar('New task');
-    I.waitForVisible('.io-ox-tasks-edit-window');
+    tasks.waitForApp();
+    tasks.newTask();
     I.fillField('Subject', id);
     I.fillField('Description', desc);
     I.pressKey('Enter');
     I.click('Create');
+    I.waitForDetached('.io-ox-tasks-edit-window');
+    I.waitForElement('.tasks-detailview');
     checkTask();
     I.logout();
 
     I.login('app=io.ox/tasks&folder=' + sharedFolder, { user: users[0] });
+    tasks.waitForApp();
     checkTask();
 });

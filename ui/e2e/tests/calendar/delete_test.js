@@ -65,7 +65,7 @@ Scenario('[C7466] Delete one appointment of an series', async function (I, users
         ]
     }, { user: users[0] });
     I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
     I.click('.next');
     I.waitForElement('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
@@ -134,7 +134,7 @@ Scenario('[C7468] Delete an appointment', async function (I, users) {
         ]
     }, { user: users[0] });
     I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
     I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
@@ -187,7 +187,7 @@ Scenario('[C7469] Delete a whole-day appointment', async function (I, users) {
         ]
     }, { user: users[0] });
     I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
     I.waitForVisible('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]');
     I.click('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]');

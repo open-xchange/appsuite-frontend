@@ -21,15 +21,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-function start(I) {
-    I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.waitForDetached('a.dropdown-toggle.disabled');
-}
-
-Scenario('Displays only fields with content', async function (I) {
+Scenario('Displays only fields with content', async function (I, contacts) {
     // alwaysVisible and optional fields
     const first = 'Phil',
         last = 'Dunphy',
@@ -42,7 +34,8 @@ Scenario('Displays only fields with content', async function (I) {
         street_home: 'STREET_HOME'
     });
 
-    start(I);
+    I.login('app=io.ox/contacts');
+    contacts.waitForApp();
 
     // initial value
     I.waitForElement(`~${display_name}`);

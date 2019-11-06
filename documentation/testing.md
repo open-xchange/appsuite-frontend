@@ -1,6 +1,6 @@
 ---
 title: Testing
-icon: fa-bar-chart-o
+icon: fa-chart-bar
 description:
 ---
 

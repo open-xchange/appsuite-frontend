@@ -22,102 +22,105 @@ After(async function (users) {
     await users.removeAll();
 });
 
-function prepare(user, I) {
-    I.login('app=io.ox/mail', { user });
-    I.waitForVisible('.io-ox-mail-window');
-}
-
-Scenario('User start with no picture', async function (I, users) {
-    const W = require('../../contacts/edit-picture_commands')(I);
-    const [user] = users;
-    prepare(user, I);
+Scenario('User start with no picture', async function (I, contacts, mail) {
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
 
     // toolbar
-    let [image] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
-    expect(image).is.equal('none');
-    // edit contact data
-    W.myContactData('open');
-    W.myContactData('check:empty-state');
-    W.EditPicture('open');
-    W.EditPicture('check:empty-state');
-    W.EditPicture('cancel');
-    W.myContactData('discard');
+    const image = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'backgroundImage');
+    expect(Array.isArray(image) ? image[0] : image).is.equal('none');
 
-    I.logout();
+    // edit contact data
+    contacts.editMyContact();
+
+    // check if empty
+    I.seeElementInDOM('.empty');
+    I.waitForText('Click to add photo', 20, '.contact-photo label');
+
+    I.click('.contact-edit .contact-photo');
+    I.waitForVisible('.edit-picture');
+    I.seeElementInDOM('.edit-picture.empty');
+    I.click('Cancel');
+    I.click('Discard');
 });
 
-Scenario('User can upload and remove a picture', async function (I, users) {
-    const W = require('../../contacts/edit-picture_commands')(I);
-    const [user] = users;
-
-    prepare(user, I);
+Scenario('User can upload and remove a picture', async function (I, contacts, mail) {
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
 
     // user image in toolbar?
-    let [image1] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
-    expect(image1).is.equal('none');
+    const image1 = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'backgroundImage');
+    expect(Array.isArray(image1) ? image1[0] : image1).is.equal('none');
 
     // open and check empty-state
-    W.myContactData('open');
-    W.EditPicture('open');
-    W.EditPicture('upload');
-    W.EditPicture('check:not:empty-state');
-    W.EditPicture('ok');
+    contacts.editMyContactPhoto();
+
+    // upload image (2.2 MB)
+    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+
+    I.waitForInvisible('.edit-picture.empty');
+    I.click('Apply');
+    I.waitForDetached('.edit-picture');
 
     // picture-uploader
-    W.myContactData('check:not:empty-state');
-    W.myContactData('save');
-    I.waitForVisible('.contact-picture');
-    let [image2] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
-    expect(image2).to.not.be.empty;
+    I.dontSeeElement('.empty');
+    I.click('Save');
+    I.waitForInvisible('.contact-edit');
+    I.waitForNetworkTraffic();
 
-    W.myContactData('open');
-    W.EditPicture('open');
-    W.EditPicture('remove-image');
-    W.EditPicture('ok');
-    W.myContactData('save');
-    // user image in toolbar?
-    I.waitForVisible('.contact-picture:not([style])', 2);
-    let [image3] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
-    expect(image3).is.equal('none');
+    const image2 = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'backgroundImage');
+    expect(Array.isArray(image2) ? image2[0] : image2).to.not.be.empty;
+
+    contacts.editMyContactPhoto();
+
+    // TODO: BUG
+    // There are likely to be accessibility issues due to mishandled focus
+    I.click('Remove photo');
+    I.click('Remove photo');
+
+    I.click('Apply');
+    I.waitForDetached('.modal');
+    I.click('Save');
+    I.waitForInvisible('.contact-edit');
+    I.waitForDetached('.contact-picture[style]');
+    I.waitForNetworkTraffic();
+    I.waitForElement('.contact-picture');
 
     // check again
-    W.myContactData('open');
-    W.EditPicture('open');
-    W.EditPicture('check:empty-state');
-    W.EditPicture('cancel');
-    W.myContactData('discard');
-
-    I.logout();
+    contacts.editMyContactPhoto();
+    I.waitForVisible('.edit-picture.in.empty');
 });
 
-Scenario('User can rotate her/his picture', async function (I, users) {
-    const W = require('../../contacts/edit-picture_commands')(I);
-    const [user] = users;
+Scenario('User can rotate her/his picture', async function (I, contacts, mail) {
+    let image;
 
-    prepare(user, I);
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
 
     // user image in toolbar?
-    let [image] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
-    expect(image).is.equal('none');
+    image = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'backgroundImage');
+    expect(Array.isArray(image) ? image[0] : image).is.equal('none');
 
     // open and check empty-state
-    W.myContactData('open');
-    W.EditPicture('open');
-    W.EditPicture('upload');
-    let [image_contact] = await I.grabCssPropertyFrom('.contact-photo-upload .contact-photo', 'background-image');
-    expect(image_contact).to.not.be.empty;
+    contacts.editMyContactPhoto();
+
+    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+
+    image = await I.grabCssPropertyFrom('.contact-photo-upload .contact-photo', 'backgroundImage');
+    expect(Array.isArray(image) ? image[0] : image).to.not.be.empty;
 
     // rotate (portrait to landscape)
-    let [height] = await I.grabAttributeFrom('.cr-image', 'height');
+    const height = await I.grabAttributeFrom('.cr-image', 'height');
     I.click('.inline-actions button[data-action="rotate-right"]');
-    let [width] = await I.grabAttributeFrom('.cr-image', 'width');
-    expect(height).to.be.equal(width);
-    W.EditPicture('check:not:empty-state');
-    W.EditPicture('ok');
+    const width = await I.grabAttributeFrom('.cr-image', 'width');
+    expect(Array.isArray(height) ? height[0] : height).to.be.equal(Array.isArray(width) ? width[0] : width);
+
+    I.waitForInvisible('.edit-picture.empty');
+    I.click('Apply');
+    I.waitForInvisible('.edit-picture');
 
     //picture-uploader
-    W.myContactData('discard');
-    W.myContactData('discard-confirm');
-
-    I.logout();
+    I.click('Discard');
+    I.waitForVisible('.modal-footer [data-action="delete"]');
+    I.click('.modal-footer [data-action="delete"]');
 });

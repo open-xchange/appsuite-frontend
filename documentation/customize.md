@@ -5,7 +5,7 @@ description: Getting ready to develop your own plugins / apps
 ---
 
 There are two ways that your code can interact with the OX App Suite.
-First of all there are **apps** that are described briefly [here](customize/app/first-app.html).
+First of all there are **apps** that are described briefly [here](customize/app.html).
 
 The second way is using **extension points and extensions**.
 Stated briefly an extension point is an invitation to contributing an implementation to a part of the UI.

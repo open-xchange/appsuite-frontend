@@ -35,7 +35,7 @@ Scenario('[C7781] Default sender address', async (I, users, contexts) => {
     I.click('Compose');
     // Wait for the compose dialog
     I.waitForFocus('input[placeholder="To"]');
-    I.click(user.get('primaryEmail'));
+    I.click(`<${user.get('primaryEmail')}>`, '.mail-input');
     I.waitForText('urbi@orbi.it');
     I.click('urbi@orbi.it');
     I.waitForVisible('.token-input.tt-input');

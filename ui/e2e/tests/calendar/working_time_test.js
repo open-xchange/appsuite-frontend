@@ -23,7 +23,7 @@ After(async function (users) {
 Scenario('Change working time and check in weekview', async function (I) {
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     I.selectFolder('Calendar');
     I.clickToolbar('View');

@@ -33,7 +33,7 @@ Scenario('[C114337] Flag an E-Mail as Flagged/Starred (flaggedOnly)', async (I, 
     await me.login({ color: false, star: true });
     me.selectMail();
     me.clickToolbarAction('flag');
-    I.dontSee('[data-action="io.ox/mail/actions/color"]');
+    I.dontSee({ css: '[data-action="io.ox/mail/actions/color"]' });
     I.waitForElement(flagged);
 });
 
@@ -52,7 +52,7 @@ Scenario('[C114338] Flag an E-Mail with a color flag (flaggedAndColor)', async (
     I.waitForDetached(flagged);
 });
 
-Scenario('[C114339] Flag an E-Mail with Starred flag on an alternative client (flaggedAndColor) @shaky', async (I, users) => {
+Scenario('[C114339] Flag an E-Mail with Starred flag on an alternative client (flaggedAndColor)', async (I, users) => {
 
     var me = getUtils(I, users);
     await me.login({ color: true, star: true }, 8);
@@ -110,7 +110,7 @@ function getUtils(I, users) {
         },
 
         clickToolbarAction: function (action) {
-            var selector = '[data-action="io.ox/mail/actions/' + action + '"]:not(.disabled)';
+            var selector = '.classic-toolbar [data-action="io.ox/mail/actions/' + action + '"]:not(.disabled)';
             this.waitAndClick(selector);
         },
 

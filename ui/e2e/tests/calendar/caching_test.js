@@ -22,10 +22,10 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Create never ending appointment and check display in several views @shaky', async function (I) {
+Scenario('Create never ending appointment and check display in several views', async function (I) {
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     // toggle weeks to activate caching
     I.clickToolbar('View');
@@ -61,9 +61,12 @@ Scenario('Create never ending appointment and check display in several views @sh
     I.fillField('Subject', 'test caching');
     I.fillField('Location', 'caching location');
 
+    // TODO: integrate into page object?
     I.click('~Date (M/D/YYYY)');
-    I.pressKey(['Control', 'a']);
-    I.pressKey(moment().startOf('week').add('1', 'day').format('l'));
+    I.waitForElement('.date-picker.open');
+    await I.executeScript(function (attr, newDate) {
+        $(`.dateinput[data-attribute="${attr}"] .datepicker-day-field`).val(newDate);
+    }, 'startDate', moment().startOf('week').add('1', 'day').format('l'));
     I.pressKey('Enter');
 
     I.click('All day', '.io-ox-calendar-edit-window');
@@ -87,13 +90,12 @@ Scenario('Create never ending appointment and check display in several views @sh
     I.click('Week');
     I.waitForVisible('.weekview-container.week button.weekday.today', 5);
 
-    I.waitForText('test caching', undefined, '.weekview-container.week .appointment .title');
+    I.waitForText('test caching', 5, '.weekview-container.week .appointment .title');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 6);
     I.click('~Next Week', '.weekview-container.week');
-    I.wait(2); // Nothing else seems to work here
     I.dontSeeElement('.weekview-container.week button.weekday.today');
 
-    I.waitForText('test caching', undefined, '.weekview-container.week .appointment .title');
+    I.waitForText('test caching', 5, '.weekview-container.week .appointment .title');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 7);
     I.click('~Previous Week', '.weekview-container.week');
     I.waitForVisible('.weekview-container.week button.weekday.today', 5);
@@ -114,7 +116,4 @@ Scenario('Create never ending appointment and check display in several views @sh
 
     I.waitForText('test caching', undefined, '.monthview-container .appointment .title');
     I.seeNumberOfElements('.monthview-container .day:not(.out) .appointment .title', moment().add(2, 'months').daysInMonth());
-
-    I.logout();
-
 });

@@ -11,7 +11,8 @@
  *
  */
 
-/// <reference path="../../steps.d.ts" />
+/// <reference path="../../../steps.d.ts" />
+
 Feature('Settings > Basic');
 
 Before(async (users) => {
@@ -25,47 +26,46 @@ After(async (users) => {
 Scenario('[C287803] Configure quick launchers', function (I) {
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     // wait for form (the button we're interesting in has no meta data)
-    I.waitForElement('select[name="language"]');
+    I.waitForElement({ css: 'select[name="language"]' });
     I.seeElement('~Mail', '#io-ox-quicklaunch');
     I.seeElement('~Calendar', '#io-ox-quicklaunch');
     I.seeElement('~Drive', '#io-ox-quicklaunch');
-    I.click('Configure quick launchers');
-    I.waitForText('Configure quick launchers');
+    I.click('Configure quick launchers ...', '.settings-detail-pane');
+    I.waitForText('Change quick launch icons');
     I.see('Position 1');
-    I.see('Mail', '[id="settings-apps/quickLaunch0"]');
+    I.see('Mail', { css: '[id="settings-apps/quickLaunch0"]' });
     I.see('Position 2');
-    I.see('Calendar', '[id="settings-apps/quickLaunch0"]');
+    I.see('Calendar', { css: '[id="settings-apps/quickLaunch0"]' });
     I.see('Position 3');
-    I.see('Drive', '[id="settings-apps/quickLaunch0"]');
-    I.selectOption('[id="settings-apps/quickLaunch0"]', 'Address Book');
-    I.waitForText('Calendar','5','[id="settings-apps/quickLaunch0"]');
-    I.selectOption('[id="settings-apps/quickLaunch1"]', 'Tasks');
-    I.waitForText('Calendar','5','[id="settings-apps/quickLaunch0"]');
-    I.selectOption('[id="settings-apps/quickLaunch2"]', 'Portal');
-    I.waitForText('Calendar','5','[id="settings-apps/quickLaunch0"]');
+    I.see('Drive', { css: '[id="settings-apps/quickLaunch0"]' });
+    I.selectOption({ css: '[id="settings-apps/quickLaunch0"]' }, 'Address Book');
+    I.waitForText('Calendar', '5', { css: '[id="settings-apps/quickLaunch0"]' });
+    I.selectOption({ css: '[id="settings-apps/quickLaunch1"]' }, 'Tasks');
+    I.waitForText('Calendar', '5', { css: '[id="settings-apps/quickLaunch0"]' });
+    I.selectOption({ css: '[id="settings-apps/quickLaunch2"]' }, 'Portal');
+    I.waitForText('Calendar', '5', { css: '[id="settings-apps/quickLaunch0"]' });
     I.click('Cancel');
-    I.waitForInvisible('Configure quick launchers');
+    I.waitForInvisible('Change quick launch icons');
     I.seeElement('~Mail', '#io-ox-quicklaunch');
     I.seeElement('~Calendar', '#io-ox-quicklaunch');
     I.seeElement('~Drive', '#io-ox-quicklaunch');
-    I.click('Configure quick launchers');
-    I.waitForText('Configure quick launchers');
+    I.click('Configure quick launchers ...', '.settings-detail-pane');
+    I.waitForText('Change quick launch icons');
     I.see('Position 1');
-    I.see('Mail', '[id="settings-apps/quickLaunch0"]');
+    I.see('Mail', { css: '[id="settings-apps/quickLaunch0"]' });
     I.see('Position 2');
-    I.see('Calendar', '[id="settings-apps/quickLaunch0"]');
+    I.see('Calendar', { css: '[id="settings-apps/quickLaunch0"]' });
     I.see('Position 3');
-    I.see('Drive', '[id="settings-apps/quickLaunch0"]');
-    I.selectOption('[id="settings-apps/quickLaunch0"]', 'Address Book');
-    I.waitForText('Calendar','5','[id="settings-apps/quickLaunch0"]');
-    I.selectOption('[id="settings-apps/quickLaunch1"]', 'Tasks');
-    I.waitForText('Calendar','5','[id="settings-apps/quickLaunch0"]');
-    I.selectOption('[id="settings-apps/quickLaunch2"]', 'Portal');
-    I.waitForText('Calendar','5','[id="settings-apps/quickLaunch0"]');
+    I.see('Drive', { css: '[id="settings-apps/quickLaunch0"]' });
+    I.selectOption({ css: '[id="settings-apps/quickLaunch0"]' }, 'Address Book');
+    I.waitForText('Calendar', '5', '[id="settings-apps/quickLaunch0"]');
+    I.selectOption({ css: '[id="settings-apps/quickLaunch1"]' }, 'Tasks');
+    I.waitForText('Calendar', '5', '[id="settings-apps/quickLaunch0"]');
+    I.selectOption({ css: '[id="settings-apps/quickLaunch2"]' }, 'Portal');
+    I.waitForText('Calendar', '5', '[id="settings-apps/quickLaunch0"]');
     I.click('Save changes');
-    I.waitForInvisible('Configure quick launchers');
+    I.waitForInvisible('Change quick launch icons');
     I.seeElement('~Address Book', '#io-ox-quicklaunch');
     I.seeElement('~Tasks', '#io-ox-quicklaunch');
     I.seeElement('~Portal', '#io-ox-quicklaunch');
-    I.logout();
 });

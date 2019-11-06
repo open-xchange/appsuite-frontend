@@ -2699,6 +2699,10 @@ msgstr "Конфигурирайте %s"
 msgid "Configure categories"
 msgstr "Конфигуриране на категории"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Configure now"
+msgstr "Редактирай имената"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Configure categories"
@@ -3959,18 +3963,6 @@ msgstr "Изтеглете инсталационния файл"
 msgid "Download personal data"
 msgstr "Изтеглете цялата папка"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Download entire folder"
-msgid "Download profile"
-msgstr "Изтеглете цялата папка"
-
-#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Slow requests"
-msgid "Download requested"
-msgstr "Бавни заявки"
-
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
@@ -4699,6 +4691,10 @@ msgstr "Съществува"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Expand form"
 msgstr "Разгънете формуляра"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Expert user?"
+msgstr "Експерт потребител?"
 
 #. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -5595,6 +5591,10 @@ msgstr "Скриване на подробностите"
 msgid "Hide non-working time"
 msgstr "Скриване на неработно време"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Hide options for expert users."
+msgstr "Скриване на опциите за експертни потребители."
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
 msgstr "Hide request body"
@@ -6270,6 +6270,13 @@ msgstr "Научи повече"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Letters • Symbols"
 msgstr "Letters • Symbols"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid ""
+"Let´s automatically configure your device, by clicking the button below."
+msgstr ""
+"Нека автоматично да конфигурирате устройството си, като кликнете върху "
+"бутона по-долу."
 
 #. Emoji category
 #. Japanese: 日常
@@ -10272,20 +10279,9 @@ msgstr "Показване в Диск"
 msgid "Show information about account recovery"
 msgstr "Показване на информация за възстановяване на профила"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Show less options"
-msgstr "Акаунт настройки"
-
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Покажи лист"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Sort options"
-msgid "Show more options"
-msgstr "Опции за подреждане"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -10296,9 +10292,7 @@ msgid "Show next month"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Show or hide actions for advanced users."
-msgid "Show or hide alternative options for advanced users."
+msgid "Show or hide actions for advanced users."
 msgstr "Показване или скриване на действия за напреднали потребители."
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
@@ -11693,15 +11687,15 @@ msgstr ""
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Това е стандартна папка, която не може да бъде преименувана."
 
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+msgid "This is how your message text will look like."
+msgstr "Така ще изглежда текстът на съобщението ви."
+
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #, fuzzy
 #| msgid "This is not a valid email address"
 msgid "This is an invalid email address."
 msgstr "Това е невалиден и-мейл адрес"
-
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "This is how your message text will look like."
-msgstr "Така ще изглежда текстът на съобщението ви."
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "This is not a valid email address"
@@ -12319,7 +12313,7 @@ msgstr "Качи файл"
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 #, fuzzy
 #| msgid "Upload local file"
-msgid "Upload local file"
+msgid "Upload local image"
 msgstr "Качване на локален файл"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
@@ -12852,10 +12846,6 @@ msgstr ""
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "You are currently signed in with the following devices"
 msgstr "В момента сте влезли в профила си от следните устройства"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "You are no longer using a public calendar. You were added as organizer."
-msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "You are no longer using a shared calendar. You were added as organizer."
@@ -13596,12 +13586,6 @@ msgstr "iCalendar"
 msgid "iOS"
 msgstr "iOS"
 
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid ""
-"iOS devices can be automatically configured by installing the configuration "
-"profile."
-msgstr ""
-
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
 msgctxt "in"
@@ -14213,9 +14197,6 @@ msgstr "вашата платформа"
 #~ msgid "Compose new mail"
 #~ msgstr "Създайте нов мейл"
 
-#~ msgid "Configure now"
-#~ msgstr "Редактирай имената"
-
 #~ msgid "Content"
 #~ msgstr "Съдържание"
 
@@ -14335,9 +14316,6 @@ msgstr "вашата платформа"
 #~ msgid "Every %1$d weeks on workdays."
 #~ msgstr "Всеки %1$d дни"
 
-#~ msgid "Expert user?"
-#~ msgstr "Експерт потребител?"
-
 #~ msgid "February"
 #~ msgstr "Февруари"
 
@@ -14348,9 +14326,6 @@ msgstr "вашата платформа"
 
 #~ msgid "Hide names"
 #~ msgstr "Скрий имената"
-
-#~ msgid "Hide options for expert users."
-#~ msgstr "Скриване на опциите за експертни потребители."
 
 #~ msgid "Hours"
 #~ msgstr "Часа"
@@ -14402,12 +14377,6 @@ msgstr "вашата платформа"
 #, fuzzy
 #~ msgid "Leave the presentation"
 #~ msgstr "Започни презентация"
-
-#~ msgid ""
-#~ "Let´s automatically configure your device, by clicking the button below."
-#~ msgstr ""
-#~ "Нека автоматично да конфигурирате устройството си, като кликнете върху "
-#~ "бутона по-долу."
 
 #, fuzzy
 #~ msgid "Line %1$d: %2$s"

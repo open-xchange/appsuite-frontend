@@ -94,6 +94,14 @@
     &.editable .vgrid-cell.vgrid-label  {
         padding-left: @checkboxWidth + @paddingLabel;
     }
+
+    &.invisible-labels .vgrid-label {
+        visibility: hidden;
+        overflow: hidden;
+        height: 0;
+        padding: 0;
+        border: 0;
+    }
 }
 
 // Tabs
@@ -336,7 +344,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         .first_name, .last_name {
-            white-space: nowrap;
+            .ellipsis();
         }
     }
 

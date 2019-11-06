@@ -35,11 +35,14 @@ define('io.ox/mail/compose/resize-view', [
         }
         // no computation necessary for original, but fileupload needs to be triggered
         if (size === 'original') {
+            delete model.resized;
             model.trigger('image:resized', file);
             return $.when();
         }
         if (!imageResize.matches('type', file)) return $.when();
         if (!imageResize.matches('size', file)) return $.when();
+
+        model.resized = new $.Deferred();
 
         // add image dimension and check if this image is ellegibable for resize
         return imageResize.addDimensionsProperty(file).then(function () {
@@ -49,7 +52,10 @@ define('io.ox/mail/compose/resize-view', [
             var targetDimensions = imageResize.getTargetDimensions(file, size);
             return imageResize.resizeImage(file, targetDimensions);
         }).then(function (file) {
-            if (file) model.trigger('image:resized', file);
+            if (file) {
+                model.resized.resolve(file);
+                model.trigger('image:resized', file);
+            }
         });
     }
 

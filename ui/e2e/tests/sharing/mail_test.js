@@ -24,13 +24,14 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C83383] mail folders using “Permisions” dialog @shaky', async (I, users) => {
+Scenario('[C83383] mail folders using “Permisions” dialog', async (I, users) => {
     // Alice shares a mail folder
     I.login('app=io.ox/mail');
     I.waitForText('Spam', 5, '.folder-tree');
     I.selectFolder('Spam');
-    I.click({ css: '.folder-tree [title="Actions for Spam"]' });
-    I.click(locate('a').withText('Permissions').inside('.dropdown'));
+    I.openFolderMenu('Spam');
+    I.clickDropdown('Permissions');
+    I.waitForText('Permissions for folder');
     I.click('~Select contacts');
     I.waitForElement('.modal .list-view.address-picker li.list-item');
     I.fillField('Search', users[1].get('name'));
@@ -40,8 +41,7 @@ Scenario('[C83383] mail folders using “Permisions” dialog @shaky', async (I,
     I.click({ css: 'button[data-action="select"]' });
     I.waitForElement(locate('.permissions-view .row').at(2));
     I.click('Author');
-    I.waitForText('Viewer', '.dropdown');
-    I.click('Viewer');
+    I.clickDropdown('Viewer');
 
     I.click('Save', '.modal');
     I.waitToHide('.modal');

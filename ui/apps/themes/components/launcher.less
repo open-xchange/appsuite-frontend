@@ -407,6 +407,9 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 width: 100%;
+                // to make ellipsis actually work (test with open mail compose and long subject)
+                display: block;
+                white-space: nowrap;
             }
             .flex-center(row);
             &.upsell i {

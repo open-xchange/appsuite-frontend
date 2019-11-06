@@ -22,7 +22,7 @@ Before(async (users) => {
 After(async (users) => {
     await users.removeAll();
 });
-const searchField = 'input[type=search]';
+const searchField = '.search-box input[type=search]';
 
 function getTestMail(from, to, opt) {
     opt = opt || {};
@@ -61,7 +61,7 @@ Scenario('[C8407] Perform a multi search', async function (I, users) {
     I.pressKey('Enter');
     I.waitForVisible('.list-view [data-index="0"]');
     I.waitForVisible('.list-view [data-index="1"]');
-    I.wait(1);
+    I.waitForElement('.token span[title="test"] + a');
     I.fillField(searchField, '123');
     I.pressKey('Enter');
     I.waitForElement('.list-view [data-index="0"]');
@@ -89,12 +89,13 @@ Scenario('[C8406] Delete a string from multi search', async function (I, users) 
     I.pressKey('Enter');
     I.waitForVisible('.list-view [data-index="0"]');
     I.waitForVisible('.list-view [data-index="1"]');
-    I.wait(1);
+    I.waitForElement('.token span[title="test"] + a');
     I.fillField(searchField, '123');
     I.pressKey('Enter');
     I.waitForElement('.list-view [data-index="0"]');
     I.waitForInvisible('.list-view [data-index="1"]');
-    I.click('span[title="123"] + a ');
+    I.waitForElement('.token span[title="123"] + a');
+    I.click('.token span[title="123"] + a');
     I.waitForVisible('.list-view [data-index="0"]');
     I.waitForVisible('.list-view [data-index="1"]');
 

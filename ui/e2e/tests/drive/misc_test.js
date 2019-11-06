@@ -23,56 +23,44 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C114352] Create folder in copy/move dialog @shaky', async (I, users) => {
-
-    // Preconditions: At least one file in Drive
-
-    const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
-
-    I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
+Scenario('[C114352] Create folder in copy/move dialog', async (I, users, drive) => {
+    await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.odt');
 
     // 1. Go to Drive
-
     I.login('app=io.ox/files');
+    drive.waitForApp();
 
     // 2. Select any file
-
-    I.click('.list-item[aria-label*="testdocument.odt"]');
+    I.waitForElement(locate('.filename').withText('testdocument.odt').inside('.list-view'));
+    I.click(locate('.filename').withText('testdocument.odt').inside('.list-view'));
     I.waitForVisible('~Details');
 
     // 3. Open context menu and select "Move"
-
-    I.click('[data-original-title="More actions"]');
-    I.waitForVisible('.smart-dropdown-container');
-
-    I.click('Move');
-    I.waitForText('Move');
+    I.click('~More actions');
+    I.clickDropdown('Move');
+    I.waitForText('Move', 5, '.modal');
 
     // 4. Select "My files" and click "Create folder"
-
     // "My files" is already selected by default.
     I.click('Create folder');
     I.waitForText('Add new folder');
 
     // 5. Choose a name and hit "Add"
-
-    I.fillField('[data-point="io.ox/core/folder/add-popup"] input', 'Foobar');
+    I.fillField({ css: '[data-point="io.ox/core/folder/add-popup"] input' }, 'Foobar');
     I.click('Add');
-    I.waitForText('Move');
-    I.see('Foobar');
-
+    I.waitForText('Move', 5, '.modal-footer');
+    I.waitForText('Foobar', 5, '.modal-body .selected');
     // 6. Select the new folder and "Move"
-
     // Folder is already selected by default.
-    I.click('Move', '[data-point="io.ox/core/folder/picker"]');
     I.wait(1);
-    I.doubleClick('.list-item[aria-label*="Foobar"]');
-    I.wait(2);
-    I.see('testdocument.odt');
-
+    I.click('Move', '.modal-footer');
+    I.waitForText('File has been moved');
+    I.waitForInvisible('File has been moved');
+    I.selectFolder('Foobar');
+    I.waitForText('testdocument.odt', 5, '.list-view');
 });
 
-Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', async (I, users) => {
+Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', async (I, users, drive) => {
 
     /*
      * Preconditions:
@@ -86,51 +74,36 @@ Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', a
      *
      */
 
-    const myFiles = await I.grabDefaultFolder('infostore', { user: users[0] });
-
-    const folderA = await I.haveFolder({ title: 'folderA', module: 'infostore',parent: myFiles });
+    const myFiles = await I.grabDefaultFolder('infostore');
+    const folderA = await I.haveFolder({ title: 'folderA', module: 'infostore', parent: myFiles });
     const folderB = await I.haveFolder({ title: 'folderB', module: 'infostore', parent: folderA });
     await I.haveFolder({ title: 'folderC', module: 'infostore', parent: folderB });
 
-    // 1. Login
-
-    I.login();
-
-    // 2. Go to Drive
-
-    I.openApp('Drive');
-
-    // 3. Create a sharing link for folder 'C'
-    I.waitForText('folderA');
-    I.doubleClick('.list-item[aria-label*="folderA"]');
-
-    I.waitForText('folderB');
-    I.doubleClick('.list-item[aria-label*="folderB"]');
-
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    I.waitForElement(locate('.list-item').withText('folderA').inside('.list-view'));
+    I.doubleClick(locate('.list-item').withText('folderA').inside('.list-view'));
+    I.waitForElement(locate('.list-item').withText('folderB').inside('.list-view'));
+    I.doubleClick(locate('.list-item').withText('folderB').inside('.list-view'));
+    I.waitForElement(locate('.list-item').withText('folderC').inside('.list-view'));
+    I.click(locate('.list-item').withText('folderC').inside('.list-view'));
     I.waitForText('folderC');
     I.click('.list-item[aria-label*="folderC"]');
-
-    I.click('Share');
-    I.waitForVisible('.dropdown-menu');
-
-    I.click('Create sharing link');
+    I.clickToolbar('Share');
+    I.clickDropdown('Create sharing link');
     I.waitForText('Sharing link created for folder');
-
-    const [url] = await I.grabValueFrom('.share-wizard input[type="text"]');
-
-    I.click('Close');
-
+    I.waitForFocus('.share-wizard input[type="text"]');
+    const url = await I.grabValueFrom('.share-wizard input[type="text"]');
+    I.click('Close', '.modal-footer');
     I.logout();
 
     // 4. Open the sharing link in another browser tab
+    I.amOnPage(Array.isArray(url) ? url[0] : url);
+    drive.waitForApp();
 
-    I.amOnPage(url);
-
-    I.waitForVisible('.breadcrumb-view');
-
+    I.waitForText('folderC', 5, '.breadcrumb-view');
     I.dontSee('folderA', '.breadcrumb-view');
     I.dontSee('folderB', '.breadcrumb-view');
-    I.see('folderC', '.breadcrumb-view');
 
     I.waitForVisible('.folder-tree');
 
@@ -140,16 +113,19 @@ Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', a
 
 });
 
-Scenario('[C257247] Restore deleted items @shaky', async (I, users) => {
+Scenario('[C257247] Restore deleted items', async (I, drive) => {
 
     // Preconditions: At least one file and one folder in Drive
 
-    const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
+    const infostoreFolderID = await I.grabDefaultFolder('infostore');
 
-    I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
-    I.haveFolder({ title: 'testfolder', module: 'infostore', parent: infostoreFolderID });
+    await Promise.all([
+        I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt'),
+        I.haveFolder({ title: 'testfolder', module: 'infostore', parent: infostoreFolderID })
+    ]);
 
     I.login('app=io.ox/files');
+    drive.waitForApp();
 
     // 1. Delete the folder
 
@@ -166,25 +142,23 @@ Scenario('[C257247] Restore deleted items @shaky', async (I, users) => {
     // 2. Switch to Trash, select the previously deleted folder and use "restore" from the toolbar Expected Result
 
     I.selectFolder('Trash');
-    I.wait(1); // Wait for thre list view to refresh
-    I.see('testfolder');
-
-    I.click('.list-item[aria-label*="testfolder"]');
+    drive.waitForApp();
+    I.waitForElement(locate('.list-item').withText('testfolder').inside('.list-view'));
+    I.click(locate('.list-item').withText('testfolder').inside('.list-view'));
     I.waitForVisible('~Details');
 
-    I.click('[data-original-title="More actions"]');
-    I.waitForVisible('.smart-dropdown-container');
-    I.see('Restore');
+    I.click('~More actions');
+    I.clickDropdown('Restore');
 
-    I.click('Restore');
     I.waitForVisible('.io-ox-alert-info');
     I.see('Restored into folder:');
     I.see('Drive/My files');
+    I.click('.io-ox-alert-info .close');
     I.waitForInvisible('.io-ox-alert-info');
 
     I.selectFolder('My files');
-    I.wait(1); // Wait for thre list view to refresh
-    I.see('testfolder');
+    drive.waitForApp();
+    I.waitForElement(locate('.list-item').withText('testfolder').inside('.list-view'));
 
     // 3. Repeat Step 1 and 2 with a file.
 
@@ -199,24 +173,39 @@ Scenario('[C257247] Restore deleted items @shaky', async (I, users) => {
     I.dontSee('testdocument.odt');
 
     I.selectFolder('Trash');
-    I.wait(1); // Wait for thre list view to refresh
-    I.see('testdocument.odt');
+    drive.waitForApp();
+    I.waitForElement('.list-item[aria-label*="testdocument.odt"]');
 
     I.click('.list-item[aria-label*="testdocument.odt"]');
     I.waitForVisible('~Details');
 
-    I.click('[data-original-title="More actions"]');
-    I.waitForVisible('.smart-dropdown-container');
-    I.see('Restore');
+    I.click('~More actions');
+    I.clickDropdown('Restore');
 
-    I.click('Restore');
     I.waitForVisible('.io-ox-alert-info');
     I.see('Restored into folder:');
     I.see('Drive/My files');
+    I.click('.io-ox-alert-info .close');
     I.waitForInvisible('.io-ox-alert-info');
 
     I.selectFolder('My files');
-    I.wait(1); // Wait for thre list view to refresh
-    I.see('testdocument.odt');
+    drive.waitForApp();
+    I.triggerRefresh();
+    I.waitForText('testdocument.odt', 5, '.list-view');
 
+});
+
+Scenario('Logout right before running into error storing data in JSLob', async (I) => {
+    await I.haveSetting('io.ox/files//viewOptions',
+        [...Array(2500)]
+        .map(() => ({ sort: 702, order: 'ASC', layout: 'list' }))
+        .reduce(function (acc, val, ix) {
+            acc[ix + 50] = val;
+            return acc;
+        }, {})
+    );
+    I.login('app=io.ox/files');
+    I.clickToolbar('Sort by');
+    I.clickDropdown('Date');
+    I.logout();
 });

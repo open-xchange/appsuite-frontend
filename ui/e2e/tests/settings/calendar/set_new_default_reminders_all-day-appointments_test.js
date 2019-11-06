@@ -22,15 +22,14 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C244799] Set new default reminder for all-day appointments @shaky', async function (I) {
+Scenario('[C244799] Set new default reminder for all-day appointments', async function (I) {
     const alaramNotification = 'Notification';
     const alaramTime = '1 day';
     const alaramRelated = 'before start';
     I.login();
 
     // Default reminder
-    I.click('~Settings', '#io-ox-settings-topbar-icon');
-    I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
+    I.openApp('Settings', { folder: 'virtual/settings/io.ox/calendar' });
     I.waitForElement('.alarms-link-view .btn-link');
     I.click(
         locate('.form-group')
@@ -48,12 +47,13 @@ Scenario('[C244799] Set new default reminder for all-day appointments @shaky', a
     // verify reminder is set as a notification to 1 day before start by default.
     I.openApp('Calendar');
     I.clickToolbar('New appointment');
-    I.waitForText('Subject');
+    I.waitForText('Subject', 30, '.io-ox-calendar-edit');
     I.fillField('summary', 'subject');
     I.fillField('location', 'Dortmund');
     I.checkOption('All day');
     I.fillField('description', 'description');
     I.click('Create');
+    I.waitForDetached('.io-ox-calendar-edit');
 
     I.waitForText('subject', '.appointment-content');
     I.click('subject', '.appointment-content');

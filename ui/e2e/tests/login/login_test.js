@@ -25,9 +25,13 @@ After(async (users) => {
     await users.removeAll();
 });
 
+
 Scenario('[C7336] Successful Login', function (I, users) {
     I.amOnPage('/');
-    I.waitForFocus('input[name="username"]');
+    I.setCookie({ name: 'locale', value: 'en_US' });
+    I.refreshPage();
+
+    I.waitForFocus('#io-ox-login-username', 30);
     I.fillField('User name', `${users[0].get('name')}@${users[0].context.id}`);
     I.fillField('Password', users[0].get('password'));
     I.click('Sign in');
@@ -36,7 +40,9 @@ Scenario('[C7336] Successful Login', function (I, users) {
 
 Scenario('[C7337] Unsuccessful Login', function (I, users) {
     I.amOnPage('/');
-    I.waitForFocus('input[name="username"]');
+    I.setCookie({ name: 'locale', value: 'en_US' });
+    I.refreshPage();
+    I.waitForFocus('#io-ox-login-username', 30);
     I.fillField('User name', `${users[0].get('name')}@${users[0].context.id}`);
     I.fillField('Password', 'wrong password');
     I.click('Sign in');
@@ -45,7 +51,9 @@ Scenario('[C7337] Unsuccessful Login', function (I, users) {
 
 Scenario('[C7339] Stay signed in checkbox', async function (I, users) {
     I.amOnPage('/');
-    I.waitForFocus('input[name="username"]');
+    I.setCookie({ name: 'locale', value: 'en_US' });
+    I.refreshPage();
+    I.waitForFocus('#io-ox-login-username', 30);
     I.fillField('User name', `${users[0].get('name')}@${users[0].context.id}`);
     I.fillField('Password', `${users[0].get('password')}`);
     I.seeCheckboxIsChecked('Stay signed in');
@@ -54,20 +62,24 @@ Scenario('[C7339] Stay signed in checkbox', async function (I, users) {
     let cookies = await I.grabCookie(),
         secretCookie = cookies.filter(c => c.name.indexOf('open-xchange-secret') === 0)[0];
 
-    expect(secretCookie, 'browser session cookies don\'t have expiry set').to.haveOwnProperty('expiry');
+    const hasProperty = (o, p) => Object.prototype.hasOwnProperty.call(o, p);
+    // webdriver sets "expiry" and puppeteer sets "expires"
+    const expiresWithSession = c => hasProperty(c, 'expires') ? c.expires < 0 : !hasProperty(c, 'expiry');
+
+    expect(expiresWithSession(secretCookie), 'browser session cookies do expire with session').to.equal(false);
     I.refreshPage();
-    I.waitForVisible('#io-ox-core');
+    I.waitForVisible('#io-ox-topbar-dropdown-icon');
     I.logout();
 
-    I.waitForFocus('input[name="username"]');
+    I.waitForFocus('#io-ox-login-username', 30);
     I.uncheckOption('Stay signed in');
     I.login();
     I.waitForVisible('#io-ox-core');
     cookies = await I.grabCookie();
     secretCookie = cookies.filter(c => c.name.indexOf('open-xchange-secret') === 0)[0];
-    const sessionCookies = cookies.filter(c => typeof c.expiry === 'undefined');
+    const sessionCookies = cookies.filter(expiresWithSession);
 
-    expect(secretCookie, 'browser session cookies don\'t have expiry set').not.to.haveOwnProperty('expiry');
+    expect(expiresWithSession(secretCookie), 'browser session cookies do expire with session').to.equal(true);
     // simulate a browser restart by removing all session cookies
     for (let cookie of sessionCookies) {
         I.clearCookie(cookie.name);

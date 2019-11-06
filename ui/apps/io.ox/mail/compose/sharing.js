@@ -193,11 +193,13 @@ define('io.ox/mail/compose/sharing', [
         point: 'io.ox/mail/compose/sharing',
 
         initialize: function () {
-            var data = {
-                'language': coreSettings.get('language'),
-                'enabled': false,
-                'autodelete': mailSettings.get('compose/shareAttachments/forceAutoDelete', false)
-            };
+            var forceAutoDelete = mailSettings.get('compose/shareAttachments/forceAutoDelete', false),
+                data = _.extend({
+                    'language': coreSettings.get('language'),
+                    'enabled': false,
+                    'autodelete': forceAutoDelete
+                }, this.model.get('sharedAttachments'));
+            if (forceAutoDelete) data.autodelete = true;
 
             // make sure default expiry date is set if it is mandatory
             if (mailSettings.get('compose/shareAttachments/requiredExpiration')) data.expiryDate = getTimeOption(mailSettings.get('compose/shareAttachments/defaultExpiryDate', '1w')).value;

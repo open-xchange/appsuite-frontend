@@ -22,30 +22,24 @@ After(async function (users) {
 });
 
 
-Scenario('[C7369] by Name', async function (I, search) {
+Scenario('[C7369] by Name', async function (I, search, contacts) {
     const testrailID = 'C7369';
-    //Create Contact
     const contact = {
-        display_name: '' + testrailID + ', ' + testrailID + '',
+        display_name: testrailID + ', ' + testrailID,
         folder_id: await I.grabDefaultFolder('contacts'),
         first_name: testrailID,
         last_name: testrailID
     };
-    I.haveContact(contact);
+    await I.haveContact(contact);
 
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
+    contacts.waitForApp();
 
     search.doSearch(testrailID + ' ' + testrailID);
-    I.see(testrailID, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
-    I.see(testrailID, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
+    I.waitForText(testrailID, 5, '.vgrid-cell');
 });
 
-Scenario('[C7370] by Phone numbers', async function (I, search) {
+Scenario('[C7370] by Phone numbers', async function (I, search, contacts) {
     const phone = '+4917113371337';
     const testrailID = 'C7370';
     //Create Contact
@@ -59,19 +53,14 @@ Scenario('[C7370] by Phone numbers', async function (I, search) {
     await I.haveContact(contact);
 
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
+    contacts.waitForApp();
 
     search.doSearch(phone);
 
-    I.see(testrailID, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
-    I.see(testrailID, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
+    I.waitForText(testrailID, 5, '.vgrid-cell');
 });
 
-Scenario('[C7371] by Addresses', async function (I, search) {
+Scenario('[C7371] by Addresses', async function (I, search, contacts) {
     const testrailID = 'C7371';
     const firstname = testrailID;
     const lastname = testrailID;
@@ -92,24 +81,20 @@ Scenario('[C7371] by Addresses', async function (I, search) {
     await I.haveContact(contact);
 
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
+    contacts.waitForApp();
     search.doSearch(contact.street_home);
-    I.see(lastname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
-    I.see(firstname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
+    I.waitForText(firstname, 5, '.vgrid-cell');
+    I.waitForText(lastname, 5, '.vgrid-cell');
     search.doSearch(contact.post_code_home);
-    I.see(lastname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
-    I.see(firstname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
+    I.waitForText(firstname, 5, '.vgrid-cell');
+    I.waitForText(lastname, 5, '.vgrid-cell');
     search.doSearch(contact.city_home);
-    I.see(lastname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
-    I.see(firstname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
+    I.waitForText(firstname, 5, '.vgrid-cell');
+    I.waitForText(lastname, 5, '.vgrid-cell');
     search.doSearch(contact.state_home);
-    I.see(lastname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
-    I.see(firstname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
+    I.waitForText(firstname, 5, '.vgrid-cell');
+    I.waitForText(lastname, 5, '.vgrid-cell');
     search.doSearch(contact.country_home);
-    I.see(lastname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
-    I.see(firstname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
+    I.waitForText(firstname, 5, '.vgrid-cell');
+    I.waitForText(lastname, 5, '.vgrid-cell');
 });

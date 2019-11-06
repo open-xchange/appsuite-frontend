@@ -76,6 +76,11 @@ define('io.ox/mail/compose/actions/send', [
             }
         },
         {
+            id: 'check:attachment-empty',
+            index: 350,
+            perform: extensions.emptyAttachmentCheck
+        },
+        {
             id: 'check:attachment-missing',
             index: 400,
             perform: extensions.attachmentMissingCheck

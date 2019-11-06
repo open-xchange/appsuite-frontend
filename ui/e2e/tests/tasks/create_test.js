@@ -21,12 +21,10 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('create complete task', async function (I) {
+Scenario('create complete task', async function (I, tasks) {
     I.login('app=io.ox/tasks');
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-
-    I.clickToolbar('New task');
-    I.waitForVisible('.io-ox-tasks-edit-window');
+    tasks.waitForApp();
+    tasks.newTask();
 
     I.fillField('Subject', 'Test Task');
     I.fillField('Description', 'Best Task evor!!!11elf');
@@ -59,9 +57,7 @@ Scenario('create complete task', async function (I) {
     I.fillField({ css: '[name="billing_information"]' }, "Don't know any Bill");
     I.fillField({ css: '[name="companies"]' }, 'Wurst Inc.');
 
-    I.click('Create');
-
-    I.seeElement('.tasks-detailview');
+    tasks.create();
 
     I.seeElement({ css: '[title="High priority"]' });
     I.see('Test Task');
@@ -91,6 +87,4 @@ Scenario('create complete task', async function (I) {
 
     I.see('External participants');
     I.see('testdude1 <testdude1@test.test>');
-
-    I.logout();
 });

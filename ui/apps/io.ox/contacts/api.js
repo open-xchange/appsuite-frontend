@@ -658,7 +658,8 @@ define('io.ox/contacts/api', [
                     });
                     // favor contacts in global address book
                     data.sort(function (a, b) {
-                        return b.folder_id === '6' ? +1 : -1;
+                        // work with strings and numbers
+                        return String(b.folder_id) === '6' ? +1 : -1;
                     });
                     // just use the first one
                     data = data[0];

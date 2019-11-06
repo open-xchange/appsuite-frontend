@@ -9,13 +9,13 @@
 <link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.7.1. 创建新规则">
 <link rel="next" href="ox.appsuite.user.sect.email.mailfilter.action.html" title="5.7.3. 添加一个动作">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
-<link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
-<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <script src="../../../help/jquery.min.js"></script> 
-
-   <script src="../../../help/bootstrap.min.js"></script> 
-</head>
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
@@ -48,7 +48,7 @@
 <li class="step">
 <p role="presentation">您可以添加更多条件。您可以指定是满足一个条件还是满足所有条件才执行操作。为此，单击<span class="guibutton"><strong>如果所有条件符合套用规则</strong></span>。</p>
 <p role="presentation">在有一个条件的一刻，您就能创建嵌套的条件。为此，单击<span class="guibutton"><strong>添加条件</strong></span>。选择<span class="guibutton"><strong>嵌套的条件</strong></span>。</p>
-<p role="presentation">要删除一个条件，单击在条件旁边的<span class="guibutton"><strong>删除</strong></span>图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.mailfilter.condition.delete"><img src="../../images/appsuite_user_icon_trash.png"></span>。</p>
+<p role="presentation">要删除一个条件，单击在条件旁边的 <span class="guibutton"><strong>删除</strong></span> 图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.mailfilter.condition.delete"><img src="../../images/appsuite_user_icon_trash.png"></span>。</p>
 </li>
 </ol></div>
 </div>
@@ -61,7 +61,9 @@
 <p>如是者电子邮件的主题会被验证是否与变量 ("分钟") 完全相同。如何使用主题过滤电子邮件的更多示例：</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p role="presentation">标准：“包含”如果主题包含变量中的字符，则符合条件。示例：变量为”minutes“。</p>
+<p role="presentation">准则："包含"：</p>
+<p role="presentation">如果主题包含变量中的字符，则符合条件。</p>
+<p role="presentation">例如：变量为 "minutes"。</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">主题 "minutes" 符合条件。</p></li>
 <li class="listitem"><p role="presentation">主题 "meeting minutes" 也符合条件。</p></li>
@@ -70,14 +72,18 @@
             </p>
 </li>
 <li class="listitem">
-<p role="presentation">标准：“匹配”如果主题与变量中的字符完全相同，则符合条件。字符串可以包含通配符。示例：变量为”minutes*“。*" 是表示任意字符的通配符。</p>
+<p role="presentation">准则："matches"</p>
+<p role="presentation">如果主题与变量中的字符完全相同，则符合条件。字符串可以包含通配符。</p>
+<p role="presentation">例如：变量为 "minutes*"。"*" 是表示任意字符的通配符。</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">主题 "minutes" 符合条件。</p></li>
 <li class="listitem"><p role="presentation">主题 "meeting minutes" 不符合条件。</p></li>
 </ul>
 </li>
 <li class="listitem">
-<p role="presentation">标准：“正则”如果主题包含变量中的正则表达式提供的字符，则符合条件。正则表达式允许复杂的请求。可在互联网的相应网站中找到更多信息。以下非常简单的正则表达式可以洞察主题。示例：变量为”organi(z|s)ation“。表达式 "(z|s)" 表示字符 "z" 或 "s"。</p>
+<p role="presentation">准则："Regex"</p>
+<p role="presentation">如果主题包含变量中的正则表达式提供的字符，则符合条件。正则表达式允许复杂的请求。可在互联网的相应网站中找到更多信息。以下非常简单的正则表达式可以洞察主题。</p>
+<p role="presentation">例如：变量为 "organi(z|s)ation"。表达式 "(z|s)" 表示字符 "z" 或 "s"。</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">主题 "minutes" 符合条件。</p></li>
 <li class="listitem"><p role="presentation">主题 "organisation" 也符合条件。</p></li>

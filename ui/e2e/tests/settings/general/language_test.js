@@ -41,8 +41,8 @@ Scenario('[C7757] Set langugae', (I) => {
     for (var id in languages) {
         I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
         I.waitForText(previous);
-        I.waitForElement('select[name="language"]');
-        I.selectOption('select[name="language"]', languages[id][1]);
+        I.waitForElement({ css: 'select[name="language"]' });
+        I.selectOption({ css: 'select[name="language"]' }, languages[id][1]);
         previous = languages[id][0];
         // wait for "yell" so that the change arrived at server
         I.waitForVisible('.io-ox-alert');
@@ -52,5 +52,4 @@ Scenario('[C7757] Set langugae', (I) => {
     // last time
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     I.waitForText(previous);
-    I.logout();
 });

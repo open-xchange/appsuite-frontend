@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C85622] Address Book Popup', async (I, users) => {
+Scenario('[C85622] Address Book Popup', async (I, users, mail) => {
     // Preparation
     // Create Distributionlist
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
@@ -45,28 +45,22 @@ Scenario('[C85622] Address Book Popup', async (I, users) => {
             }).done(done);
         });
     }, distribution_list);
-    I.waitForText('Compose');
-    I.click('Compose');
-    // Wait for the compose dialog
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
 
+    mail.newMail();
     // Enter everything but the last letter of the display name of user 3 in the To field
     // To make the autocomplete dropdown appear
     var displayName = users[3].get('display_name');
     var partialName = displayName.substring(0, displayName.length - 1);
-    I.wait(1); // Wait for focus
     I.fillField('To', partialName);
-    I.wait(1); // Wait for popup
-    // Check that the dropdown with the user appeared
-    I.see(displayName);
+    I.waitForText(displayName, 5, '.tt-suggestion');
     // Click on the entry to add it to the To: field
-    I.click(locate('div').withText(displayName).inside('.tt-dropdown-menu'));
+    I.click(displayName, '.tt-suggestion');
 
     // Now let's do the same thing for the distribution list
     I.fillField('To', 'Erisian');
-    I.wait(1); // Wait for popup
-    I.see('Erisian Disciples');
-    I.click(locate('div').withText('Erisian Disciples').inside('.tt-dropdown-menu'));
+    // distribution lists somehow need a more specific selector :/
+    I.waitForText('Erisian Disciples', 5, '.tt-suggestion .participant-name');
+    I.click('Erisian Disciples', '.tt-suggestion .participant-name');
 
     // Verify we see the given_name + sur_name combination for users[3]
     I.see(users[3].get('given_name') + ' ' + users[3].get('sur_name'), '.tokenfield');
@@ -76,14 +70,11 @@ Scenario('[C85622] Address Book Popup', async (I, users) => {
 
     // Compose an email and send it
     I.fillField('Subject', 'Hail Eris! All Hail Discordia!');
-    I.click('Send');
-    I.waitForInvisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
-    I.logout();
+    mail.send();
     // Verify the mail arrived at the other accounts
     [users[1], users[2], users[3]].forEach(function (current_user) {
+        I.logout();
         I.login('app=io.ox/mail', { user: current_user });
         I.waitForText('Hail Eris! All Hail Discordia!', 5);
-        I.logout();
     });
 });

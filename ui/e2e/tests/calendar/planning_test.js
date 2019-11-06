@@ -31,10 +31,10 @@ After(async function (users) {
 
 Scenario('use planning view opened from edit view', async function (I) {
     I.login('app=io.ox/calendar');
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
     I.clickToolbar('New appointment');
-    I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar/edit"]' });
 
     I.fillField('Subject', 'Planning View Test');
 
@@ -58,13 +58,11 @@ Scenario('use planning view opened from edit view', async function (I) {
     I.waitForValue({ css: '[data-attribute="endDate"] .time-field' }, '1:00 PM');
 
     I.click('Create');
-
-    I.logout();
 });
 
 Scenario('use planning view as Standalone app', async function (I) {
     I.login('app=io.ox/calendar');
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
     I.clickToolbar('Scheduling');
 
@@ -89,7 +87,7 @@ Scenario('use planning view as Standalone app', async function (I) {
     I.waitForInvisible('.freetime-view-header');
     I.waitForInvisible('.freetime-view-body');
 
-    I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar/edit"]' });
 
     I.fillField('Subject', 'Planning View Test2');
 
@@ -99,13 +97,11 @@ Scenario('use planning view as Standalone app', async function (I) {
     I.see('testdude1');
 
     I.click('Create');
-
-    I.logout();
 });
 
 Scenario('test planning view lasso', async function (I) {
     I.login('app=io.ox/calendar');
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
     I.clickToolbar('Scheduling');
 
@@ -125,7 +121,7 @@ Scenario('test planning view lasso', async function (I) {
     I.waitForInvisible('.freetime-view-header');
     I.waitForInvisible('.freetime-view-body');
 
-    I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar/edit"]' });
 
     I.fillField('Subject', 'Planning View Test2');
 
@@ -133,13 +129,11 @@ Scenario('test planning view lasso', async function (I) {
     I.waitForValue({ css: '[data-attribute="endDate"] .time-field' }, '2:30 PM');
 
     I.click('Create');
-
-    I.logout();
 });
 
 Scenario('create distributionlist from planning view', async function (I) {
     I.login('app=io.ox/calendar');
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
     I.clickToolbar('Scheduling');
 
@@ -160,13 +154,11 @@ Scenario('create distributionlist from planning view', async function (I) {
     I.click('Create list', '.io-ox-contacts-distrib-window');
 
     I.click('.scheduling-app-close');
-
-    I.logout();
 });
 
 Scenario('check planning view options and minimizing behavior', async function (I) {
     I.login('app=io.ox/calendar');
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
     I.clickToolbar('Scheduling');
 
@@ -202,8 +194,6 @@ Scenario('check planning view options and minimizing behavior', async function (
     I.waitForVisible('.freetime-view-body');
 
     I.click('.scheduling-app-close');
-
-    I.logout();
 });
 
 var addAttendee = function (I, name, context) {

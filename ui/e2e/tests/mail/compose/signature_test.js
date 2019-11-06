@@ -24,100 +24,106 @@ After(async (users) => {
 });
 
 
-Scenario('[C8825] Add and replace signatures', async function (I) {
+Scenario('[C8825] Add and replace signatures', async function (I, mail) {
 
-    await I.haveSnippet({
-        content: '<p>Very original and clever signature</p>',
-        displayname: 'My signature',
-        misc: { insertion: 'above', 'content-type': 'text/html' },
-        module: 'io.ox/mail',
-        type: 'signature'
-    });
-    await I.haveSnippet({
-        content: '<p>Super original and fabulous signature</p>',
-        displayname: 'Super signature',
-        misc: { insertion: 'above', 'content-type': 'text/html' },
-        module: 'io.ox/mail',
-        type: 'signature'
-    });
+    await Promise.all([
+        I.haveSnippet({
+            content: '<p>Very original and clever signature</p>',
+            displayname: 'My signature',
+            misc: { insertion: 'above', 'content-type': 'text/html' },
+            module: 'io.ox/mail',
+            type: 'signature'
+        }),
+        I.haveSnippet({
+            content: '<p>Super original and fabulous signature</p>',
+            displayname: 'Super signature',
+            misc: { insertion: 'above', 'content-type': 'text/html' },
+            module: 'io.ox/mail',
+            type: 'signature'
+        })
+    ]);
 
     I.login('app=io.ox/mail');
-    I.clickToolbar('Compose');
-    I.waitForFocus('input[type="email"].token-input.tt-input');
+    mail.newMail();
     I.click('Signatures');
-    I.waitForText('My signature');
-    I.click('My signature');
+    I.waitForText('My signature', 5, '.dropdown.open .dropdown-menu');
+    I.click('My signature', '.dropdown.open .dropdown-menu');
     within({ frame: '#mce_0_ifr' }, () => {
         I.waitForText('Very original and clever signature');
     });
     I.click('Signatures');
-    I.waitForText('Super signature');
-    I.click('Super signature');
+    I.waitForText('Super signature', 5, '.dropdown.open .dropdown-menu');
+    I.click('Super signature', '.dropdown.open .dropdown-menu');
     within({ frame: '#mce_0_ifr' }, () => {
         I.waitForText('Super original and fabulous signature');
         I.dontSee('Very original and clever signature');
     });
 });
 
-Scenario('[C265555] Change the Signature', async function (I) {
+Scenario('[C265555] Change the Signature', async function (I, mail) {
 
     const firstSignatureContent = 'Very original and clever signature',
         secondSignatureContent = 'Super original and fabulous signature',
-        firstSignature = await I.haveSnippet({
-            content: '<p>' + firstSignatureContent + '</p>',
-            displayname: 'My signature',
-            misc: { insertion: 'above', 'content-type': 'text/html' },
-            module: 'io.ox/mail',
-            type: 'signature'
-        });
-    await I.haveSnippet({
-        content: '<p>' + secondSignatureContent + '</p>',
-        displayname: 'Super signature',
-        misc: { insertion: 'above', 'content-type': 'text/html' },
-        module: 'io.ox/mail',
-        type: 'signature'
-    });
+        [firstSignature] = await Promise.all([
+            I.haveSnippet({
+                content: '<p>' + firstSignatureContent + '</p>',
+                displayname: 'My signature',
+                misc: { insertion: 'above', 'content-type': 'text/html' },
+                module: 'io.ox/mail',
+                type: 'signature'
+            }),
+            I.haveSnippet({
+                content: '<p>' + secondSignatureContent + '</p>',
+                displayname: 'Super signature',
+                misc: { insertion: 'above', 'content-type': 'text/html' },
+                module: 'io.ox/mail',
+                type: 'signature'
+            })
+        ]);
 
     await I.haveSetting({ 'io.ox/mail': { defaultSignature: firstSignature.data } });
 
     I.login('app=io.ox/mail');
-    I.clickToolbar('Compose');
-    I.waitForFocus('input[type="email"].token-input.tt-input');
+    mail.newMail();
     within({ frame: '#mce_0_ifr' }, () => {
         I.waitForText(firstSignatureContent);
     });
-    I.fillField('input[type="email"].token-input.tt-input', 'foo@bar');
-    I.wait(1);
-    I.fillField('input[name="subject"]', 'test subject');
+    I.fillField('To', 'foo@bar');
+    I.fillField('Subject', 'test subject');
     I.click('Discard');
     I.click('Save as draft');
-    I.wait(1);
+    I.waitForNetworkTraffic();
+    I.waitForDetached('.io-ox-mail-compose');
+
     I.selectFolder('Drafts');
-    I.waitForText('test subject');
-    I.click('li[data-index="0"]');
-    I.clickToolbar({ css: '.io-ox-mail-window .classic-toolbar [data-action="more"]' });
+    mail.selectMail('test subject');
+    I.clickToolbar('.io-ox-mail-window .classic-toolbar [data-action="more"]');
+    I.waitForElement('.dropdown.open');
     I.click('Move', '.dropdown.open .dropdown-menu');
     I.waitForVisible('.modal-footer');
     I.click('Move', '.modal-footer');
     I.dontSee('test subject');
     I.selectFolder('Inbox');
-    I.waitForText('test subject');
-    I.click('li[data-index="0"]');
+    I.waitForText('test subject', 5, '.list-view li[data-index="0"]');
+    I.click('.list-view li[data-index="0"]');
     I.clickToolbar('~Reply to sender');
-    I.waitForVisible('.io-ox-mail-compose-window');
+    I.waitForVisible('.io-ox-mail-compose-window #mce_1_ifr');
     within({ frame: '#mce_1_ifr' }, () => {
         I.waitForVisible(locate('blockquote').withText(firstSignatureContent));
         I.waitForVisible(locate('div.io-ox-signature').withText(firstSignatureContent));
     });
+    // some focus event still needs to happen
+    I.wait(0.5);
     I.click('Signatures');
-    I.click('Super signature');
+    I.waitForElement('.dropdown.open');
+    I.click('Super signature', '.dropdown.open .dropdown-menu');
     within({ frame: '#mce_1_ifr' }, () => {
         I.waitForVisible(locate('div.io-ox-signature').withText(secondSignatureContent));
         I.waitForVisible(locate('blockquote').withText(firstSignatureContent));
     });
 });
 
-Scenario('Use image-only signature', async function (I) {
+Scenario('Use image-only signature', async function (I, mail) {
     await I.haveSnippet({
         content: `<p><img src="${getBas64Image()}"></p>`,
         displayname: 'My image signature',
@@ -127,8 +133,7 @@ Scenario('Use image-only signature', async function (I) {
     });
 
     I.login('app=io.ox/mail');
-    I.clickToolbar('Compose');
-    I.waitForFocus('input[type="email"].token-input.tt-input');
+    mail.newMail();
     I.click('Signatures');
     I.waitForText('My image signature');
     I.click('My image signature');

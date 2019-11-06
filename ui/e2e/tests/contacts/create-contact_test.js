@@ -21,68 +21,51 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7354] With all available fields filled', function (I) {
-    function addContactsField(fieldType, field, input) {
-        I.click({ css: `div.dropdown[data-add="${fieldType}"] button` }, '.contact-edit');
-        //I.click(`Add ${fieldType}`);
-        I.waitForVisible('.dropdown-menu');
-        I.click(field);
-        I.waitForText(field, undefined, '.contact-edit');
-        if (input) I.pressKey(input);
-        I.wait(0.5);
-    }
-
+Scenario('[C7354] With all available fields filled', function (I, contacts) {
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.waitForDetached('a.dropdown-toggle.disabled');
-    // toolbar dropdown
-    I.retry(5).click('New contact');
-    // real action in dropdown
-    I.waitForVisible('.dropdown-menu');
-    I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
-    I.waitForVisible('.io-ox-contacts-edit-window');
+
+    contacts.waitForApp();
+    contacts.newContact();
 
     //personal info
     I.fillField('First name', 'Richard');
     I.fillField('Last name', 'Petersen');
-    addContactsField('personal', 'Title', 'Sir');
-    addContactsField('personal', 'Middle name', 'Holger');
-    addContactsField('personal', 'Suffix', 'Pro');
-    addContactsField('personal', 'Birthday');
+    contacts.addContactsField('personal', 'Title', 'Sir');
+    contacts.addContactsField('personal', 'Middle name', 'Holger');
+    contacts.addContactsField('personal', 'Suffix', 'Pro');
+    contacts.addContactsField('personal', 'Birthday');
     I.selectOption('month', 'May');
     I.selectOption('date', '4');
     I.selectOption('year', '1957');
-    addContactsField('personal', 'URL', 'my.homepage.com');
+    contacts.addContactsField('personal', 'URL', 'my.homepage.com');
 
     // job description
     I.fillField('Department', 'Frontend');
     I.fillField('Company', 'Open-Xchange');
-    addContactsField('business', 'Profession', 'Developer');
-    addContactsField('business', 'Position', 'Senior Developer');
-    addContactsField('business', 'Room number', '101');
+    contacts.addContactsField('business', 'Profession', 'Developer');
+    contacts.addContactsField('business', 'Position', 'Senior Developer');
+    contacts.addContactsField('business', 'Room number', '101');
 
     // communication
     I.fillField('Email 1', 'email1@test');
     I.fillField('Cell phone', 'cell phone');
-    addContactsField('communication', 'Email 2', 'email2@test');
-    addContactsField('communication', 'Email 3', 'email3@test');
-    addContactsField('communication', 'Instant Messenger 1', 'instantmessenger1');
-    addContactsField('communication', 'Instant Messenger 2', 'instantmessenger2');
+    contacts.addContactsField('communication', 'Email 2', 'email2@test');
+    contacts.addContactsField('communication', 'Email 3', 'email3@test');
+    contacts.addContactsField('communication', 'Instant Messenger 1', 'instantmessenger1');
+    contacts.addContactsField('communication', 'Instant Messenger 2', 'instantmessenger2');
 
     // phone and fax
-    addContactsField('communication', 'Cell phone (alt)', 'cell phone alt');
-    addContactsField('communication', 'Phone (business)', 'phone business');
-    addContactsField('communication', 'Phone (business alt)', 'phone business alt');
-    addContactsField('communication', 'Phone (home)', 'phone home');
-    addContactsField('communication', 'Phone (home alt)', 'phone home alt');
-    addContactsField('communication', 'Phone (other)', 'phone other');
-    addContactsField('communication', 'Fax', 'fax');
-    addContactsField('communication', 'Fax (Home)', 'fax home');
+    contacts.addContactsField('communication', 'Cell phone (alt)', 'cell phone alt');
+    contacts.addContactsField('communication', 'Phone (business)', 'phone business');
+    contacts.addContactsField('communication', 'Phone (business alt)', 'phone business alt');
+    contacts.addContactsField('communication', 'Phone (home)', 'phone home');
+    contacts.addContactsField('communication', 'Phone (home alt)', 'phone home alt');
+    contacts.addContactsField('communication', 'Phone (other)', 'phone other');
+    contacts.addContactsField('communication', 'Fax', 'fax');
+    contacts.addContactsField('communication', 'Fax (Home)', 'fax home');
 
     // home address
-    addContactsField('other', 'Home address');
+    contacts.addContactsField('other', 'Home address');
     I.fillField('street_home', 'Home Street');
     I.fillField('postal_code_home', '12345');
     I.fillField('city_home', 'Home City');
@@ -90,7 +73,7 @@ Scenario('[C7354] With all available fields filled', function (I) {
     I.fillField('country_home', 'Home County');
 
     // business address
-    addContactsField('other', 'Business address');
+    contacts.addContactsField('other', 'Business address');
     I.fillField('street_business', 'Business Street');
     I.fillField('postal_code_business', '23456');
     I.fillField('city_business', 'Business City');
@@ -98,7 +81,7 @@ Scenario('[C7354] With all available fields filled', function (I) {
     I.fillField('country_business', 'Business County');
 
     // other address
-    addContactsField('other', 'Other address');
+    contacts.addContactsField('other', 'Other address');
     I.fillField('street_other', 'Other Street');
     I.fillField('postal_code_other', '34567');
     I.fillField('city_other', 'Other City');
@@ -169,20 +152,11 @@ Scenario('[C7354] With all available fields filled', function (I) {
     I.see('a comment in the comment field');
 });
 
-Scenario('Dirtycheck on creating contact', function (I) {
+Scenario('Dirtycheck on creating contact', function (I, contacts) {
 
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.waitForDetached('a.dropdown-toggle.disabled');
-    // toolbar dropdown
-    I.retry(5).click('New contact');
-    // real action in dropdown
-    I.waitForVisible('.dropdown-menu');
-    I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
-    I.waitForVisible('.io-ox-contacts-edit-window');
-
+    contacts.waitForApp();
+    contacts.newContact();
     I.click('Discard');
     I.dontSeeElement('.modal-dialog');
 });

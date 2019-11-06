@@ -52,9 +52,8 @@ Scenario.skip('Authenticity', async (I) => {
 
     // detail content
     await within({ frame: '.mail-detail-frame' }, async () => {
-        I.retry().waitForVisible('a[disabled="disabled"]');
+        I.retry().waitForVisible({ css: 'a[disabled="disabled"]' });
         I.wait(1);
     });
 
-    I.logout();
 });

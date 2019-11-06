@@ -56,6 +56,4 @@ Scenario('[C7485] Disable a widget', async (I, users) => {
     //Verify Inbox widget isn't displayed on Portal
     I.openApp('Portal');
     I.dontSee('~Inbox');
-
-    I.logout();
 });

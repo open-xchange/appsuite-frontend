@@ -1,40 +1,40 @@
-<html lang="ja">
+<html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>12.6.2. 自分の鍵を管理する</title>
+<title>12.6.2. 自分の鍵を管理する</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="ユーザ ガイド">
-<link rel="up" href="ox.appsuite.user.sect.guard.settings.html" title="12.6. ガード設定">
-<link rel="prev" href="ox.appsuite.user.sect.guard.settings.password.html" title="12.6.1. パスワード管理">
-<link rel="next" href="ox.appsuite.user.sect.guard.settings.publickeys.html" title="12.6.3. 公開鍵を管理する">
+<link rel="up" href="ox.appsuite.user.sect.guard.settings.html" title="12.6. Guard設定">
+<link rel="prev" href="ox.appsuite.user.sect.guard.settings.password.html" title="12.6.1. パスワード管理">
+<link rel="next" href="ox.appsuite.user.sect.guard.settings.publickeys.html" title="12.6.3. 公開鍵を管理する">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
-<link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
-<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <script src="../../../help/jquery.min.js"></script> 
-
-   <script src="../../../help/bootstrap.min.js"></script> 
-</head>
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.settings.password.html">戻る</a></li>
-<li><a accesskey="h" href="index.html" class="oxhelp-home-link">ホーム</a></li>
-<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目次</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.settings.publickeys.html">次へ</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.settings.password.html">Prev</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Next</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <h1 class="sr-only">データの暗号化<span class="phrase">ガード</span>
-</h1>
+  <h1 class="sr-only">
+<span class="phrase">Guard</span>を使ってデータの暗号化</h1>
 <h2 class="sr-only">
-<span class="phrase">ガード</span>設定</h2>
+<span class="phrase">Guard</span>設定</h2>
 <div class="sect2" id="ox.appsuite.user.sect.guard.settings.yourkeys">
-<div class="titlepage"><div><div><h3 class="title">12.6.2. 自分の鍵を管理する</h3></div></div></div>
+<div class="titlepage"><div><div><h3 class="title">12.6.2. 自分の鍵を管理する</h3></div></div></div>
 <a class="indexterm" name="id-1.13.11.13.2"></a><p id="ox.appsuite.user.concept.guard.settings.yourkeys">次のようなオプションの機能があります。</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
@@ -43,8 +43,8 @@
 </li>
 <li class="listitem"><p role="presentation">新規鍵の追加</p></li>
 <li class="listitem">
-<p role="presentation">ユーザーIDの追加</p>
-<p role="presentation">追加のユーザーIDを鍵に追加すると、鍵を複数のメール アカウントに使用できます。</p>
+<p role="presentation">ユーザIDの追加</p>
+<p role="presentation">追加のユーザIDを鍵に追加すると、鍵を複数のメール アカウントに使用できます。</p>
 </li>
 <li class="listitem"><p role="presentation">鍵をダウンロード</p></li>
 <li class="listitem"><p role="presentation">鍵を削除する</p></li>
@@ -64,7 +64,7 @@
 <li class="listitem"><p role="presentation">サブ鍵は、メールおよびファイルの暗号化および復号化に使用されます。</p></li>
 </ul>
                   </p></li>
-<li class="listitem"><p role="presentation">目的によって、<span class="phrase">ガード</span>は自動でマスター鍵かサブ鍵を使用します。</p></li>
+<li class="listitem"><p role="presentation">目的によって、<span class="phrase">Guard</span>は自動でマスター鍵かサブ鍵を使用します。</p></li>
 </ul>
             </p>
 </li>
@@ -80,11 +80,11 @@
 <p role="presentation">次のようなオプションの機能があります。<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">秘密鍵の追加には、<span class="guibutton"><strong>秘密鍵をアップロードする</strong></span>をクリックします。秘密鍵を含むファイルを選択してください。<span class="guilabel"><strong>秘密鍵のアップロード</strong></span>ウィンドウが開きます。</p>
-<p role="presentation">新しい鍵のアップロードには、<span class="phrase">ガード</span> セキュリティパスワードを入力してください。新しい鍵用の新しいパスワードを入力します。</p>
+<p role="presentation">新しい鍵のアップロードには、<span class="phrase">Guard</span>セキュリティパスワードを入力してください。新しい鍵用の新しいパスワードを入力します。</p>
 </li>
 <li class="listitem"><p role="presentation">公開鍵の追加の場合、<span class="guibutton"><strong>公開鍵のみを追加する</strong></span>をクリックします。公開鍵を含むファイルを選択してください。</p></li>
 <li class="listitem">
-<p role="presentation">新しい鍵ペアを作成する場合は、<span class="guibutton"><strong>新しい鍵を作成する</strong></span>をクリックします。<span class="phrase"><span class="guilabel"><strong>セキュリティ鍵作成</strong></span></span>セキュリティ鍵作成ウィンドウが開きます。</p>
+<p role="presentation">新しい鍵ペアを作成する場合は、<span class="guibutton"><strong>新しい鍵を作成する</strong></span>をクリックします。<span class="phrase"><span class="guilabel"><strong>Guardセキュリティ鍵作成</strong></span></span>Guardセキュリティ鍵作成ウィンドウが開きます。</p>
 <p role="presentation">新しい鍵用のパスワードを入力します。パスワードを確認してください。</p>
 <p role="presentation">新しい鍵にはマスター鍵と該当するサブ鍵があります。</p>
 </li>
@@ -95,11 +95,11 @@
 </ol></div>
 </div>
 <div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addaccount">
-<p class="title"><span class="guilabel"><strong>あなたの鍵</strong></span>ウィンドウで追加のユーザーIDを追加する方法：</p>
+<p class="title"><span class="guilabel"><strong>あなたの鍵</strong></span>ウィンドウで追加のユーザIDを追加する方法：</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">鍵の隣にある<span class="guibutton"><strong>編集</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addaccount.edit"><img src="../../images/guard_user_icon_edit.png"></span>をクリックします。<span class="guilabel"><strong>ユーザーID追加</strong></span>ウィンドウが開きます。</p></li>
+<li class="step"><p role="presentation">鍵の隣にある<span class="guibutton"><strong>編集</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addaccount.edit"><img src="../../images/guard_user_icon_edit.png"></span>をクリックします。<span class="guilabel"><strong>ユーザID追加</strong></span>ウィンドウが開きます。</p></li>
 <li class="step">
-<p role="presentation">ユーザーID名を入力します。この鍵に使用したいメールアドレスを入力します。</p>
+<p role="presentation">ユーザID名を入力します。この鍵に使用したいメールアドレスを入力します。</p>
 <p role="presentation">鍵のパスワードを入力してください。</p>
 <p role="presentation"><span class="guibutton"><strong>OK</strong></span>をクリックします。</p>
 </li>
@@ -147,7 +147,7 @@
 </li></ul>
 <p>
       </p>
-<p id="ox.appsuite.user.parent.guard.settings.yourkeys">親記事：<a class="xref" href="ox.appsuite.user.sect.guard.settings.html"><span class="phrase">ガード</span>設定</a></p>
+<p id="ox.appsuite.user.parent.guard.settings.yourkeys">親記事：<a class="xref" href="ox.appsuite.user.sect.guard.settings.html"><span class="phrase">Guard</span>設定</a></p>
 </div>
           </div>
         </body>

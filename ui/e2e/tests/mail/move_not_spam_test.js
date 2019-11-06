@@ -13,7 +13,7 @@
 
 /// <reference path="../../steps.d.ts" />
 
-Feature('Mail > mark as not spam and move to inbox');
+Feature('Mail > Spam');
 
 Before(async function (I, users) {
     const user = users.getRandom();
@@ -42,14 +42,12 @@ Scenario.skip('Mark mail in spam folder as not spam and move to inbox', async fu
 
     I.waitForVisible('.io-ox-mail-window');
     I.waitForVisible(locate('span').withAttr({ 'title': subject }));
-    I.rightClick(subject);
+    I.rightClick(subject, '.list-item');
     I.click('Mark as spam', '.smart-dropdown-container');
     I.selectFolder('Spam');
     I.waitForVisible(locate('span').withAttr({ 'title': subject }));
-    I.rightClick(subject);
+    I.rightClick(subject, '.list-item');
     I.click('Not spam', '.smart-dropdown-container');
     I.selectFolder('Inbox');
     I.waitForVisible(locate('span').withAttr({ 'title': subject }));
-
-    I.logout();
 });

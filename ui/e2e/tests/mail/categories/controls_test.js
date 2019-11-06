@@ -37,13 +37,13 @@ const SELECTORS = {
 const A = {
     toggle: function (I) {
         I.clickToolbar('View');
-        I.waitForVisible('a[data-name="categories"]', 'body > .dropdown');
-        I.click('a[data-name="categories"]', 'body > .dropdown');
+        I.waitForVisible({ css: 'a[data-name="categories"]' }, 'body > .dropdown');
+        I.click({ css: 'a[data-name="categories"]' }, 'body > .dropdown');
     },
     openConfiguration: function (I) {
         I.clickToolbar('View');
-        I.waitForVisible('a[data-name="categories-config"]', 'body > .dropdown');
-        I.click('a[data-name="categories-config"]', 'body > .dropdown');
+        I.waitForVisible({ css: 'a[data-name="categories-config"]' }, 'body > .dropdown');
+        I.click({ css: 'a[data-name="categories-config"]' }, 'body > .dropdown');
     }
 };
 
@@ -74,8 +74,8 @@ Scenario('[C85626] Mail categories can be renamed', function (I) {
     I.seeElement(SELECTORS.dialog);
     within(SELECTORS.dialog, async () => {
         I.say('Rename categories', 'blue');
-        I.fillField('[data-id="uc1"] input[type="text"]', 'C85626-01');
-        I.fillField('[data-id="uc2"] input[type="text"]', 'C85626-02');
+        I.fillField({ css: '[data-id="uc1"] input[type="text"]' }, 'C85626-01');
+        I.fillField({ css: '[data-id="uc2"] input[type="text"]' }, 'C85626-02');
 
         I.click('Save');
     });
@@ -109,12 +109,12 @@ Scenario('[C85626] Categories can be enabled or disabled', function (I) {
     I.wait(1);
 
     I.say('Ensure all tabss except "General" are hidden', 'blue');
-    I.seeElement('[data-id="general"]', SELECTORS.toolbar);
-    I.dontSeeElement('[data-id="promotion"]', SELECTORS.toolbar);
-    I.dontSeeElement('[data-id="social"]', SELECTORS.toolbar);
-    I.dontSeeElement('[data-id="purchases"]', SELECTORS.toolbar);
-    I.dontSeeElement('[data-id="uc1"]', SELECTORS.toolbar);
-    I.dontSeeElement('[data-id="uc2"]', SELECTORS.toolbar);
+    I.seeElement({ css: '[data-id="general"]' }, SELECTORS.toolbar);
+    I.dontSeeElement({ css: '[data-id="promotion"]' }, SELECTORS.toolbar);
+    I.dontSeeElement({ css: '[data-id="social"]' }, SELECTORS.toolbar);
+    I.dontSeeElement({ css: '[data-id="purchases"]' }, SELECTORS.toolbar);
+    I.dontSeeElement({ css: '[data-id="uc1"]' }, SELECTORS.toolbar);
+    I.dontSeeElement({ css: '[data-id="uc2"]' }, SELECTORS.toolbar);
 
     I.say('Enable all categories except "General"', 'blue');
     A.openConfiguration(I);
@@ -132,12 +132,12 @@ Scenario('[C85626] Categories can be enabled or disabled', function (I) {
     I.wait(1);
 
     I.say('Check names of custom categories', 'blue');
-    I.seeElement('[data-id="general"]', SELECTORS.toolbar);
-    I.seeElement('[data-id="promotion"]', SELECTORS.toolbar);
-    I.seeElement('[data-id="social"]', SELECTORS.toolbar);
-    I.seeElement('[data-id="purchases"]', SELECTORS.toolbar);
-    I.seeElement('[data-id="uc1"]', SELECTORS.toolbar);
-    I.seeElement('[data-id="uc2"]', SELECTORS.toolbar);
+    I.seeElement({ css: '[data-id="general"]' }, SELECTORS.toolbar);
+    I.seeElement({ css: '[data-id="promotion"]' }, SELECTORS.toolbar);
+    I.seeElement({ css: '[data-id="social"]' }, SELECTORS.toolbar);
+    I.seeElement({ css: '[data-id="purchases"]' }, SELECTORS.toolbar);
+    I.seeElement({ css: '[data-id="uc1"]' }, SELECTORS.toolbar);
+    I.seeElement({ css: '[data-id="uc2"]' }, SELECTORS.toolbar);
 });
 
 Scenario('[C85626] Support different aspects of categories', function (I) {
@@ -227,9 +227,6 @@ Scenario.skip('[C85632] Move mails to another category', async function (I, user
 
     // TODO: add missing steps that involves drag and drop
     await I.dragAndDrop(item, target);
-    I.wait(2);
-
-    I.logout();
 });
 
 function reply(I, user) {
@@ -238,7 +235,7 @@ function reply(I, user) {
     I.waitForVisible('.io-ox-mail-window .list-view');
     I.click('.list-item[data-index="0"]', '.list-view');
     I.wait(1);
-    I.click('a[data-action="io.ox/mail/actions/reply"]');
+    I.click({ css: 'a[data-action="io.ox/mail/actions/reply"]' });
     I.wait(2);
     I.click('Send');
     I.wait(1);
@@ -274,16 +271,14 @@ Scenario.skip('[C96951] Conversations', async function (I, users) {
 
     I.say('Enable Conversations/Threads', 'blue');
     I.click('Sort', '.list-view-control');
-    I.waitForVisible('[data-name="thread"]', 'body > .dropdown');
-    I.click('[data-name="thread"]', 'body > .dropdown');
+    I.waitForVisible({ css: '[data-name="thread"]' }, { css: 'body > .dropdown' });
+    I.click({ css: '[data-name="thread"]' }, { css: 'body > .dropdown' });
     I.wait(2);
 
     I.say('Check Thread in "inbox"', 'blue');
     I.see('6', '.list-view .thread-size');
 
     I.say('Check Thread in "promotion"', 'blue');
-    I.click('[data-id="promotion"]', SELECTORS.toolbar);
+    I.click({ css: '[data-id="promotion"]' }, SELECTORS.toolbar);
     I.see('6', '.list-view .thread-size');
-
-    I.logout();
 });

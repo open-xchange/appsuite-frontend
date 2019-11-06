@@ -50,7 +50,7 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
         end_time: moment().add(2, 'days').valueOf(),
         days: 2
     };
-    I.haveTask(task, { user: users[0] });
+    await I.haveTask(task, { user: users[0] });
 
     //Create Contact
     const contact = {
@@ -61,14 +61,14 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
         birthday: moment().add(2, 'days').valueOf()
 
     };
-    I.haveContact(contact, { user: users[0] });
+    await I.haveContact(contact, { user: users[0] });
     //Upload File to Infostore
     const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
     await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
 
     //Create Appointment
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
-    I.haveAppointment({
+    await I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
         summary: testrailID,
         location: testrailID,
@@ -91,8 +91,8 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
     I.click('.item', '.widget[aria-label="Inbox"]');
     I.waitForElement('.io-ox-sidepopup', 5);
     I.waitForText(testrailID + ' - ' + testrailName, 5, '.io-ox-sidepopup-pane .subject');
-    I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane .person-from');
-    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane .address');
+    I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane');
+    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane');
     I.click('.item', '.widget[aria-label="Inbox"]');
     I.waitForDetached('.io-ox-sidepopup', 5);
 
@@ -132,9 +132,8 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
     //TODO: Verifiy Date
     I.click('.item', '.widget[aria-label="Appointments"]');
     I.waitForDetached('.io-ox-sidepopup', 5);
-
-    I.logout();
 });
+
 Scenario('[C7472] Check if the portalpage is up to date', async function (I, users) {
     // TODO: Need to add Appointment, latest file(upload?)
     //const moment = require('moment');
@@ -157,7 +156,7 @@ Scenario('[C7472] Check if the portalpage is up to date', async function (I, use
         I.click('#io-ox-refresh-icon', '.taskbar');
         I.waitForElement('.launcher .fa-spin-paused', 5);
         I.wait(0.5);
-        element = await I.grabNumberOfVisibleElements('[aria-label="Inbox"] .item .person');
+        element = await I.grabNumberOfVisibleElements({ css: '[aria-label="Inbox"] .item .person' });
         if (!retries) assert.fail('Timeout waiting for element');
     }
     //Verifiy Inbox Widget
@@ -165,45 +164,45 @@ Scenario('[C7472] Check if the portalpage is up to date', async function (I, use
     I.click('.item', '.widget[aria-label="Inbox"]');
     I.waitForElement('.io-ox-sidepopup', 5);
     I.waitForText(testrailID + ' - ' + testrailName, 5, '.io-ox-sidepopup-pane .subject');
-    I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane .person-from');
-    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane .address');
+    I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane');
+    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane');
     I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup', 5);
-    I.logout();
     //TODO: Same for appointments, tasks birthdays and latest files.
 });
-Scenario('[C7482] Add a mail to portal', async function (I, users) {
+
+Scenario('[C7482] Add a mail to portal', async function (I, users, mail) {
     // TODO: Need to add Appointment, latest file(upload?)
     //const moment = require('moment');
-    let testrailID = 'C7482';
-    let testrailName = 'Add a mail to portal';
+    const testrailID = 'C7482',
+        testrailName = 'Add a mail to portal',
+        testSubject = testrailID + ' - ' + testrailName;
     await I.haveMail({
         from: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]],
         sendtype: 0,
-        subject: testrailID + ' - ' + testrailName,
+        subject: testSubject,
         to: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]]
     });
     I.login('app=io.ox/mail', { user: users[0] });
-    I.waitForVisible('.io-ox-mail-window');
-    I.waitForText('C7482 - Add a mail to portal', 5, { css: '.drag-title' });
-    I.click('C7482 - Add a mail to portal', { css: '.drag-title' });
-    I.waitForElement('article.mail-detail', 5);
-    I.click('[aria-label="Mail Toolbar"] [data-action="more"]');
-    I.waitForElement('.dropdown.open [data-action="io.ox/mail/actions/add-to-portal"]', 5);
-    I.click('.dropdown.open [data-action="io.ox/mail/actions/add-to-portal"]');
+    mail.waitForApp();
+    mail.selectMail(testSubject);
+    I.waitForElement('.mail-detail');
+    I.click('~More actions', '.mail-detail-pane');
+    I.waitForElement('.dropdown.open', 5);
+    I.click('Add to portal', '.dropdown.open .dropdown-menu');
     I.openApp('Portal');
     I.waitForVisible('.io-ox-portal-window');
-    I.waitForElement('.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"] .item', 5);
-    I.waitForText(testrailID + ' - ' + testrailName, 5, '.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"] .title');
-    I.click('.item', '.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"]');
+    I.waitForElement('.io-ox-portal [aria-label="' + testSubject + '"] .item', 5);
+    I.waitForText(testSubject, 5, '.io-ox-portal [aria-label="' + testSubject + '"] .title');
+    I.click('.item', '.io-ox-portal [aria-label="' + testSubject + '"]');
     I.waitForElement('.io-ox-sidepopup', 5);
-    I.waitForText(testrailID + ' - ' + testrailName, 5, '.io-ox-sidepopup-pane .subject');
-    I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane .person-from');
-    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane .address');
-    I.click('.item', '.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"]');
+    I.waitForText(testSubject, 5, '.io-ox-sidepopup-pane .subject');
+    I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane');
+    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane');
+    I.click('.item', '.io-ox-portal [aria-label="' + testSubject + '"]');
     I.waitForDetached('.io-ox-sidepopup', 5);
-    I.logout();
 });
+
 Scenario('[C7475] Add inbox widget', async function (I, users) {
     // TODO: Need to add Appointment, latest file(upload?)
     //const moment = require('moment');
@@ -234,6 +233,7 @@ Scenario('[C7475] Add inbox widget', async function (I, users) {
     I.click('Inbox', '.widget');
     I.waitForDetached('.modal');
 });
+
 Scenario('[C7476] Add task widget', async function (I, users) {
     const moment = require('moment');
     let testrailID = 'C7476';
@@ -268,9 +268,8 @@ Scenario('[C7476] Add task widget', async function (I, users) {
     I.waitForText(testrailName, 5, '.io-ox-sidepopup-pane .tasks-detailview .note');
     I.click('.item', '.widget[aria-label="My tasks"]');
     I.waitForDetached('.io-ox-sidepopup', 5);
-
-    I.logout();
 });
+
 Scenario('[C7477] Add appointment widget', async function (I, users) {
     const moment = require('moment');
     let testrailID = 'C7477';
@@ -303,8 +302,8 @@ Scenario('[C7477] Add appointment widget', async function (I, users) {
     I.waitForText(testrailID, 5, '.io-ox-sidepopup-pane div.location');
     I.click('.item', '.widget[aria-label="Appointments"]');
     I.waitForDetached('.io-ox-sidepopup', 5);
-    I.logout();
 });
+
 Scenario('[C7478] Add user data widget', async function (I, users) {
     await I.haveSetting('io.ox/portal//widgets/user', '{}');
     I.login('app=io.ox/portal');
@@ -328,6 +327,7 @@ Scenario('[C7478] Add user data widget', async function (I, users) {
     I.click('Cancel', '.modal');
     I.waitForDetached('.modal');
 });
+
 Scenario('[C7480] Add recently changed files widget', async function (I, users) {
     const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
     await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
@@ -344,5 +344,4 @@ Scenario('[C7480] Add recently changed files widget', async function (I, users) 
     I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name a');
     I.click('.io-ox-viewer [data-action="io.ox/core/viewer/actions/toolbar/close"]');
     I.waitForDetached('.io-ox-viewer');
-    I.logout();
 });

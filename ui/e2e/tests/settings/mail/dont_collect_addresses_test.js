@@ -35,12 +35,10 @@ Scenario('[7772] No contact collection when sending mail', async (I) => {
     I.fillField('To', 'urbi@orbi.vat');
     I.fillField('Subject', 'Richtig gutes zeug');
     I.click('Send');
-    I.wait(2);
     I.waitForVisible('#io-ox-launcher');
 
     I.openApp('Address Book');
     I.click('#io-ox-refresh-icon');
-    I.wait(2);
     I.waitForText('My address books');
     I.doubleClick('~My address books');
     I.selectFolder('Collected addresses');

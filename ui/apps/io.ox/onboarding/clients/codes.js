@@ -23,14 +23,14 @@ define('io.ox/onboarding/clients/codes', [], function () {
             if (id) {
                 return {
                     label: hash[id].name + ' (' + hash[id].code + ')',
-                    value: hash[id].code
+                    value: hash[id].id + hash[id].code
                 };
             }
             // all
             return _.map(hash, function (data) {
                 return {
                     label: data.name + ' (' + data.code + ')',
-                    value: data.code
+                    value: data.id + data.code
                 };
             });
         },

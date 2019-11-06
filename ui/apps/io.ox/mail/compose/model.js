@@ -95,18 +95,33 @@ define('io.ox/mail/compose/model', [
             return this.save(_.device('smartphone'));
         },
 
-        send: function () {
+        sendOrSave: function (method) {
+            var data = this.toJSON(),
+                getFiles = (this.get('attachments') || []).filter(function (model) {
+                    return model.get('group') === 'localFile';
+                }).map(function (model) {
+                    if (model.resized) return model.resized;
+                    return model.get('originalFile');
+                });
+            // remove attachments meta as it contains a lot of overhead like base64 encoded preview urls
+            data.attachments.forEach(function (attachment) {
+                delete attachment.meta;
+            });
             this.destroyed = true;
-            return composeAPI.space.send(this.get('id'), this.toJSON()).fail(function () {
+            return $.when.apply($, getFiles).then(function () {
+                var files = _(arguments).toArray();
+                return composeAPI.space[method](this.get('id'), data, files);
+            }.bind(this)).fail(function () {
                 this.destroyed = false;
             }.bind(this));
         },
 
+        send: function () {
+            return this.sendOrSave('send');
+        },
+
         saveDraft: function () {
-            this.destroyed = true;
-            return composeAPI.space.save(this.get('id'), this.toJSON()).fail(function () {
-                this.destroyed = false;
-            }.bind(this));
+            return this.sendOrSave('save');
         },
 
         attachFiles: function (files) {

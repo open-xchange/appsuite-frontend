@@ -192,7 +192,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                 }
                 timestamp = parseInt(this.model.getDate ? this.model.getDate(this.attribute, { fulltime: this.isFullTime() }) : this.model.get(this.attribute), 10);
                 if (_.isNaN(timestamp)) return;
-                timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));
+                timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute) || moment().tz());
             } else {
                 timestamp = this.model.getMoment(this.attribute);
             }

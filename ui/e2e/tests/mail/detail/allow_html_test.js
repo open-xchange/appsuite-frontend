@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7816] HTML/Plain-text mail', async (I, users) => {
+Scenario('[C7816] HTML/Plain-text mail', async (I, users, mail) => {
 
     var icke = users[0].userdata.email1;
 
@@ -38,31 +38,32 @@ Scenario('[C7816] HTML/Plain-text mail', async (I, users) => {
     });
 
     // turn off HTML formatting
-    await testCycle(false, async function () {
+    await testCycle(false, function () {
         I.waitForElement('.mail-detail-content');
         I.seeNumberOfElements('.mail-detail-content > div', 2);
-        I.seeTextEquals('Span with red color\nTable', '.mail-detail-content');
+        I.see('Span with red color', '.mail-detail-content');
+        I.see('Table', '.mail-detail-content');
     });
 
     // turn on HTML formatting
-    await testCycle(true, async function () {
+    await testCycle(true, function () {
         I.waitForElement('.mail-detail-content');
         I.seeNumberOfElements('.mail-detail-content > span[style]', 1);
         I.seeNumberOfElements('.mail-detail-content > br', 1);
         I.seeNumberOfElements('.mail-detail-content > table', 1);
-        I.seeTextEquals('Span with red color\nTable', '.mail-detail-content');
+        I.see('Span with red color', '.mail-detail-content');
+        I.see('Table', '.mail-detail-content');
     });
 
     async function testCycle(flag, callback) {
         // toggle HTML formatting
         await I.haveSetting({ 'io.ox/mail': { allowHtmlMessages: flag } });
         I.login('app=io.ox/mail');
+        mail.waitForApp();
         // wait for first email
-        var firstItem = '.list-view .list-item';
-        I.waitForElement(firstItem);
-        I.click(firstItem);
-        I.waitForVisible('.thread-view.list-view .list-item');
+        mail.selectMail('Allow HTML formatting');
         // check content
+        I.waitForElement('.mail-detail-frame');
         within({ frame: '.mail-detail-frame' }, callback);
         I.logout();
     }

@@ -24,24 +24,25 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C101622] Aggressive image replacements', async (I) => {
+Scenario('[C101622] Aggressive image replacements', async (I, mail) => {
 
-    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
-    await I.haveSetting('io.ox/mail//allowHtmlImages', true);
-
-    await I.haveMail({
-        folder: 'default0/INBOX',
-        path: 'e2e/media/mails/c101622.eml'
-    });
+    await Promise.all([
+        I.haveSetting('io.ox/mail//features/registerProtocolHandler', false),
+        I.haveSetting('io.ox/mail//allowHtmlImages', true),
+        I.haveMail({
+            folder: 'default0/INBOX',
+            path: 'e2e/media/mails/c101622.eml'
+        })
+    ]);
 
     I.login('app=io.ox/mail');
-    I.waitForText('Aggressive image replacements');
-    I.click('Aggressive image replacements', '.list-item.selectable');
+    mail.waitForApp();
+    mail.selectMail('Aggressive image replacements');
 
-    await within({ frame: '.mail-detail-frame' }, async () => {
+    I.waitForElement('.mail-detail-frame');
+    within({ frame: '.mail-detail-frame' }, async () => {
 
-        I.retry().waitForVisible('.mail-detail-content img');
-        I.wait(1);
+        I.waitForVisible('.mail-detail-content img');
 
         let height = await I.executeScript(function () {
             return document.querySelector('.mail-detail-content img').offsetHeight;

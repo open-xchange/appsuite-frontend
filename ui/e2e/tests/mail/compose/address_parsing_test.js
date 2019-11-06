@@ -22,17 +22,11 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C114353] Mail address parsing supports multiple delimiters @shaky', async (I) => {
+Scenario('[C114353] Mail address parsing supports multiple delimiters', async (I, mail) => {
 
     await I.haveSetting({ 'io.ox/mail': { 'features/registerProtocolHandler': false } });
     I.login('app=io.ox/mail');
-
-    I.waitForText('Compose');
-    I.click('Compose');
-
-    // no better approach yet. I.waitForMailCompose() might be a good one
-    I.waitForElement('button[data-action="send"]:not(.disabled)');
-    I.wait(1);
+    mail.newMail();
 
     // Copy multiple addresses delimited by commas into the address field
     pasteTriple('Foo Bar <foo@bar.com>, John Doe <john@doe.com>, Jane Doe <jane@doe.com>');
@@ -58,13 +52,12 @@ Scenario('[C114353] Mail address parsing supports multiple delimiters @shaky', a
         I.waitForVisible(locate('.token-label').withText('Foo Bar'));
         I.waitForVisible(locate('.token-label').withText('John Doe'));
         I.waitForVisible(locate('.token-label').withText('Jane Doe'));
-        I.wait(1);
         I.pressKey('Backspace');
-        I.wait(0.5);
+        I.wait(0.1);
         I.pressKey('Backspace');
-        I.wait(0.5);
+        I.wait(0.1);
         I.pressKey('Backspace');
-        I.wait(0.5);
+        I.wait(0.1);
         I.pressKey('Backspace');
     }
 
@@ -72,15 +65,13 @@ Scenario('[C114353] Mail address parsing supports multiple delimiters @shaky', a
         paste(str);
         I.seeNumberOfElements('.mail-compose-fields .token-label', 1);
         I.waitForVisible(locate('.token-label').withText(text));
-        I.wait(1);
         I.pressKey('Backspace');
-        I.wait(0.5);
+        I.wait(0.1);
         I.pressKey('Backspace');
     }
 
     function paste(str) {
-        I.fillField('.mail-compose-fields .token-input.tt-input', str);
-        I.wait(1);
+        I.fillField('To', str);
         I.pressKey('Enter');
     }
 });

@@ -25,15 +25,15 @@ Scenario('adds and removes a autoforward rule', function (I) {
     I.waitForVisible('.io-ox-settings-main .rightside h1');
     I.see('Basic settings', '.rightside h1');
 
-    I.waitForVisible('li[data-id="virtual/settings/io.ox/mail"]');
+    I.waitForVisible({ css: 'li[data-id="virtual/settings/io.ox/mail"]' });
     I.selectFolder('Mail');
     I.waitForVisible('.rightside  .io-ox-mail-settings');
     I.see('Mail', '.rightside h1');
 
-    I.waitForElement('[data-action="edit-auto-forward"]');
-    I.see('Auto forward ...', '[data-action="edit-auto-forward"]');
+    I.waitForElement({ css: '[data-action="edit-auto-forward"]' });
+    I.see('Auto forward ...', { css: '[data-action="edit-auto-forward"]' });
     I.click('Auto forward ...', '.form-group.buttons [data-action="edit-auto-forward"]');
-    I.waitForElement('[data-point="io.ox/mail/auto-forward/edit"]');
+    I.waitForElement({ css: '[data-point="io.ox/mail/auto-forward/edit"]' });
 
     // check for all expexted elements
     I.seeElement('.modal-header input[name="active"]');
@@ -43,46 +43,44 @@ Scenario('adds and removes a autoforward rule', function (I) {
     I.see('Apply changes', '.modal-footer');
 
     // // form elements
-    I.seeElement('input[name="to"][disabled]');
-    I.seeElement('input[name="copy"][disabled]');
-    I.seeElement('input[name="processSub"][disabled]');
+    I.seeElement({ css: 'input[name="to"][disabled]' });
+    I.seeElement({ css: 'input[name="copy"][disabled]' });
+    I.seeElement({ css: 'input[name="processSub"][disabled]' });
 
     // enable
     I.click('.modal-header .checkbox.switch.large');
 
-    I.seeElement('input[name="to"]:not([disabled])');
-    I.seeElement('input[name="copy"]:not([disabled])');
-    I.seeElement('input[name="processSub"]:not([disabled])');
+    I.seeElement({ css: 'input[name="to"]:not([disabled])' });
+    I.seeElement({ css: 'input[name="copy"]:not([disabled])' });
+    I.seeElement({ css: 'input[name="processSub"]:not([disabled])' });
 
     // button disabled?
     I.seeElement('.modal-footer [data-action="save"][disabled]');
 
-    I.fillField('input[name="to"]', 'test@oxtest.com');
+    I.fillField({ css: 'input[name="to"]' }, 'test@oxtest.com');
 
     // button enabled?
     I.waitForElement('.modal-footer [data-action="save"]:not([disabled])');
 
     I.click('.modal-footer button[data-action="save"]');
 
-    I.see('Auto forward ...', '[data-action="edit-auto-forward"]');
+    I.see('Auto forward ...', { css: '[data-action="edit-auto-forward"]' });
 
-    I.waitForElement('[data-action="edit-auto-forward"] .fa-toggle-on');
-    I.waitForInvisible('[data-point="io.ox/mail/auto-forward/edit"]');
+    I.waitForElement({ css: '[data-action="edit-auto-forward"] .fa-toggle-on' });
+    I.waitForInvisible({ css: '[data-point="io.ox/mail/auto-forward/edit"]' });
 
     // check notification in mail
     I.openApp('Mail');
     I.waitForElement('.window-container.io-ox-mail-window');
-    I.waitForElement('a[data-action="edit-autoforward-notice"]');
-    I.seeElement('a[data-action="edit-autoforward-notice"]');
-    I.see('Auto forwarding is active', 'a[data-action="edit-autoforward-notice"]');
+    I.waitForElement({ css: 'a[data-action="edit-autoforward-notice"]' });
+    I.seeElement({ css: 'a[data-action="edit-autoforward-notice"]' });
+    I.see('Auto forwarding is active', { css: 'a[data-action="edit-autoforward-notice"]' });
 
-    I.click('a[data-action="edit-autoforward-notice"]');
-    I.waitForElement('[data-point="io.ox/mail/auto-forward/edit"]');
+    I.click({ css: 'a[data-action="edit-autoforward-notice"]' });
+    I.waitForElement({ css: '[data-point="io.ox/mail/auto-forward/edit"]' });
 
-    I.seeInField('input[name="to"]', 'test@oxtest.com');
-    I.seeElement('input[name="processSub"]:checked');
+    I.seeInField({ css: 'input[name="to"]' }, 'test@oxtest.com');
+    I.seeElement({ css: 'input[name="processSub"]:checked' });
 
     I.click('Cancel', '.modal-footer');
-
-    I.logout();
 });

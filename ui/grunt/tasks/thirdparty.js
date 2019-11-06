@@ -90,8 +90,7 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: [
                             'moment/moment.js',
-                            'moment-timezone/builds/moment-timezone-with-data.js',
-                            '@open-xchange/moment-interval/moment-interval.js'
+                            'moment-timezone/builds/moment-timezone-with-data.js'
                         ],
                         cwd: 'node_modules',
                         dest: 'build/static/3rd.party/moment'

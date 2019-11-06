@@ -63,7 +63,9 @@ define('io.ox/mail/compose/main', [
         index: INDEX += 100,
         perform: function () {
             if (settings.get('customDisplayNames')) return;
-            return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).then(function (address) {
+            return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).catch(function () {
+                return accountAPI.getPrimaryAddressFromFolder(mailAPI.getDefaultFolder());
+            }).then(function (address) {
                 // ensure defaultName is set (bug 56342 and 63891)
                 settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
             });
@@ -74,7 +76,9 @@ define('io.ox/mail/compose/main', [
         perform: function () {
             var model = this.model;
             if (model.get('from')) return;
-            return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).then(function (address) {
+            return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).catch(function () {
+                return accountAPI.getPrimaryAddressFromFolder(mailAPI.getDefaultFolder());
+            }).then(function (address) {
                 // custom display names
                 if (settings.get(['customDisplayNames', address[1], 'overwrite'])) {
                     address[0] = settings.get(['customDisplayNames', address[1], 'name'], '');

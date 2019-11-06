@@ -21,7 +21,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('adds an malicious attachment to a contact', async function (I) {
+Scenario('adds an malicious attachment to a contact', async function (I, contacts) {
     const folder = await I.grabDefaultFolder('contacts');
     const { id } = await I.haveContact({ folder_id: folder, first_name: 'Evil', last_name: 'Knivel' });
     await I.haveAttachment(
@@ -31,13 +31,8 @@ Scenario('adds an malicious attachment to a contact', async function (I) {
     );
 
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
-    I.waitForText('My address books');
-    I.doubleClick('~My address books');
-    I.click('~Contacts, 1 total'); // need to add "1 total" as this is part of the aria-label
-
-    I.click('#io-ox-refresh-icon');
-    I.waitForVisible('section[data-block="attachments"]');
+    contacts.waitForApp();
+    contacts.selectContact('Knivel, Evil');
+    I.waitForVisible({ css: 'section[data-block="attachments"]' });
     I.see('><img src=x onerror=alert(123)>');
 });

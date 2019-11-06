@@ -280,6 +280,7 @@ define('io.ox/onboarding/clients/extensions', [
                 prefix = this.model.get('code');
             // remove everything except digits and '+'
             local = local.replace(/[^\d+]+/g, '');
+            prefix = prefix.replace(/[^\d+]+/g, '');
             // 0049... -> +49...
             local = local.replace(/^00/, '+');
             // valid country code entered?

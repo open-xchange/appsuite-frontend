@@ -350,7 +350,12 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/viewer', {
         collection: 'some && items',
         matches: function (baton) {
-            if (baton.isViewer) { return false; }   // don't open a new viewer instance within the viewer
+            var file = baton.first();
+            // don't open a new viewer instance within the viewer
+            if (baton.isViewer) { return false; }
+            // Spreadsheet supports display of current version only
+            // versions may not be loaded when the action is not called from versions list, so check current_version for false
+            if (file.current_version === false && api.isSpreadsheet(file)) { return false; }
             return !baton.collection.has('guard') || capabilities.has('guard');
         },
         action: function (baton) {

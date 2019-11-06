@@ -34,7 +34,7 @@ Scenario('Compose plain text mail', function (I, users) {
     I.selectFolder('Compose');
 
     // set compose mode to html
-    I.wait(2);
+    I.waitForText('HTML');
     I.checkOption('HTML');
 
     // 1) Switch to the mail app, select "Create mail"
@@ -49,7 +49,7 @@ Scenario('Compose plain text mail', function (I, users) {
     // 1.2) continue opening mail compose
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
 
     // 2) Select "Plain Text" as text format under "Options"
     I.click('Options');
@@ -59,18 +59,20 @@ Scenario('Compose plain text mail', function (I, users) {
 
     // 3) Set a recipient, add a subject and mail text
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
+    I.pressKey('Enter');
     I.fillField('.io-ox-mail-compose [name="subject"]', 'Test subject');
     I.fillField({ css: 'textarea.plain-text' }, 'Test text');
     I.seeInField({ css: 'textarea.plain-text' }, 'Test text');
 
     // 4) Send the E-Mail and check it as recipient
     I.click('Send');
-    I.waitForVisible('.io-ox-mail-window .leftside ul li.unread');
+    I.waitForVisible('.io-ox-mail-window .leftside ul li.unread', 30);
     I.click('.io-ox-mail-window .leftside ul li.unread');
     I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
     I.see('Test subject', '.mail-detail-pane');
 
     // 4.1) Assert body content
+    I.waitForElement('.mail-detail-frame');
     I.switchTo('.mail-detail-frame');
     I.see('Test text');
     I.switchTo();
@@ -82,9 +84,8 @@ Scenario('Compose plain text mail', function (I, users) {
     I.see('Test subject', '.mail-detail-pane');
 
     // 5.1) Assert body content
+    I.waitForElement('.mail-detail-frame');
     I.switchTo('.mail-detail-frame');
     I.see('Test text');
     I.switchTo();
-
-    I.logout();
 });

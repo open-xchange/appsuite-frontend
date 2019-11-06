@@ -1,6 +1,6 @@
 /// <reference path="../../steps.d.ts" />
 
-Feature('Login: Switch translations');
+Feature('Login > Switch translations');
 
 Before(async (users) => {
     await users.create();
@@ -12,7 +12,9 @@ After(async (users) => {
 
 Scenario('[C7338] on form login page', function (I) {
     I.amOnPage('/');
-    I.waitForFocus('input[name="username"]');
+    I.setCookie({ name: 'locale', value: 'en_US' });
+    I.refreshPage();
+    I.waitForFocus('#io-ox-login-username', 30);
     I.click('Language');
     I.waitForElement('~Languages');
     I.click('Italiano');
@@ -31,16 +33,17 @@ Scenario('[OXUI-700] for guest users with password', async (I, users) => {
     I.click('Password required');
     I.seeCheckboxIsChecked('Password required');
     I.fillField('Enter Password', 'CorrectHorseBatteryStaple');
-    const [url] = await I.grabValueFrom('.share-wizard input[type="text"]');
+    let url = await I.grabValueFrom('.share-wizard input[type="text"]');
+    url = Array.isArray(url) ? url[0] : url;
     I.click('Close');
     I.waitToHide('Create sharing link');
     I.logout();
-    I.amOnPage(url.replace(/^https?:\/\/[^\/]+\//, '/'));
-    I.waitForFocus('input[name="password"]');
-    I.click('#io-ox-languages');
+    I.amOnPage(url.replace(/^https?:\/\/[^/]+\//, '../'));
+    I.waitForFocus('#io-ox-login-password');
+    I.click('#io-ox-languages .dropup > a');
     I.click('Deutsch (Deutschland)');
     I.waitForText('hat Ordner "Musik" für Sie freigegeben', 5);
-    I.click('#io-ox-languages');
+    I.click('#io-ox-languages .dropup > a');
     I.click('English (United States)');
     I.waitForText('has shared the folder "Music" with you', 5);
 });

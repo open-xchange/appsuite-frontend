@@ -65,10 +65,11 @@ define('io.ox/calendar/folder-select-support', [
         var self = this,
             initialList = settings.get('selectedFolders');
         if (!initialList) {
-            // this is the case, when upgrading to the new calendar. all private appointments and allPublic should be checked
+            // this is the case for new users or when upgrading to the new calendar. all private appointments and allPublic should be checked
             folderAPI.flat({ module: 'calendar', all: true }).then(function (data) {
                 initialList = _(data.private).pluck('id');
                 if (!capabilities.has('guest') && capabilities.has('edit_public_folders')) initialList.push('cal://0/allPublic');
+                if (app.folder.get() !== folderAPI.getDefaultFolder('calendar')) initialList.push(app.folder.get());
                 // fallback if no object has been added. Maybe the case for guests
                 if (initialList.length === 0) initialList = _(data.shared).pluck('id');
                 setFolders.call(self, initialList);

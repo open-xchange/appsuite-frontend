@@ -225,12 +225,14 @@ define('io.ox/core/main/logout', [
         logout: function () {
             // force save requests for all pending settings
             http.pause();
+            var def = $.Deferred();
             $.when.apply($,
                 _(settings.getAllPendingSettings()).map(function (set) {
                     return set.save(undefined, { force: true });
                 })
-            );
-            return http.resume();
+            ).always(def.resolve);
+            http.resume();
+            return def;
         }
     });
 

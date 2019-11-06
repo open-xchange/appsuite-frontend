@@ -21,12 +21,13 @@ define('io.ox/backbone/mini-views/alarms', [
 
     'use strict';
 
-    var standardTypes = ['DISPLAY', 'AUDIO', 'EMAIL'],
-        supportedTypes = settings.get('availableAlarmTypes', standardTypes),
+    var standardTypes = ['DISPLAY', 'AUDIO', 'EMAIL', 'SMS'],
+        supportedTypes = settings.get('availableAlarmTypes', ['DISPLAY', 'AUDIO', 'EMAIL']),
         typeTranslations = {
             DISPLAY: gt('Notification'),
             AUDIO: gt('Audio'),
-            EMAIL: gt('Mail')
+            EMAIL: gt('Mail'),
+            SMS: gt('SMS')
         },
         relatedLabels = {
             //#. Used in a selectbox when the reminder for an appointment is before the start time
@@ -207,7 +208,7 @@ define('io.ox/backbone/mini-views/alarms', [
                     $('<label class="sr-only">').attr('for', 'action-' + uid).text(gt('type')),
                     $('<select class="form-control alarm-action">').attr('id', 'action-' + uid).append(
                         _(supportedTypes).map(function (type) {
-                            return $('<option>').text(typeTranslations[type]).val(type);
+                            return $('<option>').text(typeTranslations[type] || type).val(type);
                         })
                     ).val(alarm.action)
                 );

@@ -54,13 +54,13 @@ define('io.ox/core/boot/login/openid', [
         var def = new $.Deferred();
         function listener(event) {
             if (event.origin !== ox.abs) return;
+            ox.session = event.data;
             def.resolve(event.data);
             window.removeEventListener('message', listener);
         }
         window.addEventListener('message', listener, false);
         window.setTimeout(function () {
-            if (def.state() === 'pending') def.reject({ reason: 'timeout' });
-            window.removeEventListener('message', listener);
+            if (def.state() === 'pending') def.reject({ reason: 'timeout', oidc_session_listener: listener });
         }, 10000);
         return def;
     }
@@ -95,15 +95,39 @@ define('io.ox/core/boot/login/openid', [
                     frame.attr('src', res.redirect);
                     waitForResponse().then(def.resolve, def.reject);
                     return def;
-                }).then(function (session) {
-                    ox.session = session;
+                }).then(function () {
                     baton.stopPropagation();
                     baton.preventDefault();
                     baton.data.reloginState = 'success';
                     return { reason: 'relogin:success' };
-                }, function () {
-                    // if fetching the session timed out, may be show a popup to regain the session?
-
+                }, function (result) {
+                    if (result.reason === 'timeout') {
+                        var point = ext.point('io.ox/core/relogin'),
+                            action = point.extend;
+                        if (point.has('oidc_waitForSessionPropagation')) action = point.replace;
+                        // call with point as context, because it operates on "this"
+                        action.call(point, {
+                            id: 'oidc_waitForSessionPropagation',
+                            index: '200',
+                            render: function () {
+                                var dialog = this;
+                                function listener(event) {
+                                    if (event.origin !== ox.abs) return;
+                                    ox.session = event.data;
+                                    dialog.trigger('relogin:success');
+                                    dialog.close();
+                                }
+                                window.addEventListener('message', listener, false);
+                                if (_.isFunction(result.oidc_session_listener)) {
+                                    window.removeEventListener('message', result.oidc_session_listener);
+                                    delete result.oidc_session_listener;
+                                }
+                                dialog.on('close', function () {
+                                    window.removeEventListener('message', listener);
+                                });
+                            }
+                        });
+                    }
                     // let some other extension handle this
                     return $.when({ reason: 'relogin:continue' });
                 });

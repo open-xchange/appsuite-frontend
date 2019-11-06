@@ -35,6 +35,7 @@ title: Variables
 
 @white:                                 #fff;
 @black:                                 #000;
+@gray:                                  #555555;    /* Bootstrap overwrite */
 @blue:                                  #017fb3;
 @blue-dark:                             #0064cd;
 @blue-light:                            lighten(#049cdb, 25%);
@@ -45,7 +46,6 @@ title: Variables
 @orange:                                #f89406;
 @pink:                                  #e01cd9;
 @purple:                                #7e16cf;
-@grey-light:                            #ebebeb;
 @dark-silver:                           #aaa;
 @silver:                                #bbb;
 @light-silver:                          #ccc;
@@ -61,9 +61,9 @@ title: Variables
 @app-color-drive:                       #444444;
 @app-color-tasks:                       #f57c00;
 @app-color-portal:                      #999;
-@app-color-text:                        #2c569a; //M$ word
-@app-color-spreadsheet:                 #227643; //M$ excel
-@app-color-presentation:                #d24727; //M$ PP
+@app-color-text:                        #2c569a; // text processor
+@app-color-spreadsheet:                 #227643; // spreadsheet editor
+@app-color-presentation:                #d24727; // presentation editor
 
 /*
  * 1.3 High contrast colors
@@ -87,6 +87,7 @@ title: Variables
 @topbar-font-size:                      13px;
 @vgrid-font-size:                       13px;
 @inline-link-font-size:                 14px;
+@sm-mail-detail-font-size:              15px;
 
 /*
  * 1.5 Base layout
@@ -130,7 +131,8 @@ title: Variables
 @fallback-image-resource:               'apps/themes/@{theme}/fallback-image-resource.png';
 
 @onboarding-mailapp:                    'apps/themes/icons/default/apps/mailapp.png';
-@onboarding-driveapp:                   'apps/themes/icons/default/apps/driveapp.png';
+@onboarding-driveapp-googleplay:                   'apps/themes/icons/default/apps/Android_Drive_App_Icon.png';
+@onboarding-driveapp-appstore:                   'apps/themes/icons/default/apps/iOS_Drive_App_Icon.png';
 
 /*
  * 1.9 Border radius
@@ -151,7 +153,7 @@ title: Variables
 
 // matches smartphone detection threshold in browser.js
 @smartphone-breakpoint:                 540px;
-@pagecontroller-animation-duration:     600ms;
+@pagecontroller-animation-duration:     400ms;
 // size of the menu launcher in the top left
 @mobile-launcher-icon-size:             18px;
 //toolbar height
@@ -313,7 +315,7 @@ title: Variables
 @premium-toolbar-background:            darken(@brand-primary, 10%);
 @premium-toolbar-header-background:     lighten(@premium-toolbar-background, 10%);
 @premium-toolbar-link-color:            @white;
-@premium-toolbar-header-color:          lighten(@premium-toolbar-header-background, 35%);
+@premium-toolbar-header-color:          lighten(@premium-toolbar-header-background, 50%);
 
 /*
  * 3.7 Custom controls
@@ -452,3 +454,4 @@ title: Variables
 @badge-waiting-color:                   @white;
 @badge-overdue-bg:                      @blue;
 @badge-overdue-color:                   @white;
+```

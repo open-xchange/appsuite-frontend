@@ -61,7 +61,9 @@
 <p>Bu durumda, bir e-postanın konusunun tam olarak "dakika" değişkeniyle eşleşip eşleşmediği kontrol edilir. E-postaları konu bazında filtrelemeye dair birkaç örnek daha verelim:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p role="presentation">Koşul: "Şunu içeren" Değişkendeki karakterler konuda yer alıyorsa koşul sağlanmış demektir. Örnek: Değişkenin "dakika" olduğunu düşünelim.</p>
+<p role="presentation">Koşul "şunu içeren"</p>
+<p role="presentation">Konu, değişkendeki karakterleri içeriyorsa koşul sağlanır.</p>
+<p role="presentation">Örnek: Değişken "dakika".</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Konu "dakika" ise koşul sağlanır.</p></li>
 <li class="listitem"><p role="presentation">Konu "Dakikalar boyunca" ise koşul yine sağlanır.</p></li>
@@ -70,14 +72,18 @@
             </p>
 </li>
 <li class="listitem">
-<p role="presentation">Koşul: "Şununla eşleşen"  Konu değişkendeki karakterlerle tam olarak eşleşiyorsa koşul sağlanır. Karakter dizesi joker karakterleri içerebilir. Örnek: Değişken "dakikalar*" olsun. "*" karakteri tüm karakterlerin yerine geçer.</p>
+<p role="presentation">Koşul: "şununla eşleşen"</p>
+<p role="presentation">Konu, değişkendeki karakterlerle tam olarak eşleşiyorsa koşul sağlanır. Karakter dizesi joker karakterleri içerebilir.</p>
+<p role="presentation">Örnek: Değişken "dakikalar*" olsun. "*" karakteri tüm karakterlerin yerine geçer.</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Konu "dakika" ise koşul sağlanır.</p></li>
 <li class="listitem"><p role="presentation">Konu "son dakikalar" ise koşul karşılanmaz.</p></li>
 </ul>
 </li>
 <li class="listitem">
-<p role="presentation">Ölçüt: "Regex"  Konu, değişkenindeki düzenli ifade tarafından sağlanan karakterleri içeriyorsa koşul karşılanır. Düzenle ifadeler karmaşık istekler oluşturmanıza olanak tanır. Düzenli ifadelerle ilgili daha fazla bilgiyi internette bulabilirsiniz. Aşağıdaki basit düzenli ifade konuyla ilgili bir fikir verebilir.Örnek: Değişken "organi(z|s)ation" olsun. "(z|s)" ifadesi ya "z" ya da "s" karakteri yerine geçer.</p>
+<p role="presentation">Koşul: "Regex"</p>
+<p role="presentation">Konu, değişkenindeki düzenli ifade tarafından sağlanan karakterleri içeriyorsa koşul karşılanır. Düzenle ifadeler karmaşık istekler oluşturmanıza olanak tanır. Düzenli ifadelerle ilgili daha fazla bilgiyi internette bulabilirsiniz. Aşağıdaki basit düzenli ifade konuyla ilgili bir fikir verebilir.</p>
+<p role="presentation">Örnek: Değişken "organi(z|s)ation" olsun. "(z|s)" ifadesi ya "z" ya da "s" karakteri yerine geçer.</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Konu "dakika" ise koşul sağlanır.</p></li>
 <li class="listitem"><p role="presentation">Konu "organisation" ise koşul yine sağlanır.</p></li>

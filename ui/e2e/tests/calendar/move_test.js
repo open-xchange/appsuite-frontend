@@ -14,7 +14,7 @@
 
 const moment = require('moment');
 
-Feature('Calendar Actions');
+Feature('Calendar > Actions');
 
 Before(async function (users) {
     await users.create();
@@ -24,7 +24,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Move event to different folder @shaky', async function (I) {
+Scenario('Move event to different folder', async function (I) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, viewView: 'week:week' }
@@ -58,9 +58,9 @@ Scenario('Move event to different folder @shaky', async function (I) {
 
     I.waitForElement('.folder-picker-dialog');
 
-    I.waitForElement('[data-id="virtual/flat/event/private"] .folder-arrow', '.folder-picker-dialog');
+    I.waitForElement({ css: '[data-id="virtual/flat/event/private"] .folder-arrow' }, '.folder-picker-dialog');
 
-    I.click('[data-id="virtual/flat/event/private"] .folder-arrow', '.folder-picker-dialog');
+    I.click({ css: '[data-id="virtual/flat/event/private"] .folder-arrow' }, '.folder-picker-dialog');
     I.waitForText(movefolder, '.folder-picker-dialog .selectable');
 
     I.click(locate('.folder-picker-dialog .selectable').find('~New calendar'));
@@ -71,6 +71,6 @@ Scenario('Move event to different folder @shaky', async function (I) {
     I.waitForDetached('.folder-picker-dialog');
     I.waitForVisible('.weekview-container.week .appointment');
     I.seeElement('.weekview-container.week .appointment');
-    I.seeElement('[aria-label="New calendar"][aria-checked="true"]');
+    I.seeElement({ css: '[aria-label="New calendar"][aria-checked="true"]' });
 
 });

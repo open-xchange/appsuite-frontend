@@ -27,7 +27,7 @@ Scenario('[C274141] Customize default app, order and count for Quicklauncher @co
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     I.waitForVisible({ css: 'div[data-point="io.ox/core/settings/detail/view"]' });
 
-    I.selectOption('[name=autoStart]', 'Portal');
+    I.selectOption({ css: '[name=autoStart]' }, 'Portal');
 
     I.click('Configure quick launchers ...');
 
@@ -56,8 +56,8 @@ Scenario('[C274141] Customize default app, order and count for Quicklauncher @co
     I.waitForVisible({ css: '.io-ox-portal' });
 
     await within('#io-ox-quicklaunch', async () => {
-        I.seeElement('[data-app-name="io.ox/calendar"]');
-        I.seeElement('[data-app-name="io.ox/contacts"]');
-        I.seeElement('[data-app-name="io.ox/mail"]');
+        I.seeElement({ css: '[data-app-name="io.ox/calendar"]' });
+        I.seeElement({ css: '[data-app-name="io.ox/contacts"]' });
+        I.seeElement({ css: '[data-app-name="io.ox/mail"]' });
     });
 });

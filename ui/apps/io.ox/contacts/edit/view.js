@@ -58,8 +58,8 @@ define('io.ox/contacts/edit/view', [
                 this.renderAllFields();
             },
             attachments: function () {
-                // Remove attachment handling when infostore is not present
-                if (!coreSettings.get('features/PIMAttachments', capabilities.has('filestore'))) return;
+                // Remove attachment handling when infostore is not present or if user data is used instead of contact data
+                if (!coreSettings.get('features/PIMAttachments', capabilities.has('filestore')) || this.model.isUserMode()) return;
                 this.renderAttachments();
                 this.renderDropzone();
             },
@@ -74,7 +74,7 @@ define('io.ox/contacts/edit/view', [
                     $('<div class="col-xs-3 col-sm-4">').append(
                         this.renderContactPhoto()
                     ),
-                    $('<div class="col-xs-9 col-sm-8 height-100">').append(
+                    $('<div class="col-xs-9 col-sm-6 height-100">').append(
                         this.renderContactSummary()
                     )
                 )
@@ -806,9 +806,12 @@ define('io.ox/contacts/edit/view', [
             }
         },
 
+        isUserMode: function () {
+            return String(this.get('folder_id')) === '6' && String(this.get('id')) === String(ox.user_id);
+        },
+
         getApi: function () {
-            var useUserApi = String(this.get('folder_id')) === '6' && String(this.get('id')) === String(ox.user_id);
-            return useUserApi ? userApi : api;
+            return this.isUserMode() ? userApi : api;
         },
 
         getChanges: function () {

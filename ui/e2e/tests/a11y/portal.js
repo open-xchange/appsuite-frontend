@@ -16,12 +16,13 @@ const { expect } = require('chai');
 Scenario('Portal - View with empty standard tiles', async (I) => {
     await I.haveSetting({ 'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false } });
     I.login('app=io.ox/portal');
-    I.waitForVisible('[data-app-name="io.ox/portal"]', 5);
     I.waitForText('Inbox');
     I.waitForText('Appointments');
     I.waitForText('My tasks');
     I.waitForText('Birthdays');
     I.waitForText('My latest files');
+    I.waitForElement('.fa-spin.fa-refresh');
+    I.waitForDetached('.fa-spin.fa-refresh');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });

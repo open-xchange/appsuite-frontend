@@ -64,5 +64,35 @@ module.exports = actor({
         // save
         this.click('Create', '.io-ox-calendar-edit-window');
         this.waitForDetached('.io-ox-calendar-edit-window', 5);
+    },
+
+    waitForNetworkTraffic() {
+        this.waitForElement('.fa-spin.fa-refresh');
+        this.waitForElement('.fa-spin-paused.fa-refresh');
+    },
+
+    triggerRefresh() {
+        this.executeScript(function () {
+            ox.trigger('refresh^');
+        });
+        this.waitForElement('.fa-spin.fa-refresh');
+        this.waitForElement('.fa-spin-paused.fa-refresh');
+    },
+
+    async grabBackgroundImageFrom(selector) {
+        let backgroundImage = await this.grabCssPropertyFrom(selector, 'backgroundImage');
+        backgroundImage = Array.isArray(backgroundImage) ? backgroundImage[0] : backgroundImage;
+        return backgroundImage ? backgroundImage : 'none';
+    },
+
+    clickDropdown(text) {
+        this.waitForText(text, 5, '.dropdown.open .dropdown-menu');
+        this.click(text, '.dropdown.open .dropdown-menu');
+    },
+
+    openFolderMenu(folderName) {
+        const item = `.folder-tree .contextmenu-control[title*="${folderName}"]`;
+        this.waitForElement(item);
+        this.click(item);
     }
 });

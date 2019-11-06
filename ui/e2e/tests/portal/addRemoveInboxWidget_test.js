@@ -60,6 +60,4 @@ Scenario('[C7488] [C7484] Add/Remove Inbox widget', async (I, users) => {
 
     // verify that the widget is removed
     I.dontSee('~Inbox');
-
-    I.logout();
 });

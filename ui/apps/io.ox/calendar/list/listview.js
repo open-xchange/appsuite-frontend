@@ -217,7 +217,7 @@ define('io.ox/calendar/list/listview', [
 
         initialize: function (options) {
             ListView.prototype.initialize.call(this, options);
-            this.$el.addClass('chronos-item');
+            this.$el.addClass('chronos-item').attr('aria-label', gt('List view'));
             this.connect(api.collectionLoader);
             this.listenTo(settings, 'change:showDeclinedAppointments', this.rerender);
             this.on('collection:change:attendees', this.onChangeAttendee);

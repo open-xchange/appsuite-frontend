@@ -608,9 +608,11 @@ define('io.ox/core/commons', [
                 id: 'toggle-folderview',
                 index: 1000,
                 draw: function () {
+                    var guid = _.uniqueId('control');
+
                     this.addClass('bottom-toolbar').append(
-                        $('<div class="generic-toolbar bottom visual-focus" role="region">').append(
-                            $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
+                        $('<div class="generic-toolbar bottom visual-focus" role="region">').attr('aria-labelledby', guid).append(
+                            $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr({ id: guid, 'aria-label': gt('Close folder view') })
                             .append(
                                 $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                             )
@@ -651,9 +653,10 @@ define('io.ox/core/commons', [
                 index: 1000,
                 draw: function () {
                     if (_.device('smartphone')) return;
+                    var guid = _.uniqueId('control');
                     this.addClass('bottom-toolbar').append(
-                        $('<div class="generic-toolbar bottom visual-focus" role="region">').append(
-                            $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
+                        $('<div class="generic-toolbar bottom visual-focus" role="region">').attr('aria-labelledby', guid).append(
+                            $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr({ id: guid, 'aria-label': gt('Close folder view') })
                             .append(
                                 $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                             )
