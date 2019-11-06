@@ -68,9 +68,6 @@ define('io.ox/core/tk/contenteditable-editor', [
                 if (!e.content) return;
                 e.content = DOMPurify.sanitize(e.content);
             };
-            if (ed.oxContext && ed.oxContext.signature) {
-                ed.on('BeforeSetContent', sanitizeAttributes);
-            }
             // see bug 48231 and 50849
             ed.on('PastePreProcess', sanitizeAttributes);
         }
@@ -88,6 +85,8 @@ define('io.ox/core/tk/contenteditable-editor', [
                 }).compact().value();
             }
             return function (ed) {
+                // disable for signature editor (bugs 66594, 67650)
+                if (ed.oxContext && ed.oxContext.signature) return;
                 var oldsIds = [];
                 ed.on('BeforeSetContent change Focus Blur', function (e) {
                     // use e.content for BeforeSetContent events
