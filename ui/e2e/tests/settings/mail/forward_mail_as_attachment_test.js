@@ -23,7 +23,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7778] Forwarding mail inline/attachment', async (I, users) => {
+Scenario('[C7778] Forwarding mail inline/attachment', async (I, users, mail) => {
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
@@ -34,17 +34,19 @@ Scenario('[C7778] Forwarding mail inline/attachment', async (I, users) => {
     }, { user });
 
     I.login('app=io.ox/mail', { user });
-    I.waitForText('Richtig gutes Zeug');
-    I.click('.list-item.selectable');
+    mail.selectMail('Richtig gutes Zeug');
     I.waitForVisible('h1.subject');
     I.click('Forward');
     I.waitForText('Fwd: Richtig gutes Zeug');
+    I.waitForElement('.io-ox-mail-compose-window .editor iframe');
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
         I.waitForText('---------- Original Message ----------');
     });
+    I.wait(0.5);
 
     I.waitToHide('Saving');
     I.click('Discard');
+    I.waitForDetached('.io-ox-mail-compose-window');
     I.logout();
 
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mail/settings/compose', { user });
@@ -52,20 +54,16 @@ Scenario('[C7778] Forwarding mail inline/attachment', async (I, users) => {
     I.click('Attachment');
 
     I.click('Mail');
-    I.waitForText('Richtig gutes Zeug');
-    I.click('.list-item.selectable');
+    mail.selectMail('Richtig gutes Zeug');
     I.waitForVisible('h1.subject');
     I.click('Forward');
-    I.waitToHide('.io-ox-mail-compose-window');
     I.waitForText('Fwd: Richtig gutes Zeug');
     I.see('1 attachment');
     I.waitForFocus('[placeholder="To"]');
     I.fillField('To', user.get('primaryEmail'));
-    I.click('Send');
-    I.waitForDetached('.io-ox-mail-compose-window');
-    I.wait(1);
-    I.waitForText('Fwd: Richtig gutes Zeug');
-    I.click('Fwd: Richtig gutes Zeug', '.list-item.selectable');
+    mail.send();
+    I.triggerRefresh();
+    mail.selectMail('Fwd: Richtig gutes Zeug');
     I.waitForVisible('h1.subject');
     I.waitForText('1 attachment');
     I.click('1 attachment');

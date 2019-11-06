@@ -70,7 +70,7 @@ Scenario('Sanitize entered signature source code', async function (I) {
     }
 });
 
-Scenario('[C7766] Create new signature', function (I) {
+Scenario('[C7766] Create new signature', function (I, mail) {
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
 
@@ -97,11 +97,10 @@ Scenario('[C7766] Create new signature', function (I) {
 
     I.openApp('Mail');
 
-    I.clickToolbar('Compose');
-    I.waitForText('Signatures');
+    mail.newMail();
 
-    I.retry(5).click('Signatures');
-    I.click('Testsignaturename');
+    I.click('Signatures');
+    I.clickDropdown('Testsignaturename');
 
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
         I.see('Testsignaturecontent');
@@ -109,7 +108,7 @@ Scenario('[C7766] Create new signature', function (I) {
 
 });
 
-Scenario('[C7767] Define signature position', async function (I, users) {
+Scenario('[C7767] Define signature position', async function (I, users, mail) {
     const [user] = users;
     await I.haveMail({
         attachments: [{
@@ -153,24 +152,24 @@ Scenario('[C7767] Define signature position', async function (I, users) {
     I.openApp('Mail');
 
     // reply to mail
-    I.retry(5).click('.io-ox-mail-window .leftside ul li.list-item');
-    I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
+    mail.selectMail('Test subject');
     I.click('Reply');
 
-    I.waitForText('Signatures');
-
-    I.retry(5).click('Signatures');
-    I.click('Testsignaturename');
-
-    within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
-        expect((await I.grabHTMlFrom2('body > *')).join('')).to.match(
-            new RegExp(`^${emptyLine}<div class="io-ox-signature"><p>Testsignaturecontent</p></div><blockquote type="cite">.*</blockquote>$`)
-        );
+    I.waitForElement('.io-ox-mail-compose-window .editor iframe');
+    within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
+        I.waitForText('Test content');
     });
+    I.wait(0.5); // there still might be a focus event somewhere
 
+    I.click('Signatures', '.io-ox-mail-compose-window');
+    I.clickDropdown('Testsignaturename');
+
+    await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
+        I.seeElement(locate('.io-ox-signature').before({ css: 'blockquote[type="cite"]' }).as('Signature before quoted text'));
+    });
 });
 
-Scenario('[C7768] Edit signature', async function (I) {
+Scenario('[C7768] Edit signature', async function (I, mail) {
     await I.haveSnippet({
         content: '<p>Testsignaturecontent</p>',
         displayname: 'Testsignaturename',
@@ -195,7 +194,6 @@ Scenario('[C7768] Edit signature', async function (I) {
 
     // assert existance of signature
     I.waitForText('Newsignaturename');
-    I.see('Newsignaturecontent');
 
     // disable default siganture
     I.selectOption('Default signature for new messages', 'No signature');
@@ -203,11 +201,10 @@ Scenario('[C7768] Edit signature', async function (I) {
 
     I.openApp('Mail');
 
-    I.clickToolbar('Compose');
-    I.waitForText('Signatures');
+    mail.newMail();
 
-    I.retry(5).click('Signatures');
-    I.click('Newsignaturename');
+    I.click('Signatures');
+    I.clickDropdown('Newsignaturename');
 
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
         I.see('Newsignaturecontent');
