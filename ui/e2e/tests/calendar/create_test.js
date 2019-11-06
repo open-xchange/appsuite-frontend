@@ -124,12 +124,18 @@ Scenario('[C7411] Discard appointment during the creation', function (I, calenda
 
 // Check: There actually may be a legitimate bug here or is it intended that shared private appointments don't appear in list view?
 Scenario('[C7412] Create private appointment @contentReview @bug', async function (I, users, calendar) {
-    I.haveSetting('io.ox/core//autoOpenNotification', false);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    await I.haveSetting({
+        'io.ox/core': {
+            autoOpenNotification: false,
+            showDesktopNotifications: false
+        }, 'io.ox/calendar': {
+            viewView: 'week:week'
+        }
+    });
 
     const title = 'C7412',
         timestamp = Math.round(+new Date() / 1000),
+        testDate = moment().startOf('isoWeek').add(1, 'week'),
         appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] }),
         permissions = [{
             bits: 403710016,
@@ -150,19 +156,19 @@ Scenario('[C7412] Create private appointment @contentReview @bug', async functio
         class: 'CONFIDENTIAL',
         endDate: {
             tzid: 'Europe/Berlin',
-            value: moment().startOf('isoWeek').add(10, 'hours').format('YYYYMMDD[T]HHmm00')
+            value: testDate.clone().add(10, 'hours').format('YYYYMMDD[T]HHmm00')
         },
         startDate: {
             tzid: 'Europe/Berlin',
-            value: moment().startOf('isoWeek').add(8, 'hours').format('YYYYMMDD[T]HHmm00')
+            value: testDate.clone().add(8, 'hours').format('YYYYMMDD[T]HHmm00')
         }
     }, { user: users[0] });
 
     I.login('app=io.ox/calendar', { user: users[1] });
     calendar.waitForApp();
+    I.click(`.date-picker .date[data-date="${testDate.unix() * 1000}"]`);
     I.waitForText('Shared calendars');
     I.doubleClick('~Shared calendars');
-    I.selectFolder(title);
     I.waitForVisible({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${title}"]` });
     I.doubleClick({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${title}"]` });
     ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
@@ -1042,7 +1048,7 @@ Scenario('[C271749] Show prompt on event creation in public calendar', async fun
     I.fillField('Calendar name', 'Cal#A');
     I.checkOption('Add as public calendar');
     I.click('Add');
-    I.waitForVisible('#io-ox-core');
+    I.waitForDetached('.modal');
 
     // Open create new appointment dialog
     I.doubleClick(locate('~Public calendars'));
