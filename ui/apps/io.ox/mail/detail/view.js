@@ -449,6 +449,13 @@ define('io.ox/mail/detail/view', [
                     $(this.contentDocument).find('head').append('<style>' + contentStyle + '</style>');
                     $(this.contentDocument).find('body').replaceWith($content);
 
+                    $content.find('table').each(function () {
+                        if (this.getAttribute('height') === '100%' || (this.style || {}).height === '100%') {
+                            this.setAttribute('height', '');
+                            $(this).css('height', 'initial');
+                        }
+                    });
+
                     $(this.contentWindow)
                         .on('complete toggle-blockquote', { iframe: $(this) }, onImmediateResize)
                         .on('resize', { iframe: $(this) }, onWindowResize)
