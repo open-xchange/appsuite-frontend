@@ -199,7 +199,7 @@ define('io.ox/backbone/views/datepicker', [
 
         renderScaffold: function () {
             var headerId = _.uniqueId('header');
-            this.$el.attr({ 'aria-labelledby': headerId, 'role': 'region', 'tabindex': 0 }).append(
+            this.$el.attr({ 'aria-labelledby': headerId, 'role': 'region' }).append(
                 $('<div class="navigation">').append(
                     $('<button type="button" class="btn-prev pull-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
                     $('<span role="heading" aria-live="assertive" aria-atomic="true" aria-level="2">').attr('id', headerId),
@@ -233,8 +233,8 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         setNavigationLabels: function (prev, next) {
-            this.$('.btn-prev').attr('aria-label', prev);
-            this.$('.btn-next').attr('aria-label', next);
+            this.$('.btn-prev').attr('aria-label', prev).find('.fa').attr('title', prev);
+            this.$('.btn-next').attr('aria-label', next).find('.fa').attr('title', next);
         },
 
         renderMonth: function () {
