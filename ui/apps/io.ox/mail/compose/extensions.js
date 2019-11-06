@@ -12,7 +12,7 @@
  */
 
 define('io.ox/mail/compose/extensions', [
-    'io.ox/contacts/api',
+    'io.ox/mail/api',
     'io.ox/mail/sender',
     'io.ox/backbone/mini-views/common',
     'io.ox/backbone/mini-views/dropdown',
@@ -34,7 +34,7 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/mail/compose/resize-view',
     'io.ox/mail/compose/resize',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, sender, mini, Dropdown, ext, actionsUtil, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, settingsContacts, Attachments, strings, ResizeView, imageResize) {
+], function (mailAPI, sender, mini, Dropdown, ext, actionsUtil, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, settingsContacts, Attachments, strings, ResizeView, imageResize) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -622,25 +622,38 @@ define('io.ox/mail/compose/extensions', [
 
             attachmentView.$footer.append(node);
 
-            // set mail size
-            attachmentView.listenTo(attachmentView.collection, 'add remove reset change:size', update);
-            attachmentView.listenTo(baton.model, 'change:sharedAttachments', update);
+            var update = _.debounce(function () {
+                    var hasUploadedAttachments = baton.model.get('attachments').some(function (model) {
+                            return model.get('group') === 'mail';
+                        }),
+                        isDriveMail = !!(baton.model.get('sharedAttachments') || {}).enabled,
+                        visible = hasUploadedAttachments && !isDriveMail;
+                    node.text(gt('Mail size: %1$s', getMailSize())).toggleClass('invisible', !visible);
+                }, 10),
+                lazyUpdate = _.throttle(update, 5000);
             update();
 
-            function update() {
-                var hasUploadedAttachments = baton.model.get('attachments').some(function (model) {
-                        return model.get('group') === 'mail';
-                    }),
-                    isDriveMail = !!(baton.model.get('sharedAttachments') || {}).enabled,
-                    visible = hasUploadedAttachments && !isDriveMail;
-                node.text(gt('Mail size: %1$s', getMailSize())).toggleClass('invisible', !visible);
-            }
+            attachmentView.listenTo(attachmentView.collection, 'add remove reset change:size', update);
+            attachmentView.listenTo(baton.model, 'change:sharedAttachments', update);
+            attachmentView.listenTo(baton.model, 'change:content', lazyUpdate);
 
             function getMailSize() {
-                var mailSize = baton.model.get('content').length,
+                var content = baton.model.get('content').replace(/src="data:image[^"]*"/g, ''),
+                    mailSize = content.length,
                     attachmentSize = baton.model.get('attachments').reduce(function (memo, attachment) {
+                        // check if inline attachment is really in DOM. Otherwise, it will be removed on send/save
+                        if (attachment.get('contentDisposition') === 'INLINE') {
+                            var space = baton.model.get('id'),
+                                url = mailAPI.getUrl(_.extend({ space: space }, attachment), 'view').replace('?', '\\?'),
+                                containsServerReplacedURL = new RegExp('<img[^>]*src="' + url + '"[^>]*>').test(baton.model.get('content')),
+                                containsClientReplacedURL = new RegExp('<img[^>]*src="[^"]*' + attachment.get('id') + '"[^>]*>').test(baton.model.get('content'));
+
+                            if (!containsServerReplacedURL && !containsClientReplacedURL) return memo;
+                        }
+
                         return memo + (attachment.getSize() || 0);
                     }, 0);
+
                 return strings.fileSize(mailSize + attachmentSize, 1);
             }
         },
