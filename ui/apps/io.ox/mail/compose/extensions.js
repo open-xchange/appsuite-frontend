@@ -41,12 +41,15 @@ define('io.ox/mail/compose/extensions', [
     //make strings accessible to translators
     var tokenfieldTranslations = {
         to: gt('To'),
+        pickerto: gt('Select contacts'),
         //#. %1$s is the name of the inputfield (To, CC, BCC)
         ariato: gt('%1$s autocomplete token field. Use left and right Arrowkeys to navigate between the tokens', gt('To')),
         cc: gt('CC'),
+        pickercc: gt('Select CC contacts'),
         //#. %1$s is the name of the inputfield (To, CC, BCC)
         ariacc: gt('%1$s autocomplete token field. Use left and right Arrowkeys to navigate between the tokens', gt('CC')),
         bcc: gt('BCC'),
+        pickerbcc: gt('Select BCC contacts'),
         //#. %1$s is the name of the inputfield (To, CC, BCC)
         ariabcc: gt('%1$s autocomplete token field. Use left and right Arrowkeys to navigate between the tokens', gt('BCC')),
         reply_to: /*#. Must not exceed 8 characters. e.g. German would be: "Antworten an", needs to be abbreviated like "Antw. an" as space is very limited */ gt.pgettext('compose', 'Reply to')
@@ -347,8 +350,8 @@ define('io.ox/mail/compose/extensions', [
                 if (usePicker) {
                     node.addClass('has-picker').append(
                         $('<a href="#" role="button" class="open-addressbook-popup">').append(
-                            $('<i class="fa fa-address-book" aria-hidden="true">').attr('title', gt('Select contacts'))
-                        ).attr('aria-label', gt('Select contacts'))
+                            $('<i class="fa fa-address-book" aria-hidden="true">').attr('title', tokenfieldTranslations['picker' + attr])
+                        ).attr('aria-label', tokenfieldTranslations['picker' + attr])
                         .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
                     );
                 }
