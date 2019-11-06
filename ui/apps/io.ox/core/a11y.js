@@ -53,10 +53,13 @@ define('io.ox/core/a11y', [], function () {
     // focus active app from foldertree on <escape> and focus listview on <enter> and <space>
     $(document).on('keydown.foldertree', '.folder-tree .folder.selected', function (e) {
         if (!/13|32|27/.test(e.which)) return;
+        if ($(e.target).attr('aria-expanded') === 'false') return;
+        if ($(e.target).attr('aria-expanded') === 'true' && $(e.target).hasClass('virtual')) return;
         if (!$(e.target).is('li')) return;
         var node = $(e.target).closest('.window-container');
         if (e.which === 27) $('#io-ox-quicklaunch button:not([tabindex="-1"])').focus();
-        if (/13|32/.test(e.which)) {
+        if (/^(13|32)$/.test(e.which)) {
+            if (node.hasClass('io-ox-mail-window') || node.hasClass('io-ox-files-window')) return;
             e.preventDefault();
             focusListSelection(node);
         }
