@@ -135,9 +135,9 @@ define('io.ox/backbone/views/window', [
             if (!this.model.get('lazy')) new TaskbarElement({ model: this.model }).render();
 
             //bind some functions
-            _.bindAll(this, 'drag', 'stopDrag', 'keepInWindow');
+            _.bindAll(this, 'drag', 'stopDrag', 'keepInWindow', 'onResize');
 
-            $(window).on('resize', this.keepInWindow);
+            $(window).on('resize', this.keepInWindow, this.onResize);
             this.listenTo(this, 'dispose', function () { $(window).off('resize', this.keepInWindow); });
         },
 
@@ -152,6 +152,24 @@ define('io.ox/backbone/views/window', [
                 $('<button type="button" class="btn btn-link" data-action="maximize" tabindex="-1">').attr('aria-label', gt('Maximize')).append($('<i class="fa fa-expand" aria-hidden="true">').attr('title', gt('Maximize'))).toggleClass('hidden', !isNormal),
                 this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close" tabindex="-1">').attr('aria-label', gt('Close')).append($('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))) : ''
             );
+        },
+
+        onResize: function () {
+            if (!this.model) return;
+            if (!_.isBoolean(this.model.get('noOverflow'))) this.model.set('noOverflow', true);
+
+            if (this.model.get('mode') === 'maximized' && this.isOverfloating(this.$el) && this.model.get('noOverflow')) {
+                this.model.set('onResize', true);
+                this.model.set('mode', 'normal');
+            }
+        },
+
+        isOverfloating: function (el) {
+            // returns true if el overfloats the browser screen
+            return el.position().left + el.width() > document.documentElement.clientWidth
+                || el.position().top + el.height() > document.documentElement.clientHeight
+                || el.position().left < 0
+                || el.position().top < 0;
         },
 
         keepInWindow: function (usePadding) {
@@ -255,6 +273,7 @@ define('io.ox/backbone/views/window', [
             }
             backdrop.remove();
             this.$el.removeClass('dragging');
+            this.model.set('noOverflow', !this.isOverfloating(this.$el));
         },
 
         onQuit: function () {
@@ -292,6 +311,9 @@ define('io.ox/backbone/views/window', [
 
             var isNormal = this.model.get('mode') === 'normal';
 
+            var elOrigLeft = this.el.offsetLeft,
+                elOrigWidth = this.el.offsetWidth;
+
             this.$('[data-action="normalize"]').toggleClass('hidden', isNormal);
             this.$('[data-action="maximize"]').toggleClass('hidden', !isNormal);
             this.$el.removeClass('normal maximized').addClass(this.model.get('mode'));
@@ -299,6 +321,15 @@ define('io.ox/backbone/views/window', [
 
             this.model.set({ 'initialWidth': this.el.offsetWidth, 'initialHeight': this.el.offsetHeight });
             $(window).trigger('changefloatingstyle');
+
+            if (this.model.get('onResize')) {
+                this.$el.css('left', elOrigLeft);
+                this.model.set('onResize', false);
+            } else {
+                var percentage = (elOrigLeft / (document.documentElement.clientWidth - elOrigWidth)),
+                    growingDiff = this.el.offsetWidth - elOrigWidth;
+                this.$el.css('left', elOrigLeft - percentage * growingDiff);
+            }
 
             // save value as new preferrence for this app
             if (_.device('desktop') && settings.get('features/floatingWindows/preferredMode/enabled', true) && this.model.get('name')) {
