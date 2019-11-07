@@ -5,9 +5,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-10-21 21:27+0200\n"
-"Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
-"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"PO-Revision-Date: 2019-10-30 20:50+0100\n"
+"Last-Translator: Ivar Snaaijer <ivar@workshop-chapina.com>\n"
+"Language-Team: Dutch <nl@workshop-chapina.com>\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -269,17 +269,21 @@ msgid "Edit reminders"
 msgstr "Herinneringen bewerken"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 msgid "Apply"
 msgstr "Toepassen"
 
+#. %1$s is attachment file name
 #: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
-#: apps/io.ox/core/attachments/view.js apps/io.ox/core/tk/attachments.js
-#: apps/io.ox/core/tk/attachmentsUtil.js
-msgid "Remove attachment"
-msgstr "Bijlage verwijderen"
+msgid "Remove attachment \"%1$s\""
+msgstr "Bijlage \"%1$s\" verwijderen"
+
+#: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
+msgid "Add attachment"
+msgstr "Voeg bijlage toe"
 
 #. color names for screenreaders
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
@@ -497,7 +501,7 @@ msgid ""
 "change year or shift-key to change month. Close date-picker by pressing ESC "
 "key."
 msgstr ""
-"Gebruik de cursortoetsen om de datum te veranderen. Druk de Ctrl-toests "
+"Gebruik de cursortoetsen om de datum te veranderen. Druk de Ctrl-toets "
 "tegelijk in om het jaar te veranderen en Shift voor de maand. Sluit het "
 "datumselectiescherm door op Esc te drukken."
 
@@ -678,6 +682,7 @@ msgid "Currently there are no compatible webcams available on your device."
 msgstr "Momenteel zijn er geen compatibele webcams beschikbaar op uw apparaat."
 
 #: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 msgid "Take a photo"
 msgstr "Maak een foto"
 
@@ -738,8 +743,12 @@ msgid "Go to next decade"
 msgstr "Ga naar de volgende dag"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Edit image"
-msgstr "Afbeelding bewerken"
+msgid "Change photo"
+msgstr "Foto aanpassen"
+
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+msgid "Upload a photo"
+msgstr "Foto uploaden"
 
 #. noun. label for the zoomslider in case the zoom is undefined or 0
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
@@ -747,31 +756,8 @@ msgid "Zoom"
 msgstr "Zoom"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-#: apps/io.ox/contacts/widgets/pictureUpload.js
-msgid "Upload image"
-msgstr "Bestand uploaden"
-
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Take photo"
-msgstr "Maak foto"
-
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Rotate image"
-msgstr "Afbeelding draaien"
-
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/change-folder-alarms.js
-#: apps/io.ox/calendar/actions/change-organizer.js
-#: apps/io.ox/core/folder/picker.js module:io.ox/core
-#: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-#: apps/io.ox/settings/security/sessions/settings/pane.js
-msgid "Ok"
-msgstr "Ok"
+msgid "Remove photo"
+msgstr "Foto verwijderen"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
@@ -800,7 +786,7 @@ msgstr "Sluiten"
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/detail/links.js
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
 #: module:io.ox/core/boot apps/io.ox/notes/toolbar.js module:io.ox/notes
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
@@ -1019,51 +1005,40 @@ msgstr "Verplaatsen"
 # (Reinout)
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
-#| msgid "Change confirmation status"
 msgid "Change appointment status"
 msgstr "Bevestigingsstatus aanpassen"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#| msgid ""
-#| "Do you want to confirm the whole series or just one appointment within "
-#| "the series?"
 msgid ""
 "This appointment is part of a series. Do you want to confirm the whole "
 "series or just one appointment within the series?"
 msgstr ""
-"Deze afspraak is onderdeel van een reeks. Wilt u de hele reeks of slechts één"
-" enkele afspraak uit de reeks bevestigen?"
+"Deze afspraak is onderdeel van een reeks. Wilt u de hele reeks of slechts "
+"één enkele afspraak uit de reeks bevestigen?"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#| msgid ""
-#| "Do you want to decline the whole series or just one appointment within "
-#| "the series?"
 msgid ""
 "This appointment is part of a series. Do you want to decline the whole "
 "series or just one appointment within the series?"
 msgstr ""
-"Deze afspraak is onderdeel van een reeks. Wilt u de hele reeks of slechts"
-" enkele afspraken uit de reeks afwijzen?"
+"Deze afspraak is onderdeel van een reeks. Wilt u de hele reeks of slechts "
+"enkele afspraken uit de reeks afwijzen?"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#| msgid "New appointment"
 msgid "Accept appointment"
 msgstr "Accepteer afspraak"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#| msgid "Delete appointment"
 msgid "Decline appointment"
 msgstr "Afspraak afwijzen"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#| msgid "Accept / Decline"
 msgid "Accept series"
 msgstr "Accepteer reeksen"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#| msgid "Delete whole series"
 msgid "Decline series"
 msgstr "Reeks afwijzen"
 
@@ -1168,8 +1143,8 @@ msgstr ""
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
-#: apps/plugins/portal/xing/actions.js module:plugins/portal
+#: apps/io.ox/contacts/model.js apps/plugins/portal/xing/actions.js
+#: module:plugins/portal
 msgid "Comment"
 msgstr "Commentaar"
 
@@ -1187,25 +1162,20 @@ msgid "Tentative"
 msgstr "Voorlopig"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#| msgid ""
-#| "Do you want to delete the whole series or just this appointment within "
-#| "the series?"
 msgid ""
 "This appointment is part of a series. Do you want to change your "
 "confirmation for the whole series or just for this appointment within the "
 "series?"
 msgstr ""
-"Deze afspraak is onderdeel van een reeks. Wilt u de hele reeks of alleen deze"
-" afspraak uit de reeks verwijderen?"
+"Deze afspraak is onderdeel van een reeks. Wilt u de hele reeks of alleen "
+"deze afspraak uit de reeks verwijderen?"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#| msgid "Create appointment"
 msgid "Change appointment"
 msgstr "Afspraak aanpassen"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#| msgid "Change reminders"
 msgid "Change series"
 msgstr "Reeks aanpassen"
 
@@ -1221,6 +1191,19 @@ msgstr "Herinneringen aanpassen"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Reminder"
 msgstr "Herinnering"
+
+#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-folder-alarms.js
+#: apps/io.ox/calendar/actions/change-organizer.js
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+#: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
+msgid "Ok"
+msgstr "Ok"
 
 #. %1$s:  is the calendar's name
 #: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
@@ -1316,30 +1299,22 @@ msgid "Create in public calendar"
 msgstr "Maak in publieke agenda"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#| msgid ""
-#| "Do you want to delete the whole series or just this appointment within "
-#| "the series?"
 msgid ""
 "This appointment is part of a series. Do you want to delete all appointments "
 "of the series or just this appointment?"
 msgstr ""
-"Deze afspraak is onderdeel van een reeks. Wilt u de hele reeks of alleen deze"
-" afspraak uit de reeks verwijderen?"
+"Deze afspraak is onderdeel van een reeks. Wilt u de hele reeks of alleen "
+"deze afspraak uit de reeks verwijderen?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#| msgid ""
-#| "Do you want to delete this and all future appointments or just this "
-#| "appointment within the series?"
 msgid ""
 "This appointment is part of a series. Do you want to delete this and all "
 "future appointments of the series or just this appointment?"
 msgstr ""
-"Deze afspraak is onderdeel van een reeks. Wilt u alleen deze afspraak of alle"
-" toekomstige afspraken uit deze reeks "
-"verwijderen?"
+"Deze afspraak is onderdeel van een reeks. Wilt u alleen deze afspraak of "
+"alle toekomstige afspraken uit deze reeks verwijderen?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#| msgid "Do you want to delete this appointment?"
 msgid "Do you really want to delete this appointment?"
 msgstr "Weet u zeker dat u deze afspraak wilt verwijderen?"
 
@@ -1349,17 +1324,14 @@ msgid "Delete appointment"
 msgstr "Afspraak verwijderen"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#| msgid "Delete appointment"
 msgid "Delete this appointment"
 msgstr "Deze afspraak verwijderen"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#| msgid "Delete appointment"
 msgid "Delete all appointments"
 msgstr "Alle Afspraken verwijderen"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#| msgid "All future appointments"
 msgid "Delete all future appointments"
 msgstr "Alle toekomstige afspraken verwijderen"
 
@@ -1411,7 +1383,7 @@ msgstr "Abonneer op gedeelde agenda's"
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/settings/editLocale.js apps/io.ox/editor/main.js
@@ -1448,15 +1420,19 @@ msgstr "Synchroniseer via DAV"
 msgid "sync via DAV"
 msgstr "synchroniseer via DAV"
 
+#. shown when a download of calendar data is requested
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public calendars"
 msgstr "Publieke agenda's"
 
+#. shown when a download of calendar data is requested
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared calendars"
 msgstr "Gedeelde agenda's"
 
@@ -1465,9 +1441,9 @@ msgstr "Gedeelde agenda's"
 #: apps/io.ox/calendar/common-extensions.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
-#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Privé"
 
@@ -1515,7 +1491,8 @@ msgstr "Tonen als"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
+#: module:io.ox/mail apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Calendar"
 msgstr "Agenda"
 
@@ -1592,8 +1569,8 @@ msgstr "Aanmaken"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/view-form.js apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
@@ -1681,6 +1658,11 @@ msgstr ""
 "U gebruikt geen gedeelde agenda meer. U bent toegevoegd als organisator."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "You are no longer using a public calendar. You were added as organizer."
+msgstr ""
+"U gebruikt geen publieke agenda meer. U bent toegevoegd als organisator."
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My calendars"
 msgstr "Mijn agenda's"
@@ -1703,40 +1685,12 @@ msgid "Collapse form"
 msgstr "Formulier inklappen"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Zichtbaarheidshulp"
+msgid "Visibility"
+msgstr "Zichtbaarheid"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Standard"
 msgstr "Standaard"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "De afspraak is zichtbaar voor alle gebruikers in gedeelde agenda's."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"In gedeelde agenda's wordt de afspraak getoond als een eenvoudige periode "
-"voor niet aanwezige gebruikers."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"De afspraak is helemaal niet zichtbaar voor niet aanwezige gebruikers in "
-"gedeelde agenda's. Er wordt geen rekening gehouden met deze afspraak bij "
-"conflicten en verschijnt ook niet in het planningsoverzicht. Deze optie kan "
-"niet gebruikt worden als de afspraak bronnen blokkeert."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility"
-msgstr "Zichtbaarheid"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Appointment color"
@@ -1763,7 +1717,8 @@ msgstr "Deelnemers kunnen aanpassingen maken"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/contacts/edit/view-form.js
-#: module:io.ox/contacts apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/contacts apps/io.ox/contacts/edit/view.js
+#: apps/io.ox/contacts/view-detail.js apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail apps/io.ox/mail/view-options.js
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
@@ -1772,7 +1727,8 @@ msgstr "Bijlagen"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr ""
 "Sleep bestand hierheen om het als <b class=\"dndignore\">nieuwe bijlage</b> "
@@ -1874,7 +1830,8 @@ msgstr "Volgende maand"
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/sharing.js apps/io.ox/mail/compose/view.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/mail/toolbar.js apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "Opties"
 
@@ -2055,6 +2012,7 @@ msgstr "Opnieuw proberen"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Select all"
 msgstr "Selecteer alles"
 
@@ -2084,15 +2042,8 @@ msgid "Could't load appointment data."
 msgstr "Kan afspraak-gegevens niet laden."
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/tree.js module:io.ox/core
-#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/files/share/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
-msgid "Folders"
-msgstr "Mappen"
+msgid "Calendars"
+msgstr "Agenda's"
 
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
@@ -2104,8 +2055,15 @@ msgid "Back"
 msgstr "Terug"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-msgid "Calendars"
-msgstr "Agenda's"
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
+#: module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/files/share/toolbar.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
+msgid "Folders"
+msgstr "Mappen"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendar account error"
@@ -2151,7 +2109,7 @@ msgstr ""
 "opgelost."
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-msgid "Listview"
+msgid "List view"
 msgstr "Lijstoverzicht"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
@@ -2377,8 +2335,8 @@ msgid "Language"
 msgstr "Taal"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/contacts/model.js
-#: module:io.ox/contacts
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/contacts/edit/view.js
+#: module:io.ox/contacts apps/io.ox/contacts/model.js
 msgid "Country"
 msgstr "Land"
 
@@ -2903,12 +2861,10 @@ msgid "The series never ends."
 msgstr "De afsprakenreeks eindigt nooit."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#| msgid "The appointment is visible for all users in shared folders."
 msgid "This appointment is part of a series."
 msgstr "Deze afspraak is onderdeel van een reeks."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#| msgid "Edit appointment"
 msgid "Edit this appointment"
 msgstr "Deze afspraak bewerken"
 
@@ -2919,7 +2875,6 @@ msgid ""
 msgstr "Wilt u de hele reeks of slechts deze afspraak uit de reeks bewerken?"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#| msgid "Mail address"
 msgid "Edit series"
 msgstr "Reeks bewerken"
 
@@ -2935,7 +2890,6 @@ msgid "Series"
 msgstr "Reeksen"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#| msgid "All future appointments"
 msgid "Edit all future appointments"
 msgstr "Bewerk alle toekomstige afspraken"
 
@@ -3081,7 +3035,6 @@ msgid "New contact"
 msgstr "Nieuw contact"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#| msgid "Add distribution list"
 msgid "New distribution list"
 msgstr "Nieuwe Distributielijst"
 
@@ -3172,13 +3125,17 @@ msgstr "Distributielijst"
 msgid "My address books"
 msgstr "Mijn adresboeken"
 
+#. shown when a download of contact data is requested
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public address books"
 msgstr "Publieke adresboeken"
 
+#. shown when a download of contact data is requested
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared address books"
 msgstr "Gedeelde adresboeken"
 
@@ -3217,7 +3174,6 @@ msgid "Empty"
 msgstr "Leeg"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/contacts/widgets/pictureUpload.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
 #: module:io.ox/settings/certificates
@@ -3279,7 +3235,7 @@ msgstr "Bewerk distributielijst"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
+#: apps/io.ox/contacts/print.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
 #: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -3324,10 +3280,6 @@ msgid "Edit Contact"
 msgstr "Bewerk Contactpersoon"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
-msgid "Create contact"
-msgstr "Contact aanmaken"
-
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/settings/pane.js apps/io.ox/core/folder/extensions.js
 #: module:io.ox/core apps/io.ox/core/main/topbar_right.js
 #: apps/io.ox/core/settings/pane.js
@@ -3339,10 +3291,6 @@ msgstr "Mijn contactgegevens"
 #: apps/io.ox/contacts/toolbar.js
 msgid "Edit contact"
 msgstr "Bewerk contactpersoon"
-
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
-msgid "Some fields contain invalid data"
-msgstr "Sommige velden bevatten ongeldige gegevens"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
@@ -3365,15 +3313,18 @@ msgid "Phone & fax numbers"
 msgstr "Telefoon- en faxnummers"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
 msgid "Home address"
 msgstr "Huisadres"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Business address"
 msgstr "Zakelijk adres"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
 msgid "Other address"
 msgstr "Ander adres"
 
@@ -3408,9 +3359,463 @@ msgstr ""
 "%4$s\n"
 "%5$s"
 
-#: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-msgid "Show all fields"
-msgstr "Toon alle velden"
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Remove field"
+msgstr "Veld verwijderen"
+
+#. Contact edit dialog. Personal information.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add personal info"
+msgstr "Persoonlijke informatie toevoegen"
+
+#. Contact edit dialog. Business information.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add business info"
+msgstr "Zakelijke informatie toevoegen"
+
+#. Contact edit dialog.
+#. Short for: Add email address, phone number, fax number.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add email, phone, fax"
+msgstr "E-mail, telefoon of fax toevoegen"
+
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add postal address"
+msgstr "Postadres toevoegen"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgctxt "salutation"
+msgid "Title"
+msgstr "Titel"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Display name"
+msgstr "Weergavenaam"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/plugins/portal/xing/register.js
+#: module:plugins/portal apps/plugins/wizards/mandatory/main.js
+#: module:io.ox/wizards/firstStart
+msgid "First name"
+msgstr "Voornaam"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/plugins/portal/xing/register.js
+#: module:plugins/portal apps/plugins/wizards/mandatory/main.js
+#: module:io.ox/wizards/firstStart
+msgid "Last name"
+msgstr "Achternaam"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Middle name"
+msgstr "Tweede voornaam"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Suffix"
+msgstr "Achtervoegsel"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Birthday"
+msgstr "Verjaardag"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Marital status"
+msgstr "Burgerlijke staat"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Children"
+msgstr "Kinderen"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Nickname"
+msgstr "Roepnaam"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Spouse's name"
+msgstr "Naam echtgeno(o)t(e)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Anniversary"
+msgstr "Verjaardag"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Email 1"
+msgstr "E-mail 1"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Email 2"
+msgstr "E-mail 2"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Email 3"
+msgstr "E-mail 3"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Instant Messenger 1"
+msgstr "Instant Messenger 1"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Instant Messenger 2"
+msgstr "Instant Messenger 2"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/onboarding/clients/config.js
+#: module:io.ox/core/onboarding apps/plugins/portal/rss/register.js
+#: module:io.ox/portal
+msgid "URL"
+msgstr "URL"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Company"
+msgstr "Bedrijf"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Profession"
+msgstr "Beroep"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/print.js
+msgid "Department"
+msgstr "Afdeling"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Position"
+msgstr "Functie"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Employee type"
+msgstr "Type werknemer"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Room number"
+msgstr "Kamernummer"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Employee ID"
+msgstr "Werknemersidentificatie"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Sales Volume"
+msgstr "Verkoopvolume"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "TAX ID"
+msgstr "BTW-nummer"
+
+# (Reinout) KvK-nummer?
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Commercial Register"
+msgstr "KvK-nummer"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Branches"
+msgstr "Afdelingen"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Business category"
+msgstr "Bedrijfstak"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/core/yell.js module:io.ox/core
+msgid "Info"
+msgstr "Informatie"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Manager"
+msgstr "Manager"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Assistant"
+msgstr "Assistent"
+
+#. vcard (electronic business card) field
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/print-details.js
+#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
+msgid "Cell phone"
+msgstr "Mobiele telefoon"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Cell phone (alt)"
+msgstr "Mobiele telefoon (alt.)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (business)"
+msgstr "Telefoon (werk)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (business alt)"
+msgstr "Telefoon (werk alt.)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Telephone callback"
+msgstr "Terugbelnummer"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (car)"
+msgstr "Telefoon (auto)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (company)"
+msgstr "Telefoon (bedrijf)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (home)"
+msgstr "Telefoon (Thuis)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (home alt)"
+msgstr "Telefoon (Thuis alt.)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (other)"
+msgstr "Telefoon (overig)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Telephone (ISDN)"
+msgstr "Telefoon (ISDN)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Pager"
+msgstr "Pager"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Telephone primary"
+msgstr "Primaire telefoon"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Telephone radio"
+msgstr "Radiotelefoon"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Telex"
+msgstr "Telex"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "TTY/TDD"
+msgstr "Teletype/TDD"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "IP phone"
+msgstr "VOIP Telefoon"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (assistant)"
+msgstr "Telefoon (assistent)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Fax (Home)"
+msgstr "Fax (Thuis)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Fax"
+msgstr "Fax"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Fax (alt)"
+msgstr "Fax (alt.)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Street"
+msgstr "Straat"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Postcode"
+msgstr "Postcode"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/print.js
+msgid "City"
+msgstr "Plaats"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "State"
+msgstr "Provincie"
+
+#. Notes on a contact in the address book.
+#. Like in "adding a note". "Notizen" in German, for example.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgctxt "contact"
+msgid "Note"
+msgstr "Notitie"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Furigana for first name"
+msgstr "Furigana als voornaam"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Furigana for last name"
+msgstr "Furigana als achternaam"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Furigana for company"
+msgstr "Furigana als bedrijfsnaam"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Image 1"
+msgstr "Afbeelding 1"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 01"
+msgstr "Facultatief 01"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 02"
+msgstr "Facultatief 02"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 03"
+msgstr "Facultatief 03"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 04"
+msgstr "Facultatief 04"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 05"
+msgstr "Facultatief 05"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 06"
+msgstr "Facultatief 06"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 07"
+msgstr "Facultatief 07"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 08"
+msgstr "Facultatief 08"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 09"
+msgstr "Facultatief 09"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 10"
+msgstr "Facultatief 10"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 11"
+msgstr "Facultatief 11"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 12"
+msgstr "Facultatief 12"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 13"
+msgstr "Facultatief 13"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 14"
+msgstr "Facultatief 14"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 15"
+msgstr "Facultatief 15"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 16"
+msgstr "Facultatief 16"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 17"
+msgstr "Facultatief 17"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 18"
+msgstr "Facultatief 18"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 19"
+msgstr "Facultatief 19"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 20"
+msgstr "Facultatief 20"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "This value is too long. The allowed length is %1$d characters."
+msgstr "Deze waarde is te lang. De maximale lengte is %1$d tekens."
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "This is an invalid email address."
+msgstr "Dit is een ongeldig e-mailadres."
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Empty name and description found."
@@ -3454,339 +3859,6 @@ msgid "Last name must not be empty for internal users"
 msgstr "Achternaam mag niet leeg zijn voor interne gebruikers"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Display name"
-msgstr "Weergavenaam"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/plugins/portal/xing/register.js module:plugins/portal
-#: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
-msgid "First name"
-msgstr "Voornaam"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/plugins/portal/xing/register.js module:plugins/portal
-#: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
-msgid "Last name"
-msgstr "Achternaam"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Middle name"
-msgstr "Tweede voornaam"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Suffix"
-msgstr "Achtervoegsel"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgctxt "salutation"
-msgid "Title"
-msgstr "Titel"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Street"
-msgstr "Straat"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Postcode"
-msgstr "Postcode"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
-msgid "City"
-msgstr "Plaats"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "State"
-msgstr "Provincie"
-
-#. vcard (electronic business card) field
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
-#: module:plugins/portal
-msgid "Date of birth"
-msgstr "Geboortedatum"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Marital status"
-msgstr "Burgerlijke staat"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Children"
-msgstr "Kinderen"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Profession"
-msgstr "Beroep"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Nickname"
-msgstr "Roepnaam"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Spouse's name"
-msgstr "Naam echtgeno(o)t(e)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Anniversary"
-msgstr "Verjaardag"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
-msgid "Department"
-msgstr "Afdeling"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Position"
-msgstr "Functie"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Employee type"
-msgstr "Type werknemer"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Room number"
-msgstr "Kamernummer"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Employee ID"
-msgstr "Werknemersidentificatie"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Sales Volume"
-msgstr "Verkoopvolume"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "TAX ID"
-msgstr "BTW-nummer"
-
-# (Reinout) KvK-nummer?
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Commercial Register"
-msgstr "KvK-nummer"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Branches"
-msgstr "Afdelingen"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Business category"
-msgstr "Bedrijfstak"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts apps/io.ox/core/yell.js
-#: module:io.ox/core
-msgid "Info"
-msgstr "Informatie"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Manager"
-msgstr "Manager"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Assistant"
-msgstr "Assistent"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (business)"
-msgstr "Telefoon (werk)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (business alt)"
-msgstr "Telefoon (werk alt.)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Fax"
-msgstr "Fax"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Telephone callback"
-msgstr "Terugbelnummer"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (car)"
-msgstr "Telefoon (auto)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (company)"
-msgstr "Telefoon (bedrijf)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (home)"
-msgstr "Telefoon (Thuis)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (home alt)"
-msgstr "Telefoon (Thuis alt.)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Fax (Home)"
-msgstr "Fax (Thuis)"
-
-#. vcard (electronic business card) field
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Cell phone"
-msgstr "Mobiele telefoon"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Cell phone (alt)"
-msgstr "Mobiele telefoon (alt.)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (other)"
-msgstr "Telefoon (overig)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Fax (alt)"
-msgstr "Fax (alt.)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Email 1"
-msgstr "E-mail 1"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Email 2"
-msgstr "E-mail 2"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Email 3"
-msgstr "E-mail 3"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-#: apps/plugins/portal/rss/register.js module:io.ox/portal
-msgid "URL"
-msgstr "URL"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Telephone (ISDN)"
-msgstr "Telefoon (ISDN)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Pager"
-msgstr "Pager"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Telephone primary"
-msgstr "Primaire telefoon"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Telephone radio"
-msgstr "Radiotelefoon"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Telex"
-msgstr "Telex"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "TTY/TDD"
-msgstr "Teletype/TDD"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Instant Messenger 1"
-msgstr "Instant Messenger 1"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Instant Messenger 2"
-msgstr "Instant Messenger 2"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "IP phone"
-msgstr "VOIP Telefoon"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (assistant)"
-msgstr "Telefoon (assistent)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Company"
-msgstr "Bedrijf"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Image 1"
-msgstr "Afbeelding 1"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 01"
-msgstr "Facultatief 01"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 02"
-msgstr "Facultatief 02"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 03"
-msgstr "Facultatief 03"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 04"
-msgstr "Facultatief 04"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 05"
-msgstr "Facultatief 05"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 06"
-msgstr "Facultatief 06"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 07"
-msgstr "Facultatief 07"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 08"
-msgstr "Facultatief 08"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 09"
-msgstr "Facultatief 09"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 10"
-msgstr "Facultatief 10"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 11"
-msgstr "Facultatief 11"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 12"
-msgstr "Facultatief 12"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 13"
-msgstr "Facultatief 13"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 14"
-msgstr "Facultatief 14"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 15"
-msgstr "Facultatief 15"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 16"
-msgstr "Facultatief 16"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 17"
-msgstr "Facultatief 17"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 18"
-msgstr "Facultatief 18"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 19"
-msgstr "Facultatief 19"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 20"
-msgstr "Facultatief 20"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Links"
 msgstr "Link"
 
@@ -3823,24 +3895,22 @@ msgstr "Telefoon"
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Email"
 msgstr "E-mail"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Zakelijk Adres"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Huisadres"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Ander Adres"
 
@@ -3864,6 +3934,12 @@ msgstr "Anderen"
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Messenger"
+
+#. vcard (electronic business card) field
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/plugins/halo/xing/register.js module:plugins/portal
+msgid "Date of birth"
+msgstr "Geboortedatum"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -3958,6 +4034,11 @@ msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
+#. %1$d is age in years (number)
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Age: %1$d"
+msgstr "Leeftijd: %1$d"
+
 #. '%1$s contact's display name
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
 msgid "%1$s could not be added as the contact has no valid email field."
@@ -3977,11 +4058,10 @@ msgid_plural "Distribution list with %1$d entries"
 msgstr[0] "Distributielijst met 1 item"
 msgstr[1] "Distributielijst met %1$d items"
 
+#. %1$s is a map service, like "Google Maps"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-#: apps/io.ox/participants/chronos-views.js module:io.ox/core
-#: apps/io.ox/participants/views.js
-msgid "Resource"
-msgstr "Bron"
+msgid "Open in %1$s"
+msgstr "Open in %1$s"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
@@ -3994,32 +4074,6 @@ msgstr "Alle bijlagen"
 msgid "Could not load attachments for this contact."
 msgstr "Kan niet alle bijlagen van dit contact laden."
 
-#. %1$s is a map service, like "Google Maps"
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Open in %1$s"
-msgstr "Open in %1$s"
-
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Personal"
-msgstr "Persoonlijk"
-
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Job"
-msgstr "Taak"
-
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Mail and Messaging"
-msgstr "E-mail en Berichtenservice"
-
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Phone numbers"
-msgstr "Telefoonnummers"
-
-#. section name for contact fields in detail view
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Miscellaneous"
-msgstr "Overig"
-
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Copy to description"
 msgstr "Kopieer naar omschrijving"
@@ -4028,19 +4082,26 @@ msgstr "Kopieer naar omschrijving"
 msgid "Saved in:"
 msgstr "Opgeslagen in:"
 
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Change contact photo"
+msgstr "Contact foto aanpassen"
+
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-msgstr ""
-"De door uw gekozen afbeelding is groter dan het maximum grootte van %1$s"
+msgid "The photo exceeds the allowed file size of %1$s"
+msgstr "de foto overschrijdt de maximale grootte van %1$s"
 
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid ""
-"This filetype is not supported as contact picture. Only image types (JPG, "
-"GIF, BMP or PNG) are supported."
+"The file type \"%1$s\" cannot be used as a contact photo. Supported file "
+"types are JPEG, GIF, BMP, and PNG."
 msgstr ""
-"Dit bestandsformaat wordt niet ondersteund als contact-afbeelding. Alleen "
-"afbeelding bestandstypen (JPG, GIF, BMP of PNG) worden ondersteund."
+"Het bestandstype \"%1$s\" kan niet gebruikt worden als contactpersoon."
+" Ondersteunde bestanden zijn JPEG, GIF, BMP en PNG."
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Click to add photo"
+msgstr "Klik om foto toe te voegen"
 
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
@@ -4077,6 +4138,11 @@ msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
 msgstr[0] "%1$d bijlage"
 msgstr[1] "%1$d bijlagen"
+
+#: apps/io.ox/core/attachments/view.js module:io.ox/core
+#: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/attachmentsUtil.js
+msgid "Remove attachment"
+msgstr "Bijlage verwijderen"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
@@ -4333,16 +4399,14 @@ msgstr "Ongecontroleerd bestand downloaden"
 #: apps/io.ox/core/download.js module:io.ox/core
 msgid "Unable to perform Anti-Virus check for the requested file(s)"
 msgstr ""
-"Het is niet mogelijk om de Anti-Virus controle uit te voeren op de gevraagde"
-" bestanden."
+"Het is niet mogelijk om de Anti-Virus controle uit te voeren op de gevraagde "
+"bestanden."
 
 #: apps/io.ox/core/download.js module:io.ox/core
-#| msgid "Conflicts detected"
 msgid "Malicious file detected"
 msgstr "Schadelijk bestand ontdekt"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-#| msgid "Anti-Virus Warning"
 msgid "Anti-Virus warning"
 msgstr "Anti-Virus waarschuwing"
 
@@ -4424,7 +4488,9 @@ msgstr "Formaat"
 msgid "No export format available"
 msgstr "Geen exporteer-formaat beschikbaar"
 
+#. shown when a download of contact data is requested
 #: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Include distribution lists"
 msgstr "Distributielijst insluiten"
 
@@ -5067,7 +5133,6 @@ msgid "Navigate to:"
 msgstr "Navigeer naar:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
-#| msgid "Applications"
 msgid "All Applications"
 msgstr "Alle Applicaties"
 
@@ -5109,7 +5174,7 @@ msgstr "Portaal"
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: module:io.ox/settings apps/io.ox/settings/personalData/settings/pane.js
 msgctxt "app"
 msgid "Drive"
 msgstr "Drive"
@@ -5244,13 +5309,11 @@ msgstr "Koppel dit Apparaat"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
-#| msgid "optional password"
 msgid "Add login password"
 msgstr "Aanmeld wachtwoord toevoegen"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
-#| msgid "Change password"
 msgid "Change login password"
 msgstr "Aanmeld wachtwoord wijzigen"
 
@@ -5265,7 +5328,6 @@ msgstr "Over"
 
 #. tooltip of dropdown menu in topbar (contact image icon)
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#| msgid "SMTP port"
 msgid "Support"
 msgstr "Ondersteuning"
 
@@ -5547,20 +5609,12 @@ msgstr[0] "Dit item kan niet afgedrukt worden"
 msgstr[1] "Deze items kunnen niet afgedrukt worden"
 
 #: apps/io.ox/core/relogin.js module:io.ox/core
-msgid "Your session is expired"
-msgstr "Uw sessie is verlopen"
+msgid "You have to sign in again"
+msgstr "U moet opnieuw aanmelden"
 
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Please sign in again to continue"
 msgstr "Meld opnieuw aan om door te gaan"
-
-#: apps/io.ox/core/relogin.js module:io.ox/core
-msgid "Your IP address has changed"
-msgstr "Uw IP-adres is gewijzigd"
-
-#: apps/io.ox/core/relogin.js module:io.ox/core
-msgid "You have to sign in again"
-msgstr "U moet opnieuw aanmelden"
 
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Please enter correct password"
@@ -5569,6 +5623,14 @@ msgstr "Voer alstublieft het correcte wachtwoord in"
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Failed to sign in"
 msgstr "Aanmelden is mislukt"
+
+#: apps/io.ox/core/relogin.js module:io.ox/core
+msgid "Your IP address has changed"
+msgstr "Uw IP-adres is gewijzigd"
+
+#: apps/io.ox/core/relogin.js module:io.ox/core
+msgid "Your session is expired"
+msgstr "Uw sessie is verlopen"
 
 #. object permissions - read
 #. object permissions - edit/modify
@@ -5588,17 +5650,14 @@ msgstr "Geen"
 
 #. %s is the number of the quicklauncher (1-3)
 #: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-#| msgid "Position"
 msgid "Position %s"
 msgstr "Positie %s"
 
 #: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-#| msgid "Configure categories"
 msgid "Change quick launch icons"
 msgstr "Snel-start pictogrammen aanpassen"
 
 #: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-#| msgid "Accept changes"
 msgid "Save changes"
 msgstr "Wijzigingen opslaan"
 
@@ -5640,7 +5699,6 @@ msgid "Regional settings"
 msgstr "Regionale instellingen"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#| msgid "12 hours"
 msgid "9:00 AM (12 hours)"
 msgstr "9:00 AM (12 uren)"
 
@@ -5649,32 +5707,26 @@ msgid "09:00 AM (12 hours)"
 msgstr "09:00 AM (12 uren)"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#| msgid "24 hours"
 msgid "9:00 (24 hours)"
 msgstr "9:00 (24 uren)"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#| msgid "24 hours"
 msgid "09:00 (24 hours)"
 msgstr "09:00 (24 uren)"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#| msgid "24 hours"
 msgid "9.00 (24 hours)"
 msgstr "9.00 (24 uren)"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#| msgid "24 hours"
 msgid "09.00 (24 hours)"
 msgstr "09.00 (24 uren)"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#| msgid "Week that contains January 1st"
 msgid "Week that contains January 1st (e.g. US, Canada)"
 msgstr "Week waarin 1 januari valt (b.v. US, Canada)"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#| msgid "Week that contains January 1st"
 msgid "Week that contains January 4th (e.g. Europe, ISO-8601)"
 msgstr "Week waarin 4 januari valt (b.v. Europa, ISO-8601)"
 
@@ -5683,27 +5735,22 @@ msgid "Reset"
 msgstr "Herstel"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#| msgid "Text format"
 msgid "Time format"
 msgstr "Tijdopmaak"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#| msgid "Text format"
 msgid "Date format"
 msgstr "Datumopmaak"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#| msgid "Text format"
 msgid "Number format"
 msgstr "Nummerformaat"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#| msgid "First day of week"
 msgid "First day of the week"
 msgstr "Eerste dag van de week"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#| msgid "First week of year"
 msgid "First week of the year"
 msgstr "Eerste week van het jaar"
 
@@ -5789,9 +5836,6 @@ msgid "No lost requests"
 msgstr "Geen verloren verzoeken"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a page reload or "
-#| "relogin to take effect."
 msgid ""
 "Some settings (e.g. language and timezone) require a page reload or relogin "
 "to take effect."
@@ -5800,7 +5844,6 @@ msgstr ""
 "opnieuw inlaad of dat u zich opnieuw aanmeld."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#| msgid "Customizing"
 msgid "Customized"
 msgstr "Aangepast"
 
@@ -5871,7 +5914,6 @@ msgid "Reload page"
 msgstr "Pagina herladen"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#| msgid "Configure categories"
 msgid "Configure quick launchers"
 msgstr "Snelstart Configureren"
 
@@ -5881,12 +5923,10 @@ msgid "Change password"
 msgstr "Wachtwoord wijzigen"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#| msgid "Regional settings"
 msgid "More regional settings"
 msgstr "Meer regionale instellingen"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#| msgid "First day of week"
 msgid "First day of the week: %1$s"
 msgstr "Eerste dag van de week: %1$s"
 
@@ -6626,8 +6666,8 @@ msgid ""
 "This document cannot be viewed at the moment because a new version is being "
 "uploaded. Please wait until the upload is completed."
 msgstr ""
-"Dit document kan op dit moment niet getoond worden omdat een nieuwe versie"
-" wordt geüpload. Wacht totdat de upload voltooid is."
+"Dit document kan op dit moment niet getoond worden omdat een nieuwe versie "
+"wordt geüpload. Wacht totdat de upload voltooid is."
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
@@ -7055,8 +7095,6 @@ msgstr "Deel uw mappen"
 #. Folder name for an external file storage (dropbox, google drive etc)
 #. %1$s - the name of the file storage service (dropbox, one drive, google drive, box drive)
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
-#| msgctxt "a11y"
-#| msgid "at %1$s"
 msgid "My %1$s"
 msgstr "Mijn %1$s"
 
@@ -7255,6 +7293,10 @@ msgstr "Aflopend"
 msgid "Add files"
 msgstr "Bestanden toevoegen"
 
+#: apps/io.ox/files/filepicker.js module:io.ox/files
+msgid "Upload local file"
+msgstr "Lokaal bestand uploaden"
+
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
 msgstr "Bestanden"
@@ -7266,11 +7308,6 @@ msgstr[0] ""
 "Het geüploade bestand komt niet overeen met het gevraagde bestandstype."
 msgstr[1] ""
 "Geen van de geüploade bestanden komt overeen met het gevraagde bestandstype."
-
-#: apps/io.ox/files/filepicker.js module:io.ox/files
-#| msgid "Upload local file"
-msgid "Upload local image"
-msgstr "Lokaal bestand uploaden"
 
 #: apps/io.ox/files/listview.js module:io.ox/files
 msgid "Error: Failed to load files"
@@ -8054,12 +8091,10 @@ msgid "Use unified mail for this account"
 msgstr "Gebruik verzamelde mail voor dit account"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#| msgid "Add mail account"
 msgid "Add other mail account"
 msgstr "Ander e-mailaccount toevoegen"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#| msgid "Please select your mail account provider"
 msgid "Please choose your mail account provider."
 msgstr "Kies alstublieft uw e-maildienstverlener"
 
@@ -8593,7 +8628,6 @@ msgid "Note:"
 msgstr "Notitie:"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#| msgid "From"
 msgid "From:"
 msgstr "Van:"
 
@@ -8705,17 +8739,14 @@ msgid "Mail has no recipient."
 msgstr "E-mailbericht heeft geen ontvanger."
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
-#| msgid "No subject"
 msgid "Empty subject"
 msgstr "Leeg onderwerp"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
-#| msgid "Mail has empty subject. Send it anyway?"
 msgid "This email has no subject. Do you want to send it anyway?"
 msgstr "Dit e-mailbericht heeft geen onderwerp. Wilt u het toch verzenden?"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
-#| msgid "Yes, send without subject"
 msgid "Send without subject"
 msgstr "Stuur zonder onderwerp"
 
@@ -9190,6 +9221,7 @@ msgid "Spreadsheet"
 msgstr "Rekenblad"
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Tasks"
 msgstr "Taken"
 
@@ -9292,7 +9324,6 @@ msgid "Edit rule"
 msgstr "Regel bewerken"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#| msgid "Save as file"
 msgid "Save and apply"
 msgstr "Opslaan en toepassen"
 
@@ -9498,8 +9529,8 @@ msgstr "Envelope"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Localpart"
-msgstr "Lokaal deel"
+msgid "Local-part"
+msgstr "Lokaal-deel"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -10035,6 +10066,20 @@ msgstr[1] "Verzend %1$d berichten ... %2$d%"
 msgid "Reply to all recipients"
 msgstr "Beantwoord naar alle ontvangers"
 
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
+#: apps/io.ox/mail/view-options.js
+msgid "Flag"
+msgstr "Markeer"
+
+#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
+msgid "Unflag"
+msgstr "Demarkeer"
+
+#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
+msgid "Set color..."
+msgstr "Stel kleur in..."
+
 #: apps/io.ox/mail/print.js module:io.ox/mail
 msgctxt "BCC"
 msgid "Blind copy"
@@ -10367,7 +10412,6 @@ msgid "Primary account"
 msgstr "Primair account"
 
 #: apps/io.ox/mail/util.js module:io.ox/core
-#| msgid "Warning: This message might be a phishing or scam mail"
 msgid "Be careful with this message. It might be spam or a phishing mail."
 msgstr ""
 "Wees voorzichtig met dit bericht: Het kan spam of een phishing bericht zijn."
@@ -10405,11 +10449,6 @@ msgstr "Bevat de woorden"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Has attachments"
 msgstr "Heeft bijlagen"
-
-#. Sort by messages which are flagged, "Flag" is used in dropdown
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
-msgid "Flag"
-msgstr "Markeer"
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Conversations"
@@ -10456,18 +10495,14 @@ msgid "Recovery code"
 msgstr "Herstel code"
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
-#| msgid ""
-#| "There are no backup devices available for this account.  Please notify "
-#| "support for help."
 msgid ""
 "There are no backup devices available for this account. Please notify "
 "support for help."
 msgstr ""
-"Er is geen backup apparaat beschikbaar voor dit account. Meld dit bij"
-" ondersteuning voor hulp."
+"Er is geen backup apparaat beschikbaar voor dit account. Meld dit bij "
+"ondersteuning voor hulp."
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
-#| msgid "Connection timed out. Please try reloading the page."
 msgid "Authentication failure. Please try reloading the page."
 msgstr "Aanmelden is mislukt. Ververs alstublieft de pagina."
 
@@ -10516,7 +10551,6 @@ msgstr "Geef alstublieft het telefoonnummer voor het apparaat."
 
 #. Catch all error when trying to set up a new 2step device
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#| msgid "Something went wrong.  Please try again later."
 msgid "Something went wrong. Please try again later."
 msgstr "Er ging iets mis. Probeer het alstublieft later opnieuw."
 
@@ -10536,18 +10570,14 @@ msgstr "Toevoegen Verificatie Optie"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-#| msgid ""
-#| "In the event you lose or are unable to use your authentication device, "
-#| "your account will be locked out unless you set up a recovery method.  We "
-#| "strongly recommend that you do so now."
 msgid ""
 "In the event you lose or are unable to use your authentication device, your "
 "account will be locked out unless you set up a recovery method. We strongly "
 "recommend that you do so now."
 msgstr ""
-"In het geval dat u het autorisatie apparaat verliest of tijdelijk niet kan"
-" gebruiken, wordt uw account geblokkeerd tenzij u een herstel methode"
-" instelt. We adviseren dat u dit direct doet."
+"In het geval dat u het autorisatie apparaat verliest of tijdelijk niet kan "
+"gebruiken, wordt uw account geblokkeerd tenzij u een herstel methode "
+"instelt. We adviseren dat u dit direct doet."
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
@@ -10602,8 +10632,8 @@ msgid ""
 "This is your recovery code. Please write it down, print it, or save the "
 "file. Be sure to save this in a secure location."
 msgstr ""
-"Dit is uw herstelcode. Schrijf deze alstublieft op, druk deze af of sla het"
-" bestand op. Verzeker uzelf van een veilige locatie."
+"Dit is uw herstelcode. Schrijf deze alstublieft op, druk deze af of sla het "
+"bestand op. Verzeker uzelf van een veilige locatie."
 
 #. this is a file name that stores the a long recovery code
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
@@ -10655,23 +10685,20 @@ msgstr "Bevestig Code"
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
-#| msgid "Please enter the phone number for the device."
 msgid "Please enter the validation code we just sent to your device."
 msgstr ""
-"Voer alstublieft de controlecode in die we zojuist naar uw apparaat hebben"
-" gestuurd."
+"Voer alstublieft de controlecode in die we zojuist naar uw apparaat hebben "
+"gestuurd."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-#| msgid "Bad input or server error.  Please try again."
 msgid "Bad input or server error. Please try again."
 msgstr "Verkeerde invoer of serverfout. Probeer het alstublieft opnieuw."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-#| msgid "Bad verification code.  Please try again"
 msgid "Bad verification code. Please try again"
 msgstr "Verkeerde verificatie code. Probeer het alstublieft opnieuw."
 
@@ -10692,9 +10719,6 @@ msgstr "Klik om de URL naar het kladblok te kopiëren"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
-#| msgid ""
-#| "If scanning doesn't work, you may be able to enter the following setup "
-#| "code."
 msgid ""
 "If scanning does not work, you may be able to enter the following setup code."
 msgstr "Als scannen niet werkt kan u de volgende setup code invoeren."
@@ -10710,7 +10734,6 @@ msgstr ""
 
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
-#| msgid "Please select the platform of your device."
 msgid "Please touch/activate your device"
 msgstr "Activeer alstublieft uw apparaat"
 
@@ -10739,7 +10762,6 @@ msgid "Upload Recovery File"
 msgstr "Herstelbestand Uploaden"
 
 #: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
-#| msgid "Please enter a search query"
 msgid "Please enter the recovery code"
 msgstr "Geef alstublieft de herstelcode"
 
@@ -10757,7 +10779,7 @@ msgstr "Authenticatie is opnieuw noodzakelijk voor deze actie"
 
 #: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
 msgid "Select 2-Step Verification Method"
-msgstr "Selecteer 2-Stappen Verificatiemethode"
+msgstr "Selecteer 2-Staps Verificatiemethode"
 
 #: apps/io.ox/multifactor/views/selectDeviceView.js module:io.ox/core/boot
 msgid "Please select a device to use for additional authentication"
@@ -10768,68 +10790,52 @@ msgid "New code sent."
 msgstr "Nieuwe code verzonden."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
-#| msgid "A new code was sent to your SMS device.  Please enter the code."
 msgid "A new code was sent to your SMS device. Please enter the code."
 msgstr ""
 "Een nieuwe code is naar uw SMS apparaat gestuurd. Geef alstublieft deze code."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
-#| msgid ""
-#| "You secured your account with 2-Step Verification.  Please enter the "
-#| "verification code we sent to the phone *****%s."
 msgid ""
 "You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
 msgstr ""
-"U heeft uw account beveiligd met Twee Factor Authenticatie. Geef alstublieft"
-" de verificatiecode die we hebben gestuurd naar de telefoon met het nummer"
-" *****%s."
+"U heeft uw account beveiligd met Twee Factor Authenticatie. Geef alstublieft "
+"de verificatiecode die we hebben gestuurd naar de telefoon met het nummer "
+"*****%s."
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
-#| msgid ""
-#| "You secured your account with 2-Step Verification.  Please enter the "
-#| "verification code from the Authenticator App."
 msgid ""
 "You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
 msgstr ""
-"U heeft uw account beveiligd met Twee Factor Authenticatie. Geef alstublieft"
-" de verificatiecode uit de Authenticator App."
+"U heeft uw account beveiligd met Twee Factor Authenticatie. Geef alstublieft "
+"de verificatiecode uit de Authenticator App."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-#| msgid ""
-#| "You secured your account with 2-Step Verification.  Please use your "
-#| "authentication token to complete verification."
 msgid ""
 "You secured your account with 2-Step Verification. Please use your "
 "authentication token to complete verification."
 msgstr ""
-"U heeft uw account beveiligd met Twee Factor Authenticatie. Gebruik"
-" alstublieft uw authenticatie-token om de controle te voltooien."
+"U heeft uw account beveiligd met Twee Factor Authenticatie. Gebruik "
+"alstublieft uw authenticatie-token om de controle te voltooien."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-#| msgid ""
-#| "This browser is not compatible with your configured authentication "
-#| "device.  Please use Chrome browser, or Firefox with U2F enabled."
 msgid ""
 "This browser is not compatible with your configured authentication device. "
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr ""
-"Deze browser is niet compatibel met de door u ingestelde authenticatie"
-" apparaat. Gebruik alstublieft de Chrome browser, of Firefox met U2F"
-" ingeschakeld."
+"Deze browser is niet compatibel met de door u ingestelde authenticatie "
+"apparaat. Gebruik alstublieft de Chrome browser, of Firefox met U2F "
+"ingeschakeld."
 
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-#| msgid ""
-#| "Bad parameters for authenticating with this key.  Possibly wrong URL "
-#| "domain for this key."
 msgid ""
 "Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
 msgstr ""
-"Verkeerde parameters voor het authenticeren met deze sleutel. Mogelijk is dit"
-" de verkeerde URL of domein voor deze sleutel."
+"Verkeerde parameters voor het authenticeren met deze sleutel. Mogelijk is "
+"dit de verkeerde URL of domein voor deze sleutel."
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10838,11 +10844,10 @@ msgstr "Configuratie wordt niet ondersteund"
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-#| msgid "This device is not eligible for this request.  Wrong hardware key?"
 msgid "This device is not eligible for this request. Wrong hardware key?"
 msgstr ""
-"Dit apparaat is niet toegestaan voor deze aanvraag. Verkeerde hardware"
-" sleutel?"
+"Dit apparaat is niet toegestaan voor deze aanvraag. Verkeerde hardware "
+"sleutel?"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "Timeout"
@@ -10850,7 +10855,6 @@ msgstr "Timeout"
 
 #. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-#| msgid "Error authenticating.  Please reload browser and try again."
 msgid "Error authenticating. Please reload browser and try again."
 msgstr ""
 "Authenticatie is mislukt. Ververs alstublieft uw browser en probeer opnieuw."
@@ -10940,10 +10944,11 @@ msgstr "Configureer uw apparaat door middel van een e-mailbericht."
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid ""
-"Let´s automatically configure your device, by clicking the button below."
+"iOS devices can be automatically configured by installing the configuration "
+"profile."
 msgstr ""
-"We gaan uw apparaat automatisch configureren als u op de knop hieronder "
-"klikt."
+"iOS apparaten kunnen automatisch ingesteld worden door het configuratie"
+" profiel te installeren."
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV"
@@ -10982,17 +10987,16 @@ msgid "EAS"
 msgstr "EAS"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Show or hide actions for advanced users."
-msgstr ""
-"Klik om de acties voor geavanceerde gebruikers te tonen of te verbergen."
+msgid "Show or hide alternative options for advanced users."
+msgstr "Toon of verberg alternative opties voor geavanceerde gebruikers."
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Expert user?"
-msgstr "Geavanceerde gebruiker?"
+msgid "Show more options"
+msgstr "Toon meer opties"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Hide options for expert users."
-msgstr "Verberg de opties voor geavanceerde gebruikers."
+msgid "Show less options"
+msgstr "Toon minder opties"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Manual Configuration"
@@ -11020,8 +11024,8 @@ msgid "Automatic Configuration"
 msgstr "Automatische Configuratie"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Configure now"
-msgstr "Configureer nu"
+msgid "Download profile"
+msgstr "Profiel downloaden"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Installation"
@@ -11133,6 +11137,11 @@ msgstr "Externe deelnemers"
 #: apps/plugins/administration/resources/settings/pane.js
 msgid "Resources"
 msgstr "Bronnen"
+
+#: apps/io.ox/participants/chronos-views.js module:io.ox/core
+#: apps/io.ox/participants/views.js
+msgid "Resource"
+msgstr "Bron"
 
 #: apps/io.ox/participants/chronos-views.js module:io.ox/core
 #: apps/io.ox/participants/views.js
@@ -11418,6 +11427,170 @@ msgstr "Certificaten"
 #: apps/io.ox/settings/main.js module:io.ox/core
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all emails from your primary mail account as eml files."
+msgstr ""
+"Bevat alle e-mailberichten van uw primaire e-mailaccount als eml bestanden."
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Included folders"
+msgstr "Inclusief bestanden"
+
+#. shown when a download of mail data is requested
+#. shown when a download of (cloud) drive files is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Trash folder"
+msgstr "Prullenbak"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Unsubscribed folders"
+msgstr "Niet geabonneerde mappen"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all appointments from your calendars as ical files."
+msgstr "Bevat alle afspraken uit uw agenda's als ical bestanden."
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Included calendars"
+msgstr "Inclusift agenda's"
+
+#. shown when a download of calendar data is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Unsubscribed calendars"
+msgstr "Niet geabonneerde agenda's"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Address book"
+msgstr "Adresboek"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all contact data from your address books as vcard files."
+msgstr "Bevat alle contactgegevens uit uw adresboeken als vcard bestanden."
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Included address books"
+msgstr "Inclusief adresboeken"
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Additional options"
+msgstr "Extra opties"
+
+#. %1$s is usually "Drive" (product name; might be customized)
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all files from %1$s."
+msgstr "Inclusief alle bestanden van %1$s."
+
+#. shown when a download of (cloud) drive files is requested
+#. shown when a download of task data is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Public folders"
+msgstr "Openbare mappen"
+
+#. shown when a download of (cloud) drive files is requested
+#. shown when a download of task data is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Shared folders"
+msgstr "Gedeelde mappen"
+
+#. shown when a download of (cloud) drive files is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Include all file versions"
+msgstr "Inclusief alle bestandsversies"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all tasks as ical files."
+msgstr "Bevat alle taken als ical bestanden."
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Download your personal data"
+msgstr "Persoonlijke gegevens downloaden"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"You can download a copy of your personal data from your account, if you want "
+"to save it or transfer it to another provider."
+msgstr ""
+"U kan een kopie van uw persoonlijke gegevens downloaden uit uw account, om op"
+" te slaan of om deze over te zetten naar een ander account."
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Maximum file size"
+msgstr "Maximale bestandsgrootte"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Archives larger than the selected size will be split into multiple files."
+msgstr ""
+"Archiefbestanden die groter zijn dan de gekozen grootte worden in meerdere"
+" bestanden opgedeeld."
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Request download"
+msgstr "Download aanvragen"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Download requested"
+msgstr "Download aangevraagd"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Request new download"
+msgstr "Nieuwe download aanvragen"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"There is currently an archive download available. By requesting a new "
+"download the current archive will be deleted and is no longer available."
+msgstr ""
+"Er is momenteel een archief beschikbaar om te downloaden. Door een nieuwe aan"
+" te vragen wordt de huidige verwijderd en is dan niet meer beschikbaar."
+
+#. header for zip archive download list
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Your archive"
+msgstr "Uw archief"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Your requested archive is currently being created. Depending on the size of "
+"the requested data this may take hours or days. You will be informed via "
+"email when your download is ready."
+msgstr ""
+"Uw aangevraagde archief wordt momenteel gemaakt. Afhankelijk van de grootte"
+" van de aangevraagde gegevens kan dit uren of dagen duren. U krijgt een"
+" e-mail als uw download klaar staat."
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Cancel download request"
+msgstr "Annuleer download verzoek"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Do you really want to cancel the current download request?"
+msgstr "Weet u zeker dat u het huidige download verzoek wilt annuleren?"
+
+#. %1$s: date and time when the download expires
+#. %1$s: date when the download was requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Your data archive from %2$s is ready for download. The download is available "
+"until %1$s."
+msgstr ""
+"Uw gegevensarchief van %2$s is klaar om te downloaden download. De download"
+" is beschikbaar tot %1$s."
+
+#. %1$s: filename
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Download %1$s."
+msgstr "Download %1$s."
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Download personal data"
+msgstr "Persoonlijke gegevens downloaden"
 
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
 #: module:io.ox/settings/certificates
@@ -12272,21 +12445,6 @@ msgstr "Aankoopbevestiging"
 msgid "The following products will be activated now:"
 msgstr "De volgende producten worden nu geactiveerd:"
 
-#. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
-msgid "Furigana for last name"
-msgstr "Furigana als achternaam"
-
-#. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
-msgid "Furigana for first name"
-msgstr "Furigana als voornaam"
-
-#. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
-msgid "Furigana for company"
-msgstr "Furigana als bedrijfsnaam"
-
 #: apps/plugins/administration/groups/register.js module:io.ox/core
 #: apps/plugins/administration/groups/settings/pane.js
 msgid "Groups"
@@ -12796,12 +12954,10 @@ msgid "Edit Flickr photo stream"
 msgstr "Bewerk Flickr foto-stream"
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
-#| msgid "Search Options"
 msgid "Search photos"
 msgstr "Zoek foto's"
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
-#| msgid "Public tasks"
 msgid "Public photos by user"
 msgstr "Publieke foto's van gebruikers"
 
@@ -13364,6 +13520,106 @@ msgstr "Uitnodigingen voor %s"
 msgid "Add on %s"
 msgstr "Toegevoegd  op %s"
 
+#~ msgid "Edit image"
+#~ msgstr "Afbeelding bewerken"
+
+#~ msgid "Upload image"
+#~ msgstr "Bestand uploaden"
+
+#~ msgid "Take photo"
+#~ msgstr "Maak foto"
+
+#~ msgid "Rotate image"
+#~ msgstr "Afbeelding draaien"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Zichtbaarheidshulp"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "De afspraak is zichtbaar voor alle gebruikers in gedeelde agenda's."
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "In gedeelde agenda's wordt de afspraak getoond als een eenvoudige periode "
+#~ "voor niet aanwezige gebruikers."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "De afspraak is helemaal niet zichtbaar voor niet aanwezige gebruikers in "
+#~ "gedeelde agenda's. Er wordt geen rekening gehouden met deze afspraak bij "
+#~ "conflicten en verschijnt ook niet in het planningsoverzicht. Deze optie "
+#~ "kan niet gebruikt worden als de afspraak bronnen blokkeert."
+
+#~ msgid "Listview"
+#~ msgstr "Lijstoverzicht"
+
+#~ msgid "Create contact"
+#~ msgstr "Contact aanmaken"
+
+#~ msgid "Some fields contain invalid data"
+#~ msgstr "Sommige velden bevatten ongeldige gegevens"
+
+#~ msgid "Show all fields"
+#~ msgstr "Toon alle velden"
+
+#~ msgid "Personal"
+#~ msgstr "Persoonlijk"
+
+#~ msgid "Job"
+#~ msgstr "Taak"
+
+#~ msgid "Mail and Messaging"
+#~ msgstr "E-mail en Berichtenservice"
+
+#~ msgid "Phone numbers"
+#~ msgstr "Telefoonnummers"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Overig"
+
+#~ msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+#~ msgstr ""
+#~ "De door uw gekozen afbeelding is groter dan het maximum grootte van %1$s"
+
+#~ msgid ""
+#~ "This filetype is not supported as contact picture. Only image types (JPG, "
+#~ "GIF, BMP or PNG) are supported."
+#~ msgstr ""
+#~ "Dit bestandsformaat wordt niet ondersteund als contact-afbeelding. Alleen "
+#~ "afbeelding bestandstypen (JPG, GIF, BMP of PNG) worden ondersteund."
+
+#~| msgid "Upload local file"
+#~ msgid "Upload local image"
+#~ msgstr "Lokaal bestand uploaden"
+
+#~ msgid "Localpart"
+#~ msgstr "Lokaal deel"
+
+#~ msgid ""
+#~ "Let´s automatically configure your device, by clicking the button below."
+#~ msgstr ""
+#~ "We gaan uw apparaat automatisch configureren als u op de knop hieronder "
+#~ "klikt."
+
+#~ msgid "Show or hide actions for advanced users."
+#~ msgstr ""
+#~ "Klik om de acties voor geavanceerde gebruikers te tonen of te verbergen."
+
+#~ msgid "Expert user?"
+#~ msgstr "Geavanceerde gebruiker?"
+
+#~ msgid "Hide options for expert users."
+#~ msgstr "Verberg de opties voor geavanceerde gebruikers."
+
+#~ msgid "Configure now"
+#~ msgstr "Configureer nu"
+
 #, fuzzy
 #~| msgid "is not a valid user or group."
 #~ msgid " is not a valid user or group."
@@ -13642,9 +13898,6 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Add account"
 #~ msgstr "Account toevoegen"
 
-#~ msgid "Add attachment"
-#~ msgstr "Voeg bijlage toe"
-
 #~ msgid "Add cipher code"
 #~ msgstr "Versleutelcode toevoegen"
 
@@ -13853,9 +14106,6 @@ msgstr "Toegevoegd  op %s"
 #~ "Onder de ontvanger vindt u andere functies, bijvoorbeeld voor het "
 #~ "verzenden van kopieën aan andere ontvangers of voor het toevoegen van "
 #~ "bijlagen."
-
-#~ msgid "Birthday"
-#~ msgstr "Verjaardag"
 
 #~ msgid "Blind copy (BCC) to"
 #~ msgstr "Blinde kopie (BCC) aan"
@@ -16760,9 +17010,6 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Tracking the editing status"
 #~ msgstr "Bijhouden van bewerkingsstatus"
-
-#~ msgid "Trash folder"
-#~ msgstr "Prullenbak"
 
 #~ msgid "UNKNOWN"
 #~ msgstr "ONBEKEND"
