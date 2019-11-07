@@ -937,7 +937,7 @@ define('io.ox/calendar/week/view', [
                 ).on('scroll', this.updateHiddenIndicators.bind(this)),
                 this.$hiddenIndicators.css('right', coreUtil.getScrollBarWidth())
             );
-            this.updateTimezones();
+            if (!_.device('Smartphone')) this.updateTimezones();
             this.updateToday();
             pane.children().css('height', height);
             this.applyTimeScale();
