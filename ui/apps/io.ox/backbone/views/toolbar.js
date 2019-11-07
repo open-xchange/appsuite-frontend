@@ -74,7 +74,7 @@ define('io.ox/backbone/views/toolbar', [
         },
 
         createToolbar: function () {
-            var title = this.options.title ? gt('%1$s Toolbar', this.options.title) : gt('Actions. Use cursor keys to navigate.');
+            var title = this.options.title ? gt('%1$s Toolbar. Use cursor keys to navigate', this.options.title) : gt('Actions. Use cursor keys to navigate.');
             return $('<ul role="toolbar">')
                 .addClass(this.options.inline ? 'inline-toolbar' : 'classic-toolbar')
                 .attr({ 'aria-label': title })

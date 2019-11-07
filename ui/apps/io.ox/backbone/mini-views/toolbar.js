@@ -31,7 +31,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/views/disposable', 
         createToolbar: function () {
             var node = $('<ul class="classic-toolbar" role="toolbar">')
                 //#. screenreader label for main toolbar
-                .attr({ 'aria-label': this.options.title ? gt('%1$s Toolbar', this.options.title) : gt('Actions. Use cursor keys to navigate.') });
+                .attr({ 'aria-label': this.options.title ? gt('%1$s Toolbar. Use cursor keys to navigate.', this.options.title) : gt('Actions. Use cursor keys to navigate.') });
             return node
                 // always avoid clearing the URL hash
                 .on('click', 'a', $.preventDefault);
