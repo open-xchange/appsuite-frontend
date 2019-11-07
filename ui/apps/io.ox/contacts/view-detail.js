@@ -170,7 +170,7 @@ define('io.ox/contacts/view-detail', [
     });
 
     // Contact Summary
-    var countryFlag = settings.get('features/countryFlag', true),
+    var countryFlag = settings.get('features/countryFlag', false),
         flags = {
             US: '\uD83C\uDDFA\uD83C\uDDF8',
             GB: '\uD83C\uDDEC\uD83C\uDDE7',
