@@ -4,10 +4,6 @@
         margin-bottom: 15px;
     }
 
-    .item {
-        display: flex;
-    }
-
     .item-name {
         flex: 1;
         margin-top: 12px;
@@ -31,6 +27,7 @@
 
     .list-group-item {
         padding: 5px 15px;
+        display: flex;
 
         &.page {
             cursor: pointer;
@@ -47,5 +44,30 @@
     li:focus {
         outline: 2px solid #3c73aa;
         text-decoration: underline;
+    }
+
+    @media (max-width: 575px) {
+        .list-group-item {
+            margin: 10px 0px;
+            flex-wrap: wrap;
+
+            .checkbox.custom {
+                width: 100%;
+                margin-top: 0;
+                margin-left: 0;
+            }
+
+            .checkbox.switch {
+                margin: 10px 0px;
+            }
+
+            .item-name {
+                overflow: hidden;
+
+                div {
+                    .ellipsis();
+                }
+            }
+        }
     }
 }
