@@ -69,6 +69,10 @@ define('io.ox/calendar/actions/subscribe-shared', [
         });
         ext.point('io.ox/core/folder/subscribe-shared-calendar').invoke('render', data.dialog);
         data.dialog.idle();
+
+        // focus first usable checkbox
+        data.dialog.$body.find('input[type="checkbox"]:enabled').first().focus();
+
     }
 
     var ItemView = Backbone.View.extend({
