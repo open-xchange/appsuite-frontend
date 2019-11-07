@@ -2186,7 +2186,8 @@ msgstr "Камера %1$s"
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/files/main.js module:io.ox/files
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
+#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js
 #: apps/io.ox/mail/compose/actions/extensions.js
 #: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/compose/view.js
 #: apps/io.ox/mail/main.js
@@ -2380,14 +2381,9 @@ msgid "Change quick launch icons"
 msgstr "Конфигуриране на категории"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#, fuzzy
-#| msgid "Create reminder"
-msgid "Change reminder"
-msgstr "Създай напомняне"
-
-#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-alarms.js
 #: apps/io.ox/calendar/actions/change-folder-alarms.js
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #, fuzzy
 #| msgid "Create reminder"
 msgid "Change reminders"
@@ -2698,10 +2694,6 @@ msgstr "Конфигурирайте %s"
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "Configure categories"
 msgstr "Конфигуриране на категории"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Configure now"
-msgstr "Редактирай имената"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
@@ -3963,6 +3955,18 @@ msgstr "Изтеглете инсталационния файл"
 msgid "Download personal data"
 msgstr "Изтеглете цялата папка"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Download entire folder"
+msgid "Download profile"
+msgstr "Изтеглете цялата папка"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Slow requests"
+msgid "Download requested"
+msgstr "Бавни заявки"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
@@ -4691,10 +4695,6 @@ msgstr "Съществува"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Expand form"
 msgstr "Разгънете формуляра"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Expert user?"
-msgstr "Експерт потребител?"
 
 #. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -5591,10 +5591,6 @@ msgstr "Скриване на подробностите"
 msgid "Hide non-working time"
 msgstr "Скриване на неработно време"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Hide options for expert users."
-msgstr "Скриване на опциите за експертни потребители."
-
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
 msgstr "Hide request body"
@@ -5837,9 +5833,7 @@ msgstr "Категории входящи"
 msgid "Include all file versions"
 msgstr "Изтриване на версията"
 
-#. shown when a download of contact data is requested
 #: apps/io.ox/core/export.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Include distribution lists"
 msgstr "Включете списъци за разпространение"
 
@@ -6271,13 +6265,6 @@ msgstr "Научи повече"
 msgid "Letters • Symbols"
 msgstr "Letters • Symbols"
 
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid ""
-"Let´s automatically configure your device, by clicking the button below."
-msgstr ""
-"Нека автоматично да конфигурирате устройството си, като кликнете върху "
-"бутона по-долу."
-
 #. Emoji category
 #. Japanese: 日常
 #. Rather "everyday life". Contains: Cars, trucks, plane, buildings, flags
@@ -6340,7 +6327,9 @@ msgstr ""
 msgid "List"
 msgstr "Лист"
 
-#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
+#: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/files/listview.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
 #| msgid "Listview"
 msgid "List view"
@@ -8778,14 +8767,14 @@ msgstr "Напредъкът трябва да е валиден между 0 и
 msgid "Properties"
 msgstr "Properties"
 
-#. shown when a download of contact data is requested
+#. shown when a download of contact data is requested (has header "Included address books ...")
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public address books"
 msgstr "Публичена адресна книга"
 
-#. shown when a download of calendar data is requested
+#. shown when a download of calendar data is requested (has header "Included calendars ...")
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -8793,8 +8782,9 @@ msgstr "Публичена адресна книга"
 msgid "Public calendars"
 msgstr "Публични календари"
 
-#. shown when a download of (cloud) drive files is requested
-#. shown when a download of task data is requested
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
+#. shown when a download of task data is requested (has header "Included folders ...")
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Public calendars"
@@ -9553,6 +9543,10 @@ msgstr "Име на правилото"
 msgid "Run slideshow"
 msgstr "Повтаряйте слайдшоуто"
 
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "SMS"
+msgstr "СМС"
+
 #: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
 msgid "SMS Code"
 msgstr ""
@@ -10100,7 +10094,7 @@ msgstr "Споделени срещи"
 msgid "Shared activity"
 msgstr "Споделена дейност"
 
-#. shown when a download of contact data is requested
+#. shown when a download of contact data is requested (has header "Included address books ...")
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/settings/personalData/settings/pane.js
@@ -10111,7 +10105,7 @@ msgstr "Споделени адресни книги"
 msgid "Shared by other users"
 msgstr "Сподели с други потребители"
 
-#. shown when a download of calendar data is requested
+#. shown when a download of calendar data is requested (has header "Included calendars ...")
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -10119,8 +10113,9 @@ msgstr "Сподели с други потребители"
 msgid "Shared calendars"
 msgstr "Споделени календари"
 
-#. shown when a download of (cloud) drive files is requested
-#. shown when a download of task data is requested
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
+#. shown when a download of task data is requested (has header "Included folders ...")
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Share your folders"
@@ -10279,9 +10274,20 @@ msgstr "Показване в Диск"
 msgid "Show information about account recovery"
 msgstr "Показване на информация за възстановяване на профила"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+msgid "Show less options"
+msgstr "Акаунт настройки"
+
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Покажи лист"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Sort options"
+msgid "Show more options"
+msgstr "Опции за подреждане"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -10292,7 +10298,9 @@ msgid "Show next month"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Show or hide actions for advanced users."
+#, fuzzy
+#| msgid "Show or hide actions for advanced users."
+msgid "Show or hide alternative options for advanced users."
 msgstr "Показване или скриване на действия за напреднали потребители."
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
@@ -10365,6 +10373,7 @@ msgstr ""
 msgid "Sign out now"
 msgstr "Излез сега"
 
+#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/certificates/settings/utils.js
 #: module:io.ox/settings/certificates
 msgid "Signature"
@@ -11687,15 +11696,15 @@ msgstr ""
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Това е стандартна папка, която не може да бъде преименувана."
 
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "This is how your message text will look like."
-msgstr "Така ще изглежда текстът на съобщението ви."
-
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #, fuzzy
 #| msgid "This is not a valid email address"
 msgid "This is an invalid email address."
 msgstr "Това е невалиден и-мейл адрес"
+
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+msgid "This is how your message text will look like."
+msgstr "Така ще изглежда текстът на съобщението ви."
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "This is not a valid email address"
@@ -11973,8 +11982,8 @@ msgstr "Всички: %1$d"
 msgid "Total: %1$s requests"
 msgstr "Общо: %1$s заявки"
 
-#. shown when a download of mail data is requested
-#. shown when a download of (cloud) drive files is requested
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Create folder"
@@ -12236,7 +12245,7 @@ msgstr "Непрочетени: %1$d"
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Незапазените документи ще бъдат загубени. Искате ли да излезете сега?"
 
-#. shown when a download of calendar data is requested (has header "Included folders ...")
+#. shown when a download of calendar data is requested (has header "Included calendars ...")
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "subscribe to calendar"
@@ -12313,7 +12322,7 @@ msgstr "Качи файл"
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 #, fuzzy
 #| msgid "Upload local file"
-msgid "Upload local image"
+msgid "Upload local file"
 msgstr "Качване на локален файл"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
@@ -12824,6 +12833,10 @@ msgstr "Жълто зелен"
 msgid "Yes"
 msgstr "Да"
 
+#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
+msgid "Yes, with empty attachment"
+msgstr "Да, с празен прикачен файл"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/find/date/patterns.js module:io.ox/core apps/io.ox/mail/util.js
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
@@ -12848,6 +12861,10 @@ msgid "You are currently signed in with the following devices"
 msgstr "В момента сте влезли в профила си от следните устройства"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "You are no longer using a public calendar. You were added as organizer."
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "You are no longer using a shared calendar. You were added as organizer."
 msgstr ""
 
@@ -12864,6 +12881,14 @@ msgstr "Вие сте организаторът"
 msgid ""
 "You are using a shared calendar. The calendar owner was added as organizer."
 msgstr ""
+
+#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
+msgid ""
+"You attached an empty file. It could be, that this file has been deleted on "
+"your hard drive. Send it anyway?"
+msgstr ""
+"Прикрепихте празен файл. Възможно е този файл да е изтрит на твърдия ви "
+"диск. Изпрати го така или иначе?"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid ""
@@ -13586,6 +13611,12 @@ msgstr "iCalendar"
 msgid "iOS"
 msgstr "iOS"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid ""
+"iOS devices can be automatically configured by installing the configuration "
+"profile."
+msgstr ""
+
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
 msgctxt "in"
@@ -14167,6 +14198,11 @@ msgstr "вашата платформа"
 #~ msgstr "Капацитет"
 
 #, fuzzy
+#~| msgid "Create reminder"
+#~ msgid "Change reminder"
+#~ msgstr "Създай напомняне"
+
+#, fuzzy
 #~ msgid "Changes have been saved."
 #~ msgstr "Промените са запазени"
 
@@ -14196,6 +14232,9 @@ msgstr "вашата платформа"
 
 #~ msgid "Compose new mail"
 #~ msgstr "Създайте нов мейл"
+
+#~ msgid "Configure now"
+#~ msgstr "Редактирай имената"
 
 #~ msgid "Content"
 #~ msgstr "Съдържание"
@@ -14316,6 +14355,9 @@ msgstr "вашата платформа"
 #~ msgid "Every %1$d weeks on workdays."
 #~ msgstr "Всеки %1$d дни"
 
+#~ msgid "Expert user?"
+#~ msgstr "Експерт потребител?"
+
 #~ msgid "February"
 #~ msgstr "Февруари"
 
@@ -14326,6 +14368,9 @@ msgstr "вашата платформа"
 
 #~ msgid "Hide names"
 #~ msgstr "Скрий имената"
+
+#~ msgid "Hide options for expert users."
+#~ msgstr "Скриване на опциите за експертни потребители."
 
 #~ msgid "Hours"
 #~ msgstr "Часа"
@@ -14377,6 +14422,12 @@ msgstr "вашата платформа"
 #, fuzzy
 #~ msgid "Leave the presentation"
 #~ msgstr "Започни презентация"
+
+#~ msgid ""
+#~ "Let´s automatically configure your device, by clicking the button below."
+#~ msgstr ""
+#~ "Нека автоматично да конфигурирате устройството си, като кликнете върху "
+#~ "бутона по-долу."
 
 #, fuzzy
 #~ msgid "Line %1$d: %2$s"
@@ -14537,9 +14588,6 @@ msgstr "вашата платформа"
 
 #~ msgid "Run auto-play mode"
 #~ msgstr "Изпълнете режима на автоматично възпроизвеждане"
-
-#~ msgid "SMS"
-#~ msgstr "СМС"
 
 #, fuzzy
 #~ msgid "Safari %1$s on %2$s"
@@ -14719,22 +14767,12 @@ msgstr "вашата платформа"
 #~ msgid "Years"
 #~ msgstr "Години"
 
-#~ msgid "Yes, with empty attachment"
-#~ msgstr "Да, с празен прикачен файл"
-
 #~ msgid ""
 #~ "You are currently using %1$s of your %2$s available disk space. You have "
 #~ "%3$s left. "
 #~ msgstr ""
 #~ "Понастоящем използвате %1$s от вашето %2$s свободно дисково пространство. "
 #~ "Имате останали %3$s . "
-
-#~ msgid ""
-#~ "You attached an empty file. It could be, that this file has been deleted "
-#~ "on your hard drive. Send it anyway?"
-#~ msgstr ""
-#~ "Прикрепихте празен файл. Възможно е този файл да е изтрит на твърдия ви "
-#~ "диск. Изпрати го така или иначе?"
 
 #~ msgid "You cannot move items to virtual folders"
 #~ msgstr "Не можете да премествате елементи във виртуални папки"
