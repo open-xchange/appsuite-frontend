@@ -1052,7 +1052,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         onKeydown: function (e) {
             switch (e.which) {
 
-                // space
+                // enter or space
+                case 13:
                 case 32:
                     this.onSpace(e);
                     break;
