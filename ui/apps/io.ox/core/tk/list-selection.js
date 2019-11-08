@@ -259,8 +259,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 items.removeClass('precursor');
                 node = this.focus(index, items, focus).addClass('precursor');
 
-                if (!e) return;
-                else if (this.isMultiple(e)) this.pickMultiple(node, items);
+                if (this.isMultiple(e)) this.pickMultiple(node, items);
                 else this.pickSingle(node);
             }
         },
