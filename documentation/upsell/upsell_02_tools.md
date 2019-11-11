@@ -2,12 +2,12 @@
 title: Tools
 ---
 
-The following features inside OX App Suite can be used to integrate additional cross-& upsell trigger.
+The following features inside OX App Suite can be used to integrate additional cross-& upsell opportunities.
 
 # Custom app
 
 You are able to add an app to the app launcher which is completly customized. Icon, name as well as URL can be included and link to the upsell wizard as well as to an external page.
-For more technical information please see [here](https://documentation.open-xchange.com/latest/ui/customize/app/simple-application-iframe.html#add-app-to-launcher.)
+For more technical information please see [here]({{ site.baseurl }}/ui/customize/app/simple-application-iframe.html#add-app-to-launcher.)
 
 
 # Widget
@@ -73,16 +73,15 @@ The type can be one of text-top, text-bottom, text-only and image-only.
 Text usually takes up a third of an ad that also contains an image.
 Text and image are cut off in case they exceed the space.
 
-For additional information see article about [Portal Widgets](https://documentation.open-xchange.com/latest/ui/customize/portal-widget.html).
+For additional information see article about [Portal Widgets]({{ site.baseurl }}/ui/customize/portal-widget.html).
 
 # Guided tour
 
 In order to cross-/upsell right from the beginning, the guided tour can be used to walk the end user trough the OX App Suite UI as well as show/point out upsell/cross-sell opportunities (trigger).
-See more information under [Guided tours](https://documentation.open-xchange.com/latest/ui/components/guided-tours.html.)
 
 # Bubbles
 
-Bubbles are little popups based on hopscotch, similar to the [guided tours](../components/wizards/guided-tours.html).
+Bubbles are little popups based on hopscotch, similar to the guided tours.
 They show up after a given amount of time and point to a defined UI element to display some text.
 Clicking on them can start the upsell wizard (unless you click "cancel", of course).
 
