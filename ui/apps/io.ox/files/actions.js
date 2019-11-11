@@ -1354,6 +1354,14 @@ define('io.ox/files/actions', [
             title: gt('Unlock'),
             ref: 'io.ox/files/actions/unlock',
             section: 'file-op'
+        },
+        {
+            id: 'restore',
+            prio: 'lo',
+            mobile: 'lo',
+            title: gt('Restore'),
+            ref: 'io.ox/files/actions/restore',
+            section: 'file-op'
         }
     ];
 
