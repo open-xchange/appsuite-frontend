@@ -15,8 +15,9 @@ define('io.ox/find/view', [
     'io.ox/core/extensions',
     'io.ox/find/view-searchbox',
     'io.ox/find/view-facets',
+    'gettext!io.ox/core',
     'less!io.ox/find/style'
-], function (ext, AutocompleteView, FacetView) {
+], function (ext, AutocompleteView, FacetView, gt) {
 
     'use strict';
 
@@ -109,15 +110,21 @@ define('io.ox/find/view', [
         },
 
         disable: function () {
+            // only real change. We want to avoiud screenreader talking with every folderchange
+            if (this.ui.field.prop('disabled') === true) return;
             this.ui.field.prop('disabled', true);
             this.ui.action.prop('disabled', true);
             this.ui.field.find('input.token-input.tt-input').removeAttr('tabindex');
+            this.$el.find('input.form-control.tokenfield').trigger('aria-live-update', gt('Search function not supported in this folder'));
         },
 
         enable: function () {
+            // only real change. We want to avoiud screenreader talking with every folderchange
+            if (this.ui.field.prop('disabled') === false) return;
             this.ui.field.prop('disabled', false);
             this.ui.action.prop('disabled', false);
             this.ui.field.find('input.token-input.tt-input').attr('tabindex', 0);
+            this.$el.find('input.form-control.tokenfield').trigger('aria-live-update', '');
         },
 
         calculateDimensions: function () {

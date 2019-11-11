@@ -11,7 +11,10 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/find/view-placeholder', ['io.ox/backbone/views/disposable'], function (DisposableView) {
+define('io.ox/find/view-placeholder', [
+    'io.ox/backbone/views/disposable',
+    'gettext!io.ox/core'
+], function (DisposableView, gt) {
 
     'use strict';
 
@@ -49,15 +52,21 @@ define('io.ox/find/view-placeholder', ['io.ox/backbone/views/disposable'], funct
         },
 
         disable: function () {
+            // only real change. We wnat to avoiud screenreader talking with every folderchange
+            if (this.ui.field.prop('disabled') === true) return;
             this.ui.field.prop('disabled', true);
             this.ui.action.prop('disabled', true);
             this.ui.field.find('input.token-input.tt-input').removeAttr('tabindex');
+            this.$el.find('.arialive').text(gt('Search function not supported in this folder'));
         },
 
         enable: function () {
+            // only real change. We wnat to avoiud screenreader talking with every folderchange
+            if (this.ui.field.prop('disabled') === false) return;
             this.ui.field.prop('disabled', false);
             this.ui.action.prop('disabled', false);
             this.ui.field.find('input.token-input.tt-input').attr('tabindex', 0);
+            this.$el.find('.arialive').text('');
         },
 
         focused: function () {
