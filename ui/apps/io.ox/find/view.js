@@ -80,6 +80,9 @@ define('io.ox/find/view', [
                 }
             });
 
+            // field stub already rendered
+            this.setElement(this.win.nodes.sidepanel.find('.io-ox-find'));
+
             // shortcuts
             this.ui = {
                 container: undefined,
@@ -87,11 +90,10 @@ define('io.ox/find/view', [
                 manager: undefined,
                 // subviews
                 searchbox: undefined,
-                facets: undefined
+                facets: undefined,
+                field: this.$el.find('.search-field'),
+                action: this.$el.find('.action-show')
             };
-
-            // field stub already rendered
-            this.setElement(this.win.nodes.sidepanel.find('.io-ox-find'));
 
             // shortcuts
             this.ui.container = this.$el.closest('.window-container');
@@ -102,6 +104,20 @@ define('io.ox/find/view', [
             this.ui.searchbox = new AutocompleteView(_.extend(props, { parent: this }));
             this.ui.facets = new FacetView(_.extend(props, { parent: this }));
 
+            this.listenTo(options.app, 'view:disable', this.disable);
+            this.listenTo(options.app, 'view:enable', this.enable);
+        },
+
+        disable: function () {
+            this.ui.field.prop('disabled', true);
+            this.ui.action.prop('disabled', true);
+            this.ui.field.find('input.token-input.tt-input').removeAttr('tabindex');
+        },
+
+        enable: function () {
+            this.ui.field.prop('disabled', false);
+            this.ui.action.prop('disabled', false);
+            this.ui.field.find('input.token-input.tt-input').attr('tabindex', 0);
         },
 
         calculateDimensions: function () {
