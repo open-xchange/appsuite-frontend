@@ -27,7 +27,9 @@ define('io.ox/calendar/extensions', [
             function addColors(node, model) {
                 var folder = folderAPI.pool.getModel(model.get('folder')).toJSON(),
                     color = util.getAppointmentColor(folder, model),
-                    foregroundColor = util.getForegroundColor(color);
+                    foregroundColor = util.getForegroundColor(color),
+                    colorName = util.getColorName(color);
+
                 if (!color) {
                     // cleanup possible previous styles
                     node.css({
@@ -47,6 +49,12 @@ define('io.ox/calendar/extensions', [
                 if (util.canAppointmentChangeColor(folder, model)) {
                     node.attr('data-folder', folder.id);
                 }
+                //#. Will be used as aria lable for the screen reader to tell the user which color/category the appointment within the calendar has.
+                if (colorName) node.attr('aria-label', getTitle(model) + ', ' + gt('Category') + ': ' + colorName);
+            }
+
+            function getTitle(model) {
+                return _([model.get('summary'), model.get('location')]).compact().join(', ');
             }
 
             return function (baton) {
@@ -54,11 +62,13 @@ define('io.ox/calendar/extensions', [
                 var model = baton.model,
                     folderModel = folderAPI.pool.getModel(model.get('folder')),
                     folder = folderModel.toJSON(),
-                    folderId = model.get('folder'),
-                    title = _([model.get('summary'), model.get('location')]).compact().join(', ');
+                    folderId = model.get('folder');
 
                 // cleanup classes to redraw correctly
                 this.removeClass('modify private disabled needs-action accepted declined tentative');
+
+                // Call this before addColor is invoked
+                this.attr('aria-label', getTitle(model));
 
                 if (String(folder.id) === String(folderId)) addColors(this, model);
                 else if (folderId !== undefined) folderAPI.get(folderId).done(addColors.bind(this, this, model));
@@ -76,9 +86,8 @@ define('io.ox/calendar/extensions', [
                 }
 
                 this
-                    .attr('aria-label', title)
                     .append(
-                        $('<div class="appointment-content" aria-hidden="true">').attr('title', title).append(
+                        $('<div class="appointment-content" aria-hidden="true">').attr('title', getTitle(model)).append(
                             $('<div class="title-container">').append(
                                 util.returnIconsByType(model).type,
                                 model.get('summary') ? $('<div class="title">').text(gt.format('%1$s', model.get('summary') || '\u00A0')) : ''

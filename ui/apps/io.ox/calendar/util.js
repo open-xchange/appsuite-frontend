@@ -1097,6 +1097,13 @@ define('io.ox/calendar/util', [
             return color;
         },
 
+        getColorName: function (color) {
+            if (!color) return gt('None');
+            var colorObj = _.findWhere(this.colors, { value: color });
+            if (colorObj) return colorObj.label;
+            return gt('Unknown');
+        },
+
         getDeepLink: function (data) {
             return [
                 ox.abs,

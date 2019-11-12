@@ -1083,7 +1083,11 @@ define('io.ox/core/folder/extensions', [
 
                 require(['io.ox/calendar/util'], function (util) {
                     var folderColor = util.getFolderColor(baton.data),
-                        target = folderLabel.find('.color-label');
+                        target = folderLabel.find('.color-label'),
+                        colorName = util.getColorName(folderColor);
+
+                    //#. Will be used as aria lable for the screen reader to tell the user which color/category the appointment within the calendar has.
+                    if (colorName) baton.view.addA11yDescription(gt('Category') + ': ' + colorName);
 
                     if (target.length === 0) target = $('<div class="color-label" aria-hidden="true">');
                     target.toggleClass('selected', app.folders.isSelected(baton.data.id));

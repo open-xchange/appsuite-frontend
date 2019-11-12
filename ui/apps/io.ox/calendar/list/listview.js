@@ -126,6 +126,19 @@ define('io.ox/calendar/list/listview', [
 
             this.closest('li').attr('aria-label', _.escape(a11yLabel.join(', ')) + '.');
             this.append($('<div class="title">').text(summary));
+
+            if (model.get('folder')) {
+                folderAPI.get(model.get('folder')).done(function (folder) {
+                    var color = util.getAppointmentColor(folder, model),
+                        colorName = util.getColorName(color);
+
+                    if (colorName) {
+                        //#. Will be used as aria lable for the screen reader to tell the user which color/category the appointment within the calendar has.
+                        a11yLabel.push(gt('Category') + ': ' + util.getColorName(color));
+                        this.closest('li').attr('aria-label', _.escape(a11yLabel.join(', ')) + '.');
+                    }
+                }.bind(this));
+            }
         }
     });
 
