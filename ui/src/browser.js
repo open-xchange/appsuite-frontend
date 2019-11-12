@@ -51,7 +51,8 @@
         'Chrome':    74,
         'Safari':    11,
         'Firefox':   66,
-        'IE':        11
+        'IE':        11,
+        'Edge':      12
     };
 
     us.platformSupport = {
@@ -118,7 +119,6 @@
             us.browser = {
                 /** is IE? */
                 IE: edge
-                    // TODO: Handle Edge as IE 12. Is this really wanted?
                     ? Number(ua.match(/Edge\/(\d+.\d)\d+$/)[1])
                     : (
                         nav.appName === 'Microsoft Internet Explorer'
@@ -128,10 +128,9 @@
                                 : undefined)
                     ),
                 /** is Edge browser? */
-                Edge: edge
-                    // TODO: If Edge is handled as IE 12, a specific 'Edge' property is not required.
-                    ? Number(ua.match(/Edge\/(\d+.\d+)$/)[1])
-                    : undefined,
+                Edge: edgeChromium ?
+                    ua.split('Edg/')[1].split(' ')[0].split('.')[0]
+                    : (edge ? Number(ua.match(/Edge\/(\d+.\d+)$/)[1]) : undefined),
                 /** is Opera? */
                 Opera: opera ? ua.split('OPR/')[1].split(' ')[0].split('.')[0] : undefined,
                 /** is WebKit? */
