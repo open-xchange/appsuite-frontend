@@ -255,18 +255,34 @@ define('io.ox/mail/toolbar', [
             if (_.device('smartphone')) return;
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ el: this, caret: true, model: baton.app.props, label: gt('View') })
-            .group(gt('Layout'))
+            var dropdown = new Dropdown({ el: this, caret: true, model: baton.app.props, label: gt('View') });
+
+            dropdown.render().$el.addClass('dropdown pull-right').attr('data-dropdown', 'view');
+            ext.point('io.ox/mail/toolbar/links/view-dropdown').invoke('draw', dropdown, baton);
+        }
+    });
+
+    ext.point('io.ox/mail/toolbar/links/view-dropdown').extend({
+        id: 'layout',
+        index: 100,
+        draw: function () {
+            this.group(gt('Layout'))
             .option('layout', 'vertical', gt('Vertical'), { radio: true, group: true });
             // offer compact view only on desktop
-            if (_.device('desktop')) dropdown.option('layout', 'compact', gt('Compact'), { radio: true, group: true });
-            dropdown.option('layout', 'horizontal', gt('Horizontal'), { radio: true, group: true })
+            if (_.device('desktop')) this.option('layout', 'compact', gt('Compact'), { radio: true, group: true });
+            this.option('layout', 'horizontal', gt('Horizontal'), { radio: true, group: true })
             .option('layout', 'list', gt('List'), { radio: true, group: true })
             .divider();
+        }
+    });
 
+    ext.point('io.ox/mail/toolbar/links/view-dropdown').extend({
+        id: 'categories',
+        index: 200,
+        draw: function (baton) {
             // feature: tabbed inbox
             if (capabilities.has('mail_categories') && !_.device('smartphone')) {
-                dropdown
+                this
                 .group(gt('Inbox'))
                 .option('categories', true, gt('Use categories'), { group: true })
                 //#. term is followed by a space and three dots (' …')
@@ -275,7 +291,14 @@ define('io.ox/mail/toolbar', [
                 .link('categories-config', gt('Configure') + ' …', _.bind(onConfigureCategories, this, baton.app.props), { icon: true, group: true })
                 .divider();
             }
+        }
+    });
 
+    ext.point('io.ox/mail/toolbar/links/view-dropdown').extend({
+        id: 'options',
+        index: 300,
+        draw: function (baton) {
+            var dropdown = this;
             dropdown
             .group(gt('Options'))
             .option('folderview', true, gt('Folder view'), { group: true });
@@ -291,19 +314,7 @@ define('io.ox/mail/toolbar', [
             .option('alwaysShowSize', true, gt('Message size'), { group: true })
             .divider();
 
-            if (capabilities.has('mailfilter_v2')) {
-                dropdown.link('vacation-notice', gt('Vacation notice'), onOpenVacationNotice);
-            }
-
-            if (settings.get('folder/mailattachments', {}).all) {
-                dropdown.link('attachments', gt('All attachments'), allAttachments.bind(null, baton.app));
-            }
-
-            dropdown
-            .link('statistics', gt('Statistics'), statistics.bind(null, baton.app))
-            .listenTo(baton.app.props, 'change:layout', updateContactPicture);
-
-            dropdown.render().$el.addClass('dropdown pull-right').attr('data-dropdown', 'view');
+            dropdown.listenTo(baton.app.props, 'change:layout', updateContactPicture);
 
             toggleTextPreview();
             baton.app.on('folder:change', toggleTextPreview);
@@ -313,6 +324,32 @@ define('io.ox/mail/toolbar', [
             }
 
             updateContactPicture.call(dropdown);
+        }
+    });
+
+    ext.point('io.ox/mail/toolbar/links/view-dropdown').extend({
+        id: 'vacation-notice',
+        index: 400,
+        draw: function () {
+            if (!capabilities.has('mailfilter_v2')) return;
+            this.link('vacation-notice', gt('Vacation notice'), onOpenVacationNotice);
+        }
+    });
+
+    ext.point('io.ox/mail/toolbar/links/view-dropdown').extend({
+        id: 'mail-attachments',
+        index: 500,
+        draw: function (baton) {
+            if (!settings.get('folder/mailattachments', {}).all) return;
+            this.link('attachments', gt('All attachments'), allAttachments.bind(null, baton.app));
+        }
+    });
+
+    ext.point('io.ox/mail/toolbar/links/view-dropdown').extend({
+        id: 'statistics',
+        index: 600,
+        draw: function (baton) {
+            this.link('statistics', gt('Statistics'), statistics.bind(null, baton.app));
         }
     });
 
