@@ -368,6 +368,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                         this.$el.attr('data-id', self.model.get('id'))
                             .addClass('draggable ' + getEditableState())
+                            .attr('draggable', true)
                             .toggleClass('active', self.model.get('active'))
                             .toggleClass('disabled', !self.model.get('active'))
                             .empty().append(
@@ -612,19 +613,18 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             sortable: true,
                             containment: this.$el,
                             notification: this.$('#' + notificationId),
-                            childView: FilterSettingsView,
-                            update: function () {
-                                var arrayOfFilters = $node.find('li[data-id]'),
-                                    data = _.map(arrayOfFilters, function (single) {
-                                        return parseInt($(single).attr('data-id'), 10);
-                                    });
+                            childView: FilterSettingsView
+                        }).on('order:changed', function () {
+                            var arrayOfFilters = $node.find('li[data-id]'),
+                                data = _.map(arrayOfFilters, function (single) {
+                                    return parseInt($(single).attr('data-id'), 10);
+                                });
 
-                                //yell on reject
-                                settingsUtil.yellOnReject(
-                                    api.reorder(data)
-                                );
-                                updatePositionInCollection(collection, data);
-                            }
+                            //yell on reject
+                            settingsUtil.yellOnReject(
+                                api.reorder(data)
+                            );
+                            updatePositionInCollection(collection, data);
                         }).render().$el);
                     },
 
