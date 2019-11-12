@@ -105,10 +105,13 @@ define('io.ox/core/main/topbar_right', [
         index: 200,
         draw: function () {
             if (_.device('smartphone')) return;
+
+            var node = $('<i class="fa fa-refresh launcher-icon" aria-hidden="true">');
+
             this.append(
                 addLauncher(
                     'right',
-                    $('<i class="fa fa-refresh launcher-icon" aria-hidden="true">').attr('title', gt('Refresh')),
+                    node,
                     function () {
                         refresh();
                         return $.when();
@@ -116,6 +119,14 @@ define('io.ox/core/main/topbar_right', [
                     gt('Refresh')
                 ).attr('id', 'io-ox-refresh-icon')
             );
+
+            function setLabel() {
+                var minutes = parseInt(settings.get('refreshInterval', 300000), 10) / 60000;
+                return node.attr('title', gt('Refresh. Current interval (%1$s min) can be customized in settings.', minutes));
+            }
+
+            setLabel();
+            settings.on('change:refreshInterval', setLabel);
         }
     });
 
