@@ -322,16 +322,16 @@ define('io.ox/portal/settings/pane', [
                         //do not show protected widgets which are enabled but don't have any attribute changeable
                         if (model.get('protectedWidget') === true && model.get('enabled') === true && !anyChangeable) return false;
                         return true;
-                    },
-                    update: function () {
-                        widgets.getCollection().trigger('order-changed', 'settings');
-                        widgets.save(this.$el);
                     }
                 })
                 .on('add', function (view) {
                     // See Bugs: 47816 / 47230
                     if (ox.ui.App.getCurrentApp().get('name') === 'io.ox/portal') return;
                     view.edit();
+                })
+                .on('order:changed', function () {
+                    widgets.getCollection().trigger('order-changed', 'settings');
+                    widgets.save(this.$el);
                 })
                 .render().$el
             );
