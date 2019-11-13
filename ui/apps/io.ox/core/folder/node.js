@@ -526,7 +526,7 @@ define('io.ox/core/folder/node', [
                 summary = summary.join(', ');
                 a11ysummary = a11ysummary.reverse().join(', ');
                 if (summary) summary = ' (' + summary + ')';
-                if (a11ysummary) a11ysummary = ', ' + a11ysummary;
+                if (a11ysummary) a11ysummary = ', ' + a11ysummary + '. ' + gt('Right click for more options.');
             }
             this.$el.attr('aria-label', this.getTitle() + a11ysummary + this.getA11yDescription());
             this.$.selectable.attr('title', this.getTitle() + summary);
