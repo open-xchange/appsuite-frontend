@@ -311,10 +311,13 @@ define('io.ox/tasks/api', [
         }).then(function (obj) {
             task.id = obj.id;
             response = obj;
-
+            //get fresh data
+            return api.get(task);
+        }).then(function (newData) {
+            // fill caches
+            task = newData;
             return $.when(
                 api.caches.all.grepRemove(task.folder_id + api.DELIM),
-                api.caches.get.add(task),
                 api.caches.list.merge(task)
             );
         }).then(function () {
