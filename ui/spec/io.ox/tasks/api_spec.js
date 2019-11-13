@@ -24,6 +24,9 @@ define(['shared/examples/for/api',
                 this.server.respondWith('PUT', /api\/tasks\?action=new/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data":{"id":122}}');
                 });
+                this.server.respondWith('GET', /api\/tasks\?action=get/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data":{"id":122}}');
+                });
             });
             it('should add a new task', function () {
                 //make copy of testData
