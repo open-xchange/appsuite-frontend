@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-10-30 20:50+0100\n"
+"PO-Revision-Date: 2019-11-13 10:10+0100\n"
 "Last-Translator: Ivar Snaaijer <ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <nl@workshop-chapina.com>\n"
 "Language: nl_NL\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 18.12.3\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -4096,8 +4096,8 @@ msgid ""
 "The file type \"%1$s\" cannot be used as a contact photo. Supported file "
 "types are JPEG, GIF, BMP, and PNG."
 msgstr ""
-"Het bestandstype \"%1$s\" kan niet gebruikt worden als contactpersoon."
-" Ondersteunde bestanden zijn JPEG, GIF, BMP en PNG."
+"Het bestandstype \"%1$s\" kan niet gebruikt worden als contactpersoon. "
+"Ondersteunde bestanden zijn JPEG, GIF, BMP en PNG."
 
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid "Click to add photo"
@@ -10947,8 +10947,8 @@ msgid ""
 "iOS devices can be automatically configured by installing the configuration "
 "profile."
 msgstr ""
-"iOS apparaten kunnen automatisch ingesteld worden door het configuratie"
-" profiel te installeren."
+"iOS apparaten kunnen automatisch ingesteld worden door het configuratie "
+"profiel te installeren."
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV"
@@ -11516,8 +11516,8 @@ msgid ""
 "You can download a copy of your personal data from your account, if you want "
 "to save it or transfer it to another provider."
 msgstr ""
-"U kan een kopie van uw persoonlijke gegevens downloaden uit uw account, om op"
-" te slaan of om deze over te zetten naar een ander account."
+"U kan een kopie van uw persoonlijke gegevens downloaden uit uw account, om "
+"op te slaan of om deze over te zetten naar een ander account."
 
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Maximum file size"
@@ -11527,8 +11527,8 @@ msgstr "Maximale bestandsgrootte"
 msgid ""
 "Archives larger than the selected size will be split into multiple files."
 msgstr ""
-"Archiefbestanden die groter zijn dan de gekozen grootte worden in meerdere"
-" bestanden opgedeeld."
+"Archiefbestanden die groter zijn dan de gekozen grootte worden in meerdere "
+"bestanden opgedeeld."
 
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Request download"
@@ -11547,8 +11547,8 @@ msgid ""
 "There is currently an archive download available. By requesting a new "
 "download the current archive will be deleted and is no longer available."
 msgstr ""
-"Er is momenteel een archief beschikbaar om te downloaden. Door een nieuwe aan"
-" te vragen wordt de huidige verwijderd en is dan niet meer beschikbaar."
+"Er is momenteel een archief beschikbaar om te downloaden. Door een nieuwe "
+"aan te vragen wordt de huidige verwijderd en is dan niet meer beschikbaar."
 
 #. header for zip archive download list
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
@@ -11561,9 +11561,9 @@ msgid ""
 "the requested data this may take hours or days. You will be informed via "
 "email when your download is ready."
 msgstr ""
-"Uw aangevraagde archief wordt momenteel gemaakt. Afhankelijk van de grootte"
-" van de aangevraagde gegevens kan dit uren of dagen duren. U krijgt een"
-" e-mail als uw download klaar staat."
+"Uw aangevraagde archief wordt momenteel gemaakt. Afhankelijk van de grootte "
+"van de aangevraagde gegevens kan dit uren of dagen duren. U krijgt een e-"
+"mail als uw download klaar staat."
 
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Cancel download request"
@@ -11580,8 +11580,8 @@ msgid ""
 "Your data archive from %2$s is ready for download. The download is available "
 "until %1$s."
 msgstr ""
-"Uw gegevensarchief van %2$s is klaar om te downloaden download. De download"
-" is beschikbaar tot %1$s."
+"Uw gegevensarchief van %2$s is klaar om te downloaden download. De download "
+"is beschikbaar tot %1$s."
 
 #. %1$s: filename
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
@@ -11820,7 +11820,7 @@ msgstr "Van alle apparaten afmelden"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Do you really want to sign out from all clients except the current one?"
 msgstr ""
-"Weet u zeker dat u van alle cliets wilt afmelden behalve van dit apparaat?"
+"Weet u zeker dat u van alle clients wilt afmelden behalve van dit apparaat?"
 
 #. headline for general settings
 #. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
