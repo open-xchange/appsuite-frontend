@@ -166,7 +166,7 @@
             var relatedTarget = { relatedTarget: $this.get(0) };
             $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget));
 
-            activeElement = $(document.activeElement);
+            activeElement = $(this);
 
             if (e.isDefaultPrevented()) return;
 
