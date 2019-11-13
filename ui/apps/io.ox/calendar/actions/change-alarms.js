@@ -64,9 +64,9 @@ define('io.ox/calendar/actions/change-alarms', [
 
     return function (appointmentData) {
         if (appointmentData.recurrenceId && appointmentData.seriesId) {
-            new ModalDialog({ title: gt('Change appointment status'), width: 600 })
+            new ModalDialog({ title: gt('Change appointment reminders'), width: 600 })
                 .build(function () {
-                    this.$body.append(gt('This appointment is part of a series. Do you want to change your confirmation for the whole series or just for this appointment within the series?'));
+                    this.$body.append(gt('This appointment is part of a series. Do you want to change your reminders for the whole series or just for this appointment within the series?'));
                 })
                 .addCancelButton({ left: true })
                 .addButton({ className: 'btn-default', label: gt('Change appointment'), action: 'appointment' })
