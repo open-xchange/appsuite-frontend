@@ -326,7 +326,8 @@ define('io.ox/onboarding/clients/extensions', [
                 width: 600
             })
             .build(function () {
-                this.$body.text(gt('Link will be send to %1$s ', data.sms));
+                //#. %1$s: a cell phone number
+                this.$body.text(gt('Link will be send to %1$s', data.sms));
             })
             .addCancelButton({ left: true })
             .addButton({ action: 'apply', label: gt('Send') })
