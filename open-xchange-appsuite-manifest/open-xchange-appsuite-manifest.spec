@@ -52,6 +52,9 @@ else
     if [ -x %{update} ]; then %{update} --later; fi
 fi
 
+%preun
+    cp -R /opt/open-xchange/appsuite/apps/ /opt/open-xchange/appsuite/@OXVERSION@-@OXREVISION@/ || true
+
 %triggerpostun -- open-xchange-appsuite-manifest < 7.2.0
 if [ -x %{update} ]; then %{update}; fi
 

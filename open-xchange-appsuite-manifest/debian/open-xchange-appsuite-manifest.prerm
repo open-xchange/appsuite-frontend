@@ -1,0 +1,3 @@
+#!/bin/sh
+cp -R /opt/open-xchange/appsuite/apps/ /opt/open-xchange/appsuite/apps-%{version}/ || true
+cp -R /opt/open-xchange/appsuite/manifests/ /opt/open-xchange/appsuite/manifests-%{version}/ || true
