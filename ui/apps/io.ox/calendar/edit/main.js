@@ -415,6 +415,10 @@ define('io.ox/calendar/edit/main', [
 
             getContextualHelp: function () {
                 return 'ox.appsuite.user.sect.calendar.gui.create.html';
+            },
+
+            hasUnsavedChanges: function () {
+                return this.getDirtyStatus();
             }
         });
 

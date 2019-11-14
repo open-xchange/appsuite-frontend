@@ -184,6 +184,18 @@ define('io.ox/mail/compose/main', [
             }.bind(this));
         }
     }, {
+        id: 'save-state',
+        index: INDEX += 100,
+        perform: function () {
+            var model = this.model,
+                onSave = function onSave() {
+                    this.savedState = model.toJSON();
+                }.bind(this);
+
+            onSave();
+            this.view.listenTo(model, 'success:save', onSave);
+        }
+    }, {
         id: 'initial-patch',
         index: INDEX += 100,
         perform: function () {
@@ -283,6 +295,11 @@ define('io.ox/mail/compose/main', [
                 });
             });
             return def;
+        };
+
+        app.hasUnsavedChanges = function () {
+            if (!this.savedState) return false;
+            return !_.isEmpty(app.view.model.deepDiff(this.savedState, app.view.model.toJSON()));
         };
 
         // destroy

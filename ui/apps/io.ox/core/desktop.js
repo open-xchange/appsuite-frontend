@@ -925,18 +925,27 @@ define('io.ox/core/desktop', [
     $('#io-ox-core').show();
 
     // check if any open application has unsaved changes
-    window.onbeforeunload = function () {
+    window.onbeforeunload = function (e) {
 
-        // find an applications with unsaved changes
-        var unsavedChanges = apps.some(function (app) {
+        // find all applications with unsaved changes
+        var unsavedApps = apps.filter(function (app) {
             return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
         });
 
-        // browser will show a confirmation dialog, if onbeforeunload returns a string
-        ox.trigger('beforeunload', unsavedChanges);
-        if (unsavedChanges) {
-            return gt('There are unsaved changes.');
-        }
+        // if unsaved changes were found trigger the beforeunload-event
+        ox.trigger('beforeunload', unsavedApps);
+
+        if (!coreSettings.get('features/showUnsavedPrompt', false)) return;
+        if (unsavedApps.length === 0) return;
+
+        // open all minimized dirty apps
+        unsavedApps.forEach(function (app) {
+            app.getWindow().show();
+        });
+        // set returnValue and return message for browser compatibility
+        (e || window.event).returnValue = gt('There are unsaved changes.');
+        return (e || window.event).returnValue;
+
     };
 
     /**

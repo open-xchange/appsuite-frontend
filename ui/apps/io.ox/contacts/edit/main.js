@@ -196,6 +196,10 @@ define('io.ox/contacts/edit/main', [
             return 'ox.appsuite.user.sect.settings.personaldata.html';
         };
 
+        app.hasUnsavedChanges = function () {
+            return this.view.model.isDirty();
+        };
+
         return app;
     }
 

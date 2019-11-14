@@ -253,6 +253,10 @@ define('io.ox/tasks/edit/main', [
             return 'ox.appsuite.user.sect.tasks.gui.create.html';
         };
 
+        app.hasUnsavedChanges = function () {
+            return app.isDirty();
+        };
+
         return app;
     }
 
