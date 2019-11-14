@@ -9,6 +9,7 @@
  * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Richard Petersen <richard.petersen@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 define('io.ox/backbone/mini-views/timezonepicker', [
@@ -38,17 +39,20 @@ define('io.ox/backbone/mini-views/timezonepicker', [
             this.$el.attr({ name: this.name });
             if (this.id) this.$el.attr({ id: this.id });
             _.defer(function () {
-                // current timezone
-                this.$el.append(
-                    this.renderOptions(
-                        [getTimezoneData(coreSettings.get('timezone'), true)],
-                        $('<optgroup>').attr('label', gt('Standard timezone'))
-                    )
-                );
                 // favorites
                 if (this.options.favorites) {
                     this.$el.append(
                         this.renderOptions(this.options.favorites, $('<optgroup>').attr('label', gt('Favorites')))
+                    );
+                }
+                // system timezone
+                var systemTimezone = getSystemTimeZone();
+                if (systemTimezone && _(this.options.list).findWhere({ value: systemTimezone })) {
+                    this.$el.append(
+                        this.renderOptions(
+                            [getTimezoneData(systemTimezone, true)],
+                            $('<optgroup>').attr('label', gt('Local system timezone'))
+                        )
                     );
                 }
                 // all timezones
@@ -60,19 +64,13 @@ define('io.ox/backbone/mini-views/timezonepicker', [
 
         renderGroups: function () {
             this.$el.append(
-                _(regions)
+                _(regionList)
                 .chain()
-                .keys()
                 .map(function (region) {
                     var list = _(this.options.list)
                         .filter(function (zone) { return zone.region === region; });
                     if (!list.length) return $();
                     return this.renderOptions(list, $('<optgroup>').attr('label', regions[region]));
-                    //     sections = _(list).chain().pluck('offset').uniq().value();
-                    // return _(sections).map(function (offset) {
-                    //     var subset = _(list).where({ offset: offset });
-                    //     return this.renderOptions(subset, $('<optgroup>').attr('label', regions[region] + ' ' + offset));
-                    // }, this);
                 }, this)
                 .flatten()
                 .value()
@@ -118,6 +116,7 @@ define('io.ox/backbone/mini-views/timezonepicker', [
             if (/^(Poland|Portugal|PRC|PST8PDT|ROC|ROK|Singapore|Turkey|UCT|Universal|WET|W-SU|Zulu)$/.test(name)) return false;
             if (/^Etc\/(Greenwich|UCT|Universal|Zulu)$/.test(name)) return false;
             // Drop ALIAS zones
+            if (coreSettings.get('timezones/includeAlias', false)) return true;
             // Africa
             if (/^Africa\/(Addis_Ababa|Asmara|Bamako|Bangui|Banjul|Blantyre|Brazzaville|Bujumbura|Conakry|Dakar)$/.test(name)) return false;
             if (/^Africa\/(Dar_es_Salaam|Djibouti|Douala|Freetown|Gaborone|Harare|Kampala|Kigali|Kinshasa|Libreville)$/.test(name)) return false;
@@ -137,7 +136,7 @@ define('io.ox/backbone/mini-views/timezonepicker', [
             // Australia
             if (/^Australia\/(Canberra|Yancowinna)$/.test(name)) return false;
             // Europe
-            if (/^Australia\/(Belfast|Bratislava|Busingen|Guernsey|Isle_of_Man|Jersey|Ljubljana|Mariehamn|Podgorica|San_Marino|Sarajevo|Skopje|Tiraspol|Vaduz|Vatican|Zagreb)$/.test(name)) return false;
+            if (/^Europe\/(Belfast|Bratislava|Busingen|Guernsey|Isle_of_Man|Jersey|Ljubljana|Mariehamn|Podgorica|San_Marino|Sarajevo|Skopje|Tiraspol|Vaduz|Vatican|Zagreb)$/.test(name)) return false;
             // Indian Ocean
             if (/^Indian\/(Antananarivo|Comoro|Mayotte)$/.test(name)) return false;
             // Pacific Ocean
@@ -169,6 +168,14 @@ define('io.ox/backbone/mini-views/timezonepicker', [
         return (regions[region] || region) + '/';
     }
 
+    function getSystemTimeZone() {
+        var tz;
+        try {
+            tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        } finally { _.noop(); }
+        return tz || '';
+    }
+
     //
     // Regions and their translations
     //
@@ -191,17 +198,23 @@ define('io.ox/backbone/mini-views/timezonepicker', [
         //#. Timezon region / Pacific Ocean
         Pacific: gt('Pacific'),
         //#. Timezon region
-        Arctic: gt('Arctic'),
-        //#. Timezon region
         Antarctica: gt('Antarctica'),
         //#. Timezon region
         Other: gt('Other')
     };
 
-    // expose to test
+    var regionList = coreSettings.get('timezones/regions');
+    regionList = _.isString(regionList) ? regionList.split(',') : _(regions).keys();
+
+    // tweak order of regions
+    var region = getSystemTimeZone().split('/')[0];
+    if (_(regionList).contains(region)) regionList = [region].concat(_(regionList).without(region));
+
+    // expose to debug/test
     TimezonePicker.util = {
         getTimezones: getTimezones,
-        getAvailableTimezones: getAvailableTimezones
+        getAvailableTimezones: getAvailableTimezones,
+        regionList: regionList
     };
 
     return TimezonePicker;
