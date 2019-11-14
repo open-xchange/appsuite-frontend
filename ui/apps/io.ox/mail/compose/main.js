@@ -197,6 +197,15 @@ define('io.ox/mail/compose/main', [
             var win = baton.win;
             // calculate right margin for to field (some languages like chinese need extra space for cc bcc fields)
             win.nodes.main.find('.tokenfield').css('padding-right', 14 + win.nodes.main.find('.recipient-actions').width() + win.nodes.main.find('[data-extension-id="to"] .has-picker').length * 20);
+
+            // clear max width for tokenfields to accomodate new max width
+            this.view.$el.find('.mail-input>.tokenfield>input.tokenfield').each(function () {
+                var tokenfield = $(this).data('bs.tokenfield'),
+                    attr = $(this).closest('[data-extension-id]').data('extension-id');
+                delete tokenfield.maxTokenWidth;
+                // trigger redraw
+                baton.model.trigger('change:' + attr, baton.model, baton.model.get(attr));
+            });
             // Set window and toolbars visible again
             win.nodes.header.removeClass('sr-only');
             win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0).trigger('scroll');
