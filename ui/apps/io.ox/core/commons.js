@@ -577,6 +577,15 @@ define('io.ox/core/commons', [
         mediateFolderView: function (app) {
             function toggleFolderView(e) {
                 e.data.app.folderView.toggle(e.data.state);
+
+                if (!!e.data.state) {
+                    e.data.app.folderView.tree.getNodeView(e.data.app.folder.get()).$el.focus();
+                } else {
+                    var grid = e.data.app.grid;
+
+                    if (grid.getIds().length === 0) return grid.getContainer().focus();
+                    grid.selection.focus();
+                }
             }
 
             function onFolderViewOpen(app) {
@@ -646,6 +655,13 @@ define('io.ox/core/commons', [
                 e.preventDefault();
                 app.trigger('before:change:folderview');
                 app.folderView.toggle(e.data.state);
+
+                if (!!e.data.state) {
+                    app.folderView.tree.getNodeView(app.folder.get()).$el.focus();
+                } else {
+                    var a11y = require('io.ox/core/a11y');
+                    a11y.getTabbable(app.getWindow().nodes.body.find('.classic-toolbar'))[0].focus();
+                }
             };
 
             ext.point(app.get('name') + '/sidepanel').extend({

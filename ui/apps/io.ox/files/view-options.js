@@ -254,6 +254,21 @@ define('io.ox/files/view-options', [
     function toggleFolderView(e) {
         e.preventDefault();
         e.data.app.folderView.toggle(e.data.state);
+
+        if (!!e.data.state) {
+            e.data.app.folderView.tree.getNodeView(e.data.app.folder.get()).$el.focus();
+        } else {
+            var listView = e.data.app.listView;
+
+            var node = listView.selection.get().reduce(function (memo, item) {
+                if (memo) return memo;
+                return listView.selection.getNode(item);
+            }, null);
+
+            if (node) return listView.selection.focus(0, node);
+            if (listView.collection.length === 0) return listView.$el.focus();
+            listView.selection.select(0);
+        }
     }
 
     function onFolderViewOpen(app) {
