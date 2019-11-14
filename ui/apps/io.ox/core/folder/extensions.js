@@ -940,7 +940,7 @@ define('io.ox/core/folder/extensions', [
                 attributes: { role: 'presentation' },
                 tagName: 'li',
                 className: 'dropdown',
-                $toggle: $('<a href="#" class="dropdown-toggle"data-action="add-subfolder" data-toggle="dropdown">').append(
+                $toggle: $('<a href="#" data-action="add-subfolder" data-toggle="dropdown">').append(
                     gt('Add new calendar'),
                     $('<i class="fa fa-caret-down" aria-hidden="true">')
                 )
