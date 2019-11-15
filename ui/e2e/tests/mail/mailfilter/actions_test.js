@@ -57,7 +57,7 @@ function createFilterRule(I, name, action) {
 
 }
 
-Scenario('[C7801] Keep filtered mail', async function (I, users) {
+Scenario('[C7801] Keep filtered mail', async function (I, users, mail) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -71,15 +71,13 @@ Scenario('[C7801] Keep filtered mail', async function (I, users) {
     I.openApp('Mail');
 
     // compose mail
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.newMail();
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'C7801');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
-    I.click('Send');
+    mail.send();
     I.waitForElement('~Sent, 1 total', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total', 30);
     I.see('C7801', '.subject');
