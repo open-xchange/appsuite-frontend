@@ -51,10 +51,6 @@ define('io.ox/backbone/views/actions/mobile', [
                         options.app = baton.app;
                         options.folder_id = baton.app.folder.get();
                     }
-                    // some detailview inline toolbars have a model attribute
-                    if (baton.model) {
-                        options.model = baton.model;
-                    }
                     return options;
                 })
                 .$el
