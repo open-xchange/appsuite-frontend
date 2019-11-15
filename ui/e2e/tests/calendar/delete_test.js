@@ -68,27 +68,27 @@ Scenario('[C7466] Delete one appointment of an series', async function (I, users
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
     I.click('.next');
-    I.waitForElement('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
-    I.click('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForElement('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.click('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]');
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup');
     I.waitForText('Delete', undefined, '.io-ox-sidepopup');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.modal');
     I.click('Delete this appointment', '.modal');
     I.waitForDetached('.modal');
-    I.waitForDetached('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForDetached('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]');
     I.click('Today');
-    I.waitForElement('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.waitForElement('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.next');
-    I.waitForDetached('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.waitForDetached('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.next');
-    I.waitForElement('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.waitForElement('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.next');
-    I.waitForElement('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.waitForElement('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.next');
-    I.waitForElement('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.waitForElement('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.next');
-    I.waitForElement('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.waitForElement('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]', 5);
 });
 
 Scenario('[C7468] Delete an appointment', async function (I, users) {
