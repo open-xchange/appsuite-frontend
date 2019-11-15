@@ -282,6 +282,7 @@ define('io.ox/calendar/edit/extensions', [
 
                 });
             this.append(baton.parentView.startDatePicker.render().$el);
+            baton.parentView.startDatePicker.nodes.timezoneField.attr('title', gt('Change timezone'));
         }
     });
 
@@ -316,6 +317,7 @@ define('io.ox/calendar/edit/extensions', [
 
                 });
             this.append(baton.parentView.endDatePicker.render().$el);
+            baton.parentView.endDatePicker.nodes.timezoneField.attr('title', gt('Change timezone'));
         }
     });
 
