@@ -262,7 +262,7 @@ define('io.ox/calendar/week/view', [
                     .append(
                         $('<span aria-hidden="true">').attr('title', gt('Create all-day appointment')).append(
                             $.txt(tmpDate.format('ddd ')),
-                            $('<span class="number">').text(tmpDate.format('D'))
+                            $('<span aria-hidden="true" class="number">').text(tmpDate.format('D'))
                         )
                     );
 
@@ -292,8 +292,10 @@ define('io.ox/calendar/week/view', [
                         todayContainer = $('.week-container .day[date="' + index + '"]', self.pane);
                         if (self.model.get('numColumns') > 1) todayContainer.addClass(self.opt.todayClass);
                         day
-                            .prepend($('<span class="sr-only">').text(gt('Today')))
-                            .addClass(self.opt.todayClass);
+                            .addClass(self.opt.todayClass)
+                            .attr('aria-label', function () {
+                                return gt('Today,') + ' ' + $(this).attr('aria-label');
+                            });
                     }
                 }
                 self.$el.append(day);

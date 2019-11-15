@@ -289,7 +289,8 @@ define('io.ox/backbone/views/datepicker', [
                                                 .attr({
                                                     'id': datepickerId + '_' + m.format('l'),
                                                     //#. CW is calender week and %1$d is the week number
-                                                    'aria-label': m.format('l, dddd') + ', ' + gt('CW %1$d', m.week()),
+                                                    'aria-label': isToday(m) ? gt('Today,') + ' ' + m.format('l, dddd') + ', ' + gt('CW %1$d', m.week()) :
+                                                        m.format('l, dddd') + ', ' + gt('CW %1$d', m.week()),
                                                     'aria-selected': isSame(m, current),
                                                     'data-date': m.valueOf()
                                                 })
