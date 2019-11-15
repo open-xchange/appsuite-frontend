@@ -664,7 +664,7 @@ Scenario('[C274537] Support use-count calculation on Appointment create with Gro
     I.click({ xpath: '//div[@class="participant-name"]//strong[@class="tt-highlight"][contains(text(),"' + timestamp + '-003")]' });
     I.click('Create');
     I.waitForDetached(calendar.locators.edit);
-    I.waitForElement('.appointment-container [aria-label="' + testrailID + '"]', 5);
+    I.waitForElement('.appointment-container [title="' + testrailID + '"]', 5);
 
     I.say('Check new order of groups');
     calendar.newAppointment();
@@ -686,7 +686,7 @@ Scenario('[C274537] Support use-count calculation on Appointment create with Gro
 
 Scenario('[C274516] Follow up should also propose a future date for appointments in the future', async function (I, users, calendar) {
     const testrailID = 'C274516';
-    const appointmentSelector = `~${testrailID}`;
+    const appointmentSelector = `.appointment-content[title="${testrailID}"]`;
     const date = moment().add(2, 'week');
     const SIDEPOPUP = locate({ css: '.io-ox-calendar-main .io-ox-sidepopup' }).as('Sidepopup');
 
@@ -756,8 +756,8 @@ Scenario('[C274515] Attendees are not allowed to change their own permission sta
 
     I.say('Open sidepopup');
     I.clickToolbar('Today');
-    I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
-    I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForElement('.appointment-container [title="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.click('.appointment-container [title="' + testrailID + ', ' + testrailID + '"]');
     I.waitForElement(SIDEPOPUP, 5);
 
     I.say('Edit');
@@ -772,7 +772,7 @@ Scenario('[C274484] Attendees can change the appointment', async function (I, us
     const SIDEPOPUP = locate({ css: '.io-ox-calendar-main .io-ox-sidepopup' }).as('Sidepopup');
     const testrailID = 'C274484';
     const timestamp = Math.round(+new Date() / 1000);
-    const appointmentSelector = `~${testrailID}`;
+    const appointmentSelector = `.appointment-content[title="${testrailID}"]`;
 
 
     I.haveSetting('io.ox/core//autoOpenNotification', false, { user: users[1] });
@@ -1425,7 +1425,7 @@ Scenario('[C7415] Create two reserved appointments at the same time', async func
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
     I.clickToolbar('Today');
-    expect(await I.grabNumberOfVisibleElements(`.appointment-container [aria-label="${testrailID}, ${testrailID}"]`)).to.equal(1);
+    expect(await I.grabNumberOfVisibleElements(`.appointment-container [title="${testrailID}, ${testrailID}"]`)).to.equal(1);
 
     I.say('Create appointment');
     calendar.newAppointment();
@@ -1441,7 +1441,7 @@ Scenario('[C7415] Create two reserved appointments at the same time', async func
     I.waitForElement('#io-ox-refresh-icon .fa-spin');
     I.waitForDetached('#io-ox-refresh-icon .fa-spin');
 
-    I.seeNumberOfVisibleElements(`.appointment-container [aria-label="${testrailID}, ${testrailID}"]`, 2);
+    I.seeNumberOfVisibleElements(`.appointment-container [title="${testrailID}, ${testrailID}"]`, 2);
 });
 
 Scenario('[C7446] Create recurring whole-day appointment', async function (I, users, calendar) {
@@ -1555,7 +1555,7 @@ Scenario('[C234658] Create appointments and show this in cumulatively view', asy
 
     const testrailID = 'C234658';
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar');
-    const selector = '.appointment-container [aria-label="C234658, C234658"]';
+    const selector = '.appointment-container [title="C234658, C234658"]';
 
     for (let i = 0; i < 2; i++) {
         const folder = await I.haveFolder({ title: `${testrailID} - ${i}`, module: 'event', parent: 'cal://0/' + appointmentDefaultFolder });
@@ -1583,7 +1583,7 @@ Scenario('[C234658] Create appointments and show this in cumulatively view', asy
     I.click({ css: `[data-id="virtual/flat/event/private"] [title="${testrailID} - 0"] .color-label` });
     I.waitNumberOfVisibleElements(selector, 1);
     I.click({ css: `[data-id="virtual/flat/event/private"] [title="${testrailID} - 1"] .color-label` });
-    I.waitNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 2);
+    I.waitNumberOfVisibleElements('.appointment-container [title="C234658, C234658"]', 2);
 });
 
 Scenario('[C265153] Create appointment with a link in the description', async function (I, users, calendar) {
@@ -1615,8 +1615,8 @@ Scenario('[C265153] Create appointment with a link in the description', async fu
 
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
-    I.waitForElement('.appointment-container [aria-label="C265153, C265153"]');
-    I.click('.appointment-container [aria-label="C265153, C265153"]');
+    I.waitForElement('.appointment-container [title="C265153, C265153"]');
+    I.click('.appointment-container [title="C265153, C265153"]');
     I.waitForElement('.calendar-detail [href="https://www.google.de"]');
     I.click('.calendar-detail [href="https://www.google.de"]');
     I.switchToNextTab();

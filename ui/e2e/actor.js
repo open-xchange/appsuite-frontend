@@ -25,7 +25,7 @@ module.exports = actor({
     createAppointment({ subject, location, folder, startDate, startTime, endDate, endTime }) {
         // select calendar
         this.selectFolder(folder);
-        this.waitForElement('li.selected[aria-label="' + folder + '"] .color-label');
+        this.waitForElement('li.selected[aria-label^="' + folder + '"] .color-label');
 
         this.clickToolbar('New appointment');
         this.waitForVisible('.io-ox-calendar-edit-window');
