@@ -67,6 +67,12 @@ define('io.ox/backbone/mini-views/settings-list-view', [
             },
 
             onDragStart: function (e) {
+                // prevent d&d on IE when drag starts on controls
+                if (_.browser.ie && $(e.target).closest('.list-item-controls').length) {
+                    e.preventDefault();
+                    return false;
+                }
+
                 var originalEvent = e.originalEvent;
                 $current = $(e.currentTarget);
                 indexBefore = $current.index();
