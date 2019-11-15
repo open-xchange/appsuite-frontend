@@ -895,7 +895,7 @@ Scenario('[C7425] Create appointment with a group', async function (I, users, ca
     I.waitForText(`New appointment: ${data.subject}`);
 });
 
-Scenario('XXX[C7429] Create appointment via Contact', async function (I, users, contacts, calendar) {
+Scenario('[C7429] Create appointment via Contact', async function (I, users, contacts, calendar) {
     const data = { subject: 'Wichtige Dinge', location: 'Kneipe' };
 
     I.login('app=io.ox/contacts');
