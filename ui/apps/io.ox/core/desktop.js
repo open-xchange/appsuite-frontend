@@ -892,6 +892,7 @@ define('io.ox/core/desktop', [
                                 });
                                 return $.when();
                             }
+                            var oldId = obj.id;
                             return app.launch().then(function () {
                                 // update unique id
                                 obj.id = this.get('uniqueID');
@@ -901,6 +902,12 @@ define('io.ox/core/desktop', [
                                         app.set('restored', true);
                                     });
                                 }
+                            }).fail(function (e) {
+                                if (!e || e.code !== 'MSG-0032') return;
+                                // restoreById-savepoint after draft got deleted
+                                _.delay(function () {
+                                    ox.ui.App.removeRestorePoint(oldId);
+                                });
                             });
                         });
                     })
