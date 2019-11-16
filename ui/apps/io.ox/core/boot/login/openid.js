@@ -65,37 +65,57 @@ define('io.ox/core/boot/login/openid', [
         return def;
     }
 
+    function silentRelogin() {
+        var params = {
+            flow: 'login',
+            redirect: false,
+            client: session.client(),
+            version: session.version(),
+            hash: '#login_type=propagateSession'
+        };
+        var url = oidcUrlFor(params);
+        var frame = $('iframe');
+        return $.ajax(url).then(function (res) {
+            var def = $.Deferred();
+            frame.one('load', _.debounce(function () {
+                // try to fail early
+                try {
+                    if (frame[0].contentDocument.body.innerHTML.length === 0) def.reject({ reason: 'relogin:failed' });
+                } catch (e) {
+                    def.reject(e);
+                }
+            }, 500));
+            frame.attr('src', res.redirect);
+            waitForResponse().then(def.resolve, def.reject);
+            return def;
+        });
+    }
+
     if (ox.serverConfig.oidcLogin === true) {
+        ext.point('io.ox/core/relogin').extend({
+            id: 'openid_connect_retry',
+            after: 'default',
+            render: function () {
+                var dialog = this;
+                // default extension registers ok button, but we want a different action, here
+                this.off('ok');
+                this.on('ok', function () {
+                    silentRelogin().then(function success() {
+                        dialog.trigger('relogin:success');
+                    }, function fail() {
+                        dialog.trigger('relogin:continue');
+                    });
+                });
+            }
+        });
         ext.point('io.ox/core/boot/login').extend({
             id: 'openid_connect',
             after: 'autologin',
             login: function () {
                 return openIdConnectLogin({ flow: 'login' });
             },
-            relogin: function silentRelogin(baton) {
-                var params = {
-                    flow: 'login',
-                    redirect: false,
-                    client: session.client(),
-                    version: session.version(),
-                    hash: '#login_type=propagateSession'
-                };
-                var url = oidcUrlFor(params);
-                var frame = $('iframe');
-                return $.ajax(url).then(function (res) {
-                    var def = $.Deferred();
-                    frame.one('load', _.debounce(function () {
-                        // try to fail early
-                        try {
-                            if (frame[0].contentDocument.body.innerHTML.length === 0) def.reject({ reason: 'relogin:failed' });
-                        } catch (e) {
-                            def.reject(e);
-                        }
-                    }, 500));
-                    frame.attr('src', res.redirect);
-                    waitForResponse().then(def.resolve, def.reject);
-                    return def;
-                }).then(function () {
+            relogin: function (baton) {
+                return silentRelogin().then(function () {
                     baton.stopPropagation();
                     baton.preventDefault();
                     baton.data.reloginState = 'success';
