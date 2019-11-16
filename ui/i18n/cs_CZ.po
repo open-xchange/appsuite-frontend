@@ -2290,7 +2290,8 @@ msgstr "Změnit sérii"
 msgid "Change status"
 msgstr "Změnit stav"
 
-#: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/timezone-dialog.js
 msgid "Change timezone"
 msgstr "Změnit časové pásmo"
 

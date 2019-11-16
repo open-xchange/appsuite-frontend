@@ -2204,7 +2204,8 @@ msgstr "更改系列"
 msgid "Change status"
 msgstr "更改状态"
 
-#: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/timezone-dialog.js
 msgid "Change timezone"
 msgstr "更改时区"
 

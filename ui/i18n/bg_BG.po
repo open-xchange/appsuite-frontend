@@ -2401,7 +2401,8 @@ msgstr "Създай напомняне"
 msgid "Change status"
 msgstr "Промени статус"
 
-#: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/timezone-dialog.js
 msgid "Change timezone"
 msgstr "Промени времевата зона"
 

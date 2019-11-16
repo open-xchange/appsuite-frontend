@@ -2298,7 +2298,8 @@ msgstr "Modifică seria"
 msgid "Change status"
 msgstr "Modifică starea"
 
-#: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/timezone-dialog.js
 msgid "Change timezone"
 msgstr "Modifică fusul orar"
 

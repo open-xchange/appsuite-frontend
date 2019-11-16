@@ -2286,7 +2286,8 @@ msgstr "Cambiar serie"
 msgid "Change status"
 msgstr "Cambiar estado"
 
-#: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/timezone-dialog.js
 msgid "Change timezone"
 msgstr "Cambiar la zona horaria"
 

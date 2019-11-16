@@ -2277,7 +2277,8 @@ msgstr "Mainīt sēriju"
 msgid "Change status"
 msgstr "Izmainīt statusu"
 
-#: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/timezone-dialog.js
 msgid "Change timezone"
 msgstr "Izmainīt laika joslu"
 
