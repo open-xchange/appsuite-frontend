@@ -38,6 +38,9 @@ stages:
     - "[ -z \"$L10N_PACKAGE_NAME\" ] && export L10N_PACKAGE_NAME=${PACKAGE_NAME}"
     - npx grunt install:dist --prefix=../${PACKAGE_NAME}/build/pkg --htdoc=../${HTDOCS_PACKAGE_NAME}/build/pkg
     - npx grunt install:languages --prefix=../${L10N_PACKAGE_NAME}/build/pkg
+    # artifacts to bundle in docker images
+    - npx grunt install:dist --prefix=../images/manifest/root --htdoc=../images/static/root
+    - npx grunt install:languages --prefix=../images/manifest/root
   stage: build
   artifacts:
     expire_in: 2hours
@@ -45,6 +48,7 @@ stages:
       - "*/build"
       - "*/dist"
       - "*/node_modules"
+      - "images/*/root"
 
 # split build_ui into 2 build jobs (running on 2 different runners in parallel)
 # this distributes workload onto 2 runners instead of one and basically halves build time
