@@ -213,6 +213,14 @@ define('io.ox/contacts/view-detail', [
             }
         },
         {
+            index: 120,
+            id: 'private_flag',
+            draw: function (baton) {
+                if (_.device('smartphone') || !baton.data.private_flag) return;
+                this.find('h1.fullname').append($('<div class="sr-only">').attr('aria-label', gt('Private contact')), $('<i class="fa fa-lock private-flag" aria-hidden="true">').attr('title', gt('Private')));
+            }
+        },
+        {
             index: 200,
             id: 'business',
             draw: function (baton) {
