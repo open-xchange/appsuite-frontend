@@ -30,7 +30,7 @@ const A = {
         I.selectFolder(folder);
         I.waitNumberOfVisibleElements('.list-view li.list-item', subjects.length);
         subjects.forEach(function (subject) {
-            I.see(subject, '.list-view .subject');
+            I.waitForText(subject, 5, '.list-view.mail-item');
         });
     },
     clickMoreAction: function (I, toolbar, action) {
