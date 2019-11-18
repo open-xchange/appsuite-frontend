@@ -34,6 +34,7 @@ Scenario('[C7862] Configure display name representation', async (I, contacts) =>
     I.waitForVisible('.io-ox-contacts-settings');
 
     // go into settings and change display style of contacts
+    I.say('Setting: firstname lastname');
     I.waitForText('Address Book', 10, '.io-ox-contacts-settings');
     I.waitForText('Display of names', undefined, '.io-ox-contacts-settings');
     I.click('First name Last name', '.io-ox-contacts-settings');
@@ -42,12 +43,12 @@ Scenario('[C7862] Configure display name representation', async (I, contacts) =>
     I.openApp('Address Book');
     contacts.waitForApp();
     I.waitForElement('.contact-grid-container');
-
-    const firstNameLocator = locate('.first_name').withText(firstName).inside('.contact-detail'),
-        lastNameLocator = locate('.last_name').withText(lastName).inside('.contact-detail');
+    const firstNameLocator = locate('.first_name').withText(firstName).inside('.contact-detail').as('first name node'),
+        lastNameLocator = locate('.last_name').withText(lastName).inside('.contact-detail').as('last name node');
     I.waitForVisible(firstNameLocator.before(lastNameLocator), 5, '.fullname');
 
     // Go back to settings and switch to other display style
+    I.say('Setting: lastname, firstname');
     I.openApp('Settings', { folder: 'virtual/settings/io.ox/contacts' });
 
     I.waitForText('Display of names');

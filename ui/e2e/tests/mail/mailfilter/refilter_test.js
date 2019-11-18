@@ -61,7 +61,8 @@ function checkForFilteredMail(I) {
     I.waitToHide('foobar');
     I.waitForText('Empty');
     I.selectFolder('foo');
-    I.see('foobar', '.subject');
+    I.waitForElement({ css: '.list-item .subject' }, 10);
+    I.see('foobar', { css: '.list-item .subject' });
 }
 
 Scenario('[C290529] Refilter mails in INBOX folder', async (I, users) => {

@@ -28,7 +28,7 @@ After(async (users) => {
 
 Scenario('[C104305] calendar folders using “Permisions” dialog and sharing link', async (I, users, calendar) => {
     let url;
-    // Alice shares a folder with 2 appointments
+    I.say('Alice shares a folder with 2 appointments');
     session('Alice', async () => {
         I.login('app=io.ox/calendar');
         calendar.newAppointment();
@@ -74,14 +74,14 @@ Scenario('[C104305] calendar folders using “Permisions” dialog and sharing l
         I.seeNumberOfElements('.appointment', 2);
         I.see('simple appointment 2');
 
-        // check for missing edit rights
+        I.say('check for missing edit rights')
         I.click(locate('.appointment').at(1));
         I.waitForElement('.io-ox-sidepopup');
         I.dontSee('Edit', '.io-ox-sidepopup');
         I.click('~Close', '.io-ox-sidepopup');
     };
 
-    // Bob receives the share
+    I.say('Bob receives the share');
     session('Bob', () => {
         I.login('app=io.ox/mail', { user: users[1] });
         I.waitForText('has shared the calendar', undefined, '.list-view');
@@ -95,13 +95,14 @@ Scenario('[C104305] calendar folders using “Permisions” dialog and sharing l
         within('.io-ox-calendar-main', checkSharedCalendarFolder);
     });
 
-    // Eve uses external link to shared folder
+    I.say('Eve uses external link to shared folder');
     session('Eve', () => {
         I.amOnPage(url);
         I.waitForElement('.io-ox-calendar-main', 30);
         within('.io-ox-calendar-main', checkSharedCalendarFolder);
     });
 
+    I.say('Alice revoces access');
     session('Alice', () => {
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
         I.clickDropdown('Permissions / Invite people');
