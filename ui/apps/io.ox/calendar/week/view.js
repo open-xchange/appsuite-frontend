@@ -966,7 +966,8 @@ define('io.ox/calendar/week/view', [
             // update scrollposition
             pane.scrollTop(
                 _.isNaN(scrollRatio) ?
-                    this.$currentTimeIndicator.data('top') * height - pane.height() / 2 :
+                    // dont user current time indicator top here because that only works when today is visible
+                    (moment().diff(moment().startOf('day'), 'minutes') / 24 / 60) * height - pane.height() / 2 :
                     scrollRatio * pane.height()
             );
             // render appointments
