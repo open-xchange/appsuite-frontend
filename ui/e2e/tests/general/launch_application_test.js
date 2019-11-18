@@ -51,8 +51,8 @@ Scenario('[C7345] Launch "Address Book" application', async function (I) {
     I.click('#io-ox-launcher');
     I.waitForElement('.launcher-dropdown');
     I.click('Address Book', '.launcher-dropdown');
-    I.waitForElement('.classic-toolbar[aria-label="Address Book Toolbar"]');
-    I.seeElement('.classic-toolbar[aria-label="Address Book Toolbar"]');
+    I.waitForElement('.classic-toolbar[aria-label="Address Book toolbar. Use cursor keys to navigate."]');
+    I.seeElement('.classic-toolbar[aria-label="Address Book toolbar. Use cursor keys to navigate."]');
 });
 
 Scenario('[C7346] Launch "Calendar" application', async function (I) {
@@ -63,8 +63,8 @@ Scenario('[C7346] Launch "Calendar" application', async function (I) {
     I.click('#io-ox-launcher');
     I.waitForElement('.launcher-dropdown');
     I.click('Calendar', '.launcher-dropdown');
-    I.waitForElement('.classic-toolbar[aria-label="Calendar Toolbar"]');
-    I.seeElement('.classic-toolbar[aria-label="Calendar Toolbar"]');
+    I.waitForElement('.classic-toolbar[aria-label="Calendar toolbar. Use cursor keys to navigate."]');
+    I.seeElement('.classic-toolbar[aria-label="Calendar toolbar. Use cursor keys to navigate."]');
 });
 
 Scenario('[C7347] Launch "Drive" application', async function (I) {
@@ -105,6 +105,6 @@ Scenario('[C234516] Launch "Tasks" application', async function (I) {
     I.click('#io-ox-launcher');
     I.waitForElement('.launcher-dropdown');
     I.click('Tasks', '.launcher-dropdown');
-    I.waitForElement('.classic-toolbar[aria-label="Tasks Toolbar"]');
-    I.seeElement('.classic-toolbar[aria-label="Tasks Toolbar"]');
+    I.waitForElement('.classic-toolbar[aria-label="Tasks toolbar. Use cursor keys to navigate."]');
+    I.seeElement('.classic-toolbar[aria-label="Tasks toolbar. Use cursor keys to navigate."]');
 });

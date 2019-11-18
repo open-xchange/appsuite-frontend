@@ -26,11 +26,11 @@ Scenario('[C274424] Inline Help', async (I) => {
     I.login();
 
     verifyHelp(I, 'Mail', 'The E-Mail Components');
-    verifyHelp(I, 'Calendar', 'The Calendar components');
-    verifyHelp(I, 'Address Book', 'The Address Book components');
-    verifyHelp(I, 'Drive', 'The Drive components');
-    verifyHelp(I, 'Tasks', 'The Tasks components');
-    verifyHelp(I, 'Portal', 'The Portal components');
+    verifyHelp(I, 'Calendar', 'The Calendar Components');
+    verifyHelp(I, 'Address Book', 'The Address Book Components');
+    verifyHelp(I, 'Drive', 'The Drive Components');
+    verifyHelp(I, 'Tasks', 'The Tasks Components');
+    verifyHelp(I, 'Portal', 'The Portal Components');
 });
 
 function verifyHelp(I, appName, expectedHelp) {
