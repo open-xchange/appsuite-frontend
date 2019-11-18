@@ -136,14 +136,14 @@ Scenario('[C7468] Delete an appointment', async function (I, users) {
     I.login('app=io.ox/calendar', { user: users[0] });
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
-    I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
-    I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForElement('.appointment[aria-label^="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.click('.appointment[aria-label^="' + testrailID + ', ' + testrailID + '"]');
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.modal');
     I.click('Delete', '.modal');
     I.waitForDetached('.modal');
-    I.waitForDetached('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForDetached('.appointment[aria-label^="' + testrailID + ', ' + testrailID + '"]');
 });
 
 Scenario('[C7469] Delete a whole-day appointment', async function (I, users) {
@@ -189,13 +189,13 @@ Scenario('[C7469] Delete a whole-day appointment', async function (I, users) {
     I.login('app=io.ox/calendar', { user: users[0] });
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
-    I.waitForVisible('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]');
-    I.click('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForVisible('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]');
+    I.click('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]');
     I.waitForVisible('.io-ox-calendar-main .io-ox-sidepopup');
     I.waitForText('Delete');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.modal');
     I.click('Delete', '.modal');
     I.waitForDetached('.modal');
-    I.waitForDetached('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForDetached('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]');
 });
