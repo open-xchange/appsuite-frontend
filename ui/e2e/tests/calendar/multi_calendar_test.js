@@ -59,13 +59,13 @@ Scenario('Create appointments in workweekview', async function (I, users) {
     I.seeNumberOfElements('.workweek .appointment .title', 2);
 
     // switch off New calendar
-    I.waitForElement({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
-    I.click({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
+    I.waitForElement({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
+    I.click({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
     I.seeNumberOfElements('.workweek .appointment .title', 1);
 
     // switch on again
-    I.waitForElement({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
-    I.click({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
+    I.waitForElement({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
+    I.click({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
     I.see('test appointment two', '.workweek .appointment .title');
     I.seeNumberOfElements('.workweek .appointment .title', 2);
 });
@@ -96,13 +96,13 @@ Scenario('Create appointments in weekview', async function (I, users) {
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 2);
 
     // switch off New calendar
-    I.waitForElement({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
-    I.click({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
+    I.waitForElement({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
+    I.click({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
     I.seeNumberOfElements('.weekview-container.week .appointment .appointment-content .title', 1);
 
     // switch on again
-    I.waitForElement({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
-    I.click({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
+    I.waitForElement({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
+    I.click({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
     I.see('test appointment one', '.week .appointment .title');
     I.seeNumberOfElements('.weekview-container.week .appointment .appointment-content .title', 2);
 });
@@ -133,13 +133,13 @@ Scenario('Create appointments in monthview', async function (I, users) {
     I.seeNumberOfElements('.month-container .appointment .title', 2);
 
     // switch off New calendar
-    I.waitForElement({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
-    I.click({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
+    I.waitForElement({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
+    I.click({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
     I.seeNumberOfElements('.month-container .appointment .appointment-content .title', 1);
 
     // switch on again
-    I.waitForElement({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
-    I.click({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
+    I.waitForElement({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
+    I.click({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
     I.see('test appointment two', '.month-container .appointment .title');
     I.seeNumberOfElements('.month-container .appointment .appointment-content .title', 2);
 });
@@ -172,13 +172,13 @@ Scenario('Create appointments in dayview', async function (I, users) {
     I.seeNumberOfElements('.weekview-container.day .appointment .title', 2);
 
     // switch off New calendar
-    I.waitForElement({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
-    I.click({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
+    I.waitForElement({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
+    I.click({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
     I.seeNumberOfElements('.weekview-container.day .appointment .title', 1);
 
     // switch on again
-    I.waitForElement({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
-    I.click({ css: '[aria-label="New calendar"] .color-label' }, '.window-sidepanel');
+    I.waitForElement({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
+    I.click({ css: '[aria-label^="New calendar"] .color-label' }, '.window-sidepanel');
     I.see('test appointment one', '.weekview-container.day .appointment .title');
     I.seeNumberOfElements('.weekview-container.day .appointment .title', 2);
 });

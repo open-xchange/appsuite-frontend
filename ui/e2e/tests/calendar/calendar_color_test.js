@@ -53,7 +53,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     I.seeNumberOfElements('.workweek .appointment .title', 1);
 
     // get folder color
-    const [folderColor] = await I.grabCssPropertyFrom('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label', 'background-color');
+    const [folderColor] = await I.grabCssPropertyFrom('li.selected[aria-label^="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label', 'background-color');
     // get appointment color
     let [appointmentColor] = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
     // check if the color is the same
@@ -156,7 +156,7 @@ Scenario('Changing calendar color should change appointment color that uses cale
     I.waitForText('test appointment one', 5, '.workweek');
 
     // get folder color
-    const [folderColor] = await I.grabCssPropertyFrom({ css: 'li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label' }, 'background-color');
+    const [folderColor] = await I.grabCssPropertyFrom({ css: 'li.selected[aria-label^="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label' }, 'background-color');
     // get appointment colors
     const [appointmentOneColor] = await I.grabCssPropertyFrom('.workweek .appointment[aria-label*="test appointment one"]', 'background-color');
     const [appointmentTwoColor] = await I.grabCssPropertyFrom('.workweek .appointment[aria-label*="test appointment two"]', 'background-color');

@@ -143,7 +143,7 @@ Scenario('[C207509] Year view', async (I) => {
     I.see('January', '.monthview-container');
 });
 
-Scenario('[C236795] Visibility Flags', (I) => {
+Scenario.skip('[C236795] Visibility Flags', (I) => {
     const createAppointment = (subject, startDate, startTime, visibility) => {
         I.clickToolbar('New appointment');
         I.waitForVisible('.io-ox-calendar-edit-window');
@@ -494,7 +494,7 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
     I.login('app=io.ox/calendar');
 
     I.waitForText('New calendar');
-    I.rightClick('~New calendar');
+    I.rightClick({ css: '[aria-label^="New calendar"]' });
     I.waitForText('Permissions / Invite people');
     I.wait(0.2); // Just wait a little extra for all event listeners
     I.click('Permissions / Invite people');

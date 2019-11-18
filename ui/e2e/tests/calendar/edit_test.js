@@ -64,8 +64,8 @@ Scenario('[C7449] Move appointment to folder', async function (I) {
     I.waitForVisible('.modal-dialog');
     within('.modal-dialog', function () {
         I.click('.folder-arrow', '~My calendars');
-        I.waitForVisible('~New calendar');
-        I.click('~New calendar');
+        I.waitForVisible({ css: '[title="New calendar"]' });
+        I.click({ css: '[title="New calendar"]' });
         I.wait(0.5); // wait until disabled is removed
         I.click('Move');
     });
@@ -73,10 +73,10 @@ Scenario('[C7449] Move appointment to folder', async function (I) {
 
     // disable the other folder
     I.wait(1);
-    I.waitForElement({ css: '[aria-label="New calendar"][aria-checked="true"]' });
+    I.waitForElement({ css: '[aria-label^="New calendar"][aria-checked="true"]' });
     I.waitForElement('~New calendar', '.selected');
     I.click({ css: '[title="New calendar"] .color-label' });
-    I.waitForElement({ css: '[aria-label="New calendar"][aria-checked="false"]' });
+    I.waitForElement({ css: '[aria-label^="New calendar"][aria-checked="false"]' });
 
     // open all views and verify that the appointment is gone
     ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
@@ -88,7 +88,7 @@ Scenario('[C7449] Move appointment to folder', async function (I) {
 
     // enable the other folder
     I.click({ css: '[title="New calendar"] .color-label' });
-    I.waitForElement({ css: '[aria-label="New calendar"][aria-checked="true"]' });
+    I.waitForElement({ css: '[aria-label^="New calendar"][aria-checked="true"]' });
 
     // open all views and verify that the appointment is there again
     ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
@@ -231,7 +231,7 @@ Scenario('[C7465] Edit appointment in shared folder as author', async function (
     I.login('app=io.ox/calendar');
 
     I.waitForText('New calendar');
-    I.rightClick('~New calendar');
+    I.rightClick({ css: '[aria-label^="New calendar"]' });
     I.waitForText('Permissions / Invite people');
     I.wait(0.2); // Just wait a little extra for all event listeners
     I.click('Permissions / Invite people');
@@ -452,7 +452,7 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
     I.login('app=io.ox/calendar');
 
     I.waitForText('New calendar');
-    I.rightClick('~New calendar');
+    I.rightClick({ css: '[aria-label^="New calendar"]' });
     I.waitForText('Permissions / Invite people');
     I.wait(0.2); // Just wait a little extra for all event listeners
     I.click('Permissions / Invite people');
@@ -867,7 +867,7 @@ Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, use
 
     const momentRange = require('moment-range').extendMoment(moment);
     const testrailID = 'C7454';
-    const appointmentSelector = `~${testrailID}, ${testrailID}`;
+    const appointmentSelector = { css: `[title="${testrailID}, ${testrailID}"]` };
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
     await I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
@@ -977,8 +977,8 @@ Scenario('[C7462] Remove a participant', async function (I, users) {
     I.login('app=io.ox/calendar', { user: users[0] });
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
-    I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
-    I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForElement('.appointment-container [aria-label^="' + testrailID + ', ' + testrailID + '"]');
+    I.click('.appointment-container [aria-label^="' + testrailID + ', ' + testrailID + '"]');
     I.waitForVisible('.io-ox-calendar-main .io-ox-sidepopup');
     I.waitForElement({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
     I.waitForElement('.io-ox-sidepopup-pane a[title="' + users[1].userdata.primaryEmail + '"]');
@@ -1477,8 +1477,8 @@ Scenario('[C7463] Remove a resource', async function (I, users) {
     I.login('app=io.ox/calendar', { user: users[0] });
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
-    I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
-    I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForElement('.appointment-container [aria-label^="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.click('.appointment-container [aria-label^="' + testrailID + ', ' + testrailID + '"]');
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
     I.waitForElement({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' }, 5);
     expect(await I.grabNumberOfVisibleElements(locate('.halo-resource-link').inside('.participant-list').withText(JSON.stringify(resource.display_name)))).to.equal(1);
