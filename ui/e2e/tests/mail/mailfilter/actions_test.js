@@ -78,8 +78,8 @@ Scenario('[C7801] Keep filtered mail', async function (I, users, mail) {
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
     mail.send();
-    I.waitForElement('~Sent, 1 total', 30);
-    I.waitForElement('~Inbox, 1 unread, 1 total', 30);
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.see('C7801', '.subject');
 });
 
@@ -106,7 +106,7 @@ Scenario('[C7802] Discard filtered mail', async function (I, users) {
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
     I.click('Send');
-    I.waitForElement('~Sent, 1 total', 30);
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
     I.wait(1);
     I.seeElement('~Inbox');
 
@@ -137,13 +137,13 @@ Scenario('[C7803] Redirect filtered mail', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total', 30);
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
     I.wait(1);
     I.seeElement('~Inbox');
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[1] });
-    I.waitForElement('~Inbox, 1 unread, 1 total', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.waitForText('TestCase0388', 5, '.subject');
 
 });
@@ -185,7 +185,7 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForVisible('~Sent, 1 total', 30);
+    I.waitForVisible('~Sent, 1 total. Right click for more options.', 30);
     I.wait(1);
     I.waitForVisible('~Inbox', 30);
     I.click('.io-ox-mail-window .window-sidepanel [data-id="virtual/myfolders"] .folder-arrow');
@@ -193,7 +193,7 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
     I.click(`.io-ox-mail-window .window-sidepanel [data-id="default0/INBOX/${folder}"]`);
     I.waitForVisible(`.io-ox-mail-window .window-sidepanel [data-id="default0/INBOX/${folder}"].selected`, 5);
     I.wait(1);
-    I.waitForVisible('~TestCase0389, 1 unread', 30);
+    I.waitForVisible('~TestCase0389, 1 unread. Right click for more options.', 30);
     I.see('TestCase0389', '.subject');
 
 });
@@ -258,8 +258,8 @@ Scenario('[C7806] Mark mail as filtered mail', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total', 30);
-    I.waitForElement('~Inbox, 1 total', 30);
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 1 total. Right click for more options.', 30);
 
 });
 
@@ -288,8 +288,8 @@ Scenario('[C7807] Tag mail with filtered mail', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total', 30);
-    I.waitForElement('~Inbox, 1 unread, 1 total', 30);
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.waitForElement('.vsplit .flag_1', 30);
 
 });
@@ -322,8 +322,8 @@ Scenario('[C7809] Mark mail as deleted filtered mail', async function (I, users)
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total', 30);
-    I.waitForElement('~Inbox, 1 unread, 1 total', 30);
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.see('TestCase0394', '.unread.deleted .subject');
 
 });

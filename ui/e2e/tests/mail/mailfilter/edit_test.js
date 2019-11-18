@@ -95,8 +95,8 @@ Scenario('[C7790] Edit filter rule @contentReview', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 2 total');
-    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.waitForElement('~Sent, 2 total. Right click for more options.');
+    I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.');
 
     I.logout();
 

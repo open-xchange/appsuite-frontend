@@ -83,7 +83,7 @@ Scenario('[C7785] Set vacation notice', async function (I, users) {
     I.seeInField({ css: 'textarea.plain-text' }, 'Test text');
 
     I.click('Send');
-    I.waitForElement('~Sent, 1 total', 30);
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
 
     I.logout();
 
@@ -173,8 +173,8 @@ Scenario('[C110281] Vacation notice is time zone capable', async function (I, us
     I.click('Send');
 
     // check for mail
-    I.waitForElement('~Sent, 1 total', 30);
-    I.waitForElement('~Inbox, 1 unread, 1 total', 30);
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
 
     I.waitForVisible('.io-ox-mail-window .leftside ul li.unread');
     I.click('.io-ox-mail-window .leftside ul li.unread');
