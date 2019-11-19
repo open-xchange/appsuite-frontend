@@ -610,8 +610,6 @@ define('io.ox/mail/compose/view', [
         },
 
         dispose: function () {
-            // remove from queue, to prevent zombies wehn mail is currently sent
-            composeAPI.queue.remove(this.model.get('id'));
             // disable dynamic extensionpoint to trigger saveAsDraft on logout
             this.removeLogoutPoint();
             this.stopListening();
@@ -694,11 +692,16 @@ define('io.ox/mail/compose/view', [
                 win = this.app.getWindow(),
                 point = ext.point('io.ox/mail/compose/actions/send');
 
+            // don't ask wether the app can be closed if we have unsaved data, we just want to send
+            baton.config.set('autoDismiss', true);
+
             win.busy();
             this.model.saving = true;
 
             return point.cascade(this, baton).then(function () {
             }).always(function () {
+                // a check/user intaction aborted the flow or app is re-opened after a request error; we want to be asked before any unsaved data is discarded again
+                if (baton.rejected || baton.error) baton.config.set('autoDismiss', false);
                 if (this.model) this.model.saving = false;
                 win.idle();
             }.bind(this));
