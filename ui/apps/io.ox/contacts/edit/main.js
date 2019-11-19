@@ -14,19 +14,13 @@
 define('io.ox/contacts/edit/main', [
     'io.ox/contacts/edit/view',
     'gettext!io.ox/contacts',
-    'io.ox/core/tk/upload',
-    'io.ox/core/api/user',
-    'io.ox/core/extensions',
     'io.ox/contacts/util',
-    'io.ox/core/capabilities',
-    'io.ox/core/notifications',
-    'io.ox/core/util',
     'io.ox/core/a11y',
     'io.ox/core/yell',
     'io.ox/backbone/views/modal',
     // 'settings!io.ox/core',
     'less!io.ox/contacts/edit/style'
-], function (View, gt, upload, userApi, ext, util, capabilities, notifications, coreUtil, a11y, yell, ModalDialog) {
+], function (View, gt, util, a11y, yell, ModalDialog) {
 
     'use strict';
 
@@ -91,7 +85,7 @@ define('io.ox/contacts/edit/main', [
                                 },
                                 function fail(e) {
                                     win.idle();
-                                    notifications.yell(e);
+                                    yell(e);
                                 }
                             );
                         }),
