@@ -1618,7 +1618,7 @@ Scenario('[C265153] Create appointment with a link in the description', async fu
     I.click('.appointment-container [title="C265153, C265153"]');
     I.waitForElement('.calendar-detail [href="https://www.google.de"]');
     I.click('.calendar-detail [href="https://www.google.de"]');
-    I.switchToNextTab();
+    I.retry(5).switchToNextTab();
     I.waitInUrl('https://www.google.de/', 5);
 });
 
