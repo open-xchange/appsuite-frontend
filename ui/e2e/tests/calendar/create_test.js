@@ -957,7 +957,7 @@ Scenario('[C7430] Create appointment via Icon', async function (I, calendar) {
 });
 
 Scenario('[C7431] Create appointment via doubleclick', async function (I, calendar) {
-    const data = { subject: 'Todesstern testen'};
+    const data = { subject: 'Todesstern testen' };
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
 
@@ -982,11 +982,11 @@ Scenario('[C7431] Create appointment via doubleclick', async function (I, calend
     I.say('Month');
     I.clickToolbar('View');
     I.click('Month', '.smart-dropdown-container');
-    I.doubleClick('.io-ox-pagecontroller.current .day .list');
+    I.retry(5).doubleClick('.io-ox-pagecontroller.current .day .list');
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.fillField('Subject', data.subject);
     I.click('Create');
-    I.waitForVisible('.appointment');
+    I.waitForVisible('.appointment', 5);
 });
 
 Scenario('[C256455] Create all-day appointment via date label', async function (I, calendar) {
