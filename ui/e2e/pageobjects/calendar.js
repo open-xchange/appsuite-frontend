@@ -103,6 +103,6 @@ module.exports = {
         I.click('~Select contacts');
         contactpicker.add(name);
         contactpicker.close();
-        I.waitForText(name, 5, this.locators.participants.find('.participant-email').as('Participant mail'));
+        I.waitForText(name, 5, this.locators.participants);
     }
 };
