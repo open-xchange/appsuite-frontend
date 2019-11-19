@@ -226,7 +226,8 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
         })
     ]);
     I.login('app=io.ox/files');
-    // create textfile in drive
+
+    I.say('Create textfile in drive');
     I.clickToolbar('New');
     I.click('Add note');
     I.waitForVisible('.io-ox-editor');
@@ -236,6 +237,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.waitForText('Save', 5, '.window-footer button');
     I.click('Close');
 
+    I.say('Add attachment to new draft');
     I.openApp('Mail');
 
     // workflow 10: Compose with Drive Mail attachment
@@ -249,52 +251,55 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
 
     I.waitForText('Use Drive Mail');
     I.checkOption('Use Drive Mail');
-    I.fillField('Subject', 'Testsubject');
+    I.fillField('Subject', 'Testsubject #1');
     I.click('Discard');
     I.waitForText('Save as draft', 5, '.io-ox-dialog-popup');
     I.click('Save as draft', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-taskbar-container .taskbar-button');
 
     I.selectFolder('Drafts');
-    mail.selectMail('Testsubject');
+    mail.selectMail('Testsubject #1');
 
     // workflow 17: Edit copy
+    I.say('Edit copy of that draft');
     I.clickToolbar('Edit copy');
     I.waitForElement('.editor iframe');
     within({ frame: '.editor iframe' }, () => {
         I.fillField('body', 'Editing a copy');
     });
-
     I.fillField('To', user2.get('primaryEmail'));
+    I.fillField('Subject', 'Testsubject #2');
     mail.send();
     I.waitForDetached('.io-ox-taskbar-container .taskbar-button');
 
     // workflow 11: Compose mail, add Drive-Mail attachment, close compose, logout, login, edit Draft, remove Drive-Mail option, send Mail
     // workflow 16: Edit draft
+    I.say('Edit original draft');
     I.clickToolbar('Edit draft');
     I.waitForElement('.editor iframe');
     within({ frame: '.editor iframe' }, () => {
         I.fillField('body', 'Editing draft');
     });
-
     I.waitForText('Use Drive Mail');
     I.checkOption('Use Drive Mail');
     I.seeNumberOfVisibleElements('.inline-items > li', 1);
 
     I.fillField('To', user.get('primaryEmail'));
-    I.fillField('Subject', 'Testsubject');
+    I.fillField('Subject', 'Testsubject #3');
+    I.say('Send edited original draft');
     mail.send();
     I.waitForDetached('.io-ox-taskbar-container .taskbar-button');
 
     I.selectFolder('Inbox');
 
     I.waitForVisible('.list-view li.unread', 30); // wait for one unread mail
-    mail.selectMail('Testsubject');
+    mail.selectMail('Testsubject #3');
 
     I.waitForElement('.mail-detail-frame');
     I.switchTo('.mail-detail-frame');
     I.see('Testdocument.txt');
     I.switchTo();
+
 });
 
 Scenario('Compose mail with vcard and read receipt', async function (I, users, mail) {

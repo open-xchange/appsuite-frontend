@@ -969,7 +969,6 @@ Scenario('[C7431] Create appointment via doubleclick', async function (I, calend
         I.doubleClick('.io-ox-pagecontroller.current .day .timeslot:nth-child(25)');
         I.waitForVisible('.io-ox-calendar-edit-window');
         I.fillField('Subject', data.subject);
-        if (perspective === 'Workweek') pause();
         I.seeInField(calendar.locators.starttime, '12:00 PM');
         I.click('Create');
         I.waitForVisible({ css: '.appointment' });

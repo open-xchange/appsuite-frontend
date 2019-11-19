@@ -74,7 +74,7 @@ Scenario('[C104305] calendar folders using “Permisions” dialog and sharing l
         I.seeNumberOfElements('.appointment', 2);
         I.see('simple appointment 2');
 
-        I.say('check for missing edit rights')
+        I.say('check for missing edit rights');
         I.click(locate('.appointment').at(1));
         I.waitForElement('.io-ox-sidepopup');
         I.dontSee('Edit', '.io-ox-sidepopup');
@@ -92,6 +92,8 @@ Scenario('[C104305] calendar folders using “Permisions” dialog and sharing l
             I.click('View calendar');
         });
         I.waitForElement('.io-ox-calendar-main');
+        // SHAKY: 'TypeError: Cannot read property 'mainFrame' of null'
+        // SHAKY: 'Node is either not visible or not an HTMLElement'
         within('.io-ox-calendar-main', checkSharedCalendarFolder);
     });
 
@@ -118,14 +120,14 @@ Scenario('[C104305] calendar folders using “Permisions” dialog and sharing l
         I.click('Remove link');
     });
 
+    I.say('Bob has no access');
     session('Bob', () => {
         I.triggerRefresh();
-
         I.seeNumberOfElements(locate('.appointment').inside('.io-ox-calendar-main'), 0);
         I.dontSee('simple appointment 1', '.io-ox-calendar-main');
         I.dontSee('simple appointment 2', '.io-ox-calendar-main');
     });
-
+    I.say('Eve has no access');
     session('Eve', () => {
         I.amOnPage(url);
         I.waitForText('The share you are looking for does not exist.');
