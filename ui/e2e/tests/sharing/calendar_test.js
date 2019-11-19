@@ -49,6 +49,7 @@ Scenario('[C104305] calendar folders using “Permisions” dialog and sharing l
         I.click('~Select contacts');
         I.waitForElement('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));
+        I.waitNumberOfVisibleElements({ css: '.modal .list-view .list-item' }, 1, 5);
         I.waitForText(users[1].get('name'), 5, '.address-picker');
         I.click('.address-picker .list-item');
         I.click({ css: 'button[data-action="select"]' });
@@ -69,10 +70,10 @@ Scenario('[C104305] calendar folders using “Permisions” dialog and sharing l
     });
 
     const checkSharedCalendarFolder = () => {
-        I.waitForText('simple appointment 1');
-        I.waitForText(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
+        I.waitForText('simple appointment 1', 5, { css: '.appointment-container' });
+        I.waitForText(users[0].get('sur_name') + ', ' + users[0].get('given_name'), 5, { css: '.tree-container' });
         I.seeNumberOfElements('.appointment', 2);
-        I.see('simple appointment 2');
+        I.see('simple appointment 2', { css: '.appointment-container' });
 
         I.say('check for missing edit rights');
         I.click(locate('.appointment').at(1));
@@ -92,16 +93,14 @@ Scenario('[C104305] calendar folders using “Permisions” dialog and sharing l
             I.click('View calendar');
         });
         I.waitForElement('.io-ox-calendar-main');
-        // SHAKY: 'TypeError: Cannot read property 'mainFrame' of null'
-        // SHAKY: 'Node is either not visible or not an HTMLElement'
-        within('.io-ox-calendar-main', checkSharedCalendarFolder);
+        checkSharedCalendarFolder();
     });
 
     I.say('Eve uses external link to shared folder');
     session('Eve', () => {
         I.amOnPage(url);
         I.waitForElement('.io-ox-calendar-main', 30);
-        within('.io-ox-calendar-main', checkSharedCalendarFolder);
+        checkSharedCalendarFolder();
     });
 
     I.say('Alice revoces access');
