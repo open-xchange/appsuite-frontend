@@ -89,7 +89,7 @@ Scenario('[C8366] Edit description', async (I, drive) => {
     I.say('Check description #2');
     I.waitForDetached(modelEditDescription);
     I.waitForVisible(sidebarDescription);
-    I.seeTextEquals('Test description changed', sidebarDescription);
+    I.waitForText('Test description changed', 5, sidebarDescription);
 });
 
 const checkIfFoldersExist = (I, layout) => {

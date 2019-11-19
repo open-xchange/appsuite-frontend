@@ -474,7 +474,7 @@ Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thu
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
-    I.retry(5).click(`~${date.format('l, dddd')}, CW ${date.week()}`, calendar.locators.mini);
+    I.retry(5).click(`~Today, ${date.format('l, dddd')}, CW ${date.week()}`, calendar.locators.mini);
 
     I.say('Create');
     calendar.newAppointment();
