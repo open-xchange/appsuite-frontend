@@ -45,11 +45,7 @@ define('io.ox/core/api/tab', [
         _.extend(_api, api); // backup api functions
         _checkTabHandlingSupport = util.checkTabHandlingSupport; // backup function
 
-        if (util.checkTabHandlingSupport) {
-            enable();
-        } else {
-            disable();
-        }
+        ox.tabHandlingEnabled = true;
 
         initialized = true;
     }
