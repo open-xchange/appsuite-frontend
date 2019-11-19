@@ -967,7 +967,8 @@ define('io.ox/calendar/week/view', [
             pane.scrollTop(
                 _.isNaN(scrollRatio) ?
                     // dont user current time indicator top here because that only works when today is visible
-                    (moment().diff(moment().startOf('day'), 'minutes') / 24 / 60) * height - pane.height() / 2 :
+                    // set to 2 hours before current time. Past events are less important
+                    (moment().diff(moment().startOf('day'), 'minutes') / 24 / 60) * height - 2 * height / 24 :
                     scrollRatio * pane.height()
             );
             // render appointments
