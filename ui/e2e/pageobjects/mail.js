@@ -20,7 +20,8 @@ module.exports = {
     },
     send() {
         I.click('Send');
-        I.waitForVisible('.generic-toolbar.mail-progress');
+        I.wait(0.5);
+        I.waitToHide('.io-ox-mail-compose-window');
         I.waitToHide('.generic-toolbar.mail-progress');
     }
 };
