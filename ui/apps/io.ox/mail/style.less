@@ -242,15 +242,18 @@
         }
 
         &.unread {
-            .date { opacity: 1; font-weight: bold; }
+            .date { opacity: 1; font-weight: bold; color: @black; }
         }
     }
 }
 
 // macos and ios specific styles
-html.macos, html.ios {
+html.macos .preview-right, html.ios {
     .mail-item.list-view .list-item .from .person {
-        font-weight: bold;
+        font-weight: 700;
+    }
+    .mail-item.list-view .list-item.unread .from .person {
+        font-weight: 900;
     }
 }
 
