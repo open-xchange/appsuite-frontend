@@ -172,6 +172,9 @@ define('io.ox/mail/compose/actions/send', [
                     notifications.yell('success', gt('The email has been sent'));
                 }
                 baton.view.dirty(false);
+                // don't ask wether the app can be closed if we have unsaved data, we just want to send
+                baton.config.set('autoDismiss', true);
+
                 baton.app.quit();
             }
         },

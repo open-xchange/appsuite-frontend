@@ -610,6 +610,8 @@ define('io.ox/mail/compose/view', [
         },
 
         dispose: function () {
+            // remove from queue, to prevent zombies wehn mail is currently sent
+            composeAPI.queue.remove(this.model.get('id'));
             // disable dynamic extensionpoint to trigger saveAsDraft on logout
             this.removeLogoutPoint();
             this.stopListening();
@@ -691,9 +693,6 @@ define('io.ox/mail/compose/view', [
                 }),
                 win = this.app.getWindow(),
                 point = ext.point('io.ox/mail/compose/actions/send');
-
-            // don't ask wether the app can be closed if we have unsaved data, we just want to send
-            baton.config.set('autoDismiss', true);
 
             win.busy();
             this.model.saving = true;
