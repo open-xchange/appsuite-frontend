@@ -143,15 +143,12 @@ Scenario('[C207509] Year view', async (I) => {
     I.see('January', '.monthview-container');
 });
 
-Scenario.skip('[C236795] Visibility Flags', (I) => {
+Scenario.skip('[C236795] Visibility Flags', (I, calendar) => {
     const createAppointment = (subject, startDate, startTime, visibility) => {
         I.clickToolbar('New appointment');
         I.waitForVisible('.io-ox-calendar-edit-window');
         I.fillField('Subject', subject);
-        I.click('~Date (M/D/YYYY)');
-        I.pressKey(['Control', 'a']);
-        I.pressKey(startDate);
-        I.pressKey('Enter');
+        calendar.setDate('startDate', startDate);
         I.click('~Start time');
         I.click(startTime);
         I.scrollTo('.io-ox-calendar-edit select');
@@ -176,7 +173,7 @@ Scenario.skip('[C236795] Visibility Flags', (I) => {
     };
 
     const checkAppointment = (subject, visibility, time) => {
-        createAppointment(subject, moment().startOf('isoWeek').format('M/D/YYYY'), time, visibility);
+        createAppointment(subject, moment().startOf('isoWeek'), time, visibility);
         // PRIVATE => Private
         // CONFIDENTIAL => Secret
         let labelAndIcon;

@@ -23,7 +23,7 @@ After(async function (users) {
 });
 
 // TODO: broken for last 5 runs (expected number of elements (.weekview-container.week .appointment .title) is 6, but found 4)
-Scenario.skip('Create never ending appointment and check display in several views', async function (I) {
+Scenario.skip('Create never ending appointment and check display in several views', async function (I, calendar) {
 
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
@@ -62,13 +62,7 @@ Scenario.skip('Create never ending appointment and check display in several view
     I.fillField('Subject', 'test caching');
     I.fillField('Location', 'caching location');
 
-    // TODO: integrate into page object?
-    I.click('~Date (M/D/YYYY)');
-    I.waitForElement('.date-picker.open');
-    await I.executeScript(function (attr, newDate) {
-        $(`.dateinput[data-attribute="${attr}"] .datepicker-day-field`).val(newDate);
-    }, 'startDate', moment().startOf('week').add('1', 'day').format('l'));
-    I.pressKey('Enter');
+    await calendar.setDate('startDate', moment().startOf('week').add('1', 'day'));
 
     I.click('All day', '.io-ox-calendar-edit-window');
 

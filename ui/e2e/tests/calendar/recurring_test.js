@@ -23,7 +23,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Create recurring appointments with one participant', async function (I, users) {
+Scenario('Create recurring appointments with one participant', async function (I, users, calendar) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -42,12 +42,7 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     I.fillField('Subject', 'test recurring');
     I.fillField('Location', 'invite location');
-
-    I.click('~Date (M/D/YYYY)');
-    I.pressKey(['Control', 'a']);
-    I.pressKey(moment().startOf('week').add('8', 'day').format('l'));
-    I.pressKey('Enter');
-
+    calendar.setDate('startDate', moment().startOf('week').add('8', 'day'));
     I.click('~Start time');
     I.click('4:00 PM');
 

@@ -142,7 +142,7 @@ Scenario('[C7450] Edit private appointment', async function (I) {
 
 });
 
-Scenario('[C7451] Edit yearly series via dubbleclick', async function (I) {
+Scenario('[C7451] Edit yearly series via dubbleclick', async function (I, calendar) {
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const time = moment('1612', 'DDMM').add(10, 'hours');
     await I.haveAppointment({
@@ -173,11 +173,7 @@ Scenario('[C7451] Edit yearly series via dubbleclick', async function (I) {
 
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.click('~Date (M/D/YYYY)');
-    I.waitForVisible('.date-picker.open', 2);
-    I.pressKey(['Control', 'a']);
-    I.pressKey(time.add(1, 'day').format('l'));
-    I.pressKey('Enter');
+    await calendar.setDate('startDate', time.add(1, 'day'));
 
     I.click('Save');
     I.waitForDetached('.io-ox-calendar-edit-window');
@@ -283,7 +279,7 @@ Scenario('[C7465] Edit appointment in shared folder as author', async function (
     });
 });
 
-Scenario('[C234659] Split appointment series', async function (I, users) {
+Scenario('[C234659] Split appointment series', async function (I, users, calendar) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -295,12 +291,7 @@ Scenario('[C234659] Split appointment series', async function (I, users) {
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'Testsubject');
-
-    I.click('~Date (M/D/YYYY)');
-    I.pressKey(['Control', 'a']);
-    I.pressKey(moment().startOf('week').add(1, 'day').format('l'));
-    I.pressKey('Enter');
-
+    await calendar.setDate('startDate', moment().startOf('week').add(1, 'day'));
     I.click('~Start time');
     I.click('4:00 PM');
 
@@ -349,7 +340,7 @@ Scenario('[C234659] Split appointment series', async function (I, users) {
     I.see(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, '.io-ox-sidepopup');
 });
 
-Scenario('[C234679] Exceptions changes on series modification', async function (I) {
+Scenario('[C234679] Exceptions changes on series modification', async function (I, calendar) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -361,12 +352,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'Testsubject');
-
-    I.click('~Date (M/D/YYYY)');
-    I.pressKey(['Control', 'a']);
-    I.pressKey(moment().startOf('week').add(1, 'day').format('l'));
-    I.pressKey('Enter');
-
+    await calendar.setDate('startDate', moment().startOf('week').add(1, 'day'));
     I.click('~Start time');
     I.click('4:00 PM');
 
