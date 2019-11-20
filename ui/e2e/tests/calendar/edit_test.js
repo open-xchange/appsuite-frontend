@@ -604,7 +604,7 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
     I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
     I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Details');
-    I.see(`Organizer ${users[0].userdata.display_name}`, '.io-ox-sidepopup');
+    I.waitForText(`${users[0].userdata.display_name}`, 5, '.io-ox-sidepopup .details .organizer');
 
     I.wait(0.2); // gently wait for event listeners
     I.click('~More actions', '.io-ox-sidepopup');
@@ -629,13 +629,13 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
     I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
     I.waitForVisible('.io-ox-sidepopup');
     I.click('Details');
-    I.waitForText(`Organizer ${users[1].userdata.display_name}`, '.io-ox-sidepopup');
+    I.waitForText(`${users[1].userdata.display_name}`, 5, '.io-ox-sidepopup .details .organizer');
     I.click('~Close', '.io-ox-sidepopup');
 
     I.click('.appointment');
     I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Details');
-    I.waitForText(`Organizer ${users[0].userdata.display_name}`, '.io-ox-sidepopup');
+    I.waitForText(`${users[0].userdata.display_name}`, 5, '.io-ox-sidepopup .details .organizer');
 });
 
 Scenario('[C265149] As event organizer I can add a textual reason why an event was canceled', async function (I, users) {
