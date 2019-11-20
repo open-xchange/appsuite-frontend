@@ -464,8 +464,7 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
 
 });
 
-// TODO: shaky (Clickable element "aria-label=Today, 11/19/2019, Tuesday, CW 47" was not found inside element Mini Calendar)
-Scenario.skip('[C7422] Create a allday weekly recurring appointment every Tuesday Thursday never ends', async function (I, calendar) {
+Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thursday never ends', async function (I, calendar) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -475,7 +474,7 @@ Scenario.skip('[C7422] Create a allday weekly recurring appointment every Tuesda
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
-    I.retry(5).click(`~Today, ${date.format('l, dddd')}, CW ${date.week()}`, calendar.locators.mini);
+    I.retry(5).click({ css: `[aria-label*="${date.format('l, dddd')}, CW ${date.week()}"]` }, calendar.locators.mini);
 
     I.say('Create');
     calendar.newAppointment();
