@@ -45,8 +45,6 @@ define('io.ox/core/api/tab', [
         _.extend(_api, api); // backup api functions
         _checkTabHandlingSupport = util.checkTabHandlingSupport; // backup function
 
-        ox.tabHandlingEnabled = true;
-
         initialized = true;
     }
 
@@ -70,6 +68,8 @@ define('io.ox/core/api/tab', [
      * Enable the whole TabAPI
      */
     function enable() {
+        if (!initialized) initialize();
+
         _.extend(api, _api);
 
         ox.tabHandlingEnabled = true;
@@ -219,10 +219,6 @@ define('io.ox/core/api/tab', [
             return tabSession.login();
         }
     };
-
-    if (util.checkTabHandlingSupport() && !initialized) {
-        initialize();
-    }
 
     // expose old API for compatibility reasons
     // can be removed once all stacks got updated
