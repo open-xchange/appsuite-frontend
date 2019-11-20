@@ -272,7 +272,7 @@ Scenario('[C7444] Check availability of resources', async function (I) {
     await I.dontHaveResource('Laser Sharks');
 });
 
-Scenario('[C7445] Check availability of resources and participants', async function (I, users) {
+Scenario.skip('[C7445] Check availability of resources and participants', async function (I, users) {
 
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 

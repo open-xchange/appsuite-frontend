@@ -179,7 +179,7 @@ Scenario('[C7410] Copy several mails from inbox to a sub-folder', async function
     A.check(I, subjects, folder);
 });
 
-Scenario('[C114349] Create folder within move dialog', async function (I, users, mail) {
+Scenario.skip('[C114349] Create folder within move dialog', async function (I, users, mail) {
     let [user] = users,
         folder = 'C114349-move',
         subject = 'C114349-move';
