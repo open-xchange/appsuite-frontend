@@ -185,7 +185,7 @@ Scenario('[C7729] Create Task with participants', async function (I, users, task
 
     tasks.create();
     I.see(testrailID, '.tasks-detailview');
-    I.see(testrailName, '.tasks-detailview');
+    I.retry(5).see(testrailName, '.tasks-detailview');
     I.dontSeeElement({ css: '[title="High priority"]' });
     I.dontSeeElement({ css: '[title="Low priority"]' });
     I.see('Not started');
@@ -195,7 +195,7 @@ Scenario('[C7729] Create Task with participants', async function (I, users, task
 
     I.login('app=io.ox/tasks', { user: users[1] });
     tasks.waitForApp();
-    I.see(testrailID, '.tasks-detailview');
+    I.retry(5).see(testrailID, '.tasks-detailview');
     I.see(testrailName, '.tasks-detailview');
     I.dontSeeElement({ css: '[title="High priority"]' });
     I.dontSeeElement({ css: '[title="Low priority"]' });
@@ -206,7 +206,7 @@ Scenario('[C7729] Create Task with participants', async function (I, users, task
 
     I.login('app=io.ox/tasks', { user: users[2] });
     tasks.waitForApp();
-    I.see(testrailID, '.tasks-detailview');
+    I.retry(5).see(testrailID, '.tasks-detailview');
     I.see(testrailName, '.tasks-detailview');
     I.dontSeeElement({ css: '[title="High priority"]' });
     I.dontSeeElement({ css: '[title="Low priority"]' });
