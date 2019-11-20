@@ -37,6 +37,7 @@ Scenario('[C7433] Create appointment by marking some timeframe', async (I) =>{
 
     // Create appointment from 01:00am to 03:00am today
     await within('.appointment-container', async () => {
+        I.scrollTo('//div[contains(@class, "timeslot")][3]');
         // each timeslot element represents 30 minute blocks
         // The first slot will be from 00:00am to 00:30am...
         // The third slot will be 01:00am to 01:30am (add 3 slots)
