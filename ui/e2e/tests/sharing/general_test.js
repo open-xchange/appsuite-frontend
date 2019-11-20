@@ -130,7 +130,8 @@ Scenario.skip('[C83385] Copy to clipboard @puppeteer', async function (I, drive)
     I.waitForText('Music');
 });
 
-Scenario('[C85625] My Shares default sort order', async function (I, drive) {
+// TODO: shaky (element (.fa-spin.fa-refresh) still not present on page after 30 )
+Scenario.skip('[C85625] My Shares default sort order', async function (I, drive) {
     function share(I, item) {
         I.retry(5).click(locate('li.list-item').withText(item));
         I.clickToolbar('Share');

@@ -55,7 +55,8 @@ Scenario.skip('[C8364] Upload new file', (I, drive) => {
 });
 
 // Note: This is not accessible H4 and textarea does not have a label
-Scenario('[C8366] Edit description', async (I, drive) => {
+// TODO: shaky (reference: element is not attached to the page document)
+Scenario.skip('[C8366] Edit description', async (I, drive) => {
     await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();

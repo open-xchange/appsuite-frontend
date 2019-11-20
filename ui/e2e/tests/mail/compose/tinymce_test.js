@@ -893,7 +893,6 @@ function getRGBValue(toConvert) {
     return toConvert;
 }
 
-// TODO: shaky (element (.generic-toolbar.mail-progress) still not present on page after 30 sec)
 Scenario('[C7399] Send mail with different text colours', async function (I, users, mail) {
 
     const selectColor = (action) => {
@@ -1108,8 +1107,7 @@ Scenario('[C7400] Send mail with multiple different text formatting - set before
     });
 });
 
-// TODO: shaky (element (.generic-toolbar.mail-progress) still not present on page after 30 sec)
-Scenario.skip('[C7400] Send mail with multiple different text formatting - set after writting', async function (I, users, mail) {
+Scenario('[C7400] Send mail with multiple different text formatting - set after writting', async function (I, users, mail) {
 
     let [sender, recipient] = users;
 

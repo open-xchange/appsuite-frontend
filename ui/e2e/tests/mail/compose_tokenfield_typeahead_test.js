@@ -131,7 +131,8 @@ Scenario('Add typeahed suggestion via autoselect', async (I, users, mail) => {
 //     }
 // });
 
-Scenario('Add typeahead suggestion via keyboard', async (I, users, mail) => {
+// TODO: shaky (element (.tt-dropdown-menu .tt-cursor) still not present on page after 3 sec)
+Scenario.skip('Add typeahead suggestion via keyboard', async (I, users, mail) => {
     const [user] = users;
 
     I.login('app=io.ox/mail');
