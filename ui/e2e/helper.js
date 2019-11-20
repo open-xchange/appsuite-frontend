@@ -1,12 +1,6 @@
 const Helper = require('@open-xchange/codecept-helper').helper;
 const { util } = require('@open-xchange/codecept-helper');
 
-function assertElementExists(res, locator, prefixMessage = 'Element', postfixMessage = 'was not found by text|CSS|XPath') {
-    if (!res || res.length === 0) {
-        if (typeof locator === 'object') locator = locator.toString();
-        throw new Error(`${prefixMessage} "${locator}" ${postfixMessage}`);
-    }
-}
 class MyHelper extends Helper {
 
     async haveLockedFile(data, options) {
@@ -87,6 +81,33 @@ class MyHelper extends Helper {
         }, id, options.waitForTimeout);
 
         if (error) throw error;
+    }
+
+    /*
+     * Overwrite native puppeteer d&d, because it does not work for every case
+     * Maybe this is going to be fixed in the future by puppeteer, then this can be removed.
+     */
+    async dragAndDrop(srcSelector, targetSelector) {
+        const wdio = this.helpers['WebDriver'];
+        if (wdio) return wdio.dragAndDrop.apply(wdio, arguments);
+
+        const helper = this.helpers['Puppeteer'];
+        const { page } = helper;
+
+        const [src] = await helper._locate(srcSelector);
+        const [target] = await helper._locate(targetSelector);
+        const srcBB = await src.boundingBox();
+        const targetBB = await target.boundingBox();
+
+        const startX = srcBB.x + srcBB.width / 2;
+        const startY = srcBB.y + srcBB.height / 2;
+        const endX = targetBB.x + targetBB.width / 2;
+        const endY = targetBB.y + targetBB.height / 2;
+
+        await page.mouse.move(startX, startY);
+        await page.mouse.down();
+        await page.mouse.move(endX, endY);
+        await page.mouse.up();
     }
 
 }
