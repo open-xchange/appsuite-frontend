@@ -204,6 +204,7 @@ define('io.ox/core/tk/doc-converter-utils', [
                 id: model.get('id'),
                 folder_id: model.get('folder_id'),
                 mimetype: model.get('file_mimetype'),
+                revtag: _.uniqueId('revtag-'),  // needed when doing revisionless save
                 nocache: _.uniqueId() // needed to trick the browser
             };
 
