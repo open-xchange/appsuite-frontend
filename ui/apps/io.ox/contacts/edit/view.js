@@ -916,6 +916,7 @@ define('io.ox/contacts/edit/view', [
             });
         },
 
+        // limits are defined by db
         maxLength: {
             // most fields have a maxlength of 64
             first_name: 128,
@@ -927,6 +928,7 @@ define('io.ox/contacts/edit/view', [
             street_home: 256,
             street_other: 256,
             street_business: 256,
+            display_name: 320,
             email1: 512,
             email2: 512,
             email3: 512,
