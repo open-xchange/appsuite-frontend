@@ -25,7 +25,8 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7738] Edit task with all fields filled', async function (I, tasks) {
+// TODO: shaky (stale element reference: element is not attached to the page document)
+Scenario.skip('[C7738] Edit task with all fields filled', async function (I, tasks) {
     const testrailID = 'C7738',
         testrailName = 'Edit task with all fields filled';
 
