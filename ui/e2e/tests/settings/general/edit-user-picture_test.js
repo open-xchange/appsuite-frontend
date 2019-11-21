@@ -44,7 +44,8 @@ Scenario('User start with no picture', async function (I, contacts, mail) {
     I.click('Discard');
 });
 
-Scenario('User can upload and remove a picture', async function (I, contacts, mail) {
+// TODO: shaky (element (.fa-spin.fa-refresh) still not present on page after 30 sec)
+Scenario.skip('User can upload and remove a picture', async function (I, contacts, mail) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
