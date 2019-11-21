@@ -203,7 +203,7 @@ var addAttendee = function (I, name, context) {
     I.pressKey('Enter');
 };
 
-Scenario('[C7443] Check availability of participants', async function (I, users) {
+Scenario.skip('[C7443] Check availability of participants', async function (I, users) {
 
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
