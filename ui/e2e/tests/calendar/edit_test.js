@@ -1152,13 +1152,13 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
     I.clickToolbar('View');
     I.click('Week', '.smart-dropdown-container');
 
-    I.click('.io-ox-pagecontroller.current .appointment');
+    I.retry(5).click('.io-ox-pagecontroller.current .appointment');
     I.waitForText('11:00 – 2:00 PM');
 
     I.clickToolbar('View');
     I.click('Month', '.smart-dropdown-container');
 
-    I.click('.io-ox-pagecontroller.current .appointment');
+    I.retry(5).click('.io-ox-pagecontroller.current .appointment');
     I.waitForText('11:00 – 2:00 PM');
 
     I.clickToolbar('View');
@@ -1271,13 +1271,13 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
     I.clickToolbar('View');
     I.click('Week', '.smart-dropdown-container');
 
-    I.click('.io-ox-pagecontroller.current .appointment');
+    I.retry(5).click('.io-ox-pagecontroller.current .appointment');
     I.waitForText('1:00 – 2:00 PM');
 
     I.clickToolbar('View');
     I.click('Month', '.smart-dropdown-container');
 
-    I.click('.io-ox-pagecontroller.current .appointment');
+    I.retry(5).click('.io-ox-pagecontroller.current .appointment');
     I.waitForText('1:00 – 2:00 PM');
 
     I.clickToolbar('View');
