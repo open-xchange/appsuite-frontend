@@ -231,7 +231,7 @@ Scenario('[C7465] Edit appointment in shared folder as author', async function (
     I.wait(0.2); // Just wait a little extra for all event listeners
     I.click('Permissions / Invite people');
     I.waitForText('Permissions for folder "New calendar"');
-    I.pressKey(users[1].userdata.primaryEmail);
+    I.fillField('.modal-dialog .tt-input', users[1].userdata.primaryEmail);
     I.waitForVisible(locate('*').withText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
@@ -442,7 +442,7 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
     I.wait(0.2); // Just wait a little extra for all event listeners
     I.click('Permissions / Invite people');
     I.waitForText('Permissions for folder "New calendar"');
-    I.pressKey(users[1].userdata.primaryEmail);
+    I.fillField('.modal-dialog .tt-input', users[1].userdata.primaryEmail);
     I.waitForVisible(locate('*').withText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
