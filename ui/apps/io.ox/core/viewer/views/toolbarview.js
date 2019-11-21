@@ -189,8 +189,14 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_ACTION_ID + '/help',
                 customize: function () {
                     var helpView = new HelpView({
-                        href: 'ox.appsuite.user.sect.drive.gui.viewer.html'
+                        href: 'ox.appsuite.user.sect.drive.gui.viewer.html',
+                        // no title we use bootstrap tooltip here to keep the toolbar consistant
+                        content: $('<i class="fa" aria-hidden="true">')
                     });
+                    helpView.$el.attr({
+                        'data-original-title': gt('Online help'),
+                        'data-placement': 'bottom'
+                    }).tooltip();
                     this.replaceWith(helpView.render().$el);
                 }
             },
