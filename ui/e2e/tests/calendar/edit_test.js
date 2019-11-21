@@ -98,8 +98,7 @@ Scenario('[C7449] Move appointment to folder', async function (I) {
     });
 });
 
-// TODO: shaky (element (.io-ox-calendar-edit-window) still not visible after 30 sec)
-Scenario.skip('[C7450] Edit private appointment', async function (I, calendar) {
+Scenario('[C7450] Edit private appointment', async function (I, calendar) {
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
     await I.haveAppointment({
@@ -207,8 +206,7 @@ Scenario('[C7464] Change appointment in shared folder as guest', async function 
     I.dontSeeElement('.io-ox-calendar-edit-window');
 });
 
-// TODO: shaky (element (.io-ox-calendar-edit-window) still not visible after 30 sec)
-Scenario.skip('[C7465] Edit appointment in shared folder as author', async function (I, users, calendar) {
+Scenario('[C7465] Edit appointment in shared folder as author', async function (I, users, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -768,8 +766,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     I.see('Testappointment', { css: `[id="${time.format('YYYY-M-D')}"]` });
 });
 
-// TODO: shaky (element (.io-ox-calendar-edit-window) still not present on page after 30 sec)
-Scenario.skip('[C7453] Edit appointment, set the all day checkmark', async function (I, calendar) {
+Scenario('[C7453] Edit appointment, set the all day checkmark', async function (I, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, 'chronos/allowChangeOfOrganizer': true }
@@ -1368,8 +1365,7 @@ Scenario.skip('[C7459] Remove attachments', async function (I) {
     });
 });
 
-// TODO: shaky (element (.io-ox-calendar-edit-window) still not visible after 30 sec)
-Scenario.skip('[C7458] Edit appointment by doubleclick', async function (I, calendar) {
+Scenario('[C7458] Edit appointment by doubleclick', async function (I, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
