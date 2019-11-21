@@ -93,6 +93,14 @@ module.exports = {
         cb.call(this, this.locators[MAPPING[label]]);
     },
 
+    doubleClick() {
+        // mimic a double click with little time in between.
+        // is necessary due to custom double click handler in appointments
+        I.click.apply(I, arguments);
+        I.wait(0.05);
+        I.click.apply(I, arguments);
+    },
+
     addAttendee: function (name, mode) {
         if (mode !== 'picker') {
             I.fillField('.add-participant.tt-input', name);

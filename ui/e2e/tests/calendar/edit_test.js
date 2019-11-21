@@ -98,7 +98,7 @@ Scenario('[C7449] Move appointment to folder', async function (I) {
     });
 });
 
-Scenario('[C7450] Edit private appointment', async function (I) {
+Scenario('[C7450] Edit private appointment', async function (I, calendar) {
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
     await I.haveAppointment({
@@ -124,7 +124,7 @@ Scenario('[C7450] Edit private appointment', async function (I) {
     });
 
     // edit the appointment
-    I.doubleClick('.page.current .appointment');
+    calendar.doubleClick('.page.current .appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.selectOption('Visibility', 'Standard');
 
@@ -187,7 +187,7 @@ Scenario('[C7451] Edit yearly series via dubbleclick', async function (I, calend
     I.waitForVisible(`.page.current .day:nth-child(${time.weekday() + 2}) .appointment`);
 });
 
-Scenario('[C7464] Change appointment in shared folder as guest', async function (I, users) {
+Scenario('[C7464] Change appointment in shared folder as guest', async function (I, users, calendar) {
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const time = moment().startOf('week').add(3, 'days').add(10, 'hours');
     await I.haveAppointment({
@@ -201,12 +201,12 @@ Scenario('[C7464] Change appointment in shared folder as guest', async function 
     I.login('app=io.ox/calendar', { user: users[1] });
     I.waitForText('Testappointment');
 
-    I.doubleClick('.appointment');
+    calendar.doubleClick('.appointment');
     I.wait(1);
     I.dontSeeElement('.io-ox-calendar-edit-window');
 });
 
-Scenario('[C7465] Edit appointment in shared folder as author', async function (I, users) {
+Scenario('[C7465] Edit appointment in shared folder as author', async function (I, users, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -255,7 +255,7 @@ Scenario('[C7465] Edit appointment in shared folder as author', async function (
     I.waitForText('Testappointment');
 
     // 1. Double click to the appointment
-    I.doubleClick('.page.current .appointment');
+    calendar.doubleClick('.page.current .appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     // 2. Change Subject, Location and Description.
@@ -765,7 +765,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     I.see('Testappointment', { css: `[id="${time.format('YYYY-M-D')}"]` });
 });
 
-Scenario('[C7453] Edit appointment, set the all day checkmark', async function (I) {
+Scenario('[C7453] Edit appointment, set the all day checkmark', async function (I, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, 'chronos/allowChangeOfOrganizer': true }
@@ -785,7 +785,7 @@ Scenario('[C7453] Edit appointment, set the all day checkmark', async function (
     I.login('app=io.ox/calendar');
     I.waitForElement(appointment);
 
-    I.doubleClick(appointment);
+    calendar.doubleClick(appointment);
     I.waitForElement('.io-ox-calendar-edit-window');
     I.waitForText('All day');
     I.checkOption('All day');
@@ -1362,8 +1362,7 @@ Scenario('[C7459] Remove attachments', async function (I) {
     });
 });
 
-// Bug: Double-clicking causes appointment to open and close again
-Scenario('[C7458] Edit appointment by doubleclick @bug', async function (I) {
+Scenario('[C7458] Edit appointment by doubleclick', async function (I, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
@@ -1385,7 +1384,7 @@ Scenario('[C7458] Edit appointment by doubleclick @bug', async function (I) {
     I.login(['app=io.ox/calendar&perspective=week:week']);
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.waitForText(subject, 5, '.appointment');
-    I.doubleClick(subject, '.appointment');
+    calendar.doubleClick(subject, '.appointment');
 
     // Expected Result: Edit tab is opened.
     I.waitForVisible('.io-ox-calendar-edit-window');
