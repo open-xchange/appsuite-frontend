@@ -23,7 +23,8 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7341] Use first run mandatory wizard', async function (I, users) {
+// TODO: shaky (element (body) is not in DOM or there is no element(body) with text "Welcome to OX App Suite" after 30 sec)
+Scenario.skip('[C7341] Use first run mandatory wizard', async function (I, users) {
     const [user] = users;
     const first_name = 'John';
     const last_name = 'Wayne';

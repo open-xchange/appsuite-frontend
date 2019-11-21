@@ -43,7 +43,8 @@ Scenario('[C45021] Generate simple link for sharing', async function (I) {
     I.see('Music', '.folder-tree .selected');
 });
 
-Scenario('[C252159] Generate link for sharing including subfolders', async function (I) {
+// TODO: shaky (element (.list-view) is not in DOM or there is no element(.list-view) with text "A subfolder" after 5 sec)
+Scenario.skip('[C252159] Generate link for sharing including subfolders', async function (I) {
     I.login('app=io.ox/files');
     const myfiles = locate('.folder-tree .folder-label').withText('My files');
     I.waitForElement(myfiles);
