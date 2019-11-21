@@ -738,7 +738,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     I.clickToolbar('View');
     I.click('Week');
 
-    I.waitForVisible('.appointment');
+    I.waitForVisible('.page.current .appointment');
     I.see('Testappointment', locate('.page.current .day').at(3));
 
     // use 5th child here as the container has another child before the first .day
