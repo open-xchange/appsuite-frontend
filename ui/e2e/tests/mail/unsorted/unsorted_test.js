@@ -593,21 +593,29 @@ Scenario.skip('[C12120] Recipient cartridge', async function (I, users, mail) {
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     mail.newMail();
+
+    I.say('Init tokenfield/typehead');
     I.click('CC');
     I.waitForElement({ css: '.io-ox-mail-compose .cc .tt-input' }, 5);
     I.click('BCC');
     I.waitForElement({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
-    const fields = ['to', 'cc', 'bcc'];
-    fields.forEach(function (field) {
+
+    ['to', 'cc', 'bcc'].forEach(function (field) {
         within('.io-ox-mail-compose div[data-extension-id="' + field + '"]', function () {
+            I.say(`Enter #1 in ${field}`);
             I.fillField({ css: 'input.tt-input' }, users[1].userdata.primaryEmail);
-            I.waitForElement('.tt-dropdown-menu .tt-suggestions');
+            I.waitForVisible({ css: '.tt-dropdown-menu .tt-suggestions' });
             I.pressKey('Enter');
+            I.waitForInvisible({ css: '.tt-dropdown-menu .tt-suggestions' });
+
+            I.say(`Enter #2 in ${field}`);
             I.fillField({ css: 'input.tt-input' }, 'super@ox.com');
             I.pressKey('Enter');
             I.seeNumberOfElements({ css: 'div.token' }, 2);
-            I.waitForText(users[1].userdata.given_name + ' ' + users[1].userdata.sur_name, 5, '.token-label');
-            I.waitForText('super@ox.com', 5, '.token-label');
+
+            I.say(`Check in ${field}`);
+            I.waitForText(users[1].userdata.given_name + ' ' + users[1].userdata.sur_name, 5, { css: '.token-label' });
+            I.waitForText('super@ox.com', 5, { css: '.token-label' });
         });
     });
 });
