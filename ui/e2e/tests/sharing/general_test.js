@@ -25,28 +25,32 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C45021] Generate simple link for sharing', async function (I) {
+Scenario('[C45021] Generate simple link for sharing', async function (I, drive) {
     I.login('app=io.ox/files');
+    drive.waitForApp();
+
     const myfiles = locate('.folder-tree .folder-label').withText('My files');
     I.waitForElement(myfiles);
     I.selectFolder('Music');
-    I.clickToolbar('Share');
-    I.clickDropdown('Create sharing link');
-    I.waitForText('Sharing link created for folder');
-    I.waitForFocus('.share-wizard input[type="text"]');
-    const url = await I.grabValueFrom('.share-wizard input[type="text"]');
+    drive.shareItem('Create sharing link');
+    let url = await I.grabValueFrom('.share-wizard input[type="text"]');
+    url = Array.isArray(url) ? url[0] : url;
     I.click('Close', '.modal-footer');
     I.logout();
+
     I.amOnPage(Array.isArray(url) ? url[0] : url);
-    I.waitForElement('.list-view');
+    drive.waitForApp();
     I.dontSee('Documents', '.list-view');
     I.see('Music', '.folder-tree .selected');
 });
 
 // TODO: shaky (element (.list-view) is not in DOM or there is no element(.list-view) with text "A subfolder" after 5 sec)
-Scenario.skip('[C252159] Generate link for sharing including subfolders', async function (I) {
+Scenario('[C252159] Generate link for sharing including subfolders', async function (I, drive) {
     I.login('app=io.ox/files');
+    drive.waitForApp();
+
     const myfiles = locate('.folder-tree .folder-label').withText('My files');
+    I.say('Share folder with subfolder');
     I.waitForElement(myfiles);
     I.selectFolder('Music');
     I.clickToolbar('New');
@@ -63,47 +67,50 @@ Scenario.skip('[C252159] Generate link for sharing including subfolders', async 
     I.selectFolder('My files');
     I.waitForElement(locate('.filename').withText('Music').inside('.list-view'));
     I.click(locate('.filename').withText('Music').inside('.list-view'));
-    I.clickToolbar('Share');
-    I.clickDropdown('Create sharing link');
-    I.waitForText('Sharing link created for folder');
-    I.waitForFocus('.share-wizard input[type="text"]');
+    drive.shareItem('Create sharing link');
     const url = await I.grabValueFrom('.share-wizard input[type="text"]');
     I.click('Close', '.modal-footer');
     I.logout();
+
+    I.say('Check sharing link');
     I.amOnPage(Array.isArray(url) ? url[0] : url);
+    drive.waitForApp();
     I.waitForText('A subfolder', 5, '.list-view');
     I.seeNumberOfVisibleElements('.list-view li.list-item', 2);
     I.see('Second subfolder');
 });
 
-Scenario('[C45022] Generate simple link for sharing with password', async function (I) {
+Scenario('[C45022] Generate simple link for sharing with password', async function (I, drive) {
     I.login('app=io.ox/files');
+    drive.waitForApp();
     const myfiles = locate('.folder-tree .folder-label').withText('My files');
     I.waitForElement(myfiles);
     I.selectFolder('Music');
-    I.clickToolbar('Share');
-    I.clickDropdown('Create sharing link');
-    I.waitForText('Sharing link created for folder');
-    I.waitForFocus('.share-wizard input[type="text"]');
+
+    I.say('Create sharing link wiht password');
+    drive.shareItem('Create sharing link');
     I.click('Password required');
     I.waitForFocus('.share-wizard input[type="password"]');
     I.fillField('Enter Password', 'CorrectHorseBatteryStaple');
     I.seeCheckboxIsChecked('Password required');
-    const url = await I.grabValueFrom('.share-wizard input[type="text"]');
+    let url = await I.grabValueFrom('.share-wizard input[type="text"]');
+    url = Array.isArray(url) ? url[0] : url;
     I.click('Close', '.modal-footer');
     I.waitForDetached('.get-link-dialog');
     I.triggerRefresh();
     I.logout();
+
+    I.say('Check sharing link');
     I.amOnPage(Array.isArray(url) ? url[0] : url);
     I.waitForFocus('input[name="password"]');
     I.fillField('Password', 'CorrectHorseBatteryStaple');
     I.click('Sign in');
-    I.waitForElement('.list-view');
+    drive.waitForApp();
     I.see('Music', '.folder-tree .selected');
 });
 
 // TODO: works perfect locally but breaks remotely for puppeteer and webdriver
-Scenario.skip('[C83385] Copy to clipboard @puppeteer', async function (I, drive) {
+Scenario('[C83385] Copy to clipboard @puppeteer', async function (I, drive) {
     await I.allowClipboardRead();
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -111,10 +118,7 @@ Scenario.skip('[C83385] Copy to clipboard @puppeteer', async function (I, drive)
     I.waitForElement(myfiles);
     I.selectFolder('Music');
     drive.waitForApp();
-    I.clickToolbar('Share');
-    I.clickDropdown('Create sharing link');
-    I.waitForText('Sharing link created for folder');
-    I.waitForFocus('.share-wizard input[type="text"]');
+    drive.shareItem('Create sharing link');
     I.waitForVisible('.clippy');
     let url = await I.grabValueFrom('.share-wizard input[type="text"]');
     url = Array.isArray(url) ? url[0] : url;
@@ -132,17 +136,14 @@ Scenario.skip('[C83385] Copy to clipboard @puppeteer', async function (I, drive)
 });
 
 // TODO: shaky (element (.fa-spin.fa-refresh) still not present on page after 30 )
-Scenario.skip('[C85625] My Shares default sort order', async function (I, drive) {
-    function share(I, item) {
+Scenario('[C85625] My Shares default sort order', async function (I, drive) {
+    function share(item) {
         I.retry(5).click(locate('li.list-item').withText(item));
-        I.clickToolbar('Share');
-        I.clickDropdown('Create sharing link');
-        I.waitForText('Sharing link created for');
-        I.waitForFocus('.share-wizard input[type="text"]');
+        drive.shareItem('Create sharing link');
         I.click('Close', '.modal-footer');
         I.waitForDetached('.modal');
     }
-    function selectAndWait(I, folder) {
+    function selectAndWait(folder) {
         I.selectFolder(folder);
         drive.waitForApp();
         I.waitForText(folder, undefined, '.breadcrumb-view.toolbar-item');
@@ -158,15 +159,14 @@ Scenario.skip('[C85625] My Shares default sort order', async function (I, drive)
     ]);
     I.login('app=io.ox/files&folder=' + folder);
     drive.waitForApp();
+    share('document.txt');
+    selectAndWait('Testfolder');
+    share('testdocument.rtf');
+    share('testpresentation.ppsm');
+    selectAndWait('My files');
+    share('Testfolder');
 
-    share(I, 'document.txt');
-    selectAndWait(I, 'Testfolder');
-    share(I, 'testdocument.rtf');
-    share(I, 'testpresentation.ppsm');
-    selectAndWait(I, 'My files');
-    share(I, 'Testfolder');
-
-    selectAndWait(I, 'My shares');
+    selectAndWait('My shares');
     I.waitForText('Testfolder', undefined, '.myshares-list');
     expect(await I.grabTextFrom(locate('li.list-item .displayname'))).to.deep.equal(['Testfolder', 'testpresentation.ppsm', 'testdocument.rtf', 'document.txt']);
     I.click('Sort by');
