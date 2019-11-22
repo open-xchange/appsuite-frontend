@@ -7286,7 +7286,8 @@ msgstr ""
 "而是存放在伺服器中。您寄出的郵件當中包含可下載這些檔案的連結。"
 
 #: apps/io.ox/backbone/mini-views/helplink.js module:io.ox/core
-#: apps/io.ox/help/main.js module:io.ox/help
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/help/main.js
+#: module:io.ox/help
 msgid "Online help"
 msgstr "線上說明"
 

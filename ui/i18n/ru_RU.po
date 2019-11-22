@@ -7415,7 +7415,8 @@ msgstr ""
 "сервере, а отправленное сообщение содержит ссылки для их скачивания."
 
 #: apps/io.ox/backbone/mini-views/helplink.js module:io.ox/core
-#: apps/io.ox/help/main.js module:io.ox/help
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/help/main.js
+#: module:io.ox/help
 msgid "Online help"
 msgstr "Онлайн-справка"
 

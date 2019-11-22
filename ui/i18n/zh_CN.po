@@ -7247,7 +7247,8 @@ msgstr ""
 "是保留在服务器上。您发送的电子邮件只会包含下载那些文件的链接。"
 
 #: apps/io.ox/backbone/mini-views/helplink.js module:io.ox/core
-#: apps/io.ox/help/main.js module:io.ox/help
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/help/main.js
+#: module:io.ox/help
 msgid "Online help"
 msgstr "线上帮助"
 
