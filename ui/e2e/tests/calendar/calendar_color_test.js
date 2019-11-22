@@ -23,7 +23,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Create appointment and check if the color is correctly applied and removed', async function (I, users) {
+Scenario('Create appointment and check if the color is correctly applied and removed', async function (I, users, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -38,20 +38,14 @@ Scenario('Create appointment and check if the color is correctly applied and rem
         endDate: { value: time.add(1, 'hour').format(format), tzid: 'Europe/Berlin' }
     });
 
-    I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
-
-    I.clickToolbar('View');
-    I.click('Workweek');
-
-    // check in Workweek view
-    I.clickToolbar('View');
-    I.click('Workweek');
+    I.login('app=io.ox/calendar&perspective="week:workweek"');
+    calendar.waitForApp();
     I.waitForText('test appointment one', 5, '.workweek');
     I.see('test appointment one', '.workweek .appointment .title');
 
     I.seeNumberOfElements('.workweek .appointment .title', 1);
 
+    I.say('Get colors #1');
     // get folder color
     const [folderColor] = await I.grabCssPropertyFrom('li.selected[aria-label^="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label', 'background-color');
     // get appointment color
@@ -59,7 +53,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     // check if the color is the same
     expect(folderColor).equal(appointmentColor);
 
-    // change color
+    I.say('Change color');
     I.click('test appointment one', '.workweek .appointment .title');
     I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/edit"]');
     I.click('Edit', '.io-ox-sidepopup');
@@ -69,6 +63,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
+    I.say('Get colors #2');
     // get appointment color
     [appointmentColor] = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
     // check if the color is the same
@@ -76,7 +71,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     // the color might differ if the appointment has .hover class which is not predictable
     expect(appointmentColor).be.oneOf(['rgba(181, 54, 54, 1)', 'rgba(200, 70, 70, 1)']);
 
-    // change color back to folder color
+    I.say('Change color back to folder color');
     I.click('test appointment one', '.workweek .appointment .title');
     I.waitForText('Edit', 5, '.io-ox-sidepopup');
     I.click('Edit', '.io-ox-sidepopup');
@@ -86,6 +81,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
+    I.say('Get colors #3');
     // get appointment color
     [appointmentColor] = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
     // check if the color is the same
@@ -93,16 +89,16 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     expect(appointmentColor).not.to.be.oneOf(['rgba(181, 54, 54, 1)', 'rgba(200, 70, 70, 1)']);
 
     // remove
-    I.click('test appointment one', '.workweek .appointment .title');
-    I.waitForText('Delete', 5, '.io-ox-sidepopup');
-    I.click('Delete', '.io-ox-sidepopup');
-    I.waitForText('Delete', 5, '.modal-dialog');
-    I.click('Delete', '.modal-dialog');
-    I.waitForDetached('.modal-dialog');
-    I.waitForDetached('.io-ox-dialog-sidepopup');
+    // I.click('test appointment one', '.workweek .appointment .title');
+    // I.waitForText('Delete', 5, '.io-ox-sidepopup');
+    // I.click('Delete', '.io-ox-sidepopup');
+    // I.waitForText('Delete', 5, '.modal-dialog');
+    // I.click('Delete', '.modal-dialog');
+    // I.waitForDetached('.modal-dialog');
+    // I.waitForDetached('.io-ox-dialog-sidepopup');
 });
 
-Scenario('Changing calendar color should change appointment color that uses calendar color', async function (I, users) {
+Scenario('Changing calendar color should change appointment color that uses calendar color', async function (I, users, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -123,18 +119,15 @@ Scenario('Changing calendar color should change appointment color that uses cale
         endDate: { value: time.add(1, 'hour').format(format), tzid: 'Europe/Berlin' }
     });
 
-    I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
+    I.login('app=io.ox/calendar&perspective="week:workweek"');
+    calendar.waitForApp();
 
-    I.clickToolbar('View');
-    I.click('Workweek');
-
-    // check
+    I.say('Check colors');
     I.see('test appointment one', '.workweek .appointment .title');
     I.see('test appointment two', '.workweek .appointment .title');
     I.seeNumberOfElements('.workweek .appointment .title', 2);
 
-    // change color of first appointment
+    I.say('Change color of first appointment');
     I.click('test appointment one', '.workweek .appointment .title');
     I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/edit"]');
     I.click('Edit', '.io-ox-sidepopup');
@@ -145,22 +138,22 @@ Scenario('Changing calendar color should change appointment color that uses cale
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
-    // change calendar color to dark green
+    I.say('Change calendar color to dark green');
     I.click('.folder-options');
     const [darkGreen] = await I.grabCssPropertyFrom({ css: 'a[title="dark green"] > i' }, 'background-color');
     I.click('dark green');
 
     // click some stuff
-    I.clickToolbar('View');
-    I.click('Workweek');
+    // I.clickToolbar('View');
+    // I.click('Workweek');
     I.waitForText('test appointment one', 5, '.workweek');
 
+    I.say('Check correctly applied colors');
     // get folder color
     const [folderColor] = await I.grabCssPropertyFrom({ css: 'li.selected[aria-label^="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label' }, 'background-color');
     // get appointment colors
     const [appointmentOneColor] = await I.grabCssPropertyFrom('.workweek .appointment[aria-label*="test appointment one"]', 'background-color');
     const [appointmentTwoColor] = await I.grabCssPropertyFrom('.workweek .appointment[aria-label*="test appointment two"]', 'background-color');
-    // check if the colors are correctly applied
     expect(folderColor, 'folderColor equals darkGreen').equal(darkGreen);
     expect(appointmentOneColor, 'appointment one color equals darkRed').equal(darkRed);
     expect(appointmentTwoColor, 'appointment two color equals darkGreen').equal(darkGreen);

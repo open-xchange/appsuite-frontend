@@ -24,15 +24,13 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7466] Delete one appointment of an series', async function (I, users) {
+Scenario('[C7466] Delete one appointment of an series', async function (I, users, calendar) {
     const testrailID = 'C7466';
-    //var timestamp = Math.round(+new Date() / 1000);
-    I.haveSetting('io.ox/core//autoOpenNotification', false);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
+    await I.haveSetting('io.ox/core//showDesktopNotifications', false);
 
     //Create Appointment
-    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar');
     I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
         summary: testrailID,
@@ -40,36 +38,37 @@ Scenario('[C7466] Delete one appointment of an series', async function (I, users
         description: testrailID,
         attendeePrivileges: 'DEFAULT',
         rrule: 'FREQ=WEEKLY;BYDAY=' + moment().format('dd') + '',
-        endDate: {
-            tzid: 'Europe/Berlin',
-            value: moment().format('YYYYMMDD')
-        },
         startDate: {
             tzid: 'Europe/Berlin',
             value: moment().format('YYYYMMDD')
         },
-        attendees: [
-            {
-                cuType: 'INDIVIDUAL',
-                cn: users[0].userdata.given_name + ' ' + users[0].userdata.sur_name,
-                partStat: 'ACCEPTED',
-                entity: users[0].userdata.id,
-                email: users[0].userdata.primaryEmail,
-                uri: 'mailto:' + users[0].userdata.primaryEmail,
-                contact: {
-                    display_name: users[0].userdata.given_name + ' ' + users[0].userdata.sur_name,
-                    first_name: users[0].userdata.given_name,
-                    last_name: users[0].userdata.sur_name
-                }
-            }
-        ]
-    }, { user: users[0] });
-    I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().format('YYYYMMDD')
+        }//,
+        // attendees: [{
+        //     cuType: 'INDIVIDUAL',
+        //     cn: users[0].userdata.given_name + ' ' + users[0].userdata.sur_name,
+        //     partStat: 'ACCEPTED',
+        //     entity: users[0].userdata.id,
+        //     email: users[0].userdata.primaryEmail,
+        //     uri: 'mailto:' + users[0].userdata.primaryEmail,
+        //     contact: {
+        //         display_name: users[0].userdata.given_name + ' ' + users[0].userdata.sur_name,
+        //         first_name: users[0].userdata.given_name,
+        //         last_name: users[0].userdata.sur_name
+        //     }
+        // }]
+    });
+    I.login('app=io.ox/calendar&perspective=week:week');
+    calendar.waitForApp();
+
     I.clickToolbar('Today');
     I.click('.next');
     I.waitForElement('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]');
+
+    I.say('Delete');
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup');
     I.waitForText('Delete', undefined, '.io-ox-sidepopup');
     I.click('Delete', '.io-ox-sidepopup');
@@ -77,6 +76,8 @@ Scenario('[C7466] Delete one appointment of an series', async function (I, users
     I.click('Delete this appointment', '.modal');
     I.waitForDetached('.modal');
     I.waitForDetached('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]');
+
+    I.say('Check');
     I.click('Today');
     I.waitForElement('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.next');
@@ -91,14 +92,13 @@ Scenario('[C7466] Delete one appointment of an series', async function (I, users
     I.waitForElement('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]', 5);
 });
 
-Scenario('[C7468] Delete an appointment', async function (I, users) {
+Scenario('[C7468] Delete an appointment', async function (I, users, calendar) {
 
     const testrailID = 'C7468';
 
     //var timestamp = Math.round(+new Date() / 1000);
-    I.haveSetting('io.ox/core//autoOpenNotification', false);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
+    await I.haveSetting('io.ox/core//showDesktopNotifications', false);
 
     //Create Appointment
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
@@ -108,7 +108,6 @@ Scenario('[C7468] Delete an appointment', async function (I, users) {
         location: testrailID,
         description: testrailID,
         attendeePrivileges: 'DEFAULT',
-        //rrule: 'FREQ=WEEKLY;BYDAY=' + moment().format('dd') + '',
         endDate: {
             tzid: 'Europe/Berlin',
             value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
@@ -116,42 +115,40 @@ Scenario('[C7468] Delete an appointment', async function (I, users) {
         startDate: {
             tzid: 'Europe/Berlin',
             value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00')
-        },
-        attendees: [
-            {
-                cuType: 'INDIVIDUAL',
-                cn: users[0].userdata.given_name + ' ' + users[0].userdata.sur_name,
-                partStat: 'ACCEPTED',
-                entity: users[0].userdata.id,
-                email: users[0].userdata.primaryEmail,
-                uri: 'mailto:' + users[0].userdata.primaryEmail,
-                contact: {
-                    display_name: users[0].userdata.given_name + ' ' + users[0].userdata.sur_name,
-                    first_name: users[0].userdata.given_name,
-                    last_name: users[0].userdata.sur_name
-                }
-            }
-        ]
-    }, { user: users[0] });
-    I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+        }//,
+        // attendees: [
+        //     {
+        //         cuType: 'INDIVIDUAL',
+        //         cn: users[0].userdata.given_name + ' ' + users[0].userdata.sur_name,
+        //         partStat: 'ACCEPTED',
+        //         entity: users[0].userdata.id,
+        //         email: users[0].userdata.primaryEmail,
+        //         uri: 'mailto:' + users[0].userdata.primaryEmail,
+        //         contact: {
+        //             display_name: users[0].userdata.given_name + ' ' + users[0].userdata.sur_name,
+        //             first_name: users[0].userdata.given_name,
+        //             last_name: users[0].userdata.sur_name
+        //         }
+        //     }
+        // ]
+    });
+    I.login('app=io.ox/calendar&perspective=week:week');
+    calendar.waitForApp();
+
     I.clickToolbar('Today');
     I.waitForElement('.appointment[aria-label^="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.appointment[aria-label^="' + testrailID + ', ' + testrailID + '"]');
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
-    I.click('Delete', '.io-ox-sidepopup');
-    I.waitForVisible('.modal');
-    I.click('Delete', '.modal');
-    I.waitForDetached('.modal');
+
+    calendar.deleteAppointment();
     I.waitForDetached('.appointment[aria-label^="' + testrailID + ', ' + testrailID + '"]');
 });
 
-Scenario('[C7469] Delete a whole-day appointment', async function (I, users) {
+Scenario('[C7469] Delete a whole-day appointment', async function (I, users, calendar) {
     let testrailID = 'C7469';
     //var timestamp = Math.round(+new Date() / 1000);
-    I.haveSetting('io.ox/core//autoOpenNotification', false);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
+    await I.haveSetting('io.ox/core//showDesktopNotifications', false);
 
     //Create Appointment
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
@@ -161,7 +158,6 @@ Scenario('[C7469] Delete a whole-day appointment', async function (I, users) {
         location: testrailID,
         description: testrailID,
         attendeePrivileges: 'DEFAULT',
-        //rrule: 'FREQ=WEEKLY;BYDAY=' + moment().format('dd') + '',
         endDate: {
             tzid: 'Europe/Berlin',
             value: moment().format('YYYYMMDD')
@@ -169,33 +165,31 @@ Scenario('[C7469] Delete a whole-day appointment', async function (I, users) {
         startDate: {
             tzid: 'Europe/Berlin',
             value: moment().format('YYYYMMDD')
-        },
-        attendees: [
-            {
-                cuType: 'INDIVIDUAL',
-                cn: users[0].userdata.given_name + ' ' + users[0].userdata.sur_name,
-                partStat: 'ACCEPTED',
-                entity: users[0].userdata.id,
-                email: users[0].userdata.primaryEmail,
-                uri: 'mailto:' + users[0].userdata.primaryEmail,
-                contact: {
-                    display_name: users[0].userdata.given_name + ' ' + users[0].userdata.sur_name,
-                    first_name: users[0].userdata.given_name,
-                    last_name: users[0].userdata.sur_name
-                }
-            }
-        ]
-    }, { user: users[0] });
-    I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+        }//,
+        // attendees: [
+        //     {
+        //         cuType: 'INDIVIDUAL',
+        //         cn: users[0].userdata.given_name + ' ' + users[0].userdata.sur_name,
+        //         partStat: 'ACCEPTED',
+        //         entity: users[0].userdata.id,
+        //         email: users[0].userdata.primaryEmail,
+        //         uri: 'mailto:' + users[0].userdata.primaryEmail,
+        //         contact: {
+        //             display_name: users[0].userdata.given_name + ' ' + users[0].userdata.sur_name,
+        //             first_name: users[0].userdata.given_name,
+        //             last_name: users[0].userdata.sur_name
+        //         }
+        //     }
+        // ]
+    });
+    I.login('app=io.ox/calendar&perspective=week:week');
+    calendar.waitForApp();
+
     I.clickToolbar('Today');
     I.waitForVisible('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]');
     I.click('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]');
     I.waitForVisible('.io-ox-calendar-main .io-ox-sidepopup');
-    I.waitForText('Delete');
-    I.click('Delete', '.io-ox-sidepopup');
-    I.waitForVisible('.modal');
-    I.click('Delete', '.modal');
-    I.waitForDetached('.modal');
+
+    calendar.deleteAppointment();
     I.waitForDetached('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]');
 });

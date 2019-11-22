@@ -26,14 +26,14 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7449] Move appointment to folder', async function (I) {
+Scenario('[C7449] Move appointment to folder', async function (I, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
     });
     const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
     const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
+    await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
     await I.haveAppointment({
         folder:  defaultFolderId,
         summary: 'Testappointment',
@@ -42,9 +42,10 @@ Scenario('[C7449] Move appointment to folder', async function (I) {
     });
 
     I.login('app=io.ox/calendar');
+    calendar.waitForApp();
 
-    if (!moment().isSame(time, 'month')) I.retry(5).click('~Go to next month', '.window-sidepanel');
-    I.retry(5).click(`~${time.format('l, dddd')}, CW ${time.week()}`, '.window-sidepanel');
+    if (!moment().isSame(time, 'month')) I.retry(5).click('~Go to next month', calendar.locators.mini);
+    I.retry(5).click(`~${time.format('l, dddd')}, CW ${time.week()}`, calendar.locators.mini);
 
     // open all views and load the appointment there
     ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
@@ -158,8 +159,8 @@ Scenario.skip('[C7451] Edit yearly series via doubleclick', async function (I, c
 
     // select the next 16.th december via the mini calendar
     const diffMonth = time.diff(moment().startOf('month'), 'months');
-    for (let i = 0; i < diffMonth; i++) I.click('~Go to next month', '.window-sidepanel');
-    I.click(`~${time.format('l, dddd')}, CW ${time.week()}`, '.window-sidepanel');
+    for (let i = 0; i < diffMonth; i++) I.click('~Go to next month', calendar.locators.mini);
+    I.click(`~${time.format('l, dddd')}, CW ${time.week()}`, calendar.locators.mini);
 
     I.clickToolbar('View');
     I.click('Week');
@@ -181,8 +182,8 @@ Scenario.skip('[C7451] Edit yearly series via doubleclick', async function (I, c
     I.waitForVisible(`.page.current .day:nth-child(${time.weekday() + 2}) .appointment`);
 
     time.add(1, 'year');
-    for (let i = 0; i < 12; i++) I.click('~Go to next month', '.window-sidepanel');
-    I.click(`~${time.format('l, dddd')}, CW ${time.week()}`, '.window-sidepanel');
+    for (let i = 0; i < 12; i++) I.click('~Go to next month', calendar.locators.mini);
+    I.click(`~${time.format('l, dddd')}, CW ${time.week()}`, calendar.locators.mini);
 
     I.waitForVisible(`.page.current .day:nth-child(${time.weekday() + 2}) .appointment`);
 });
@@ -797,7 +798,7 @@ Scenario('[C7453] Edit appointment, set the all day checkmark', async function (
 
 });
 
-Scenario('[C7457] Edit appointment via toolbar', async function (I) {
+Scenario('[C7457] Edit appointment via toolbar', async function (I, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, 'chronos/allowChangeOfOrganizer': true }
@@ -816,8 +817,8 @@ Scenario('[C7457] Edit appointment via toolbar', async function (I) {
     I.login('app=io.ox/calendar');
 
     // select the according day in the mini datepicker
-    if (!moment().isSame(time, 'month')) I.retry(5).click('~Go to next month', '.window-sidepanel');
-    I.retry(5).click(`~${time.format('l, dddd')}, CW ${time.week()}`, '.window-sidepanel');
+    if (!moment().isSame(time, 'month')) I.retry(5).click('~Go to next month', calendar.locators.mini);
+    I.retry(5).click(`~${time.format('l, dddd')}, CW ${time.week()}`, calendar.locators.mini);
 
     // open all views and load the appointment there
     ['Day', 'Month', 'List', 'Week', 'Workweek'].forEach((view) => {

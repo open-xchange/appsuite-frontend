@@ -14,6 +14,7 @@
 /// <reference path="../../steps.d.ts" />
 
 const expect = require('chai').expect;
+
 Feature('Calendar > Create');
 
 Before(async (users) => {
@@ -51,7 +52,7 @@ let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) 
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 };
 
-Scenario.skip('[C264519] Create appointments with colors in public folder', async function (I, users) {
+Scenario.skip('[C264519] Create appointments with colors in public folder', async function (I, users, calendar) {
 
     let [user_a, user_b] = users;
     let selectInsideFolder = (node) => locate(node)
@@ -63,8 +64,10 @@ Scenario.skip('[C264519] Create appointments with colors in public folder', asyn
 
     //login user a
     I.login('app=io.ox/calendar', { user: user_a });
+    calendar.waitForApp();
+
+    I.say('Create public calendar');
     I.waitForText('Add new calendar');
-    // add new public calendar
     I.click('Add new calendar');
     I.waitForText('Personal calendar');
     I.click('Personal calendar');
@@ -73,7 +76,8 @@ Scenario.skip('[C264519] Create appointments with colors in public folder', asyn
     I.click('Add');
     I.waitToHide('.modal');
     I.wait(1);
-    // give user b permissions
+
+    I.say('Grant permission to user b');
     I.click('.fa.fa-caret-right');
     I.selectFolder('New calendar');
     I.click(selectInsideFolder('a'));
@@ -84,11 +88,13 @@ Scenario.skip('[C264519] Create appointments with colors in public folder', asyn
     I.pressKey('Enter');
     I.click('Save');
     I.waitForDetached('.modal');
-    //create 2 test appointments with different colors
+
+    I.say('create 2 test appointments with different colors');
     createAppointment({ subject: 'testing is fun', folder: 'New calendar', startTime: '8:00 AM', color: 'dark green' });
     createAppointment({ subject: 'testing is awesome', folder: 'New calendar', startTime: '10:00 AM', color: 'dark cyan' });
     I.logout();
-    //login user b
+
+    I.say('Login user b');
     I.waitForVisible('#io-ox-login-screen');
     I.login('app=io.ox/calendar', { user: user_b });
     I.waitForVisible('.fa.fa-caret-right');

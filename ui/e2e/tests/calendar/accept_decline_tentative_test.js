@@ -25,7 +25,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Create appointments with participants who will accept/decline/accept tentative', async function (I, users) {
+Scenario('Create appointments with participants who will accept/decline/accept tentative', async function (I, users, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -33,6 +33,10 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const time = moment().startOf('day').add(10, 'hours');
     const format = 'YYYYMMDD[T]HHmmss';
+    const usersettings = {
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    };
     await I.haveAppointment({
         folder: folder,
         summary: 'test invite accept/decline/accept tentative',
@@ -49,111 +53,66 @@ Scenario('Create appointments with participants who will accept/decline/accept t
         }]
     });
 
-    // user 1
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    }, { user: users[1] });
-
-    // login new user1 for accept
-    I.login('app=io.ox/calendar', { user: users[1] });
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
-
+    I.say('User 1');
+    await I.haveSetting(usersettings, { user: users[1] });
+    I.login('app=io.ox/calendar&perspective="list"', { user: users[1] });
+    calendar.waitForApp();
     I.selectFolder('Calendar');
 
-    I.clickToolbar('View');
-    I.click('List');
-
+    I.say('Accept');
     I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
-
     I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
     I.waitForElement('.modal-dialog');
-
     I.click('Accept', '.modal-dialog');
-
     I.waitForDetached('.modal-dialog', 5);
-
     I.waitForElement('.rightside .participant a.accepted[title="' + users[1].userdata.primaryEmail + '"]');
-
     I.logout();
 
-    // user 2
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    }, { user: users[2] });
-
-    // login new user2 for decline
-    I.login('app=io.ox/calendar', { user: users[2] });
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
-
+    I.say('User 2');
+    await I.haveSetting(usersettings, { user: users[2] });
+    I.login('app=io.ox/calendar&perspective="list"', { user: users[2] });
+    calendar.waitForApp();
     I.selectFolder('Calendar');
 
-    I.clickToolbar('View');
-    I.click('List');
-
+    I.say('Decline');
     I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
-
     I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
     I.waitForElement('.modal-dialog');
-
     I.click('Decline', '.modal-dialog');
-
     I.waitForDetached('.modal-dialog', 5);
-
     I.waitForElement('.rightside .participant a.declined[title="' + users[2].userdata.primaryEmail + '"]');
-
     I.logout();
 
-    // user 3
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    }, { user: users[3] });
-
-    // login new user3 for accept tentative
-    I.login('app=io.ox/calendar', { user: users[3] });
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
-
+    I.say('User 3');
+    await I.haveSetting(usersettings, { user: users[3] });
+    I.login('app=io.ox/calendar&perspective="list"', { user: users[3] });
+    calendar.waitForApp();
     I.selectFolder('Calendar');
 
-    I.clickToolbar('View');
-    I.click('List');
-
+    I.say('Tentative');
     I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
-
     I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
     I.waitForElement('.modal-dialog');
-
     I.click('Tentative', '.modal-dialog');
-
     I.waitForDetached('.modal-dialog', 5);
-
     I.waitForElement('.rightside .participant a.tentative[title="' + users[3].userdata.primaryEmail + '"]');
-
     I.logout();
 
-    // login owner
-    I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
-
+    I.say('Owner');
+    I.login('app=io.ox/calendar&perspective="list"', { user: users[0] });
+    calendar.waitForApp();
     I.selectFolder('Calendar');
-    I.clickToolbar('View');
-    I.click('List');
 
     // check in list view
-    I.clickToolbar('View');
-    I.click('List');
+    I.say('Check list view');
     I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
-
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
-
     // owner
     I.waitForElement('.rightside .participant a.accepted[title="' + users[0].userdata.primaryEmail + '"]');
     // accepted
