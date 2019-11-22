@@ -69,7 +69,6 @@ Scenario('Add an existing distribution list', function (I, contacts) {
     I.fillField('~Search', title);
     I.waitForText(title, 5, '.modal li.list-item');
     I.click(title, '.modal li.list-item');
-    I.pressKey('Enter');
     I.waitForText('4 addresses selected', 5);
     I.see(title, 'li.token');
 
