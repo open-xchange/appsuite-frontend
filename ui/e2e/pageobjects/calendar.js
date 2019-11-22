@@ -58,6 +58,7 @@ module.exports = {
         I.click('Delete', '.io-ox-sidepopup .calendar-detail');
         I.waitForText('Delete');
         I.click('Delete', '.modal-dialog .modal-footer');
+        I.waitForDetached('.modal');
     },
 
     // attr: [startDate, endDate, until]
@@ -114,5 +115,10 @@ module.exports = {
         contactpicker.add(name);
         contactpicker.close();
         I.waitForText(name, 5, this.locators.participants);
+    },
+
+    clickMin: function name(date) {
+        if (!moment().isSame(date, 'month')) I.retry(5).click('~Go to next month', this.locators.mini);
+        I.retry(5).click(`~${date.format('l, dddd')}, CW ${date.week()}`, this.locators.mini);
     }
 };
