@@ -1045,7 +1045,7 @@ Scenario.skip('[C7461] Add a participant/ressource', async function (I, users) {
         weebl.userdata.primaryEmail,
         bob.userdata.primaryEmail,
         'foo@bar'
-    ].forEach(mail => I.waitForText(mail, 5, '.participant-wrapper'));
+    ].forEach(mail => I.waitForText(mail, 5, '.participantsrow'));
 
     // 4. Save the appointment and check it in all calendar views
     const getSectionLocator = (sectionName) => locate('fieldset').withDescendant(locate('h2').withText(sectionName));
