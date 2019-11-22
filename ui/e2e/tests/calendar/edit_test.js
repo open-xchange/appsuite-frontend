@@ -548,7 +548,7 @@ Scenario.skip('[C274402] Change organizer of appointment with internal attendees
 
     I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Details');
-    I.see(`Organizer ${users[0].userdata.display_name}`, '.io-ox-sidepopup');
+    I.waitForText(`${users[0].userdata.display_name}`, 5, '.io-ox-sidepopup .details .organizer');
 
     I.wait(0.2); // gently wait for event listeners
     I.click('~More actions', '.io-ox-sidepopup');
@@ -566,7 +566,7 @@ Scenario.skip('[C274402] Change organizer of appointment with internal attendees
 
     I.waitForText('Details');
     I.click('Details');
-    I.waitForText(`Organizer ${users[1].userdata.display_name}`, undefined, '.io-ox-sidepopup');
+    I.waitForText(`${users[1].userdata.display_name}`, 5, '.io-ox-sidepopup .details .organizer');
 });
 
 Scenario('[274409] Change organizer of series with internal attendees', async function (I, users) {
