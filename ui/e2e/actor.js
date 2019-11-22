@@ -92,7 +92,7 @@ module.exports = actor({
 
     openFolderMenu(folderName) {
         const item = `.folder-tree .contextmenu-control[title*="${folderName}"]`;
-        this.waitForElement(item);
+        this.waitForVisible(item);
         this.click(item);
     }
 });

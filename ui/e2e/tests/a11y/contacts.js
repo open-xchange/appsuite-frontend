@@ -57,7 +57,7 @@ Scenario('Contacts - Modal Dialog - Import', async (I, contacts) => {
 });
 
 // TODO: shaky (element not interactable)
-Scenario.skip('Contacts - Modal Dialog - Create sharing link (with exceptions)', async (I, contacts) => {
+Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', async (I, contacts) => {
     // Exceptions:
     // Typeahead missing label (critical)
     // Textinput, password and textarea have missing visual labels (critical)
