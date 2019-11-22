@@ -143,7 +143,7 @@ Scenario.skip('[C7450] Edit private appointment', async function (I, calendar) {
 
 });
 
-Scenario('[C7451] Edit yearly series via dubbleclick', async function (I, calendar) {
+Scenario.skip('[C7451] Edit yearly series via doubleclick', async function (I, calendar) {
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const time = moment('1612', 'DDMM').add(10, 'hours');
     await I.haveAppointment({

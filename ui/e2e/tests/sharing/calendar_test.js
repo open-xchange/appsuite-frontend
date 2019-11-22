@@ -26,7 +26,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C104305] calendar folders using “Permisions” dialog and sharing link', async (I, users, calendar) => {
+Scenario.skip('[C104305] calendar folders using “Permisions” dialog and sharing link', async (I, users, calendar) => {
     let url;
     I.say('Alice shares a folder with 2 appointments');
     session('Alice', async () => {
