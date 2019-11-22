@@ -587,7 +587,8 @@ Scenario('[C12119] Edit recipients', async function (I, users, mail) {
     });
 });
 
-Scenario('[C12120] Recipient cartridge', async function (I, users, mail) {
+// TOOD: shaky? Success rate 99.55% (226 of 227)
+Scenario.skip('[C12120] Recipient cartridge', async function (I, users, mail) {
     let [user] = users;
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
