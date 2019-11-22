@@ -172,7 +172,7 @@ Scenario.skip('[C7451] Edit yearly series via doubleclick', async function (I, c
     I.click('Edit series');
 
     I.waitForVisible('.io-ox-calendar-edit-window');
-
+    I.wait(0.5); // gently wait for listeners
     await calendar.setDate('startDate', time.add(1, 'day'));
 
     I.click('Save');
