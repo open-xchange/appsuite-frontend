@@ -786,7 +786,7 @@ Scenario('[C7453] Edit appointment, set the all day checkmark', async function (
     I.login('app=io.ox/calendar');
     I.waitForElement(appointment);
 
-    calendar.doubleClick(appointment);
+    calendar.doubleClick('.page.current .appointment');
     I.waitForElement('.io-ox-calendar-edit-window');
     I.waitForText('All day');
     I.checkOption('All day');
@@ -1387,7 +1387,7 @@ Scenario('[C7458] Edit appointment by doubleclick', async function (I, calendar)
     I.login(['app=io.ox/calendar&perspective=week:week']);
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.waitForText(subject, 5, '.appointment');
-    calendar.doubleClick(subject, '.appointment');
+    calendar.doubleClick('.page.current .appointment');
 
     // Expected Result: Edit tab is opened.
     I.waitForVisible('.io-ox-calendar-edit-window');
