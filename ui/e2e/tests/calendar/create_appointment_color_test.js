@@ -52,7 +52,7 @@ let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) 
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 };
 
-Scenario.skip('[C264519] Create appointments with colors in public folder', async function (I, users, calendar) {
+Scenario('[C264519] Create appointments with colors in public folder', async function (I, users, calendar) {
 
     let [user_a, user_b] = users;
     let selectInsideFolder = (node) => locate(node)
@@ -67,23 +67,28 @@ Scenario.skip('[C264519] Create appointments with colors in public folder', asyn
     calendar.waitForApp();
 
     I.say('Create public calendar');
-    I.waitForText('Add new calendar');
-    I.click('Add new calendar');
-    I.waitForText('Personal calendar');
-    I.click('Personal calendar');
+    I.waitForText('Add new calendar', 5, '.folder-tree');
+    I.click('Add new calendar', '.folder-tree');
+
+    calendar.clickInsideDropdown('Personal calendar');
+
     I.waitForVisible('.modal-body');
-    I.checkOption('Add as public calendar');
-    I.click('Add');
+
+    within('.modal-content', function () {
+        I.checkOption('Add as public calendar');
+        I.click('Add');
+    });
+
     I.waitToHide('.modal');
-    I.wait(1);
 
     I.say('Grant permission to user b');
-    I.click('.fa.fa-caret-right');
+    I.click('.folder-node .folder-arrow .fa.fa-caret-right');
     I.selectFolder('New calendar');
-    I.click(selectInsideFolder('a'));
-    I.waitForText('Permissions / Invite people');
-    I.click('Permissions / Invite people');
-    I.waitForFocus('.form-control.tt-input');
+    I.click(selectInsideFolder({ css: 'a.folder-options' }));
+
+    calendar.clickInsideDropdown('Permissions / Invite people');
+    I.waitForVisible('.modal-dialog');
+    I.waitForFocus('.modal-dialog input[type="text"][id^="form-control-label"]');
     I.fillField('.form-control.tt-input', user_b.get('primaryEmail'));
     I.pressKey('Enter');
     I.click('Save');
@@ -97,8 +102,10 @@ Scenario.skip('[C264519] Create appointments with colors in public folder', asyn
     I.say('Login user b');
     I.waitForVisible('#io-ox-login-screen');
     I.login('app=io.ox/calendar', { user: user_b });
-    I.waitForVisible('.fa.fa-caret-right');
-    I.click('.fa.fa-caret-right');
+    calendar.waitForApp();
+
+    I.waitForVisible('.folder-node .folder-arrow .fa.fa-caret-right');
+    I.click('.folder-node .folder-arrow .fa.fa-caret-right');
     I.selectFolder('New calendar');
     I.click(selectInsideFolder('div.color-label'));
     //check if public appointments are there

@@ -122,5 +122,13 @@ module.exports = {
         I.waitForElement('.dropdown.open');
         I.click(locate('a').inside(this.locators.dropdown).withText(view));
         this.waitForApp();
+    },
+    clickInsideDropdown: function (attr) {
+        I.waitForVisible(this.locators.dropdown);
+        within(this.locators.dropdown, () => {
+            I.waitForText(attr);
+            I.click(attr);
+        });
+        I.waitForDetached(this.locators.dropdown);
     }
 };
