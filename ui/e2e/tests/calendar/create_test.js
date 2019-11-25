@@ -123,7 +123,7 @@ Scenario('[C7411] Discard appointment during the creation', function (I, calenda
     I.dontSee('Subject C7411');
 });
 
-// Check: There actually may be a legitimate bug here or is it intended that shared private appointments don't appear in list view?
+// TODO: creation of shared appointment happened via api call?!
 Scenario('[C7412] Create private appointment @contentReview @bug', async function (I, users, calendar) {
     await I.haveSetting({
         'io.ox/core': {
@@ -135,8 +135,8 @@ Scenario('[C7412] Create private appointment @contentReview @bug', async functio
     });
 
     const title = 'C7412',
-        timestamp = Math.round(+new Date() / 1000),
-        testDate = moment().startOf('isoWeek').add(1, 'week'),
+        somedetail = Math.round(+new Date() / 1000),
+        today = moment('12:00:00', 'HH:mm:ss'),
         appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] }),
         permissions = [{
             bits: 403710016,
@@ -148,36 +148,41 @@ Scenario('[C7412] Create private appointment @contentReview @bug', async functio
             group: false
         }];
     const sharedFolderID = await I.haveFolder({ title, permissions, module: 'event', parent: 'cal://0/' + appointmentDefaultFolder }, { user: users[0] });
+
     await I.haveAppointment({
         folder: sharedFolderID,
-        summary: timestamp,
-        location: timestamp,
-        description: timestamp,
+        summary: somedetail,
+        location: somedetail,
+        description: somedetail,
         attendeePrivileges: 'MODIFY',
         class: 'CONFIDENTIAL',
-        endDate: {
-            tzid: 'Europe/Berlin',
-            value: testDate.clone().add(10, 'hours').format('YYYYMMDD[T]HHmm00')
-        },
         startDate: {
             tzid: 'Europe/Berlin',
-            value: testDate.clone().add(8, 'hours').format('YYYYMMDD[T]HHmm00')
+            value: today.clone().add(2, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: today.clone().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
         }
-    }, { user: users[0] });
+    });
 
+    I.say('Login with second user');
     I.login('app=io.ox/calendar', { user: users[1] });
     calendar.waitForApp();
-    I.click(`.date-picker .date[data-date="${testDate.unix() * 1000}"]`);
+
+    I.retry(5).click({ css: `[aria-label*="${today.format('l, dddd')}, CW ${today.week()}"]` }, calendar.locators.mini);
+
+    I.say('Show appointments of first user');
     I.waitForText('Shared calendars');
     I.doubleClick('~Shared calendars');
     I.waitForVisible({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${title}"]` });
     I.doubleClick({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${title}"]` });
-    ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
-        I.clickToolbar('View');
-        I.click(view);
+
+    I.say('Check views');
+    ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
         I.waitForText('Private');
-        I.dontSee(timestamp);
-    });
+        I.dontSee(somedetail);
+    }));
 });
 
 Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December, no end', async function (I, calendar) {
