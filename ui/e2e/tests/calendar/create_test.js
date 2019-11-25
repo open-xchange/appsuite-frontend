@@ -1067,7 +1067,7 @@ Scenario('[C271749] Show prompt on event creation in public calendar', async fun
 });
 
 // "datepicker open" doesn't work reliable when running puppeteer headerless
-Scenario.skip('[C7440] Start/End date autoadjustment', async function (I, calendar) {
+Scenario('[C7440] Start/End date autoadjustment', async function (I, calendar) {
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
     calendar.newAppointment();
@@ -1083,7 +1083,7 @@ Scenario.skip('[C7440] Start/End date autoadjustment', async function (I, calend
     async function check(direction, toChange) {
         // start today
         I.click({ css: '[data-attribute="' + toChange + '"] .datepicker-day-field' });
-        I.waitForElement('.date-picker.open');
+        I.waitForElement('.date-picker.open', 3);
         I.click('.date-picker.open .btn-today');
         // change month
         I.click({ css: '[data-attribute="' + toChange + '"] .datepicker-day-field' });
