@@ -44,8 +44,7 @@ Scenario('User start with no picture', async function (I, contacts, mail) {
     I.click('Discard');
 });
 
-// TODO: shaky (element (.fa-spin.fa-refresh) still not present on page after 30 sec)
-Scenario.skip('User can upload and remove a picture', async function (I, contacts, mail) {
+Scenario('User can upload and remove a picture', async function (I, contacts, mail) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
@@ -66,8 +65,8 @@ Scenario.skip('User can upload and remove a picture', async function (I, contact
     // picture-uploader
     I.dontSeeElement('.empty');
     I.click('Save');
-    I.waitForInvisible('.contact-edit');
     I.waitForNetworkTraffic();
+    I.waitForInvisible('.contact-edit');
 
     const image2 = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'backgroundImage');
     expect(Array.isArray(image2) ? image2[0] : image2).to.not.be.empty;
@@ -76,15 +75,16 @@ Scenario.skip('User can upload and remove a picture', async function (I, contact
 
     // TODO: BUG
     // There are likely to be accessibility issues due to mishandled focus
-    I.click('Remove photo');
+    I.waitForVisible('.modal-footer [data-action="remove"]:not([disabled])');
     I.click('Remove photo');
 
+    I.waitForVisible('.edit-picture.empty');
     I.click('Apply');
     I.waitForDetached('.modal');
     I.click('Save');
+    I.waitForNetworkTraffic();
     I.waitForInvisible('.contact-edit');
     I.waitForDetached('.contact-picture[style]');
-    I.waitForNetworkTraffic();
     I.waitForElement('.contact-picture');
 
     // check again
