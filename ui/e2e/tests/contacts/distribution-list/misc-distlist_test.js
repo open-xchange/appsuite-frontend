@@ -23,38 +23,48 @@ After(async function (users) {
 
 const util = require('./util');
 
-Scenario('Add external participant as contact', function (I, contacts) {
+Scenario('Add external participant as contact', async function (I, contacts) {
+    const haloview = locate({ css: '.io-ox-sidepopup .io-ox-halo' }).as('Halo View');
 
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
     contacts.newDistributionlist();
 
+    I.say('New distribution list');
     I.fillField('Name', 'Testlist');
     I.fillField('Add contact', 'test@tester.com');
     I.pressKey('Enter');
 
+    I.say('Open halo view');
     I.waitForVisible('a.halo-link');
     I.click('a.halo-link');
+    I.waitForVisible(haloview);
+    await within(haloview, async () => {
+        I.waitForVisible({ css: '[data-action="io.ox/contacts/actions/add-to-contactlist"]' });
+        I.see('Add to address book');
+        I.click('Add to address book');
+    });
 
-    I.waitForVisible('.io-ox-sidepopup');
-    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/contacts/actions/add-to-contactlist"]');
-    I.see('Add to address book', '.io-ox-sidepopup');
-    I.click('Add to address book', '.io-ox-sidepopup');
-
+    I.say('New contact');
     I.waitForVisible('.io-ox-contacts-edit-window');
     I.waitForVisible({ css: '[name="last_name"]' });
 
-    //confirm dirtycheck is working properly
+    I.say('Check prefilled mail address');
+    I.seeInField('Email 1', 'test@tester.com');
+
+    I.say('Confirm dirtycheck is working properly');
     I.click('Discard', '.io-ox-contacts-edit-window');
     I.waitForText('Do you really want to discard your changes?', 5, '.modal-dialog');
     I.click('Cancel');
     I.waitForDetached('.modal-dialog');
 
+    I.say('Save contact as `Lastname`');
     I.fillField('Last name', 'Lastname');
-
     I.click('Save', '.io-ox-contacts-edit-window');
     I.waitForDetached('.io-ox-contacts-edit-window');
+    I.waitForText('Lastname', 5, haloview);
 
+    I.say('Save to addressbook');
     I.waitForVisible('.io-ox-contacts-distrib-window');
     I.click('Create list', '.io-ox-contacts-distrib-window');
 
