@@ -20,32 +20,30 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Change working time and check in weekview', async function (I) {
+Scenario('Change working time and check in weekview', async function (I, calendar, settings) {
 
-    I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
+    I.login('app=io.ox/calendar&perspective=week:workweek');
+    calendar.waitForApp();
 
-    I.selectFolder('Calendar');
-    I.clickToolbar('View');
-    I.click('Workweek');
-
+    I.say('Check inital working time');
     I.see('7 AM', '.week-container-label .working-time-border:not(.in) .number');
     I.see('5 PM', '.week-container-label .working-time-border.in .number');
 
-    // switch to settings
+    I.say('Swich to settings');
     I.click('~Settings', '#io-ox-settings-topbar-icon');
+    settings.waitForApp();
 
-    I.waitForVisible('.io-ox-settings-window .leftside [title="Calendar"]');
-    I.click('~Calendar', '.leftside');
+    settings.select('Calendar');
     I.waitForText('Start of working time', 5);
-
+    I.say('Change working time');
     I.selectOption('Start of working time', '6:00 AM');
     I.selectOption('End of working time', '6:00 PM');
 
     // switch to calendar
     I.openApp('Calendar');
-    I.wait(1);
+    calendar.waitForApp();
 
+    I.say('Check new working time');
     I.see('5 AM', '.week-container-label .working-time-border:not(.in) .number');
     I.see('5 PM', '.week-container-label .working-time-border.in .number');
 });
