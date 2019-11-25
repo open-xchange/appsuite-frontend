@@ -89,10 +89,7 @@ Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', a
     I.click(locate('.list-item').withText('folderC').inside('.list-view'));
     I.waitForText('folderC');
     I.click('.list-item[aria-label*="folderC"]');
-    I.clickToolbar('Share');
-    I.clickDropdown('Create sharing link');
-    I.waitForText('Sharing link created for folder');
-    I.waitForFocus('.share-wizard input[type="text"]');
+    drive.shareItem('Create sharing link');
     const url = await I.grabValueFrom('.share-wizard input[type="text"]');
     I.click('Close', '.modal-footer');
     I.logout();

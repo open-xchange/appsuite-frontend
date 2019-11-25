@@ -25,7 +25,7 @@ After(async (users) => {
 });
 
 // TODO: shaky (element (body) is not in DOM or there is no element(body) with text "Hello from Bob" after 30 sec)
-Scenario.skip('[C45032] Edit Permissions at "My shares"', async function (I, users, drive) {
+Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, drive) {
     session('Alice', () => {
         I.login('app=io.ox/files');
         drive.waitForApp();
@@ -39,9 +39,7 @@ Scenario.skip('[C45032] Edit Permissions at "My shares"', async function (I, use
         I.click('My files', '.folder-tree');
         I.selectFolder('Music');
         drive.waitForApp();
-        I.clickToolbar('Share');
-        I.clickDropdown('Invite people');
-        I.waitForText('Share folder');
+        drive.shareItem('Invite people');
         I.click('Send notification by email');
         I.dontSeeCheckboxIsChecked('Send notification by email');
         I.click('~Select contacts');
@@ -105,6 +103,7 @@ Scenario.skip('[C45032] Edit Permissions at "My shares"', async function (I, use
         I.waitForText('Add new folder');
         I.fillField('Folder name', 'Hello from Bob');
         I.click('Add');
+        I.waitForDetached('.modal');
     });
 
     session('Alice', () => {
@@ -127,9 +126,7 @@ Scenario.skip('[C107063] Revoke Permissions at "My shares"', async function (I, 
 
         //I.shareFolder('Music');
         I.selectFolder('Music');
-        I.clickToolbar('Share');
-        I.clickDropdown('Invite people');
-        I.waitForText('Share folder');
+        drive.shareItem('Invite people');
         I.click('Send notification by email');
         I.dontSeeCheckboxIsChecked('Send notification by email');
         I.click('~Select contacts');
@@ -176,17 +173,18 @@ Scenario.skip('[C107063] Revoke Permissions at "My shares"', async function (I, 
     });
 });
 
-Scenario('[C73919] Copy a shared file to another folder', async function (I, users) {
+Scenario('[C73919] Copy a shared file to another folder', async function (I, users, drive) {
     // the test case also shares with an external user, this is left out for now.
 
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
+    drive.waitForApp();
     I.waitForText('document.txt', 5, '.file-list-view');
 
     I.click(locate('.list-view li').withText('document.txt'));
     I.clickToolbar('~View');
-    I.waitForVisible('.io-ox-viewer');
+    drive.waitForViewer();
     I.waitForEnabled({ css: '.io-ox-viewer input.file-input' });
     I.attachFile('.io-ox-viewer input.file-input', 'e2e/media/files/0kb/document.txt');
     I.click('Upload');
@@ -195,10 +193,7 @@ Scenario('[C73919] Copy a shared file to another folder', async function (I, use
     I.waitForDetached('.io-ox-viewer');
     I.see('Versions (2)', '.detail-pane');
 
-    //I.shareFile
-    I.clickToolbar('Share');
-    I.click('Invite people');
-    I.waitForText('Share file');
+    drive.shareItem('Invite people');
     I.click('~Select contacts');
     I.waitForElement('.modal .list-view.address-picker li.list-item');
     I.fillField('Search', users[1].get('name'));
