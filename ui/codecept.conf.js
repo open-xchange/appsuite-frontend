@@ -55,6 +55,7 @@ module.exports.config = {
         mail: './e2e/pageobjects/mail',
         portal: './e2e/pageobjects/portal',
         drive: './e2e/pageobjects/drive',
+        settings: './e2e/pageobjects/settings',
         tasks: './e2e/pageobjects/tasks'
     },
     bootstrap: function (done) {
