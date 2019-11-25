@@ -44,6 +44,7 @@ module.exports = {
     newAppointment() {
         I.clickToolbar({ css: '[data-action="io.ox/calendar/detail/actions/create"]' });
         I.waitForVisible(this.locators.edit);
+        I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
     },
 
     recurAppointment(date) {

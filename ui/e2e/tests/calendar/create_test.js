@@ -95,7 +95,7 @@ Scenario('Fullday appointments', async function (I, calendar) {
 
 //See Bug 64409
 // TODO: shaky (element (~Start time) is not in DOM or there is no element(~Start time) with value "9:52 AM" after 30 sec)
-Scenario.skip('Enter start time and press enter key', function (I, calendar) {
+Scenario('Enter start time and press enter key', function (I, calendar) {
     I.login('app=io.ox/calendar');
 
     calendar.waitForApp();
@@ -1071,6 +1071,7 @@ Scenario('[C7440] Start/End date autoadjustment', async function (I, calendar) {
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
     calendar.newAppointment();
+
     // strings are usually the same, but if this test is run around midnight, we may get a one day difference, so we must calculate that
     var startString = await calendar.getDate('startDate'),
         endString = await calendar.getDate('endDate'),
@@ -1083,14 +1084,15 @@ Scenario('[C7440] Start/End date autoadjustment', async function (I, calendar) {
     async function check(direction, toChange) {
         // start today
         I.click({ css: '[data-attribute="' + toChange + '"] .datepicker-day-field' });
-        I.waitForElement('.date-picker.open', 3);
+        I.waitForVisible('.date-picker.open');
         I.click('.date-picker.open .btn-today');
+        I.waitForDetached('.datepicker.open');
         // change month
         I.click({ css: '[data-attribute="' + toChange + '"] .datepicker-day-field' });
         I.click('.date-picker.open .btn-' + direction);
         // quite funny selector but this makes sure we don't click on one of the greyed out days of last month (:not selector does not work...)
         I.click('.date-picker.open tr:first-child .date:last-child');
-        I.wait(1);
+        I.waitForDetached('.date-picker.open');
 
         //check if the fields are updated to the expected values
         startString = await calendar.getDate('startDate');
@@ -1102,13 +1104,14 @@ Scenario('[C7440] Start/End date autoadjustment', async function (I, calendar) {
     // start today
     I.click({ css: '[data-attribute="endDate"] .datepicker-day-field' });
     I.click('.date-picker.open .btn-today');
+    I.waitForDetached('.datepicker.open');
     // change month
     I.click({ css: '[data-attribute="endDate"] .datepicker-day-field' });
     I.click('.date-picker.open .btn-next');
     // quite funny selector but this makes sure we don't click on one of the greyed out days of last month (:not selector does not work...)
     I.click('.date-picker.open tr:first-child .date:last-child');
+    I.waitForDetached('.datepicker.open');
 
-    I.wait(1);
     var newStartString = await calendar.getDate('startDate'),
         newEndString = await calendar.getDate('endDate');
     expect(newStartString).to.equal(startString);
