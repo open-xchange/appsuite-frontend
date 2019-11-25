@@ -101,27 +101,47 @@ define('io.ox/backbone/mini-views/alarms', [
             'EMAILEND0': gt('Send mail at end.'),
 
             //#. Used to display reminders for appointments
-            //#. %1$s: the reminder type, SMS etc
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'SMSSTART-': gt('Send SMS %1$s before start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'SMSSTART': gt('Send SMS %1$s after start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'SMSEND-': gt('Send SMS %1$s before end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'SMSEND': gt('Send SMS %1$s after end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+            'SMSABS': gt('Send SMS at %1$s.'),
+            //#. Used to display reminders for appointments
+            'SMSSTART0': gt('Send SMS at start.'),
+            //#. Used to display reminders for appointments
+            'SMSEND0': gt('Send SMS at end.'),
+
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS, email etc
             //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
             'GENERICSTART-': gt('%1$s %2$s before start.'),
             //#. Used to display reminders for appointments
-            //#. %1$s: the reminder type, SMS etc
+            //#. %1$s: the reminder type, SMS, email etc
             //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
             'GENERICSTART': gt('%1$s %2$s after start.'),
             //#. Used to display reminders for appointments
-            //#. %1$s: the reminder type, SMS etc
+            //#. %1$s: the reminder type, SMS, email etc
             //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
             'GENERICEND-': gt('%1$s %2$s before end.'),
             //#. Used to display reminders for appointments
-            //#. %1$s: the reminder type, SMS etc
+            //#. %1$s: the reminder type, SMS, email etc
             //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
             'GENERICEND': gt('%1$s %2$s after end.'),
             //#. Used to display reminders for appointments
-            //#. %1$s: the reminder type, SMS etc
+            //#. %1$s: the reminder type, SMS, email etc
             //#. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
             'GENERICABS': gt('%1$s at %2$s.'),
             //#. Used to display reminders for appointments
-            //#. %1$s: the reminder type, SMS etc
+            //#. %1$s: the reminder type, SMS, email etc
             'GENERICSTART0': gt('%1$s at start.'),
             //#. Used to display reminders for appointments
             //#. %1$s: the reminder type, SMS etc
