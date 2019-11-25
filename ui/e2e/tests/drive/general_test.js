@@ -176,7 +176,8 @@ Scenario('[C8371] Delete file', async (I, drive) => {
     I.waitForDetached(locate('li.list-item').withText('document.txt'));
 });
 
-Scenario('[C45039] Breadcrumb navigation', async (I, drive) => {
+// TODO: shaky, 227 of 238 (element (.fa-spin.fa-refresh) still not present on page after 30 sec)
+Scenario.skip('[C45039] Breadcrumb navigation', async (I, drive) => {
     const parent = await I.haveFolder({ title: 'Folders', module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
     await Promise.all([
         I.haveFolder({ title: 'subfolder1', module: 'infostore', parent }),

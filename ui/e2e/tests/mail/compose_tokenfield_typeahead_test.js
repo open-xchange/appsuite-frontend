@@ -53,7 +53,8 @@ Scenario('Add without typeahead', async (I, mail) => {
     }
 });
 
-Scenario('Add typeahed suggestion via autoselect', async (I, users, mail) => {
+// TODO: shaky, 166 of 175 (element (.tt-dropdown-menu .tt-cursor) still not present on page after 3 sec)
+Scenario.skip('Add typeahed suggestion via autoselect', async (I, users, mail) => {
     const [user] = users;
     const firstname = user.get('display_name');
     const surname = user.get('sur_name');
