@@ -24,7 +24,7 @@ After(async (users) => {
 });
 
 // TODO: shaky
-Scenario.skip('[C7862] Configure display name representation', async (I, contacts) => {
+Scenario('[C7862] Configure display name representation', async (I, contacts) => {
     const folder = await I.grabDefaultFolder('contacts'),
         firstName = 'Foo',
         lastName = 'Bar';
@@ -46,8 +46,8 @@ Scenario.skip('[C7862] Configure display name representation', async (I, contact
     I.waitForElement('.contact-grid-container');
     const firstNameLocator = locate('.first_name').withText(firstName).inside('.contact-detail').as('first name node'),
         lastNameLocator = locate('.last_name').withText(lastName).inside('.contact-detail').as('last name node');
-    // shaky: sometimes changed setting not reflected in detail view
-    I.waitForVisible(firstNameLocator.before(lastNameLocator).as(`'${firstName} ${lastName}'`), 5, '.fullname');
+    const fullname = firstNameLocator.before(lastNameLocator).as(`'${firstName} ${lastName}'`);
+    I.waitForVisible(fullname, 5, '.fullname');
 
     // Go back to settings and switch to other display style
     I.say('Setting: lastname, firstname');
