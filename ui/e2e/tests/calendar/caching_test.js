@@ -23,15 +23,12 @@ After(async function (users) {
 });
 
 // TODO: broken for last 5 runs (expected number of elements (.weekview-container.week .appointment .title) is 6, but found 4)
-Scenario.skip('Create never ending appointment and check display in several views', async function (I, calendar) {
+Scenario('Create never ending appointment and check display in several views', async function (I, calendar) {
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
-
+    calendar.waitForApp();
     // toggle weeks to activate caching
-    I.clickToolbar('View');
-    I.click('Week');
-    I.waitForVisible('.weekview-container.week button.weekday.today');
+    calendar.switchView('Week');
     I.click('~Next Week', '.weekview-container.week');
     I.dontSeeElement('.weekview-container.week button.weekday.today');
     I.click('~Previous Week', '.weekview-container.week');
@@ -39,10 +36,7 @@ Scenario.skip('Create never ending appointment and check display in several view
     I.click('.date.today', '.date-picker');
 
     // toggle months to activate caching
-    I.clickToolbar('View');
-    I.click('Month');
-    I.waitForVisible('.monthview-container td.day.today');
-
+    calendar.switchView('Month');
     // just skip 2 months, because "today" might still be visible in the "next" month
     I.click('~Next Month', '.monthview-container');
     I.click('~Next Month', '.monthview-container');
@@ -53,37 +47,30 @@ Scenario.skip('Create never ending appointment and check display in several view
     I.waitForVisible('.monthview-container td.day.today');
 
     // create in List view
-    I.selectFolder('Calendar');
-    I.clickToolbar('View');
-    I.click('List');
-    I.clickToolbar('New appointment');
-    I.waitForVisible('.io-ox-calendar-edit-window');
+    calendar.switchView('List');
+    calendar.newAppointment();
 
     I.fillField('Subject', 'test caching');
     I.fillField('Location', 'caching location');
+    I.pressKey('Enter');
 
     await calendar.setDate('startDate', moment().startOf('week').add('1', 'day'));
 
-    I.click('All day', '.io-ox-calendar-edit-window');
+    I.checkOption('All day', '.io-ox-calendar-edit-window');
 
-    I.click('Repeat', '.io-ox-calendar-edit-window');
+    calendar.recurAppointment();
     I.click('.btn.btn-link.summary'); // Variable so it needs a selector
-
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
 
     I.click('Apply', '.modal-dialog');
-
     I.waitForDetached('.modal-dialog');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
-
     I.waitForInvisible('.io-ox-calendar-edit-window', 5);
 
     // check in week view
-    I.clickToolbar('View');
-    I.click('Week');
-    I.waitForVisible('.weekview-container.week button.weekday.today', 5);
+    calendar.switchView('Week');
 
     I.waitForText('test caching', 5, '.weekview-container.week .appointment .title');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 6);
@@ -95,11 +82,9 @@ Scenario.skip('Create never ending appointment and check display in several view
     I.click('~Previous Week', '.weekview-container.week');
     I.waitForVisible('.weekview-container.week button.weekday.today', 5);
     I.click('.date.today', '.date-picker');
-    // check in month view
-    I.clickToolbar('View');
-    I.click('Month');
 
-    I.waitForVisible('.monthview-container td.day.today');
+    // check in month view
+    calendar.switchView('Month');
 
     I.waitForVisible('.monthview-container .day .appointment .title');
     I.see('test caching', '.monthview-container .day .appointment .title');
