@@ -268,7 +268,7 @@ msgstr ""
 "%5$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
@@ -276,7 +276,7 @@ msgid "%1$s %2$s after end."
 msgstr "%1$s %2$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
@@ -284,7 +284,7 @@ msgid "%1$s %2$s after start."
 msgstr "%1$s on uus kontakt"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
@@ -292,7 +292,7 @@ msgid "%1$s %2$s before end."
 msgstr "%1$s %2$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s before start."
@@ -331,7 +331,7 @@ msgid "%1$s at %2$s"
 msgstr "%1$s %2$s juures"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
@@ -346,7 +346,7 @@ msgid "%1$s at end."
 msgstr "%1$s %2$s juures"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
 msgid "%1$s at start."
@@ -9833,6 +9833,56 @@ msgstr "Valiku üksikasjad"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "Saada"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+msgid "Send SMS %1$s after end."
+msgstr "%1$s %2$s"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+msgid "Send SMS %1$s after start."
+msgstr "%1$s on uus kontakt"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+msgid "Send SMS %1$s before end."
+msgstr "%1$s %2$s"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+msgid "Send SMS %1$s before start."
+msgstr "Töönädala alguspäev"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Keep mails to %1$s"
+msgid "Send SMS at %1$s."
+msgstr "Säilita kirjad, mis on saadetud %1$s"
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Send mail"
+msgid "Send SMS at end."
+msgstr "Saada e-kiri"
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Saved mail attachment"
+msgid "Send SMS at start."
+msgstr "E-kirja manus salvestatud"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail

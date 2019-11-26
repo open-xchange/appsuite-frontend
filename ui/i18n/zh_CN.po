@@ -238,28 +238,28 @@ msgid "%1$s %2$s - %3$s %4$s"
 msgstr "%2$s 年 %1$s  - %4$s 年 %3$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s after end."
 msgstr "结束后 %2$s 发送 %1$s。"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s after start."
 msgstr "开始后 %2$s 发送 %1$s。"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s before end."
 msgstr "结束前 %2$s 发送 %1$s。"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s before start."
@@ -294,7 +294,7 @@ msgid "%1$s at %2$s"
 msgstr "%1$s - %2$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at %2$s."
@@ -307,7 +307,7 @@ msgid "%1$s at end."
 msgstr "结束时发送 %1$s。"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at start."
 msgstr "开始时发送 %1$s。"
@@ -9335,6 +9335,60 @@ msgstr "选择详情"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "发送"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Send mail %1$s after end."
+msgid "Send SMS %1$s after end."
+msgstr "在结束之后发送邮件 %1$s 通知。"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Send mail %1$s after start."
+msgid "Send SMS %1$s after start."
+msgstr "在开始之后发送邮件 %1$s 通知。"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Send mail %1$s before end."
+msgid "Send SMS %1$s before end."
+msgstr "在结束之前发送邮件 %1$s 通知。"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Send mail %1$s before start."
+msgid "Send SMS %1$s before start."
+msgstr "在开始之前发送邮件 %1$s 通知。"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Send mail at %1$s."
+msgid "Send SMS at %1$s."
+msgstr "于 %1$s 发送邮件。"
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Send mail at end."
+msgid "Send SMS at end."
+msgstr "在结束时发送邮件。"
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Send mail at start."
+msgid "Send SMS at start."
+msgstr "在开始时保存邮件。"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
