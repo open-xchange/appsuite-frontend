@@ -82,6 +82,55 @@ class MyHelper extends Helper {
         context.overridePermissions(config.url.replace(/\/appsuite\//, ''), ['clipboard-read']);
     }
 
+    async selectFolder(id) {
+        let wdio = this.helpers['WebDriver'],
+            browser = wdio.browser,
+            options = wdio.options;
+
+        const error = await browser.executeAsync((id, timeout, done) => {
+            require(['io.ox/core/folder/api'], function (folderAPI) {
+                function repeatUntil(cb, interval, timeout) {
+                    var start = _.now(),
+                        def = new $.Deferred(),
+                        iterate = function () {
+                            var result = cb();
+                            if (result) return def.resolve(result);
+                            if (_.now() - start < timeout) return _.delay(iterate, interval);
+                            def.reject({ message: 'Folder API could not resolve folder after ' + timeout / 1000 + ' seconds' });
+                        };
+                    iterate();
+                    return def;
+                }
+
+                repeatUntil(function () {
+                    var model = _(folderAPI.pool.models).find(function (m) {
+                        return m.get('title') === id || m.get('id') === id || m.get('display_title') === id;
+                    });
+                    return model;
+                }, 100, timeout).then(function (model) {
+                    var app = ox.ui.App.getCurrentApp();
+                    // special handling for virtual folders
+                    if (model.get('id').indexOf('virtual/') === 0) {
+                        var body = app.getWindow().nodes.body;
+                        if (body) {
+                            var view = body.find('.folder-tree').data('view');
+                            if (view) {
+                                view.trigger('virtual', model.get('id'));
+                            }
+                        }
+                    }
+                    app.folder.set(model.get('id')).then(function () {
+                        done();
+                    }, done);
+                }, function fail(error) {
+                    done(error);
+                });
+            });
+        }, id, options.waitForTimeout * 1000);
+
+        if (error) throw error;
+    }
+
 }
 
 module.exports = MyHelper;
