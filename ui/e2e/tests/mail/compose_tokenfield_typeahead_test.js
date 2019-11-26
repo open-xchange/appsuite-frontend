@@ -53,43 +53,53 @@ Scenario('Add without typeahead', async (I, mail) => {
     }
 });
 
-// TODO: shaky, 166 of 175 (element (.tt-dropdown-menu .tt-cursor) still not present on page after 3 sec)
-Scenario.skip('Add typeahed suggestion via autoselect', async (I, users, mail) => {
+Scenario('Add typeahed suggestion via autoselect', async (I, users, mail) => {
     const [user] = users;
     const firstname = user.get('display_name');
     const surname = user.get('sur_name');
     const email = user.get('primaryEmail');
     const label = `User ${surname}`;
 
+    const field = locate({ css: '.tokenfield.to' }).as('To field');
+    const suggestions = locate({ css: '.tt-dropdown-menu' }).as('Suggestion dropdown');
+
     I.login('app=io.ox/mail');
     mail.newMail();
 
-    // fully matches mail address
+    I.say('fully matches mail address');
     await addToken(email, 'Enter', label);
     await addToken(email, 'Tab', label);
-    // fully matches label
+
+    I.say('fully matches label');
     await addToken(label.slice(0, 10), 'Enter', label);
     await addToken(label.slice(0, 10), 'Tab', label);
-    // startsWith: label
+
+    I.say('startsWith: label');
     await addToken(firstname, 'Enter', label);
     await addToken(firstname, 'Tab', label);
-    // startsWith: mail address
+
+    I.say('startsWith: mail address');
     await addToken(email.slice(0, 10), 'Enter', label);
     await addToken(email.slice(0, 10), 'Tab', label);
 
     async function addToken(query, key, result) {
         // enter term, wait for typeahead and hit key
         I.fillField('To', query);
-        I.waitForElement('.tt-dropdown-menu .tt-suggestion .participant-name');
         // hack: simulate hover
-        await I.executeScript(async () => { $('.tt-dropdown-menu .tt-suggestion:last').addClass('tt-cursor'); });
-        I.waitForElement('.tt-dropdown-menu .tt-cursor', 3);
+        I.waitForElement(suggestions.find({ css: '.tt-suggestion:nth-of-type(1)' }).as('First suggestion'));
+        I.waitForElement(suggestions.find({ css: '.tt-suggestion .participant-name' }).as('First suggestion with a name'));
+        await I.executeScript(async () => {
+            $('.tt-dropdown-menu .tt-suggestion:last').addClass('tt-cursor');
+        });
+        I.waitForElement(suggestions.find({ css: '.tt-suggestion:nth-of-type(1)' }).as('First suggestion'));
+        I.waitForElement(suggestions.find({ css: '.tt-suggestion .participant-name' }).as('First suggestion with a name'));
+        I.waitForElement(suggestions.find({ css: '.tt-cursor' }).as('Last suggestion'), 10);
         // create and check token
         I.pressKey(key);
-        I.waitForText(result, 2, '.tokenfield.to');
-        I.waitForInvisible('.tt-dropdown-menu');
-        I.dontSee('Sister', '.tokenfield.to');
-        I.dontSee('Brother', '.tokenfield.to');
+        I.waitForText(result, 10, field);
+        I.waitForInvisible(suggestions);
+        I.dontSee('Sister', field);
+        I.dontSee('Brother', field);
         // reset
         I.pressKey(['Command', 'a']);
         I.pressKey('Backspace');
