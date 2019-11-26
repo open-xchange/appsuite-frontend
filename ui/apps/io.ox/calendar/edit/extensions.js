@@ -679,34 +679,13 @@ define('io.ox/calendar/edit/extensions', [
         render: function () {
 
             // visibility flag only works in private folders and does not work with exceptions
-            var folder = this.model.get('folder');
-            if (!folderAPI.pool.getModel(folder).is('private') || (this.model.get('recurrenceId') && this.model.mode === 'appointment')) return;
-            var popoverUid = _.uniqueId('popover-'),
-                helpNode = $('<button type="button" class="visibility-helper-button btn btn-link" data-toggle="popover" data-trigger="manual" data-placement="left" data-content=" ">').attr('aria-label', gt('Visibility Help')).append('<i class="fa fa-question-circle" aria-hidden="true">')
-                .attr('data-template', '<div class="popover calendar-popover" role="tooltip"><div class="arrow"></div><div id="' + popoverUid + '">' +
-                    '<div class="ox-popover-title">' + gt('Standard') + '</div>' +
-                    '<div>' + gt('The appointment is visible for all users in shared calendars.') + '</div>' +
-                    '<div class="ox-popover-title">' + gt('Private') + '</div>' +
-                    '<div>' + gt('In shared calendars, the appointment is displayed as a simple time slot for non-attending users.') + '</div>' +
-                    '<div class="ox-popover-title">' + gt('Secret') + '</div>' +
-                    '<div>' + gt('The appointment is not visible to non-attending users in shared calendars at all. The appointment is not considered for conflicts and does not appear in the scheduling view. This option cannot be used, if the appointment blocks resources.') + '</div>' +
-                    '</div></div>')
-                    .popover({
-                        container: '#' + this.baton.app.get('window').id + ' .window-content.scrollable'
-                    })
-                    .on('blur', function () { helpNode.popover('hide'); })
-                    .on('click', function () { helpNode.popover('toggle'); })
-                    .on('keydown', function (e) {
-                        if (e.which !== 27) return;
-                        if ($('#' + popoverUid).is(':visible')) e.stopImmediatePropagation();
-                        helpNode.popover('hide');
-                    }),
+            var folder = this.model.get('folder'),
                 guid = _.uniqueId('form-control-label-');
+            if (!folderAPI.pool.getModel(folder).is('private') || (this.model.get('recurrenceId') && this.model.mode === 'appointment')) return;
 
             this.$el.append(
                 $('<div>').append(
                     $('<label class="simple">').attr('for', guid).text(gt('Visibility')),
-                    helpNode,
                     new mini.SelectView({ id: guid, label: gt('Visibility'), name: 'class', model: this.model, list: [
                         { value: 'PUBLIC', label: gt('Standard') },
                         { value: 'CONFIDENTIAL', label: gt('Private') },
