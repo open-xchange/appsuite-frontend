@@ -12,8 +12,9 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     'io.ox/backbone/mini-views/listutils',
     'io.ox/mail/util',
     'io.ox/backbone/mini-views/settings-list-view',
+    'static/3rd.party/purify.min.js',
     'less!io.ox/mail/settings/signatures/style'
-], function (ext, ExtensibleView, gt, settings, util, ModalDialog, snippets, mini, config, notifications, listutils, mailutil, ListView) {
+], function (ext, ExtensibleView, gt, settings, util, ModalDialog, snippets, mini, config, notifications, listutils, mailutil, ListView, DOMPurify) {
 
     'use strict';
 
@@ -87,6 +88,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                         var str = String(signature.content).replace(/[\s\xA0]+$/g, '');
                         signature.content = $('<p>').append(editor.ln2br(str)).prop('outerHTML');
                     }
+                    if (signature.content) signature.content = DOMPurify.sanitize(signature.content) + '';
                     editor.setContent(signature.content);
                     baton.view.editor = editor;
                 });

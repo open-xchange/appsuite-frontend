@@ -11,7 +11,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/settings/pane', [
+define.async('io.ox/mail/settings/pane', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/extensible',
     'io.ox/core/capabilities',
@@ -19,9 +19,10 @@ define('io.ox/mail/settings/pane', [
     'io.ox/core/notifications',
     'io.ox/mail/mailfilter/vacationnotice/model',
     'io.ox/mail/mailfilter/autoforward/model',
+    'io.ox/core/api/mailfilter',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (ext, ExtensibleView, capabilities, util, notifications, vacationNoticeModel, autoforwardModel, settings, gt) {
+], function (ext, ExtensibleView, capabilities, util, notifications, vacationNoticeModel, autoforwardModel, mailfilter, settings, gt) {
 
     'use strict';
 
@@ -182,6 +183,11 @@ define('io.ox/mail/settings/pane', [
         }
     );
 
+    var hasVacationNoticeAction,
+        moduleReady = mailfilter.getConfig().then(function (config) {
+            hasVacationNoticeAction = !!_(config.actioncmds).findWhere({ id: 'vacation' });
+        });
+
     //
     // Buttons
     //
@@ -194,7 +200,7 @@ define('io.ox/mail/settings/pane', [
             index: 100,
             render: function () {
 
-                if (!capabilities.has('mailfilter_v2')) return;
+                if (!capabilities.has('mailfilter_v2') || !hasVacationNoticeAction) return;
 
                 this.append(
                     $('<button type="button" class="btn btn-default" data-action="edit-vacation-notice">')
@@ -282,4 +288,6 @@ define('io.ox/mail/settings/pane', [
             }
         }
     );
+
+    return moduleReady;
 });

@@ -32,8 +32,8 @@ define('io.ox/calendar/view-detail', [
         index: 100,
         id: 'inline-actions',
         draw: function (baton, options) {
-            // if this is opened via invitation mail from an external user account we dont show actions => not supported
-            if (options.isExternalUser) return;
+            // if this is opened via invitation mail we dont show actions, event might not be created etc
+            if (options.hideToolbar) return;
             ext.point('io.ox/calendar/detail/actions').invoke('draw', this, baton);
         }
     });
