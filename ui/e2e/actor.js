@@ -1,5 +1,6 @@
 
 const actor = require('@open-xchange/codecept-helper').actor;
+const _ = require('underscore');
 
 module.exports = actor({
     //remove previously created appointments by appointment title
@@ -69,6 +70,31 @@ module.exports = actor({
     waitForNetworkTraffic() {
         this.waitForElement('.fa-spin.fa-refresh');
         this.waitForElement('.fa-spin-paused.fa-refresh');
+    },
+
+    // Use the next two helpers together. Example that checks for old toolbar to be removed/redrawn after folder change:
+
+    // let listenerID = I.registerNodeRemovalListener('.classic-toolbar');
+    // I.selectFolder('test address book');
+    // I.waitForNodeRemoval(listenerID);
+
+    // this way you can be sure the listener is there before you do things, instead of hoping the listener is attached fast enough after you did things
+    registerNodeRemovalListener(selector) {
+        var guid  = _.uniqueId('e2eNodeRemovalListener');
+        this.executeScript(function (selector, guid) {
+            console.log(selector, guid);
+            $(selector + ':visible').parent().one('DOMNodeRemoved', function (e) {
+                console.log(e.target, $(e.target).filter(selector));
+                if ($(e.target).filter(selector)) ox[guid] = true;
+            });
+        }, selector, guid);
+        return guid;
+    },
+
+    // use guid from registerNodeRemovalListener
+    waitForNodeRemoval(guid, time = 5) {
+        this.waitForFunction(function (guid) { return ox[guid]; }, [guid], time);
+        this.executeScript(function (guid) { delete ox[guid]; }, guid);
     },
 
     triggerRefresh() {
