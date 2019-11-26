@@ -294,7 +294,7 @@ Scenario('[C7770] Set default signature', async function (I, users) {
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
         I.waitForVisible('body');
         I.wait(0.5);
-        expect((await I.grabHTMlFrom2('body > *')).join('')).to.match(
+        expect(await I.grabHTMLFrom('body')).to.match(
             new RegExp(`^${emptyLine}<div class="io-ox-signature"><p>Testsignaturecontent2</p></div><blockquote type="cite">.*</blockquote>$`)
         );
     });

@@ -10,19 +10,6 @@ function assertElementExists(res, locator, prefixMessage = 'Element', postfixMes
 }
 class MyHelper extends Helper {
 
-    // will hopefully be removed when codecept 2.0 works as expected
-    async grabHTMlFrom2(locator) {
-
-        let wdio = this.helpers['WebDriver'];
-
-        const elems = await wdio._locate(locator, true);
-        assertElementExists(elems, locator);
-        const html = Promise.all(elems.map(async elem => elem.getHTML()));
-        this.debugSection('Grab', html);
-        return html;
-
-    }
-
     // This needs to be a helper, as actors are too verbose in this case
     async grabAxeReport(context, options) {
         let wdio = this.helpers['WebDriver'],
