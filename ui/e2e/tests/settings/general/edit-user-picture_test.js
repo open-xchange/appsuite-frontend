@@ -92,8 +92,7 @@ Scenario('User can upload and remove a picture', async function (I, contacts, ma
     I.waitForVisible('.edit-picture.in.empty');
 });
 
-// TODO: shaky (Element ".cr-image" was not found by text|CSS|XPath)
-Scenario.skip('User can rotate her/his picture', async function (I, contacts, mail) {
+Scenario('User can rotate her/his picture', async function (I, contacts, mail) {
     let image;
 
     I.login('app=io.ox/mail');
