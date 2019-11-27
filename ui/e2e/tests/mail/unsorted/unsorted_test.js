@@ -587,8 +587,7 @@ Scenario('[C12119] Edit recipients', async function (I, users, mail) {
     });
 });
 
-// TOOD: shaky? Success rate 99.55% (226 of 227)
-Scenario.skip('[C12120] Recipient cartridge', async function (I, users, mail) {
+Scenario('[C12120] Recipient cartridge', async function (I, users, mail) {
     let [user] = users;
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
@@ -615,7 +614,7 @@ Scenario.skip('[C12120] Recipient cartridge', async function (I, users, mail) {
 
             I.say(`Check in ${field}`);
             I.waitForText(users[1].userdata.given_name + ' ' + users[1].userdata.sur_name, 5, { css: '.token-label' });
-            I.waitForText('super@ox.com', 5, { css: '.token-label' });
+            I.waitForElement('//span[@class="token-label"][text()="super@ox.com"]');
         });
     });
 });
