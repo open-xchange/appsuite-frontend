@@ -158,7 +158,7 @@ Scenario('Reply to mail with signature above correctly placed and changed', asyn
     I.waitForVisible('.io-ox-mail-window');
 
     // click on first email
-    I.click('.io-ox-mail-window .leftside ul li.list-item');
+    I.retry(5).click('.io-ox-mail-window .leftside ul li.list-item');
     I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
     expect(await I.grabTextFrom('.io-ox-mail-window .mail-detail-pane .subject')).to.equal('Test subject');
 
@@ -210,7 +210,7 @@ Scenario('reply to mail with signature below correctly placed initially', async 
     I.waitForVisible('.io-ox-mail-window');
 
     // click on first email
-    I.click('.io-ox-mail-window .leftside ul li.list-item');
+    I.retry(5).click('.io-ox-mail-window .leftside ul li.list-item');
     I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
     expect(await I.grabTextFrom('.io-ox-mail-window .mail-detail-pane .subject')).to.equal('Test subject');
 
