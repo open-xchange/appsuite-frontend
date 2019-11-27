@@ -27,6 +27,8 @@ module.exports = {
     },
 
     selectFirst() {
+        I.waitForEnabled(this.locators.results);
+        I.waitForEnabled(this.locators.results.first().as('First list item'));
         I.click(this.locators.results.first().as('First list item'));
         I.waitForVisible(locate({ css: '.list-item.selected' }).as('Selected list item'));
     },
