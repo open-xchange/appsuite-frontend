@@ -47,7 +47,7 @@ function sampleRule(I) {
 function extendedLogin(I) {
     I.login();
     I.waitForText('nothing special');
-    I.see('foobar', '.subject');
+    I.waitForText('foobar', 5, '.subject');
     I.openApp('Settings', { folder: 'virtual/settings/io.ox/mailfilter' });
     I.waitForText('Add new rule', 30, '.settings-detail-pane');
 }
@@ -79,7 +79,7 @@ Scenario.skip('[C290529] Refilter mails in INBOX folder', async (I, users) => {
     checkForFilteredMail(I);
 });
 //TODO: I see "foobar", ".subject" fails, stale element reference
-Scenario.skip('[C290530] Create and apply new filter rule', async (I, users) => {
+Scenario('[C290530] Create and apply new filter rule', async (I, users) => {
     const [user] = users;
     await setup(I, user);
     extendedLogin(I);
