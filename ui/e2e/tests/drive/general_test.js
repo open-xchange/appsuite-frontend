@@ -55,8 +55,7 @@ Scenario.skip('[C8364] Upload new file', (I, drive) => {
 });
 
 // Note: This is not accessible H4 and textarea does not have a label
-// TODO: shaky (reference: element is not attached to the page document)
-Scenario.skip('[C8366] Edit description', async (I, drive) => {
+Scenario('[C8366] Edit description', async (I, drive) => {
     await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -176,8 +175,7 @@ Scenario('[C8371] Delete file', async (I, drive) => {
     I.waitForDetached(locate('li.list-item').withText('document.txt'));
 });
 
-// TODO: shaky, 227 of 238 (element (.fa-spin.fa-refresh) still not present on page after 30 sec)
-Scenario.skip('[C45039] Breadcrumb navigation', async (I, drive) => {
+Scenario('[C45039] Breadcrumb navigation', async (I, drive) => {
     const parent = await I.haveFolder({ title: 'Folders', module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
     await Promise.all([
         I.haveFolder({ title: 'subfolder1', module: 'infostore', parent }),
@@ -189,15 +187,15 @@ Scenario.skip('[C45039] Breadcrumb navigation', async (I, drive) => {
     I.login('app=io.ox/files&folder=' + subsubFolder);
     drive.waitForApp();
     I.waitForText('subfolder3', 5, '.breadcrumb-view');
-    I.click('subfolder3', '.breadcrumb-view');
+    I.retry(5).click({ xpath: '//div[text()="subfolder3"][@role="presentation"]' });
     drive.waitForApp();
     I.waitForText('subsubfolder1', 5, '.list-view');
     I.waitForText('subsubfolder2', 5, '.list-view');
-    I.click('subsubfolder2', '.list-view');
+    I.retry(5).click({ xpath: '//div[text()="subsubfolder2"][@role="presentation"]' });
     I.click('Drive', '.breadcrumb-view');
     drive.waitForApp();
-    I.waitForText('Public files', 5, '.list-view');
-    I.doubleClick('Public files', '.list-view');
+    I.waitForElement({ xpath: '//div[@role="presentation"][text()="Public files"]' });
+    I.retry(5).doubleClick({ xpath: '//div[text()="Public files"][@role="presentation"]' });
 });
 
 const checkFileOrder = (I, files) => {
