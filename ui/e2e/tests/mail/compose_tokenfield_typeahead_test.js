@@ -142,9 +142,9 @@ Scenario('Add typeahed suggestion via autoselect', async (I, users, mail) => {
 //     }
 // });
 
-// TODO: shaky (element (.tt-dropdown-menu .tt-cursor) still not present on page after 3 sec)
-Scenario.skip('Add typeahead suggestion via keyboard', async (I, users, mail) => {
+Scenario('Add typeahead suggestion via keyboard', async (I, users, mail) => {
     const [user] = users;
+    const suggestions = locate({ css: '.tt-dropdown-menu' }).as('Suggestion dropdown');
 
     I.login('app=io.ox/mail');
     mail.newMail();
@@ -165,13 +165,20 @@ Scenario.skip('Add typeahead suggestion via keyboard', async (I, users, mail) =>
     await addToken(name, 'ArrowDown,ArrowDown,ArrowDown,Space', 'ister', { hover: false });
 
     async function addToken(query, keys, result, options) {
+        // enter term, wait for typeahead and hit key
         I.fillField('To', query);
-        I.waitForElement('.tt-dropdown-menu .tt-suggestion', 3);
         // hack: simulate hover
+        I.waitForElement(suggestions.find({ css: '.tt-suggestion:nth-of-type(1)' }).as('First suggestion'));
+        I.waitForElement(suggestions.find({ css: '.tt-suggestion .participant-name' }).as('First suggestion with a name'));
         if (options.hover) {
-            await I.executeScript(async () => { $('.tt-dropdown-menu .tt-suggestion:last').addClass('tt-cursor'); });
-            I.waitForElement('.tt-dropdown-menu .tt-cursor', 3);
+            await I.executeScript(async () => {
+                $('.tt-dropdown-menu .tt-suggestion:last').addClass('tt-cursor');
+            });
+            I.waitForElement(suggestions.find({ css: '.tt-suggestion:nth-of-type(1)' }).as('First suggestion'));
+            I.waitForElement(suggestions.find({ css: '.tt-suggestion .participant-name' }).as('First suggestion with a name'));
+            I.waitForElement(suggestions.find({ css: '.tt-cursor' }).as('Last suggestion'), 10);
         }
+
         keys.split(',').forEach((key) => { I.pressKey(key.trim()); });
         I.waitForText(result, 2, '.tokenfield.to');
         I.pressKey(['Command', 'a']);
