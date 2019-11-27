@@ -17,6 +17,10 @@ Before(async (users) => {
     await users.create();
 });
 
+After(async (users) => {
+    await users.removeAll();
+});
+
 function setup(I, user) {
     return Promise.all([
         I.haveMail({
@@ -109,8 +113,7 @@ Scenario('[C290530] Create and apply new filter rule', async (I, users) => {
     checkForFilteredMail(I);
 });
 
-// TODO: shaky, 145 of 178 (stale element reference: element is not attached to the page document)
-Scenario.skip('[C290531] Edit and apply existing filter rule', async (I, users) => {
+Scenario('[C290531] Edit and apply existing filter rule', async (I, users) => {
     const [user] = users;
     await setup(I, user);
     await sampleRule(I);
@@ -124,8 +127,4 @@ Scenario.skip('[C290531] Edit and apply existing filter rule', async (I, users) 
     I.click('Ok');
 
     checkForFilteredMail(I);
-});
-
-After(async (users) => {
-    await users.removeAll();
 });
