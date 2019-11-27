@@ -56,29 +56,41 @@ Scenario('Contacts - Modal Dialog - Import', async (I, contacts) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-// TODO: shaky (element not interactable)
 Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', async (I, contacts) => {
     // Exceptions:
     // Typeahead missing label (critical)
     // Textinput, password and textarea have missing visual labels (critical)
-
     const excludes = { exclude: [
         ['.tt-hint'], ['.tt-input'],
         ['[placeholder="Password"]'],
         ['[placeholder="Message (optional)"]'],
         ['input[type="text"].form-control']
     ] };
+    const defaultFolder = await I.grabDefaultFolder('contacts');
 
+    await I.haveFolder({
+        title: 'Krawall',
+        module: 'contacts',
+        parent: defaultFolder
+    });
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
+
     I.waitForText('My address books');
     I.click('.folder-arrow', '~My address books');
-    I.openFolderMenu('Contacts');
+    I.waitForText('Krawall');
+    I.click('Krawall');
+    I.openFolderMenu('Krawall');
     I.clickDropdown('Create sharing link');
     I.waitForText('Sharing link created for folder');
-    I.waitForFocus('.share-wizard input[type="text"]');
+    I.waitForFocus('.share-wizard .link-group input[type="text"]');
 
+    I.say('Axe report');
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
+
+    I.say('Cleanup');
+    I.click('Remove link');
+    I.waitForText('The link has been removed');
 });
 
 Scenario('Contacts - New contact window', async (I, contacts) => {
