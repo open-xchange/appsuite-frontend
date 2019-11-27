@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: info@open-xchange.com\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-10-04 11:26+0200\n"
+"PO-Revision-Date: 2019-11-27 15:27+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it_IT\n"
@@ -1683,41 +1683,12 @@ msgid "Collapse form"
 msgstr "Contrai modulo"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Guida di visibilità"
+msgid "Visibility"
+msgstr "Visibilità"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Standard"
 msgstr "Standard"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr ""
-"L'appuntamento è visibile per tutti gli utenti nei calendari condivisi."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"Nei calendari condivisi, l'appuntamento è visualizzato come un semplice "
-"intervallo temporale per gli utenti non partecipanti."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"L'appuntamento non è visibile in alcun modo agli utenti non partecipanti nei "
-"calendari condivisi. L'appuntamento non è considerato nei casi di conflitto "
-"e non appare nella vista di pianificazione. Questa opzione non può essere "
-"utilizzata se l'appuntamento blocca risorse."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility"
-msgstr "Visibilità"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Appointment color"
@@ -5004,7 +4975,7 @@ msgstr "Naviga su:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "All Applications"
-msgstr ""
+msgstr "Tutte le applicazioni"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5184,12 +5155,12 @@ msgstr "Connetti questo dispositivo"
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Add login password"
-msgstr ""
+msgstr "Aggiungi password di accesso"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change login password"
-msgstr ""
+msgstr "Cambia la password di accesso"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -7904,11 +7875,11 @@ msgstr "Usa la posta unificata per questo account"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Add other mail account"
-msgstr ""
+msgstr "Aggiungi un altro account di posta"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Please choose your mail account provider."
-msgstr ""
+msgstr "Scegli il fornitore del tuo account di posta"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10663,7 +10634,7 @@ msgstr "Invia tramite posta"
 
 #: apps/io.ox/oauth/backbone.js module:io.ox/oauth
 msgid "Sign in with Google. This will add your Gmail account."
-msgstr ""
+msgstr "Accedi a Google. Questo aggiungerà il tuo account Gmail."
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
@@ -11979,6 +11950,8 @@ msgid ""
 "E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
+"I messaggi appariranno in una nuova finestra. Queste finestre possono essere "
+"massimizzate, minimizzate e chiuse."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
@@ -13153,6 +13126,31 @@ msgstr "Invita a %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Aggiungi su %s"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Guida di visibilità"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr ""
+#~ "L'appuntamento è visibile per tutti gli utenti nei calendari condivisi."
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "Nei calendari condivisi, l'appuntamento è visualizzato come un semplice "
+#~ "intervallo temporale per gli utenti non partecipanti."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "L'appuntamento non è visibile in alcun modo agli utenti non partecipanti "
+#~ "nei calendari condivisi. L'appuntamento non è considerato nei casi di "
+#~ "conflitto e non appare nella vista di pianificazione. Questa opzione non "
+#~ "può essere utilizzata se l'appuntamento blocca risorse."
 
 #~ msgid "Apps"
 #~ msgstr "Applicazioni"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-10-04 11:29+0200\n"
+"PO-Revision-Date: 2019-11-27 15:29+0100\n"
 "Last-Translator: Luiz Fernando Ranghetti <luiz@workshop-chapina.com>\n"
 "Language-Team: Portuguese <bianca@workshop-chapina.com >\n"
 "Language: pt_BR\n"
@@ -1685,41 +1685,12 @@ msgid "Collapse form"
 msgstr "Recolher formulário"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Ajuda de visibilidade"
+msgid "Visibility"
+msgstr "Visibilidade"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Standard"
 msgstr "Padrão"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr ""
-"O compromisso é visível para todos os usuários em calendários compartilhados."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"Em calendários compartilhados o compromisso é exibido como um horário "
-"simples parausuários não participantes."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"O compromisso não é visível para usuários não participantes em calendários "
-"compartilhados. O compromisso não é considerado para conflitos e não aparece "
-"na visualização da agenda. Esta opção não pode ser usada se o compromisso "
-"bloqueia os recursos."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility"
-msgstr "Visibilidade"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Appointment color"
@@ -5003,7 +4974,7 @@ msgstr "Navegar para:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "All Applications"
-msgstr ""
+msgstr "Todos os aplicativos"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5177,12 +5148,12 @@ msgstr "Conecte este dispositivo"
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Add login password"
-msgstr ""
+msgstr "Adicionar senha da sessão"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change login password"
-msgstr ""
+msgstr "Alterar senha da sessão"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -7891,11 +7862,11 @@ msgstr "Usar e-mail unificado para essa conta"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Add other mail account"
-msgstr ""
+msgstr "Adicionar outra conta de e-mail"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Please choose your mail account provider."
-msgstr ""
+msgstr "Selecione seu provedor de conta de e-mail."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10643,7 +10614,7 @@ msgstr "Enviar por e-mail"
 
 #: apps/io.ox/oauth/backbone.js module:io.ox/oauth
 msgid "Sign in with Google. This will add your Gmail account."
-msgstr ""
+msgstr "Inicie sessão com o Google. Isso adicionará sua conta do Gmail."
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
@@ -11957,6 +11928,8 @@ msgid ""
 "E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
+"E-mails serão exibidos em uma nova janela. Essas janelas podem ser "
+"maximizadasminimizadas e fechadas."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
@@ -13123,6 +13096,32 @@ msgstr "Convidar para %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Adicionar em %s"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Ajuda de visibilidade"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr ""
+#~ "O compromisso é visível para todos os usuários em calendários "
+#~ "compartilhados."
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "Em calendários compartilhados o compromisso é exibido como um horário "
+#~ "simples parausuários não participantes."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "O compromisso não é visível para usuários não participantes em "
+#~ "calendários compartilhados. O compromisso não é considerado para "
+#~ "conflitos e não aparece na visualização da agenda. Esta opção não pode "
+#~ "ser usada se o compromisso bloqueia os recursos."
 
 #~ msgid "Apps"
 #~ msgstr "Aplicativos"

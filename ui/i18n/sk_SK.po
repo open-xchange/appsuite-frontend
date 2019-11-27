@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-10-04 11:30+0200\n"
+"PO-Revision-Date: 2019-11-27 15:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -1679,40 +1679,12 @@ msgid "Collapse form"
 msgstr "Zbaliť formulár"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Pomoc k viditeľnosti"
+msgid "Visibility"
+msgstr "Viditeľnosť"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Standard"
 msgstr "Štandardná"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "Schôdzka je viditeľná všetkým používateľom v zdieľaných kalendároch."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"Používateľom, ktorí sa schôdzky nezúčastnia sa v zdieľaných kalendároch "
-"schôdzka zobrazí ako jednoduchý časový blok."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Používatelia, ktorí sa schôdzky nezúčastnia v zdieľaných kalendároch "
-"schôdzku vôbec neuvidia. Schôdzka sa nebude zohľadňovať pri konfliktoch a "
-"nezobrazí sa v zobrazení plánovania. Túto voľbu nemožno použiť ak schôdzka "
-"blokuje zdroje."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility"
-msgstr "Viditeľnosť"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Appointment color"
@@ -5015,7 +4987,7 @@ msgstr "Prejsť na:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "All Applications"
-msgstr ""
+msgstr "Všetky aplikácie"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5194,12 +5166,12 @@ msgstr "Pripojiť toto zariadenie"
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Add login password"
-msgstr ""
+msgstr "Pridať prihlasovacie heslo"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change login password"
-msgstr ""
+msgstr "Zmeniť prihlasovacie heslo"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -7923,11 +7895,11 @@ msgstr "Použiť pre tento účet Zjednotenú poštu"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Add other mail account"
-msgstr ""
+msgstr "Pridať ďalší poštový účet"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Please choose your mail account provider."
-msgstr ""
+msgstr "Prosím, vyberte vášho poskytovateľa e-mailového účtu."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10678,6 +10650,7 @@ msgstr "Poslať emailom"
 #: apps/io.ox/oauth/backbone.js module:io.ox/oauth
 msgid "Sign in with Google. This will add your Gmail account."
 msgstr ""
+"Prihlásiť sa pomocou služby Google. Týmto pridáte svoj účet služby Gmail."
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
@@ -11996,6 +11969,8 @@ msgid ""
 "E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
+"E-maily sa objavia v novom okne. Tieto okná je možné maximalizovať, "
+"minimalizovať alebo zatvoriť."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
@@ -13160,6 +13135,31 @@ msgstr "Pozvať na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pridať na %s"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Pomoc k viditeľnosti"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr ""
+#~ "Schôdzka je viditeľná všetkým používateľom v zdieľaných kalendároch."
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "Používateľom, ktorí sa schôdzky nezúčastnia sa v zdieľaných kalendároch "
+#~ "schôdzka zobrazí ako jednoduchý časový blok."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Používatelia, ktorí sa schôdzky nezúčastnia v zdieľaných kalendároch "
+#~ "schôdzku vôbec neuvidia. Schôdzka sa nebude zohľadňovať pri konfliktoch a "
+#~ "nezobrazí sa v zobrazení plánovania. Túto voľbu nemožno použiť ak "
+#~ "schôdzka blokuje zdroje."
 
 #~ msgid "Apps"
 #~ msgstr "Aplikácie"

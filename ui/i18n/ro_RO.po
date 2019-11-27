@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-10-04 11:29+0200\n"
+"PO-Revision-Date: 2019-11-27 15:30+0100\n"
 "Last-Translator: Adi David <adi@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -1676,41 +1676,12 @@ msgid "Collapse form"
 msgstr "Restrânge formularul"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Ajutor pentru vizibilitate"
+msgid "Visibility"
+msgstr "Vizibilitate"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Standard"
 msgstr "Standard"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr ""
-"Întâlnirea este vizibilă pentru toți utilizatorii din calendarele partajate."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"În calendarele partajate, întâlnirea este afișată ca spațiu obișnuit pentru "
-"utilizatorii care nu participă."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Întâlnirea nu este vizibilă pentru niciun utilizator din calendarele "
-"partajate. Întâlnirea nu este luată în considerare din cauza unor conflicte "
-"și nu apare în vederea programare. Această opțiune nu poate fi utilizată "
-"dacă întâlnirea blochează resurse."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility"
-msgstr "Vizibilitate"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Appointment color"
@@ -5020,7 +4991,7 @@ msgstr "Navighează la:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "All Applications"
-msgstr ""
+msgstr "Toate aplicațiile"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5202,12 +5173,12 @@ msgstr "Conectează acest dispozitiv"
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Add login password"
-msgstr ""
+msgstr "Adăugați parolă pentru autentificare"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change login password"
-msgstr ""
+msgstr "Modifică parola de autentificare"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -7935,11 +7906,11 @@ msgstr "Folosește mesageria unificată pentru acest cont"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Add other mail account"
-msgstr ""
+msgstr "Adaugă alt cont de mail"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Please choose your mail account provider."
-msgstr ""
+msgstr "Selectați providerul contului dumneavoastră de mail"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10703,7 +10674,7 @@ msgstr "Trimite prin mail"
 
 #: apps/io.ox/oauth/backbone.js module:io.ox/oauth
 msgid "Sign in with Google. This will add your Gmail account."
-msgstr ""
+msgstr "Autentificare prin Google. Acest lucru vă va adăuga contul de Gmail."
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
@@ -12030,6 +12001,8 @@ msgid ""
 "E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
+"Mesajele vor fi afișate într-o fereastră nouă. Aceste ferestre pot fi "
+"maximizate, minimizate sau închise."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
@@ -13197,6 +13170,32 @@ msgstr "Invită la %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Adaugă pe %s"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Ajutor pentru vizibilitate"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr ""
+#~ "Întâlnirea este vizibilă pentru toți utilizatorii din calendarele "
+#~ "partajate."
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "În calendarele partajate, întâlnirea este afișată ca spațiu obișnuit "
+#~ "pentru utilizatorii care nu participă."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Întâlnirea nu este vizibilă pentru niciun utilizator din calendarele "
+#~ "partajate. Întâlnirea nu este luată în considerare din cauza unor "
+#~ "conflicte și nu apare în vederea programare. Această opțiune nu poate fi "
+#~ "utilizată dacă întâlnirea blochează resurse."
 
 #~ msgid "Apps"
 #~ msgstr "Aplicații"

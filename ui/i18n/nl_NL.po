@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-10-04 11:28+0200\n"
+"PO-Revision-Date: 2019-11-27 15:29+0100\n"
 "Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -1685,40 +1685,12 @@ msgid "Collapse form"
 msgstr "Formulier inklappen"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Zichtbaarheidshulp"
+msgid "Visibility"
+msgstr "Zichtbaarheid"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Standard"
 msgstr "Standaard"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "De afspraak is zichtbaar voor alle gebruikers in gedeelde agenda's."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"In gedeelde agenda's wordt de afspraak getoond als een eenvoudige periode "
-"voor niet aanwezige gebruikers."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"De afspraak is helemaal niet zichtbaar voor niet aanwezige gebruikers in "
-"gedeelde agenda's. Er wordt geen rekening gehouden met deze afspraak bij "
-"conflicten en verschijnt ook niet in het planningsoverzicht. Deze optie kan "
-"niet gebruikt worden als de afspraak bronnen blokkeert."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility"
-msgstr "Zichtbaarheid"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Appointment color"
@@ -5025,7 +4997,7 @@ msgstr "Navigeer naar:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "All Applications"
-msgstr ""
+msgstr "Alle Applicaties"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5200,12 +5172,12 @@ msgstr "Koppel dit Apparaat"
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Add login password"
-msgstr ""
+msgstr "Aanmeld wachtwoord toevoegen"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change login password"
-msgstr ""
+msgstr "Aanmeld wachtwoord wijzigen"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -7931,11 +7903,11 @@ msgstr "Gebruik verzamelde mail voor dit account"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Add other mail account"
-msgstr ""
+msgstr "Ander e-mailaccount toevoegen"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Please choose your mail account provider."
-msgstr ""
+msgstr "Kies alstublieft uw e-maildienstverlener"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10692,7 +10664,7 @@ msgstr "Verzenden via e-mailbericht"
 
 #: apps/io.ox/oauth/backbone.js module:io.ox/oauth
 msgid "Sign in with Google. This will add your Gmail account."
-msgstr ""
+msgstr "Meld u aan met Google. Hierdoor wordt uw Gmail account toegevoegd."
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
@@ -13175,6 +13147,30 @@ msgstr "Uitnodigingen voor %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Toegevoegd  op %s"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Zichtbaarheidshulp"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "De afspraak is zichtbaar voor alle gebruikers in gedeelde agenda's."
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "In gedeelde agenda's wordt de afspraak getoond als een eenvoudige periode "
+#~ "voor niet aanwezige gebruikers."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "De afspraak is helemaal niet zichtbaar voor niet aanwezige gebruikers in "
+#~ "gedeelde agenda's. Er wordt geen rekening gehouden met deze afspraak bij "
+#~ "conflicten en verschijnt ook niet in het planningsoverzicht. Deze optie "
+#~ "kan niet gebruikt worden als de afspraak bronnen blokkeert."
 
 #~ msgid "Please select your mail account provider"
 #~ msgstr "Selecteer alstublieft uw e-maildienstverlener"

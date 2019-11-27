@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-10-04 11:23+0200\n"
+"PO-Revision-Date: 2019-11-27 15:23+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1691,40 +1691,12 @@ msgid "Collapse form"
 msgstr "Formular ausblenden"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Sichtbarkeit-Hilfe"
+msgid "Visibility"
+msgstr "Sichtbarkeit"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Standard"
 msgstr "Standard"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "Der Termin ist in freigegebenen Ordnern für alle Benutzer sichtbar."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"In freigegebenen Kalendern wird der Termin für nicht teilnehmende Benutzer "
-"als einfaches Zeitfenster angezeigt."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Der Termin ist für nicht teilnehmende Benutzer in freigegebenen Kalendern "
-"nicht sichtbar. Der Termin wird für Konflikte nicht berücksichtigt und "
-"erscheint nicht in der Planungsansicht. Diese Option kann nicht verwendet "
-"werden, wenn der Termin Ressourcen blockiert."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility"
-msgstr "Sichtbarkeit"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Appointment color"
@@ -13218,6 +13190,30 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Sichtbarkeit-Hilfe"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "Der Termin ist in freigegebenen Ordnern für alle Benutzer sichtbar."
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "In freigegebenen Kalendern wird der Termin für nicht teilnehmende "
+#~ "Benutzer als einfaches Zeitfenster angezeigt."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Der Termin ist für nicht teilnehmende Benutzer in freigegebenen Kalendern "
+#~ "nicht sichtbar. Der Termin wird für Konflikte nicht berücksichtigt und "
+#~ "erscheint nicht in der Planungsansicht. Diese Option kann nicht verwendet "
+#~ "werden, wenn der Termin Ressourcen blockiert."
 
 #~ msgid "Please select your mail account provider"
 #~ msgstr "Bitte wählen Sie Ihren E-Mail-Anbieter"
