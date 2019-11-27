@@ -22,10 +22,10 @@ After(async (users) => {
     await users.removeAll();
 });
 
+// TODO: shaky at verifyHelp() -> within(), probably a puppeteer bug
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
 Scenario.skip('[C274424] Inline Help', async (I) => {
     I.login();
-
     verifyHelp(I, 'Mail', 'The E-Mail Components');
     verifyHelp(I, 'Calendar', 'The Calendar Components');
     verifyHelp(I, 'Address Book', 'The Address Book Components');
@@ -36,9 +36,9 @@ Scenario.skip('[C274424] Inline Help', async (I) => {
 
 function verifyHelp(I, appName, expectedHelp) {
     I.openApp(appName);
-    I.waitForNetworkTraffic();
     I.click('.io-ox-context-help');
     I.waitForElement('.io-ox-help-window');
+    // TODO: broken, sometimes fails at I.waitForText('User Guide') -> "cannot read property 'innerText' of null"
     within({ frame: '.io-ox-help-window.floating-window .inline-help-iframe' }, () => {
         I.see(expectedHelp, '.title');
         I.waitForText('Table Of Contents');
