@@ -56,9 +56,15 @@ const signatures = [{
 async function selectAndAssertSignature(I, name, compare) {
     I.click('Signatures');
     I.click(name);
-    let [result] = await I.grabValueFrom('.io-ox-mail-compose textarea.plain-text');
+    let result = await grabValueFrom(I, '.io-ox-mail-compose textarea.plain-text');
     if (compare instanceof RegExp) expect(result).to.match(compare);
     else expect(result).to.equal(compare);
+}
+
+async function grabValueFrom(I, selector) {
+    const result = await I.grabValueFrom(selector);
+    if (result instanceof Array && result.length <= 1) return result[0];
+    return result;
 }
 
 function getTestMail(user) {
@@ -90,7 +96,7 @@ Scenario('Compose new mail with signature above correctly placed and changed', a
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text');
     I.wait(1);
-    expect(await I.grabValueFrom('.io-ox-mail-compose textarea.plain-text')).to.deep.equal([`\n\n${signatures[0].plaintext}`]);
+    expect(await grabValueFrom(I, '.io-ox-mail-compose textarea.plain-text')).to.equal(`\n\n${signatures[0].plaintext}`);
 
     await selectAndAssertSignature(I, 'Second signature above', `\n\n${signatures[1].plaintext}`);
     await selectAndAssertSignature(I, 'First signature below', `\n\n${signatures[2].plaintext}`);
@@ -101,7 +107,7 @@ Scenario('Compose new mail with signature above correctly placed and changed', a
     // insert some text
     I.click('.io-ox-mail-compose textarea.plain-text');
     I.pressKey(['Up arrow', 'Up arrow', 'some user input']);
-    expect(await I.grabValueFrom('.io-ox-mail-compose textarea.plain-text')).to.deep.equal([`some user input\n\n${signatures[0].plaintext}`]);
+    expect(await grabValueFrom(I, '.io-ox-mail-compose textarea.plain-text')).to.equal(`some user input\n\n${signatures[0].plaintext}`);
 
     await selectAndAssertSignature(I, 'Second signature above', `some user input\n\n${signatures[1].plaintext}`);
     await selectAndAssertSignature(I, 'First signature below', `some user input\n\n${signatures[2].plaintext}`);
@@ -130,7 +136,7 @@ Scenario('Compose new mail with signature below correctly placed initially', asy
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text');
     I.wait(1);
-    expect(await I.grabValueFrom('.io-ox-mail-compose textarea.plain-text')).to.deep.equal([`\n\n${signatures[2].plaintext}`]);
+    expect(await grabValueFrom(I, '.io-ox-mail-compose textarea.plain-text')).to.equal(`\n\n${signatures[2].plaintext}`);
 
     // discard mail
     I.click('Discard');
@@ -160,7 +166,7 @@ Scenario('Reply to mail with signature above correctly placed and changed', asyn
     I.click('Reply');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text');
     I.wait(1);
-    expect(await I.grabValueFrom('.io-ox-mail-compose textarea.plain-text')).to.match(
+    expect(await grabValueFrom(I, '.io-ox-mail-compose textarea.plain-text')).to.match(
         new RegExp(`^\\n\\n${signatures[0].plaintext}\\n\\n(>[^\\n]*(\\n)?)+$`)
     );
 
@@ -173,7 +179,7 @@ Scenario('Reply to mail with signature above correctly placed and changed', asyn
     // insert some text at the very beginning
     I.click('.io-ox-mail-compose textarea.plain-text');
     I.pressKey(['PageUp', 'some user input']);
-    expect(await I.grabValueFrom('.io-ox-mail-compose textarea.plain-text')).to.match(
+    expect(await grabValueFrom(I, '.io-ox-mail-compose textarea.plain-text')).to.match(
         new RegExp(`^some user input\\n\\n${signatures[0].plaintext}\\n\\n(>[^\\n]*(\\n)?)+$`)
     );
 
@@ -212,7 +218,7 @@ Scenario('reply to mail with signature below correctly placed initially', async 
     I.click('Reply');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text');
     I.wait(1);
-    expect(await I.grabValueFrom('.io-ox-mail-compose textarea.plain-text')).to.match(
+    expect(await grabValueFrom(I, '.io-ox-mail-compose textarea.plain-text')).to.match(
         new RegExp(`^\\n\\n(>[^\\n]*(\\n)?)+\\n\\n${signatures[2].plaintext}$`)
     );
 
