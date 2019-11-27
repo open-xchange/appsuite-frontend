@@ -70,11 +70,23 @@ class MyHelper extends Helper {
     }
 
     async selectFolder(id) {
-        let wdio = this.helpers['WebDriver'],
-            browser = wdio.browser,
-            options = wdio.options;
+        let browser, options, funcName;
 
-        const error = await browser.executeAsync((id, timeout, done) => {
+        if (this.helpers['WebDriver']) {
+            let wdio = this.helpers['WebDriver'];
+            browser = wdio.browser;
+            options = wdio.options;
+            funcName = 'executeAsync';
+        } else {
+            let puppeteer = this.helpers['Puppeteer'];
+            browser = puppeteer.page;
+            options = puppeteer.options;
+            funcName = 'evaluate';
+        }
+
+        if (options.waitForTimeout < 1000) options.waitForTimeout = options.waitForTimeout * 1000;
+
+        const error = await browser[funcName]((id, timeout, done) => {
             require(['io.ox/core/folder/api'], function (folderAPI) {
                 function repeatUntil(cb, interval, timeout) {
                     var start = _.now(),
@@ -113,7 +125,7 @@ class MyHelper extends Helper {
                     done(error);
                 });
             });
-        }, id, options.waitForTimeout * 1000);
+        }, id, options.waitForTimeout);
 
         if (error) throw error;
     }
