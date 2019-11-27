@@ -89,8 +89,7 @@ Scenario('[C7792] Filter mail on sender', async function (I, users, mail) {
 
 });
 
-// TODO: shaky, 219 of 237 (I see "There is no rule defined")
-Scenario.skip('[C7793] Filter mail on any recipient', async function (I, users) {
+Scenario('[C7793] Filter mail on any recipient', async function (I, users, mail) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
