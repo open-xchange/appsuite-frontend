@@ -108,7 +108,8 @@ Scenario.skip('[C290530] Create and apply new filter rule', async (I, users) => 
     checkForFilteredMail(I);
 });
 
-Scenario('[C290531] Edit and apply existing filter rule', async (I, users) => {
+// TODO: shaky, 145 of 178 (stale element reference: element is not attached to the page document)
+Scenario.skip('[C290531] Edit and apply existing filter rule', async (I, users) => {
     const [user] = users;
     await setup(I, user);
     await sampleRule(I);
