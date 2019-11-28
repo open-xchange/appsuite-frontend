@@ -1166,7 +1166,7 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7460] Add attachments', async function (I) {
+Scenario('[C7460] Add attachments', async function (I) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
@@ -1286,7 +1286,7 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7459] Remove attachments', async function (I) {
+Scenario('[C7459] Remove attachments', async function (I) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
