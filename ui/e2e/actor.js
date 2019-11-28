@@ -1,6 +1,7 @@
 
 const actor = require('@open-xchange/codecept-helper').actor;
 const _ = require('underscore');
+const { util } = require('@open-xchange/codecept-helper');
 
 module.exports = actor({
     //remove previously created appointments by appointment title
@@ -65,6 +66,36 @@ module.exports = actor({
         // save
         this.click('Create', '.io-ox-calendar-edit-window');
         this.waitForDetached('.io-ox-calendar-edit-window', 5);
+    },
+
+    // remove when merge request is done and this is part of normal codecept helper plugin
+    login(urlParams, options) {
+        if (urlParams && !urlParams.length) {
+            // looks like an object, not string or array
+            options = urlParams;
+            urlParams = [];
+        }
+        urlParams = [].concat(urlParams || []);
+        options = Object.assign({ prefix: '' }, options);
+        let user = options.user || require('codeceptjs').container.support('users')[0];
+        console.log(Helper);
+        const I = this, baseURL = util.getURLRoot(),
+            prefix = options.prefix ? `${options.prefix}/` : '',
+            url = `${baseURL}/${prefix}appsuite/ui`;
+
+        if (typeof user === 'undefined') throw new Error('No user defined');
+        if (user.toJSON) user = user.toJSON();
+
+        I.amOnPage(url + '#!!' + (urlParams.length === 0 ? '' : '&' + urlParams.join('&')));
+        I.injectLoginScript({
+            name: `${user.name}${user.context ? '@' + user.context.id : ''}`,
+            password: user.password
+        });
+        I.waitForElement('#io-ox-launcher', 20);
+
+        // this is the only difference to normal login
+        // we need to wait for the busy spinner to go away too, some tests tored to interact with the ui while the spinner was still there
+        I.waitForInvisible('#background-loader.busy', 10);
     },
 
     waitForNetworkTraffic() {
