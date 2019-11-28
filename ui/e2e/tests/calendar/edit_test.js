@@ -526,7 +526,7 @@ Scenario('[C7470] Delete a recurring appointment', async function (I) {
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C274402] Change organizer of appointment with internal attendees', async function (I, users) {
+Scenario('[C274402] Change organizer of appointment with internal attendees', async function (I, users, calendar) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -543,6 +543,7 @@ Scenario.skip('[C274402] Change organizer of appointment with internal attendees
         attendees: [{ entity: users[0].userdata.id }, { entity: users[1].userdata.id }]
     });
     I.login('app=io.ox/calendar');
+    calendar.waitForApp();
 
     I.waitForText('Testsubject');
     I.click('.appointment');
@@ -565,8 +566,8 @@ Scenario.skip('[C274402] Change organizer of appointment with internal attendees
     I.click('Ok');
     I.waitForDetached('.modal-dialog');
 
-    I.waitForText('Details');
-    I.click('Details');
+    I.waitForVisible(locate('.io-ox-label a.expandable-toggle').withText('Details').inside('.io-ox-sidepopup'));
+    I.retry(5).click('Details');
     I.waitForText(`${users[1].userdata.display_name}`, 5, '.io-ox-sidepopup .details .organizer');
 });
 
