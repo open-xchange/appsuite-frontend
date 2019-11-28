@@ -65,7 +65,8 @@ function checkForFilteredMail(I) {
     I.see('foobar', { css: '.list-view .list-item .subject .drag-title' });
 }
 
-Scenario('[C290529] Refilter mails in INBOX folder', async (I, users) => {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C290529] Refilter mails in INBOX folder', async (I, users) => {
     const [user] = users;
     await setup(I, user);
     await sampleRule(I);

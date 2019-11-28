@@ -243,7 +243,8 @@ Scenario('[C7733] Set Task startdate behind due date', async function (I, tasks)
     I.retry(5).seeTextEquals('The due date must not be before the start date.', '[data-attribute="end_time"] div.error');
 });
 
-Scenario('[C7731] Create a Task in a shared folder', async function (I, users, tasks) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7731] Create a Task in a shared folder', async function (I, users, tasks) {
     const id = 'C7731',
         desc = 'Create a Task in a shared folder',
         sharedFolder = await I.haveFolder({

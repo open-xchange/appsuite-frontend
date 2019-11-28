@@ -116,7 +116,8 @@ Scenario.skip('[C45032] Edit Permissions at "My shares"', async function (I, use
     });
 });
 
-Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users, drive) {
+// TODO: shaky, failed (10 runs on 2019-11-28)
+Scenario.skip('[C107063] Revoke Permissions at "My shares"', async function (I, users, drive) {
     session('Alice', () => {
         I.login('app=io.ox/files');
         drive.waitForApp();

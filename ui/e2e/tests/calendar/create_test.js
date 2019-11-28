@@ -820,7 +820,8 @@ Scenario('[C274484] Attendees can change the appointment', async function (I, us
     I.waitForText(timestamp, 5, SIDEPOPUP);
 });
 
-Scenario('[C7428] Create appointment with internal participants', async function (I, users, calendar) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7428] Create appointment with internal participants', async function (I, users, calendar) {
     const data = { subject: 'Einkaufen', location: 'Wursttheke' };
 
     I.login('app=io.ox/calendar&perspective="week:day"');
@@ -855,7 +856,8 @@ Scenario('[C7428] Create appointment with internal participants', async function
     I.waitForText(`New appointment: ${data.subject}`);
 });
 
-Scenario('[C7425] Create appointment with a group', async function (I, users, calendar) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7425] Create appointment with a group', async function (I, users, calendar) {
 
     await I.haveGroup({
         name: 'Awesome guys',
@@ -901,7 +903,8 @@ Scenario('[C7425] Create appointment with a group', async function (I, users, ca
     I.waitForText(`New appointment: ${data.subject}`);
 });
 
-Scenario('[C7429] Create appointment via Contact', async function (I, users, contacts, calendar) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7429] Create appointment via Contact', async function (I, users, contacts, calendar) {
     const data = { subject: 'Wichtige Dinge', location: 'Kneipe' };
 
     I.login('app=io.ox/contacts');
@@ -962,7 +965,8 @@ Scenario('[C7430] Create appointment via Icon', async function (I, calendar) {
     }));
 });
 
-Scenario('[C7431] Create appointment via doubleclick', async function (I, calendar) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7431] Create appointment via doubleclick', async function (I, calendar) {
     const data = { subject: 'Todesstern testen' };
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
@@ -1221,7 +1225,8 @@ Scenario.skip('[C7442] Set date from date-picker', async function (I, calendar) 
 
 });
 
-Scenario('[C7413] Create appointment with an attachment', async function (I, calendar) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7413] Create appointment with an attachment', async function (I, calendar) {
     // Preconditions: You are at the Calendar-tab
     I.login(['app=io.ox/calendar&perspective=week:week']);
     calendar.waitForApp();
@@ -1399,7 +1404,8 @@ Scenario('[C7414] Create two appointments at the same time (one is shown as free
     I.waitForDetached(locate('.modal-open .modal-title').withText('Conflicts detected'));
 });
 
-Scenario('[C7415] Create two reserved appointments at the same time', async function (I, users, calendar) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7415] Create two reserved appointments at the same time', async function (I, users, calendar) {
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
@@ -1484,7 +1490,8 @@ Scenario('[C7446] Create recurring whole-day appointment', async function (I, us
 });
 
 
-Scenario('[C7447] Private appointment with participants', async function (I, users, calendar) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7447] Private appointment with participants', async function (I, users, calendar) {
     //var timestamp = Math.round(+new Date() / 1000);
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
@@ -1548,7 +1555,8 @@ Scenario('[C7448] Cannot create private appointment', async function (I, users, 
     expect(await I.grabNumberOfVisibleElements('option[value="CONFIDENTIAL"]')).to.equal(0);
 });
 
-Scenario('[C234658] Create appointments and show this in cumulatively view', async function (I, calendar) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C234658] Create appointments and show this in cumulatively view', async function (I, calendar) {
     const
         Moment = require('moment'),
         MomentRange = require('moment-range'),

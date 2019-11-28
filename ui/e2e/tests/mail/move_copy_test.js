@@ -86,7 +86,8 @@ const H = {
     }
 };
 
-Scenario('[C7407] Move mail from inbox to a sub-folder', async function (I, users, mail) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7407] Move mail from inbox to a sub-folder', async function (I, users, mail) {
     let [user] = users,
         folder = 'C7407',
         subject = 'C7407';

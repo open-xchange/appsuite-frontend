@@ -459,7 +459,8 @@ Scenario.skip('[C8388] Delete a folder', async (I, drive) => {
     });
 });
 
-Scenario('[C8389] Move a folder', async (I, drive) => {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C8389] Move a folder', async (I, drive) => {
     // Testrail description:
     // A folder hierarchy e.g.: My files Subfolder a SubSubFolder 1 Subfolder b
     // 1. Choose a folder

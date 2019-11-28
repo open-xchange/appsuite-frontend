@@ -24,7 +24,8 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C208269] Edit users contact information', async (I) => {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C208269] Edit users contact information', async (I) => {
 
     function addContactsField(fieldType, field, input) {
         I.click({ css: `.dropdown[data-add="${fieldType}"] button` }, '.contact-edit');

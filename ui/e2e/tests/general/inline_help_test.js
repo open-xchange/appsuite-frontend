@@ -22,7 +22,8 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C274424] Inline Help', async (I) => {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C274424] Inline Help', async (I) => {
     I.login();
 
     verifyHelp(I, 'Mail', 'The E-Mail Components');

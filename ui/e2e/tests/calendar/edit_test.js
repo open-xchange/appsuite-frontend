@@ -526,7 +526,8 @@ Scenario('[C7470] Delete a recurring appointment', async function (I) {
     });
 });
 
-Scenario('[C274402] Change organizer of appointment with internal attendees', async function (I, users) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C274402] Change organizer of appointment with internal attendees', async function (I, users) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -983,7 +984,8 @@ Scenario('[C7462] Remove a participant', async function (I, users) {
     I.dontSeeElement('.io-ox-sidepopup-pane a[title="' + users[1].userdata.primaryEmail + '"]');
 });
 
-Scenario('[C7461] Add a participant/ressource', async function (I, users) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7461] Add a participant/ressource', async function (I, users) {
     await users.create();
     await users.create();
     const [userA, userB, weebl, bob] = users;
@@ -1172,7 +1174,8 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
     I.waitForText('2:00 PM');
 });
 
-Scenario('[C7460] Add attachments', async function (I) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7460] Add attachments', async function (I) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
@@ -1291,8 +1294,8 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
     I.waitForText('2:00 PM');
 });
 
-Scenario('[C7459] Remove attachments', async function (I) {
-
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7459] Remove attachments', async function (I) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }

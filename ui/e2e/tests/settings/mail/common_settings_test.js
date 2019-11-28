@@ -23,7 +23,8 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7779] Mail formatting', async function (I, users, mail) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7779] Mail formatting', async function (I, users, mail) {
 
     const [user] = users;
 

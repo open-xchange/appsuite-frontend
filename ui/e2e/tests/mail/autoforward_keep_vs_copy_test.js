@@ -49,8 +49,8 @@ Scenario('checks if an auto forward rule with copy statement is handled correctl
     I.waitForInvisible('.modal-dialog');
 });
 
-Scenario('checks if an auto forward rule with keep statement is handled correctly', function (I) {
-
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('checks if an auto forward rule with keep statement is handled correctly', function (I) {
     I.haveMailFilterRule({
         'rulename': 'autoforward',
         'actioncmds': [
