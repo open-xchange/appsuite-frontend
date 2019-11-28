@@ -116,7 +116,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
 });
 
 // TODO: shaky, failed (10 runs on 2019-11-28)
-Scenario.skip('[C107063] Revoke Permissions at "My shares"', async function (I, users, drive) {
+Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users, drive) {
     session('Alice', () => {
         I.login('app=io.ox/files');
         drive.waitForApp();
@@ -156,6 +156,8 @@ Scenario.skip('[C107063] Revoke Permissions at "My shares"', async function (I, 
     session('Bob', () => {
         I.login('app=io.ox/files', { user: users[1] });
         drive.waitForApp();
+        I.click({ css: 'li.folder[aria-label^="Shared files"] .folder-arrow' });
+        I.waitForText(users[0].get('name'), 5, '.folder-tree');
         I.selectFolder(users[0].get('name'));
         I.waitForText('Music', 5, '.list-view');
     });
