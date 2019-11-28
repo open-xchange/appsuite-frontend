@@ -23,8 +23,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-// TODO: shaky (element (body) is not in DOM or there is no element(body) with text "Welcome to OX App Suite" after 30 sec)
-Scenario.skip('[C7341] Use first run mandatory wizard', async function (I, users) {
+Scenario('[C7341] Use first run mandatory wizard', async function (I, users) {
     const [user] = users;
     const first_name = 'John';
     const last_name = 'Wayne';
@@ -34,8 +33,10 @@ Scenario.skip('[C7341] Use first run mandatory wizard', async function (I, users
     I.wait(1);
     I.fillField('User name', `${user.get('name')}@${user.context.id}`);
     I.fillField('Password', user.get('password'));
-    I.click('Sign in');
-    I.waitForText('Welcome to OX App Suite');
+    I.waitForText('OX App Suite', 30);
+    I.wait(1);
+    I.retry(5).click('//input[@id="io-ox-login-button"]');
+    I.waitForText('Welcome to OX App Suite', 30);
     I.click('Start tour');
     I.waitForFocus('.form-control');
     I.fillField('first_name', first_name);
@@ -46,6 +47,7 @@ Scenario.skip('[C7341] Use first run mandatory wizard', async function (I, users
     I.waitForVisible('#io-ox-launcher');
     I.waitForNetworkTraffic();
     I.waitForVisible('.contact-picture');
+    I.wait(1);
     I.click('.contact-picture');
     I.waitForText('My contact data');
     I.click('My contact data');
