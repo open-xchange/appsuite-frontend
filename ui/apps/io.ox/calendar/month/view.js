@@ -211,7 +211,7 @@ define('io.ox/calendar/month/view', [
                         .attr({
                             id: day.format('YYYY-M-D'),
                             //#. %1$s is a date: october 12th 2017 for example
-                            title: gt('Selected - %1$s', day.format('ddd LL'))
+                            title: gt('%1$s', day.format('ddd LL'))
                         })
                         .data('date', day.valueOf())
                         .append(

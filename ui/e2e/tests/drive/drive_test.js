@@ -151,7 +151,7 @@ Scenario('[C45061] Delete file versions', async function (I, drive) {
     I.see('Versions (4)', '.io-ox-viewer .viewer-fileversions');
 });
 
-Scenario('[C45062] Change current file version', async function (I, drive) {
+Scenario.skip('[C45062] Change current file version', async function (I, drive) {
     //Generate TXT file for upload
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
 

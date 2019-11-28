@@ -31,7 +31,7 @@ Scenario('[C287801] Configure quick launchers', function (I) {
     I.rightClick('#io-ox-quicklaunch');
     I.waitForElement('.modal.in');
     within('.modal.in', () => {
-        I.waitForText('Change quick launch icons', 5, '.modal h1');
+        I.waitForText('Change quick launch icons', 5, { css: '.modal-header h1' });
         I.see('Position 1');
         I.see('Mail', { css: '[id="settings-apps/quickLaunch0"]' });
         I.see('Position 2');
@@ -53,7 +53,7 @@ Scenario('[C287801] Configure quick launchers', function (I) {
     I.rightClick('#io-ox-quicklaunch');
     I.waitForElement('.modal.in');
     within('.modal.in', () => {
-        I.waitForText('Change quick launch icons');
+        I.waitForText('Change quick launch icons', 5, { css: '.modal-header h1' });
         I.see('Position 1');
         I.see('Mail', { css: '[id="settings-apps/quickLaunch0"]' });
         I.see('Position 2');

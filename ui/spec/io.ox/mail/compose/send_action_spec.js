@@ -39,6 +39,7 @@ define([
                         launch: sinon.spy(),
                         quit: sinon.spy()
                     },
+                    config: new Backbone.Model(),
                     catchErrors: true
                 });
 

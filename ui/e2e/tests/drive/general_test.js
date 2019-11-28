@@ -55,29 +55,42 @@ Scenario.skip('[C8364] Upload new file', (I, drive) => {
 });
 
 // Note: This is not accessible H4 and textarea does not have a label
-Scenario('[C8366] Edit description', async (I, drive) => {
+// TODO: shaky (reference: element is not attached to the page document)
+Scenario.skip('[C8366] Edit description', async (I, drive) => {
     await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
+
+    let sidebarDescription = locate({ css: '.viewer-sidebar-pane .sidebar-panel-body .description' }).as('Sidebar'),
+        modelEditDescription = locate({ css: 'div.modal' }).as('Modal: Edit description');
+
     I.waitForText('document.txt', 1, '.file-list-view');
     I.click(locate('li.list-item').withText('document.txt'));
+
+    I.say('Add description');
     I.waitForText('Add a description');
     I.click('Add a description');
-    I.waitForElement('.modal-body textarea.form-control');
-    I.fillField('.modal-body textarea.form-control', 'Test description');
+    I.waitForElement(modelEditDescription.find('textarea.form-control'));
+    I.fillField(modelEditDescription.find('textarea.form-control'), 'Test description');
     I.click('Save');
-    I.waitForDetached('.modal-body');
-    I.seeTextEquals('Test description', 'div.description');
-    I.waitForText('document.txt', '.file-list-view');
+    I.waitForDetached(modelEditDescription);
+
+    I.say('Check description #1');
+    I.seeTextEquals('Test description', sidebarDescription);
+
+    I.say('Edit description');
+    I.waitForText('document.txt', 1, '.file-list-view');
     I.click(locate('li.list-item').withText('document.txt'));
     I.waitForText('Edit description');
     I.click('button.description-button');
-    I.waitForElement('.modal-body textarea.form-control');
-    I.fillField('.modal-body textarea.form-control', 'Test description changed');
+    I.waitForElement(modelEditDescription.find('textarea.form-control'));
+    I.fillField(modelEditDescription.find('textarea.form-control'), 'Test description changed');
     I.click('Save');
-    I.waitForDetached('.modal-body');
-    I.waitForVisible('div.description');
-    I.seeTextEquals('Test description changed', 'div.description');
+
+    I.say('Check description #2');
+    I.waitForDetached(modelEditDescription);
+    I.waitForVisible(sidebarDescription);
+    I.waitForText('Test description changed', 5, sidebarDescription);
 });
 
 const checkIfFoldersExist = (I, layout) => {
@@ -163,7 +176,8 @@ Scenario('[C8371] Delete file', async (I, drive) => {
     I.waitForDetached(locate('li.list-item').withText('document.txt'));
 });
 
-Scenario('[C45039] Breadcrumb navigation', async (I, drive) => {
+// TODO: shaky, 227 of 238 (element (.fa-spin.fa-refresh) still not present on page after 30 sec)
+Scenario.skip('[C45039] Breadcrumb navigation', async (I, drive) => {
     const parent = await I.haveFolder({ title: 'Folders', module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
     await Promise.all([
         I.haveFolder({ title: 'subfolder1', module: 'infostore', parent }),

@@ -97,9 +97,11 @@ define('io.ox/calendar/freetime/timeView', [
         id: 'zoomlevels',
         index: 200,
         draw: function (baton) {
-            var inputField = $('<input type="text" readonly="readonly" class="form-control">').val(baton.model.get('zoom') + '%'),
-                plus = $('<span class="input-group-btn">').append($('<button class="btn btn-default" type="button">').append($('<i class="fa fa-plus">'))),
-                minus = $('<span class="input-group-btn">').append($('<button class="btn btn-default" type="button">').append($('<i class="fa fa-minus">'))),
+            var inputField = $('<input type="text" readonly="readonly" aria-live="polite" class="form-control">').val(baton.model.get('zoom') + '%'),
+                plus = $('<span class="input-group-btn">').append($('<button class="btn btn-default" type="button">').attr('aria-label', gt('Zoom in'))
+                    .append($('<i aria-hidden="true" class="fa fa-plus">').attr('title', gt('Zoom in')))),
+                minus = $('<span class="input-group-btn">').append($('<button class="btn btn-default" type="button">').attr('aria-label', gt('Zoom out'))
+                    .append($('<i aria-hidden="true" class="fa fa-minus">').attr('title', gt('Zoom out')))),
                 changefunction = function (e) {
                     var index = _(ZOOM_LEVELS).indexOf(parseInt(baton.model.get('zoom'), 10));
                     if (e.data.direction === 'plus' && index + 1 < ZOOM_LEVELS.length) {

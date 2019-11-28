@@ -24,7 +24,7 @@ io.ox/core//upsell/enabled/portal=true
 io.ox/core//upsell/enabled/tasks=true
 ```
 
-Each line enables a specific [capability](../customize/manifests.html#capabilities) for upsell.
+Each line enables a specific [capability]({{ site.baseurl }}/ui/customize/manifests.html#capabilities) for upsell.
 That means whenever a feature misses one of these capabilities, a special upsell related event is triggered.
 
 **Note**: For simple demo purposes, you can enable an internal upsell configuration by appending *&demo=upsell* to the URL and reload the specific page.
@@ -33,8 +33,8 @@ That means whenever a feature misses one of these capabilities, a special upsell
 
 When implementing cross-/upsell trigger, tracking should be integrated at the same time in order to analyse performance.
 
-The [Metrics](https://documentation.open-xchange.com/latest/ui/features/metrics.html) module provides a very flexible and extendible way to track user behaviour and conditions within OX App Suite.
+The [Metrics]({{ site.baseurl }}/ui/features/metrics.html) module provides a very flexible and extendible way to track user behaviour and conditions within OX App Suite.
 
-Upsell can be tracked via the specific [events](https://documentation.open-xchange.com/latest/ui/features/metrics/09-events.html#upsell).
+Upsell can be tracked via the specific [events]({{ site.baseurl }}/ui/features/metrics/09-events.html#upsell).
 
-For more information see [trackevent](https://documentation.open-xchange.com/latest/ui/features/metrics/01-details.html#trackevent).
+For more information see [trackevent]({{ site.baseurl }}/ui/features/metrics/01-details.html#trackevent).

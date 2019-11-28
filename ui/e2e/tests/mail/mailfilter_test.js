@@ -55,7 +55,7 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     // action and all components visible?
     I.seeNumberOfVisibleElements('.io-ox-mailfilter-edit ol.actions > li', 1);
     I.see('Keep');
-    I.seeElement('.io-ox-mailfilter-edit ol.actions a.remove');
+    I.seeElement('.io-ox-mailfilter-edit ol.actions .remove');
 
     // add condition
     I.click('Add condition');
@@ -72,7 +72,7 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.fillField('values', 'Test Value');
     I.dontSeeElement('.io-ox-mailfilter-edit [data-test-id="0"] .row.has-error');
     I.seeElement('.modal button[data-action="save"]');
-    I.seeElement('.io-ox-mailfilter-edit [data-action-id="0"] a.remove');
+    I.seeElement('.io-ox-mailfilter-edit [data-action-id="0"] .remove');
 
     // add nested condition
     I.click('Add condition');
@@ -98,7 +98,7 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
 
     I.see('File into', '.list-title');
     I.see('Select folder', '.folderselect');
-    I.seeElement('.io-ox-mailfilter-edit [data-action-id="1"] a.remove');
+    I.seeElement('.io-ox-mailfilter-edit [data-action-id="1"] .remove');
 
     // open folder picker
     I.click('Select folder');
@@ -185,7 +185,7 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.seeInField('.io-ox-mailfilter-edit [data-test-id="1"] input[name="values"]', '');
 
     I.see('Keep', '.io-ox-mailfilter-edit [data-action-id="0"] .list-title');
-    I.seeElement('.io-ox-mailfilter-edit [data-action-id="0"] a.remove');
+    I.seeElement('.io-ox-mailfilter-edit [data-action-id="0"] .remove');
 
     // set the comparison to "contains"
     I.click('.io-ox-mailfilter-edit li[data-test-id="1"] .dropdownlink span');
@@ -217,7 +217,7 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.seeInField('.io-ox-mailfilter-edit [data-test-id="1"] input[name="headers"]', 'Test headers');
     I.seeInField('.io-ox-mailfilter-edit [data-test-id="1"] input[name="values"]', 'Test values');
     I.see('Keep', '.io-ox-mailfilter-edit [data-action-id="0"] .list-title');
-    I.seeElement('.io-ox-mailfilter-edit [data-action-id="0"] a.remove');
+    I.seeElement('.io-ox-mailfilter-edit [data-action-id="0"] .remove');
 
     I.click('Add condition');
     I.click('Size');
@@ -255,7 +255,7 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.seeElement('.modal button[data-action="save"]');
 
     // ckeck header validation
-    I.click('.io-ox-mailfilter-edit [data-test-id="1"] a[data-action="remove-test"]');
+    I.click('.io-ox-mailfilter-edit [data-test-id="1"] [data-action="remove-test"]');
     I.click('Add condition');
     I.click('Header');
 

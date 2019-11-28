@@ -1097,6 +1097,13 @@ define('io.ox/calendar/util', [
             return color;
         },
 
+        getColorName: function (color) {
+            if (!color) return gt('None');
+            var colorObj = _.findWhere(this.colors, { value: color });
+            if (colorObj) return colorObj.label;
+            return gt('Unknown');
+        },
+
         getDeepLink: function (data) {
             return [
                 ox.abs,
@@ -1194,12 +1201,12 @@ define('io.ox/calendar/util', [
                 property: []
             };
 
-            if (that.hasFlag(obj, 'tentative')) icons.type.push($('<span class="tentative-flag">').attr('title', gt('Tentative')).append($('<i class="fa fa-question-circle" aria-hidden="true">')));
-            if (that.hasFlag(obj, 'private')) icons.type.push($('<span class="private-flag">').attr('title', gt('Private')).append($('<i class="fa fa-user-circle" aria-hidden="true">')));
-            if (that.hasFlag(obj, 'confidential')) icons.type.push($('<span class="confidential-flag">').attr('title', gt('Confidential')).append($('<i class="fa fa-lock" aria-hidden="true">')));
-            if (this.hasFlag(obj, 'series') || this.hasFlag(obj, 'overridden')) icons.property.push($('<span class="recurrence-flag">').attr('title', gt('Recurrence')).append($('<i class="fa fa-repeat" aria-hidden="true">')));
-            if (this.hasFlag(obj, 'scheduled')) icons.property.push($('<span class="participants-flag">').attr('title', gt('Participants')).append($('<i class="fa fa-user-o" aria-hidden="true">')));
-            if (this.hasFlag(obj, 'attachments')) icons.property.push($('<span class="attachments-flag">').attr('title', gt('Attachments')).append($('<i class="fa fa-paperclip" aria-hidden="true">')));
+            if (that.hasFlag(obj, 'tentative')) icons.type.push($('<span class="tentative-flag">').attr('aria-label', gt('Tentative')).append($('<i class="fa fa-question-circle" aria-hidden="true">').attr('title', gt('Tentative'))));
+            if (that.hasFlag(obj, 'private')) icons.type.push($('<span class="private-flag">').attr('aria-label', gt('Appointment is private')).append($('<i class="fa fa-user-circle" aria-hidden="true">').attr('title', gt('Appointment is private'))));
+            if (that.hasFlag(obj, 'confidential')) icons.type.push($('<span class="confidential-flag">').attr('aria-label', gt('Appointment is confidential')).append($('<i class="fa fa-lock" aria-hidden="true">').attr('title', gt('Appointment is confidential'))));
+            if (this.hasFlag(obj, 'series') || this.hasFlag(obj, 'overridden')) icons.property.push($('<span class="recurrence-flag">').attr('aria-label', gt('Appointment is part of a series')).append($('<i class="fa fa-repeat" aria-hidden="true">').attr('title', gt('Appointment is part of a series'))));
+            if (this.hasFlag(obj, 'scheduled')) icons.property.push($('<span class="participants-flag">').attr('aria-label', gt('Appointment has participants')).append($('<i class="fa fa-user-o" aria-hidden="true">').attr('title', gt('Appointment has participants'))));
+            if (this.hasFlag(obj, 'attachments')) icons.property.push($('<span class="attachments-flag">').attr('aria-label', gt('Appointment has attachments')).append($('<i class="fa fa-paperclip" aria-hidden="true">').attr('title', gt('Appointment has attachments'))));
             return icons;
         },
 

@@ -201,7 +201,7 @@ define('io.ox/core/folder/api', [
             // drive: always enabled
             if (this.is('drive')) return true;
             // mail: check gab (webmail, PIM, PIM+infostore) and folder capability (bit 0), see Bug 47229
-            if (this.is('mail')) return capabilities.has('gab') && this.supportsShares();
+            if (this.is('mail')) return capabilities.has('gab') && this.can('change:permissions');
             // contacts, calendar, tasks
             if (this.is('calendar') && this.is('private') && !this.supportsShares()) return false;
             if (this.is('public')) return capabilities.has('edit_public_folders');

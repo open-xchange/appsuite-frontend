@@ -67,20 +67,19 @@ Scenario('[C125311] Change confimation status as participant', async function (I
     I.click('Show task details');
     I.waitForVisible('.io-ox-sidepopup');
 
-    let actions = ['Tentative', 'Decline', 'Accept'];
+    let actions = [{ text: 'Tentative', class: 'tentative' }, { text: 'Decline', class: 'declined' }, { text: 'Accept', class: 'accepted' }];
 
     actions.forEach(function (action) {
         I.click('~More actions', '.io-ox-sidepopup');
         I.waitForVisible('.dropdown.open');
         I.click('Change confirmation status', '.dropdown.open .dropdown-menu');
         I.waitForText('Change confirmation status');
-        I.click(action);
-        I.waitForDetached('.participant-list');
-        I.waitForElement('.participant-list');
+        I.click(action.text);
+        I.waitForElement('.io-ox-sidepopup .status.' + action.class);
 
-        if (action === 'Tentative') I.waitForElement('.status.tentative');
-        if (action === 'Decline') I.waitForElement('.status .fa-times');
-        if (action === 'Accept') I.waitForElement('.status .fa-check');
+        if (action.text === 'Tentative') I.waitForElement('.status.tentative');
+        if (action.text === 'Decline') I.waitForElement('.status .fa-times');
+        if (action.text === 'Accept') I.waitForElement('.status .fa-check');
 
     });
 });

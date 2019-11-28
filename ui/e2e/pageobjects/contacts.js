@@ -2,14 +2,15 @@ const { I } = inject();
 
 module.exports = {
     waitForApp() {
+        I.waitForElement('.io-ox-contacts-window');
         I.waitForNetworkTraffic();
         I.selectFolder('Contacts');
         I.triggerRefresh();
         I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
     },
     selectContact(text) {
-        I.waitForElement('[aria-label="' + text + '"]');
-        I.click('[aria-label="' + text + '"]');
+        I.waitForElement('.vgrid [aria-label="' + text + '"]');
+        I.click('.vgrid [aria-label="' + text + '"]');
         I.waitForElement('.contact-header');
         I.waitForText(text, 5, '.contact-header .fullname');
     },

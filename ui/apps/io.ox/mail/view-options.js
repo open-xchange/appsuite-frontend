@@ -324,9 +324,30 @@ define('io.ox/mail/view-options', [
         var state = !!e.data.state;
         e.data.app.folderView.forceOpen = state;
         e.data.app.props.set('folderview', state);
+
         // keep focus
-        var selector = '[data-action="' + (state ? 'close' : 'open') + '-folder-view"]';
-        e.data.app.getWindow().nodes.outer.find(selector).focus();
+        if (!!e.data.state) {
+            e.data.app.folderView.tree.getNodeView(e.data.app.folder.get()).$el.focus();
+        } else {
+            var listView = e.data.app.listView,
+                node = listView.selection.get().reduce(function (memo, item) {
+                    if (memo) return memo;
+                    return listView.selection.getNode(item);
+                }, null);
+
+            if (node) listView.selection.focus(0, node);
+            else {
+                var util = require('io.ox/mail/util'),
+                    mailCollection = listView.selection.view.collection,
+                    firstUnreadMail = mailCollection.models.find(function (e) {
+                        return !util.isUnseen(e.get('flags'));
+                    });
+
+                if (firstUnreadMail) return listView.selection.select(mailCollection.indexOf(firstUnreadMail));
+
+                listView.$el.focus();
+            }
+        }
     }
 
     function onFolderViewOpen(app) {

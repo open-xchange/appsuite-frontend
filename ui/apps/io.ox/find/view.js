@@ -15,8 +15,9 @@ define('io.ox/find/view', [
     'io.ox/core/extensions',
     'io.ox/find/view-searchbox',
     'io.ox/find/view-facets',
+    'gettext!io.ox/core',
     'less!io.ox/find/style'
-], function (ext, AutocompleteView, FacetView) {
+], function (ext, AutocompleteView, FacetView, gt) {
 
     'use strict';
 
@@ -80,6 +81,9 @@ define('io.ox/find/view', [
                 }
             });
 
+            // field stub already rendered
+            this.setElement(this.win.nodes.sidepanel.find('.io-ox-find'));
+
             // shortcuts
             this.ui = {
                 container: undefined,
@@ -87,11 +91,10 @@ define('io.ox/find/view', [
                 manager: undefined,
                 // subviews
                 searchbox: undefined,
-                facets: undefined
+                facets: undefined,
+                field: this.$el.find('.search-field'),
+                action: this.$el.find('.action-show')
             };
-
-            // field stub already rendered
-            this.setElement(this.win.nodes.sidepanel.find('.io-ox-find'));
 
             // shortcuts
             this.ui.container = this.$el.closest('.window-container');
@@ -102,6 +105,26 @@ define('io.ox/find/view', [
             this.ui.searchbox = new AutocompleteView(_.extend(props, { parent: this }));
             this.ui.facets = new FacetView(_.extend(props, { parent: this }));
 
+            this.listenTo(options.app, 'view:disable', this.disable);
+            this.listenTo(options.app, 'view:enable', this.enable);
+        },
+
+        disable: function () {
+            // only real change. We want to avoiud screenreader talking with every folderchange
+            if (this.ui.field.prop('disabled') === true) return;
+            this.ui.field.prop('disabled', true);
+            this.ui.action.prop('disabled', true);
+            this.ui.field.find('input.token-input.tt-input').removeAttr('tabindex');
+            this.$el.find('input.form-control.tokenfield').trigger('aria-live-update', gt('Search function not supported in this folder'));
+        },
+
+        enable: function () {
+            // only real change. We want to avoiud screenreader talking with every folderchange
+            if (this.ui.field.prop('disabled') === false) return;
+            this.ui.field.prop('disabled', false);
+            this.ui.action.prop('disabled', false);
+            this.ui.field.find('input.token-input.tt-input').attr('tabindex', 0);
+            this.$el.find('input.form-control.tokenfield').trigger('aria-live-update', '');
         },
 
         calculateDimensions: function () {

@@ -21,7 +21,7 @@ Scenario('Drive - List view w/o files', async (I) => {
 
 Scenario('Drive - Icon view w/o files', async (I) => {
     I.login('app=io.ox/files');
-    I.waitForText('View', undefined, '.classic-toolbar[aria-label="Drive Toolbar"]');
+    I.waitForText('View', undefined, '.classic-toolbar[aria-label^="Drive toolbar"]');
     I.clickToolbar('View');
     I.click('Icons');
     I.waitForElement('.file-list-view.complete.grid-layout');

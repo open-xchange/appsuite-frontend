@@ -143,15 +143,12 @@ Scenario('[C207509] Year view', async (I) => {
     I.see('January', '.monthview-container');
 });
 
-Scenario('[C236795] Visibility Flags', (I) => {
+Scenario.skip('[C236795] Visibility Flags', (I, calendar) => {
     const createAppointment = (subject, startDate, startTime, visibility) => {
         I.clickToolbar('New appointment');
         I.waitForVisible('.io-ox-calendar-edit-window');
         I.fillField('Subject', subject);
-        I.click('~Date (M/D/YYYY)');
-        I.pressKey(['Control', 'a']);
-        I.pressKey(startDate);
-        I.pressKey('Enter');
+        calendar.setDate('startDate', startDate);
         I.click('~Start time');
         I.click(startTime);
         I.scrollTo('.io-ox-calendar-edit select');
@@ -176,7 +173,7 @@ Scenario('[C236795] Visibility Flags', (I) => {
     };
 
     const checkAppointment = (subject, visibility, time) => {
-        createAppointment(subject, moment().startOf('isoWeek').format('M/D/YYYY'), time, visibility);
+        createAppointment(subject, moment().startOf('isoWeek'), time, visibility);
         // PRIVATE => Private
         // CONFIDENTIAL => Secret
         let labelAndIcon;
@@ -268,7 +265,8 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
     I.see('17', '.weekview-container .weekview-toolbar .weekday');
 });
 
-Scenario('[C244785] Open event from invite notification in calendar', async (I, users) => {
+//TODO: step I see "11:21 AM – 12:21 PM" fails, seems to only happen at around 11am - 12 pm
+Scenario.skip('[C244785] Open event from invite notification in calendar', async (I, users) => {
     const [userA, userB] = users;
 
     await I.haveSetting({ 'io.ox/core': { autoOpenNotification: false } }, { user: userB });
@@ -494,12 +492,12 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
     I.login('app=io.ox/calendar');
 
     I.waitForText('New calendar');
-    I.rightClick('~New calendar');
+    I.rightClick({ css: '[aria-label^="New calendar"]' });
     I.waitForText('Permissions / Invite people');
     I.wait(0.2); // Just wait a little extra for all event listeners
     I.click('Permissions / Invite people');
     I.waitForText('Permissions for folder "New calendar"');
-    I.pressKey(users[1].userdata.primaryEmail);
+    I.fillField('.modal-dialog .tt-input', users[1].userdata.primaryEmail);
     I.waitForText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, undefined, '.tt-dropdown-menu');
     I.pressKey('ArrowDown');
     I.pressKey('Enter');

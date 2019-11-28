@@ -78,9 +78,14 @@ define('io.ox/core/boot/load', [
         run: function () {
             util.debug('Load "tabHandling"');
 
-            if (!util.checkTabHandlingSupport()) return;
+            require(['io.ox/core/api/tab']).then(function (tabAPI) {
 
-            require(['io.ox/core/api/tab']);
+                if (!util.checkTabHandlingSupport()) {
+                    return tabAPI.disable();
+                }
+
+                return tabAPI.enable();
+            });
         }
     }, {
         id: 'multifactor',

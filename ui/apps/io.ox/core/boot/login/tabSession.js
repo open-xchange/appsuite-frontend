@@ -23,7 +23,7 @@ define('io.ox/core/boot/login/tabSession', [
         id: 'TabSession',
         index: 195,
         login: function () {
-            if (!util.checkTabHandlingSupport()) return;
+            if (ox.serverConfig.openInSingleTab || _.device('ie && ie <= 11') || _.device('smartphone') || _.device('tablet')) return;
             return tabAPI.login().then(tabSessionLoginSuccess, function () {
                 util.debug('TabSession: login timed out');
             });

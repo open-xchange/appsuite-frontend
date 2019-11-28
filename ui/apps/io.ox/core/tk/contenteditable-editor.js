@@ -72,9 +72,6 @@ define('io.ox/core/tk/contenteditable-editor', [
                 // we have no choice but making this a String
                 e.content = DOMPurify.sanitize(e.content) + '';
             };
-            if (ed.oxContext && ed.oxContext.signature) {
-                ed.on('BeforeSetContent', sanitizeAttributes);
-            }
             // see bug 48231 and 50849
             ed.on('PastePreProcess', sanitizeAttributes);
         }
@@ -85,6 +82,19 @@ define('io.ox/core/tk/contenteditable-editor', [
         index: INDEX += 100,
         draw: function (ed) {
             ed.on('keyup SetContent Change', _.throttle(this.trigger.bind(this, 'change'), 50));
+        }
+    });
+
+    // see Bug 67872
+    // fixes ios iframe focus bug
+    ext.point(POINT + '/setup').extend({
+        id: 'ios-focus',
+        index: INDEX += 100,
+        draw: function (ed) {
+            if (_.device('!tablet && ios >= 13')) return;
+            ed.on('touchstart', function () {
+                if (!$(document.activeElement).is('iframe')) $(document.activeElement).blur();
+            });
         }
     });
 

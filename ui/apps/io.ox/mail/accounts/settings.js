@@ -163,6 +163,8 @@ define('io.ox/mail/accounts/settings', [
                     baton.popup.$footer.find('[data-action="add"]').show();
                     // invoke wizard, there are no OAuth options to choose from
                     ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.$body.empty());
+                    // ensure modal's 'compact layout' for empty bodys get's removed
+                    $el.closest('.modal').removeClass('compact');
                     return;
                 }
                 // Invoke extension point for custom predefined non-oauth accounts

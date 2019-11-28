@@ -383,7 +383,7 @@ define('io.ox/calendar/main', [
 
         'multi-folder-selection': function (app) {
             addFolderSelectSupport(app);
-            app.on('folders:change', function () {
+            app.on('folder:change', function () {
                 app.folders.reset();
             });
             app.folderView.tree.on('dblclick', function (e, folder) {

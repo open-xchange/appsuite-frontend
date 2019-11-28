@@ -83,7 +83,9 @@ define('io.ox/mail/common-extensions', [
 
             if (util.isUnseen(data)) parts.push(gt('Unread'));
             if (util.isFlagged(data)) parts.push(gt('Flagged'));
-            if (baton.data.color_label && settings.get('features/flag/color')) parts.push(flagPicker.colorName(baton.data.color_label));
+            //#. Color is used as a noun
+            //#. %1$s - color name, used to describe a mail that has a color flag
+            if (baton.data.color_label && settings.get('features/flag/color')) parts.push(gt('Color %1$s', flagPicker.colorName(baton.data.color_label)));
             parts.push(util.getDisplayName(fromlist[0]), data.subject, util.getTime(data.received_date));
             if (size > 1) parts.push(gt.format('Thread contains %1$d messages', size));
             if (data.attachment) parts.push(gt('has attachments'));

@@ -115,10 +115,10 @@
         left: 0;
         height: 32px;
         width: 56px;
-        border: 1px solid #ccc;
+        border: 1px solid @hc-gray;
         border-radius: 16px;
         margin-right: 16px;
-        background-color: white;
+        background-color: #eee;
         transition: border 0.2s, background-color 0.2s;
     }
 
@@ -145,8 +145,8 @@
     }
 
     input:focus + i.toggle {
-        border-color: lighten(@switch-background, 20%);
-        box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+        border-color: @blue-dark;
+        box-shadow: 0 0 0 3px fade(@blue-dark, 40%);
     }
 
     input:disabled + i.toggle {

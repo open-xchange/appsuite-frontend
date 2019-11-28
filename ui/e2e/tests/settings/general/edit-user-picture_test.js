@@ -44,7 +44,8 @@ Scenario('User start with no picture', async function (I, contacts, mail) {
     I.click('Discard');
 });
 
-Scenario('User can upload and remove a picture', async function (I, contacts, mail) {
+// TODO: shaky (element (.fa-spin.fa-refresh) still not present on page after 30 sec)
+Scenario.skip('User can upload and remove a picture', async function (I, contacts, mail) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
@@ -91,7 +92,8 @@ Scenario('User can upload and remove a picture', async function (I, contacts, ma
     I.waitForVisible('.edit-picture.in.empty');
 });
 
-Scenario('User can rotate her/his picture', async function (I, contacts, mail) {
+// TODO: shaky (Element ".cr-image" was not found by text|CSS|XPath)
+Scenario.skip('User can rotate her/his picture', async function (I, contacts, mail) {
     let image;
 
     I.login('app=io.ox/mail');

@@ -25,7 +25,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C104269] Import App Suite CSV', async (I, contacts) => {
+Scenario.skip('[C104269] Import App Suite CSV', async (I, contacts) => {
 // this scenario also covers:
 // [C104268] Import App Suite vCard
 // [C104277] Import Outlook vCard

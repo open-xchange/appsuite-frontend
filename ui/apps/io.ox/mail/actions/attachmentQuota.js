@@ -74,41 +74,7 @@ define('io.ox/mail/actions/attachmentQuota', [
         return true;
     }
 
-    function attachmentsExceedQuota(files) {
-        if (!_.isArray(files)) return false;
-        var allAttachmentsSizes = files.map(function (m) { return m.size || 0; }),
-            quota = coreSettings.get('properties/attachmentQuota', 0),
-            accumulatedSize = allAttachmentsSizes
-                .reduce(function (acc, size) {
-                    return acc + size;
-                }, 0),
-            singleFileExceedsQuota = allAttachmentsSizes
-                .reduce(function (acc, size) {
-                    var quotaPerFile = coreSettings.get('properties/attachmentQuotaPerFile', 0);
-                    return acc || (quotaPerFile > 0 && size > quotaPerFile);
-                }, false);
-        return singleFileExceedsQuota || (quota > 0 && accumulatedSize > quota);
-    }
-
-    function publishMailAttachmentsNotification(files) {
-        var def = new $.Deferred();
-        if (require('io.ox/core/capabilities').has('publish_mail_attachments') && attachmentsExceedQuota(files)) {
-            notifications.yell({
-                type: 'info',
-                message: gt(
-                    'One or more attached files exceed the size limit per email. ' +
-                    'Therefore, the files are not sent as attachments but kept on the server. ' +
-                    'The email you have sent just contains links to download these files.'
-                ),
-                duration: 30000
-            });
-        }
-        def.resolve();
-        return def;
-    }
-
     return {
-        publishMailAttachmentsNotification: publishMailAttachmentsNotification,
         checkQuota: checkQuota
     };
 });

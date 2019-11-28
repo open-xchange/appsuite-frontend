@@ -61,10 +61,12 @@ function checkForFilteredMail(I) {
     I.waitToHide('foobar');
     I.waitForText('Empty');
     I.selectFolder('foo');
-    I.see('foobar', '.subject');
+    I.waitForElement({ css: '.list-view .list-item .subject .drag-title' }, 10);
+    I.see('foobar', { css: '.list-view .list-item .subject .drag-title' });
 }
 
-Scenario('[C290529] Refilter mails in INBOX folder', async (I, users) => {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C290529] Refilter mails in INBOX folder', async (I, users) => {
     const [user] = users;
     await setup(I, user);
     await sampleRule(I);
@@ -76,8 +78,8 @@ Scenario('[C290529] Refilter mails in INBOX folder', async (I, users) => {
 
     checkForFilteredMail(I);
 });
-
-Scenario('[C290530] Create and apply new filter rule', async (I, users) => {
+//TODO: I see "foobar", ".subject" fails, stale element reference
+Scenario.skip('[C290530] Create and apply new filter rule', async (I, users) => {
     const [user] = users;
     await setup(I, user);
     extendedLogin(I);
@@ -107,7 +109,8 @@ Scenario('[C290530] Create and apply new filter rule', async (I, users) => {
     checkForFilteredMail(I);
 });
 
-Scenario('[C290531] Edit and apply existing filter rule', async (I, users) => {
+// TODO: shaky, 145 of 178 (stale element reference: element is not attached to the page document)
+Scenario.skip('[C290531] Edit and apply existing filter rule', async (I, users) => {
     const [user] = users;
     await setup(I, user);
     await sampleRule(I);

@@ -7,7 +7,7 @@ It should provide some useful insights and hopefully help implementing custom up
 
 # Upsell capabilities
 
-There are lots of different capabilities. They are defined on the server-side and basically, they are just strings.
+There are lots of different [capabilities](../customize/manifests.html#capabilities). They are defined on the server-side and basically, they are just strings.
 
 Let's keep it simple and understand them as either services (e.g. mobility), specific functionalities (e.g. multiple_mail_accounts) or applications (e.g. calendar).
 Some obvious examples:
@@ -15,7 +15,7 @@ Some obvious examples:
 | Capability | Description                 | Upsell trigger (if capability is missing)                                                                                                                |
 | ---------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | calendar   | User has "Calendar" app     | Mail/All recipients: Invite to appointment; Add portal widget; Top bar                                                                                   |
-| contacts   | User has "Address Book" app | Mail/App recipients: Save as distribution list; Calendar: Save participants as distribution list; Top bar                                                |
+| contacts   | User has "Address Book" app | Mail/All recipients: Save as distribution list; Calendar: Save participants as distribution list; Top bar                                                |
 | infostore  | User has "Files" app        | Mail: Save in infostore; Add portal widget (My latest files, Recently changed files); Top bar                                                            |
 | portal     | User has "Portal" app       | Mail: Add to portal; Contacts: Add to portal; Files: Add to portal; Top bar                                                                              |
 | tasks      | User has "Tasks" app        | Mail: Remind me; Add portal widget; Top bar                                                                                                              |
@@ -183,7 +183,7 @@ The second event 'upsell:upgrade' can be understood as the final imperative to r
 # Example: Upsell widget
 
 Besides waiting for the user to click on such links, it's always a good idea to offer explicit control to trigger upsell.
-One option is creating a widget inside the Portal that advertises a premium subscription:
+One option is creating a widget inside the portal that advertises a premium subscription:
 
 ```javascript
 define('plugins/portal/upsell/register',

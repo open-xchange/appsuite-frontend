@@ -93,6 +93,10 @@ module.exports = {
         cb.call(this, this.locators[MAPPING[label]]);
     },
 
+    doubleClick() {
+        I.doubleClick.apply(I, arguments);
+    },
+
     addAttendee: function (name, mode) {
         if (mode !== 'picker') {
             I.fillField('.add-participant.tt-input', name);
@@ -103,6 +107,6 @@ module.exports = {
         I.click('~Select contacts');
         contactpicker.add(name);
         contactpicker.close();
-        I.waitForText(name, 5, this.locators.participants.find('.participant-email').as('Participant mail'));
+        I.waitForText(name, 5, this.locators.participants);
     }
 };

@@ -32,7 +32,10 @@ define('io.ox/backbone/mini-views/settings-list-view', [
         },
 
         render: function () {
-            this.$el.empty().addClass(this.opt.sortable ? 'draggable' : '').append(
+            this.$el.empty()
+            .addClass(this.opt.sortable ? 'draggable' : '')
+            .attr('draggable', this.opt.sortable)
+            .append(
                 this.opt.sortable ? listUtils.dragHandle(gt('Drag to reorder items')) : null,
                 listUtils.makeTitle(this.model.get(this.opt.titleAttribute)),
                 listUtils.makeControls()
@@ -44,17 +47,105 @@ define('io.ox/backbone/mini-views/settings-list-view', [
 
     });
 
-    return DisposableView.extend({
+    var dragSupport = (function () {
+        var $current, $placeholder, indexBefore;
+
+        function deferCSS(elem, attrs, condition) {
+            if (!condition) return elem.css(attrs);
+            _.defer(function () {
+                elem.css(attrs);
+            });
+        }
+
+        return {
+            events: {
+                'dragstart li': 'onDragStart',
+                'dragenter li': 'onDragEnter',
+                'dragover': 'onDragOver',
+                'dragend': 'onDragEnd',
+                'drop li': 'onDrop'
+            },
+
+            onDragStart: function (e) {
+                // prevent d&d on IE when drag starts on controls
+                if (_.browser.ie && $(e.target).closest('.list-item-controls').length) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                var originalEvent = e.originalEvent;
+                $current = $(e.currentTarget);
+                indexBefore = $current.index();
+                var offset = $current.offset();
+
+                // create a placeholder and place it outside the screen
+                if (originalEvent.dataTransfer.setDragImage) {
+                    $placeholder = $current.clone();
+                    $placeholder.css({ position: 'absolute', width: $current.width() });
+                    // defer placement of the placeholder, because edge can then create a correct snapshot
+                    deferCSS($placeholder, { top: '-100px', 'z-index': -1000 }, !!_.browser.edge || !!_.browser.safari);
+                    $current.after($placeholder);
+                    originalEvent.dataTransfer.setDragImage($placeholder.get(0), e.pageX - offset.left, e.pageY - offset.top);
+                }
+
+                originalEvent.dataTransfer.setData('text', ''); // need to set data for transfer. Otherwise firefox will ignore d&d. Needs to be 'text', otherwise IE11 will crash
+
+                // update visibility of current.
+                // Defer setting opacity here, because then IE will create a snapshot for the dragged element without opacity
+                deferCSS($current, { opacity: '0.2' }, !!_.browser.ie);
+                $current.attr('aria-grabbed', true);
+
+                // set aria dropeffect
+                this.$('> li').attr('aria-dropeffect', 'copy');
+            },
+
+            onDragEnter: function (e) {
+                var $target = $(e.currentTarget),
+                    listItem = $target.closest('li.settings-list-item');
+                if (listItem.length === 0) return;
+                if (listItem.is($current)) return;
+
+                if (listItem.index() < $current.index()) listItem.before($current);
+                else listItem.after($current);
+            },
+
+            onDragOver: function (e) {
+                e.originalEvent.dataTransfer.effectAllowed = 'move';
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            },
+
+            onDragEnd: function () {
+                if ($placeholder) $placeholder.remove();
+                $placeholder = undefined;
+
+                $current.css('opacity', '').attr('aria-grabbed', false);
+                this.$('> li').attr('aria-dropeffect', '');
+
+                if (indexBefore !== $current.index()) this.trigger('order:changed');
+            },
+
+            onDrop: function (e) {
+                // stops some browsers from redirecting
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        };
+    })();
+
+    return DisposableView.extend(dragSupport).extend({
 
         tagName: 'ol',
 
         className: 'list-group list-unstyled settings-list-view',
 
-        events: {
+        events: _.extend({
             'click *[data-action]': 'onClickAction',
             'keydown .drag-handle': 'onKeydown',
             'blur .drag-handle': 'onBlurDragHandle'
-        },
+        }, dragSupport.events),
 
         initialize: function (opt) {
             this.opt = _.extend({
@@ -87,29 +178,6 @@ define('io.ox/backbone/mini-views/settings-list-view', [
             this.$el.empty();
             this.views = {};
             this.renderChildViews();
-
-            if (this.opt.sortable) {
-                var self = this;
-                this.$el.sortable({
-                    axis: 'y',
-                    containment: this.opt.containment || this.$el,
-                    delay: 150,
-                    handle: '.drag-handle',
-                    cancel: 'li.protected',
-                    items: '> li.draggable',
-                    start: function (e, ui) {
-                        ui.item.attr('aria-grabbed', 'true');
-                    },
-                    stop: function (e, ui) {
-                        ui.item.attr('aria-grabbed', 'false');
-                    },
-                    scroll: true,
-                    update: function () {
-                        self.opt.update.call(self);
-                    }
-                });
-            }
-
             return this;
         },
 
@@ -205,7 +273,7 @@ define('io.ox/backbone/mini-views/settings-list-view', [
             function cont(curIndex) {
                 var newText = gt('%1$s moved to position %2$s of %3$s', current.find('.list-item-title').text(), curIndex + 1, items.length),
                     oldText = self.opt.notification.text();
-                self.opt.update.call(self);
+                self.trigger('order:changed');
                 if (target.hasClass('drag-handle')) {
                     self.$el.find('[' + self.opt.dataIdAttribute + '="' + id + '"] .drag-handle').focus().addClass('selected');
                 } else {

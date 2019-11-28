@@ -69,6 +69,10 @@ define('io.ox/calendar/actions/subscribe-shared', [
         });
         ext.point('io.ox/core/folder/subscribe-shared-calendar').invoke('render', data.dialog);
         data.dialog.idle();
+
+        // focus first usable checkbox
+        data.dialog.$body.find('input[type="checkbox"]:enabled').first().focus();
+
     }
 
     var ItemView = Backbone.View.extend({
@@ -125,26 +129,24 @@ define('io.ox/calendar/actions/subscribe-shared', [
             });
 
             this.$el.append(
-                $('<div class="item">').append(
-                    new Switch({
-                        name: 'subscribed',
-                        model: this.model,
-                        label: ''
+                new Switch({
+                    name: 'subscribed',
+                    model: this.model,
+                    label: ''
 
-                    }).render().$el.attr('title', gt('subscribe to calendar')),
-                    $('<div class="item-name">').append(
-                        $('<div>').text(this.model.attributes.display_title || this.model.attributes.title)
-                    ),
-                    new mini.CustomCheckboxView({
-                        name: 'com.openexchange.calendar.extendedProperties',
-                        model: this.model,
-                        label: gt('Sync via DAV'),
-                        customValues: {
-                            'true': preparedValueTrue,
-                            'false': preparedValueFalse
-                        }
-                    }).render().$el.attr('title', gt('sync via DAV'))
-                )
+                }).render().$el.attr('title', gt('subscribe to calendar')),
+                $('<div class="item-name">').append(
+                    $('<div>').text(this.model.attributes.display_title || this.model.attributes.title)
+                ),
+                new mini.CustomCheckboxView({
+                    name: 'com.openexchange.calendar.extendedProperties',
+                    model: this.model,
+                    label: gt('Sync via DAV'),
+                    customValues: {
+                        'true': preparedValueTrue,
+                        'false': preparedValueFalse
+                    }
+                }).render().$el.attr('title', gt('sync via DAV'))
             );
 
             if (!this.model.get('subscribed')) {

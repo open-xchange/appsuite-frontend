@@ -203,7 +203,7 @@ var addAttendee = function (I, name, context) {
     I.pressKey('Enter');
 };
 
-Scenario('[C7443] Check availability of participants', async function (I, users) {
+Scenario.skip('[C7443] Check availability of participants', async function (I, users) {
 
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
@@ -232,7 +232,8 @@ Scenario('[C7443] Check availability of participants', async function (I, users)
     I.seeNumberOfVisibleElements('~Abdancen', 3);
 });
 
-Scenario('[C7444] Check availability of resources', async function (I) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7444] Check availability of resources', async function (I) {
 
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
@@ -272,7 +273,7 @@ Scenario('[C7444] Check availability of resources', async function (I) {
     await I.dontHaveResource('Laser Sharks');
 });
 
-Scenario('[C7445] Check availability of resources and participants', async function (I, users) {
+Scenario.skip('[C7445] Check availability of resources and participants', async function (I, users) {
 
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 

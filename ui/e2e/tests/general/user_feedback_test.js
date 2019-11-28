@@ -31,7 +31,7 @@ Scenario('[C125002] Enable user feedback dialog', function (I) {
     I.grabTitle('#star-rating');
 });
 
-Scenario('[C125004] App aware user feedback', function (I) {
+Scenario.skip('[C125004] App aware user feedback', function (I) {
 
     function testFeedback(appType = 'general') {
         I.waitForNetworkTraffic();

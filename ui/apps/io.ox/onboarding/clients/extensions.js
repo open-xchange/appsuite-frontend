@@ -14,10 +14,11 @@
 define('io.ox/onboarding/clients/extensions', [
     'io.ox/backbone/mini-views/common',
     'io.ox/onboarding/clients/api',
+    'io.ox/backbone/views/modal',
     'io.ox/core/yell',
     'io.ox/core/extensions',
     'gettext!io.ox/core/onboarding'
-], function (mini, api, yell, ext, gt) {
+], function (mini, api, ModalDialog, yell, ext, gt) {
 
     'use strict';
 
@@ -46,6 +47,12 @@ define('io.ox/onboarding/clients/extensions', [
         enable: function (obj) {
             $(obj.target || obj).removeClass('disabled');
             $(obj.target || obj).prop('disabled', false);
+        },
+        showWizard: function () {
+            $('.client-onboarding, .wizard-backdrop').show();
+        },
+        hideWizard: function () {
+            $('.client-onboarding, .wizard-backdrop').hide();
         }
     };
 
@@ -310,11 +317,32 @@ define('io.ox/onboarding/clients/extensions', [
                 };
             // call
             util.disable(e);
-            api.execute(scenario, action, data)
+
+            // show modal only
+            util.hideWizard();
+
+            new ModalDialog({
+                title: gt('Please confirm'),
+                width: 600
+            })
+            .build(function () {
+                //#. %1$s: a cell phone number
+                this.$body.text(gt('Link will be sent to %1$s', data.sms));
+            })
+            .addCancelButton({ left: true })
+            .addButton({ action: 'apply', label: gt('Send') })
+            .on('apply', function () {
+                api.execute(scenario, action, data)
                 .always(yellError)
                 .done(_.partial(util.addIcon, e))
                 .fail(_.partial(util.removeIcons, e))
                 .fail(_.partial(util.enable, e));
+            })
+            .on('cancel', function () {
+                util.showWizard();
+                util.enable(e);
+            })
+            .open();
         }
     });
 

@@ -242,15 +242,22 @@
         }
 
         &.unread {
-            .date { opacity: 1; font-weight: bold; }
+            .date { opacity: 1; font-weight: bold; color: #000; }
         }
     }
 }
 
 // macos and ios specific styles
-html.macos, html.ios {
+html.macos .preview-right, html.ios {
     .mail-item.list-view .list-item .from .person {
-        font-weight: bold;
+        font-weight: 700;
+    }
+    .mail-item.list-view .list-item.unread .from .person {
+        font-weight: 800;
+        color: #000;
+    }
+    .mail-item.list-view.has-focus .list-item.unread.selected .from .person {
+        color: #fff;
     }
 }
 
@@ -958,7 +965,7 @@ html.macos, html.ios {
             padding: 6px 40px 18px 0;
             margin: 0;
             font-weight: 700;
-            word-break: break-word;
+            word-wrap: break-word;
         }
 
         .toggle-all, .toggle-big-screen {

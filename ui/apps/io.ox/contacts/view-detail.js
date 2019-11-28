@@ -170,7 +170,7 @@ define('io.ox/contacts/view-detail', [
     });
 
     // Contact Summary
-    var countryFlag = settings.get('features/countryFlag', true),
+    var countryFlag = settings.get('features/countryFlag', false),
         flags = {
             US: '\uD83C\uDDFA\uD83C\uDDF8',
             GB: '\uD83C\uDDEC\uD83C\uDDE7',
@@ -210,6 +210,14 @@ define('io.ox/contacts/view-detail', [
                 if (!flag) return;
                 // h1.fullname maybe missing (a11y: headings must not be empty)
                 this.find('h1.fullname').append($.txt(' ' + flag));
+            }
+        },
+        {
+            index: 120,
+            id: 'private_flag',
+            draw: function (baton) {
+                if (_.device('smartphone') || !baton.data.private_flag) return;
+                this.find('h1.fullname').append($('<div class="sr-only">').attr('aria-label', gt('Private contact')), $('<i class="fa fa-lock private-flag" aria-hidden="true">').attr('title', gt('Private')));
             }
         },
         {

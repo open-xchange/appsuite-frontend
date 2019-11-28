@@ -22,7 +22,7 @@ define('io.ox/mail/settings/signatures/register', [
     if (!capabilities.has('guest')) {
         ext.point('io.ox/settings/pane/main/io.ox/mail').extend({
             id: 'io.ox/mail/settings/signatures',
-            title: gt('Signatures'),
+            title: _.device('smartphone') ? gt('Signature') : gt('Signatures'),
             ref: 'io.ox/mail/settings/signatures',
             index: 200
         });

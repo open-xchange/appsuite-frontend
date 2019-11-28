@@ -195,13 +195,14 @@ define('io.ox/mail/compose/model', [
                     header.push('', '');
 
                     if (data.contentType === 'text/html') {
-                        data.content = '<div><br></div>' + $('<blockquote type="cite">').append(
-                            header.map(function (line) {
-                                if (!line) return '<div><br></div>';
-                                return $('<div>').text(line);
-                            }),
-                            data.content
-                        ).prop('outerHTML');
+                        data.content = mailUtil.getDefaultStyle().node.get(0).outerHTML
+                            + $('<blockquote type="cite">').append(
+                                header.map(function (line) {
+                                    if (!line) return '<div><br></div>';
+                                    return $('<div>').text(line);
+                                }),
+                                data.content
+                            ).prop('outerHTML');
                     } else if (data.contentType === 'text/plain') {
                         data.content = '\n' +
                             header.map(function (line) { return '> ' + line; }).join('\n') +

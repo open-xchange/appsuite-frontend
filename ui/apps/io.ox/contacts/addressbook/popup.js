@@ -683,7 +683,8 @@ define('io.ox/contacts/addressbook/popup', [
             onCursorDown: function () {
                 this.$('.search-field').on('keydown', function (e) {
                     if (!(e.which === 40 || e.which === 13)) return;
-                    this.listView.selection.select(0);
+                    this.listView.selection.focus(0);
+                    e.preventDefault();
                 }.bind(this));
             },
             onDoubleClick: function () {

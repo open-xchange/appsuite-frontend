@@ -18,11 +18,14 @@ define('plugins/administration/resources/settings/pane', [
     'io.ox/core/tk/list',
     'io.ox/core/api/resource',
     'plugins/administration/resources/settings/toolbar',
+    'io.ox/core/tk/list-contextmenu',
     'gettext!io.ox/core',
     'less!plugins/administration/resources/settings/style'
-], function (ext, DisposableView, backbone, ListView, resourceAPI, toolbar, gt) {
+], function (ext, DisposableView, backbone, ListView, resourceAPI, toolbar, Contextmenu, gt) {
 
     'use strict';
+
+    var GroupListView = ListView.extend(Contextmenu);
 
     //
     // Entry point
@@ -59,7 +62,7 @@ define('plugins/administration/resources/settings/pane', [
         initialize: function () {
 
             // define list view component
-            this.listView = new ListView({ ignoreFocus: true, pagination: false, ref: 'administration/resources/listview' });
+            this.listView = new GroupListView({ ignoreFocus: true, pagination: false, ref: 'administration/resources/listview' });
             this.listView.toggleCheckboxes(false);
             this.listView.getCompositeKey = function (model) { return model.id; };
 
@@ -142,5 +145,26 @@ define('plugins/administration/resources/settings/pane', [
             );
         }
     });
+
+    //
+    // Context menu
+    //
+
+    var items = [
+        { id: 'administration/resources/edit', section: 'organize', title: gt('Edit') },
+        { id: 'administration/resources/delete', section: 'organize', title: gt('Delete') }
+    ];
+
+    ext.point('administration/resources/listview/contextmenu').extend(
+        items.map(function (item, index) {
+            return _.extend({
+                id: item.id,
+                index: (index + 1) * 100,
+                title: item.title,
+                ref: item.id,
+                section: item.section
+            }, item);
+        })
+    );
 
 });

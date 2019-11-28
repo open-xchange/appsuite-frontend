@@ -48,6 +48,13 @@ define('io.ox/contacts/edit/view', [
             this.model = new View.ContactModel(options.data);
             // hash to track fields that are currently visible
             this.visible = {};
+            // hash to track fields that are disabled (not supported etc)
+            this.disabled = {};
+
+            // enable private flag when capability is there and it's not usermode or public folders
+            if (!capabilities.has('read_create_shared_folders') || this.model.isUserMode() || options.isPublic) {
+                this.disabled.private_flag = true;
+            }
         },
 
         extensions: {
@@ -150,15 +157,17 @@ define('io.ox/contacts/edit/view', [
                 maxLength = this.model.getMaxLength(name),
                 readonly = this.isReadonly(name),
                 length = this.fieldLength[name] || 6,
-                offset = 6 - length;
+                offset = 6 - length,
+                node = this.renderRightColumn(null, length);
+
             if (visible) this.visible[name] = true;
             return $('<div class="form-group">')
                 .attr('data-field', name)
                 .toggleClass('hidden', !visible)
                 .append(
                     this.renderLeftColumn(label),
-                    this.renderRightColumn(null, length).append(
-                        callback.call(this, guid, label)
+                    node.append(
+                        callback.call(this, guid, label, node)
                             .attr('maxlength', maxLength)
                             .attr('readonly', readonly || null),
                         new common.ErrorView({ model: this.model, name: name }).render().$el
@@ -196,6 +205,14 @@ define('io.ox/contacts/edit/view', [
         renderNote: function () {
             return this.renderField('note', function (guid) {
                 return new common.TextView({ name: 'note', model: this.model, id: guid, validate: false }).render().$el;
+            });
+        },
+
+        renderPrivateFlag: function () {
+            return this.renderField('private_flag', function (guid, label, node) {
+                label.addClass('sr-only');
+                node.addClass('col-xs-offset-0 col-sm-offset-4');
+                return new common.CustomCheckboxView({ name: 'private_flag', label: gt('This contact is private and cannot be shared'), model: this.model, id: guid }).render().$el;
             });
         },
 
@@ -251,6 +268,8 @@ define('io.ox/contacts/edit/view', [
             }
 
             function renderField(name) {
+
+                if (this.disabled[name]) return '';
                 var visible;
                 switch (name) {
                     case 'address_home':
@@ -267,6 +286,8 @@ define('io.ox/contacts/edit/view', [
                         // show display name in special case
                         visible = (this.visible[name] = this.showDisplayName());
                         return this.renderTextField(name).toggleClass('hidden', !visible);
+                    case 'private_flag':
+                        return this.renderPrivateFlag();
                     default:
                         return this.renderTextField(name);
                 }
@@ -304,7 +325,7 @@ define('io.ox/contacts/edit/view', [
         renderDropdownOptions: function (dropdown, section) {
             dropdown.$ul.empty();
             _(this.sections[section]).each(function (name) {
-                if (this.visible[name]) return;
+                if (this.visible[name] || this.disabled[name]) return;
                 if (name === '-') dropdown.divider(); else dropdown.link(name, View.i18n[name]);
             }, this);
             // hide/show dropdown bades on number of options left in the dropdown
@@ -472,7 +493,8 @@ define('io.ox/contacts/edit/view', [
             email1: true,
             cellular_telephone1: true,
             note: true,
-            attachments: true
+            attachments: true,
+            private_flag: true
         },
 
         readonly: {
@@ -519,12 +541,19 @@ define('io.ox/contacts/edit/view', [
                     'fax_business', 'fax_home', 'fax_other'
                 ]
             },
-            other: {
+            addresses: {
                 //#. Contact edit dialog.
                 add: gt('Add postal address'),
                 fields: [
-                    'address_home', 'address_business', 'address_other',
-                    'note'
+                    'address_home', 'address_business', 'address_other'
+                ]
+            },
+            other: {
+                //#. Contact edit dialog.
+                add: gt('Add additional info'),
+                fields: [
+                    'note',
+                    'private_flag'
                 ]
             }
         },
@@ -554,10 +583,10 @@ define('io.ox/contacts/edit/view', [
                 '-',
                 'fax_business', 'fax_home', 'fax_other'
             ],
+            addresses: ['address_home', 'address_business', 'address_other'],
             other: [
-                'address_home', 'address_business', 'address_other',
-                '-',
-                'note'
+                'note',
+                'private_flag'
             ]
         },
 
@@ -610,6 +639,7 @@ define('io.ox/contacts/edit/view', [
         nickname: gt('Nickname'),
         spouse_name: gt('Spouse\'s name'),
         anniversary: gt('Anniversary'),
+        private_flag: '',
         // messaging
         email1: gt('Email 1'),
         email2: gt('Email 2'),
@@ -886,6 +916,7 @@ define('io.ox/contacts/edit/view', [
             });
         },
 
+        // limits are defined by db
         maxLength: {
             // most fields have a maxlength of 64
             first_name: 128,
@@ -897,6 +928,7 @@ define('io.ox/contacts/edit/view', [
             street_home: 256,
             street_other: 256,
             street_business: 256,
+            display_name: 320,
             email1: 512,
             email2: 512,
             email3: 512,

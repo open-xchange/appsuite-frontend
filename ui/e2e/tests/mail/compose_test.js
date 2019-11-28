@@ -22,7 +22,8 @@ After(async function (users) {
 });
 
 // https://testrail.open-xchange.com/index.php?/cases/view/7382
-Scenario('Compose plain text mail', function (I, users) {
+// TODO: shaky, failed (10 runs on 2019-11-28)
+Scenario.skip('Compose plain text mail', function (I, users) {
     const [user] = users;
     // 0) log in to settings and set compose mode to html
     I.login('app=io.ox/settings', { user });

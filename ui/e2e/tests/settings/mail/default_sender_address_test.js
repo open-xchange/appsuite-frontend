@@ -25,22 +25,20 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7781] Default sender address', async (I, users, contexts) => {
+Scenario('[C7781] Default sender address', async (I, users, contexts, mail) => {
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
     await I.haveAnAlias('urbi@orbi.it', { user, ctx: { id: contexts[0].id } });
     I.login('app=io.ox/mail');
-    I.waitForText('Compose');
-    I.click('Compose');
-    // Wait for the compose dialog
-    I.waitForFocus('input[placeholder="To"]');
+    mail.newMail();
     I.click(`<${user.get('primaryEmail')}>`, '.mail-input');
     I.waitForText('urbi@orbi.it');
     I.click('urbi@orbi.it');
     I.waitForVisible('.token-input.tt-input');
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', 'Richtig gutes Zeug');
-    I.click('Send');
-    I.waitForText('urbi@orbi.it');
+    mail.send();
+    I.triggerRefresh();
+    I.waitForText('urbi@orbi.it', 30);
 });

@@ -190,4 +190,4 @@ Since this page is part of the UI and therefore located on the same domain, it i
 
 
 # Welcome wizard
-You are able to use the Welcome Wizard in order to include upsell as well as cross-sell content. For more information please see [Writing a wizard](https://documentation.open-xchange.com/latest/ui/customize/welcome-wizard.html)
+You are able to use the Welcome Wizard in order to include upsell as well as cross-sell content. For more information please see [Writing a wizard]({{ site.baseurl }}/ui/customize/welcome-wizard.html)

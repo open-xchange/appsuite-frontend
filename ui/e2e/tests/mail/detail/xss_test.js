@@ -50,8 +50,7 @@ Scenario('double quoted urls are escaped properly', async function (I, users, ma
         I.waitForText('XSSME');
         I.click('XSSME');
     });
-    I.wait(0.5);
-    I.switchToNextTab();
+    I.retry(5).switchToNextTab();
     I.seeCurrentUrlEquals('http://qwe"-alert(document.domain)-"/');
 });
 
@@ -68,7 +67,6 @@ Scenario('urls should not be double encoded', async function (I, users, mail) {
         I.waitForText('XSSME');
         I.click('XSSME');
     });
-    I.wait(0.5);
-    I.switchToNextTab();
+    I.retry(5).switchToNextTab();
     expect(await I.grabCurrentUrl()).to.equal('http://localhost/?test=ajlksd89123jd9hnasdf%3D&action=test');
 });

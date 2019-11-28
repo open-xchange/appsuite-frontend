@@ -392,6 +392,9 @@ Max size of returned characters for mail reply/forward in bytes (API parameter) 
 <config>io.ox/mail//maxSize/view=`<number>`</config>
 Max size of returned characters for mail viewing in bytes. Default: `102400` (100 kB)
 
+<config>io.ox/mail//features/instantAttachmentUpload=`<bool>`</config>
+Feature toggle to enable/disable instant attachment upload. Default is 'true'
+
 ### Mail compose: Image resize
 
 <config>io.ox/mail//features/imageResize/enabled=`<bool>`</config>

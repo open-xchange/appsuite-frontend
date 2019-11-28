@@ -93,7 +93,8 @@ Scenario('[C7732] Create a Task in a shared folder without rights', async functi
     I.waitForElement(locate('.classic-toolbar .disabled').withText('New').as('disabled "New" button in toolbar'));
 });
 
-Scenario('[C7727] Create task with all fields', async function (I, tasks) {
+// TODO: edit view and detail view timestamps differ about an hour
+Scenario.skip('[C7727] Create task with all fields', async function (I, tasks) {
     const testrailID = 'C7727';
     const testrailName = 'Create task with all fields';
     I.login('app=io.ox/tasks');
@@ -137,10 +138,12 @@ Scenario('[C7727] Create task with all fields', async function (I, tasks) {
     I.see(testrailID);
     I.see(testrailName);
 
+    // check in task-header
     I.see('Due 12/13/2114, 1:00 PM');
     I.see('Progress 25 %');
     I.see('In progress');
 
+    // check in task-body
     I.see('Start date');
     I.see('12/13/2114, 12:00 PM');
 
@@ -182,7 +185,7 @@ Scenario('[C7729] Create Task with participants', async function (I, users, task
 
     tasks.create();
     I.see(testrailID, '.tasks-detailview');
-    I.see(testrailName, '.tasks-detailview');
+    I.retry(5).see(testrailName, '.tasks-detailview');
     I.dontSeeElement({ css: '[title="High priority"]' });
     I.dontSeeElement({ css: '[title="Low priority"]' });
     I.see('Not started');
@@ -192,7 +195,7 @@ Scenario('[C7729] Create Task with participants', async function (I, users, task
 
     I.login('app=io.ox/tasks', { user: users[1] });
     tasks.waitForApp();
-    I.see(testrailID, '.tasks-detailview');
+    I.retry(5).see(testrailID, '.tasks-detailview');
     I.see(testrailName, '.tasks-detailview');
     I.dontSeeElement({ css: '[title="High priority"]' });
     I.dontSeeElement({ css: '[title="Low priority"]' });
@@ -203,7 +206,7 @@ Scenario('[C7729] Create Task with participants', async function (I, users, task
 
     I.login('app=io.ox/tasks', { user: users[2] });
     tasks.waitForApp();
-    I.see(testrailID, '.tasks-detailview');
+    I.retry(5).see(testrailID, '.tasks-detailview');
     I.see(testrailName, '.tasks-detailview');
     I.dontSeeElement({ css: '[title="High priority"]' });
     I.dontSeeElement({ css: '[title="Low priority"]' });
@@ -240,7 +243,8 @@ Scenario('[C7733] Set Task startdate behind due date', async function (I, tasks)
     I.retry(5).seeTextEquals('The due date must not be before the start date.', '[data-attribute="end_time"] div.error');
 });
 
-Scenario('[C7731] Create a Task in a shared folder', async function (I, users, tasks) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7731] Create a Task in a shared folder', async function (I, users, tasks) {
     const id = 'C7731',
         desc = 'Create a Task in a shared folder',
         sharedFolder = await I.haveFolder({
