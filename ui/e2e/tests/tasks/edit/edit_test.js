@@ -25,8 +25,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-// TODO: shaky (stale element reference: element is not attached to the page document)
-Scenario.skip('[C7738] Edit task with all fields filled', async function (I, tasks) {
+Scenario('[C7738] Edit task with all fields filled', async function (I, tasks) {
     const testrailID = 'C7738',
         testrailName = 'Edit task with all fields filled';
 
@@ -84,22 +83,22 @@ Scenario.skip('[C7738] Edit task with all fields filled', async function (I, tas
 
     I.waitForElement('.task-details');
     within('.task-details', () => {
-        I.dontSee('1337');
-        I.dontSee('1336');
-        I.dontSee('€1,335');
-        I.dontSee('€1,334');
-        I.dontSee('1337mm');
-        I.dontSee('Don not know any Bill');
-        I.dontSee('Open-Xchange GmbH');
-        I.see('1339');
-        I.see('1338');
-        I.see('RUB');
-        I.see('1,339.00');
-        I.see('1,338.00');
-        I.see('1338mm');
-        I.see('Yes, i know any Bill');
-        I.see('Open-Xchange Inc.');
+        I.waitForInvisible('//dd[text()="1337"]');
+        I.waitForInvisible('//dd[text()="1336"]');
+        I.waitForInvisible('//dd[text()="€1,335"]');
+        I.waitForInvisible('//dd[text()="€1,334"]');
+        I.waitForInvisible('//dd[text()="1337mm"]');
+        I.waitForInvisible('//dd[text()="Don not know any Bill"]');
+        I.waitForInvisible('//dd[text()="Open-Xchange GmbH"]');
     });
+    I.waitForText('1339', '.task-details');
+    I.waitForText('1338', '.task-details');
+    I.waitForText('RUB', '.task-details');
+    I.waitForText('1,339.00', '.task-details');
+    I.waitForText('1,338.00', '.task-details');
+    I.waitForText('1338mm', '.task-details');
+    I.waitForText('Yes, i know any Bill', '.task-details');
+    I.waitForText('Open-Xchange Inc.', '.task-details');
 });
 
 Scenario('[C7739] Change tasks due date in dropdown', async function (I, tasks) {
