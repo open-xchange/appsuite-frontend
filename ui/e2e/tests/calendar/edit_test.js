@@ -984,7 +984,7 @@ Scenario('[C7462] Remove a participant', async function (I, users) {
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7461] Add a participant/ressource', async function (I, users) {
+Scenario('[C7461] Add a participant/ressource', async function (I, users, calendar, mail) {
     await users.create();
     await users.create();
     const [userA, userB, weebl, bob] = users;
@@ -1024,7 +1024,7 @@ Scenario.skip('[C7461] Add a participant/ressource', async function (I, users) {
     I.waitForText(subject, 5, '.appointment');
 
     // 2. Select the appointment and click "Edit"
-    I.click(subject, '.appointment');
+    I.retry(5).click(subject, '.appointment');
     I.waitForElement('.io-ox-sidepopup');
     I.waitForText('Edit', 5, '.io-ox-sidepopup');
     I.click('Edit');
@@ -1035,7 +1035,7 @@ Scenario.skip('[C7461] Add a participant/ressource', async function (I, users) {
     // 3. Locate the "Participants" section and add some OX users, groups and resources as participants. This may include external mail accounts which are not handled by OX
     const addParticipant = (name) => {
         I.fillField('Add contact/resource', name);
-        I.wait(0.5);
+        I.seeInField('Add contact/resource', name);
         I.pressKey('Enter');
     };
     [userB.userdata.primaryEmail, groupName, resourceName, 'foo@bar'].forEach(addParticipant);
@@ -1057,8 +1057,7 @@ Scenario.skip('[C7461] Add a participant/ressource', async function (I, users) {
     // Expected Result: The appointment has been modified and all resources, groups, participants are displayed at the appointment popup.
     // Their confirmation status is indicated as well and they're ordered by their type (internal, external, resource).
     ['Week', 'Day', 'Month', 'List'].forEach((view) => {
-        I.clickToolbar('View');
-        I.click(view);
+        calendar.switchView(view);
         I.waitForText(subject, 5, '.page.current .appointment');
         I.click(subject, '.page.current .appointment');
         if (view === 'List') {
@@ -1084,11 +1083,11 @@ Scenario.skip('[C7461] Add a participant/ressource', async function (I, users) {
     // 5. Check the mail inbox of one of the participants.
     I.logout();
     I.login(['app=io.ox/mail'], { user: userB });
+    mail.waitForApp();
 
     // Expected Result: A mail has been received, informing about the new appointment.
     let mailCount = await I.grabNumberOfVisibleElements('.list-item');
     let retries = 60;
-
     while (mailCount < 1) {
         if (retries > 0) {
             I.waitForElement('#io-ox-refresh-icon', 5, '.taskbar');
@@ -1104,14 +1103,7 @@ Scenario.skip('[C7461] Add a participant/ressource', async function (I, users) {
         }
     }
 
-    I.click('#io-ox-refresh-icon');
-    I.waitForElement('#io-ox-refresh-icon .fa-spin');
-    I.waitForDetached('#io-ox-refresh-icon .fa-spin');
-    I.retry().waitForElement({ css: `span[title="New appointment: ${subject}"]` });
-
-    // clean up groups and resources
-    await I.dontHaveResource(resourceName);
-    await I.dontHaveGroup(groupName);
+    I.retry(3).waitForElement({ css: `span[title="New appointment: ${subject}"]` });
 });
 
 Scenario('[C7455] Edit appointment by changing the timeframe', async function (I, users) {
