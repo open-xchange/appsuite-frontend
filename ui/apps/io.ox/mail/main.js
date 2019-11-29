@@ -1882,6 +1882,7 @@ define('io.ox/mail/main', [
         },
 
         'metrics': function (app) {
+
             // forward event to internal tracker
             if (app.options.first) {
                 app.listView.on('first-reset', function () {

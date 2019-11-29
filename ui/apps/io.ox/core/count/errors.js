@@ -11,9 +11,7 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/core/count/errors', [
-    'io.ox/core/count/api'
-], function (api) {
+define('io.ox/core/count/errors', ['io.ox/core/count/api'], function (api) {
 
     'use strict';
 
@@ -21,5 +19,4 @@ define('io.ox/core/count/errors', [
     ox.on('yell:error', function (error) {
         api.add('error', { code: error.code });
     });
-
 });
