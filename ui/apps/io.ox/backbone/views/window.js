@@ -156,12 +156,21 @@ define('io.ox/backbone/views/window', [
 
         onResize: function () {
             if (!this.model) return;
+
+            if (this.model.get('forceChangeMode')) {
+                this.model.set('forceChangeMode', false);
+                this.model.set('noOverflow', !this.isOverfloating(this.$el));
+                return;
+            }
+
             if (!_.isBoolean(this.model.get('noOverflow'))) this.model.set('noOverflow', true);
 
             if (this.model.get('mode') === 'maximized' && this.isOverfloating(this.$el) && this.model.get('noOverflow')) {
                 this.model.set('onResize', true);
                 this.model.set('mode', 'normal');
             }
+
+            this.model.set('noOverflow', !this.isOverfloating(this.$el));
         },
 
         isOverfloating: function (el) {
@@ -306,6 +315,8 @@ define('io.ox/backbone/views/window', [
         },
 
         onChangeMode: function () {
+            this.model.set('forceChangeMode', true);
+
             // do nothing if the minimizing animation is playing
             if (this.minimizing) return;
 
@@ -357,6 +368,8 @@ define('io.ox/backbone/views/window', [
             if (this.$el.has(document.activeElement).length === 0 && !e) {
                 a11y.getTabbable(this.$body).first().focus();
             }
+
+            if ($(container).width() < this.$el.width()) this.model.set('mode', 'normal');
 
             if (this.model.get('lazy')) return this.model.set('lazy', false);
             this.keepInWindow();
