@@ -111,9 +111,11 @@ Scenario('[C73769] Application Availability', function (I) {
 Scenario('[C73776] Mail Configuration', async function (I, users) {
 
     I.login();
-    I.waitForNetworkTraffic();
     I.waitForVisible('#io-ox-topbar-dropdown-icon');
+    // let some time to render here, site is still loading up
+    I.waitForElement({ css: '#io-ox-topbar-dropdown-icon [data-action="client-onboarding"]' }, 15);
     I.click('#io-ox-topbar-dropdown-icon');
+
     I.waitForVisible(locate('a')
         .withAttr({ 'data-action': 'client-onboarding' })
         .inside('#topbar-settings-dropdown'));

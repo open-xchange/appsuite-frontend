@@ -84,7 +84,6 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
         });
 
         tasks.waitForApp();
-        I.waitForNetworkTraffic();
         I.waitForElement(`.folder-tree .contextmenu-control[title*="${users[0].get('sur_name')}, ${users[0].get('given_name')}: Tasks`);
         I.waitForText('simple task 1', 5, '.io-ox-tasks-main .vgrid');
         I.seeNumberOfElements('.io-ox-tasks-main .vgrid li.vgrid-cell', 2);
@@ -97,7 +96,6 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
     // Eve uses external link to shared folder
     session('Eve', () => {
         I.amOnPage(url);
-        I.waitForNetworkTraffic();
         I.waitForElement(`.folder-tree .contextmenu-control[title*="${users[0].get('sur_name')}, ${users[0].get('given_name')}: Tasks`);
         I.waitForText('simple task 1', undefined, '.io-ox-tasks-main .vgrid');
         I.seeNumberOfElements('.io-ox-tasks-main .vgrid li.vgrid-cell', 2);

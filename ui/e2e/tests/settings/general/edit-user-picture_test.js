@@ -64,9 +64,12 @@ Scenario('User can upload and remove a picture', async function (I, contacts, ma
 
     // picture-uploader
     I.dontSeeElement('.empty');
+
+    let listenerID = I.registerNodeRemovalListener('#io-ox-topbar-dropdown-icon .contact-picture');
     I.click('Save');
-    I.waitForNetworkTraffic();
     I.waitForInvisible('.contact-edit');
+    I.waitForNodeRemoval(listenerID);
+    I.waitForElement('.contact-picture');
 
     const image2 = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'backgroundImage');
     expect(Array.isArray(image2) ? image2[0] : image2).to.not.be.empty;
@@ -81,10 +84,11 @@ Scenario('User can upload and remove a picture', async function (I, contacts, ma
     I.waitForVisible('.edit-picture.empty');
     I.click('Apply');
     I.waitForDetached('.modal');
+
+    let listenerID2 = I.registerNodeRemovalListener('#io-ox-topbar-dropdown-icon .contact-picture');
     I.click('Save');
-    I.waitForNetworkTraffic();
     I.waitForInvisible('.contact-edit');
-    I.waitForDetached('.contact-picture[style]');
+    I.waitForNodeRemoval(listenerID2);
     I.waitForElement('.contact-picture');
 
     // check again

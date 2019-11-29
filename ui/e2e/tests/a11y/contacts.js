@@ -24,7 +24,6 @@ Scenario('Contacts - List view w/o contact', async (I, contacts) => {
 
 Scenario('Contacts - List view with contact detail view', async (I) => {
     I.login('app=io.ox/contacts');
-    I.waitForNetworkTraffic();
     I.waitForElement('.contact-detail');
 
     expect(await I.grabAxeReport()).to.be.accessible;

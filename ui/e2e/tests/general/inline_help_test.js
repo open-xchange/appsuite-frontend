@@ -36,6 +36,14 @@ Scenario.skip('[C274424] Inline Help', async (I) => {
 
 function verifyHelp(I, appName, expectedHelp) {
     I.openApp(appName);
+
+    // wait until current app is correct
+    I.waitForFunction(function (appName) {
+        let app = ox.ui.App.getCurrentFloatingApp() || ox.ui.App.getCurrentApp();
+        return app && app.get ? app.get('title') === appName : false;
+    }, [appName], 5);
+
+    I.waitForElement('.io-ox-context-help');
     I.click('.io-ox-context-help');
     I.waitForElement('.io-ox-help-window');
     // TODO: broken, sometimes fails at I.waitForText('User Guide') -> "cannot read property 'innerText' of null"

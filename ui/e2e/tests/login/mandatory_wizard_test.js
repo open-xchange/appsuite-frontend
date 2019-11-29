@@ -31,21 +31,26 @@ Scenario('[C7341] Use first run mandatory wizard', async function (I, users) {
 
     I.amOnPage('/');
     I.wait(1);
+    I.waitForInvisible('#background-loader.busy', 30);
+    // make sure we have an english UI
+    I.click('.dropup');
+    I.waitForText('English (United States)');
+    I.click('English (United States)');
     I.fillField('User name', `${user.get('name')}@${user.context.id}`);
     I.fillField('Password', user.get('password'));
-    I.waitForText('OX App Suite', 30);
-    I.wait(1);
-    I.retry(5).click('//input[@id="io-ox-login-button"]');
-    I.waitForText('Welcome to OX App Suite', 30);
+    I.click('Sign in');
+    I.waitForInvisible('#background-loader.busy', 20);
+    I.waitForText('Welcome to OX App Suite');
     I.click('Start tour');
     I.waitForFocus('.form-control');
     I.fillField('first_name', first_name);
     I.fillField('last_name', last_name);
     I.pressKey('Enter');
     I.click('Next');
+    let listenerID = I.registerNodeRemovalListener('.wizard-container');
     I.click('Finish');
-    I.waitForVisible('#io-ox-launcher');
-    I.waitForNetworkTraffic();
+    I.waitForNodeRemoval(listenerID);
+    I.waitForVisible('#io-ox-launcher', 5);
     I.waitForVisible('.contact-picture');
     I.wait(1);
     I.click('.contact-picture');

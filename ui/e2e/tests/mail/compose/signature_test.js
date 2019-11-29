@@ -92,7 +92,6 @@ Scenario('[C265555] Change the Signature', async function (I, mail) {
     I.fillField('Subject', 'test subject');
     I.click('Discard');
     I.click('Save as draft');
-    I.waitForNetworkTraffic();
     I.waitForDetached('.io-ox-mail-compose');
 
     I.selectFolder('Drafts');

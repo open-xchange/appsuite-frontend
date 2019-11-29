@@ -23,8 +23,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C110279] Primary mail account name can be changed', async function (I) {
+Scenario('[C110279] Primary mail account name can be changed', async function (I) {
     const name = 'Räuber Hotzenplotz';
     await I.haveFolder({ title: 'Personal', module: 'mail', parent: 'default0/INBOX' });
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/settings/accounts');
@@ -46,7 +45,7 @@ Scenario.skip('[C110279] Primary mail account name can be changed', async functi
 
     I.say('check mail folder view', 'blue');
     I.openApp('Mail');
-    I.waitForVisible('.tree-container');
+    I.waitForElement('.tree-container');
     I.waitForText(name);
     I.seeTextEquals(name, '.tree-container [data-id= "virtual/myfolders"] > .folder-node .folder-label');
 });

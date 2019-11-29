@@ -51,7 +51,8 @@ Scenario('Opening multiple windows', async function (I, users, calendar) {
     I.waitForVisible({ css: '[data-block="communication"]' });
     I.click(users[1].get('primaryEmail'), { css: '[data-block="communication"]' });
 
-    I.waitForNetworkTraffic();
+    // wait until compose window is active
+    I.waitForVisible('.io-ox-mail-compose-window.active');
 
     const composeIndex = await I.grabCssPropertyFrom('.io-ox-mail-compose-window', 'zIndex');
     const sidePopupIndizes = await I.grabCssPropertyFrom('.io-ox-sidepopup', 'zIndex');

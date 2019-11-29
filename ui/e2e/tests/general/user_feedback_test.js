@@ -25,16 +25,16 @@ After(async (users) => {
 
 Scenario('[C125002] Enable user feedback dialog', function (I) {
     I.login();
-    I.waitForNetworkTraffic();
+    I.waitForVisible('~Feedback');
     I.click('.feedback-button');
     I.waitForText('Please rate the following application', 5, '.modal');
     I.grabTitle('#star-rating');
 });
 
-Scenario.skip('[C125004] App aware user feedback', function (I) {
+Scenario('[C125004] App aware user feedback', function (I) {
 
     function testFeedback(appType = 'general') {
-        I.waitForNetworkTraffic();
+        I.waitForVisible('~Feedback');
         I.click('.feedback-button');
         I.waitForText('Please rate the following application:', 5, '.modal');
         I.waitForValue('.feedback-select-box', appType);
@@ -87,7 +87,6 @@ Scenario('[C125005] Provide user feedback', function (I) {
     };
 
     I.login();
-    I.waitForNetworkTraffic();
     I.waitForVisible('~Feedback');
     //Open Feedback dialog and rate each app in turn
     appArr.forEach(giveFeedback);

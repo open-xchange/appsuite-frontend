@@ -26,7 +26,7 @@ After(async function (users) {
 function createFilterRule(I, name, condition, value, flag) {
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
-    I.waitForNetworkTraffic();
+    I.waitForElement({ css: 'li .folder[data-id="virtual/settings/io.ox/mail"]>.folder-node' });
     I.selectFolder('Mail');
     I.waitForVisible('.rightside h1');
 

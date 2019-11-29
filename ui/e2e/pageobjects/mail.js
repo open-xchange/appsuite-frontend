@@ -2,9 +2,13 @@ const { I } = inject();
 
 module.exports = {
     waitForApp() {
-        I.waitForNetworkTraffic();
-        I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-        I.waitForVisible({ css: '[data-ref="io.ox/mail/listview"]' });
+        // wait for listview, detailview, toolbar and foldertree to be visible
+        I.waitForVisible({ css: '[data-ref="io.ox/mail/listview"]' }, 5);
+        I.waitForVisible({ css: '.rightside.mail-detail-pane' }, 5);
+        I.waitForVisible({ css: '.io-ox-mail-window .classic-toolbar-container .classic-toolbar' }, 5);
+        I.waitForVisible({ css: '[data-id="virtual/standard"]' }, 5);
+        //wait for all busy classes to disappear
+        I.waitForInvisible('[data-ref="io.ox/mail/listview"] .busy-indicator', 5);
     },
     selectMail(text) {
         const item = locate('.list-view li.list-item').withText(text);

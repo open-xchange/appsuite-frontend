@@ -24,7 +24,6 @@ After(async (users) => {
 
 Scenario('[C287801] Configure quick launchers', function (I) {
     I.login();
-    I.waitForNetworkTraffic();
     I.waitForElement('~Mail', '#io-ox-quicklaunch');
     I.waitForElement('~Calendar', '#io-ox-quicklaunch');
     I.waitForVisible('~Drive', '#io-ox-quicklaunch');

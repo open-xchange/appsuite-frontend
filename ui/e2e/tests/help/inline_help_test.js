@@ -76,7 +76,8 @@ Scenario('Check help window for supposed language', function (I) {
     };
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
-    I.waitForNetworkTraffic();
+
+    I.waitForText('Basic settings', 5, '.rightside');
 
     for (const id in languages) {
         I.say(languages[id][1]);
@@ -88,7 +89,9 @@ Scenario('Check help window for supposed language', function (I) {
         I.waitForVisible('.io-ox-alert', 30);
         I.refreshPage();
         I.refreshPage();
-        I.waitForNetworkTraffic();
+
+        I.waitForInvisible('#background-loader.busy', 20);
+        I.waitForVisible('#settings-language', 5);
 
         //open help window
         I.click('.io-ox-context-help');

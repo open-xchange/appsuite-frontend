@@ -57,7 +57,7 @@ Scenario('[C7862] Configure display name representation', async (I, contacts) =>
 
     // Go back to contacts app and verify it
     I.openApp('Address Book');
-    contacts.waitForApp();
+    contacts.waitForApp(true);
     I.wait(1); //wait for listeners to be attached
     I.click('.selectable.contact');
     I.waitForElement(lastNameLocator.before(firstNameLocator).as(`'${lastName}, ${firstName}'`), 5, '.fullname');

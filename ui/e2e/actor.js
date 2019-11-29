@@ -79,13 +79,11 @@ module.exports = actor({
     // I.selectFolder('test address book');
     // I.waitForNodeRemoval(listenerID);
 
-    // this way you can be sure the listener is there before you do things, instead of hoping the listener is attached fast enough after you did things
+    // usually a save way to check for updates after some action is done (toolbar redraw, contact picture changes etc)
     registerNodeRemovalListener(selector) {
         var guid  = _.uniqueId('e2eNodeRemovalListener');
         this.executeScript(function (selector, guid) {
-            console.log(selector, guid);
             $(selector + ':visible').parent().one('DOMNodeRemoved', function (e) {
-                console.log(e.target, $(e.target).filter(selector));
                 if ($(e.target).filter(selector)) ox[guid] = true;
             });
         }, selector, guid);

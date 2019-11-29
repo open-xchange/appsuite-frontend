@@ -36,9 +36,22 @@ module.exports = {
     },
 
     waitForApp() {
-        I.waitForNetworkTraffic();
-        I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-        I.waitForVisible(locate({ css: '*[data-app-name="io.ox/calendar"]' }).as('Calendar container'));
+        // wait for nodes to be visible
+        I.waitForVisible(locate({ css: '*[data-app-name="io.ox/calendar"]' }).as('Calendar container'), 10);
+        I.waitForVisible({ css: '.io-ox-calendar-main .classic-toolbar-container .classic-toolbar' }, 5);
+        I.waitForVisible({ css: '.io-ox-calendar-main .tree-container' }, 5);
+        I.waitForVisible({ css: '.io-ox-calendar-main .window-sidepanel .date-picker' }, 5);
+
+        // wait for perspectives
+        I.waitForElement({ css: '.io-ox-pagecontroller.page[data-page-id="io.ox/calendar/month"]' }, 5);
+        I.waitForElement({ css: '.io-ox-pagecontroller.page[data-page-id="io.ox/calendar/week:day"]' }, 5);
+        I.waitForElement({ css: '.io-ox-pagecontroller.page[data-page-id="io.ox/calendar/week:workweek"]' }, 5);
+        I.waitForElement({ css: '.io-ox-pagecontroller.page[data-page-id="io.ox/calendar/week:week"]' }, 5);
+        I.waitForElement({ css: '.io-ox-pagecontroller.page[data-page-id="io.ox/calendar/list"]' }, 5);
+        I.waitForElement({ css: '.io-ox-pagecontroller.page[data-page-id="io.ox/calendar/year"]' }, 5);
+
+        // wait current perspective
+        I.waitForElement({ css: '.io-ox-pagecontroller.page.current' }, 5);
     },
 
     newAppointment() {
