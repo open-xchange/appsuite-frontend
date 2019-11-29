@@ -986,7 +986,6 @@ Scenario('[C7462] Remove a participant', async function (I, users) {
     I.dontSeeElement('.io-ox-sidepopup-pane a[title="' + users[1].userdata.primaryEmail + '"]');
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
 Scenario('[C7461] Add a participant/ressource', async function (I, users, calendar, mail) {
     await users.create();
     await users.create();
@@ -1036,21 +1035,16 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users, calend
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     // 3. Locate the "Participants" section and add some OX users, groups and resources as participants. This may include external mail accounts which are not handled by OX
-    const addParticipant = (name) => {
-        I.fillField('Add contact/resource', name);
-        I.seeInField('Add contact/resource', name);
-        I.pressKey('Enter');
-    };
-    [userB.userdata.primaryEmail, groupName, resourceName, 'foo@bar'].forEach(addParticipant);
-
+    await calendar.addParticipant(userB.userdata.primaryEmail);
+    await calendar.addParticipant(groupName);
+    await calendar.addParticipant(resourceName);
+    await calendar.addParticipant('foo@bar', false);
     // Expected Result: The participants area is populating with people that got added to the appointment.
-    [
-        userA.userdata.primaryEmail,
-        userB.userdata.primaryEmail,
-        weebl.userdata.primaryEmail,
-        bob.userdata.primaryEmail,
-        'foo@bar'
-    ].forEach(mail => I.waitForText(mail, 5, '.participantsrow'));
+    I.waitForText(userA.userdata.primaryEmail, 5, calendar.locators.participants);
+    I.waitForText(userB.userdata.primaryEmail, 5, calendar.locators.participants);
+    I.waitForText(weebl.userdata.primaryEmail, 5, calendar.locators.participants);
+    I.waitForText(bob.userdata.primaryEmail, 5, calendar.locators.participants);
+    I.waitForText('foo@bar', 5, calendar.locators.participants);
 
     // 4. Save the appointment and check it in all calendar views
     const getSectionLocator = (sectionName) => locate('fieldset').withDescendant(locate('h2').withText(sectionName));
@@ -1059,11 +1053,10 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users, calend
 
     // Expected Result: The appointment has been modified and all resources, groups, participants are displayed at the appointment popup.
     // Their confirmation status is indicated as well and they're ordered by their type (internal, external, resource).
-    ['Week', 'Day', 'Month', 'List'].forEach((view) => {
-        calendar.switchView(view);
+    ['Day', 'Week', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, (location) => {
         I.waitForText(subject, 5, '.page.current .appointment');
         I.click(subject, '.page.current .appointment');
-        if (view === 'List') {
+        if (perspective === 'List') {
             I.waitForVisible('.calendar-detail-pane');
             I.see(subject, '.calendar-detail-pane');
         } else {
@@ -1081,7 +1074,7 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users, calend
         I.seeElement(locate(`a.accepted[title="${userA.userdata.primaryEmail}"]`).inside(getSectionLocator('Participants')));
         I.see('foo', getSectionLocator('External participants'));
         I.see(resourceName, getSectionLocator('Resources'));
-    });
+    }));
 
     // 5. Check the mail inbox of one of the participants.
     I.logout();
