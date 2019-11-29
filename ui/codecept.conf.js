@@ -71,14 +71,16 @@ module.exports.config = {
         I: './e2e/actor',
         users: './e2e/users',
         contexts: './e2e/contexts',
+        // pageobjects
         contacts: './e2e/pageobjects/contacts',
         calendar: './e2e/pageobjects/calendar',
-        contactpicker: './e2e/pageobjects/contact-picker',
         mail: './e2e/pageobjects/mail',
         portal: './e2e/pageobjects/portal',
         drive: './e2e/pageobjects/drive',
         settings: './e2e/pageobjects/settings',
         tasks: './e2e/pageobjects/tasks',
+        // widgets
+        contactpicker: './e2e/widgetobjects/contact-picker',
         search: './e2e/widgetobjects/search'
     },
     bootstrap: function (done) {
