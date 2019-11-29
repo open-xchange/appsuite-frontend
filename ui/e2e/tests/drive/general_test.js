@@ -152,8 +152,8 @@ Scenario('[C8369] Search', async (I, drive) => {
     searchFor(I, 'noneexisting');
     I.waitForText('No matching items found.');
     I.click('~Cancel search');
-    searchFor(I, 'd');
-    I.waitNumberOfVisibleElements('.file-list-view .list-item', 4);
+    searchFor(I, 'doc');
+    I.waitNumberOfVisibleElements('.file-list-view .list-item', 3);
 });
 
 Scenario('[C8371] Delete file', async (I, drive) => {

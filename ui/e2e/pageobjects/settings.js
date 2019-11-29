@@ -19,7 +19,6 @@ module.exports = {
     },
 
     waitForApp() {
-        I.waitForNetworkTraffic();
         I.waitForElement(this.locators.tree);
         I.waitForElement(this.locators.main);
     },

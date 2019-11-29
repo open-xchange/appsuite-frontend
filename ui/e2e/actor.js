@@ -1,5 +1,7 @@
 
 const actor = require('@open-xchange/codecept-helper').actor;
+const _ = require('underscore');
+const { util } = require('@open-xchange/codecept-helper');
 
 module.exports = actor({
     //remove previously created appointments by appointment title
@@ -66,9 +68,64 @@ module.exports = actor({
         this.waitForDetached('.io-ox-calendar-edit-window', 5);
     },
 
+    // remove when merge request is done and this is part of normal codecept helper plugin
+    login(urlParams, options) {
+        if (urlParams && !urlParams.length) {
+            // looks like an object, not string or array
+            options = urlParams;
+            urlParams = [];
+        }
+        urlParams = [].concat(urlParams || []);
+        options = Object.assign({ prefix: '' }, options);
+        let user = options.user || require('codeceptjs').container.support('users')[0];
+        console.log(Helper);
+        const I = this, baseURL = util.getURLRoot(),
+            prefix = options.prefix ? `${options.prefix}/` : '',
+            url = `${baseURL}/${prefix}appsuite/ui`;
+
+        if (typeof user === 'undefined') throw new Error('No user defined');
+        if (user.toJSON) user = user.toJSON();
+
+        I.amOnPage(url + '#!!' + (urlParams.length === 0 ? '' : '&' + urlParams.join('&')));
+        I.injectLoginScript({
+            name: `${user.name}${user.context ? '@' + user.context.id : ''}`,
+            password: user.password
+        });
+        I.waitForElement('#io-ox-launcher', 20);
+
+        // this is the only difference to normal login
+        // we need to wait for the busy spinner to go away too, some tests tored to interact with the ui while the spinner was still there
+        I.waitForInvisible('#background-loader.busy', 10);
+    },
+
     waitForNetworkTraffic() {
         this.waitForElement('.fa-spin.fa-refresh');
         this.waitForElement('.fa-spin-paused.fa-refresh');
+    },
+
+    // Use the next two helpers together. Example that checks for old toolbar to be removed/redrawn after folder change:
+
+    // let listenerID = I.registerNodeRemovalListener('.classic-toolbar');
+    // I.selectFolder('test address book');
+    // I.waitForNodeRemoval(listenerID);
+
+    // this way you can be sure the listener is there before you do things, instead of hoping the listener is attached fast enough after you did things
+    registerNodeRemovalListener(selector) {
+        var guid  = _.uniqueId('e2eNodeRemovalListener');
+        this.executeScript(function (selector, guid) {
+            console.log(selector, guid);
+            $(selector + ':visible').parent().one('DOMNodeRemoved', function (e) {
+                console.log(e.target, $(e.target).filter(selector));
+                if ($(e.target).filter(selector)) ox[guid] = true;
+            });
+        }, selector, guid);
+        return guid;
+    },
+
+    // use guid from registerNodeRemovalListener
+    waitForNodeRemoval(guid, time = 5) {
+        this.waitForFunction(function (guid) { return ox[guid]; }, [guid], time);
+        this.executeScript(function (guid) { delete ox[guid]; }, guid);
     },
 
     triggerRefresh() {

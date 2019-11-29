@@ -24,7 +24,7 @@ After(async function (users) {
 
 var util = require('./util');
 
-Scenario('Add an existing distribution list', function (I, contacts) {
+Scenario('Add an existing distribution list', async function (I, contacts) {
     const title = 'test distribution list one';
 
     I.login('app=io.ox/contacts');
@@ -39,9 +39,10 @@ Scenario('Add an existing distribution list', function (I, contacts) {
     I.waitForDetached('.modal-dialog');
 
     // create distribution list
+    let listenerID = I.registerNodeRemovalListener('.classic-toolbar');
     I.selectFolder('test address book');
-    I.waitForNetworkTraffic();
-    I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
+    I.waitForNodeRemoval(listenerID);
+
     I.waitForText('Empty'); // Empty in list view
     contacts.newDistributionlist();
 

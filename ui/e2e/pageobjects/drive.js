@@ -2,8 +2,14 @@ const { I } = inject();
 
 module.exports = {
     waitForApp() {
+        // wait untill all importand nodes are drawn
         I.waitForElement('.file-list-view.complete');
-        I.waitForNetworkTraffic();
+        I.waitForVisible({ css: '.io-ox-files-window .folder-tree' }, 5);
+        I.waitForVisible({ css: '.io-ox-files-window .classic-toolbar-container .classic-toolbar' }, 5);
+        I.waitForVisible({ css: '.secondary-toolbar .breadcrumb-view' }, 5);
+        // wait a bit because breadcrumb has some redraw issues atm (redraws 7 times)
+        // TODO Fix the redraw issue
+        I.wait(0.5);
     },
     waitForViewer() {
         I.waitForText('Details', 10, '.io-ox-viewer .sidebar-panel-title');
