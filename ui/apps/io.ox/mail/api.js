@@ -305,7 +305,8 @@ define('io.ox/mail/api', [
             model = pool.get('detail').get(cid),
             useCache = options && (options.cache !== undefined) ? options.cache : true,
             isDefaultView = obj.view === 'noimg' || !obj.view,
-            isComplete;
+            isComplete,
+            t0 = _.now();
 
         if (model) {
             isComplete = !!model.get('attachments');
@@ -327,11 +328,14 @@ define('io.ox/mail/api', [
 
         // never use factory's internal cache, therefore always 'false' at this point
         return get.call(api, obj, false).done(function (data) {
+            // trigger loading time event
+            ox.trigger('timing:mail:load', _.now() - t0);
             // don't save raw data in our models. We only want preformated content there
             if (obj.src || obj.view === 'raw') return;
             // delete potential 'cid' attribute (see bug 40136); otherwise the mail gets lost
             delete data.cid;
 
+            var t1 = _.now();
             data.attachments = sanitizeAttachments(data.attachments);
 
             if (_.isArray(data.nested_msgs)) {
@@ -340,6 +344,8 @@ define('io.ox/mail/api', [
                     return nested_msg;
                 });
             }
+            // trigger timing event for sanitize duration
+            ox.trigger('timing:mail:sanitize', _.now() - t1);
 
             // either update or add model
             if (model) {

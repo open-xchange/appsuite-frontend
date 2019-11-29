@@ -20,7 +20,7 @@ define('io.ox/backbone/views/window', [
 
     'use strict';
 
-    var collection = new Backbone.Collection(),
+    var collection = ox.ui.floatingWindows = new Backbone.Collection(),
         // selector for window container for convenience purpose
         container = '#io-ox-core',
         // used when dragging, prevents iframe event issues

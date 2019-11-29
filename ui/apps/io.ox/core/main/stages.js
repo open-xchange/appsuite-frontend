@@ -284,6 +284,8 @@ define('io.ox/core/main/stages', [
                 if (_.device('smartphone') && ox.ui.apps.where({ 'restored': true, 'name': details.name }).length) return;
                 // split app/call
                 var launch, method, options = _(hash).pick('folder', 'id');
+                // remember first started app
+                options.first = true;
                 debug('Auto launch:', details.app, options);
                 if (/detail\/main$/.test(details.app)) {
                     // TODO: NEEDS REFACTORING

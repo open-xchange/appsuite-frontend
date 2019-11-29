@@ -147,6 +147,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         if (_.isObject(type)) {
             // catch server error?
             if ('error' in type) {
+                ox.trigger('yell:error', type);
                 // find possible conflicts with filestorages and offer a dialog to display all conflicts
                 if (type.categories === 'CONFLICT' && (type.code === 'FILE_STORAGE-0045' || type.code === 'FLD-1038')) {
                     useConflictsView = true;

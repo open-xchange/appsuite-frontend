@@ -12,38 +12,43 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tracker/api', ['settings!io.ox/core'], function (settings) {
+define('io.ox/core/count/api', ['settings!io.ox/core'], function (settings) {
 
     'use strict';
 
     // we always need to expose the API even if tracking is disabled
-    var api = _.extend({ queue: [], add: _.noop }, Backbone.Events);
+    var api = _.extend({ queue: [], add: _.noop }, Backbone.Events),
+        url = settings.get('count/url');
 
-    var url = settings.get('tracker/url'),
-        // having an URL means enabled, disable requires an explicit "false"
-        disabled = !url || settings.get('tracker/enabled') === false;
+    // having an URL means enabled, disable requires an explicit "false"
+    api.disabled = !url || settings.get('count/enabled') === false;
 
     // return mock/noop API so that consumers don't have to worry
-    if (disabled) return api;
+    if (api.disabled) return api;
 
-    var delay = window.parseInt(settings.get('tracker/delay', 15), 10) * 1000,
-        brand = settings.get('tracker/brand', 'Default');
+    var delay = parseInt(settings.get('count/delay', 3), 10) * 1000,
+        brand = settings.get('count/brand'),
+        toggles = settings.get('count/stats', {});
 
     // overwrite with real function
     api.add = function (stat, data) {
-        data = _.extend({ stat: stat, brand: brand }, data);
+        if (toggles[stat] === false) return;
+        data = _.extend({ stat: stat }, data);
+        if (brand) data.brand = brand;
         api.trigger('add', data);
         api.queue.push(data);
     };
 
+    api.stat = function (id) {
+        return toggles[id] !== false;
+    };
+
     var intervalId = setInterval(function () {
-
         if (api.queue.length === 0) return;
-
         var data = api.queue;
         api.queue = [];
         api.trigger('sync', data);
-
+        if (url === 'debug') return console.debug('count', data);
         $.post({ url: url, contentType: 'application/json', data: JSON.stringify(data), timeout: 10000 })
         .fail(function (xhr) {
             // stop in case of 403 Forbidden (which means we have an invalid API token)
@@ -55,7 +60,6 @@ define('io.ox/core/tracker/api', ['settings!io.ox/core'], function (settings) {
             api.trigger('fail', data);
             [].push.apply(api.queue, data);
         });
-
     }, delay);
 
     return api;

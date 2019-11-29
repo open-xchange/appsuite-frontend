@@ -289,9 +289,12 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/main.js',
                             'apps/io.ox/core/links.js',
                             // tracker
-                            'apps/io.ox/core/tracker/api.js',
-                            'apps/io.ox/core/tracker/duration.js',
-                            'apps/io.ox/core/tracker/main.js',
+                            'apps/io.ox/core/count/api.js',
+                            'apps/io.ox/core/count/active.js',
+                            'apps/io.ox/core/count/timing.js',
+                            'apps/io.ox/core/count/errors.js',
+                            'apps/io.ox/core/count/eyeballtime.js',
+                            'apps/io.ox/core/count/main.js',
                             // mail app
                             'apps/io.ox/mail/util.js',
                             'apps/io.ox/mail/api.js',

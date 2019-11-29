@@ -1882,7 +1882,15 @@ define('io.ox/mail/main', [
         },
 
         'metrics': function (app) {
+            // forward event to internal tracker
+            if (app.options.first) {
+                app.listView.on('first-reset', function () {
+                    var t = _.now() - ox.t0;
+                    ox.trigger('timing:mail:ready', t);
+                });
+            }
 
+            // legacy piwik tracking
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
@@ -2139,7 +2147,6 @@ define('io.ox/mail/main', [
 
     // launcher
     app.setLauncher(function () {
-
         // get window
         var win = ox.ui.createWindow({
             name: 'io.ox/mail',
