@@ -731,6 +731,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
 
     I.waitForText('Testappointment');
     I.see('Testappointment', locate('.page.current .day').at(1));
+    I.scrollTo('.page.current .appointment');
     I.dragAndDrop('.page.current .appointment', locate('.page.current .day').at(2).find('.timeslot').at(21));
     I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
     I.click('Edit series');
@@ -745,6 +746,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     I.see('Testappointment', locate('.page.current .day').at(3));
 
     // use 5th child here as the container has another child before the first .day
+    I.scrollTo('.page.current .appointment');
     I.dragAndDrop(locate('.page.current .appointment'), locate('.page.current .day').at(4).find('.timeslot').at(21));
     I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
     I.click('Edit series');
@@ -760,6 +762,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     I.see('Testappointment', { css: `[id="${time.format('YYYY-M-D')}"]` });
 
     time.add(1, 'day');
+    I.scrollTo('.page.current .appointment');
     I.dragAndDrop(locate('.page.current .appointment'), `[id="${time.format('YYYY-M-D')}"]`);
     I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
     I.click('Edit series');
@@ -1128,6 +1131,7 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
     I.waitForVisible('.appointment');
+    I.scrollTo('.page.current .appointment');
     I.dragAndDrop('.appointment .resizable-n', '.day .timeslot:nth-child(23)');
     I.wait(0.5);
 
@@ -1136,6 +1140,7 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
     I.waitForText('11:00 – 1:00 PM');
     I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup');
+    I.scrollTo('.page.current .appointment');
     I.dragAndDrop('.appointment .resizable-s', '.day .timeslot:nth-child(28)');
     I.wait(0.5);
 
