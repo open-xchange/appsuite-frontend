@@ -22,6 +22,16 @@ class MyHelper extends Helper {
         context.overridePermissions(config.url.replace(/\/appsuite\//, ''), ['clipboard-read']);
     }
 
+    // TODO Can be removed as soon as this is fixed in codecept
+    async pressKeys(key) {
+        if (this.helpers['WebDriver']) {
+            return this.helpers['WebDriver'].pressKey(key);
+        }
+        if (this.helpers['Puppeteer']) {
+            return [...key].forEach(k => this.helpers['Puppeteer'].pressKey(k));
+        }
+    }
+
     async selectFolder(id) {
         let browser, options, funcName;
 

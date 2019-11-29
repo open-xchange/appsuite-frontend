@@ -376,7 +376,7 @@ Scenario('[C252158] All my public appointments', (I, users) => {
     I.click('~Start time');
     I.pressKey('Enter');
     I.pressKey(['Control', 'a']);
-    I.pressKey(moment().format('hh:mm'));
+    I.pressKeys(moment().format('hh:mm'));
     I.pressKey('Enter');
     I.fillField('Add contact/resource', userB.userdata.primaryEmail);
     I.wait(0.5);
@@ -441,7 +441,7 @@ Scenario('[C265147] Appointment organizer should be marked in attendee list', as
     I.click('~Start time');
     I.pressKey('Enter');
     I.pressKey(['Control', 'a']);
-    I.pressKey(startTime.format('hh:mm P'));
+    I.pressKeys(startTime.format('hh:mm P'));
     I.pressKey('Enter');
 
     // 4. add User#B as participant
