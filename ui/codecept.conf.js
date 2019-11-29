@@ -71,7 +71,6 @@ module.exports.config = {
         I: './e2e/actor',
         users: './e2e/users',
         contexts: './e2e/contexts',
-        search: './e2e/actor_search',
         contacts: './e2e/pageobjects/contacts',
         calendar: './e2e/pageobjects/calendar',
         contactpicker: './e2e/pageobjects/contact-picker',
@@ -79,7 +78,8 @@ module.exports.config = {
         portal: './e2e/pageobjects/portal',
         drive: './e2e/pageobjects/drive',
         settings: './e2e/pageobjects/settings',
-        tasks: './e2e/pageobjects/tasks'
+        tasks: './e2e/pageobjects/tasks',
+        search: './e2e/widgetobjects/search'
     },
     bootstrap: function (done) {
         // setup chai
