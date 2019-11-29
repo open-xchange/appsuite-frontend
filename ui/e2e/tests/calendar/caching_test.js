@@ -38,8 +38,8 @@ Scenario('Create never ending appointment and check display in several views', a
     // toggle months to activate caching
     calendar.switchView('Month');
     // just skip 2 months, because "today" might still be visible in the "next" month
-    I.click('~Next Month', '.monthview-container');
-    I.click('~Next Month', '.monthview-container');
+    I.retry(5).click('~Next Month', '.monthview-container');
+    I.retry(5).click('~Next Month', '.monthview-container');
     I.dontSeeElement('.monthview-container td.day.today:not(.out)');
 
     I.click('~Previous Month', '.monthview-container');
