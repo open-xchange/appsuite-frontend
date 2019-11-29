@@ -1,4 +1,4 @@
-const { I, contactpicker } = inject();
+const { I, contactpicker, autocomplete } = inject();
 
 const MAPPING = {
     'Day': 'dayview',
@@ -24,7 +24,7 @@ module.exports = {
         endtime: locate({ css: '[data-attribute="endDate"] .time-field' }).as('Ends at'),
         repeat: locate({ css: '.io-ox-calendar-edit-window div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'),
         participants: locate({ css: '.participantsrow' }).as('Participants List'),
-
+        addparticipants: locate({ css: '.add-participant.tt-input' }).as('Add participant field'),
         // views
         dayview: locate({ css: '.weekview-container.day' }).as('Day View'),
         workweekview: locate({ css: '.weekview-container.workweek' }).as('Workweek View'),
@@ -119,19 +119,30 @@ module.exports = {
         if (error) throw error;
     },
 
-    addAttendee: function (name, mode) {
-        if (mode !== 'picker') {
-            I.wait(1);
-            I.fillField('.add-participant.tt-input', name);
-            I.waitForVisible('.tt-dropdown-menu .tt-suggestion');
-            return I.pressKey('Enter');
-        }
-        // picker
+    async addParticipant(name, exists) {
+        // does suggestion exists (for contact, user, ...)
+        exists = typeof exists === 'boolean' ? exists : true;
+        let number = await I.grabNumberOfVisibleElements({ css: '.participant-wrapper' });
+        // input field
+        I.waitForVisible(this.locators.addparticipants);
+        I.waitForEnabled(this.locators.addparticipants);
+        I.fillField(this.locators.addparticipants, name);
+        // tokenfield/typeahead
+        exists ?
+            autocomplete.selectFirst() :
+            I.pressKey('Enter');
+        I.waitForInvisible(autocomplete.locators.suggestions);
+        // note: might be more than one that get's added (group)
+        I.waitForElement({ css: `.participant-wrapper:nth-of-type(${number + 1})` });
+    },
+
+    addParticipantByPicker: function (name) {
         I.click('~Select contacts');
         contactpicker.add(name);
         contactpicker.close();
         I.waitForText(name, 5, this.locators.participants);
     },
+
     switchView: function (view) {
         I.click(locate({ css: '[data-dropdown="view"]' }).inside('.classic-toolbar-container'));
         I.waitForElement('.dropdown.open');

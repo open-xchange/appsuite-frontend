@@ -80,6 +80,7 @@ module.exports.config = {
         settings: './e2e/pageobjects/settings',
         tasks: './e2e/pageobjects/tasks',
         // widgets
+        autocomplete: './e2e/widgetobjects/contact-autocomplete',
         contactpicker: './e2e/widgetobjects/contact-picker',
         search: './e2e/widgetobjects/search'
     },

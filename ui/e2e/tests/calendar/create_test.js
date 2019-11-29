@@ -831,7 +831,7 @@ Scenario.skip('[C7428] Create appointment with internal participants', async fun
     calendar.newAppointment();
     I.fillField('Subject', data.subject);
     I.fillField('Location', data.location);
-    calendar.addAttendee(users[1].get('name'), 'picker');
+    calendar.addParticipantByPicker(users[1].get('name'));
     I.click('Create');
 
     I.say('Check Views');
@@ -875,7 +875,7 @@ Scenario('[C7425] Create appointment with a group', async function (I, users, ca
     calendar.newAppointment();
     I.fillField('Subject', data.subject);
     I.fillField('Location', data.location);
-    calendar.addAttendee('Awesome guys');
+    await calendar.addParticipant('Awesome guys');
     I.waitForText(users[0].get('name'), 5);
     I.waitForText(users[1].get('name'), 5);
     I.click('Create');
@@ -1273,7 +1273,7 @@ Scenario('[C274406] Change organizer of appointment with external attendees', as
     calendar.newAppointment();
     I.fillField('Subject', subject);
     I.fillField('Location', 'Globe Theatre');
-    calendar.addAttendee(users[1].get('name'));
+    await calendar.addParticipant(users[1].get('name'));
     I.fillField('.add-participant.tt-input', 'ExcellentExternalExterminator@Extraterrestrial.ex');
     I.pressKey('Enter');
     I.click('Create');
