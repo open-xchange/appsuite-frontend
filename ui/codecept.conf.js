@@ -205,7 +205,7 @@ module.exports.config = {
     name: 'App Suite Core UI'
 };
 
-if (process.env.CHROME_ARGS) {
+if (process.env.CHROME_ARGS && process.env.CODECEPT_DRIVER === 'puppeteer') {
     Object.assign(module.exports.config.helpers.Puppeteer, {
         chrome: {
             args: process.env.CHROME_ARGS.split(' ')
