@@ -216,7 +216,7 @@ examples.add(['[C104292] Import Thunderbird iCal', 'thunderbird_45_full', functi
 }]);
 
 examples.add(['[C104276] Import emClient iCal', 'emclient_7', function (I) {
-    I.waitForText('Simple appointment', 5, appointment + ' .title');
+    I.waitForElement(locate('.title').withText('Simple appointment').inside(appointment));
     I.seeNumberOfElements(appointment, 6);
     I.seeNumberOfElements(fulltime, 1);
     I.click(locate(appointment).withText('Simple appointment'));
