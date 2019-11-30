@@ -62,7 +62,7 @@ Scenario('Check help window for supposed language', function (I) {
     var languages = {
         'de_DE': ['help/l10n/de_DE/ox.appsuite.user.sect.settings.globalsettings.html', 'Deutsch (Deutschland)', 'Grundeinstellungen anpassen', '~Schließen'],
         'en_US': ['help/l10n/en_US/ox.appsuite.user.sect.settings.globalsettings.html', 'English (United States)', 'Customizing the Basic Settings', '~Close'],
-        'en_GB': ['help/l10n/en_GB/ox.appsuite.user.sect.settings.globalsettings.html', 'English (United Kingdom)', 'Customizing the basic settings', '~Close'],
+        'en_GB': ['help/l10n/en_GB/ox.appsuite.user.sect.settings.globalsettings.html', 'English (United Kingdom)', 'Customising the basic settings', '~Close'],
         'es_ES': ['help/l10n/es_ES/ox.appsuite.user.sect.settings.globalsettings.html', 'Español (Espana)', 'Personalización de la configuración básica', '~Cerrar'],
         'es_MX': ['help/l10n/es_MX/ox.appsuite.user.sect.settings.globalsettings.html', 'Español (México)', 'Personalización de la configuración básica', '~Cerrar'],
         'fr_FR': ['help/l10n/fr_FR/ox.appsuite.user.sect.settings.globalsettings.html', 'Français (France)', 'Personnaliser les réglages de base', '~Fermer'],
@@ -100,6 +100,7 @@ Scenario('Check help window for supposed language', function (I) {
         //check language in help window
         I.waitForElement(locate('.inline-help-iframe').withAttr({ src: languages[id][0] }).inside('.io-ox-help-window'), 10);
         within({ frame: '.inline-help-iframe' }, () => {
+            I.wait(1);
             I.waitForText(languages[id][2], 20);
         });
 
