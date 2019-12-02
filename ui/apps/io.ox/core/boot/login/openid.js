@@ -74,7 +74,7 @@ define('io.ox/core/boot/login/openid', [
             hash: '#login_type=propagateSession'
         };
         var url = oidcUrlFor(params);
-        var frame = $('iframe');
+        var frame = $('<iframe>').appendTo('body');
         return $.ajax(url).then(function (res) {
             var def = $.Deferred();
             frame.one('load', _.debounce(function () {
@@ -86,7 +86,11 @@ define('io.ox/core/boot/login/openid', [
                 }
             }, 500));
             frame.attr('src', res.redirect);
-            waitForResponse().then(def.resolve, def.reject);
+            waitForResponse()
+                .then(def.resolve, def.reject)
+                .always(function () {
+                    frame.remove();
+                });
             return def;
         });
     }
