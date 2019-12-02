@@ -408,7 +408,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.min.js',
 
             extended_valid_elements: 'blockquote[type]',
-            invalid_elements: 'object,iframe,script',
+            invalid_elements: 'object,iframe,script,embed',
 
             height: opt.height,
             autoresize_bottom_margin: 0,
