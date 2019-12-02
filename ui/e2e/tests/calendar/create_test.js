@@ -167,7 +167,7 @@ Scenario('[C7412] Create private appointment @contentReview @bug', async functio
     });
 
     I.say('Login with second user');
-    I.login('app=io.ox/calendar', { user: users[1] });
+    I.login('app=io.ox/calendar&perspective=week:week', { user: users[1] });
     calendar.waitForApp();
 
     I.retry(5).click({ css: `[aria-label*="${today.format('l, dddd')}, CW ${today.week()}"]` }, calendar.locators.mini);
@@ -179,7 +179,7 @@ Scenario('[C7412] Create private appointment @contentReview @bug', async functio
     I.doubleClick({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${title}"]` });
 
     I.say('Check views');
-    ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
+    ['Day', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
         I.waitForText('Private');
         I.dontSee(somedetail);
     }));
