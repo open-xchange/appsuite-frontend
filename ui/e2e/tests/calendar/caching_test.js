@@ -57,9 +57,7 @@ Scenario('Create never ending appointment and check display in several views', a
     await calendar.setDate('startDate', moment().startOf('week').add('1', 'day'));
 
     I.checkOption('All day', '.io-ox-calendar-edit-window');
-
     calendar.recurAppointment();
-    I.click('.btn.btn-link.summary'); // Variable so it needs a selector
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
 
     I.click('Apply', '.modal-dialog');

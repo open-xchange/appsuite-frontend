@@ -70,7 +70,7 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     I.waitForText('Add new calendar', 5, '.folder-tree');
     I.click('Add new calendar', '.folder-tree');
 
-    calendar.clickInsideDropdown('Personal calendar');
+    I.clickDropdown('Personal calendar');
 
     I.waitForVisible('.modal-body');
 
@@ -86,7 +86,7 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     I.selectFolder('New calendar');
     I.click(selectInsideFolder({ css: 'a.folder-options' }));
 
-    calendar.clickInsideDropdown('Permissions / Invite people');
+    I.clickDropdown('Permissions / Invite people');
     I.waitForVisible('.modal-dialog');
     I.waitForFocus('.modal-dialog input[type="text"][id^="form-control-label"]');
     I.fillField('.form-control.tt-input', user_b.get('primaryEmail'));

@@ -135,14 +135,6 @@ module.exports = {
     switchView: function (view) {
         I.click(locate({ css: '[data-dropdown="view"]' }).inside('.classic-toolbar-container'));
         I.waitForElement('.dropdown.open');
-        this.clickInsideDropdown(view);
-    },
-    clickInsideDropdown: function (attr) {
-        I.waitForVisible(this.locators.dropdown);
-        within(this.locators.dropdown, () => {
-            I.waitForText(attr);
-            I.click(attr);
-        });
-        I.waitForDetached(this.locators.dropdown);
+        I.clickDropdown(view);
     }
 };
