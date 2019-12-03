@@ -13,7 +13,7 @@ module.exports = {
 
     locators: {
         // main
-        view: locate({ css: '.io-ox-calendar-main .classic-toolbar .dropdown > a' }).as('View'),
+        view: locate({ xpath: '//ul[@class="classic-toolbar"]//li[@class="dropdown pull-right"]' }).as('View'),
         edit: locate({ css: '.io-ox-calendar-edit-window' }).as('Edit Dialog'),
         dropdown: locate({ css: '.smart-dropdown-container' }).as('Dropdown'),
         mini: locate({ css: '.window-sidepanel .date-picker' }).as('Mini Calendar'),
@@ -55,6 +55,7 @@ module.exports = {
     },
 
     newAppointment() {
+        I.wait(1);
         I.clickToolbar({ css: '[data-action="io.ox/calendar/detail/actions/create"]' });
         I.waitForVisible(this.locators.edit);
         I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
@@ -120,6 +121,7 @@ module.exports = {
 
     addAttendee: function (name, mode) {
         if (mode !== 'picker') {
+            I.wait(1);
             I.fillField('.add-participant.tt-input', name);
             I.waitForVisible('.tt-dropdown-menu .tt-suggestion');
             return I.pressKey('Enter');

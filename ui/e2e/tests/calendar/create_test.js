@@ -856,8 +856,7 @@ Scenario.skip('[C7428] Create appointment with internal participants', async fun
     I.waitForText(`New appointment: ${data.subject}`);
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7425] Create appointment with a group', async function (I, users, calendar) {
+Scenario('[C7425] Create appointment with a group', async function (I, users, calendar) {
 
     await I.haveGroup({
         name: 'Awesome guys',
