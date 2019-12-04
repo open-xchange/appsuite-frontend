@@ -1792,7 +1792,7 @@ define('io.ox/mail/api', [
         // don't remove all if all marked as deleted
         if (thread.length === 0) thread = list.slice(0, 1);
 
-        // workaround for bug 62881 until middleware change is available
+        // workaround for bug 62881 until middleware change is available (MW-1284)
         // authenticity -> authenticity_preview (same property name - different content for threadedAll/all and get)
         _(thread.concat(obj)).each(renameProperty);
 
