@@ -133,13 +133,7 @@ Scenario('[C83385] Copy to clipboard @puppeteer', async function (I, drive) {
     I.logout();
     I.amOnPage(url);
     I.waitForText('Music');
-})
-    .config({ chrome: {
-        args: [
-            '--unsafely-treat-insecure-origin-as-secure=http://e2e-develop.ui.cloud.open-xchange.com/appsuite/',
-            '--no-sandbox']
-    } });
-
+});
 // TODO: shaky (element (.fa-spin.fa-refresh) still not present on page after 30 )
 Scenario('[C85625] My Shares default sort order', async function (I, drive) {
     function share(item) {
