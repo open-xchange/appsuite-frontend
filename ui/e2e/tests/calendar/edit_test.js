@@ -1053,7 +1053,7 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users, calend
 
     // Expected Result: The appointment has been modified and all resources, groups, participants are displayed at the appointment popup.
     // Their confirmation status is indicated as well and they're ordered by their type (internal, external, resource).
-    ['Day', 'Week', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, (location) => {
+    ['Day', 'Week', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
         I.waitForText(subject, 5, '.page.current .appointment');
         I.click(subject, '.page.current .appointment');
         if (perspective === 'List') {
