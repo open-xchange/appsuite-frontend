@@ -176,8 +176,8 @@ Scenario('check planning view options and minimizing behavior', async function (
     I.waitForVisible({ css: '[data-name="compact"]' });
     I.waitForVisible({ css: '[data-name="showFineGrid"]' });
     I.waitForVisible({ css: '[data-name="showFree"]' });
-    I.waitForVisible({ css: '[data-value="week"]' });
-    I.waitForVisible({ css: '[data-value="month"]' });
+    I.waitForVisible({ css: '[data-value="week"][data-name="dateRange"]' });
+    I.waitForVisible({ css: '[data-value="month"][data-name="dateRange"]' });
     I.waitForVisible({ css: '[data-name="onlyWorkingHours"]' });
 
     I.pressKey('Escape');
