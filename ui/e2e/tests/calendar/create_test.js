@@ -268,11 +268,6 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window');
 
-    if (moment().isSame(date, 'week')) {
-        I.waitForVisible('.io-ox-sidepopup');
-        I.click('~Close', '.io-ox-sidepopup');
-    }
-
     I.say('Check next occurence');
     const diffMonth = date.diff(moment().startOf('month'), 'months');
     for (let i = 0; i < diffMonth; i++) I.click('~Go to next month', calendar.locators.mini);
