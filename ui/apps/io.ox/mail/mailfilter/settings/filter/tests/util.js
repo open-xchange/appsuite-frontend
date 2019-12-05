@@ -22,6 +22,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
 
     'use strict';
 
+    var SIZELIMITS = { 'B': 2147483648, 'K': 2097152, 'KB': 2097152, 'M': 2048, 'MB': 2048, 'G': 2, 'GB': 2 };
+
     var DropdownLinkView = mini.DropdownLinkView.extend({
         updateLabel: function () {
             this.$el.find('.dropdown-label').text(this.options.values[this.model.get(this.name)] || this.model.get(this.name));
@@ -47,7 +49,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                 }
             });
 
-            return /^[0-9]+$/.test(number) && parseInt(number, 10) < 2147483648 && parseInt(number, 10) >= 0 && (unit === '' || _.contains(listOfUnits, unit.toUpperCase()));
+            return /^[0-9]+$/.test(number) && parseInt(number, 10) <= SIZELIMITS[unit || 'B'] && parseInt(number, 10) >= 0 && (unit === '' || _.contains(listOfUnits, unit.toUpperCase()));
         },
         onChange: function () {
             if (this.name === 'size' && this.validationForSize()) {
