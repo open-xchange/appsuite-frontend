@@ -20,7 +20,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7497] Daytime within Greeting', async (I) => {
+Scenario('[C7497] Daytime within Greeting @flaky', async (I) => {
 
     const moment = require('moment');
     await I.haveSetting('io.ox/core//autoOpenNotification', false);

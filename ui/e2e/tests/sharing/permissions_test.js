@@ -25,7 +25,7 @@ After(async (users) => {
 });
 
 // TODO: shaky (element (body) is not in DOM or there is no element(body) with text "Hello from Bob" after 30 sec)
-Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, drive) {
+Scenario('[C45032] Edit Permissions at "My shares" @flaky', async function (I, users, drive) {
     session('Alice', () => {
         I.login('app=io.ox/files');
         drive.waitForApp();
@@ -33,12 +33,12 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
         I.selectFolder('My shares');
         drive.waitForApp();
         // sometimes this is not fast enough and there are 4 objects
-        I.seeNumberOfElements('.list-view li.list-item', 0);
+        I.retry(3).seeNumberOfElements('.list-view li.list-item', 0);
 
         //I.shareFolder('Music');
         I.click('My files', '.folder-tree');
         I.selectFolder('Music');
-        drive.waitForApp();
+        I.waitForVisible(locate('.breadcrumb-tail[data-module="infostore"]').withText('Music'));
         drive.shareItem('Invite people');
         I.click('Send notification by email');
         I.dontSeeCheckboxIsChecked('Send notification by email');
@@ -62,7 +62,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
         I.waitForElement(locate('.displayname').withText('Music').inside('.list-view'));
         I.seeNumberOfElements('.list-view li.list-item', 1);
 
-        I.click('Music', '.list-view .displayname');
+        I.retry(5).click('Music', '.list-view .displayname');
     });
 
     session('Bob', () => {
@@ -98,7 +98,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
         I.triggerRefresh();
 
         I.selectFolder('Music');
-        I.clickToolbar('New');
+        I.retry(5).clickToolbar('New');
         I.clickDropdown('Add new folder');
         I.waitForText('Add new folder');
         I.fillField('Folder name', 'Hello from Bob');
@@ -111,7 +111,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
 
         I.triggerRefresh();
 
-        I.waitForText('Hello from Bob');
+        I.retry(3).waitForText('Hello from Bob');
     });
 });
 
