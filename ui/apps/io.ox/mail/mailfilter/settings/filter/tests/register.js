@@ -968,10 +968,15 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         }
                     });
 
+                    var sizeValueView = new util.Input({ name: 'sizeValue', model: cmodel, className: 'form-control', id: inputId });
+
+                    // initial states
                     cmodel.set('unit', unit || 'B', { silent: true });
                     cmodel.set('sizeValue', number, { silent: true });
 
                     cmodel.on('change:sizeValue change:unit', function () {
+                        // workaround to trigger validation on sizevalue-input also when unit changes
+                        if (this.changed.unit) sizeValueView.onKeyup();
                         this.set('size', this.get('sizeValue') + this.get('unit'));
                     });
 
@@ -986,7 +991,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                                         new util.DropdownLinkView({ name: 'comparison', model: cmodel, values: filterValues(condition.id, sizeValues) }).render().$el
                                     ),
                                     $('<div class="col-sm-4">').append(
-                                        new util.Input({ name: 'sizeValue', model: cmodel, className: 'form-control', id: inputId }).render().$el
+                                        sizeValueView.render().$el
                                     ),
                                     $('<div>').addClass('col-sm-1 no-padding-left').append(
                                         new mini.DropdownLinkView({ name: 'unit', model: cmodel, values: unitValues }).render().$el,

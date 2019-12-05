@@ -365,6 +365,34 @@ Scenario('[C7814] Filter mail using IsBiggerThan', async function (I, users) {
     I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0400'), 30);
 });
 
+Scenario('Filter mail using validated size', async function (I) {
+    await I.haveSetting({
+        'io.ox/mail': { messageFormat: 'text' }
+    });
+
+    createFilterRule(I, 'TestCaseSome', 'Size', null, null, 'Red', true);
+    let disabledButton = locate({ css: '.modal-footer .btn-primary[disabled]' }).as('Disabled button'),
+        enabledButton = locate({ css: '.modal-footer .btn-primary:not([disabled])' }).as('Enabled button');
+
+    // valid
+    I.say('Enter valid value for Byte');
+    I.fillField('sizeValue', '3');
+    I.waitForElement(enabledButton);
+
+    // invalid
+    I.say('Switch to GB that causes value to be invalid');
+    I.click('Byte');
+    I.waitForElement('.dropdown.open');
+    I.see('GB', '.dropdown.open');
+    I.click('GB', '.dropdown.open');
+    I.waitForElement(disabledButton);
+
+    // invalid
+    I.say('Enter valid value for GB');
+    I.fillField('sizeValue', '2');
+    I.waitForElement(enabledButton);
+});
+
 Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users) {
     let [user] = users;
     await I.haveSetting({
