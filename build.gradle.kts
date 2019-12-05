@@ -12,12 +12,6 @@ buildscript {
         classpath("com.openexchange.build", "licensing")
         classpath("com.openexchange.build", "packaging", "[3.1.0,4.0[")
         classpath("com.openexchange.build", "opensuse-build-service-client", "[1.5.0,2.0[")
-
-    }
-    configurations.classpath {
-        resolutionStrategy {
-            force("com.openexchange.build:packaging:3.1.2")
-        }
     }
 }
 
