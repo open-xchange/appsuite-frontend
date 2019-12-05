@@ -63,7 +63,7 @@ Scenario('User can upload and remove a picture', async function (I, contacts, ma
     I.waitForDetached('.edit-picture');
 
     // picture-uploader
-    I.dontSeeElement('.empty');
+    I.waitForInvisible('.empty', 3);
 
     let listenerID = I.registerNodeRemovalListener('#io-ox-topbar-dropdown-icon .contact-picture');
     I.click('Save');

@@ -45,7 +45,7 @@ Scenario('Sanitize entered signature source code', async function (I) {
     I.waitForVisible('.contenteditable-editor iframe');
     I.fillField('Signature name', 'Sanitize me!');
 
-    await set('A<svg><svg onload=alert(document.cookie)>Z', 'AZ');
+    await set('A<svg><svg onload="document.body.innerHTML=\'I am a hacker\'>Z', 'AZ');
 
     async function set(text, clean) {
         I.say('Add: source code');
@@ -56,9 +56,9 @@ Scenario('Sanitize entered signature source code', async function (I) {
             I.click('Ok');
         });
 
-        I.say('Check: alert');
-        let alerttext = await I.grabPopupText();
-        expect(alerttext).to.be.undefined;
+        I.say('Check: body.innerHTML unchanged');
+        I.wait(1);
+        I.dontSee('I am a hacker');
 
         I.say('Check: value');
         I.waitForDetached(dialog);

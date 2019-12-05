@@ -11,7 +11,9 @@
  *
  */
 /// <reference path="../../steps.d.ts" />
-const { expect } = require('chai');
+
+const expect = require('chai').expect;
+
 Feature('Mail > Search');
 
 Before(async (users) => {
@@ -99,16 +101,18 @@ Scenario('[C8406] Delete a string from multi search', async function (I, users) 
     I.waitForVisible('.list-view [data-index="0"]');
     I.waitForVisible('.list-view [data-index="1"]');
 
-
 });
 
 Scenario('[C8408] Try to run a script in search', async function (I) {
-
     I.login();
+    I.waitForElement('.search-box');
     I.click('.search-box');
     I.waitForFocus(searchField);
-    I.fillField(searchField, '<script>alert(1)</script>');
+
+    I.fillField(searchField, '<script>document.body.innerHTML=\'I am a hacker\'</script>');
+    I.waitForElement('.tt-suggestions');
     I.pressKey('Enter');
-    let text = await I.grabPopupText();
-    expect(!!text).to.be.false;
+
+    I.wait(1);
+    expect(await I.grabHTMLFrom({ xpath: '//body' })).to.not.equal('I am a hacker');
 });
