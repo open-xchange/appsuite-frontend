@@ -41,6 +41,7 @@ Scenario('[C244795] Zoom levels in scheduling view', async (I, users) => {
 
     I.login('app=io.ox/calendar');
     I.waitForText('Scheduling');
+    I.wait(1);
     I.click('Scheduling');
     I.waitForElement('.freetime-view .appointment');
 
