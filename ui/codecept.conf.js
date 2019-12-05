@@ -27,7 +27,7 @@ const helpers = {
             script: 5000
         },
         chrome: {
-            args: [`--unsafely-treat-insecure-origin-as-secure=${process.env.LAUNCH_URL}`]
+            args: [`--unsafely-treat-insecure-origin-as-secure=${process.env.LAUNCH_URL}`].concat((process.env.CHROME_ARGS || '').split(' '))
         },
         // set HEADLESS=false in your terminal to show chrome window
         show: process.env.HEADLESS ? process.env.HEADLESS === 'false' : false
@@ -208,8 +208,3 @@ module.exports.config = {
     },
     name: 'App Suite Core UI'
 };
-
-if (process.env.CHROME_ARGS && process.env.CODECEPT_DRIVER === 'puppeteer') {
-    const oldArgs = module.exports.config.helpers.Puppeteer.chrome.args;
-    module.exports.config.helpers.Puppeteer.chrome.args = oldArgs.concat(process.env.CHROME_ARGS.split(' '));
-}
