@@ -138,7 +138,7 @@ define([
                 collection = filtercollection;
                 var addButton = $container.find('.btn-primary[data-action="add"]');
                 addButton.click();
-                $popup = $('body').find('.io-ox-mailfilter-edit').closest('.io-ox-dialog-popup');
+                $popup = $('body').find('.io-ox-mailfilter-edit').closest('.modal-dialog');
                 done();
             });
             $('body', document).append($container);
@@ -1127,7 +1127,7 @@ define([
             filters.editMailfilter($container.empty()).done(function () {
                 var addButton = $container.find('.btn-primary[data-action="add"]');
                 addButton.click();
-                $popup = $('body').find('.io-ox-mailfilter-edit').closest('.io-ox-dialog-popup');
+                $popup = $('body').find('.io-ox-mailfilter-edit').closest('.modal-dialog');
                 done();
             });
             $('body', document).append($container);
@@ -1199,7 +1199,7 @@ define([
             filters.editMailfilter($container.empty()).done(function (filtercollection) {
                 collection = filtercollection;
                 $container.find('li[data-id="2"] a[data-action="edit"]').click();
-                $popup = $('body').find('.io-ox-mailfilter-edit').closest('.io-ox-dialog-popup');
+                $popup = $('body').find('.io-ox-mailfilter-edit').closest('.modal-dialog');
                 done();
             });
             $('body', document).append($container);

@@ -13,6 +13,8 @@
 
 /// <reference path="../../steps.d.ts" />
 
+const { expect } = require('chai');
+
 Feature('Login');
 
 Before(async (users) => {
@@ -23,9 +25,13 @@ After(async (users) => {
     await users.removeAll();
 });
 
+
 Scenario('[C7336] Successful Login', function (I, users) {
     I.amOnPage('/');
-    I.wait(1);
+    I.setCookie({ name: 'locale', value: 'en_US' });
+    I.refreshPage();
+
+    I.waitForFocus('#io-ox-login-username', 30);
     I.fillField('User name', `${users[0].get('name')}@${users[0].context.id}`);
     I.fillField('Password', users[0].get('password'));
     I.click('Sign in');
@@ -34,34 +40,50 @@ Scenario('[C7336] Successful Login', function (I, users) {
 
 Scenario('[C7337] Unsuccessful Login', function (I, users) {
     I.amOnPage('/');
-    I.wait(1);
+    I.setCookie({ name: 'locale', value: 'en_US' });
+    I.refreshPage();
+    I.waitForFocus('#io-ox-login-username', 30);
     I.fillField('User name', `${users[0].get('name')}@${users[0].context.id}`);
     I.fillField('Password', 'wrong password');
     I.click('Sign in');
     I.waitForText('The user name or password is incorrect.');
 });
 
-Scenario('[C7338] Change language', function (I) {
+Scenario('[C7339] Stay signed in checkbox', async function (I, users) {
     I.amOnPage('/');
-    I.wait(1);
-    I.click('Language');
-    I.waitForElement('~Languages');
-    I.click('Italiano');
-    I.waitForText('Nome utente');
-});
-
-Scenario('[C7339] Stay signed in checkbox', function (I) {
-    I.amOnPage('/');
-    I.wait(1);
-    I.seeCheckboxIsChecked('Stay signed in');
-    I.login();
+    I.setCookie({ name: 'locale', value: 'en_US' });
     I.refreshPage();
+    I.waitForFocus('#io-ox-login-username', 30);
+    I.fillField('User name', `${users[0].get('name')}@${users[0].context.id}`);
+    I.fillField('Password', `${users[0].get('password')}`);
+    I.seeCheckboxIsChecked('Stay signed in');
+    I.click('Sign in');
     I.waitForVisible('#io-ox-core');
+    let cookies = await I.grabCookie(),
+        secretCookie = cookies.filter(c => c.name.indexOf('open-xchange-secret') === 0)[0];
+
+    const hasProperty = (o, p) => Object.prototype.hasOwnProperty.call(o, p);
+    // webdriver sets "expiry" and puppeteer sets "expires"
+    const expiresWithSession = c => hasProperty(c, 'expires') ? c.expires < 0 : !hasProperty(c, 'expiry');
+
+    expect(expiresWithSession(secretCookie), 'browser session cookies do expire with session').to.equal(false);
+    I.refreshPage();
+    I.waitForVisible('#io-ox-topbar-dropdown-icon');
     I.logout();
 
-    I.waitForVisible('#io-ox-login-screen');
+    I.waitForFocus('#io-ox-login-username', 30);
     I.uncheckOption('Stay signed in');
     I.login();
+    I.waitForVisible('#io-ox-core');
+    cookies = await I.grabCookie();
+    secretCookie = cookies.filter(c => c.name.indexOf('open-xchange-secret') === 0)[0];
+    const sessionCookies = cookies.filter(expiresWithSession);
+
+    expect(expiresWithSession(secretCookie), 'browser session cookies do expire with session').to.equal(true);
+    // simulate a browser restart by removing all session cookies
+    for (let cookie of sessionCookies) {
+        I.clearCookie(cookie.name);
+    }
     I.refreshPage();
     I.waitForVisible('#io-ox-login-screen');
 });
@@ -75,5 +97,5 @@ Scenario('[C7340] Successful logout', function (I) {
 Scenario('[C163025] Screen gets blured when session times out', function (I) {
     I.login();
     I.clearCookie();
-    I.seeElement('.abs.unselectable.blur');
+    I.waitForElement('.abs.unselectable.blur');
 });

@@ -283,6 +283,7 @@ define('io.ox/core/wizard/registry', [
         };
 
         this.start = function (options) {
+            options = options || {};
             if (state !== 'stopped') {
                 console.error('Cannot start wizard, when it is in state: ', state);
                 return;

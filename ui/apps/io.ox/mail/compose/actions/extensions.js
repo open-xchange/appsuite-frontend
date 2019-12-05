@@ -13,14 +13,25 @@
  */
 
 define('io.ox/mail/compose/actions/extensions', [
-    'io.ox/mail/actions/attachmentQuota',
+    'io.ox/mail/actions/attachmentEmpty',
     'io.ox/mail/api',
     'io.ox/mail/compose/api',
-    'gettext!io.ox/mail'
-], function (attachmentQuota, mailAPI, composeAPI, gt) {
+    'gettext!io.ox/mail',
+    'settings!io.ox/mail',
+    'io.ox/core/yell'
+], function (attachmentEmpty, mailAPI, composeAPI, gt, settings, yell) {
     'use strict';
 
     var api = {};
+
+    api.emptyAttachmentCheck = function (baton) {
+        var files = baton.model.get('attachments').chain().pluck('originalFile').compact().value();
+        return attachmentEmpty.emptinessCheck(files).then(_.identity, function () {
+            baton.stopPropagation();
+            throw arguments;
+        });
+    };
+
 
     api.waitForPendingUploads = function (baton) {
         var deferreds = baton.model.get('attachments')
@@ -64,8 +75,36 @@ define('io.ox/mail/compose/actions/extensions', [
         return $.when.apply($, deferreds);
     };
 
-    api.publishMailAttachments = function (baton) {
-        return attachmentQuota.publishMailAttachmentsNotification(baton.model.get('attachments').toJSON());
+    api.checkForAutoEnabledDriveMail = function (opt) {
+        opt = _.extend({
+            yell: false,
+            restoreWindow: false,
+            stopPropagation: false,
+            removeQueue: false
+        }, opt);
+        return function (baton) {
+            if (settings.get('compose/shareAttachments/threshold', 0) > 0) {
+                var model = baton.model,
+                    sharedAttachments = model.get('sharedAttachments') || {},
+                    actualAttachmentSize = model.get('attachments').getSize();
+                if (actualAttachmentSize > settings.get('compose/shareAttachments/threshold', 0) && sharedAttachments.enabled === false) {
+                    //#. %1$s is usually "Drive Mail" (product name; might be customized)
+                    if (opt.yell) yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
+                    model.set('sharedAttachments', _.extend({}, sharedAttachments, { enabled: true }));
+
+                    if (opt.stopPropagation) baton.stopPropagation();
+
+                    if (opt.restoreWindow) {
+                        var win = baton.app.getWindow();
+                        win.idle().show();
+                    }
+
+                    if (opt.removeQueue) composeAPI.queue.remove(baton.model.get('id'));
+
+                    throw arguments;
+                }
+            }
+        };
     };
 
     api.attachmentMissingCheck = function (baton) {

@@ -46,14 +46,12 @@ Scenario('[C7486] Remove a file', async (I, users) => {
 
     // remove file widget from portal
     I.click('~testdocument.odt, Disable widget');
-    I.waitForVisible({ css: '.io-ox-dialog-popup' });
-    I.click('Delete', '.io-ox-dialog-popup');
+    I.waitForVisible({ css: '.modal-dialog' });
+    I.click('Delete', '.modal-dialog');
 
     // verify that the file widget is removed
     I.dontSee('~testdocument.odt');
     I.click('Customize this page');
     I.waitForText('Portal settings');
     I.dontSee('testdocument.odt');
-
-    I.logout();
 });

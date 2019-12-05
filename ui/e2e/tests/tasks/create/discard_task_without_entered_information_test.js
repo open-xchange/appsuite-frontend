@@ -23,15 +23,13 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7735] Discard Task without entered information', async (I) => {
+Scenario('[C7735] Discard Task without entered information', async (I, tasks) => {
 
     // 1. Create a new task an click Discard
 
     I.login('app=io.ox/tasks');
-    I.waitForVisible('[data-app-name="io.ox/tasks"]');
-
-    I.click('New');
-    I.waitForVisible('[data-app-name="io.ox/tasks/edit"]');
+    tasks.waitForApp();
+    tasks.newTask();
 
     I.click('Discard');
     I.waitForDetached('.io-ox-tasks-edit');

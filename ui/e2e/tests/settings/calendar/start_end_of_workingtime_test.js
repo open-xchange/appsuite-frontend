@@ -27,16 +27,14 @@ Scenario('[C7869] Set new start and end of working time', async function (I) {
     const workingStartTime = '7:00 AM';
     const workingEndTime = '9:00 AM';
 
-    I.login();
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings');
-    I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/calendar']);
+    I.waitForText('Start of working time');
     I.selectOption('#settings-startTime', workingStartTime);
     I.selectOption('#settings-endTime', workingEndTime);
     I.openApp('Calendar');
-    I.waitForElement('.working-time-border');
+    I.waitForVisible('.working-time-border');
 
-    //////////Check to see number of working hours
+    // Check to see number of working hours
     I.see('7 AM', '.time.in');
     I.see('8 AM', '.time.in');
     I.seeNumberOfElements('.time.in', 2);

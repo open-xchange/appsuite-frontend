@@ -11,7 +11,12 @@
  * @author Björn Köster <bjoern.koester@open-xchange.com>
  */
 
-define('io.ox/help/main', ['io.ox/backbone/views/modal', 'gettext!io.ox/help', 'less!io.ox/help/style'], function (ModalDialogView, gt) {
+define('io.ox/help/main', [
+    'io.ox/backbone/views/modal',
+    'gettext!io.ox/help',
+    'io.ox/core/capabilities',
+    'less!io.ox/help/style'
+], function (ModalDialogView, gt, capabilities) {
 
     'use strict';
 
@@ -25,7 +30,7 @@ define('io.ox/help/main', ['io.ox/backbone/views/modal', 'gettext!io.ox/help', '
             base = href.base || base;
             href = href.target || href;
         }
-        return base + '/l10n/' + ox.language + '/' + href;
+        return base + '/l10n/' + ox.locale + '/' + href;
     }
 
     function createInstance(options) {
@@ -111,8 +116,17 @@ define('io.ox/help/main', ['io.ox/backbone/views/modal', 'gettext!io.ox/help', '
                 // mark the iframes html as embedded class and modal to override the styles in the help less files
                 var classesToAdd = opt.modal ? 'embedded in-modal' : 'embedded',
                     contents = $('.inline-help-iframe').contents(),
-                    firstTabbable = contents.find('.navbar-nav > li > a:first'),
-                    lastTabbable = contents.find('body a:last');
+                    firstTabbable = contents.find('.oxhelp-content a:first'),
+                    lastTabbable = contents.find('.navbar-nav a:eq(2)'),
+                    caps = capabilities.getFlat(),
+                    navigation = contents.find('.oxhelp-navigation-top'),
+                    helpContent = contents.find('.oxhelp-content');
+
+                navigation.before(helpContent);
+
+                _(caps.enabled).each(function (cap) {
+                    classesToAdd += ' cap-' + cap;
+                });
 
                 contents.find('html')
                     .addClass(classesToAdd)

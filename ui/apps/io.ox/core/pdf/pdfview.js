@@ -30,6 +30,7 @@ define('io.ox/core/pdf/pdfview', [
             if (('deviceXDPI' in screen) && ('logicalXDPI' in screen) && (screen.logicalXDPI > 0)) {
                 // IE mobile or IE
                 devicePixelRatio = screen.deviceXDPI / screen.logicalXDPI;
+                /* eslint no-prototype-builtins: "off" */
             } else if (window.hasOwnProperty('devicePixelRatio')) {
                 // other devices
                 devicePixelRatio = window.devicePixelRatio;

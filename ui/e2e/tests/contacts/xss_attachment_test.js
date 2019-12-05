@@ -21,19 +21,18 @@ After(async function (users) {
     await users.removeAll();
 });
 
-// TODO wait for changes to the codecept helper for generic file attachments
-Scenario.skip('adds an malicious attachment to a contact', async function (I) {
+Scenario('adds an malicious attachment to a contact', async function (I, contacts) {
     const folder = await I.grabDefaultFolder('contacts');
     const { id } = await I.haveContact({ folder_id: folder, first_name: 'Evil', last_name: 'Knivel' });
-    await I.haveAttachment('contacts', { id, folder }, 'e2e/media/files/><img src=x onerror=alert(123)>');
+    await I.haveAttachment(
+        'contacts',
+        { id, folder },
+        { name: 'e2e/media/files/><img src=x onerror=alert(123)>', content: '<img src=x onerror=alert(123)>' }
+    );
 
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
-    I.waitForText('My address books');
-    I.doubleClick('~My address books');
-    I.click('~Contacts, 1 total'); // need to add "1 total" as this is part of the aria-label
-
-    I.click('#io-ox-refresh-icon');
-    I.waitForVisible('.attachments-container');
+    contacts.waitForApp();
+    contacts.selectContact('Knivel, Evil');
+    I.waitForVisible({ css: 'section[data-block="attachments"]' });
+    I.see('><img src=x onerror=alert(123)>');
 });

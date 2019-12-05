@@ -51,7 +51,7 @@
             // The constructor function for the new subclass is either defined by you
             // (the 'constructor' property in your `extend` definition), or defaulted
             // by us to simply call the parent's constructor.
-            if (protoProps && protoProps.hasOwnProperty('constructor')) {
+            if (protoProps && Object.prototype.hasOwnProperty.call(protoProps, 'constructor')) {
                 ExtendableClass = protoProps.constructor;
             } else {
                 ExtendableClass = function () {

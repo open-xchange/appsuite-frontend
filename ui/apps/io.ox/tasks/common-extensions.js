@@ -62,7 +62,7 @@ define('io.ox/tasks/common-extensions', [
                 var data = e.data.data,
                     finderId = $(e.target).val();
 
-                ox.load(['io.ox/core/tk/dialogs', 'io.ox/core/notifications']).done(function (dialogs, notifications) {
+                ox.load(['io.ox/backbone/views/modal', 'io.ox/core/notifications']).done(function (ModalDialog, notifications) {
 
                     var endTime = util.computePopupTime(finderId).endDate,
                         modifications = {
@@ -73,29 +73,22 @@ define('io.ox/tasks/common-extensions', [
 
                     //check if startDate is still valid with new endDate, if not, show dialog
                     if (data.start_time && data.start_time > endTime) {
-
-                        var popup = new dialogs.ModalDialog()
-                            .addButton('cancel', gt('Cancel'), 'cancel')
-                            .addPrimaryButton('change', gt('Adjust start date'), 'changechange');
-                        //text
-                        popup.getBody().append(
-                            $('<h4>').text(gt('Inconsistent dates')),
-                            $('<div>').text(
-                                //#. If the user changes the duedate of a task, it may be before the start date, which is not allowed
-                                //#. If this happens the user gets the option to change the start date so it matches the due date
-                                gt('The due date cannot be before start date. Adjust start date?')
-                            )
-                        );
-                        popup.show().done(function (action) {
-                            if (action === 'cancel') {
-                                notifications.yell('info', gt('Canceled'));
-                            } else {
+                        new ModalDialog({
+                            title: gt('Inconsistent dates'),
+                            //#. If the user changes the duedate of a task, it may be before the start date, which is not allowed
+                            //#. If this happens the user gets the option to change the start date so it matches the due date
+                            description: gt('The due date cannot be before start date. Adjust start date?')
+                        })
+                            .addCancelButton()
+                            .addButton({ label: gt('Adjust start date'), action: 'datechange' })
+                            .on('cancel', function () { notifications.yell('info', gt('Canceled')); })
+                            .on('datechange', function () {
                                 modifications.start_time = modifications.end_time;
                                 api.update(modifications).done(function () {
                                     notifications.yell('success', gt('Changed due date'));
                                 });
-                            }
-                        });
+                            })
+                            .open();
                     } else {
                         api.update(modifications).done(function () {
                             notifications.yell('success', gt('Changed due date'));

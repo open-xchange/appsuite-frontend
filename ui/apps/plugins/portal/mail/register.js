@@ -18,7 +18,7 @@ define('plugins/portal/mail/register', [
     'io.ox/mail/util',
     'io.ox/core/api/account',
     'io.ox/portal/widgets',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'gettext!plugins/portal',
     'io.ox/backbone/views/disposable',
     'io.ox/core/api/collection-loader',
@@ -26,7 +26,7 @@ define('plugins/portal/mail/register', [
     'io.ox/core/http',
     'settings!io.ox/mail',
     'less!plugins/portal/mail/style'
-], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader, capabilities, http, mailSettings) {
+], function (ext, api, util, accountAPI, portalWidgets, ModalDialog, gt, DisposableView, CollectionLoader, capabilities, http, mailSettings) {
 
     'use strict';
 
@@ -40,7 +40,7 @@ define('plugins/portal/mail/register', [
                     // no threads - no different subject
                     disable: { 'io.ox/mail/detail/header/row3': 'different-subject' }
                 });
-                popup.idle().append(view.render().expand().$el.addClass('no-padding'));
+                popup.idle().empty().append(view.render().expand().$el.addClass('no-padding'));
                 data = null;
                 // response to "remove" event
                 view.listenTo(view.model, 'remove', function () {
@@ -61,7 +61,6 @@ define('plugins/portal/mail/register', [
         },
 
         render: function (baton) {
-
             var self = this,
                 subject = this.model.get('subject') ? _.ellipsis(this.model.get('subject'), { max: 50 }) : gt('No subject'),
                 received = moment(this.model.get('received_date')).format('l');
@@ -75,8 +74,12 @@ define('plugins/portal/mail/register', [
                                 return $('<i class="fa fa-circle new-item accent">');
                             }
                         })(),
-                        $('<div class="date accent">').text(_.noI18n(received)),
-                        $('<div class="sender">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' ')
+                        // same markup as mail's common-extensions.from
+                        $('<div class="from">').attr('title', this.model.get('from')[0][1]).append(
+                            $('<span class="flags">'),
+                            $('<div class="person">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' ')
+                        ),
+                        $('<div class="date accent">').text(_.noI18n(received))
                     ),
                     $('<div class="row2">').append(
                         $('<div class="subject ellipsis">').text(subject),
@@ -251,61 +254,54 @@ define('plugins/portal/mail/register', [
         // disable widget till data is set by user
         model.set('candidate', true, { silent: true, validate: true });
 
-        var dialog = new dialogs.ModalDialog({ async: true }),
+        var dialog = new ModalDialog({ title: gt('Inbox'), async: true }),
             props = model.get('props') || {};
 
         accountAPI.all().then(function (accounts) {
-            var accId = _.uniqueId('form-control-label-'),
-                nameId = _.uniqueId('form-control-label-'),
-                options = _(accounts).map(function (acc) {
-                    return $('<option>').val(acc.id).text(acc.name).prop('selected', props.id && (props.id === String(acc.id)));
-                }), accSelect, nameInput;
+            var accSelect, nameInput, options = _(accounts).map(function (acc) {
+                return $('<option>').val(acc.id).text(acc.name).prop('selected', props.id && (props.id === String(acc.id)));
+            });
 
-            dialog.header($('<h4>').text(gt('Inbox')))
-                .build(function () {
-                    this.getContentNode().append(
-                        capabilities.has('multiple_mail_accounts') ?
-                            $('<div class="form-group">').append(
-                                $('<label>').attr('for', accId).text(gt('Account')),
-                                accSelect = $('<select class="form-control">').attr('id', accId).prop('disabled', options.length <= 1).append(options)
-                            ) : $(),
+            dialog.build(function () {
+                var accId = _.uniqueId('form-control-label-'),
+                    nameId = _.uniqueId('form-control-label-');
+                this.$body.append(
+                    capabilities.has('multiple_mail_accounts') ?
                         $('<div class="form-group">').append(
-                            $('<label>').attr('for', nameId).text(gt('Description')),
-                            nameInput = $('<input type="text" class="form-control">').attr('id', nameId).val(props.name || gt('Inbox')),
-                            $('<div class="alert alert-danger">').css('margin-top', '15px').hide()
-                        )
-                    );
-                })
-                .addPrimaryButton('save', gt('Save'), 'save')
-                .addButton('cancel', gt('Cancel'), 'cancel')
-                .show(function () {
-                    if (options.length > 1) {
-                        if (!props.name) {
-                            accSelect.on('change', function () {
-                                nameInput.val(gt('Inbox') + ' (' + $('option:selected', this).text() + ')');
-                            }).change();
-                        }
-                        // set focus
-                        accSelect.focus();
-                    } else {
-                        nameInput.focus();
+                            $('<label>').attr('for', accId).text(gt('Account')),
+                            accSelect = $('<select class="form-control">').attr('id', accId).prop('disabled', options.length <= 1).append(options)
+                        ) : $(),
+                    $('<div class="form-group">').append(
+                        $('<label>').attr('for', nameId).text(gt('Description')),
+                        nameInput = $('<input type="text" class="form-control">').attr('id', nameId).val(props.name || gt('Inbox')),
+                        $('<div class="alert alert-danger">').css('margin-top', '15px').hide()
+                    )
+                );
+            })
+            .addCancelButton()
+            .addButton({ label: gt('Save'), action: 'save' })
+            .on('show', function () {
+                if (options.length > 1) {
+                    if (!props.name) {
+                        accSelect.on('change', function () {
+                            nameInput.val(gt('Inbox') + ' (' + $('option:selected', this).text() + ')');
+                        }).change();
                     }
-                });
+                    // set focus
+                    accSelect.focus();
+                } else {
+                    nameInput.focus();
+                }
+            }).open();
 
             dialog.on('save', function () {
                 var title = $.trim(nameInput.val()),
                     widgetProps = { name: title };
-                if (options.length > 1) {
-                    widgetProps.id = accSelect.val();
-                }
-                model
-                    .set({ title: title, props: widgetProps })
-                    .unset('candidate');
+                if (options.length > 1) widgetProps.id = accSelect.val();
+                model.set({ title: title, props: widgetProps }).unset('candidate');
                 dialog.close();
             }).on('cancel', function () {
-                if (model.has('candidate') && _.isEmpty(model.attributes.props)) {
-                    view.removeWidget();
-                }
+                if (model.has('candidate') && _.isEmpty(model.attributes.props)) view.removeWidget();
             });
         });
 

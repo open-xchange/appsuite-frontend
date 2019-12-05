@@ -940,7 +940,7 @@ define('io.ox/core/folder/extensions', [
                 attributes: { role: 'presentation' },
                 tagName: 'li',
                 className: 'dropdown',
-                $toggle: $('<a href="#" class="dropdown-toggle"data-action="add-subfolder" data-toggle="dropdown">').append(
+                $toggle: $('<a href="#" data-action="add-subfolder" data-toggle="dropdown">').append(
                     gt('Add new calendar'),
                     $('<i class="fa fa-caret-down" aria-hidden="true">')
                 )
@@ -1083,7 +1083,11 @@ define('io.ox/core/folder/extensions', [
 
                 require(['io.ox/calendar/util'], function (util) {
                     var folderColor = util.getFolderColor(baton.data),
-                        target = folderLabel.find('.color-label');
+                        target = folderLabel.find('.color-label'),
+                        colorName = util.getColorName(folderColor);
+
+                    //#. Will be used as aria lable for the screen reader to tell the user which color/category the appointment within the calendar has.
+                    if (colorName) baton.view.addA11yDescription(gt('Category') + ': ' + colorName);
 
                     if (target.length === 0) target = $('<div class="color-label" aria-hidden="true">');
                     target.toggleClass('selected', app.folders.isSelected(baton.data.id));

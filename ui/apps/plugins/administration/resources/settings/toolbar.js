@@ -17,9 +17,9 @@ define('plugins/administration/resources/settings/toolbar', [
     'io.ox/backbone/views/actions/util',
     'plugins/administration/resources/settings/edit',
     'io.ox/core/api/resource',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/core'
-], function (ext, ToolbarView, actionsUtil, edit, resourceAPI, dialogs, gt) {
+], function (ext, ToolbarView, actionsUtil, edit, resourceAPI, ModalDialog, gt) {
 
     'use strict';
 
@@ -47,17 +47,12 @@ define('plugins/administration/resources/settings/toolbar', [
         collection: 'one',
         action: function (baton) {
             var id = baton.first().id, model = resourceAPI.getModel(id);
-            new dialogs.ModalDialog()
-            .text(
-                //#. %1$s is the resource name
-                gt('Do you really want to delete the resource "%1$s"? This action cannot be undone!', model.get('display_name'))
-            )
-            .addPrimaryButton('delete', gt('Delete resource'), 'delete')
-            .addButton('cancel', gt('Cancel'), 'cancel')
-            .on('delete', function () {
-                resourceAPI.remove(id);
-            })
-            .show();
+            //#. %1$s is the resource name
+            new ModalDialog({ title: gt('Do you really want to delete the resource "%1$s"? This action cannot be undone!', model.get('display_name')) })
+                .addCancelButton()
+                .addButton({ label: gt('Delete resource'), action: 'delete' })
+                .on('delete', function () { resourceAPI.remove(id); })
+                .open();
         }
     });
 

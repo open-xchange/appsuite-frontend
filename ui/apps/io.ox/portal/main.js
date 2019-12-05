@@ -18,6 +18,7 @@ define('io.ox/portal/main', [
     'io.ox/core/api/user',
     'io.ox/contacts/api',
     'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/portal/widgets',
     'io.ox/portal/util',
     'io.ox/portal/settings/pane',
@@ -27,7 +28,7 @@ define('io.ox/portal/main', [
     'settings!io.ox/portal',
     'settings!io.ox/core',
     'less!io.ox/portal/style'
-], function (ext, capabilities, userAPI, contactAPI, dialogs, widgets, util, settingsPane, WidgetSettingsView, yell, gt, settings, coreSettings) {
+], function (ext, capabilities, userAPI, contactAPI, dialogs, ModalDialog, widgets, util, settingsPane, WidgetSettingsView, yell, gt, settings, coreSettings) {
 
     'use strict';
 
@@ -718,7 +719,7 @@ define('io.ox/portal/main', [
             });
 
             // add side popup
-            sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer, .action.pointer', openSidePopup);
+            sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer, .action.pointer', _.debounce(openSidePopup, 100));
 
             // react on 'remove'
             win.nodes.main.on('click', '.disable-widget', function (e) {
@@ -728,27 +729,17 @@ define('io.ox/portal/main', [
                 if (model) {
                     // do we have custom data that might be lost?
                     if (!_.isEmpty(model.get('props'))) {
-                        var dialog = new dialogs.ModalDialog()
-                        .header($('<h4>').text(gt('Delete widget')))
-                        .append($('<span>').text(gt('Do you really want to delete this widget?')))
-                        .addPrimaryButton('delete',
-                            //#. Really delete portal widget - in contrast to "just disable"
-                            gt('Delete'), 'delete'
-                        )
-                        .addButton('cancel', gt('Cancel'), 'cancel');
+                        var dialog = new ModalDialog({ title: gt('Delete widget'), description: gt('Do you really want to delete this widget?') })
+                        .addCancelButton()
+                        //#. Really delete portal widget - in contrast to "just disable"
+                        .addButton({ label: gt('Delete'), action: 'delete' })
+                        .on('delete', function () { model.collection.remove(model); });
                         if (model.get('enabled')) {
-                            dialog.addAlternativeButton('disable',
-                                //#. Just disable portal widget - in contrast to delete
-                                gt('Just disable widget'), 'disable'
-                            );
+                            //#. Just disable portal widget - in contrast to delete
+                            dialog.addButton({ label: gt('Just disable widget'), action: 'disable', placement: 'left', className: 'btn-default' })
+                                .on('disable', function () { model.set('enabled', false, { validate: true }); });
                         }
-                        dialog.show().done(function (action) {
-                            if (action === 'delete') {
-                                model.collection.remove(model);
-                            } else if (action === 'disable') {
-                                model.set('enabled', false, { validate: true });
-                            }
-                        });
+                        dialog.open();
                     } else {
                         model.collection.remove(model);
                     }

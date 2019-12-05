@@ -26,7 +26,7 @@ define('io.ox/tasks/mobile-toolbar-actions', [
         'create': {
             prio: 'hi',
             mobile: 'hi',
-            title: gt('New'),
+            title: gt('New task'),
             icon: 'fa fa-plus',
             drawDisabled: true,
             ref: 'io.ox/tasks/actions/create'

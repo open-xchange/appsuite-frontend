@@ -1330,7 +1330,7 @@ Note: When reporting on conformance with the WCAG 2.x Success Criteria, they are
             <td>Web: The product is not intended to process legal or financial data directly, but it has an email component. After sending an email there is no way of reversing that process.</td>
         </tr>
         <tr>
-            <td><a href="https://www.w3.org/TR/WCAG21/#status-messages">3.3.4 Status Messages</a> (Level AA 2.1 only)<br>
+            <td><a href="https://www.w3.org/TR/WCAG21/#status-messages">4.1.3 Status Messages</a> (Level AA 2.1 only)<br>
                 <span>Also applies to:</span>
                 <ul>
                     <li>EN 301 549 Criteria

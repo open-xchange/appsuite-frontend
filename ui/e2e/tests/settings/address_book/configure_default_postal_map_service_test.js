@@ -26,7 +26,32 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C85624] Configure postal addresses map service', async (I) =>{
+Scenario('[C85624] Configure postal addresses map service', async (I, contacts) => {
+
+    const verifyMapType = async function (mapName, link, value) {
+        // Go back to settings and switch to other display style
+        I.openApp('Settings', { folder: 'virtual/settings/io.ox/contacts' });
+        I.waitForText('Link postal addresses with map service');
+        I.waitForText(mapName);
+        I.checkOption(`.io-ox-contacts-settings input[value="${value}"]`);
+        I.seeCheckboxIsChecked(`.io-ox-contacts-settings input[value="${value}"]`);
+
+        // Verify the displayed style
+        I.openApp('Address Book');
+        contacts.waitForApp();
+        contacts.selectContact('Bar, Foo');
+
+        if (mapName !== 'No link') {
+            I.waitForText('Open in ' + mapName);
+            const href = await I.grabAttributeFrom('.maps-service', 'href');
+            expect(Array.isArray(href) ? href[0] : href).to.include(link);
+        } else {
+            I.dontSee('Open in');
+        }
+    };
+
+    await I.haveSetting('io.ox/tours//server/disableTours', true);
+    await I.haveSetting('io.ox/tours//whatsNew/neverShowAgain', true);
     await I.haveContact({
         folder_id: `${await I.grabDefaultFolder('contacts')}`,
         last_name: 'Bar',
@@ -40,53 +65,10 @@ Scenario('[C85624] Configure postal addresses map service', async (I) =>{
 
     I.login();
 
-    await verifyMapType(I, 'Google Maps', 'google.com');
-
-    await verifyMapType(I, 'Open Street Map', 'openstreetmap.org');
-
-    await verifyMapType(I, 'No link');
-
-    I.logout();
+    I.say('Google Maps');
+    verifyMapType('Google Maps', 'google.com', 'google');
+    I.say('Open Street Map');
+    verifyMapType('Open Street Map', 'openstreetmap.org', 'osm');
+    I.say('No link');
+    await verifyMapType('No link', '', 'none');
 });
-
-async function verifyMapType(I, mapName, link) {
-    // Go back to settings and switch to other display style
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.waitForVisible('#topbar-settings-dropdown');
-    I.click('Settings');
-
-    // Select address book settings
-    I.waitForText('Address Book', 5, '.folder-node');
-    I.selectFolder('Address Book');
-    I.waitForText('Address Book', 5, '[data-app-name="io.ox/settings"]');
-
-    I.see('Link postal addresses with map service');
-    I.waitForText(mapName);
-    I.click(mapName);
-    I.waitForVisible('.fa-refresh.fa-spin');
-    I.waitForDetached('.fa-refresh.fa-spin');
-
-    // Verify the displayed style
-    I.openApp('Address Book');
-    I.waitForVisible('[data-app-name="io.ox/contacts"]');
-
-    I.refreshPage();
-    I.waitForVisible('[data-app-name="io.ox/contacts"]');
-
-    I.waitForVisible('.fa-refresh.fa-spin');
-    I.waitForDetached('.fa-refresh.fa-spin');
-
-    I.selectFolder('Contacts');
-
-    I.waitForElement('~Bar, Foo', 5);
-    I.click('~Bar, Foo');
-
-    I.waitForText('Home Address', 5, '.contact-detail');
-
-    if (mapName !== 'No link') {
-        I.waitForText('Open in ' + mapName);
-        expect((await I.grabAttributeFrom('a.maps-service', 'href')).join()).to.include(link);
-    } else {
-        I.dontSee('Open in');
-    }
-}

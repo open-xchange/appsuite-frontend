@@ -14,10 +14,10 @@
 define('io.ox/mail/compose/checks', [
     'io.ox/mail/api',
     'io.ox/mail/util',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (mailAPI, util, dialogs, settings, gt) {
+], function (mailAPI, util, ModalDialog, settings, gt) {
 
     function getSender(data) {
         if (!data) return null;
@@ -71,33 +71,23 @@ define('io.ox/mail/compose/checks', [
                 list = '<b>' + _.escape(getList(original.toJSON())) + '</b>',
                 address = '<b>' + _.escape(util.getDisplayName(sender, { showMailAddress: true })) + '</b>';
 
-            new dialogs.ModalDialog({ easyOut: false })
-                .header(
-                    $('<h4>').text(gt('Reply to mailing list'))
-                )
-                .append(
-                    $('<p>').html(
-                        //#. %1$d is an email addresses
-                        list ? gt('This message was sent via the mailing list %1$s.', list) : gt('This message was sent via a mailing list.')
-                    ),
-                    $('<p>').html(
-                        //#. %1$d is an email addresses
-                        gt('Do you really want to reply all or just %1$s?', address)
-                    )
-                )
-                .addAlternativeButton('cancel', gt('Cancel'))
-                .addPrimaryButton('reply-all', gt('Reply all'))
-                .addPrimaryButton('reply', gt('Reply to sender'))
-                .on('reply-all', function () {
-                    def.resolve('replyall');
-                })
-                .on('reply', function () {
-                    def.resolve('reply');
-                })
-                .on('cancel', function () {
-                    def.reject();
-                })
-                .show();
+            new ModalDialog({
+                title: gt('Reply to mailing list'),
+                easyOut: false,
+                description: [
+                    //#. %1$d is an email addresses
+                    $('<p>').html(list ? gt('This message was sent via the mailing list %1$s.', list) : gt('This message was sent via a mailing list.')),
+                    //#. %1$d is an email addresses
+                    $('<p>').html(gt('Do you really want to reply all or just %1$s?', address))
+                ]
+            })
+                .addCancelButton({ left: true })
+                .addButton({ label: gt('Reply all'), action: 'reply-all' })
+                .addButton({ label: gt('Reply to sender'), action: 'reply' })
+                .on('reply-all', function () { def.resolve('replyall'); })
+                .on('reply', function () { def.resolve('reply'); })
+                .on('cancel', function () { def.reject(); })
+                .open();
 
             return def;
         }

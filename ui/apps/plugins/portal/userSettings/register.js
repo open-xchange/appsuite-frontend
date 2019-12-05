@@ -44,7 +44,7 @@ define('plugins/portal/userSettings/register', [
 
     function changePassword() {
 
-        require(['io.ox/core/tk/dialogs', 'io.ox/core/http', 'io.ox/core/yell'], function (dialogs, http, yell) {
+        require(['io.ox/backbone/views/modal', 'io.ox/core/http', 'io.ox/core/yell'], function (ModalDialog, http, yell) {
 
             var isGuest = capabilities.has('guest'),
                 oldPass, oldScore, newPass, newPass2, strengthBar, strengthLabel, strengthBarWrapper,
@@ -67,8 +67,7 @@ define('plugins/portal/userSettings/register', [
             if (isGuest) {
                 buttonText = settings.get('password/emptyCurrent') ? gt('Add login password') : gt('Change login password');
             }
-            new dialogs.ModalDialog({ async: true, width: 500 })
-            .header($('<h4>').text(isGuest ? buttonText : gt('Change password')))
+            new ModalDialog({ async: true, width: 500, title: isGuest ? buttonText : gt('Change password') })
             .build(function () {
                 //#. %1$s are some example characters
                 //#, c-format
@@ -97,7 +96,7 @@ define('plugins/portal/userSettings/register', [
                 var currentPasswordString = gt('Your current password'),
                     guid = _.uniqueId('form-control-label-');
 
-                this.getContentNode().append(
+                this.$body.append(
                     $('<label class="password-change-label">').attr('for', guid).text(currentPasswordString).toggle(!(isGuest && settings.get('password/emptyCurrent'))),
                     oldPass = $('<input type="password" class="form-control current-password">').attr({ 'id': guid, autocomplete: 'new-password' }).toggle(!(isGuest && settings.get('password/emptyCurrent'))),
 
@@ -115,16 +114,16 @@ define('plugins/portal/userSettings/register', [
                 if (showStrength) newPass.on('keyup', updateStrength);
 
             })
-
-            .addPrimaryButton('change', isGuest ? buttonText : gt('Change password and sign out'))
-            .addButton('cancel', gt('Cancel'))
-            .on('change', function (e, data, dialog) {
+            .addCancelButton()
+            .addButton({ label: buttonText, action: 'change' })
+            .on('change', function () {
 
                 // we change empty string to null to be consistent
-                var node = dialog.getContentNode(),
-                    newPassword1 = newPass.val().trim() === '' ? null : newPass.val(),
-                    newPassword2 = newPass2.val().trim() === '' ? null : newPass2.val(),
-                    oldPassword = oldPass.val().trim() === '' ? null : oldPass.val();
+                var dialog = this,
+                    node = dialog.$body,
+                    newPassword1 = newPass.val() === '' ? null : newPass.val(),
+                    newPassword2 = newPass2.val() === '' ? null : newPass2.val(),
+                    oldPassword = oldPass.val() === '' ? null : oldPass.val();
 
                 // current state: middlware allows empty passwords for guests ONLY
                 if (!isGuest && newPassword1 === null) {
@@ -168,9 +167,9 @@ define('plugins/portal/userSettings/register', [
                     dialog = null;
                 });
             })
-            .show(function () {
+            .on('show', function () {
                 oldPass.focus();
-            });
+            }).open();
 
             //returns the strength of a password
             function strengthtest(pw) {
@@ -234,7 +233,7 @@ define('plugins/portal/userSettings/register', [
             if (internalUserEdit) {
                 content.append(
                     // user data
-                    $('<div class="action" role="button" tabindex="0">').text(gt('My contact data'))
+                    $('<button class="action" type="button">').text(gt('My contact data'))
                     .on('click keypress', { fn: changeUserData }, keyClickFilter)
 
                 );
@@ -243,7 +242,7 @@ define('plugins/portal/userSettings/register', [
             // check for capability
             if (passwordEdit) {
                 content.append(
-                    $('<div class="action" role="button" tabindex="0">').text(gt('My password'))
+                    $('<button class="action" type="button">').text(gt('My password'))
                     .on('click keypress', { fn: changePassword }, keyClickFilter)
                 );
             }

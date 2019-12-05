@@ -90,8 +90,7 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: [
                             'moment/moment.js',
-                            'moment-timezone/builds/moment-timezone-with-data.js',
-                            '@open-xchange/moment-interval/moment-interval.js'
+                            'moment-timezone/builds/moment-timezone-with-data.js'
                         ],
                         cwd: 'node_modules',
                         dest: 'build/static/3rd.party/moment'
@@ -124,9 +123,34 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
+                        flatten: true,
+                        src: ['requirejs/require.js'],
+                        cwd: 'node_modules/',
+                        dest: 'build/static/3rd.party/requirejs'
+                    },
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['crypto-js/crypto-js.js'],
+                        cwd: 'node_modules/',
+                        dest: 'build/static/3rd.party/crypto-js'
+                    },
+                    {
+                        expand: true,
                         src: ['unorm.js'],
                         cwd: 'node_modules/unorm/lib/',
                         dest: 'build/static/3rd.party/unorm'
+                    },
+                    {
+                        expand: true,
+                        src: [
+                            // see io.ox/core/locale/meta for the list of locales
+                            '{ca,cs,da,de,de-AT,de-CH,en,en-GB,en-AU,en-CA,en-DE,en-IE,en-NZ,en-SG,en-ZA,' +
+                            'es,es-MX,es-AR,es-BO,es-CL,es-CO,es-CR,es-DO,es-EC,es-SV,es-GT,es-HN,es-NI,es-PA,es-PY,es-PE,es-PR,es-US,' +
+                            'fi,fr,fr-CA,fr-CH,fr-BE,hu,it,it-CH,lv,nl,nl-BE,nb,pl,pt,ru,ro,sk,sv,tr,ja,zh}/ca-gregorian.json'
+                        ],
+                        cwd: 'node_modules/cldr-dates-modern/main/',
+                        dest: 'build/apps/3rd.party/cldr-dates'
                     }
                 ]
             }

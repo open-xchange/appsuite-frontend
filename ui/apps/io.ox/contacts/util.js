@@ -80,7 +80,7 @@ define('io.ox/contacts/util', [
         var copy = obj;
         if (htmlOutput === true) {
             copy = {};
-            _(['title', 'first_name', 'last_name', 'display_name', 'cn']).each(function (id) {
+            _(['title', 'first_name', 'last_name', 'company', 'display_name', 'cn']).each(function (id) {
                 var text = $.trim(obj[id]);
                 if (!text) {
                     // yomi as fallback
@@ -88,6 +88,8 @@ define('io.ox/contacts/util', [
                         text = $.trim(obj.yomiLastName);
                     } else if (id === 'first_name' && $.trim(obj.yomiFirstName)) {
                         text = $.trim(obj.yomiFirstName);
+                    } else if (id === 'company' && $.trim(obj.yomiCompany)) {
+                        text = $.trim(obj.yomiCompany);
                     } else {
                         return;
                     }
@@ -124,6 +126,7 @@ define('io.ox/contacts/util', [
             var first_name = $.trim(obj.first_name),
                 last_name = $.trim(obj.last_name),
                 display_name = $.trim(obj.display_name || obj.cn),
+                company = $.trim(obj.company),
                 title = $.trim(obj.title);
 
             // combine title, last_name, and first_name
@@ -166,7 +169,10 @@ define('io.ox/contacts/util', [
             // fallback #2: just first_name
             if (first_name) return single(1, first_name);
 
-            // fallback #3: use existing display name?
+            // fallback #3: use existing company?
+            if (company) return single(1, company);
+
+            // fallback #4: use existing display name?
             if (display_name) return single(4, util.unescapeDisplayName(display_name));
 
             return { format: '', params: [] };
@@ -175,6 +181,11 @@ define('io.ox/contacts/util', [
         getFullName: function (obj, htmlOutput) {
             var fmt = getFullNameFormatHelper(obj, false, htmlOutput);
             return gt.format(fmt.format, fmt.params);
+        },
+
+        // this gets overridden in case of ja_JP
+        getFullNameWithFurigana: function (data) {
+            return this.getFullName(data, true);
         },
 
         getDisplayName: function (obj) {
@@ -318,17 +329,31 @@ define('io.ox/contacts/util', [
 
         // little helper to get birthdays
         // @birthday is either a timestamp or a momentjs instance
-        getBirthday: function (birthday) {
+        getBirthday: function (birthday, withAge) {
             // ensure instance of moment
             birthday = moment.utc(birthday);
             // Year 1 and year 1604 are  special for birthdays without year
             // therefore, return full date if year is not 1
-            if (birthday.year() > 1 && birthday.year() !== 1604) return birthday.format('l');
+            if (birthday.year() > 1 && birthday.year() !== 1604) {
+                return birthday.format('l') +
+                    //#. %1$d is age in years (number)
+                    (withAge ? ' (' + gt('Age: %1$d', moment().diff(birthday, 'years')) + ')' : '');
+            }
             // get localized format without the year otherwise
-            // i.e. remove dashes and slashes but keep dots
-            return birthday.format(
-                moment.localeData().longDateFormat('l').replace(/[/-]*Y+[/-]*/, '')
-            );
+            return birthday.formatCLDR('Md');
+        },
+
+        getSummaryBusiness: function (data) {
+            var array = [data.position, data.company, data.department];
+            // pretty sure we don't **really** need the company when we are in
+            // global address book; let's see which bug report will come around.
+            if (String(data.folder_id) === '6') array.splice(1, 1);
+            return array.map($.trim).filter(Boolean).join(', ');
+        },
+
+        getSummaryLocation: function (data) {
+            var list = data.city_business ? [data.city_business, data.country_business] : [data.city_home, data.country_home];
+            return list.map($.trim).filter(Boolean).join(', ');
         },
 
         // @arg is either a string (image1_url) or an object with image1_url

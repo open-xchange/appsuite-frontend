@@ -31,45 +31,39 @@ Scenario('[C7866] Set all-day appointments to be marked as free', async function
 
     await I.haveSetting('io.ox/calendar//markFulltimeAppointmentsAsFree', false);
     I.login(['app=io.ox/calendar&perspective=week:week']);
-
-    // Make sure setting is set correctly
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings');
-    I.waitForVisible('div[data-point="io.ox/core/settings/detail/view"]');
-    I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
+    I.openApp('Settings', { folder: 'virtual/settings/io.ox/calendar' });
     I.waitForElement('.alarms-link-view .btn-link');
     I.dontSeeCheckboxIsChecked('Mark all day appointments as free');
 
     // Create all day appointment and dont mark as free
     I.openApp('Calendar');
-    I.clickToolbar('New');
-    I.waitForText('Subject');
+    I.clickToolbar('New appointment');
+    I.waitForText('Subject', 30, '.io-ox-calendar-edit');
     I.fillField('summary', reservedappointmentsubject);
     I.fillField('location', location);
-    I.click('All day');
+    I.checkOption('All day');
     I.fillField('description', description);
     I.dontSeeCheckboxIsChecked('transp');
-    I.click('Create');
-    I.waitForElement('div.appointment.reserved');
+    I.click('Create', '.io-ox-calendar-edit-window');
+    I.waitForElement('.appointment.reserved');
 
     // Change setting
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings');
-    I.waitForVisible('div[data-point="io.ox/calendar/settings/detail/view"]');
+    I.openApp('Settings', { folder: 'virtual/settings/io.ox/calendar' });
+    I.waitForVisible('.io-ox-calendar-settings');
     I.waitForElement('.alarms-link-view .btn-link');
-    I.click('Mark all day appointments as free');
+    I.click('Mark all day appointments as free', '.io-ox-calendar-settings');
 
     // Create new all day appointment and see if it is marked as free
     I.openApp('Calendar');
     I.waitForVisible('.weekview-toolbar');
     // Have to click on today button for setting to work
-    I.click('button.weekday.today');
-    I.waitForText('Subject');
+    I.click('.weekday.today', '.weekview-toolbar');
+    I.waitForText('Subject', 30, '.io-ox-calendar-edit');
     I.fillField('summary', freeappointmentsubject);
     I.fillField('location', location);
     I.fillField('description', description);
     I.seeCheckboxIsChecked('allDay');
     I.seeCheckboxIsChecked('transp');
     I.click('Create');
-    I.waitForElement('div.appointment.free');
+    I.waitForElement('.appointment.free');
 });

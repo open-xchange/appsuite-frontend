@@ -40,12 +40,18 @@ deploy documentation:
     - find /var/www/documentation -user gitlab-runner -exec chgrp www-data '{}' \;
   dependencies:
     - build documentation
+  needs:
+    - build documentation
   tags:
     - shell
     - documentation
   allow_failure: true
   only:
-    - develop
-    - master
-    - /^master-.*$/
-    - /^release-.*$/
+    refs:
+      - develop
+      - master
+      - /^master-.*$/
+      - /^release-.*$/
+    changes:
+      - documentation/**/*
+      - ui/package.json

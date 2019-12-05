@@ -37,19 +37,31 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 panelHeading = this.find('.sidebar-panel-heading'),
                 panelBody = this.find('.sidebar-panel-body'),
                 versionCounter = 1,
-                table;
+                isUpToDate = _.contains(_.pluck(versions, 'version'), model.get('version')),
+                tableNode;
 
-            function drawAllVersions(allVersions) {
-                _.chain(allVersions)
+            function getVersionsTable() {
+
+                var table = $('<table>').addClass('versiontable table').attr('data-latest-version', (versions.length > 0) && _.last(versions).version).append(
+                    $('<caption>').addClass('sr-only').text(gt('File version table, the first row represents the current version.')),
+                    $('<thead>').addClass('sr-only').append(
+                        $('<tr>').append(
+                            $('<th>').text(gt('File'))
+                        )
+                    )
+                );
+
+                _.chain(versions)
                 // avoid unnecessary model changes / change events
                 .clone(versionSorter)
                 .sort(versionSorter)
                 .each(function (version) {
                     var entryRow = $('<tr class="version">');
-                    Ext.point(POINT + '/version').invoke('draw', entryRow, Ext.Baton({ data: version, viewerEvents: viewerEvents, isViewer: isViewer, latestVersion: versionCounter === allVersions.length }));
+                    Ext.point(POINT + '/version').invoke('draw', entryRow, Ext.Baton({ data: version, viewerEvents: viewerEvents, isViewer: isViewer, latestVersion: versionCounter === versions.length }));
                     table.append(entryRow);
                     versionCounter++;
                 });
+                return table;
             }
 
             function versionSorter(version1, version2) {
@@ -62,22 +74,20 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 return version2.last_modified - version1.last_modified;
             }
 
-            panelBody.empty();
-            if (!model || !_.isArray(versions)) { return; }
+            if (!model || !_.isArray(versions)) {
+                panelBody.empty();
+                return;
+            }
 
-            table = $('<table>').addClass('versiontable table').attr('data-latest-version', (versions.length > 0) && _.last(versions).version).append(
-                $('<caption>').addClass('sr-only').text(gt('File version table, the first row represents the current version.')),
-                $('<thead>').addClass('sr-only').append(
-                    $('<tr>').append(
-                        $('<th>').text(gt('File'))
-                    )
-                )
-            );
+            var def = isUpToDate ? $.when(versions) : FilesAPI.versions.load(model.toJSON(), { cache: false });
 
-            drawAllVersions(versions);
-
-            panelHeading.idle();
-            panelBody.append(table);
+            return def.then(function (allVersions) {
+                versions = allVersions;
+                tableNode = getVersionsTable();
+                panelHeading.idle();
+                panelBody.empty();
+                panelBody.append(tableNode);
+            });
         }
     });
 

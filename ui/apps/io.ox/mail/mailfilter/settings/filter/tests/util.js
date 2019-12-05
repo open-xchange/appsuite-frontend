@@ -61,7 +61,9 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
     });
 
     var drawDeleteButton = function (type) {
-        return $('<a href="#" class="remove" tabindex="0">').attr('data-action', 'remove-' + type).append($('<i class="fa fa-trash-o" aria-hidden="true">'));
+        return $('<button type="button" class="btn btn-link remove">')
+            .attr({ 'data-action': 'remove-' + type, 'aria-label': gt('Remove') })
+            .append($('<i class="fa fa-trash-o" aria-hidden="true">').attr('title', gt('Remove')));
     };
 
     var drawCondition = function (o) {

@@ -20,30 +20,29 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Create new appointment and check display in portal widget', async function (I) {
+Scenario('Create new appointment and check display in portal widget', async function (I, calendar) {
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
-
-    // make ssure there are no upcommig appointments
+    calendar.waitForApp();
+    I.selectFolder('Calendar');
     I.clickToolbar('View');
-    I.click('List');
-    I.dontSeeElement('[data-page-id="io.ox/calendar/list"] li.appointment');
+    I.click('List', '.dropdown.open .dropdown-menu');
+    I.dontSeeElement('.appointment');
 
     // make sure portal widget is empty
     I.openApp('Portal');
     I.waitForVisible('.io-ox-portal [data-widget-id="calendar_0"]');
-    I.see('You don\'t have any appointments in the near future.', '[data-widget-id="calendar_0"] li.line');
+    I.see('You don\'t have any appointments in the near future.', { css: '[data-widget-id="calendar_0"] li.line' });
 
     I.openApp('Calendar');
     I.clickToolbar('View');
-    I.click('List');
+    I.click('List', '.dropdown.open .dropdown-menu');
 
     // create in List view
     I.selectFolder('Calendar');
     I.clickToolbar('View');
-    I.click('List');
-    I.clickToolbar('New');
+    I.click('List', '.dropdown.open .dropdown-menu');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'test portal widget');
@@ -64,19 +63,19 @@ Scenario('Create new appointment and check display in portal widget', async func
     // check in portal
     I.openApp('Portal');
     I.waitForVisible('.io-ox-portal [data-widget-id="calendar_0"] li.item div');
-    I.see('test portal widget', '[data-widget-id="calendar_0"] li.item div');
+    I.see('test portal widget', { css: '[data-widget-id="calendar_0"] li.item div' });
 
     // create a second appointment
     I.openApp('Calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
     I.clickToolbar('View');
-    I.click('List');
+    I.click('List', '.dropdown.open .dropdown-menu');
 
     // create in List view
     I.selectFolder('Calendar');
     I.clickToolbar('View');
-    I.click('List');
-    I.clickToolbar('New');
+    I.click('List', '.dropdown.open .dropdown-menu');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'second test portal widget ');
@@ -90,10 +89,7 @@ Scenario('Create new appointment and check display in portal widget', async func
 
     // check in week view
     I.clickToolbar('View');
-    I.click('Week');
+    I.click('Week', '.dropdown.open .dropdown-menu');
     I.waitForVisible('.weekview-container.week button.weekday.today');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 2);
-
-    I.logout();
-
 });

@@ -17,12 +17,12 @@ define('io.ox/calendar/util', [
     'io.ox/core/api/group',
     'io.ox/core/folder/api',
     'io.ox/core/util',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'gettext!io.ox/calendar',
     'io.ox/core/a11y'
-], function (userAPI, contactAPI, groupAPI, folderAPI, util, dialogs, settings, coreSettings, gt, a11y) {
+], function (userAPI, contactAPI, groupAPI, folderAPI, util, ModalDialog, settings, coreSettings, gt, a11y) {
 
     'use strict';
 
@@ -267,7 +267,7 @@ define('io.ox/calendar/util', [
                     //#, c-format
                     return gt('%1$s to %2$s', startDate.format(fmtstr), endDate.format(fmtstr));
                 }
-                return startDate.formatInterval(endDate, fmtstr);
+                return startDate.formatInterval(endDate, 'yMEd', { alwaysFullDate: true });
             }
             return '';
         },
@@ -680,7 +680,7 @@ define('io.ox/calendar/util', [
         getRecurrenceEnd: function (data) {
             var str;
             if (data.until) {
-                str = gt('The series ends on %1$s.', moment(data.until).utc().format('l'));
+                str = gt('The series ends on %1$s.', data.startDate.tzid ? moment(data.until).utc().format('l') : moment(data.until).format('l'));
             } else if (data.occurrences) {
                 var n = data.occurrences;
                 str = gt.format(gt.ngettext('The series ends after one occurrence.', 'The series ends after %1$d occurences.', n), n);
@@ -1097,6 +1097,13 @@ define('io.ox/calendar/util', [
             return color;
         },
 
+        getColorName: function (color) {
+            if (!color) return gt('None');
+            var colorObj = _.findWhere(this.colors, { value: color });
+            if (colorObj) return colorObj.label;
+            return gt('Unknown');
+        },
+
         getDeepLink: function (data) {
             return [
                 ox.abs,
@@ -1146,37 +1153,40 @@ define('io.ox/calendar/util', [
             });
         },
 
-        getRecurrenceEditDialog: function () {
-            return new dialogs.ModalDialog()
-                    .text(gt('Do you want to edit the whole series or just this appointment within the series?'))
-                    .addPrimaryButton('series', gt('Series'), 'series')
-                    .addButton('appointment', gt('Appointment'), 'appointment')
-                    .addButton('cancel', gt('Cancel'), 'cancel');
-        },
-
         showRecurrenceDialog: function (model, options) {
             if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
             if (model.get('recurrenceId')) {
                 options = options || {};
-                var dialog = new dialogs.ModalDialog();
-                // first occurence
+                var text,
+                    teaser = gt('This appointment is part of a series.'),
+                    dialog = new ModalDialog({
+                        width: 600
+                    }).addCancelButton({ left: true });
+                if (!options.dontAllowExceptions) dialog.addButton({ label: gt('Edit this appointment'), action: 'appointment', className: 'btn-default' });
+
                 if (model.hasFlag('first_occurrence')) {
                     if (options.dontAllowExceptions) return $.when('series');
-                    dialog.text(gt('Do you want to edit the whole series or just this appointment within the series?'));
-                    dialog.addPrimaryButton('series', gt('Series'), 'series');
+                    text = gt('Do you want to edit the whole series or just this appointment within the series?');
+                    dialog.addButton({ label: gt('Edit series'), action: 'series' });
                 } else if (model.hasFlag('last_occurrence') && !options.allowEditOnLastOccurence) {
                     return $.when('appointment');
                 } else if (options.dontAllowExceptions) {
-                    dialog.text(gt('Do you want to edit this and all future appointments or the whole series?'));
-                    dialog.addPrimaryButton('thisandfuture', gt('All future appointments'), 'thisandfuture');
-                    dialog.addPrimaryButton('series', gt('Series'), 'series');
+                    text = gt('Do you want to edit this and all future appointments or the whole series?');
+                    dialog.addButton({ label: gt('Series'), action: 'series', className: 'btn-default' });
+                    dialog.addButton({ label: gt('Edit all future appointments'), action: 'thisandfuture' });
                 } else {
-                    dialog.text(gt('Do you want to edit this and all future appointments or just this appointment within the series?'));
-                    dialog.addPrimaryButton('thisandfuture', gt('All future appointments'), 'thisandfuture');
+                    text = gt('Do you want to edit this and all future appointments or just this appointment within the series?');
+                    dialog.addButton({ label: gt('Edit all future appointments'), action: 'thisandfuture' });
                 }
-                if (!options.dontAllowExceptions) dialog.addButton('appointment', gt('This appointment'), 'appointment');
-                return dialog.addAlternativeButton('cancel', gt('Cancel'), 'cancel')
-                    .show();
+                dialog.build(function () {
+                    this.$title.text(gt('Edit appointment'));
+                    this.$body.append(teaser, '\u00a0', text);
+                }).open();
+                var def = $.Deferred();
+                dialog.on('action', function (value) {
+                    def.resolve(value);
+                });
+                return def;
             }
             return $.when('appointment');
         },
@@ -1191,12 +1201,12 @@ define('io.ox/calendar/util', [
                 property: []
             };
 
-            if (that.hasFlag(obj, 'tentative')) icons.type.push($('<span class="tentative-flag">').attr('title', gt('Tentative')).append($('<i class="fa fa-question-circle" aria-hidden="true">')));
-            if (that.hasFlag(obj, 'private')) icons.type.push($('<span class="private-flag">').attr('title', gt('Private')).append($('<i class="fa fa-user-circle" aria-hidden="true">')));
-            if (that.hasFlag(obj, 'confidential')) icons.type.push($('<span class="confidential-flag">').attr('title', gt('Confidential')).append($('<i class="fa fa-lock" aria-hidden="true">')));
-            if (this.hasFlag(obj, 'series') || this.hasFlag(obj, 'overridden')) icons.property.push($('<span class="recurrence-flag">').attr('title', gt('Recurrence')).append($('<i class="fa fa-repeat" aria-hidden="true">')));
-            if (this.hasFlag(obj, 'scheduled')) icons.property.push($('<span class="participants-flag">').attr('title', gt('Participants')).append($('<i class="fa fa-user-o" aria-hidden="true">')));
-            if (this.hasFlag(obj, 'attachments')) icons.property.push($('<span class="attachments-flag">').attr('title', gt('Attachments')).append($('<i class="fa fa-paperclip" aria-hidden="true">')));
+            if (that.hasFlag(obj, 'tentative')) icons.type.push($('<span class="tentative-flag">').attr('aria-label', gt('Tentative')).append($('<i class="fa fa-question-circle" aria-hidden="true">').attr('title', gt('Tentative'))));
+            if (that.hasFlag(obj, 'private')) icons.type.push($('<span class="private-flag">').attr('aria-label', gt('Appointment is private')).append($('<i class="fa fa-user-circle" aria-hidden="true">').attr('title', gt('Appointment is private'))));
+            if (that.hasFlag(obj, 'confidential')) icons.type.push($('<span class="confidential-flag">').attr('aria-label', gt('Appointment is confidential')).append($('<i class="fa fa-lock" aria-hidden="true">').attr('title', gt('Appointment is confidential'))));
+            if (this.hasFlag(obj, 'series') || this.hasFlag(obj, 'overridden')) icons.property.push($('<span class="recurrence-flag">').attr('aria-label', gt('Appointment is part of a series')).append($('<i class="fa fa-repeat" aria-hidden="true">').attr('title', gt('Appointment is part of a series'))));
+            if (this.hasFlag(obj, 'scheduled')) icons.property.push($('<span class="participants-flag">').attr('aria-label', gt('Appointment has participants')).append($('<i class="fa fa-user-o" aria-hidden="true">').attr('title', gt('Appointment has participants'))));
+            if (this.hasFlag(obj, 'attachments')) icons.property.push($('<span class="attachments-flag">').attr('aria-label', gt('Appointment has attachments')).append($('<i class="fa fa-paperclip" aria-hidden="true">').attr('title', gt('Appointment has attachments'))));
             return icons;
         },
 
@@ -1394,9 +1404,9 @@ define('io.ox/calendar/util', [
         cleanupAttendees: function (attendees) {
             // clean up attendees (remove confirmation status comments etc)
             return _(attendees).map(function (attendee) {
-                var temp = _(attendee).pick('cn', 'cuType', 'email', 'uri', 'entity', 'contact');
+                var temp = _(attendee).pick('cn', 'cuType', 'email', 'uri', 'entity', 'contact', 'resource');
                 // resources are always set to accepted
-                if (temp.cn === 'RESOURCE') {
+                if (temp.cuType === 'RESOURCE') {
                     temp.partStat = 'ACCEPTED';
                     if (attendee.comment) temp.comment = attendee.comment;
                 } else {

@@ -58,9 +58,9 @@ Scenario('[C7787] Add filter rule', async function (I, users) {
     I.dontSee('Please define at least one action.');
 
     // action and all components visible?
-    I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="0"]');
+    I.seeElement('.io-ox-mailfilter-edit [data-action-id="0"]');
     I.see('Redirect to');
-    I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="0"] a.remove');
+    I.seeElement('.io-ox-mailfilter-edit [data-action-id="0"] button.remove');
 
     // add condition
     I.click('Add condition');
@@ -73,13 +73,13 @@ Scenario('[C7787] Add filter rule', async function (I, users) {
     // condition and all components visible?
     I.see('Subject', '.list-title');
     I.see('Contains', '.dropdown-label');
-    I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="0"] .row.has-error');
-    I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"]');
-    I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="0"] a.remove');
+    I.dontSeeElement('.io-ox-mailfilter-edit [data-test-id="0"] .row.has-error');
+    I.seeElement('.modal button[data-action="save"]');
+    I.seeElement('.modal [data-action-id="0"] button.remove');
     // save the form
     I.click('Save');
 
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.logout();
 
@@ -95,7 +95,7 @@ Scenario('[C7787] Add filter rule', async function (I, users) {
     I.seeInField({ css: 'textarea.plain-text' }, 'Test text');
 
     I.click('Send');
-    I.waitForElement('~Sent, 1 total');
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
 
 
     I.logout();
@@ -110,16 +110,8 @@ Scenario('[C7787] Add filter rule', async function (I, users) {
 });
 
 function createFilterRule(I, name, condition, comparison, value, flag, skipConditionProp) {
-    I.login('app=io.ox/settings');
-    I.waitForVisible('.io-ox-settings-main');
-    I.selectFolder('Mail');
-    I.waitForVisible('.rightside h1');
-
-    // open mailfilter settings
-    I.selectFolder('Filter Rules');
-
-    // checks the h1 and the empty message
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mailfilter-settings h1');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+    I.waitForVisible('.settings-detail-pane .io-ox-mailfilter-settings h1');
     I.see('Mail Filter Rules');
 
     I.see('There is no rule defined');
@@ -162,7 +154,7 @@ Scenario('[C7810] Filter mail using contains', async function (I, users) {
     createFilterRule(I, 'TestCase0395', 'Subject', 'Contains', 'TestCasexxx0395', 'Red');
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
     I.openApp('Mail');
 
     // compose mail
@@ -187,10 +179,10 @@ Scenario('[C7810] Filter mail using contains', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 2 total');
-    I.waitForElement('~Inbox, 2 unread, 2 total');
+    I.waitForElement('~Sent, 2 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 2 unread, 2 total. Right click for more options.', 30);
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCasexxx0395'));
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCasexxx0395'), 30);
     I.waitForElement(locate('.list-item-row').withChild(':not(.flag_1)').withText('xxxTestCase0395xxx'));
 });
 
@@ -228,10 +220,10 @@ Scenario('[C7811] Filter mail using is exactly', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 2 total');
-    I.waitForElement('~Inbox, 2 unread, 2 total');
+    I.waitForElement('~Sent, 2 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 2 unread, 2 total. Right click for more options.', 30);
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0396'));
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0396'), 30);
     I.waitForElement(locate('.list-item-row').withChild(':not(.flag_1)').withText('xxxTestCase0396xxx'));
 
 });
@@ -245,7 +237,7 @@ Scenario('[C7812] Filter mail using matches', async function (I, users) {
     createFilterRule(I, 'TestCase0397', 'Subject', 'Matches', '*Case0397*', 'Red');
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
     I.openApp('Mail');
 
     // compose mail
@@ -270,10 +262,10 @@ Scenario('[C7812] Filter mail using matches', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 2 total');
-    I.waitForElement('~Inbox, 2 unread, 2 total');
+    I.waitForElement('~Sent, 2 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 2 unread, 2 total. Right click for more options.', 30);
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('xxxTestCase0397xxx'));
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('xxxTestCase0397xxx'), 30);
     I.waitForElement(locate('.list-item-row').withChild(':not(.flag_1)').withText('xxx0397xxx'));
 
 });
@@ -287,7 +279,7 @@ Scenario('[C7813] Filter mail using regex', async function (I, users) {
     createFilterRule(I, 'TestCase0398', 'Subject', 'Regex', 'TestCase0398.*', 'Red');
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
     I.openApp('Mail');
 
     // compose mail
@@ -312,10 +304,10 @@ Scenario('[C7813] Filter mail using regex', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 2 total');
-    I.waitForElement('~Inbox, 2 unread, 2 total');
+    I.waitForElement('~Sent, 2 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 2 unread, 2 total. Right click for more options.', 30);
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0398xxx'));
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0398xxx'), 30);
     I.waitForElement(locate('.list-item-row').withChild(':not(.flag_1)').withText('xxxTestCase398xxx'));
 
 });
@@ -341,7 +333,7 @@ Scenario('[C7814] Filter mail using IsBiggerThan', async function (I, users) {
         });
     });
 
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
     I.openApp('Mail');
 
     // compose mail
@@ -367,10 +359,10 @@ Scenario('[C7814] Filter mail using IsBiggerThan', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total');
-    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0400'));
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0400'), 30);
 });
 
 Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users) {
@@ -390,7 +382,7 @@ Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users) {
     // save the form
     I.click('Save');
 
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
     I.openApp('Mail');
 
     // compose mail
@@ -404,9 +396,9 @@ Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total');
-    I.waitForElement('~Inbox, 1 unread, 1 total');
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0401'));
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0401'), 30);
 });
 
 Scenario('[C83386] Create mail filter based on mail', async function (I, users) {
@@ -427,7 +419,7 @@ Scenario('[C83386] Create mail filter based on mail', async function (I, users) 
 
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose-window');
-    I.waitForElement('~Sent, 1 total');
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
 
     I.logout();
 
@@ -452,13 +444,14 @@ Scenario('[C83386] Create mail filter based on mail', async function (I, users) 
     I.click('Select folder');
     I.waitForElement('.folder-picker-dialog');
 
-    I.waitForElement('[data-id="default0/INBOX/Trash"]', '.folder-picker-dialog');
-    I.click('[data-id="default0/INBOX/Trash"]', '.folder-picker-dialog');
-    I.waitForElement('[data-id="default0/INBOX/Trash"].selected', '.folder-picker-dialog');
+    I.waitForElement({ css: '[data-id="default0/INBOX/Trash"]' }, '.folder-picker-dialog');
+    I.click({ css: '[data-id="default0/INBOX/Trash"]' }, '.folder-picker-dialog');
+    I.waitForElement({ css: '[data-id="default0/INBOX/Trash"].selected' }, '.folder-picker-dialog');
     I.wait(1);
     I.click('Ok');
     // save the form
     I.click('Save');
+    I.waitForDetached('.modal-backdrop.in');
 
     I.logout();
 
@@ -475,7 +468,7 @@ Scenario('[C83386] Create mail filter based on mail', async function (I, users) 
 
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose-window');
-    I.waitForElement('~Sent, 1 total');
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
 
     I.logout();
 
@@ -483,27 +476,15 @@ Scenario('[C83386] Create mail filter based on mail', async function (I, users) 
 
     // check for mail
     I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
-    I.see('Test subject', '.mail-detail-pane');
-    I.waitForElement('~Trash, 1 unread, 1 total');
+    I.see('Test subject', '.io-ox-mail-window .mail-detail-pane .subject');
+    I.waitForElement('~Trash, 1 unread, 1 total. Right click for more options.', 30);
 
 });
 
 Scenario('[C274412] Filter mail by size', async function (I, users) {
     function createOrEditFilterRule(I, name, oldSize, newSize, edit) {
-        I.click('[title=Settings]');
-        I.waitForVisible('#topbar-settings-dropdown');
-        I.click('Settings');
-
-        I.waitForVisible('.io-ox-settings-main');
-        I.selectFolder('Mail');
-        I.waitForVisible('.rightside h1');
-
-        // open mailfilter settings
-        I.selectFolder('Filter Rules');
-
-        // checks the h1 and the empty message
-        I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mailfilter-settings h1');
-        I.see('Mail Filter Rules');
+        I.openApp('Settings', { folder: 'virtual/settings/io.ox/mailfilter' });
+        I.waitForText('Mail Filter Rules', 30, '.settings-detail-pane h1');
 
         if (edit) {
             I.click('Edit', '.settings-list-view');
@@ -515,7 +496,7 @@ Scenario('[C274412] Filter mail by size', async function (I, users) {
 
             // add condition
             I.click('Add condition');
-            I.click('[data-value="size"');
+            I.click({ css: '[data-value="size"' });
 
             // add action
             I.click('Add action');
@@ -531,21 +512,25 @@ Scenario('[C274412] Filter mail by size', async function (I, users) {
 
         I.click('Save');
         I.waitForDetached('.modal-dialog');
-        I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+        I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
     }
 
     let [user] = users;
+    let listItem = locate('.list-item-row').withChild('.flag_1').withText('C274412').as('Mail in list view');
+
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
     I.login();
 
+    I.say('Create filter rule');
     createOrEditFilterRule(I, 'C274412', 'Byte', 'Byte');
 
     I.openApp('Mail');
 
     // compose mail
+    I.say('Compose #1');
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
@@ -557,12 +542,12 @@ Scenario('[C274412] Filter mail by size', async function (I, users) {
 
     I.click('Send');
     I.wait(1);
-    I.waitForElement('~Sent, 1 total');
-    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.see('C274412', '.subject');
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('C274412'));
-    I.click(locate('.list-item-row').withChild('.flag_1').withText('C274412'));
+    I.waitForElement(listItem, 30);
+    I.click(listItem);
 
     I.waitForElement('.inline-toolbar-container [data-action="io.ox/mail/actions/delete"]');
     I.click('Delete', '.inline-toolbar-container');
@@ -574,6 +559,7 @@ Scenario('[C274412] Filter mail by size', async function (I, users) {
     I.waitForElement('.io-ox-mail-window');
 
     // compose mail
+    I.say('Compose #2');
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
@@ -585,12 +571,12 @@ Scenario('[C274412] Filter mail by size', async function (I, users) {
 
     I.click('Send');
     I.wait(1);
-    I.waitForElement('~Sent, 2 total');
-    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.waitForElement('~Sent, 2 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.see('C274412', '.subject');
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('C274412'));
-    I.click(locate('.list-item-row').withChild('.flag_1').withText('C274412'));
+    I.waitForElement(listItem, 30);
+    I.click(listItem);
 
     I.waitForElement('.inline-toolbar-container [data-action="io.ox/mail/actions/delete"]');
     I.click('Delete', '.inline-toolbar-container');
@@ -602,6 +588,7 @@ Scenario('[C274412] Filter mail by size', async function (I, users) {
     I.waitForElement('.io-ox-mail-window');
 
     // compose mail
+    I.say('Compose #3');
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
@@ -613,9 +600,9 @@ Scenario('[C274412] Filter mail by size', async function (I, users) {
 
     I.click('Send');
     I.wait(1);
-    I.waitForElement('~Sent, 3 total');
-    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.waitForElement('~Sent, 3 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.see('C274412', '.subject');
 
-    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('C274412'));
+    I.waitForElement(listItem, 30);
 });

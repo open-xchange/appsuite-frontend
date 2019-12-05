@@ -299,9 +299,9 @@ define('io.ox/core/viewer/views/mainview', [
         },
 
         onDispose: function () {
-            this.toolbarView.remove();
-            this.displayerView.remove();
-            this.sidebarView.remove();
+            if (this.toolbarView) { this.toolbarView.remove(); }
+            if (this.displayerView) { this.displayerView.remove(); }
+            if (this.sidebarView) { this.sidebarView.remove(); }
             this.collection = null;
             this.toolbarView = null;
             this.displayerView = null;

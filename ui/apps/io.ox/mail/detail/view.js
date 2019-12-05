@@ -282,6 +282,9 @@ define('io.ox/mail/detail/view', [
         id: 'inline-links',
         index: 100,
         draw: function (baton) {
+            // no need for a toolbar if the mail is collapsed
+            // extension point is invoked again on expand anyway
+            if (!baton.view.$el.hasClass('expanded') || baton.view.placeholder) return;
             var toolbarView = new ToolbarView({ el: this[0], point: 'io.ox/mail/links/inline', inline: true });
             toolbarView.$el.attr('data-toolbar', 'io.ox/mail/links/inline');
             toolbarView.setSelection([_.cid(baton.data)], { data: baton.data });
@@ -305,6 +308,16 @@ define('io.ox/mail/detail/view', [
             var section = $('<section class="warnings">');
             ext.point('io.ox/mail/detail/warnings').invoke('draw', section, baton);
             this.append(section);
+        }
+    });
+
+    ext.point('io.ox/mail/detail').extend({
+        id: 'preview-text',
+        index: INDEX += 100,
+        draw: function (baton) {
+            if (!baton.view.supportsTextPreview || !baton.data.text_preview) return;
+            // add dots if max length or it looks weird
+            this.append($('<section class="text-preview">').text(baton.data.text_preview + (baton.data.text_preview.length >= 100 ? '...' : '')));
         }
     });
 
@@ -375,7 +388,10 @@ define('io.ox/mail/detail/view', [
             // "//:0" does not work for src as IE 11 goes crazy when loading the frame
             var iframe = $('<iframe src="" class="mail-detail-frame">').attr('title', gt('Email content')).on('load', function () {
                 iframe.contents().on('click', 'a[rel="noopener"], area[target="_blank"]', function (e) {
-                    if (_.browser.chrome >= 72) return;
+                    if (_.device('noopener')) return;
+                    // see bug 67365
+                    var isDeepLink = ($(this).attr('class') || '').indexOf('deep-link') > -1;
+                    if (isDeepLink) return e.preventDefault();
                     e.preventDefault();
                     blankshield.open($(this).attr('href'));
                 });
@@ -433,6 +449,13 @@ define('io.ox/mail/detail/view', [
                     $(this.contentDocument).find('head').append('<style>' + contentStyle + '</style>');
                     $(this.contentDocument).find('body').replaceWith($content);
 
+                    $content.find('table').each(function () {
+                        if (this.getAttribute('height') === '100%' || (this.style || {}).height === '100%') {
+                            this.setAttribute('height', '');
+                            $(this).css('height', 'initial');
+                        }
+                    });
+
                     $(this.contentWindow)
                         .on('complete toggle-blockquote', { iframe: $(this) }, onImmediateResize)
                         .on('resize', { iframe: $(this) }, onWindowResize)
@@ -450,6 +473,8 @@ define('io.ox/mail/detail/view', [
             function onImmediateResize(e) {
                 // scrollHeight consdiers paddings, border, and margins
                 // set height for iframe and its parent
+                // prevent js errors on too early calls
+                if (!this.document.body) return;
                 e.data.iframe.parent().addBack().height(this.document.body.scrollHeight);
             }
 
@@ -490,7 +515,7 @@ define('io.ox/mail/detail/view', [
                 // e.g. iOS is too fast, i.e. load is triggered before adding to the DOM
                 _.defer(function () {
                     var html = $(this.contentDocument).find('html'),
-                        targets = '.mailto-link, .deep-link-tasks, .deep-link-contacts, .deep-link-calendar, .deep-link-files, .deep-link-app';
+                        targets = '.mailto-link, .deep-link-tasks, .deep-link-contacts, .deep-link-calendar, .deep-link-files, .deep-link-gdpr, .deep-link-app';
                     // forward deep link clicks from iframe scope to document-wide handlers
                     html.on('click', targets, function (e) {
                         ox.trigger('click:deep-link-mail', e, this);
@@ -558,6 +583,7 @@ define('io.ox/mail/detail/view', [
         events: {
             'keydown': 'onToggle',
             'click .detail-view-header': 'onToggle',
+            'click .text-preview': 'onToggle',
             'click .toggle-mail-body-btn': 'onToggle',
             'click a[data-action="retry"]': 'onRetry'
         },
@@ -586,19 +612,6 @@ define('io.ox/mail/detail/view', [
             if (this.model.previous('attachments') &&
                 this.model.get('attachments') &&
                 this.model.previous('attachments')[0].content !== this.model.get('attachments')[0].content) this.onChangeContent();
-        },
-
-        onChangeSecurity: function () {
-            if (_.device('small')) return;  // Need to redraw action links on desktop only
-            var data = this.model.toJSON(),
-                baton = ext.Baton({
-                    view: this,
-                    model: this.model,
-                    data: data,
-                    attachments: util.getAttachments(data)
-                }),
-                node = this.$el.find('header.detail-view-header').empty();
-            ext.point('io.ox/mail/detail/header').invoke('draw', node, baton);
         },
 
         getEmptyBodyNode: function () {
@@ -691,7 +704,6 @@ define('io.ox/mail/detail/view', [
         },
 
         onLoad: function (data) {
-
             // since this function is a callback we have to check this.model
             // as an indicator whether this view has been destroyed meanwhile
             if (this.model === null) return;
@@ -706,11 +718,13 @@ define('io.ox/mail/detail/view', [
             this.trigger('load:done');
             // draw
             // nested mails do not have a subject before loading, so trigger change as well
+            if (!this.$el.find('.detail-view-row.row-5').hasClass('inline-toolbar-container')) {
+                this.$el.empty();
+                this.render();
+            }
             this.onChangeSubject();
             this.onChangeAttachments();
             this.onChangeContent();
-
-            if (capabilities.has('guard') && data && (data.security || data.security_info)) this.onChangeSecurity();
 
             // process unseen flag
             if (unseen) {
@@ -735,17 +749,18 @@ define('io.ox/mail/detail/view', [
         },
 
         toggle: function (state) {
+            this.placeholder = false;
             var $li = this.$el,
                 $button = $li.find('.toggle-mail-body-btn');
 
             $li.toggleClass('expanded', state);
+            var isExpanded = $li.hasClass('expanded');
 
-            $button.attr('aria-expanded', $li.hasClass('expanded'));
+            $button.attr('aria-expanded', isExpanded);
 
             // trigger DOM event that bubbles
             this.$el.trigger('toggle');
-
-            if ($li.attr('data-loaded') === 'false' && $li.hasClass('expanded')) {
+            if ($li.attr('data-loaded') === 'false' && isExpanded) {
                 $li.attr('data-loaded', true);
                 $li.find('section.body').addClass('loading');
                 this.trigger('load');
@@ -768,7 +783,7 @@ define('io.ox/mail/detail/view', [
                         );
                     }
                 }
-            } else if ($li.hasClass('expanded')) {
+            } else if (isExpanded) {
                 // trigger resize to restart resizeloop
                 this.$el.find('.mail-detail-frame').contents().find('.mail-detail-content').trigger('resize');
             }
@@ -788,6 +803,8 @@ define('io.ox/mail/detail/view', [
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
             this.listenTo(this.model, 'change:attachments', this.onChangeAttachments);
             this.listenTo(this.model, 'change:to change:cc change:bcc', this.onChangeRecipients);
+            this.placeholder = true;
+            this.supportsTextPreview = options.supportsTextPreview;
 
             this.on({
                 'load': function () {
@@ -825,7 +842,11 @@ define('io.ox/mail/detail/view', [
 
             this.$el.data({ view: this, model: this.model });
 
-            ext.point('io.ox/mail/detail').invoke('draw', this.$el, baton);
+            if (!this.placeholder) {
+                ext.point('io.ox/mail/detail').invoke('draw', this.$el, baton);
+            }
+
+            this.$el.toggleClass('placeholder', this.placeholder);
 
             // global event for tracking purposes
             ox.trigger('mail:detail:render', this);

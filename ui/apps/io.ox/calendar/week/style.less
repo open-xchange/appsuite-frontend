@@ -26,7 +26,7 @@
         .cw {
             font-size: 14px;
             color: @hc-gray;
-            .fontWeight(normal);
+            font-weight: normal;
         }
 
         .merge-split {
@@ -64,7 +64,7 @@
 
             .number {
                 font-size: 20px;
-                .fontWeight(bold);
+                font-weight: bold;
                 color: black;
 
                 &:hover {
@@ -496,6 +496,15 @@
         color: #767676;
         display: inline-block;
         width: 3.5em;
+    }
+
+    &.double {
+        .timezone-abbr {
+            width : 6em;
+        }
+        .offset {
+            width : 7em;
+        }
     }
 
     a:focus .offset{ color: inherit };

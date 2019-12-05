@@ -481,6 +481,16 @@ define('io.ox/mail/main', [
         },
 
         /*
+        * make some special folders not selectable
+        */
+        'unselectable-folders': function () {
+            // make shared root folder unclickable (not virtual but still not a true selectable folder)
+            if (!accountAPI.cache[0]) return;
+            var id = accountAPI.cache[0].root_folder + '/Shared';
+            app.folderView.tree.selection.addUnselectableFolder(id);
+        },
+
+        /*
          * Split into left and right pane
          */
         'vsplit': function (app) {
@@ -489,7 +499,7 @@ define('io.ox/mail/main', [
             var left = app.pages.getPage('listView'),
                 right = app.pages.getPage('detailView');
 
-            app.left = left.addClass('border-right');
+            app.left = left.toggleClass('border-right', _.device('!smartphone'));
             app.right = right.addClass('mail-detail-pane');
         },
 
@@ -685,8 +695,38 @@ define('io.ox/mail/main', [
                     .attr('aria-label', gt('Messages options'))
                     .end()
             );
+            // turn top toolbar into bottom toolbar on smartphones
+            if (_.device('smartphone')) {
+                app.listControl.$('.toolbar.bottom').hide();
+                app.listControl.$('.toolbar.top').removeClass('top').addClass('bottom');
+                app.listControl.$el.removeClass('toolbar-top-visible');
+            }
             // make resizable
             app.listControl.resizable();
+        },
+
+        'textPreview': function (app) {
+
+            // default is true (for testing) until we have cross-stack support
+            var support = settings.get('features/textPreview', true);
+
+            app.supportsTextPreview = function () {
+                return support;
+            };
+
+            app.supportsTextPreviewConfiguration = function () {
+                var id = app.folder.get();
+                return support && (account.isPrimary(id) || id === 'virtual/all-unseen');
+            };
+
+            app.useTextPreview = function () {
+                return app.supportsTextPreviewConfiguration() && app.props.get('textPreview');
+            };
+
+            app.on('resume', function () {
+                // Viewport calculations are invalid when app is invisible (See Bug 58552)
+                this.listView.fetchTextPreview();
+            });
         },
 
         /*
@@ -694,7 +734,7 @@ define('io.ox/mail/main', [
          */
         'thread-view': function (app) {
             if (_.device('smartphone')) return;
-            app.threadView = new ThreadView.Desktop();
+            app.threadView = new ThreadView.Desktop({ app: app });
             app.right.append(app.threadView.render().$el);
         },
 
@@ -899,7 +939,8 @@ define('io.ox/mail/main', [
             if (!_.device('smartphone')) return;
             app.showMail = function (cid) {
                 // render mail view and append it to detailview's page
-                app.pages.getPage('detailView').empty().append(app.threadView.renderMail(cid));
+                app.pages.getPage('detailView')
+                    .empty().append(app.threadView.renderMail(cid));
             };
         },
 
@@ -1552,11 +1593,11 @@ define('io.ox/mail/main', [
             if (_.device('!smartphone')) return;
 
             // intial hide
-            app.listControl.$el.toggleClass('toolbar-top-visible', false);
+            app.listControl.$el.toggleClass('toolbar-bottom-visible', false);
 
             app.props.on('change:checkboxes', function (model, value) {
                 app.listView.toggleCheckboxes(value);
-                app.listControl.$el.toggleClass('toolbar-top-visible', value);
+                app.listControl.$el.toggleClass('toolbar-bottom-visible', value);
                 if (value) {
                     app.pages.getNavbar('listView')
                         .setRight(gt('Cancel'))
@@ -1573,30 +1614,6 @@ define('io.ox/mail/main', [
                     // reset selection
                     app.listView.selection.selectNone();
                 }
-            });
-        },
-
-        'textPreview': function (app) {
-
-            // default is true (for testing) until we have cross-stack support
-            var support = settings.get('features/textPreview', true);
-
-            app.supportsTextPreview = function () {
-                return support;
-            };
-
-            app.supportsTextPreviewConfiguration = function () {
-                var id = app.folder.get();
-                return support && (account.isPrimary(id) || id === 'virtual/all-unseen');
-            };
-
-            app.useTextPreview = function () {
-                return app.supportsTextPreviewConfiguration() && app.props.get('textPreview');
-            };
-
-            app.on('resume', function () {
-                // Viewport calculations are invalid when app is invisible (See Bug 58552)
-                this.listView.fetchTextPreview();
             });
         },
 
@@ -1627,6 +1644,7 @@ define('io.ox/mail/main', [
             if (_.device('!smartphone')) return;
             // force lazyload to load, otherwise the whole pane will stay empty...
             app.pages.getPage('detailView').on('pageshow', function () {
+                $(this).scrollTop(0);
                 $(this).find('li.lazy').trigger('scroll');
             });
         },
@@ -1663,6 +1681,7 @@ define('io.ox/mail/main', [
         },
 
         'a11y': function (app) {
+            app.listView.$el.attr('aria-label', gt('List view'));
             // mail list: focus mail detail view on <enter>
             // mail list: focus folder on <escape>
             app.listView.$el.on('keydown', '.list-item', function (e) {

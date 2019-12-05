@@ -32,7 +32,7 @@ module.exports = function (grunt) {
     // steps to build the ui (ready for development)
     grunt.registerTask('build', ['lint', 'workaround_fetch', 'copy_build', 'compile_po', 'concat', 'newer:less']);
     // create a package ready version of the ui (aka what jenkins does)
-    grunt.registerTask('dist', ['clean', 'copy_build', 'compile_po', 'concat', 'newer:less', 'uglify', 'copy_dist', 'create_i18n_properties']);
+    grunt.registerTask('dist:build', ['clean', 'copy_build', 'compile_po', 'concat', 'uglify', 'copy_dist', 'create_i18n_properties']);
 
     grunt.registerTask('force_update', ['bootjs', 'copy:build_base']);
 
@@ -48,6 +48,7 @@ module.exports = function (grunt) {
             config.prefixes[0] + 'apps/io.ox/office/tk/dom/definitions.less',
             config.prefixes[0] + 'apps/io.ox/office/tk/dom/icons/definitions.less',
             config.prefixes[0] + 'apps/io.ox/office/tk/dom/icons/docs-icons.less',
+            config.prefixes[0] + 'apps/io.ox/office/debug/common/view/definitions.less',
             config.prefixes[0] + 'apps/oxguard/tour/style.less'
         ].map(function (fileName) {
             if (grunt.file.exists(fileName)) return;

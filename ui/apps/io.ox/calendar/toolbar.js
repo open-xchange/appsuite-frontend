@@ -41,8 +41,7 @@ define('io.ox/calendar/toolbar', [
         'create': {
             prio: 'hi',
             mobile: 'hi',
-            title: gt('New'),
-            tooltip: gt('New appointment'),
+            title: gt('New appointment'),
             drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/create'
         },

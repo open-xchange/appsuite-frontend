@@ -11,11 +11,13 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     'io.ox/core/notifications',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/mail/util',
+    'io.ox/mail/api',
     'io.ox/backbone/mini-views/settings-list-view',
+    'io.ox/core/tk/contenteditable-editor',
     'io.ox/mail/compose/inline-images',
     'static/3rd.party/purify.min.js',
     'less!io.ox/mail/settings/signatures/style'
-], function (ext, ExtensibleView, gt, settings, util, ModalDialog, snippets, mini, config, notifications, listutils, mailutil, ListView, inline, DOMPurify) {
+], function (ext, ExtensibleView, gt, settings, util, ModalDialog, snippets, mini, config, notifications, listutils, mailutil, mailAPI, ListView, Editor, inline, DOMPurify) {
 
     'use strict';
 
@@ -61,46 +63,44 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     'min-height': '266px',
                     'height': '266px'
                 }).append(
-                    container = $('<div class="editor-container">').attr('data-editor-id', _.uniqueId('editor-'))
+                    container = $('<div class="editor">').attr('data-editor-id', _.uniqueId('editor-'))
                 )
             );
 
-            require(['io.ox/core/tk/contenteditable-editor', 'io.ox/mail/api'], function (Editor, mailAPI) {
-                new Editor(container, {
-                    toolbar1: 'bold italic | alignleft aligncenter alignright | link image',
-                    advanced: 'fontselect fontsizeselect forecolor | code',
-                    css: {
-                        //overwrite min-height of editor
-                        'min-height': '230px',
-                        'height': '230px',
-                        'overflow-y': 'auto'
+            new Editor(container, {
+                toolbar1: 'bold italic | alignleft aligncenter alignright | link image',
+                advanced: 'fontselect fontsizeselect forecolor | code',
+                css: {
+                    //overwrite min-height of editor
+                    'min-height': '230px',
+                    'height': '230px',
+                    'overflow-y': 'auto'
+                },
+                height: 230,
+                plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
+                class: 'io-ox-signature-edit',
+                keepalive: mailAPI.keepalive,
+                scrollpane: container,
+                oxContext: { signature: true },
+                imageLoader: {
+                    upload: function (file) {
+                        return inline.api.inlineImage({ file: file, editor: baton.view.editor.tinymce() });
                     },
-                    height: 230,
-                    plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
-                    class: 'io-ox-signature-edit',
-                    keepalive: mailAPI.keepalive,
-                    scrollpane: container,
-                    oxContext: { signature: true },
-                    imageLoader: {
-                        upload: function (file) {
-                            return inline.api.inlineImage({ file: file, editor: baton.view.editor.tinymce() });
-                        },
-                        getUrl: function (response) {
-                            return inline.api.getInsertedImageUrl(response);
-                        }
+                    getUrl: function (response) {
+                        return inline.api.getInsertedImageUrl(response);
                     }
-                }).done(function (editor) {
-                    editor.show();
-                    signature.content = signature.content || '';
-                    if (signature.content && !looksLikeHTML(signature.content)) {
-                        // convert to html
-                        var str = String(signature.content).replace(/[\s\xA0]+$/g, '');
-                        signature.content = $('<p>').append(editor.ln2br(str)).prop('outerHTML');
-                    }
-                    if (signature.content) signature.content = DOMPurify.sanitize(signature.content) + '';
-                    editor.setContent(signature.content);
-                    baton.view.editor = editor;
-                });
+                }
+            }).done(function (editor) {
+                editor.show();
+                signature.content = signature.content || '';
+                if (signature.content && !looksLikeHTML(signature.content)) {
+                    // convert to html
+                    var str = String(signature.content).replace(/[\s\xA0]+$/g, '');
+                    signature.content = $('<p>').append(editor.ln2br(str)).prop('outerHTML');
+                }
+                if (signature.content) signature.content = DOMPurify.sanitize(signature.content) + '';
+                editor.setContent(signature.content);
+                baton.view.editor = editor;
             });
         }
     });
@@ -172,10 +172,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                         baton.view.close();
                     });
                 }).fail(function (error) {
-                    require(['io.ox/core/notifications'], function (notifications) {
-                        notifications.yell(error);
-                        baton.view.idle();
-                    });
+                    notifications.yell(error);
+                    baton.view.idle();
                 });
             }
         }
@@ -301,7 +299,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     meta: {
                         imported: sig
                     }
-                }).fail(require('io.ox/core/notifications').yell);
+                }).fail(notifications.yell);
             });
 
             $.when.apply($, deferreds).then(function () {
@@ -327,10 +325,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 .build(function () {
                     this.listenTo(settings, 'change', function () {
                         settings.saveAndYell().done(function () {
-                            //update mailapi
-                            require(['io.ox/mail/api'], function (mailAPI) {
-                                mailAPI.updateViewSettings();
-                            });
+                            mailAPI.updateViewSettings();
                         });
                     });
                 })
@@ -348,7 +343,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             index: 100,
             render: function () {
                 this.$el.addClass('io-ox-signature-settings').append(
-                    util.header(gt('Signatures'))
+                    util.header(_.device('smartphone') ? gt('Signature') : gt('Signatures'))
                 );
             }
         },
@@ -469,7 +464,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                         var id = $(e.currentTarget).closest('li').attr('data-id');
                         if (mailutil.getDefaultSignature('new') === id) settings.set('defaultSignature', '');
                         if (mailutil.getDefaultSignature('reply/forward') === id) settings.set('defaultReplyForwardSignature', '');
-                        snippets.destroy(id).fail(require('io.ox/core/notifications').yell);
+                        snippets.destroy(id).fail(notifications.yell);
                         e.preventDefault();
                     })
                     .render().$el

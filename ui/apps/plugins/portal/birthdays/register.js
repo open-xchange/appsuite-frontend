@@ -198,7 +198,7 @@ define('plugins/portal/birthdays/register', [
                                 ),
                                 $('<div class="name">').text(name),
                                 $('<div>').append(
-                                    $('<span class="date">').text(birthday.format((birthday.year() === 1 || birthday.year() === 1604) ? moment.localeData().longDateFormat('l').replace(/Y/g, '') : 'l')), $.txt(' '),
+                                    $('<span class="date">').text((birthday.year() === 1 || birthday.year() === 1604) ? birthday.formatCLDR('Md') : birthday.format('l')), $.txt(' '),
                                     $('<span class="distance">').text(delta)
                                 )
                             )

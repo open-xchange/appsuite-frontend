@@ -392,6 +392,9 @@ Max size of returned characters for mail reply/forward in bytes (API parameter) 
 <config>io.ox/mail//maxSize/view=`<number>`</config>
 Max size of returned characters for mail viewing in bytes. Default: `102400` (100 kB)
 
+<config>io.ox/mail//features/instantAttachmentUpload=`<bool>`</config>
+Feature toggle to enable/disable instant attachment upload. Default is 'true'
+
 ### Mail compose: Image resize
 
 <config>io.ox/mail//features/imageResize/enabled=`<bool>`</config>
@@ -500,13 +503,16 @@ Start in global addressbook when Contacts App is launched. Default `true`
 <config>io.ox/contacts//mapService=`<string>`</config>
 External map service to locate addresses. One of `google` (Google Maps, default), `osm` (Open Street Map) or `apple` (Apple Maps, only works on iOS and MacOS)
 
+<config>io.ox/contacts//toolbar/limits/fetch=`<number>`</config>
+Fetch limit when selecting multiple contacts. A number of selected contacts beyond this limit might led to unavailable toolbar actions. Default `100`
+
 ## Addressbook picker
 
 <config>io.ox/contacts//picker/limits/departments=`<number>`</config>
 Maxium departments to show. Default `100`
 
 <config>io.ox/contacts//picker/limits/fetch=`<number>`</config>
-Maximum number of concacts to fetch. Default `10000`
+Maximum number of contacts to fetch. Default `10000`
 
 <config>io.ox/contacts//picker/limits/list=`<number>`</config>
 Max elements shown in the list before first paginate. Default `100`

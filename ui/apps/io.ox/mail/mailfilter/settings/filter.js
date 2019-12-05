@@ -15,7 +15,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/core/extensions',
     'io.ox/core/api/mailfilter',
     'io.ox/mail/mailfilter/settings/model',
-    'io.ox/core/tk/dialogs',
     'io.ox/backbone/views/modal',
     'io.ox/core/notifications',
     'io.ox/settings/util',
@@ -26,10 +25,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/backbone/views/disposable',
     'settings!io.ox/mail',
     'io.ox/mail/mailfilter/settings/filter/defaults',
+    'io.ox/core/folder/picker',
+    'io.ox/mail/api',
     'static/3rd.party/jquery-ui.min.js',
     'less!io.ox/mail/mailfilter/settings/style'
-
-], function (ext, api, mailfilterModel, dialogs, ModalDialog, notifications, settingsUtil, FilterDetailView, gt, listUtils, ListView, DisposableView, settings, DEFAULTS) {
+], function (ext, api, mailfilterModel, ModalDialog, notifications, settingsUtil, FilterDetailView, gt, listUtils, ListView, DisposableView, settings, DEFAULTS, picker, mailAPI) {
 
     'use strict';
 
@@ -138,6 +138,13 @@ define('io.ox/mail/mailfilter/settings/filter', [
             myView.render().el
         );
 
+        if (defaults.applyMailFilterSupport) {
+            myView.dialog.addButton({
+                label: gt('Save and apply'),
+                action: 'apply'
+            });
+        }
+
         myView.dialog.addButton({
             label: gt('Save'),
             action: 'save'
@@ -157,7 +164,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
         myView.collection = collection;
 
         myView.dialog.on('save', function () {
-            myView.dialog.$body.find('.io-ox-mailfilter-edit').trigger('save');
+            myView.onSave();
+        });
+
+        myView.dialog.on('apply', function () {
+            myView.onApply();
         });
 
         myView.dialog.on('cancel', function () {
@@ -182,10 +193,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
         draw: function (model) {
             var flag = (model.get('flags') || [])[0];
             var title = model.get('rulename'),
+                applytoggle = gt('Apply'),
                 texttoggle = model.get('active') ? gt('Disable') : gt('Enable'),
                 actioncmds = model.get('actioncmds'),
                 faClass = containsStop(actioncmds) ? 'fa-ban' : 'fa-arrow-down',
-                actionValue;
+                actionValue,
+                applyToggle = flag === 'vacation' || flag === 'autoforward' || !defaults.applyMailFilterSupport ? [] : listUtils.applyToggle(applytoggle);
 
             if (flag === 'vacation') {
                 actionValue = 'edit-vacation';
@@ -196,6 +209,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
             }
 
             $(this).append(
+                applyToggle,
                 listUtils.controlsEdit({
                     'aria-label': gt('Edit %1$s', title),
                     'data-action': actionValue
@@ -277,6 +291,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     initialize: function () {
                         if (_.indexOf(this.model.get('flags'), 'vacation') !== -1) this.listenTo(ox, 'mail:change:vacation-notice', this.handleToogleState);
                         if (_.indexOf(this.model.get('flags'), 'autoforward') !== -1) this.listenTo(ox, 'mail:change:auto-forward', this.handleToogleState);
+                        this.listenTo(this.model, 'apply', function () {
+                            this.onApply();
+                        });
                     },
 
                     handleToogleState: function (model) {
@@ -284,23 +301,20 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     },
 
                     render: function () {
+                        if (this.disposed) return;
+
                         var flag = (this.model.get('flags') || [])[0],
                             self = this,
                             actions = (this.model.get('actioncmds') || []),
                             testsPart = this.model.get('test'),
                             supportColorFlags = settings.get('features/flag/color');
 
-                        if (this.disposed) {
-                            return;
-                        }
-
                         function checkForUnknown() {
                             var unknown = false;
 
                             function checkForColorFlags(a) {
-                                if (a.flags) {
-                                    return !supportColorFlags && (/\$cl_/g.test(a.flags[0]));
-                                }
+                                if (!a.flags) return;
+                                return !supportColorFlags && (/\$cl_/g.test(a.flags[0]));
                             }
 
                             function collectIds(testsPart) {
@@ -352,21 +366,19 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         var title = self.model.get('rulename'),
                             titleNode;
 
-                        this.$el.attr({
-                            'data-id': self.model.get('id')
-                        })
-                        .addClass('draggable ' + getEditableState())
-                        .toggleClass('active', self.model.get('active'))
-                        .toggleClass('disabled', !self.model.get('active'))
-                        .empty().append(
-
-                            listUtils.dragHandle(gt('Drag to reorder filter rules'), this.model.collection.length <= 1 ? 'hidden' : ''),
-                            titleNode = listUtils.makeTitle(title),
-                            listUtils.makeControls().append(function () {
-                                var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (checkForUnknown() || flag || 'common'));
-                                point.invoke('draw', $(this), self.model);
-                            })
-                        );
+                        this.$el.attr('data-id', self.model.get('id'))
+                            .addClass('draggable ' + getEditableState())
+                            .attr('draggable', true)
+                            .toggleClass('active', self.model.get('active'))
+                            .toggleClass('disabled', !self.model.get('active'))
+                            .empty().append(
+                                listUtils.dragHandle(gt('Drag to reorder filter rules'), this.model.collection.length <= 1 ? 'hidden' : ''),
+                                titleNode = listUtils.makeTitle(title),
+                                listUtils.makeControls().append(function () {
+                                    var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (checkForUnknown() || flag || 'common'));
+                                    point.invoke('draw', $(this), self.model);
+                                })
+                            );
 
                         self.model.on('change:rulename', function (el, val) {
                             titleNode.text(val);
@@ -386,11 +398,31 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     events: {
                         'click [data-action="toggle"]': 'onToggle',
+                        'click [data-action="apply"]': 'onApply',
                         'click [data-action="delete"]': 'onDelete',
                         'click [data-action="edit"]': 'onEdit',
                         'click [data-action="toggle-process-subsequent"]': 'onToggleProcessSub',
                         'click [data-action="edit-vacation"]': 'onEditVacation',
                         'click [data-action="edit-autoforward"]': 'onEditAutoforward'
+                    },
+
+                    propagate: function (model) {
+
+                        if (_.indexOf(model.get('flags'), 'vacation') !== -1) {
+                            require(['io.ox/mail/mailfilter/vacationnotice/model'], function (Model) {
+                                var vacationnoticeModel = new Model();
+                                vacationnoticeModel.set(model.toJSON());
+                                ox.trigger('mail:change:vacation-notice', vacationnoticeModel);
+                            });
+                        }
+
+                        if (_.indexOf(model.get('flags'), 'autoforward') !== -1) {
+                            require(['io.ox/mail/mailfilter/autoforward/model'], function (Model) {
+                                var autoforwardModel = new Model();
+                                autoforwardModel.set(model.toJSON());
+                                ox.trigger('mail:change:auto-forward', autoforwardModel);
+                            });
+                        }
                     },
 
                     onToggle: function (e) {
@@ -404,27 +436,41 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 self.$el.toggleClass('active', self.model.get('active'));
                                 self.$el.toggleClass('disabled', !self.model.get('active'));
                                 $(e.target).text(self.model.get('active') ? gt('Disable') : gt('Enable'));
-
-                                if (_.indexOf(self.model.get('flags'), 'autoforward') !== -1) {
-                                    require(['io.ox/mail/mailfilter/autoforward/model'], function (Model) {
-                                        var autoforwardModel = new Model();
-                                        autoforwardModel.set(self.model.attributes);
-                                        ox.trigger('mail:change:auto-forward', autoforwardModel);
-
-                                    });
-                                }
-
-                                if (_.indexOf(self.model.get('flags'), 'vacation') !== -1) {
-                                    require(['io.ox/mail/mailfilter/vacationnotice/model'], function (Model) {
-                                        var vacationnoticeModel = new Model();
-                                        vacationnoticeModel.set(self.model.attributes);
-                                        ox.trigger('mail:change:vacation-notice', vacationnoticeModel);
-
-                                    });
-                                }
-
+                                self.propagate(self.model);
                             })
                         );
+                    },
+
+                    onApply: function (e) {
+                        if (e) e.preventDefault();
+                        var self = this;
+                        picker({
+                            async: true,
+                            context: 'filter',
+                            title: gt('Select the folder to apply the rule to'),
+                            done: function (id, dialog) {
+                                dialog.close();
+                                var rule = self.$el.find('a[data-action="apply"]');
+                                rule.empty().append($('<i aria-hidden="true">').addClass('fa fa-refresh fa-spin'));
+
+                                api.apply({ folderId: id, id: self.model.id }).then(function () {
+                                    return mailAPI.expunge(id);
+                                }).fail(function (response) {
+                                    notifications.yell('error', response.error);
+                                }).then(function () {
+                                    // applied rule might have moved mails into folders or changed mails
+                                    _(mailAPI.pool.getCollections()).forEach(function (o) {
+                                        o.collection.expire();
+                                    });
+                                    mailAPI.refresh();
+                                    rule.empty().text(gt('Apply'));
+                                });
+                            },
+                            module: 'mail',
+                            root: '1',
+                            settings: settings,
+                            persistent: 'folderpopup'
+                        });
                     },
 
                     onToggleProcessSub: function (e) {
@@ -456,41 +502,34 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     onDelete: function (e) {
                         e.preventDefault();
-                        var self = this,
-                            id = self.model.get('id');
 
-                        new dialogs.ModalDialog()
-                        .text(gt('Do you really want to delete this filter rule?'))
-                        .addPrimaryButton('delete', gt('Delete'), 'delete')
-                        .addButton('cancel', gt('Cancel'), 'cancel')
-                        .show()
-                        .done(function (action) {
-                            if (action === 'delete') {
-                                if (id !== false) {
-                                    //yell on reject
-                                    self.model.collection.remove(id);
-                                    settingsUtil.yellOnReject(
-                                        api.deleteRule(id).done(function () {
-                                            var arrayOfFilters,
-                                                data;
-                                            $node.find('.controls [data-action="add"]').focus();
-
-                                            arrayOfFilters = $node.find('li[data-id]');
+                        new ModalDialog({ title: gt('Do you really want to delete this filter rule?') })
+                            .addCancelButton()
+                            .addButton({ label: gt('Delete'), action: 'delete' })
+                            .on('delete', function () {
+                                var view = this,
+                                    model = this.model;
+                                if (model.get('id') === false) return;
+                                collection.remove(model);
+                                //yell on reject
+                                settingsUtil.yellOnReject(
+                                    api.deleteRule(model.get('id')).done(function () {
+                                        // for proper handling in mail-settings/mail-list
+                                        view.propagate(model.set('active', false));
+                                        $node.find('.controls [data-action="add"]').focus();
+                                        var arrayOfFilters = $node.find('li[data-id]'),
                                             data = _.map(arrayOfFilters, function (single) {
                                                 return parseInt($(single).attr('data-id'), 10);
                                             });
-                                            //yell on reject
-                                            settingsUtil.yellOnReject(
-                                                api.reorder(data)
-                                            );
-                                            updatePositionInCollection(collection, data);
-
-                                        })
-                                    );
-                                }
-                            }
-                        });
-
+                                        //yell on reject
+                                        settingsUtil.yellOnReject(
+                                            api.reorder(data)
+                                        );
+                                        updatePositionInCollection(collection, data);
+                                    })
+                                );
+                            }.bind(this))
+                            .open();
                     },
 
                     onEdit: function (e) {
@@ -574,19 +613,18 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             sortable: true,
                             containment: this.$el,
                             notification: this.$('#' + notificationId),
-                            childView: FilterSettingsView,
-                            update: function () {
-                                var arrayOfFilters = $node.find('li[data-id]'),
-                                    data = _.map(arrayOfFilters, function (single) {
-                                        return parseInt($(single).attr('data-id'), 10);
-                                    });
+                            childView: FilterSettingsView
+                        }).on('order:changed', function () {
+                            var arrayOfFilters = $node.find('li[data-id]'),
+                                data = _.map(arrayOfFilters, function (single) {
+                                    return parseInt($(single).attr('data-id'), 10);
+                                });
 
-                                //yell on reject
-                                settingsUtil.yellOnReject(
-                                    api.reorder(data)
-                                );
-                                updatePositionInCollection(collection, data);
-                            }
+                            //yell on reject
+                            settingsUtil.yellOnReject(
+                                api.reorder(data)
+                            );
+                            updatePositionInCollection(collection, data);
                         }).render().$el);
                     },
 

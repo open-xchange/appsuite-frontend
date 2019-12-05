@@ -23,68 +23,61 @@ define('io.ox/mail/actions/reminder', [
 
     return function (baton) {
         var data = [].concat(baton.data)[0];
-        require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (dialogs, taskAPI, tasksUtil) {
+        require(['io.ox/backbone/views/modal', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (ModalDialog, taskAPI, tasksUtil) {
             //create popup dialog
 
             var titleInput,
                 noteInput,
                 dateSelector,
-                endDate = new Date(),
-                popup = new dialogs.ModalDialog({
-                    help: 'ox.appsuite.user.sect.email.manage.reminder.html'
+                endDate = new Date();
+
+            new ModalDialog({
+                title: gt('Remind me'),
+                help: 'ox.appsuite.user.sect.email.manage.reminder.html'
+            })
+            .addCancelButton()
+            .addButton({ label: gt('Create reminder'), action: 'create' })
+            .build(function () {
+                var guid;
+                this.$body.append(
+                    $('<div class="form-group">').append(
+                        $('<label>').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Subject')),
+                        titleInput = $('<input type="text" class="form-control">').attr('id', guid)
+                            .val(gt('Mail reminder') + ': ' + data.subject).focus(function () { this.select(); })
+                    ),
+                    $('<div class="form-group">').append(
+                        $('<label>').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Note')),
+                        noteInput = $('<textarea class="form-control" rows="5">').attr('id', guid)
+                            .val(gt('Mail reminder for') + ': ' + data.subject + ' \n' + gt('From') + ': ' + util.formatSender(data.from[0]))
+                    ),
+                    $('<div class="form-group">').append(
+                        $('<label>').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Remind me')),
+                        dateSelector = $('<select class="form-control" name="dateselect">').attr('id', guid).append(
+                            tasksUtil.buildDropdownMenu({ time: endDate })
+                        )
+                    )
+                );
+            }).on('create', function () {
+                //Calculate the right time
+                var dates = tasksUtil.computePopupTime(dateSelector.val(), true),
+                    note;
+
+                //add mail cid so the task can offer a link
+                note = noteInput.val() + '\n--\nmail://' + _.ecid(data);
+                taskAPI.create({
+                    title: titleInput.val(),
+                    folder_id: coreSettings.get('folder/tasks'),
+                    alarm: dates.alarmDate,
+                    note: note,
+                    status: 1,
+                    recurrence_type: 0,
+                    percent_completed: 0
                 })
-                    .addPrimaryButton('create', gt('Create reminder'), 'create')
-                    .addButton('cancel', gt('Cancel'), 'cancel');
-
-            //Header
-            popup.getHeader().append($('<h4>').text(gt('Remind me')));
-
-            //fill popup body
-            var popupBody = popup.getBody(), guid;
-
-            popupBody.append(
-                $('<div class="form-group">').append(
-                    $('<label>').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Subject')),
-                    titleInput = $('<input>', { class: 'form-control', type: 'text', value: gt('Mail reminder') + ': ' + data.subject, 'aria-labelledby': 'subject', id: guid })
-                        .focus(function () { this.select(); })
-                ),
-                $('<div class="form-group">').append(
-                    $('<label>').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Note')),
-                    noteInput = $('<textarea>', { class: 'form-control', rows: '5', value: gt('Mail reminder for') + ': ' + data.subject + ' \n' + gt('From') + ': ' + util.formatSender(data.from[0]), 'aria-labelledby': 'note', id: guid })
-                        .focus(function () { this.select(); })
-                ),
-                $('<div class="form-group">').append(
-                    $('<label id="remindme">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Remind me')),
-                    dateSelector = $('<select>', { class: 'form-control', name: 'dateselect', 'aria-labelledby': 'remindme', id: guid }).append(tasksUtil.buildDropdownMenu({ time: endDate }))
-                )
-            );
-
-            //ready for work
-            var def = popup.show();
-            titleInput.focus();
-            def.done(function (action) {
-                if (action === 'create') {
-
-                    //Calculate the right time
-                    var dates = tasksUtil.computePopupTime(dateSelector.val(), true),
-                        note;
-
-                    //add mail cid so the task can offer a link
-                    note = noteInput.val() + '\n--\nmail://' + _.ecid(data);
-                    taskAPI.create({
-                        title: titleInput.val(),
-                        folder_id: coreSettings.get('folder/tasks'),
-                        alarm: dates.alarmDate,
-                        note: note,
-                        status: 1,
-                        recurrence_type: 0,
-                        percent_completed: 0
-                    })
-                    .done(function () {
-                        notifications.yell('success', gt('Reminder has been created'));
-                    });
-                }
-            });
+                .done(function () {
+                    notifications.yell('success', gt('Reminder has been created'));
+                });
+            })
+            .open();
         });
     };
 });

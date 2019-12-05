@@ -4,15 +4,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-10-04 11:23+0200\n"
+"PO-Revision-Date: 2019-11-20 22:38+0100\n"
 "Last-Translator: Andrés Herrera <andres@workshop-chapina.com>\n"
 "Language-Team: Spanish <ox7doc@workshop-chapina.com>\n"
-"Language: es_MX\n"
+"Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Lokalize 2.0\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -41,6 +41,11 @@ msgstr "Sonido"
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Mail"
 msgstr "Correo"
+
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#| msgid "RSS"
+msgid "SMS"
+msgstr "SMS"
 
 #. Used in a selectbox when the reminder for an appointment is before the start time
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
@@ -268,16 +273,21 @@ msgid "Edit reminders"
 msgstr "Editar recordatorios"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js
 msgid "Apply"
 msgstr "Aplicar"
 
+#. %1$s is attachment file name
 #: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
-#: apps/io.ox/core/attachments/view.js apps/io.ox/core/tk/attachments.js
-#: apps/io.ox/core/tk/attachmentsUtil.js
-msgid "Remove attachment"
-msgstr "Eliminar adjunto"
+msgid "Remove attachment \"%1$s\""
+msgstr "Eliminar el adjunto \"%1$s\""
+
+#: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
+msgid "Add attachment"
+msgstr "Añadir adjunto"
 
 #. color names for screenreaders
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
@@ -479,7 +489,6 @@ msgstr "Día"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/editLocale.js
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -501,7 +510,6 @@ msgstr ""
 "cambiar el mes. Cierre el selector de fecha pulsando la tecla [Esc]."
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "Hora"
 
@@ -520,7 +528,6 @@ msgstr "Ayuda en línea"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
@@ -543,7 +550,9 @@ msgstr "Ayuda en línea"
 #: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
 #: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
+#: apps/plugins/administration/groups/settings/pane.js
 #: apps/plugins/administration/groups/settings/toolbar.js
+#: apps/plugins/administration/resources/settings/pane.js
 #: apps/plugins/administration/resources/settings/toolbar.js
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 #: apps/plugins/portal/xing/actions.js
@@ -566,7 +575,9 @@ msgstr "Borrar"
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/main.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
+#: apps/plugins/administration/groups/settings/pane.js
 #: apps/plugins/administration/groups/settings/toolbar.js
+#: apps/plugins/administration/resources/settings/pane.js
 #: apps/plugins/administration/resources/settings/toolbar.js
 msgid "Edit"
 msgstr "Editar"
@@ -631,8 +642,8 @@ msgstr "Todas las zonas horarias"
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 #: apps/io.ox/backbone/views/toolbar.js
-msgid "%1$s Toolbar"
-msgstr "Barra de herramientas %1$s"
+msgid "%1$s toolbar. Use cursor keys to navigate."
+msgstr "Barra de herramientas %1$s. Use las teclas del cursor para moverse."
 
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
@@ -679,6 +690,7 @@ msgid "Currently there are no compatible webcams available on your device."
 msgstr "Actualmente no hay webcams compatibles disponibles en su dispositivo."
 
 #: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 msgid "Take a photo"
 msgstr "Tomar una fotografía"
 
@@ -739,8 +751,12 @@ msgid "Go to next decade"
 msgstr "Ir a la década siguiente"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Edit image"
-msgstr "Editar imagen"
+msgid "Change photo"
+msgstr "Cambiar foto"
+
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+msgid "Upload a photo"
+msgstr "Subir una foto"
 
 #. noun. label for the zoomslider in case the zoom is undefined or 0
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
@@ -748,31 +764,8 @@ msgid "Zoom"
 msgstr "Acercar"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-#: apps/io.ox/contacts/widgets/pictureUpload.js
-msgid "Upload image"
-msgstr "Subir imagen"
-
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Take photo"
-msgstr "Tomar fotografía"
-
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Rotate image"
-msgstr "Rotar imagen"
-
-#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/change-folder-alarms.js
-#: apps/io.ox/calendar/actions/change-organizer.js
-#: apps/io.ox/core/folder/picker.js module:io.ox/core
-#: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-#: apps/io.ox/settings/security/sessions/settings/pane.js
-msgid "Ok"
-msgstr "Aceptar"
+msgid "Remove photo"
+msgstr "Eliminar foto"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
@@ -801,7 +794,7 @@ msgstr "Cerrar"
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/detail/links.js
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
 #: module:io.ox/core/boot apps/io.ox/notes/toolbar.js module:io.ox/notes
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
@@ -809,64 +802,25 @@ msgid "Download"
 msgstr "Descargar"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-alarms.js
 #: apps/io.ox/calendar/actions/change-folder-alarms.js
-#: apps/io.ox/calendar/actions/change-organizer.js
-#: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
-#: apps/io.ox/calendar/settings/timezones/favorite-view.js
-#: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
-#: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
-#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js apps/io.ox/core/download.js
-#: apps/io.ox/core/folder/actions/archive.js
-#: apps/io.ox/core/folder/actions/common.js
-#: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
+#: apps/io.ox/calendar/actions/change-organizer.js apps/io.ox/calendar/main.js
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/core/desktop.js
+#: apps/io.ox/core/download.js apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
-#: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/core/upsell.js
+#: module:io.ox/core/sub
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
-#: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
-#: apps/io.ox/files/actions/delete.js
-#: apps/io.ox/files/actions/edit-description.js
-#: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/upload-new-version.js
-#: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
+#: module:io.ox/core/viewer apps/io.ox/files/main.js module:io.ox/files
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
-#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/actions/delete.js module:io.ox/mail
-#: apps/io.ox/mail/actions/reminder.js apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js
 #: apps/io.ox/mail/compose/actions/extensions.js
-#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/compose/view.js
-#: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
+#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/main.js
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: module:io.ox/core/boot apps/io.ox/multifactor/views/constants.js
-#: apps/io.ox/portal/main.js module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/apps/settings/pane.js
-#: apps/io.ox/settings/security/certificates/settings/certificate-view.js
-#: module:io.ox/settings/certificates apps/io.ox/tasks/actions/delete.js
-#: module:io.ox/tasks apps/io.ox/tasks/common-extensions.js
-#: apps/io.ox/tasks/edit/main.js apps/io.ox/tasks/main.js
-#: apps/plugins/administration/groups/settings/edit.js
-#: apps/plugins/administration/groups/settings/toolbar.js
-#: apps/plugins/administration/resources/settings/edit.js
-#: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-#: apps/plugins/portal/mail/register.js apps/plugins/portal/rss/register.js
-#: apps/plugins/portal/tumblr/register.js apps/plugins/portal/twitter/util.js
-#: apps/plugins/portal/userSettings/register.js
-#: apps/plugins/portal/xing/register.js
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -1031,15 +985,15 @@ msgstr "¿Desea que las citas se impriman en detalle o en una lista compacta?"
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-msgid "Detailed"
-msgstr "Detallado"
-
-#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/freetime/timeView.js apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "Compact"
 msgstr "Compacta"
+
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Detailed"
+msgstr "Detallado"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
@@ -1058,32 +1012,42 @@ msgstr "Mover"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
-msgid ""
-"Do you want to confirm the whole series or just one appointment within the "
-"series?"
-msgstr ""
-"¿Quiere confirmar la serie completa o simplemente una cita dentro de ella?"
+msgid "Change appointment status"
+msgstr "Cambiar estado de la cita"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid ""
-"Do you want to decline the whole series or just one appointment within the "
-"series?"
-msgstr "¿Quiere rechazar toda la serie o solo una cita de la serie?"
+"This appointment is part of a series. Do you want to confirm the whole "
+"series or just one appointment within the series?"
+msgstr ""
+"Esta cita es parte de una serie. ¿Quiere confirmar la serie completa o "
+"simplemente una cita dentro de ella?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid ""
+"This appointment is part of a series. Do you want to decline the whole "
+"series or just one appointment within the series?"
+msgstr ""
+"Esta cita es parte de una serie. ¿Quiere rechazar toda la serie o solo una "
+"cita de la serie?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Accept appointment"
+msgstr "Aceptar cita"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Decline appointment"
+msgstr "Rechazar cita"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
-#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
-msgid "Series"
-msgstr "Serie"
+msgid "Accept series"
+msgstr "Aceptar serie"
 
+#. Use singular in this context
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/view.js
-#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail
-msgid "Appointment"
-msgstr "Cita"
+msgid "Decline series"
+msgstr "Rechazar serie"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
@@ -1104,9 +1068,11 @@ msgid "Change status"
 msgstr "Cambiar estado"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-alarms.js
+#: apps/io.ox/calendar/actions/change-folder-alarms.js
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-msgid "Change reminder"
-msgstr "Cambiar recordatorio"
+msgid "Change reminders"
+msgstr "Cambiar recordatorios"
 
 #. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -1164,15 +1130,6 @@ msgid "Synchronize calendar"
 msgstr "Sincronizar calendario"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/change-alarms.js
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-msgid "Reminder"
-msgstr "Recordatorio"
-
-#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 msgid "Change confirmation status"
@@ -1194,8 +1151,8 @@ msgstr ""
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
-#: apps/plugins/portal/xing/actions.js module:plugins/portal
+#: apps/io.ox/contacts/model.js apps/plugins/portal/xing/actions.js
+#: module:plugins/portal
 msgid "Comment"
 msgstr "Comentario"
 
@@ -1209,10 +1166,58 @@ msgstr "Por favor, comente su estado de confirmación."
 msgid "Tentative"
 msgstr "Provisional"
 
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+msgid ""
+"This appointment is part of a series. Do you want to change your "
+"confirmation for the whole series or just for this appointment within the "
+"series?"
+msgstr ""
+"Esta cita forma parte de una serie. ¿Quiere cambiar la confirmación de toda "
+"la serie o solo de esta cita dentro de la serie?"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-alarms.js
+msgid "Change appointment"
+msgstr "Cambiar cita"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-alarms.js
+msgid "Change series"
+msgstr "Cambiar serie"
+
+#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+msgid "Reminder"
+msgstr "Recordatorio"
+
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-folder-alarms.js
-msgid "Change reminders"
-msgstr "Cambiar recordatorios"
+#: apps/io.ox/calendar/actions/change-organizer.js
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+#: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
+msgid "Ok"
+msgstr "Aceptar"
+
+#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
+msgid "Change appointment reminders"
+msgstr "Cambiar recordatorios de cita"
+
+#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
+msgid ""
+"This appointment is part of a series. Do you want to change your reminders "
+"for the whole series or just for this appointment within the series?"
+msgstr ""
+"Esta cita forma parte de una serie. ¿Quiere cambiar sus recordatorios para"
+" toda la serie o solo para esta cita?"
 
 #. %1$s:  is the calendar's name
 #: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
@@ -1286,12 +1291,12 @@ msgstr ""
 "en su propio calendario?"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-msgid "On behalf of the owner"
-msgstr "En nombre del propietario"
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Invite owner"
 msgstr "Invitar al propietario"
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid "On behalf of the owner"
+msgstr "En nombre del propietario"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in public calendars"
@@ -1311,27 +1316,23 @@ msgstr "Crear en calendario público"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid ""
-"Do you want to delete the whole series or just this appointment within the "
-"series?"
-msgstr "¿Quiere borrar toda la serie o solo una cita de la serie?"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
-msgid "This appointment"
-msgstr "Esta cita"
+"This appointment is part of a series. Do you want to delete all appointments "
+"of the series or just this appointment?"
+msgstr ""
+"Esta cita forma parte de una serie. ¿Quiere borrar todas las citas de la "
+"serie o solo esta cita?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid ""
-"Do you want to delete this and all future appointments or just this "
-"appointment within the series?"
+"This appointment is part of a series. Do you want to delete this and all "
+"future appointments of the series or just this appointment?"
 msgstr ""
-"¿Quiere borrar esta cita y todas las citas futuras o solo esta cita de la "
-"serie?"
+"Esta cita forma parte de una serie. ¿Quiere borrar esta cita y todas las "
+"citas futuras de la serie o solo esta cita?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
-msgid "All future appointments"
-msgstr "Todas las citas futuras"
+msgid "Do you really want to delete this appointment?"
+msgstr "¿Está seguro de que quiere borrar esta cita?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -1339,8 +1340,16 @@ msgid "Delete appointment"
 msgstr "Borrar cita"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Do you want to delete this appointment?"
-msgstr "¿Quiere borrar esta cita?"
+msgid "Delete this appointment"
+msgstr "Borrar esta cita"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+msgid "Delete all appointments"
+msgstr "Borrar todas las citas"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+msgid "Delete all future appointments"
+msgstr "Borrar todas las citas futuras"
 
 #: apps/io.ox/calendar/actions/subscribe-google.js module:io.ox/calendar
 msgid "My Google Calendar"
@@ -1390,9 +1399,10 @@ msgstr "Suscribirse a calendarios compartidos"
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/settings/editLocale.js apps/io.ox/editor/main.js
 #: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
 #: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
@@ -1426,15 +1436,19 @@ msgstr "Sincronizar mediante DAV"
 msgid "sync via DAV"
 msgstr "sincronizar mediante DAV"
 
+#. shown when a download of calendar data is requested (has header "Included calendars ...")
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public calendars"
 msgstr "Calendarios públicos"
 
+#. shown when a download of calendar data is requested (has header "Included calendars ...")
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared calendars"
 msgstr "Calendarios compartidos"
 
@@ -1442,12 +1456,18 @@ msgstr "Calendarios compartidos"
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/common-extensions.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
-#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/list/listview.js
+#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Privada"
+
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Hidden calendars"
+msgstr "Calendarios ocultos"
 
 #: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
 msgid "no color"
@@ -1487,7 +1507,8 @@ msgstr "Mostrado como"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
+#: module:io.ox/mail apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Calendar"
 msgstr "Calendario"
 
@@ -1544,7 +1565,7 @@ msgstr "Ha ocurrido un error. Por favor, inténtelo de nuevo."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/toolbar.js
-#: module:io.ox/calendar
+#: module:io.ox/calendar apps/io.ox/calendar/util.js
 msgid "Edit appointment"
 msgstr "Editar cita"
 
@@ -1564,8 +1585,8 @@ msgstr "Crear"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/view-form.js apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
@@ -1654,14 +1675,14 @@ msgstr ""
 "organizador."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "My calendars"
-msgstr "Mis calendarios"
+msgid "You are no longer using a public calendar. You were added as organizer."
+msgstr ""
+"Ya no está utilizando un calendario público. Se le añadió como organizador."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Hidden calendars"
-msgstr "Calendarios ocultos"
+msgid "My calendars"
+msgstr "Mis calendarios"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
@@ -1681,40 +1702,12 @@ msgid "Collapse form"
 msgstr "Plegar formulario"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Ayuda de visibilidad"
+msgid "Visibility"
+msgstr "Visibilidad"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Standard"
 msgstr "Estándar"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "La cita es visible para todos los usuarios de calendarios compartidos."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"En calendarios compartidos, la cita se muestra como un bloque de tiempo "
-"sencillo para los usuarios que no asisten."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"La cita no es visible en absoluto para los usuarios que no asisten de "
-"calendarios compartidos. La cita no se toma en consideración para "
-"conflictos, y no aparece en la vista de planificación. Esta opción no se "
-"puede usar si la cita bloquea recursos."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility"
-msgstr "Visibilidad"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Appointment color"
@@ -1739,24 +1732,24 @@ msgstr "Los participantes pueden hacer cambios"
 
 #. Sort by messages that have attachments
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-detail.js apps/io.ox/contacts/edit/view-form.js
-#: module:io.ox/contacts apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail apps/io.ox/mail/view-options.js
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/view-options.js apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Attachments"
 msgstr "Adjuntos"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr "Suelte aquí para subir un <b class=\"dndignore\">nuevo adjunto</b>"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -1775,6 +1768,15 @@ msgstr "Editar cita"
 msgid "Description has been copied"
 msgstr "La descripción ha sido copiada"
 
+#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail
+msgid "Appointment"
+msgstr "Cita"
+
+#. "Discard changes" appears in combination with "Cancel" (this action)
+#. Translation must be distinguishable for the user
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/editor/main.js
@@ -1808,6 +1810,13 @@ msgstr "Cambiar la zona horaria"
 msgid "Change"
 msgstr "Cambiar"
 
+#. Will be used as aria lable for the screen reader to tell the user which color/category the appointment within the calendar has.
+#: apps/io.ox/calendar/extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/list/listview.js apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core
+msgid "Category"
+msgstr "Categoría"
+
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
 msgctxt "app"
@@ -1837,12 +1846,23 @@ msgid "Next month"
 msgstr "Mes siguiente"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid "Zoom in"
+msgstr "Acercar"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid "Zoom out"
+msgstr "Alejar"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/toolbar.js
 #: module:io.ox/contacts apps/io.ox/files/toolbar.js module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/sharing.js apps/io.ox/mail/compose/view.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/mail/toolbar.js apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "Opciones"
 
@@ -2028,6 +2048,12 @@ msgid "Select all"
 msgstr "Seleccionar todo"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
+#: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/files/listview.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+msgid "List view"
+msgstr "Vista de lista"
+
+#: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 msgid "Load appointments until %1$s"
 msgstr "Cargar citas hasta %1$s"
 
@@ -2053,15 +2079,8 @@ msgid "Could't load appointment data."
 msgstr "No se pudieron cargar datos de la cita."
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/tree.js module:io.ox/core
-#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/files/share/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
-msgid "Folders"
-msgstr "Carpetas"
+msgid "Calendars"
+msgstr "Calendarios"
 
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
@@ -2073,8 +2092,15 @@ msgid "Back"
 msgstr "Atrás"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-msgid "Calendars"
-msgstr "Calendarios"
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
+#: module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/files/share/toolbar.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
+msgid "Folders"
+msgstr "Carpetas"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendar account error"
@@ -2118,10 +2144,6 @@ msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "La aplicación puede no funcionar como debería hasta que se resuelva este "
 "problema."
-
-#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-msgid "Listview"
-msgstr "Vista de lista"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -2177,8 +2199,8 @@ msgid "Selected - %1$s"
 msgstr "Seleccionada - %1$s"
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js apps/io.ox/participants/chronos-detail.js
-#: module:io.ox/core apps/io.ox/participants/detail.js
+#: apps/io.ox/participants/chronos-detail.js module:io.ox/core
+#: apps/io.ox/participants/detail.js
 msgid "Participants"
 msgstr "Participantes"
 
@@ -2344,8 +2366,8 @@ msgid "Language"
 msgstr "Idioma"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/contacts/model.js
-#: module:io.ox/contacts
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/contacts/edit/view.js
+#: module:io.ox/contacts apps/io.ox/contacts/model.js
 msgid "Country"
 msgstr "País"
 
@@ -2390,15 +2412,6 @@ msgstr "Zonas horarias favoritas"
 msgctxt "app"
 msgid "Favorite timezones"
 msgstr "Zonas horarias favoritas"
-
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
-#: apps/io.ox/tasks/toolbar.js
-msgid "New"
-msgstr "Nuevo"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #. used as a verb here. label of a button to view attachments
@@ -2875,6 +2888,36 @@ msgstr[1] "La serie termina después de %1$d repeticiones."
 msgid "The series never ends."
 msgstr "La serie nunca termina."
 
+#. object permissions - read
+#. object permissions - edit/modify
+#. object permissions - delete
+#. Auth type. None. No authentication
+#. Connection security. None.
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/attachments.js
+#: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/view-options.js
+#: module:io.ox/files apps/io.ox/mail/accounts/view-form.js
+#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "None"
+msgstr "Ninguno"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/participants/views.js module:io.ox/core
+msgid "Unknown"
+msgstr "Desconocida"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "This appointment is part of a series."
+msgstr "Esta cita forma parte de una serie."
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "Edit this appointment"
+msgstr "Editar esta cita"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
 "Do you want to edit the whole series or just this appointment within the "
@@ -2882,10 +2925,22 @@ msgid ""
 msgstr "¿Quiere editar toda la serie o solo esta cita de la serie?"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "Edit series"
+msgstr "Editar serie"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
 "Do you want to edit this and all future appointments or the whole series?"
 msgstr ""
 "¿Quiere editar esta cita y todas las citas futuras o la serie completa?"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "Series"
+msgstr "Serie"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "Edit all future appointments"
+msgstr "Editar todas las citas futuras"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
@@ -2895,12 +2950,24 @@ msgstr ""
 "¿Quiere editar esta y todas las citas futuras o solo esta cita de la serie?"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Confidential"
-msgstr "Confidencial"
+msgid "Appointment is private"
+msgstr "La cita es privada"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Recurrence"
-msgstr "Repetición"
+msgid "Appointment is confidential"
+msgstr "La cita es confidencial"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "Appointment is part of a series"
+msgstr "La cita forma parte de una serie"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "Appointment has participants"
+msgstr "La cita tiene participantes"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "Appointment has attachments"
+msgstr "La cita tiene adjuntos"
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid ""
@@ -3019,14 +3086,15 @@ msgid "Contact has been copied"
 msgstr "El contacto se ha copiado"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/create-dist-view.js
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-msgid "Add contact"
-msgstr "Añadir contacto"
+#: apps/io.ox/contacts/edit/main.js
+#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
+#: apps/io.ox/contacts/toolbar.js
+msgid "New contact"
+msgstr "Nuevo contacto"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Add distribution list"
-msgstr "Añadir lista de distribución"
+msgid "New distribution list"
+msgstr "Nueva lista de distribución"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/mail/actions.js module:io.ox/mail
@@ -3115,13 +3183,17 @@ msgstr "Lista de distribución"
 msgid "My address books"
 msgstr "Mis libretas de direcciones"
 
+#. shown when a download of contact data is requested (has header "Included address books ...")
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public address books"
 msgstr "Libretas de direcciones públicas"
 
+#. shown when a download of contact data is requested (has header "Included address books ...")
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared address books"
 msgstr "Libretas de direcciones compartidas"
 
@@ -3160,8 +3232,10 @@ msgid "Empty"
 msgstr "Vacío"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/contacts/widgets/pictureUpload.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
+#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
 #: module:io.ox/settings/certificates
 msgid "Remove"
@@ -3219,7 +3293,7 @@ msgstr "Editar lista de distribución"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
+#: apps/io.ox/contacts/print.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
 #: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -3233,6 +3307,11 @@ msgstr "Nombre"
 #: apps/io.ox/contacts/view-detail.js
 msgid "This list has no members yet"
 msgstr "Esta lista no tiene miembros aún"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+msgid "Add contact"
+msgstr "Añadir contacto"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid ""
@@ -3260,10 +3339,6 @@ msgid "Edit Contact"
 msgstr "Editar contacto"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
-msgid "Create contact"
-msgstr "Crear contacto"
-
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/settings/pane.js apps/io.ox/core/folder/extensions.js
 #: module:io.ox/core apps/io.ox/core/main/topbar_right.js
 #: apps/io.ox/core/settings/pane.js
@@ -3275,14 +3350,6 @@ msgstr "Mis datos de contacto"
 #: apps/io.ox/contacts/toolbar.js
 msgid "Edit contact"
 msgstr "Editar contacto"
-
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
-msgid "Some fields contain invalid data"
-msgstr "Algunos campos contienen datos no válidos"
-
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
-msgid "New contact"
-msgstr "Nuevo contacto"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
@@ -3304,15 +3371,18 @@ msgid "Phone & fax numbers"
 msgstr "Números de teléfono y fax"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
 msgid "Home address"
 msgstr "Dirección privada"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Business address"
 msgstr "Dirección profesional"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view.js apps/io.ox/contacts/view-detail.js
 msgid "Other address"
 msgstr "Otras direcciones"
 
@@ -3347,9 +3417,473 @@ msgstr ""
 "%4$s\n"
 "%5$s"
 
-#: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-msgid "Show all fields"
-msgstr "Mostrar todos los campos"
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Remove field"
+msgstr "Eliminar campo"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "This contact is private and cannot be shared"
+msgstr "Este contacto es privado y no se puede compartir"
+
+#. Contact edit dialog. Personal information.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add personal info"
+msgstr "Añadir información personal"
+
+#. Contact edit dialog. Business information.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add business info"
+msgstr "Añadir información profesional"
+
+#. Contact edit dialog.
+#. Short for: Add email address, phone number, fax number.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add email, phone, fax"
+msgstr "Añadir correo, teléfono, fax"
+
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add postal address"
+msgstr "Añadir dirección postal"
+
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add additional info"
+msgstr "Añadir información adicional"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgctxt "salutation"
+msgid "Title"
+msgstr "Tratamiento"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Display name"
+msgstr "Nombre a mostrar"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/plugins/portal/xing/register.js
+#: module:plugins/portal apps/plugins/wizards/mandatory/main.js
+#: module:io.ox/wizards/firstStart
+msgid "First name"
+msgstr "Nombre"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/plugins/portal/xing/register.js
+#: module:plugins/portal apps/plugins/wizards/mandatory/main.js
+#: module:io.ox/wizards/firstStart
+msgid "Last name"
+msgstr "Apellidos"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Middle name"
+msgstr "Segundo nombre"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Suffix"
+msgstr "Sufijo"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Birthday"
+msgstr "Cumpleaños"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Marital status"
+msgstr "Estado civil"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Children"
+msgstr "Hijos"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Nickname"
+msgstr "Apodo"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Spouse's name"
+msgstr "Nombre del cónyuge"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Anniversary"
+msgstr "Aniversario"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Email 1"
+msgstr "Correo electrónico 1"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Email 2"
+msgstr "Correo electrónico 2"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Email 3"
+msgstr "Correo electrónico 3"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Instant Messenger 1"
+msgstr "Mensajería instantánea 1"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Instant Messenger 2"
+msgstr "Mensajería instantánea 2"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/onboarding/clients/config.js
+#: module:io.ox/core/onboarding apps/plugins/portal/rss/register.js
+#: module:io.ox/portal
+msgid "URL"
+msgstr "URL"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Company"
+msgstr "Empresa"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Profession"
+msgstr "Profesión"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/print.js
+msgid "Department"
+msgstr "Departamento"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Position"
+msgstr "Puesto"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Employee type"
+msgstr "Tipo de empleado"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Room number"
+msgstr "Número de despacho"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Employee ID"
+msgstr "Nº de empleado"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Sales Volume"
+msgstr "Volumen de ventas"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "TAX ID"
+msgstr "Nº Fiscal"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Commercial Register"
+msgstr "Registro comercial"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Branches"
+msgstr "Sucursales"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Business category"
+msgstr "Categoría profesional"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/core/yell.js module:io.ox/core
+msgid "Info"
+msgstr "Información"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Manager"
+msgstr "Gerente"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Assistant"
+msgstr "Ayudante"
+
+#. vcard (electronic business card) field
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/print-details.js
+#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
+msgid "Cell phone"
+msgstr "Teléfono móvil"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Cell phone (alt)"
+msgstr "Teléfono móvil (alternativo)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (business)"
+msgstr "Teléfono (profesional)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (business alt)"
+msgstr "Teléfono (profesional alternativo)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Telephone callback"
+msgstr "Teléfono de devolución de llamada"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (car)"
+msgstr "Teléfono (coche)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (company)"
+msgstr "Teléfono (empresa)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (home)"
+msgstr "Teléfono (casa)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (home alt)"
+msgstr "Teléfono (alternativo de casa)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (other)"
+msgstr "Teléfono (otro)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Telephone (ISDN)"
+msgstr "Teléfono (RDSI)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Pager"
+msgstr "Buscapersonas"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Telephone primary"
+msgstr "Teléfono principal"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Telephone radio"
+msgstr "Radioteléfono"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Telex"
+msgstr "Télex"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "TTY/TDD"
+msgstr "DTS"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "IP phone"
+msgstr "Teléfono IP"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Phone (assistant)"
+msgstr "Teléfono (ayudante)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Fax (Home)"
+msgstr "Fax (Casa)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Fax"
+msgstr "Fax"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Fax (alt)"
+msgstr "Fax (alternativo)"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Street"
+msgstr "Calle"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Postcode"
+msgstr "Código postal"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/print.js
+msgid "City"
+msgstr "Ciudad"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "State"
+msgstr "Estado"
+
+#. Notes on a contact in the address book.
+#. Like in "adding a note". "Notizen" in German, for example.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgctxt "contact"
+msgid "Note"
+msgstr "Nota"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Furigana for first name"
+msgstr "Furigana de nombre"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Furigana for last name"
+msgstr "Furigana de apellido"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Furigana for company"
+msgstr "Furigana de empresa"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Image 1"
+msgstr "Imagen 1"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 01"
+msgstr "Opcional 01"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 02"
+msgstr "Opcional 02"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 03"
+msgstr "Opcional 03"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 04"
+msgstr "Opcional 04"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 05"
+msgstr "Opcional 05"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 06"
+msgstr "Opcional 06"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 07"
+msgstr "Opcional 07"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 08"
+msgstr "Opcional 08"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 09"
+msgstr "Opcional 09"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 10"
+msgstr "Opcional 10"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 11"
+msgstr "Opcional 11"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 12"
+msgstr "Opcional 12"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 13"
+msgstr "Opcional 13"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 14"
+msgstr "Opcional 14"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 15"
+msgstr "Opcional 15"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 16"
+msgstr "Opcional 16"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 17"
+msgstr "Opcional 17"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 18"
+msgstr "Opcional 18"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 19"
+msgstr "Opcional 19"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js
+msgid "Optional 20"
+msgstr "Opcional 20"
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "This value is too long. The allowed length is %1$d characters."
+msgstr ""
+"Este valor es demasiado largo. La longitud permitida es de %1$d caracteres."
+
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "This is an invalid email address."
+msgstr "Esta dirección de correo no es válida."
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Empty name and description found."
@@ -3393,338 +3927,6 @@ msgid "Last name must not be empty for internal users"
 msgstr "El apellido de los usuarios internos no debe estar vacío"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Display name"
-msgstr "Nombre a mostrar"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/plugins/portal/xing/register.js module:plugins/portal
-#: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
-msgid "First name"
-msgstr "Nombre"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/plugins/portal/xing/register.js module:plugins/portal
-#: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
-msgid "Last name"
-msgstr "Apellidos"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Middle name"
-msgstr "Segundo nombre"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Suffix"
-msgstr "Sufijo"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgctxt "salutation"
-msgid "Title"
-msgstr "Tratamiento"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Street"
-msgstr "Calle"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Postcode"
-msgstr "Código postal"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
-msgid "City"
-msgstr "Ciudad"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "State"
-msgstr "Estado"
-
-#. vcard (electronic business card) field
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
-#: module:plugins/portal
-msgid "Date of birth"
-msgstr "Fecha de nacimiento"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Marital status"
-msgstr "Estado civil"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Children"
-msgstr "Hijos"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Profession"
-msgstr "Profesión"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Nickname"
-msgstr "Apodo"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Spouse's name"
-msgstr "Nombre del cónyuge"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Anniversary"
-msgstr "Aniversario"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
-msgid "Department"
-msgstr "Departamento"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Position"
-msgstr "Puesto"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Employee type"
-msgstr "Tipo de empleado"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Room number"
-msgstr "Número de despacho"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Employee ID"
-msgstr "Nº de empleado"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Sales Volume"
-msgstr "Volumen de ventas"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "TAX ID"
-msgstr "Nº Fiscal"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Commercial Register"
-msgstr "Registro comercial"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Branches"
-msgstr "Sucursales"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Business category"
-msgstr "Categoría profesional"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts apps/io.ox/core/yell.js
-#: module:io.ox/core
-msgid "Info"
-msgstr "Información"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Manager"
-msgstr "Gerente"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Assistant"
-msgstr "Ayudante"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (business)"
-msgstr "Teléfono (profesional)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (business alt)"
-msgstr "Teléfono (profesional alternativo)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Fax"
-msgstr "Fax"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Telephone callback"
-msgstr "Teléfono de devolución de llamada"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (car)"
-msgstr "Teléfono (coche)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (company)"
-msgstr "Teléfono (empresa)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (home)"
-msgstr "Teléfono (casa)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (home alt)"
-msgstr "Teléfono (alternativo de casa)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Fax (Home)"
-msgstr "Fax (Casa)"
-
-#. vcard (electronic business card) field
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Cell phone"
-msgstr "Teléfono móvil"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Cell phone (alt)"
-msgstr "Teléfono móvil (alternativo)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (other)"
-msgstr "Teléfono (otro)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Fax (alt)"
-msgstr "Fax (alternativo)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Email 1"
-msgstr "Correo electrónico 1"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Email 2"
-msgstr "Correo electrónico 2"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Email 3"
-msgstr "Correo electrónico 3"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-#: apps/plugins/portal/rss/register.js module:io.ox/portal
-msgid "URL"
-msgstr "URL"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Telephone (ISDN)"
-msgstr "Teléfono (RDSI)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Pager"
-msgstr "Buscapersonas"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Telephone primary"
-msgstr "Teléfono principal"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Telephone radio"
-msgstr "Radioteléfono"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Telex"
-msgstr "Télex"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "TTY/TDD"
-msgstr "DTS"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Instant Messenger 1"
-msgstr "Mensajería instantánea 1"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Instant Messenger 2"
-msgstr "Mensajería instantánea 2"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "IP phone"
-msgstr "Teléfono IP"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Phone (assistant)"
-msgstr "Teléfono (ayudante)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Company"
-msgstr "Empresa"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Image 1"
-msgstr "Imagen 1"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 01"
-msgstr "Opcional 01"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 02"
-msgstr "Opcional 02"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 03"
-msgstr "Opcional 03"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 04"
-msgstr "Opcional 04"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 05"
-msgstr "Opcional 05"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 06"
-msgstr "Opcional 06"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 07"
-msgstr "Opcional 07"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 08"
-msgstr "Opcional 08"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 09"
-msgstr "Opcional 09"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 10"
-msgstr "Opcional 10"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 11"
-msgstr "Opcional 11"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 12"
-msgstr "Opcional 12"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 13"
-msgstr "Opcional 13"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 14"
-msgstr "Opcional 14"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 15"
-msgstr "Opcional 15"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 16"
-msgstr "Opcional 16"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 17"
-msgstr "Opcional 17"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 18"
-msgstr "Opcional 18"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 19"
-msgstr "Opcional 19"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Optional 20"
-msgstr "Opcional 20"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Links"
 msgstr "Enlaces"
 
@@ -3748,10 +3950,6 @@ msgstr "Dirección profesional"
 msgid "Address Other"
 msgstr "Otra dirección"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "This contact is private and cannot be shared"
-msgstr "Este contacto es privado y no se puede compartir"
-
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
@@ -3761,24 +3959,22 @@ msgstr "Teléfono"
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Email"
 msgstr "Correo electrónico"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Dirección profesional"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Dirección privada"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Otras direcciones"
 
@@ -3802,6 +3998,12 @@ msgstr "Otro"
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Mensajería"
+
+#. vcard (electronic business card) field
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/plugins/halo/xing/register.js module:plugins/portal
+msgid "Date of birth"
+msgstr "Fecha de nacimiento"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -3894,6 +4096,11 @@ msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
+#. %1$d is age in years (number)
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Age: %1$d"
+msgstr "Edad: %1$d"
+
 #. '%1$s contact's display name
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
 msgid "%1$s could not be added as the contact has no valid email field."
@@ -3913,11 +4120,10 @@ msgid_plural "Distribution list with %1$d entries"
 msgstr[0] "Lista de distribución con 1 entrada"
 msgstr[1] "Lista de distribución con %1$d entradas"
 
+#. %1$s is a map service, like "Google Maps"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-#: apps/io.ox/participants/chronos-views.js module:io.ox/core
-#: apps/io.ox/participants/views.js
-msgid "Resource"
-msgstr "Recurso"
+msgid "Open in %1$s"
+msgstr "Abrir en %1$s"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
@@ -3930,32 +4136,6 @@ msgstr "Todos los adjuntos"
 msgid "Could not load attachments for this contact."
 msgstr "No se pudieron cargar los adjuntos de este contacto."
 
-#. %1$s is a map service, like "Google Maps"
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Open in %1$s"
-msgstr "Abrir en %1$s"
-
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Personal"
-msgstr "Personal"
-
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Job"
-msgstr "Empleo"
-
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Mail and Messaging"
-msgstr "Correo y mensajería"
-
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Phone numbers"
-msgstr "Números de teléfono"
-
-#. section name for contact fields in detail view
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-msgid "Miscellaneous"
-msgstr "Otros"
-
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Copy to description"
 msgstr "Copiar a la descripción"
@@ -3964,18 +4144,26 @@ msgstr "Copiar a la descripción"
 msgid "Saved in:"
 msgstr "Guardado en:"
 
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Change contact photo"
+msgstr "Cambiar foto de contacto"
+
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-msgstr "Su imagen seleccionada supera el tamaño máximo permitido de %1$s"
+msgid "The photo exceeds the allowed file size of %1$s"
+msgstr "La foto supera el tamaño de fichero permitido de %1$s"
 
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid ""
-"This filetype is not supported as contact picture. Only image types (JPG, "
-"GIF, BMP or PNG) are supported."
+"The file type \"%1$s\" cannot be used as a contact photo. Supported file "
+"types are JPEG, GIF, BMP, and PNG."
 msgstr ""
-"Este tipo de fichero no está admitido como imagen de contacto. Sólo se "
-"admiten los tipos de imagen (JPG, GIF, BMP o PNG)."
+"El tipo de fichero \"%1$s\" no se puede usar como foto de contacto. Los "
+"tipos de fichero permitidos son JPEG, GIF, BMP, y PNG."
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Click to add photo"
+msgstr "Pulse para añadir una foto"
 
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
@@ -4012,6 +4200,11 @@ msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
 msgstr[0] "%1$d adjunto"
 msgstr[1] "%1$d adjuntos"
+
+#: apps/io.ox/core/attachments/view.js module:io.ox/core
+#: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/attachmentsUtil.js
+msgid "Remove attachment"
+msgstr "Eliminar adjunto"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
@@ -4272,8 +4465,7 @@ msgstr "Descargar fichero no escaneado"
 #: apps/io.ox/core/download.js module:io.ox/core
 msgid "Unable to perform Anti-Virus check for the requested file(s)"
 msgstr ""
-"No se pudo realizar la comprobación antivirus del fichero o ficheros "
-"solicitados"
+"No se puede ejecutar la comprobación antivirus en los fichero(s) solicitados"
 
 #: apps/io.ox/core/download.js module:io.ox/core
 msgid "Malicious file detected"
@@ -4483,6 +4675,7 @@ msgstr "La carpeta se ha vaciado"
 msgid "Do you really want to empty folder \"%s\"?"
 msgstr "¿De verdad quiere vaciar la carpeta \"%s\"?"
 
+#. empty is a verb in this case. Used when the contents of a folder should be deleted
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
 msgid "Empty folder"
@@ -4491,10 +4684,6 @@ msgstr "Vaciar Carpeta"
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe to IMAP folders"
 msgstr "Suscribirse a carpetas IMAP"
-
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-msgid "You cannot move items to virtual folders"
-msgstr "No puede mover elementos a carpetas virtuales"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
@@ -4617,9 +4806,10 @@ msgid "%1$s: %2$s"
 msgstr "%1$s: %2$s"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
-#: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
-msgid "Unread messages"
-msgstr "Mensajes no leídos"
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#: apps/io.ox/mail/view-options.js
+msgid "Unread"
+msgstr "No leido"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 msgid "All my public appointments"
@@ -4668,8 +4858,8 @@ msgid "Delete forever"
 msgstr "Borrar para siempre"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
-#: module:io.ox/files
 msgid "Restore"
 msgstr "Restaurar"
 
@@ -4868,6 +5058,10 @@ msgid "%1$d unread"
 msgstr "%1$d no leídos"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+msgid "Right click for more options."
+msgstr "Pulsar con el botón derecho para más opciones."
+
+#: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Folder-specific actions"
 msgstr "Acciones específicas de carpeta"
 
@@ -5006,7 +5200,7 @@ msgstr "Navegar a:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "All Applications"
-msgstr ""
+msgstr "Todas las aplicaciones"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5046,7 +5240,7 @@ msgstr "Portal"
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: module:io.ox/settings apps/io.ox/settings/personalData/settings/pane.js
 msgctxt "app"
 msgid "Drive"
 msgstr "Drive"
@@ -5066,6 +5260,12 @@ msgstr "Notas"
 #: module:io.ox/editor apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Editor"
 msgstr "Editor"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/topbar_right.js
+#: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
+msgid "Settings"
+msgstr "Configuración"
 
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
@@ -5114,18 +5314,18 @@ msgstr ""
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Los documentos no guardados se perderán. ¿Desea salir ahora?"
 
+#. folder permissions - Is Admin? NO
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
+msgid "No"
+msgstr "No"
+
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
 #: module:io.ox/files
 msgid "Yes"
 msgstr "Sí"
-
-#. folder permissions - Is Admin? NO
-#: apps/io.ox/core/main/logout.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js
-msgid "No"
-msgstr "No"
 
 #: apps/io.ox/core/main/offline.js module:io.ox/core
 msgid "Offline"
@@ -5160,14 +5360,14 @@ msgstr[1] ""
 "Si no desea conservar un elemento, por favor pulse en el icono de papelera."
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+msgid "Refresh. Current interval (%1$s min) can be customized in settings."
+msgstr ""
+"Recargar. El intervalo actual (%1$s min) se puede personalizar en los ajustes."
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/upsell/register.js module:plugins/portal
 msgid "Upgrade your account"
 msgstr "Actualice su cuenta"
-
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
-msgid "Settings"
-msgstr "Configuración"
 
 #. starts the client onboarding wizard that helps users
 #. to configure their devices to access/sync appsuites
@@ -5187,12 +5387,12 @@ msgstr "Conectar este dispositivo"
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Add login password"
-msgstr ""
+msgstr "Añadir contraseña de inicio de sesión"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change login password"
-msgstr ""
+msgstr "Cambiar contraseña de inicio de sesión"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -5202,6 +5402,11 @@ msgstr "Ayuda"
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 msgid "About"
 msgstr "Acerca de"
+
+#. tooltip of dropdown menu in topbar (contact image icon)
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+msgid "Support"
+msgstr "Soporte"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 msgid ""
@@ -5479,20 +5684,12 @@ msgstr[0] "No se puede imprimir este elemento"
 msgstr[1] "No se pueden imprimir estos elementos"
 
 #: apps/io.ox/core/relogin.js module:io.ox/core
-msgid "Your session is expired"
-msgstr "La sesión ha expirado"
+msgid "You have to sign in again"
+msgstr "Tiene que identificarse de nuevo"
 
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Please sign in again to continue"
 msgstr "Por favor, inicie de nuevo la sesión para continuar"
-
-#: apps/io.ox/core/relogin.js module:io.ox/core
-msgid "Your IP address has changed"
-msgstr "Su dirección IP ha cambiado"
-
-#: apps/io.ox/core/relogin.js module:io.ox/core
-msgid "You have to sign in again"
-msgstr "Tiene que identificarse de nuevo"
 
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Please enter correct password"
@@ -5501,6 +5698,27 @@ msgstr "Por favor, introduzca la contraseña correcta"
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Failed to sign in"
 msgstr "Falló el inicio de sesión"
+
+#: apps/io.ox/core/relogin.js module:io.ox/core
+msgid "Your IP address has changed"
+msgstr "Su dirección IP ha cambiado"
+
+#: apps/io.ox/core/relogin.js module:io.ox/core
+msgid "Your session is expired"
+msgstr "La sesión ha expirado"
+
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+msgid "Position %s"
+msgstr "Posición %s"
+
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+msgid "Change quick launch icons"
+msgstr "Cambiar iconos de lanzamiento rápido"
+
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+msgid "Save changes"
+msgstr "Guardar cambios"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
@@ -5537,49 +5755,62 @@ msgstr "Descargas"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 msgid "Regional settings"
-msgstr "Ajustes regionales"
-
-#. default in terms of standard value
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal
-msgid "Default"
-msgstr "Predeterminado"
+msgstr "Configuración regional"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "12 hours"
-msgstr "12 horas"
+msgid "9:00 AM (12 hours)"
+msgstr "9:00 AM (12 horas)"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "24 hours"
-msgstr "24 horas"
+msgid "09:00 AM (12 hours)"
+msgstr "09:00 AM (12 horas)"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Sunday"
-msgstr "Domingo"
+msgid "9:00 (24 hours)"
+msgstr "9:00 (24 horas)"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Monday"
-msgstr "Lunes"
+msgid "09:00 (24 hours)"
+msgstr "09:00 (24 horas)"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Week that contains January 1st"
-msgstr "Semana que contiene el 1 de enero"
+msgid "9.00 (24 hours)"
+msgstr "9.00 (24 horas)"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Week that contains the first Thursday"
-msgstr "Semana que contiene el primer jueves"
+msgid "09.00 (24 hours)"
+msgstr "09.00 (24 horas)"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Numbers"
-msgstr "Números"
+msgid "Week that contains January 1st (e.g. US, Canada)"
+msgstr "Semana que contiene el 1 de enero (por ejemplo EEUU, Canadá)"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "First day of week"
+msgid "Week that contains January 4th (e.g. Europe, ISO-8601)"
+msgstr "Semana que contiene el 4 de enero (por ejemplo Europa, ISO-8601)"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Reset"
+msgstr "Reiniciar"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Time format"
+msgstr "Formato de hora"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Date format"
+msgstr "Formato de fecha"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Number format"
+msgstr "Formato numérico"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "First day of the week"
 msgstr "Primer día de la semana"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "First week of year"
+msgid "First week of the year"
 msgstr "Primera semana del año"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
@@ -5663,35 +5894,17 @@ msgstr "No hay peticiones lentas"
 msgid "No lost requests"
 msgstr "No hay peticiones perdidas"
 
-#. object permissions - read
-#. object permissions - edit/modify
-#. object permissions - delete
-#. Auth type. None. No authentication
-#. Connection security. None.
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/flag-picker.js
-#: module:io.ox/mail apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-msgid "None"
-msgstr "Ninguno"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
-"Some settings (language, timezone, theme) require a page reload or relogin "
+"Some settings (e.g. language and timezone) require a page reload or relogin "
 "to take effect."
 msgstr ""
-"Algunos ajustes (idioma, zona horaria, tema) requieren de una actualización "
-"de la página o un nuevo inicio de sesión para que surtan efecto."
+"Algunos ajustes (por ejemplo idioma y zona horaria) requieren de volver a "
+"cargar la página o de un nuevo inicio de sesión para que surtan efecto."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid ""
-"Some settings (language, timezone, theme) require a relogin to take effect."
-msgstr ""
-"Algunos ajustes (idioma, zona horaria, tema) requieren de un nuevo inicio de "
-"sesión para que surtan efecto."
+msgid "Customized"
+msgstr "Personalizado"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default Theme"
@@ -5700,6 +5913,11 @@ msgstr "Tema predeterminado"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Unicolor"
 msgstr "Unicolor"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+msgid "Default"
+msgstr "Predeterminado"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Multicolor"
@@ -5749,21 +5967,25 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr "Necesita actualizar o entrar de nuevo para que el ajuste surta efecto."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "The setting requires a relogin to take effect."
-msgstr "El ajuste precisa de un nuevo inicio de sesión para que surta efecto."
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "Actualizar página"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Relogin"
-msgstr "Nuevo inicio de sesión"
+msgid "Configure quick launchers"
+msgstr "Configurar lanzadores rápidos"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
 msgstr "Cambiar contraseña"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "More regional settings"
+msgstr "Más ajustes regionales"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "First day of the week: %1$s"
+msgstr "Primer día de la semana: %1$s"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -5780,11 +6002,6 @@ msgstr "Intervalo de actualización"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default app after sign in"
 msgstr "Aplicación predeterminada después de iniciar sesión"
-
-#. %s is the number of the quicklauncher (1-3)
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Quick launch %s"
-msgstr "Lanzador rápido %s"
 
 #. Opens a native browser popup to decide if this applications/website is allowed to show notifications
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
@@ -6024,12 +6241,12 @@ msgid "Clear"
 msgstr "Borrar"
 
 #: apps/io.ox/core/tk/filestorageUtil.js module:io.ox/core
-msgid "Ignore warnings"
-msgstr "Ignorar advertencias"
-
-#: apps/io.ox/core/tk/filestorageUtil.js module:io.ox/core
 msgid "Conflicts"
 msgstr "Conflictos"
+
+#: apps/io.ox/core/tk/filestorageUtil.js module:io.ox/core
+msgid "Ignore warnings"
+msgstr "Ignorar advertencias"
 
 #: apps/io.ox/core/tk/filestorageUtil.js module:io.ox/core
 msgid "Warnings:"
@@ -6502,20 +6719,20 @@ msgid "Drop only a single file as new version."
 msgstr "Dejar sólo un único fichero como nueva versión."
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid ""
+"This document cannot be viewed at the moment because a new version is being "
+"uploaded. Please wait until the upload is completed."
+msgstr ""
+"Este documento no se puede ver en este momento porque se está cargando una "
+"nueva versión. Por favor, espere hasta que se complete la carga."
+
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "Nombre de fichero"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Rename File"
 msgstr "Renombrar fichero"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Zoom out"
-msgstr "Alejar"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Zoom in"
-msgstr "Acercar"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Fit to screen width"
@@ -6918,6 +7135,12 @@ msgstr "Soltar aquí para subir una <b class=\"dndignore\">nueva versión</b>"
 msgid "Share your folders"
 msgstr "Compartir sus carpetas"
 
+#. Folder name for an external file storage (dropbox, google drive etc)
+#. %1$s - the name of the file storage service (dropbox, one drive, google drive, box drive)
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+msgid "My %1$s"
+msgstr "Mi %1$s"
+
 #. error message shown to the user after trying to create a duplicate account
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Account already exists"
@@ -7113,6 +7336,10 @@ msgstr "Descendente"
 msgid "Add files"
 msgstr "Añadir ficheros"
 
+#: apps/io.ox/files/filepicker.js module:io.ox/files
+msgid "Upload local file"
+msgstr "Cargar fichero local"
+
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
 msgstr "Ficheros"
@@ -7123,10 +7350,6 @@ msgid_plural "None of the uploaded files matches the requested file type."
 msgstr[0] "El fichero cargado no coincide con el tipo de fichero solicitado."
 msgstr[1] ""
 "Ninguno de los ficheros cargados coinciden con el tipo de fichero solicitado."
-
-#: apps/io.ox/files/filepicker.js module:io.ox/files
-msgid "Upload local file"
-msgstr "Subir fichero local"
 
 #: apps/io.ox/files/listview.js module:io.ox/files
 msgid "Error: Failed to load files"
@@ -7636,6 +7859,10 @@ msgid "Enter Password"
 msgstr "Introduzca contraseña"
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
+msgid "New"
+msgstr "Nuevo"
+
+#: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Icons"
 msgstr "Iconos"
 
@@ -7830,6 +8057,11 @@ msgstr "Buscar en todas las carpetas"
 msgid "Search facets"
 msgstr "Buscar facetas"
 
+#: apps/io.ox/find/view-placeholder.js module:io.ox/core
+#: apps/io.ox/find/view.js
+msgid "Search function not supported in this folder"
+msgstr "La función de búsqueda no está permitida en esta carpeta"
+
 #: apps/io.ox/help/main.js module:io.ox/help
 msgid "%1$s Help"
 msgstr "Ayuda de %1$s"
@@ -7905,11 +8137,11 @@ msgstr "Utilizar el correo unificado para esta cuenta"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Add other mail account"
-msgstr ""
+msgstr "Añadir otra cuenta de correo"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Please choose your mail account provider."
-msgstr ""
+msgstr "Por favor, elija su proveedor de cuenta de correo."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -8192,6 +8424,18 @@ msgstr "Sin asunto"
 msgid "This email has been added to the portal"
 msgstr "Este correo se ha añadido al portal"
 
+#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
+msgid ""
+"You attached an empty file. It could be, that this file has been deleted on "
+"your hard drive. Send it anyway?"
+msgstr ""
+"Ha adjuntado un fichero vacío. Podría ser que este fichero se haya eliminado "
+"de su disco duro. ¿Enviarlo de todas formas?"
+
+#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
+msgid "Yes, with empty attachment"
+msgstr "Sí, con adjunto vacío"
+
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the total attachment "
@@ -8223,17 +8467,6 @@ msgid ""
 msgstr ""
 "El fichero \"%1$s\" no se puede cargar porque supera el límite de cuota del "
 "almacén de información de %2$s"
-
-#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-msgid ""
-"One or more attached files exceed the size limit per email. Therefore, the "
-"files are not sent as attachments but kept on the server. The email you have "
-"sent just contains links to download these files."
-msgstr ""
-"Uno o más ficheros adjuntos superan el límite de tamaño por correo "
-"electrónico. Por tanto, los ficheros no se han enviado como adjuntos, sino "
-"que siguen en el servidor. El correo que ha enviado sólo contiene enlaces "
-"para descargar dichos ficheros."
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -8304,12 +8537,12 @@ msgid "The appointment has been added to your calendar"
 msgstr "La cita se ha añadido a su calendario"
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
-msgid "Create reminder"
-msgstr "Crear recordatorio"
-
-#: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Remind me"
 msgstr "Recordarme"
+
+#: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
+msgid "Create reminder"
+msgstr "Crear recordatorio"
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Mail reminder"
@@ -8402,6 +8635,10 @@ msgid "Inbox categories"
 msgstr "Categorías de Bandeja de entrada"
 
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
+msgid "Unread messages"
+msgstr "Mensajes no leídos"
+
+#: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Drop here!"
 msgstr "¡Soltar aquí!"
 
@@ -8425,13 +8662,16 @@ msgstr[1] ""
 "categoría?"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#: apps/io.ox/mail/view-options.js
-msgid "Unread"
-msgstr "No leido"
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Flagged"
 msgstr "Marcado"
+
+#. Color is used as a noun
+#. %1$s - color name, used to describe a mail that has a color flag
+#. %1$s is the title of the item, which should be colored
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+msgid "Color %1$s"
+msgstr "Colorear %1$s"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "has attachments"
@@ -8444,6 +8684,10 @@ msgstr "Aviso:"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Note:"
 msgstr "Nota:"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "From:"
+msgstr "De:"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Not flagged"
@@ -8516,6 +8760,16 @@ msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "El remitente quiere recibir una notificación cuando se haya leído este correo"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/sharing.js
+msgid ""
+"Attachment file size too large. You have to use %1$s or reduce the "
+"attachment file size."
+msgstr ""
+"Tamaño de fichero adjunto demasiado grande. Debe utilizar %1$s o reducir el "
+"tamaño del fichero adjunto."
+
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
 #. long as you use the "|" delimiter to seperate each phrase. Also: Detection is case-insensitive so we don't need case variants.
@@ -8555,12 +8809,16 @@ msgid "Mail has no recipient."
 msgstr "El correo no tiene destinatario."
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
-msgid "Mail has empty subject. Send it anyway?"
-msgstr "El correo tiene el asunto vacío. ¿Desea enviarlo de todos modos?"
+msgid "Empty subject"
+msgstr "Asunto vacío"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
-msgid "Yes, send without subject"
-msgstr "Sí, enviarlo sin asunto"
+msgid "This email has no subject. Do you want to send it anyway?"
+msgstr "El correo no tiene asunto. ¿Desea enviarlo de todos modos?"
+
+#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
+msgid "Send without subject"
+msgstr "Enviar sin asunto"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Add subject"
@@ -8616,10 +8874,18 @@ msgstr ""
 msgid "CC"
 msgstr "CC"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Select CC contacts"
+msgstr "Seleccionar contactos para el campo Cc"
+
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "BCC"
 msgstr "CCO"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Select BCC contacts"
+msgstr "Seleccionar contactos para el campo BCC"
 
 #. Must not exceed 8 characters. e.g. German would be: "Antworten an", needs to be abbreviated like "Antw. an" as space is very limited
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -8881,15 +9147,6 @@ msgstr "Recibir notificación cuando alguien acceda al fichero o a los ficheros"
 
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid ""
-"Attachment file size too large. You have to use %1$s or reduce the "
-"attachment file size."
-msgstr ""
-"Tamaño de fichero adjunto demasiado grande. Debe utilizar %1$s o reducir el "
-"tamaño del fichero adjunto."
-
-#. %1$s is usually "Drive Mail" (product name; might be customized)
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Use %1$s"
 msgstr "Usar %1$s"
 
@@ -9033,6 +9290,7 @@ msgid "Spreadsheet"
 msgstr "Hoja de cálculo"
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Tasks"
 msgstr "Tareas"
 
@@ -9132,6 +9390,10 @@ msgid "Edit rule"
 msgstr "Editar regla"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+msgid "Save and apply"
+msgstr "Guardar y aplicar"
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Edit %1$s"
@@ -9155,6 +9417,10 @@ msgstr "Esta regla contiene propiedades no permitidas."
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Drag to reorder filter rules"
 msgstr "Arrastrar para reordenar reglas de filtrado"
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+msgid "Select the folder to apply the rule to"
+msgstr "Seleccione la carpeta a la que aplicar la regla"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Do you really want to delete this filter rule?"
@@ -9329,7 +9595,7 @@ msgstr "Sobre"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Localpart"
+msgid "Local-part"
 msgstr "Parte local"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
@@ -9867,6 +10133,20 @@ msgstr[1] "Enviando %1$d mensajes ... %2$d%"
 msgid "Reply to all recipients"
 msgstr "Responder a todos los destinatarios"
 
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
+#: apps/io.ox/mail/view-options.js
+msgid "Flag"
+msgstr "Marca"
+
+#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
+msgid "Unflag"
+msgstr "Desmarcar"
+
+#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
+msgid "Set color..."
+msgstr "Asignar color..."
+
 #: apps/io.ox/mail/print.js module:io.ox/mail
 msgctxt "BCC"
 msgid "Blind copy"
@@ -10055,6 +10335,12 @@ msgid "No preview available"
 msgstr "No hay vista previa disponible"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Signature"
+msgstr "Firma"
+
+#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add new signature"
 msgstr "Añadir nueva firma"
 
@@ -10089,6 +10375,10 @@ msgstr "Correos por día de la semana (%)"
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Mails per hour (%)"
 msgstr "Correos por hora (%)"
+
+#: apps/io.ox/mail/statistics.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+msgid "Statistics"
+msgstr "Estadísticas"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Back to list"
@@ -10171,10 +10461,6 @@ msgstr "Fechas exactas"
 msgid "Message size"
 msgstr "Tamaño del mensaje"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Statistics"
-msgstr "Estadísticas"
-
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "Unknown sender"
 msgstr "Remitente desconocido"
@@ -10198,12 +10484,14 @@ msgid "Primary account"
 msgstr "Cuenta principal"
 
 #: apps/io.ox/mail/util.js module:io.ox/core
-msgid ""
-"This is a suspicious email because we could not verify that it is really "
-"from %1$s."
+msgid "Be careful with this message. It might be spam or a phishing mail."
 msgstr ""
-"Este es un correo electrónico sospechoso porque no se pudo verificar que "
-"realmente provenga de %1$s."
+"Tenga cuidado con este mensaje. Podría ser un correo no deseado o de "
+"suplantación."
+
+#: apps/io.ox/mail/util.js module:io.ox/core
+msgid "This is a dangerous email containing spam or malware."
+msgstr "Este es un correo peligroso no deseado o que contiene malware."
 
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "We could not verify that this email is from %1$s."
@@ -10234,11 +10522,6 @@ msgstr "Contiene palabras"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Has attachments"
 msgstr "Tiene adjuntos"
-
-#. Sort by messages which are flagged, "Flag" is used in dropdown
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
-msgid "Flag"
-msgstr "Marca"
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Conversations"
@@ -10290,11 +10573,12 @@ msgid ""
 "support for help."
 msgstr ""
 "No hay dispositivos de copia de seguridad disponibles para esta cuenta. Por "
-"favor, notifíquelo al soporte para conseguir ayuda."
+"favor, avise a soporte para recibir ayuda."
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid "Authentication failure. Please try reloading the page."
-msgstr "Fallo de autenticación. Por favor, intente volver a cargar la página."
+msgstr ""
+"Fallo en la autenticación. Por favor, inténtelo volviendo a cargar la página."
 
 #: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
 #: apps/io.ox/multifactor/views/constants.js
@@ -10342,7 +10626,7 @@ msgstr "Por favor, indique el número de teléfono del dispositivo."
 #. Catch all error when trying to set up a new 2step device
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
 msgid "Something went wrong. Please try again later."
-msgstr "Algo salió mal. Por favor, inténtelo de nuevo más tarde."
+msgstr "Algo ha ido mal. Por favor, inténtelo de nuevo más tarde."
 
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
 msgid "Please only use numeric characters for phone number"
@@ -10365,9 +10649,9 @@ msgid ""
 "account will be locked out unless you set up a recovery method. We strongly "
 "recommend that you do so now."
 msgstr ""
-"En caso de que pierda o no pueda utilizar su dispositivo de autenticación, "
-"su cuenta se bloqueará a menos que configure un método de recuperación. Le "
-"recomendamos encarecidamente que lo haga ahora."
+"En caso de que pierda o no pueda usar su dispositivo de autenticación, su "
+"cuenta se bloqueará a menos que configure un método de recuperación. Le "
+"recomendamos encarecidamente que lo haga ya."
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
@@ -10421,7 +10705,7 @@ msgid ""
 "This is your recovery code. Please write it down, print it, or save the "
 "file. Be sure to save this in a secure location."
 msgstr ""
-"Este es su código de recuperación. Por favor escríbalo, imprímalo o guarde "
+"Este es su código de recuperación. Por favor, anótelo, imprímalo, o guarde "
 "el fichero. Asegúrese de guardarlo en un lugar seguro."
 
 #. this is a file name that stores the a long recovery code
@@ -10476,14 +10760,14 @@ msgstr "Confirmar código"
 #: module:io.ox/core/boot
 msgid "Please enter the validation code we just sent to your device."
 msgstr ""
-"Por favor, introduzca el código de validación que acabamos de enviar a su "
+"Por favor, introduzca el código de validación que acabamos de enviarle a su "
 "dispositivo."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 msgid "Bad input or server error. Please try again."
-msgstr "Error de entrada o del servidor. Por favor, inténtelo de nuevo."
+msgstr "Entrada errónea o error del servidor. Por favor, inténtelo de nuevo."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
@@ -10511,7 +10795,7 @@ msgstr "Pulse para copiar la URL al portapapeles"
 msgid ""
 "If scanning does not work, you may be able to enter the following setup code."
 msgstr ""
-"Si el escaneo no funciona, puede introducir el siguiente código de "
+"Si el escaneo no funciona, puede tener que introducir el siguiente código de "
 "configuración."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
@@ -10526,7 +10810,7 @@ msgstr ""
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
 msgid "Please touch/activate your device"
-msgstr "Por favor, toque/active su dispositivo"
+msgstr "Por favor, toque/active su dispositivo."
 
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
@@ -10584,7 +10868,7 @@ msgstr "Nuevo código enviado."
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
 msgid "A new code was sent to your SMS device. Please enter the code."
 msgstr ""
-"Se envió un nuevo código a su dispositivo SMS. Por favor, introduzca el "
+"Se ha enviado un nuevo código a su dispositivo SMS. Por favor, introduzca el "
 "código."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
@@ -10592,24 +10876,24 @@ msgid ""
 "You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
 msgstr ""
-"Su cuenta está asegurada con la verificación en 2 pasos. Por favor, "
-"introduzca el código de verificación que enviamos al teléfono *****%s."
+"Ha asegurado su cuenta con verificación en 2 pasos. Por favor, introduzca el "
+"código de verificación que hemos enviado al teléfono *****%s."
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
 msgstr ""
-"Su cuenta está asegurada con la verificación en 2 pasos. Por favor, "
-"introduzca el código de verificación de la aplicación Authenticator."
+"Ha asegurado su cuenta con verificación en 2 pasos. Por favor, introduzca el "
+"código de verificación de la aplicación Authenticator."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please use your "
 "authentication token to complete verification."
 msgstr ""
-"Su cuenta está asegurada con la verificación en 2 pasos. Por favor, use su "
-"token de autenticación para completar la verificación."
+"Ha asegurado su cuenta con verificación en 2 pasos. Por favor, use su token "
+"de autenticación para completar la verificación."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
@@ -10617,7 +10901,7 @@ msgid ""
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr ""
 "Este navegador no es compatible con su dispositivo de autenticación "
-"configurado. Utilice el navegador Chrome, o Firefox con U2F habilitado."
+"configurado. Por favor, use el navegador Chrome, o Firefox con U2F activado."
 
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10625,8 +10909,8 @@ msgid ""
 "Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
 msgstr ""
-"Parámetros incorrectos para autenticar con esta clave. Posiblemente el "
-"dominio de la URL es incorrecto para esta clave."
+"Parámetros erróneos para la autenticación con esta clave. Posiblemente, el "
+"dominio de URL es erróneo para esta clave."
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10637,8 +10921,8 @@ msgstr "Configuración no permitida"
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "This device is not eligible for this request. Wrong hardware key?"
 msgstr ""
-"Este dispositivo no es seleccionable para esta solicitud. ¿Clave de hardware "
-"incorrecta?"
+"Este dispositivo no es seleccionable para esta petición. ¿Clave de hardware "
+"errónea?"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "Timeout"
@@ -10648,8 +10932,7 @@ msgstr "Tiempo agotado"
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "Error authenticating. Please reload browser and try again."
 msgstr ""
-"Error de autenticación. Por favor, vuelva a cargar el navegador e inténtelo "
-"de nuevo."
+"Error al autenticar. Por favor, recargue el navegador e inténtelo de nuevo."
 
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
 msgid "Topics"
@@ -10669,7 +10952,7 @@ msgstr "Enviar por correo"
 
 #: apps/io.ox/oauth/backbone.js module:io.ox/oauth
 msgid "Sign in with Google. This will add your Gmail account."
-msgstr ""
+msgstr "Iniciar sesión con Google. Esto añadirá su cuenta de Google."
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
@@ -10734,8 +11017,11 @@ msgstr "Configure su dispositivo por correo."
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid ""
-"Let´s automatically configure your device, by clicking the button below."
-msgstr "Configure automáticamente su dispositivo pulsando el botón inferior."
+"iOS devices can be automatically configured by installing the configuration "
+"profile."
+msgstr ""
+"Los dispositivos iOS se pueden configurar automáticamente instalando el "
+"perfil de configuración."
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV"
@@ -10774,16 +11060,16 @@ msgid "EAS"
 msgstr "EAS"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Show or hide actions for advanced users."
-msgstr "Mostrar u ocultar acciones para usuarios avanzados."
+msgid "Show or hide alternative options for advanced users."
+msgstr "Mostrar u ocultar opciones alternativas para usuarios avanzados."
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Expert user?"
-msgstr "¿Usuario experto?"
+msgid "Show more options"
+msgstr "Mostrar más opciones"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Hide options for expert users."
-msgstr "Ocultar opciones para los usuarios expertos."
+msgid "Show less options"
+msgstr "Mostrar menos opciones"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Manual Configuration"
@@ -10802,6 +11088,15 @@ msgstr ""
 "para configurar automáticamente su dispositivo iOS! ¡Es así de simple!"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Please confirm"
+msgstr "Por favor, confirme"
+
+#. %1$s: a cell phone number
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Link will be sent to %1$s"
+msgstr "Se enviará el enlace a %1$s"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configuration Email"
 msgstr "Correo de configuración"
 
@@ -10811,8 +11106,8 @@ msgid "Automatic Configuration"
 msgstr "Configuración automática"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Configure now"
-msgstr "Configurar ahora"
+msgid "Download profile"
+msgstr "Descargar perfil"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Installation"
@@ -10929,6 +11224,11 @@ msgstr "Recursos"
 
 #: apps/io.ox/participants/chronos-views.js module:io.ox/core
 #: apps/io.ox/participants/views.js
+msgid "Resource"
+msgstr "Recurso"
+
+#: apps/io.ox/participants/chronos-views.js module:io.ox/core
+#: apps/io.ox/participants/views.js
 msgid "Remove contact"
 msgstr "Eliminar contacto"
 
@@ -10951,10 +11251,6 @@ msgstr "Miembros (%1$d)"
 #: apps/io.ox/participants/views.js
 msgid "Participants (%1$d)"
 msgstr "Participantes (%1$d)"
-
-#: apps/io.ox/participants/views.js module:io.ox/core
-msgid "Unknown"
-msgstr "Desconocida"
 
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Resource group"
@@ -11002,6 +11298,7 @@ msgid "Customize this page"
 msgstr "Personalizar esta página"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
+#: apps/plugins/portal/files/register.js module:plugins/portal
 msgid "Disable widget"
 msgstr "Desactivar widget"
 
@@ -11066,11 +11363,6 @@ msgstr "Ajustes del portal"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
 msgstr "Añadir widget"
-
-#. %1$s is the title of the item, which should be colored
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-msgid "Color %1$s"
-msgstr "Colorear %1$s"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Drag to reorder widget"
@@ -11211,6 +11503,175 @@ msgstr "Certificados"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all emails from your primary mail account as eml files."
+msgstr ""
+"Incluye todos los correos de su cuenta de correo principal en forma de "
+"ficheros eml."
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Included folders"
+msgstr "Carpetas incluidas"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Trash folder"
+msgstr "Carpeta Papelera"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
+#. shown when a download of task data is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Public folders"
+msgstr "Carpetas públicas"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
+#. shown when a download of task data is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Shared folders"
+msgstr "Carpetas compartidas"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Unsubscribed folders"
+msgstr "Carpetas no suscritas"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all appointments from your calendars as ical files."
+msgstr "Incluye todas las citas de sus calendarios como ficheros ical."
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Included calendars"
+msgstr "Calendarios incluidos"
+
+#. shown when a download of calendar data is requested (has header "Included calendars ...")
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Unsubscribed calendars"
+msgstr "Calendarios no suscritos"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Address book"
+msgstr "Libreta de direcciones"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all contact data from your address books as vcard files."
+msgstr ""
+"Incluye todos los datos de contactos de sus libretas de direcciones como "
+"ficheros vcard."
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Included address books"
+msgstr "Libretas de direcciones incluidas"
+
+#. %1$s is usually "Drive" (product name; might be customized)
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all files from %1$s."
+msgstr "Incluye todos los ficheros de %1$s."
+
+#. header for a dropdown
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Additional options"
+msgstr "Opciones adicionales"
+
+#. shown when a download of (cloud) drive files is requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Include all file versions"
+msgstr "Incluir todas las versiones de los ficheros"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Includes all tasks as ical files."
+msgstr "Incluye todas las tareas como ficheros ical."
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Download your personal data"
+msgstr "Descargar sus datos personales"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"You can download a copy of your personal data from your account, if you want "
+"to save it or transfer it to another provider."
+msgstr ""
+"Puede descargar una copia de sus datos personales de su cuenta, si quiere "
+"guardarla o transferirla a otro proveedor."
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Maximum file size"
+msgstr "Tamaño máximo de fichero"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Archives larger than the selected size will be split into multiple files."
+msgstr ""
+"Archivos mayores que el tamaño seleccionado se dividirán en múltiples "
+"ficheros."
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Request download"
+msgstr "Solicitar descarga"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Download requested"
+msgstr "Descarga solicitada"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Request new download"
+msgstr "Solicitar nueva descarga"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"There is currently an archive download available. By requesting a new "
+"download the current archive will be deleted and is no longer available."
+msgstr ""
+"Actualmente hay un fichero de descarga disponible. Al solicitar una nueva "
+"descarga de borrará el fichero actual y dejará de estar disponible."
+
+#. header for zip archive download list
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Your archive"
+msgstr "Su fichero"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Your requested archive is currently being created. Depending on the size of "
+"the requested data this may take hours or days. You will be informed via "
+"email when your download is ready."
+msgstr ""
+"El fichero solicitado se está creando en estos momentos. Dependiendo del "
+"tamaño de los datos solicitados, esto podría llevar horas o días. Se le "
+"informará por correo cuando su descarga esté preparada."
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Cancel download request"
+msgstr "Cancelar la descarga solicitada"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Do you really want to cancel the current download request?"
+msgstr "¿De verdad quiere cancelar la solicitud de descarga actual?"
+
+#. %1$s: date and time when the download expires
+#. %1$s: date when the download was requested
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid ""
+"Your data archive from %2$s is ready for download. The download is available "
+"until %1$s."
+msgstr ""
+"Su fichero de datos de %2$s está listo para descargarse. Estará disponible "
+"hasta %1$s."
+
+#. %1$s: filename
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Download %1$s."
+msgstr "Descargar %1$s"
+
+#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
+msgid "Download personal data"
+msgstr "Descargar datos personales"
+
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
 #: module:io.ox/settings/certificates
 msgid "Remove certificate"
@@ -11291,11 +11752,6 @@ msgstr "Emitido el"
 #: module:io.ox/settings/certificates
 msgid "Serial number"
 msgstr "Número de serie"
-
-#: apps/io.ox/settings/security/certificates/settings/utils.js
-#: module:io.ox/settings/certificates
-msgid "Signature"
-msgstr "Firma"
 
 #: apps/io.ox/settings/security/certificates/settings/utils.js
 #: module:io.ox/settings/certificates
@@ -11554,10 +12010,6 @@ msgid "Progress"
 msgstr "Progreso"
 
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
-msgid "Adjust start date"
-msgstr "Ajustar fecha de comienzo"
-
-#: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "Fechas inconsistentes"
 
@@ -11568,6 +12020,10 @@ msgid "The due date cannot be before start date. Adjust start date?"
 msgstr ""
 "La fecha de vencimiento no puede ser anterior a la fecha de inicio. ¿Ajustar "
 "la fecha de inicio?"
+
+#: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
+msgid "Adjust start date"
+msgstr "Ajustar fecha de comienzo"
 
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Changed due date"
@@ -11746,6 +12202,11 @@ msgstr "Pedir"
 msgid "Show done tasks"
 msgstr "Mostrar tareas realizadas"
 
+#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js
+msgid "New task"
+msgstr "Nueva tarea"
+
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
 msgstr "La fecha de comienzo debe ser anterior a la de fin."
@@ -11813,10 +12274,6 @@ msgid ""
 msgstr ""
 "Recibir notificaciones cuando un participante acepte o rechace una tarea en "
 "la que usted participe"
-
-#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
-msgid "New task"
-msgstr "Nueva tarea"
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Delete task"
@@ -11981,6 +12438,8 @@ msgid ""
 "E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
+"Los correos electrónicos aparecerán en una nueva ventana. Estas ventanas se "
+"pueden maximizar, minimizar y cerrar."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
@@ -12061,21 +12520,6 @@ msgstr "Confirmación de la compra"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "The following products will be activated now:"
 msgstr "Los siguientes productos se activarán ahora:"
-
-#. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
-msgid "Furigana for last name"
-msgstr "Furigana de apellido"
-
-#. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
-msgid "Furigana for first name"
-msgstr "Furigana de nombre"
-
-#. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
-msgid "Furigana for company"
-msgstr "Furigana de empresa"
 
 #: apps/plugins/administration/groups/register.js module:io.ox/core
 #: apps/plugins/administration/groups/settings/pane.js
@@ -12212,9 +12656,10 @@ msgstr "Por favor, califique este producto"
 msgid "Please rate the following application:"
 msgstr "Por favor, califique la siguiente aplicación:"
 
+#. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your feedback"
-msgstr "Sus comentarios"
+msgid "How do you like %1$s?"
+msgstr "¿Cuánto le gusta %1$s?"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Comments and suggestions"
@@ -12580,16 +13025,16 @@ msgid "Cannot find user with given name."
 msgstr "No se puede encontrar el usuario con el nombre suministrado."
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.photos.search"
-msgstr "flickr.photos.search"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
-msgstr "flickr.people.getPublicPhotos"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Edit Flickr photo stream"
 msgstr "Editar un flujo de fotos de Flickr"
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+msgid "Search photos"
+msgstr "Buscar fotos"
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+msgid "Public photos by user"
+msgstr "Fotos públicas del usuario"
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Please enter a search query"
@@ -13150,363 +13595,131 @@ msgstr "Invitar a %s"
 msgid "Add on %s"
 msgstr "Añadir a %s"
 
-#~ msgid "Apps"
-#~ msgstr "Aplicaciones"
+#~ msgid "%1$s Toolbar"
+#~ msgstr "Barra de herramientas %1$s"
 
-#~ msgid "Please select your mail account provider"
-#~ msgstr "Por favor seleccione su proveedor de correo electrónico"
+#~ msgid "Change reminder"
+#~ msgstr "Cambiar recordatorio"
 
-#~ msgid ""
-#~ "Emails will appear in a new window. These windows can be maximized, "
-#~ "minimized and closed."
-#~ msgstr ""
-#~ "Los correos electrónicos aparecerán en una nueva ventana. Estas ventanas "
-#~ "se pueden maximizar, minimizar y cerrar."
+#~ msgid "Confidential"
+#~ msgstr "Confidencial"
 
-#~ msgid "Anti-Virus Warning"
-#~ msgstr "Advertencia del antivirus"
-
-#~ msgid "UNKNOWN"
-#~ msgstr "DESCONOCIDO"
+#~ msgid "Recurrence"
+#~ msgstr "Repetición"
 
 #~ msgid ""
-#~ "There are no backup devices available for this account.  Please notify "
-#~ "support for help."
+#~ "One or more attached files exceed the size limit per email. Therefore, "
+#~ "the files are not sent as attachments but kept on the server. The email "
+#~ "you have sent just contains links to download these files."
 #~ msgstr ""
-#~ "No hay dispositivos de copia de seguridad disponibles para esta cuenta. "
-#~ "Por favor, avise a soporte para recibir ayuda."
+#~ "Uno o más ficheros adjuntos superan el límite de tamaño por correo "
+#~ "electrónico. Por tanto, los ficheros no se han enviado como adjuntos, "
+#~ "sino que siguen en el servidor. El correo que ha enviado sólo contiene "
+#~ "enlaces para descargar dichos ficheros."
 
-#~ msgid "Authentication failure.  Please reload browser and try again."
+#~ msgid "Edit image"
+#~ msgstr "Editar imagen"
+
+#~ msgid "Upload image"
+#~ msgstr "Subir imagen"
+
+#~ msgid "Take photo"
+#~ msgstr "Tomar fotografía"
+
+#~ msgid "Rotate image"
+#~ msgstr "Rotar imagen"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Ayuda de visibilidad"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
 #~ msgstr ""
-#~ "Fallo de autenticación. Por favor, recargue el navegador e inténtelo de "
-#~ "nuevo."
-
-#~ msgid "Something went wrong.  Please try again later."
-#~ msgstr "Algo ha ido mal. Por favor, inténtelo de nuevo."
+#~ "La cita es visible para todos los usuarios de calendarios compartidos."
 
 #~ msgid ""
-#~ "In the event you lose or are unable to use your authentication device, "
-#~ "your account will be locked out unless you set up a recovery method.  We "
-#~ "strongly recommend that you do so now."
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
 #~ msgstr ""
-#~ "En caso de que pierda o no pueda usar su dispositivo de autenticación, su "
-#~ "cuenta se bloqueará a menos que configure un método de recuperación. Le "
-#~ "recomendamos encarecidamente que lo haga ya."
-
-#~ msgid "Bad input or server error.  Please try again."
-#~ msgstr ""
-#~ "Entrada errónea o error del servidor. Por favor, inténtelo de nuevo."
-
-#~ msgid "Bad verification code.  Please try again"
-#~ msgstr "Código de verificación erróneo. Por favor, inténtelo de nuevo"
+#~ "En calendarios compartidos, la cita se muestra como un bloque de tiempo "
+#~ "sencillo para los usuarios que no asisten."
 
 #~ msgid ""
-#~ "If scanning doesn't work, you may be able to enter the following setup "
-#~ "code."
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
 #~ msgstr ""
-#~ "Si la comprobación no funciona, puede tener que introducir el siguiente "
-#~ "código de configuración."
+#~ "La cita no es visible en absoluto para los usuarios que no asisten de "
+#~ "calendarios compartidos. La cita no se toma en consideración para "
+#~ "conflictos, y no aparece en la vista de planificación. Esta opción no se "
+#~ "puede usar si la cita bloquea recursos."
 
-#~ msgid "A new code was sent to your SMS device.  Please enter the code."
-#~ msgstr ""
-#~ "Se ha enviado un nuevo código a su dispositivo SMS. Por favor, introduzca "
-#~ "el código."
+#~ msgid "Listview"
+#~ msgstr "Vista de lista"
+
+#~ msgid "Create contact"
+#~ msgstr "Crear contacto"
+
+#~ msgid "Some fields contain invalid data"
+#~ msgstr "Algunos campos contienen datos no válidos"
+
+#~ msgid "Show all fields"
+#~ msgstr "Mostrar todos los campos"
+
+#~ msgid "Personal"
+#~ msgstr "Personal"
+
+#~ msgid "Job"
+#~ msgstr "Empleo"
+
+#~ msgid "Mail and Messaging"
+#~ msgstr "Correo y mensajería"
+
+#~ msgid "Phone numbers"
+#~ msgstr "Números de teléfono"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Otros"
+
+#~ msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+#~ msgstr "Su imagen seleccionada supera el tamaño máximo permitido de %1$s"
 
 #~ msgid ""
-#~ "You secured your account with 2-Step Verification.  Please enter the "
-#~ "verification code we sent to the phone *****%s."
+#~ "This filetype is not supported as contact picture. Only image types (JPG, "
+#~ "GIF, BMP or PNG) are supported."
 #~ msgstr ""
-#~ "Ha asegurado su cuenta con verificación en 2 pasos. Por favor, introduzca "
-#~ "el código de verificación que hemos enviado al teléfono *****%s."
+#~ "Este tipo de fichero no está admitido como imagen de contacto. Sólo se "
+#~ "admiten los tipos de imagen (JPG, GIF, BMP o PNG)."
+
+#~| msgid "Upload local file"
+#~ msgid "Upload local image"
+#~ msgstr "Subir imagen local"
+
+#~ msgid "Localpart"
+#~ msgstr "Parte local"
 
 #~ msgid ""
-#~ "You secured your account with 2-Step Verification.  Please enter the "
-#~ "verification code from the Authenticator App."
+#~ "Let´s automatically configure your device, by clicking the button below."
 #~ msgstr ""
-#~ "Ha asegurado su cuenta con verificación en 2 pasos. Por favor, introduzca "
-#~ "el código de verificación de la aplicación Authenticator."
+#~ "Configure automáticamente su dispositivo pulsando el botón inferior."
 
-#~ msgid ""
-#~ "You secured your account with 2-Step Verification.  Please use your "
-#~ "authentication token to complete verification."
-#~ msgstr ""
-#~ "Ha asegurado su cuenta con verificación en 2 pasos. Por favor, use su "
-#~ "token de autenticación para completar la verificación."
+#~ msgid "Show or hide actions for advanced users."
+#~ msgstr "Mostrar u ocultar acciones para usuarios avanzados."
 
-#~ msgid ""
-#~ "This browser is not compatible with your configured authentication "
-#~ "device.  Please use Chrome browser, or Firefox with U2F enabled."
-#~ msgstr ""
-#~ "Este navegador no es compatible con su dispositivo de autenticación "
-#~ "configurado. Por favor, use un navegador Chrome, o Firefox con U2F "
-#~ "activado."
+#~ msgid "Expert user?"
+#~ msgstr "¿Usuario experto?"
 
-#~ msgid ""
-#~ "Bad parameters for authenticating with this key.  Possibly wrong URL "
-#~ "domain for this key."
-#~ msgstr ""
-#~ "Parámetros erróneos para la autenticación con esta clave. Posiblemente, "
-#~ "dominio de URL erróneo para esta clave."
+#~ msgid "Hide options for expert users."
+#~ msgstr "Ocultar opciones para los usuarios expertos."
 
-#~ msgid "This device is not eligible for this request.  Wrong hardware key?"
-#~ msgstr ""
-#~ "Este dispositivo no es seleccionable para esta petición. ¿Clave de "
-#~ "hardware errónea?"
-
-#~ msgid "Error authenticating.  Please reload browser and try again."
-#~ msgstr ""
-#~ "Error al autenticar. Por favor, recargue el navegador e inténtelo de "
-#~ "nuevo."
-
-#~ msgid "Please leave a comment for other participants."
-#~ msgstr "Por favor, deje un comentario para otros participantes."
-
-#~ msgid "Participants can edit the appointment"
-#~ msgstr "Los participantes pueden editar la cita"
-
-#~ msgid "Participant permissions"
-#~ msgstr "Permisos de los participantes"
-
-#~ msgid "Your default reminders will be applied to this calendars."
-#~ msgstr "Sus recordatorios predeterminados se aplicarán a este calendario."
-
-#~ msgid "All file versions older than 1 day will be deleted"
-#~ msgid_plural "All file versions older than %1$d days will be deleted"
-#~ msgstr[0] "Todas las versiones de hace más de 1 día se borrarán"
-#~ msgstr[1] "Todas las versiones de hace más de %1$d días se borrarán"
-
-#~ msgid ""
-#~ "When a file has more than 1 additional version, older versions of the "
-#~ "file will be deleted"
-#~ msgid_plural ""
-#~ "When a file has more than %1$d additional versions, older versions of the "
-#~ "file will be deleted"
-#~ msgstr[0] ""
-#~ "Cuando un fichero tiene más de 1 versión adicional, las versiones más "
-#~ "antiguas se borrarán"
-#~ msgstr[1] ""
-#~ "Cuando un fichero tiene más de %1$d versiones adicionales, las versiones "
-#~ "más antiguas se borrarán"
-
-#~ msgid ""
-#~ "Older versions will be deleted after next login or when a new version is "
-#~ "created"
-#~ msgstr ""
-#~ "Las versiones más antiguas se borrarán tras el próximo inicio de sesión o "
-#~ "cuando se cree una versión nueva."
-
-#~ msgid "1 minute"
-#~ msgstr "1 minuto"
-
-#~ msgid "3 minutes"
-#~ msgstr "3 minutos"
-
-#~ msgid "A severe error occurred!"
-#~ msgstr "¡Se ha producido un error grave!"
-
-#~ msgctxt "help"
-#~ msgid "Accessing Files with WebDAV"
-#~ msgstr "Acceso a ficheros con WebDAV"
-
-#~ msgid "Add folder"
-#~ msgstr "Añadir carpeta"
-
-#~ msgid "Add original message as attachment"
-#~ msgstr "Añadir mensaje original como adjunto"
-
-#~ msgid "Add to Favorites"
-#~ msgstr "Añadir a Favoritos"
-
-#~ msgid "Auto-save email drafts"
-#~ msgstr "Guardar automáticamente borradores de correo electrónico"
-
-#~ msgid "Capacity"
-#~ msgstr "Capacidad"
-
-#~ msgid "Click here to quit the help center"
-#~ msgstr "Haga clic aquí para salir del centro de ayuda"
-
-#~ msgid "Compose new mail"
-#~ msgstr "Redactar nuevo correo electrónico"
-
-#~ msgid "Continue"
-#~ msgstr "Continuar"
-
-#~ msgctxt "help"
-#~ msgid "Creating Files"
-#~ msgstr "Creación de ficheros"
-
-#~ msgid "Draft saved at %1$s"
-#~ msgstr "Borrador guardado a las %1$s"
-
-#~ msgctxt "help"
-#~ msgid "Drive Settings"
-#~ msgstr "Ajustes de Drive"
-
-#~ msgid "Drop here to import this mail"
-#~ msgstr "Soltar aquí para importar este correo"
-
-#~ msgid "Email 1 / Phone number"
-#~ msgstr "Correo electrónico 1 / Número de teléfono"
-
-#~ msgid "Image size:"
-#~ msgstr "Tamaño de imagen:"
-
-#~ msgid "Is bigger than (Size: B/KB/MB/GB)"
-#~ msgstr "Es mayor que (Tamaño: B/KB/MB/GB)"
-
-#~ msgid "Is smaller than (Size: B/KB/MB/GB)"
-#~ msgstr "Es menor que (Tamaño: B/KB/MB/GB)"
-
-#~ msgid "Load full mail"
-#~ msgstr "Cargar correo completo"
-
-#~ msgid "Loading the full mail might lead to performance problems."
-#~ msgstr ""
-#~ "La carga completa del correo podría generar problemas de rendimiento."
-
-#~ msgid "Mail has been copied"
-#~ msgstr "El correo se ha copiado"
-
-#~ msgid "Mail has been moved"
-#~ msgstr "Los correos se han movido"
-
-#~ msgid "Mail size:"
-#~ msgstr "Tamaño del correo:"
-
-#~ msgid "Mails have been copied"
-#~ msgstr "Los correos se han copiado"
-
-#~ msgid "Mails have been moved"
-#~ msgstr "Los correos se han movido"
-
-#~ msgctxt "help"
-#~ msgid "Managing Files"
-#~ msgstr "Administración de ficheros"
-
-#~ msgid "New Mail"
-#~ msgstr "Nuevo correo"
-
-#~ msgid "New file"
-#~ msgstr "Nuevo fichero"
-
-#~ msgid "Open"
-#~ msgstr "Abrir"
-
-#~ msgid "Please enter a valid email address or phone number"
-#~ msgstr ""
-#~ "Por favor, introduzca una dirección de correo electrónico válida o un "
-#~ "número de teléfono"
-
-#~ msgid "Pop out"
-#~ msgstr "Mostrar aparte"
-
-#~ msgid "Publication must have a site."
-#~ msgstr "La publicación debe tener un sitio."
-
-#~ msgid "Publication must have a target."
-#~ msgstr "La publicación ha de tener un destino."
-
-#~ msgid "Publications and Subscriptions"
-#~ msgstr "Publicaciones y suscripciones"
-
-#~ msgid "Quick reply: %1$s"
-#~ msgstr "Respuesta rápida: %1$s"
-
-#~ msgid "Related articles"
-#~ msgstr "Artículos relacionados"
-
-#~ msgid "Reply to all"
-#~ msgstr "Responder a todos"
-
-#~ msgid "Send mail"
-#~ msgstr "Enviar correo"
-
-#~ msgid "Send mail to all participants"
-#~ msgstr "Enviar correo electrónico a todos los participantes"
-
-#~ msgid "Send new mail"
-#~ msgstr "Enviar nuevo correo electrónico"
-
-#~ msgid "Share current folder"
-#~ msgstr "Compartir la carpeta actual"
-
-#~ msgid "Share selected file"
-#~ msgid_plural "Share selected files"
-#~ msgstr[0] "Compartir el fichero seleccionado"
-#~ msgstr[1] "Compartir los ficheros seleccionados"
-
-#~ msgid "Share selected folder"
-#~ msgid_plural "Share selected folders"
-#~ msgstr[0] "Compartir la carpeta seleccionada"
-#~ msgstr[1] "Compartir las carpetas seleccionadas"
-
-#~ msgid "Share selected objects"
-#~ msgstr "Compartir objetos seleccionados"
-
-#~ msgid "Task was modified before, please reload"
-#~ msgstr "La tarea ya había sido modificada. Por favor, cárguela de nuevo"
-
-#~ msgctxt "help"
-#~ msgid "The Drive App"
-#~ msgstr "La aplicación Drive"
-
-#~ msgid ""
-#~ "These statistics only include folders, which have a depth less than four "
-#~ "in the folder structure from the folder \"%1$s\"."
-#~ msgstr ""
-#~ "Estas estadísticas sólo incluyen carpetas que tienen una profundidad "
-#~ "inferior a cuatro en la estructura de carpetas desde la carpeta \"%1$s\"."
-
-#~ msgid "This folder has publications and/or subscriptions"
-#~ msgstr "Esta carpeta tiene publicaciones y/o suscripciones"
-
-#~ msgid "This mail has been added to the portal"
-#~ msgstr "Este correo se ha añadido al portal"
-
-#~ msgid "Top 10 file types"
-#~ msgstr "Top 10 de tipos de fichero"
-
-#~ msgid "Top 10 folder size"
-#~ msgstr "Top 10 de tamaños de carpeta"
-
-#~ msgid "Viewer Toolbar"
-#~ msgstr "Barra de herramientas del visor"
-
-#~ msgid "Yes, with empty attachment"
-#~ msgstr "Sí, con adjunto vacío"
-
-#~ msgid ""
-#~ "You are currently using %1$s of your %2$s available disk space. You have "
-#~ "%3$s left. "
-#~ msgstr ""
-#~ "Actualmente está usando %1$s de sus %2$s de espacio en disco disponible. "
-#~ "Le quedan %3$s. "
-
-#~ msgid ""
-#~ "You attached an empty file. It could be, that this file has been deleted "
-#~ "on your hard drive. Send it anyway?"
-#~ msgstr ""
-#~ "Ha adjuntado un fichero vacío. Podría ser que este fichero se haya "
-#~ "eliminado de su disco duro. ¿Enviarlo de todas formas?"
-
-#~ msgid ""
-#~ "Your capacity is shared with all members of your group. Your group is "
-#~ "currently using %1$s of its %2$s available disk space. The amount of free "
-#~ "space is %3$s. "
-#~ msgstr ""
-#~ "Su capacidad está compartida con todos los miembros de su grupo. Su grupo "
-#~ "está utilizando actualmente %1$s de %2$s del espacio en disco disponible. "
-#~ "La cantidad de espacio libre es %3$s."
+#~ msgid "Configure now"
+#~ msgstr "Configurar ahora"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
 
 #~ msgid " %1$s (%2$s); "
 #~ msgstr " %1$s (%2$s); "
-
-#~ msgid " %1$s; "
-#~ msgstr " %1$s; "
 
 #~ msgid " is currently editing this document."
 #~ msgstr " está editando este documento actualmente."
@@ -13881,6 +14094,9 @@ msgstr "Añadir a %s"
 #~ msgid "1 hour"
 #~ msgstr "1 hora"
 
+#~ msgid "1 minute"
+#~ msgstr "1 minuto"
+
 #~ msgid "1 week"
 #~ msgstr "1 semana"
 
@@ -13901,6 +14117,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "200%"
 #~ msgstr "200%"
+
+#~ msgid "3 minutes"
+#~ msgstr "3 minutos"
 
 #~ msgid "3 weeks"
 #~ msgstr "3 semanas"
@@ -14273,6 +14492,9 @@ msgstr "Añadir a %s"
 #~ "\n"
 #~ "========================================== "
 
+#~ msgid "A severe error occurred!"
+#~ msgstr "¡Se ha producido un error grave!"
+
 #~ msgid "AD"
 #~ msgstr "DC"
 
@@ -14314,6 +14536,10 @@ msgstr "Añadir a %s"
 
 #~ msgid "Accept extra participant"
 #~ msgstr "Aceptar participante extra"
+
+#~ msgctxt "help"
+#~ msgid "Accessing Files with WebDAV"
+#~ msgstr "Acceso a ficheros con WebDAV"
 
 #~ msgid "Account Settings"
 #~ msgstr "Configuración de la cuenta"
@@ -14378,11 +14604,11 @@ msgstr "Añadir a %s"
 #~ msgid "Add account"
 #~ msgstr "Añadir cuenta"
 
-#~ msgid "Add attachment"
-#~ msgstr "Añadir adjunto"
-
 #~ msgid "Add cipher code"
 #~ msgstr "Añadir código de cifrado"
+
+#~ msgid "Add distribution list"
+#~ msgstr "Añadir lista de distribución"
 
 #~ msgid "Add feed"
 #~ msgstr "Añadir feed"
@@ -14391,6 +14617,9 @@ msgstr "Añadir a %s"
 #~| msgid "Add files"
 #~ msgid "Add file"
 #~ msgstr "Añadir ficheros"
+
+#~ msgid "Add folder"
+#~ msgstr "Añadir carpeta"
 
 #~ msgid "Add folder menu"
 #~ msgstr "Añadir menú de carpeta"
@@ -14416,6 +14645,9 @@ msgstr "Añadir a %s"
 #~ msgid "Add new subfolder"
 #~ msgstr "Añadir nueva subcarpeta"
 
+#~ msgid "Add original message as attachment"
+#~ msgstr "Añadir mensaje original como adjunto"
+
 #~ msgid "Add picture"
 #~ msgstr "Añadir foto"
 
@@ -14426,6 +14658,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Add sender to \"To\", recipients to \"Cc\""
 #~ msgstr "Añadir el remitente a \"Para\", los destinatarios a \"Cc\""
+
+#~ msgid "Add to Favorites"
+#~ msgstr "Añadir a Favoritos"
 
 #~ msgid "Added"
 #~ msgstr "Añadida"
@@ -14652,6 +14887,11 @@ msgstr "Añadir a %s"
 #~| msgid "All my contacts"
 #~ msgid "All contacts"
 #~ msgstr "Todos mis contactos"
+
+#~ msgid "All file versions older than 1 day will be deleted"
+#~ msgid_plural "All file versions older than %1$d days will be deleted"
+#~ msgstr[0] "Todas las versiones de hace más de 1 día se borrarán"
+#~ msgstr[1] "Todas las versiones de hace más de %1$d días se borrarán"
 
 #~ msgid "All future messages from %1$s will be moved to the selected folder."
 #~ msgid_plural ""
@@ -15249,9 +15489,6 @@ msgstr "Añadir a %s"
 #~ msgid "Application Toolbar"
 #~ msgstr "Barra de herramientas de la aplicación"
 
-#~ msgid "Applications"
-#~ msgstr "Aplicaciones"
-
 #~ msgid "Apply a Template (optional)"
 #~ msgstr "Aplicar una plantilla (opcional)"
 
@@ -15260,6 +15497,11 @@ msgstr "Añadir a %s"
 
 #~ msgid "Apply to all messages?"
 #~ msgstr "¿Aplicar a todos los mensajes?"
+
+#, fuzzy
+#~| msgid "Apply"
+#~ msgid "Apply..."
+#~ msgstr "Aplicar"
 
 #~ msgid "Appointment '%s' not found."
 #~ msgstr "No se ha encontrado la cita '%s'."
@@ -15314,6 +15556,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Duración aproximada de las suscripciones"
+
+#~ msgid "Apps"
+#~ msgstr "Aplicaciones"
 
 #~ msgid "Apr"
 #~ msgstr "abr"
@@ -15833,11 +16078,19 @@ msgstr "Añadir a %s"
 #~ msgid "Authentication failed. Please fill in login and password."
 #~ msgstr "Autenticación fallida. Por favor, introduzca usuario y contraseña."
 
+#~ msgid "Authentication failure.  Please reload browser and try again."
+#~ msgstr ""
+#~ "Fallo de autenticación. Por favor, recargue el navegador e inténtelo de "
+#~ "nuevo."
+
 #~ msgid "Auto"
 #~ msgstr "Auto"
 
 #~ msgid "Auto Logout"
 #~ msgstr "Desconexión automática"
+
+#~ msgid "Auto-save email drafts"
+#~ msgstr "Guardar automáticamente borradores de correo electrónico"
 
 #~ msgid "Auto-save email drafts?"
 #~ msgstr "¿Guardar automáticamente borradores de correo electrónico?"
@@ -15960,9 +16213,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Bhutan"
 #~ msgstr "Bhután"
-
-#~ msgid "Birthday"
-#~ msgstr "Cumpleaños"
 
 #~ msgid "Birthday Appointment"
 #~ msgstr "Cita de cumpleaños"
@@ -16159,6 +16409,9 @@ msgstr "Añadir a %s"
 #~ msgid "Cannot move system folder."
 #~ msgstr "No se puede mover una carpeta de sistema."
 
+#~ msgid "Capacity"
+#~ msgstr "Capacidad"
+
 #~ msgid "Cape Verde"
 #~ msgstr "Cabo Verde"
 
@@ -16176,9 +16429,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Categories:"
 #~ msgstr "Categorías:"
-
-#~ msgid "Category"
-#~ msgstr "Categoría"
 
 #~ msgid "Category names must be unique"
 #~ msgstr "Los nombres de categorías deben ser únicos"
@@ -16310,6 +16560,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Click here to add your account"
 #~ msgstr "Pulse aquí para añadir su cuenta"
+
+#~ msgid "Click here to quit the help center"
+#~ msgstr "Haga clic aquí para salir del centro de ayuda"
 
 #~ msgid ""
 #~ "Click on a letter on the left side of the navigation bar in order to "
@@ -16460,6 +16713,9 @@ msgstr "Añadir a %s"
 #~ msgid "Company:"
 #~ msgstr "Empresa:"
 
+#~ msgid "Compose new mail"
+#~ msgstr "Redactar nuevo correo electrónico"
+
 #~ msgid "Composing a new E-Mail"
 #~ msgstr "Componer una nuevo correo electrónico"
 
@@ -16510,6 +16766,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Content-Type:"
 #~ msgstr "Content-Type:"
+
+#~ msgid "Continue"
+#~ msgstr "Continuar"
 
 #, fuzzy
 #~ msgid "Continue Presentation"
@@ -16637,6 +16896,10 @@ msgstr "Añadir a %s"
 #~ msgid "Created:"
 #~ msgstr "Creado:"
 
+#~ msgctxt "help"
+#~ msgid "Creating Files"
+#~ msgstr "Creación de ficheros"
+
 #~ msgid "Creating a new appointment"
 #~ msgstr "Creación de una nueva cita"
 
@@ -16719,9 +16982,6 @@ msgstr "Añadir a %s"
 #~ msgid "Custom colors"
 #~ msgstr "Colores personalizados"
 
-#~ msgid "Customizing"
-#~ msgstr "Personalización"
-
 #~ msgid "Cut"
 #~ msgstr "Cortar"
 
@@ -16767,9 +17027,6 @@ msgstr "Añadir a %s"
 #~ msgstr ""
 #~ "Sincronización de datos con su equipo local (Windows). El cliente de "
 #~ "Drive le permite configurar las carpetas a sincronizar."
-
-#~ msgid "Date format:"
-#~ msgstr "Formato de fecha:"
 
 #~ msgid "Date of birth:"
 #~ msgstr "Fecha de nacimiento:"
@@ -16885,9 +17142,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Delete the draft after sending."
 #~ msgstr "Eliminar el borrador después de enviar."
-
-#~ msgid "Delete whole series"
-#~ msgstr "Borrar series completas"
 
 #, fuzzy
 #~| msgid "Return Receipt"
@@ -17134,6 +17388,9 @@ msgstr "Añadir a %s"
 #~ msgid "Download updater for the Connector for Microsoft Outlook"
 #~ msgstr "Descargue el updater para el Conector para Microsoft Outlook"
 
+#~ msgid "Draft saved at %1$s"
+#~ msgstr "Borrador guardado a las %1$s"
+
 #~ msgid "Drafts folder"
 #~ msgstr "Carpeta Borradores"
 
@@ -17148,6 +17405,13 @@ msgstr "Añadir a %s"
 
 #~ msgid "Drawing position"
 #~ msgstr "Posición del dibujo"
+
+#~ msgctxt "help"
+#~ msgid "Drive Settings"
+#~ msgstr "Ajustes de Drive"
+
+#~ msgid "Drop here to import this mail"
+#~ msgstr "Soltar aquí para importar este correo"
 
 #~ msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
 #~ msgstr "Suelte aquí para subir un <b class='dndignore'>nuevo adjunto</b>"
@@ -17279,11 +17543,6 @@ msgstr "Añadir a %s"
 #~ msgid "Edit as new"
 #~ msgstr "Editar como nuevo"
 
-#, fuzzy
-#~| msgid "Available Categories:"
-#~ msgid "Edit categories"
-#~ msgstr "Categorías disponibles:"
-
 #~ msgid "Edit feed"
 #~ msgstr "Editar feed"
 
@@ -17307,6 +17566,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Elements of this week only"
 #~ msgstr "Sólo elementos de esta semana"
+
+#~ msgid "Email 1 / Phone number"
+#~ msgstr "Correo electrónico 1 / Número de teléfono"
 
 #~ msgid "Email Address:"
 #~ msgstr "Dirección de correo:"
@@ -18010,10 +18272,6 @@ msgstr "Añadir a %s"
 #~ msgid "From %s"
 #~ msgstr "De %s"
 
-#~ msgctxt "when"
-#~ msgid "From:"
-#~ msgstr "De:"
-
 #
 #~ msgctxt "who"
 #~ msgid "From:"
@@ -18403,6 +18661,9 @@ msgstr "Añadir a %s"
 #~ msgid "Illegal entry in reminder hour field"
 #~ msgstr "Entrada no válida en el campo de hora de recordatorio"
 
+#~ msgid "Image size:"
+#~ msgstr "Tamaño de imagen:"
+
 #~ msgid "Import Status"
 #~ msgstr "Estado de la importación"
 
@@ -18686,6 +18947,12 @@ msgstr "Añadir a %s"
 #~ msgid "Is at most"
 #~ msgstr "Es como máximo"
 
+#~ msgid "Is bigger than (Size: B/KB/MB/GB)"
+#~ msgstr "Es mayor que (Tamaño: B/KB/MB/GB)"
+
+#~ msgid "Is smaller than (Size: B/KB/MB/GB)"
+#~ msgstr "Es menor que (Tamaño: B/KB/MB/GB)"
+
 #~ msgid "Isle of Man"
 #~ msgstr "Isla of Man"
 
@@ -18916,6 +19183,13 @@ msgstr "Añadir a %s"
 #~ msgid "Load all mails. This might take some time."
 #~ msgstr "Cargar todos los correos. Esto puede tardar un tiempo."
 
+#~ msgid "Load full mail"
+#~ msgstr "Cargar correo completo"
+
+#~ msgid "Loading the full mail might lead to performance problems."
+#~ msgstr ""
+#~ "La carga completa del correo podría generar problemas de rendimiento."
+
 #~ msgid "Location:"
 #~ msgstr "Ubicación:"
 
@@ -18989,6 +19263,12 @@ msgstr "Añadir a %s"
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Cuentas de correo electrónico y de redes sociales"
 
+#~ msgid "Mail has been copied"
+#~ msgstr "El correo se ha copiado"
+
+#~ msgid "Mail has been moved"
+#~ msgstr "Los correos se han movido"
+
 #~ msgid "Mail port"
 #~ msgstr "Puerto de correo"
 
@@ -18997,6 +19277,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Mail saved as draft"
 #~ msgstr "Correo guardado como borrador"
+
+#~ msgid "Mail size:"
+#~ msgstr "Tamaño del correo:"
 
 #~ msgid "Mail text"
 #~ msgstr "Texto del correo"
@@ -19015,6 +19298,12 @@ msgstr "Añadir a %s"
 
 #~ msgid "Mailing list %s"
 #~ msgstr "Lista de correo %s"
+
+#~ msgid "Mails have been copied"
+#~ msgstr "Los correos se han copiado"
+
+#~ msgid "Mails have been moved"
+#~ msgstr "Los correos se han movido"
 
 #~ msgid "Malawi"
 #~ msgstr "Malawi"
@@ -19043,6 +19332,10 @@ msgstr "Añadir a %s"
 #~ msgctxt "help"
 #~ msgid "Managing E-Mail messages"
 #~ msgstr "Gestión de mensajes de correo"
+
+#~ msgctxt "help"
+#~ msgid "Managing Files"
+#~ msgstr "Administración de ficheros"
 
 #~ msgid "Mandatory Field(s) missing!"
 #~ msgstr "¡Falta(n) algún(os) campo(s) obligatorio(s)!"
@@ -19195,6 +19488,9 @@ msgstr "Añadir a %s"
 #~ msgid "Monaco"
 #~ msgstr "Mónaco"
 
+#~ msgid "Monday"
+#~ msgstr "Lunes"
+
 #~ msgid "Mongolia"
 #~ msgstr "Mongolia"
 
@@ -19303,11 +19599,11 @@ msgstr "Añadir a %s"
 #~ msgid "New Caledonia"
 #~ msgstr "Nueva Caledonia"
 
-#~ msgid "New Distribution List"
-#~ msgstr "Nueva lista de distribución"
-
 #~ msgid "New Infoitem"
 #~ msgstr "Nuevo elemento de información"
+
+#~ msgid "New Mail"
+#~ msgstr "Nuevo correo"
 
 #~ msgid "New Mail from %1$s %2$s. Press [enter] to open"
 #~ msgstr "Nuevo correo de %1$s %2$s. Pulse [intro] para abrirlo"
@@ -19323,6 +19619,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "New account..."
 #~ msgstr "Nueva cuenta..."
+
+#~ msgid "New file"
+#~ msgstr "Nuevo fichero"
 
 #~ msgid "New messaging service"
 #~ msgstr "Nuevo servicio de mensajería"
@@ -19580,6 +19879,9 @@ msgstr "Añadir a %s"
 #~ msgid "Numbering On/Off"
 #~ msgstr "Numeración Sí/No"
 
+#~ msgid "Numbers"
+#~ msgstr "Números"
+
 #~ msgid "OAuth Accounts"
 #~ msgstr "Cuentas OAuth"
 
@@ -19606,6 +19908,13 @@ msgstr "Añadir a %s"
 
 #~ msgid "Old Password is wrong."
 #~ msgstr "La contraseña antigua es errónea."
+
+#~ msgid ""
+#~ "Older versions will be deleted after next login or when a new version is "
+#~ "created"
+#~ msgstr ""
+#~ "Las versiones más antiguas se borrarán tras el próximo inicio de sesión o "
+#~ "cuando se cree una versión nueva."
 
 #~ msgid "Oman"
 #~ msgstr "Omán"
@@ -19674,6 +19983,9 @@ msgstr "Añadir a %s"
 #~ "de trabajo. Puede utilizar varias ventanas del navegador para trabajar "
 #~ "con el software colaborativo. No emplee esta opción si trabaja desde un "
 #~ "ordenador de terceros (por ejemplo, desde un cibercafé)"
+
+#~ msgid "Open"
+#~ msgstr "Abrir"
 
 #~ msgid "Open in browser"
 #~ msgstr "Abrir en el navegador"
@@ -19920,8 +20232,14 @@ msgstr "Añadir a %s"
 #~ msgid "Parameter:"
 #~ msgstr "Parámetro:"
 
+#~ msgid "Participant permissions"
+#~ msgstr "Permisos de los participantes"
+
 #~ msgid "Participant:"
 #~ msgstr "Participante:"
+
+#~ msgid "Participants can edit the appointment"
+#~ msgstr "Los participantes pueden editar la cita"
 
 #~ msgid "Participants:"
 #~ msgstr "Participantes:"
@@ -20051,6 +20369,11 @@ msgstr "Añadir a %s"
 #~ msgid "Please enter a valid date."
 #~ msgstr "Por favor, indique una fecha válida."
 
+#~ msgid "Please enter a valid email address or phone number"
+#~ msgstr ""
+#~ "Por favor, introduzca una dirección de correo electrónico válida o un "
+#~ "número de teléfono"
+
 #~ msgid "Please enter an feed-url."
 #~ msgstr "Por favor, indique una URL para el feed."
 
@@ -20074,6 +20397,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Please invite the group %1$s to the appointment."
 #~ msgstr "Por favor invite al grupo %1$s a la cita. "
+
+#~ msgid "Please leave a comment for other participants."
+#~ msgstr "Por favor, deje un comentario para otros participantes."
 
 #~ msgid "Please note that distribution lists cannot contain resources."
 #~ msgstr ""
@@ -20175,6 +20501,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Polish"
 #~ msgstr "Polaco"
+
+#~ msgid "Pop out"
+#~ msgstr "Mostrar aparte"
 
 #~ msgid "Popups"
 #~ msgstr "Ventanas emergentes"
@@ -20342,6 +20671,15 @@ msgstr "Añadir a %s"
 #~ msgid "Publication has been added"
 #~ msgstr "Se ha añadido la publicación"
 
+#~ msgid "Publication must have a site."
+#~ msgstr "La publicación debe tener un sitio."
+
+#~ msgid "Publication must have a target."
+#~ msgstr "La publicación ha de tener un destino."
+
+#~ msgid "Publications and Subscriptions"
+#~ msgstr "Publicaciones y suscripciones"
+
 #~ msgid "Publications must have a name"
 #~ msgstr "Las publicaciones han de tener nombre"
 
@@ -20371,6 +20709,9 @@ msgstr "Añadir a %s"
 #~ msgid "Quick config"
 #~ msgstr "Configuración rápida"
 
+#~ msgid "Quick launch %s"
+#~ msgstr "Lanzador rápido %s"
+
 #~ msgid "Quick launch 1"
 #~ msgstr "Lanzamiento rápido 1"
 
@@ -20382,6 +20723,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Quick reply"
 #~ msgstr "Respuesta rápida"
+
+#~ msgid "Quick reply: %1$s"
+#~ msgstr "Respuesta rápida: %1$s"
 
 #~ msgid "Quit"
 #~ msgstr "Salir"
@@ -20470,8 +20814,14 @@ msgstr "Añadir a %s"
 #~ msgid "Recurring tasks need a valid end date."
 #~ msgstr "Las tareas periódicas necesitan una fecha de finalización válida."
 
+#~ msgid "Related articles"
+#~ msgstr "Artículos relacionados"
+
 #~ msgid "Reload current view every:"
 #~ msgstr "Recargar la vista actual cada:"
+
+#~ msgid "Relogin"
+#~ msgstr "Nuevo inicio de sesión"
 
 #~ msgid "Remind me again %1$s"
 #~ msgstr "Recordarme de nuevo %1$s"
@@ -20514,6 +20864,9 @@ msgstr "Añadir a %s"
 #~ msgid "Reply to"
 #~ msgstr "Responder a"
 
+#~ msgid "Reply to all"
+#~ msgstr "Responder a todos"
+
 #~ msgid "Reply-to Address"
 #~ msgstr "Responder a la dirección"
 
@@ -20525,9 +20878,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Reserve the resource %1$s for the appointment."
 #~ msgstr "Reserve el recurso %1$s para la cita."
-
-#~ msgid "Reset"
-#~ msgstr "Reiniciar"
 
 #~ msgid "Resource email"
 #~ msgstr "Email del recurso"
@@ -20634,11 +20984,6 @@ msgstr "Añadir a %s"
 #~ msgid "SEK"
 #~ msgstr "SEK"
 
-#, fuzzy
-#~| msgid "RSS"
-#~ msgid "SMS"
-#~ msgstr "RSS"
-
 #~ msgid "SMTP Login"
 #~ msgstr "Acceder a SMTP"
 
@@ -20650,9 +20995,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "SMTP login"
 #~ msgstr "Usuario SMTP"
-
-#~ msgid "SMTP port"
-#~ msgstr "Puerto SMTP"
 
 #~ msgid "SMTP protocol"
 #~ msgstr "Protocolo SMTP"
@@ -20742,9 +21084,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Scheduling"
 #~ msgstr "Planificación"
-
-#~ msgid "Search Options"
-#~ msgstr "Opciones de búsqueda"
 
 #~ msgid "Search here"
 #~ msgstr "Buscar aquí"
@@ -20875,6 +21214,15 @@ msgstr "Añadir a %s"
 #~ msgid "Send feedback"
 #~ msgstr "Enviar comentario"
 
+#~ msgid "Send mail"
+#~ msgstr "Enviar correo"
+
+#~ msgid "Send mail to all participants"
+#~ msgstr "Enviar correo electrónico a todos los participantes"
+
+#~ msgid "Send new mail"
+#~ msgstr "Enviar nuevo correo electrónico"
+
 #~ msgid "Sender address"
 #~ msgstr "Dirección de remite"
 
@@ -20941,8 +21289,24 @@ msgstr "Añadir a %s"
 #~ msgid "Seychelles"
 #~ msgstr "Seychelles"
 
+#~ msgid "Share current folder"
+#~ msgstr "Compartir la carpeta actual"
+
 #~ msgid "Share link by email"
 #~ msgstr "Compartir enlace por correo"
+
+#~ msgid "Share selected file"
+#~ msgid_plural "Share selected files"
+#~ msgstr[0] "Compartir el fichero seleccionado"
+#~ msgstr[1] "Compartir los ficheros seleccionados"
+
+#~ msgid "Share selected folder"
+#~ msgid_plural "Share selected folders"
+#~ msgstr[0] "Compartir la carpeta seleccionada"
+#~ msgstr[1] "Compartir las carpetas seleccionadas"
+
+#~ msgid "Share selected objects"
+#~ msgstr "Compartir objetos seleccionados"
 
 #~ msgid "Share the folder \"%1$d\""
 #~ msgid_plural "Share %1$d items"
@@ -21205,6 +21569,17 @@ msgstr "Añadir a %s"
 #~ "Algunos archivos no se pueden subir porque superan el tamaño máximo de "
 #~ "archivo de %1$s"
 
+#, fuzzy
+#~| msgid ""
+#~| "Some settings (language, timezone, theme) require a relogin to take "
+#~| "effect."
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Algunos ajustes (idioma, zona horaria, tema) requieren de un nuevo inicio "
+#~ "de sesión para que surtan efecto."
+
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Alguien ha compartido un fichero con usted"
 
@@ -21439,6 +21814,9 @@ msgstr "Añadir a %s"
 #~ msgid "Sun"
 #~ msgstr "dom"
 
+#~ msgid "Sunday"
+#~ msgstr "Domingo"
+
 #~ msgid "Superscript"
 #~ msgstr "Superíndice"
 
@@ -21596,6 +21974,9 @@ msgstr "Añadir a %s"
 #~ msgid "Task reminder. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "Recordatorio de tareas. %1$s %2$s %3$s. Pulse [Intro] para abrir"
 
+#~ msgid "Task was modified before, please reload"
+#~ msgstr "La tarea ya había sido modificada. Por favor, cárguela de nuevo"
+
 #~ msgid "Tasks have been moved"
 #~ msgstr "Las tareas se han movido"
 
@@ -21632,14 +22013,15 @@ msgstr "Añadir a %s"
 #~ msgid "Text Fill Color"
 #~ msgstr "Color de relleno de texto"
 
-#~ msgid "Text format"
-#~ msgstr "Formato de texto"
-
 #~ msgid "Text:"
 #~ msgstr "Texto:"
 
 #~ msgid "Thailand"
 #~ msgstr "Tailandia"
+
+#~ msgctxt "help"
+#~ msgid "The Drive App"
+#~ msgstr "La aplicación Drive"
 
 #~ msgctxt "help"
 #~ msgid "The E-Mail Components"
@@ -21789,10 +22171,6 @@ msgstr "Añadir a %s"
 #~ "attribute=\"day\">miércoles</a> <a href=\"#\" data-widget=\"number\" data-"
 #~ "attribute=\"interval\">de cada <span class=\"number-control\">2</span> "
 #~ "meses</a>. "
-
-#~ msgid "The appointment is visible for all users in shared folders."
-#~ msgstr ""
-#~ "La cita está visible para todos los usuarios de carpetas compartidas."
 
 #~ msgid "The appointment takes place in a new location: %1$s."
 #~ msgstr "La cita tiene lugar en una nueva ubicación: %1$s."
@@ -22091,6 +22469,10 @@ msgstr "Añadir a %s"
 #~ "Los ajustes se han guardado y se activarán cuando entre en la aplicación "
 #~ "la próxima vez."
 
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr ""
+#~ "El ajuste precisa de un nuevo inicio de sesión para que surta efecto."
+
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "
 #~ "e.g Basic settings, E-Mail or My contact data."
@@ -22178,11 +22560,21 @@ msgstr "Añadir a %s"
 #~ msgid "There were not activities in your network"
 #~ msgstr "No hubo actividad en su red"
 
+#~ msgid ""
+#~ "These statistics only include folders, which have a depth less than four "
+#~ "in the folder structure from the folder \"%1$s\"."
+#~ msgstr ""
+#~ "Estas estadísticas sólo incluyen carpetas que tienen una profundidad "
+#~ "inferior a cuatro en la estructura de carpetas desde la carpeta \"%1$s\"."
+
 #~ msgid "This Signature name already exists"
 #~ msgstr "Este nombre de firma ya existe"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "La cuenta no se puede validar"
+
+#~ msgid "This appointment"
+#~ msgstr "Esta cita"
 
 #~ msgid ""
 #~ "This appointment does not take place.\n"
@@ -22409,6 +22801,9 @@ msgstr "Añadir a %s"
 #~ msgid "This file is locked by you"
 #~ msgstr "El fichero está bloqueado por usted"
 
+#~ msgid "This folder has publications and/or subscriptions"
+#~ msgstr "Esta carpeta tiene publicaciones y/o suscripciones"
+
 #~ msgid ""
 #~ "This folder is shared with others. It won't be available for the invited "
 #~ "guests any more."
@@ -22441,6 +22836,13 @@ msgstr "Añadir a %s"
 #~ "destinatario haya leído ni comprendido el contenido del mensaje."
 
 #~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Este es un correo electrónico sospechoso porque no se pudo verificar que "
+#~ "realmente provenga de %1$s."
+
+#~ msgid ""
 #~ "This is an update to an appointment that already changed in the meantime. "
 #~ "It is best to just ignore this one."
 #~ msgstr ""
@@ -22449,6 +22851,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Este correo contiene una URL de una publicación."
+
+#~ msgid "This mail has been added to the portal"
+#~ msgstr "Este correo se ha añadido al portal"
 
 #~ msgid "This mail has been sent from %1$s."
 #~ msgstr "Este correo ha sido enviado por %1$s."
@@ -22968,6 +23373,12 @@ msgstr "Añadir a %s"
 #~ msgid "Too short"
 #~ msgstr "Demasiado corto"
 
+#~ msgid "Top 10 file types"
+#~ msgstr "Top 10 de tipos de fichero"
+
+#~ msgid "Top 10 folder size"
+#~ msgstr "Top 10 de tamaños de carpeta"
+
 #~ msgid "Touchselect on/off"
 #~ msgstr "Selector de encendido/apagado"
 
@@ -22982,9 +23393,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Trash"
 #~ msgstr "Papelera"
-
-#~ msgid "Trash folder"
-#~ msgstr "Carpeta Papelera"
 
 #~ msgid "Trinidad and Tobago"
 #~ msgstr "Trinidad y Tobago"
@@ -23017,6 +23425,9 @@ msgstr "Añadir a %s"
 #~| msgid "Virgin Islands, U.S."
 #~ msgid "U.S. Virgin Islands"
 #~ msgstr "Islas Vírgenes Americanas"
+
+#~ msgid "UNKNOWN"
+#~ msgstr "DESCONOCIDO"
 
 #~ msgid "URI"
 #~ msgstr "URI"
@@ -23355,6 +23766,9 @@ msgstr "Añadir a %s"
 #~ msgid "View the presentation in fullscreen on your device."
 #~ msgstr "Ver la presentación en pantalla completa en su dispositivo."
 
+#~ msgid "Viewer Toolbar"
+#~ msgstr "Barra de herramientas del visor"
+
 #~ msgid "Virgin Islands, British"
 #~ msgstr "Islas Vírgenes Británicas"
 
@@ -23383,6 +23797,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Week View"
 #~ msgstr "Vista de semana"
+
+#~ msgid "Week that contains the first Thursday"
+#~ msgstr "Semana que contiene el primer jueves"
 
 #~ msgid "Week(s) on"
 #~ msgstr "Semana(s) en"
@@ -23439,6 +23856,19 @@ msgstr "Añadir a %s"
 
 #~ msgid "When \"Reply all\":"
 #~ msgstr "Al \"Responder a todos\":"
+
+#~ msgid ""
+#~ "When a file has more than 1 additional version, older versions of the "
+#~ "file will be deleted"
+#~ msgid_plural ""
+#~ "When a file has more than %1$d additional versions, older versions of the "
+#~ "file will be deleted"
+#~ msgstr[0] ""
+#~ "Cuando un fichero tiene más de 1 versión adicional, las versiones más "
+#~ "antiguas se borrarán"
+#~ msgstr[1] ""
+#~ "Cuando un fichero tiene más de %1$d versiones adicionales, las versiones "
+#~ "más antiguas se borrarán"
 
 #~ msgid "When activating this option an installation wizard will be launched."
 #~ msgstr "Cuando se active esta opción se lanzará un asistente."
@@ -23532,6 +23962,13 @@ msgstr "Añadir a %s"
 #~ msgstr "Ya ha aceptado esta invitación"
 
 #~ msgid ""
+#~ "You are currently using %1$s of your %2$s available disk space. You have "
+#~ "%3$s left. "
+#~ msgstr ""
+#~ "Actualmente está usando %1$s de sus %2$s de espacio en disco disponible. "
+#~ "Le quedan %3$s. "
+
+#~ msgid ""
 #~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
 #~ "Appointments will therefore be created in your private calendar."
 #~ msgstr ""
@@ -23578,6 +24015,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "You can't present the same document more than once."
 #~ msgstr "No puede presentar el mismo documento más de una vez."
+
+#~ msgid "You cannot move items to virtual folders"
+#~ msgstr "No puede mover elementos a carpetas virtuales"
 
 #~ msgid ""
 #~ "You cannot remove the owner of the shared folder from this appointment."
@@ -23739,6 +24179,15 @@ msgstr "Añadir a %s"
 #~ msgid "Your browser is slow and outdated!"
 #~ msgstr "Su navegador es lento y está desactualizado"
 
+#~ msgid ""
+#~ "Your capacity is shared with all members of your group. Your group is "
+#~ "currently using %1$s of its %2$s available disk space. The amount of free "
+#~ "space is %3$s. "
+#~ msgstr ""
+#~ "Su capacidad está compartida con todos los miembros de su grupo. Su grupo "
+#~ "está utilizando actualmente %1$s de %2$s del espacio en disco disponible. "
+#~ "La cantidad de espacio libre es %3$s."
+
 #~ msgid "Your contact information have been saved."
 #~ msgstr "Su información de contacto ha sido guardada."
 
@@ -23752,8 +24201,14 @@ msgstr "Añadir a %s"
 #~ "No se pudo establecer su recordatorio predeterminado para esta cita "
 #~ "debido a permisos insuficientes"
 
+#~ msgid "Your default reminders will be applied to this calendars."
+#~ msgstr "Sus recordatorios predeterminados se aplicarán a este calendario."
+
 #~ msgid "Your email address will be included when sending this feedback"
 #~ msgstr "Su dirección de correo se incluirá al enviar este comentario"
+
+#~ msgid "Your feedback"
+#~ msgstr "Sus comentarios"
 
 #~ msgid "Your messages"
 #~ msgstr "Sus mensajes"
@@ -24217,6 +24672,12 @@ msgstr "Añadir a %s"
 #~ msgid "february"
 #~ msgstr "febrero"
 
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.people.getPublicPhotos"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.photos.search"
+
 #~ msgid "forward"
 #~ msgstr "avanzar"
 
@@ -24351,9 +24812,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "open"
 #~ msgstr "abrir"
-
-#~ msgid "optional password"
-#~ msgstr "contraseña opcional"
 
 #~ msgid "organized by %s"
 #~ msgstr "organizado por %s"

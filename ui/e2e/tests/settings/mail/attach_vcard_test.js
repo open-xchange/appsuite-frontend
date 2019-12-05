@@ -30,8 +30,8 @@ const goToMailAndSendMail = (I, user, subject) => {
 };
 
 const openMail = (I, subject) => {
-    I.waitForText(subject);
-    I.click(subject, '.list-item.selectable');
+    I.waitForText(subject, 10, '.list-item.selectable');
+    I.retry(5).click(subject, '.list-item.selectable');
     // wait for everything being loaded
     I.waitForVisible('.fa-refresh.fa-spin');
     I.waitForDetached('.fa-refresh.fa-spin');
@@ -48,7 +48,7 @@ After(async (users) => {
 });
 
 
-Scenario('[C7775] Append vCard when sending mail @shaky', async (I, users) => {
+Scenario('[C7775] Append vCard when sending mail', async (I, users) => {
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
     const user = users[0];
 
@@ -66,7 +66,10 @@ Scenario('[C7775] Append vCard when sending mail @shaky', async (I, users) => {
 
     checkSetting(I);
     goToMailAndSendMail(I, user, 'Katalog von Pearl');
+    I.waitForVisible('~Refresh');
+    I.click('~Refresh');
+    I.waitForVisible('.fa-refresh.fa-spin');
+    I.waitForDetached('.fa-refresh.fa-spin');
     openMail(I, 'Katalog von Pearl');
     I.dontSee('1 attachment');
-
 });

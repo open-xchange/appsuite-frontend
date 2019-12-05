@@ -79,7 +79,7 @@ define('io.ox/calendar/main', [
                 name: 'folderTree',
                 navbar: new Bars.NavbarView({
                     baton: baton,
-                    extension: 'io.ox/calendar/mobile/navbar'
+                    extension: 'io.ox/calendar/mobile/navbarFoldertree'
                 })
             });
 
@@ -238,7 +238,7 @@ define('io.ox/calendar/main', [
                 .on('leftAction', function () {
                     app.pages.goBack();
                 })
-                .setLeft(gt('Folders'));
+                .setLeft(gt('Calendars'));
 
             app.pages.getNavbar('week:day')
                 .on('leftAction', function () {
@@ -258,8 +258,8 @@ define('io.ox/calendar/main', [
 
             app.pages.getNavbar('folderTree')
                 .setTitle(gt('Folders'))
-                .setLeft(false)
-                .setRight(gt('Edit'));
+                .setLeft(gt('Edit'))
+                .setRight(gt('Back'));
 
             app.pages.getNavbar('detailView')
                 .setTitle('')
@@ -341,8 +341,13 @@ define('io.ox/calendar/main', [
             var nav = app.pages.getNavbar('folderTree'),
                 page = app.pages.getPage('folderTree');
 
-            nav.on('rightAction', function () {
+            nav.on('leftAction', function () {
                 app.toggleFolders();
+            });
+
+            nav.on('rightAction', function () {
+                app.pages.changePage('month', { animation: 'slideleft' });
+
             });
 
             var tree = new TreeView({
@@ -353,7 +358,7 @@ define('io.ox/calendar/main', [
                 module: 'calendar'
             });
             // initialize folder view
-            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month' });
+            FolderView.initialize({ app: app, tree: tree, firstResponder: false });
             page.append(tree.render().$el);
             app.treeView = tree;
         },
@@ -463,7 +468,7 @@ define('io.ox/calendar/main', [
                     app.perspective = views[item];
                     // trigger change perspective so toolbar is redrawn (no more lost today button)
                     app.getWindow().trigger('change:perspective', views[item]);
-                    if (_.device('smartphone')) settings.set('viewView', item);
+                    if (_.device('!smartphone')) settings.set('viewView', item);
                 });
                 node.on('pageshow', function () {
                     // update the indicator arrows after the page is visible, otherwise we get wrong calculations
@@ -516,12 +521,12 @@ define('io.ox/calendar/main', [
             if (_.device('!smartphone')) return;
 
             var toggle =  function () {
-
                 var page = app.pages.getPage('folderTree'),
                     state = app.props.get('mobileFolderSelectMode'),
-                    right = state ? gt('Edit') : gt('Cancel');
+                    left = state ? gt('Edit') : gt('Cancel');
                 app.props.set('mobileFolderSelectMode', !state);
-                app.pages.getNavbar('folderTree').setRight(right);
+                app.pages.getNavbar('folderTree').setLeft(left);
+                app.pages.getNavbar('folderTree').$el.find('.right').toggle(!!state);
                 page.toggleClass('mobile-edit-mode', !state);
             };
 
@@ -655,7 +660,7 @@ define('io.ox/calendar/main', [
         },
 
         'create': function (app) {
-            api.on('create', function (event) {
+            api.on('create move', function (event) {
                 var folder = folderAPI.pool.getModel(event.folder);
                 // do not select public folder if allPublic is selected
                 if (app.folders.isSelected('cal://0/allPublic') && folder && folder.is('public')) return;
@@ -953,7 +958,6 @@ define('io.ox/calendar/main', [
         win.addClass('io-ox-calendar-main');
 
         // go!
-        var defaultFolder  = options.folder || folderAPI.getDefaultFolder('calendar');
         if (!options.folder && capabilities.has('guest')) {
             // try to select the first shared folder available
             if (folderAPI.getFlatCollection('calendar', 'shared').fetched) {
@@ -965,10 +969,11 @@ define('io.ox/calendar/main', [
                 });
             }
         } else {
-            addFolderSupport(defaultFolder);
+            addFolderSupport(options.folder);
         }
 
         function addFolderSupport(folder) {
+            folder = folder || folderAPI.getDefaultFolder('calendar');
             commons.addFolderSupport(app, null, 'calendar', folder)
                 .always(function () {
                     app.mediate();

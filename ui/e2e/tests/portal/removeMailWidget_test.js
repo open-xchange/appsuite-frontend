@@ -40,7 +40,7 @@ Scenario('[C7487] Remove a mail', async (I, users) => {
     I.waitForVisible('.io-ox-mail-window');
 
     // click on first email
-    I.waitForVisible('.io-ox-mail-window .leftside');
+    I.waitForText('Test subject', 5, '.io-ox-mail-window .leftside');
     I.click('.io-ox-mail-window .leftside ul li.list-item[aria-label*="Test subject"]');
     I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
     I.clickToolbar({ css: '.io-ox-mail-window .classic-toolbar [data-action="more"]' });
@@ -52,8 +52,8 @@ Scenario('[C7487] Remove a mail', async (I, users) => {
     I.waitForElement('~Test subject');
     I.waitForElement('~Test subject, Disable widget');
     I.click('~Test subject, Disable widget');
-    I.waitForVisible({ css: '.io-ox-dialog-popup' });
-    I.click('Delete', '.io-ox-dialog-popup');
+    I.waitForVisible({ css: '.modal-dialog' });
+    I.click('Delete', '.modal-dialog');
 
     // verify that the widget is removed
     I.dontSee('~Test subject');

@@ -1,4 +1,5 @@
 @import 'node_modules/bootstrap/less/bootstrap.less';
+@import './inline_help_capabilities.less';
 html.embedded {
     margin: 0;
     padding: 0;
@@ -11,7 +12,7 @@ html.embedded {
             padding-right: 0px;
         }
         min-height: initial;
-        margin-top: 16px;
+        margin-top: 0px;
         &, & > .navbar-header , & > .navbar-collapse {
             background: #fff;
             color: #000;
@@ -24,18 +25,24 @@ html.embedded {
             }
             a:hover, a:focus {
                 color: #284171;
-                text-decoration: none;
-                background-color: #eee;
+                text-decoration: underline;
+                background-color: transparent;
                 outline: 0;
             }
         }
         .nav > li > a:first-child {
             padding-left: 8px;
         }
+        .oxhelp-content {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        .oxhelp-prev-link, .oxhelp-next-link {
+            display: none;
+        }
     }
-    .oxhelp-content {
-        padding-left: 15px;
-        padding-right: 15px;
+    .container-fluid {
+        padding-left: 32px;
     }
 }
 

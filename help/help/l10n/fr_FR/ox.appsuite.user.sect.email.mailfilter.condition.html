@@ -1,4 +1,4 @@
-<html lang="fr">
+<html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>5.7.2. Ajouter une condition</title>
@@ -9,23 +9,23 @@
 <link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.7.1. Pour créer une nouvelle règle :">
 <link rel="next" href="ox.appsuite.user.sect.email.mailfilter.action.html" title="5.7.3. Ajouter une action">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
-<link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
-<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <script src="../../../help/jquery.min.js"></script> 
-
-   <script src="../../../help/bootstrap.min.js"></script> 
-</head>
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.mailfilter.create.html">Précédent</a></li>
-<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Sommaire</a></li>
-<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdM</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.email.mailfilter.action.html">Suivant</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.mailfilter.create.html">Prev</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.email.mailfilter.action.html">Next</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -65,7 +65,9 @@
 <p>Dans ce cas, la règle vérifie si le sujet d'un courriel correspond exactement à l'argument "minutes". Exemples supplémentaires sur le filtrage de courriels au moyen du sujet :</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p role="presentation">Critère : "contient" La condition est vérifiée si le sujet contient les caractères de l'argument. Exemple : l'argument est "minutes".</p>
+<p role="presentation">Critère: "contient"</p>
+<p role="presentation">La condition est vérifiée si le sujet contient les caractères fournis en argument.</p>
+<p role="presentation">Exemple : L'argument est "minutes".</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">La condition est vérifiée par le sujet "minutes".</p></li>
 <li class="listitem"><p role="presentation">La condition est également vérifiée par le sujet "minutes de la réunion".</p></li>
@@ -74,14 +76,18 @@
             </p>
 </li>
 <li class="listitem">
-<p role="presentation">Critère : "Correspond" La condition est vérifiée si le sujet correspond exactement aux caractères de l'argument. La chaîne de caractères peut contenir des caractères de remplacement.   Exemple : l'argument est "minutes*". Le caractère "*" est un caractère de remplacement représentant n'importe quelle série d'autres caractères. </p>
+<p role="presentation">Critère : "correspond"</p>
+<p role="presentation">La condition est vérifiée si le sujet correspond exactement aux caractères de l'argument. La chaîne de caractères peut contenir des caractères de remplacement.</p>
+<p role="presentation">Exemple : l'argument est "minutes*". Le caractère "*" est un caractère de remplacement représentant n'importe quelle série d'autres caractères. </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">La condition est vérifiée par le sujet "minutes".</p></li>
 <li class="listitem"><p role="presentation">La condition n'est pas vérifiée par le sujet "minutes de la réunion".</p></li>
 </ul>
 </li>
 <li class="listitem">
-<p role="presentation">Critère : "Expression rationnelle"  La condition est vérifiée si le sujet contient les caractères fournis par l'expression rationnelle en argument. Les expressions rationnelles permettent d'écrire des requêtes complexes. Vous pouvez trouver davantage d'informations à leur sujet sur de nombreux sites web. L'expression rationnelle suivante, très simple, devrait vous donner une petite idée du sujet.  Exemple : l'argument est "organi(z|s)ation". L'expression "(z|s)" représente soit le caractère "z", soit le caractère "s". </p>
+<p role="presentation">Critère : "expression rationnelle"</p>
+<p role="presentation">La condition est vérifiée si le sujet contient les caractères fournis par l'expression rationnelle en argument. Les expressions rationnelles permettent d'écrire des requêtes complexes. Vous pouvez trouver davantage d'informations à leur sujet sur de nombreux sites web. L'expression rationnelle suivante, très simple, devrait vous donner une petite idée du sujet.</p>
+<p role="presentation">Exemple : l'argument est "organi(z|s)ation". L'expression "(z|s)" représente soit le caractère "z", soit le caractère "s". </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">La condition est vérifiée par le sujet "minutes".</p></li>
 <li class="listitem"><p role="presentation">La condition est vérifiée par le sujet "organisation".</p></li>

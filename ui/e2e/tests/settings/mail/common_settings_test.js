@@ -23,94 +23,90 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C7779] Mail formatting', async function (I, users, mail) {
 
     const [user] = users;
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/compose']);
-
-
-    I.retry(5).checkOption(locate('label').withText('Plain text'));
+    I.waitForText('Mail Compose');
+    I.checkOption('Plain text');
     I.seeCheckboxIsChecked('[name="messageFormat"][value="text"]');
 
     I.openApp('Mail');
 
-    I.retry(5).click('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text');
+    mail.newMail();
 
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject');
     I.fillField('.io-ox-mail-compose textarea.plain-text', 'Testcontent');
 
-    I.click('Send');
-    I.waitForDetached('.io-ox-mail-compose-window');
+    mail.send();
 
-    I.retry(10).click(locate('span').withText('Testsubject'));
+    I.wait(0.5); // wait for mail to arrive
+    I.triggerRefresh();
+    I.waitForText('Testsubject', 600, '.list-view');
+    mail.selectMail('Testsubject');
 
-    I.waitForElement('.mail-detail-frame');
+    I.waitForText('Testsubject', 20, 'h1.subject');
+    I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, function () {
         I.see('Testcontent');
         I.dontSeeElement(locate('strong').withText('Testcontent'));
     });
 
-    // switch back to settings
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.waitForVisible('#topbar-settings-dropdown');
-    I.click('Settings');
+    I.openApp('Settings');
 
-    I.retry(5).checkOption(locate('label').withText('HTML'));
+    I.checkOption('HTML');
     I.seeCheckboxIsChecked('[name="messageFormat"][value="html"]');
 
     I.openApp('Mail');
-    I.retry(5).click('Compose');
 
-    I.waitForVisible('.io-ox-mail-compose-window .editor iframe');
+    mail.newMail();
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject2');
+    I.click('.mce-i-bold');
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
         I.appendField('body', 'Testcontent2');
-        I.pressKey(['Control', 'a']);
     });
-    I.click('.mce-i-bold');
 
-    I.click('Send');
-    I.waitForDetached('.io-ox-mail-compose-window');
+    mail.send();
 
-    I.retry(10).click(locate('span').withText('Testsubject2'));
-
-    I.waitForElement('.mail-detail-frame');
+    I.wait(0.5); // wait for mail to arrive
+    I.triggerRefresh();
+    I.waitForText('Testsubject2', 600, '.list-view');
+    mail.selectMail('Testsubject2');
+    I.waitForText('Testsubject2', 20, 'h1.subject');
+    I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, function () {
         I.seeElement(locate('strong').withText('Testcontent2'));
     });
 
-    // switch back to settings
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.waitForVisible('#topbar-settings-dropdown');
-    I.click('Settings');
+    I.openApp('Settings');
 
-    I.retry(5).checkOption(locate('label').withText('HTML and plain text'));
+    I.checkOption('HTML and plain text');
     I.seeCheckboxIsChecked('[name="messageFormat"][value="alternative"]');
 
     I.openApp('Mail');
-    I.retry(5).click('Compose');
+    mail.newMail();
 
-    I.waitForVisible('.io-ox-mail-compose-window .editor iframe');
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject3');
+    I.click('.mce-i-bold');
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
         I.appendField('body', 'Testcontent3');
-        I.pressKey(['Control', 'a']);
     });
-    I.click('.mce-i-bold');
 
-    I.click('Send');
-    I.waitForDetached('.io-ox-mail-compose-window');
+    mail.send();
 
-    I.retry(10).click(locate('span').withText('Testsubject3'));
+    I.wait(0.5); // wait for mail to arrive
+    I.triggerRefresh();
+    I.waitForText('Testsubject3', 600, '.list-view');
+    mail.selectMail('Testsubject3');
 
-    I.waitForElement('.mail-detail-frame');
+    I.waitForText('Testsubject3', 20, 'h1.subject');
+    I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, function () {
         I.seeElement(locate('strong').withText('Testcontent3'));
     });
-
 });

@@ -23,6 +23,8 @@ define('io.ox/backbone/mini-views/abstract', [], function () {
 
         initialize: function (options) {
             var o = this.options = options || {};
+            // defaults
+            if (o.validate === undefined) o.validate = true;
             // use id if id is given and no name
             if (o.id && !o.name) o.name = o.id;
             // register for 'dispose' event (using inline function to make this testable via spyOn)

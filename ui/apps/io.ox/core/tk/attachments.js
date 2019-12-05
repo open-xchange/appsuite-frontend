@@ -15,17 +15,12 @@ define('io.ox/core/tk/attachments', [
     'io.ox/backbone/views/disposable',
     'io.ox/backbone/views/action-dropdown',
     'io.ox/core/api/attachment',
-    'io.ox/core/folder/title',
     'io.ox/core/strings',
-    'io.ox/core/tk/attachmentsUtil',
     'io.ox/core/capabilities',
-    'io.ox/preview/main',
-    'io.ox/core/tk/dialogs',
     'settings!io.ox/core',
-    'io.ox/core/notifications',
     'gettext!io.ox/core',
     'io.ox/core/pim/actions'
-], function (DisposableView, ActionDropdownView, attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, settings, notifications, gt) {
+], function (DisposableView, ActionDropdownView, attachmentAPI, strings, capabilities, settings, gt) {
 
     'use strict';
 

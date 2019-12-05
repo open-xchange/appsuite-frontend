@@ -39,8 +39,7 @@ define('io.ox/tasks/toolbar', [
         'create': {
             prio: 'hi',
             mobile: 'hi',
-            title: gt('New'),
-            tooltip: gt('New task'),
+            title: gt('New task'),
             drawDisabled: true,
             ref: 'io.ox/tasks/actions/create'
         },
@@ -150,7 +149,8 @@ define('io.ox/tasks/toolbar', [
         index: 10000,
         setup: function (app) {
 
-            var toolbarView = new ToolbarView({ point: 'io.ox/tasks/toolbar/links', title: app.getTitle() });
+            // yep strict false (otherwise toolbar does not redraw when changing between empty folders => tasks are created in the wrong folder)
+            var toolbarView = new ToolbarView({ point: 'io.ox/tasks/toolbar/links', title: app.getTitle(), strict: false });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbarView.$el

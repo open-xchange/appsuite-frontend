@@ -14,10 +14,10 @@
 define('io.ox/files/actions/upload-new-version', [
     'io.ox/files/api',
     'io.ox/core/folder/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/tk/attachments',
     'gettext!io.ox/files'
-], function (FilesAPI, folderApi, Dialogs, Attachments, gt) {
+], function (FilesAPI, folderApi, ModalDialog, Attachments, gt) {
 
     'use strict';
 
@@ -71,40 +71,33 @@ define('io.ox/files/actions/upload-new-version', [
             }),
             filename = $('<div class="form-group">').css('font-size', '14px').hide();
 
-        new Dialogs.ModalDialog({ async: true })
-            .header(
-                $('<h4>').text(gt('Upload new version'))
-            )
-            .append(
-                $input.on('change', function () {
-                    if ($input.find('input[type="file"]')[0].files.length === 0) {
-                        filename.text('').hide();
-                    } else {
-                        filename.text($input.find('input[type="file"]')[0].files[0].name).show();
-                    }
-                }),
-                filename,
-                folderApi.pool.getModel(data.folder_id).supports('extended_metadata') ? $('<textarea rows="6" class="form-control">') : ''
-            )
-            .addPrimaryButton('upload', gt('Upload'), 'upload')
-            .addButton('cancel', gt('Cancel'), 'cancel')
+        new ModalDialog({ title: gt('Upload new version'), async: true })
+            .build(function () {
+                this.$body.append(
+                    $input.on('change', function () {
+                        if ($input.find('input[type="file"]')[0].files.length === 0) {
+                            filename.text('').hide();
+                        } else {
+                            filename.text($input.find('input[type="file"]')[0].files[0].name).show();
+                        }
+                    }),
+                    filename,
+                    folderApi.pool.getModel(data.folder_id).supports('extended_metadata') ? $('<textarea rows="6" class="form-control">') : ''
+                );
+            })
+            .addCancelButton()
+            .addButton({ label: gt('Upload'), action: 'upload' })
             .on('upload', function () {
-                var $node = this.getContentNode(),
+                var $node = this.$body,
                     files = $node.find('input[type="file"]')[0].files,
                     comment = (folderApi.pool.getModel(data.folder_id).supports('extended_metadata') ? $node.find('textarea').val() : '');
 
                 process(_.first(files), comment).then(this.close, this.idle)
                 .fail(function () {
-                    if (files.length === 0) {
-                        notify('info', gt('You have to select a file to upload.'));
-                    }
+                    if (files.length === 0) notify('info', gt('You have to select a file to upload.'));
                     _.defer(function () { $node.focus(); });
                 });
             })
-            .show(function () {
-                // focus the file upload widget
-                this.find('.btn-file').focus();
-            });
-
+            .open();
     };
 });

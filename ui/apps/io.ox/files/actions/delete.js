@@ -14,10 +14,10 @@
 define('io.ox/files/actions/delete', [
     'io.ox/files/api',
     'io.ox/core/folder/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/notifications',
     'gettext!io.ox/files'
-], function (api, folderAPI, dialogs, notifications, gt) {
+], function (api, folderAPI, ModalDialog, notifications, gt) {
 
     'use strict';
 
@@ -55,9 +55,9 @@ define('io.ox/files/actions/delete', [
     }
 
     return function (list) {
+        list = _.isArray(list) ? list : [list];
 
-        var dialog = new dialogs.ModalDialog(),
-            deleteNotice = gt.ngettext(
+        var deleteNotice = gt.ngettext(
                 'Do you really want to delete this item?',
                 'Do you really want to delete these items?',
                 list.length
@@ -67,8 +67,6 @@ define('io.ox/files/actions/delete', [
                 list.length
             );
 
-        list = _.isArray(list) ? list : [list];
-
         function isShared() {
             var result = _.findIndex(list, function (model) {
                 return model.get('object_permissions') ? model.get('object_permissions').length !== 0 : model.get('permissions').length > 1;
@@ -77,14 +75,12 @@ define('io.ox/files/actions/delete', [
             if (result !== -1) return true;
         }
 
-        dialog.text(deleteNotice)
-            .append($('<p>').text(isShared() ? shareNotice : ''))
-            .addPrimaryButton('delete', gt('Delete'), 'delete')
-            .addButton('cancel', gt('Cancel'), 'cancel')
+        new ModalDialog({ title: deleteNotice, description: isShared() ? shareNotice : false })
+            .addCancelButton()
+            .addButton({ label: gt('Delete'), action: 'delete' })
             .on('delete', function () {
                 _.defer(function () { process(list); });
             })
-            .show();
-        dialog.getContentNode().find('h4').addClass('white-space');
+            .open();
     };
 });

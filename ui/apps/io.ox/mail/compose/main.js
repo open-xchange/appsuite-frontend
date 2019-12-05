@@ -63,7 +63,9 @@ define('io.ox/mail/compose/main', [
         index: INDEX += 100,
         perform: function () {
             if (settings.get('customDisplayNames')) return;
-            return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).then(function (address) {
+            return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).catch(function () {
+                return accountAPI.getPrimaryAddressFromFolder(mailAPI.getDefaultFolder());
+            }).then(function (address) {
                 // ensure defaultName is set (bug 56342 and 63891)
                 settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
             });
@@ -74,7 +76,9 @@ define('io.ox/mail/compose/main', [
         perform: function () {
             var model = this.model;
             if (model.get('from')) return;
-            return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).then(function (address) {
+            return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).catch(function () {
+                return accountAPI.getPrimaryAddressFromFolder(mailAPI.getDefaultFolder());
+            }).then(function (address) {
                 // custom display names
                 if (settings.get(['customDisplayNames', address[1], 'overwrite'])) {
                     address[0] = settings.get(['customDisplayNames', address[1], 'name'], '');
@@ -193,6 +197,15 @@ define('io.ox/mail/compose/main', [
             var win = baton.win;
             // calculate right margin for to field (some languages like chinese need extra space for cc bcc fields)
             win.nodes.main.find('.tokenfield').css('padding-right', 14 + win.nodes.main.find('.recipient-actions').width() + win.nodes.main.find('[data-extension-id="to"] .has-picker').length * 20);
+
+            // clear max width for tokenfields to accomodate new max width
+            this.view.$el.find('.mail-input>.tokenfield>input.tokenfield').each(function () {
+                var tokenfield = $(this).data('bs.tokenfield'),
+                    attr = $(this).closest('[data-extension-id]').data('extension-id');
+                delete tokenfield.maxTokenWidth;
+                // trigger redraw
+                baton.model.trigger('change:' + attr, baton.model, baton.model.get(attr));
+            });
             // Set window and toolbars visible again
             win.nodes.header.removeClass('sr-only');
             win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0).trigger('scroll');

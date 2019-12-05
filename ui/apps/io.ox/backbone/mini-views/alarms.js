@@ -21,12 +21,12 @@ define('io.ox/backbone/mini-views/alarms', [
 
     'use strict';
 
-    var standardTypes = ['DISPLAY', 'AUDIO', 'EMAIL'],
-        supportedTypes = settings.get('availableAlarmTypes', standardTypes),
+    var supportedTypes = settings.get('availableAlarmTypes', ['DISPLAY', 'AUDIO', 'EMAIL']),
         typeTranslations = {
             DISPLAY: gt('Notification'),
             AUDIO: gt('Audio'),
-            EMAIL: gt('Mail')
+            EMAIL: gt('Mail'),
+            SMS: gt('SMS')
         },
         relatedLabels = {
             //#. Used in a selectbox when the reminder for an appointment is before the start time
@@ -138,6 +138,8 @@ define('io.ox/backbone/mini-views/alarms', [
         initialize: function (options) {
             this.options = options || {};
             this.attribute = options.attribute || 'alarms';
+            this.phoneNumber = options.phoneNumber;
+            this.supportedTypes = options.phoneNumber ? supportedTypes : _(supportedTypes).without('SMS');
             this.list = $('<div class="alarm-list">');
 
             if (this.model) {
@@ -199,15 +201,15 @@ define('io.ox/backbone/mini-views/alarms', [
                 //#. %1$d: is the number of the reminder
                 $('<legend class="sr-only">').text(gt('Reminder %1$d', index)),
                 row = $('<div class="item">'));
-            if (_(supportedTypes).indexOf(alarm.action) === -1) {
+            if (_(this.supportedTypes).indexOf(alarm.action) === -1) {
                 row.append($('<div class="alarm-action" tabindex="0">').text(typeTranslations[alarm.action] || alarm.action).val(alarm.action));
             } else {
                 row.append(
                     //#. screenreader label for the reminder type (audio, notification, etc)
                     $('<label class="sr-only">').attr('for', 'action-' + uid).text(gt('type')),
                     $('<select class="form-control alarm-action">').attr('id', 'action-' + uid).append(
-                        _(supportedTypes).map(function (type) {
-                            return $('<option>').text(typeTranslations[type]).val(type);
+                        _(this.supportedTypes).map(function (type) {
+                            return $('<option>').text(typeTranslations[type] || type).val(type);
                         })
                     ).val(alarm.action)
                 );
@@ -273,6 +275,10 @@ define('io.ox/backbone/mini-views/alarms', [
                     case 'DISPLAY':
                         if (!alarm.description) alarm.description = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
                         break;
+                    case 'SMS':
+                        if (!alarm.description) alarm.description = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
+                        if (!alarm.attendees && self.phoneNumber) alarm.attendees = [{ uri: 'tel:' + self.phoneNumber }];
+                        break;
                     // no default
                 }
                 return alarm;
@@ -304,53 +310,52 @@ define('io.ox/backbone/mini-views/alarms', [
                 if (!alarm || !alarm.trigger) return;
                 var options = [], key;
 
-                if (_(standardTypes).indexOf(alarm.action) === -1) {
-                    // unknown type
-                    options.push(alarm.action);
-                    key = 'GENERIC';
-                } else {
-                    key = alarm.action;
-                }
-
                 if (alarm.trigger.duration) {
                     options.push(util.getReminderOptions()[alarm.trigger.duration.replace('-', '')] || new moment.duration(alarm.trigger.duration).humanize());
-                    key = key + (alarm.trigger.related || 'START') + (alarm.trigger.duration.indexOf('PT0') === -1 ? alarm.trigger.duration.replace(/\w*/g, '') : '0');
+                    key = (alarm.trigger.related || 'START') + (alarm.trigger.duration.indexOf('PT0') === -1 ? alarm.trigger.duration.replace(/\w*/g, '') : '0');
                 } else {
                     options.push(new moment(alarm.trigger.dateTime).format('LLL'));
-                    key = key + 'ABS';
+                    key = 'ABS';
                 }
-
-                options.unshift(predefinedSentences[key]);
+                options.push(alarm.action);
+                options.unshift(predefinedSentences[alarm.action + key] || predefinedSentences['GENERIC' + key]);
                 node.append($('<li>').append($('<button type="button" class="alarm-link btn btn-link">').text(gt.format.apply(undefined, options))));
             });
             return node;
         },
-        openDialog: function () {
+        openDialog: function (options) {
+            options = options || {};
             var self = this;
 
-            require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-                var model = {}, alarmView;
-                // deepclone is needed here or the models are not detached and the attribute is bound by reference
-                model[self.attribute] = _.deepClone(self.model.get(self.attribute));
-                alarmView = new alarmsView({ model: new Backbone.Model(model), attribute: self.attribute });
-                new ModalDialog({
-                    title: gt('Edit reminders'),
-                    width: 600
-                })
-                .build(function () {
-                    this.$body.append(alarmView.render().$el);
-                    this.$el.addClass('alarms-view-dialog');
-                })
-                .addCancelButton({ left: true })
-                .addButton({ action: 'apply', label: gt('Apply') })
-                .on('apply', function () {
-                    // trigger event, so we know the user set the alarms manually
-                    // used by edit view, to determine, if the default alarms should be applied on allday change
-                    self.model.trigger('userChangedAlarms');
-                    // if the length of the array doesn't change the model doesn't trigger a change event,so we trigger it manually
-                    self.model.set(self.attribute, alarmView.getAlarmsArray()).trigger('change:' + self.attribute);
-                })
-                .open();
+            require(['io.ox/backbone/views/modal', 'io.ox/core/api/user'], function (ModalDialog, userApi) {
+                userApi.get({ id: options.userId }).always(function (data) {
+                    data = data || {};
+
+                    var model = {},
+                        phoneNumber = data.cellular_telephone1 || data.cellular_telephone2,
+                        alarmView;
+                    // deepclone is needed here or the models are not detached and the attribute is bound by reference
+                    model[self.attribute] = _.deepClone(self.model.get(self.attribute));
+                    alarmView = new alarmsView({ model: new Backbone.Model(model), attribute: self.attribute, phoneNumber: phoneNumber });
+                    new ModalDialog({
+                        title: gt('Edit reminders'),
+                        width: 600
+                    })
+                    .build(function () {
+                        this.$body.append(alarmView.render().$el);
+                        this.$el.addClass('alarms-view-dialog');
+                    })
+                    .addCancelButton({ left: true })
+                    .addButton({ action: 'apply', label: gt('Apply') })
+                    .on('apply', function () {
+                        // trigger event, so we know the user set the alarms manually
+                        // used by edit view, to determine, if the default alarms should be applied on allday change
+                        self.model.trigger('userChangedAlarms');
+                        // if the length of the array doesn't change the model doesn't trigger a change event,so we trigger it manually
+                        self.model.set(self.attribute, alarmView.getAlarmsArray()).trigger('change:' + self.attribute);
+                    })
+                    .open();
+                });
             });
         }
     });

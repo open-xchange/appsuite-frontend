@@ -339,32 +339,16 @@ define.async('io.ox/mail/accounts/view-form', [
                             self.dialog.idle();
                         } else if (hasWarning) {
                             //on warning ask user
-                            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                            require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                                 var messages = _.map([].concat(error.warnings), function (warn) {
-                                    return $('<div>')
-                                            .addClass('alert alert-warning')
-                                            .css('margin', '10px')
-                                            .text(warn.error);
+                                    return $('<div class="alert alert-warning" style="margin: 10px">').text(warn.error);
                                 });
-                                var dialog = new dialogs.ModalDialog();
                                 self.dialog.pause();
-
-                                // new dialogs.ModalDialog()
-                                dialog
-                                    .header(
-                                        $('<h4>').text(gt('Warnings'))
-                                    )
-                                    .build(function () {
-                                        this.getContentNode().append(messages);
-                                    });
-
-                                if (/SSL/.test(error.code) && coreSettings.get('security/manageCertificates')) dialog.addSuccessButton('inspect', gt('Inspect certificate'));
-
-                                dialog
-                                    .addPrimaryButton('proceed', gt('Ignore Warnings'))
-                                    .addButton('cancel', gt('Cancel'))
-                                    .show()
-                                    .done(function (action) {
+                                var dialog = new ModalDialog({ title: gt('Warnings') })
+                                    .build(function () { this.$body.append(messages); })
+                                    .addCancelButton()
+                                    .addButton('proceed', gt('Ignore Warnings'))
+                                    .on('action', function (action) {
                                         self.dialog.resume();
                                         if (action === 'proceed') {
                                             saveAccount();
@@ -376,6 +360,10 @@ define.async('io.ox/mail/accounts/view-form', [
                                             self.dialog.idle();
                                         }
                                     });
+
+                                if (/SSL/.test(error.code) && coreSettings.get('security/manageCertificates')) dialog.addButton({ label: gt('Inspect certificate'), action: 'inspect' });
+
+                                dialog.open();
                             });
                         } else {
                             //on success save

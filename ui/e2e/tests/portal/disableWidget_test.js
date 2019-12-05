@@ -45,7 +45,7 @@ Scenario('[C7485] Disable a widget', async (I, users) => {
     I.click('Add widget');
     I.waitForVisible('.io-ox-portal-settings-dropdown');
     I.click('Inbox');
-    I.waitForVisible('.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
     I.click('Save');
 
     // Disable Inbox widget
@@ -56,6 +56,4 @@ Scenario('[C7485] Disable a widget', async (I, users) => {
     //Verify Inbox widget isn't displayed on Portal
     I.openApp('Portal');
     I.dontSee('~Inbox');
-
-    I.logout();
 });

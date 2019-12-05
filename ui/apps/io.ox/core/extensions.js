@@ -169,7 +169,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
                 // skip duplicates (= same id)
                 if (has(id)) {
-                    if (ox.debug) console.warn('Extensions MUST HAVE unique identifiers! Point: %s ID: %s', this.id, extension.id);
+                    if (ox.debug && _.device('!karma')) console.warn('Extensions MUST HAVE unique identifiers! Point: %s ID: %s', this.id, extension.id);
                     return;
                 }
 
@@ -340,11 +340,12 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                 } finally {
                     baton.invoke = previousInvoke;
                 }
-            }
-            try {
-                return o.invoke.apply(o, args);
-            } catch (e) {
-                error(e);
+            } else {
+                try {
+                    return o.invoke.apply(o, args);
+                } catch (e) {
+                    error(e);
+                }
             }
         };
 
@@ -520,6 +521,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
         dispose: function () {
             for (var id in this) {
+                /* eslint no-prototype-builtins: "off" */
                 if (this.hasOwnProperty(id)) this[id] = null;
             }
             this.disposed = true;

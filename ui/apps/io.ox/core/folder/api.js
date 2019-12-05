@@ -201,7 +201,7 @@ define('io.ox/core/folder/api', [
             // drive: always enabled
             if (this.is('drive')) return true;
             // mail: check gab (webmail, PIM, PIM+infostore) and folder capability (bit 0), see Bug 47229
-            if (this.is('mail')) return capabilities.has('gab') && this.supportsShares();
+            if (this.is('mail')) return capabilities.has('gab') && this.can('change:permissions');
             // contacts, calendar, tasks
             if (this.is('calendar') && this.is('private') && !this.supportsShares()) return false;
             if (this.is('public')) return capabilities.has('edit_public_folders');
@@ -304,6 +304,7 @@ define('io.ox/core/folder/api', [
             _.each(this.models, function (model, id) {
                 if (!model.get('account_id')) return true;
                 if (model.get('account_id') !== accountId) return true;
+                api.trigger('remove', id, this.models[id].toJSON());
                 delete this.models[id];
             }.bind(this));
         },
@@ -457,7 +458,7 @@ define('io.ox/core/folder/api', [
             folder_id: 'default0/INBOX',
             id: 'virtual/all-unseen',
             module: 'mail',
-            title: gt('Unread messages')
+            title: gt('Unread')
         });
     }
 

@@ -363,21 +363,20 @@ define('io.ox/editor/main', [
         app.setQuit(function () {
             var def = $.Deferred();
             if (app.isDirty()) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                     if (app.getWindow().floating) {
                         app.getWindow().floating.toggle(true);
                     } else if (_.device('smartphone')) {
                         app.getWindow().resume();
                     }
-                    new dialogs.ModalDialog()
-                    .text(gt('Do you really want to discard your changes?'))
-                    //#. "Discard changes" appears in combination with "Cancel" (this action)
-                    //#. Translation should be distinguishable for the user
-                    .addPrimaryButton('quit', gt.pgettext('dialog', 'Discard changes'))
-                    .addButton('cancel', gt('Cancel'))
-                    .on('quit', def.resolve)
-                    .on('cancel', def.reject)
-                    .show();
+                    new ModalDialog({ title: gt('Do you really want to discard your changes?') })
+                        .addCancelButton()
+                        //#. "Discard changes" appears in combination with "Cancel" (this action)
+                        //#. Translation should be distinguishable for the user
+                        .addButton({ label: gt.pgettext('dialog', 'Discard changes'), action: 'quit' })
+                        .on('quit', def.resolve)
+                        .on('cancel', def.reject)
+                        .open();
                 });
             } else {
                 def.resolve();

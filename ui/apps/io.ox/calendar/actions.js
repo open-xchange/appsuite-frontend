@@ -21,9 +21,9 @@ define('io.ox/calendar/actions', [
     'io.ox/core/capabilities',
     'io.ox/core/folder/api',
     'io.ox/core/yell',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'settings!io.ox/calendar'
-], function (ext, actionsUtil, api, util, print, gt, capabilities, folderAPI, yell, dialogs, settings) {
+], function (ext, actionsUtil, api, util, print, gt, capabilities, folderAPI, yell, ModalDialog, settings) {
 
     'use strict';
 
@@ -151,11 +151,11 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/create', {
         device: '!guest',
-        action: function (baton, obj) {
+        action: _.debounce(function (baton, obj) {
             ox.load(['io.ox/calendar/actions/create']).done(function (action) {
                 action(baton, obj);
             });
-        }
+        }, 500, true)
     });
 
     new Action('io.ox/calendar/detail/actions/changeAlarms', {
@@ -165,11 +165,11 @@ define('io.ox/calendar/actions', [
             // cannot confirm appointments without proper id or folder (happens when detail view was opened from mail invitation from external calendar)
             // must use buttons in invitation mail instead
             if (!data.id || !data.folder) return false;
-            // we don't show the action if the attendee flag is present (change status is shown instead)
-            if (f.attendee || f.attendee_on_behalf || f.organizer || f.organizer_on_behalf) return false;
             // folder must support alarms
             var folder = folderAPI.pool.getModel(data.folder).toJSON();
             if (folder.supported_capabilities.indexOf('alarms') === -1) return false;
+            // In public folders we must be organizer or attende, not on behalf
+            if (folderAPI.is('public', folder) && !(f.attendee || f.organizer)) return false;
             return true;
         },
         action: function (baton) {
@@ -223,21 +223,18 @@ define('io.ox/calendar/actions', [
                 return;
             }
 
-            new dialogs.ModalDialog()
-                .append($('<h4>').text(gt('Do you want the appointments printed in detail or as a compact list?')))
+            new ModalDialog({
+                title: gt('Do you want the appointments printed in detail or as a compact list?'),
+                previousFocus: $('.io-ox-calendar-main .classic-toolbar [data-action="more"]')
+            })
+                .addCancelButton()
                 //#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
-                .addPrimaryButton('detailed', gt('Detailed'), 'detailed')
+                .addButton({ label: gt('Compact'), action: 'compact', className: 'btn-default' })
                 //#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
-                .addButton('compact', gt('Compact'), 'compact')
-                .addButton('cancel', gt('Cancel'), 'cancel')
-                .show()
-                .done(function (action) {
-                    if (action === 'detailed') {
-                        print.request('io.ox/calendar/print', list);
-                    } else if (action === 'compact') {
-                        print.request('io.ox/calendar/print-compact', list);
-                    }
-                });
+                .addButton({ label: gt('Detailed'), action: 'detailed' })
+                .on('detailed', function () { print.request('io.ox/calendar/print', list); })
+                .on('compact', function () { print.request('io.ox/calendar/print-compact', list); })
+                .open();
         }
     });
 
@@ -305,7 +302,7 @@ define('io.ox/calendar/actions', [
                                 sameOwner = data.created_by === myId,
                                 isPublic = folderAPI.is('public', data),
                                 sourceFolderIsPublic = folderAPI.is('public', folderData),
-                                noOtherAttendees = list[0].attendees.length < 2,
+                                noOtherAttendees = util.hasFlag(list[0], 'scheduled'),
                                 create = folderAPI.can('create', data),
                                 isOrganizer = util.hasFlag(list[0], 'organizer') || util.hasFlag(list[0], 'organizer_on_behalf');
 
@@ -445,29 +442,31 @@ define('io.ox/calendar/actions', [
             // check if only one appointment or the whole series should be accepted
             // exceptions don't have the same id and seriesId
             if (data.seriesId === data.id && appointment.recurrenceId) {
-                new dialogs.ModalDialog()
-                    .text(accept ? gt('Do you want to confirm the whole series or just one appointment within the series?') :
-                        gt('Do you want to decline the whole series or just one appointment within the series?'))
-                    .addPrimaryButton('series',
-                        //#. Use singular in this context
-                        gt('Series'), 'series')
-                    .addButton('appointment', gt('Appointment'), 'appointment')
-                    .addButton('cancel', gt('Cancel'), 'cancel')
-                    .show()
-                    .then(function (action) {
-                        if (action === 'cancel') {
-                            return;
-                        }
-                        if (action === 'series') {
-                            delete appointment.recurrenceId;
-                        }
-                        $(baton.e.target).addClass('disabled');
-                        // those links are for fast accept/decline, so don't check conflicts
-                        api.confirm(appointment, util.getCurrentRangeOptions()).fail(function (e) {
-                            yell(e);
-                            $(baton.e.target).removeClass('disabled');
-                        });
+                new ModalDialog({
+                    title: gt('Change appointment status'),
+                    width: 600
+                })
+                .build(function () {
+                    this.$body.append(accept
+                        ? gt('This appointment is part of a series. Do you want to confirm the whole series or just one appointment within the series?')
+                        : gt('This appointment is part of a series. Do you want to decline the whole series or just one appointment within the series?')
+                    );
+                })
+                .addCancelButton({ left: true })
+                .addButton({ label: accept ? gt('Accept appointment') : gt('Decline appointment'), action: 'appointment', className: 'btn-default' })
+                //#. Use singular in this context
+                .addButton({ label: accept ? gt('Accept series') : gt('Decline series'), action: 'series' })
+                .on('action', function (action) {
+                    if (action === 'cancel') return;
+                    if (action === 'series') delete appointment.recurrenceId;
+                    $(baton.e.target).addClass('disabled');
+                    // those links are for fast accept/decline, so don't check conflicts
+                    api.confirm(appointment, util.getCurrentRangeOptions()).fail(function (e) {
+                        yell(e);
+                        $(baton.e.target).removeClass('disabled');
                     });
+                })
+                .open();
                 return;
             }
             $(baton.e.target).addClass('disabled');
@@ -506,9 +505,9 @@ define('io.ox/calendar/actions', [
     }
 
     function supportsChangeStatus(f, baton) {
-        // no flags at all => public folder and user is no attendee or organizer
-        // Note: there is a possibility for imported events where the user is attendee but status flags are not set (the partstat attribute is missing). To cover this case we use the attende check as result and not just return false
-        if (!f.accepted && !f.declined && !f.tentative && !f.needs_action) return (f.attendee || f.organizer);
+        // no flags at all => public folder and user is no attendee. Not allowed to change attendee statuses
+        if (!f.accepted && !f.declined && !f.tentative && !f.needs_action) return false;
+
         // normal attendee or organizer
         if (f.attendee || f.organizer) return true;
         // in shared and public folders we also have to check if we have the permission to modify
@@ -554,7 +553,7 @@ define('io.ox/calendar/actions', [
             prio: 'hi',
             mobile: 'lo',
             id: 'changereminder',
-            title: gt('Change reminder'),
+            title: gt('Change reminders'),
             ref: 'io.ox/calendar/detail/actions/changeAlarms'
         },
         {

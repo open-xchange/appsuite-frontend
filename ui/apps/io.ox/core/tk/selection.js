@@ -867,6 +867,21 @@ define('io.ox/core/tk/selection', [
         };
 
         /**
+         * Set focus
+         */
+
+        this.focus = function () {
+            if ($.contains(container, document.activeElement)) return;
+
+            if (this.get().length === 0) return this.selectFirst(true);
+
+            var key = this.serialize(_.last(this.get())),
+                $node = getNode(key);
+
+            $node.focus();
+        };
+
+        /**
          * Select item
          */
         this.select = function (id) {

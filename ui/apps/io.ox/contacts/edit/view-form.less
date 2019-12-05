@@ -1,0 +1,154 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Christoph Kopp <christoph.kopp@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.edit-contact {
+    // baseline adjustment
+    padding: @default-padding 0 0 0;
+
+    h1.name {
+        font-weight: 300;
+        font-size: 24px;
+        line-height: 32px;
+        margin: 0;
+        .ellipsis();
+    }
+
+    /* needed for furigana */
+    .row label { width: 100%; }
+
+    h2.job {
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+        margin: 0 0 14px 0;
+        color: #777;
+        .ellipsis();
+    }
+
+    & div.field.rare:not(.has-content),
+    &.compact div.field { display: none; }
+
+    & div.field.always,
+    &.compact div.field.has-content { display: block; }
+
+    .block {
+        margin-bottom:28px;
+        .attachment-list { margin-left: 15px; }
+        legend.group { color: @brand-primary }
+        legend.group h2 {
+            font-weight: bold;
+            font-size: 13px;
+            margin-top: 3px;
+            margin-bottom: 3px;
+        }
+    }
+
+    [data-field="note"] {
+        margin-left: 0;
+        margin-right: 0;
+
+        label {
+            padding-left: 0;
+            color: @brand-primary;
+            border-bottom: 1px solid #ccc;
+        }
+    }
+
+    textarea {
+        margin-top: 62px;
+        height: 282px;
+    }
+
+    .native-date-picker div {
+        &:first-child { padding-right: 0; }
+        &:last-child { padding-left: 0; }
+    }
+
+    .inline-error { display: none; }
+
+    .field.error {
+
+        label, input, .inline-error { color: #B94A48; }
+
+        input {
+            border-color: #B94A48;
+            &:focus { box-shadow: 0 0 6px #D59392; }
+        }
+
+        .inline-error {
+            margin-bottom: 14px;
+            display: block;
+        }
+    }
+
+    .attachment-list {
+
+        .attachment {
+
+            position: relative;
+            margin-bottom: 7px;
+            padding: 7px 50px 7px 50px;
+            background-color: #F5F5F5;
+
+            width: 330px;
+            float: left;
+            margin-right: 0;
+
+            &:nth-child(odd) { margin-right: 60px; }
+
+            i.fa-paperclip {
+                position: absolute;
+                font-size: 24px;
+                color: rgba(0, 0, 0, 0.20);
+                top: 15px;
+                left: 15px;
+            }
+
+            .filesize {
+                font-size: 13px;
+                color: #aaa;
+            }
+
+            .remove {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom:  0;
+                width: 2em;
+                font-size: 18px;
+                background-color: #f0f0f0;
+                border-left: 1px solid white;
+                color: #bbb;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #a00;
+                    color: #fff;
+                    text-decoration: none;
+                }
+
+                i.fa-trash-o {
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    right: 0;
+                    margin-top: -0.5em;
+                    text-align: center;
+                }
+            }
+
+            .row-1, .row-2 { .ellipsis(); }
+        }
+    }
+}

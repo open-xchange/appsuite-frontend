@@ -16,9 +16,10 @@ define('io.ox/contacts/distrib/main', [
     'io.ox/contacts/api',
     'io.ox/contacts/model',
     'io.ox/contacts/distrib/create-dist-view',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/contacts',
     'less!io.ox/contacts/distrib/style'
-], function (api, contactModel, ContactCreateDistView, gt) {
+], function (api, contactModel, ContactCreateDistView, ModalDialog, gt) {
 
     'use strict';
 
@@ -198,32 +199,29 @@ define('io.ox/contacts/distrib/main', [
                 if (_.isEqual(initialDistlist, app.model.changedSinceLoading())) {
                     def.resolve();
                 } else {
-                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        if (app.getWindow().floating) {
-                            app.getWindow().floating.toggle(true);
-                        } else if (_.device('smartphone')) {
-                            app.getWindow().resume();
-                        }
-                        new dialogs.ModalDialog()
-                            .text(gt('Do you really want to discard your changes?'))
-                            //#. "Discard changes" appears in combination with "Cancel" (this action)
-                            //#. Translation should be distinguishable for the user
-                            .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete')
-                            .addButton('cancel', gt('Cancel'), 'cancel')
-                            .show()
-                            .done(function (action) {
-                                if (action === 'delete') {
-                                    app.model.factory.realm('edit').release();
-                                    def.resolve();
-                                } else {
-                                    // NOTE: biggeleben: maybe we need a better function here
-                                    // actually I just want to reset the current model
-                                    // see Bug 26184 - [L3] Contact in Distribution list will still be deleted although the removal of the contact in edit mode was cancelled
-                                    app.model.factory.realm('edit').destroy();
-                                    def.reject();
-                                }
-                            });
-                    });
+                    if (app.getWindow().floating) {
+                        app.getWindow().floating.toggle(true);
+                    } else if (_.device('smartphone')) {
+                        app.getWindow().resume();
+                    }
+                    //#. "Discard changes" appears in combination with "Cancel" (this action)
+                    //#. Translation must be distinguishable for the user
+                    new ModalDialog({ title: gt('Do you really want to discard your changes?') })
+                        .addCancelButton()
+                        .addButton({ label: gt.pgettext('dialog', 'Discard changes'), action: 'delete' })
+                        .on('action', function (action) {
+                            if (action === 'delete') {
+                                app.model.factory.realm('edit').release();
+                                def.resolve();
+                            } else {
+                                // NOTE: biggeleben: maybe we need a better function here
+                                // actually I just want to reset the current model
+                                // see Bug 26184 - [L3] Contact in Distribution list will still be deleted although the removal of the contact in edit mode was cancelled
+                                app.model.factory.realm('edit').destroy();
+                                def.reject();
+                            }
+                        })
+                        .open();
                 }
 
             } else {

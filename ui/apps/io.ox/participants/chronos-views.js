@@ -78,7 +78,7 @@ define('io.ox/participants/chronos-views', [
                 this.options.hideMail ? '' : $('<div class="extra-decorator">').append(this.nodes.$extra = $('<span>')),
                 $('<a href="#" class="remove" role="button">').append(
                     $('<div class="icon">').append(
-                        $('<i class="fa fa-trash-o" aria-hidden="true">'),
+                        $('<i class="fa fa-trash-o" aria-hidden="true">').attr('title', gt('Remove contact') + ' ' + this.getDisplayName(this.model)),
                         $('<span class="sr-only">').text(gt('Remove contact') + ' ' + this.getDisplayName(this.model))
                     )
                 )

@@ -87,12 +87,8 @@ define('io.ox/core/folder/actions/move', [
             function commit(target) {
                 if (isMove && options.vgrid) options.vgrid.busy();
 
-                if (/^virtual/.test(target)) {
-                    return notifications.yell('error', gt('You cannot move items to virtual folders'));
-                }
-
-                // final check for write privileges; if it's only folders the server check the privilegs.
-                if (!onlyFolder && !api.pool.getModel(target).can('create')) {
+                // chekc for virtual folder and final check for write privileges; if it's only folders the server check the privilegs.
+                if (/^virtual/.test(target) || !onlyFolder && !api.pool.getModel(target).can('create')) {
                     return notifications.yell('error', gt('You cannot move items to this folder'));
                 }
 

@@ -45,8 +45,11 @@ define('io.ox/mail/common-extensions', [
     function pictureHalo(node, data, baton) {
 
         // authenticity
-        var status = util.authenticity('image', baton && baton.model.toJSON());
-        if (status) return node.text(status === 'neutral' ? '?' : '!');
+        var maildata = baton.data.thread ? baton.data.thread[0] || baton.data : baton.data,
+            status = util.authenticity('image', maildata),
+            isSpam = account.is('spam', baton.data.folder_id);
+
+        if (status || isSpam) return node.text('!');
 
         // add initials
         var initials = getInitials(baton.data.from);
@@ -80,7 +83,9 @@ define('io.ox/mail/common-extensions', [
 
             if (util.isUnseen(data)) parts.push(gt('Unread'));
             if (util.isFlagged(data)) parts.push(gt('Flagged'));
-            if (baton.data.color_label && settings.get('features/flag/color')) parts.push(flagPicker.colorName(baton.data.color_label));
+            //#. Color is used as a noun
+            //#. %1$s - color name, used to describe a mail that has a color flag
+            if (baton.data.color_label && settings.get('features/flag/color')) parts.push(gt('Color %1$s', flagPicker.colorName(baton.data.color_label)));
             parts.push(util.getDisplayName(fromlist[0]), data.subject, util.getTime(data.received_date));
             if (size > 1) parts.push(gt.format('Thread contains %1$d messages', size));
             if (data.attachment) parts.push(gt('has attachments'));
@@ -106,19 +111,19 @@ define('io.ox/mail/common-extensions', [
 
             var section = $('<section class="authenticity">'),
                 data = baton.data,
-                from = data.from || [], email;
+                from = data.from || [],
+                mails = _.chain(from).map(function (item) {
+                    return String(item[1] || '').toLowerCase();
+                }).compact().value().join(', ');
 
-            _(from).each(function (item) {
-                email = String(item[1] || '').toLowerCase();
-                section.append(
-                    $('<div>')
-                        .addClass(status.toLowerCase())
-                        .append(
-                            $('<b>').text(status === 'fail' ? gt('Warning:') + ' ' : gt('Note:') + ' '),
-                            $.txt(util.getAuthenticityMessage(status, email))
-                        )
-                );
-            });
+            section.append(
+                $('<div>')
+                    .addClass('message ' + status.toLowerCase())
+                    .append(
+                        $('<b>').text(/(fail|suspicious)/.test(status) ? gt('Warning:') + ' ' : gt('Note:') + ' '),
+                        $.txt(util.getAuthenticityMessage(status, mails))
+                    )
+            );
 
             this.append(section);
         },
@@ -194,22 +199,27 @@ define('io.ox/mail/common-extensions', [
             // from is special as we need to consider the "sender" header
             // plus making the mail address visible (see bug 56407)
 
-            _(from).each(function (item, i) {
+            _(from).each(function (item) {
 
                 var email = String(item[1] || '').toLowerCase(),
-                    name = util.getDisplayName(item);
+                    name = util.getDisplayName(item),
+                    $container;
                 if (!email) return;
-
-                $el.append(
-                    $('<a href="#" role="button" class="halo-link person-link person-from ellipsis">')
+                $el.addClass(length > 1 || _.device('smartphone') ? 'no-max-height' : '')
+                   .append(
+                       $container = $('<a href="#" role="button" class="halo-link">')
                         .data({ email: email, email1: email })
-                        .text(name)
+                        .append($('<span class="sr-only">').text(gt('From:')))
+                        .append($('<span class="person-link person-from ellipsis">').text(name))
                         .addClass((name === email && status) ? 'authenticity-sender ' + status : '')
+                   );
 
-                );
+                // don't show email address on smartphones if status is pass or it's myself
+                var skipEmail = _.device('smartphone') && !!name && (status === 'pass' || account.is('sent', data.folder_id)),
+                    showEmailAddress = name !== email && !skipEmail;
 
-                if (name !== email) {
-                    $el.append(
+                if (showEmailAddress) {
+                    $container.append(
                         $('<span class="address">')
                             .text('<' + email + '>')
                             .addClass(status ? 'authenticity-sender ' + status : '')
@@ -217,29 +227,28 @@ define('io.ox/mail/common-extensions', [
                 }
 
                 if (status) {
-                    $el.append(
-                        $('<a role="button" tabindex="0" style="border: 0; padding: 0" data-toggle="popover" data-container="body">').attr('aria-label', util.getAuthenticityMessage(status, email)).popover({
+                    $container.append(
+                        $('<span data-toggle="popover" data-container="body" class="authenticity">').attr('aria-label', util.getAuthenticityMessage(status, email)).popover({
                             placement: _.device('smartphone') ? 'auto' : 'right',
                             trigger: 'focus hover',
                             content: util.getAuthenticityMessage(status, email)
                         })
                         .append(
                             $('<i class="fa" aria-hidden="true">').addClass(function () {
-                                if (status === 'neutral') return 'fa-question'; //fa-question
-                                if (status === 'fail') return 'fa-exclamation';
-                                return 'fa-check';
+                                if (/(pass|trusted)/.test(status)) return 'fa-check';
+                                if (/(fail|suspicious)/.test(status)) return 'fa-exclamation-triangle';
+                                return 'fa-question';
                             })
                             .addClass(status ? 'authenticity-icon-' + status : '')
                         )
                     );
                 }
 
-
                 // save space on mobile by showing address only for suspicious mails
                 if (_.device('smartphone') && name.indexOf('@') > -1) $el.addClass('show-address');
-
-                if (i < length - 1) $el.append('<span class="delimiter">,</span>');
             });
+
+            $el.append('<div class="spacer">');
 
             this.append($el);
         },
@@ -338,17 +347,24 @@ define('io.ox/mail/common-extensions', [
                 $(node).attr('aria-label', label).find('.fa').attr('title', label);
             }
 
-            function toggle(e) {
+            function update(e) {
                 e.preventDefault();
                 var data = e.data.model.toJSON();
                 // toggle 'flagged' bit
                 if (util.isFlagged(data)) api.flag(data, false); else api.flag(data, true);
-                $(this).each(_.partial(makeAccessible, data));
+            }
+
+            function toggle(view, model) {
+                var toggleElement = view.$('a.flag.io-ox-action-link');
+                makeAccessible(model.toJSON(), undefined, toggleElement);
             }
 
             return function (baton) {
                 if (!settings.get('features/flag/star') || util.isEmbedded(baton.data)) return;
                 var self = this;
+
+                baton.view.listenTo(baton.view.model, 'change:flags', _.partial(toggle, baton.view));
+
                 folderAPI.get(baton.data.folder_id).done(function (data) {
                     // see if the user is allowed to modify the flag status - always allows for unified folder
                     if (!folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data)) return;
@@ -356,7 +372,7 @@ define('io.ox/mail/common-extensions', [
                         $('<a href="#" role="button" class="flag io-ox-action-link" data-action="flag">')
                         .append(extensions.flagIcon.call(this))
                         .each(_.partial(makeAccessible, baton.data))
-                        .on('click', { model: baton.view.model }, toggle)
+                        .on('click', { model: baton.view.model }, update)
                     );
                 });
             };
@@ -573,7 +589,8 @@ define('io.ox/mail/common-extensions', [
                         data: data,
                         el: this.$('.file'),
                         point: 'io.ox/mail/attachment/links',
-                        title: this.model.getShortTitle()
+                        title: this.model.getShortTitle(),
+                        list: this.model.collection.toJSON()
                     });
 
                     url = api.getUrl(data, 'download');
@@ -645,14 +662,16 @@ define('io.ox/mail/common-extensions', [
                             clickTarget = $(e.target), id, data, baton;
 
                         // skip if click was on the dropdown
-                        if (!clickTarget.attr('data-original')) return;
+                        if (clickTarget.hasClass('dropdown-toggle')) return;
 
-                        // skip attachments without preview
-                        if (!node.attr('data-original')) return;
-
+                        // get data
                         id = node.attr('data-id');
                         data = collection.get(id).toJSON();
-                        baton = ext.Baton({ simple: true, startItem: data, data: list, restoreFocus: clickTarget });
+
+                        // start viewer in general (see bug 65016)
+                        id = node.attr('data-id');
+                        data = collection.get(id).toJSON();
+                        baton = ext.Baton({ simple: true, data: data, list: list, restoreFocus: clickTarget, openedBy: 'io.ox/mail/details' });
                         actionsUtil.invoke('io.ox/mail/attachment/actions/view', baton);
                     });
 
@@ -677,21 +696,27 @@ define('io.ox/mail/common-extensions', [
             function makeAccessible(data, index, node) {
                 var label = util.isUnseen(data) ? gt('Mark as read') : gt('Mark as unread');
                 $(node).attr({ 'aria-label': label })
-                       .find('.fa').attr('title', label);
+                    .find('.fa').attr('title', label);
             }
 
-            function toggle(e) {
+            function update(e) {
                 e.preventDefault();
                 var data = e.data.model.toJSON();
                 // toggle 'unseen' bit
                 if (util.isUnseen(data)) api.markRead(data); else api.markUnread(data);
-                $(this).each(_.partial(makeAccessible, data));
+            }
+
+            function toggle(view, model) {
+                var toggleElement = view.$('a.unread-toggle');
+                makeAccessible(model.toJSON(), undefined, toggleElement);
             }
 
             return function (baton) {
-
                 if (util.isEmbedded(baton.data)) return;
                 var self = this;
+
+                baton.view.listenTo(baton.view.model, 'change:flags', _.partial(toggle, baton.view));
+
                 folderAPI.get(baton.data.folder_id).done(function (data) {
                     // see if the user is allowed to modify the read/unread status
                     // always allows for unifeid folder
@@ -701,7 +726,7 @@ define('io.ox/mail/common-extensions', [
                         $('<a href="#" role="button" class="unread-toggle io-ox-action-link" data-action="unread-toggle">')
                         .append('<i class="fa" aria-hidden="true">')
                         .each(_.partial(makeAccessible, baton.data))
-                        .on('click', { model: baton.view.model }, toggle)
+                        .on('click', { model: baton.view.model }, update)
                     );
                 });
             };

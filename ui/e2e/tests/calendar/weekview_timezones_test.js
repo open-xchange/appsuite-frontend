@@ -12,7 +12,7 @@
 
 const moment = require('moment-timezone');
 
-Feature('Calendar Create');
+Feature('Calendar > Create');
 
 Before(async function (users) {
     await users.create();
@@ -36,15 +36,14 @@ Scenario('Create appointment and switch timezones', async function (I) {
     });
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     // check in view
     I.waitForVisible('.workweek .title');
-    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "workweek")]//div[@class="title" and text()="test timezones"]', 1);
+    I.seeNumberOfElements({ xpath: '//div[contains(concat(" ", @class, " "), "workweek")]//div[@class="title" and text()="test timezones"]' }, 1);
 
     // switch to settings
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings', '#topbar-settings-dropdown');
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
 
     I.waitForVisible('.io-ox-settings-window .leftside [title="Calendar"]');
 
@@ -55,10 +54,10 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.waitForText('Add timezone', 5);
     I.click('Add timezone');
 
-    I.waitForVisible('.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
     I.selectOption('Time zone', '+09:00 JST Asia/Tokyo');
-    I.click('Add', '.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.click('Add', '.modal-dialog');
+    I.waitForDetached('.modal-dialog');
 
     I.waitForText('Asia/Tokyo', '.rightside li');
 
@@ -82,20 +81,20 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.floating-window-content [data-attribute="startDate"] .timezone');
     I.click('.floating-window-content [data-attribute="startDate"] .timezone');
-    I.waitForVisible('.io-ox-dialog-popup [name="startTimezone"]');
+    I.waitForVisible('.modal-dialog [name="startTimezone"]');
     I.selectOption('Start date timezone', '+09:00 JST Asia/Tokyo');
     I.selectOption('End date timezone', '+09:00 JST Asia/Tokyo');
     I.click('Change');
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.modal-dialog');
 
     I.waitForText('Europe/Berlin: ');
     I.waitForText('Mon, ' + time.format('l'));
     I.waitForText('4:00 – 5:00 PM');
 
     I.click('Discard', '.floating-window-content');
-    I.waitForVisible('.io-ox-dialog-popup');
-    I.click('Discard changes', '.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
+    I.click('Discard changes', '.modal-dialog');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached('.floating-window-content');
 
     I.waitForVisible('.io-ox-sidepopup [data-action="close"]');
@@ -103,8 +102,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.waitForDetached('.io-ox-sidepopup');
 
     // switch to settings
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings', '#topbar-settings-dropdown');
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
 
     I.waitForVisible('.io-ox-settings-window');
 
@@ -118,15 +116,14 @@ Scenario('Create appointment and switch timezones', async function (I) {
 
     // inspect in calendar app
     I.openApp('Calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     I.seeNumberOfElements('.workweek .week-container-label', 1);
     I.dontSee('JST', '.workweek');
     I.see('7 AM', '.week-container-label:not(.secondary-timezone) .working-time-border .number');
 
     // switch to settings
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings', '#topbar-settings-dropdown');
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
 
     I.waitForVisible('.io-ox-settings-window');
 
@@ -138,7 +135,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
 
     // switch to calendar
     I.openApp('Calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
 
     I.seeNumberOfElements('.workweek .weekday', 3);
 });

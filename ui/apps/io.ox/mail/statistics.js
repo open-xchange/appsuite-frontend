@@ -15,30 +15,19 @@ define('io.ox/mail/statistics', [
     'io.ox/mail/api',
     'io.ox/core/api/account',
     'io.ox/core/extensions',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/mail',
     'static/3rd.party/Chart.min.js'
-], function (api, accountAPI, ext, dialogs, gt, Chart) {
+], function (api, accountAPI, ext, ModalDialog, gt, Chart) {
 
     'use strict';
 
     var INDEX = 100;
 
     ext.point('io.ox/mail/statistics').extend({
-        id: 'foldername',
-        index: INDEX += 100,
-        draw: function (baton) {
-            this.append(
-                $('<h1 class="folder-name">').text(baton.data.title)
-            );
-        }
-    });
-
-    ext.point('io.ox/mail/statistics').extend({
         id: 'folder-statistic-from',
         index: INDEX += 100,
         draw: function (baton) {
-
             var node = $('<section>').busy();
             baton.statistics.sender(node, { folder: baton.folder });
             this.append(node);
@@ -49,7 +38,6 @@ define('io.ox/mail/statistics', [
         id: 'folder-statistic-weekday',
         index: INDEX += 100,
         draw: function (baton) {
-
             var node = $('<section>').busy();
             baton.statistics.weekday(node, { folder: baton.folder });
             this.append(node);
@@ -60,7 +48,6 @@ define('io.ox/mail/statistics', [
         id: 'folder-statistic-hour',
         index: INDEX += 100,
         draw: function (baton) {
-
             var node = $('<section>').busy();
             baton.statistics.hour(node, { folder: baton.folder });
             this.append(node);
@@ -72,9 +59,7 @@ define('io.ox/mail/statistics', [
         HEIGHT = _.device('smartphone') ? 150 : 200;
 
     function createCanvas() {
-
-        // attribute notation does not work! don't know why. maybe retina whatever.
-        return $('<canvas width="' + WIDTH + '" height="' + HEIGHT + '" style="width:' + WIDTH + 'px; height:' + HEIGHT + 'px;"></canvas>');
+        return $('<canvas>').attr({ width: WIDTH, height: HEIGHT }).css({ width: WIDTH, height: HEIGHT });
     }
 
     function createLineChart(canvas, data) {
@@ -102,12 +87,10 @@ define('io.ox/mail/statistics', [
     }
 
     var fetch = (function () {
-
         // hash of deferred objects
         var hash = {};
 
         return function (options) {
-
             var cid = JSON.stringify(options);
 
             if (!hash[cid] || hash[cid].state() === 'rejected') {
@@ -120,9 +103,7 @@ define('io.ox/mail/statistics', [
     }());
 
     return {
-
         sender: function (node, options) {
-
             var canvas = createCanvas(),
                 isSent = accountAPI.is('sent', options.folder);
 
@@ -175,7 +156,6 @@ define('io.ox/mail/statistics', [
         },
 
         weekday: function (node, options) {
-
             var canvas = createCanvas();
 
             node.append(
@@ -215,7 +195,6 @@ define('io.ox/mail/statistics', [
         },
 
         hour: function (node, options) {
-
             var canvas = createCanvas();
 
             node.append(
@@ -251,24 +230,20 @@ define('io.ox/mail/statistics', [
         },
 
         open: function (app) {
-
             var statistics = this;
 
-            new dialogs.ModalDialog({
-                top: 60,
-                width: 600,
-                center: false,
-                maximize: true
-            })
-            .build(function () {
-                var node = this.getContentNode().addClass('statistics');
-                app.folder.getData().done(function (data) {
-                    var baton = ext.Baton({ data: data, app: app, folder: app.folder.get(), statistics: statistics });
-                    ext.point('io.ox/mail/statistics').invoke('draw', node, baton);
-                });
-            })
-            .addPrimaryButton('cancel', gt('Close'), 'cancel')
-            .show();
+            new ModalDialog({ top: 60, width: 600, center: false, maximize: true })
+                .build(function () {
+                    var self = this,
+                        node = this.$body.addClass('statistics');
+                    app.folder.getData().done(function (data) {
+                        var baton = ext.Baton({ data: data, app: app, folder: app.folder.get(), statistics: statistics });
+                        self.$title.text(gt('Statistics') + ' - ' + baton.data.title);
+                        ext.point('io.ox/mail/statistics').invoke('draw', node, baton);
+                    });
+                })
+                .addButton({ label: gt('Close'), action: 'cancel' })
+                .open();
         }
     };
 });

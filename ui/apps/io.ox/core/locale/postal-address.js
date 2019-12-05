@@ -19,28 +19,37 @@ define('io.ox/core/locale/postal-address', [], function () {
 
     var _ = ' ', LF = '\n';
 
-    function format(data, type, countrycode) {
+    function format(data, type, cc) {
         type = type || 'home';
-        return getAddress(data, type, countrycode)
-                // remove inline spaces caused by undefined variables
+        return getAddress(data, type, cc)
+                // ensure single spaces (handles undefined variables)
                 .replace(/( )+/g, ' ')
-                .replace(/(\n |\n)+/g, '\n').trim();
+                // trim each line
+                .replace(/(^ +| +$)+/gm, '')
+                // remove empty lines
+                .replace(/\n+/g, '\n').trim();
     }
 
-    function getAddress(data, type, countrycode) {
+    function getAddress(data, type, cc) {
 
-        var street = $.trim(data['street_' + type]),
-            postal_code = $.trim(data['postal_code_' + type]),
-            city = $.trim(data['city_' + type]),
-            state = $.trim(data['state_' + type]),
-            country = $.trim(data['country_' + type]).toUpperCase();
+        var street = data['street_' + type] || '',
+            code = data['postal_code_' + type] || '',
+            city = data['city_' + type] || '',
+            state = data['state_' + type] || '',
+            country = data['country_' + type] || '';
 
-        countrycode = countrycode || getCountryCode(country) || (ox.locale || ox.language || '').slice(3, 5) || 'US';
+        cc = cc || getCountryCode(country) || (ox.locale || '').slice(3, 5);
 
-        switch (countrycode) {
+        switch (cc) {
+
+            // without 'state'
+            case 'DE':
+                return street + LF +
+                       code + _ + city + LF +
+                       country;
+
             case 'AR':
             case 'AT':
-            case 'BE':
             case 'BO':
             case 'CH':
             case 'CZ':
@@ -53,21 +62,16 @@ define('io.ox/core/locale/postal-address', [], function () {
             case 'NO':
             case 'SE':
                 return street + LF +
-                       postal_code + _ + city + _ + state + LF +
-                       country;
-
-            // omits 'state'
-            case 'DE':
-                return street + LF +
-                       postal_code + _ + city + LF +
+                       code + _ + city + _ + state + LF +
                        country;
 
             case 'AU':
             case 'CA':
             case 'PR':
             case 'US':
+            case 'TW':
                 return street + LF +
-                       city + _ + state + _ + postal_code + LF +
+                       city + _ + state + _ + code + LF +
                        country;
 
             case 'IE':
@@ -75,56 +79,51 @@ define('io.ox/core/locale/postal-address', [], function () {
             case 'RU':
                 return street + LF +
                        city + LF +
-                       state + _ + postal_code + LF +
+                       state + _ + code + LF +
                        country;
 
             case 'NZ':
             case 'SG':
                 return street + LF +
-                       city + _ + postal_code + _ + state + LF +
+                       city + _ + code + _ + state + LF +
                        country;
 
             case 'CN':
                 return street + _ + city + LF +
-                       postal_code + _ + state + LF +
+                       code + _ + state + LF +
                        country;
 
             case 'CR':
                 return street + LF +
                        city + _ + state + LF +
-                       postal_code + _ + country;
+                       code + _ + country;
 
             case 'JP':
                 return street + LF +
-                       state + _ + city + _ + postal_code + LF +
+                       state + _ + city + _ + code + LF +
                        country;
 
             case 'MX':
                 return street + LF +
                        city + LF +
-                       postal_code + _ + state + LF +
+                       code + _ + state + LF +
                        country;
 
             case 'NL':
                 return street + LF +
-                       postal_code + _ + state + _ + city + LF +
-                       country;
-
-            case 'TW':
-                return street + LF +
-                       city + _ + state + _ + postal_code + LF +
+                       code + _ + state + _ + city + LF +
                        country;
 
             case 'ZA':
                 return street + LF +
                        city + LF +
                        state + LF +
-                       postal_code + _ + country;
+                       code + _ + country;
 
             case 'RO':
             default:
                 return street + LF +
-                       postal_code + _ + city + LF +
+                       code + _ + city + LF +
                        state + LF +
                        country;
         }

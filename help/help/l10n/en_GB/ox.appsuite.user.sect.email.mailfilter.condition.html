@@ -9,13 +9,13 @@
 <link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.7.1. Creating new rules">
 <link rel="next" href="ox.appsuite.user.sect.email.mailfilter.action.html" title="5.7.3. Adding an action">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
-<link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
-<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <script src="../../../help/jquery.min.js"></script> 
-
-   <script src="../../../help/bootstrap.min.js"></script> 
-</head>
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
@@ -52,7 +52,7 @@
 <li class="step">
 <p role="presentation">You can add additional conditions. You can then specify whether one or all conditions are to be met in order to process the actions. To do so, click on <span class="guibutton"><strong>Apply rule if all conditions are met</strong></span>.</p>
 <p role="presentation">As soon as there is a condition, you can create nested conditions. To do so, click on <span class="guibutton"><strong>Add condition</strong></span>. Select <span class="guibutton"><strong>Nested condition</strong></span>.</p>
-<p role="presentation">To delete a condition, click the <span class="guibutton"><strong>Delete</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.mailfilter.condition.delete"><img src="../../images/appsuite_user_icon_trash.png"></span> next to the condition.</p>
+<p role="presentation">To delete a condition, click the <span class="guibutton"><strong>Delete</strong></span> icon <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.mailfilter.condition.delete"><img src="../../images/appsuite_user_icon_trash.png"></span> next to the condition.</p>
 </li>
 </ol></div>
 </div>
@@ -65,7 +65,9 @@
 <p>In this case it would verify whether the subject of an E-Mail exactly matches the argument "minutes". Additional examples how to filter E-Mail messages using the subject:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p role="presentation">Criterion: "contains" The condition is met if the subject contains the characters in the argument. Example: The argument is "minutes".</p>
+<p role="presentation">Criterion: "contains"</p>
+<p role="presentation">The condition is met if the subject contains the characters in the argument.</p>
+<p role="presentation">Example: The argument is "minutes".</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">The condition is met for the subject "minutes".</p></li>
 <li class="listitem"><p role="presentation">The condition is also met for the subject "meeting minutes".</p></li>
@@ -74,14 +76,18 @@
             </p>
 </li>
 <li class="listitem">
-<p role="presentation">Criterion: "Matches" The condition is met if the subject exactly matches the characters in the argument. The character string can contain wildcards. Example: The argument is "minutes*". The "*" character is a wildcard for any characters. </p>
+<p role="presentation">Criterion: "matches"</p>
+<p role="presentation">The condition is met if the subject exactly matches the characters in the argument. The character string can contain wildcards.</p>
+<p role="presentation">Example: The argument is "minutes*". The "*" character is a wildcard for any characters. </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">The condition is met for the subject "minutes".</p></li>
 <li class="listitem"><p role="presentation">The condition is not met for the subject "meeting minutes".</p></li>
 </ul>
 </li>
 <li class="listitem">
-<p role="presentation">Criterion: "Regex"  The condition is met if the subject contains the characters provided by the regular expression in the argument. Regular expressions allow complex requests. More information can be found on respective sites on the Web. The following, very simple regular expression should give an insight to the topic. Example: The argument is "organi(z|s)ation". The expression "(z|s)" stands for either the "z" or the "s" character. </p>
+<p role="presentation">Criterion: "Regex"</p>
+<p role="presentation">The condition is met if the subject contains the characters provided by the regular expression in the argument. Regular expressions allow complex requests. More information can be found on respective sites on the Web. The following, very simple regular expression should give an insight to the topic.</p>
+<p role="presentation">Example: The argument is "organi(z|s)ation". The expression "(z|s)" stands for either the "z" or the "s" character. </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">The condition is met for the subject "minutes".</p></li>
 <li class="listitem"><p role="presentation">The condition is also met for the subject "organisation".</p></li>

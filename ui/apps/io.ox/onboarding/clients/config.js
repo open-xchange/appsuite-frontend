@@ -57,7 +57,7 @@ define('io.ox/onboarding/clients/config', [
                 description: gt('Get your device configured by email.')
             },
             'download': {
-                description: gt('Let´s automatically configure your device, by clicking the button below.')
+                description: gt('iOS devices can be automatically configured by installing the configuration profile.')
             }
         },
 
@@ -307,16 +307,15 @@ define('io.ox/onboarding/clients/config', [
                                 var type = key.indexOf('_') >= 0 ? key.split('_')[0] : key.substr(0, 4),
                                     injectHeadline = lasttype !== type;
                                 lasttype = type;
-                                /* eslint-disable no-nested-ternary */
                                 return [
                                     injectHeadline ? { name: COMPLEMENT.labels[type] || type } : undefined,
                                     {
                                         name: COMPLEMENT.labels[key] || key,
+                                        // eslint-disable-next-line no-nested-ternary
                                         value: /imapSecure|smtpSecure/.test(key) ? (action.data[key] ? 'SSL/TLS' : 'STARTTLS') : action.data[key],
                                         type: type
                                     }
                                 ];
-                                /* eslint-enable no-nested-ternary */
                             })
                             .flatten()
                             .compact()

@@ -12,8 +12,9 @@
  */
 
 define('io.ox/mail/mailfilter/settings/filter/defaults', [
-    'io.ox/core/extensions'
-], function (ext) {
+    'io.ox/core/extensions',
+    'io.ox/core/folder/api'
+], function (ext, folderAPI) {
 
     'use strict';
 
@@ -29,7 +30,8 @@ define('io.ox/mail/mailfilter/settings/filter/defaults', [
                     'id': 'true'
                 }
             },
-            actions: {}
+            actions: {},
+            applyMailFilterSupport: false
         };
 
     ext.point('io.ox/mail/mailfilter/tests').each(function (point) {
@@ -38,6 +40,12 @@ define('io.ox/mail/mailfilter/settings/filter/defaults', [
 
     ext.point('io.ox/mail/mailfilter/actions').each(function (point) {
         point.invoke('initialize', null, { actionsTranslations: actionsTranslations, defaults: defaults, actionCapabilities: actionCapabilities, actionsOrder: actionsOrder });
+    });
+
+    // for whatever reason support for "apply filter to folder" is not exposed as general capability
+    // since SIEVE rules can only apply to default0 folders, check the INBOX for support
+    folderAPI.get('default0/INBOX').then(function (f) {
+        defaults.applyMailFilterSupport = _(f.supported_capabilities).contains('MAIL_FILTER');
     });
 
     _.extend(defaults, {

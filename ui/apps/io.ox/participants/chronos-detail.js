@@ -19,8 +19,9 @@ define('io.ox/participants/chronos-detail', [
     'io.ox/mail/util',
     'io.ox/core/util',
     'gettext!io.ox/core',
+    'settings!io.ox/calendar',
     'less!io.ox/participants/style'
-], function (util, ext, contactsUtil, calendarUtil, mailUtil, coreUtil, gt) {
+], function (util, ext, contactsUtil, calendarUtil, mailUtil, coreUtil, gt, settings) {
 
     'use strict';
 
@@ -52,13 +53,9 @@ define('io.ox/participants/chronos-detail', [
             if (baton.data.cuType === 'RESOURCE') return;
 
             var display_name, html, opt;
-            if (baton.data.contact) {
-                display_name = mailUtil.getDisplayName([baton.data.cn, baton.data.email], { showMailAddress: true });
-                html = baton.data.full_name ? $(baton.data.full_name) : $.txt(display_name);
-                opt = _.extend({ html: html }, baton.data);
-            } else {
-                opt = _.extend({ html: $.txt(calendarUtil.getAttendeeName(baton.data)) }, baton.data);
-            }
+            display_name = mailUtil.getDisplayName([calendarUtil.getAttendeeName(baton.data), baton.data.email], { showMailAddress: true });
+            html = baton.data.full_name ? $(baton.data.full_name) : $.txt(display_name);
+            opt = _.extend({ html: html }, baton.data);
 
             if (!baton.options.halo) opt.$el = $('<span>');
             if (baton.data.entity) opt.user_id = baton.data.entity;
@@ -84,7 +81,7 @@ define('io.ox/participants/chronos-detail', [
 
             baton.flexWrapper.append(
                 // pause for screenreader
-                !baton.data.isRessource ? $('<span class="sr-only">').text(', ' + util.getConfirmationLabel(data.partStat) + '.') : '',
+                !baton.data.isResource ? $('<span class="sr-only">').text(', ' + util.getConfirmationLabel(data.partStat) + '.') : '',
                 // has confirmation icon?
                 confirm ? $('<span class="status" aria-hidden="true">').addClass(statusClass).append(confirm) : ''
             );
@@ -100,8 +97,8 @@ define('io.ox/participants/chronos-detail', [
 
     function isOrganizer(baton) {
         var appointment = baton.appointment.toJSON();
-        if (!appointment.organizer || !appointment.organizer.entity) return false;
-        return baton.data.entity === appointment.organizer.entity;
+        if (!appointment.organizer || !(appointment.organizer.entity || appointment.organizer.email)) return false;
+        return baton.data.entity ? baton.data.entity === appointment.organizer.entity : baton.data.email === appointment.organizer.email;
     }
 
     function drawParticipant(obj, appointment, options) {
@@ -145,7 +142,9 @@ define('io.ox/participants/chronos-detail', [
             //no inline links (provide extensionpoint id here to make them show)
             inlineLinks: false,
             //halo views
-            halo: true
+            halo: true,
+            // external participants and users in the same list or not
+            separateLists: settings.get('separateExternalParticipantList', false)
         }, options);
 
         this.draw = function () {
@@ -158,12 +157,12 @@ define('io.ox/participants/chronos-detail', [
                 // get users
                 var users = _(list)
                     .filter(function (obj) {
-                        return (!obj.cuType || obj.cuType === 'INDIVIDUAL') && obj.entity;
+                        return (!obj.cuType || obj.cuType === 'INDIVIDUAL') && (!options.separateLists || obj.entity);
                     });
                 // get external
                 var external = _(list)
                     .filter(function (obj) {
-                        return (!obj.cuType || obj.cuType === 'INDIVIDUAL') && !obj.entity;
+                        return options.separateLists && (!obj.cuType || obj.cuType === 'INDIVIDUAL') && !obj.entity;
                     });
                 // get resources
                 var resources = _(list)

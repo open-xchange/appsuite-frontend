@@ -15,10 +15,10 @@ define('io.ox/files/actions/save-as-pdf', [
     'io.ox/core/folder/api',
     'io.ox/files/api',
     'io.ox/core/extensions',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/tk/doc-converter-utils',
     'gettext!io.ox/files'
-], function (FolderApi, FilesApi, ext, dialogs, ConverterUtils, gt) {
+], function (FolderApi, FilesApi, ext, ModalDialog, ConverterUtils, gt) {
 
     'use strict';
 
@@ -123,28 +123,22 @@ define('io.ox/files/actions/save-as-pdf', [
             return save.call(this, name);
         }
 
-        new dialogs.ModalDialog({ enter: 'save', async: true })
-            .header(
-                $('<h4>').text(gt('Save as PDF'))
-            )
-            .append(
-                $('<input type="text" name="name" class="form-control">')
-            )
-            .addPrimaryButton('save', gt('Save'), 'save')
-            .addButton('cancel', gt('Cancel'), 'cancel')
+        new ModalDialog({ title: gt('Save as PDF'), enter: 'save', async: true })
+            .build(function () {
+                this.$body.append(
+                    this.$input = $('<input type="text" name="name" class="form-control">')
+                );
+                this.$input.focus().val(filename).get(0).setSelectionRange(0, filename.lastIndexOf('.'));
+            })
+            .addCancelButton()
+            .addButton({ label: gt('Save'), action: 'save' })
             .on('save', function () {
-                var node = this.getContentNode(),
-                    name = node.find('input[name="name"]').val();
-
+                var name = this.$input.val();
                 process(name).then(this.close, this.idle).fail(function () {
-                    _.defer(function () { node.focus(); });
+                    _.defer(function () { this.$input.focus(); });
                 });
             })
-            .show(function () {
-                this.find('input[name="name"]')
-                    .focus().val(filename)
-                    .get(0).setSelectionRange(0, filename.lastIndexOf('.'));
-            });
+            .open();
 
     };
 });

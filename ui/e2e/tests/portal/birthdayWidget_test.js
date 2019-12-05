@@ -12,6 +12,7 @@
 /// <reference path="../../steps.d.ts" />
 
 const moment = require('moment');
+const _ = require('underscore');
 
 Feature('Portal');
 
@@ -27,30 +28,27 @@ Scenario('[C7492] Birthday', async (I) => {
     // Create a contact with birthday
     const contactFolderID = await I.grabDefaultFolder('contacts');
 
-    const contactDisplayNamePiff = 'First Piff';
-    const contactDisplayNamePaff = 'Second Paff';
-    const contactDisplayNamePuff = 'Third Puff';
-
-    await I.haveContact({
-        folder_id: contactFolderID,
-        first_name: 'First',
-        last_name: 'Piff',
-        display_name: contactDisplayNamePiff,
-        birthday: moment().add(2, 'days').valueOf()
-    });
-    await I.haveContact({
-        folder_id: contactFolderID,
-        first_name: 'Second',
-        last_name: 'Paff',
-        display_name: contactDisplayNamePaff,
-        birthday: moment().add(3, 'days').valueOf()
-    });
-    await I.haveContact({
-        folder_id: contactFolderID,
+    const contacts = _.each([{
         first_name: 'Third',
         last_name: 'Puff',
-        display_name: contactDisplayNamePuff,
         birthday: moment().add(30, 'days').valueOf()
+    }, {
+        first_name: 'Second',
+        last_name: 'Paff',
+        birthday: moment().add(3, 'days').valueOf()
+    }, {
+        first_name: 'First',
+        last_name: 'Piff',
+        birthday: moment().add(2, 'days').valueOf()
+    }], async function (contact) {
+        contact['display_name'] = `${contact.last_name}, ${contact.first_name}`;
+        await I.haveContact({
+            folder_id: contactFolderID,
+            first_name: contact.first_name,
+            last_name: contact.last_name,
+            display_name: contact.display_name,
+            birthday: contact.birthday
+        });
     });
 
     // clear the portal settings
@@ -63,14 +61,14 @@ Scenario('[C7492] Birthday', async (I) => {
     I.waitForVisible('.io-ox-portal-settings-dropdown');
     I.click('Birthdays');
 
-    //Verify contacts displays with the most recent birthday date first
+    // verify contacts displays with the most recent birthday date first
     I.waitForElement('~Birthdays');
     I.waitForElement('.widget[aria-label="Birthdays"] ul li');
     I.see('Piff, First', '.widget[aria-label="Birthdays"] ul li:nth-child(1)');
     I.see('Paff, Second', '.widget[aria-label="Birthdays"] ul li:nth-child(2)');
     I.see('Puff, Third', '.widget[aria-label="Birthdays"] ul li:nth-child(3)');
 
-    //Display list of birthdays and contact
+    // display list of birthdays and contact
     I.click('~Birthdays');
     I.waitForVisible('.io-ox-sidepopup .io-ox-portal-birthdays');
     I.seeElement('.picture', locate('.io-ox-sidepopup .io-ox-portal-birthdays .birthday').withText('Piff, First'));
@@ -81,39 +79,23 @@ Scenario('[C7492] Birthday', async (I) => {
     I.see('Paff, Second', '.io-ox-sidepopup .io-ox-portal-birthdays');
     I.see('Puff, Third', '.io-ox-sidepopup .io-ox-portal-birthdays');
 
-    //Check Contack popup
-    I.click(locate('.io-ox-sidepopup .io-ox-portal-birthdays .birthday').withText('Piff, First'));
-    I.waitForVisible('~Contact Details');
-    I.waitForVisible('.inline-toolbar', 10, '.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
-    I.waitForVisible('.picture', 10, '.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
-    I.see('Piff', '.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
-    I.see('First', '.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
-    I.see('Date of birth', '.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
-    I.seeElement('.close', locate('.io-ox-sidepopup').withChild('.contact-detail'));
-    I.click('.close', locate('.io-ox-sidepopup').withText('Date of birth'));
-    I.waitForDetached('~Contact Details');
+    // check contact popup
+    var detail = locate('.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
+    _.each(contacts, function (contact) {
+        I.say(contact.last_name);
+        I.click(locate('.io-ox-sidepopup .io-ox-portal-birthdays .birthday').withText(contact.display_name));
+        I.waitForVisible('~Contact Details');
+        I.waitForVisible('.inline-toolbar', 10, detail);
+        I.waitForVisible('.picture', 10, detail);
+        I.see(contact.last_name, detail);
+        I.see(contact.first_name, detail);
+        I.see('Birthday', detail);
+        I.seeElement('.close', detail);
+        var topSidepopup = locate('.window-container-center .io-ox-sidepopup').at(2);
+        I.waitForText('Saved in', topSidepopup);
+        I.click('.close', topSidepopup);
+        I.waitForDetached('~Contact Details');
+    });
 
-    I.click(locate('.io-ox-sidepopup .io-ox-portal-birthdays .birthday').withText('Paff, Second'));
-    I.waitForVisible('~Contact Details');
-    I.waitForVisible('.inline-toolbar', 10, '.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
-    I.waitForVisible('.picture', 10, '.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
-    I.see('Paff', '.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
-    I.see('Second', '.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
-    I.see('Date of birth', '.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
-    I.seeElement('.close', locate('.io-ox-sidepopup').withChild('.contact-detail'));
-    I.click('.close', locate('.io-ox-sidepopup').withText('Date of birth'));
-    I.waitForDetached('~Contact Details');
-
-    I.click(locate('.io-ox-sidepopup .io-ox-portal-birthdays .birthday').withText('Puff, Third'));
-    I.waitForVisible('~Contact Details');
-    I.waitForVisible('.inline-toolbar', 10, '.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
-    I.waitForVisible('.picture', 10, '.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
-    I.see('Puff', '.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
-    I.see('Third', '.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
-    I.see('Date of birth', '.io-ox-sidepopup .io-ox-sidepopup-pane .contact-detail');
-    I.seeElement('.close', locate('.io-ox-sidepopup').withChild('.contact-detail'));
-    I.click('.close', locate('.io-ox-sidepopup').withText('Date of birth'));
-    I.waitForDetached('~Contact Details');
-
-    I.click('.close', locate('.io-ox-sidepopup').withText('Birthdays'));
+    I.click('.close', locate('.io-ox-sidepopup').withText('Buy a gift'));
 });

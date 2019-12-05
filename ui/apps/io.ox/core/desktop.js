@@ -194,7 +194,7 @@ define('io.ox/core/desktop', [
                             if (!appchange) {
                                 // update window title & toolbar?
                                 if (win) {
-                                    win.setTitle(data.title || '');
+                                    win.setTitle(data.display_title || data.title || '');
                                     win.updateToolbar();
                                 }
                                 // update grid?
@@ -467,9 +467,10 @@ define('io.ox/core/desktop', [
                 }
             });
         },
+
         /**
          * Registers an event handler at a global browser object (e.g. the
-         * window, the document, or the <body> element) that listens to the
+         * window, the document, or the `<body>` element) that listens to the
          * specified event or events. The event handler will only be active
          * while the application window is visible, and will be inactive while
          * the application window is hidden.
@@ -482,43 +483,35 @@ define('io.ox/core/desktop', [
          *  The event name(s) the handler function will be registered for.
          *
          * @param {Function} eventHandler
-         *  The event handler function bound to the specified events. Will be
-         *  triggered once automatically when the application window becomes
-         *  visible.
-         *
-         * @returns {ox.io.App}
-         *  A reference to this application instance.
+         *  The event handler function bound to the specified events.
          */
         registerGlobalEventHandler: function (target, eventType, eventHandler) {
-            var handlers = {
-                show: function () {
-                    $(target).on(eventType, eventHandler);
-                    eventHandler();
-                },
-                hide: function () {
-                    $(target).off(eventType, eventHandler);
-                }
-            };
-            if (this.getWindow().on(handlers).state.visible) handlers.show();
-            return this;
+            var $target = $(target), win = this.getWindow();
+            function startListening() { $target.on(eventType, eventHandler); }
+            function stopListening() { $target.off(eventType, eventHandler); }
+            win.on({ show: startListening, hide: stopListening, quit: stopListening });
+            if (win.state.visible) { startListening(); }
         },
 
         /**
          * Registers an event handler at the browser window that listens to
-         * 'resize' events. The event handler will only be active while the
+         * `resize` events. The event handler will only be active while the
          * application window is visible, and will be inactive while the
          * application window is hidden.
          *
          * @param {Function} resizeHandler
-         *  The resize handler function bound to 'resize' events of the browser
-         *  window. Will be triggered once automatically when the application
-         *  window becomes visible.
-         *
-         * @returns {ox.io.App}
-         *  A reference to this application instance.
+         *  The resize handler function bound to `resize` events of the browser
+         *  window. Will be called when:
+         *  - the application is visible, and the browser window triggers a
+         *    `resize` event,
+         *  - the application window becomes visible,
+         *  - immediately on registration if the application window is visible.
          */
         registerWindowResizeHandler: function (resizeHandler) {
-            return this.registerGlobalEventHandler(window, 'resize', resizeHandler);
+            var win = this.getWindow();
+            this.registerGlobalEventHandler(window, 'resize', resizeHandler);
+            win.on('show', resizeHandler);
+            if (win.state.visible) { resizeHandler(); }
         },
 
         setState: function (obj) {
@@ -934,13 +927,12 @@ define('io.ox/core/desktop', [
     // check if any open application has unsaved changes
     window.onbeforeunload = function () {
 
-        // find all applications with unsaved changes
-        var dirtyApps = apps.filter(function (app) {
+        // find an applications with unsaved changes
+        var unsavedChanges = apps.some(function (app) {
             return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
         });
 
         // browser will show a confirmation dialog, if onbeforeunload returns a string
-        var unsavedChanges = dirtyApps.length > 0;
         ox.trigger('beforeunload', unsavedChanges);
         if (unsavedChanges) {
             return gt('There are unsaved changes.');
@@ -1133,7 +1125,7 @@ define('io.ox/core/desktop', [
             windows = _(windows).without(win);
             if (!win.options.floating) {
                 _(windows).each(function (w) { w.nodes.body.removeAttr('role'); });
-                win.nodes.body.attr('role', 'main');
+                if (win.options.name !== 'io.ox/settings') win.nodes.body.attr('role', 'main');
             } else {
                 win.nodes.body.attr('role', 'region');
             }
@@ -1296,6 +1288,7 @@ define('io.ox/core/desktop', [
 
                 this.show = function (cont, resume) {
                     var appchange = false;
+                    // the viewer can be a plugged application that must have a different handling that the root application
                     var appPlugged = this.app && this.app.options.plugged;
                     //todo URL changes on app change? direct links?
                     //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
@@ -1336,7 +1329,7 @@ define('io.ox/core/desktop', [
                         if (!this.floating && currentWindow && currentWindow !== self && !this.page) {
                             currentWindow.hide();
                         }
-                        if (!this.floating) {
+                        if (!this.floating && !appPlugged) {
                             currentWindow = self;
                         }
                         _.call(cont);

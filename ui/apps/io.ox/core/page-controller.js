@@ -112,7 +112,6 @@ define('io.ox/core/page-controller', [], function () {
                 try {
                     if (document.activeElement &&
                         document.activeElement.nodeName.toLowerCase() !== 'body') {
-
                         $(document.activeElement).blur();
                     } else {
                         $('input:focus, textarea:focus, select:focus').blur();

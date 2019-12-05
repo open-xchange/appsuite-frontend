@@ -200,22 +200,28 @@ define('io.ox/contacts/main', [
             // add template
             grid.addTemplate({
                 build: function () {
-                    var name, description, private_flag;
+                    var name, description, location, photo, private_flag;
                     this.addClass('contact').append(
+                        photo = $('<div class="contact-photo">').attr('aria-hidden', true),
                         private_flag = $('<i class="fa fa-lock private_flag" aria-hidden="true">').hide(),
                         name = $('<div class="fullname">').attr('aria-hidden', true),
-                        description = $('<div class="gray">').attr('aria-hidden', true)
+                        description = $('<div class="description">').attr('aria-hidden', true),
+                        location = $('<div class="gray">').attr('aria-hidden', true)
                     );
-                    return { name: name, private_flag: private_flag, description: description };
+                    return { name: name, private_flag: private_flag, description: description, location: location, photo: photo };
                 },
                 set: function (data, fields) {
                     var fullname, name, description;
                     if (data.mark_as_distributionlist === true) {
                         name = data.display_name || '';
                         fields.name.text(name);
-                        fields.private_flag.get(0).style.display =
-                            data.private_flag ? '' : 'none';
+                        fields.private_flag.get(0).style.display = data.private_flag ? '' : 'none';
                         fields.description.text(gt('Distribution list'));
+                        fields.location.text('');
+                        fields.photo
+                            .empty()
+                            .append('<i class="fa fa-bars">')
+                            .css('background-image', '');
                     } else {
                         fullname = $.trim(util.getFullName(data));
                         if (fullname) {
@@ -230,10 +236,16 @@ define('io.ox/contacts/main', [
                                 coreUtil.renderPersonalName({ name: name }, data)
                             );
                         }
-                        description = $.trim(util.getJob(data));
-                        fields.private_flag.get(0).style.display =
-                            data.private_flag ? '' : 'none';
+                        description = util.getSummaryBusiness(data);
+                        fields.private_flag.get(0).style.display = data.private_flag ? '' : 'none';
                         fields.description.text(description);
+                        fields.location.text(util.getSummaryLocation(data));
+                        var url = api.getContactPhotoUrl(data, 48);
+                        fields.photo
+                            .empty()
+                            .text(url ? '' : util.getInitials(data))
+                            .css('background-image', url ? 'url(' + url + ')' : '')
+                            .toggleClass('empty', !url);
                         if (name === '' && description === '') {
                             // nothing is written down, add some text, so user isn’t confused
                             fields.name.addClass('gray').text(gt('Empty name and description found.'));
@@ -943,7 +955,8 @@ define('io.ox/contacts/main', [
             settings: settings,
             hideTopbar: _.device('smartphone'),
             hideToolbar: _.device('smartphone'),
-            containerLabel: gt('Contact list. Select a contact to view details.')
+            containerLabel: gt('Contact list. Select a contact to view details.'),
+            dividerThreshold: settings.get('dividerThreshold', 30)
             //swipeRightHandler: swipeRightHandler,
         });
 

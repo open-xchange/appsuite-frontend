@@ -27,16 +27,26 @@ Scenario('[C274141] Customize default app, order and count for Quicklauncher @co
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     I.waitForVisible({ css: 'div[data-point="io.ox/core/settings/detail/view"]' });
 
-    I.selectOption('[name=autoStart]', 'Portal');
+    I.selectOption({ css: '[name=autoStart]' }, 'Portal');
 
-    I.selectOption('Quick launch 1', 'None');
-    I.selectOption('Quick launch 2', 'None');
-    I.selectOption('Quick launch 3', 'None');
+    I.click('Configure quick launchers ...');
+
+    I.selectOption('Position 1', 'None');
+    I.selectOption('Position 2', 'None');
+    I.selectOption('Position 3', 'None');
+
+    I.click('Save changes');
+
     I.click('#io-ox-refresh-icon');
 
-    I.selectOption('Quick launch 1', 'Calendar');
-    I.selectOption('Quick launch 2', 'Address Book');
-    I.selectOption('Quick launch 3', 'io.ox/mail/main');
+    I.click('Configure quick launchers ...');
+
+    I.selectOption('Position 1', 'Calendar');
+    I.selectOption('Position 2', 'Address Book');
+    I.selectOption('Position 3', 'io.ox/mail/main');
+
+    I.click('Save changes');
+
     I.click('#io-ox-refresh-icon');
 
     I.logout();
@@ -46,8 +56,8 @@ Scenario('[C274141] Customize default app, order and count for Quicklauncher @co
     I.waitForVisible({ css: '.io-ox-portal' });
 
     await within('#io-ox-quicklaunch', async () => {
-        I.seeElement('[data-app-name="io.ox/calendar"]');
-        I.seeElement('[data-app-name="io.ox/contacts"]');
-        I.seeElement('[data-app-name="io.ox/mail"]');
+        I.seeElement({ css: '[data-app-name="io.ox/calendar"]' });
+        I.seeElement({ css: '[data-app-name="io.ox/contacts"]' });
+        I.seeElement({ css: '[data-app-name="io.ox/mail"]' });
     });
 });

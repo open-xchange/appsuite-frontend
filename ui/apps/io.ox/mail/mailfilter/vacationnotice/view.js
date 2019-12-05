@@ -108,6 +108,8 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                 this.$('.error-message > .help-block').text(error).parent().toggle(!!error);
                 this.$('[name="dateUntil"]').parent().toggleClass('has-error', !!error);
                 this.$('.btn-primary[data-action="save"]').prop('disabled', !!error);
+                this.$('[name="subject"]').prop('disabled', !!error);
+                this.$('[name="text"]').prop('disabled', !!error);
             }
         })
         .build(function () {

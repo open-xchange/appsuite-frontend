@@ -183,30 +183,26 @@ define('io.ox/tasks/edit/main', [
             };
 
             if (app.isDirty()) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                     if (app.getWindow().floating) {
                         app.getWindow().floating.toggle(true);
                     } else if (_.device('smartphone')) {
                         app.getWindow().resume();
                     }
-                    new dialogs.ModalDialog()
-                        .text(gt('Do you really want to discard your changes?'))
+                    new ModalDialog({ title: gt('Do you really want to discard your changes?') })
+                        .addCancelButton()
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete')
-                        .addButton('cancel', gt('Cancel'), 'cancel')
-                        .show()
-                        .done(function (action) {
-                            if (action === 'delete') {
-                                // clean before resolve
-                                clean();
-                                //old model no longer needed
-                                model.factory.realm('edit').release();
-                                def.resolve();
-                            } else {
-                                def.reject();
-                            }
-                        });
+                        .addButton({ label: gt.pgettext('dialog', 'Discard changes'), action: 'delete' })
+                        .on('delete', function () {
+                            // clean before resolve
+                            clean();
+                            //old model no longer needed
+                            model.factory.realm('edit').release();
+                            def.resolve();
+                        })
+                        .on('cancel', function () { def.reject(); })
+                        .open();
                 });
             } else if (app.edit) {
                 clean();

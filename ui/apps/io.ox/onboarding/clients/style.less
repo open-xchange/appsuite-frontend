@@ -61,8 +61,12 @@
     [data-action='link/mailappinstall'] .app-icon {
         background-image: url(@onboarding-mailapp);
     }
-    [data-action='link/driveappinstall'] .app-icon {
-        background-image: url(@onboarding-driveapp);
+    [data-action='link/driveappinstall'] .app-icon[data-detail='Google Play'] {
+        background-image: url(@onboarding-driveapp-googleplay);
+    }
+    // selector works for App Store and Mac App Store data-detail attribute
+    [data-action='link/driveappinstall'] .app-icon[data-detail*='App Store'] {
+        background-image: url(@onboarding-driveapp-appstore);
     }
 
     .app-icon {

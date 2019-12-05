@@ -41,6 +41,7 @@ Scenario('adding a mail containing XSS code', async function (I, users) {
 
     I.login('app=io.ox/mail');
     I.waitForVisible('.io-ox-mail-window');
+    I.waitForText('Test subject', 5, '.io-ox-mail-window .leftside');
 
     // click on first email
     I.click('.io-ox-mail-window .leftside ul li.list-item');
@@ -52,14 +53,15 @@ Scenario('adding a mail containing XSS code', async function (I, users) {
     I.waitForElement({ css: '[data-app-name="io.ox/portal"] .widgets' }, 20);
     I.waitForDetached('#io-ox-refresh-icon .fa-refresh.fa-spin');
 
-    let [widgetId] = await I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-id');
-    let [type] = await I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-type');
+    let widgetId = await I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-id');
+    widgetId = Array.isArray(widgetId) ? widgetId[0] : widgetId; // differs in puppeteer vs. webdriver
+    let type = await I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-type');
+    type = Array.isArray(type) ? type[0] : type; // differs in puppeteer vs. webdriver
     expect(type).to.equal('stickymail');
     let title = await I.grabTextFrom(`.io-ox-portal-window .widgets li.widget[data-widget-id="${widgetId}"] .title`);
     expect(title).to.equal('Test subject <img src="x" onerror="alert(666);">');
 
     I.click(`.io-ox-portal-window .widgets li.widget[data-widget-id="${widgetId}"] .disable-widget`);
-    I.click('Delete', '.io-ox-dialog-popup');
+    I.click('Delete', '.modal-dialog');
     I.waitForDetached(`.io-ox-portal-window .widgets li.widget[data-widget-id="${widgetId}"]`);
-    I.logout();
 });

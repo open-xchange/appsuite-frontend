@@ -66,16 +66,13 @@ define('io.ox/core/boot/login/token', [
         var def = $.Deferred();
 
         ox.session = data.session;
-        ox.secretCookie = hash.secretCookie === 'true';
+        ox.secretCookie = (hash.secretCookie || _.getCookie('secretCookie')) === 'true';
 
-        // both, ramup and store are uncritical, they may
+        // ramup is uncritical, it may
         // fail but will not block the UI. So we use always
         // The important call is the userconfig and whoami
         // which will finally resolve the returned deferred
-        $.when(
-            session.rampup(),
-            hash.store === 'true' ? session.store() : $.when()
-        )
+        session.rampup()
         .always(function () {
             // fetch user config
             config.user()
@@ -121,7 +118,6 @@ define('io.ox/core/boot/login/token', [
             ref: null,
             secretCookie: null,
             session: null,
-            store: null,
             token: null,
             user: null,
             user_id: null

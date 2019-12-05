@@ -16,7 +16,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
     'use strict';
 
     //
-    // Model Dialog View.
+    // Modal Dialog View
     //
     // options:
     // - async: call busy() instead of close() when invoking an action (except "cancel")
@@ -63,12 +63,12 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             var title_id = _.uniqueId('title');
             this.$el
                 .toggleClass('maximize', !!options.maximize)
-                .attr({ role: 'dialog', 'aria-labelledby': title_id })
+                .attr({ role: 'dialog', 'aria-modal': true, 'aria-labelledby': title_id })
                 .append(
                     $('<div class="modal-dialog" role="document">').width(options.width).append(
                         $('<div class="modal-content">').append(
                             this.$header = $('<div class="modal-header">').append(
-                                $('<h1 class="modal-title">').attr('id', title_id).text(options.title || '\u00A0')
+                                this.$title = $('<h1 class="modal-title">').attr('id', title_id).text(options.title || '\u00A0')
                             ),
                             this.$body = $('<div class="modal-body">'),
                             this.$footer = $('<div class="modal-footer">')
@@ -95,6 +95,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                     );
                 });
             }
+
+            if (options.description) this.addDescription(options);
 
             // scroll inputs into view when smartphone keyboard shows up
             if (_.device('smartphone') && options.smartphoneInputFocus) {
@@ -160,24 +162,51 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.$el.modal({ backdrop: o.backdrop || 'static', keyboard: false }).modal('show');
             this.toggleAriaHidden(true);
             this.trigger('open');
-            // set initial focus
-            var elem = this.$(o.focus);
-            if (elem.length) {
-                // dialog might be busy, i.e. elements are invisible so focus() might not work
-                this.activeElement = elem[0];
-                elem[0].focus();
-            }
+            this.setInitialFocus(o);
             // track open instances
             open.add(this);
             return this;
         },
 
-        toggleAriaHidden: function (state) {
-            // require for proper screen reader use
-            this.$el.siblings(':not(script,noscript)').attr('aria-hidden', !!state);
+        setInitialFocus: function (o) {
+            var self = this;
+            // set initial focus
+            if (o.focus) {
+                var elem = this.$(o.focus);
+                if (elem.length) {
+                    // dialog might be busy, i.e. elements are invisible so focus() might not work
+                    this.activeElement = elem[0];
+                    elem[0].focus();
+                }
+            } else {
+                // Defer focus handling and then try to focus in following order:
+                // 1: First tababble element in modal body
+                // 2: Primary button in footer
+                // 3: First tababble element in footer
+                _.defer(function () {
+                    self.$el.toggleClass('compact', self.$body.is(':empty'));
+                    var focusNode = a11y.getTabbable(self.$body).first();
+                    if (focusNode.length === 0) focusNode = self.$footer.find('.btn-primary');
+                    if (focusNode.length === 0) focusNode = a11y.getTabbable(self.$footer).first();
+                    if (focusNode.length !== 0) focusNode.focus();
+                });
+            }
+        },
+
+        toggleAriaHidden: function () {
+            // A11y: This function may be removed in the future (needs more testing)
+            //
+            // New:
+            // Uses new WCAG 1.1 aria-modal on role="dialog" element
+            // Old:
+            // this.$el.siblings(':not(script,noscript)').attr('aria-hidden', !!state);
         },
 
         disableFormElements: function () {
+            // function may not be run 2 times in a row, "disabled" marker class would be applied to every input, therefore keep track of it
+            if (this.formElementsDisabled) return;
+            this.formElementsDisabled = true;
+
             // disable all form elements; mark already disabled elements via CSS class
             this.$(':input').each(function () {
                 if ($(this).attr('data-action') === 'cancel' || $(this).attr('data-state') === 'manual') return;
@@ -186,10 +215,16 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         },
 
         enableFormElements: function () {
+            this.formElementsDisabled = false;
             // enable all form elements
             this.$(':input').each(function () {
                 if ($(this).attr('data-state') === 'manual') return;
-                $(this).prop('disabled', false).removeClass('disabled');
+                // input elements that have the "disabled" class, were already disabled when disableFormElements was called. Leave them disabled to recreate the previous state and remove the marker class.
+                if ($(this).hasClass('disabled')) {
+                    $(this).removeClass('disabled');
+                    return;
+                }
+                $(this).prop('disabled', false);
             });
         },
 
@@ -217,6 +252,17 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                     .attr('data-action', o.action)
                     .text(o.label)
             );
+            return this;
+        },
+
+        addDescription: function (options) {
+            if (!options.description) return this;
+            var id = _.uniqueId('modal-description-'),
+                node = $('<div>').attr('id', id);
+            if (typeof options.description === 'object') node.append(options.description);
+            else node.text(options.description);
+            this.$el.attr('aria-describedby', id);
+            this.$body.prepend(node);
             return this;
         },
 
@@ -322,6 +368,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             } else {
                 this.$el.prev('.modal-backdrop.in:visible').addBack().hide();
             }
+            // use disableFormElements here, so when resuming, the correct disabled status can be set again (resume -> idle -> enableFormElements needs the correct marker classes)
+            this.disableFormElements();
             this.toggleAriaHidden(false);
         },
 
@@ -373,7 +421,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         this.enableFormElements();
         this.$body.parent().idle();
         this.$body.removeClass('invisible').css('opacity', '');
-        if ($.contains(this.el, this.activeElement)) $(this.activeElement).focus();
+        //if ($.contains(this.el, this.activeElement)) $(this.activeElement).focus();
+        this.setInitialFocus(this.options);
         this.activeElement = null;
         return this;
     }

@@ -21,24 +21,15 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('check actions', async function (I) {
+Scenario('check actions', async function (I, tasks) {
     I.login('app=io.ox/tasks');
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-
-    I.clickToolbar('New');
-    I.waitForVisible('.io-ox-tasks-edit-window');
-
+    tasks.waitForApp();
+    tasks.newTask();
     I.fillField('Subject', 'Test Task');
-
     I.click('Expand form');
-
     I.fillField({ css: '[data-attribute="start_time"] .datepicker-day-field' }, '12/13/2114');
-
     I.fillField({ css: '[data-attribute="end_time"] .datepicker-day-field' }, '12/13/2114');
-
-    I.click('Create');
-
-    I.seeElement('.tasks-detailview');
+    tasks.create();
 
     // test done undone actions
     I.waitForVisible('.badge-notstarted');
@@ -53,19 +44,13 @@ Scenario('check actions', async function (I) {
     // close yell
     I.pressKey('Escape');
 
-    // test edit
-    I.clickToolbar('Edit');
-    I.waitForVisible('.io-ox-tasks-edit-window');
-
+    tasks.editTask();
     I.fillField('Description', 'Best Task evor!!!11elf');
-
-    I.click('Save');
+    tasks.save();
 
     I.waitForText('Best Task evor!!!11elf', 5, '.tasks-detailview');
     I.clickToolbar('Delete');
     I.click('Delete', '.modal-footer');
     I.waitForVisible('.summary.empty');
     I.waitForDetached('.modal-backdrop.in');
-
-    I.logout();
 });

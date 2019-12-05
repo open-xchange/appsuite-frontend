@@ -104,7 +104,7 @@ define('io.ox/calendar/month/print', [
                     labels: _(_.range(7)).map(function (num) {
                         return moment().weekday(num).format('dddd');
                     }),
-                    title: selection.title + ' - ' + moment(selection.current).format('MMMM YYYY')
+                    title: selection.title + ' - ' + moment(selection.current).formatCLDR('yMMMM')
                 },
 
                 selector: '.calendar-month-view',

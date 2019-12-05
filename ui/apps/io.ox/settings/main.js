@@ -29,6 +29,7 @@ define('io.ox/settings/main', [
     'io.ox/keychain/api',
     'io.ox/core/settings/errorlog/settings/pane',
     'io.ox/core/settings/downloads/pane',
+    'io.ox/settings/personalData/settings/pane',
     'io.ox/settings/apps/settings/pane',
     'less!io.ox/settings/style'
 ], function (VGrid, apps, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, yell, keychainAPI) {
@@ -70,7 +71,7 @@ define('io.ox/settings/main', [
                 'virtual/settings/io.ox/portal': 'ox.appsuite.user.sect.portal.settings.html',
                 'virtual/settings/io.ox/tasks': 'ox.appsuite.user.sect.tasks.settings.html',
                 'virtual/settings/io.ox/office': 'ox.documents.user.sect.documents.settings.html',
-                'virtual/settings/io.ox/core/sub': 'ox.appsuite.user.sect.dataorganisation.subscribe.html',
+                'virtual/settings/io.ox/core/sub': 'ox.appsuite.user.sect.contacts.folder.managesubscribed.html',
                 'virtual/settings/io.ox/core/downloads': 'ox.appsuite.user.sect.settings.clients.html',
                 'virtual/settings/administration/groups': 'ox.appsuite.user.sect.calendar.groups.html',
                 'virtual/settings/administration/resources': 'ox.appsuite.user.sect.calendar.resources.html'
@@ -108,13 +109,13 @@ define('io.ox/settings/main', [
         left = vsplit.left.addClass('leftside border-right');
 
         left.attr({
-            'role': 'navigation',
             'aria-label': gt('Settings')
         });
 
         right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
             //needed or mac voice over reads the whole settings pane when an input element is focused
-            'tabindex': 0
+            'tabindex': 0,
+            'role': 'main'
         }).scrollable();
 
         // Create extensions for the apps
@@ -493,6 +494,12 @@ define('io.ox/settings/main', [
             subgroup: 'io.ox/settings/pane/external'
         });
 
+        ext.point('io.ox/settings/pane').extend({
+            id: 'personalData',
+            index: 600,
+            subgroup: 'io.ox/settings/pane/personalData'
+        });
+
         // enqueue is probably a bad name, but since it's not exposed …
         // only resolve the last object enqueed
         var enqueue = (function () {
@@ -509,6 +516,7 @@ define('io.ox/settings/main', [
                 }.bind(active));
             };
         }());
+
         var showSettings = function (baton, focus) {
             baton = ext.Baton.ensure(baton);
             baton.tree = tree;

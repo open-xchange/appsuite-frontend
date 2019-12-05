@@ -14,28 +14,38 @@
  */
 
 define('io.ox/files/actions/add-storage-account', [
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/metrics/main',
     'io.ox/core/yell',
-    'io.ox/core/a11y',
     'gettext!io.ox/files',
     // must be required here or popupblocker blocks the window while we require files
     'io.ox/oauth/keychain',
     'io.ox/core/api/filestorage',
     'io.ox/oauth/backbone'
-], function (dialogs, metrics, yell, a11y, gt, oauthAPI, filestorageApi, OAuth) {
+], function (ModalDialog, metrics, yell, gt, oauthAPI, filestorageApi, OAuth) {
 
     'use strict';
 
+    var defaultNames = {
+        'com.openexchange.oauth.google': 'Google Drive',
+        'com.openexchange.oauth.boxcom': 'Box Drive',
+        'com.openexchange.oauth.dropbox': 'Dropbox',
+        'com.openexchange.oauth.microsoft.graph': 'OneDrive'
+    };
+
     function createAccount(service) {
         var account = new OAuth.Account.Model({
-            serviceId: service.id,
-            displayName: oauthAPI.chooseDisplayName(service)
-        });
+                serviceId: service.id,
+                displayName: oauthAPI.chooseDisplayName(service)
+            }),
+            options = {};
+        //#. Folder name for an external file storage (dropbox, google drive etc)
+        //#. %1$s - the name of the file storage service (dropbox, one drive, google drive, box drive)
+        if (defaultNames[service.id]) options.displayName = gt('My %1$s', defaultNames[service.id]);
 
         // if only the filestorage account is missing there is no need for Oauth authorization.
         if (oauthAPI.accounts.forService(service.id)[0] && _(account.attributes.enabledScopes).contains('drive') && !filestorageApi.getAccountForOauth(account.attributes)) {
-            return filestorageApi.createAccountFromOauth(account.attributes).done(function () {
+            return filestorageApi.createAccountFromOauth(account.attributes, options).done(function () {
                 yell('success', gt('Account added successfully'));
             });
         }
@@ -47,7 +57,7 @@ define('io.ox/files/actions/add-storage-account', [
                 if (a) a.fetch();
             });
 
-            return filestorageApi.createAccountFromOauth(res);
+            return filestorageApi.createAccountFromOauth(res, options);
         }).then(function () {
             yell('success', gt('Account added successfully'));
         });
@@ -94,18 +104,13 @@ define('io.ox/files/actions/add-storage-account', [
             });
         }
 
-        dialog.getContentNode().append(
-            view.render().$el
-        );
+        dialog.$body.append(view.render().$el);
     }
 
     return function () {
-        return new dialogs.ModalDialog({ width: 574 })
-            .header($('<h4>').text(gt('Add storage account')))
-            .addPrimaryButton('close', gt('Close'), 'close')
+        return new ModalDialog({ title: gt('Add storage account'), width: 576 })
+            .addButton({ label: gt('Close'), action: 'close' })
             .build(drawContent)
-            .show(function () {
-                a11y.getTabbable(this).first().focus();
-            });
+            .open();
     };
 });

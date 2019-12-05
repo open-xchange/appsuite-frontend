@@ -41,10 +41,9 @@ define('io.ox/calendar/actions/subscribe-shared', [
             .addButton({ label: gt('Save'), action: 'subscribe' })
             .build(function () {
                 this.$body.addClass('shared-calendars');
-            });
-
-        dialog.open();
-        dialog.busy(true);
+            })
+            .busy(true)
+            .open();
         return getData(dialog).then(loadLandingPage);
     }
 
@@ -68,9 +67,12 @@ define('io.ox/calendar/actions/subscribe-shared', [
             http.resume();
 
         });
-
-        data.dialog.idle();
         ext.point('io.ox/core/folder/subscribe-shared-calendar').invoke('render', data.dialog);
+        data.dialog.idle();
+
+        // focus first usable checkbox
+        data.dialog.$body.find('input[type="checkbox"]:enabled').first().focus();
+
     }
 
     var ItemView = Backbone.View.extend({
@@ -185,7 +187,8 @@ define('io.ox/calendar/actions/subscribe-shared', [
                 sections = {
                     public: gt('Public calendars'),
                     shared: gt('Shared calendars'),
-                    private: gt('Private')
+                    private: gt('Private'),
+                    hidden: gt('Hidden calendars')
                 };
 
             _.each(this.calendarData, function (section, title) {
@@ -205,10 +208,12 @@ define('io.ox/calendar/actions/subscribe-shared', [
         return $.when(api.flat({ module: 'calendar', all: true })).then(function (pageData) {
             var calendarData = {};
 
+            var sections = ['private', 'public', 'shared', 'hidden'];
+
             // cleanup
-            calendarData.public = pageData.public;
-            calendarData.shared = pageData.shared;
-            calendarData.private = pageData.private;
+            _.each(sections, function (section) {
+                if (!_.isEmpty(pageData[section])) calendarData[section] = pageData[section];
+            });
 
             return {
                 dialog: dialog,

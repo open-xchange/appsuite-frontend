@@ -26,7 +26,7 @@ Scenario('[C7764] Change password', async (I, users) => {
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     // wait for form (the button we're interesting in has no meta data)
-    I.waitForElement('select[name="language"]');
+    I.waitForText('Change password');
     I.click('Change password ...');
     // modal dialog opens
     I.waitForElement('.current-password');
@@ -75,9 +75,9 @@ Scenario('[C7764] Change password', async (I, users) => {
     I.waitForDetached('.io-ox-dialog-popup');
 
     I.say('login with old password');
-    I.waitForFocus('input[name="username"]');
-    var user = users[0].userdata;
-    I.fillField('User name', user.name + (user.context ? '@' + user.context.id : ''));
+    I.waitForFocus('#io-ox-login-username', 30);
+    const [user] = users;
+    I.fillField('User name', user.get('name') + (user.context ? '@' + user.context.id : ''));
     I.fillField('Password', 'secret');
     I.click('Sign in');
     I.waitForText('The user name or password is incorrect. (LGI-0006)', 5, '#io-ox-login-feedback > .alert');

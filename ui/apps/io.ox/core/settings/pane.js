@@ -21,20 +21,21 @@ define('io.ox/core/settings/pane', [
     'io.ox/core/upsell',
     'io.ox/core/capabilities',
     'io.ox/core/notifications',
+    'io.ox/core/locale',
     'io.ox/core/desktopNotifications',
     'plugins/portal/userSettings/register',
     'settings!io.ox/core',
     'settings!io.ox/core/settingOptions',
     'gettext!io.ox/core',
     'io.ox/backbone/mini-views/timezonepicker',
-    'io.ox/core/main/appcontrol'
-], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol) {
+    'io.ox/core/main/appcontrol',
+    'io.ox/core/settings/dialogs/quickLauncherDialog'
+], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, locale, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol, quickLauncherDialog) {
 
     'use strict';
 
     var INDEX = 0,
         MINUTES = 60000,
-        AUTOLOGIN = capabilities.has('autologin') && ox.secretCookie === true,
         availableApps = apps.forLauncher().filter(function (model) {
             var requires = model.get('requires');
             return upsell.has(requires);
@@ -44,11 +45,6 @@ define('io.ox/core/settings/pane', [
                 value: o.get('path')
             };
         }).concat([{ label: gt('None'), value: 'none' }]);
-
-    // Check that the app exists in available applications
-    function getAvailablePath(app) {
-        return _(availableApps).findWhere({ 'value': app }) ? app : '';
-    }
 
     // this is the offical point for settings
     ext.point('io.ox/core/settings/detail').extend({
@@ -67,14 +63,16 @@ define('io.ox/core/settings/pane', [
                         });
                     },
 
-                    reloadHint: AUTOLOGIN ?
-                        gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.') :
-                        gt('Some settings (language, timezone, theme) require a relogin to take effect.'),
+                    reloadHint: gt('Some settings (e.g. language and timezone) require a page reload or relogin to take effect.'),
 
                     getLanguageOptions: function () {
-                        return _(ox.serverConfig.languages).map(function (key, val) {
-                            return { label: key, value: val };
-                        });
+                        var isCustomized = !_.isEmpty(settings.get('localeData')),
+                            current = locale.current();
+                        return _(locale.getSupportedLocales())
+                            .map(function (locale) {
+                                locale.name = isCustomized && locale.id === current ? locale.name + ' / ' + gt('Customized') : locale.name;
+                                return { label: locale.name, value: locale.id };
+                            });
                     },
 
                     getThemeOptions: function () {
@@ -138,17 +136,17 @@ define('io.ox/core/settings/pane', [
                     },
 
                     propagateSettingsLanguage: function (val) {
-                        require(['io.ox/core/api/tab'], function (TabApi) {
-                            TabApi.TabCommunication.propagateToAllExceptWindow('update-ox-object', TabApi.TabHandling.windowName, { language: val });
-                            TabApi.TabCommunication.updateOxObject({ language: val });
+                        require(['io.ox/core/api/tab'], function (tabApi) {
+                            tabApi.propagate('update-ox-object', { language: val, exceptWindow: tabApi.getWindowName() });
+                            tabApi.updateOxObject({ language: val });
                         });
 
                     },
 
                     propagateSettingsTheme: function (val) {
-                        require(['io.ox/core/api/tab'], function (TabApi) {
-                            TabApi.TabCommunication.propagateToAllExceptWindow('update-ox-object', TabApi.TabHandling.windowName, { theme: val });
-                            TabApi.TabCommunication.updateOxObject({ theme: val });
+                        require(['io.ox/core/api/tab'], function (tabApi) {
+                            tabApi.propagate('update-ox-object', { theme: val, exceptWindow: tabApi.getWindowName() });
+                            tabApi.updateOxObject({ theme: val });
                         });
 
                     }
@@ -185,9 +183,7 @@ define('io.ox/core/settings/pane', [
                     settings.saveAndYell(undefined, { force: !!showNotice }).then(
                         function success() {
                             if (!showNotice) return;
-                            var message = AUTOLOGIN ?
-                                gt('The setting requires a reload or relogin to take effect.') :
-                                gt('The setting requires a relogin to take effect.');
+                            var message = gt('The setting requires a reload or relogin to take effect.');
                             notifications.yell('success', message);
                         }
                     );
@@ -205,11 +201,9 @@ define('io.ox/core/settings/pane', [
                 this.$el.append(
                     $('<div class="help-block">').text(this.reloadHint + ' ').css('margin-bottom', '24px')
                     .append(
-                        $('<a href="#" role="button" data-action="reload">').text(
-                            AUTOLOGIN ?
-                                gt('Reload page') :
-                                gt('Relogin')
-                        ).on('click', reload)
+                        $('<a href="#" role="button" data-action="reload">')
+                            .text(gt('Reload page'))
+                            .on('click', reload)
                     )
                 );
 
@@ -263,6 +257,14 @@ define('io.ox/core/settings/pane', [
             render: function () {
 
                 var $group = $('<div class="form-group buttons">');
+                // Quicklaunch apps
+                if (settings.isConfigurable('apps/quickLaunch') && appcontrol.getQuickLauncherCount() !== 0 && !_.device('smartphone')) {
+                    $group.append(
+                        $('<button type="button" class="btn btn-default">')
+                            .text(gt('Configure quick launchers') + ' ...')
+                            .on('click', quickLauncherDialog.openDialog)
+                    );
+                }
 
                 // check if users can edit their own data (see bug 34617)
                 if (settings.get('user/internalUserEdit', true)) {
@@ -299,13 +301,41 @@ define('io.ox/core/settings/pane', [
 
                 if (!settings.isConfigurable('language')) return;
 
-                baton.$el.append(
-                    util.compactSelect('language', gt('Language'), this.model, this.getLanguageOptions())
+                var getOptions = this.getLanguageOptions.bind(this),
+                    select = util.compactSelect('language', gt('Language'), this.model, getOptions()),
+                    view = select.find('select').data('view');
+
+                select.find('.col-md-6').append(
+                    $('<div class="help-block locale-example" style="white-space: pre">').text(getExample()),
+                    $('<div class="help-block">').append(
+                        $('<button role="button" class="btn btn-default" data-action="reload">')
+                        .text(gt('More regional settings') + ' ...').on('click', editLocale)
+                    )
                 );
 
-                this.listenTo(this.model, 'change:language', function (language) {
+                view.listenTo(this.model, 'change:language', function (language) {
                     _.setCookie('language', language);
                 });
+
+                view.listenTo(ox, 'change:locale:data', function () {
+                    this.$el.siblings('.locale-example').text(getExample());
+                    this.setOptions(getOptions());
+                });
+
+                baton.$el.append(select);
+
+                function getExample() {
+                    return moment().format('dddd, L LT') + '   ' +
+                        locale.currency(1234.56, 'EUR') + '\n' +
+                        gt('First day of the week: %1$s', locale.getFirstDayOfWeek());
+                }
+
+                function editLocale(e) {
+                    e.preventDefault();
+                    require(['io.ox/core/settings/editLocale'], function (dialog) {
+                        dialog.open();
+                    });
+                }
             }
         },
         //
@@ -384,19 +414,6 @@ define('io.ox/core/settings/pane', [
         }
     );
 
-    var QuickLaunchModel = Backbone.Model.extend({
-        initialize: function () {
-            appcontrol.getQuickLauncherItems().forEach(function (item, i) {
-                this.set('apps/quickLaunch' + i, getAvailablePath(item));
-            }.bind(this));
-        },
-        toString: function () {
-            return _.range(appcontrol.getQuickLauncherCount()).map(function (i) {
-                return this.get('apps/quickLaunch' + i);
-            }.bind(this)).join(',');
-        }
-    });
-
     INDEX = 0;
 
     ext.point('io.ox/core/settings/detail/view/fieldset/second').extend(
@@ -416,65 +433,8 @@ define('io.ox/core/settings/pane', [
                     util.compactSelect('autoStart', gt('Default app after sign in'), this.model, availableApps)
                 );
             }
-        },
-
-        // Quicklaunch apps
-        {
-            id: 'quickLaunch',
-            index: INDEX += 100,
-            render: function (baton) {
-                if (!settings.isConfigurable('apps/quickLaunch') || appcontrol.getQuickLauncherCount() === 0 || _.device('smartphone')) return;
-                baton.$el.append(
-                    new quickLauncherSettingsView({ settings: this.model, model: new QuickLaunchModel() }).render().$el
-                );
-            }
         }
     );
-
-    var quickLauncherSettingsView = DisposableView.extend({
-        initialize: function (options) {
-            this.listenTo(this.model, 'change', function () {
-                options.settings.set('apps/quickLaunch', this.model.toString());
-            });
-        },
-        render: function () {
-            this.$el.append(
-                _.range(appcontrol.getQuickLauncherCount()).map(function (i) {
-                    //#. %s is the number of the quicklauncher (1-3)
-                    return this.getMultiSelect('apps/quickLaunch' + i, gt('Quick launch %s', i + 1), { pos: i });
-                }, this)
-            );
-            return this;
-        },
-        getMultiSelect: function (name, label, options) {
-            options = options || {};
-            var id = 'settings-' + name,
-                view = new mini.SelectView({ id: id, name: name, model: this.model, list: this.appsForPos(options.pos), pos: options.pos }),
-                appsForPos = this.appsForPos.bind(this);
-
-            view.listenTo(this.model, 'change', function () {
-                this.options.list = appsForPos(this.options.pos);
-                this.$el.empty();
-                this.render();
-            });
-
-            return $('<div class="form-group row">').append(
-                $('<div class="col-md-6">').append(
-                    $('<label>').attr('for', id).text(label),
-                    view.render().$el
-                )
-            );
-        },
-        appsForPos: function (pos) {
-            // This function filters the select box, in order to prevent duplicate quicklaunchers
-            return _.range(appcontrol.getQuickLauncherCount())
-                .filter(function (i) { return i !== pos; })
-                .map(function (i) { return this.model.get('apps/quickLaunch' + i); }, this)
-                .reduce(function (acc, app) {
-                    return acc.filter(function (a) { return a.value !== app || app === 'none'; });
-                }, availableApps);
-        }
-    });
 
     INDEX = 0;
 

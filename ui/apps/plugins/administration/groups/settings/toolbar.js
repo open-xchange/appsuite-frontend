@@ -17,9 +17,9 @@ define('plugins/administration/groups/settings/toolbar', [
     'io.ox/backbone/views/actions/util',
     'plugins/administration/groups/settings/edit',
     'io.ox/core/api/group',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/core'
-], function (ext, ToolbarView, actionsUtil, edit, groupAPI, dialogs, gt) {
+], function (ext, ToolbarView, actionsUtil, edit, groupAPI, ModalDialog, gt) {
 
     'use strict';
 
@@ -58,17 +58,12 @@ define('plugins/administration/groups/settings/toolbar', [
         },
         action: function (baton) {
             var id = baton.first().id, model = groupAPI.getModel(id);
-            new dialogs.ModalDialog()
-            .text(
-                //#. %1$s is the group name
-                gt('Do you really want to delete the group "%1$s"? This action cannot be undone!', model.get('display_name'))
-            )
-            .addPrimaryButton('delete', gt('Delete group'), 'delete')
-            .addButton('cancel', gt('Cancel'), 'cancel')
-            .on('delete', function () {
-                groupAPI.remove(id);
-            })
-            .show();
+            //#. %1$s is the group name
+            new ModalDialog({ title: gt('Do you really want to delete the group "%1$s"? This action cannot be undone!', model.get('display_name')) })
+                .addCancelButton()
+                .addButton({ label: gt('Delete group'), action: 'delete' })
+                .on('delete', function () { groupAPI.remove(id); })
+                .open();
         }
     });
 

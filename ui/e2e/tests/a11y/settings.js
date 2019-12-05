@@ -15,8 +15,7 @@ const { expect } = require('chai');
 
 function axeReport(folder, label) {
     this.login(['app=io.ox/settings', 'folder=virtual/settings/' + folder]);
-    this.waitForVisible('[data-app-name="io.ox/settings"]', 5);
-    this.waitForText(label, 5, 'h1');
+    this.waitForText(label, 5, '.settings-detail-pane h1');
     return this.grabAxeReport();
 }
 

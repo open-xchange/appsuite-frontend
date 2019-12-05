@@ -356,7 +356,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
             _.each(this.data.data.page_sections, function (section) {
                 self.$body.append(
                     $('<div class="item-block">').append(
-                        $('<h4>').text(section.name),
+                        $('<h2>').text(section.name),
                         $('<ol class="list-group">').append(
                             returnListItems(section, self)
                         )

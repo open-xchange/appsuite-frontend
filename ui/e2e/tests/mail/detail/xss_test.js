@@ -37,44 +37,36 @@ function getTestMail(user, content) {
     };
 }
 
-Scenario('double quoted urls are escaped properly', async function (I, users) {
+Scenario('double quoted urls are escaped properly', async function (I, users, mail) {
     // See Bug 57692
     let [user] = users;
     await I.haveMail(getTestMail(user, '<p><a href="http://qwe&quot;-alert(document.domain)-&quot;">XSSME</a></p>'));
     I.login('app=io.ox/mail');
-    I.waitForVisible('.io-ox-mail-window');
+    mail.waitForApp();
     // click on first email
-    I.click('.io-ox-mail-window .leftside ul li.list-item');
-    I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
-    expect(await I.grabTextFrom('.io-ox-mail-window .mail-detail-pane .subject')).to.equal('Test subject');
+    mail.selectMail('Test subject');
+    I.waitForElement('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, () => {
+        I.waitForText('XSSME');
         I.click('XSSME');
     });
-    I.wait(0.5);
-    I.switchToNextTab();
+    I.retry(5).switchToNextTab();
     I.seeCurrentUrlEquals('http://qwe"-alert(document.domain)-"/');
-    I.closeCurrentTab();
-    I.logout();
 });
 
-Scenario('urls should not be double encoded', async function (I, users) {
+Scenario('urls should not be double encoded', async function (I, users, mail) {
     // See Bug 58333
     let [user] = users;
     await I.haveMail(getTestMail(user, '<p><a href="http://localhost/?test=ajlksd89123jd9hnasdf%3D&action=test">XSSME</a></p>'));
     I.login('app=io.ox/mail');
-    I.waitForVisible('.io-ox-mail-window');
+    mail.waitForApp();
     // click on first email
-    I.click('.io-ox-mail-window .leftside ul li.list-item');
-    I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
-    expect(await I.grabTextFrom('.io-ox-mail-window .mail-detail-pane .subject')).to.equal('Test subject');
+    mail.selectMail('Test subject');
+    I.waitForElement('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, () => {
+        I.waitForText('XSSME');
         I.click('XSSME');
     });
-    I.wait(0.5);
-    I.switchToNextTab();
+    I.retry(5).switchToNextTab();
     expect(await I.grabCurrentUrl()).to.equal('http://localhost/?test=ajlksd89123jd9hnasdf%3D&action=test');
-
-    I.closeCurrentTab();
-    I.logout();
 });
-

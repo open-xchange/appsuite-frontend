@@ -28,28 +28,27 @@ After(async (users) => {
 
 const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
 
-Scenario('Use default font style for new mails', async function (I, users) {
+Scenario('Use default font style for new mails', async function (I, users, mail) {
 
     let [sender] = users;
 
     const defaultText = 'This text has a default style.';
 
-    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
-    await I.haveSetting('io.ox/mail//defaultFontStyle/family', 'helvetica');
+    await Promise.all([
+        I.haveSetting('io.ox/mail//features/registerProtocolHandler', false),
+        I.haveSetting('io.ox/mail//defaultFontStyle/family', 'helvetica')
+    ]);
 
     I.login('app=io.ox/mail', { user: sender });
+    mail.newMail();
 
-    I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
-    I.waitForFocus('input[placeholder="To"]');
     await within({ frame: iframeLocator }, async () => {
-        I.click('.default-style');
-        I.pressKey(defaultText);
-        expect(await I.grabAttributeFrom(locate('.default-style'), 'style')).that.include('font-family: helvetica;');
+        I.appendField('body', defaultText);
+        I.seeCssPropertiesOnElements('.default-style', { 'font-family': 'helvetica' });
     });
 });
 
-Scenario('Use default font style in replies', async function (I, users) {
+Scenario('Use default font style in replies', async function (I, users, mail) {
 
     let [sender] = users;
 
@@ -73,22 +72,17 @@ Scenario('Use default font style in replies', async function (I, users) {
 
     I.login('app=io.ox/mail', { user: sender });
 
-    I.waitForText(mailSubject, 2);
-    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    mail.selectMail(mailSubject);
 
-    I.see('Reply');
     I.click('Reply');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
-    // please note that tinymce get's focused when a custom default style is set
-    I.waitForFocus(iframeLocator);
+    I.waitForElement(iframeLocator);
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(defaultText);
-        I.seeElementInDOM('span[style="font-family: helvetica;"]');
+        I.appendField('body', defaultText);
+        I.seeElementInDOM({ css: 'span[style="font-family: helvetica;"]' });
     });
 });
 
-Scenario('[C7392] Send mail with different text highlighting', async function (I, users) {
+Scenario('[C7392] Send mail with different text highlighting', async function (I, users, mail) {
 
     const selectInline = (action) => {
         I.click(locate('button').withChild(locate('span').withText('Formats')));
@@ -118,26 +112,22 @@ Scenario('[C7392] Send mail with different text highlighting', async function (I
     I.login('app=io.ox/mail', { user: sender });
 
     // Open the mail composer
-    I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
-    I.click('~Maximize');
+    mail.newMail();
 
-    // Fill out to and subject
-    I.waitForFocus('input[placeholder="To"]');
+    I.click('~Maximize');
     I.fillField('To', recipient.get('primaryEmail'));
     I.fillField('Subject', mailSubject);
 
     // Write some text with the default settings
     await within({ frame: iframeLocator }, async () => {
-        I.click('.default-style');
-        I.pressKey(defaultText);
+        I.fillField('body', defaultText);
         I.pressKey('Enter');
     });
 
     // Write some text in bold
     selectInline('Bold');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textBold);
+        I.appendField('body', textBold);
         I.pressKey('Enter');
     });
     selectInline('Bold');
@@ -145,7 +135,7 @@ Scenario('[C7392] Send mail with different text highlighting', async function (I
     // Write some text in italic
     selectInline('Italic');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textItalic);
+        I.appendField('body', textItalic);
         I.pressKey('Enter');
     });
     selectInline('Italic');
@@ -153,7 +143,7 @@ Scenario('[C7392] Send mail with different text highlighting', async function (I
     // Write some text which is underlined
     selectInline('Underline');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textUnderline);
+        I.appendField('body', textUnderline);
         I.pressKey('Enter');
     });
     selectInline('Underline');
@@ -161,7 +151,7 @@ Scenario('[C7392] Send mail with different text highlighting', async function (I
     // Write some striked through text
     selectInline('Strikethrough');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textStrikethrough);
+        I.appendField('body', textStrikethrough);
         I.pressKey('Enter');
     });
     selectInline('Strikethrough');
@@ -169,7 +159,7 @@ Scenario('[C7392] Send mail with different text highlighting', async function (I
     // Write some sup text
     selectInline('Superscript');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textSuperscript);
+        I.appendField('body', textSuperscript);
         I.pressKey('Enter');
     });
     selectInline('Superscript');
@@ -177,7 +167,7 @@ Scenario('[C7392] Send mail with different text highlighting', async function (I
     // Write some sub text
     selectInline('Subscript');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textSubscript);
+        I.appendField('body', textSubscript);
         I.pressKey('Enter');
     });
     selectInline('Subscript');
@@ -185,14 +175,14 @@ Scenario('[C7392] Send mail with different text highlighting', async function (I
     // Write some code
     selectInline('Code');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textCode);
+        I.appendField('body', textCode);
         I.pressKey('Enter');
     });
     selectInline('Code');
 
     // Write some text, format it and remove the style
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textChanged);
+        I.appendField('body', textChanged);
         I.pressKey(['Shift', 'Home']); // Select the just written text
     });
     selectInline('Bold');
@@ -211,41 +201,38 @@ Scenario('[C7392] Send mail with different text highlighting', async function (I
     selectInline('Italic');
     selectInline('Superscript');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textBoldItalicSuperscript);
+        I.appendField('body', textBoldItalicSuperscript);
         I.pressKey('Enter');
     });
 
-    // Send the mail
-    I.click('Send');
-
-    // Let's stick around a bit for sending to finish
-    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.send();
     I.logout();
 
     // Log in as second user and navigate to mail app
     I.login('app=io.ox/mail', { user: recipient });
 
     // Open the mail
-    I.waitForText(mailSubject, 2);
-    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    mail.selectMail(mailSubject);
 
+    I.waitForElement('.mail-detail-frame');
     await within({ frame: '.mail-detail-frame' }, async () => {
-        expect(await I.grabAttributeFrom(locate('div').withText(defaultText), 'style')).to.have.lengthOf(0);
+        let attrs = await I.grabAttributeFrom(locate({ css: 'div' }).withText(defaultText), 'style');
+        //attrs = Array.isArray(attrs) ? attrs[0] : attrs;
+        expect(attrs).to.be.empty;
         I.waitForElement(locate('strong').withText(textBold));
         I.waitForElement(locate('em').withText(textItalic));
-        expect((await I.grabCssPropertyFrom(locate('span').withText(textUnderline), 'text-decoration')).join()).to.include('underline');
-        expect((await I.grabCssPropertyFrom(locate('span').withText(textStrikethrough), 'text-decoration')).join()).to.include('line-through');
+        attrs = await I.grabCssPropertyFrom(locate('span').withText(textUnderline), 'textDecoration');
+        expect(attrs.join()).to.include('underline');
+        expect((await I.grabCssPropertyFrom(locate('span').withText(textStrikethrough), 'textDecoration')).join()).to.include('line-through');
         I.waitForElement(locate('sup').withText(textSuperscript));
         I.waitForElement(locate('sub').withText(textSubscript));
         I.waitForElement(locate('code').withText(textCode));
-        expect(await I.grabAttributeFrom(locate('div').withText(textChanged), 'style')).to.have.lengthOf(0);
+        expect(await I.grabAttributeFrom(locate('div').withText(textChanged), 'style')).to.be.empty;
         I.waitForElement((locate('strong').withText(textBoldItalicSuperscript)).inside('em').inside('sup'));
     });
 });
 
-Scenario('[C7393] Send mail with bullet point and numbering - bullet points', async function (I, users) {
+Scenario('[C7393] Send mail with bullet point and numbering - bullet points', async function (I, users, mail) {
 
     let [sender, recipient] = users;
 
@@ -260,78 +247,62 @@ Scenario('[C7393] Send mail with bullet point and numbering - bullet points', as
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
 
     I.login('app=io.ox/mail', { user: sender });
-
-    // Open the mail composer
-    I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
-    I.click('~Maximize');
-
-    // Fill out to and subject
-    I.waitForFocus('input[placeholder="To"]');
+    mail.newMail();
     I.fillField('To', recipient.get('primaryEmail'));
     I.fillField('Subject', mailSubject);
 
     // Write some text with the default settings
     await within({ frame: iframeLocator }, async () => {
         I.click('.default-style');
-        I.pressKey(defaultText);
+        I.appendField('body', defaultText);
         I.pressKey('Enter');
     });
 
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textBullet1);
+        I.appendField('body', textBullet1);
     });
 
     I.click(locate('button').inside('~Bullet list'));
 
     await within({ frame: iframeLocator }, async () => {
         I.pressKey('Enter');
-        I.pressKey(textBullet2);
+        I.appendField('body', textBullet2);
         I.pressKey('Enter');
     });
 
     I.click(locate('button').inside('~Increase indent'));
 
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textBullet21);
+        I.appendField('body', textBullet21);
         I.pressKey('Enter');
     });
 
     I.click(locate('button').inside('~Decrease indent'));
 
-    await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textBullet1_1);
+    within({ frame: iframeLocator }, () => {
+        I.appendField('body', textBullet1_1);
         I.pressKey('Enter');
         I.pressKey('Enter');
         I.pressKey('Enter');
     });
 
-    // Send the mail
-    I.click('Send');
-
-    // Let's stick around a bit for sending to finish
-    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.send();
     I.logout();
 
-    // Log in as second user and navigate to mail app
     I.login('app=io.ox/mail', { user: recipient });
 
-    // Open the mail
-    I.waitForText(mailSubject, 2);
-    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    mail.selectMail(mailSubject);
 
-    await within({ frame: '.mail-detail-frame' }, async () => {
-        I.waitForElement(locate('div').withText(defaultText));
-        I.waitForElement((locate('li').inside('ul')).at(1).withText(textBullet1));
-        I.waitForElement((locate('li').inside('ul')).at(2).withText(textBullet2));
-        I.waitForElement((locate('li').withText(textBullet21)).inside('ul').inside('li').inside('ul'));
-        I.waitForElement((locate('li').inside('ul')).at(3).withText(textBullet1_1));
+    within({ frame: '.mail-detail-frame' }, () => {
+        I.seeElement(locate('div').withText(defaultText));
+        I.seeElement(locate('.mail-detail-content > ul > li').at(1).withText(textBullet1));
+        I.seeElement(locate('.mail-detail-content > ul > li').at(2).withText(textBullet2));
+        I.seeElement(locate('.mail-detail-content > ul > li').at(2).find('ul > li').withText(textBullet21));
+        I.seeElement(locate('.mail-detail-content > ul > li').at(3).withText(textBullet1_1));
     });
 });
 
-Scenario('[C7393] Send mail with bullet point and numbering - numbering', async function (I, users) {
+Scenario('[C7393] Send mail with bullet point and numbering - numbering', async function (I, users, mail) {
 
     let [sender, recipient] = users;
 
@@ -347,77 +318,64 @@ Scenario('[C7393] Send mail with bullet point and numbering - numbering', async 
 
     I.login('app=io.ox/mail', { user: sender });
 
-    // Open the mail composer
-    I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
-    I.click('~Maximize');
-
-    // Fill out to and subject
-    I.waitForFocus('input[placeholder="To"]');
+    mail.newMail();
     I.fillField('To', recipient.get('primaryEmail'));
     I.fillField('Subject', mailSubject);
 
     // Write some text with the default settings
     await within({ frame: iframeLocator }, async () => {
         I.click('.default-style');
-        I.pressKey(defaultText);
+        I.appendField('body', defaultText);
         I.pressKey('Enter');
     });
 
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textNumber1);
+        I.appendField('body', textNumber1);
     });
 
     I.click(locate('button').inside('~Numbered list'));
 
     await within({ frame: iframeLocator }, async () => {
         I.pressKey('Enter');
-        I.pressKey(textNumber2);
+        I.appendField('body', textNumber2);
         I.pressKey('Enter');
     });
 
     I.click(locate('button').inside('~Increase indent'));
 
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textNumber21);
+        I.appendField('body', textNumber21);
         I.pressKey('Enter');
     });
 
     I.click(locate('button').inside('~Decrease indent'));
 
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textNumber1_1);
+        I.appendField('body', textNumber1_1);
         I.pressKey('Enter');
         I.pressKey('Enter');
         I.pressKey('Enter');
     });
 
-    // Send the mail
-    I.click('Send');
-
-    // Let's stick around a bit for sending to finish
-    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.send();
     I.logout();
 
     // Log in as second user and navigate to mail app
     I.login('app=io.ox/mail', { user: recipient });
 
-    // Open the mail
-    I.waitForText(mailSubject, 2);
-    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    mail.selectMail(mailSubject);
 
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
     await within({ frame: '.mail-detail-frame' }, async () => {
-        I.waitForElement(locate('div').withText(defaultText));
-        I.waitForElement((locate('li').inside('ol')).at(1).withText(textNumber1));
-        I.waitForElement((locate('li').inside('ol')).at(2).withText(textNumber2));
-        I.waitForElement((locate('li').withText(textNumber21)).inside('ol').inside('li').inside('ol'));
-        I.waitForElement((locate('li').inside('ol')).at(3).withText(textNumber1_1));
+        I.seeElement(locate('div').withText(defaultText));
+        I.seeElement(locate('.mail-detail-content > ol > li').at(1).withText(textNumber1));
+        I.seeElement(locate('.mail-detail-content > ol > li').at(2).withText(textNumber2));
+        I.seeElement(locate('.mail-detail-content > ol > li').at(2).find('ol > li').withText(textNumber21));
+        I.seeElement(locate('.mail-detail-content > ol > li').at(3).withText(textNumber1_1));
     });
 });
 
-Scenario('[C7394] Send mail with different text alignments', async function (I, users) {
+Scenario('[C7394] Send mail with different text alignments', async function (I, users, mail) {
 
     const selectAlignment = (action) => {
         I.click(locate('button').withChild(locate('span').withText('Formats')));
@@ -440,41 +398,37 @@ Scenario('[C7394] Send mail with different text alignments', async function (I, 
 
     I.login('app=io.ox/mail', { user: sender });
 
-    // Open the mail composer
-    I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    mail.newMail();
     I.click('~Maximize');
 
-    // Fill out to and subject
-    I.waitForFocus('input[placeholder="To"]');
     I.fillField('To', recipient.get('primaryEmail'));
     I.fillField('Subject', mailSubject);
 
     // Write some text with the default settings
     await within({ frame: iframeLocator }, async () => {
         I.click('.default-style');
-        I.pressKey(defaultText);
+        I.appendField('body', defaultText);
         I.pressKey('Enter');
     });
 
     // Write some right aligned text
     selectAlignment('Right');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textRightAligned);
+        I.appendField('body', textRightAligned);
         I.pressKey('Enter');
     });
 
     // Write some left aligned text
     selectAlignment('Left');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textLeftAligned);
+        I.appendField('body', textLeftAligned);
         I.pressKey('Enter');
     });
 
     // Write some centered text
     selectAlignment('Right');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textCentered);
+        I.appendField('body', textCentered);
         I.pressKey(['Shift', 'Home']); // Select the just written text
     });
     selectAlignment('Center');
@@ -486,37 +440,30 @@ Scenario('[C7394] Send mail with different text alignments', async function (I, 
     // Write some justifyed text
     selectAlignment('Justify');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textJustify);
+        I.appendField('body', textJustify);
         I.pressKey('Enter');
     });
 
-    // Send the mail
-    I.click('Send');
-
-    // Let's stick around a bit for sending to finish
-    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.send();
     I.logout();
 
     // Log in as second user and navigate to mail app
     I.login('app=io.ox/mail', { user: recipient });
 
-    // Open the mail
-    I.waitForText(mailSubject, 2);
-    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    mail.selectMail(mailSubject);
 
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
     await within({ frame: '.mail-detail-frame' }, async () => {
         I.waitForElement(locate('div').withText(defaultText));
-        expect(await I.grabCssPropertyFrom(locate('div').withText(defaultText), 'text-align')).to.include('start');
-        expect(await I.grabCssPropertyFrom(locate('div').withText(textRightAligned), 'text-align')).to.include('right');
-        expect(await I.grabCssPropertyFrom(locate('div').withText(textLeftAligned), 'text-align')).to.include('left');
-        expect(await I.grabCssPropertyFrom(locate('div').withText(textCentered), 'text-align')).to.include('center');
-        expect(await I.grabCssPropertyFrom(locate('div').withText(textJustify), 'text-align')).to.include('justify');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(defaultText), 'textAlign')).to.include('start');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textRightAligned), 'textAlign')).to.include('right');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textLeftAligned), 'textAlign')).to.include('left');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textCentered), 'textAlign')).to.include('center');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textJustify), 'textAlign')).to.include('justify');
     });
 });
 
-Scenario('[C7395] Send mail with text indentations', async function (I, users) {
+Scenario('[C7395] Send mail with text indentations', async function (I, users, mail) {
 
     let [sender, recipient] = users;
 
@@ -532,49 +479,44 @@ Scenario('[C7395] Send mail with text indentations', async function (I, users) {
 
     I.login('app=io.ox/mail', { user: sender });
 
-    // Open the mail composer
-    I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
-
-    // Fill out to and subject
-    I.waitForFocus('input[placeholder="To"]');
+    mail.newMail();
     I.fillField('To', recipient.get('primaryEmail'));
     I.fillField('Subject', mailSubject);
 
     // Write some text with the default settings
     await within({ frame: iframeLocator }, async () => {
         I.click('.default-style');
-        I.pressKey(defaultText);
+        I.appendField('body', defaultText);
         I.pressKey('Enter');
         I.pressKey('Enter');
     });
 
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textIndent1);
-    });
-
-    I.click(locate('button').inside('~Increase indent'));
-
-    await within({ frame: iframeLocator }, async () => {
-        I.pressKey('Enter');
+        I.appendField('body', textIndent1);
     });
 
     I.click(locate('button').inside('~Increase indent'));
 
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textIndent2);
         I.pressKey('Enter');
     });
 
     I.click(locate('button').inside('~Increase indent'));
 
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textIndent3);
+        I.appendField('body', textIndent2);
+        I.pressKey('Enter');
+    });
+
+    I.click(locate('button').inside('~Increase indent'));
+
+    await within({ frame: iframeLocator }, async () => {
+        I.appendField('body', textIndent3);
         I.pressKey('Enter');
     });
 
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textIndent11);
+        I.appendField('body', textIndent11);
     });
     I.click(locate('button').inside('~Increase indent'));
     I.click(locate('button').inside('~Decrease indent'));
@@ -588,37 +530,30 @@ Scenario('[C7395] Send mail with text indentations', async function (I, users) {
     I.click(locate('button').inside('~Decrease indent'));
 
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textIndent0);
+        I.appendField('body', textIndent0);
         I.pressKey('Enter');
     });
 
-    // Send the mail
-    I.click('Send');
-
-    // Let's stick around a bit for sending to finish
-    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.send();
     I.logout();
 
     // Log in as second user and navigate to mail app
     I.login('app=io.ox/mail', { user: recipient });
 
-    // Open the mail
-    I.waitForText(mailSubject, 2);
-    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    mail.selectMail(mailSubject);
 
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
     await within({ frame: '.mail-detail-frame' }, async () => {
-        expect(await I.grabCssPropertyFrom(locate('div').withText(defaultText), 'padding-left')).to.include('0px');
-        expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent1), 'padding-left')).to.include('40px');
-        expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent2), 'padding-left')).to.include('80px');
-        expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent3), 'padding-left')).to.include('120px');
-        expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent11), 'padding-left')).to.include('40px');
-        expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent0), 'padding-left')).to.include('0px');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(defaultText), 'paddingLeft')).to.include('0px');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent1), 'paddingLeft')).to.include('40px');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent2), 'paddingLeft')).to.include('80px');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent3), 'paddingLeft')).to.include('120px');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent11), 'paddingLeft')).to.include('40px');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent0), 'paddingLeft')).to.include('0px');
     });
 });
 
-Scenario('[C7396] Send mail with different text fonts', async function (I, users) {
+Scenario('[C7396] Send mail with different text fonts', async function (I, users, mail) {
 
     const selectFont = (action) => {
         I.click(locate('button').inside('~Font Family'));
@@ -644,41 +579,37 @@ Scenario('[C7396] Send mail with different text fonts', async function (I, users
 
     I.login('app=io.ox/mail', { user: sender });
 
-    // Open the mail composer
-    I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    mail.newMail();
     I.click('~Maximize');
 
-    // Fill out to and subject
-    I.waitForFocus('input[placeholder="To"]');
     I.fillField('To', recipient.get('primaryEmail'));
     I.fillField('Subject', mailSubject);
 
     // Write some text with the default settings
     await within({ frame: iframeLocator }, async () => {
         I.click('.default-style');
-        I.pressKey(defaultText);
+        I.appendField('body', defaultText);
         I.pressKey('Enter');
     });
 
     // Write some text with H3
     selectFont('Arial');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textArial);
+        I.appendField('body', textArial);
         I.pressKey('Enter');
     });
 
     // Write some text with H5
     selectFont('Arial Black');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textArialBlack);
+        I.appendField('body', textArialBlack);
         I.pressKey('Enter');
     });
 
     // Write some text with H6, but change it to H1
     selectFont('Georgia');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textComicSansMS);
+        I.appendField('body', textComicSansMS);
         I.pressKey(['Shift', 'Home']); // Select the just written text
     });
     selectFont('Comic Sans MS');
@@ -689,76 +620,69 @@ Scenario('[C7396] Send mail with different text fonts', async function (I, users
 
     selectFont('Courier New');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textCourierNew);
+        I.appendField('body', textCourierNew);
         I.pressKey('Enter');
     });
 
     // Write some text with H2
     selectFont('Helvetica');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textHelvetica);
+        I.appendField('body', textHelvetica);
         I.pressKey('Enter');
     });
 
     selectFont('Terminal');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textTerminal);
+        I.appendField('body', textTerminal);
         I.pressKey('Enter');
     });
 
     selectFont('Verdana');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textVerdana);
+        I.appendField('body', textVerdana);
         I.pressKey('Enter');
     });
 
     selectFont('Webdings');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textWebdings);
+        I.appendField('body', textWebdings);
         I.pressKey('Enter');
     });
 
-    // Send the mail
-    I.click('Send');
-
-    // Let's stick around a bit for sending to finish
-    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.send();
     I.logout();
 
     // Log in as second user and navigate to mail app
     I.login('app=io.ox/mail', { user: recipient });
 
-    // Open the mail
-    I.waitForText(mailSubject, 2);
-    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    mail.selectMail(mailSubject);
 
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
     await within({ frame: '.mail-detail-frame' }, async () => {
         const styleDefault = await I.grabAttributeFrom(locate('div').withText(defaultText), 'style');
-        const styleArial = await I.grabCssPropertyFrom(locate('span').withText(textArial), 'font-family');
-        const styleArialBlack = await I.grabCssPropertyFrom(locate('span').withText(textArialBlack), 'font-family');
-        const styleComicSansMS = await I.grabCssPropertyFrom(locate('span').withText(textComicSansMS), 'font-family');
-        const styleCourierNew = await I.grabCssPropertyFrom(locate('span').withText(textCourierNew), 'font-family');
-        const styleHelvetica = await I.grabCssPropertyFrom(locate('span').withText(textHelvetica), 'font-family');
-        const styleTerminal = await I.grabCssPropertyFrom(locate('span').withText(textTerminal), 'font-family');
-        const styleVerdana = await I.grabCssPropertyFrom(locate('span').withText(textVerdana), 'font-family');
-        const styleWebdings = await I.grabCssPropertyFrom(locate('span').withText(textWebdings), 'font-family');
+        const styleArial = await I.grabCssPropertyFrom(locate({ css: 'span' }).withText(textArial), 'fontFamily');
+        const styleArialBlack = await I.grabCssPropertyFrom(locate({ css: 'span' }).withText(textArialBlack), 'fontFamily');
+        const styleComicSansMS = await I.grabCssPropertyFrom(locate({ css: 'span' }).withText(textComicSansMS), 'fontFamily');
+        const styleCourierNew = await I.grabCssPropertyFrom(locate({ css: 'span' }).withText(textCourierNew), 'fontFamily');
+        const styleHelvetica = await I.grabCssPropertyFrom(locate({ css: 'span' }).withText(textHelvetica), 'fontFamily');
+        const styleTerminal = await I.grabCssPropertyFrom(locate({ css: 'span' }).withText(textTerminal), 'fontFamily');
+        const styleVerdana = await I.grabCssPropertyFrom(locate({ css: 'span' }).withText(textVerdana), 'fontFamily');
+        const styleWebdings = await I.grabCssPropertyFrom(locate({ css: 'span' }).withText(textWebdings), 'fontFamily');
 
-        expect(styleDefault).to.have.lengthOf(0);
-        expect(styleArial.join()).to.include('arial');
-        expect(styleArialBlack.join()).to.include('arial black');
-        expect(styleComicSansMS.join()).to.include('comic sans ms');
-        expect(styleCourierNew.join()).to.include('courier new');
-        expect(styleHelvetica.join()).to.include('helvetica');
-        expect(styleTerminal.join()).to.include('terminal');
-        expect(styleVerdana.join()).to.include('verdana');
-        expect(styleWebdings.join()).to.include('webdings');
+        expect(styleDefault).to.be.empty;
+        expect(styleArial[styleArial.length - 1]).to.include('arial');
+        expect(styleArialBlack[styleArialBlack.length - 1]).to.include('arial black');
+        expect(styleComicSansMS[styleComicSansMS.length - 1]).to.include('comic sans ms');
+        expect(styleCourierNew[styleCourierNew.length - 1]).to.include('courier new');
+        expect(styleHelvetica[styleHelvetica.length - 1]).to.include('helvetica');
+        expect(styleTerminal[styleTerminal.length - 1]).to.include('terminal');
+        expect(styleVerdana[styleVerdana.length - 1]).to.include('verdana');
+        expect(styleWebdings[styleWebdings.length - 1]).to.include('webdings');
     });
 });
 
 // combined with [C7383] Compose HTML mail
-Scenario('[C7397] Send mail with different text styles', async function (I, users) {
+Scenario('[C7397] Send mail with different text styles', async function (I, users, mail) {
 
     const selectHeading = (action) => {
         I.click(locate('button').withChild(locate('span').withText('Formats')));
@@ -781,41 +705,36 @@ Scenario('[C7397] Send mail with different text styles', async function (I, user
 
     I.login('app=io.ox/mail', { user: sender });
 
-    // Open the mail composer
-    I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    mail.newMail();
     I.click('~Maximize');
-
-    // Fill out to and subject
-    I.waitForFocus('input[placeholder="To"]');
     I.fillField('To', recipient.get('primaryEmail'));
     I.fillField('Subject', mailSubject);
 
     // Write some text with the default settings
     await within({ frame: iframeLocator }, async () => {
         I.click('.default-style');
-        I.pressKey(defaultText);
+        I.appendField('body', defaultText);
         I.pressKey('Enter');
     });
 
     // Write some text with H3
     selectHeading('Heading 3');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textH3);
+        I.appendField('body', textH3);
         I.pressKey('Enter');
     });
 
     // Write some text with H5
     selectHeading('Heading 5');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textH5);
+        I.appendField('body', textH5);
         I.pressKey('Enter');
     });
 
     // Write some text with H6, but change it to H1
     selectHeading('Heading 6');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textH1);
+        I.appendField('body', textH1);
         I.pressKey(['Shift', 'Home']); // Select the just written text
     });
     selectHeading('Heading 1');
@@ -827,30 +746,26 @@ Scenario('[C7397] Send mail with different text styles', async function (I, user
     // Write some text with H2
     selectHeading('Heading 2');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textH2);
+        I.appendField('body', textH2);
         I.pressKey('Enter');
     });
 
-    // Send the mail
-    I.click('Send');
-
-    // Let's stick around a bit for sending to finish
-    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.send();
 
     // move to to 'sent' folder (First of C7383)
     I.selectFolder('Sent');
-    I.waitForText(mailSubject);
-    I.click(mailSubject, '.list-item.selectable');
+    mail.selectMail(mailSubject);
 
     // open mail source dialog
     I.click('~More actions', '.detail-view-header');
-    I.waitForVisible('[data-action="io.ox/mail/actions/source"]', 'body > .dropdown');
-    I.click('[data-action="io.ox/mail/actions/source"]', 'body > .dropdown');
-    I.waitForVisible('body .mail-source-dialog');
+    I.waitForElement('.dropdown.open');
+    I.click('View source', '.dropdown.open .dropdown-menu');
+    I.waitForElement('.mail-source-view');
+    I.waitForFunction(() => $('.mail-source-view').val().length > 0);
 
     // check mail source of recently sent mail (Last of C7383)
-    let [source] = await I.grabValueFrom('body .mail-source-view');
+    let source = await I.grabValueFrom('.mail-source-view');
+    source = Array.isArray(source) ? source[0] : source;
     expect(source).to.contain(`>${textH3}</h3>`);
     expect(source).to.contain(`>${textH5}</h5>`);
     expect(source).to.contain(`>${textH1}</h1>`);
@@ -862,11 +777,9 @@ Scenario('[C7397] Send mail with different text styles', async function (I, user
     // Log in as second user and navigate to mail app
     I.login('app=io.ox/mail', { user: recipient });
 
-    // Open the mail
-    I.waitForText(mailSubject, 2);
-    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    mail.selectMail(mailSubject);
 
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
     await within({ frame: '.mail-detail-frame' }, async () => {
         I.waitForElement(locate('div').withText(defaultText));
         I.waitForElement(locate('h3').withText(textH3));
@@ -876,7 +789,7 @@ Scenario('[C7397] Send mail with different text styles', async function (I, user
     });
 });
 
-Scenario('[C7398] Send mail with different text sizes', async function (I, users) {
+Scenario('[C7398] Send mail with different text sizes', async function (I, users, mail) {
 
     const selectFontSize = (action) => {
         I.click(locate('button').inside('~Font Sizes'));
@@ -897,19 +810,14 @@ Scenario('[C7398] Send mail with different text sizes', async function (I, users
 
     I.login('app=io.ox/mail', { user: sender });
 
-    // Open the mail composer
-    I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
-
-    // Fill out to and subject
-    I.waitForFocus('input[placeholder="To"]');
+    mail.newMail();
     I.fillField('To', recipient.get('primaryEmail'));
     I.fillField('Subject', mailSubject);
 
     // Write some text with the default settings
     await within({ frame: iframeLocator }, async () => {
         I.click('.default-style');
-        I.pressKey(defaultText);
+        I.appendField('body', defaultText);
         I.pressKey('Enter');
         I.pressKey('Enter');
     });
@@ -917,14 +825,14 @@ Scenario('[C7398] Send mail with different text sizes', async function (I, users
     // Write some text in 13pt
     selectFontSize('13pt');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(text13pt);
+        I.appendField('body', text13pt);
         I.pressKey('Enter');
     });
 
     // Write some text in 16pt
     selectFontSize('16pt');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(text16pt);
+        I.appendField('body', text16pt);
         I.pressKey('Enter');
         I.pressKey('Enter');
     });
@@ -932,7 +840,7 @@ Scenario('[C7398] Send mail with different text sizes', async function (I, users
     // Write some text in 10pt, but change it to 36pt
     selectFontSize('10pt');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(text36pt);
+        I.appendField('body', text36pt);
         I.pressKey(['Shift', 'Home']); // Select the just written text
     });
     selectFontSize('36pt');
@@ -944,54 +852,53 @@ Scenario('[C7398] Send mail with different text sizes', async function (I, users
     // Write some text in 8pt
     selectFontSize('8pt');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(text8pt);
+        I.appendField('body', text8pt);
     });
 
-    // Send the mail
-    I.click('Send');
-
-    // Let's stick around a bit for sending to finish
-    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.send();
     I.logout();
 
     // Log in as second user and navigate to mail app
     I.login('app=io.ox/mail', { user: recipient });
 
-    // Open the mail
-    I.waitForText(mailSubject, 2);
-    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    mail.selectMail(mailSubject);
 
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
     await within({ frame: '.mail-detail-frame' }, async () => {
-        const styleDefault = await I.grabAttributeFrom(locate('div').withText(defaultText), 'style');
-        const style13 = await I.grabAttributeFrom(locate('span').withText(text13pt), 'style');
-        const style16 = await I.grabAttributeFrom(locate('span').withText(text16pt), 'style');
-        const style36 = await I.grabAttributeFrom(locate('span').withText(text36pt), 'style');
-        const style8 = await I.grabAttributeFrom(locate('span').withText(text8pt), 'style');
+        const last = el => el[el.length - 1];
+        const defaultSize = last(await I.grabCssPropertyFrom(locate('div').withText(defaultText), 'fontSize'));
+        const size13 = last(await I.grabCssPropertyFrom(locate('span').withText(text13pt), 'fontSize'));
+        const size16 = last(await I.grabCssPropertyFrom(locate('span').withText(text16pt), 'fontSize'));
+        const size36 = last(await I.grabCssPropertyFrom(locate('span').withText(text36pt), 'fontSize'));
+        const size8 = last(await I.grabCssPropertyFrom(locate('span').withText(text8pt), 'fontSize'));
+        const sizes = [];
 
-        expect(styleDefault).to.have.lengthOf(0);
-        expect(style13.join()).to.include('13pt');
-        expect(style16.join()).to.include('16pt');
-        expect(style36.join()).to.include('36pt');
-        expect(style8.join()).to.include('8pt');
+        expect(defaultSize).to.equal('13px');
+        sizes.push(defaultSize);
+        expect(sizes).not.to.include(size13);
+        sizes.push(size13);
+        expect(sizes).not.to.include(size16);
+        sizes.push(size16);
+        expect(sizes).not.to.include(size36);
+        sizes.push(size36);
+        expect(sizes).not.to.include(size8);
     });
 });
 
 function getRGBValue(toConvert) {
     // converts rgba(255, 0, 0, 1) --> 255,0,0,1
     toConvert.forEach(function (element, index) {
-        toConvert[index] = element.match(/\d+/g).map(function (a) { return parseInt(a, 10); }).join();
+        toConvert[index] = element.match(/\d+/g).map(function (a) { return parseInt(a, 10); }).slice(0, 3).join();
     });
     return toConvert;
 }
 
-Scenario('[C7399] Send mail with different text colours', async function (I, users) {
+Scenario('[C7399] Send mail with different text colours', async function (I, users, mail) {
 
     const selectColor = (action) => {
         I.click(locate('.mce-open').inside('~Text color'));
         I.waitForElement('.mce-floatpanel .mce-colorbutton-grid');
-        I.click('div[title="' + action + '"]');
+        I.click({ css: 'div[title="' + action + '"]' });
         I.waitForInvisible('.mce-floatpanel .mce-colorbutton-grid');
     };
     let [sender, recipient] = users;
@@ -1007,19 +914,14 @@ Scenario('[C7399] Send mail with different text colours', async function (I, use
 
     I.login('app=io.ox/mail', { user: sender });
 
-    // Open the mail composer
-    I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
-
-    // Fill out to and subject
-    I.waitForFocus('input[placeholder="To"]');
+    mail.newMail();
     I.fillField('To', recipient.get('primaryEmail'));
     I.fillField('Subject', mailSubject);
 
     // Write some text with the default settings
     await within({ frame: iframeLocator }, async () => {
         I.click('.default-style');
-        I.pressKey(defaultText);
+        I.appendField('body', defaultText);
         I.pressKey('Enter');
         I.pressKey('Enter');
     });
@@ -1027,14 +929,14 @@ Scenario('[C7399] Send mail with different text colours', async function (I, use
     // Write some text in red
     selectColor('Red');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(redText);
+        I.appendField('body', redText);
         I.pressKey('Enter');
     });
 
     // Write some text in aqua
     selectColor('Aqua');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(aquaText);
+        I.appendField('body', aquaText);
         I.pressKey('Enter');
         I.pressKey('Enter');
     });
@@ -1042,7 +944,7 @@ Scenario('[C7399] Send mail with different text colours', async function (I, use
     // Write some text in yellow, but change it to lime
     selectColor('Yellow');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(limeText);
+        I.appendField('body', limeText);
         I.pressKey(['Shift', 'Home']); // Select the just written text
     });
     selectColor('Lime');
@@ -1054,30 +956,23 @@ Scenario('[C7399] Send mail with different text colours', async function (I, use
     // Write some text in black
     selectColor('Black');
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(blackText);
+        I.appendField('body', blackText);
     });
 
-    // Send the mail
-    I.click('Send');
-
-    // Let's stick around a bit for sending to finish
-    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.send();
     I.logout();
 
     // Log in as second user and navigate to mail app
     I.login('app=io.ox/mail', { user: recipient });
 
-    // Open the mail
-    I.waitForText(mailSubject, 2);
-    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    mail.selectMail(mailSubject);
 
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
     await within({ frame: '.mail-detail-frame' }, async () => {
-        const rgbBlack = '0,0,0,1';
-        const rgbRed = '255,0,0,1';
-        const rgbAqua = '0,255,255,1';
-        const rgbLime = '0,255,0,1';
+        const rgbBlack = '0,0,0';
+        const rgbRed = '255,0,0';
+        const rgbAqua = '0,255,255';
+        const rgbLime = '0,255,0';
 
         const valueDefault = getRGBValue(await I.grabCssPropertyFrom(locate('div').withText(defaultText), 'color'));
         const valueRed = getRGBValue(await I.grabCssPropertyFrom(locate('span').withText(redText), 'color'));
@@ -1119,7 +1014,7 @@ const selectFont = (I, font) => {
 const selectColor = (I, color) => {
     I.click(locate('.mce-open').inside('~Text color'));
     I.waitForElement('.mce-floatpanel .mce-colorbutton-grid');
-    I.click('div[title="' + color + '"]');
+    I.click({ css: 'div[title="' + color + '"]' });
     I.waitForInvisible('.mce-floatpanel .mce-colorbutton-grid');
 };
 
@@ -1144,7 +1039,7 @@ const selectFontSize = (I, fontSize) => {
     I.click(locate('span.mce-text').withText(fontSize));
     I.waitForInvisible('.mce-floatpanel');
 };
-Scenario('[C7400] Send mail with multiple different text formatting - set before writting @shaky', async function (I, users) {
+Scenario('[C7400] Send mail with multiple different text formatting - set before writting', async function (I, users, mail) {
 
     let [sender, recipient] = users;
 
@@ -1158,20 +1053,15 @@ Scenario('[C7400] Send mail with multiple different text formatting - set before
 
     I.login('app=io.ox/mail', { user: sender });
 
-    // Open the mail composer
-    I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    mail.newMail();
     I.click('~Maximize');
-
-    // Fill out to and subject
-    I.waitForFocus('input[placeholder="To"]');
     I.fillField('To', recipient.get('primaryEmail'));
     I.fillField('Subject', mailSubject);
 
     // Write some text with the default settings
     await within({ frame: iframeLocator }, async () => {
         I.click('.default-style');
-        I.pressKey(defaultText);
+        I.appendField('body', defaultText);
         I.pressKey('Enter');
         I.pressKey('Enter');
     });
@@ -1185,46 +1075,39 @@ Scenario('[C7400] Send mail with multiple different text formatting - set before
     selectFontSize(I, '10pt');
 
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textFormatted);
+        I.appendField('body', textFormatted);
         I.pressKey('Enter');
     });
 
-    // Send the mail
-    I.click('Send');
-
-    // Let's stick around a bit for sending to finish
-    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.send();
     I.logout();
 
     // Log in as second user and navigate to mail app
     I.login('app=io.ox/mail', { user: recipient });
 
-    // Open the mail
-    I.waitForText(mailSubject, 2);
-    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    mail.selectMail(mailSubject);
 
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
     await within({ frame: '.mail-detail-frame' }, async () => {
 
-        expect(await I.grabAttributeFrom(locate('div').withText(defaultText), 'style')).to.have.lengthOf(0);
+        expect(await I.grabAttributeFrom(locate('div').withText(defaultText), 'style')).to.be.empty;
 
         const span = locate('span').withText(textFormatted).inside('h1');
 
         //const rgbBlack = '0,0,0,1';
-        const rgbRed = '255,0,0,1';
-        const rgbYellow = '255,255,0,1';
+        const rgbRed = '255,0,0';
+        const rgbYellow = '255,255,0';
 
-        expect((await I.grabCssPropertyFrom(span, 'text-decoration')).join()).to.include('line-through');
-        expect((await I.grabCssPropertyFrom(span, 'font-family')).join()).to.include('courier new');
+        expect((await I.grabCssPropertyFrom(span, 'textDecoration')).join()).to.include('line-through');
+        expect((await I.grabCssPropertyFrom(span, 'fontFamily')).join()).to.include('courier new');
         expect(getRGBValue(await I.grabCssPropertyFrom(span, 'color'))).to.include(rgbRed);
-        expect(getRGBValue(await I.grabCssPropertyFrom(span, 'background-color'))).to.include(rgbYellow);
-        expect(await I.grabCssPropertyFrom(span, 'text-align')).to.include('center');
-        expect((await I.grabAttributeFrom(span, 'style')).join()).to.include('10pt');
+        expect(getRGBValue(await I.grabCssPropertyFrom(span, 'backgroundColor'))).to.include(rgbYellow);
+        expect(await I.grabCssPropertyFrom(span, 'textAlign')).to.include('center');
+        expect((await I.grabCssPropertyFrom(span, 'fontSize')).join()).to.include('13');
     });
 });
 
-Scenario('[C7400] Send mail with multiple different text formatting - set after writting', async function (I, users) {
+Scenario('[C7400] Send mail with multiple different text formatting - set after writting', async function (I, users, mail) {
 
     let [sender, recipient] = users;
 
@@ -1238,26 +1121,21 @@ Scenario('[C7400] Send mail with multiple different text formatting - set after 
 
     I.login('app=io.ox/mail', { user: sender });
 
-    // Open the mail composer
-    I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    mail.newMail();
     I.click('~Maximize');
-
-    // Fill out to and subject
-    I.waitForFocus('input[placeholder="To"]');
     I.fillField('To', recipient.get('primaryEmail'));
     I.fillField('Subject', mailSubject);
 
     // Write some text with the default settings
     await within({ frame: iframeLocator }, async () => {
         I.click('.default-style');
-        I.pressKey(defaultText);
+        I.appendField('body', defaultText);
         I.pressKey('Enter');
         I.pressKey('Enter');
     });
 
     await within({ frame: iframeLocator }, async () => {
-        I.pressKey(textFormatted);
+        I.appendField('body', textFormatted);
         I.pressKey(['Shift', 'Home']); // Select the just written text
     });
 
@@ -1274,37 +1152,30 @@ Scenario('[C7400] Send mail with multiple different text formatting - set after 
         I.pressKey('Enter');
     });
 
-    // Send the mail
-    I.click('Send');
-
-    // Let's stick around a bit for sending to finish
-    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.send();
     I.logout();
 
     // Log in as second user and navigate to mail app
     I.login('app=io.ox/mail', { user: recipient });
 
-    // Open the mail
-    I.waitForText(mailSubject, 2);
-    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
-    I.waitForVisible('iframe.mail-detail-frame');
+    mail.selectMail(mailSubject);
 
+    I.waitForVisible({ css: 'iframe.mail-detail-frame' });
     await within({ frame: '.mail-detail-frame' }, async () => {
 
-        expect(await I.grabAttributeFrom(locate('div').withText(defaultText), 'style')).to.have.lengthOf(0);
+        expect(await I.grabAttributeFrom(locate('div').withText(defaultText), 'style')).to.be.empty;
 
         const span = locate('span').withText(textFormatted).inside('h1');
 
         //const rgbBlack = '0,0,0,1';
-        const rgbRed = '255,0,0,1';
-        const rgbYellow = '255,255,0,1';
+        const rgbRed = '255,0,0';
+        const rgbYellow = '255,255,0';
 
-        expect((await I.grabCssPropertyFrom(span, 'text-decoration')).join()).to.include('line-through');
-        expect((await I.grabCssPropertyFrom(span, 'font-family')).join()).to.include('courier new');
+        expect((await I.grabCssPropertyFrom(span, 'textDecoration')).join()).to.include('line-through');
+        expect((await I.grabCssPropertyFrom(span, 'fontFamily')).join()).to.include('courier new');
         expect(getRGBValue(await I.grabCssPropertyFrom(span, 'color'))).to.include(rgbRed);
-        expect(getRGBValue(await I.grabCssPropertyFrom(span, 'background-color'))).to.include(rgbYellow);
-        expect(await I.grabCssPropertyFrom(span, 'text-align')).to.include('center');
-        expect((await I.grabAttributeFrom(span, 'style')).join()).to.include('10pt');
+        expect(getRGBValue(await I.grabCssPropertyFrom(span, 'backgroundColor'))).to.include(rgbYellow);
+        expect(await I.grabCssPropertyFrom(span, 'textAlign')).to.include('center');
+        expect((await I.grabCssPropertyFrom(span, 'fontSize')).join()).to.include('13');
     });
 });

@@ -86,7 +86,8 @@ define('io.ox/mail/detail/links', [
                 contacts: gt('Address Book'),
                 calendar: gt('Calendar'),
                 tasks: gt('Tasks'),
-                files: gt('Folder')
+                files: gt('Folder'),
+                'io.ox/settings': gt('Download')
             },
             regDeepLink = /^([\s\S]*)(http[^#]+#!{0,2}&?app=([^&]+)((&(folder|id|item|perspective)=[^&\s]+)+))([\s\S]*)$/i,
             regDeepLinkAlt = /^([\s\S]*)(http[^#]+#m=(contacts|calendar|tasks|infostore)((&(f|i)=[^&\s]+)+))([\s\S]*)$/i,
@@ -111,6 +112,8 @@ define('io.ox/mail/detail/links', [
                 data.className = 'deep-link-files';
             } else if (/^(contacts|calendar|tasks)$/.test(data.app)) {
                 data.className = 'deep-link-' + data.app;
+            } else if (/^io.ox\/settings$/.test(data.app) && params.folder === 'virtual/settings/personaldata') {
+                data.className = 'deep-link-gdpr';
             } else if (deepLinkWhitelist.test(data.app)) {
                 data.className = 'deep-link-app';
             }

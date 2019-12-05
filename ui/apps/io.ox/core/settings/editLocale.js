@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2018 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2019 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  *
@@ -35,58 +35,67 @@ define('io.ox/core/settings/editLocale', [
             model: new Backbone.Model(),
             point: POINT,
             title: gt('Regional settings'),
-            width: 480
+            width: 560
         })
         .inject({
             getTimeOptions: function () {
                 return [
-                    //#. default in terms of standard value
-                    { label: gt('Default'), value: 'default' },
-                    { label: gt('12 hours'), value: 'h:mm A' },
-                    { label: gt('24 hours'), value: 'H:mm' }
+                    { label: gt('9:00 AM (12 hours)'), value: 'h:mm:ss a' },
+                    { label: gt('09:00 AM (12 hours)'), value: 'hh:mm:ss a' },
+                    { label: gt('9:00 (24 hours)'), value: 'H:mm:ss' },
+                    { label: gt('09:00 (24 hours)'), value: 'HH:mm:ss' },
+                    { label: gt('9.00 (24 hours)'), value: 'H.mm.ss' },
+                    { label: gt('09.00 (24 hours)'), value: 'HH.mm.ss' }
                 ];
             },
             getDateOptions: function () {
-                var m = moment().month(0).date(29);
-                return [{ label: gt('Default'), value: 'default' }].concat(
-                    locale.getDateFormats().map(function (format) {
-                        return { label: m.format(format), value: format };
-                    })
-                );
+                return locale.getDateFormatOptions();
             },
             getNumberOptions: function () {
-                return [{ label: gt('Default'), value: 'default' }].concat(
-                    locale.getNumberFormats().map(function (format) {
-                        return { label: format, value: format };
-                    })
-                );
+                return locale.getNumberFormats().map(function (format) {
+                    return { label: format, value: format };
+                });
             },
             getFirstDayOfWeekOptions: function () {
+                // these values can be used to directly set "dow" (see doy)
+                var weekdays = moment.localeData().weekdays();
                 return [
-                    //#. default in terms of standard value
-                    { label: gt('Default'), value: 'default' },
-                    { label: gt('Sunday'), value: 0 },
-                    { label: gt('Monday'), value: 1 }
+                    { label: weekdays[1], value: 'monday' },
+                    { label: weekdays[6], value: 'saturday' },
+                    { label: weekdays[0], value: 'sunday' }
                 ];
             },
             getFirstDayOfYearOptions: function () {
+                // these values define the first day, not "doy" because it depends on "dow".
+                // the active DOY needs to be calculated on the fly
+                // formula: doy = 7 + dow - janX
+                // existing values for doy (in moment locales): 4, 6, 7, 12
+                // combinations:
+                // - US: dow=0 first=Jan 1st -> doy=6
+                // - Europe: dow=1 first=Jan 4th -> doy=4
+                // - Arab: dow=6 first=Jan 1st -> doy=12
+                // - 1/7: dow=1 first=Jan 1st -> doy=7
+                // So we need to offer two days:
                 return [
-                    //#. default in terms of standard value
-                    { label: gt('Default'), value: 'default' },
-                    { label: gt('Week that contains January 1st'), value: 1 },
-                    { label: gt('Week that contains the first Thursday'), value: 4 }
+                    { label: gt('Week that contains January 1st (e.g. US, Canada)'), value: 1 },
+                    { label: gt('Week that contains January 4th (e.g. Europe, ISO-8601)'), value: 4 }
                 ];
             }
         })
-        .build(function () {
-        })
+        .addAlternativeButton({ label: gt('Reset'), action: 'reset' })
         .addCancelButton()
-        .addButton({ label: gt('Apply changes'), action: 'save' })
+        .addButton({ label: gt('Save'), action: 'save' })
         .on('open', function () {
-            this.model.set(locale.getSettings());
+            this.initial = locale.getLocaleData();
+            this.model.set(this.initial);
         })
         .on('save', function () {
-            settings.set('locale', this.model.toJSON());
+            var changed = this.model.changedAttributes(this.initial);
+            if (!changed) return;
+            locale.setLocaleData(this.model.toJSON());
+        })
+        .on('reset', function () {
+            locale.resetLocaleData();
         })
         .open();
     }
@@ -100,7 +109,7 @@ define('io.ox/core/settings/editLocale', [
             id: 'time',
             render: function () {
                 this.$body.append(
-                    util.compactSelect('time', gt('Time'), this.model, this.getTimeOptions(), { width: 12 })
+                    util.compactSelect('timeLong', gt('Time format'), this.model, this.getTimeOptions(), { width: 12 })
                 );
             }
         },
@@ -112,7 +121,7 @@ define('io.ox/core/settings/editLocale', [
             id: 'date',
             render: function () {
                 this.$body.append(
-                    util.compactSelect('date', gt('Date'), this.model, this.getDateOptions(), { width: 12 })
+                    util.compactSelect('date', gt('Date format'), this.model, this.getDateOptions(), { width: 12 })
                 );
             }
         },
@@ -124,7 +133,7 @@ define('io.ox/core/settings/editLocale', [
             id: 'number',
             render: function () {
                 this.$body.append(
-                    util.compactSelect('number', gt('Numbers'), this.model, this.getNumberOptions(), { width: 12 })
+                    util.compactSelect('number', gt('Number format'), this.model, this.getNumberOptions(), { width: 12 })
                 );
             }
         },
@@ -136,7 +145,7 @@ define('io.ox/core/settings/editLocale', [
             id: 'first-day-week',
             render: function () {
                 this.$body.append(
-                    util.compactSelect('firstDayOfWeek', gt('First day of week'), this.model, this.getFirstDayOfWeekOptions(), { width: 12 })
+                    util.compactSelect('firstDayOfWeek', gt('First day of the week'), this.model, this.getFirstDayOfWeekOptions(), { width: 12 })
                 );
             }
         },
@@ -148,7 +157,7 @@ define('io.ox/core/settings/editLocale', [
             id: 'first-day-year',
             render: function () {
                 this.$body.append(
-                    util.compactSelect('firstDayOfYear', gt('First week of year'), this.model, this.getFirstDayOfYearOptions(), { width: 12 })
+                    util.compactSelect('firstDayOfYear', gt('First week of the year'), this.model, this.getFirstDayOfYearOptions(), { width: 12 })
                 );
             }
         }

@@ -1,38 +1,39 @@
-<html lang="ja">
+<html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>5.7.2. 条件を追加</title>
+<title>5.7.2. 条件を追加</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="ユーザ ガイド">
-<link rel="up" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.7. メールフィルターの使用">
-<link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.7.1. 新規のルールの作成">
-<link rel="next" href="ox.appsuite.user.sect.email.mailfilter.action.html" title="5.7.3. アクションを追加">
+<link rel="up" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.7. メールフィルタの使用">
+<link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.7.1. 新規のルールの作成">
+<link rel="next" href="ox.appsuite.user.sect.email.mailfilter.action.html" title="5.7.3. アクションを追加">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
-<link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
-<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <script src="../../../help/jquery.min.js"></script> 
-
-   <script src="../../../help/bootstrap.min.js"></script> 
-</head>
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.mailfilter.create.html">戻る</a></li>
-<li><a accesskey="h" href="index.html" class="oxhelp-home-link">ホーム</a></li>
-<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目次</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.email.mailfilter.action.html">次へ</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.mailfilter.create.html">Prev</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.email.mailfilter.action.html">Next</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <h1 class="sr-only"><span class="phrase">メール</span></h1>
-<h2 class="sr-only">メールフィルターの使用</h2>
+  <h1 class="sr-only">
+<span class="phrase">メール</span>  </h1>
+<h2 class="sr-only">メールフィルタの使用</h2>
 <div class="sect2" id="ox.appsuite.user.sect.email.mailfilter.condition">
-<div class="titlepage"><div><div><h3 class="title">5.7.2. 条件を追加</h3></div></div></div>
+<div class="titlepage"><div><div><h3 class="title">5.7.2. 条件を追加</h3></div></div></div>
 <a class="indexterm" name="id-1.6.13.11.2"></a><a class="indexterm" name="id-1.6.13.11.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.condition">条件によって操作が適用されるメールを指定できます。１つまたは複数の条件を設定できます。</p>
 <div class="task" id="ox.appsuite.user.task.email.mailfilter.condition">
 <p class="title"><span class="guilabel"><strong>新規ルールを作成</strong></span>ウィンドウで条件を追加する：</p>
@@ -58,10 +59,12 @@
 <li class="listitem"><p role="presentation">基準は「次の文字列と完全に一致」</p></li>
 <li class="listitem"><p role="presentation">引数は「議事録」</p></li>
 </ul>
-<p>上記の場合、メールの件名が引数の「議事録」に完全に一致するかどうかが検証されます。件名でメールにフィルターをかける例：</p>
+<p>上記の場合、メールの件名が引数の「議事録」に完全に一致するかどうかが検証されます。件名でメールにフィルタをかける例：</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p role="presentation">判定基準：「次の文字列を含む」引数の文字が件名に含まれる場合、条件を満たします。例：引数を「minutes」とします。</p>
+<p role="presentation">判定基準: 「含む」</p>
+<p role="presentation">引数の文字が件名に含まれる場合、条件を満たします。</p>
+<p role="presentation">例：引数を「minutes」とします。</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">件名が「minutes」の場合、条件を満たします。</p></li>
 <li class="listitem"><p role="presentation">件名が「meeting minutes」の場合も、条件を満たします。</p></li>
@@ -70,14 +73,18 @@
             </p>
 </li>
 <li class="listitem">
-<p role="presentation">判定基準：「次の文字列と一致」件名が引数の文字に完全に一致する場合、条件を満たします。この文字列には、ワイルドカードを含めることができます。例：因数を「minutes」とします。「*」の文字は、任意の文字を示すワイルドカードです。</p>
+<p role="presentation">判定基準: ”一致”</p>
+<p role="presentation">件名が引数の文字に完全に一致する場合、条件を満たします。この文字列には、ワイルドカードを含めることができます。</p>
+<p role="presentation">例：引数を「minutes」とします。「*」の文字は、任意の文字を示すワイルドカードです。</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">件名が「minutes」の場合、条件を満たします。</p></li>
 <li class="listitem"><p role="presentation">件名が「meeting minutes」の場合、条件を満たしません。</p></li>
 </ul>
 </li>
 <li class="listitem">
-<p role="presentation">判定基準：「次の文字列と一致（正規表現)」正規表現の形で引数に入力した文字が件名に含まれる場合、条件を満たします。正規表現を使用すれば、複雑な絞込みも可能になります。詳細は、インターネットの関連サイトを参照してください。正規表現の非常に簡単な例を次に示します。引数に「organi(z|s)ation」を設定します。「(z|s)」の表現は、「z」または「s」のいずれかの文字を表します。</p>
+<p role="presentation">判定基準: 「次の文字列と一致（正規表現)」</p>
+<p role="presentation"> 正規表現の形で引数に入力した文字が件名に含まれる場合、条件を満たします。正規表現を使用すれば、複雑な絞込みも可能になります。詳細は、インターネットの関連サイトを参照してください。正規表現の非常に簡単な例を次に示します。 </p>
+<p role="presentation">例：引数に「organi(z|s)ation」を設定します。「(z|s)」の表現は、「z」または「s」のいずれかの文字を表します。</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">件名が「minutes」の場合、条件を満たします。</p></li>
 <li class="listitem"><p role="presentation">件名が「organisation」の場合も条件を満たします。</p></li>
@@ -99,7 +106,7 @@
 <ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.action.html">アクションを追加</a></p></li></ul>
 <p>
       </p>
-<p id="ox.appsuite.user.parent.email.mailfilter.condition">親記事：<a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html">メールフィルターの使用</a></p>
+<p id="ox.appsuite.user.parent.email.mailfilter.condition">親記事：<a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html">メールフィルタの使用</a></p>
 </div>
           </div>
         </body>

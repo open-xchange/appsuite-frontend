@@ -60,27 +60,25 @@ define('io.ox/mail/compose/actions/send', [
 
                 var def = $.Deferred();
                 // show dialog
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({ focus: false })
-                    .text(gt('Mail has empty subject. Send it anyway?'))
-                    .addPrimaryButton('send', gt('Yes, send without subject'), 'send')
-                    .addButton('subject', gt('Add subject'), 'subject')
-                    .show(function () {
-                        def.notify('empty subject');
-                    })
-                    .done(function (action) {
-                        if (action !== 'send') {
-                            this.remove();
-                            baton.view.$el.find('input[name="subject"]').focus();
+                require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                    new ModalDialog({ title: gt('Empty subject'), description: gt('This email has no subject. Do you want to send it anyway?') })
+                        .addAlternativeButton({ label: gt('Send without subject'), className: 'btn-default', action: 'send' })
+                        .addButton({ label: gt('Add subject'), action: 'subject' })
+                        .on('send', function () { def.resolve(); })
+                        .on('subject', function () {
                             baton.stopPropagation();
+                            setTimeout(function () { baton.view.$el.find('input[name="subject"]').focus(); }, 200);
                             def.reject();
-                        } else {
-                            def.resolve();
-                        }
-                    });
+                        })
+                        .open();
                 });
                 return def;
             }
+        },
+        {
+            id: 'check:attachment-empty',
+            index: 350,
+            perform: extensions.emptyAttachmentCheck
         },
         {
             id: 'check:attachment-missing',
@@ -118,9 +116,9 @@ define('io.ox/mail/compose/actions/send', [
             perform: extensions.removeUnusedInlineImages
         },
         {
-            id: 'check:attachment-publishmailattachments',
+            id: 'check-for-auto-enabled-drive-mail',
             index: 800,
-            perform: extensions.publishMailAttachments
+            perform: extensions.checkForAutoEnabledDriveMail({ yell: true, restoreWindow: true, stopPropagation: true, removeQueue: true })
         },
         {
             id: 'send',
@@ -174,6 +172,9 @@ define('io.ox/mail/compose/actions/send', [
                     notifications.yell('success', gt('The email has been sent'));
                 }
                 baton.view.dirty(false);
+                // don't ask wether the app can be closed if we have unsaved data, we just want to send
+                baton.config.set('autoDismiss', true);
+
                 baton.app.quit();
             }
         },

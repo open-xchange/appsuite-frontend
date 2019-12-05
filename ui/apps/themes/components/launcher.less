@@ -12,8 +12,8 @@
  */
 
 @appcontrol-height:                     64px;
-@appcontrol-height-smartphone:          48px;
-@appcontrol-launcher-height-smartphone: 48px;
+@appcontrol-height-smartphone:          50px;
+@appcontrol-launcher-height-smartphone: 50px;
 
 @appcontrol-border-color:               rgba(0, 0, 0, 0.90);
 @appcontrol-launcher-color:             @white;
@@ -48,7 +48,7 @@
 #io-ox-core {
     #io-ox-topbar { display: none; }
     #io-ox-screens {
-        top: @appcontrol-height - 1;
+        top: @appcontrol-height;
         .smartphone & {
             top: @appcontrol-height-smartphone;
         }
@@ -87,15 +87,13 @@
     list-style: none;
     width: auto;
     margin: 0 24px;
-
-    // height: @appcontrol-height;
-
     // Keep this for dynamic themes
     font-size: 0;
-    line-height: @appcontrol-height - 2;
+    line-height: @appcontrol-height - 1;
 
     .smartphone & {
         line-height: @appcontrol-height-smartphone;
+        margin: 0 10px;
     }
 
     img {
@@ -117,13 +115,12 @@
 
 
 #io-ox-appcontrol {
-
     position: absolute;
     left: 0;
     right: 0;
     z-index: 12;
     color: #fff;
-    height: @appcontrol-height - 1;
+    height: @appcontrol-height;
     border-bottom: 1px solid @appcontrol-border-color;
     padding: 0;
     display: flex;
@@ -139,11 +136,11 @@
         left: 0;
         right: 0;
         z-index: -1;
-        height: @appcontrol-height - 1;
+        height: @appcontrol-height;
         border-bottom: 1px solid @appcontrol-border-color;
         opacity: 0;
         .smartphone & {
-            height:  @appcontrol-height-smartphone - 1;
+            height:  @appcontrol-height-smartphone;
             border-bottom: 0;
         }
     }
@@ -176,7 +173,7 @@
             //width: @appcontrol-height - 16;
             position: relative;
             z-index: 2;
-            height: @appcontrol-height - 2;
+            height: @appcontrol-height;
             display: inline-block;
             border: 0;
             svg .fill-c1 { fill: #fff; }
@@ -250,7 +247,6 @@
 
     #io-ox-topsearch {
         margin-top: 15px;
-        margin-right: 24px;
         flex-grow: 1;
 
         .search-box > .form-group { margin-bottom: 0; }
@@ -311,6 +307,8 @@
 
     #io-ox-toprightbar {
         padding-right: 12px; // break alignment on purpose
+        // more space needed on smartphones
+        .smartphone & { padding-right: 0}
         .launcher {
             & > a {
                 padding: 16px 11px;
@@ -349,18 +347,19 @@
     width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 2;
 
     .smartphone & {
-        padding: 5px 0;
-        width: 100%;
-
-        .standalone& {
-            padding: 20px 0;
-        }
+        width: 100% !important;
+        left: 0px !important;
+        right: 0px !important;
+        height: auto !important;
+        top: @appcontrol-height-smartphone !important;
+        max-height: 90%;
+        -webkit-overflow-scrolling: touch;
     }
 
     li {
         float: left;
 
-        .smartphone & { float: initial; }
+        //.smartphone & { float: initial; }
 
         .fa { width: auto; }
         a:focus {
@@ -387,10 +386,9 @@
             color: #666;
             height: 42px;
         }
+
         .smartphone & {
-            width: 100%;
-            height: 42px;
-            flex-direction: row;
+            width: ~"calc(100vw/3 - 8px)";
             padding: 0;
             margin: 0;
         }
@@ -406,13 +404,14 @@
             text-align: center;
             width: @launcher-size;
             .smartphone & {
-                top: auto;
-                color: inherit;
-                font-size: 18px;
-                font-weight: 300;
+                font-size: 14px;
+                top: 70%;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 width: 100%;
+                // to make ellipsis actually work (test with open mail compose and long subject)
+                display: block;
+                white-space: nowrap;
             }
             .flex-center(row);
             &.upsell i {
@@ -434,9 +433,7 @@
             width: @svg-wrap-size;
             height: 100%;
             // no icons on smartphone as it is a dropdown there
-            .smartphone & {
-                display: none;
-            }
+
         }
 
         svg, i {
@@ -448,49 +445,58 @@
             font-size: 36px;
             color: @app-color-standard;
             overflow: visible;
-            .smartphone & {
+            /*.smartphone & {
                 // top: -10px;
 
                 // for FA icons
                 top: auto;
                 line-height: 42px;
                 font-size: 24px;
-            }
+            }*/
             // overwrite stroke colors if coloredicons are configured
             &.colored {
                 &.app-icon-mail {
+                    color: @app-color-mail;
                     .stroke-c1 { stroke: @app-color-mail; }
                     .fill-c1 { fill: @app-color-mail; }
                 }
                 &.app-icon-calendar {
+                    color: @app-color-calendar;
                     .stroke-c1 { stroke: @app-color-calendar; }
                     .fill-c1 { fill: @app-color-calendar; }
                 }
                 &.app-icon-addressbook {
+                    color: @app-color-addressbook;
                     .stroke-c1 { stroke: @app-color-addressbook; }
                     .fill-c1 { fill: @app-color-addressbook; }
                 }
                 &.app-icon-drive {
+                    color: @app-color-drive;
                     .stroke-c1 { stroke: @app-color-drive; }
                     .fill-c1 { fill: @app-color-drive; }
                 }
                 &.app-icon-tasks {
+                    color: @app-color-tasks;
                     .stroke-c1 { stroke: @app-color-tasks; }
                     .fill-c1 { fill: @app-color-tasks; }
                 }
                 &.app-icon-portal {
+                    color: @app-color-portal;
                     .stroke-c1 { stroke: @app-color-portal; }
                     .fill-c1 { fill: @app-color-portal; }
                 }
                 &.app-icon-text {
+                    color: @app-color-text;
                     .stroke-c1 { stroke: @app-color-text; }
                     .fill-c1 { fill: @app-color-text; }
                 }
                 &.app-icon-spreadsheet {
+                    color: @app-color-spreadsheet;
                     .stroke-c1 { stroke: @app-color-spreadsheet; }
                     .fill-c1 { fill: @app-color-spreadsheet; }
                 }
                 &.app-icon-presentation {
+                    color: @app-color-presentation;
                     .stroke-c1 { stroke: @app-color-presentation; }
                     .fill-c1 { fill: @app-color-presentation; }
                 }

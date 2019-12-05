@@ -104,6 +104,12 @@ define.async('io.ox/core/boot/main', [
 
         useCookie: function () {
             return require('io.ox/core/boot/login/auto')();
+        },
+
+        propagateSession: function () {
+            if (window.parent) window.parent.postMessage(_.url.hash('session'), '*');
+            if (window.opener) window.opener.postMessage(_.url.hash('session'), '*');
+            util.debug('Propagated session', _.url.hash('session'));
         }
     };
 
@@ -173,8 +179,17 @@ define.async('io.ox/core/boot/main', [
             }).then(function () {
                 if (!util.checkTabHandlingSupport()) return;
 
-                require(['io.ox/core/api/tab'], function (TabAPI) {
-                    TabAPI.TabSession.propagateLogin();
+                require(['io.ox/core/api/tab'], function (tabAPI) {
+                    tabAPI.propagate('propagateLogin', {
+                        session: ox.session,
+                        language: ox.language,
+                        theme: ox.theme,
+                        user: ox.user,
+                        user_id: ox.user_id,
+                        context_id: ox.context_id,
+                        exceptWindow: tabAPI.getWindowName(),
+                        storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION
+                    });
                 });
             });
         },

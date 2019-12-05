@@ -14,10 +14,10 @@
 define('io.ox/files/actions/rename', [
     'io.ox/files/api',
     'io.ox/core/extensions',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/files/util',
     'gettext!io.ox/files'
-], function (api, ext, dialogs, util, gt) {
+], function (api, ext, ModalDialog, util, gt) {
 
     'use strict';
 
@@ -63,29 +63,24 @@ define('io.ox/files/actions/rename', [
             return util.confirmDialog(name, filename).then(rename.bind(this, name));
         }
 
-        new dialogs.ModalDialog({ enter: 'rename', async: true })
-            .header(
-                $('<h4>').text(gt('Rename'))
-            )
-            .append(
-                $('<input type="text" name="name" class="form-control">')
-            )
-            .addPrimaryButton('rename', gt('Rename'), 'rename')
-            .addButton('cancel', gt('Cancel'), 'cancel')
+        new ModalDialog({ title: gt('Rename'), enter: 'rename', async: true })
+            .build(function () {
+                this.$body.append($('<input type="text" name="name" class="form-control">'));
+                // Test for Guard .suffix.pgp such as .jpg.pgp
+                var highlight = (/\.[a-z0-9]+\.pgp/i).test(filename) ? filename.replace('.pgp', '').lastIndexOf('.') : filename.lastIndexOf('.');
+                this.$body.find('input[name="name"]')
+                    .focus().val(filename)
+                    .get(0).setSelectionRange(0, highlight > -1 ? highlight : filename.length);
+            })
+            .addCancelButton()
+            .addButton({ label: gt('Rename'), action: 'rename' })
             .on('rename', function () {
-                var node = this.getContentNode(),
+                var node = this.$body,
                     name = node.find('input[name="name"]').val();
                 process(name).then(this.close, this.idle).fail(function () {
                     _.defer(function () { node.focus(); });
                 });
             })
-            .show(function () {
-                // Test for Guard .suffix.pgp such as .jpg.pgp
-                var highlight = (/\.[a-z0-9]+\.pgp/i).test(filename) ? filename.replace('.pgp', '').lastIndexOf('.') : filename.lastIndexOf('.');
-                this.find('input[name="name"]')
-                    .focus().val(filename)
-                    .get(0).setSelectionRange(0, highlight > -1 ? highlight : filename.length);
-            });
-
+            .open();
     };
 });

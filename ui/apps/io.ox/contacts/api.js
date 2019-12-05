@@ -26,9 +26,7 @@ define('io.ox/contacts/api', [
 
     'use strict';
 
-    var // object to store contacts, that have attachments uploading atm
-        uploadInProgress = {},
-        convertResponseToGregorian = function (response) {
+    var convertResponseToGregorian = function (response) {
             if (response.id) {
                 // single contact: convert birthdays with year 1 or earlier from julian to gregorian calendar
                 // year might be 0 if birthday is on 1.1 or 1.2. (year 1 - 2days difference)
@@ -80,7 +78,7 @@ define('io.ox/contacts/api', [
             all: {
                 action: 'all',
                 folder: '6',
-                columns:  ox.language === 'ja_JP' ? '20,1,101,555,556,557,607' : '20,1,101,607',
+                columns:  ox.locale === 'ja_JP' ? '20,1,101,555,556,557,607' : '20,1,101,607',
                 extendColumns: 'io.ox/contacts/api/all',
                 // 607 = magic field
                 sort: '607',
@@ -91,7 +89,7 @@ define('io.ox/contacts/api', [
             },
             list: {
                 action: 'list',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617,5,2',
+                columns: '20,1,101,500,501,502,505,508,510,519,520,524,526,528,555,556,557,569,592,597,602,606,607,616,617,5,2',
                 extendColumns: 'io.ox/contacts/api/list'
             },
             get: {
@@ -232,7 +230,7 @@ define('io.ox/contacts/api', [
                 if (data.user_id) data.internal_userid = data.user_id;
 
                 // japanese sorting
-                if (data && data.distribution_list && data.distribution_list.length && ox.language === 'ja_JP') {
+                if (data && data.distribution_list && data.distribution_list.length && ox.locale === 'ja_JP') {
 
                     // add some additional info for sorting
                     _(data.distribution_list).each(function (obj) {
@@ -252,7 +250,7 @@ define('io.ox/contacts/api', [
             },
             all: function (response) {
                 // japanese sorting
-                if (ox.language === 'ja_JP') {
+                if (ox.locale === 'ja_JP') {
 
                     // add some additional info for sorting
                     _(response).each(function (obj) {
@@ -372,7 +370,6 @@ define('io.ox/contacts/api', [
         }
 
         var method,
-            attachmentHandlingNeeded = data.tempAttachmentIndicator,
             opt = {
                 module: 'contacts',
                 data: data,
@@ -380,7 +377,6 @@ define('io.ox/contacts/api', [
                 fixPost: true
             };
 
-        delete data.tempAttachmentIndicator;
         data = cleanUpData(data, { mode: 'create' });
         if (file) {
             if (window.FormData && file instanceof window.File) {
@@ -413,10 +409,6 @@ define('io.ox/contacts/api', [
                     fetchCache.clear()
                 )
                 .then(function () {
-                    if (attachmentHandlingNeeded) {
-                        // to make the detailview show the busy animation
-                        api.addToUploadList(_.ecid(d));
-                    }
                     api.trigger('create', { id: d.id, folder: d.folder_id });
                     api.trigger('refresh.all');
                     return d;
@@ -434,16 +426,13 @@ define('io.ox/contacts/api', [
      * @return {deferred} returns
      */
     api.update = function (o) {
-
-        var attachmentHandlingNeeded = o.data.tempAttachmentIndicator,
+        var attachmentHandlingNeeded = o.attachments,
             needsCacheWipe = false;
-        delete o.data.tempAttachmentIndicator;
 
         if (_.isEmpty(o.data)) {
             if (attachmentHandlingNeeded) {
                 return $.when().then(function () {
                     // to make the detailview show the busy animation
-                    api.addToUploadList(_.ecid(o));
                     api.trigger('update:' + _.ecid(o));
                     api.trigger('update', o);
                     return { folder_id: o.folder, id: o.id };
@@ -492,10 +481,6 @@ define('io.ox/contacts/api', [
                     data.user_id ? clearUserApiCache(data) : ''
                 )
                 .done(function () {
-                    if (attachmentHandlingNeeded) {
-                        // to make the detailview show the busy animation
-                        api.addToUploadList(_.ecid(data));
-                    }
                     api.trigger('update:' + _.ecid(data), data);
                     api.trigger('update', data);
                     // trigger refresh.all, since position might have changed
@@ -673,7 +658,8 @@ define('io.ox/contacts/api', [
                     });
                     // favor contacts in global address book
                     data.sort(function (a, b) {
-                        return b.folder_id === '6' ? +1 : -1;
+                        // work with strings and numbers
+                        return String(b.folder_id) === '6' ? +1 : -1;
                     });
                     // just use the first one
                     data = data[0];
@@ -700,6 +686,13 @@ define('io.ox/contacts/api', [
         return ox.base + '/apps/themes/' + ox.theme + '/fallback-image-' + (type || 'contact') + '.png';
     };
 
+    // for cache busting
+    var uniq = ox.t0;
+    // update uniq on picture change
+    api.on('update:image', function () {
+        uniq = _.now();
+    });
+
     /**
      * show default image or assigned image (in case it's available)
      * @param  {jquery} node    placeholder node that gets background-image OR null
@@ -712,13 +705,7 @@ define('io.ox/contacts/api', [
 
         // local hash to recognize URLs that have been fetched already
         var cachedURLs = {},
-            uniq = ox.t0,
             fallback = api.getFallbackImage();
-
-        // update uniq on picture change
-        api.on('update:image', function () {
-            uniq = _.now();
-        });
 
         function getType(data, opt) {
             // duck checks
@@ -733,7 +720,6 @@ define('io.ox/contacts/api', [
 
         function getParams(data, opt, type) {
             var params = {};
-
             switch (type) {
                 case 'user':
                     params.user_id = data.user_id || data.userid || data.userId || data.internal_userid;
@@ -747,18 +733,8 @@ define('io.ox/contacts/api', [
                     break;
                 default:
             }
-
-            return _.extend(params, {
-                width: _.device('retina') ? opt.width * 2 : opt.width,
-                height: _.device('retina') ? opt.height * 2 : opt.height,
-                scaleType: opt.scaleType,
-                // allow multiple public-session cookies per browser (see bug 44812)
-                user: ox.user_id,
-                context: ox.context_id,
-                // ui only caching trick
-                sequence: data.last_modified || 1,
-                uniq: uniq
-            });
+            params.sequence = data.last_modified || 1;
+            return _.extend(params, pictureParams(opt));
         }
 
         function load(node, url, opt) {
@@ -797,6 +773,7 @@ define('io.ox/contacts/api', [
         }
 
         return function (node, data, options) {
+
             var opt = _.extend({
                     width: 48,
                     height: 48,
@@ -847,6 +824,38 @@ define('io.ox/contacts/api', [
             }
         };
     }());
+
+    // simple variant
+    api.getContactPhoto = function (data, options) {
+        options = _.extend({ size: 48, fallback: false, initials: true }, options);
+        var url = this.getContactPhotoUrl(data, options.size) || (options.fallback && api.getFallbackImage()),
+            $el = $('<div class="contact-photo" aria-hidden="true">');
+        if (!url && options.initials) $el.text(util.getInitials(data));
+        if (url) $el.css('background-image', 'url(' + url + ')');
+        $el.toggleClass('empty', !url);
+        return $el;
+    };
+
+    api.getContactPhotoUrl = function (data, size) {
+        // contact picture URLs meanwhile contain a timestamp so we don't need sequence or uniq
+        var options = { width: size, height: size, sequence: false, uniq: false };
+        if (!data.image1_url) return '';
+        return coreUtil.getShardingRoot(coreUtil.replacePrefix(data.image1_url) + '&' + $.param(pictureParams(options)));
+    };
+
+    function pictureParams(options) {
+        return $.extend({}, {
+            width: _.device('retina') ? options.width * 2 : options.width,
+            height: _.device('retina') ? options.height * 2 : options.height,
+            scaleType: options.scaleType,
+            // allow multiple public-session cookies per browser (see bug 44812)
+            user: ox.user_id,
+            context: ox.context_id,
+            // ui only caching trick
+            sequence: options.sequence !== false ? options.sequence : undefined,
+            uniq: options.uniq !== false ? uniq : undefined
+        });
+    }
 
     /**
     * get div node with callbacks managing fetching/updating
@@ -1043,36 +1052,8 @@ define('io.ox/contacts/api', [
         return !!obj.mark_as_distributionlist;
     };
 
-    /**
-     * ask if this contact has attachments uploading at the moment (busy animation in detail View)
-     * @param  {string} key (task id)
-     * @return {boolean}
-     */
-    api.uploadInProgress = function (key) {
-        //return true boolean
-        return uploadInProgress[key] || false;
-    };
-
-    /**
-     * add contact to the list
-     * @param {string} key (task id)
-     * @return {undefined}
-     */
-    api.addToUploadList = function (key) {
-        uploadInProgress[key] = true;
-    };
-
-    /**
-     * remove contact from the list
-     * @param  {string} key (task id)
-     * @fires  api#update: + key
-     * @return {undefined}
-     */
-    api.removeFromUploadList = function (key) {
-        delete uploadInProgress[key];
-        //trigger refresh
-        api.trigger('update:' + key);
-    };
+    // shared api variable as workaround for detail view (progrss bar in detail View)
+    api.pendingAttachments = {};
 
     //
     // Simple auto-complete search

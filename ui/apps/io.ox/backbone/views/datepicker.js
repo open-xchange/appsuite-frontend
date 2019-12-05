@@ -199,7 +199,7 @@ define('io.ox/backbone/views/datepicker', [
 
         renderScaffold: function () {
             var headerId = _.uniqueId('header');
-            this.$el.attr({ 'aria-labelledby': headerId, 'role': 'region', 'tabindex': 0 }).append(
+            this.$el.attr({ 'aria-labelledby': headerId, 'role': 'region', 'tabindex': -1 }).append(
                 $('<div class="navigation">').append(
                     $('<button type="button" class="btn-prev pull-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
                     $('<span role="heading" aria-live="assertive" aria-atomic="true" aria-level="2">').attr('id', headerId),
@@ -233,8 +233,8 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         setNavigationLabels: function (prev, next) {
-            this.$('.btn-prev').attr('aria-label', prev);
-            this.$('.btn-next').attr('aria-label', next);
+            this.$('.btn-prev').attr('aria-label', prev).find('.fa').attr('title', prev);
+            this.$('.btn-next').attr('aria-label', next).find('.fa').attr('title', next);
         },
 
         renderMonth: function () {
@@ -249,7 +249,7 @@ define('io.ox/backbone/views/datepicker', [
                         'data-mode': 'year',
                         'data-value': m.year()
                     })
-                    .text(m.format('MMMM YYYY'))
+                    .text(m.formatCLDR('yMMMM'))
             );
 
             this.setNavigationLabels(gt('Go to previous month'), gt('Go to next month'));
@@ -289,7 +289,8 @@ define('io.ox/backbone/views/datepicker', [
                                                 .attr({
                                                     'id': datepickerId + '_' + m.format('l'),
                                                     //#. CW is calender week and %1$d is the week number
-                                                    'aria-label': m.format('l, dddd') + ', ' + gt('CW %1$d', m.week()),
+                                                    'aria-label': isToday(m) ? gt('Today,') + ' ' + m.format('l, dddd') + ', ' + gt('CW %1$d', m.week()) :
+                                                        m.format('l, dddd') + ', ' + gt('CW %1$d', m.week()),
                                                     'aria-selected': isSame(m, current),
                                                     'data-date': m.valueOf()
                                                 })
@@ -334,7 +335,7 @@ define('io.ox/backbone/views/datepicker', [
                                 return $('<td role="gridcell" class="month switch-mode">')
                                     .attr({
                                         'id': 'month_' + m.format('YYYY-MM'),
-                                        'aria-label': m.format('MMMM YYYY'),
+                                        'aria-label': m.formatCLDR('yMMMM'),
                                         'aria-selected': m.month() === current,
                                         'data-mode': 'month',
                                         'data-value': m.month()

@@ -41,22 +41,12 @@ define('io.ox/backbone/mini-views/attachments', [
 
         setup: function () {
 
-            var self = this;
-
             this.attachmentsToAdd = [];
             this.attachmentsToDelete = [];
             this.attachmentsOnServer = [];
             this.allAttachments = [];
 
-            this.listenToOnce(this.model, 'create update', function (response) {
-
-                var id = self.model.get('id'),
-                    folder = self.model.get('folder') || self.model.get('folder_id');
-
-                if (id === undefined && response !== undefined) id = response.id;
-
-                if (folder && id) self.save(id, folder);
-            });
+            this.listenToOnce(this.model, 'save:success', this.save);
 
             this.loadAttachments();
         },
@@ -76,22 +66,17 @@ define('io.ox/backbone/mini-views/attachments', [
 
         renderAttachment: function (attachment) {
 
-            var size = attachment.file_size > 0 ? strings.fileSize(attachment.file_size, 1) : '\u00A0';
+            var size = attachment.file_size > 0 ? strings.fileSize(attachment.file_size, 0) : '\u00A0';
             return $('<div class="attachment">').append(
-                $('<i class="fa fa-paperclip" aria-hidden="true">'),
-                $('<div class="row-1">').text(attachment.filename),
-                $('<div class="row-2">').append(
-                    $('<span class="filesize">').text(size)
+                $('<div class="file ellipsis">').append(
+                    $('<span class="filesize pull-right">').text(size),
+                    $('<span class="filename">').text(attachment.filename)
                 ),
-                $('<a href="#" class="remove" role="button">')
-                .attr({
-                    'title': gt('Remove attachment'),
-                    'aria-label': gt('Remove attachment') + ' ' + attachment.filename
-                })
-                .data(attachment)
-                .append(
-                    $('<i class="fa fa-trash-o" aria-hidden="true">')
-                )
+                $('<button type="button" class="btn btn-link remove">')
+                    .data(attachment)
+                    //#. %1$s is attachment file name
+                    .attr('title', gt('Remove attachment "%1$s"', attachment.filename))
+                    .append('<i class="fa fa-minus-circle" aria-hidden="true">')
             );
         },
 
@@ -129,6 +114,8 @@ define('io.ox/backbone/mini-views/attachments', [
                     return toDelete.id === attachment.id;
                 });
             });
+            // track pending attachments in contact model
+            this.model.attachments(this.attachmentsToAdd.length + this.attachmentsToDelete.length);
             this.checkQuota();
             this.render();
         },
@@ -153,23 +140,23 @@ define('io.ox/backbone/mini-views/attachments', [
             this.updateState();
         },
 
-        save: function (id, folderId) {
-
+        save: function () {
             var self = this,
                 // 0 ready 1 delete 2 add 3 delete and add
                 allDone = 0,
-                //store errormessages
                 errors = [],
                 apiOptions = {
                     module: this.options.module,
-                    id: id || this.model.id,
-                    folder: folderId || this.model.get('folder') || this.model.get('folder_id')
+                    id: this.model.get('id'),
+                    folder: this.model.get('folder_id')
                 };
 
             function done() {
+                // track pending attachments in contact model
                 if (self.options.changeCallback) {
-                    self.options.changeCallback(self.model, id, errors);
+                    self.options.changeCallback(self.model, errors);
                 }
+                self.model.attachments(0);
             }
 
             if (this.attachmentsToDelete.length) allDone++;
@@ -221,31 +208,34 @@ define('io.ox/backbone/mini-views/attachments', [
 
     var UploadView = AbstractView.extend({
 
-        className: 'contact_attachments_buttons',
+        className: 'fileupload',
+
+        events: {
+            'change input[type="file"]': 'onChange'
+        },
+
+        onChange: function (e) {
+            e.preventDefault();
+
+            var input = $(e.target),
+                listview = this.$el.closest('.section').find('.attachment-list').data('view');
+            _(input[0].files).each(listview.addFile.bind(listview));
+            // WORKAROUND "bug" in Chromium (no change event triggered when selecting the same file again,
+            // in file picker dialog - other browsers still seem to work)
+            input[0].value = '';
+            input.trigger('reset.fileupload');
+        },
 
         render: function () {
+            var button = attachments.fileUploadWidget({ buttontext: gt('Add attachment') })
+                    .find('button')
+                    .addClass('btn-link')
+                    .removeClass('btn-default')
+                    .prepend(
+                        $('<i class="fa fa-plus-circle" aria-hidden="true">')
+                    );
 
-            var self = this;
-
-            var uploadWidget = attachments.fileUploadWidget({
-                wrapperClass: 'form-horizontal control-group'
-            });
-
-            var $input = uploadWidget.find('input[type="file"]')
-                .on('change', function (e) {
-                    e.preventDefault();
-                    var list = self.$el.closest('form').find('.attachment-list').data('view');
-                    _($input[0].files).each(function (fileData) {
-                        // add to attachment list
-                        list.addFile(fileData);
-                    });
-                    //WORKAROUND "bug" in Chromium (no change event triggered when selecting the same file again,
-                    //in file picker dialog - other browsers still seem to work)
-                    $input[0].value = '';
-                    $input.trigger('reset.fileupload');
-                });
-
-            this.$el.append(uploadWidget);
+            this.$el.attr('data-add', 'attachment').append(button);
             return this;
         }
     });

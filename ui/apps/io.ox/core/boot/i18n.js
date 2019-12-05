@@ -18,7 +18,7 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
     util.gt = gt;
 
     // A list of all strings to be included in the POT file.
-    /* eslint-disable no-unused-vars */
+    // eslint-disable-next-line no-unused-vars
     function list() {
         gt('User name');
         gt('Password');
@@ -68,5 +68,4 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
 
 
     }
-    /* eslint-disable no-unused-vars */
 });

@@ -104,7 +104,8 @@ define('io.ox/calendar/common-extensions', [
         },
 
         recurrence: function (baton) {
-            var recurrenceString = util.getRecurrenceString(baton.model || baton.data);
+            // userecurrenceMaster if available (is requested for series exceptions)
+            var recurrenceString = util.getRecurrenceString(baton.recurrenceMaster || baton.model || baton.data);
             if (recurrenceString === '') return;
             this.append(
                 $('<div class="recurrence">').text(recurrenceString)

@@ -17,7 +17,8 @@ define('io.ox/core/tk/upload', [
     'io.ox/core/notifications',
     'io.ox/core/folder/api',
     'io.ox/core/api/filestorage',
-    'gettext!io.ox/core'
+    'gettext!io.ox/core',
+    'less!io.ox/core/tk/upload.less'
 ], function (Events, ext, notifications, folderAPI, filestorageAPI, gt) {
 
     'use strict';
@@ -37,7 +38,7 @@ define('io.ox/core/tk/upload', [
 
         initialize: function (options) {
             require(['less!io.ox/core/tk/upload']);
-            this.options = _.extend({ point: '', app: undefined }, options);
+            this.options = _.extend({ point: '', app: undefined, scrollable: '.scrollable' }, options);
             this.actions = [];
 
             var point = ext.point(options.point);
@@ -66,7 +67,7 @@ define('io.ox/core/tk/upload', [
         },
 
         getDimensions: function () {
-            var node = this.$el.closest('.scrollable'),
+            var node = this.$el.closest(this.options.scrollable),
                 top = node.scrollTop(),
                 height = node.outerHeight(),
                 innerheight = node.children().outerHeight();
@@ -80,13 +81,13 @@ define('io.ox/core/tk/upload', [
         show: function () {
             this.$('.dropzone-floating')
                 .addClass('visible');
-            this.$el.closest('.scrollable').addClass('scrollable-disabled');
+            this.$el.closest(this.options.scrollable).addClass('scrollable-disabled');
         },
 
         hide: function () {
             this.$el.removeClass('locked');
             this.$('.dropzone-floating').removeClass('visible');
-            this.$el.closest('.scrollable').removeClass('scrollable-disabled');
+            this.$el.closest(this.options.scrollable).removeClass('scrollable-disabled');
         },
 
         render: function () {

@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C244801] Define default app after login', async (I) => {
+Scenario('[C7761] Define default app after login', async (I) => {
 
     // Calendar
     await I.haveSetting({ 'io.ox/core': { autoStart: 'io.ox/calendar/main' } });
@@ -43,5 +43,4 @@ Scenario('[C244801] Define default app after login', async (I) => {
     I.login();
     I.waitForInvisible('#background-loader');
     I.dontSeeElement('.window-container');
-    I.logout();
 });

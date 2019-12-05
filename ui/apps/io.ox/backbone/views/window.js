@@ -24,7 +24,8 @@ define('io.ox/backbone/views/window', [
         // selector for window container for convenience purpose
         container = '#io-ox-core',
         // used when dragging, prevents iframe event issues
-        backdrop = $('<div id="floating-window-backdrop">');
+        backdrop = $('<div id="floating-window-backdrop">'),
+        minimalPixelsInside = 100;
 
     var TaskbarView = DisposableView.extend({
         tagName: 'ul',
@@ -67,7 +68,7 @@ define('io.ox/backbone/views/window', [
             return el;
         },
         render: function () {
-            $('#io-ox-taskbar-container').empty().append(this.$el);
+            $('#io-ox-taskbar-container').empty().attr('aria-label', gt('Minimized windows')).append(this.$el);
             return this;
         }
     });
@@ -134,9 +135,9 @@ define('io.ox/backbone/views/window', [
             if (!this.model.get('lazy')) new TaskbarElement({ model: this.model }).render();
 
             //bind some functions
-            _.bindAll(this, 'drag', 'stopDrag', 'keepInWindow');
+            _.bindAll(this, 'drag', 'stopDrag', 'keepInWindow', 'onResize');
 
-            $(window).on('resize', this.keepInWindow);
+            $(window).on('resize', this.keepInWindow, this.onResize);
             this.listenTo(this, 'dispose', function () { $(window).off('resize', this.keepInWindow); });
         },
 
@@ -153,6 +154,24 @@ define('io.ox/backbone/views/window', [
             );
         },
 
+        onResize: function () {
+            if (!this.model) return;
+            if (!_.isBoolean(this.model.get('noOverflow'))) this.model.set('noOverflow', true);
+
+            if (this.model.get('mode') === 'maximized' && this.isOverfloating(this.$el) && this.model.get('noOverflow')) {
+                this.model.set('onResize', true);
+                this.model.set('mode', 'normal');
+            }
+        },
+
+        isOverfloating: function (el) {
+            // returns true if el overfloats the browser screen
+            return el.position().left + el.width() > document.documentElement.clientWidth
+                || el.position().top + el.height() > document.documentElement.clientHeight
+                || el.position().left < 0
+                || el.position().top < 0;
+        },
+
         keepInWindow: function (usePadding) {
             // maybe an event, never use padding if that's the case
             if (!_.isBoolean(usePadding)) usePadding = false;
@@ -161,9 +180,9 @@ define('io.ox/backbone/views/window', [
             if (this.model.get('minimized') || this.minimizing || this.$el.parent().length === 0) return;
 
             // move window
-            if (this.el.offsetLeft !== 0 || this.el.offsetTop !== 0) {
-                var left = Math.max(0, Math.min($(container).width() - this.el.offsetWidth, this.el.offsetLeft)),
-                    top = Math.max(0, Math.min($(container).height() - this.el.offsetHeight, this.el.offsetTop));
+            if (this.el.offsetLeft !== (minimalPixelsInside - this.el.offsetWidth) || this.el.offsetTop !== 0) {
+                var left = Math.max(minimalPixelsInside - this.el.offsetWidth, Math.min($(container).width() - minimalPixelsInside, this.el.offsetLeft)),
+                    top = Math.max(0, Math.min($(container).height() - minimalPixelsInside, this.el.offsetTop));
 
                 if (usePadding) {
                     var spaceLeftX = $(container).width() - this.el.offsetWidth,
@@ -191,8 +210,10 @@ define('io.ox/backbone/views/window', [
             }
 
             // resize window
+            // doesn't really work if we allow overlapping
+
             // if there is enough space available, expand the window to original proportions, if not make it smaller
-            if (this.el.offsetLeft === 0) {
+            /*if (this.el.offsetLeft === 0) {
                 if (this.model.get('initialWidth') === undefined) this.model.set('initialWidth', this.el.offsetWidth);
                 this.$el.css('width', Math.min($(container).width(), this.model.get('initialWidth')) + 'px');
             }
@@ -201,7 +222,7 @@ define('io.ox/backbone/views/window', [
             if (this.model.get('mode') === 'normal' && this.el.offsetTop === 0) {
                 if (this.model.get('initialHeight') === undefined) this.model.set('initialHeight', this.el.offsetHeight);
                 this.$el.css('height', Math.min($(container).height(), this.model.get('initialHeight')) + 'px');
-            }
+            }*/
         },
 
         startDrag: function (e) {
@@ -252,6 +273,7 @@ define('io.ox/backbone/views/window', [
             }
             backdrop.remove();
             this.$el.removeClass('dragging');
+            this.model.set('noOverflow', !this.isOverfloating(this.$el));
         },
 
         onQuit: function () {
@@ -279,7 +301,7 @@ define('io.ox/backbone/views/window', [
             $(container).append(this.$el);
             this.$el.focus();
             //if (backdrop.parents().length === 0) $('#io-ox-screens').append(backdrop);
-            this.activate();
+            this.activate({ firstTime: true });
             return this;
         },
 
@@ -289,6 +311,9 @@ define('io.ox/backbone/views/window', [
 
             var isNormal = this.model.get('mode') === 'normal';
 
+            var elOrigLeft = this.el.offsetLeft,
+                elOrigWidth = this.el.offsetWidth;
+
             this.$('[data-action="normalize"]').toggleClass('hidden', isNormal);
             this.$('[data-action="maximize"]').toggleClass('hidden', !isNormal);
             this.$el.removeClass('normal maximized').addClass(this.model.get('mode'));
@@ -296,6 +321,15 @@ define('io.ox/backbone/views/window', [
 
             this.model.set({ 'initialWidth': this.el.offsetWidth, 'initialHeight': this.el.offsetHeight });
             $(window).trigger('changefloatingstyle');
+
+            if (this.model.get('onResize')) {
+                this.$el.css('left', elOrigLeft);
+                this.model.set('onResize', false);
+            } else {
+                var percentage = (elOrigLeft / (document.documentElement.clientWidth - elOrigWidth)),
+                    growingDiff = this.el.offsetWidth - elOrigWidth;
+                this.$el.css('left', elOrigLeft - percentage * growingDiff);
+            }
 
             // save value as new preferrence for this app
             if (_.device('desktop') && settings.get('features/floatingWindows/preferredMode/enabled', true) && this.model.get('name')) {
@@ -326,6 +360,9 @@ define('io.ox/backbone/views/window', [
 
             if (this.model.get('lazy')) return this.model.set('lazy', false);
             this.keepInWindow();
+            if (e && e.firstTime && this.model.get('mode') === 'maximized') {
+                this.$el.css('top', Math.max(0, Math.min(32, $(container).height() - this.$el.height())));
+            }
             ox.trigger('change:document:title', this.model.get('title'));
         },
 

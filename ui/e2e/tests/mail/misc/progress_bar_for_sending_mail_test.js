@@ -30,12 +30,14 @@ Scenario('[C85616] Progress bar for sending mail', async (I, users) => {
     I.login('app=io.ox/mail');
     I.clickToolbar('Compose');
     I.waitForElement('.io-ox-mail-compose');
+    I.waitForVisible('.window-blocker.io-ox-busy');
+    I.waitForInvisible('.window-blocker.io-ox-busy');
 
     // 2. Send a mail with big attachments to yourself.
 
-    I.click('[data-extension-id="to"] input.tt-input');
+    I.click({ css: '[data-extension-id="to"] input.tt-input' });
     I.wait(1); // wait for autofocus
-    I.fillField('[data-extension-id="to"] input.tt-input', users[0].get('primaryEmail'));
+    I.fillField({ css: '[data-extension-id="to"] input.tt-input' }, users[0].get('primaryEmail'));
     I.fillField('Subject', 'My Subject');
 
     I.click('Send');
@@ -46,7 +48,5 @@ Scenario('[C85616] Progress bar for sending mail', async (I, users) => {
     // 3. Verify that the mail is sent successfully
 
     // wait for mail delivery
-    I.wait(5);
-    I.seeElement('.list-item[aria-label*="My Subject"]', '.list-view');
-
+    I.waitForVisible(locate('.list-item[aria-label*="My Subject"]').inside('.list-view'));
 });

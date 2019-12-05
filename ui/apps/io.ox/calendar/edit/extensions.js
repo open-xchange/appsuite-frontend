@@ -159,7 +159,8 @@ define('io.ox/calendar/edit/extensions', [
                                 recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
                                 attachments: attachments,
                                 checkConflicts: true,
-                                usedGroups: baton.model._attendees.usedGroups
+                                usedGroups: baton.model._attendees.usedGroups,
+                                showRecurrenceInfo: true
                             }),
                             delta = baton.app.getDelta();
                         api.update(delta, options).then(save, fail);
@@ -505,6 +506,21 @@ define('io.ox/calendar/edit/extensions', [
                                 } else {
                                     yell('info', gt('You are no longer using a shared calendar. You were added as organizer.'));
                                 }
+                            });
+                        });
+                    } else if (folderAPI.is('public', newModel) && !folderAPI.is('public', previousModel)) {
+                        // trigger redraw of attendees, organizer might be removable/not removable anymore
+                        self.model.getAttendees().trigger('reset');
+                    } else if (!folderAPI.is('public', newModel) && folderAPI.is('public', previousModel)) {
+                        var prevLength = self.model.getAttendees().length;
+                        self.model.setDefaultAttendees({ create: true, resetStates: !self.model.get('id') }).done(function () {
+                            // trigger reset to trigger a redrawing of all participants (avoid 2 organizers)
+                            self.model.getAttendees().trigger('reset');
+                            // no user added -> user was organizer before, no yell needed
+                            if (prevLength === self.model.getAttendees().length) return;
+
+                            require(['io.ox/core/yell'], function (yell) {
+                                yell('info', gt('You are no longer using a public calendar. You were added as organizer.'));
                             });
                         });
                     }

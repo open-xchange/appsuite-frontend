@@ -13,8 +13,16 @@
 
 .edit-picture {
 
+    .upper-toolbar {
+        margin-top: 16px;
+        button {
+            margin-right: 8px;
+        }
+    }
+
     .modal-body.croppie-container {
-        min-height: 500px;
+        min-height: 456px;
+        padding: 0;
         .smartphone & {
             min-height: initial;
         }
@@ -35,25 +43,30 @@
 
     .inline-actions {
         .flex-center(row);
-        .btn {  margin: 0 5px; }
+        .btn {
+            margin-right: 8px;
+            .fa { margin-right: 8px; }
+        }
+        margin-bottom: 16px;
     }
 
     input.cr-slider:focus {
         outline: thin dotted;
-        outline: 5px auto -webkit-focus-ring-color;
+        outline: 4px auto -webkit-focus-ring-color;
         outline-offset: 0;
     }
 
-    // toggle class
-    &.blank {
-        .modal-body > .inline-actions,
-        .cr-boundary, .cr-slider-wrap {
-            display: none;
+    .croppie-container .cr-slider-wrap {
+        width: 320px;
+        margin: 16px auto;
+    }
+
+    &.empty {
+        .cr-viewport {
+            border-color: #eee;
+            background-color: #ddd;
+            box-shadow: 0 0 2000px 2000px rgba(0, 0, 0, 0.20);
         }
+        .cr-image { display: none; }
     }
-    &:not(.blank) {
-        .empty-state { display: none; }
-    }
-
-
 }

@@ -110,7 +110,6 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 availableWidth = $(window).width(),
                 availableHeight = $(window).height(),
                 topbar = $('#io-ox-appcontrol');
-
             // hits bottom ?
             if (bounds.top + bounds.height > availableHeight - this.margin) {
                 // left or right?
@@ -188,14 +187,13 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 toggleValue = node.data('toggle-value'),
                 toggle = node.data('toggle'),
                 keep = this.options.keep || node.attr('data-keep-open') === 'true';
-            // do no handle links with valid href attribute
+            // do not handle links with valid href attribute
             if (href && href.length !== 0 && href !== '#') return;
             e.preventDefault();
             // keep drop-down open?
             if (keep) e.stopPropagation();
             // ignore plain links
             if (node.hasClass('disabled')) return;
-
             // make sure event bubbles up
             if (!e.isPropagationStopped() && this.$overlay && this.$placeholder && !this.options.noDetach) {
                 // to use jquery event bubbling, the element, which triggered the event must have the correct parents
@@ -211,22 +209,24 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 this.$el.trigger(e);
                 $temp.replaceWith(node);
             }
-
+            // always forward event
+            this.trigger('click', node.data());
+            // return if model or value is missing
+            if (!this.model) return;
             if (!this.options.allowUndefined && value === undefined) return;
-            if (this.model) {
-                var nextValue = value;
-                if (toggle) {
-                    if (toggleValue === undefined) {
-                        // boolean toggle
-                        nextValue = !this.model.get(name);
-                    } else {
-                        // alternate between 2 non boolean values
-                        nextValue = this.model.get(name) === value ? toggleValue : value;
-                    }
+            // finally update value
+            var nextValue = value;
+            if (toggle) {
+                if (toggleValue === undefined) {
+                    // boolean toggle
+                    nextValue = !this.model.get(name);
+                } else {
+                    // alternate between 2 non boolean values
+                    nextValue = this.model.get(name) === value ? toggleValue : value;
                 }
-                if (this.options.saveAsArray) nextValue = [nextValue];
-                this.model.set(name, nextValue);
             }
+            if (this.options.saveAsArray) nextValue = [nextValue];
+            this.model.set(name, nextValue);
         },
 
         setup: function () {
@@ -297,7 +297,6 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         option: function (name, value, text, options) {
-
             options = _.extend({ prefix: '', toggleValue: undefined, radio: false }, options);
 
             var currentValue = this.model ? this.model.get(name) : undefined,
@@ -350,8 +349,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 .on('dragstart', false)
                 .append(
                     options.icon ? $('<i class="fa fa-fw" aria-hidden="true">') : $(),
-                    // bug #54320
-                    $('<span>').text(text)
+                    // bug #54320 - no need for <span>
+                    $.txt(text)
                 );
             if (options.data) link.data(options.data);
             if (callback) link.on('click', {}, callback);

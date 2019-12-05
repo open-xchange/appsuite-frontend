@@ -18,6 +18,10 @@ msgstr ""
 msgid "Add another account"
 msgstr "Добавете друг профил"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr ""
+
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
 msgstr "Добавяне на прикачени файлове"
@@ -26,6 +30,17 @@ msgstr "Добавяне на прикачени файлове"
 msgid "Adding further details"
 msgstr "Добавяне на допълнителни подробности"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr ""
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "At the top you can find the toolbar with many functions and additional "
@@ -33,6 +48,10 @@ msgid ""
 msgstr ""
 "В горната част можете да намерите лентата с много функции и допълнителни "
 "опции. Можете лесно да създавате нови папки, нови файлове и много други."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -78,7 +97,7 @@ msgid "Collaborating"
 msgstr "Сътрудничество"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "Съставяне на нова електронна поща"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -131,6 +150,12 @@ msgid ""
 msgstr ""
 "Подробни указания за отделните приложения се намират в менюто Система> Помощ."
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
+
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "Did you know that you can edit text documents and spreadsheets online? Drive "
@@ -177,13 +202,13 @@ msgstr ""
 msgid "Edit documents"
 msgstr "Редактиране на документи"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
-msgstr "Редактиране на няколко електронни писма"
-
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Editing multiple contacts"
 msgstr "Редактиране на няколко контакта"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Editing multiple emails"
+msgstr "Редактиране на няколко електронни писма"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -194,9 +219,14 @@ msgid "Editing settings"
 msgstr "Редактиране на настройките"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "Enter the E-Mail text into the main area. If the text format was set to "
+#| "HTML in the options, you can format the E-Mail text. To do so select a "
+#| "text part and then click an icon in the formatting bar."
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTML "
-"in the options, you can format the E-Mail text. To do so select a text part "
+"Enter the email text into the main area. If the text format was set to HTML "
+"in the options, you can format the email text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
 "Въведете текста на електронната поща в главната област. Ако форматът на "
@@ -234,13 +264,13 @@ msgstr "Въведете обекта, началната дата и описа
 msgid "Entering billing information"
 msgstr "Въвеждане на информация за плащане"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
-msgstr "Въвеждане на текста на електронната поща"
-
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
 msgstr "Въвеждане на данните за събитие"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the email text"
+msgstr "Въвеждане на текста на електронната поща"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Entering the recipient's name"
@@ -309,8 +339,12 @@ msgid "How the settings are organized"
 msgstr "Как се организират настройките"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+#| "separate window."
 msgid ""
-"If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+"If double-clicking on an email in the list, the email is opened in a "
 "separate window."
 msgstr ""
 "Ако щракнете двукратно върху електронна поща в списъка, електронната поща се "
@@ -322,9 +356,14 @@ msgstr ""
 "Ако вече не искате да показвате квадрат, кликнете върху иконата за изтриване."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "In order to edit multiple E-Mails at once, enable the checkboxes on the "
+#| "left side of the E-Mails. If the checkboxes are not displayed, click on "
+#| "View > Checkboxes on the right side of the toolbar."
 msgid ""
-"In order to edit multiple E-Mails at once, enable the checkboxes on the left "
-"side of the E-Mails. If the checkboxes are not displayed, click on View > "
+"In order to edit multiple emails at once, enable the checkboxes on the left "
+"side of the emails. If the checkboxes are not displayed, click on View > "
 "Checkboxes on the right side of the toolbar."
 msgstr ""
 "За да редактирате едновременно няколко имейла, активирайте квадратчетата за "
@@ -350,6 +389,10 @@ msgstr "Стартиране на приложение"
 msgid "Navigation bar"
 msgstr "Навигационна лента"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr ""
+
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "On the left you can see the folder tree. It displays your folder structure "
@@ -363,7 +406,7 @@ msgstr ""
 "снимки и видеоклипове."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "Отваряне на електронна поща в отделен прозорец"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -371,7 +414,7 @@ msgid "Opening or closing the folder tree"
 msgstr "Отваряне или затваряне на дървото на папките"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "Отваряне на настройките за електронна поща"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -391,16 +434,24 @@ msgid "Preview mode"
 msgstr "Режим на визуализация"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "Четене на разговори по електронната поща"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "Четене на подробностите"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr ""
+
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Търсене на обекти"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Select a view"
@@ -410,12 +461,18 @@ msgstr "Изберете изглед"
 msgid "Selecting a view"
 msgstr "Избиране на изглед"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr ""
+
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "Изпращане на електронна поща до контакт"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "Изпращане на електронната поща"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -447,8 +504,12 @@ msgid "Sorting tasks"
 msgstr "Сортиране на задачи"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "Сортиране на имейлите ви"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The Detail view"
@@ -490,8 +551,12 @@ msgid "The Portal"
 msgstr "Порталът"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "The Portal informs you about current E-Mails, appointments or social "
+#| "network news."
 msgid ""
-"The Portal informs you about current E-Mails, appointments or social network "
+"The Portal informs you about current emails, appointments or social network "
 "news."
 msgstr ""
 "Порталът ви информира за текущите имейли, срещи или новини в социалните "
@@ -528,9 +593,13 @@ msgid "The list"
 msgstr "Списъкът"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "The settings are organized in topics. Select the topic on the left side, "
+#| "e.g Basic settings or E-Mail."
 msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
-"Basic settings or E-Mail."
+"Basic settings or Mail."
 msgstr ""
 "Настройките са организирани по теми. Изберете темата отляво, например "
 "Основни настройки или Електронна поща."
@@ -538,6 +607,12 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The toolbar"
 msgstr "Лента с инструменти"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
@@ -563,24 +638,22 @@ msgstr ""
 "позиция и го поставете там."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To choose between the different views. click on View in the toolbar. "
+#| "Select a menu entry in the layout."
 msgid ""
-"To choose between the different views. click on View in the toolbar. Select "
+"To choose between the different views, click on View in the toolbar. Select "
 "a menu entry in the layout."
 msgstr ""
 "Да избирате между различните изгледи. Кликнете върху Изглед в лентата с "
 "инструменти. Изберете елемент от менюто в оформлението."
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+#: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/mail.js
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "За да създадете нова електронна поща, кликнете върху \"Изготвяне\" в лентата "
 "с инструменти."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
-msgstr ""
-"За да създадете нова електронна поща, кликнете върху \"Създаване на нова "
-"електронна поща\" в лентата с инструменти."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
@@ -698,8 +771,12 @@ msgid "To not miss the task, use the reminder function."
 msgstr "За да не пропуснете задачата, използвайте функцията за напомняне."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open or close an E-Mail in a conversation, click on a free area in the "
+#| "header."
 msgid ""
-"To open or close an E-Mail in a conversation, click on a free area in the "
+"To open or close an email in a conversation, click on a free area in the "
 "header."
 msgstr ""
 "За да отворите или затворите електронна поща в разговор, кликнете върху "
@@ -714,9 +791,14 @@ msgstr ""
 "върху Изглед> Преглед на папки от дясната страна на лентата с инструменти."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the E-Mail settings, click the System menu icon on the upper "
+#| "right side of the menu bar. Select Settings. Click on E-Mail on the left "
+#| "side."
 msgid ""
-"To open the E-Mail settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on E-Mail on the left side."
+"To open the email settings, click the System menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
 "За да отворите настройките за електронна поща, кликнете върху иконата на "
 "системното меню в горната дясна част на лентата с менюта. Изберете "
@@ -770,15 +852,19 @@ msgstr ""
 "Изглед в лентата с инструменти. Изберете запис от менюто от секцията Layout."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To send an E-Mail to the contact, click on an E-Mail address or on Send "
+#| "email in the toolbar."
 msgid ""
-"To send an E-Mail to the contact, click on an E-Mail address or on Send "
-"email in the toolbar."
+"To send an email to the contact, click on an email address or on Send email "
+"in the toolbar."
 msgstr ""
 "За да изпратите електронна поща на контакта, кликнете върху адрес на "
 "електронна поща или върху Изпращане на имейл в лентата с инструменти."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "За да изпратите електронната поща, кликнете върху Изпращане"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -798,7 +884,7 @@ msgstr ""
 "горната дясна част на лентата с менюта. Изберете Изход."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 "За да сортирате имейлите, кликнете върху Сортиране по. Изберете критерии за "
 "сортиране."
@@ -857,6 +943,11 @@ msgstr ""
 msgid "Using the reminder function"
 msgstr "Използване на функцията за напомняне"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr ""
+
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "Добре дошли в %s"
@@ -873,6 +964,12 @@ msgstr ""
 "до онлайн съхранените файлове от всичките ви профили. Тук можете да качвате "
 "и запазвате файловете си, да ги споделяте и да ги синхронизирате с различни "
 "устройства.  "
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
 
 #~ msgid ""
 #~ "Hint: you can always restart guided tours, any time you need them, from "

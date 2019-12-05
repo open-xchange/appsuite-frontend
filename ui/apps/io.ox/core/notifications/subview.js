@@ -297,7 +297,7 @@ define('io.ox/core/notifications/subview', [
             }
         },
         //removes a notification from view and puts it in the hidden collection
-        //does not redraw the whole view or fire requests
+        //does not redraw the whole view or fire requests (exeption: there are more notifications than the max number, in that case we have to redraw to get a new one)
         //if there is 0 items left to display, hides the view
 
         // BE SURE TO REMOVE IT FROM THE HIDDEN COLLECTION WHEN THE REQUEST IS DONE OR IT CANNOT BE READDED
@@ -310,11 +310,12 @@ define('io.ox/core/notifications/subview', [
 
             if (obj) {
                 this.hiddenCollection.add(obj);
+                var aboveLimit = this.collection.size() > this.model.get('max');
                 this.removeNotifications(obj, true);
 
                 this.$el.find('[data-cid="' + _.cid(data) + '"]').remove();
 
-                if (this.collection.size() === 0) {
+                if (this.collection.size() === 0 || aboveLimit) {
                     this.render(this.$el.parent());
                 }
                 this.trigger('responsive-remove');
@@ -400,7 +401,9 @@ define('io.ox/core/notifications/subview', [
             }
 
             // smartRemove removes the item without redrawing (manual remove of the nodes)
+            // redraw only when hitting 0 or when we are above the max number of notifications (to render a new one)
             if (this.model.get('smartRemove')) {
+                var aboveLimit = this.collection.size() > this.model.get('max');
                 this.collection.remove(items, { silent: true });
                 var self = this;
 
@@ -409,7 +412,7 @@ define('io.ox/core/notifications/subview', [
                     self.$el.find('[data-cid="' + _.cid(item) + '"],[model-cid="' + _.cid(item) + '"]').remove();
                 });
 
-                if (this.collection.size() === 0) {
+                if (this.collection.size() === 0 || aboveLimit) {
                     this.render(this.$el.parent());
                 }
                 this.trigger('responsive-remove');

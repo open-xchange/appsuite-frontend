@@ -57,7 +57,7 @@ function createFilterRule(I, name, action) {
 
 }
 
-Scenario('[C7801] Keep filtered mail', async function (I, users) {
+Scenario('[C7801] Keep filtered mail', async function (I, users, mail) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -66,22 +66,20 @@ Scenario('[C7801] Keep filtered mail', async function (I, users) {
     createFilterRule(I, 'C7801', 'Keep');
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
 
     // compose mail
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.newMail();
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'C7801');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
-    I.click('Send');
-    I.waitForElement('~Sent, 1 total');
-    I.waitForElement('~Inbox, 1 unread, 1 total');
+    mail.send();
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.see('C7801', '.subject');
 });
 
@@ -108,7 +106,7 @@ Scenario('[C7802] Discard filtered mail', async function (I, users) {
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
     I.click('Send');
-    I.waitForElement('~Sent, 1 total');
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
     I.wait(1);
     I.seeElement('~Inbox');
 
@@ -124,7 +122,7 @@ Scenario('[C7803] Redirect filtered mail', async function (I, users) {
     I.fillField('to', users[1].get('primaryEmail'));
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
 
@@ -139,14 +137,14 @@ Scenario('[C7803] Redirect filtered mail', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total');
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
     I.wait(1);
     I.seeElement('~Inbox');
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[1] });
-    I.waitForElement('~Inbox, 1 unread, 1 total');
-    I.see('TestCase0388', '.subject');
+    I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
+    I.waitForText('TestCase0388', 5, '.subject');
 
 });
 
@@ -157,24 +155,22 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
-    await I.haveFolder(folder, 'mail', 'default0/INBOX');
+    await I.haveFolder({ title: folder, module: 'mail', parent: 'default0/INBOX' });
 
     createFilterRule(I, 'TestCase0389', 'File into');
     I.click('Select folder');
-    I.waitForElement('.folder-picker-dialog');
+    I.waitForVisible(locate('.folder-picker-dialog [data-id="virtual/myfolders"] .folder-arrow'));
 
-    I.waitForElement(locate('[role="presentation"]').withText('ox-e2e-backend.novalocal'));
-
-    I.click('[data-id="virtual/myfolders"] .folder-arrow', '.folder-picker-dialog');
-    I.waitForElement(`[data-id="default0/INBOX/${folder}"]`, '.folder-picker-dialog');
-    I.click(`[data-id="default0/INBOX/${folder}"]`, '.folder-picker-dialog');
-    I.waitForElement(`[data-id="default0/INBOX/${folder}"].selected`, '.folder-picker-dialog');
+    I.click('.folder-picker-dialog [data-id="virtual/myfolders"] .folder-arrow');
+    I.waitForVisible(`.folder-picker-dialog [data-id="default0/INBOX/${folder}"]`, 5);
+    I.click(`.folder-picker-dialog [data-id="default0/INBOX/${folder}"]`);
+    I.waitForVisible(`.folder-picker-dialog [data-id="default0/INBOX/${folder}"].selected`, 5);
     I.wait(1);
     I.click('Ok');
 
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
 
@@ -189,15 +185,15 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total');
+    I.waitForVisible('~Sent, 1 total. Right click for more options.', 30);
     I.wait(1);
-    I.waitForElement('~Inbox');
-    I.click('[data-id="virtual/myfolders"] .folder-arrow', '.io-ox-mail-window .window-sidepanel');
-    I.waitForElement(`[data-id="default0/INBOX/${folder}"]`, '.io-ox-mail-window .window-sidepanel');
-    I.click(`[data-id="default0/INBOX/${folder}"]`, '.io-ox-mail-window .window-sidepanel');
-    I.waitForElement(`[data-id="default0/INBOX/${folder}"].selected`, '.io-ox-mail-window .window-sidepanel');
+    I.waitForVisible('~Inbox', 30);
+    I.click('.io-ox-mail-window .window-sidepanel [data-id="virtual/myfolders"] .folder-arrow');
+    I.waitForVisible(`.io-ox-mail-window .window-sidepanel [data-id="default0/INBOX/${folder}"]`, 5);
+    I.click(`.io-ox-mail-window .window-sidepanel [data-id="default0/INBOX/${folder}"]`);
+    I.waitForVisible(`.io-ox-mail-window .window-sidepanel [data-id="default0/INBOX/${folder}"].selected`, 5);
     I.wait(1);
-    I.waitForElement('~TestCase0389, 1 unread');
+    I.waitForVisible('~TestCase0389, 1 unread. Right click for more options.', 30);
     I.see('TestCase0389', '.subject');
 
 });
@@ -247,7 +243,7 @@ Scenario('[C7806] Mark mail as filtered mail', async function (I, users) {
 
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
 
@@ -262,9 +258,8 @@ Scenario('[C7806] Mark mail as filtered mail', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total');
-    I.wait(1);
-    I.waitForElement('~Inbox, 1 total');
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 1 total. Right click for more options.', 30);
 
 });
 
@@ -278,7 +273,7 @@ Scenario('[C7807] Tag mail with filtered mail', async function (I, users) {
 
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
 
@@ -293,9 +288,9 @@ Scenario('[C7807] Tag mail with filtered mail', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total');
-    I.waitForElement('~Inbox, 1 unread, 1 total');
-    I.seeElement('.vsplit .flag_1');
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
+    I.waitForElement('.vsplit .flag_1', 30);
 
 });
 
@@ -312,7 +307,7 @@ Scenario('[C7809] Mark mail as deleted filtered mail', async function (I, users)
 
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
 
@@ -327,8 +322,8 @@ Scenario('[C7809] Mark mail as deleted filtered mail', async function (I, users)
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total');
-    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
+    I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.see('TestCase0394', '.unread.deleted .subject');
 
 });

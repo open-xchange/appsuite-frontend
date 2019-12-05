@@ -101,11 +101,10 @@
     function toggle(e, f) {
         var $this = $(this),
             $parent = getParent($this),
-            dontProcessOnMobile = $parent.attr('dontProcessOnMobile'),
+            dontProcessOnMobile = !!$parent.attr('dontProcessOnMobile'),
             isActive = $parent.hasClass('open');
 
         if ($this.is('.disabled, :disabled')) return;
-
         // on a phone detach the menu and attach it to the body again
         // with position fixed. Then it will be a modal menu in fullscreen
         if (phone && !dontProcessOnMobile) {
@@ -137,7 +136,6 @@
                 // may be not the case if a menu point is added after menu was
                 // initial moved to the body by the code above
                 var menu = $parent.data('menu');
-                console.log(menu);
                 if (!menu.find('[data-action="close-menu"]').parent().is(':last-child')) {
                     menu.find('[data-action="close-menu"]').parent().appendTo(menu);
                 }
@@ -168,7 +166,7 @@
             var relatedTarget = { relatedTarget: $this.get(0) };
             $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget));
 
-            activeElement = $(document.activeElement);
+            activeElement = $(this);
 
             if (e.isDefaultPrevented()) return;
 

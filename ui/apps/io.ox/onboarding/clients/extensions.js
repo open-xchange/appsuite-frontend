@@ -14,10 +14,11 @@
 define('io.ox/onboarding/clients/extensions', [
     'io.ox/backbone/mini-views/common',
     'io.ox/onboarding/clients/api',
+    'io.ox/backbone/views/modal',
     'io.ox/core/yell',
     'io.ox/core/extensions',
     'gettext!io.ox/core/onboarding'
-], function (mini, api, yell, ext, gt) {
+], function (mini, api, ModalDialog, yell, ext, gt) {
 
     'use strict';
 
@@ -46,6 +47,12 @@ define('io.ox/onboarding/clients/extensions', [
         enable: function (obj) {
             $(obj.target || obj).removeClass('disabled');
             $(obj.target || obj).prop('disabled', false);
+        },
+        showWizard: function () {
+            $('.client-onboarding, .wizard-backdrop').show();
+        },
+        hideWizard: function () {
+            $('.client-onboarding, .wizard-backdrop').hide();
         }
     };
 
@@ -77,9 +84,9 @@ define('io.ox/onboarding/clients/extensions', [
         getToggleNode: function () {
             var id = _.uniqueId('description');
             return [
-                $('<div class="sr-only">').attr('id', id).text(gt('Show or hide actions for advanced users.')),
-                $('<a href="#" class="toggle-link" data-value="to-advanced">').attr('aria-describedby', id).text(gt('Expert user?')),
-                $('<a href="#" class="toggle-link" data-value="to-simple">').attr('aria-describedby', id).text(gt('Hide options for expert users.'))
+                $('<div class="sr-only">').attr('id', id).text(gt('Show or hide alternative options for advanced users.')),
+                $('<a href="#" class="toggle-link" data-value="to-advanced">').attr('aria-describedby', id).text(gt('Show more options')),
+                $('<a href="#" class="toggle-link" data-value="to-simple">').attr('aria-describedby', id).text(gt('Show less options'))
             ];
         },
 
@@ -280,6 +287,7 @@ define('io.ox/onboarding/clients/extensions', [
                 prefix = this.model.get('code');
             // remove everything except digits and '+'
             local = local.replace(/[^\d+]+/g, '');
+            prefix = prefix.replace(/[^\d+]+/g, '');
             // 0049... -> +49...
             local = local.replace(/^00/, '+');
             // valid country code entered?
@@ -309,11 +317,32 @@ define('io.ox/onboarding/clients/extensions', [
                 };
             // call
             util.disable(e);
-            api.execute(scenario, action, data)
+
+            // show modal only
+            util.hideWizard();
+
+            new ModalDialog({
+                title: gt('Please confirm'),
+                width: 600
+            })
+            .build(function () {
+                //#. %1$s: a cell phone number
+                this.$body.text(gt('Link will be sent to %1$s', data.sms));
+            })
+            .addCancelButton({ left: true })
+            .addButton({ action: 'apply', label: gt('Send') })
+            .on('apply', function () {
+                api.execute(scenario, action, data)
                 .always(yellError)
                 .done(_.partial(util.addIcon, e))
                 .fail(_.partial(util.removeIcons, e))
                 .fail(_.partial(util.enable, e));
+            })
+            .on('cancel', function () {
+                util.showWizard();
+                util.enable(e);
+            })
+            .open();
         }
     });
 
@@ -440,7 +469,7 @@ define('io.ox/onboarding/clients/extensions', [
                         // action
                         $('<button type="button" class="btn btn-primary action-call">')
                             .attr('aria-describedby', ref)
-                            .text(gt('Configure now'))
+                            .text(gt('Download profile'))
                     )
                 );
             return this;

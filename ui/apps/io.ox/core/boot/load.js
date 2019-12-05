@@ -23,8 +23,9 @@ define('io.ox/core/boot/load', [
     'io.ox/core/capabilities',
     'io.ox/core/manifests',
     'io.ox/core/sockets',
+    'io.ox/core/locale',
     'io.ox/core/moment'
-], function (themes, gettext, ext, config, util, session, http, coreSettings, capabilities, manifests, socket) {
+], function (themes, gettext, ext, config, util, session, http, coreSettings, capabilities, manifests, socket, locale) {
 
     'use strict';
 
@@ -35,26 +36,34 @@ define('io.ox/core/boot/load', [
     }, {
         id: 'i18n',
         run: function (baton) {
+            var language = locale.deriveSupportedLanguageFromLocale(baton && baton.sessionData && baton.sessionData.language || ox.locale);
             // apply session data (again) & page title
             if (baton.sessionData) session.set(baton.sessionData);
             ox.trigger('change:document:title');
             // load UI
-            util.debug('Load UI > load i18n plugins and set current language', ox.language);
+            util.debug('Load UI > load i18n plugins and set current locale', ox.locale);
 
             // signin phase is over (important for gettext)
             ox.signin = false;
 
-            // we have to clear the device function cache or there might be invalid return values, like for example wrong language data.(see Bug 51405)
+            // we have to clear the device function cache or there might be invalid return values, like for example wrong locale data (see Bug 51405).
             _.device.cache = {};
             // make sure we have loaded precore.js now
+            ox.language = language;
             return $.when(
                 require([ox.base + '/precore.js']),
-                gettext.setLanguage(ox.language),
+                gettext.setLanguage(language),
                 manifests.manager.loadPluginsFor('i18n')
             ).then(function () {
-                util.debug('Load UI > current language and i18n plugins DONE.');
+                util.debug('Load UI > current locale and i18n plugins DONE.');
                 gettext.enable();
             });
+        }
+    }, {
+        id: 'locale',
+        run: function () {
+            // run after language is set
+            return require(['io.ox/core/locale']);
         }
     }, {
         id: 'warnings',
@@ -69,9 +78,14 @@ define('io.ox/core/boot/load', [
         run: function () {
             util.debug('Load "tabHandling"');
 
-            if (!util.checkTabHandlingSupport()) return;
+            require(['io.ox/core/api/tab']).then(function (tabAPI) {
 
-            require(['io.ox/core/api/tab']);
+                if (!util.checkTabHandlingSupport()) {
+                    return tabAPI.disable();
+                }
+
+                return tabAPI.enable();
+            });
         }
     }, {
         id: 'multifactor',

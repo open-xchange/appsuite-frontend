@@ -1,6 +1,6 @@
 ---
-title: Analytics solutions 
-description: 
+title: Analytics solutions
+description:
 ---
 
 # PIWIK
@@ -40,7 +40,7 @@ The script provided by PIWIK will look like this:
       // in this line you can see the site id that we need to add as property
       _paq.push(['setSiteId', 1]);
       var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-      g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js';     
+      g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js';
       s.parentNode.insertBefore(g,s);
     })();
   </script>
@@ -71,7 +71,8 @@ _generated PIWIK script_
 _appsuite property_
 
 ```javascript
-    io.ox/core//tracking/piwik/url=https://metrics.example.com/piwik/
+    io.ox/core//tracking/piwik/url/lib=https://metrics.example.com/piwik/piwik.js
+    io.ox/core//tracking/piwik/url/api=https://metrics.example.com/piwik/piwik.php
 ```
 
 ### siteId
@@ -117,7 +118,7 @@ Unfortunatly PIWIK limits the maximal length of custom variable values to [200 c
 
 # Google Analytics
 
-With this easy step-by-step guide it should be quite simple to setup PIWIK and adjust the relevant properties to start tracking. Documentation about the corresponding front end adapter can be found [here](02-adapters.html#piwik).
+With this easy step-by-step guide it should be quite simple to setup Google Analytics and adjust the relevant properties to start tracking. Documentation about the corresponding front end adapter can be found [here](02-adapters.html).
 
 ## Preconditions
 

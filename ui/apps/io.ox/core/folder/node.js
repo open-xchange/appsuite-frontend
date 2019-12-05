@@ -246,23 +246,26 @@ define('io.ox/core/folder/node', [
 
         // respond to cursor left/right
         onKeydown: function (e) {
-            // already processed or not cursor right/left
-            if (e.isDefaultPrevented() || !/37|39/.test(e.which)) return;
+            // already processed or not cursor right/left, enter or space
+            if (e.isDefaultPrevented() || !/^(13|32|37|39)$/.test(e.which)) return;
 
             e.preventDefault();
-            // skip cursor right unless folder has subfolders
-            if (!this.hasSubFolders() && e.which === 39) return;
+            // skip cursor right, space and enter unless folder has subfolders
+            if (!this.hasSubFolders() && /^(13|32|39)$/.test(e.which)) return;
             var o = this.options;
 
+            // enter and space on virtual folders
+            if (/^(13|32)$/.test(e.which) && this.isVirtual) this.toggle(!o.open);
+
             // cursor right
-            if (e.which === 39) {
+            else if (e.which === 39) {
                 if (!o.open && e.which === 39) this.toggle(true); // open subfolders if subfolders are closed
                 else this.$el.find('ul.subfolders:first > li:first-child').trigger('click'); // select first subfolder if folder has subfolder and subfolders are open
 
             // cursor left
             } else if (e.which === 37) {
                 if (o.open) this.toggle(false); // close folder with subfolders
-                else if (o.indent && o.level > 0) o.parent.$el.trigger('click'); // move up one folder (parent)
+                else if (o.indent && o.level >= 0) o.parent.$el.trigger('click'); // move up one folder (parent)
             }
         },
 
@@ -523,7 +526,7 @@ define('io.ox/core/folder/node', [
                 summary = summary.join(', ');
                 a11ysummary = a11ysummary.reverse().join(', ');
                 if (summary) summary = ' (' + summary + ')';
-                if (a11ysummary) a11ysummary = ', ' + a11ysummary;
+                if (a11ysummary) a11ysummary = ', ' + a11ysummary + '. ' + gt('Right click for more options.');
             }
             this.$el.attr('aria-label', this.getTitle() + a11ysummary + this.getA11yDescription());
             this.$.selectable.attr('title', this.getTitle() + summary);

@@ -575,8 +575,6 @@ define('io.ox/mail/listview', [
             data.thread = thread;
             // set subject to first message in thread so a Thread has a constant subject
             data.subject = api.threads.subject(data) || data.subject || '';
-            // get text preview
-            data.text_preview = model.get('text_preview');
             // done
             return data;
         },

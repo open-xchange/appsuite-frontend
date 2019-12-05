@@ -42,6 +42,9 @@ body {
         overflow-x: auto;
     }
 
+    .smartphone & {
+        font-size: @sm-mail-detail-font-size;
+    }
     // use display: table to cover padding/margin/float issues at the bottom
     //display: table;
 
@@ -124,7 +127,7 @@ body {
     .calendar-detail .label {
         display: block;
         text-shadow: none;
-        .fontWeight(normal);
+        font-weight: normal;
         background-color: transparent;
     }
 
@@ -153,7 +156,6 @@ body {
         font-feature-settings: "liga" 0;
         line-height: normal;
         border-collapse: collapse;
-        height: initial !important;
     }
 
     ul, ol {

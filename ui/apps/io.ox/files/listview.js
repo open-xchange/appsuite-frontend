@@ -39,7 +39,7 @@ define('io.ox/files/listview', [
 
             ListView.prototype.initialize.apply(this, arguments);
             this.contextMenu = options.contextMenu;
-            this.$el.addClass('file-list-view');
+            this.$el.attr('aria-label', gt('List view')).addClass('file-list-view');
 
             updateSettings.call(this);
             settings.on('change:favorites/infostore', updateSettings.bind(this));

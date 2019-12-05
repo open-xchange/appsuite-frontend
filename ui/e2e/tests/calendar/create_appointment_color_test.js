@@ -14,7 +14,7 @@
 /// <reference path="../../steps.d.ts" />
 
 const expect = require('chai').expect;
-Feature('Calendar Create');
+Feature('Calendar > Create');
 
 Before(async (users) => {
     await users.create();
@@ -28,7 +28,7 @@ After(async (users) => {
 //helper function for creating appointments, added ability to select color
 let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) => {
     // select calendar
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForText('Appointments in public calendar');
     I.click('Create in public calendar');
     I.waitForVisible('.io-ox-calendar-edit-window');
@@ -39,10 +39,10 @@ let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) 
         I.click(startTime);
     }
     if (color) {
-        I.click('Appointment color');
-        I.waitForVisible('.io-ox-calendar-color-picker-container');
+        I.click('Appointment color', '.color-picker-dropdown');
+        I.waitForElement('.color-picker-dropdown.open');
         I.click(locate('a')
-            .inside('.smart-dropdown-container.dropdown.open')
+            .inside('.color-picker-dropdown.open')
                 .withAttr({ title: color }));
     }
 
@@ -51,7 +51,7 @@ let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) 
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 };
 
-Scenario('[C264519] Create appointments with colors in public folder @shaky', async function (I, users) {
+Scenario.skip('[C264519] Create appointments with colors in public folder', async function (I, users) {
 
     let [user_a, user_b] = users;
     let selectInsideFolder = (node) => locate(node)
@@ -71,33 +71,36 @@ Scenario('[C264519] Create appointments with colors in public folder @shaky', as
     I.waitForVisible('.modal-body');
     I.checkOption('Add as public calendar');
     I.click('Add');
-    I.waitForVisible('#io-ox-core');
+    I.waitToHide('.modal');
     I.wait(1);
     // give user b permissions
     I.click('.fa.fa-caret-right');
     I.selectFolder('New calendar');
     I.click(selectInsideFolder('a'));
-    I.waitForText('Permissions');
-    I.click('Permissions');
+    I.waitForText('Permissions / Invite people');
+    I.click('Permissions / Invite people');
     I.waitForFocus('.form-control.tt-input');
     I.fillField('.form-control.tt-input', user_b.get('primaryEmail'));
     I.pressKey('Enter');
     I.click('Save');
+    I.waitForDetached('.modal');
     //create 2 test appointments with different colors
-    createAppointment({ subject: 'testing is fun', folder: 'New calendar', startTime: '8:00', color: 'dark green' });
-    createAppointment({ subject: 'testing is awesome', folder: 'New calendar', startTime: '10:00', color: 'dark cyan' });
+    createAppointment({ subject: 'testing is fun', folder: 'New calendar', startTime: '8:00 AM', color: 'dark green' });
+    createAppointment({ subject: 'testing is awesome', folder: 'New calendar', startTime: '10:00 AM', color: 'dark cyan' });
     I.logout();
     //login user b
     I.waitForVisible('#io-ox-login-screen');
     I.login('app=io.ox/calendar', { user: user_b });
+    I.waitForVisible('.fa.fa-caret-right');
     I.click('.fa.fa-caret-right');
     I.selectFolder('New calendar');
     I.click(selectInsideFolder('div.color-label'));
     //check if public appointments are there
     I.see('testing is fun', '.workweek .appointment .title-container');
     I.see('testing is awesome', '.workweek .appointment .title-container');
-    //see if appointment colors are still the standard folder color
-    const [folderColor] = await I.grabCssPropertyFrom(selectInsideFolder('div.color-label'), 'background-color');
-    let [appointmentColor] = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
-    expect(folderColor).equal(appointmentColor);
+    //see if appointment colors still drawn with customized color (See Bug 65410)
+    const appointmentColors = (await I.grabCssPropertyFrom('.workweek .appointment', 'backgroundColor'))
+        // webdriver resolves with rgba, puppeteer with rgb for some reason
+        .map(c => c.indexOf('rgba') === 0 ? c : c.replace('rgb', 'rgba').replace(')', ', 1)'));
+    expect(appointmentColors).to.deep.equal(['rgba(55, 107, 39, 1)', 'rgba(57, 109, 123, 1)']);
 });

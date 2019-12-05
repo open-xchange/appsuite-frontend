@@ -29,18 +29,19 @@ Scenario('[C83383] mail folders using “Permisions” dialog', async (I, users)
     I.login('app=io.ox/mail');
     I.waitForText('Spam', 5, '.folder-tree');
     I.selectFolder('Spam');
-    I.click({ css: '.folder-tree [title="Actions for Spam"]' });
-    I.click(locate('a').withText('Permissions').inside('.dropdown'));
+    I.openFolderMenu('Spam');
+    I.clickDropdown('Permissions');
+    I.waitForText('Permissions for folder');
     I.click('~Select contacts');
     I.waitForElement('.modal .list-view.address-picker li.list-item');
     I.fillField('Search', users[1].get('name'));
     I.waitForText(users[1].get('name'), 5, '.address-picker');
-    I.click('.address-picker .list-item');
+    I.waitForText(users[1].get('primaryEmail'));
+    I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
     I.click({ css: 'button[data-action="select"]' });
     I.waitForElement(locate('.permissions-view .row').at(2));
     I.click('Author');
-    I.waitForText('Viewer', '.dropdown');
-    I.click('Viewer');
+    I.clickDropdown('Viewer');
 
     I.click('Save', '.modal');
     I.waitToHide('.modal');
@@ -57,6 +58,6 @@ Scenario('[C83383] mail folders using “Permisions” dialog', async (I, users)
         I.click('View folder');
     });
     I.waitForText('Empty', 5, '.list-view');
-    I.see(`${users[0].get('name')}`, '.folder-tree');
+    I.waitForText(`${users[0].get('name')}`, 10, '.folder-tree');
     I.see('Spam', '.folder-tree [data-id="default0/shared"]');
 });

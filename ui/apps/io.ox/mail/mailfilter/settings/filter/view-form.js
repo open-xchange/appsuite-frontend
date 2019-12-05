@@ -12,13 +12,12 @@
  */
 
 define('io.ox/mail/mailfilter/settings/filter/view-form', [
-    'io.ox/core/notifications',
     'gettext!io.ox/settings',
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/dropdown',
     'settings!io.ox/core'
-], function (notifications, gt, ext, mini, Dropdown, coreSettings) {
+], function (gt, ext, mini, Dropdown, coreSettings) {
 
     'use strict';
 
@@ -127,6 +126,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             },
             events: {
                 'save': 'onSave',
+                'apply': 'onApply',
                 'click [data-action=change-dropdown-value]': 'onChangeDropdownValue',
                 'click [data-action="change-color"]': 'onChangeColor',
                 'click [data-action="remove-test"]': 'onRemoveTest',
@@ -137,8 +137,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             onToggleSaveButton: function () {
                 if (this.$el.find('.has-error, .alert-danger').length === 0) {
                     this.dialog.$el.find('.modal-footer [data-action="save"]').prop('disabled', false);
+                    this.dialog.$el.find('.modal-footer [data-action="apply"]').prop('disabled', false);
                 } else {
                     this.dialog.$el.find('.modal-footer [data-action="save"]').prop('disabled', true);
+                    this.dialog.$el.find('.modal-footer [data-action="apply"]').prop('disabled', true);
                 }
             },
 
@@ -308,7 +310,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     this.model.set('actioncmds', actionArray);
                 }
 
-                this.model.save().then(function (id) {
+                return this.model.save().then(function (id) {
                     //first rule gets 0
                     if (!_.isUndefined(id) && !_.isNull(id) && !_.isUndefined(self.listView)) {
                         self.model.set('id', id);
@@ -319,6 +321,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     }
                     self.dialog.close();
                 }, self.dialog.idle);
+            },
+
+            onApply: function () {
+                var model = this.model;
+                return this.onSave().then(function () {
+                    model.trigger('apply');
+                });
             },
 
             onChangeDropdownValue: function (e) {

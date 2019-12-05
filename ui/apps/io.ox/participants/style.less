@@ -32,10 +32,11 @@
 }
 
 .participant-wrapper {
-    margin-bottom: 2px;
+
+    margin-bottom: 8px;
     position: relative;
-    min-height: 54px; /* for floating icon */
-    line-height: 20px;
+    min-height: 56px; /* for floating icon */
+    line-height: 16px;
 
     .autocomplete-item & { margin: 0; }
 
@@ -93,9 +94,8 @@
     }
 
     &.three-rows {
-        line-height: 18px;
-
-        .participant-name { padding-top: 0; }
+        line-height: 16px;
+        .participant-name { padding-top: 4px; }
     }
 
     .participant-image {
@@ -200,9 +200,8 @@
         padding-top: 5px;
 
         .participant {
-            vertical-align: top;
-            width: 250px;
-            margin: 0 20px 8px 0;
+            width: 100%;
+            margin: 0 0px 8px 0;
             line-height: 24px;
 
             &:focus {
@@ -215,9 +214,6 @@
                padding-top: 1px;
 
                .ellipsis();
-                // icons and padding need 28px
-                max-width: 222px;
-                display: inline-block;
 
                 &.accepted { color: @participant-accepted; }
 

@@ -74,8 +74,8 @@ define('io.ox/core/main/appcontrol', [
                 if (ox.tabHandlingEnabled && this.model.get('openInTab')) {
                     // we must stay synchronous to prevent popup-blocker
                     // we can be sure that 'io.ox/core/api/tab' is cached when 'ox.tabHandlingEnabled' is true
-                    var TabAPI = require('io.ox/core/api/tab');
-                    TabAPI.TabHandling.openChild(this.model.get('tabUrl'));
+                    var tabAPI = require('io.ox/core/api/tab');
+                    tabAPI.openChildTab(this.model.get('tabUrl'));
                     return;
                 }
                 ox.launch(this.model.get('path'));
@@ -117,28 +117,31 @@ define('io.ox/core/main/appcontrol', [
             this.$icon.attr('aria-hidden', true);
 
             // reverted for 7.10
-            // if (settings.get('coloredIcons', false)) this.$icon.addClass('colored');
+            if (settings.get('coloredIcons', false)) this.$icon.addClass('colored');
 
             if (id === 'io.ox/calendar' || /calendar/.test(this.model.getName())) this.drawDate();
 
-            var cell = $('<div class="lcell" aria-hidden="true">').append(
+            this.$cell = $('<div class="lcell">').append(
                 // important: do not add circle element via append (https://stackoverflow.com/a/3642265)
-                this.badge = $('<svg height="8" width="8" class="indicator"><circle cx="4" cy="4" r="4"></svg>')
+                this.badge = $('<svg height="8" width="8" class="indicator" focusable="false"><circle cx="4" cy="4" r="4"></svg>')
                     .toggleClass('hidden', !this.model.get('hasBadge')),
                 $('<div class="icon">').append(this.$icon),
                 $('<div class="title">').text(this.model.get('title'))
             );
             // checks for upsell and append an icon if needed
-            this.drawUpsellIcon(cell.find('.title'));
-            return cell;
+            this.drawUpsellIcon(this.$cell.find('.title'));
+            return this.$cell;
         },
         toggleBadge: function () {
             this.badge.toggleClass('hidden', !this.model.get('hasBadge'));
         },
         updateTooltip: function () {
-            var tooltipAttribute = this.quicklaunch ? 'title' : 'aria-label';
-            var tooltip = this.model.get('tooltip') ? ' (' + this.model.get('tooltip') + ')' : '';
-            this.$el.attr(tooltipAttribute, this.model.get('title') + tooltip);
+            if (!this.quicklaunch) return;
+            var tooltip = this.model.get('tooltip'),
+                title = this.model.get('title');
+            tooltip = title + (tooltip ? ' (' + tooltip + ')' : '');
+            this.$el.attr('aria-label', tooltip);
+            this.$cell.attr({ 'aria-hidden': true, 'title': tooltip });
         },
         updateTitle: function (model, newTitle) {
             var $title = this.icon.find('.title');
@@ -159,10 +162,7 @@ define('io.ox/core/main/appcontrol', [
     });
 
     var api = {
-        quickLaunchLimit: 3,
-        /*getQuickLauncherLimit: function () {
-            return settings.get('apps/quickLaunchLimit', 3);
-        },*/
+        quickLaunchLimit: 5,
         getQuickLauncherCount: function () {
             var n = settings.get('apps/quickLaunchCount', 3);
             if (!_.isNumber(n)) return 0;
@@ -208,7 +208,8 @@ define('io.ox/core/main/appcontrol', [
             'role': 'toolbar'
         },
         events: {
-            'click button': 'onClick'
+            'click button': 'onClick',
+            'contextmenu': 'onContextmenu'
         },
         initialize: function () {
             this.collection = new QuickLaunchersCollection();
@@ -217,12 +218,18 @@ define('io.ox/core/main/appcontrol', [
         onClick: function () {
             toggleOverlay(false);
         },
+        onContextmenu: function (e) {
+            e.preventDefault();
+            require(['io.ox/core/settings/dialogs/quickLauncherDialog'], function (quickLauncherDialog) {
+                quickLauncherDialog.openDialog();
+            });
+        },
         render: function () {
             this.$el.empty().append(
                 this.collection.map(function (model) {
                     return new LauncherView({
                         tagName: 'button',
-                        attributes: { tabindex: -1 },
+                        attributes: { tabindex: -1, type: 'button' },
                         model: model,
                         quicklaunch: true
                     }).render().$el.attr('tabindex', -1);
@@ -234,16 +241,17 @@ define('io.ox/core/main/appcontrol', [
     });
 
     var LaunchersView = Dropdown.extend({
-        attributes: { role: 'presentation' },
+        attributes: { role: 'presentation', dontprocessonmobile: 'true' },
         tagName: 'li',
+        options: { dontProcessOnMobile: true },
         className: 'launcher dropdown',
         id: 'io-ox-launcher',
         $ul: $('<ul class="launcher-dropdown dropdown-menu dropdown-menu-right" role="menu">'),
         // this should be a link. Otherwise, this can cause strange focus issues on iOS when having the cursor inside an iframe before clicking this (see Bug 63441)
-        $toggle: $('<a href="#" class="launcher-btn btn btn-link dropdown-toggle">').attr('aria-label', gt('Navigate to:')).append($(icons.launcher).attr('title', gt('All Applications'))),
+        $toggle: $('<a href="#" class="launcher-btn btn btn-link dropdown-toggle" dontprocessonmobile="true">').attr('aria-label', gt('Navigate to:')).append($(icons.launcher).attr('title', gt('All Applications'))),
         initialize: function () {
             Dropdown.prototype.initialize.apply(this, arguments);
-            this.listenTo(this.collection, 'add remove', this.update);
+            this.listenTo(this.collection, 'add remove launcher:update launcher:sort', this.update);
             this.update();
         },
         update: function () {
@@ -386,7 +394,8 @@ define('io.ox/core/main/appcontrol', [
         index: 120,
         draw: function () {
             var launchers = window.launchers = new LaunchersView({
-                collection: ox.ui.apps
+                collection: ox.ui.apps,
+                dontProcessOnMobile: true
             });
             this.append(launchers.render().$el);
         }

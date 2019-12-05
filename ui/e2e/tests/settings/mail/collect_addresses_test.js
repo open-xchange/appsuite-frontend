@@ -28,22 +28,20 @@ Scenario('[7772] Contact collection when sending mail', async (I) => {
 
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mail');
     I.waitForVisible('.io-ox-mail-settings');
-    I.click('Automatically collect contacts in the folder "Collected addresses" while sending');
+    I.checkOption('Automatically collect contacts in the folder "Collected addresses" while sending');
 
-    I.click('Mail');
-    I.waitForText('Compose');
-    I.clickToolbar('Compose');
+    I.openApp('Mail');
+    I.waitForText('Compose', '.classic-toolbar');
+    I.retry(5).clickToolbar('Compose');
 
     I.waitForFocus('[placeholder="To"]');
     I.fillField('To', 'urbi@orbi.vat');
     I.fillField('Subject', 'Richtig gutes zeug');
     I.click('Send');
-    I.wait(2);
     I.waitForVisible('#io-ox-launcher');
 
     I.openApp('Address Book');
     I.click('#io-ox-refresh-icon');
-    I.wait(2);
     I.waitForText('My address books');
     I.doubleClick('~My address books');
 

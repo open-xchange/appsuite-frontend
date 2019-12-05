@@ -14,13 +14,12 @@
 define('io.ox/core/boot/form', [
     'io.ox/core/http',
     'io.ox/core/boot/util',
-    'io.ox/core/boot/language',
+    'io.ox/core/boot/locale',
     'io.ox/core/boot/support',
     'io.ox/core/boot/login/standard',
-    'io.ox/core/manifests',
-    'io.ox/core/capabilities'
+    'io.ox/core/manifests'
 
-], function (http, util, language, support, login, manifests, capabilities) {
+], function (http, util, locale, support, login, manifests) {
 
     'use strict';
 
@@ -142,15 +141,6 @@ define('io.ox/core/boot/form', [
             }
         }
 
-        function redeemToken() {
-            return http.GET({
-                module: 'share/redeem/token',
-                params: { token: _.url.hash('token'), language: language.getSelectedLanguage() },
-                appendSession: false,
-                processResponse: false
-            });
-        }
-
         var loginType = _.url.hash('login_type'), showContinue = false;
 
         switch (loginType) {
@@ -194,24 +184,32 @@ define('io.ox/core/boot/form', [
 
         $('#io-ox-login-feedback');
 
+        var redeem = function (lang) {
+            http.GET({
+                module: 'share/redeem/token',
+                params: { token: _.url.hash('token'), language: lang },
+                appendSession: false,
+                processResponse: false
+            }).done(function (data) {
+                if (data.message_type === 'ERROR') {
+                    util.feedback('error', data.message);
+                } else {
+                    $('#io-ox-login-help').text(data.message);
+                }
+                if (showContinue) displayContinue(data);
+            })
+            .fail(function (e) {
+                util.feedback('error', e.error);
+                if (showContinue) hideFormElements();
+            });
+        };
+
         // handle message params
         if (_.url.hash('token')) {
-            redeemToken()
-                .done(function (data) {
-                    if (data.message_type === 'ERROR') {
-                        util.feedback('error', data.message);
-                    } else {
-                        $('#io-ox-login-help').text(data.message);
-                    }
-                    if (showContinue) displayContinue(data);
-                })
-                .fail(function (e) {
-                    util.feedback('error', e.error);
-                    if (showContinue) hideFormElements();
-                });
+            ox.on('language', redeem);
         }
 
-        language.render();
+        locale.render();
 
         // update header
         $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '\u00A0') + ' ').removeAttr('aria-hidden');
@@ -225,21 +223,16 @@ define('io.ox/core/boot/form', [
         footer += sc.buildDate ? '(' + sc.buildDate + ')' : '';
         $('#io-ox-copyright').text(footer.replace(/\(c\)/i, '\u00A9'));
 
-        // hide checkbox?
-        if (!capabilities.has('autologin')) {
-            $('#io-ox-login-store').remove();
-        } else {
-            // check/uncheck?
-            var box = $('#io-ox-login-store-box'), cookie = _.getCookie('staySignedIn');
-            if (cookie !== undefined) {
-                box.prop('checked', cookie === 'true');
-            } else if ('staySignedIn' in sc) {
-                box.prop('checked', !!sc.staySignedIn);
-            }
-            box.on('change', function () {
-                _.setCookie('staySignedIn', $(this).prop('checked'));
-            });
+        // check/uncheck?
+        var box = $('#io-ox-login-store-box'), cookie = _.getCookie('staySignedIn');
+        if (cookie !== undefined) {
+            box.prop('checked', cookie === 'true');
+        } else if ('staySignedIn' in sc) {
+            box.prop('checked', !!sc.staySignedIn);
         }
+        box.on('change', function () {
+            _.setCookie('staySignedIn', $(this).prop('checked'));
+        });
 
         if (_.device('IE')) {
             // cannot change type with jQuery's attr()
@@ -252,15 +245,14 @@ define('io.ox/core/boot/form', [
             gt('Please enter your email address associated with %1$s. You will receive an email that contains a link to reset your password.', sc.productName)
         );
 
-        util.debug('Set default language');
+        util.debug('Set default locale');
 
         // make sure we get 'signin' plugins
         manifests.reset();
 
         return $.when(
             manifests.manager.loadPluginsFor('signin'),
-            // use browser language
-            language.setDefaultLanguage()
+            locale.setDefaultLocale()
         )
         .always(function () {
 

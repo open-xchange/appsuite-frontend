@@ -19,7 +19,6 @@ Scenario('Tasks - List view w/o tasks', async (I) => {
         'io.ox/calendar': { showCheckboxes: true }
     });
     I.login('app=io.ox/tasks');
-    I.waitForVisible('[data-app-name="io.ox/tasks"]', 5);
     I.waitForVisible('.summary.empty');
 
     expect(await I.grabAxeReport()).to.be.accessible;

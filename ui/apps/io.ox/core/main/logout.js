@@ -16,9 +16,10 @@ define('io.ox/core/main/logout', [
     'io.ox/core/http',
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
+    'io.ox/backbone/views/modal',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (session, http, ext, capabilities, settings, gt) {
+], function (session, http, ext, capabilities, ModalDialog, settings, gt) {
 
     var DURATION = 250;
 
@@ -44,10 +45,10 @@ define('io.ox/core/main/logout', [
 
             // when logged out by other tab, just redirect to logout location and clear
             if (baton.skipSessionLogout) {
-                require(['io.ox/core/api/tab'], function (TabAPI) {
+                require(['io.ox/core/api/tab'], function (tabAPI) {
                     // session can already be destroyed here by the active tab, better be safe than sorry
                     try {
-                        TabAPI.TabHandling.setLoggingOutState('follower');
+                        tabAPI.setLoggingOutState(tabAPI.LOGGING_OUT_STATE.FOLLOWER);
                         // stop websockets
                         ox.trigger('logout');
                         // stop requests/rt polling
@@ -80,9 +81,9 @@ define('io.ox/core/main/logout', [
             if (!ox.tabHandlingEnabled || !baton.manualLogout) return $.when();
 
             var def = $.Deferred();
-            require(['io.ox/core/api/tab'], function (TabApi) {
+            require(['io.ox/core/api/tab'], function (tabApi) {
 
-                TabApi.TabCommunication.otherTabsLiving().then(
+                tabApi.otherTabsLiving().then(
                     // when other tabs exists, user must confirm logout
                     function () {
                         require(['io.ox/backbone/views/modal'], function (ModalDialog) {
@@ -128,12 +129,12 @@ define('io.ox/core/main/logout', [
 
             var def = $.Deferred();
 
-            require(['io.ox/core/api/tab'], function (TabAPI) {
+            require(['io.ox/core/api/tab'], function (tabAPI) {
                 // require does catch errors, so we handle them to ensure a resolved deferred
                 try {
-                    TabAPI.TabHandling.setLoggingOutState('leader');
+                    tabAPI.setLoggingOutState(tabAPI.LOGGING_OUT_STATE.LEADER);
                     // notify other tabs that a logout happened
-                    TabAPI.TabSession.propagateLogout({ autologout: baton.autologout });
+                    tabAPI.propagate('propagateLogout', { autologout: baton.autologout, exceptWindow: tabAPI.getWindowName(), storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION });
                 } catch (e) {
                     if (ox.debug) console.warn('propagate logout did not work', e);
                 } finally {
@@ -177,22 +178,16 @@ define('io.ox/core/main/logout', [
                     if (canRestore) {
                         $('#io-ox-core').show();
                         $('#background-loader').hide();
-                        require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                            new dialogs.ModalDialog()
-                                .text(gt('Unsaved documents will be lost. Do you want to sign out now?'))
-                                .addPrimaryButton('Yes', gt('Yes'))
-                                .addButton('No', gt('No'))
-                                .show()
-                                .then(function (action) {
-                                    if (action === 'No') {
-                                        def.reject();
-                                    } else {
-                                        $('#io-ox-core').hide();
-                                        $('#background-loader').show();
-                                        def.resolve();
-                                    }
-                                });
-                        });
+                        new ModalDialog({ title: gt('Unsaved documents will be lost. Do you want to sign out now?') })
+                            .addButton({ label: gt('No'), action: 'No' })
+                            .addButton({ label: gt('Yes'), action: 'Yes' })
+                            .on('No', function () { def.reject(); })
+                            .on('Yes', function () {
+                                $('#io-ox-core').hide();
+                                $('#background-loader').show();
+                                def.resolve();
+                            })
+                            .open();
                     } else {
                         def.resolve();
                     }
@@ -230,12 +225,14 @@ define('io.ox/core/main/logout', [
         logout: function () {
             // force save requests for all pending settings
             http.pause();
+            var def = $.Deferred();
             $.when.apply($,
                 _(settings.getAllPendingSettings()).map(function (set) {
                     return set.save(undefined, { force: true });
                 })
-            );
-            return http.resume();
+            ).always(def.resolve);
+            http.resume();
+            return def;
         }
     });
 

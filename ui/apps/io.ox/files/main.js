@@ -83,8 +83,8 @@ define('io.ox/files/main', [
         'refresh-from-broadcast': function () {
             if (!ox.tabHandlingEnabled) return;
             // we can be sure that 'io.ox/core/api/tab' is cached when 'ox.tabHandlingEnabled' is true
-            var TabAPI = require('io.ox/core/api/tab');
-            var events = TabAPI.TabCommunication.events;
+            var tabAPI = require('io.ox/core/api/tab');
+            var events = tabAPI.communicationEvents;
             events.listenTo(events, 'refresh-file', function (parameters) {
                 api.propagate('refresh:file', _.pick(parameters, 'folder_id', 'id'));
             });
@@ -737,8 +737,22 @@ define('io.ox/files/main', [
                     app.settings.set('showCheckboxes', data.checkboxes);
                 }
                 app.settings.set('showDetails', data.details);
-                app.settings.save();
+                app.settings.save().fail(function (e) {
+                    if (e.code !== 'SVL-0011' && _.keys(app.settings.get('viewOptions')).length < 2500) return;
+
+                    return app.settings
+                        .set('viewOptions', {})
+                        .set(['viewOptions', folder], { sort: data.sort, order: data.order, layout: data.layout })
+                        .save();
+                });
             }, 500));
+            app.listenTo(folderAPI, 'remove:infostore', function (folder) {
+                // garbage collect viewOptions when removing folders
+                // or we'll end up with Bug 66217
+                var viewOptions = app.settings.get('viewOptions', {});
+                delete viewOptions[folder.id];
+                app.settings.set('viewOptions', viewOptions).save();
+            });
         },
 
         /*
@@ -1381,6 +1395,12 @@ define('io.ox/files/main', [
             api.on('remove:file', function () {
                 // trigger scroll after remove, if files were removed with select all we need to trigger a redraw or we get an empty view
                 app.listView.$el.trigger('scroll');
+
+                // When a file is removed the trash collection must be updated for showing the correct contextmenu entries
+                var id = settings.get('folder/trash');
+                if (id) {
+                    folderAPI.get(id, { cache: false });
+                }
             });
         },
 

@@ -1,0 +1,128 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ */
+
+const expect = require('chai').expect;
+
+Feature('Settings > Basic > User picture');
+
+Before(async function (users) {
+    await users.create();
+});
+
+After(async function (users) {
+    await users.removeAll();
+});
+
+Scenario('User start with no picture', async function (I, contacts, mail) {
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+
+    // toolbar
+    const image = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'backgroundImage');
+    expect(Array.isArray(image) ? image[0] : image).is.equal('none');
+
+    // edit contact data
+    contacts.editMyContact();
+
+    // check if empty
+    I.seeElementInDOM('.empty');
+    I.waitForText('Click to add photo', 20, '.contact-photo label');
+
+    I.click('.contact-edit .contact-photo');
+    I.waitForVisible('.edit-picture');
+    I.seeElementInDOM('.edit-picture.empty');
+    I.click('Cancel');
+    I.click('Discard');
+});
+
+// TODO: shaky (element (.fa-spin.fa-refresh) still not present on page after 30 sec)
+Scenario.skip('User can upload and remove a picture', async function (I, contacts, mail) {
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+
+    // user image in toolbar?
+    const image1 = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'backgroundImage');
+    expect(Array.isArray(image1) ? image1[0] : image1).is.equal('none');
+
+    // open and check empty-state
+    contacts.editMyContactPhoto();
+
+    // upload image (2.2 MB)
+    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+
+    I.waitForInvisible('.edit-picture.empty');
+    I.click('Apply');
+    I.waitForDetached('.edit-picture');
+
+    // picture-uploader
+    I.dontSeeElement('.empty');
+    I.click('Save');
+    I.waitForInvisible('.contact-edit');
+    I.waitForNetworkTraffic();
+
+    const image2 = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'backgroundImage');
+    expect(Array.isArray(image2) ? image2[0] : image2).to.not.be.empty;
+
+    contacts.editMyContactPhoto();
+
+    // TODO: BUG
+    // There are likely to be accessibility issues due to mishandled focus
+    I.click('Remove photo');
+    I.click('Remove photo');
+
+    I.click('Apply');
+    I.waitForDetached('.modal');
+    I.click('Save');
+    I.waitForInvisible('.contact-edit');
+    I.waitForDetached('.contact-picture[style]');
+    I.waitForNetworkTraffic();
+    I.waitForElement('.contact-picture');
+
+    // check again
+    contacts.editMyContactPhoto();
+    I.waitForVisible('.edit-picture.in.empty');
+});
+
+// TODO: shaky (Element ".cr-image" was not found by text|CSS|XPath)
+Scenario.skip('User can rotate her/his picture', async function (I, contacts, mail) {
+    let image;
+
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+
+    // user image in toolbar?
+    image = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'backgroundImage');
+    expect(Array.isArray(image) ? image[0] : image).is.equal('none');
+
+    // open and check empty-state
+    contacts.editMyContactPhoto();
+
+    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+
+    image = await I.grabCssPropertyFrom('.contact-photo-upload .contact-photo', 'backgroundImage');
+    expect(Array.isArray(image) ? image[0] : image).to.not.be.empty;
+
+    // rotate (portrait to landscape)
+    const height = await I.grabAttributeFrom('.cr-image', 'height');
+    I.click('.inline-actions button[data-action="rotate-right"]');
+    const width = await I.grabAttributeFrom('.cr-image', 'width');
+    expect(Array.isArray(height) ? height[0] : height).to.be.equal(Array.isArray(width) ? width[0] : width);
+
+    I.waitForInvisible('.edit-picture.empty');
+    I.click('Apply');
+    I.waitForInvisible('.edit-picture');
+
+    //picture-uploader
+    I.click('Discard');
+    I.waitForVisible('.modal-footer [data-action="delete"]');
+    I.click('.modal-footer [data-action="delete"]');
+});

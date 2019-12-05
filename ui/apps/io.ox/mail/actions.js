@@ -22,7 +22,7 @@ define('io.ox/mail/actions', [
     'io.ox/core/print',
     'io.ox/core/api/account',
     'io.ox/core/notifications',
-    'io.ox/core/viewer/views/types/typesregistry',
+    'io.ox/core/viewer/views/types/typesutil',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
 ], function (ext, actionsUtil, api, util, filesAPI, folderAPI, print, account, notifications, viewerTypes, settings, gt) {
@@ -34,7 +34,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/compose', {
         device: '!guest',
         action: function (baton) {
-            ox.registry.call('mail-compose', 'open', null, { folderId: baton.folder_id });
+            ox.registry.call('mail-compose', 'open', null, { folderId: baton.app.folder.get() });
         }
     });
 
@@ -234,6 +234,18 @@ define('io.ox/mail/actions', [
         action: function (baton) {
             var list = _.isArray(baton.data) ? baton.data : [baton.data];
             api.archive(list);
+        }
+    });
+
+    new Action('io.ox/mail/actions/triggerFlags', {
+        collection: 'some',
+        action: function (baton) {
+            console.log(baton.e);
+            var dropDown = $('.dropdown.flag-picker').data();
+            $(document).trigger('click.bs.dropdown.data-api');
+            _.delay(function () {
+                dropDown.view.open();
+            }, 200);
         }
     });
 
@@ -443,16 +455,16 @@ define('io.ox/mail/actions', [
             });
         },
         action: function (baton) {
-            var list = baton.array();
+            // mappings for different invokation sources
+            var files = baton.list || baton.array(),
+                selection =  baton.array()[0];
             ox.load(['io.ox/mail/actions/viewer']).done(function (action) {
-                var options = { files: list, restoreFocus: baton.restoreFocus };
-                if (baton.startItem) {
-                    options.selection = baton.startItem;
-                }
-                if (baton.openedBy) {
-                    options.openedBy = baton.openedBy;
-                }
-                action(options);
+                action({
+                    files: files,
+                    selection: selection,
+                    restoreFocus: baton.restoreFocus,
+                    openedBy: baton.openedBy
+                });
             });
         }
     });
@@ -748,4 +760,15 @@ define('io.ox/mail/actions', [
             app.queues.importEML.offer(file, { folder: app.folder.get() });
         }
     });
+
+    ext.point('io.ox/mail/folderview/premium-area').extend({
+        index: 100,
+        id: 'inline-premium-links',
+        draw: function (baton) {
+            this.append(
+                baton.renderActions('io.ox/mail/links/premium-links', baton)
+            );
+        }
+    });
+
 });

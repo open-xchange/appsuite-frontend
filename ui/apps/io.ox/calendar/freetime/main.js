@@ -217,7 +217,7 @@ define('io.ox/calendar/freetime/main', [
 
             dialog = new ModalDialog({
                 async: true,
-                focus: 'input.add-participant.tt-input',
+                focus: 'a.control.prev',
                 maximize: true,
                 title: options.title || gt.pgettext('app', 'Scheduling'),
                 width: '100%'
@@ -284,7 +284,7 @@ define('io.ox/calendar/freetime/main', [
             win.show();
             app.view.render();
 
-            win.nodes.outer.find('input.add-participant.tt-input').focus();
+            win.nodes.outer.find('a.control.prev').focus();
         });
 
         app.setQuit(function () {

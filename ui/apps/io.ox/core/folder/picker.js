@@ -105,11 +105,16 @@ define('io.ox/core/folder/picker', [
                 // request and open create-folder-dialog
                 add(mapIds(parentview.folder, true), { module: o.module === 'calendar' ? 'event' : o.module }).then(
                     function (data) {
-                        // add additonal 5ms to tree nodes debounced onSort handler
+                        // high delay because of tree nodes debounced onSort handler
                         _.delay(function () {
                             tree.selection.set(data.id);
-                            tree.selection.scrollIntoView(data.id);
-                        }, 15);
+                            var parentNode = tree.getNodeView(data.folder_id),
+                                node = tree.getNodeView(data.id);
+                            // open parent folder first new folder may be a subfolder of a non opened folder, or the first subfolder of this folder
+                            if (parentNode) parentNode.toggle(true);
+                            // use focus so we get the blue border instead of only the grey one, confuses users otherwise
+                            if (node) node.$el.focus();
+                        }, 300);
                     }
                 );
             });

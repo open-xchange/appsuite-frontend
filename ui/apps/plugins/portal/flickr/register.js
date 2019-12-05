@@ -15,10 +15,10 @@
 define('plugins/portal/flickr/register', [
     'io.ox/core/extensions',
     'io.ox/portal/feed',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'settings!io.ox/portal',
     'gettext!plugins/portal'
-], function (ext, Feed, dialogs, settings, gt) {
+], function (ext, Feed, ModalDialog, settings, gt) {
 
     'use strict';
 
@@ -111,7 +111,6 @@ define('plugins/portal/flickr/register', [
         draw: (function () {
 
             function drawPhoto(photo, flickrUrl) {
-
                 var size = '', url, img;
 
                 // find proper image size
@@ -124,31 +123,17 @@ define('plugins/portal/flickr/register', [
                     }
                 });
                 // use size
-                if (size) {
-                    if (photo.title) {
-                        this.append(
-                            $('<caption>').text(photo.title)
-                        );
-                    }
-                    this.append(
-                        img = $('<div class="photo">').css('backgroundImage', 'url(' + url + ')')
-                    );
-                    if (flickrUrl) {
-                        img.wrap(
-                            $('<a target="_blank" rel="noopener">').attr({ href: flickrUrl + '/' + photo.owner + '/' + photo.id + '/' })
-                        );
-                    }
-                }
+                if (!size) return;
+                if (photo.title) this.append($('<caption>').text(photo.title));
+                this.append(img = $('<div class="photo">').css('backgroundImage', 'url(' + url + ')'));
+                if (!flickrUrl) return;
+                img.wrap($('<a target="_blank" rel="noopener">').attr('href', flickrUrl + '/' + photo.owner + '/' + photo.id + '/'));
             }
 
             return function (baton) {
 
                 var node = $('<div class="portal-feed">'),
-                    flickrUrl = '';
-
-                if (baton.model.get('props').method === 'flickr.photos.search') {
-                    flickrUrl = 'http://www.flickr.com/photos';
-                }
+                    flickrUrl = baton.model.get('props').method === 'flickr.photos.search' ? 'http://www.flickr.com/photos' : '';
 
                 node.append($('<h1>').text(baton.model.get('props').query));
 
@@ -195,52 +180,46 @@ define('plugins/portal/flickr/register', [
         //disable widget till data is set by user
         model.set('candidate', true, { silent: true, validate: true });
 
-        var dialog = new dialogs.ModalDialog({ async: true, width: 400 }),
+        var dialog = new ModalDialog({ title: gt('Edit Flickr photo stream'), async: true, width: 400 }),
             $q = $('<input id="flickr_search" type="text" class="form-control" tabindex="0">'),
             $description = $('<input id="flickr_desc" type="text" class="form-control" tabindex="0">'),
             $method = $('<select id="flickr_option" class="form-control" tabindex="0">').append(
-                $('<option>').attr('value', 'flickr.photos.search').text(gt('flickr.photos.search')),
-                $('<option>').attr('value', 'flickr.people.getPublicPhotos').text(gt('flickr.people.getPublicPhotos'))
+                $('<option>').attr('value', 'flickr.photos.search').text(gt('Search photos')),
+                $('<option>').attr('value', 'flickr.people.getPublicPhotos').text(gt('Public photos by user'))
             ),
             $error = $('<div>').addClass('alert alert-danger').css('margin-top', '15px').hide(),
             props = model.get('props') || {};
 
-        dialog.header($('<h4>').text(gt('Edit Flickr photo stream')))
-            .build(function () {
-                this.getContentNode().append(
-                    $('<div class="row">').append(
-                        $('<div class="col-sm-12">').append(
-                            $('<label for="flickr_search">').text(gt('Search')),
-                            $q.val(props.query)
-                        )
-                    ),
-                    $('<div class="row">').append(
-                        $('<div class="col-sm-12">').append(
-                            $('<label for="flickr_option">').text(gt('Type')),
-                            $method.val(props.method)
-                        )
-                    ),
-                    $('<div class="row">').append(
-                        $('<div class="col-sm-12">').append(
-                            $('<label for="flickr_desc">').text(gt('Description')),
-                            $description.val(props.description),
-                            $error
-                        )
+        dialog.build(function () {
+            this.$body.append(
+                $('<div class="row">').append(
+                    $('<div class="col-sm-12">').append(
+                        $('<label for="flickr_search">').text(gt('Search')),
+                        $q.val(props.query)
                     )
-                );
-            })
-            .addPrimaryButton('save', gt('Save'))
-            .addButton('cancel', gt('Cancel'))
-            .show(function () {
-                $q.focus();
-            });
-
-        dialog.on('cancel', function () {
+                ),
+                $('<div class="row">').append(
+                    $('<div class="col-sm-12">').append(
+                        $('<label for="flickr_option">').text(gt('Type')),
+                        $method.val(props.method)
+                    )
+                ),
+                $('<div class="row">').append(
+                    $('<div class="col-sm-12">').append(
+                        $('<label for="flickr_desc">').text(gt('Description')),
+                        $description.val(props.description),
+                        $error
+                    )
+                )
+            );
+        })
+        .addCancelButton()
+        .addButton({ label: gt('Save'), action: 'save' })
+        .on('cancel', function () {
             // if it's a new widget delete it, otherwise not
-            if (model.has('candidate') && _.isEmpty(model.get('props'))) {
-                view.removeWidget();
-            }
-        });
+            if (model.has('candidate') && _.isEmpty(model.get('props'))) view.removeWidget();
+        })
+        .open();
 
         dialog.on('save', function () {
 

@@ -22,8 +22,9 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
+    'io.ox/files/util',
     'gettext!io.ox/core'
-], function (Dropdown, DisposableView, ToolbarView, Ext, actionsUtil, FilesAPI, HelpView, DocConverterUtils, Util, Settings, gt) {
+], function (Dropdown, DisposableView, ToolbarView, Ext, actionsUtil, FilesAPI, HelpView, DocConverterUtils, Util, Settings, FileUtils, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -37,6 +38,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         TOOLBAR_LINKS_ID = TOOLBAR_ID + '/links',
         TOOLBAR_ACTION_ID = 'io.ox/core/viewer/actions/toolbar',
         TOOLBAR_ACTION_DROPDOWN_ID = TOOLBAR_ACTION_ID + '/dropdown',
+        FILE_VERSION_IS_UPLOADING_MSG = gt('This document cannot be viewed at the moment because a new version is being uploaded. Please wait until the upload is completed.'),
         // define extension points for this ToolbarView
         // toolbarPoint = Ext.point(TOOLBAR_ID),
         // toolbar link meta object used to generate extension points later
@@ -88,6 +90,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                         );
                     };
                 }())
+            },
+            'editplaintext': {
+                prio: 'hi',
+                mobile: 'lo',
+                title: gt('Edit'),
+                section: 'edit',
+                ref: 'io.ox/files/actions/editor'
             },
             'zoomout': {
                 prio: 'hi',
@@ -322,6 +331,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             },
             compose: {
+                /*
+                #64470 - no download when Viewer ist started from mail compose
+
                 'downloadcomposeattachment': {
                     prio: 'hi',
                     mobile: 'lo',
@@ -329,6 +341,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     title: gt('Download'),
                     ref: Util.getRefByModelSource('compose')
                 }
+                */
             },
             pim: {
                 'print': {
@@ -360,12 +373,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'edit',
                     ref: 'io.ox/files/actions/rename'
                 },
-                'edit': {
-                    prio: 'hi',
-                    mobile: 'lo',
-                    title: gt('Edit'),
-                    ref: 'io.ox/files/actions/editor'
-                },
                 'editdescription': {
                     prio: 'lo',
                     mobile: 'lo',
@@ -380,14 +387,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     title: gt('Download'),
                     section: 'export',
                     ref: Util.getRefByModelSource('guardDrive')
-                },
-                'open': {
-                    prio: 'lo',
-                    mobile: 'hi',
-                    title: gt('Open attachment'),
-                    icon: _.device('ios && ios < 12') ? 'fa fa-download' : '',
-                    section: 'export',
-                    ref: 'oxguard/open'
                 },
                 'sendbymail': {
                     prio: 'lo',
@@ -454,7 +453,11 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
         action: function (baton) {
             var documentPDFUrl = DocConverterUtils.getEncodedConverterUrl(baton.context.model);
-            blankshield.open(documentPDFUrl, '_blank');
+            if (_.device('noopener')) {
+                window.open(documentPDFUrl, '_blank', 'noopener');
+            } else {
+                blankshield.open(documentPDFUrl, '_blank');
+            }
         }
     });
 
@@ -480,8 +483,10 @@ define('io.ox/core/viewer/views/toolbarview', [
             return model.get('group') !== 'localFile' && !baton.context.standalone;
         },
         action: function (baton) {
-            var fileModel = baton.model.isFile() ? baton.model : { file: baton.data };
-            ox.launch('io.ox/files/detail/main', fileModel);
+            if (!FileUtils.isFileVersionUploading(baton.data.id, FILE_VERSION_IS_UPLOADING_MSG)) {
+                var fileModel = baton.model.isFile() ? baton.model : { file: baton.data };
+                ox.launch('io.ox/files/detail/main', fileModel);
+            }
         }
     });
 

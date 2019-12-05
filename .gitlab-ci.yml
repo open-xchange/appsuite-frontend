@@ -1,10 +1,11 @@
 image: docker:latest
 
 include:
-  - "/gitlab-ci/docker.yml"
-  - "/gitlab-ci/preview_apps.yml"
-  - "/gitlab-ci/documentation.yml"
-  - "/gitlab-ci/e2e.yml"
+  - local: "/gitlab-ci/docker.yml"
+  - local: "/gitlab-ci/preview_apps.yml"
+  - local: "/gitlab-ci/documentation.yml"
+  - local: "/gitlab-ci/packaging.yml"
+  - local: "/gitlab-ci/e2e.yml"
 
 stages:
   - build
@@ -14,46 +15,88 @@ stages:
   - report
   - cleanup
 
-.default_cache: &default_cache
+.default_cache:
   cache:
     # use one cache
     key: "yarn"
     paths:
       - ".yarn-cache"
 
-.build_ui: &build_ui
-  <<: *default_cache
+.build ui plugin:
+  extends: .default_cache
   image: gitlab.open-xchange.com:4567/frontend/dev_env:latest
+  variables:
+    build_tasks: dist:build
+    build_script: grunt ${build_tasks}
   script:
-    - cd ui
+    - cd ${PROJECT_PATH}
     - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
-    - grunt ${CI_JOB_NAME}
+    - echo ${build_script}
+    - eval "${build_script}"
+    - "[ -z \"$PACKAGE_NAME\" ] && export PACKAGE_NAME=${PROJECT_PATH}"
+    - "[ -z \"$HTDOCS_PACKAGE_NAME\" ] && export HTDOCS_PACKAGE_NAME=${PACKAGE_NAME}"
+    - "[ -z \"$L10N_PACKAGE_NAME\" ] && export L10N_PACKAGE_NAME=${PACKAGE_NAME}"
+    - npx grunt install:dist --prefix=../${PACKAGE_NAME}/build/pkg --htdoc=../${HTDOCS_PACKAGE_NAME}/build/pkg
+    - npx grunt install:languages --prefix=../${L10N_PACKAGE_NAME}/build/pkg
   stage: build
   artifacts:
     expire_in: 2hours
     paths:
-      - ui/build
-      - ui/dist
-      - ui/node_modules
+      - "*/build"
+      - "*/dist"
+      - "*/node_modules"
 
 # split build_ui into 2 build jobs (running on 2 different runners in parallel)
 # this distributes workload onto 2 runners instead of one and basically halves build time
-lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist:
-  <<: *build_ui
+build ui:
+  extends: .build ui plugin
+  parallel: 2
+  variables:
+    PROJECT_PATH: ui
+    PACKAGE_NAME: open-xchange-appsuite-manifest
+    HTDOCS_PACKAGE_NAME: open-xchange-appsuite
+    L10N_PACKAGE_NAME: open-xchange-appsuite-l10n
+    build_script: eval "grunt \$${build_tasks_$$CI_NODE_INDEX}"
+    build_tasks_1: lint copy_build compile_po concat uglify:dist_largeFiles less copy_dist
+    build_tasks_2: copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
   tags:
     - openstack
+  only:
+    changes:
+      - ui/**/*
+      - update-themes/**/*
+      - open-xchange-appsuite/**/*
+      - open-xchange-appsuite-l10n/**/*
+      - open-xchange-appsuite-manifest/**/*
+      - gitlab-ci/*
+      - .gitlab-ci.yml
 
-copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist:
-  <<: *build_ui
-  tags:
-    - openstack
+build update-themes:
+  extends: .build ui plugin
+  variables:
+    PROJECT_PATH: update-themes
+    PACKAGE_NAME: open-xchange-appsuite-manifest
+
+  before_script:
+    - cd ${PROJECT_PATH}
+    # add production dependencies to different modules folder, so those can be picked up by grunt copy tasks
+    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache --production --modules-folder=deps
+    - cd ..
+  only:
+    changes:
+      - ui/**/*
+      - update-themes/**/*
+      - open-xchange-appsuite/**/*
+      - open-xchange-appsuite-l10n/**/*
+      - open-xchange-appsuite-manifest/**/*
+      - gitlab-ci/*
+      - .gitlab-ci.yml
 
 build ui docker image:
   dependencies:
-    - lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist
-    - copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
+    - build ui
 
-test_ui:
+test ui:
   image: gitlab.open-xchange.com:4567/frontend/dev_env/browser:latest
   variables:
     BROWSERS: DockerHeadless
@@ -62,49 +105,62 @@ test_ui:
     - yarn test
   stage: test
   dependencies:
-    - lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist
-    - copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
+    - build ui
+  needs:
+    - build ui
   artifacts:
     reports:
       junit: ui/build/reports/unit/*/result.xml
-
-run e2e tests:
-  <<: *default_cache
-
-.build_ui_plugin_template: &build_ui_plugin
-  <<: *default_cache
-  image: gitlab.open-xchange.com:4567/frontend/dev_env:latest
-  stage: build
-  script:
-    - cd ${PROJECT_PATH}
-    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
-    - grunt dist:build
-  artifacts:
-    expire_in: 2hours
-    paths:
-      - ${PROJECT_PATH}/build
-      - ${PROJECT_PATH}/dist
-      - ${PROJECT_PATH}/node_modules
   only:
     changes:
-      - ${PROJECT_PATH}/**/*
+      - ui/**/*
 
-build_help:
+run e2e tests:
+  extends: .default_cache
+  # don't change the cache, just pull should be up-to-date due to previous build jobs
+  cache:
+    policy: pull
+
+build help:
+  extends: .build ui plugin
   variables:
     PROJECT_PATH: help
-  <<: *build_ui_plugin
+    PACKAGE_NAME: open-xchange-appsuite-help
+  only:
+    changes:
+      - help/**/*
+      - open-xchange-appsuite-help/**/*
+      - gitlab-ci/*
+      - .gitlab-ci.yml
 
-build_guidedtours:
+build guidedtours:
+  extends: .build ui plugin
   variables:
     PROJECT_PATH: guidedtours
-  <<: *build_ui_plugin
+    PACKAGE_NAME: open-xchange-guidedtours
+  only:
+    changes:
+      - guidedtours/**/*
+      - open-xchange-guidedtours/**/*
+      - gitlab-ci/*
+      - .gitlab-ci.yml
 
-build_spamexperts:
+build spamexperts:
+  extends: .build ui plugin
   variables:
     PROJECT_PATH: open-xchange-appsuite-spamexperts
-  <<: *build_ui_plugin
+  only:
+    changes:
+      - open-xchange-appsuite-spamexperts/**/*
+      - gitlab-ci/*
+      - .gitlab-ci.yml
 
-build_dynamic-theme:
+build dynamic-theme:
+  extends: .build ui plugin
   variables:
     PROJECT_PATH: open-xchange-dynamic-theme
-  <<: *build_ui_plugin
+  only:
+    changes:
+      - open-xchange-dynamic-theme/**/*
+      - gitlab-ci/*
+      - .gitlab-ci.yml

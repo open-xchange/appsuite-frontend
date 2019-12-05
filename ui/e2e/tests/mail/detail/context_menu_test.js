@@ -22,55 +22,57 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C248438] Context menu can be opened by right click', async (I, users) => {
+Scenario('[C248438] Context menu can be opened by right click', async (I, users, mail) => {
 
-    var icke = users[0].userdata.email1,
+    const icke = users[0].userdata.email1,
         subject = 'Context menu can be opened by right click';
 
-    await I.haveMail({
-        attachments: [{
-            content: 'Lorem ipsum',
-            content_type: 'text/html',
-            disp: 'inline'
-        }],
-        from: [['Icke', icke]],
-        subject: subject,
-        to: [['Icke', icke]]
-    });
+    await Promise.all([
+        I.haveMail({
+            attachments: [{
+                content: 'Lorem ipsum',
+                content_type: 'text/html',
+                disp: 'inline'
+            }],
+            from: [['Icke', icke]],
+            subject: subject,
+            to: [['Icke', icke]]
+        }),
+        I.haveSetting({ 'io.ox/mail': { 'features/registerProtocolHandler': false } })
+    ]);
 
-    await I.haveSetting({ 'io.ox/mail': { 'features/registerProtocolHandler': false } });
     I.login('app=io.ox/mail');
+    mail.waitForApp();
 
     // wait for first email
     var firstItem = '.list-view .list-item';
     I.waitForElement(firstItem);
     I.click(firstItem);
     I.waitForVisible('.thread-view.list-view .list-item');
-
     // we need to wait until the message is seen
-    I.wait(1);
+    I.waitForDetached('.thread-view.list-view .list-item.unread');
 
     // Mark unread
     rightClick();
-    clickAction('io.ox/mail/actions/mark-unread');
-    I.waitForElement('a.unread-toggle[aria-label="Mark as read"]');
+    I.clickDropdown('Mark as unread');
+    I.waitForElement('.thread-view.list-view .list-item.unread');
 
     // View source
     rightClick();
-    clickAction('io.ox/mail/actions/source');
+    I.clickDropdown('View source');
     I.waitForElement('.mail-source-dialog');
-    I.click('Close');
+    I.click('Close', '.modal-footer');
 
     // Move
     rightClick();
-    clickAction('io.ox/mail/actions/move');
+    I.clickDropdown('Move');
     I.waitForElement('.folder-picker-dialog');
     I.click('Cancel');
 
     // Reply
     rightClick();
-    clickAction('io.ox/mail/actions/reply');
-    I.waitForElement('button[data-action="discard"]:not(.disabled)');
+    I.clickDropdown('Reply');
+    I.waitForElement({ css: 'button[data-action="discard"]:not(.disabled)' });
     I.seeInField('subject', 'Re: ' + subject);
     // no better approach yet. I.waitForMailCompose() might be a good one
     I.wait(1);
@@ -86,7 +88,7 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users)
     // Delete
     rightClick();
     I.seeNumberOfElements('.leftside .list-view .list-item', 1);
-    clickAction('io.ox/mail/actions/delete');
+    I.clickDropdown('Delete');
     I.waitForDetached('.leftside .list-view .list-item');
 
     function rightClick() {
@@ -95,13 +97,7 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users)
             // eslint-disable-next-line no-undef
             list.$el.trigger(e);
         });
-        I.seeElement('.smart-dropdown-container.dropdown.open');
-    }
-
-    function clickAction(action) {
-        var selector = '.smart-dropdown-container a[data-action="' + action + '"]';
-        I.waitForElement(selector);
-        I.click(selector);
+        I.waitForElement('.dropdown.open');
     }
 
     // function shiftF10() {

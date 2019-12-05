@@ -14,12 +14,12 @@
 define('io.ox/core/folder/actions/common', [
     'io.ox/mail/api',
     'io.ox/core/folder/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/notifications',
     'gettext!io.ox/core',
     'io.ox/core/api/account',
     'io.ox/core/http'
-], function (mailAPI, folderAPI, dialogs, notifications, gt, account, http) {
+], function (mailAPI, folderAPI, ModalDialog, notifications, gt, account, http) {
 
     'use strict';
 
@@ -80,10 +80,10 @@ define('io.ox/core/folder/actions/common', [
             return function (id) {
 
                 folderAPI.get(id).done(function (folder) {
-                    new dialogs.ModalDialog()
-                        .text(gt('Do you really want to empty folder "%s"?', folderAPI.getFolderTitle(folder.title, 30)))
-                        .addPrimaryButton('delete', gt('Empty folder'), 'delete')
-                        .addButton('cancel', gt('Cancel'), 'cancel')
+                    new ModalDialog({ title: gt('Do you really want to empty folder "%s"?', folderAPI.getFolderTitle(folder.title, 30)) })
+                        .addCancelButton()
+                        //#. empty is a verb in this case. Used when the contents of a folder should be deleted
+                        .addButton({ label: gt('Empty folder'), action: 'delete' })
                         .on('delete', function () {
                             if (account.is('spam|confirmed_spam', id)) {
                                 http.pause();
@@ -94,13 +94,7 @@ define('io.ox/core/folder/actions/common', [
                                 clear(id, folder.module);
                             }
                         })
-                        .on('show', function () {
-                            var self = this;
-                            _.defer(function () {
-                                self.getFooter().find('.btn-primary').focus();
-                            });
-                        })
-                        .show();
+                        .open();
                 });
             };
         }())

@@ -50,7 +50,7 @@ define('io.ox/backbone/mini-views/common', [
         // firefox does not trigger a change event if you drop text.
         events: _.device('firefox') ? { 'change': 'onChange', 'drop': 'onDrop', 'paste': 'onPaste' } : { 'blur': 'onChange', 'change': 'onChange', 'paste': 'onPaste' },
         onChange: function () {
-            this.model.set(this.name, this.$el.val(), { validate: true });
+            this.model.set(this.name, this.$el.val(), { validate: this.options.validate });
         },
         onDrop: firefoxDropHelper,
         onPaste: pasteHelper,
@@ -92,7 +92,7 @@ define('io.ox/backbone/mini-views/common', [
         onChange: function () {
             var value = this.$el.val();
             if (/^\*$/.test(value)) value = null;
-            this.model.set(this.name, value, { validate: true, _event: 'change' });
+            this.model.set(this.name, value, { validate: this.options.validate, _event: 'change' });
         },
         // paste doesn't trigger a change event
         onPaste: pasteHelper,
@@ -186,7 +186,7 @@ define('io.ox/backbone/mini-views/common', [
         // firefox does not trigger a change event if you drop text.
         events: _.device('firefox') ? { 'change': 'onChange', 'drop': 'onDrop' } : { 'change': 'onChange' },
         onChange: function () {
-            this.model.set(this.name, this.$el.val(), { validate: true });
+            this.model.set(this.name, this.$el.val(), { validate: this.options.validate });
         },
         onDrop: firefoxDropHelper,
         setup: function (options) {
@@ -236,15 +236,16 @@ define('io.ox/backbone/mini-views/common', [
         isChecked: function () {
             return !!this.$input.prop('checked');
         },
-        setup: function () {
+        setup: function (options) {
             this.$input = this.$el;
+            this.nodeName = options.nodeName;
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
         update: function () {
             this.$input.prop('checked', this.setValue());
         },
         render: function () {
-            this.$input.attr({ name: this.name });
+            this.$input.attr({ name: this.nodeName || this.name });
             if (this.options.id) this.$input.attr('id', this.options.id);
             this.update();
             return this;
@@ -253,7 +254,7 @@ define('io.ox/backbone/mini-views/common', [
 
     //
     // custom checkbox
-    // options: id, name, size (small | large), label
+    // options: id, name, nodeName, size (small | large), label
     //
     var CustomCheckboxView = CheckboxView.extend({
         el: '<div class="checkbox custom">',
@@ -261,7 +262,7 @@ define('io.ox/backbone/mini-views/common', [
             var id = this.options.id || _.uniqueId('custom-');
             this.$el.addClass(this.options.size || 'small').append(
                 $('<label>').attr('for', id).append(
-                    this.$input = $('<input type="checkbox" class="sr-only">').attr({ id: id, name: this.name }),
+                    this.$input = $('<input type="checkbox" class="sr-only">').attr({ id: id, name: this.nodeName || this.name }),
                     $('<i class="toggle" aria-hidden="true">'),
                     $.txt(this.options.label || '\u00a0')
                 )
@@ -366,25 +367,37 @@ define('io.ox/backbone/mini-views/common', [
         render: function () {
             this.$el.attr({ name: this.name });
             if (this.id) this.$el.attr({ id: this.id });
-            this.$el.append(
-                this.options.groups ?
-                    this.renderOptionGroups(this.options.list) :
-                    this.renderOptions(this.options.list)
-            );
-            this.update();
+            this.rerender();
             return this;
         },
         renderOptionGroups: function (items) {
-            return _(items).map(function (item) {
-                return $('<optgroup>').attr('label', item.label).append(
-                    this.renderOptions(item.options)
-                );
-            }, this);
+            return _(items)
+                .chain()
+                .map(function (item) {
+                    if (item.label === false) return this.renderOptions(item.options);
+                    return $('<optgroup>').attr('label', item.label).append(
+                        this.renderOptions(item.options)
+                    );
+                }, this)
+                .flatten(true)
+                .value();
         },
         renderOptions: function (items) {
             return _(items).map(function (item) {
                 return $('<option>').attr({ value: item.value }).text(item.label);
             });
+        },
+        rerender: function () {
+            this.$el.empty().append(
+                this.options.groups ?
+                    this.renderOptionGroups(this.options.list) :
+                    this.renderOptions(this.options.list)
+            );
+            this.update();
+        },
+        setOptions: function (list) {
+            this.options.list = list;
+            this.rerender();
         }
     });
 

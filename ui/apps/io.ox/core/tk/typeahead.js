@@ -208,6 +208,7 @@ define('io.ox/core/tk/typeahead', [
                     })
                 );
                 dropdown.find('.tt-suggestions').replaceWith(container);
+                dropdown.scrollTop(0);
             });
 
             if (this.options.init) {

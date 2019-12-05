@@ -116,27 +116,21 @@ define('io.ox/settings/security/settings/pane', [
         }
     });
 
-    ext.point('io.ox/settings/security/settings/detail/mail').extend({
+    // disabled
+    ext.point('io.ox/settings/security/settings/detail/mail').disable('authenticity').extend({
         id: 'authenticity',
         index: 200,
         render: function () {
-            var isEnabled = mailSettings.get('features/authenticity', false),
-                isConfigurable = this.model.isConfigurable('authenticity/level');
-
-            // IMPORTANT: level currently hardcoded as 'fail_neutral_trusted' and 'protected' by MW and not adjustable by any property file change or user interaction.
-            if (!isEnabled || !isConfigurable) return;
-
-            // fallback default value
-            if (!this.model.get('authenticity/level')) this.model.set('authenticity/level', 'none');
-
+            // IMPORTANT: level currently hardcoded as 'fail_suspicious_trusted' by MW and not adjustable by any property file change or user interaction.
+            if (!mailSettings.get('features/authenticity', false)) return;
             this.$('fieldset.mail').append(
                 util.compactSelect('authenticity/level', gt('Show email authenticity'), this.model, [
                     //#. Status for mail authenticity features. Do not show any information at all
                     { label: gt('Disabled'), value: 'none' },
                     //#. Status for mail authenticity features. Show information for dangerous and unambiguous/inconclusive
-                    { label: gt('Suspicious and unclassified emails only'), value: 'fail_neutral_trusted' },
+                    { label: gt('Suspicious and unclassified emails only'), value: 'fail_suspicious_trusted' },
                     //#. Status for mail authenticity features. Show information for any mail
-                    { label: gt('All emails'), value: 'all' }
+                    { label: gt('All emails'), value: 'fail_suspicious_neutral_none_pass_trusted' }
                 ])
             );
         }

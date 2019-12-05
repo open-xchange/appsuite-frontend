@@ -21,7 +21,7 @@ const changeSubscription = (I, toggle) => {
     I.click('.modal-dialog .folder-arrow');
     I.waitForText('Krawall');
     if (toggle) {
-        I.click('[value="default0/INBOX/Krawall"]');
+        I.click('.folder [value="default0/INBOX/Krawall"]');
     }
     I.click('Save');
     I.waitForDetached('.modal-dialog');
@@ -29,14 +29,14 @@ const changeSubscription = (I, toggle) => {
 
 const prepare = async (I) => {
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
-    await I.haveFolder('Krawall', 'mail', 'default0/INBOX');
-    await I.haveFolder('Remmidemmi', 'mail', 'default0/INBOX');
+    await I.haveFolder({ title: 'Krawall', module: 'mail', parent: 'default0/INBOX' });
+    await I.haveFolder({ title: 'Remmidemmi', module: 'mail', parent: 'default0/INBOX' });
 };
 
 const goToMail = (I) => {
     I.openApp('Mail');
     I.waitForText('Inbox');
-    I.doubleClick('[data-model="virtual/myfolders"]');
+    I.doubleClick('.tree-container [data-model="virtual/myfolders"]');
     I.waitForText('Remmidemmi');
 };
 

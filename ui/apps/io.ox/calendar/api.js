@@ -30,7 +30,7 @@ define('io.ox/calendar/api', [
             return false;
         },
         // updates pool based on writing operations response (create update delete etc)
-        processResponse = function (response) {
+        processResponse = function (response, options) {
             if (!response) return;
 
             // post request responses are arrays with data and timestamp
@@ -61,7 +61,7 @@ define('io.ox/calendar/api', [
                     events.forEach(function (evt) {
                         evt.set(updates);
                         api.trigger('update', evt.attributes);
-                        api.trigger('update:' + util.cid(evt), evt.attributes);
+                        api.trigger('update:' + util.cid(evt), evt.attributes, { updateData: { showRecurrenceInfo: options && options.showRecurrenceInfo } });
                     });
 
                 } else {
@@ -80,7 +80,7 @@ define('io.ox/calendar/api', [
                     api.pool.propagateUpdate(event);
                 }
                 api.trigger('update', event);
-                api.trigger('update:' + util.cid(event), event);
+                api.trigger('update:' + util.cid(event), event, { updateData: { showRecurrenceInfo: options && options.showRecurrenceInfo } });
             });
 
 
@@ -92,17 +92,6 @@ define('io.ox/calendar/api', [
             });
 
             return response;
-        },
-        // checks if attendees have the extended Contact information (list request does not have them, get has them, we need to distinguish)
-        hasExtendedEntities = function (attendees) {
-            if (!attendees) return false;
-            var extendedEntities = true;
-
-            _(attendees).each(function (attendee) {
-                // if we have an entity we need either contact or ressource information
-                if (attendee.entity && !(attendee.contact || attendee.resource)) extendedEntities = false;
-            });
-            return extendedEntities;
         },
 
         defaultFields = ['lastModified', 'color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'rrule', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp'].join(','),
@@ -174,8 +163,7 @@ define('io.ox/calendar/api', [
 
                 if (useCache !== false) {
                     var model = api.pool.getModel(util.cid(obj));
-                    // check if we have a full model with extended entities
-                    if (model && hasExtendedEntities(model.get('attendees'))) return $.when(model);
+                    if (model && model.get('attendees')) return $.when(model);
                 }
                 // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
                 if (obj.eventId) {
@@ -199,24 +187,33 @@ define('io.ox/calendar/api', [
             },
 
             resolve: function (id, useCache) {
+                var sequence;
+                if (_.isObject(id)) {
+                    sequence = id.sequence;
+                    id = id.id;
+                }
                 if (useCache !== false) {
                     var collections = api.pool.getCollections(), model;
                     _(collections).find(function (data) {
                         var collection = data.collection;
                         model = collection.find(function (m) {
-                            return m.get('id') === id && !m.has('recurrenceId');
+                            return m.get('id') === id && !m.has('recurrenceId') && (sequence === undefined || m.get('sequence') === sequence);
                         });
                         return !!model;
                     });
                     if (model) return $.when(model);
                 }
+
+                var params = {
+                    action: 'resolve',
+                    id: id,
+                    fields: api.defaultFields
+                };
+                if (sequence !== undefined) params.sequence = sequence;
+
                 return http.GET({
                     module: 'chronos',
-                    params: {
-                        action: 'resolve',
-                        id: id,
-                        fields: api.defaultFields
-                    }
+                    params: params
                 }).then(function (data) {
                     if (isRecurrenceMaster(data)) return api.pool.get('detail').add(data);
                     api.pool.propagateAdd(data);
@@ -229,7 +226,8 @@ define('io.ox/calendar/api', [
                     return http.PUT({
                         module: 'chronos',
                         params: {
-                            action: 'list'
+                            action: 'list',
+                            fields: defaultFields
                         },
                         data: list
                     }).catch(function (err) {
@@ -261,7 +259,8 @@ define('io.ox/calendar/api', [
                     if (useCache !== false) {
                         reqList = list.filter(function (obj) {
                             var model = api.pool.getModel(util.cid(obj));
-                            return !(model && model.has('attendees'));
+                            // since we are using a list request even models without attendees are fine
+                            return !model;
                         });
                     }
 
@@ -285,8 +284,8 @@ define('io.ox/calendar/api', [
                                 if (isRecurrenceMaster(obj)) return;
 
                                 var model = api.pool.getModel(util.cid(obj));
-                                // do not overwrite cache data that has extended entities and the same or newer lastModified timestamp
-                                if (model && hasExtendedEntities(model.get('attendees')) && (model.get('lastModified') >= obj.lastModified)) {
+                                // do not overwrite cache data that has attendees and the same or newer lastModified timestamp
+                                if (model && model.get('attendees') && (model.get('lastModified') >= obj.lastModified)) {
                                     return;
                                 }
                                 api.pool.propagateAdd(obj);
@@ -444,22 +443,24 @@ define('io.ox/calendar/api', [
                         data: data
                     });
                 }
-                return def.then(processResponse)
-                    .then(function (data) {
-                        // post request responses are arrays with data and timestamp
-                        data = data.data || data;
+                return def.then(function (response) {
+                    processResponse(response, options);
+                    return response;
+                }).then(function (data) {
+                    // post request responses are arrays with data and timestamp
+                    data = data.data || data;
 
-                        api.getAlarms();
-                        // return conflicts or new model
-                        if (data.conflicts) {
-                            return data;
-                        }
+                    api.getAlarms();
+                    // return conflicts or new model
+                    if (data.conflicts) {
+                        return data;
+                    }
 
-                        var updated = data.updated ? data.updated[0] : undefined;
-                        if (!updated) return api.pool.getModel(util.cid(obj));
-                        if (isRecurrenceMaster(updated)) return api.pool.get('detail').add(data);
-                        return api.pool.getModel(updated);
-                    });
+                    var updated = data.updated ? data.updated[0] : undefined;
+                    if (!updated) return api.pool.getModel(util.cid(obj));
+                    if (isRecurrenceMaster(updated)) return api.pool.get('detail').add(data);
+                    return api.pool.getModel(updated);
+                });
             },
 
             remove: function (list, options) {
@@ -724,6 +725,7 @@ define('io.ox/calendar/api', [
                 }).done(function (list) {
                     _(list).each(function (obj) {
                         api.trigger('move:' + util.cid(obj), targetFolderId);
+                        api.trigger('move', obj.data.created[0]);
                     });
                     api.trigger('refresh.all');
                 });
@@ -782,7 +784,8 @@ define('io.ox/calendar/api', [
                     action: 'ack',
                     folder: obj.folder,
                     id: obj.eventId,
-                    alarmId: obj.alarmId
+                    alarmId: obj.alarmId,
+                    fields: api.defaultFields
                 };
 
                 if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
@@ -806,7 +809,8 @@ define('io.ox/calendar/api', [
                     folder: obj.folder,
                     id: obj.eventId,
                     alarmId: obj.alarmId,
-                    snoozeTime: obj.time || 300000
+                    snoozeTime: obj.time || 300000,
+                    fields: api.defaultFields
                 };
 
                 if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
@@ -827,7 +831,8 @@ define('io.ox/calendar/api', [
                     action: 'changeOrganizer',
                     folder: obj.folder,
                     id: obj.id,
-                    timestamp: _.then()
+                    timestamp: _.then(),
+                    fields: api.defaultFields
                 };
 
                 if (options.recurrenceRange) params.recurrenceRange = options.recurrenceRange;

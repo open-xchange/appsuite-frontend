@@ -109,6 +109,13 @@ define('io.ox/core/api/mailfilter', [
                     params: { action: 'reorder' },
                     data: data
                 });
+            },
+
+            apply: function (params) {
+                return http.GET({
+                    module: 'mailfilter/v2',
+                    params: _.extend({ action: 'apply' }, params)
+                });
             }
         };
 

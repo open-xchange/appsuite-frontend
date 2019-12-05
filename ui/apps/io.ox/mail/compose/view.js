@@ -436,6 +436,11 @@ define('io.ox/mail/compose/view', [
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
 
+            // see Bug 67872
+            // fixes ios iframe focus bug
+            if (_.device('tablet && ios < 13')) {
+                $(document.body).on('touchstart', this.onTouchStart);
+            }
             this.listenTo(this.model, 'keyup:subject change:subject', this.setTitle);
             this.listenTo(this.model, 'change', _.throttle(this.onChangeSaved.bind(this, 'dirty'), 100));
             this.listenTo(this.model, 'before:save', this.onChangeSaved.bind(this, 'saving'));
@@ -576,9 +581,15 @@ define('io.ox/mail/compose/view', [
         },
 
         dirty: function (state) {
-            if (state === false) this.initialModel = this.model.toJSON();
-            else if (state === true) this.initialModel = {};
-            else return !_.isEmpty(this.model.deepDiff(this.initialModel));
+            if (state === false) {
+                // update content here as the update events from the editor might be throttled
+                if (this.editor) this.model.set('content', this.editor.getContent());
+                this.initialModel = this.model.toJSON();
+            } else if (state === true) {
+                this.initialModel = {};
+            } else {
+                return !_.isEmpty(this.model.deepDiff(this.initialModel));
+            }
         },
 
         clean: function () {
@@ -587,6 +598,7 @@ define('io.ox/mail/compose/view', [
             // clean up editors
             for (var id in this.editorHash) {
                 this.editorHash[id].then(function (editor) {
+                    editor.setContent('');
                     editor.destroy();
                 });
                 delete this.editorHash[id];
@@ -598,10 +610,13 @@ define('io.ox/mail/compose/view', [
         },
 
         dispose: function () {
+            // remove from queue, to prevent zombies wehn mail is currently sent
+            composeAPI.queue.remove(this.model.get('id'));
             // disable dynamic extensionpoint to trigger saveAsDraft on logout
             this.removeLogoutPoint();
             this.stopListening();
             this.model = null;
+            $(document.body).off('touchstart', this.onTouchStart);
             delete this.editor;
         },
 
@@ -679,14 +694,20 @@ define('io.ox/mail/compose/view', [
                 win = this.app.getWindow(),
                 point = ext.point('io.ox/mail/compose/actions/send');
 
-            // don't ask wether the app can be closed if we have unsaved data, we just want to send
-            baton.config.set('autoDismiss', true);
-
             win.busy();
+            this.model.saving = true;
+
             return point.cascade(this, baton).then(function () {
+            }).always(function () {
                 // a check/user intaction aborted the flow or app is re-opened after a request error; we want to be asked before any unsaved data is discarded again
                 if (baton.rejected || baton.error) baton.config.set('autoDismiss', false);
-            }).always(win.idle.bind(win));
+                if (this.model) this.model.saving = false;
+                win.idle();
+            }.bind(this));
+        },
+
+        onTouchStart: function () {
+            if ($(document.activeElement).is('iframe')) $(document.activeElement).blur();
         },
 
         toggleTokenfield: function (e) {
@@ -893,7 +914,6 @@ define('io.ox/mail/compose/view', [
 
             // add subject to app title
             this.setTitle();
-
             // add view specific event handling to tokenfields
             this.$el.find('input.tokenfield').each(function () {
                 // get original input field from token plugin

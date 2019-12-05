@@ -45,16 +45,8 @@ Scenario('[C7788] Disabled filter rule', async function (I, users) {
         }]
     }, { user: users[0] });
 
-    I.login('app=io.ox/settings', { user: users[0] });
-    I.waitForVisible('.io-ox-settings-main');
-    I.selectFolder('Mail');
-    I.waitForVisible('.rightside h1');
-
-    // open mailfilter settings
-    I.selectFolder('Filter Rules');
-
-    // checks the h1 and the empty message
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mailfilter-settings h1');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+    I.waitForVisible('.settings-detail-pane .io-ox-mailfilter-settings h1');
     I.see('Mail Filter Rules');
     I.see('Disable', '.settings-list-view');
     I.click('Disable', '.settings-list-view');
@@ -74,7 +66,7 @@ Scenario('[C7788] Disabled filter rule', async function (I, users) {
     I.seeInField({ css: 'textarea.plain-text' }, 'Test text');
 
     I.click('Send');
-    I.waitForElement('~Sent, 1 total');
+    I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
 
     I.logout();
 

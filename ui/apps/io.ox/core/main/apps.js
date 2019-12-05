@@ -167,6 +167,7 @@ define('io.ox/core/main/apps', [
     ui.createApp({
         id: 'io.ox/settings',
         name: 'io.ox/settings',
+        title: gt('Settings'),
         refreshable: true
     });
 });

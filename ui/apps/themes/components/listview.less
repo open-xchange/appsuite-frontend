@@ -223,7 +223,7 @@
 
     .list-item.selected:not(.no-checkbox) {
         .fa-checkmark {
-            color: #08c;
+            color: @control-background;
             &:before { content: "\f14a"; }// fa-check-square-o
         }
     }
@@ -320,7 +320,7 @@
     .pull-to-refresh {
         position: absolute;
         top: 8px;
-        z-index: 3;
+        z-index: 10001;
         width: 100%;
         .spinner {
             width: 50px;
@@ -332,6 +332,7 @@
             color: #fff;
             font-size: 24px;
             margin: 0 auto;
+            .elevation-1();
         }
     }
     .scale-down {
@@ -347,6 +348,18 @@
     @keyframes scaleDown {
         from { transform: scale(1); }
         to { transform: scale(0); }
+    }
+}
+
+.smartphone {
+    .list-view .list-item .list-item-checkmark .fa-checkmark {
+        top: 8px;
+    }
+    .list-item .list-item-checkmark .fa-checkmark:before {
+        content: "\f1db"; // fa-circle-thin
+    }
+    .list-item.selected:not(.no-checkbox) .fa-checkmark:before {
+        content: "\f058"; // fa-check-circle
     }
 }
 

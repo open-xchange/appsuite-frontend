@@ -53,8 +53,8 @@ Scenario('[C8405] Find mails based on a date range', async (I, users) => {
 
     // 3. Select '01.01.2016 - 31.12.2016 as daterange'
 
-    I.waitForVisible('[data-id="range"]');
-    I.click('[data-id="range"]');
+    I.waitForVisible({ css: '[data-id="range"]' });
+    I.click({ css: '[data-id="range"]' });
 
     I.waitForText('2016', 5, '.list-view');
     I.dontSee('2017', '.list-view');
@@ -66,8 +66,8 @@ Scenario('[C8405] Find mails based on a date range', async (I, users) => {
 
     I.fillField('.search-box .token-input', '01.01.2017 - 31.12.2017');
 
-    I.waitForVisible('[data-id="range"]');
-    I.click('[data-id="range"]');
+    I.waitForVisible({ css: '[data-id="range"]' });
+    I.click({ css: '[data-id="range"]' });
 
     I.waitForText('2017', 5, '.list-view');
     I.dontSee('2016', '.list-view');

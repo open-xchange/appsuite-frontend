@@ -15,7 +15,7 @@ define('io.ox/core/boot/login/tabSession', [
     'io.ox/core/boot/util',
     'io.ox/core/extensions',
     'io.ox/core/api/tab'
-], function (util, ext, TabAPI) {
+], function (util, ext, tabAPI) {
 
     'use strict';
 
@@ -23,8 +23,8 @@ define('io.ox/core/boot/login/tabSession', [
         id: 'TabSession',
         index: 195,
         login: function () {
-            if (!util.checkTabHandlingSupport()) return;
-            return TabAPI.TabSession.login().then(tabSessionLoginSuccess, function () {
+            if (ox.serverConfig.openInSingleTab || _.device('ie && ie <= 11') || _.device('smartphone') || _.device('tablet')) return;
+            return tabAPI.login().then(tabSessionLoginSuccess, function () {
                 util.debug('TabSession: login timed out');
             });
         }
@@ -33,8 +33,6 @@ define('io.ox/core/boot/login/tabSession', [
     function tabSessionLoginSuccess(loginData) {
         util.debug('TabSession: logging in');
         ox.session = loginData.session;
-        //TODO: move this somewhere else?
-        loginData.locale = loginData.language;
         ox.secretCookie = true;
         util.debug('TabSession: logged in');
         ox.trigger('login:success', loginData);

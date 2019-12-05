@@ -39,12 +39,10 @@ Scenario('[C7496] Language of Greeting', async (I) => {
     expect(greeting).to.match(/^Hallo|^Guten Morgen|^Guten Abend/);
 
     //Re-login with fr_FR
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.waitForVisible('#topbar-settings-dropdown');
-    I.click('#topbar-settings-dropdown a[data-name="io.ox/settings"]');
+    I.click('#io-ox-settings-topbar-icon');
     I.waitForText('Grundeinstellungen');
     I.waitForText('Sprache');
-    I.selectOption('select[name="language"]', 'Français');
+    I.selectOption('select[name="language"]', 'fr_FR');
     I.waitForText('Zeitzone');
     I.waitForVisible('.io-ox-alert');
 

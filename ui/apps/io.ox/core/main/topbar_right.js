@@ -104,10 +104,14 @@ define('io.ox/core/main/topbar_right', [
         id: 'refresh',
         index: 200,
         draw: function () {
+            if (_.device('smartphone')) return;
+
+            var node = $('<i class="fa fa-refresh launcher-icon" aria-hidden="true">');
+
             this.append(
                 addLauncher(
                     'right',
-                    $('<i class="fa fa-refresh launcher-icon" aria-hidden="true">').attr('title', gt('Refresh')),
+                    node,
                     function () {
                         refresh();
                         return $.when();
@@ -115,6 +119,14 @@ define('io.ox/core/main/topbar_right', [
                     gt('Refresh')
                 ).attr('id', 'io-ox-refresh-icon')
             );
+
+            function setLabel() {
+                var minutes = parseInt(settings.get('refreshInterval', 300000), 10) / 60000;
+                return node.attr('title', gt('Refresh. Current interval (%1$s min) can be customized in settings.', minutes));
+            }
+
+            setLabel();
+            settings.on('change:refreshInterval', setLabel);
         }
     });
 
@@ -130,6 +142,20 @@ define('io.ox/core/main/topbar_right', [
             if (helpView.$el.hasClass('hidden')) return;
             this.append(
                 addLauncher('right', helpView.render().$el.attr('tabindex', -1)).attr('id', 'io-ox-context-help-icon')
+            );
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right').extend({
+        id: 'settings',
+        index: 400,
+        draw: function () {
+            if (_.device('smartphone')) return;
+            this.append(
+                addLauncher('right', $('<i class="fa fa-cog launcher-icon" aria-hidden="true">').attr('title', gt('Settings')), function () {
+                    ox.launch('io.ox/settings/main');
+                }, gt('Settings'))
+                .attr('id', 'io-ox-settings-topbar-icon')
             );
         }
     });
@@ -158,12 +184,26 @@ define('io.ox/core/main/topbar_right', [
     });
 
     ext.point('io.ox/core/appcontrol/right/dropdown').extend({
-        id: 'settings',
-        index: 100,
+        id: 'refreshMobile',
+        index: 80,
         extend: function () {
-            this.link('io.ox/settings', gt('Settings'), function (e) {
+            if (!_.device('smartphone')) return;
+            this.link('refresh-mobile', gt('Refresh'), function (e) {
                 e.preventDefault();
-                ox.launch('io.ox/settings/main');
+                refresh();
+                return $.when();
+            });
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+        id: 'settingsMobile',
+        index: 90,
+        extend: function () {
+            if (!_.device('smartphone')) return;
+            this.link('settings-mobile', gt('Settings'), function (e) {
+                e.preventDefault();
+                return ox.launch('io.ox/settings/main');
             });
         }
     });
@@ -306,8 +346,12 @@ define('io.ox/core/main/topbar_right', [
         id: 'dropdown',
         index: 1000,
         draw: function () {
-            var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
-                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('title', ox.openedInBrowserTab ? gt('Sign out') : gt('Settings')),
+            var title = ox.openedInBrowserTab ?
+                    gt('Sign out') :
+                    //#. tooltip of dropdown menu in topbar (contact image icon)
+                    gt('Support'),
+                ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
+                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('aria-label', title),
                 dropdown = new Dropdown({
                     attributes: { role: 'presentation' },
                     tagName: 'li',
@@ -330,7 +374,7 @@ define('io.ox/core/main/topbar_right', [
             function updatePicture() {
                 a.empty().append(
                     contactAPI.pictureHalo(
-                        $('<div class="contact-picture" aria-hidden="true">')
+                        $('<div class="contact-picture" aria-hidden="true">').attr('title', title)
                         .append(userAPI.getTextNode(ox.user_id, { type: 'initials' })),
                         { internal_userid: ox.user_id },
                         { width: 40, height: 40, fallback: false }
@@ -386,6 +430,7 @@ define('io.ox/core/main/topbar_right', [
                 var link = this.find('[data-action="sign-out"], #io-ox-topbar-dropdown-icon > a').first();
                 // popover
                 link.popover({
+                    // language; not locale
                     content: data[ox.language] || gt('You forgot to sign out last time. Always use the sign-out button when you finished your work.'),
                     template: '<div class="popover popover-signout" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-signout"></div></div>',
                     placement: 'bottom',

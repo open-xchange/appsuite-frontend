@@ -15,15 +15,17 @@
 Feature('Tasks > Delete');
 
 Before(async (users) => {
-    await users.create();
-    await users.create();
-    await users.create();
+    await Promise.all([
+        users.create(),
+        users.create(),
+        users.create()
+    ]);
 });
 After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7753] Delete single Task', async function (I, users) {
+Scenario('[C7753] Delete single Task', async function (I, users, tasks) {
     const testrailID = 'C7753';
     const testrailName = 'Delete single Task';
 
@@ -41,7 +43,7 @@ Scenario('[C7753] Delete single Task', async function (I, users) {
     });
 
     I.login('app=io.ox/tasks');
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    tasks.waitForApp();
     I.waitForText(testrailID, 5, '.window-body');
     I.waitForText(testrailID, 5, '.tasks-detailview .title');
     I.clickToolbar('Delete');
@@ -53,7 +55,7 @@ Scenario('[C7753] Delete single Task', async function (I, users) {
     I.waitForText('Empty', 5, '.vgrid');
 });
 
-Scenario('[C7754] Delete several Task at the same time', async function (I, users) {
+Scenario('[C7754] Delete several Task at the same time', async function (I, users, tasks) {
     const testrailID = 'C7754',
         testrailName = 'Delete several Task at the same time',
         taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] }),
@@ -64,7 +66,7 @@ Scenario('[C7754] Delete several Task at the same time', async function (I, user
     }
 
     I.login('app=io.ox/tasks');
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    tasks.waitForApp();
     I.waitForElement('.tasks-detailview', 5);
     I.clickToolbar('.btn[title="Select all"]');
     I.seeNumberOfElements('li.selected.vgrid-cell', numberOfTasks);
@@ -78,7 +80,7 @@ Scenario('[C7754] Delete several Task at the same time', async function (I, user
     I.waitForText('Empty', 5, '.vgrid');
 });
 
-Scenario('[C7755] Delete recurring Task', async function (I) {
+Scenario('[C7755] Delete recurring Task', async function (I, tasks) {
     const testrailID = 'C7755',
         testrailName = 'Delete recurring Task';
 
@@ -100,7 +102,7 @@ Scenario('[C7755] Delete recurring Task', async function (I) {
     });
 
     I.login('app=io.ox/tasks');
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    tasks.waitForApp();
     I.clickToolbar('Delete');
     I.waitForElement('.modal-body');
     I.waitForText('Do you really want to delete this task?');

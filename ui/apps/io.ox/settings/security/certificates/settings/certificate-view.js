@@ -13,15 +13,13 @@
 
 define('io.ox/settings/security/certificates/settings/certificate-view', [
     'io.ox/core/extensions',
-    'io.ox/core/tk/dialogs',
-    'io.ox/core/manifests',
-    'io.ox/core/upsell',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/settings/certificates',
     'io.ox/backbone/views/disposable',
     'io.ox/core/api/certificate',
     'io.ox/core/api/account',
     'less!io.ox/settings/security/certificates/settings/style'
-], function (ext, dialogs, manifests, upsell, gt, DisposableView, api, accountAPI) {
+], function (ext, ModalDialog, gt, DisposableView, api, accountAPI) {
 
     'use strict';
 
@@ -37,12 +35,10 @@ define('io.ox/settings/security/certificates/settings/certificate-view', [
         },
 
         render: function () {
+            if (this.disposed) return this;
 
             var baton = ext.Baton({ model: this.model, view: this });
 
-            if (this.disposed) {
-                return this;
-            }
             ext.point('io.ox/settings/security/certificates/settings/detail/view').invoke('draw', this.$el.empty(), baton);
             return this;
         },
@@ -61,7 +57,6 @@ define('io.ox/settings/security/certificates/settings/certificate-view', [
         },
 
         removeCertificate: function () {
-
             var self = this;
             api.remove({ fingerprint: this.model.get('fingerprint'), hostname: this.model.get('hostname') }).done(function () {
                 ox.trigger('SSL:remove', { code: 'SSL:remove', error_params: [self.model.get('fingerprint'), self.model.get('hostname')] });
@@ -69,25 +64,18 @@ define('io.ox/settings/security/certificates/settings/certificate-view', [
                 self.refreshWidget();
                 self.render();
             });
-
         },
 
         onDelete: function (e) {
             e.preventDefault();
-            var self = this,
-                dialog = new dialogs.ModalDialog()
-            .header($('<h4>').text(gt('Remove certificate')))
-            .append($('<span>').text(gt('Do you really want to remove this certificate?')))
-            .addPrimaryButton('remove',
-                gt('Remove'), 'remove'
-            )
-            .addButton('cancel', gt('Cancel'), 'cancel');
-            dialog.show().done(function (action) {
-                if (action === 'remove') {
+            var self = this;
+            new ModalDialog({ title: gt('Remove certificate'), description: gt('Do you really want to remove this certificate?') })
+                .addCancelButton()
+                .addButton({ label: gt('Remove'), action: 'certremove' })
+                .on('certremove', function () {
                     self.removeCertificate();
-
-                }
-            });
+                })
+                .open();
         },
 
         refreshWidget: function () {
@@ -100,7 +88,6 @@ define('io.ox/settings/security/certificates/settings/certificate-view', [
                 });
             });
         }
-
     });
 
     return {

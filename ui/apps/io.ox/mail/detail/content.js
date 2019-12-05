@@ -200,7 +200,7 @@ define('io.ox/mail/detail/content', [
                 }
 
                 // important: if this is not an internal deeplink (not in valid hosts), we must remove deeplink markup. Otherwise our event listeners are triggered instead of opening in a new tab.
-                link.removeClass('deep-link-files', 'deep-link-contacts', 'deep-link-calendar', 'deep-link-tasks', 'deep-link-app');
+                link.removeClass('deep-link-files', 'deep-link-contacts', 'deep-link-calendar', 'deep-link-tasks', 'deep-link-gdpr', 'deep-link-app');
 
                 if (href.search(/^\s*mailto:/i) > -1) {
                     // mailto:

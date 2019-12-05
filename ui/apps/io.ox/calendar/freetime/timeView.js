@@ -97,9 +97,11 @@ define('io.ox/calendar/freetime/timeView', [
         id: 'zoomlevels',
         index: 200,
         draw: function (baton) {
-            var inputField = $('<input type="text" readonly="readonly" class="form-control">').val(baton.model.get('zoom') + '%'),
-                plus = $('<span class="input-group-btn">').append($('<button class="btn btn-default" type="button">').append($('<i class="fa fa-plus">'))),
-                minus = $('<span class="input-group-btn">').append($('<button class="btn btn-default" type="button">').append($('<i class="fa fa-minus">'))),
+            var inputField = $('<input type="text" readonly="readonly" aria-live="polite" class="form-control">').val(baton.model.get('zoom') + '%'),
+                plus = $('<span class="input-group-btn">').append($('<button class="btn btn-default" type="button">').attr('aria-label', gt('Zoom in'))
+                    .append($('<i aria-hidden="true" class="fa fa-plus">').attr('title', gt('Zoom in')))),
+                minus = $('<span class="input-group-btn">').append($('<button class="btn btn-default" type="button">').attr('aria-label', gt('Zoom out'))
+                    .append($('<i aria-hidden="true" class="fa fa-minus">').attr('title', gt('Zoom out')))),
                 changefunction = function (e) {
                     var index = _(ZOOM_LEVELS).indexOf(parseInt(baton.model.get('zoom'), 10));
                     if (e.data.direction === 'plus' && index + 1 < ZOOM_LEVELS.length) {
@@ -716,7 +718,9 @@ define('io.ox/calendar/freetime/timeView', [
             if (inverse ? !this.model.get('onlyWorkingHours') : this.model.get('onlyWorkingHours')) {
                 start.add(this.model.get('startHour'), 'hours');
             }
-            return start.valueOf() + millisecondsFromDayStart;
+
+            // we may encounter a daylight saving time change here. We need to calculate the offset change correctly
+            return start.add(millisecondsFromDayStart, 'milliseconds').add(moment(start).startOf('day')._offset - start._offset, 'minutes').valueOf();
         },
 
         setToGrid: function (coord) {
@@ -825,9 +829,13 @@ define('io.ox/calendar/freetime/timeView', [
                     endTime = Math.max(this.lassoStartTime, this.lassoEndTime),
                     attendees = this.model.get('attendees').toJSON();
 
+                // use correct timezone (view uses the timezone of the startdate, so this is also correct for the enddate)
+                startTime = this.parentView.parentModel ? moment.tz(startTime, this.parentView.parentModel.get('startDate').tzid) : moment(startTime);
+                endTime = this.parentView.parentModel ? moment.tz(endTime, this.parentView.parentModel.get('startDate').tzid) : moment(endTime);
+
                 // round to full minutes
-                startTime = moment(startTime).startOf('minute');
-                endTime = moment(endTime).startOf('minute');
+                startTime.startOf('minute');
+                endTime.startOf('minute');
 
                 // check if the lasso is a fullday appointment
                 if (startTime.valueOf() !== endTime.valueOf() && startTime.valueOf() === moment(startTime).startOf('day').valueOf() && endTime.valueOf() === moment(endTime).startOf('day').valueOf()) {
@@ -837,6 +845,9 @@ define('io.ox/calendar/freetime/timeView', [
                         attendees: attendees
                     };
                 }
+
+                // Endtimezone might be different so correct this if needed
+                if (this.parentView.parentModel) endTime.tz(this.parentView.parentModel.get('endDate').tzid);
 
                 return {
                     startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: startTime.tz() },

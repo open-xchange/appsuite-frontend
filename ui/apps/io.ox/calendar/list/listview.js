@@ -126,6 +126,19 @@ define('io.ox/calendar/list/listview', [
 
             this.closest('li').attr('aria-label', _.escape(a11yLabel.join(', ')) + '.');
             this.append($('<div class="title">').text(summary));
+
+            if (model.get('folder')) {
+                folderAPI.get(model.get('folder')).done(function (folder) {
+                    var color = util.getAppointmentColor(folder, model),
+                        colorName = util.getColorName(color);
+
+                    if (colorName) {
+                        //#. Will be used as aria lable for the screen reader to tell the user which color/category the appointment within the calendar has.
+                        a11yLabel.push(gt('Category') + ': ' + util.getColorName(color));
+                        this.closest('li').attr('aria-label', _.escape(a11yLabel.join(', ')) + '.');
+                    }
+                }.bind(this));
+            }
         }
     });
 
@@ -174,7 +187,7 @@ define('io.ox/calendar/list/listview', [
         index: 100,
         draw: function (baton) {
             function toggleControl(i, state) {
-                i.attr('class', state ? 'fa fa-check-square-o' : 'fa fa-square-o').parent().attr('aria-checked', state);
+                i.attr('class', state ? 'fa fa-check-square-o' : 'fa fa-square-o').parent().attr('aria-pressed', state);
             }
 
             function toggleSelection(e) {
@@ -217,7 +230,7 @@ define('io.ox/calendar/list/listview', [
 
         initialize: function (options) {
             ListView.prototype.initialize.call(this, options);
-            this.$el.addClass('chronos-item');
+            this.$el.addClass('chronos-item').attr('aria-label', gt('List view'));
             this.connect(api.collectionLoader);
             this.listenTo(settings, 'change:showDeclinedAppointments', this.rerender);
             this.on('collection:change:attendees', this.onChangeAttendee);
@@ -241,6 +254,8 @@ define('io.ox/calendar/list/listview', [
         },
 
         setCollection: function (collection) {
+            // disable sorting for search results
+            var options = this.loader.mode === 'search' ? { comparator: false } : {};
             function filter(model) {
                 if (util.getConfirmationStatus(model) !== 'DECLINED') return true;
                 return settings.get('showDeclinedAppointments', false);
@@ -249,7 +264,7 @@ define('io.ox/calendar/list/listview', [
             // use intermediate collection to filter declined appointments if necessary
             if (this.originalCollection) this.stopListening(this.originalCollection);
             this.originalCollection = collection;
-            collection = new models.Collection(collection.filter(filter));
+            collection = new models.Collection(collection.filter(filter), options);
             collection.cid = this.originalCollection.cid;
 
             // apply intermediate collection to ListView
@@ -275,7 +290,8 @@ define('io.ox/calendar/list/listview', [
                     this.collection.remove(data);
                 },
                 'remove sort': function () {
-                    this.collection.sort();
+                    // check for comparator first
+                    if (this.collection.comparator) this.collection.sort();
                 }.bind(this)
             });
 

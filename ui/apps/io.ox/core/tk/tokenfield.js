@@ -646,8 +646,8 @@ define('io.ox/core/tk/tokenfield', [
                     stop: function (e, ui) {
                         if (this.isMultisort) {
                             ui.item.after($(this).find('.active'));
-                            self.resort();
                         }
+                        self.resort();
                     },
                     start: function (e, ui) {
                         // check for multisort

@@ -104,8 +104,11 @@
         .ellipsis();
 
         &.left {
-            left: 8px;
-            .fa-chevron-left { margin-right: 3px; }
+            left: 10px;
+            .fa-chevron-left {
+                text-align: left;
+                width: 15px;
+            }
         }
 
         a, a:hover {
@@ -118,7 +121,12 @@
             }
         }
 
-        &.right { right: 16px; }
+        &.right {
+            .fa-chevron-right {
+                margin-left: 4px;
+            }
+            right: 15px;
+        }
     }
 
     .navbar-title {
@@ -171,10 +179,19 @@
                 align-items: center;
                 height: 100%;
 
-                &:focus {
+                &:focus:not(.disabled) {
                     background: transparent;
                     color: @link-color;
                 }
+
+                &.disabled {
+                    text-decoration: none;
+
+                    &:focus {
+                        background: transparent;
+                    }
+                }
+
             }
         }
         i.fa {

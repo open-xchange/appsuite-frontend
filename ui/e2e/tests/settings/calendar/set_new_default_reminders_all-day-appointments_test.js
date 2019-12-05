@@ -28,10 +28,8 @@ Scenario('[C244799] Set new default reminder for all-day appointments', async fu
     const alaramRelated = 'before start';
     I.login();
 
-    /////////Default reminder
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings');
-    I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
+    // Default reminder
+    I.openApp('Settings', { folder: 'virtual/settings/io.ox/calendar' });
     I.waitForElement('.alarms-link-view .btn-link');
     I.click(
         locate('.form-group')
@@ -46,20 +44,21 @@ Scenario('[C244799] Set new default reminder for all-day appointments', async fu
     I.selectOption('.alarm-related', alaramRelated);
     I.click({ css: '[data-action="apply"]' });
 
-    ///////verify reminder is set as a notification to 1 day before start by default.
+    // verify reminder is set as a notification to 1 day before start by default.
     I.openApp('Calendar');
-    I.clickToolbar('New');
-    I.waitForText('Subject');
+    I.clickToolbar('New appointment');
+    I.waitForText('Subject', 30, '.io-ox-calendar-edit');
     I.fillField('summary', 'subject');
     I.fillField('location', 'Dortmund');
-    I.click('All day');
+    I.checkOption('All day');
     I.fillField('description', 'description');
     I.click('Create');
+    I.waitForDetached('.io-ox-calendar-edit');
 
     I.waitForText('subject', '.appointment-content');
     I.click('subject', '.appointment-content');
 
-    I.waitForVisible('.io-ox-sidepopup');
+    I.waitForVisible(locate('li > a').withText('Edit').inside('.io-ox-sidepopup'));
     I.click('Edit');
     I.waitForElement('.io-ox-calendar-edit');
     I.waitForText('Notify 1 day before start.');

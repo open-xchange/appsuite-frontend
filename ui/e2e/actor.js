@@ -3,7 +3,7 @@ const actor = require('@open-xchange/codecept-helper').actor;
 
 module.exports = actor({
     //remove previously created appointments by appointment title
-    removeAllAppointments: async function (title) {
+    async removeAllAppointments(title) {
         const { skipRefresh } = await this.executeAsyncScript(function (title, done) {
             const appointments = $('.appointment')
                 .toArray()
@@ -25,9 +25,9 @@ module.exports = actor({
     createAppointment({ subject, location, folder, startDate, startTime, endDate, endTime }) {
         // select calendar
         this.selectFolder(folder);
-        this.waitForElement('li.selected[aria-label="' + folder + '"] .color-label');
+        this.waitForElement('li.selected[aria-label^="' + folder + '"] .color-label');
 
-        this.clickToolbar('New');
+        this.clickToolbar('New appointment');
         this.waitForVisible('.io-ox-calendar-edit-window');
 
         this.fillField('Subject', subject);
@@ -64,5 +64,35 @@ module.exports = actor({
         // save
         this.click('Create', '.io-ox-calendar-edit-window');
         this.waitForDetached('.io-ox-calendar-edit-window', 5);
+    },
+
+    waitForNetworkTraffic() {
+        this.waitForElement('.fa-spin.fa-refresh');
+        this.waitForElement('.fa-spin-paused.fa-refresh');
+    },
+
+    triggerRefresh() {
+        this.executeScript(function () {
+            ox.trigger('refresh^');
+        });
+        this.waitForElement('.fa-spin.fa-refresh');
+        this.waitForElement('.fa-spin-paused.fa-refresh');
+    },
+
+    async grabBackgroundImageFrom(selector) {
+        let backgroundImage = await this.grabCssPropertyFrom(selector, 'backgroundImage');
+        backgroundImage = Array.isArray(backgroundImage) ? backgroundImage[0] : backgroundImage;
+        return backgroundImage ? backgroundImage : 'none';
+    },
+
+    clickDropdown(text) {
+        this.waitForText(text, 5, '.dropdown.open .dropdown-menu');
+        this.click(text, '.dropdown.open .dropdown-menu');
+    },
+
+    openFolderMenu(folderName) {
+        const item = `.folder-tree .contextmenu-control[title*="${folderName}"]`;
+        this.waitForElement(item);
+        this.click(item);
     }
 });

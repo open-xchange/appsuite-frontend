@@ -258,7 +258,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 // single select
                 items.removeClass('precursor');
                 node = this.focus(index, items, focus).addClass('precursor');
-                if (this.isMultiple(e)) this.pickMultiple(node, items); else this.pickSingle(node);
+
+                if (this.isMultiple(e)) this.pickMultiple(node, items);
+                else this.pickSingle(node);
             }
         },
 
@@ -684,7 +686,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     // append swipe action cell once, will be removed afterwards
                     this.swipeCell = $('<div class="swipe-option-cell">').append(
                         this.btnDelete = $('<div class="swipe-button delete">').append($('<i class="fa fa-trash" aria-hidden="true">')),
-                        this.btnMore = $('<div class="swipe-button more">').append($('<i class="fa fa-bars" aria-hidden="true">'))
+                        this.btnMore = $('<div class="swipe-button more">').append(this.faBars = $('<i class="fa fa-bars" aria-hidden="true">'))
                     ).css('height', this.target.outerHeight() + 'px');
                     this.target.before(this.swipeCell);
                 }
@@ -700,14 +702,16 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 // if delete threshold is reached, enlarge delete button over whole cell
                 if (Math.abs(this.distanceX) >= THRESHOLD_REMOVE && !this.expandDelete) {
                     this.expandDelete = true;
-                    this.btnMore.hide();
                     this.btnDelete.css('width', '100%');
+                    this.btnMore.css('width', 0);
+                    this.faBars.css('opacity', 0);
 
                 } else if (this.expandDelete && Math.abs(this.distanceX) <= THRESHOLD_REMOVE) {
                     // remove style
                     this.expandDelete = false;
                     this.btnDelete.css('width', '95px');
-                    this.btnMore.show();
+                    this.faBars.css('opacity', 1);
+                    this.btnMore.removeAttr('style');
                 }
             }
         },
@@ -1050,7 +1054,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         onKeydown: function (e) {
             switch (e.which) {
 
-                // space
+                // enter or space
+                case 13:
                 case 32:
                     this.onSpace(e);
                     break;

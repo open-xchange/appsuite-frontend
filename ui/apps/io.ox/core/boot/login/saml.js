@@ -90,7 +90,7 @@ define('io.ox/core/boot/login/saml', [
             }, function (jqXHR, textStatus, errorThrown) {
                 if (ox.serverConfig.samlLoginErrorRedirect) {
                     _.url.redirect(ox.serverConfig.samlLoginErrorRedirectURL +
-                        '#&' + _.serialize({ language: ox.language, statusCode: jqXHR.status || 'undefined', statusText: textStatus, error: errorThrown }));
+                        '#&' + _.serialize({ language: ox.locale, statusCode: jqXHR.status || 'undefined', statusText: textStatus, error: errorThrown }));
                 }
             });
         },

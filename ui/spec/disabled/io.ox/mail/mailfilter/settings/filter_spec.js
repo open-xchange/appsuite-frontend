@@ -192,7 +192,7 @@ define([
             addButton = this.node.find('.btn-primary[data-action="add"]');
             addButton.click();
 
-            $popup = $('body').find('.io-ox-mailfilter-edit').closest('.io-ox-dialog-popup');
+            $popup = $('body').find('.io-ox-mailfilter-edit').closest('.modal-dialog');
             expect($popup).to.have.length(1);
             $popup.remove();
         });

@@ -22,12 +22,13 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7495] Quota update', async (I, users) => {
+Scenario('[C7495] Quota update', async (I, users, contexts) => {
 
     const assert = require('chai').assert;
 
     // clear the portal settings
     await I.haveSetting('io.ox/portal//widgets/user', '{}');
+    await contexts[0].hasQuota(1000);
 
     //Add Recently changed files widget to Portal
     I.login('app=io.ox/portal');
@@ -51,7 +52,7 @@ Scenario('[C7495] Quota update', async (I, users) => {
     await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testspreadsheed.xlsm');
 
     I.waitForVisible('~Refresh');
-    I.click('~Refresh', '#io-ox-appcontrol');
+    I.retry(5).click('~Refresh', '#io-ox-appcontrol');
     I.waitForElement('#io-ox-refresh-icon .fa-spin');
     I.waitForDetached('#io-ox-refresh-icon .fa-spin');
 
@@ -59,7 +60,7 @@ Scenario('[C7495] Quota update', async (I, users) => {
     I.openApp('Portal');
     I.waitForVisible('.io-ox-portal-window');
     I.waitForVisible('~Refresh');
-    I.click('~Refresh', '#io-ox-appcontrol');
+    I.retry(5).click('~Refresh', '#io-ox-appcontrol');
     I.waitForElement('#io-ox-refresh-icon .fa-spin');
     I.waitForDetached('#io-ox-refresh-icon .fa-spin');
 
@@ -72,7 +73,5 @@ Scenario('[C7495] Quota update', async (I, users) => {
     //Verify quota is updated
     assert.isAbove(quotaAfter, quotaBefore, 'Oops');
     assert.isAtLeast(progressAfter, progressBefore, 'Oops'); //(>=)
-
-    I.logout();
 });
 

@@ -35,6 +35,7 @@ define('io.ox/core/folder/selection', [], function () {
             });
 
         this.selectableVirtualFolders = {};
+        this.unselectableFolders = {};
     }
 
     _.extend(Selection.prototype, {
@@ -134,6 +135,9 @@ define('io.ox/core/folder/selection', [], function () {
 
             // trigger action event
             this.view.trigger('selection:action', items, index);
+
+            // Bug 64624: remove selection from tree when drive is the previewed folder
+            if (this.view.app && this.view.app.get('name') === 'io.ox/files' && this.view.app.folder.get() === '9') current.removeClass('selected');
 
             // do nothing if already selected
             if (current.hasClass('selected')) return;
@@ -260,6 +264,10 @@ define('io.ox/core/folder/selection', [], function () {
             this.selectableVirtualFolders[id] = true;
         },
 
+        addUnselectableFolder: function (id) {
+            this.unselectableFolders[id] = true;
+        },
+
         triggerEvent: _.debounce(function (event) {
             if (event === 'change') this.triggerChange.apply(this, _(arguments).toArray().splice(1));
             else this.view.trigger.apply(this.view, arguments);
@@ -282,7 +290,7 @@ define('io.ox/core/folder/selection', [], function () {
                         alwaysChange: true
                     }));
                 });
-            } else if (self.view) {
+            } else if (self.view && !self.unselectableFolders[id]) {
                 self.view.trigger(isVirtual && !self.selectableVirtualFolders[id] ? 'virtual' : 'change', id, item);
             }
         }

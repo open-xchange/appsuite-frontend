@@ -124,7 +124,7 @@ define('io.ox/mail/compose/api', [
             });
         },
 
-        send: function (id, data) {
+        send: function (id, data, attachments) {
             data = _(data).clone();
 
             api.trigger('before:send', id, data);
@@ -140,9 +140,16 @@ define('io.ox/mail/compose/api', [
             var formData = new FormData();
             formData.append('JSON', JSON.stringify(data));
 
+            (attachments || []).forEach(function (attachment, index) {
+                if (attachment.name) formData.append('file_' + index, attachment, attachment.name);
+                else formData.append('file_' + index, attachment);
+            });
+
             var def = http.UPLOAD({
                 url: 'api/mail/compose/' + id + '/send',
-                data: formData
+                data: formData,
+                // this call always expects a json response. avoid errors in html format (user only sees json parsing error in this case)
+                params: { force_json_response: true }
             });
 
             def.progress(function (e) {
@@ -161,11 +168,16 @@ define('io.ox/mail/compose/api', [
             return def;
         },
 
-        save: function (id, data) {
+        save: function (id, data, attachments) {
             api.trigger('before:save', id, data);
 
             var formData = new FormData();
             formData.append('JSON', JSON.stringify(data));
+
+            (attachments || []).forEach(function (attachment, index) {
+                if (attachment.name) formData.append('file_' + index, attachment, attachment.name);
+                else formData.append('file_' + index, attachment);
+            });
 
             return http.UPLOAD({
                 url: 'api/mail/compose/' + id + '/save',

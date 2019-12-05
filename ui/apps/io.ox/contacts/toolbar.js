@@ -17,9 +17,10 @@ define('io.ox/contacts/toolbar', [
     'io.ox/backbone/views/toolbar',
     'gettext!io.ox/contacts',
     'io.ox/contacts/api',
+    'settings!io.ox/contacts',
     'io.ox/contacts/actions',
     'less!io.ox/contacts/style'
-], function (ext, Dropdown, ToolbarView, gt, api) {
+], function (ext, Dropdown, ToolbarView, gt, api, settings) {
 
     'use strict';
 
@@ -35,7 +36,7 @@ define('io.ox/contacts/toolbar', [
         'create': {
             prio: 'hi',
             mobile: 'hi',
-            title: gt('New'),
+            title: gt('New contact'),
             dropdown: 'io.ox/contacts/toolbar/new',
             drawDisabled: true
         },
@@ -51,7 +52,6 @@ define('io.ox/contacts/toolbar', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('Send email'),
-            tooltip: gt('Send email'),
             ref: 'io.ox/contacts/actions/send'
         },
         'invite': {
@@ -153,7 +153,9 @@ define('io.ox/contacts/toolbar', [
         index: 10000,
         setup: function (app) {
 
-            var toolbarView = new ToolbarView({ point: 'io.ox/contacts/toolbar/links', title: app.getTitle() });
+            // yep strict false (otherwise toolbar does not redraw when changing between empty folders => contacts are created in the wrong folder)
+            var toolbarView = new ToolbarView({ point: 'io.ox/contacts/toolbar/links', title: app.getTitle(), strict: false }),
+                limit = settings.get('toolbar/limits/fetch', 100);
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbarView.$el
@@ -164,7 +166,7 @@ define('io.ox/contacts/toolbar', [
                 var options = { data: [], folder_id: this.folder.get(), app: this };
                 toolbarView.setSelection(list, function () {
                     if (!list.length) return options;
-                    return (list.length <= 100 ? api.getList(list) : $.when(list)).pipe(function (data) {
+                    return (list.length <= limit ? api.getList(list) : $.when(list)).then(function (data) {
                         options.data = data;
                         return options;
                     });
@@ -181,6 +183,9 @@ define('io.ox/contacts/toolbar', [
             // update toolbar on selection change as well as any model change (seen/unseen flag)
             app.getGrid().selection.on('change', function (e, list) {
                 app.updateToolbar(list);
+            });
+            api.on('update', function () {
+                app.updateToolbar(app.getGrid().selection.get());
             });
         }
     });

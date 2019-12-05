@@ -156,6 +156,8 @@ define('io.ox/calendar/settings/pane', [
                 }
 
                 return function () {
+                    if (!capabilities.has('calendar_birthdays')) return;
+
                     var model = new Backbone.Model({ birthday: undefined }),
                         checkbox = util.checkbox('birthday', gt('Show birthday calendar'), model),
                         view = checkbox.data('view'), fieldset;

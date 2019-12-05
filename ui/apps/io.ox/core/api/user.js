@@ -54,6 +54,8 @@ define('io.ox/core/api/user', [
     var api = apiFactory({
         module: 'user',
         keyGenerator: function (obj) {
+            // if this is already a string or number, where done, if this is an object, use the id parameter. May happen when a list request uses array of ids instead of array of objects with ids
+            if (typeof obj === 'string' || typeof obj === 'number') return obj;
             return String(obj.id);
         },
         requests: {
@@ -297,7 +299,8 @@ define('io.ox/core/api/user', [
     // auto-inject user_id to guarantee client-side caching
     var getUser = api.get;
     api.get = function () {
-        if (!arguments.length) return getUser({ id: ox.user_id });
+        // no arguments, empty object or no id
+        if (!arguments.length || _.isEmpty(arguments) || (_.isObject(arguments[0]) && arguments[0].id === undefined)) return getUser({ id: ox.user_id });
         return getUser.apply(this, arguments);
     };
 

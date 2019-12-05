@@ -22,83 +22,82 @@ define('io.ox/contacts/view-detail', [
     'io.ox/participants/model',
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/util',
-    'io.ox/core/locale/postal-address',
     'io.ox/core/capabilities',
     'gettext!io.ox/contacts',
     'settings!io.ox/contacts',
     'io.ox/core/tk/attachments',
     'io.ox/core/http',
+    'io.ox/core/locale/postal-address',
     'io.ox/backbone/views/toolbar',
     'io.ox/backbone/views/action-dropdown',
     'static/3rd.party/purify.min.js',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, coreUtil, postalAddress, capabilities, gt, settings, attachments, http, ToolbarView, ActionDropdownView, DOMPurify) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, coreUtil, capabilities, gt, settings, attachments, http, postalAddress, ToolbarView, ActionDropdownView, DOMPurify) {
 
     'use strict';
 
     // smart join
-    var join = function () {
-        return _(arguments)
-            .select(function (obj, i) {
-                return i > 0 && !!obj;
-            })
-            .join(arguments[0] || '');
-    };
+    // var join = function () {
+    //     return _(arguments)
+    //         .select(function (obj, i) {
+    //             return i > 0 && !!obj;
+    //         })
+    //         .join(arguments[0] || '');
+    // };
 
-    function getDescription(data) {
+    // function getDescription(data) {
 
-        function single(index, value) {
-            var params = new Array(index);
-            params[index - 1] = value;
-            return { format: '%' + index + '$s', params: params };
-        }
+    //     function single(index, value) {
+    //         var params = new Array(index);
+    //         params[index - 1] = value;
+    //         return { format: '%' + index + '$s', params: params };
+    //     }
 
-        var count, desc;
+    //     var count, desc;
 
-        if (api.looksLikeDistributionList(data)) {
-            count = data.number_of_distribution_list;
-            //#. %1$d is a number of members in distribution list
-            desc = count === 0 ?
-                gt('Distribution list') :
-                gt.format(gt.ngettext('Distribution list with 1 entry', 'Distribution list with %1$d entries', count), count);
-            return single(7, desc, true);
-        }
+    //     if (api.looksLikeDistributionList(data)) {
+    //         count = data.number_of_distribution_list;
+    //         //#. %1$d is a number of members in distribution list
+    //         desc = count === 0 ?
+    //             gt('Distribution list') :
+    //             gt.format(gt.ngettext('Distribution list with 1 entry', 'Distribution list with %1$d entries', count), count);
+    //         return single(7, desc, true);
+    //     }
 
-        if (api.looksLikeResource(data)) {
-            return single(7, gt('Resource'), true);
-        }
+    //     if (api.looksLikeResource(data)) {
+    //         return single(7, gt('Resource'), true);
+    //     }
 
-        if (data.position || data.profession) {
-            return {
-                format: join(', ', data.position ? '%1$s' : '', data.profession ? '%2$s' : ''),
-                params: [data.position, data.profession]
-            };
-        }
+    //     if (data.position || data.profession) {
+    //         return {
+    //             format: join(', ', data.position ? '%1$s' : '', data.profession ? '%2$s' : ''),
+    //             params: [data.position, data.profession]
+    //         };
+    //     }
 
-        return util.getMailFormat(data);
-
-    }
+    //     return util.getMailFormat(data);
+    // }
 
     function hideAddressBook() {
-        return ox.ui.apps._indexOf('io.ox/contacts') < 0;
+        return !ox.ui.apps.get('io.ox/contacts');
     }
 
-    function createText(format, classes) {
-        return _.aprintf(
-            format.format,
-            function (index) {
-                return $('<span>').addClass(classes[index]).text(format.params[index]);
-            },
-            function (text) {
-                return $.txt(text);
-            }
-        );
-    }
+    // function createText(format, classes) {
+    //     return _.aprintf(
+    //         format.format,
+    //         function (index) {
+    //             return $('<span>').addClass(classes[index]).text(format.params[index]);
+    //         },
+    //         function (text) {
+    //             return $.txt(text);
+    //         }
+    //     );
+    // }
 
-    function buildDropdown(container, title, data) {
-        var dropdown = new ActionDropdownView({ point: 'io.ox/core/tk/attachment/links', data: data, title: title });
-        container.append(dropdown.$el);
-    }
+    // function buildDropdown(container, title, data) {
+    //     var dropdown = new ActionDropdownView({ point: 'io.ox/core/tk/attachment/links', data: data, title: title });
+    //     container.append(dropdown.$el);
+    // }
 
     /*
      * Extensions
@@ -122,104 +121,159 @@ define('io.ox/contacts/view-detail', [
 
     ext.point('io.ox/contacts/detail').extend({
         index: (INDEX += 100),
-        id: 'contact-details',
+        id: 'contact-header',
         draw: function (baton) {
-            var node;
+
+            if (baton.data.mark_as_distributionlist) return;
+
+            var $photo = $('<dt>');
+            ext.point('io.ox/contacts/detail/photo').invoke('draw', $photo, baton);
+
+            var $summary = $('<dd class="contact-summary">');
+            ext.point('io.ox/contacts/detail/summary').invoke('draw', $summary, baton);
+
             this.append(
-                node = $('<div class="contact-header">')
+                // we use a definition list here to get exactily the same layout
+                $('<dl class="dl-horizontal contact-header">').append($photo, $summary)
             );
-            ext.point('io.ox/contacts/detail/head').invoke('draw', node, baton);
         }
     });
 
-    // HEAD
-
-    ext.point('io.ox/contacts/detail/head').extend({
-        index: 100,
-        id: 'contact-picture',
+    ext.point('io.ox/contacts/detail').extend({
+        index: (INDEX += 100),
+        id: 'list-header',
         draw: function (baton) {
-            if (api.looksLikeDistributionList(baton.data)) return;
-            this.append(
-                api.pictureHalo(
-                    $('<div class="picture" aria-hidden="true">'),
-                    baton.data,
-                    { width: 64, height: 64 }
+
+            if (!baton.data.mark_as_distributionlist) return;
+
+            var count = baton.data.number_of_distribution_list,
+                //#. %1$d is a number of members in distribution list
+                desc = count === 0 ?
+                    gt('Distribution list') :
+                    gt.format(gt.ngettext('Distribution list with 1 entry', 'Distribution list with %1$d entries', count), count);
+
+            this.addClass('distribution-list').append(
+                $('<div class="contact-header">').append(
+                    $('<h1 class="fullname">').text(util.getFullName(baton.data)),
+                    $('<h2>').text(desc)
                 )
             );
         }
     });
 
-    ext.point('io.ox/contacts/detail/head').extend({
-        index: 200,
-        id: 'contact-title',
+    // Contact Photo
+
+    ext.point('io.ox/contacts/detail/photo').extend({
         draw: function (baton) {
-
-            var name = coreUtil.renderPersonalName({
-                html: util.getFullName(baton.data, true),
-                tagName: 'h1'
-            }, baton.data);
-
-            var job = createText(getDescription(baton.data), ['position', 'profession', 'type']),
-                company = $.trim(baton.data.company),
-                container;
-
-            this.append(
-                $('<div class="next-to-picture">').append(
-                    // right side
-                    $('<i class="fa fa-lock private-flag" aria-hidden="true">').attr('title', gt('Private')).hide(),
-                    name.children().length ? name.addClass('header-name') : [],
-                    company ? $('<h2 class="header-company">').append($('<span class="company">').text(company)) : [],
-                    job.length ? $('<h2 class="header-job">').append(job) : [],
-                    container = $('<section class="attachments-container clear-both">')
-                        .hide()
-                )
-            );
-
-            if (baton.data.private_flag) {
-                this.find('.private-flag').show();
-            }
-
-            if (api.uploadInProgress(_.ecid(baton.data))) {
-                var progressview = new attachments.progressView({ cid: _.ecid(baton.data) });
-                container.append(progressview.render().$el).show();
-            } else if (baton.data.number_of_attachments > 0) {
-                ext.point('io.ox/contacts/detail/attachments').invoke('draw', container, baton.data);
-            }
+            this.append(api.getContactPhoto(baton.data, { size: 120 }));
         }
     });
 
-    // Attachments
+    // Contact Summary
+    var countryFlag = settings.get('features/countryFlag', false),
+        flags = {
+            US: '\uD83C\uDDFA\uD83C\uDDF8',
+            GB: '\uD83C\uDDEC\uD83C\uDDE7',
+            DE: '\uD83C\uDDE9\uD83C\uDDEA',
+            FR: '\uD83C\uDDEB\uD83C\uDDF7',
+            ES: '\uD83C\uDDEA\uD83C\uDDF8',
+            IT: '\uD83C\uDDEE\uD83C\uDDF9',
+            NL: '\uD83C\uDDF3\uD83C\uDDF1',
+            FI: '\uD83C\uDDEB\uD83C\uDDEE',
+            JP: '\uD83C\uDDEF\uD83C\uDDF5',
+            AT: '\uD83C\uDDE6\uD83C\uDDF9',
+            CH: '\uD83C\uDDE8\uD83C\uDDED',
+            BE: '\uD83C\uDDE7\uD83C\uDDEA'
+        };
 
-    ext.point('io.ox/contacts/detail/attachments').extend({
-        draw: function (contact) {
-
-            var section = this.show();
-            // TODO: Use io.ox/core/tk/attachments for attachment list here
-            require(['io.ox/core/api/attachment'], function (api) {
-                // this request might take a while; not cached
-                api.getAll({ folder_id: contact.folder_id, id: contact.id, module: 7 }).then(
-                    function success(data) {
-                        section.empty();
-                        _(data).each(function (a) {
-                            // draw
-                            buildDropdown(section, a.filename, a);
-                        });
-                        if (data.length > 1) {
-                            buildDropdown(section, gt('All attachments'), data);
-                        }
-                        section.on('a', 'click', function (e) { e.preventDefault(); });
-                    },
-                    function fail() {
-                        section.empty().append(
-                            $.fail(gt('Could not load attachments for this contact.'), function retry() {
-                                ext.point('io.ox/contacts/detail/attachments').invoke('draw', section, contact);
-                            })
-                        );
-                    }
+    ext.point('io.ox/contacts/detail/summary').extend(
+        {
+            index: 100,
+            id: 'fullname',
+            draw: function (baton) {
+                var options = { html: util.getFullNameWithFurigana(baton.data), tagName: 'h1 class="fullname"' },
+                    node = coreUtil.renderPersonalName(options, baton.data);
+                // a11y: headings must not be empty
+                if (!node.text()) return;
+                this.append(node);
+            }
+        },
+        {
+            index: 110,
+            id: 'flag',
+            draw: function (baton) {
+                if (!countryFlag) return;
+                if (_.device('smartphone')) return;
+                var country = baton.data.country_home || baton.data.country_business;
+                if (!country) return;
+                var flag = flags[postalAddress.getCountryCode(country)];
+                if (!flag) return;
+                // h1.fullname maybe missing (a11y: headings must not be empty)
+                this.find('h1.fullname').append($.txt(' ' + flag));
+            }
+        },
+        {
+            index: 120,
+            id: 'private_flag',
+            draw: function (baton) {
+                if (_.device('smartphone') || !baton.data.private_flag) return;
+                this.find('h1.fullname').append($('<div class="sr-only">').attr('aria-label', gt('Private contact')), $('<i class="fa fa-lock private-flag" aria-hidden="true">').attr('title', gt('Private')));
+            }
+        },
+        {
+            index: 200,
+            id: 'business',
+            draw: function (baton) {
+                var value = util.getSummaryBusiness(baton.data);
+                if (!value) return;
+                // a11y: headings must not be empty
+                this.append(
+                    $('<h2 class="business hidden-xs">').text(value)
                 );
-            });
+            }
+        },
+        {
+            index: 300,
+            id: 'location',
+            draw: function (baton) {
+                var value = util.getSummaryLocation(baton.data);
+                if (!value) return;
+                // a11y: headings must not be empty
+                this.append(
+                    $('<h2 class="location hidden-xs">').text(value)
+                );
+            }
         }
-    });
+    );
+
+    // var name =
+
+    // var job = createText(getDescription(baton.data), ['position', 'profession', 'type']),
+    //     company = $.trim(baton.data.company),
+    //     container;
+
+    // this.append(
+    //     $('<div class="next-to-picture">').append(
+    //         // right side
+    //         $('<i class="fa fa-lock private-flag" aria-hidden="true">').attr('title', gt('Private')).hide(),
+    //         name.children().length ? name.addClass('header-name') : [],
+    //         company ? $('<h2 class="header-company">').append($('<span class="company">').text(company)) : [],
+    //         job.length ? $('<h2 class="header-job">').append(job) : [],
+    //         container = $('<section class="attachments-container clear-both">')
+    //             .hide()
+    //     )
+    // );
+
+    // if (baton.data.private_flag) {
+    //     this.find('.private-flag').show();
+    // }
+
+    // if (api.uploadInProgress(_.ecid(baton.data))) {
+    //     var progressview = new attachments.progressView({ cid: _.ecid(baton.data) });
+    //     container.append(progressview.render().$el).show();
+    // } else if (baton.data.number_of_attachments > 0) {
+    //     ext.point('io.ox/contacts/detail/attachments').invoke('draw', container, baton.data);
+    // }
 
     // Content
 
@@ -241,7 +295,6 @@ define('io.ox/contacts/view-detail', [
     // Distribution list members
 
     ext.point('io.ox/contacts/detail/member').extend({
-
         draw: function (data) {
             // draw member
             this.append(
@@ -290,28 +343,18 @@ define('io.ox/contacts/view-detail', [
 
     function block() {
 
-        function removeAndSplice() {
-            rows.splice(-1, 1);
-            return args.slice(-1)[0];
-        }
-
-        var args = _(arguments).toArray(),
-            rows = _(args.slice(1)).compact(),
-            noDl = _.isBoolean(args.slice(-1)[0]) ? removeAndSplice() : false,
+        var rows = _(arguments).compact(),
             block = $('<section class="block">'),
-            dl = $('<dl class="dl-horizontal">'),
-            self = noDl ? block : dl.appendTo(block);
+            dl = $('<dl class="dl-horizontal">');
 
         // if block empty
         if (rows.length < 1) return $();
 
-        _.each(rows, function (el) {
-            self.append(el);
+        _.each(rows, function (row) {
+            dl.append(row);
         });
 
-        return block.prepend(
-            $('<h2>').text(args[0])
-        );
+        return block.append(dl);
     }
 
     function row(id, builder) {
@@ -373,6 +416,17 @@ define('io.ox/contacts/view-detail', [
         };
     }
 
+    function note(data) {
+        var text = $.trim(data.note);
+        if (!text) return null;
+        return function () {
+            $(this).append(
+                $('<dt>').text(model.fields.note),
+                _.nltobr(text, $('<dd class="note">'))
+            );
+        };
+    }
+
     function IM(number, id) {
         number = $.trim(number);
         if (!number) return null;
@@ -412,30 +466,35 @@ define('io.ox/contacts/view-detail', [
     function address(data, type) {
 
         var text = postalAddress.format(data, type);
-
         if (!text) return null;
+
         var services = {
             google: { label: gt('Google Maps'), url: 'https://www.google.com/maps?q=' },
             osm: { label: gt('Open Street Map'), url: 'https://www.openstreetmap.org/search?query=' },
             apple: { label: gt('Apple Maps'), url: 'https://maps.apple.com/?q=' }
         };
 
+        var i18n = {
+            home: gt('Home address'),
+            business: gt('Business address'),
+            other: gt('Other address')
+        };
+
         return function () {
 
             var address = $('<address>').attr('data-property', type).text($.trim(text)),
-                service = settings.get('mapService', 'google');
+                service = settings.get('mapService', 'google'),
+                dd = $('<dd>').append(address);
+
+            $(this).append($('<dt>').text(i18n[type]), dd);
 
             // Apple Maps only works on iOS and MacOS
             if (service === 'apple' && !_.device('ios || macos')) service = 'none';
-
-            if (service === 'none') {
-                return $(this).append(address);
-            }
+            if (service === 'none') return $(this);
 
             var query = encodeURIComponent(text.replace(/\n*/, '\n').trim().replace(/\n/g, ', '));
 
-            $(this).append(
-                address,
+            dd.append(
                 $('<a class="maps-service" target="_blank" rel="noopener">')
                 .attr('href', services[service].url + query)
                 .append(
@@ -447,54 +506,55 @@ define('io.ox/contacts/view-detail', [
         };
     }
 
+    function attachmentlist(label, list) {
+
+        function dropdown(data, label) {
+            return new ActionDropdownView({
+                point: 'io.ox/core/tk/attachment/links',
+                data: data,
+                title: data.filename || label
+            }).$el;
+        }
+
+        return function () {
+            $(this).append(
+                $('<dt>').text(label),
+                $('<dd>').append(function () {
+                    var nodes = _.map(list, dropdown);
+                    // if more than one attachment add "All Downloads" dropdown
+                    return list.length < 2 ? nodes : nodes.concat(dropdown(list, gt('All attachments')));
+                })
+            );
+        };
+    }
+
     ext.point('io.ox/contacts/detail/content')
-
-        // Contact note/comment
-        .extend({
-            id: 'comment',
-            index: 100,
-            draw: function (baton) {
-
-                var comment = $.trim(baton.data.note || '');
-                if (comment !== '') {
-                    this.append(
-                        $('<section>').append(
-                            $('<h2 class="sr-only">').text(gt('Comment')),
-                            _.nltobr(comment, $('<div class="comment">'))
-                        )
-                    );
-                }
-            }
-        })
 
         .extend({
             id: 'personal',
             index: 200,
             draw: function (baton) {
 
-                var data = baton.data,
-                    fullname = util.getFullName(baton.data);
+                var data = baton.data;
 
                 this.append(
-                    block(gt('Personal'),
+                    block(
                         simple(data, 'title'),
-                        simple({ fullname: fullname }, 'name', gt('Name')),
                         simple(data, 'second_name'),
-                        simple(data, 'suffix'),
                         simple(data, 'nickname'),
+                        simple(data, 'suffix'),
                         row('birthday', function () {
                             // check if null, undefined, empty string
                             // 0 is valid (1.1.1970)
-                            if (_.isNumber(baton.data.birthday)) {
-                                return util.getBirthday(baton.data.birthday);
-                            }
+                            if (!_.isNumber(baton.data.birthday)) return;
+                            return util.getBirthday(baton.data.birthday, true);
                         }),
                         row('url', function () {
                             var url = $.trim(baton.data.url);
                             if (!url) return;
                             if (!/^https?:\/\//i.test(url)) url = 'http://' + url;
                             var node = $('<a target="_blank" rel="noopener">').attr('href', encodeURI(decodeURI(url))).text(url);
-                            return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a'], SAFE_FOR_JQUERY: true, RETURN_DOM_FRAGMENT: true });
+                            return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a'], ADD_ATTR: ['target'], SAFE_FOR_JQUERY: true, RETURN_DOM_FRAGMENT: true });
                         }),
                         // --- rare ---
                         simple(data, 'marital_status'),
@@ -522,12 +582,14 @@ define('io.ox/contacts/view-detail', [
                 var data = baton.data;
 
                 this.append(
-                    block(gt('Job'),
-                        simple(data, 'position'),
-                        simple(data, 'department'),
-                        simple(data, 'profession'),
+                    block(
                         simple(data, 'company'),
+                        simple(data, 'department'),
+                        simple(data, 'position'),
+                        simple(data, 'profession'),
                         simple(data, 'room_number'),
+                        simple(data, 'manager_name'),
+                        simple(data, 'assistant_name'),
                         // --- rare ---
                         simple(data, 'employee_type'),
                         simple(data, 'number_of_employees'),
@@ -536,9 +598,7 @@ define('io.ox/contacts/view-detail', [
                         simple(data, 'commercial_register'),
                         simple(data, 'branches'),
                         simple(data, 'business_category'),
-                        simple(data, 'info'),
-                        simple(data, 'manager_name'),
-                        simple(data, 'assistant_name')
+                        simple(data, 'info')
                     )
                     .attr('data-block', 'job')
                 );
@@ -546,7 +606,7 @@ define('io.ox/contacts/view-detail', [
         })
 
         .extend({
-            id: 'messaging',
+            id: 'communication',
             index: 400,
             draw: function (baton) {
 
@@ -560,27 +620,12 @@ define('io.ox/contacts/view-detail', [
                         .value();
 
                 this.append(
-                    block(gt('Mail and Messaging'),
+                    block(
                         mail(addresses[0], fullname, 'email1'),
                         mail(addresses[1], fullname, 'email2'),
                         mail(addresses[2], fullname, 'email3'),
                         IM(data.instant_messenger1, 'instant_messenger1'),
-                        IM(data.instant_messenger2, 'instant_messenger2')
-                    )
-                    .attr('data-block', 'messaging')
-                );
-            }
-        })
-
-        .extend({
-            id: 'phone',
-            index: 500,
-            draw: function (baton) {
-
-                var data = baton.data;
-
-                this.append(
-                    block(gt('Phone numbers'),
+                        IM(data.instant_messenger2, 'instant_messenger2'),
                         phone(data, 'cellular_telephone1'),
                         phone(data, 'cellular_telephone2'),
                         phone(data, 'telephone_business1'),
@@ -604,43 +649,33 @@ define('io.ox/contacts/view-detail', [
                         phone(data, 'telephone_assistant'),
                         phone(data, 'telephone_callback')
                     )
-                    .attr('data-block', 'phone')
-                );
-            }
-        })
-
-        .extend({
-            id: 'business-address',
-            index: 600,
-            draw: function (baton) {
-
-                var data = baton.data;
-
-                this.append(
-                    block(
-                        gt('Business Address'),
-                        address(data, 'business'),
-                        true
-                    )
-                    .attr('data-block', 'business-address')
+                    .attr('data-block', 'communication')
                 );
             }
         })
 
         .extend({
             id: 'home-address',
-            index: 700,
+            index: 600,
             draw: function (baton) {
-
-                var data = baton.data;
-
                 this.append(
                     block(
-                        gt('Home Address'),
-                        address(data, 'home'),
-                        true
+                        address(baton.data, 'home')
                     )
                     .attr('data-block', 'home-address')
+                );
+            }
+        })
+
+        .extend({
+            id: 'business-address',
+            index: 700,
+            draw: function (baton) {
+                this.append(
+                    block(
+                        address(baton.data, 'business')
+                    )
+                    .attr('data-block', 'business-address')
                 );
             }
         })
@@ -649,14 +684,9 @@ define('io.ox/contacts/view-detail', [
             id: 'other-address',
             index: 800,
             draw: function (baton) {
-
-                var data = baton.data;
-
                 this.append(
                     block(
-                        gt('Other Address'),
-                        address(data, 'other'),
-                        true
+                        address(baton.data, 'other')
                     )
                     .attr('data-block', 'other-address')
                 );
@@ -672,8 +702,7 @@ define('io.ox/contacts/view-detail', [
 
                 this.append(
                     block(
-                        //#. section name for contact fields in detail view
-                        gt('Miscellaneous'),
+                        note(data, 'note'),
                         // looks stupid but actually easier to read and not much shorter than any smart-ass solution
                         simple(data, 'userfield01'),
                         simple(data, 'userfield02'),
@@ -698,6 +727,53 @@ define('io.ox/contacts/view-detail', [
                     )
                     .attr('data-block', 'misc')
                 );
+            }
+        })
+
+        .extend({
+            id: 'attachments',
+            index: 1000,
+            draw: function (baton) {
+                // TODO: add proper contact model update after attachment api calls
+                if (!baton.data.number_of_attachments) return;
+                if (baton.data.mark_as_distributionlist) return;
+
+                var section = $('<section class="block hidden">'),
+                    hasPendingAttachments = !!api.pendingAttachments[_.ecid(baton.data)];
+
+                if (hasPendingAttachments) {
+                    var progressview = new attachments.progressView({ cid: _.ecid(baton.data) });
+                    return this.append(progressview.render().$el).show();
+                }
+
+                require(['io.ox/core/api/attachment'], function (api) {
+
+                    function get() {
+                        // this request might take a while; not cached
+                        api.getAll({ folder_id: baton.data.folder_id, id: baton.data.id, module: 7 }).then(success, fail);
+                    }
+
+                    function success(list) {
+                        if (!list.length) return section.remove();
+                        section.replaceWith(
+                            block(
+                                attachmentlist(gt('Attachments'), list)
+                            )
+                            .addClass('contains-dropdown')
+                            .attr('data-block', 'attachments')
+                        );
+                    }
+
+                    function fail() {
+                        section.show().append(
+                            $.fail(gt('Could not load attachments for this contact.'), get)
+                        );
+                    }
+
+                    get();
+                });
+
+                this.append(section);
             }
         });
 
@@ -756,7 +832,7 @@ define('io.ox/contacts/view-detail', [
 
             this.append(
                 $('<div class="clearfix">'),
-                new BreadcrumbView({ folder: id, app: baton.app, label: gt('Saved in:'), disable: ['2', '3'] }).render().$el
+                new BreadcrumbView({ folder: id, app: baton.app, display: 'block', label: gt('Saved in:'), disable: ['2', '3'] }).render().$el
             );
         }
     });
@@ -783,7 +859,7 @@ define('io.ox/contacts/view-detail', [
                     .on('redraw', { view: this, data: baton.data, baton: baton }, redraw)
                     .addClass('contact-detail view')
                     .attr({
-                        'role': 'complementary',
+                        'role': 'region',
                         'aria-label': gt('Contact Details')
                     });
                 ext.point('io.ox/contacts/detail').invoke('draw', node, baton);

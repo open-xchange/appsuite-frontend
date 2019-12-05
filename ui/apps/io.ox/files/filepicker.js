@@ -79,11 +79,9 @@ define('io.ox/files/filepicker', [
     // }
 
     function isFileTypeDoc(mimeType, fileModel) {
-        // ... with Dec.2016 implemented into Files-API similar to `isPresentation` that already did exist.
         return filesAPI.Model.prototype.isWordprocessing.call((fileModel || null), mimeType);
     }
     function isFileTypeXls(mimeType, fileModel) {
-        // ... with Dec.2016 implemented into Files-API similar to `isPresentation` that already did exist.
         return filesAPI.Model.prototype.isSpreadsheet.call((fileModel || null), mimeType);
     }
     function isFileTypePpt(mimeType, fileModel) {
@@ -98,7 +96,6 @@ define('io.ox/files/filepicker', [
     }
 
     function isFileTypeZip(mimeType, fileModel) {
-        // ... with Dec.2016 implemented into Files-API similar to `isPDF` that already did exist.
         return filesAPI.Model.prototype.isZIP.call((fileModel || null), mimeType);
     }
 
@@ -294,6 +291,7 @@ define('io.ox/files/filepicker', [
             multiselect: true,
             width: window.innerWidth * 0.8 > 1300 ? 1300 : Math.round(window.innerWidth * 0.8), // limit width to 1300px
             uploadButton: false,
+            uploadButtonText: gt('Upload local file'),
             tree: {
                 // must be noop (must return undefined!)
                 filter: $.noop
@@ -358,10 +356,6 @@ define('io.ox/files/filepicker', [
             filesPane.addClass('multiselect');
         } else {
             filesPane.addClass('singleselect');
-        }
-
-        if (_.device('!desktop')) {
-            options.uploadButton = false;
         }
 
         function toggleOkButton(state) {
@@ -601,7 +595,7 @@ define('io.ox/files/filepicker', [
 
             addClass: 'zero-padding add-infostore-file',
             button: options.primaryButtonText,
-            alternativeButton: options.uploadButton ? gt('Upload local file') : undefined,
+            alternativeButton: options.uploadButton ? options.uploadButtonText : null,
             height: _.device('desktop') ? 350 : containerHeight,
             module: 'infostore',
             persistent: 'folderpopup/filepicker',
@@ -700,7 +694,10 @@ define('io.ox/files/filepicker', [
                 }
             },
             cancel: options.cancel,
-            close: options.close
+            close: function () {
+                if (_.isFunction(options.close)) options.close();
+                if (def.state() === 'pending') def.reject();
+            }
         });
 
         return def.promise();

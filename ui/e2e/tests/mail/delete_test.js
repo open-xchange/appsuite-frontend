@@ -30,8 +30,9 @@ Scenario('[C7405] - Delete E-Mail', function (I, users) {
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
     I.clickToolbar('Compose');
-    I.retry(5).waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
+    I.pressKey('Enter');
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
     I.click('Send');
@@ -40,13 +41,13 @@ Scenario('[C7405] - Delete E-Mail', function (I, users) {
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.retry(5).click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.retry(5).click({ css: '[title="' + testrailID + ' - ' + timestamp + '"]' });
     I.clickToolbar('Delete');
     I.retry(5).dontSee(testrailID + ' - ' + timestamp);
     I.selectFolder('Trash');
     I.retry(5).see(testrailID + ' - ' + timestamp);
-    I.logout();
 });
+
 Scenario('[C7406] - Delete several E-Mails', async function (I, users) {
     const [user] = users,
         testrailID = 'C7406',
@@ -72,10 +73,10 @@ Scenario('[C7406] - Delete several E-Mails', async function (I, users) {
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
     for (i = 0; i < mailcount; i++) {
-        I.waitForElement('[title="' + testrailID + ' - ' + timestamp + ' - ' + [i + 1] + '"]');
-        I.click('[title="' + testrailID + ' - ' + timestamp + ' - ' + [i + 1] + '"]');
+        I.waitForElement({ css: '[title="' + testrailID + ' - ' + timestamp + ' - ' + [i + 1] + '"]' });
+        I.click({ css: '[title="' + testrailID + ' - ' + timestamp + ' - ' + [i + 1] + '"]' });
         I.clickToolbar('Delete');
-        I.waitForDetached('[title="' + testrailID + ' - ' + timestamp + ' - ' + [i + 1] + '"]');
+        I.waitForDetached({ css: '[title="' + testrailID + ' - ' + timestamp + ' - ' + [i + 1] + '"]' });
     }
     I.selectFolder('Trash');
     let loopcounter = 0;
@@ -89,8 +90,8 @@ Scenario('[C7406] - Delete several E-Mails', async function (I, users) {
             break;
         }
     }
-    I.waitForElement('[title="' + testrailID + ' - ' + timestamp + ' - 1"]');
-    I.waitForElement('[title="' + testrailID + ' - ' + timestamp + ' - 2"]');
+    I.waitForElement({ css: '[title="' + testrailID + ' - ' + timestamp + ' - 1"]' });
+    I.waitForElement({ css: '[title="' + testrailID + ' - ' + timestamp + ' - 2"]' });
 });
 
 Scenario('[C265146] Delete with setting selectBeforeDelete=false', async function (I, users) {
@@ -127,7 +128,8 @@ Scenario('[C265146] Delete with setting selectBeforeDelete=false', async functio
 
     I.login('app=io.ox/mail', { user: user2 });
     let loc = locate('li.list-item.selectable').withAttr({ 'data-index': '0' });
-    I.click(loc);
+    I.waitForText('Test Mail 1');
+    I.retry(5).click(loc);
     I.clickToolbar('Delete');
     I.waitForText('No message selected');
 });

@@ -24,13 +24,12 @@ After(async function (users) {
 
 const { expect } = require('chai');
 
-Scenario('Opening multiple windows', async function (I, users) {
+Scenario('Opening multiple windows', async function (I, users, calendar) {
     I.login('app=io.ox/calendar');
-    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
-    I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+    calendar.waitForApp();
 
-    I.clickToolbar('New');
-    I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
+    I.clickToolbar('New appointment');
+    I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'Participants test');
     I.click('.fa.fa-address-book');
@@ -42,25 +41,21 @@ Scenario('Opening multiple windows', async function (I, users) {
     I.wait(0.5);
 
     I.click('Create');
-    I.waitForDetached('*[data-app-name="io.ox/calendar/edit"]');
+    I.waitForDetached('.io-ox-calendar-edit-window');
 
     I.waitForVisible('.appointment');
     I.click('Participants test', '.appointment');
+    I.waitForText(users[1].get('sur_name'), 5, '.participants-view');
     I.click(users[1].get('sur_name'), '.participants-view');
 
-    I.waitForVisible({ css: '[data-block="messaging"]' });
-    I.click(users[1].get('primaryEmail'), { css: '[data-block="messaging"]' });
+    I.waitForVisible({ css: '[data-block="communication"]' });
+    I.click(users[1].get('primaryEmail'), { css: '[data-block="communication"]' });
 
-    const composeIndex = await I.grabCssPropertyFrom('.io-ox-mail-compose-window', 'z-index');
-    const sidePopupIndizes = await I.grabCssPropertyFrom('.io-ox-sidepopup', 'z-index');
+    I.waitForNetworkTraffic();
+
+    const composeIndex = await I.grabCssPropertyFrom('.io-ox-mail-compose-window', 'zIndex');
+    const sidePopupIndizes = await I.grabCssPropertyFrom('.io-ox-sidepopup', 'zIndex');
     sidePopupIndizes.map(s => Number.parseInt(s, 10)).forEach(function (sidePopupIndex) {
         expect(Number.parseInt(composeIndex, 10)).to.be.above(sidePopupIndex);
     });
-
-    I.waitForVisible('.window-blocker.io-ox-busy');
-    I.waitForInvisible('.window-blocker.io-ox-busy');
-
-    I.click('Discard');
-
-    I.logout();
 });

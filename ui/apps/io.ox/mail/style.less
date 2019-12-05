@@ -16,9 +16,14 @@
 @flag-color: #ffb300;
 @flag-icon: "\f005"; // fa-star
 @flag-icon-unset: "\f006"; // fa-star-o
-@a-color-neutral: #f8e400;
-@a-color-trusted: #5c7f31;
-@a-color-fail: #c50000;
+@a-color-neutral:    #888888;
+@a-color-trusted:    #5c7f31;
+@a-color-fail:       #c50000;
+
+// helpers
+.mail-item .from {
+    &.no-max-height { max-height: none; }
+}
 
 // preview panes
 .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
@@ -35,11 +40,16 @@
 
     .mail-item .list-item {
         .drag-title, .person {
-            width: 100%;
             display: inline-block;
             overflow: hidden;
             text-overflow: ellipsis;
+            max-width: 100%;
         }
+
+        .drag-title {
+            width: 100%;
+        }
+
         &.unread .drag-title {
             width: calc(~"100% - 19px");
         }
@@ -211,7 +221,7 @@
 
             .priority { float: none; }
 
-            .from span.person { .fontWeight(normal); }
+            .from span.person { font-weight: normal; }
 
             .subject {
                 display: inline;
@@ -227,20 +237,27 @@
             }
 
             &.unread {
-                .from span.person, .subject, .date { .fontWeight(bold); }
+                .from span.person, .subject, .date { font-weight: bold; }
             }
         }
 
         &.unread {
-            .date { opacity: 1; .fontWeight(bold); }
+            .date { opacity: 1; font-weight: bold; color: #000; }
         }
     }
 }
 
 // macos and ios specific styles
-html.macos, html.ios {
+html.macos .preview-right, html.ios {
     .mail-item.list-view .list-item .from .person {
-        font-weight: bold;
+        font-weight: 700;
+    }
+    .mail-item.list-view .list-item.unread .from .person {
+        font-weight: 800;
+        color: #000;
+    }
+    .mail-item.list-view.has-focus .list-item.unread.selected .from .person {
+        color: #fff;
     }
 }
 
@@ -251,16 +268,23 @@ html.macos, html.ios {
     z-index: -5;
 
     .swipe-button {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
         height: 100%;
         width: 95px;
         color:#fff;
-        line-height: 84px;
         font-size: 30px;
-        text-align: center;
         float: right;
-
+        transition: width .35s ease-in-out;
+        i { transition: opacity .3s; }
         &.delete { background: #FF4105; }
-        &.more   { background: rgb(255, 169, 8); }
+        &.more   {
+            background: rgb(255, 169, 8);
+            i { opacity: 1; }
+        }
     }
 }
 
@@ -278,7 +302,7 @@ html.macos, html.ios {
 
     section.body {
         margin: 0;
-        padding: 32px 40px;
+        padding: 24px 40px 16px 40px;
         background-color: #fff;
         display: none;
         width: 100%;
@@ -360,29 +384,39 @@ html.macos, html.ios {
     }
 
     .from {
-
         display: flex;
-        align-content: flex-start;
-        & > * { margin-right: 8px; }
 
-        span.person {
-            color: inherit;
-            .fontWeight(bold);
+        > a {
+            display: flex;
+            align-content: flex-start;
+            .ellipsis();
+            &:first-child {
+                margin-right: 16px;
+            }
         }
-
-        &.list { display: block; }
 
         .person-link {
             .ellipsis();
-            &.person-sender { color: #333; }
+            min-width: 0;
             &.person-from {
-                .fontWeight(bold);
+                font-weight: bold;
                 color: black;
             }
         }
 
         .address {
+            &:before { content: "\00a0"; }
             color: #767676;
+            .smartphone & { .ellipsis(); }
+        }
+
+        .authenticity {
+            margin-left: 8px;
+        }
+
+        .spacer {
+            flex: 1;
+            .smartphone & { display: none }
         }
     }
 
@@ -443,7 +477,7 @@ html.macos, html.ios {
     .priority {
         float: right;
         font-size: @icon-size;
-        .fontWeight(bold);
+        font-weight: bold;
         display: inline-block;
         margin-left: 7px;
 
@@ -575,7 +609,7 @@ html.macos, html.ios {
             padding: 5px 0;
             font-size: 16px;
         }
-        .smartphone & { padding: @default-padding; }
+        .smartphone & { padding: 10px 15px; }
     }
 
     .notification-item + .notification-item { border-top: none; }
@@ -644,16 +678,12 @@ html.macos, html.ios {
     .from {
         .ellipsis();
         max-height: 20px;
-        span.person {
-            color: inherit;
-            //.fontWeight(700);
-        }
     }
 
     .unread .from span.person { font-weight: bold; }
 
     .date, .size {
-        .fontWeight(400);
+        font-weight: normal;
         display: inline-block;
         margin-left: @default-padding / 2;
         float: right;
@@ -787,7 +817,7 @@ html.macos, html.ios {
         float: right;
         overflow: visible;
         text-align: center;
-        .fontWeight(normal);
+        font-weight: normal;
         border-radius: @border-radius-small;
     }
 
@@ -838,7 +868,7 @@ html.macos, html.ios {
     .thread-item {
         padding: 5px @list-view-padding 5px (@list-view-padding + 30px);
 
-        .from span.person { .fontWeight(normal); }
+        .from span.person { font-weight: normal; }
 
         i.icon-unread {
             color: @link-color;
@@ -935,7 +965,7 @@ html.macos, html.ios {
             padding: 6px 40px 18px 0;
             margin: 0;
             font-weight: 700;
-            word-break: break-word;
+            word-wrap: break-word;
         }
 
         .toggle-all, .toggle-big-screen {
@@ -958,11 +988,18 @@ html.macos, html.ios {
 
 .list-item {
     .flag {
+        .smartphone & {
+            display: none;
+        }
         font-size: 14px;
         color: rgba(0, 0, 0, 0.5);
         .fa:before { content: @flag-icon-unset; }
     }
     &.flagged .flag {
+        .smartphone & {
+            pointer-events: none;
+            display: initial;
+        }
         color: @flag-color;
         .fa:before { content: @flag-icon; }
     }
@@ -1072,6 +1109,10 @@ html.macos, html.ios {
         padding: 0;
         margin-bottom: (@default-padding / 2);
         border-bottom: 1px solid transparent;
+
+        &.placeholder {
+            min-height: 65px;
+        }
 
         &:last-child {
             margin-bottom: 0;
@@ -1255,46 +1296,11 @@ body.dragging .categories-toolbar-container {
     }
 }
 
-.authenticity() {
-    padding: 0px 4px;
-    border-radius: 4px;
-}
-
-.authenticity-trusted,
-.authenticity-pass {
-    .authenticity();
-    color: white;
-    background-color: @a-color-trusted;
-}
-
-.authenticity-fail {
-    .authenticity();
-    color: white;
-    background-color: @a-color-fail;
-}
-
-.authenticity-neutral {
-    .authenticity();
-    background-color: @a-color-neutral;
-}
-
-.contact-picture.authenticity-image,
-.mail-item .contact-picture.authenticity-image,
-.mail-detail .contact-picture.authenticity-image {
-    .flex-center();
-    // fallback image main color
-    background-color: #e6e6e6;
-    color: white;
-    .fa {
-        font-size: 24px;
-        padding: 0;
-        margin: 0;
-    }
-}
-
+// checkmark icon next to sender address
 .authenticity-icon-trusted,
 .authenticity-icon-pass,
 .authenticity-icon-neutral,
+.authenticity-icon-suspicious,
 .authenticity-icon-fail {
     font-size: 15px;
 }
@@ -1303,14 +1309,15 @@ body.dragging .categories-toolbar-container {
     color: @a-color-trusted;
 }
 .authenticity-icon-neutral {
-    color: #888;
+    color: @a-color-neutral;
 }
+.authenticity-icon-suspicious,
 .authenticity-icon-fail {
     color: @a-color-fail;
 }
 
 .mail-detail .from .authenticity-sender {
-    &.fail {
+    &.fail, &.suspicious {
         color: @a-color-fail;
     }
     &.trusted, &.pass {
@@ -1318,16 +1325,19 @@ body.dragging .categories-toolbar-container {
     }
 }
 
+// colored info box with message
 .mail-detail section.authenticity  {
     padding: 0;
-    .fail, .trusted {
+    .message {
         color: #fff;
         padding: 16px 40px;
         line-height: 16px;
         .smartphone & { padding: 16px; }
     }
+    .neutral { background-color: @a-color-neutral; }
+    .suspicious,
     .fail { background-color: @a-color-fail; }
-    .trusted {background-color: @a-color-trusted; }
+    .trusted, .pass { background-color: @a-color-trusted; }
 }
 
 .touch {
@@ -1368,8 +1378,9 @@ body.dragging .categories-toolbar-container {
 .smartphone {
 
     // phone
-    @phone-font-size: 16px;
-    @phone-line-height: 26px;
+    @phone-font-size: 15px;
+    @phone-line-height: 20px;
+    @border-color: #ddd;
 
     // helper
     .fixed-width() {
@@ -1400,16 +1411,32 @@ body.dragging .categories-toolbar-container {
             margin-left: 0;
         }
 
+        .io-ox-label {
+            font-weight: 100;
+            color: #707070;
+        }
+
         .detail-view-header {
-            padding: 0;
+
+            @padding-h: 15px;
+            @padding-v: 10px;
+
+            padding: (@padding-v + 4) 0 (@padding-v + 5) 0;
             font-size: @phone-font-size;
-            line-height: 24px;
+            line-height: @phone-line-height;
+
+            .from, .recipients, .subject, time {
+                padding: 0 @padding-h;
+            }
 
             .from {
-                flex-wrap: wrap;
-                max-height: none;
 
-                .person-link.person-from { font-weight: 500; }
+                flex-wrap: wrap;
+
+                .person-link.person-from {
+                    font-size: 16px;
+                    font-weight: bold;
+                }
 
                 &.show-address {
                     flex-wrap: wrap;
@@ -1421,37 +1448,55 @@ body.dragging .categories-toolbar-container {
                 }
             }
 
-            .recipients { border-bottom: 1px solid #eee; }
-
-            .subject {
-                font-size: @phone-font-size;
-                font-weight: 700;
-                margin-right: 32px;
+            .recipients {
+                border-bottom: 1px solid @border-color;
+                padding-bottom: (@padding-v + 5);
             }
 
-            time {
-                padding-left: @default-padding;
+            .subject {
+                font-size: @phone-font-size + 5;
+                font-weight: bold;
+                line-height: @phone-line-height + 5;
+                margin: 0;
+                padding-top: (@padding-v + 4);
+                padding-bottom: 4px;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .sp { margin-right: 4px; }
         }
 
         section {
-            .attachments, .body { border-top: 1px solid #ddd; }
+            .attachments, .body { border-top: 1px solid @border-color; }
             .attachments { margin-bottom: 0; }
             .body { padding: 8px @default-padding; }
         }
 
-        &.expanded section.attachments:empty { border: 0; }
+        &.expanded {
+            //.detail-view-header {
+            //    border-bottom: none;
+            //}
+            section.attachments:empty { border: 0; }
+        }
 
         //.attachments { border-bottom-width: 0; }
 
         .has-attachments { display: none; }
 
         .mail-attachment-list {
+            padding: 10px 0 9px 0;
+            &.open { padding-bottom: 0; }
+            .header  { padding: 0 15px; }
             ul.inline-items {
-                li.item { line-height: 35px; }
-                &.preview li.item .file { display: block; }
+                margin: 0;
+                &:not(.preview) > li.item {
+                    padding: 10px 15px 9px 15px;
+                }
+                &.preview {
+                    margin: 0 15px;
+                    li.item .file { display: block; }
+                }
             }
             .links { display:none; }
         }
@@ -1461,17 +1506,23 @@ body.dragging .categories-toolbar-container {
         & > header {
             &.mobile-detail-view-mail {
                 // use fa-fw for mobile
-                .fa { .fixed-width(); }
+                .fa {
+                    .fixed-width();
+                    &.flag_0 {
+                        display: none;
+                    }
+                }
                 .date {
                     margin-left: 0;
                     display: inline-block;
                     float: none;
+                    color: #767676;
                 }
                 .flags {
-                    display: inline-block;
+
                     float: right;
                     & > * {
-                        margin-left: 8px;
+                        margin: 0 16px 0 0;
                         float: none;
                     }
                 }
@@ -1483,19 +1534,35 @@ body.dragging .categories-toolbar-container {
 
         section.authenticity {
             padding: 0;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid @border-color;
+        }
+
+        .notification-item.external-images {
+            background-color: #eee;
+            .comment {
+                font-size: 12px;
+                margin-right: 10px;
+            }
         }
     }
 
     // list view
     .list-view.mail-item {
 
+        @checkboxShift: 40px;
+
         .list-item {
-            border-right: 1px solid rgba(0, 0, 0, 0.15);
+
+            padding-top: 14px;
+            padding-bottom: 15px;
+            padding-left: 25px + @checkboxShift;
+
+            border-right: 0;
             margin-right: -1px;
             background-color: #fff;
 
             &.unread.selected .subject { color: #000; }
+            &.unread .date { font-weight: normal; }
 
             .subject {
                 height: @phone-line-height;
@@ -1506,16 +1573,32 @@ body.dragging .categories-toolbar-container {
                 border-bottom: 0;
             }
 
-            .from { max-height: initial; }
+            .from {
+                font-size: 16px;
+                max-height: initial;
+            }
 
             .list-item-content {
                 font-size: @phone-font-size;
                 line-height: @phone-line-height;
-
                 i { line-height: @phone-line-height; }
+                i.seen-unseen-indicator, i.fa-paperclip.has-attachments {
+                    position: absolute;
+                    top: 12px;
+                    left: 8px + @checkboxShift;
+                    margin: 0;
+                }
+                i.fa-paperclip.has-attachments {
+                    top: 35px;
+                    color: #707070;
+                    font-size: 16px;
+                }
             }
+
             .thread-size {
-                margin-top: 3px;
+                font-size: inherit;
+                line-height: inherit;
+                margin-top: 0;
             }
 
             .list-item-row > i {
@@ -1523,17 +1606,34 @@ body.dragging .categories-toolbar-container {
             }
 
             &:hover { background-color: rgb(238, 238, 238); }
+
+            .text-preview.multiline {
+                font-size: inherit;
+                line-height: inherit;
+                height: 40px;
+            }
+
+            .fa-paperclip.has-attachments, .fa-cloud-download.is-shared-attachement, i.fa.signed, i.fa.encrypted {
+                font-size: 18px;
+                margin: 0 0 0 10px;
+            }
+        }
+
+        &.hide-checkboxes .list-item {
+
+            padding-left: 25px;
+
+            .list-item-content {
+                i.seen-unseen-indicator, i.fa-paperclip.has-attachments {
+                    left: 8px;
+                }
+            }
         }
 
         &.complete > .list-item:last-child {
             margin-bottom: @toolbar-height;
             border-bottom: 0;
         }
-
-        .list-item-content i.seen-unseen-indicator {
-            margin-top: 2px;
-        }
-
     }
 
     // list of mails in a thread
@@ -1549,16 +1649,19 @@ body.dragging .categories-toolbar-container {
 
         // thread header
         .thread-view-header {
-            background-color: #aaa;
-            color: #fff;
+
+            background-color: #eee;
+            color: #333;
+            border-bottom: 1px solid #ccc;
 
             // currently actually just subject
             & > * { font-size: @phone-font-size; }
 
             .subject {
                 line-height: 20px;
-                padding: 12px 16px;
-                font-weight: normal;
+                padding: 14px 15px 15px 25px;
+                font-weight: bold;
+                font-size: 16px;
             }
         }
 
@@ -1566,20 +1669,21 @@ body.dragging .categories-toolbar-container {
         .thread-view {
 
             .list-item {
+
+                border-bottom: 0;
                 margin-bottom: 0;
 
                 .detail-view-header {
+                    padding: 14px 15px 16px 25px;
                     border-bottom: 1px solid #ccc;
-                    padding: 16px 15px;
-                    //min-height: auto;
 
                     .detail-view-row {
                         margin: 0;
                     }
 
                     .unread-toggle {
-                        left: 15px;
-                        top: 18px;
+                        left: 8px;
+                        top: 15px;
                         padding: 0;
                         position: absolute;
                     }
@@ -1593,50 +1697,45 @@ body.dragging .categories-toolbar-container {
                         line-height: @phone-line-height;
                     }
 
-                    // row 1
-                    .from {
-                        padding-left: 20px;
-                    }
-
                     .recipients {
                         padding: 0;
                         margin-bottom: -1px;
                         border-bottom: 0;
+                        .person-link {
+                            white-space: nowrap;
+                        }
                     }
                     .person-from { flex: 1 }
+
+                    .show-all-recipients {
+                        display: none;
+                    }
                 }
                 // do not show recipients
                 &:not(.expanded) .recipients { max-height: initial; }
                 // last element handling
                 &:last-child {
                     margin-bottom: @toolbar-height;
-                    .detail-view-header {
-                    //    border-bottom: 0;
-                    }
                 }
             }
 
-            .row-2, .row-4, .row-5 { display: none; }
+            .list-item .unread-toggle { display: none; }
+            .list-item.unread .unread-toggle { display: inline-block; }
 
+            .row-2, .row-4, .row-5 { display: none; }
         }
     }
 
-    // mail detail
-    .mobile-detail-view-mail {
-        @unit: 2px;
-        .from, .subject, .unread-toggle {
-            // leading element in block
-            padding: (@unit * 2) (@unit * 8);
-            padding-top: (@unit * 3);
-            padding-bottom: @unit;
-         }
-
-        .recipients, time, .flags {
-            // trailing element in block
-            padding: (@unit * 2) (@unit * 8);
-            padding-top: @unit;
-            padding-bottom: (@unit * 3);
+    .generic-toolbar {
+        height: @mobile-toolbar-height;
+        line-height: @mobile-toolbar-height - 1;
+        .toolbar-item {
+            line-height: inherit;
         }
+    }
+
+    .list-view-control:not(.upside-down).toolbar-bottom-visible .list-view {
+        bottom: @mobile-toolbar-height;
     }
 
     // mail detail popup (portal)
@@ -1645,8 +1744,8 @@ body.dragging .categories-toolbar-container {
         &.no-padding .detail-view-header { padding-left: 0; }
 
         // portal widget fixes
-        .subject {
-            padding-bottom: 12px;
+        .subject {            display: flex;
+
         }
 
         .detail-view-header {

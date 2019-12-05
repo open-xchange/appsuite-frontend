@@ -68,7 +68,9 @@ define('io.ox/core/tk/contenteditable-editor', [
         draw: function (ed) {
             var sanitizeAttributes = function (e) {
                 if (!e.content) return;
-                e.content = DOMPurify.sanitize(e.content);
+                // aways cast to String (See Bug 66936) - since this is handed over to tinyMCE
+                // we have no choice but making this a String
+                e.content = DOMPurify.sanitize(e.content) + '';
             };
             // see bug 48231 and 50849
             ed.on('PastePreProcess', sanitizeAttributes);
@@ -80,6 +82,19 @@ define('io.ox/core/tk/contenteditable-editor', [
         index: INDEX += 100,
         draw: function (ed) {
             ed.on('keyup SetContent Change', _.throttle(this.trigger.bind(this, 'change'), 50));
+        }
+    });
+
+    // see Bug 67872
+    // fixes ios iframe focus bug
+    ext.point(POINT + '/setup').extend({
+        id: 'ios-focus',
+        index: INDEX += 100,
+        draw: function (ed) {
+            if (_.device('!tablet && ios >= 13')) return;
+            ed.on('touchstart', function () {
+                if (!$(document.activeElement).is('iframe')) $(document.activeElement).blur();
+            });
         }
     });
 
@@ -464,6 +479,10 @@ define('io.ox/core/tk/contenteditable-editor', [
                 if (opt.oxContext) ed.oxContext = opt.oxContext;
                 ext.point(POINT + '/setup').invoke('draw', self, ed);
                 ed.on('init', function () {
+                    // marker class to fix scroll behavior
+                    if (this.oxContext && this.oxContext.signature) {
+                        $(this.contentDocument.getElementsByTagName('html')[0]).addClass('signature-editor');
+                    }
                     // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
                     $(fixed_toolbar).find('span.mce-txt').attr('tabindex', -1);
                     // adjust toolbar

@@ -87,8 +87,8 @@ define('io.ox/core/cache', [
                         return false;
                     }),
 
-                // define id now; user & language should never change on-the-fly
-                id = _(['appsuite.cache', ox.user, ox.language, name || '']).compact().join('.'),
+                // define id now; user & locale should never change on-the-fly
+                id = _(['appsuite.cache', ox.user, ox.locale, name || '']).compact().join('.'),
 
                 getStorageLayer = function () {
                     var layer = null, instance;

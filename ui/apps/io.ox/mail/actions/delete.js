@@ -35,7 +35,6 @@ define('io.ox/mail/actions/delete', [
         require(['io.ox/backbone/views/modal'], function (ModalDialogView) {
             new ModalDialogView({
                 title: gt('Mail quota exceeded'),
-                focus: '.btn-primary',
                 previousFocus: $('[data-ref="io.ox/mail/listview"]')
             })
             .on('delete', function () {
@@ -92,21 +91,14 @@ define('io.ox/mail/actions/delete', [
         }
 
         if (showPrompt) {
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog()
-                    .addPrimaryButton('delete', gt('Delete'))
-                    .addButton('cancel', gt('Cancel'))
-                    .text(getQuestion(list))
-                    .show()
-                    .done(function (action) {
-                        if (action === 'delete') {
-                            api.remove(list, all).fail(notifications.yell);
-                        } else {
-                            // trigger back event, used for mobile swipe delete reset
-                            ox.trigger('delete:canceled', list);
-                        }
-
-                    });
+            require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                new ModalDialog({ title: getQuestion(list) })
+                    .addCancelButton()
+                    .addButton({ label: gt('Delete'), action: 'delete' })
+                    .on('delete', function () { api.remove(list, all).fail(notifications.yell); })
+                    // trigger back event, used for mobile swipe delete reset
+                    .on('cancel', function () { ox.trigger('delete:canceled', list); })
+                    .open();
             });
         } else {
             api.remove(list, all, shiftDelete).fail(function (e) {

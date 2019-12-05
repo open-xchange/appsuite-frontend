@@ -11,135 +11,81 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-/*eslint-disable */
-
 define('l10n/ja_JP/io.ox/register', [
+    'io.ox/contacts/util',
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'l10n/ja_JP/io.ox/collation',
     'settings!io.ox/core',
-    'gettext!l10n/ja_JP',
     'css!l10n/ja_JP/io.ox/style.css'
-], function (ext, mini, collation, settings, gt) {
+], function (util, ext, mini, collation, settings) {
 
     'use strict';
 
-    // Detail view
-
-    ext.point('io.ox/contacts/detail/head').extend({
-        index: 1000000000000,
-        id: 'furigana',
-        draw: function (baton) {
-
-            var self = this;
-
-            function prepend(selector, value) {
-                self.find(selector)
-                .addClass('with-furigana')
-                .prepend(
-                    // the nbsp is important to keep correct vertical alignment!
-                    $('<span class="furigana">').text(value || '\u00A0'),
-                    $('<br>')
-                );
-            }
-
-            function addFurigana(selector, yomiField) {
-
-                var value = $.trim(baton.data[yomiField]);
-
-                // no need to add yomi if they are the same as the actual name
-                if ((yomiField === 'yomiLastName' || yomiField === 'yomiFirstName' ) && self.find(selector).text() === value)  {
-                    return;
-                }
-                if (yomiField === 'yomiCompany') {
-                    // don't do anything if company is empty
-                    if (value === '') return;
-                } else if ($.trim(baton.data.yomiLastName) === '' && $.trim(baton.data.yomiFirstName) === '') {
-                    // don't add white-space if neither last nor first name has data
-                    return;
-                }
-
-                if (yomiField === 'yomiTitle') {
-                    // this is only applied if last and/or first name has data
-                    prepend(selector, '');
-                    return;
-                }
-
-                prepend(selector, value);
-            }
-
-            addFurigana('.title', 'yomiTitle');
-            addFurigana('.last_name', 'yomiLastName');
-            addFurigana('.first_name', 'yomiFirstName');
-            addFurigana('.company', 'yomiCompany');
+    // override util
+    util.getFullNameWithFurigana = function (data) {
+        var array = this.getFullName(data, true),
+            node = $('<div>').html(array);
+        data = trim(data);
+        if (showFurigana(data)) {
+            prepend(node, '.title', '');
+            prepend(node, '.last_name', data.last_yomi);
+            prepend(node, '.first_name', data.first_yomi);
+            prepend(node, '.company', data.company_yomi);
         }
-    });
-
-    var placeholders = {
-        last_name:
-            //#. Placeholder in furigana field
-            gt('Furigana for last name'),
-        first_name:
-            //#. Placeholder in furigana field
-            gt('Furigana for first name'),
-        company:
-            //#. Placeholder in furigana field
-            gt('Furigana for company')
+        // a11y does not like empty headings. Empty string works fine
+        return node.contents().length ? node.contents() : '';
     };
 
-    _(['io.ox/core/user', 'io.ox/contacts']).each(function (ref) {
+    function trim(data) {
+        return {
+            first: $.trim(data.first_name),
+            last: $.trim(data.last_name),
+            company: $.trim(data.company),
+            first_yomi: $.trim(data.yomiFirstName),
+            last_yomi: $.trim(data.yomiLastName),
+            company_yomi: $.trim(data.yomiCompany)
+        };
+    }
 
-        // Edit view
-        // change order only if language is set to japanese
-        // this file is also loaded for other languages if the setting io.ox/contacts/features/furigana is set to true
-        if (ox.language === 'ja_JP') {
-            ext.point(ref + '/edit/personal')
-                .replace({ id: 'last_name', index: 200 })
-                .replace({ id: 'first_name', index: 300 });
-        }
-
-        yomiField('personal', 'last_name', 'yomiLastName');
-        yomiField('personal', 'first_name', 'yomiFirstName');
-        yomiField('job', 'company', 'yomiCompany');
-
-        function yomiField(point, id, yomiID) {
-
-            ext.point(ref + '/edit/' + point).extend({
-                id: yomiID,
-                index: 1000000000000,
-                draw: function (baton) {
-                    var input = this.find('input[name="' + id + '"]'),
-                        label = input.closest('label');
-
-                    // insert furigana field before orginal field
-                    input.before(
-                        new mini.InputView({ name: yomiID, model: baton.model }).render().$el
-                        .addClass('furigana')
-                        .attr('placeholder', placeholders[id])
-                    );
-
-                    // use wrapper so both fields have the same width
-                    label.removeClass('col-xs-12').wrap($('<div class="col-xs-12">'));
-                    // now move original input field after its label
-                    label.after(input);
-                }
-            });
-        }
-
-        ext.point(ref + '/edit').extend({
-            index: 1000000000000,
-            draw: function () {
-                // auto-complete for furigana fields?
-                if (settings.get('features/furiganaAutoComplete', false) === true) {
-                    watchKana(this.find('input[name="last_name"]'),
-                              this.find('input[name="yomiLastName"]'));
-                    watchKana(this.find('input[name="first_name"]'),
-                              this.find('input[name="yomiFirstName"]'));
-                    watchKana(this.find('input[name="company"]'),
-                              this.find('input[name="yomiCompany"]'));
-                }
+    function showFurigana(data) {
+        return ['first', 'last', 'company'].reduce(function (result, name) {
+            if (data[name + '_yomi'] && data[name + '_yomi'] !== data[name]) {
+                if (!data[name]) data[name + '_yomi'] = '';
+                return true;
             }
-        });
+            return result;
+        }, false);
+    }
+
+    function prepend(node, selector, value) {
+        node.find(selector).addClass('with-furigana').prepend(
+            // the nbsp is important to keep correct vertical alignment!
+            $('<span class="furigana">').text(value || '\u00A0'),
+            $('<br>')
+        );
+    }
+
+    // Edit dialog
+    ext.point('io.ox/contacts/edit/view').extend({
+        index: 'last',
+        id: 'furigana',
+        render: function () {
+            // auto-complete for furigana fields?
+            if (!settings.get('features/furiganaAutoComplete', false)) return;
+            watchKana(
+                this.$('input[name="last_name"]'),
+                this.$('input[name="yomiLastName"]')
+            );
+            watchKana(
+                this.$('input[name="first_name"]'),
+                this.$('input[name="yomiFirstName"]')
+            );
+            watchKana(
+                this.$('input[name="company"]'),
+                this.$('input[name="yomiCompany"]')
+            );
+        }
     });
 
     function watchKana($field, $yomiField) {
@@ -189,10 +135,12 @@ define('l10n/ja_JP/io.ox/register', [
 
             // compute length of unchanged prefix in p
             var p = 0, l = v.length, ll = lv.length;
+            // eslint-disable-next-line no-empty
             for (; p < l && p < ll && v.charAt(p) === lv.charAt(p); p++) {}
 
             // compute length of unchanged suffix in s
             var s = 0, a = l, b = ll;
+            // eslint-disable-next-line no-empty
             for (; a > p && b > p && v.charAt(--a) === lv.charAt(--b); s++) {}
 
             if (p + s === ll) { // if inserting (i. e. typing)
@@ -268,9 +216,9 @@ define('l10n/ja_JP/io.ox/register', [
         ],
         kana = _.map(letters, function (c) { return String.fromCharCode(c); });
 
-    // add japanese labels and thumbindex only if language is set to japanese
+    // add japanese labels and thumbindex only if locale is set to japanese
     // this file is also loaded for other languages if the setting io.ox/contacts/features/furigana is set to true
-    if (ox.language !== 'ja_JP') return;
+    if (ox.locale !== 'ja_JP') return;
     ext.point('io.ox/contacts/getLabel').extend({
         id: 'furigana',
         getLabel: function (data) {

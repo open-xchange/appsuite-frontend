@@ -13,56 +13,51 @@
 
 const { expect } = require('chai');
 
-Scenario('Contacts - List view w/o contact', async (I) => {
+Scenario('Contacts - List view w/o contact', async (I, contacts) => {
     I.login('app=io.ox/contacts');
-    I.waitForElement('.contact-detail');
-    I.waitForElement('.vgrid-cell.selectable.contact.selected');
-    I.clickToolbar('View');
-    I.click('Checkboxes');
-    I.click('.vgrid-cell.selectable.contact.selected .vgrid-cell-checkbox');
+    contacts.waitForApp();
     I.waitForElement('.summary.empty');
+    I.waitForText('Empty');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
 Scenario('Contacts - List view with contact detail view', async (I) => {
     I.login('app=io.ox/contacts');
+    I.waitForNetworkTraffic();
     I.waitForElement('.contact-detail');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Contacts - Modal Dialog - New address book (with exceptions)', async (I) => {
+Scenario('Contacts - Modal Dialog - New address book (with exceptions)', async (I, contacts) => {
     // Exceptions:
     // Input field has a missing label (critical)
     const excludes = { exclude: [['input[name="name"]']] };
 
     I.login('app=io.ox/contacts');
-    I.waitForText('My address books');
-    I.doubleClick('~My address books');
-    I.click('~Contacts');
+    contacts.waitForApp();
     I.click('Add new address book');
     I.waitForText('Add as public folder');
 
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });
 
-Scenario('Contacts - Modal Dialog - Import', async (I) => {
+Scenario('Contacts - Modal Dialog - Import', async (I, contacts) => {
 
     I.login('app=io.ox/contacts');
+    contacts.waitForApp();
     I.waitForText('My address books');
-    I.doubleClick('~My address books');
-    I.click('~Contacts');
-    I.waitForElement('[title="Actions for Contacts"]');
-    I.click('*[title="Actions for Contacts"]');
-    I.waitForText('Import');
-    I.click('Import');
-    I.waitForElement('h1.modal-title');
+    I.click('.folder-arrow', '~My address books');
+    I.openFolderMenu('Contacts');
+    I.clickDropdown('Import');
+    I.waitForElement('.modal .modal-title');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', async (I) => {
+// TODO: shaky (element not interactable)
+Scenario.skip('Contacts - Modal Dialog - Create sharing link (with exceptions)', async (I, contacts) => {
     // Exceptions:
     // Typeahead missing label (critical)
     // Textinput, password and textarea have missing visual labels (critical)
@@ -75,48 +70,34 @@ Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', asyn
     ] };
 
     I.login('app=io.ox/contacts');
+    contacts.waitForApp();
     I.waitForText('My address books');
-    I.doubleClick('~My address books');
-    I.click('~Contacts');
-    I.waitForElement('[title="Actions for Contacts"]');
-    I.click('*[title="Actions for Contacts"]');
-    I.waitForText('Create sharing link');
-    I.click('Create sharing link');
-    I.waitForElement('h1.modal-title');
-    I.waitForText('Password required');
+    I.click('.folder-arrow', '~My address books');
+    I.openFolderMenu('Contacts');
+    I.clickDropdown('Create sharing link');
+    I.waitForText('Sharing link created for folder');
+    I.waitForFocus('.share-wizard input[type="text"]');
 
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });
 
-Scenario('Contacts - New contact window', async (I) => {
+Scenario('Contacts - New contact window', async (I, contacts) => {
 
     I.login('app=io.ox/contacts');
-    I.waitForText('My address books');
-    I.doubleClick('~My address books');
-    I.click('~Contacts');
-    I.waitForElement('[title="Actions for Contacts"]');
-    I.clickToolbar('New');
-    I.waitForText('Add contact');
-    I.click('Add contact');
-    I.waitForText('Personal information');
+    contacts.waitForApp();
+    contacts.newContact();
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Contacts - New distribution list window (with exceptions)', async (I) => {
+Scenario('Contacts - New distribution list window (with exceptions)', async (I, contacts) => {
     // Exceptions:
     // Typeahead missing label (critical)
     const excludes = { exclude: [['.tt-hint'], ['.tt-input']] };
 
     I.login('app=io.ox/contacts');
-    I.waitForText('My address books');
-    I.doubleClick('~My address books');
-    I.click('~Contacts');
-    I.waitForElement('[title="Actions for Contacts"]');
-    I.clickToolbar('New');
-    I.waitForText('Add distribution list');
-    I.click('Add distribution list');
-    I.waitForText('Participants');
+    contacts.waitForApp();
+    contacts.newDistributionlist();
 
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });

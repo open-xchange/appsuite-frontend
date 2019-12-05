@@ -535,7 +535,7 @@ define('io.ox/core/commons', [
                     // left
                     sides.left = $('<div class="leftside">')
                     .attr({
-                        'role': 'navigation',
+                        'role': 'complementary',
                         'aria-label': gt('Item list')
                     })
                     .on('select', select),
@@ -577,6 +577,15 @@ define('io.ox/core/commons', [
         mediateFolderView: function (app) {
             function toggleFolderView(e) {
                 e.data.app.folderView.toggle(e.data.state);
+
+                if (!!e.data.state) {
+                    e.data.app.folderView.tree.getNodeView(e.data.app.folder.get()).$el.focus();
+                } else {
+                    var grid = e.data.app.grid;
+
+                    if (grid.getIds().length === 0) return grid.getContainer().focus();
+                    grid.selection.focus();
+                }
             }
 
             function onFolderViewOpen(app) {
@@ -608,9 +617,11 @@ define('io.ox/core/commons', [
                 id: 'toggle-folderview',
                 index: 1000,
                 draw: function () {
+                    var guid = _.uniqueId('control');
+
                     this.addClass('bottom-toolbar').append(
-                        $('<div class="generic-toolbar bottom visual-focus" role="region">').append(
-                            $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
+                        $('<div class="generic-toolbar bottom visual-focus" role="region">').attr('aria-labelledby', guid).append(
+                            $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr({ id: guid, 'aria-label': gt('Close folder view') })
                             .append(
                                 $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                             )
@@ -644,6 +655,13 @@ define('io.ox/core/commons', [
                 e.preventDefault();
                 app.trigger('before:change:folderview');
                 app.folderView.toggle(e.data.state);
+
+                if (!!e.data.state) {
+                    app.folderView.tree.getNodeView(app.folder.get()).$el.focus();
+                } else {
+                    var a11y = require('io.ox/core/a11y');
+                    a11y.getTabbable(app.getWindow().nodes.body.find('.classic-toolbar'))[0].focus();
+                }
             };
 
             ext.point(app.get('name') + '/sidepanel').extend({
@@ -651,9 +669,10 @@ define('io.ox/core/commons', [
                 index: 1000,
                 draw: function () {
                     if (_.device('smartphone')) return;
+                    var guid = _.uniqueId('control');
                     this.addClass('bottom-toolbar').append(
-                        $('<div class="generic-toolbar bottom visual-focus" role="region">').append(
-                            $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
+                        $('<div class="generic-toolbar bottom visual-focus" role="region">').attr('aria-labelledby', guid).append(
+                            $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr({ id: guid, 'aria-label': gt('Close folder view') })
                             .append(
                                 $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                             )
@@ -762,14 +781,13 @@ define('io.ox/core/commons', [
 
             update = function (e, changed) {
                 // id change?
-                if (changed && (changed.former_id || changed.id !== data.id)) {
+                if (changed && (changed.former_id || (changed.id && changed.id !== data.id))) {
                     data = changed;
                 }
 
                 if (getter = (getter || (api ? api.get : null))) {
                     // fallback for create trigger
-                    var createevent = !data.id;
-                    if (createevent) {
+                    if (!data.id) {
                         data.id = arguments[1].id;
                     }
                     // get fresh object
@@ -784,7 +802,12 @@ define('io.ox/core/commons', [
                         } else {
                             baton = data;
                         }
-                        baton.isCreateEvent = createevent;
+                        // if we have some additional update data for this change provide them to the handler
+                        if (changed && changed.updateData) {
+                            baton.updateData = changed.updateData;
+                        } else {
+                            delete baton.updateData;
+                        }
                         if (node) node.triggerHandler('redraw', baton);
                     });
                 }

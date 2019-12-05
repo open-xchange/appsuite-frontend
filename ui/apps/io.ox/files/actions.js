@@ -155,6 +155,9 @@ define('io.ox/files/actions', [
             if (fromMailCompose(baton)) return false;
             if (hasStatus('lockedByOthers', baton)) return false;
 
+            var file = baton.first();
+            if (!file.folder_id || !file.id) return false;
+
             var model = _.first(baton.models),
                 isEncrypted = model && model.isEncrypted(),
                 encryptionPart = isEncrypted ? '\\.pgp' : '',
@@ -163,9 +166,9 @@ define('io.ox/files/actions', [
                 // build regex from list, pgp is added if guard is available
                 regex = new RegExp('\\.(' + fileExtensions.join('|') + '?)' + encryptionPart + '$', 'i');
 
-            if (!regex.test(baton.first().filename)) return false;
+            if (!regex.test(file.filename)) return false;
 
-            return api.versions.getCurrentState(baton.first()).then(function (currentVersion) {
+            return api.versions.getCurrentState(file).then(function (currentVersion) {
                 return currentVersion;
             });
         },
@@ -347,7 +350,12 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/viewer', {
         collection: 'some && items',
         matches: function (baton) {
-            if (baton.isViewer) { return false; }   // don't open a new viewer instance within the viewer
+            var file = baton.first();
+            // don't open a new viewer instance within the viewer
+            if (baton.isViewer) { return false; }
+            // Spreadsheet supports display of current version only
+            // versions may not be loaded when the action is not called from versions list, so check current_version for false
+            if (file.current_version === false && api.isSpreadsheet(file)) { return false; }
             return !baton.collection.has('guard') || capabilities.has('guard');
         },
         action: function (baton) {
@@ -1345,6 +1353,14 @@ define('io.ox/files/actions', [
             mobile: 'lo',
             title: gt('Unlock'),
             ref: 'io.ox/files/actions/unlock',
+            section: 'file-op'
+        },
+        {
+            id: 'restore',
+            prio: 'lo',
+            mobile: 'lo',
+            title: gt('Restore'),
+            ref: 'io.ox/files/actions/restore',
             section: 'file-op'
         }
     ];

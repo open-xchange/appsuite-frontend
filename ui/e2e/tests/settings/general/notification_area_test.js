@@ -54,5 +54,4 @@ Scenario('[C7763] Configure notification area', async (I, users) => {
     I.login('app=io.ox/mail', { user: userB });
     I.waitForText('1', 10, '#io-ox-notifications-icon');
     I.seeElement('#io-ox-notifications-icon.open');
-    I.logout();
 });

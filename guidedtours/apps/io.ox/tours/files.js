@@ -96,11 +96,11 @@ define('io.ox/tours/files', [
                 .hotspot('.classic-toolbar-container .pull-right li.dropdown-header', { position: 'left' })
                 .on('before:show', function () {
                     if ($('.classic-toolbar-container dropdown.open .dropdown-menu:visible').length === 0) {
-                        $('.classic-toolbar-container .pull-right').addClass('open');
+                        $('.classic-toolbar-container .pull-right').addClass('open').attr('forceOpen', true);
                     }
                 })
                 .on('next', function () {
-                    $('.classic-toolbar-container .pull-right').removeClass('open');
+                    $('.classic-toolbar-container .pull-right').removeClass('open').attr('forceOpen', false);
                 })
                 .end()
             .step()
@@ -110,8 +110,7 @@ define('io.ox/tours/files', [
                 .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/add-folder"]', { position: 'left' })
                 .on('before:show', function () {
                     if ($('.classic-toolbar-container [data-action="io.ox/files/actions/add-folder"]').closest('.dropdown.open:visible').length === 0) {
-
-                        $('.classic-toolbar-container [data-action="io.ox/files/actions/add-folder"]').closest('.dropdown').addClass('open');
+                        $('.classic-toolbar-container [data-action="io.ox/files/actions/add-folder"]').closest('.dropdown').addClass('open').attr('forceOpen', true);
                     }
                 })
                 .end()
@@ -126,7 +125,7 @@ define('io.ox/tours/files', [
                     }
                 })
                 .on('next', function () {
-                    $('.classic-toolbar-container [data-action="create"]').closest('.dropdown').removeClass('open');
+                    $('.classic-toolbar-container [data-action="create"]').closest('.dropdown').removeClass('open').attr('forceOpen', false);
                 })
                 .end()
             .step()
@@ -173,7 +172,7 @@ define('io.ox/tours/files', [
                 .hide()
                 .on('before:show', function () {
                     if ($('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown.open:visible').length === 0) {
-                        $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown').addClass('open');
+                        $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown').addClass('open').attr('forceOpen', true);
                     }
                 })
                 .end()
@@ -185,11 +184,11 @@ define('io.ox/tours/files', [
                 .hotspot('.classic-toolbar-container .dropdown-menu', { position: 'left' })
                 .on('before:show', function () {
                     if ($('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown.open:visible').length === 0) {
-                        $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown').addClass('open');
+                        $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown').addClass('open').attr('forceOpen', true);
                     }
                 })
                 .on('next', function () {
-                    $('.classic-toolbar-container [data-action="io.ox/files/toolbar/share"]').closest('.dropdown').removeClass('open');
+                    $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown').removeClass('open').attr('forceOpen', false);
                 })
                 .end()
             .step()
@@ -204,8 +203,8 @@ define('io.ox/tours/files', [
                 .content(gt('The file details side bar offers additional information about your files. Just enable the File details option from the View drop down menu and select a file to see the details.'))
 
                 .on('before:show', function () {
-                    if ($('.classic-toolbar-container [data-action="io.ox/files/toolbar/share"]').closest('.dropdown.open').length > 0) {
-                        $('.classic-toolbar-container [data-action="io.ox/files/toolbar/share"]').closest('.dropdown').removeClass('open');
+                    if ($('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown.open').length > 0) {
+                        $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown').removeClass('open').attr('forceOpen', false);
                     }
                     if ($('.viewer-sidebar:visible').length === 0) {
                         $('.classic-toolbar-container [data-dropdown="io.ox/files/action/view"] li [data-name="details"]').click();

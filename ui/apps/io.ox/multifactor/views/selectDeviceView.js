@@ -35,6 +35,7 @@ define('io.ox/multifactor/views/selectDeviceView', [
         device = groupDevices(device);
         def = authInfo.def;
         if (device.length === 1) { // If only one after grouping, proceed to auth
+            _.extend(authInfo, { device: device[0], providerName: device[0].providerName });
             return deviceAuthenticator.getAuth(authInfo);
         }
         dialog = openModalDialog(device, authInfo);

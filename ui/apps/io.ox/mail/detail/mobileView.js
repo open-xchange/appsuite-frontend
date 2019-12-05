@@ -92,11 +92,11 @@ define('io.ox/mail/detail/mobileView', [
         draw: extensions.recipients
     });
 
-    ext.point('io.ox/mail/mobile/detail/header').extend({
+    /*ext.point('io.ox/mail/mobile/detail/header').extend({
         id: 'unread-toggle',
         index: INDEX_header += 100,
         draw: extensions.unreadToggle
-    });
+    });*/
 
     ext.point('io.ox/mail/mobile/detail/header').extend({
         id: 'subject',
@@ -139,7 +139,10 @@ define('io.ox/mail/detail/mobileView', [
     ext.point('io.ox/mail/mobile/detail/header/flags').extend({
         id: 'color-picker',
         index: INDEX_header += 100,
-        draw: extensions.flagPicker
+        draw: function (baton) {
+            //if (_.device('smartphone')) return;
+            extensions.flagPicker.call(this, baton);
+        }
     });
 
 

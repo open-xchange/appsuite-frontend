@@ -28,6 +28,7 @@
         chrome,
         firefox,
         edge,
+        edgeChromium,
         phantom,
         MacOS,
         Linux,
@@ -42,19 +43,21 @@
         chromeIOS,
         firefoxIOS,
         browserLC = {},
-        isTouch;
+        isTouch,
+        nativeNoopener;
 
     // supported browsers
     us.browserSupport = {
-        'Chrome':    60,
-        'Safari':    10,
-        'Firefox':   52,
-        'IE':        11
+        'Chrome':    74,
+        'Safari':    11,
+        'Firefox':   66,
+        'IE':        11,
+        'Edge':      12
     };
 
     us.platformSupport = {
         'Android':  4.4,
-        'iOS':      9.0,
+        'iOS':      11.0,
         'WindowsPhone': 99.0 // special case to exclude WindowsPhone as a mobile platform
     };
 
@@ -82,11 +85,12 @@
             ua = nav.userAgent;
             opera = ua.indexOf('OPR/') > -1;
             webkit = ua.indexOf('AppleWebKit/') > -1;
-            chrome = ua.indexOf('Chrome/') > -1;
+            chrome = ua.indexOf('Chrome/') > -1 && ua.indexOf('Edg/') === -1;
             firefox = ua.indexOf('Gecko') > -1 && ua.indexOf('Firefox') > -1 && ua.indexOf('KHTML') === -1;
             // TODO: This needs to be updated, if better user agent is available
             // http://dev.modern.ie/platform/faq/what-is-the-microsoft-edge-user-agent-st
             edge = ua.indexOf('Edge/') > -1;
+            edgeChromium = ua.indexOf('Edg/') > -1;
             phantom = ua.indexOf('PhantomJS/') > -1;
             MacOS = ua.indexOf('Macintosh') > -1;
             Linux = ua.indexOf('Linux') > -1;
@@ -115,7 +119,6 @@
             us.browser = {
                 /** is IE? */
                 IE: edge
-                    // TODO: Handle Edge as IE 12. Is this really wanted?
                     ? Number(ua.match(/Edge\/(\d+.\d)\d+$/)[1])
                     : (
                         nav.appName === 'Microsoft Internet Explorer'
@@ -125,10 +128,9 @@
                                 : undefined)
                     ),
                 /** is Edge browser? */
-                Edge: edge
-                    // TODO: If Edge is handled as IE 12, a specific 'Edge' property is not required.
-                    ? Number(ua.match(/Edge\/(\d+.\d+)$/)[1])
-                    : undefined,
+                Edge: edgeChromium ?
+                    ua.split('Edg/')[1].split(' ')[0].split('.')[0]
+                    : (edge ? Number(ua.match(/Edge\/(\d+.\d+)$/)[1]) : undefined),
                 /** is Opera? */
                 Opera: opera ? ua.split('OPR/')[1].split(' ')[0].split('.')[0] : undefined,
                 /** is WebKit? */
@@ -140,8 +142,11 @@
                 PhantomJS: webkit && phantom ?
                     ua.split('PhantomJS/')[1].split(' ')[0] : undefined,
                 /** Chrome */
-                Chrome: webkit && chrome && !iOS && !opera ?
+                Chrome: webkit && chrome && !iOS && !opera && !edgeChromium ?
                     ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
+                /** is Edge chromium browser? */
+                EdgeChromium: edgeChromium && webkit && !chrome && !iOS && !opera ?
+                    ua.split('Edg/')[1].split(' ')[0].split('.')[0] : undefined,
                 /** is Firefox? */
                 Firefox: (firefox && !iOS && !Android) ? ua.split(/Firefox(\/| )/)[2].split('.')[0] : undefined,
                 ChromeiOS: chromeIOS ? ua.split('CriOS/')[1].split(' ')[0].split('.')[0] : undefined,
@@ -215,6 +220,9 @@
     }
 
     isTouch = checkTouch();
+
+    // https://mathiasbynens.github.io/rel-noopener/
+    nativeNoopener = us.browser.chrome >= 72 || us.browser.safari >= 13;
 
     // do media queries here
     // TODO define sizes to match pads and phones
@@ -298,10 +306,11 @@
         // combination of browser & display
         device: memoize(function (condition, debug) {
             // add support for language checks
-            var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
-            misc[lang] = true;
-            misc[lang.split('_')[0] + '_*'] = true;
+            var misc = {}, locale = (ox.locale || 'en_US').toLowerCase();
+            misc[locale] = true;
+            misc[locale.split('_')[0] + '_*'] = true;
             misc.touch = isTouch;
+            misc.noopener = nativeNoopener;
             misc.standalone = standalone;
             misc.emoji = underscoreExtends.hasNativeEmoji();
             misc.reload = (window.performance && window.performance.navigation.type === 1);

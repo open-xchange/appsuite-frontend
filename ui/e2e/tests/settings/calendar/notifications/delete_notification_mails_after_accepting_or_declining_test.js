@@ -129,13 +129,10 @@ Test
     I.click(locate('.btn.accept').inside('.itip-actions'));
 
     // Verify the email was deleted
-    I.wait(2);
-    I.dontSee('Erisian Dialectic');
+    I.waitForInvisible('Erisian Dialectic', 2);
 
     // Change the setting
-    I.click('[title=Settings]');
-    I.waitForVisible('#topbar-settings-dropdown');
-    I.click('Settings');
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
 
     I.waitForElement(locate('.folder[aria-label=Calendar]'));
     I.click(locate('.folder[aria-label=Calendar]'));
@@ -149,7 +146,6 @@ Test
     I.click(locate('.btn.accept').inside('.itip-actions'));
 
     // Verify the mail hasn't been deleted
-    I.wait(2);
-    I.see('Grand Cabal');
+    I.waitForText('Grand Cabal', 2);
 
 });

@@ -143,11 +143,15 @@ define('io.ox/files/favorites', [
                         folder_id: obj.attributes.folder_id
                     });
                 }
-            } else if (typeof obj === 'object' && obj.id && obj.folder_id) {
-                files.push({
-                    id: obj.id,
-                    folder_id: obj.folder_id
-                });
+            } else if (typeof obj === 'object' && obj.id) {
+                if (obj.folder_name) {
+                    folders.push(obj.id);
+                } else if (obj.folder_id) {
+                    files.push({
+                        id: obj.id,
+                        folder_id: obj.folder_id
+                    });
+                }
             } else {
 
                 var model = filesAPI.pool.get('detail').get(id);
@@ -301,7 +305,9 @@ define('io.ox/files/favorites', [
         }
     });
 
-    folderAPI.on('remove move collection:remove', function (id, data) {
+    // error:FLD-1004 is storage was removed (dropbox, googledrive folder etc)
+    // error:OAUTH-0040 token no longer valid
+    folderAPI.on('error:FLD-1004 remove move collection:remove', function (id, data) {
         removeFavorites([data]);
     });
 

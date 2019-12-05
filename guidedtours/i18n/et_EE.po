@@ -18,6 +18,10 @@ msgstr ""
 msgid "Add another account"
 msgstr "Uue konto lisamine"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr ""
+
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
 msgstr "Manuste lisamine"
@@ -25,6 +29,17 @@ msgstr "Manuste lisamine"
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Adding further details"
 msgstr "Täiendavate andmete lisamine"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr ""
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -34,6 +49,10 @@ msgstr ""
 "Tööriistariba üleval pakub hulgaliselt funktsioone ja lisavalikuid. Uute "
 "kaustade ja failide lihtne loomine ning palju muid võimalusi on teie "
 "käsutuses."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -77,7 +96,7 @@ msgid "Collaborating"
 msgstr "Koostöö"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "Uue e-kirja koostamine"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -131,6 +150,12 @@ msgstr ""
 "Üksikasjalikud juhised konkreetsete rakenduste kohta leiate Süsteemi menüü > "
 "Abi alt."
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
+
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "Did you know that you can edit text documents and spreadsheets online? Drive "
@@ -175,13 +200,13 @@ msgstr ""
 msgid "Edit documents"
 msgstr "Dokumentide muutmine"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
-msgstr "Mitme e-kirja muutmine"
-
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Editing multiple contacts"
 msgstr "Mitme kontakti andmete muutmine"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Editing multiple emails"
+msgstr "Mitme e-kirja muutmine"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -192,9 +217,14 @@ msgid "Editing settings"
 msgstr "Seadete muutmine"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "Enter the E-Mail text into the main area. If the text format was set to "
+#| "HTML in the options, you can format the E-Mail text. To do so select a "
+#| "text part and then click an icon in the formatting bar."
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTML "
-"in the options, you can format the E-Mail text. To do so select a text part "
+"Enter the email text into the main area. If the text format was set to HTML "
+"in the options, you can format the email text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
 "Sisestage e-kirja tekst põhialale. Kui teksti vorminguks seadistati valikute "
@@ -231,13 +261,13 @@ msgstr "Sisestage teema, alguskuupäev ja kirjeldus."
 msgid "Entering billing information"
 msgstr "Arveldusteabe sisestamine"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
-msgstr "E-kirja teksti sisestamine"
-
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
 msgstr "Kohtumise andmete sisestamine"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the email text"
+msgstr "E-kirja teksti sisestamine"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Entering the recipient's name"
@@ -305,8 +335,12 @@ msgid "How the settings are organized"
 msgstr "Kuidas seaded on organiseeritud"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+#| "separate window."
 msgid ""
-"If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+"If double-clicking on an email in the list, the email is opened in a "
 "separate window."
 msgstr ""
 "Topeltklõps loetelus sisalduval e-kirjal avab selle e-kirja eraldi aknas."
@@ -316,9 +350,14 @@ msgid "If you no longer want to display a square, click the delete icon."
 msgstr "Kui ruudu edasine kuvamine pole vajalik, klõpsake kustutamisikoonil."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "In order to edit multiple E-Mails at once, enable the checkboxes on the "
+#| "left side of the E-Mails. If the checkboxes are not displayed, click on "
+#| "View > Checkboxes on the right side of the toolbar."
 msgid ""
-"In order to edit multiple E-Mails at once, enable the checkboxes on the left "
-"side of the E-Mails. If the checkboxes are not displayed, click on View > "
+"In order to edit multiple emails at once, enable the checkboxes on the left "
+"side of the emails. If the checkboxes are not displayed, click on View > "
 "Checkboxes on the right side of the toolbar."
 msgstr ""
 "Mitme e-kirja korraga muutmiseks aktiveerige märkeruudud e-kirjadest "
@@ -343,6 +382,10 @@ msgstr "Rakenduse käivitamine"
 msgid "Navigation bar"
 msgstr "Navigeerimisriba"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr ""
+
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "On the left you can see the folder tree. It displays your folder structure "
@@ -356,7 +399,7 @@ msgstr ""
 "ja videote jaoks."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "E-kirja avamine eraldi aknas"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -364,7 +407,7 @@ msgid "Opening or closing the folder tree"
 msgstr "Kaustapuu avamine või sulgemine"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "E-posti seadete avamine"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -384,16 +427,24 @@ msgid "Preview mode"
 msgstr "Eelvaaterežiim"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "E-kirjavahetuste lugemine"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "Üksikasjade lugemine"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr ""
+
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Objektide otsing"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Select a view"
@@ -403,12 +454,18 @@ msgstr "Vaate valimine"
 msgid "Selecting a view"
 msgstr "Vaate valimine"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr ""
+
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "E-kirja saatmine kontaktile"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "E-kirja saatmine"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -440,8 +497,12 @@ msgid "Sorting tasks"
 msgstr "Ülesannete sorteerimine"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "E-kirjade sorteerimine"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The Detail view"
@@ -482,8 +543,12 @@ msgid "The Portal"
 msgstr "Portaal"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "The Portal informs you about current E-Mails, appointments or social "
+#| "network news."
 msgid ""
-"The Portal informs you about current E-Mails, appointments or social network "
+"The Portal informs you about current emails, appointments or social network "
 "news."
 msgstr ""
 "Portaal pakub teavet saabunud e-kirjade, kohtumiste või sotsiaalvõrgu "
@@ -519,9 +584,13 @@ msgid "The list"
 msgstr "Loetelu"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "The settings are organized in topics. Select the topic on the left side, "
+#| "e.g Basic settings or E-Mail."
 msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
-"Basic settings or E-Mail."
+"Basic settings or Mail."
 msgstr ""
 "Seaded on organiseeritud teemade järgi. Valige teema vasakul poolel, nt. "
 "Põhiseaded või E-post."
@@ -529,6 +598,12 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The toolbar"
 msgstr "Tööriistariba"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
@@ -549,20 +624,20 @@ msgid ""
 msgstr "Paigutuse muutmiseks lohistage ruudu pealkiri teise kohta."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To choose between the different views. click on View in the toolbar. "
+#| "Select a menu entry in the layout."
 msgid ""
-"To choose between the different views. click on View in the toolbar. Select "
+"To choose between the different views, click on View in the toolbar. Select "
 "a menu entry in the layout."
 msgstr ""
 "Erinevate vaadete vahel valimiseks klõpsake tööriistariba elemendil Vaade. "
 "Valige menüü kirje."
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+#: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/mail.js
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "Uue e-kirja koostamiseks klõpsake Koosta tööriistaribal."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
-msgstr "Uue e-kirja loomiseks klõpsake Koosta uus e-kiri tööriistaribal."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
@@ -671,8 +746,12 @@ msgid "To not miss the task, use the reminder function."
 msgstr "Ülesande unustamise vältimiseks kasutage meeldetuletusfunktsiooni."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open or close an E-Mail in a conversation, click on a free area in the "
+#| "header."
 msgid ""
-"To open or close an E-Mail in a conversation, click on a free area in the "
+"To open or close an email in a conversation, click on a free area in the "
 "header."
 msgstr ""
 "E-kirja avamiseks või sulgemiseks kirjavahetuses klõpsake vabal alal päises."
@@ -686,9 +765,14 @@ msgstr ""
 "tööriistariba paremal poolel."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the E-Mail settings, click the System menu icon on the upper "
+#| "right side of the menu bar. Select Settings. Click on E-Mail on the left "
+#| "side."
 msgid ""
-"To open the E-Mail settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on E-Mail on the left side."
+"To open the email settings, click the System menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
 "E-posti seadete avamiseks klõpsake Süsteemi menüü ikoonil menüüriba ülemises "
 "paremas servas. Valige Seaded. Klõpsake E-post vasakul poolel."
@@ -739,15 +823,19 @@ msgstr ""
 "Vaade. Valige menüü kirje osas Küljendus."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To send an E-Mail to the contact, click on an E-Mail address or on Send "
+#| "email in the toolbar."
 msgid ""
-"To send an E-Mail to the contact, click on an E-Mail address or on Send "
-"email in the toolbar."
+"To send an email to the contact, click on an email address or on Send email "
+"in the toolbar."
 msgstr ""
 "E-kirja saatmiseks kontaktile klõpsake e-posti aadressil või tööriistariba "
 "elemendil Saada e-kiri."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "E-kirja saatmiseks klõpsake Saada"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -767,7 +855,7 @@ msgstr ""
 "poolel. Valige Logi välja."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 "E-kirjade sorteerimiseks klõpsake elemendil Sorteerimise alus. Valige "
 "sorteerimise kriteeriumid."
@@ -825,6 +913,11 @@ msgstr ""
 msgid "Using the reminder function"
 msgstr "Meeldetuletusfunktsiooni kasutamine"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr ""
+
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "Tere tulemast %s-i"
@@ -840,6 +933,12 @@ msgstr ""
 "uuest võrgupõhisest mälulahendusest, mis võimaldab juurdepääsu salvestatud "
 "failidele teie kõigilt kontodelt. Siitkaudu saate oma faile üles laadida ja "
 "salvestada, jagada ning erinevate seadmetega sünkroniseerida.  "
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
 
 #~ msgid ""
 #~ "Hint: you can always restart guided tours, any time you need them, from "

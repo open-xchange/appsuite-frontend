@@ -147,8 +147,15 @@ define('io.ox/core/viewer/main', [
                     data.restoreFocus.focus();
                 }
 
+                // Aborted Guard Authentication.
                 if (!self.mainView) {
-                    $(el).remove();  // Aborted Guard Authentication. Remove element since the MainView hasn't been initialized and won't remove it on dispose.
+                    // Remove element since the MainView hasn't been initialized and won't remove it on dispose.
+                    $(el).remove();
+
+                    // And quit the popout Viewer app for the same reason.
+                    if (data.app && data.app.get('state') === 'running') {
+                        data.app.quit();
+                    }
                 }
             }
 

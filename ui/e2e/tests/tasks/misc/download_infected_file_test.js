@@ -23,59 +23,35 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario.skip('[C273807] Download infected file', function (I) {
+Scenario.skip('[C273807] Download infected file', async function (I) {
+    const folder = await I.grabDefaultFolder('tasks');
+    const { id } = await I.haveTask({ folder_id: folder, title: 'My Subject', note: 'My Description' });
 
-    // 1. Login
+    await I.haveAttachment('tasks', { id, folder_id: folder }, { name: 'eicar.exe', content: `${'X5O!P%@AP[4\\PZX54(P^)7CC)7}'}${'$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*'}` });
 
     I.login();
-
-    // 2. Go to Tasks
-
     I.openApp('Tasks');
 
-    // 3. Create a taks with the attached virus file (eicar.txt)
-
-    I.clickToolbar('New');
-    I.waitForVisible('[data-app-name="io.ox/tasks/edit"]');
-
-    I.fillField('Subject', 'My Subject');
-    I.fillField('Description', 'My Description');
-
-    I.attachFile('[data-app-name="io.ox/tasks/edit"] input[type="file"]', 'e2e/media/files/eicar.exe');
-
-    I.click('Create');
     I.waitForVisible('.tasks-detailview');
     I.waitForText('eicar.exe');
 
-    // 4. Download the attachment
-
     I.click('eicar.exe');
-    I.waitForVisible('.dropdown-menu'); // legacy container. shouldn't this be a 'smart-dropdown-container'?
+    // legacy container. shouldn't this be a 'smart-dropdown-container'?
+    I.waitForVisible('.dropdown-menu');
 
     I.click('Download');
     I.waitForText('Anti-Virus Warning');
 
     I.see('The file \'eicar.exe\' you are trying to download seems to be infected with \'Eicar-Test-Signature\'.');
-
-    // 5. Hit 'Cancel'
-
     I.click('Cancel');
 
-    // 6. Download the attachment again
-
     I.click('eicar.exe');
-    I.waitForVisible('.dropdown-menu'); // legacy container. shouldn't this be a 'smart-dropdown-container'?
+    // legacy container. shouldn't this be a 'smart-dropdown-container'?
+    I.waitForVisible('.dropdown-menu');
 
     I.click('Download');
     I.waitForText('Anti-Virus Warning');
 
     I.see('The file \'eicar.exe\' you are trying to download seems to be infected with \'Eicar-Test-Signature\'.');
-
-    // 7. Hit 'Download infected file'
-
     I.click('Download infected file');
-
-    // 8. Download and verify the file
-
-    // It's not possible to verify the file on the filesystem.
 });

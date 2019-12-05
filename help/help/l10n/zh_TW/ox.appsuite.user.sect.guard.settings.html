@@ -1,21 +1,21 @@
 <html lang="zh_tw">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>12.6. 安全警衛設定</title>
+<title>12.6. Guard設定</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="使用者指南&gt;">
-<link rel="up" href="ox.appsuite.user.chap.guard.html" title="章 12. 加密資料使用安全警衛">
-<link rel="prev" href="ox.appsuite.user.sect.guard.logout.html" title="12.5. 登出安全警衛">
+<link rel="up" href="ox.appsuite.user.chap.guard.html" title="章 12. 使用 Guard 加密資料">
+<link rel="prev" href="ox.appsuite.user.sect.guard.logout.html" title="12.5. 登出 Guard">
 <link rel="next" href="ox.appsuite.user.sect.guard.settings.password.html" title="12.6.1. 密碼管理">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律聲明">
-<link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
-<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <script src="../../../help/jquery.min.js"></script> 
-
-   <script src="../../../help/bootstrap.min.js"></script> 
-</head>
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
@@ -29,15 +29,14 @@
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <h1 class="sr-only">加密資料使用<span class="phrase">安全警衛</span>
-</h1>
+  <h1 class="sr-only">使用 <span class="phrase">Guard</span> 加密資料</h1>
 <div class="sect1" id="ox.appsuite.user.sect.guard.settings">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">12.6. <span class="phrase">安全警衛</span>設定</h2></div></div></div>
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">12.6. <span class="phrase">Guard</span>設定</h2></div></div></div>
 <a class="indexterm" name="id-1.13.11.2"></a><a class="indexterm" name="id-1.13.11.3"></a><a class="indexterm" name="id-1.13.11.4"></a><div class="task" id="ox.appsuite.user.task.guard.settings">
-<p class="title">如何使用 <span class="phrase">安全警衛</span> 設定：</p>
+<p class="title">如何使用 <span class="phrase">Guard</span> 設定：</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">點擊選單列右邊的 <span class="guibutton"><strong>設定</strong></span> 圖示。 點擊選單的<span class="guibutton"><strong>設定</strong></span>項目。</p></li>
-<li class="step"><p role="presentation">選擇側邊欄中的 <span class="guibutton"><strong>安全性</strong></span>項目。點擊 <span class="phrase"><span class="guibutton"><strong>安全警衛</strong></span></span>。</p></li>
+<li class="step"><p role="presentation">點擊選單列右邊的 <span class="guibutton"><strong>設定</strong></span> 圖示 <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings"><img src="../../images/appsuite_user_icon_settings.png"></span>。</p></li>
+<li class="step"><p role="presentation">點擊側邊欄的 <span class="guibutton"><strong>安全性</strong></span>。點擊 <span class="phrase"><span class="guibutton"><strong>Guard</strong></span></span>。</p></li>
 </ol></div>
 </div>
 <p id="ox.appsuite.user.reference.guard.settings">有以下設置：</p>
@@ -49,7 +48,7 @@
 <li class="listitem"><p id="ox.appsuite.user.reference.guard.settings.default.encrypt"><b>撰寫郵件時預設在寄出郵件時加密. </b><a class="indexterm" name="id-1.13.11.7.2.1.1.1.2"></a>設定是否預設寄出加密郵件。</p></li>
 <li class="listitem"><p id="ox.appsuite.user.reference.guard.settings.default.sign"><b>預設在外寄郵件中加入簽章. </b><a class="indexterm" name="id-1.13.11.7.2.1.2.1.2"></a>設定是否預設寄出加密郵件。</p></li>
 <li class="listitem"><p id="ox.appsuite.user.task.guard.settings.default.inline"><b>為新郵件預設使用行內 PGP. </b><a class="indexterm" name="id-1.13.11.7.2.1.3.1.2"></a>設定是否直接在行內使用 PGP 加密。僅只在收件者的郵件軟體不支援 PGP 時使用該設定。若使用行內 PGP，收件者還是能解密訊息。若您使用此選項，將無法以 HTML 格式寄出郵件。</p></li>
-<li class="listitem"><p id="ox.appsuite.user.reference.guard.settings.default.defaultremember"><b>記住密碼預設值. </b><a class="indexterm" name="id-1.13.11.7.2.1.4.1.2"></a>設定 <span class="phrase">安全警衛</span> 預設要記住密碼的時間長度。您可以在被詢問 <span class="phrase">安全警衛</span> 密碼時修改此預設值。</p></li>
+<li class="listitem"><p id="ox.appsuite.user.reference.guard.settings.default.defaultremember"><b>記住密碼預設值. </b><a class="indexterm" name="id-1.13.11.7.2.1.4.1.2"></a>設定 <span class="phrase">Guard</span> 預設要記住密碼的時間長度。您可以在被詢問 <span class="phrase">Guard</span> 密碼時修改此預設值。</p></li>
 </ul>
 <p>
       </p>
@@ -75,9 +74,9 @@
 <h3 class="title">金鑰</h3>
 <p>通常在收發加密研究時，不需要使用金鑰管理功能。這些功能在下列情況下非常有用：</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">您想在其他郵件軟體，例如本機電腦上的郵件軟體使用 <span class="phrase">安全警衛</span> PGP 金鑰時。</p></li>
-<li class="listitem"><p role="presentation">您有從其他 PGP 應用程式打造的 PGP 金鑰時。您想要在 <span class="phrase">安全警衛</span> 使用該金鑰時。</p></li>
-<li class="listitem"><p role="presentation">您有外部夥伴的公鑰時。要傳送加密訊息給此位外部夥伴，或在無法存取金鑰伺服器時驗證收到的訊息，想要直接匯入該夥伴的公鑰到 <span class="phrase">安全警衛</span> 時。</p></li>
+<li class="listitem"><p role="presentation">您想在其他郵件軟體，例如本機電腦上的郵件軟體使用 <span class="phrase">Guard</span> PGP 金鑰時。</p></li>
+<li class="listitem"><p role="presentation">您有從其他 PGP 應用程式打造的 PGP 金鑰時。您想要在 <span class="phrase">Guard</span> 使用該金鑰時。</p></li>
+<li class="listitem"><p role="presentation">您有外部夥伴的公鑰時。要傳送加密訊息給此位外部夥伴，或在無法存取金鑰伺服器時驗證收到的訊息，想要直接匯入該夥伴的公鑰到 <span class="phrase">Guard</span> 時。</p></li>
 <li class="listitem"><p role="presentation">您想要提供公鑰給某位外部收件者，讓他們可以傳送加密訊息給您，而不需要從金鑰伺服器下載時。</p></li>
 </ul>
 <p>有下列選項：</p>
@@ -88,7 +87,7 @@
 </ul>
 <p>
       </p>
-<p id="ox.appsuite.user.parent.guard.settings">父主題：<a class="xref" href="ox.appsuite.user.chap.guard.html"><i>加密資料使用<span class="phrase">安全警衛</span></i></a></p>
+<p id="ox.appsuite.user.parent.guard.settings">父主題：<a class="xref" href="ox.appsuite.user.chap.guard.html"><i>使用 <span class="phrase">Guard</span> 加密資料</i></a></p>
 </div>
           </div>
         </body>

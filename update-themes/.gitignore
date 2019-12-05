@@ -11,3 +11,4 @@
 local.conf*
 npm-debug.log
 /bower_components
+deps

@@ -13,20 +13,17 @@
 
 define('io.ox/files/actions/delete-previous-versions', [
     'io.ox/files/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/files'
-], function (api, dialogs, gt) {
+], function (api, ModalDialog, gt) {
 
     'use strict';
 
     return function (data) {
-        new dialogs.ModalDialog()
-            .text(gt('Do you really want to delete all previous versions except the current version?'))
-            .addPrimaryButton('deletePreviousVersions', gt('Delete'), 'deletePreviousVersions')
-            .addButton('cancel', gt('Cancel'), 'cancel')
-            .on('deletePreviousVersions', function () {
-                api.versions.removePreviousVersions(data);
-            })
-            .show();
+        new ModalDialog({ title: gt('Do you really want to delete all previous versions except the current version?') })
+            .addCancelButton()
+            .addButton({ label: gt('Delete'), action: 'deletePreviousVersions' })
+            .on('deletePreviousVersions', function () { api.versions.removePreviousVersions(data); })
+            .open();
     };
 });

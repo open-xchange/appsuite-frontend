@@ -316,7 +316,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date', 'i
                 expect(this.model.get('test')).to.equal(1362009600000);
             });
 
-            it('updates the model (without a year)', function () {
+            it.skip('updates the model (without a year)', function () {
                 this.view.$el.find('.year').val('1604').trigger('change');
                 this.view.$el.find('.month').val('0').trigger('change');
                 this.view.$el.find('.date').val('29').trigger('change');

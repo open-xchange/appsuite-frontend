@@ -101,11 +101,11 @@ define('io.ox/mail/view-options', [
                 SECONDARY_PAGE_SIZE: 100
             });
 
-            var $el = $('<div>').appendTo(this);
+            var $el = $('<div class="_hurz">').appendTo(this);
 
             require(['io.ox/backbone/views/search'], function (SearchView) {
 
-                new SearchView({ $el: $el, point: 'io.ox/mail/search/dropdown' })
+                new SearchView({ el: $el[0], point: 'io.ox/mail/search/dropdown' })
                 .build(function () {
                     var view = this;
                     baton.app.on('folder:change', function () {
@@ -132,7 +132,9 @@ define('io.ox/mail/view-options', [
         }
     };
 
-    if (settings.get('prototypes/search', false)) {
+    // search-prototype: changed "false" to "true"
+    var useSearchPrototype = _.device('desktop') && !navigator.webdriver && settings.get('prototypes/search', false);
+    if (useSearchPrototype) {
         ext.point('io.ox/mail/list-view/toolbar/top').extend(searchPrototype);
     }
 
@@ -220,7 +222,7 @@ define('io.ox/mail/view-options', [
         node.toggle(!app.props.get('find-result'));
     }
 
-    ext.point('io.ox/mail/list-view/toolbar/top').extend({
+    ext.point('io.ox/mail/list-view/toolbar/' + (useSearchPrototype ? 'bottom' : 'top')).extend({
         id: 'dropdown',
         index: 1000,
         draw: function (baton) {
@@ -230,6 +232,7 @@ define('io.ox/mail/view-options', [
             var dropdown = new Dropdown({
                 tagName: 'li',
                 className: 'dropdown grid-options toolbar-item margin-auto',
+                attributes: { role: 'presentation' },
                 caret: true,
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Sort'),
@@ -281,7 +284,7 @@ define('io.ox/mail/view-options', [
         }
     });
 
-    ext.point('io.ox/mail/list-view/toolbar/top').extend({
+    ext.point('io.ox/mail/list-view/toolbar/' + (useSearchPrototype ? 'bottom' : 'top')).extend({
         id: 'all',
         index: 200,
         draw: function (baton) {
@@ -290,6 +293,7 @@ define('io.ox/mail/view-options', [
 
             var dropdown = new Dropdown({
                 tagName: 'li',
+                attributes: { role: 'presentation' },
                 className: 'dropdown grid-options toolbar-item',
                 caret: true,
                 //#. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
@@ -320,20 +324,49 @@ define('io.ox/mail/view-options', [
         var state = !!e.data.state;
         e.data.app.folderView.forceOpen = state;
         e.data.app.props.set('folderview', state);
+
         // keep focus
-        var selector = '[data-action="' + (state ? 'close' : 'open') + '-folder-view"]';
-        e.data.app.getWindow().nodes.outer.find(selector).focus();
+        if (!!e.data.state) {
+            e.data.app.folderView.tree.getNodeView(e.data.app.folder.get()).$el.focus();
+        } else {
+            var listView = e.data.app.listView,
+                node = listView.selection.get().reduce(function (memo, item) {
+                    if (memo) return memo;
+                    return listView.selection.getNode(item);
+                }, null);
+
+            if (node) listView.selection.focus(0, node);
+            else {
+                var util = require('io.ox/mail/util'),
+                    mailCollection = listView.selection.view.collection,
+                    firstUnreadMail = mailCollection.models.find(function (e) {
+                        return !util.isUnseen(e.get('flags'));
+                    });
+
+                if (firstUnreadMail) return listView.selection.select(mailCollection.indexOf(firstUnreadMail));
+
+                listView.$el.focus();
+            }
+        }
     }
 
     function onFolderViewOpen(app) {
         app.getWindow().nodes.sidepanel.show();
-        app.getWindow().nodes.main.find('.list-view-control').removeClass('toolbar-bottom-visible');
+        if (useSearchPrototype) {
+            app.getWindow().nodes.main.find('.toolbar-item[data-action="open-folder-view"]').hide();
+        } else {
+            app.getWindow().nodes.main.find('.list-view-control').removeClass('toolbar-bottom-visible');
+        }
     }
 
     function onFolderViewClose(app) {
         // hide sidepanel so invisible objects are not tabbable
         app.getWindow().nodes.sidepanel.hide();
-        app.getWindow().nodes.main.find('.list-view-control').addClass('toolbar-bottom-visible');
+        if (useSearchPrototype) {
+            app.getWindow().nodes.main.find('.toolbar-item[data-action="open-folder-view"]').show();
+        } else {
+            app.getWindow().nodes.main.find('.list-view-control').addClass('toolbar-bottom-visible');
+        }
     }
 
     ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
@@ -344,8 +377,13 @@ define('io.ox/mail/view-options', [
             this.append(
                 $('<button type="button" class="btn btn-link toolbar-item pull-left" data-action="open-folder-view">').attr('aria-label', gt('Open folder view')).append(
                     $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view'))
-                ).on('click', { app: baton.app, state: true }, toggleFolderView)
+                )
+                .on('click', { app: baton.app, state: true }, toggleFolderView)
             );
+
+            if (useSearchPrototype) {
+                baton.app.getWindow().nodes.main.find('.list-view-control').removeClass('toolbar-bottom-visible');
+            }
 
             baton.app.on({
                 'folderview:open': onFolderViewOpen.bind(null, baton.app),
@@ -360,9 +398,13 @@ define('io.ox/mail/view-options', [
         id: 'toggle-folderview',
         index: 1000,
         draw: function (baton) {
+            var guid = _.uniqueId('control');
             this.addClass('bottom-toolbar').append(
-                $('<div class="generic-toolbar bottom visual-focus" role="region">').append(
-                    $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view')).append(
+                $('<div class="generic-toolbar bottom visual-focus" role="region">').attr('aria-labelledby', guid).append(
+                    $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr({
+                        id: guid,
+                        'aria-label': gt('Close folder view')
+                    }).append(
                         $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                     ).on('click', { app: baton.app, state: false }, toggleFolderView)
                 )

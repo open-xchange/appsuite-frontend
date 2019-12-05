@@ -81,12 +81,11 @@ Scenario('[C7491] Delete an appointment', async (I) => {
     I.waitForText('Delete', undefined, '.io-ox-sidepopup');
 
     I.click('Delete', '.io-ox-sidepopup');
-    I.waitForVisible('.io-ox-dialog-popup.delete-dialog');
-    I.waitForElement('.io-ox-dialog-popup.delete-dialog [data-action="ok"]');
-    I.click('Delete', '.io-ox-dialog-popup.delete-dialog');
+    I.waitForText('Delete', '.modal-dialog');
+    I.click('Delete', '.modal-dialog');
 
     // Verify the popup closes itself and the widget updates its list of appointments
-    I.waitForDetached('.io-ox-dialog-popup.delete-dialog');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
     I.waitNumberOfVisibleElements('~Appointments', 1, 300);
     I.dontSee('C7491-1', '.widget[aria-label="Appointments"]');

@@ -1,7 +1,6 @@
 const Helper = require('@open-xchange/codecept-helper').helper,
     axe = require('axe-core');
 const { util } = require('@open-xchange/codecept-helper');
-const assert = require('assert');
 
 function assertElementExists(res, locator, prefixMessage = 'Element', postfixMessage = 'was not found by text|CSS|XPath') {
     if (!res || res.length === 0) {
@@ -64,100 +63,6 @@ class MyHelper extends Helper {
         return report;
     }
 
-    async createFolder(folder, id, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        return httpClient.put('/appsuite/api/folders', folder, {
-            params: {
-                action: 'new',
-                autorename: true,
-                folder_id: id,
-                session: session,
-                tree: 1
-            }
-        });
-    }
-
-    async haveGroup(group, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        const response = await httpClient.put('/appsuite/api/group', group, {
-            params: {
-                action: 'new',
-                session: session
-            }
-        });
-        return response.data.data;
-    }
-
-    async dontHaveGroup(name, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        const { data: { data } } = await httpClient.put('/appsuite/api/group', '', {
-            params: {
-                action: 'all',
-                columns: '1,701',
-                session
-            }
-        });
-        const timestamp = require('moment')().add(30, 'years').format('x');
-        const test = typeof name.test === 'function' ? g => name.test(g[1]) : g => name === g[1];
-
-        const ids = data.filter(test).map(g => g[0]);
-        return Promise.all(ids.map(async (id) => {
-            await httpClient.put('/appsuite/api/group', { id }, {
-                params: {
-                    action: 'delete',
-                    session,
-                    timestamp
-                }
-            });
-            return { id, name };
-        }));
-    }
-
-    async haveResource(data, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        const response = await httpClient.put('/appsuite/api/resource', data, {
-            params: {
-                action: 'new',
-                session: session
-            }
-        });
-        return response.data.data.id;
-    }
-
-    async dontHaveResource(pattern, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        const { data: { data } } = await httpClient.put('/appsuite/api/resource', { pattern }, {
-            params: {
-                action: 'search',
-                session
-            }
-        });
-
-        const timestamp = require('moment')().add(30, 'years').format('x');
-        return Promise.all(data.map(async ({ id }) => {
-
-            await httpClient.put('/appsuite/api/resource', { id }, {
-                params: {
-                    action: 'delete',
-                    session,
-                    timestamp
-                }
-            });
-            return { id, pattern };
-        }));
-    }
-
-    async deleteResource(data, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        const response = await httpClient.put('/appsuite/api/resource', data, {
-            params: {
-                action: 'delete',
-                session: session
-            }
-        });
-        return response;
-    }
-
     async haveLockedFile(data, options) {
         const { httpClient, session } = await util.getSessionForUser(options);
         const response = await httpClient.put('/appsuite/api/files', data, {
@@ -171,17 +76,59 @@ class MyHelper extends Helper {
         return response.data;
     }
 
-    async haveAppointment(appointment, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        const response = await httpClient.put('/appsuite/api/chronos', appointment, {
-            params: {
-                action: 'new',
-                session: session,
-                folder: appointment.folder
-            }
-        });
-        assert.strictEqual(response.data.error, undefined, JSON.stringify(response.data));
-        return response;
+    async allowClipboardRead() {
+        const { browser, config } = this.helpers['Puppeteer'];
+        const context = browser.defaultBrowserContext();
+        context.overridePermissions(config.url.replace(/\/appsuite\//, ''), ['clipboard-read']);
+    }
+
+    async selectFolder(id) {
+        let wdio = this.helpers['WebDriver'],
+            browser = wdio.browser,
+            options = wdio.options;
+
+        const error = await browser.executeAsync((id, timeout, done) => {
+            require(['io.ox/core/folder/api'], function (folderAPI) {
+                function repeatUntil(cb, interval, timeout) {
+                    var start = _.now(),
+                        def = new $.Deferred(),
+                        iterate = function () {
+                            var result = cb();
+                            if (result) return def.resolve(result);
+                            if (_.now() - start < timeout) return _.delay(iterate, interval);
+                            def.reject({ message: 'Folder API could not resolve folder after ' + timeout / 1000 + ' seconds' });
+                        };
+                    iterate();
+                    return def;
+                }
+
+                repeatUntil(function () {
+                    var model = _(folderAPI.pool.models).find(function (m) {
+                        return m.get('title') === id || m.get('id') === id || m.get('display_title') === id;
+                    });
+                    return model;
+                }, 100, timeout).then(function (model) {
+                    var app = ox.ui.App.getCurrentApp();
+                    // special handling for virtual folders
+                    if (model.get('id').indexOf('virtual/') === 0) {
+                        var body = app.getWindow().nodes.body;
+                        if (body) {
+                            var view = body.find('.folder-tree').data('view');
+                            if (view) {
+                                view.trigger('virtual', model.get('id'));
+                            }
+                        }
+                    }
+                    app.folder.set(model.get('id')).then(function () {
+                        done();
+                    }, done);
+                }, function fail(error) {
+                    done(error);
+                });
+            });
+        }, id, options.waitForTimeout * 1000);
+
+        if (error) throw error;
     }
 
 }

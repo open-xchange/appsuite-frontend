@@ -142,13 +142,11 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 };
 
             afterEach(function () {
-                moment.updateLocale('de', {
-                    week: localeWeek
-                });
+                moment.updateLocale('de', { week: localeWeek });
             });
 
             it('Only works for de_DE', function () {
-                expect(ox.language).to.equal('de_DE');
+                expect(ox.locale).to.equal('de_DE');
             });
 
             // Daily

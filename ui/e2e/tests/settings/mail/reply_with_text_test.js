@@ -23,8 +23,9 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[7776] Insert the original email text to a reply', async (I, users) => {
+Scenario('[C7776] Insert the original email text to a reply', async (I, users) => {
     const user = users[0];
+    const listview = locate('.list-view-control').as('List View');
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
 
@@ -34,11 +35,11 @@ Scenario('[7776] Insert the original email text to a reply', async (I, users) =>
     }, { user });
 
     I.login('app=io.ox/mail', { user });
-    I.waitForText('plain text');
-    I.click('.list-item.selectable');
+    I.waitForText('plain text', 5, listview);
+    I.click('.list-item.selectable', listview);
     I.waitForVisible('h1.subject');
     I.click('Reply');
-    I.waitForText('Re: plain text');
+    I.waitForElement('.io-ox-mail-compose textarea');
     I.seeInField('textarea', '> This is simple plain text!');
 
     I.click('Discard');
@@ -48,13 +49,13 @@ Scenario('[7776] Insert the original email text to a reply', async (I, users) =>
     I.waitForText('Mail Compose');
     I.click('Insert the original email text to a reply');
 
-    I.click('Mail');
-    I.waitForText('plain text');
-    I.click('.list-item.selectable');
+    I.openApp('Mail');
+    I.waitForText('plain text', 5, listview);
+    I.click('.list-item.selectable', listview);
     I.waitForVisible('h1.subject');
     I.click('Reply');
     I.waitForText('Re: plain text');
-
+    I.waitForElement('.io-ox-mail-compose .editor iframe');
     await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
         I.dontSee('This is simple plain text!');
     });

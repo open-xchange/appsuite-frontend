@@ -9,145 +9,200 @@
  * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-.edit-contact {
-    // baseline adjustment
-    padding: @default-padding 0 0 0;
+@size: 120px;
 
-    h1.name {
-        font-weight: 300;
-        font-size: 24px;
-        line-height: 32px;
-        margin: 0;
-        .ellipsis();
+.contact-edit {
+
+    margin: 32px 0;
+
+    .form-group {
+        margin-bottom: 8px;
     }
 
-    // needed for furigana
-    .row label { width: 100%; }
-
-    h2.job {
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 20px;
-        margin: 0 0 14px 0;
-        color: #777;
-        .ellipsis();
+    .contact-header {
+        height: @size;
+        margin-bottom: 32px;
     }
 
-    & div.field.rare:not(.has-content),
-    &.compact div.field { display: none; }
-
-    & div.field.always,
-    &.compact div.field.has-content { display: block; }
-
-    .block {
-        margin-bottom:28px;
-        .attachment-list { margin-left: 15px; }
-        legend.group { color: @brand-primary }
-        legend.group h2 {
-            font-weight: bold;
-            font-size: 13px;
-            margin-top: 3px;
-            margin-bottom: 3px;
-        }
+    .height-100 {
+        height: 100%;
     }
 
-    [data-field="note"] {
-        margin-left: 0;
-        margin-right: 0;
+    label {
+        color: #333;
+        &.control-label { padding-top: 7px; }
+    }
 
-        label {
-            padding-left: 0;
-            color: @brand-primary;
-            border-bottom: 1px solid #ccc;
-        }
+    input, select {
+        height: 32px;
     }
 
     textarea {
-        margin-top: 62px;
-        height: 282px;
+        min-height: 120px;
     }
 
-    .native-date-picker div {
-        &:first-child { padding-right: 0; }
-        &:last-child { padding-left: 0; }
+    .section, fieldset {
+        margin-bottom: 32px;
     }
 
-    .inline-error { display: none; }
-
-    .field.error {
-
-        label, input, .inline-error { color: #B94A48; }
-
-        input {
-            border-color: #B94A48;
-            &:focus { box-shadow: 0 0 6px #D59392; }
-        }
-
-        .inline-error {
-            margin-bottom: 14px;
-            display: block;
-        }
+    .section-title {
+        font-weight: 500;
+        line-height: 32px;
+        color: #707070;
     }
 
-    .attachment-list {
-
-        .attachment {
-
+    .dropdown[data-add] button,
+    .fileupload[data-add] button
+     {
+        color: #555;
+        height: 32px;
+        .fa-plus-circle {
+            color: #4b7916;
+            font-size: 20px;
+            margin-right: 8px;
             position: relative;
-            margin-bottom: 7px;
-            padding: 7px 50px 7px 50px;
-            background-color: #F5F5F5;
+            top: 2px;
+        }
+    }
 
-            width: 330px;
-            float: left;
-            margin-right: 0;
-
-            &:nth-child(odd) { margin-right: 60px; }
-
-            i.fa-paperclip {
-                position: absolute;
-                font-size: 24px;
-                color: rgba(0, 0, 0, 0.20);
-                top: 15px;
-                left: 15px;
+    button.remove {
+        padding: 0;
+        outline: 0;
+        .fa-minus-circle {
+            color: #a00;
+            font-size: 20px;
+            position: relative;
+            top: 5px;
+        }
+        &:hover, &:focus {
+            .fa-minus-circle {
+                color: #333;
             }
+        }
+    }
+}
 
-            .filesize {
-                font-size: 13px;
-                color: #aaa;
+.contact-photo-upload {
+
+    .contact-photo {
+
+        width: @size;
+        height: @size;
+        background-repeat: no-repeat;
+        background-size: cover;
+        border-radius: 50%;
+        /* border: 3px solid white; */
+        box-shadow: 0 0 3px #000, 0 0 0px 3px white inset;
+        float: right;
+
+        /* click to add photo */
+        padding: 8px;
+        font-size: 14px;
+        color: #555;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        background-color: #f5f5f5;
+        cursor: pointer;
+        position: relative;
+
+        label {
+            margin: 0;
+            font-weight: normal;
+            line-height: 16px;
+            cursor: pointer;
+        }
+
+        &.focus {
+            border: 1px solid @link-color;
+            box-shadow: 0 0 8px 2px @link-color, 0 0 0px 2px white inset;
+        }
+    }
+
+    button.remove {
+        font-size: 18px;
+        position: absolute;
+        bottom: -4px;
+        right: @size + 4px;
+        outline: 0;
+    }
+
+    form {
+        position: absolute;
+        z-index: 1;
+    }
+
+    input[type=file] {
+        position: absolute;
+        top: 0;
+        width: @size;
+        height: @size;
+        opacity: 0;
+        cursor: pointer;
+        right: 16px;
+    }
+}
+
+.contact-edit-add {
+    display: inline-block;
+    float: right;
+    select {
+        height: 32px;
+        min-width: 240px;
+    }
+}
+
+@media (max-width: @smartphone-breakpoint) {
+
+    @size: 72px;
+
+    .contact-edit {
+
+        margin-left: 15px;
+        margin-right: 15px;
+
+        .contact-header {
+            height: @size;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin: 0;
+        }
+
+        label.control-label {
+            padding-top: 9px;
+            margin-bottom: 3px;
+        }
+
+        button.remove {
+            .fa-minus-circle {
+                color: #a00;
+                font-size: 22px;
+                position: relative;
+                top: 4px;
             }
+        }
 
-            .remove {
-                position: absolute;
-                top: 0;
-                right: 0;
-                bottom:  0;
-                width: 2em;
-                font-size: 18px;
-                background-color: #f0f0f0;
-                border-left: 1px solid white;
-                color: #bbb;
-                cursor: pointer;
+        .dropdown[data-add] button {
+            padding: 4px;
+        }
+    }
 
-                &:hover {
-                    background-color: #a00;
-                    color: #fff;
-                    text-decoration: none;
-                }
-
-                i.fa-trash-o {
-                    position: absolute;
-                    top: 50%;
-                    left: 0;
-                    right: 0;
-                    margin-top: -0.5em;
-                    text-align: center;
-                }
-            }
-
-            .row-1, .row-2 { .ellipsis(); }
+    .contact-photo-upload {
+        .contact-photo {
+            width: @size;
+            height: @size;
+            float: none;
+            border: 0;
+            box-shadow: none;
+        }
+        button.remove {
+            font-size: 14px;
         }
     }
 }

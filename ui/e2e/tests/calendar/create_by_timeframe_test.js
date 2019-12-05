@@ -16,7 +16,7 @@
 const moment = require('moment');
 const expect = require('chai').expect;
 
-Feature('Calendar Create');
+Feature('Calendar > Create');
 
 Before(async (users) => {
     await users.create();
@@ -37,12 +37,13 @@ Scenario('[C7433] Create appointment by marking some timeframe', async (I) =>{
 
     // Create appointment from 01:00am to 03:00am today
     await within('.appointment-container', async () => {
+        I.scrollTo('//div[contains(@class, "timeslot")][3]');
         // each timeslot element represents 30 minute blocks
         // The first slot will be from 00:00am to 00:30am...
         // The third slot will be 01:00am to 01:30am (add 3 slots)
         // The sixth slot will be from 02:30am to 03:00am
         // Drag from 01:00(3) down to 03:00(6)
-        I.dragAndDrop('//div[contains(@class, "timeslot")][3]', '//div[contains(@class, "timeslot")][6]');
+        I.dragAndDrop({ xpath: '//div[contains(@class, "timeslot")][3]' }, { xpath: '//div[contains(@class, "timeslot")][6]' });
     });
     I.waitForVisible('.floating-window');
     I.waitForText('Create appointment');

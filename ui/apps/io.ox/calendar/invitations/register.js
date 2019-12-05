@@ -199,7 +199,8 @@ define('io.ox/calendar/invitations/register', [
             var dateStrings = this.getDateTimeIntervalMarkup(),
                 recurrenceString = calendarUtil.getRecurrenceString(this.model),
                 title = this.getTitle(),
-                separator = title ? $.txt(', ') : $.txt('');
+                hasDateOrTime = dateStrings.dateStr || dateStrings.timeStr || recurrenceString,
+                separator = title && hasDateOrTime ? $.txt(', ') : $.txt('');
 
             this.$el.find('.itip-details').append(
                 $('<b>').text(title), separator,
@@ -215,7 +216,7 @@ define('io.ox/calendar/invitations/register', [
         },
 
         getTitle: function () {
-            this.model.get('summary');
+            return this.model.get('summary');
         },
 
         getDateTimeIntervalMarkup: function () {
@@ -418,6 +419,8 @@ define('io.ox/calendar/invitations/register', [
                 action(self.imip, {
                     api: {
                         checkConflicts: function () {
+                            if (_.isArray(self.options.conflicts)) return $.when(self.options.conflicts);
+
                             var conflicts = [];
                             // no need to check if appointment was declined
                             if (doConflictCheck) {
@@ -831,10 +834,11 @@ define('io.ox/calendar/invitations/register', [
         getCid: function () {
             var headers = this.model.get('headers') || {},
                 reminder = headers['X-OX-Reminder'],
-                module = headers['X-Open-Xchange-Module'];
+                module = headers['X-Open-Xchange-Module'],
+                sequence = ['X-Open-Xchange-Sequence'];
             if (!reminder || !module) return;
             reminder = reminder.split(/,\s*/);
-            return { module: module, folder_id: reminder[1], id: reminder[0] };
+            return sequence ? { module: module, folder_id: reminder[1], id: reminder[0], sequence: sequence } : { module: module, folder_id: reminder[1], id: reminder[0] };
         },
 
         getType: function () {
@@ -853,7 +857,7 @@ define('io.ox/calendar/invitations/register', [
                 cid = this.getCid(),
                 yell = this.options && this.options.yell;
             return require(['io.ox/calendar/api', 'io.ox/calendar/util', 'io.ox/backbone/mini-views/alarms']).then(function (api, util, AlarmsView) {
-                return api.resolve(cid.id, true).then(function (model) {
+                return api.resolve({ id: cid.id, sequence: cid.sequence }, true).then(function (model) {
                     if (self.disposed) return;
 
                     if (self.getType() === 'Deleted') {

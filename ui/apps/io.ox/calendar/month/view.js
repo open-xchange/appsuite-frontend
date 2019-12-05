@@ -79,7 +79,7 @@ define('io.ox/calendar/month/view', [
         },
 
         update: function () {
-            this.monthText.text(this.model.get('startOfMonth').format('MMMM YYYY'));
+            this.monthText.text(this.model.get('startOfMonth').formatCLDR('yMMMM'));
         },
 
         render: function () {
@@ -211,7 +211,7 @@ define('io.ox/calendar/month/view', [
                         .attr({
                             id: day.format('YYYY-M-D'),
                             //#. %1$s is a date: october 12th 2017 for example
-                            title: gt('Selected - %1$s', day.format('ddd LL'))
+                            title: gt('%1$s', day.format('ddd LL'))
                         })
                         .data('date', day.valueOf())
                         .append(
@@ -266,7 +266,7 @@ define('io.ox/calendar/month/view', [
             this.$('.list').css('height', height);
         }, 100),
 
-        renderAppointment: function (model) {
+        renderAppointment: function (model, startDate) {
             var node = $('<button class="appointment" type="button">')
                 .attr({
                     'data-cid': model.cid,
@@ -276,7 +276,7 @@ define('io.ox/calendar/month/view', [
                 })
                 .data('startDate', model.getTimestamp('startDate'));
 
-            var baton = ext.Baton(_.extend({}, this.opt, { model: model, folders: this.opt.app.folders.list() }));
+            var baton = ext.Baton(_.extend({}, this.opt, { model: model, folders: this.opt.app.folders.list(), startDate: startDate }));
             ext.point('io.ox/calendar/appointment').invoke('draw', node, baton);
             ext.point('io.ox/calendar/month/view/appointment').invoke('draw', node, baton);
 
@@ -409,7 +409,7 @@ define('io.ox/calendar/month/view', [
             // draw across multiple days
             while (startMoment.isSameOrBefore(endMoment)) {
                 var cell = this.$('#' + startMoment.format('YYYY-M-D') + ' .list');
-                cell.append(this.renderAppointment(model));
+                cell.append(this.renderAppointment(model, startMoment));
                 if (!this.onReset) cell.append(cell.children().sort(this.nodeComparator));
                 startMoment.add(1, 'day').startOf('day');
             }

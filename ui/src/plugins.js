@@ -298,6 +298,7 @@
         req.load = function (context, modulename, url) {
             var prefix = context.config.baseUrl;
             if (modulename.slice(0, 5) === 'apps/') {
+                // NOTE: If you change this - inform documents team about it - it will break code there !
                 url = ox.apiRoot + '/apps/load/' + ox.version + ',' + url.slice(5);
                 return oldload.apply(this, arguments);
             } else if (modulename.slice(0, 7) === 'static/') {

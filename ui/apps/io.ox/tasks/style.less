@@ -259,43 +259,16 @@
 
 }
 
-//portal widget
-
-.io-ox-portal [data-widget-type="tasks"] .item{
-    display: flex;
-    white-space: nowrap;
-    justify-content: space-between;
-
-    .bold {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .accent {
-        margin-left: 5px;
-    }
-
-    .flex-wrapper {
-        overflow: hidden;
-        display: flex;
-    }
-
-    .badge {
-        margin-left: 5px;
-        flex-shrink: 0;
-    }
-}
-
 //io.ox/tasks/listview, io.ox/tasks/common-extensions
 .task-item {
 
     .title {
         .ellipsis();
-        .fontWeight(500);
+        font-weight: 500;
     }
 
     .date {
-        .fontWeight(300);
+        font-weight: 300;
         display: inline-block;
         margin-left: 0.5em;
         float: right;

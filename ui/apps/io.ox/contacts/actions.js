@@ -227,13 +227,13 @@ define('io.ox/contacts/actions', [
         {
             id: 'create',
             index: 100,
-            title: gt('Add contact'),
+            title: gt('New contact'),
             ref: 'io.ox/contacts/actions/create'
         },
         {
             id: 'create-dist',
             index: 200,
-            title: gt('Add distribution list'),
+            title: gt('New distribution list'),
             ref: 'io.ox/contacts/actions/distrib'
         }
     );

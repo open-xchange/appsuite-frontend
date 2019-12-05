@@ -11,7 +11,7 @@
  */
 
 /// <reference path="../../../steps.d.ts" />
-
+const moment = require('moment');
 Feature('Settings > Basic');
 
 Before(async (users) => {
@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C244801] Set design @shaky', async (I) => {
+Scenario('[C244801] Set design', async (I) => {
 
     // dusk
     await I.haveSetting({ 'io.ox/core': { design: 'dusk' } });
@@ -39,16 +39,17 @@ Scenario('[C244801] Set design @shaky', async (I) => {
     // time-based
     await I.haveSetting({ 'io.ox/core': { design: 'time' } });
     I.login();
-    var h = new Date().getHours(), design = 'night';
-    // 00:00 Indigo
-    // 06:00 Green
-    // 09:00 Turquoise
-    // 12:00 Blue
-    // 18:00 Purple/Magenta
-    if (h >= 18) design = 'dusk';
-    else if (h >= 12) design = 'day';
-    else if (h >= 9) design = 'dawn';
-    else if (h >= 6) design = 'twilight';
+    var h = moment().format('H'), design = getTimeDependentDesign(h);
+
+    // See io.ox/core/main/designs.js
+    function getTimeDependentDesign(h) {
+        if (h < 6) return 'night';
+        if (h < 9) return 'twilight';
+        if (h < 12) return 'dawn';
+        if (h < 18) return 'day';
+        if (h < 23) return 'dusk';
+        return 'late';
+    }
+
     I.waitForElement('html.design-' + design);
-    I.logout();
 });

@@ -12,7 +12,7 @@
 
 /// <reference path="../../steps.d.ts" />
 
-Feature('Mail > Reply / Forward');
+Feature('Mail > Reply/Forward');
 
 Before(async (users) => {
     await users.create(); // Recipient
@@ -96,26 +96,26 @@ Scenario('[C7402] Mark one single mail as read or unread', async (I, users) => {
     I.waitForElement(locate('li.list-item').withText('Hail Eris'));
     I.click(locate('li.list-item').withText('Hail Eris'));
     // -> Mail is displayed as read.
-    I.dontSeeElement('article.mail-item.unread'); // Detail View
+    I.dontSeeElement('.mail-detail-pane article.mail-item.unread'); // Detail View
     I.dontSeeElement(locate('.seen-unseen-indicator').inside(
         locate('.list-item').withText('Hail Eris')
     )); // List
     // Click on "Mark Unread"
-    I.click('a.unread-toggle', 'article.mail-item');
+    I.click('.mail-detail-pane a.unread-toggle', '.mail-detail-pane article.mail-item');
     // -> Mail is displayed as unread.
-    I.seeElement('article.mail-item.unread'); // Detail View
+    I.seeElement('.mail-detail-pane article.mail-item.unread'); // Detail View
     I.seeElement(locate('.seen-unseen-indicator')
         .inside(locate('.list-item').withText('Hail Eris')));  // List
     // Click on "Mark read"
-    I.click('a.unread-toggle', 'article.mail-item');
+    I.click('.mail-detail-pane a.unread-toggle', '.mail-detail-pane article.mail-item');
     // -> Mail is displayed as read.
-    I.dontSeeElement('article.mail-item.unread'); // Detail View
+    I.dontSeeElement('.mail-detail-pane article.mail-item.unread'); // Detail View
     I.dontSeeElement(locate('.seen-unseen-indicator').inside(
         locate('.list-item').withText('Hail Eris'))); // List
-    I.logout();
 });
 
-Scenario('[C8818] Reply all', async (I, users) => {
+// TODO: shaky, failed at least once (10 runs on 2019-11-28)
+Scenario.skip('[C8818] Reply all', async (I, users) => {
     const [recipient, sender, cc] = users;
 
     // Preparation
@@ -151,13 +151,11 @@ Scenario('[C8818] Reply all', async (I, users) => {
     I.click('Send');
     I.waitForInvisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.logout();
     // Verify the mail arrived at the other accounts
     [sender, cc].forEach(function (current_user) {
+        I.logout();
         I.login('app=io.ox/mail', { user: current_user });
         I.waitForText('Re: Hail Eris', 5);
-        I.logout();
     });
-
 
 });

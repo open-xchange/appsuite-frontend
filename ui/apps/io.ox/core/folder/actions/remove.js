@@ -13,10 +13,10 @@
 
 define('io.ox/core/folder/actions/remove', [
     'io.ox/core/folder/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/notifications',
     'gettext!io.ox/core'
-], function (api, dialogs, notifications, gt) {
+], function (api, ModalDialog, notifications, gt) {
 
     'use strict';
 
@@ -35,23 +35,13 @@ define('io.ox/core/folder/actions/remove', [
     return function (id, options) {
 
         var model = api.pool.getModel(id),
-            dialog = new dialogs.ModalDialog(),
             deleteNotice = model.get('module') === 'calendar' ? gt('Do you really want to delete calendar "%s"?', model.get('title')) : gt('Do you really want to delete folder "%s"?', model.get('title')),
             shareNotice = model.get('module') === 'calendar' ? gt('This calendar is shared with others. It won\'t be available for them any more.') : gt('This folder is shared with others. It won\'t be available for them any more.');
 
-        function isShared() {
-            if (model.get('permissions').length > 1) return true;
-        }
-
-        dialog.text(deleteNotice)
-        .append($('<p>').text(isShared() ? shareNotice : ''))
-        .addPrimaryButton('delete', gt('Delete'))
-        .addButton('cancel', gt('Cancel'))
-        .on('delete', function () {
-            handler(id, options);
-        })
-        .show();
-
-        dialog.getContentNode().find('h4').addClass('white-space');
+        new ModalDialog({ title: deleteNotice, description: model.get('permissions').length > 1 ? shareNotice : false })
+            .addCancelButton()
+            .addButton({ label: gt('Delete'), action: 'delete' })
+            .on('delete', function () { handler(id, options); })
+            .open();
     };
 });

@@ -13,20 +13,23 @@
 
 define('io.ox/core/about/about', [
     'io.ox/core/extensions',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/capabilities',
     'gettext!io.ox/core'
-], function (ext, dialogs, cap, gt) {
+], function (ext, ModalDialog, cap, gt) {
 
     'use strict';
 
     ext.point('io.ox/core/about').extend({
-        draw: function (data) {
-
+        render: function () {
+            var data = ox.serverConfig || {};
             var revision = 'revision' in data ? data.revision : ('Rev' + ox.revision),
                 copyright = String(data.copyright || '').replace(/\(c\)/i, '\u00A9');
 
-            this.addClass('user-select-text').append(
+            this.$title.append(_.device('!touch') && cap.has('eggs') ?
+                $('<span class="pull-right" style="color: rgba(0, 0, 0, 0.3); cursor: pointer;">').html('&pi;').on('click', { popup: this }, click) : []);
+
+            this.$body.addClass('user-select-text').append(
                 $('<p>').append(
                     $.txt(gt('UI version')), $.txt(': '), $('<b>').text(data.version + ' ' + revision), $('<br>'),
                     $.txt(gt('Server version')), $.txt(': '), $('<b>').text(data.serverVersion)
@@ -39,32 +42,16 @@ define('io.ox/core/about/about', [
     });
 
     function click(e) {
-        require(['io.ox/core/about/c64'], function (run) {
-            e.data.popup.close();
-            run();
-        });
+        require(['io.ox/core/about/c64'], function (run) { e.data.popup.close(); run(); });
     }
 
     return {
-
         show: function () {
-
             var data = ox.serverConfig || {};
 
-            new dialogs.ModalDialog()
-                .build(function () {
-                    this.getHeader().append(
-                        $('<h4>').append(
-                            _.device('!touch') && cap.has('eggs') ?
-                                $('<span class="pull-right" style="color: rgba(0, 0, 0, 0.3); cursor: pointer;">').html('&pi;')
-                                .on('click', { popup: this }, click) : [],
-                            $.txt(data.productName)
-                        )
-                    );
-                    ext.point('io.ox/core/about').invoke('draw', this.getContentNode(), data);
-                })
-                .addPrimaryButton('cancel', gt('Close'))
-                .show();
+            new ModalDialog({ title: data.productName, previousFocus: $('#io-ox-topbar-dropdown-icon > a'), point: 'io.ox/core/about' })
+                .addButton({ label: gt('Close'), action: 'cancel' })
+                .open();
         }
     };
 });

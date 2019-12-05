@@ -527,29 +527,28 @@ define('io.ox/mail/util', [
                 switch (aspect) {
                     // contact image
                     case 'image':
-                        return matches(/(fail|neutral)/, status, level);
+                        return matches(/(fail|suspicious)/, status, level);
                     // append icon with info hover next to the from field
                     // prepend in sender block (detail), 'via' hint for different mail server
                     case 'icon':
                         // always show if status matches level
-                        return level === 'all' || matches(/(fail|neutral|pass|trusted)/, status, level);
+                        return matches(/(fail|suspicious|pass|trusted)/, status, level);
                     case 'via':
                         // always display "Via <real-domain>" if there is an authenticated domain
                         // that differs from the "From" header domain
                         return true;
                     // info box within mail detail
                     case 'box':
-                        return matches(/(fail|trusted)/, status, level);
-                    // disable links, replace external images
+                        return matches(/(fail|suspicious|trusted)/, status, level);
+                    // disable links, replace external images (use can decide to enable again)
                     case 'block':
-                        return matches(/(fail)/, status, level);
+                        return matches(/(fail|suspicious)/, status, level);
                     default:
                         return false;
                 }
             }
 
             return function (aspect, data) {
-
                 // support incomplete data (only 'status'), provided by all request
                 if (data.authenticity_preview) data = _.extend({}, { authenticity: data.authenticity_preview }, data);
 
@@ -558,7 +557,7 @@ define('io.ox/mail/util', [
 
                 // always show trusted
                 if (level === 'none' && status !== 'trusted') return;
-                if (!/^(fail|neutral|pass|trusted)$/.test(status)) return;
+                if (!/^(fail|suspicious|neutral|none|pass|trusted)$/.test(status)) return;
 
                 return isRelevant(aspect, level, status) ? status : undefined;
             };
@@ -566,7 +565,8 @@ define('io.ox/mail/util', [
 
         getAuthenticityMessage: function (status, email) {
             switch (status) {
-                case 'fail': return gt('This is a suspicious email because we could not verify that it is really from %1$s.', email);
+                case 'suspicious': return gt('Be careful with this message. It might be spam or a phishing mail.');
+                case 'fail': return gt('This is a dangerous email containing spam or malware.');
                 case 'neutral': return gt('We could not verify that this email is from %1$s.', email);
                 case 'pass':
                 case 'trusted': return gt('We could verify that this email is from %1$s.', email);
