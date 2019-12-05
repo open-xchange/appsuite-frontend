@@ -652,6 +652,7 @@ define('io.ox/core/desktop', [
                         if (data) {
                             data.floating = self.get('floating');
                             data.id = uniqueID;
+                            data.cid = self.cid;
                             data.timestamp = _.now();
                             data.version = ox.version;
                             data.ua = navigator.userAgent;
@@ -804,11 +805,12 @@ define('io.ox/core/desktop', [
                         var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
                         return ox.load(requirements).then(function (m) {
                             var app = m.getApp(obj.passPointOnGetApp ? obj.point : undefined);
+                            if (obj.cid) app.cid = obj.cid;
                             // floating windows are restored as dummies. On click the dummy starts the complete app. This speeds up the restore process.
                             if (_.device('!smartphone') && (app.options.floating || app.options.closable)) {
                                 var model, win;
                                 if (app.options.floating) {
-                                    model = new FloatingWindow.Model({ minimized: true, id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon, name: app.options.name });
+                                    model = new FloatingWindow.Model({ cid: obj.cid, minimized: true, id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon, name: app.options.name });
                                     win = new FloatingWindow.TaskbarElement({ model: model }).render();
                                     FloatingWindow.collection.add(model);
                                 } else {
@@ -893,6 +895,15 @@ define('io.ox/core/desktop', [
         reuse: function (cid) {
             var app = ox.ui.apps.find(function (m) { return m.cid === cid; });
             if (app) {
+                // Special case: There exists a unrestored restore point for the same app.
+                // Then, there must exist a corresponding model which will react on the lazyload event
+                if (app.get('state') === 'ready') {
+                    var model = FloatingWindow.collection.findWhere({ cid: cid });
+                    if (model) {
+                        model.trigger('lazyload');
+                        return true;
+                    }
+                }
                 app.launch();
                 return true;
             }
