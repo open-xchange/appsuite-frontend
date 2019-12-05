@@ -320,7 +320,8 @@ Scenario.skip('[C7445] Check availability of resources and participants', async 
     await I.dontHaveResource('Colors');
 });
 
-Scenario('[C252157] Fine grid for high zoom levels', async function (I, users) {
+// TODO reenable this, as soon as the grabCSSPropertyFrom is fixed in codecept. See https://github.com/Codeception/CodeceptJS/pull/2059
+Scenario.skip('[C252157] Fine grid for high zoom levels', async function (I, users) {
 
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });

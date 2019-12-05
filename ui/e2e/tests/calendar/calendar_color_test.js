@@ -23,7 +23,8 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Create appointment and check if the color is correctly applied and removed', async function (I, users, calendar) {
+// TODO reenable this, as soon as the grabCSSPropertyFrom is fixed in codecept. See https://github.com/Codeception/CodeceptJS/pull/2059
+Scenario.skip('Create appointment and check if the color is correctly applied and removed', async function (I, users, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
