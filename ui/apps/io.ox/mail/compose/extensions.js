@@ -124,7 +124,7 @@ define('io.ox/mail/compose/extensions', [
                 )
             );
             // ready to draw dropdown
-            sender.getAddressesOptions().then(function (list) {
+            sender.getAddressesOptions(options).then(function (list) {
                 this.list = list;
                 this.renderDropdown();
             }.bind(this));

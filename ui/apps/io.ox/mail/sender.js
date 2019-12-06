@@ -66,8 +66,8 @@ define('io.ox/mail/sender', [
          * accessible for testing purposes
          * @return { deferred} resolves as array of arrays
          */
-        getAccounts: function () {
-            return api.getAllSenderAddresses();
+        getAccounts: function (options) {
+            return api.getAllSenderAddresses(options);
         },
 
         /**
@@ -93,20 +93,19 @@ define('io.ox/mail/sender', [
          * accessible for testing purposes
          * @return { deferred} resolves as array
          */
-        getAddresses: function () {
+        getAddresses: function (options) {
             return $.when(
-                that.getAccounts(),
+                that.getAccounts(options),
                 that.getPrimaryAddress()
             );
         },
 
-        getAddressesOptions: function () {
+        getAddressesOptions: function (options) {
             // fallback address - if any other request fails we have the default send address
             var fallbackAddress = settings.get('defaultSendAddress', '').trim();
 
             // append options to select-box
-            return that.getAddresses().then(function (addresses, primary) {
-
+            return that.getAddresses(options).then(function (addresses, primary) {
                 var defaultAddress = fallbackAddress || primary[1],
                     list = [].concat(addresses);
 
