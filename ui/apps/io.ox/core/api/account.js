@@ -541,6 +541,7 @@ define('io.ox/core/api/account', [
         .then(function (data) {
             // reload all accounts
             return api.reload().then(function () {
+                ox.trigger('account:create');
                 api.trigger('create:account', { id: data.id, email: data.primary_address, name: data.name });
                 require(['io.ox/core/folder/api'], function (api) {
                     api.propagate('account:create');
