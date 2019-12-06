@@ -15,10 +15,8 @@ define('io.ox/mail/sender', [
     'io.ox/mail/util',
     'io.ox/core/api/account',
     'io.ox/core/api/user',
-    'io.ox/contacts/api',
-    'io.ox/core/capabilities',
     'settings!io.ox/mail'
-], function (util, api, userAPI, contactsAPI, capabilities, settings) {
+], function (util, api, userAPI, settings) {
 
     'use strict';
 

@@ -40,8 +40,6 @@ define('io.ox/mail/compose/main', [
         index: INDEX += 100,
         perform: function (baton) {
             var self = this;
-
-
             return require(['io.ox/mail/compose/model']).then(function (MailComposeModel) {
                 self.model = baton.model = new MailComposeModel(baton.data);
                 if (baton.data && baton.data.id) baton.model.restored = true;
