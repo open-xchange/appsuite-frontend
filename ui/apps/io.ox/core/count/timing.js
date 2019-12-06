@@ -17,6 +17,7 @@ define('io.ox/core/count/timing', [
 ], function (api, settings) {
 
     'use strict';
+    if (api.disabled) return;
 
     if (api.disabled) return;
 
