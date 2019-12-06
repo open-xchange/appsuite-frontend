@@ -203,7 +203,7 @@ var addAttendee = function (I, name, context) {
     I.pressKey('Enter');
 };
 
-Scenario.skip('[C7443] Check availability of participants', async function (I, users) {
+Scenario('[C7443] Check availability of participants', async function (I, users, calendar) {
 
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
@@ -216,24 +216,25 @@ Scenario.skip('[C7443] Check availability of participants', async function (I, u
     I.fillField('Subject', 'Abdancen');
     I.fillField('Location', 'Dancefloor');
 
-    addAttendee(I, users[1].get('name'));
-    addAttendee(I, users[2].get('name'));
+    await calendar.addParticipant(users[1].get('name'));
+    await calendar.addParticipant(users[2].get('name'));
 
     I.click('Create');
 
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    addAttendee(I, users[1].get('name'));
-    addAttendee(I, users[2].get('name'));
+    await calendar.addParticipant(users[1].get('name'));
+    await calendar.addParticipant(users[2].get('name'));
 
     I.click('Find a free time');
     I.waitForVisible({ css: '.freetime-popup' });
-    I.seeNumberOfVisibleElements('~Abdancen', 3);
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[1]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[2]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[3]' });
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7444] Check availability of resources', async function (I) {
+Scenario('[C7444] Check availability of resources', async function (I, calendar) {
 
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
@@ -244,8 +245,8 @@ Scenario.skip('[C7444] Check availability of resources', async function (I) {
     await I.dontHaveResource('Evil Lair');
     await I.dontHaveResource('Laser Sharks');
 
-    await I.haveResource({ description: 'Evil lair under an active volcano', display_name: 'Evil Lair', name: 'Evil Lair', mailaddress: 'lair@evil.inc' });
-    await I.haveResource({ description: 'Evil sharks equipped with lazers', display_name: 'Laser Sharks', name: 'Laser Sharks', mailaddress: 'lasersharks@evil.inc' });
+    await I.haveResource({ description: 'Evil lair under an active volcano', display_name: 'EvilLair', name: 'EvilLair', mailaddress: 'lair@evil.inc' });
+    await I.haveResource({ description: 'Evil sharks equipped with lazers', display_name: 'LaserSharks', name: 'LaserSharks', mailaddress: 'lasersharks@evil.inc' });
 
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
@@ -253,27 +254,28 @@ Scenario.skip('[C7444] Check availability of resources', async function (I) {
     I.fillField('Subject', 'How to conquer the world');
     I.fillField('Location', 'Secret volcano lair');
 
-    addAttendee(I, 'Evil Lair');
-    addAttendee(I, 'Laser Sharks');
+    await calendar.addParticipant('EvilLair');
+    await calendar.addParticipant('LaserSharks');
 
     I.click('Create');
 
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    addAttendee(I, 'Evil Lair');
-    addAttendee(I, 'Laser Sharks');
+    await calendar.addParticipant('EvilLair');
+    await calendar.addParticipant('LaserSharks');
 
     I.click('Find a free time');
     I.waitForVisible({ css: '.freetime-popup' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[1]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[2]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[3]' });
 
-    I.seeNumberOfVisibleElements('.freetime-table .appointment', 3);
-
-    await I.dontHaveResource('Evil Lair');
-    await I.dontHaveResource('Laser Sharks');
+    await I.dontHaveResource('EvilLair');
+    await I.dontHaveResource('LaserSharks');
 });
 
-Scenario.skip('[C7445] Check availability of resources and participants', async function (I, users) {
+Scenario('[C7445] Check availability of resources and participants', async function (I, users, calendar) {
 
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
@@ -293,11 +295,11 @@ Scenario.skip('[C7445] Check availability of resources and participants', async 
     I.fillField('Subject', 'Color Easter Eggs');
     I.fillField('Location', 'Easter Bunny house');
 
-    addAttendee(I, 'Eggs');
-    addAttendee(I, 'Colors');
+    await calendar.addParticipant('Eggs');
+    await calendar.addParticipant('Colors');
 
-    addAttendee(I, users[1].get('name'));
-    addAttendee(I, users[2].get('name'));
+    await calendar.addParticipant(users[1].get('name'));
+    await calendar.addParticipant(users[2].get('name'));
 
     I.click('Create');
 
@@ -307,14 +309,16 @@ Scenario.skip('[C7445] Check availability of resources and participants', async 
     I.click('Find a free time');
     I.waitForVisible({ css: '.freetime-popup' });
 
-    addAttendee(I, 'Eggs', '.freetime-view-header');
-    addAttendee(I, 'Colors', '.freetime-view-header');
+    await calendar.addParticipant('Eggs', true, '.freetime-view');
+    await calendar.addParticipant('Colors', true, '.freetime-view');
+    await calendar.addParticipant(users[1].get('name'), true, '.freetime-view');
+    await calendar.addParticipant(users[2].get('name'), true, '.freetime-view');
 
-    addAttendee(I, users[1].get('name'), '.freetime-view-header');
-    addAttendee(I, users[2].get('name'), '.freetime-view-header');
-    I.wait(1);
-
-    I.seeNumberOfVisibleElements('.freetime-table .appointment', 5);
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[1]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[2]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[3]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[4]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[5]' });
 
     await I.dontHaveResource('Eggs');
     await I.dontHaveResource('Colors');
