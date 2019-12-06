@@ -46,7 +46,7 @@ Scenario('[C83387] Create mail filter based on moving mail', async (I, users) =>
 
     I.login('app=io.ox/mail');
     I.waitForVisible({ css: '[data-ref="io.ox/mail/listview"]' });
-    I.click('.list-item[aria-label*="Subject#1"]');
+    I.retry(5).click('.list-item[aria-label*="Subject#1"]');
 
     // 5. Open context menu either in detailed view or in top bar
     I.waitForVisible('~More actions');
