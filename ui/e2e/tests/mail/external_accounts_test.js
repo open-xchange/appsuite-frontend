@@ -28,7 +28,7 @@ Scenario('[C125352] No mail oauth service available', function (I) {
     I.click('Add mail account');
 
     ////Check to see whether mail account wizard is shown up
-    I.seeElement('.add-mail-account-address');
+    I.waitForElement('.add-mail-account-address');
     I.seeElement('.add-mail-account-password');
 });
 
