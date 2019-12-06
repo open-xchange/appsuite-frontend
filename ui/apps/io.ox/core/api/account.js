@@ -422,33 +422,33 @@ define('io.ox/core/api/account', [
      * get all sender addresses
      * @return { promise} returns array of arrays
      */
-    api.getAllSenderAddresses = function () {
-        return api.all()
-        .then(function (list) {
-            // only consider external accounts with a transport_url (see bug 48344)
-            // primary account is assumed to always work even without a transport_url
-            return _(list).filter(function (account) {
-                return account.id === 0 || !!account.transport_url;
+    api.getAllSenderAddresses = function (options) {
+        return api.all(options)
+            .then(function (list) {
+                // only consider external accounts with a transport_url (see bug 48344)
+                // primary account is assumed to always work even without a transport_url
+                return _(list).filter(function (account) {
+                    return account.id === 0 || !!account.transport_url;
+                });
+            })
+            .then(function (list) {
+                return $.when.apply($, _(list).map(ensureDisplayName));
+            })
+            .then(function () {
+                return _(arguments).flatten(true);
+            })
+            .then(function (list) {
+                return $.when.apply($, _(list).map(getSenderAddress));
+            })
+            .then(function () {
+                return _(arguments).flatten(true);
+            })
+            .then(function (addresses) {
+                // addresses.unshift(['Matthias Biggeleben', 'all@open-xchange.com']);
+                // addresses.unshift(['Matthias Biggeleben', 'all@open-xchange.com']);
+                // addresses.push(['Matthias Biggeleben', 'all@open-xchange.com']);
+                return addresses;
             });
-        })
-        .then(function (list) {
-            return $.when.apply($, _(list).map(ensureDisplayName));
-        })
-        .then(function () {
-            return _(arguments).flatten(true);
-        })
-        .then(function (list) {
-            return $.when.apply($, _(list).map(getSenderAddress));
-        })
-        .then(function () {
-            return _(arguments).flatten(true);
-        })
-        .then(function (addresses) {
-            // addresses.unshift(['Matthias Biggeleben', 'all@open-xchange.com']);
-            // addresses.unshift(['Matthias Biggeleben', 'all@open-xchange.com']);
-            // addresses.push(['Matthias Biggeleben', 'all@open-xchange.com']);
-            return addresses;
-        });
     };
 
     api.cache = {};
