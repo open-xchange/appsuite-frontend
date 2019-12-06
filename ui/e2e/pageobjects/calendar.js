@@ -119,21 +119,24 @@ module.exports = {
         if (error) throw error;
     },
 
-    async addParticipant(name, exists) {
+    async addParticipant(name, exists, context, addedParticipants) {
+        if (!context) context = '*';
+        if (!addedParticipants) addedParticipants = 1;
+
         // does suggestion exists (for contact, user, ...)
         exists = typeof exists === 'boolean' ? exists : true;
-        let number = await I.grabNumberOfVisibleElements({ css: '.participant-wrapper' });
+        let number = await I.grabNumberOfVisibleElements(locate('.participant-wrapper').inside(context)) + addedParticipants;
         // input field
-        I.waitForVisible(this.locators.addparticipants);
-        I.waitForEnabled(this.locators.addparticipants);
-        I.fillField(this.locators.addparticipants, name);
+        I.waitForVisible(this.locators.addparticipants.inside(context));
+        I.waitForEnabled(this.locators.addparticipants.inside(context));
+        I.fillField(this.locators.addparticipants.inside(context), name);
         // tokenfield/typeahead
         exists ?
-            autocomplete.selectFirst() :
+            autocomplete.select(name, context.replace('.', '')) :
             I.pressKey('Enter');
         I.waitForInvisible(autocomplete.locators.suggestions);
         // note: might be more than one that get's added (group)
-        I.waitForElement({ css: `.participant-wrapper:nth-of-type(${number + 1})` });
+        I.waitForElement({ css: `.participant-wrapper:nth-of-type(${number})` });
     },
 
     addParticipantByPicker: function (name) {

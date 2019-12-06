@@ -1036,7 +1036,7 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users, calend
 
     // 3. Locate the "Participants" section and add some OX users, groups and resources as participants. This may include external mail accounts which are not handled by OX
     await calendar.addParticipant(userB.userdata.primaryEmail);
-    await calendar.addParticipant(groupName);
+    await calendar.addParticipant(groupName, true, undefined, 2);
     await calendar.addParticipant(resourceName);
     await calendar.addParticipant('foo@bar', false);
     // Expected Result: The participants area is populating with people that got added to the appointment.
@@ -1058,22 +1058,22 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users, calend
         I.click(subject, '.page.current .appointment');
         if (perspective === 'List') {
             I.waitForVisible('.calendar-detail-pane');
-            I.see(subject, '.calendar-detail-pane');
+            I.waitForText(subject, '.calendar-detail-pane');
         } else {
             I.waitForVisible('.io-ox-sidepopup');
-            I.see(subject, '.io-ox-sidepopup');
+            I.waitForText(subject, '.io-ox-sidepopup');
         }
-        I.seeElement({ css: 'a[aria-label="unconfirmed 4"]' });
-        I.seeElement({ css: 'a[aria-label="accepted 1"]' });
+        I.waitForElement({ css: 'a[aria-label="unconfirmed 4"]' });
+        I.waitForElement({ css: 'a[aria-label="accepted 1"]' });
         [
             `${userA.userdata.sur_name}, ${userA.userdata.given_name}`,
             `${userB.userdata.sur_name}, ${userB.userdata.given_name}`,
             `${weebl.userdata.sur_name}, ${weebl.userdata.given_name}`,
             `${bob.userdata.sur_name}, ${bob.userdata.given_name}`
-        ].forEach(name => I.see(name, getSectionLocator('Participants')));
-        I.seeElement(locate(`a.accepted[title="${userA.userdata.primaryEmail}"]`).inside(getSectionLocator('Participants')));
-        I.see('foo', getSectionLocator('External participants'));
-        I.see(resourceName, getSectionLocator('Resources'));
+        ].forEach(name => I.waitForText(name, getSectionLocator('Participants')));
+        I.waitForElement(locate(`a.accepted[title="${userA.userdata.primaryEmail}"]`).inside(getSectionLocator('Participants')));
+        I.waitForText('foo', getSectionLocator('External participants'));
+        I.waitForText(resourceName, getSectionLocator('Resources'));
     }));
 
     // 5. Check the mail inbox of one of the participants.

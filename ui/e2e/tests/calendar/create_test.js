@@ -852,10 +852,11 @@ Scenario.skip('[C7428] Create appointment with internal participants', async fun
 });
 
 Scenario('[C7425] Create appointment with a group', async function (I, users, calendar) {
+    const groupName = 'Awesome guys';
 
     await I.haveGroup({
-        name: 'Awesome guys',
-        display_name: 'Awesome guys',
+        name: groupName,
+        display_name: groupName,
         members: [
             users[0].userdata.id,
             users[1].userdata.id
@@ -870,7 +871,7 @@ Scenario('[C7425] Create appointment with a group', async function (I, users, ca
     calendar.newAppointment();
     I.fillField('Subject', data.subject);
     I.fillField('Location', data.location);
-    await calendar.addParticipant('Awesome guys');
+    await calendar.addParticipant(groupName);
     I.waitForText(users[0].get('name'), 5);
     I.waitForText(users[1].get('name'), 5);
     I.click('Create');
@@ -895,6 +896,8 @@ Scenario('[C7425] Create appointment with a group', async function (I, users, ca
     I.say('Check Mail');
     I.openApp('Mail');
     I.waitForText(`New appointment: ${data.subject}`);
+
+    await I.dontHaveGroup(groupName);
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
@@ -1276,12 +1279,16 @@ Scenario('[C274406] Change organizer of appointment with external attendees', as
     I.say('Check');
     I.waitForText(subject, undefined, '.appointment');
     I.click(subject, '.appointment');
+    I.waitForElement('.calendar-detail .more-dropdown .dropdown-toggle');
+    I.wait(1);
     I.click('.calendar-detail .more-dropdown .dropdown-toggle');
     I.waitForElement('.smart-dropdown-container.open');
     I.dontSee('Change organizer');
     I.click('.smart-dropdown-container');
 
     I.say('Edit appointment');
+    I.waitForText('Edit');
+    I.wait(1);
     I.click('Edit');
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'));
@@ -1289,7 +1296,10 @@ Scenario('[C274406] Change organizer of appointment with external attendees', as
 
     I.say('Check');
     I.waitForText(subject, undefined, '.appointment');
-    I.retry().click(subject, '.appointment');
+    I.wait(1);
+    I.click(subject, '.appointment');
+    I.waitForElement('.calendar-detail .more-dropdown .dropdown-toggle');
+    I.wait(1);
     I.click('.calendar-detail .more-dropdown .dropdown-toggle');
     I.waitForElement('.smart-dropdown-container.open');
     I.dontSee('Change organizer');
