@@ -45,21 +45,21 @@ Scenario('[C8832] Re-order recipients', async function (I, users, mail) {
 
     // add a recipient for all fields
     I.fillField('To', recipient1.get('primaryEmail'));
-    I.waitForVisible('.tt-dropdown-menu');
+    I.waitForVisible('.focus .tt-dropdown-menu');
     I.pressKey('Enter');
     I.see(tokenLabelFor(recipient1), { css: '[data-extension-id="to"] .token' });
     I.fillField('CC', recipient2.get('primaryEmail'));
-    I.waitForVisible('.tt-dropdown-menu');
+    I.waitForVisible('.focus .tt-dropdown-menu');
     I.pressKey('Enter');
     I.see(tokenLabelFor(recipient2), { css: '[data-extension-id="cc"] .token' });
     I.fillField('BCC', recipient3.get('primaryEmail'));
-    I.waitForVisible('.tt-dropdown-menu');
+    I.waitForVisible('.focus .tt-dropdown-menu');
     I.pressKey('Enter');
     I.see(tokenLabelFor(recipient3), { css: '[data-extension-id="bcc"] .token' });
 
     // move around
     I.fillField('BCC', recipient4.get('primaryEmail'));
-    I.waitForVisible('.tt-dropdown-menu');
+    I.waitForVisible('.focus .tt-dropdown-menu');
     I.pressKey('Enter');
     I.see(tokenLabelFor(recipient4), { css: '[data-extension-id="bcc"] .token:nth-of-type(2)' });
     I.dragAndDrop({ css: '[data-extension-id="bcc"] .token:nth-of-type(2)' }, { css: '[data-extension-id="cc"] .token-input' });
