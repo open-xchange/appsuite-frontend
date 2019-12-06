@@ -57,6 +57,8 @@ Scenario('[C8407] Perform a multi search', async function (I, users) {
     //let searchField = 'input[type=search]';
 
     I.login('app=io.ox/mail', { user: user2 });
+
+    I.waitForVisible('.search-box');
     I.click('.search-box');
     I.waitForFocus(searchField);
     I.fillField(searchField, 'test');
@@ -85,6 +87,8 @@ Scenario('[C8406] Delete a string from multi search', async function (I, users) 
     //let searchField = 'input[type=search]';
 
     I.login('app=io.ox/mail', { user: user2 });
+
+    I.waitForVisible('.search-box');
     I.click('.search-box');
     I.waitForFocus(searchField);
     I.fillField(searchField, 'test');
