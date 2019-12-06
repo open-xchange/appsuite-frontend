@@ -129,10 +129,10 @@ Scenario('remove mail from thread', async (I, users) => {
 
     I.login('', { user });
 
-    I.waitForText('Sent', 5, '.folder-node');
+    I.waitForText('Sent');
 
     I.selectFolder('Sent');
-    I.waitForText('Test subject', 5, '.subject');
+    I.waitForText('Test subject');
     I.click('.list-item[aria-label*="Test subject"]');
 
     I.waitForText('Reply', undefined, '.inline-toolbar');
