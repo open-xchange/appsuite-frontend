@@ -62,7 +62,7 @@ Scenario('check auto select behavior in list view', async (I, users) => {
 
     I.login('app=io.ox/mail');
 
-    I.waitForText('First mail!', 5, '.subject');
+    I.waitForText('First mail!');
     I.waitForElement('.list-item.selectable.unread [title="First mail!"]');
     I.retry().click('.list-item.selectable.unread [title="First mail!"]');
     I.waitForElement('.list-item.selected');
@@ -71,7 +71,7 @@ Scenario('check auto select behavior in list view', async (I, users) => {
 
     I.login('app=io.ox/mail');
 
-    I.waitForText('First mail!', 5, '.subject');
+    I.waitForText('First mail!', 5);
     I.waitForElement('.list-item.selected');
     I.seeNumberOfElements('.list-item.selectable.unread', 2);
     I.seeNumberOfElements('.list-item.selected', 1);
@@ -83,14 +83,14 @@ Scenario('check auto select behavior in list view', async (I, users) => {
 
     I.login('app=io.ox/mail');
 
-    I.waitForText('First mail!', 5, '.subject');
+    I.waitForText('First mail!');
     I.seeNumberOfElements('.list-item.selectable.unread', 2);
     I.dontSeeElement('.list-item.selected');
 
     I.clickToolbar('View');
     I.click('Vertical');
 
-    I.waitForText('First mail!', 5, '.subject');
+    I.waitForText('First mail!');
     I.waitForElement('.list-item.selected');
 
     I.logout();
@@ -98,7 +98,7 @@ Scenario('check auto select behavior in list view', async (I, users) => {
     I.haveSetting('io.ox/mail//layout', 'list');
 
     I.login('app=io.ox/mail');
-    I.waitForText('First mail!', 5, '.subject');
+    I.waitForText('First mail!');
 
     I.seeNumberOfElements('.list-item.selectable.unread', 2);
     I.dontSeeElement('.list-item.selected');
@@ -107,6 +107,6 @@ Scenario('check auto select behavior in list view', async (I, users) => {
 
     I.clickToolbar('View');
     I.click('Vertical');
-    I.waitForText('Second mail!', 5, '.subject');
+    I.waitForText('Second mail!');
     I.waitForElement('.list-item.selected [title="Second mail!"]');
 });
