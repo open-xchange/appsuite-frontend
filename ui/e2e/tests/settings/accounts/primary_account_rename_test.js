@@ -29,8 +29,7 @@ Scenario('[C110279] Primary mail account name can be changed', async function (I
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/settings/accounts');
 
     I.say(`rename to "${name}"`, 'blue');
-    I.waitForVisible('.io-ox-accounts-settings a[data-action="edit"]');
-    I.click('Edit', '.io-ox-accounts-settings a[data-action="edit"]');
+    I.retry(10).click('Edit');
     I.waitForElement('.modal-body input[name="name"]');
     I.fillField('Account name', name);
     I.click('Save');
