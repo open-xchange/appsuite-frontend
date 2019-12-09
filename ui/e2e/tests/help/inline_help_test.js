@@ -35,13 +35,20 @@ Scenario('Open the help app in a floating window', async function (I) {
 
     I.click('~Close', '.io-ox-help-window');
     I.waitForDetached('.io-io-help-window', 5);
+
+    I.logout();
 });
 
-Scenario('Open the help app in a modal', async function (I, mail) {
+Scenario('Open the help app in a modal', async function (I) {
     I.login('app=io.ox/mail');
-    mail.waitForApp();
-    mail.newMail();
+    I.waitForVisible({ css: '[data-app-name="io.ox/mail"]' }, 5);
 
+    I.click('Compose');
+    I.retry().waitForVisible('.io-ox-mail-compose-window', 5);
+    I.see('Compose', '.io-ox-mail-compose-window');
+
+    I.waitForVisible({ css: 'div[data-extension-id="to"]' }, 5);
+    I.wait(1);
     I.click('~Select contacts');
     I.waitForVisible('.modal.addressbook-popup', 5);
 
@@ -54,23 +61,25 @@ Scenario('Open the help app in a modal', async function (I, mail) {
 
     I.click('Cancel', '.modal.addressbook-popup');
     I.waitForDetached('.modal.addressbook-popup', 5);
+
+    I.logout();
 });
 
-Scenario('Check help window for supposed language', function (I) {
+Scenario('Check help window for supposed language', async function (I) {
 
     // check major languages
     var languages = {
         'de_DE': ['help/l10n/de_DE/ox.appsuite.user.sect.settings.globalsettings.html', 'Deutsch (Deutschland)', 'Grundeinstellungen anpassen', '~Schließen'],
-        'en_US': ['help/l10n/en_US/ox.appsuite.user.sect.settings.globalsettings.html', 'English (United States)', 'Customizing the Basic Settings', '~Close'],
-        'en_GB': ['help/l10n/en_GB/ox.appsuite.user.sect.settings.globalsettings.html', 'English (United Kingdom)', 'Customising the basic settings', '~Close'],
-        'es_ES': ['help/l10n/es_ES/ox.appsuite.user.sect.settings.globalsettings.html', 'Español (Espana)', 'Personalización de la configuración básica', '~Cerrar'],
-        'es_MX': ['help/l10n/es_MX/ox.appsuite.user.sect.settings.globalsettings.html', 'Español (México)', 'Personalización de la configuración básica', '~Cerrar'],
-        'fr_FR': ['help/l10n/fr_FR/ox.appsuite.user.sect.settings.globalsettings.html', 'Français (France)', 'Personnaliser les réglages de base', '~Fermer'],
-        'it_IT': ['help/l10n/it_IT/ox.appsuite.user.sect.settings.globalsettings.html', 'Italiano (Italia)', 'Personalizzare le impostazioni di base', '~Chiudi'],
-        'ja_JP': ['help/l10n/ja_JP/ox.appsuite.user.sect.settings.globalsettings.html', '日本語 (日本)', '基本設定のカスタマイズ', '~閉じる'],
-        'nl_NL': ['help/l10n/nl_NL/ox.appsuite.user.sect.settings.globalsettings.html', 'Nederlands (Nederland)', 'Aanpassen van de basisinstellingen', '~Sluiten'],
-        'pl_PL': ['help/l10n/pl_PL/ox.appsuite.user.sect.settings.globalsettings.html', 'Polski (Polska)', 'Dostosowywanie ustawień podstawowych', '~Zamknij'],
-        'tr_TR': ['help/l10n/tr_TR/ox.appsuite.user.sect.settings.globalsettings.html', 'Türkçe (Türkiye)', 'Temel ayarları özelleştirme', '~Kapat'],
+        'en_US': ['help/l10n/en_US/ox.appsuite.user.sect.settings.globalsettings.html', 'English (United States)', 'How to customize the basic settings:', '~Close'],
+        'en_GB': ['help/l10n/en_GB/ox.appsuite.user.sect.settings.globalsettings.html', 'English (United Kingdom)', 'How to customise the basic settings:', '~Close'],
+        'es_ES': ['help/l10n/es_ES/ox.appsuite.user.sect.settings.globalsettings.html', 'Español (Espana)', '3.1. Personalización de la configuración básica', '~Cerrar'],
+        'es_MX': ['help/l10n/es_MX/ox.appsuite.user.sect.settings.globalsettings.html', 'Español (México)', '3.1. Personalización de la configuración básica', '~Cerrar'],
+        'fr_FR': ['help/l10n/fr_FR/ox.appsuite.user.sect.settings.globalsettings.html', 'Français (France)', '3.1. Personnaliser les réglages de base', '~Fermer'],
+        'it_IT': ['help/l10n/it_IT/ox.appsuite.user.sect.settings.globalsettings.html', 'Italiano (Italia)', '3.1. Personalizzare le impostazioni di base', '~Chiudi'],
+        'ja_JP': ['help/l10n/ja_JP/ox.appsuite.user.sect.settings.globalsettings.html', '日本語 (日本)', '3.1. 基本設定のカスタマイズ', '~閉じる'],
+        'nl_NL': ['help/l10n/nl_NL/ox.appsuite.user.sect.settings.globalsettings.html', 'Nederlands (Nederland)', '3.1. Aanpassen van de basisinstellingen', '~Sluiten'],
+        'pl_PL': ['help/l10n/pl_PL/ox.appsuite.user.sect.settings.globalsettings.html', 'Polski (Polska)', '3.1. Dostosowywanie ustawień podstawowych', '~Zamknij'],
+        'tr_TR': ['help/l10n/tr_TR/ox.appsuite.user.sect.settings.globalsettings.html', 'Türkçe (Türkiye)', '3.1. Temel ayarları özelleştirme', '~Kapat'],
         'zh_CN': ['help/l10n/zh_CN/ox.appsuite.user.sect.settings.globalsettings.html', '中文 (简体)', '自定义基本设置', '~关闭'],
         'zh_TW': ['help/l10n/zh_TW/ox.appsuite.user.sect.settings.globalsettings.html', '中文 (繁體)', '自訂基礎設定', '~關閉']
     };
@@ -79,11 +88,11 @@ Scenario('Check help window for supposed language', function (I) {
 
     I.waitForText('Basic settings', 5, '.rightside');
 
-    for (const id in languages) {
+    for (let id in languages) {
         I.say(languages[id][1]);
         //Select language
-        I.waitForElement({ css: 'select[name="language"]' });
-        I.selectOption({ css: 'select[name="language"]' }, languages[id][1]);
+        I.waitForElement('select[name="language"]');
+        I.selectOption('select[name="language"]', languages[id][1]);
 
         // wait for "yell" so that the change arrived at server
         I.waitForVisible('.io-ox-alert', 30);
@@ -94,8 +103,9 @@ Scenario('Check help window for supposed language', function (I) {
         I.waitForVisible('#settings-language', 5);
 
         //open help window
-        I.click('.io-ox-context-help');
-        I.waitForElement('.io-ox-help-window');
+        I.waitForElement('#io-ox-context-help-icon', 20);
+        I.click('#io-ox-context-help-icon');
+        I.waitForElement('.inline-help-iframe', 20);
 
         //check language in help window
         I.waitForElement(locate('.inline-help-iframe').withAttr({ src: languages[id][0] }).inside('.io-ox-help-window'), 10);
@@ -106,6 +116,10 @@ Scenario('Check help window for supposed language', function (I) {
 
         //close help window
         I.click(languages[id][3], '.io-ox-help-window');
-        I.waitForDetached('.io-ox-help-window');
     }
+
+    I.logout();
+
 });
+
+
