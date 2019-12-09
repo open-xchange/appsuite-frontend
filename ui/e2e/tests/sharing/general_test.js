@@ -110,7 +110,8 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
 });
 
 // TODO: works perfect locally but breaks remotely for puppeteer and webdriver
-Scenario('[C83385] Copy to clipboard @puppeteer', async function (I, drive) {
+// Reason: With --no-sandbox, clipboard cannot be accessed
+Scenario.skip('[C83385] Copy to clipboard @puppeteer', async function (I, drive) {
     await I.allowClipboardRead();
     I.login('app=io.ox/files');
     drive.waitForApp();
