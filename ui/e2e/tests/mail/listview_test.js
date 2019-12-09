@@ -89,7 +89,7 @@ Scenario('[C114381] Sender address is shown in tooltip', async function (I, user
     I.waitForVisible('.io-ox-mail-window');
     I.waitForVisible('.leftside .list-view .list-item .from');
 
-    I.see('C114381:sent');
+    I.waitForText('C114381:sent');
     let from = await getTooltipValue(I, { locator: '.leftside .list-view .list-item .from', attribute: 'title' });
     expect(from).to.be.equal(user1.get('primaryEmail'));
 
