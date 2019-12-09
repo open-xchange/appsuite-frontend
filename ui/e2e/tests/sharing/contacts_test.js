@@ -122,7 +122,7 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
 
     session('Bob', () => {
         I.triggerRefresh();
-        I.seeNumberOfElements(locate('.contact').inside('.io-ox-contacts-window'), 0);
+        I.retry(5).seeNumberOfElements(locate('.contact').inside('.io-ox-contacts-window'), 0);
         I.dontSee('Builder', '.io-ox-contacts-window');
         I.dontSee('Wonderland', '.io-ox-contacts-window');
     });
