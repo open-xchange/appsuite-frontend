@@ -51,27 +51,27 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users,
     I.waitForVisible('.thread-view.list-view .list-item');
     // we need to wait until the message is seen
     I.waitForDetached('.thread-view.list-view .list-item.unread');
+    I.wait(1);
 
     // Mark unread
-    rightClick();
-    I.clickDropdown('Mark as unread');
+    rightClick('Mark as unread');
     I.waitForElement('.thread-view.list-view .list-item.unread');
 
     // View source
-    rightClick();
-    I.clickDropdown('View source');
+    rightClick('View source');
     I.waitForElement('.mail-source-dialog');
+    I.waitForElement('//button[@data-action="close"]', '.modal-footer');
+    I.wait(1);
     I.click('Close', '.modal-footer');
+    I.waitForDetached('.mail-source-dialog');
 
     // Move
-    rightClick();
-    I.clickDropdown('Move');
+    rightClick('Move');
     I.waitForElement('.folder-picker-dialog');
     I.click('Cancel');
 
     // Reply
-    rightClick();
-    I.clickDropdown('Reply');
+    rightClick('Reply');
     I.waitForElement({ css: 'button[data-action="discard"]:not(.disabled)' });
     I.seeInField('subject', 'Re: ' + subject);
     // no better approach yet. I.waitForMailCompose() might be a good one
@@ -86,18 +86,17 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users,
     // I.click('Close');
 
     // Delete
-    rightClick();
-    I.seeNumberOfElements('.leftside .list-view .list-item', 1);
-    I.clickDropdown('Delete');
+    rightClick('Delete');
+    // I.seeNumberOfElements('.leftside .list-view .list-item', 1);
     I.waitForDetached('.leftside .list-view .list-item');
 
-    function rightClick() {
-        I.executeScript(function () {
-            var e = $.Event('contextmenu', { pageY: 200, pageX: 350 });
-            // eslint-disable-next-line no-undef
-            list.$el.trigger(e);
-        });
+    function rightClick(action) {
+        let actionSelector = `//ul[@class="dropdown-menu"]//a[text()="${action}"]`;
+        I.rightClick({ xpath: '//li[contains(@class, "list-item selectable")]' });
         I.waitForElement('.dropdown.open');
+        I.waitForElement({ xpath: actionSelector });
+        I.wait(1);
+        I.click({ xpath: actionSelector });
     }
 
     // function shiftF10() {
