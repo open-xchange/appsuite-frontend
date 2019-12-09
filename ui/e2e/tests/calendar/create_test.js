@@ -356,7 +356,7 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
-    I.retry(5).click(`~${date.format('l, dddd')}, CW ${date.week()}`, calendar.locators.mini);
+    I.retry(5).click(`//td[contains(@aria-label, "${date.format('l, dddd')}, CW ${date.week()}")]`, calendar.locators.mini);
 
     I.say('Create');
     calendar.newAppointment();
