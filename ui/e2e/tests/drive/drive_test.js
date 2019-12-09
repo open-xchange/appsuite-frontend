@@ -90,9 +90,8 @@ Scenario('[C45046] Upload new version', async function (I, drive) {
     I.attachFile('.io-ox-viewer input.file-input', 'build/e2e/C45046.txt');
     I.click('Upload');
     I.waitForText(timestamp2);
-    I.waitForElement('.io-ox-viewer [data-action="io.ox/core/viewer/actions/toolbar/close"]');
-    I.waitForVisible('.io-ox-viewer [data-action="io.ox/core/viewer/actions/toolbar/close"]');
-    I.retry(5).click('.io-ox-viewer [data-action="io.ox/core/viewer/actions/toolbar/close"]');
+    I.wait(0.2);
+    I.retry(5).click('~Close viewer');
     I.waitForDetached('.io-ox-viewer');
 });
 
