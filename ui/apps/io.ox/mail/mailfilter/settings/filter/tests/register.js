@@ -954,21 +954,16 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         'G': 'GB'
                     };
 
-                    var splits = cmodel.get('size').split(''),
-                        number = '',
-                        unit = '',
-                        stop = false;
-
-                    _.each(splits, function (val) {
-                        if (/^[0-9]+$/.test(val) && !stop) {
-                            number = number + val;
-                        } else {
-                            stop = true;
-                            unit = unit + val;
-                        }
-                    });
-
                     var sizeValueView = new util.Input({ name: 'sizeValue', model: cmodel, className: 'form-control', id: inputId });
+
+                    var size = cmodel.get('size'),
+                        unit = size.charAt(size.length - 1),
+                        number = size.substring(0, size.length - 1);
+
+                    if (!unitValues[unit]) {
+                        unit = null;
+                        number = cmodel.get('size');
+                    }
 
                     // initial states
                     cmodel.set('unit', unit || 'B', { silent: true });
