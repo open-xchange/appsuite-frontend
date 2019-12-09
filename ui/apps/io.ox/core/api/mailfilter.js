@@ -12,8 +12,9 @@
  */
 define('io.ox/core/api/mailfilter', [
     'io.ox/core/http',
-    'io.ox/core/event'
-], function (http, Events) {
+    'io.ox/core/event',
+    'io.ox/core/capabilities'
+], function (http, Events, capabilities) {
 
     'use strict';
 
@@ -84,6 +85,9 @@ define('io.ox/core/api/mailfilter', [
              * @return { deferred }
              */
             getConfig: function () {
+
+                // do not send any requests which could fail, just return empty config instead.
+                if (!capabilities.has('mailfilter_v2')) return $.when({ actioncmds: [], options: {}, tests: [] });
 
                 var getter = function () {
                     return http.GET({
