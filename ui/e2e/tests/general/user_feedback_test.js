@@ -68,7 +68,7 @@ Scenario('[C125004] App aware user feedback', function (I, mail, drive, contacts
 
 });
 
-Scenario('[C125005] Provide user feedback', function (I) {
+Scenario('[C125005] Provide user feedback', function (I, mail) {
 
     const appArr = ['Mail', 'General', 'Calendar', 'Address Book', 'Drive'];
     const giveFeedback = (app) => {
@@ -88,6 +88,7 @@ Scenario('[C125005] Provide user feedback', function (I) {
     };
 
     I.login();
+    mail.waitForApp();
     I.waitForVisible('~Feedback');
     //Open Feedback dialog and rate each app in turn
     appArr.forEach(giveFeedback);
