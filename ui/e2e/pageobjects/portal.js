@@ -8,7 +8,7 @@ module.exports = {
         list: locate({ css: '.widgets' }).as('Widget list')
     },
 
-    ready() {
+    waitForApp() {
         I.waitForVisible({ css: '.io-ox-portal' });
     },
 

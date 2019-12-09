@@ -65,7 +65,7 @@ Scenario('[C7494] Refresh widgets', async (I, users, portal) => {
 
     I.say('Login');
     I.login('app=io.ox/portal');
-    portal.ready();
+    portal.waitForApp();
 
     I.say('Adding widgets');
     portal.addWidget('Inbox');

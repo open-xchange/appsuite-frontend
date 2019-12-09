@@ -31,7 +31,7 @@ Scenario('[C125002] Enable user feedback dialog', function (I) {
     I.grabTitle('#star-rating');
 });
 
-Scenario('[C125004] App aware user feedback', function (I) {
+Scenario('[C125004] App aware user feedback', function (I, mail, drive, contacts, calendar, portal, tasks) {
 
     function testFeedback(appType = 'general') {
         I.waitForVisible('~Feedback');
@@ -42,26 +42,27 @@ Scenario('[C125004] App aware user feedback', function (I) {
     }
 
     I.login('app=io.ox/mail');
+    mail.waitForApp();
     testFeedback('io.ox/mail');
 
     I.openApp('Drive');
-    I.waitForVisible('.io-ox-files-window');
+    drive.waitForApp();
     testFeedback('io.ox/files');
 
     I.openApp('Address Book');
-    I.waitForVisible({ css: 'div[data-app-name="io.ox/contacts"]' });
+    contacts.waitForApp();
     testFeedback('io.ox/contacts');
 
     I.openApp('Calendar');
-    I.waitForVisible({ css: 'div[data-app-name="io.ox/calendar"]' });
+    calendar.waitForApp();
     testFeedback('io.ox/calendar');
 
     I.openApp('Portal');
-    I.waitForVisible('.io-ox-portal');
+    portal.waitForApp();
     testFeedback();
 
     I.openApp('Tasks');
-    I.waitForVisible({ css: 'div[data-app-name="io.ox/tasks"]' });
+    tasks.waitForApp();
     testFeedback();
 
 
