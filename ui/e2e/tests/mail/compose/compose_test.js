@@ -357,6 +357,7 @@ Scenario('Compose mail, refresh and continue work at restore point', async funct
     I.refreshPage();
 
     I.waitForText('Mail: Testsubject', 30, '#io-ox-taskbar');
+    I.wait(1);
     I.click('Mail: Testsubject', '#io-ox-taskbar');
 
     I.waitForText('Subject', 30, '.io-ox-mail-compose');
