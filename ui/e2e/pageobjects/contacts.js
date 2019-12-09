@@ -3,15 +3,15 @@ const { I } = inject();
 module.exports = {
     waitForApp(isContactsFolder = false) {
         I.waitForElement('.io-ox-contacts-window');
-        I.waitForVisible('.classic-toolbar', 5);
-        I.waitForVisible('.tree-container');
+        I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
+        I.waitForVisible('.io-ox-contacts-window .tree-container');
         var listenerID;
         // TODO make this work without stupid parameter (didn't want to make this async)
         // there is no redraw when current folder is already 'Contacts' so no need to wait for it
-        if (!isContactsFolder) listenerID = I.registerNodeRemovalListener('.classic-toolbar');
+        if (!isContactsFolder) listenerID = I.registerNodeRemovalListener('.io-ox-contacts-window .classic-toolbar');
         I.selectFolder('Contacts');
         if (!isContactsFolder) I.waitForNodeRemoval(listenerID);
-        I.waitForVisible('.classic-toolbar', 5);
+        I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
     },
     selectContact(text) {
         I.waitForElement('.vgrid [aria-label="' + text + '"]');
