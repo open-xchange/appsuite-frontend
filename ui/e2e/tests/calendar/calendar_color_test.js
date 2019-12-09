@@ -99,7 +99,8 @@ Scenario.skip('Create appointment and check if the color is correctly applied an
     // I.waitForDetached('.io-ox-dialog-sidepopup');
 });
 
-Scenario('Changing calendar color should change appointment color that uses calendar color', async function (I, users, calendar) {
+// TODO reenable this, as soon as the grabCSSPropertyFrom is fixed in codecept. See https://github.com/Codeception/CodeceptJS/pull/2059
+Scenario.skip('Changing calendar color should change appointment color that uses calendar color', async function (I, users, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
