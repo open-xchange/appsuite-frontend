@@ -20,7 +20,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7497] Daytime within Greeting @flaky', async (I) => {
+Scenario('[C7497] Daytime within Greeting', async (I) => {
 
     const moment = require('moment');
     await I.haveSetting('io.ox/core//autoOpenNotification', false);
@@ -44,7 +44,7 @@ Scenario('[C7497] Daytime within Greeting @flaky', async (I) => {
         I.click('#io-ox-settings-topbar-icon');
         I.waitForText('Basic settings');
         I.waitForText('Time zone');
-        I.selectOption('select[name="timezone"]', timezone); // -7
+        I.selectOption({ css: 'select[name="timezone"]' }, timezone); // -7
         I.waitForVisible('.io-ox-alert');
         I.logout();
         I.login();

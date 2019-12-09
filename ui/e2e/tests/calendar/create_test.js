@@ -235,7 +235,7 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
     }));
 });
 
-Scenario('[C7418] Create a Yearly recurring appointment last day of week in december, ends after 5 @flaky', async function (I, calendar) {
+Scenario('[C7418] Create a Yearly recurring appointment last day of week in december, ends after 5', async function (I, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
