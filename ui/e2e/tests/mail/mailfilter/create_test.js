@@ -159,7 +159,7 @@ Scenario('[C7810] Filter mail using contains', async function (I, users) {
 
     // compose mail
     I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.waitForElement('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.wait(1);
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'xxxTestCase0395xxx');
@@ -170,7 +170,7 @@ Scenario('[C7810] Filter mail using contains', async function (I, users) {
 
     // second mail
     I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.waitForElement('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.wait(1);
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'TestCasexxx0395');
