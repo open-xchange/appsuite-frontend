@@ -302,7 +302,7 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
     calendar.waitForApp();
 
     // and select the correct date
-    I.retry(5).click(`~${date.format('l, dddd')}, CW ${date.week()}`, calendar.locators.mini);
+    I.retry(5).click(`//td[contains(@aria-label, "${date.format('l, dddd')}, CW ${date.week()}")]`, calendar.locators.mini);
 
     I.say('Create');
     calendar.newAppointment();
