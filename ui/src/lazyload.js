@@ -26,7 +26,7 @@
                     delete options.previewUrl;
                 }
                 // look for potential scrollpane
-                (options.container || this.closest('.scrollpane, .scrollable, .tt -dropdown-menu'))
+                (options.container || this.closest('.scrollpane, .scrollable, .tt-dropdown-menu'))
                     .lazyloadScrollpane(options)
                     .trigger('scroll');
             }.bind($(this).addClass('lazyload')));
