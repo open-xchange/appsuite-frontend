@@ -75,7 +75,7 @@ Scenario('[C8366] Edit description', async (I, drive) => {
     I.waitForDetached(modelEditDescription);
 
     I.say('Check description #1');
-    I.seeTextEquals('Test description', sidebarDescription);
+    I.waitForElement({ xpath: '//div[contains(@class, "viewer-sidebar-pane")]//*[text()="Test description"]' });
 
     I.say('Edit description');
     I.waitForText('document.txt', 1, '.file-list-view');
