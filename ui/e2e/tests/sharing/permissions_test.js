@@ -24,7 +24,6 @@ After(async (users) => {
     await users.removeAll();
 });
 
-// TODO: shaky (element (body) is not in DOM or there is no element(body) with text "Hello from Bob" after 30 sec)
 Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, drive) {
     session('Alice', () => {
         I.login('app=io.ox/files');
@@ -33,7 +32,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
         I.selectFolder('My shares');
         drive.waitForApp();
         // sometimes this is not fast enough and there are 4 objects
-        I.retry(3).seeNumberOfElements('.list-view li.list-item', 0);
+        I.waitForInvisible({ xpath: '//li[contains(@class, "list-item selectable")]' });
 
         //I.shareFolder('Music');
         I.click('My files', '.folder-tree');
@@ -52,7 +51,9 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
         I.waitForDetached('.address-picker');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.dontSee('Guest', '.permissions-view');
-        I.seeNumberOfElements('.permissions-view .permission.row', 2);
+        I.waitForElement({ xpath: '//div[contains(@class, "permission row")][1]' });
+        I.waitForElement({ xpath: '//div[contains(@class, "permission row")][2]' });
+        I.waitForText('Author');
         I.click('Author');
         I.clickDropdown('Viewer');
         I.click('Share', '.modal');
@@ -60,7 +61,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
 
         I.selectFolder('My shares');
         I.waitForElement(locate('.displayname').withText('Music').inside('.list-view'));
-        I.seeNumberOfElements('.list-view li.list-item', 1);
+        I.waitForElement({ xpath: '//li[contains(@class, "list-item selectable file-type-folder")]' });
 
         I.retry(5).click('Music', '.list-view .displayname');
     });
@@ -75,7 +76,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
         I.selectFolder(users[0].get('name'));
         I.waitForText('Music', 5, '.list-view');
         I.selectFolder('Music');
-        I.retry(3).dontSee('New', '.classic-toolbar');
+        I.waitForInvisible('New', '.classic-toolbar');
         I.selectFolder(users[0].get('name'));
     });
 
@@ -102,6 +103,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
         I.clickDropdown('Add new folder');
         I.waitForText('Add new folder');
         I.fillField('Folder name', 'Hello from Bob');
+        I.wait(1);
         I.click('Add');
         I.waitForDetached('.modal');
     });
@@ -111,7 +113,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
 
         I.triggerRefresh();
 
-        I.retry(3).waitForText('Hello from Bob');
+        I.waitForText('Hello from Bob');
     });
 });
 

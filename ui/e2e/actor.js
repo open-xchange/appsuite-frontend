@@ -112,6 +112,7 @@ module.exports = actor({
 
     clickDropdown(text) {
         this.waitForText(text, 5, '.dropdown.open .dropdown-menu');
+        this.wait(1);
         this.click(text, '.dropdown.open .dropdown-menu');
     },
 

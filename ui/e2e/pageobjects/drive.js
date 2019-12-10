@@ -16,8 +16,9 @@ module.exports = {
     },
     shareItem(type) {
         I.waitForVisible(locate({ css: '[data-dropdown="io.ox/files/toolbar/share"]' }).inside('.classic-toolbar-container'));
-        I.wait(0.2);
+        I.wait(1);
         I.click(locate({ css: '[data-dropdown="io.ox/files/toolbar/share"]' }).inside('.classic-toolbar-container'));
+        I.wait(1);
         I.clickDropdown(type);
         I.waitForDetached('.dropdown.open');
         I.waitForVisible('.modal-dialog');
