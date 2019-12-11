@@ -1,0 +1,107 @@
+<html lang="de">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>12.3.2. Autocrypt-Schlüssel verwalten</title>
+<link rel="stylesheet" type="text/css" href="../../help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Benutzeranleitung">
+<link rel="up" href="ox.appsuite.user.sect.guard.autocrypt.html" title="12.3. E-Mail-Kommunikation mit Autocrypt verschlüsseln">
+<link rel="prev" href="ox.appsuite.user.sect.guard.autocrypt.importkey.html" title="12.3.1. Autocrypt-Schlüssel importieren">
+<link rel="next" href="ox.appsuite.user.sect.guard.autocrypt.clients.html" title="12.3.3. Autocrypt-Schlüssel an andere Clients übertragen">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.autocrypt.importkey.html">Zurück</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Startseite</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhaltsverzeichnis</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.autocrypt.clients.html">Weiter</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">Datenverschlüsselung mit 
+    <span class="phrase">Guard</span>
+  </h1>
+<h2 class="sr-only">E-Mail-Kommunikation mit Autocrypt verschlüsseln</h2>
+<div class="sect2" id="ox.appsuite.user.sect.guard.autocrypt.manage">
+<div class="titlepage"><div><div><h3 class="title">12.3.2. Autocrypt-Schlüssel verwalten</h3></div></div></div>
+<a class="indexterm" name="id-1.13.8.8.2"></a><a class="indexterm" name="id-1.13.8.8.3"></a><a class="indexterm" name="id-1.13.8.8.4"></a><a class="indexterm" name="id-1.13.8.8.5"></a><a class="indexterm" name="id-1.13.8.8.6"></a><a class="indexterm" name="id-1.13.8.8.7"></a><a class="indexterm" name="id-1.13.8.8.8"></a><a class="indexterm" name="id-1.13.8.8.9"></a><a class="indexterm" name="id-1.13.8.8.10"></a><p id="ox.appsuite.user.concept.guard.autocrypt.manage">Sie haben folgende Möglichkeiten:
+        </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">Eine Liste der importierten Autocrypt-Schlüssel anzeigen</p>
+<p role="presentation">Sie können automatisch importierte Autocrypt-Schlüssel nachträglich verifizieren. 
+              Ein verifizierter Schlüssel wird folgendermaßen verwendet:
+              </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Eine ausgehende Nachricht an diesen Kontakt kann mit diesem Schlüssel verschlüsselt werden.</p></li>
+<li class="listitem"><p role="presentation">Die Signatur einer eingehenden Nachricht dieses Kontakt wird mit Hilfe des Schlüssels verifiziert. 
+                    Verläuft die Verifizierung erfolgreich, ist der Absender korrekt und der Inhalt der Nachricht ist unverändert.</p></li>
+</ul>
+</li>
+<li class="listitem"><p role="presentation">Autocrypt-Schlüssel löschen</p></li>
+</ul>
+<p>
+      </p>
+<div class="task" id="ox.appsuite.user.task.guard.autocrypt.manage.view">
+<p class="title">So zeigen Sie eine Liste der Autocrypt-Schlüssel an:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Klicken Sie in der Menüleiste rechts auf das Symbol <span class="guibutton"><strong>Einstellungen</strong></span>
+              <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.autocrypt.manage.verify"><img src="../../images/appsuite_user_icon_settings.png"></span>. 
+            </p></li>
+<li class="step"><p role="presentation">Klicken Sie in der Seitenleiste auf <span class="guibutton"><strong>Sicherheit</strong></span>. Klicken Sie auf 
+              <span class="phrase"><span class="guibutton"><strong>Guard</strong></span></span>.</p></li>
+<li class="step"><p role="presentation">Aktivieren Sie <span class="guibutton"><strong>Erweiterte Einstellungen anzeigen</strong></span>. Die Elemente zur Schlüsselverwaltung und für die Autocrypt-Einstellungen werden angezeigt. </p></li>
+<li class="step">
+<p role="presentation">Klicken Sie unterhalb von <span class="guibutton"><strong>Schlüssel</strong></span> auf <span class="guibutton"><strong>Autocrypt-Schlüssel</strong></span>. 
+              Das Fenster <span class="guilabel"><strong>Autocrypt-Schlüssel</strong></span> öffnet sich. Es zeigt eine Liste der Autocrypt-Schlüssel.</p>
+<p role="presentation">Um Details anzuzeigen, klicken Sie auf eine Schlüssel-ID.</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.autocrypt.manage.verify">
+<p class="title">So verifizieren Sie im Fenster <span class="guilabel"><strong>Autocrypt-Schlüssel</strong></span> einen Autocrypt-Schlüssel:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Überprüfen Sie einen Schlüssel, indem Sie seinen angezeigten Fingerabdruck mit dem korrekten Fingerabdruck vergleichen. 
+              Den korrekten Fingerabdruck erhalten Sie vom Absender der E-Mail, von der der Schlüssel importiert wurde.</p></li>
+<li class="step"><p role="presentation">Um den Schlüssel zu verifizieren, aktivieren Sie <span class="guibutton"><strong>Bestätigt</strong></span>.</p></li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.autocrypt.manage.delete">
+<p class="title">So löschen Sie im Fenster <span class="guilabel"><strong>Autocrypt-Schlüssel</strong></span> einen Autocrypt-Schlüssel:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Klicken Sie neben einem Schlüssel auf das Symbol <span class="guibutton"><strong>Löschen</strong></span>
+              <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.autocrypt.delete.trash"><img src="../../images/guard_user_icon_trash.png"></span>
+            </p></li>
+<li class="step"><p role="presentation">Bestätigen Sie, dass Sie den Schlüssel löschen wollen.</p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.guard.autocrypt.manage">
+        </p>
+<p class="title">Verwandte Themen:</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.html">
+      <span class="phrase">Guard</span>-Einstellungen
+    </a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.importkey.html">Autocrypt-Schlüssel importieren</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.clients.html">Autocrypt-Schlüssel an andere Clients übertragen</a></p>
+</li></ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.guard.autocrypt.manage">Übergeordnetes Thema:
+        <a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.html">E-Mail-Kommunikation mit Autocrypt verschlüsseln</a>
+      </p>
+</div>
+          </div>
+        </body>
+</html>

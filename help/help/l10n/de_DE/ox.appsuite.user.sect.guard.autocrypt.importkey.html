@@ -1,0 +1,110 @@
+<html lang="de">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>12.3.1. Autocrypt-Schlüssel importieren</title>
+<link rel="stylesheet" type="text/css" href="../../help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Benutzeranleitung">
+<link rel="up" href="ox.appsuite.user.sect.guard.autocrypt.html" title="12.3. E-Mail-Kommunikation mit Autocrypt verschlüsseln">
+<link rel="prev" href="ox.appsuite.user.sect.guard.autocrypt.html" title="12.3. E-Mail-Kommunikation mit Autocrypt verschlüsseln">
+<link rel="next" href="ox.appsuite.user.sect.guard.autocrypt.manage.html" title="12.3.2. Autocrypt-Schlüssel verwalten">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.autocrypt.html">Zurück</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Startseite</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhaltsverzeichnis</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">Weiter</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">Datenverschlüsselung mit 
+    <span class="phrase">Guard</span>
+  </h1>
+<h2 class="sr-only">E-Mail-Kommunikation mit Autocrypt verschlüsseln</h2>
+<div class="sect2" id="ox.appsuite.user.sect.guard.autocrypt.importkey">
+<div class="titlepage"><div><div><h3 class="title">12.3.1. Autocrypt-Schlüssel importieren</h3></div></div></div>
+<a class="indexterm" name="id-1.13.8.7.2"></a><a class="indexterm" name="id-1.13.8.7.3"></a><a class="indexterm" name="id-1.13.8.7.4"></a><p id="ox.appsuite.user.concept.guard.autocrypt.importkey">In den erweiterten
+        <span class="phrase">Guard</span>-Einstellungen 
+        können Sie bestimmen, ob Autocrypt-Schlüssel automatisch importiert werden. Sie können Folgendes bestimmen:
+        </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">Alle empfangenen Autocrypt-Schlüssel werden automatisch importiert.</p>
+<p role="presentation">Ein automatisch importierter Schlüssel wird folgendermaßen verwendet:
+              </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Eine ausgehende Nachricht an diesen Kontakt kann mit diesem Schlüssel verschlüsselt werden.</p></li>
+<li class="listitem"><p role="presentation">Die Signatur einer eingehenden Nachricht dieses Kontakts wird mit diesem Schlüssel nicht geprüft.  
+                    Dies bedeutet: Es kann nicht geprüft werden, ob der Absender korrekt ist und der Inhalt der Nachricht unverändert übertragen wurde.</p></li>
+</ul>
+<p role="presentation"> 
+            </p>
+</li>
+<li class="listitem">
+<p role="presentation">Für jeden empfangenen Autocrypt-Schlüssel werden Sie gefragt, ob dieser Schlüssel importiert werden soll. Dabei werden Details des
+              Autocrypt-Schlüssels angezeigt, so dass Sie seine Echtheit prüfen können. Wenn Sie den Schlüssel importieren, gilt er als verifiziert.
+              Ein verifizierter Schlüssel wird folgendermaßen verwendet:
+              </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Eine ausgehende Nachricht an diesen Kontakt kann mit diesem Schlüssel verschlüsselt werden.</p></li>
+<li class="listitem"><p role="presentation">Die Signatur einer eingehenden Nachricht dieses Kontakts wird mit Hilfe des Schlüssels verifiziert. 
+                    Verläuft die Verifizierung erfolgreich, ist der Absender korrekt und der Inhalt der Nachricht ist unverändert.</p></li>
+</ul>
+<p role="presentation"> 
+            </p>
+</li>
+</ul>
+<p>
+      </p>
+<div class="task" id="ox.appsuite.user.task.guard.autocrypt.importkey">
+<p class="title">So bestimmen Sie, wie  Autocrypt-Schlüssel importiert werden:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Klicken Sie in der Menüleiste rechts auf das Symbol <span class="guibutton"><strong>Einstellungen</strong></span>
+              <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.autocrypt.importkey"><img src="../../images/appsuite_user_icon_settings.png"></span>. 
+            </p></li>
+<li class="step"><p role="presentation">Klicken Sie in der Seitenleiste auf <span class="guibutton"><strong>Sicherheit</strong></span>. Klicken Sie auf 
+              <span class="phrase"><span class="guibutton"><strong>Guard</strong></span></span>.</p></li>
+<li class="step"><p role="presentation">Aktivieren Sie <span class="guibutton"><strong>Erweiterte Einstellungen anzeigen</strong></span>. Die Elemente zur Schlüsselverwaltung und für die Autocrypt-Einstellungen werden angezeigt. </p></li>
+<li class="step"><p role="presentation">Führen Sie unterhalb von <span class="guibutton"><strong>Autocrypt</strong></span> die folgenden Aktionen aus:
+              <ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Um Autocrypt-Schlüssel zu importieren, aktivieren Sie <span class="guibutton"><strong>Eingehende E-Mails nach Schlüsseln im Header durchsuchen</strong></span>.</p></li>
+<li class="listitem">
+<p role="presentation">Wenn Sie <span class="guibutton"><strong>Autocrypt-Schlüssel ohne Nachfrage importieren</strong></span> aktivieren, werden Autocrypt-Schlüssel automatisch importiert.</p>
+<p role="presentation">Dies ist die vorgegebene Einstellung, wenn <span class="guibutton"><strong>Erweiterte Einstellungen anzeigen</strong></span> deaktiviert ist.</p>
+</li>
+<li class="listitem"><p role="presentation">Wenn Sie <span class="guibutton"><strong>Autocrypt-Schlüssel ohne Nachfrage importieren</strong></span> deaktivieren, werden Sie gefragt, ob Sie den Schlüssel importieren wollen.
+                    Die Schlüsseldetails werden angezeigt, so dass Sie die Echtheit des Schlüssels prüfen können. Wenn Sie den Schlüssel akzeptieren, gilt er als verifiziert.
+                  </p></li>
+</ul>
+            </p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.guard.autocrypt.importkey">
+        </p>
+<p class="title">Verwandte Themen:</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.importkey.html">Autocrypt-Schlüssel importieren</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">Autocrypt-Schlüssel verwalten</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.clients.html">Autocrypt-Schlüssel an andere Clients übertragen</a></p></li>
+</ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.guard.autocrypt.importkey">Übergeordnetes Thema:
+        <a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.html">E-Mail-Kommunikation mit Autocrypt verschlüsseln</a>
+      </p>
+</div>
+          </div>
+        </body>
+</html>
