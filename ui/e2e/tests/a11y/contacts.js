@@ -47,6 +47,7 @@ Scenario('Contacts - Modal Dialog - Import', async (I, contacts) => {
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
     I.waitForText('My address books');
+    I.wait(0.2);
     I.click('.folder-arrow', '~My address books');
     I.openFolderMenu('Contacts');
     I.clickDropdown('Import');
@@ -77,6 +78,7 @@ Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', asyn
 
     I.waitForText('My address books');
     I.click('.folder-arrow', '~My address books');
+    I.wait(0.2);
     I.waitForText('Krawall');
     I.click('Krawall');
     I.openFolderMenu('Krawall');
