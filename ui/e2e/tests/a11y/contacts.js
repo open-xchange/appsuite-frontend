@@ -75,7 +75,7 @@ Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', asyn
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
 
-    I.waitForText('My address books');
+    I.waitForElement(locate('.folder-arrow').inside('~My address books').as('My address books folder arrow'));
     I.click('.folder-arrow', '~My address books');
     I.waitForText('Krawall');
     I.click('Krawall');
