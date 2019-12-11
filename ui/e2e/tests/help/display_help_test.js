@@ -20,38 +20,41 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Hide and show Help topics based on user capabilities', async function (I, users) {
+Scenario('Hide and show Help topics based on user capabilities', async function (I, users, contacts) {
 
     // Disable calendar
     await users[0].doesntHaveCapability('calendar');
 
     I.login('app=io.ox/contacts', { user: users[0] });
 
+    contacts.waitForApp();
+
     //open help window
-    I.waitForElement('#io-ox-context-help-icon', 20);
-    I.click('#io-ox-context-help-icon');
-    I.waitForElement('.inline-help-iframe', 20);
+    I.waitForElement('.io-ox-context-help');
+    I.click('.io-ox-context-help');
+    I.waitForElement('.io-ox-help-window');
 
     // Check if help shows info about disabled capability
     await within({ frame: '.inline-help-iframe' }, () => {
-        I.click('Start Page');
-        I.dontSee('Calendar');
+        I.retry(5).click('Start Page');
+        I.retry(5).dontSee('Calendar');
         I.see('Tasks');
     });
 
     // Disable tasks
     await users[0].doesntHaveCapability('tasks');
     I.refreshPage();
+    contacts.waitForApp();
 
     // open help window
-    I.waitForElement('#io-ox-context-help-icon', 20);
-    I.click('#io-ox-context-help-icon');
-    I.waitForElement('.inline-help-iframe', 20);
+    I.waitForElement('.io-ox-context-help');
+    I.click('.io-ox-context-help');
+    I.waitForElement('.io-ox-help-window');
 
     // Check if help shows info about disabled capability
     await within({ frame: '.inline-help-iframe' }, () => {
-        I.click('Start Page');
-        I.dontSee('Calendar');
+        I.retry(5).click('Start Page');
+        I.retry(5).dontSee('Calendar');
         I.dontSee('Tasks');
         I.see('Drive');
     });
@@ -61,16 +64,17 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
 
     //close help
     I.refreshPage();
+    contacts.waitForApp();
 
     //open help window
-    I.waitForElement('#io-ox-context-help-icon', 20);
-    I.click('#io-ox-context-help-icon');
-    I.waitForElement('.inline-help-iframe', 20);
+    I.waitForElement('.io-ox-context-help');
+    I.click('.io-ox-context-help');
+    I.waitForElement('.io-ox-help-window');
 
     // Check if help shows info about disabled capability
     await within({ frame: '.inline-help-iframe' }, () => {
-        I.click('Start Page');
-        I.dontSee('Calendar');
+        I.retry(5).click('Start Page');
+        I.retry(5).dontSee('Calendar');
         I.dontSee('Tasks');
         I.dontSee('Drive');
     });
