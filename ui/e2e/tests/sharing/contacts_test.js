@@ -37,7 +37,6 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         I.login('app=io.ox/contacts');
         contacts.waitForApp();
         I.waitForText('My address books');
-        I.wait(0.2);
         I.click('.folder-arrow', '~My address books');
 
         I.openFolderMenu('Contacts');
