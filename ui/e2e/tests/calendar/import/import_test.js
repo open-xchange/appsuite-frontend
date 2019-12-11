@@ -269,6 +269,7 @@ Data(examples).Scenario('Import Calendar data', async (I, current, users) => {
     );
     I.click(`.folder-options[title="Actions for ${folderName}"]`);
     I.waitForElement(locate('.dropdown.open').withText('Import'));
+    I.wait(0.2);
     I.retry(3).click('Import');
     I.waitForElement('.modal');
     I.attachFile('.file-input', `e2e/media/imports/calendar/${current.filename}.ics`);
