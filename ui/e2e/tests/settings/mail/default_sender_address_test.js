@@ -36,7 +36,7 @@ Scenario('[7781] Default sender address', async (I, users) => {
     // Wait for the compose dialog
     I.waitForVisible('.io-ox-mail-compose .row.sender');
     I.click(user.get('primaryEmail'));
-    I.waitForText('urbi@orbi.it');
+    I.retry(5).click('Show names');
     I.click('urbi@orbi.it');
     I.waitForVisible('.token-input.tt-input');
     I.fillField('To', user.get('primaryEmail'));
