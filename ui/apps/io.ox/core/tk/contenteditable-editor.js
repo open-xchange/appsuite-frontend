@@ -44,7 +44,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             ed.on('keydown', function (e) {
                 // pressed enter?
                 if (!e.shiftKey && e.which === 13) splitContent(ed, e);
-                if (e.which === 13 || e.which === 40) setTimeout(throttledScrollOnEnter, 0, ed);
+                if ((e.which === 13 && !e.shiftKey) || e.which === 40) setTimeout(throttledScrollOnEnter, 0, ed);
                 if (e.which === 38 || e.which === 8) setTimeout(throttledScrollOnCursorUp, 0, ed);
             });
         }
