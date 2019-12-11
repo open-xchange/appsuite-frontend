@@ -80,10 +80,8 @@ module.exports = {
     async setDate(attr, value) {
         I.click('~Date (M/D/YYYY)', locate({ css: `[data-attribute="${attr}"]` }));
         I.waitForElement('.date-picker.open');
-        await I.executeScript(function (attr, newDate) {
-            // fillfield works only for puppeteer, pressKey(11/10....) only for webdriver
-            $(`.dateinput[data-attribute="${attr}"] .datepicker-day-field`).val(newDate).datepicker('update');
-        }, attr, value.format('L'));
+        I.click(`.dateinput[data-attribute="${attr}"] .datepicker-day-field`);
+        I.fillField(`.dateinput[data-attribute="${attr}"] .datepicker-day-field`, value.format('L'));
         I.pressKey('Enter');
         I.waitForDetached('.date-picker.open');
     },

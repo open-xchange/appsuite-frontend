@@ -1139,7 +1139,7 @@ Scenario('[C7441] Start/End time autocompletion', async function (I, calendar) {
     check('1:00 PM', 'endDate', '10:00 AM', '1:00 PM');
 });
 
-Scenario.skip('[C7442] Set date from date-picker', async function (I, calendar) {
+Scenario('[C7442] Set date from date-picker', async function (I, calendar) {
 
     I.login('app=io.ox/calendar&perspective=week:day');
     calendar.waitForApp();
