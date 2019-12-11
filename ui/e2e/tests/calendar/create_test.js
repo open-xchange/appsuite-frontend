@@ -1486,13 +1486,14 @@ Scenario('[C7446] Create recurring whole-day appointment', async function (I, us
     I.waitForDetached('.recurrence-view-dialog');
     I.click('Create');
 
-    const selector = '.appointment-panel [aria-label="Birthday of Linus Torvalds, Helsinki Imbiss"]';
-    ['1969-12-28', '1968-12-28', '1967-12-28', '1975-12-28', '1995-12-28', '2025-12-28'].forEach(async (datestring) => {
+    const selector = '.appointment-panel [aria-label*="Birthday of Linus Torvalds, Helsinki Imbiss"]';
+    const list = ['1969-12-28', '1968-12-28', '1967-12-28', '1975-12-28', '1995-12-28', '2025-12-28'];
+    await Promise.all(list.map(async function (datestring) {
         I.say(`Check ${datestring}`);
         await I.executeScript(`ox.ui.apps.get("io.ox/calendar").setDate(new moment("${datestring}"))`);
         I.waitForVisible(selector);
         expect(await I.grabNumberOfVisibleElements(selector)).to.equal(1);
-    });
+    }));
 });
 
 
