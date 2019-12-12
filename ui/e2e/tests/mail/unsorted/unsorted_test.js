@@ -559,9 +559,9 @@ Scenario('[C12119] Edit recipients', async function (I, users, mail) {
     I.login('app=io.ox/mail', { user });
     mail.newMail();
     I.click('CC');
-    I.waitForElement({ css: '.io-ox-mail-compose .cc .tt-input' }, 5);
+    I.waitForElement({ css: '.io-ox-mail-compose .cc .tt-input' });
     I.click('BCC');
-    I.waitForElement({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
+    I.waitForElement({ css: '.io-ox-mail-compose .bcc .tt-input' });
     const fields = ['to', 'cc', 'bcc'];
     fields.forEach(function (field) {
         I.click({ css: '.io-ox-mail-compose div[data-extension-id="' + field + '"] input.tt-input' });

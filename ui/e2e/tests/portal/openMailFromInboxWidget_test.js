@@ -66,5 +66,5 @@ Scenario('[C7489] Inbox widget: open mails', async (I, users) => {
     I.see('Delete', '.io-ox-sidepopup .inline-toolbar');
     I.seeElement('.dropdown.more-dropdown', '.io-ox-sidepopup .inline-toolbar');
     I.seeElement('.close', '.io-ox-sidepopup');
-    I.clickToolbar('.close');
+    I.click('.close');
 });
