@@ -808,7 +808,8 @@ define('io.ox/mail/detail/view', [
 
             this.on({
                 'load': function () {
-                    this.$('section.body').empty().busy();
+                    // add busy manually to avoid 300ms busy spinner delay (looks strange when mail is toggled)
+                    this.$('section.body').addClass('io-ox-busy').empty();
                 },
                 'load:done': function () {
                     this.$('section.body').idle();
@@ -843,7 +844,13 @@ define('io.ox/mail/detail/view', [
             this.$el.data({ view: this, model: this.model });
 
             if (!this.placeholder) {
+                // remove scaffolding if it's there(we don't want duplicates or mixups in the extension point order)
+                this.$el.children('section.body,section.attachments').remove();
                 ext.point('io.ox/mail/detail').invoke('draw', this.$el, baton);
+            } else {
+                // add some scaffolding
+                // this is needed to show the busy spinner properly
+                ext.point('io.ox/mail/detail').get('body').invoke('draw', this.$el, baton);
             }
 
             this.$el.toggleClass('placeholder', this.placeholder);
