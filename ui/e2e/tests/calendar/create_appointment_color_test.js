@@ -56,11 +56,10 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
 
     let [user_a, user_b] = users;
     let selectInsideFolder = (node) => locate(node)
-            .inside(locate('div.folder-node')
-                    .withAttr({ title: 'New calendar' })
-            );
+            .inside(folderLocator);
 
-    const createAppointment = uncurriedCreateAppointment(I);
+    const createAppointment = uncurriedCreateAppointment(I),
+        folderLocator = locate({ css: 'div.folder-node' }).withAttr({ title: 'New calendar' });
 
     //login user a
     I.login('app=io.ox/calendar', { user: user_a });
@@ -84,7 +83,7 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     I.say('Grant permission to user b');
     I.click('.folder-node .folder-arrow .fa.fa-caret-right');
     I.selectFolder('New calendar');
-    I.click(selectInsideFolder({ css: 'a.folder-options' }));
+    I.retry(3).click(selectInsideFolder({ css: 'a.folder-options' }));
 
     I.clickDropdown('Permissions / Invite people');
     I.waitForVisible('.modal-dialog');
@@ -107,7 +106,7 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     I.waitForVisible('.folder-node .folder-arrow .fa.fa-caret-right');
     I.click('.folder-node .folder-arrow .fa.fa-caret-right');
     I.selectFolder('New calendar');
-    I.click(selectInsideFolder('div.color-label'));
+    I.retry(3).click(selectInsideFolder({ css: 'div.color-label' }));
     //check if public appointments are there
     I.see('testing is fun', '.workweek .appointment .title-container');
     I.see('testing is awesome', '.workweek .appointment .title-container');
