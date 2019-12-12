@@ -26,7 +26,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario.skip('[C104305] calendar folders using “Permisions” dialog and sharing link', async (I, users, calendar) => {
+Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing link', async (I, users, calendar) => {
     let url;
     I.say('Alice shares a folder with 2 appointments');
     session('Alice', async () => {
@@ -55,6 +55,7 @@ Scenario.skip('[C104305] calendar folders using “Permisions” dialog and shar
         I.click({ css: 'button[data-action="select"]' });
         I.waitForDetached('.address-picker');
         I.waitForElement(locate('.permissions-view .row').at(2));
+        I.waitForText('Author');
         I.click('Author');
         I.clickDropdown('Viewer');
 
@@ -71,7 +72,7 @@ Scenario.skip('[C104305] calendar folders using “Permisions” dialog and shar
 
     const checkSharedCalendarFolder = () => {
         I.waitForText('simple appointment 1', 5, { css: '.appointment-container' });
-        I.waitForText(users[0].get('sur_name') + ', ' + users[0].get('given_name'), 5, { css: '.tree-container' });
+        I.waitForText(users[0].get('sur_name') + ', ' + users[0].get('given_name'), 5, { css: '.io-ox-calendar-window .tree-container' });
         I.seeNumberOfElements('.appointment', 2);
         I.see('simple appointment 2', { css: '.appointment-container' });
 
@@ -108,10 +109,13 @@ Scenario.skip('[C104305] calendar folders using “Permisions” dialog and shar
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
         I.clickDropdown('Permissions / Invite people');
         I.waitForElement('.modal');
+        I.waitForVisible({ css: `[aria-label="${users[1].get('sur_name')}, ${users[1].get('given_name')}, Internal user."]` });
         I.click(locate({ css: 'button[title="Actions"]' }).inside('.modal'));
+        I.waitForText('Revoke access');
         I.click('Revoke access');
+        I.waitForInvisible({ css: `[aria-label="${users[1].get('sur_name')}, ${users[1].get('given_name')}, Internal user."]` });
         I.click('Save');
-        I.waitToHide('.modal');
+        I.waitForDetached('.modal');
 
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
         I.clickDropdown('Create sharing link');
@@ -121,7 +125,8 @@ Scenario.skip('[C104305] calendar folders using “Permisions” dialog and shar
 
     I.say('Bob has no access');
     session('Bob', () => {
-        I.triggerRefresh();
+        I.refreshPage();
+        calendar.waitForApp();
         I.seeNumberOfElements(locate('.appointment').inside('.io-ox-calendar-main'), 0);
         I.dontSee('simple appointment 1', '.io-ox-calendar-main');
         I.dontSee('simple appointment 2', '.io-ox-calendar-main');
