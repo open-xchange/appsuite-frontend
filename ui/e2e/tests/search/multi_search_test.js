@@ -43,6 +43,24 @@ function getTestMail(from, to, opt) {
     };
 }
 
+Scenario('Supports delayed autoselect', async function (I, mail, search) {
+
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+    var query = 'my-input';
+
+    I.say('enter query');
+    I.click(search.locators.box);
+    I.waitForVisible(search.locators.field);
+    I.fillField(search.locators.field, query);
+
+    I.dontSeeElement('.autocomplete-item');
+    I.pressKey('Enter');
+
+    I.say('check created token');
+    I.waitForText(query, 2, '.token-label');
+});
+
 Scenario('[C8407] Perform a multi search', async function (I, users) {
     const [user1, user2] = users;
 
