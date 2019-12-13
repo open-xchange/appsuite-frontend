@@ -99,6 +99,7 @@ Scenario('use planning view as Standalone app', async function (I) {
     I.click('Create');
 });
 
+// TODO: shaky, msg: 'Cannot read property 'x' of null'
 Scenario('test planning view lasso', async function (I) {
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });

@@ -25,6 +25,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
+// TODO: shaky(?) fails at 'I see "Business St. 23 Berlin Berlin 13370", {"css":"address"}'
 Scenario.skip('[C104269] Import App Suite CSV', async (I, contacts) => {
 // this scenario also covers:
 // [C104268] Import App Suite vCard

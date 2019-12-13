@@ -627,6 +627,7 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
     I.waitForText(`${users[0].userdata.display_name}`, 5, '.io-ox-sidepopup .details .organizer');
 });
 
+// TODO: shaky, msg: 'Text "Do you want to delete all appointments of the series or just this appointment?" was not found on page after 5 sec'
 Scenario('[C265149] As event organizer I can add a textual reason why an event was canceled', async function (I, users) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },

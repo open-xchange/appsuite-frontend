@@ -143,6 +143,7 @@ Scenario('[C207509] Year view', async (I) => {
     I.see('January', '.monthview-container');
 });
 
+// TODO: shaky(?), msg: element (.appointment div[title="Private visibility"] span[title="Confidential"] i.fa-lock) still not visible after 5 sec
 Scenario.skip('[C236795] Visibility Flags', (I, calendar) => {
     const createAppointment = (subject, startDate, startTime, visibility) => {
         I.clickToolbar('New appointment');

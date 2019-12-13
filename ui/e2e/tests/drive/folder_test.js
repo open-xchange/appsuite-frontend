@@ -459,6 +459,7 @@ Scenario('[C8388] Delete a folder', async (I, drive) => {
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
+// msg: 'element (.dropdown.open .dropdown-menu) still not present on page after 5 sec'
 Scenario.skip('[C8389] Move a folder', async (I, drive) => {
     // Testrail description:
     // A folder hierarchy e.g.: My files Subfolder a SubSubFolder 1 Subfolder b
