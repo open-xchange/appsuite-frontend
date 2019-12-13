@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-10-04 11:23+0200\n"
+"PO-Revision-Date: 2019-11-27 15:23+0100\n"
 "Last-Translator: Nicky Thomassen <nicky@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -1678,40 +1678,12 @@ msgid "Collapse form"
 msgstr "Skjul form"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Hjælp til synlighed"
+msgid "Visibility"
+msgstr "Synlighed"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Standard"
 msgstr "Standard"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "Aftalen er synlig for alle brugere i delte kalendre."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"I delte kalendere bliver aftalen vist som et simpelt tidsrum for ikke-"
-"deltagende brugere."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Aftalen er overhovedet ikke synlig for ikke-deltagende brugere i delte "
-"kalendre.  Aftalen bliver ikke taget med, når der undersøges for "
-"planlægningskonflikter, og optræder ikke i planlægningsvisningen.  Dette er "
-"ikke en mulighed, hvis aftalen blokerer ressourcer."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility"
-msgstr "Synlighed"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Appointment color"
@@ -4983,7 +4955,7 @@ msgstr "Navigér til:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "All Applications"
-msgstr ""
+msgstr "Alle programmer"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5161,12 +5133,12 @@ msgstr "Forbind denne enhed"
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Add login password"
-msgstr ""
+msgstr "Tilføj kodeord til logind"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change login password"
-msgstr ""
+msgstr "Ændr adgangskode til logind"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -7865,11 +7837,11 @@ msgstr "Brug forenet e-mail for denne konto"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Add other mail account"
-msgstr ""
+msgstr "Tilføj endnu en e-mail konto"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Please choose your mail account provider."
-msgstr ""
+msgstr "Vælg venligst din e-mail-udbyder."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10590,7 +10562,7 @@ msgstr "Send med e-mail"
 
 #: apps/io.ox/oauth/backbone.js module:io.ox/oauth
 msgid "Sign in with Google. This will add your Gmail account."
-msgstr ""
+msgstr "Log ind med Google. Det vil tilføje din Google-konto."
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
@@ -11895,6 +11867,8 @@ msgid ""
 "E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
+"Beskeder vil dukke op i et nyt vindue.  Disse vinduer kan maksimeres, "
+"minimeres og lukkes."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
@@ -13056,6 +13030,30 @@ msgstr "Invitér til %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Tilføj på %s"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Hjælp til synlighed"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "Aftalen er synlig for alle brugere i delte kalendre."
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "I delte kalendere bliver aftalen vist som et simpelt tidsrum for ikke-"
+#~ "deltagende brugere."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Aftalen er overhovedet ikke synlig for ikke-deltagende brugere i delte "
+#~ "kalendre.  Aftalen bliver ikke taget med, når der undersøges for "
+#~ "planlægningskonflikter, og optræder ikke i planlægningsvisningen.  Dette "
+#~ "er ikke en mulighed, hvis aftalen blokerer ressourcer."
 
 #~ msgid "Apps"
 #~ msgstr "Apps"

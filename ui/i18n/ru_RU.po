@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-10-04 11:29+0200\n"
+"PO-Revision-Date: 2019-11-27 15:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -1671,39 +1671,12 @@ msgid "Collapse form"
 msgstr "Свернуть"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Справка по просмотру"
+msgid "Visibility"
+msgstr "Видимость"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Standard"
 msgstr "Стандартно"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "Встреча будет видна всем пользователям в совместных календарях."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"В совместных календарях пользователи, которые не пойдут на встречу, вместо "
-"встречи увидят обычный отрезок времени."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Эта встреча будет скрыта от пользователей, которые на неё не пойдут, не "
-"будет учитываться при поиске конфликтов и не будет показана в расписании "
-"(эта опция недоступна, если встреча блокирует ресурсы)."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility"
-msgstr "Видимость"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Appointment color"
@@ -4997,7 +4970,7 @@ msgstr "Перейти:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "All Applications"
-msgstr ""
+msgstr "Все Приложения"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5180,12 +5153,12 @@ msgstr "Подключить устройство"
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Add login password"
-msgstr ""
+msgstr "Дополнительный пароль"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change login password"
-msgstr ""
+msgstr "Изменить пароль"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -7897,11 +7870,11 @@ msgstr "Использовать Unified Mail"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Add other mail account"
-msgstr ""
+msgstr "Добавить другую почтовую учетную запись"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Please choose your mail account provider."
-msgstr ""
+msgstr "Выберите поставщика почтовой учетной записи."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10630,6 +10603,8 @@ msgstr "Отправить по почте"
 #: apps/io.ox/oauth/backbone.js module:io.ox/oauth
 msgid "Sign in with Google. This will add your Gmail account."
 msgstr ""
+"Выполните вход с помощью Google. Это действие добавит вашу учетную запись  "
+"Gmail."
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
@@ -10860,12 +10835,10 @@ msgstr "Неполная конфигурация."
 
 #. %1$d a list of email addresses
 #: apps/io.ox/participants/add.js module:io.ox/core
-#, fuzzy, c-format
-#| msgid "This email address cannot be used"
-#| msgid_plural "The following email addresses cannot be used: %1$d"
+#, c-format
 msgid "This email address cannot be used"
 msgid_plural "The following email addresses cannot be used: %1$d"
-msgstr[0] "Этот адрес не может использоваться"
+msgstr[0] "Этот электронный адрес не может использоваться: %1$d"
 msgstr[1] "Следующие адреса нельзя использовать: %1$d"
 msgstr[2] "Следующие адреса нельзя использовать: %1$d"
 
@@ -11945,6 +11918,8 @@ msgid ""
 "E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
+"Письма будут открываться в новом окне. Окна можно развернуть, свернуть и "
+"закрыть."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
@@ -13102,6 +13077,29 @@ msgstr "Пригласить на %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Добавить в %s"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Справка по просмотру"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "Встреча будет видна всем пользователям в совместных календарях."
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "В совместных календарях пользователи, которые не пойдут на встречу, "
+#~ "вместо встречи увидят обычный отрезок времени."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Эта встреча будет скрыта от пользователей, которые на неё не пойдут, не "
+#~ "будет учитываться при поиске конфликтов и не будет показана в расписании "
+#~ "(эта опция недоступна, если встреча блокирует ресурсы)."
 
 #~ msgid "Apps"
 #~ msgstr "Приложения"

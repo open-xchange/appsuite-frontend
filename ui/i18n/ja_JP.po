@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-10-04 11:26+0200\n"
+"PO-Revision-Date: 2019-11-27 15:28+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -1669,39 +1669,12 @@ msgid "Collapse form"
 msgstr "フォームを折りたたむ"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "表示ヘルプ"
+msgid "Visibility"
+msgstr "可視性"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Standard"
 msgstr "標準"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "共有カレンダーのすべてのユーザーが予定を見ることができます。"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"共有カレンダーでは、参加しないユーザーには予定が単純なタイムスロットとして表"
-"示されます。"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"共有ｋ共有のカレンダーのすべてのユーザーが予定を全くみることができません。予"
-"定は競合とはみなされず、スケジューリング表示に表示されません。このオプション"
-"は、予定がリソースをブロックしている場合は使用できません。"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility"
-msgstr "可視性"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Appointment color"
@@ -4968,10 +4941,8 @@ msgid "Navigate to:"
 msgstr "次に移動："
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
-#, fuzzy
-#| msgid "Applications"
 msgid "All Applications"
-msgstr "アプリケーション"
+msgstr "すべてのアプリケーション"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5144,12 +5115,12 @@ msgstr "このデバイスの接続"
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Add login password"
-msgstr ""
+msgstr "ログインパスワードを追加"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change login password"
-msgstr ""
+msgstr "ログインパスワードを変更"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -7836,11 +7807,11 @@ msgstr "このアカウントに統合メールを使用"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Add other mail account"
-msgstr ""
+msgstr "別のメールアカウントを追加"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Please choose your mail account provider."
-msgstr ""
+msgstr "ご利用のメールアカウント プロバイダを選択してください"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10554,7 +10525,7 @@ msgstr "メールで送信"
 
 #: apps/io.ox/oauth/backbone.js module:io.ox/oauth
 msgid "Sign in with Google. This will add your Gmail account."
-msgstr ""
+msgstr "Googleでサインインしてください。Gmailアカウントが追加されます。"
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
@@ -13014,6 +12985,29 @@ msgstr "%s に招待"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s に追加"
+
+#~ msgid "Visibility Help"
+#~ msgstr "表示ヘルプ"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "共有カレンダーのすべてのユーザーが予定を見ることができます。"
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "共有カレンダーでは、参加しないユーザーには予定が単純なタイムスロットとして"
+#~ "表示されます。"
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "共有ｋ共有のカレンダーのすべてのユーザーが予定を全くみることができません。"
+#~ "予定は競合とはみなされず、スケジューリング表示に表示されません。このオプ"
+#~ "ションは、予定がリソースをブロックしている場合は使用できません。"
 
 #~ msgid "Please select your mail account provider"
 #~ msgstr "ご利用のメールアカウント プロバイダを選択してください"

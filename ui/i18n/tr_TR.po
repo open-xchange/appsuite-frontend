@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-10-04 11:30+0200\n"
+"PO-Revision-Date: 2019-11-27 15:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: tr_TR\n"
@@ -1678,39 +1678,12 @@ msgid "Collapse form"
 msgstr "Formu daralt"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility Help"
-msgstr "Görünürlük yardımı"
+msgid "Visibility"
+msgstr "Görünürlük"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Standard"
 msgstr "Standart"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
-msgstr "Randevu, paylaşılan takvimlerdeki tüm kullanıcılara görünür."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"In shared calendars, the appointment is displayed as a simple time slot for "
-"non-attending users."
-msgstr ""
-"Paylaşılan takvimlerde randevu, katılmayan kullanıcılar için basit bir zaman "
-"dilimi olarak görüntülenir."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is not visible to non-attending users in shared calendars at "
-"all. The appointment is not considered for conflicts and does not appear in "
-"the scheduling view. This option cannot be used, if the appointment blocks "
-"resources."
-msgstr ""
-"Randevu, paylaşılan takvimlerdeki katılımcı olmayan kullanıcılara görünmez. "
-"Randevu, çakışmalara dahil edilmez ve planlama görünümünde görünmez. "
-"Randevunun engellediği kaynaklar varsa bu seçenek kullanılamaz."
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Visibility"
-msgstr "Görünürlük"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Appointment color"
@@ -4983,7 +4956,7 @@ msgstr "Git:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "All Applications"
-msgstr ""
+msgstr "Tüm Uygulamalar"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5157,12 +5130,12 @@ msgstr "Bu cihazı bağla"
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Add login password"
-msgstr ""
+msgstr "Parola ekle"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change login password"
-msgstr ""
+msgstr "Parolayı değiştir"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -7857,11 +7830,11 @@ msgstr "Bu hesap için birleşik e-postayı kullan"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Add other mail account"
-msgstr ""
+msgstr "Başka bir e-posta hesabı ekle"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Please choose your mail account provider."
-msgstr ""
+msgstr "Lütfen e-posta hesabı sağlayıcınızı seçin."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10580,7 +10553,7 @@ msgstr "E-posta ile gönder"
 
 #: apps/io.ox/oauth/backbone.js module:io.ox/oauth
 msgid "Sign in with Google. This will add your Gmail account."
-msgstr ""
+msgstr "Google ile giriş yapın. Bu işlem Gmail hesabınızı ekler."
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
@@ -11890,6 +11863,8 @@ msgid ""
 "E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
+"E-postalar yeni bir pencerede açılacaktır. Bu pencereleri büyütüp "
+"küçültebilir ve kapatabilirsiniz."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
@@ -13047,6 +13022,29 @@ msgstr "%s etkinliğine davet et"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s üzerine ekle"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Görünürlük yardımı"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "Randevu, paylaşılan takvimlerdeki tüm kullanıcılara görünür."
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "Paylaşılan takvimlerde randevu, katılmayan kullanıcılar için basit bir "
+#~ "zaman dilimi olarak görüntülenir."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Randevu, paylaşılan takvimlerdeki katılımcı olmayan kullanıcılara "
+#~ "görünmez. Randevu, çakışmalara dahil edilmez ve planlama görünümünde "
+#~ "görünmez. Randevunun engellediği kaynaklar varsa bu seçenek kullanılamaz."
 
 #~ msgid "Apps"
 #~ msgstr "Uygulamalar"
