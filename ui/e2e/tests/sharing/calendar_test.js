@@ -67,17 +67,18 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         I.waitForFocus('.share-wizard input[type="text"]');
         url = await I.grabValueFrom('.share-wizard input[type="text"]');
         url = Array.isArray(url) ? url[0] : url;
+        I.say(url);
         I.click('Close');
     });
 
     const checkSharedCalendarFolder = () => {
         I.waitForText('simple appointment 1', 5, { css: '.appointment-container' });
         I.waitForText(users[0].get('sur_name') + ', ' + users[0].get('given_name'), 5, { css: '.io-ox-calendar-window .tree-container' });
-        I.seeNumberOfElements('.appointment', 2);
+        I.seeNumberOfVisibleElements('.appointment', 2);
         I.see('simple appointment 2', { css: '.appointment-container' });
 
         I.say('check for missing edit rights');
-        I.click(locate('.appointment').at(1));
+        I.click(locate('.appointment').inside('.weekview-container.week').at(1));
         I.waitForElement('.io-ox-sidepopup');
         I.dontSee('Edit', '.io-ox-sidepopup');
         I.click('~Close', '.io-ox-sidepopup');
@@ -85,6 +86,7 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
 
     I.say('Bob receives the share');
     session('Bob', () => {
+        I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[1] });
         I.login('app=io.ox/mail', { user: users[1] });
         I.waitForText('has shared the calendar', undefined, '.list-view');
         I.click(locate('li.list-item'));
@@ -99,8 +101,11 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
 
     I.say('Eve uses external link to shared folder');
     session('Eve', () => {
+        I.haveSetting('io.ox/calendar//viewView', 'week:week');
         I.amOnPage(url);
         I.waitForElement('.io-ox-calendar-main', 30);
+        calendar.switchView('Week');
+        I.waitForVisible({ css: '[data-page-id="io.ox/calendar/week:week"]' });
         checkSharedCalendarFolder();
     });
 
