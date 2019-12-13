@@ -74,7 +74,7 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
     const checkSharedCalendarFolder = () => {
         I.waitForText('simple appointment 1', 5, { css: '.appointment-container' });
         I.waitForText(users[0].get('sur_name') + ', ' + users[0].get('given_name'), 5, { css: '.io-ox-calendar-window .tree-container' });
-        I.seeNumberOfVisibleElements('.appointment', 2);
+        I.retry(5).seeNumberOfVisibleElements('.appointment', 2);
         I.see('simple appointment 2', { css: '.appointment-container' });
 
         I.say('check for missing edit rights');
@@ -132,7 +132,7 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
     session('Bob', () => {
         I.refreshPage();
         calendar.waitForApp();
-        I.seeNumberOfElements(locate('.appointment').inside('.io-ox-calendar-main'), 0);
+        I.retry(5).seeNumberOfElements(locate('.appointment').inside('.io-ox-calendar-main'), 0);
         I.dontSee('simple appointment 1', '.io-ox-calendar-main');
         I.dontSee('simple appointment 2', '.io-ox-calendar-main');
     });
