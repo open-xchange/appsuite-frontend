@@ -12,12 +12,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/count/api', ['settings!io.ox/core'], function (settings) {
+define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], function (uuids, settings) {
 
     'use strict';
 
     // we always need to expose the API even if tracking is disabled
-    var api = _.extend({ queue: [], add: _.noop }, Backbone.Events),
+    var api = _.extend({ queue: [], add: _.noop, uuid: uuids.randomUUID() }, Backbone.Events),
         url = settings.get('count/url');
 
     // having an URL means enabled, disable requires an explicit "false"

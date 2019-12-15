@@ -11,16 +11,14 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/core/count/lifetime', [
-    'io.ox/core/count/api',
-    'io.ox/core/uuids',
-    ''
-], function (api, uuids) {
+define('io.ox/core/count/lifetime', ['io.ox/core/count/api'], function (api) {
 
     'use strict';
-    var uuid = uuids.randomUUID();
+
+    if (api.disabled) return;
+
     function send() {
-        api.add('lt', { u: uuid, t0: ox.t0 });
+        api.add('lt', { u: api.uuid, t0: ox.t0 });
     }
 
     setInterval(send, 60000);
