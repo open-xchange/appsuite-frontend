@@ -13,19 +13,17 @@
 
 define('io.ox/core/count/eyeballtime', [
     'io.ox/core/count/api',
-    'io.ox/core/count/active',
-    'io.ox/core/uuids'
-], function (api, isActive, uuids) {
+    'io.ox/core/count/active'
+], function (api, isActive) {
 
     'use strict';
 
     if (api.disabled) return;
 
-    var counts = {},
-        uuid = uuids.randomUUID();
+    var counts = {};
 
     function count() {
-        if (!isActive) return;
+        if (!isActive()) return;
         var app = getCurrentApp();
         if (!app) return;
         // track first "running minute" per app to create a 0-1 minute interval server side.
@@ -45,7 +43,7 @@ define('io.ox/core/count/eyeballtime', [
     }
 
     function send(app) {
-        api.add('ebt', { app: app, uuid: uuid, t0: ox.t0 });
+        api.add('ebt', { app: app, uuid: api.uuid, t0: ox.t0 });
     }
 
     setInterval(count, 1000);
