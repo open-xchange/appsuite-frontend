@@ -26,7 +26,7 @@ define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], func
     // return mock/noop API so that consumers don't have to worry
     if (api.disabled) return api;
 
-    var delay = parseInt(settings.get('count/delay', 3), 10) * 1000,
+    var delay = parseInt(settings.get('count/delay', 15), 10) * 1000,
         brand = settings.get('count/brand'),
         toggles = settings.get('count/stats', {});
 
