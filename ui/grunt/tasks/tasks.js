@@ -30,9 +30,9 @@ module.exports = function (grunt) {
     grunt.registerTask('copy_build', grunt.util.runPrefixedSubtasksFor('copy', 'build'));
 
     // steps to build the ui (ready for development)
-    grunt.registerTask('build', ['lint', 'workaround_fetch', 'copy_build', 'compile_po', 'concat', 'newer:less']);
+    grunt.registerTask('build', ['lint', 'workaround_fetch', 'copy_build', 'compile_po', 'concat', 'version_txt', 'newer:less']);
     // create a package ready version of the ui (aka what jenkins does)
-    grunt.registerTask('dist:build', ['clean', 'copy_build', 'compile_po', 'concat', 'uglify', 'copy_dist', 'create_i18n_properties']);
+    grunt.registerTask('dist:build', ['clean', 'copy_build', 'compile_po', 'concat', 'uglify', 'version_txt', 'copy_dist', 'create_i18n_properties']);
 
     grunt.registerTask('force_update', ['bootjs', 'copy:build_base']);
 
