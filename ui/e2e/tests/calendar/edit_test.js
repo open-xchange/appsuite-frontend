@@ -160,7 +160,7 @@ Scenario('[C7451] Edit yearly series via doubleclick', async function (I, calend
     // select the next 16.th december via the mini calendar
     const diffMonth = time.diff(moment().startOf('month'), 'months');
     for (let i = 0; i < diffMonth; i++) I.click('~Go to next month', calendar.locators.mini);
-    I.click(`~${time.format('l, dddd')}, CW ${time.week()}`, calendar.locators.mini);
+    I.click({ css: `[aria-label*="${time.format('l, dddd')}, CW ${time.week()}"]` }, calendar.locators.mini);
 
     I.clickToolbar('View');
     I.click('Week');

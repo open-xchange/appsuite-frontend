@@ -212,15 +212,10 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
     I.click('Create');
     I.waitForDetached('.io-ox-calendar-edit-window');
 
-    if (moment().isSame(date, 'week')) {
-        I.waitForVisible('.io-ox-sidepopup');
-        I.click('~Close', '.io-ox-sidepopup');
-    }
-
     I.say('Check next occurence');
     const diffMonth = date.diff(moment().startOf('month'), 'months');
     for (let i = 0; i < diffMonth; i++) I.click('~Go to next month', calendar.locators.mini);
-    I.click(`~${date.format('l, dddd')}, CW ${date.week()}`, calendar.locators.mini);
+    I.click({ css: `[aria-label*="${date.format('l, dddd')}, CW ${date.week()}"]` }, calendar.locators.mini);
     ['Workweek', 'Week', 'Day', 'Month'].forEach(perspective => calendar.withinPerspective(perspective, (locator) => {
         I.waitForVisible(locate('.appointment').inside(locator));
         I.see('Testappointment');
