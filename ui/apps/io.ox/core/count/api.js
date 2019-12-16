@@ -18,17 +18,18 @@ define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], func
 
     // we always need to expose the API even if tracking is disabled
     var api = _.extend({ queue: [], add: _.noop, uuid: uuids.randomUUID() }, Backbone.Events),
-        url = settings.get('count/url');
+        url = settings.get('count/url') || settings.get('tracker/url');
 
-    // having an URL means enabled, disable requires an explicit "false"
-    api.disabled = !url || settings.get('count/enabled') === false;
+    // having an URL means enabled, disable during dev by default
+    api.disabled = !url || !settings.get('count/enabled', !ox.debug);
 
     // return mock/noop API so that consumers don't have to worry
     if (api.disabled) return api;
 
     var delay = parseInt(settings.get('count/delay', 15), 10) * 1000,
-        brand = settings.get('count/brand'),
-        toggles = settings.get('count/stats', {});
+        brand = settings.get('count/brand') || settings.get('tracker/brand'),
+        toggles = settings.get('count/stats', {}),
+        intervalId;
 
     // overwrite with real function
     api.add = function (stat, data) {
@@ -43,14 +44,13 @@ define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], func
         return toggles[id] !== false;
     };
 
-    var intervalId = setInterval(function () {
+    function send() {
         if (api.queue.length === 0) return;
         var data = api.queue;
         api.queue = [];
         api.trigger('sync', data);
         if (url === 'debug') return console.debug('count', data);
-        $.post({ url: url, contentType: 'application/json', data: JSON.stringify(data), timeout: 10000 })
-        .fail(function (xhr) {
+        $.post({ url: url, contentType: 'application/json', data: JSON.stringify(data), timeout: 10000 }).fail(function (xhr) {
             // stop in case of 403 Forbidden (which means we have an invalid API token)
             if (xhr.status === 403) {
                 api.trigger('forbidden');
@@ -60,7 +60,13 @@ define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], func
             api.trigger('fail', data);
             [].push.apply(api.queue, data);
         });
-    }, delay);
+    }
+
+    // send first payload after 3s, then use longer interval
+    setTimeout(function () {
+        send();
+        intervalId = setInterval(send, delay);
+    }, 3000);
 
     return api;
 });
