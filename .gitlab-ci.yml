@@ -92,10 +92,6 @@ build update-themes:
       - gitlab-ci/*
       - .gitlab-ci.yml
 
-build ui docker image:
-  dependencies:
-    - build ui
-
 test ui:
   image: gitlab.open-xchange.com:4567/frontend/dev_env/browser:latest
   variables:
