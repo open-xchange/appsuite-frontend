@@ -1,4 +1,5 @@
 import com.openexchange.build.git.GitExtension
+import com.openexchange.build.git.GitExtension.NewestVersionTagResult.Success
 
 buildscript {
     repositories {
@@ -8,9 +9,9 @@ buildscript {
     }
     dependencies {
         classpath("com.openexchange.build", "project-type-scanner", "[1.2.1,2.0[")
-        classpath("com.openexchange.build", "gradle-git", "[2.2.0,3.0[")
+        classpath("com.openexchange.build", "gradle-git", "[3.0.1,4.0[")
         classpath("com.openexchange.build", "licensing")
-        classpath("com.openexchange.build", "packaging", "[3.1.0,4.0[")
+        classpath("com.openexchange.build", "packaging", "[4.0,5.0[")
         classpath("com.openexchange.build", "opensuse-build-service-client", "[1.5.0,2.0[")
     }
 }
@@ -47,7 +48,7 @@ configure<com.openexchange.obs.gradle.plugin.BuildserviceExtension> {
         val branch = gitExtension.branchName
         val regex = Regex("[^A-Za-z0-9-_]")
         val extension = when {
-            versionTag?.commitDistance == 0L -> "${versionTag.versionWithoutRevision}-rev${versionTag.revisionMajor}"
+            versionTag is Success && versionTag.versionTag.commitDistance == 0L -> "${versionTag.versionTag.versionWithoutRevision}-rev${versionTag.versionTag.revisionMajor}"
             branch.startsWith("master") or branch.startsWith("release") -> branch
             System.getenv("OBS_PROJECT_EXT") != null -> System.getenv("OBS_PROJECT_EXT")
             else -> regex.replace(branch, "_")
