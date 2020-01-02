@@ -532,7 +532,7 @@ define('io.ox/mail/util', [
                     // prepend in sender block (detail), 'via' hint for different mail server
                     case 'icon':
                         // always show if status matches level
-                        return matches(/(fail|suspicious|pass|trusted)/, status, level);
+                        return matches(/(fail|suspicious|trusted)/, status, level);
                     case 'via':
                         // always display "Via <real-domain>" if there is an authenticated domain
                         // that differs from the "From" header domain
