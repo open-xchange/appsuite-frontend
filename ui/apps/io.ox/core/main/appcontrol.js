@@ -360,6 +360,16 @@ define('io.ox/core/main/appcontrol', [
                         target: '_blank'
                     })
                 );
+            } else if (ox.tabHandlingEnabled && (/^io\.ox\/office\/portal/).test(action)) {
+                var tabAPI = require('io.ox/core/api/tab'),
+                    appType = action.substring(0, 'io.ox/office/portal/'.length),
+                    tabUrl =  tabAPI.createUrl({ app: action }, { exclude: 'folder', suffix: 'office?app=' + appType });
+                logo.wrap(
+                    $('<a class="btn btn-link logo-btn">').attr({
+                        href: tabUrl,
+                        target: '_blank'
+                    })
+                );
             } else if (action && !ox.openedInBrowserTab) {
                 // ox.openedInBrowserTab is only true, when ox.tabHandlingEnabled is true and the window is no a core tab
                 var autoStart = settings.get('autoStart');
