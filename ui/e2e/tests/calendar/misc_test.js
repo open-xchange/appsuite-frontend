@@ -198,13 +198,13 @@ Scenario.skip('[C236795] Visibility Flags', (I, calendar) => {
 });
 
 Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (I) => {
-    // 1. Sign in, switch to calendar
+    I.say('1. Sign in, switch to calendar');
     I.login(['app=io.ox/calendar&perspective=week:week']);
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.waitForElement('.window-sidepanel .date-picker');
 
-    // 2. Switch month by using the arrows of the mini calendar on the left (located inside the folder tree)
     // Expected Result: The current month switches as you click the "previous" or "next" month button
+    I.say('2. Switch month by using the arrows of the mini calendar on the left');
     const currentMonth = moment().format('MMMM YYYY'),
         nextMonth = moment().add(1, 'month').format('MMMM YYYY'),
         previousMonth = moment().subtract(1, 'month').format('MMMM YYYY');
@@ -216,36 +216,34 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
     I.click('~Go to previous month');
     I.see(previousMonth, '.window-sidepanel .date-picker');
 
-    // 3. Click the name of the current calendar month
-    const currentYear = moment().format('YYYY'),
+    I.say('3. Click the name of the current calendar month');
+    const year = moment().subtract(1, 'month').format('YYYY'),
         months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
     I.click(previousMonth, '.window-sidepanel .date-picker');
-    I.seeElement(locate('span').withText(currentYear).inside('.window-sidepanel .date-picker'));
+    I.seeElement(locate('span').withText(year).inside('.window-sidepanel .date-picker'));
 
     // Expected Result: The mini calendar show all 12 months
     months.forEach(month => I.see(`${month.slice(0, 3)}`, '.window-sidepanel .date-picker .grid'));
 
-    // 4. Click the number of the current year
-    const minYear = Math.floor(currentYear / 10) * 10,
+    I.say('4. Click the number of the current year');
+    const minYear = Math.floor(year / 10) * 10,
         maxYear = minYear + 12,
         years = _.range(minYear, maxYear);
-
-    I.click(currentYear, '.window-sidepanel .date-picker');
+    I.click(year, '.window-sidepanel .date-picker');
     I.seeElement(locate('span').withText(`${minYear} - ${maxYear}`).inside('.window-sidepanel .date-picker'));
 
     // Expected Results: The mini calendar show all years from 2010-2021
     years.forEach(year => I.see(`${year}`, '.window-sidepanel .date-picker .grid'));
 
-    // 5. Select "2018" as year
     // minyear + 8 is a bit more futureproof as hardcoded 2018
+    I.say('5. Select "2018" as year');
     I.click(`#year_${minYear + 8}`, '.window-sidepanel .date-picker .grid');
     I.seeElement(locate('span').withText(`${minYear + 8}`).inside('.window-sidepanel .date-picker'));
 
     // All months are displayed of 2018 (as in step 3)
     months.forEach(month => I.see(`${month.slice(0, 3)}`, '.window-sidepanel .date-picker .grid'));
 
-    // 6. Select a month
+    I.say('6. Select a month');
     I.click(`#month_${minYear + 8}-07`, '.window-sidepanel .date-picker .grid');
     I.seeElement(locate('span').withText(`July ${minYear + 8}`).inside('.window-sidepanel .date-picker'));
 
