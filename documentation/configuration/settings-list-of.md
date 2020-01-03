@@ -313,6 +313,9 @@ Show requests for read receipts.
 <config>io.ox/mail//autoselectMailOnStart=`<bool>`</config>
 Automatically select first read mail on mail app start. (Default `true`)
 
+<config>io.ox/mail//features/textPreview=`<bool>`</config>
+Fetch mail teaser texts if available, only supported by Dovecot for primary accounts. Also needs MW config. (Default `true`)
+
 ## User Preferences:
 
 <config>io.ox/mail//removeDeletedPermanently=`<bool>`</config>
