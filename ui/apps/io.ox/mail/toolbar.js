@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/toolbar', [
+define.async('io.ox/mail/toolbar', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
@@ -20,18 +20,20 @@ define('io.ox/mail/toolbar', [
     'io.ox/core/capabilities',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/toolbar',
+    'io.ox/core/api/mailfilter',
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/mail/actions',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, settings, mailSettings, gt) {
+], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, mailfilter, settings, mailSettings, gt) {
 
     'use strict';
 
     // define links for classic toolbar
-    var point = ext.point('io.ox/mail/classic-toolbar/links');
+    var point = ext.point('io.ox/mail/classic-toolbar/links'),
+        moduleReady = $.when();
 
     var meta = {
         //
@@ -257,6 +259,17 @@ define('io.ox/mail/toolbar', [
         ref: 'io.ox/mail/classic-toolbar/links'
     }));
 
+    var hasVacationNoticeAction;
+    (function () {
+        var configReady = mailfilter.getConfig().then(function (config) {
+            hasVacationNoticeAction = !!_(config.actioncmds).findWhere({ id: 'vacation' });
+        });
+
+        moduleReady = moduleReady.then(function () {
+            return configReady;
+        });
+    })();
+
     // view dropdown
     ext.point('io.ox/mail/classic-toolbar').extend({
         id: 'view-dropdown',
@@ -302,7 +315,7 @@ define('io.ox/mail/toolbar', [
             .option('alwaysShowSize', true, gt('Message size'), { group: true })
             .divider();
 
-            if (capabilities.has('mailfilter_v2')) {
+            if (capabilities.has('mailfilter_v2') && hasVacationNoticeAction) {
                 dropdown.link('vacation-notice', gt('Vacation notice'), onOpenVacationNotice);
             }
 
@@ -459,4 +472,6 @@ define('io.ox/mail/toolbar', [
             });
         }
     });
+
+    return moduleReady;
 });
