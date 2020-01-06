@@ -313,7 +313,7 @@ define('io.ox/tasks/api', [
             response = obj;
 
             //get fresh data
-            return api.get(task);
+            return api.get({ folder: task.folder_id, id: task.id });
         }).then(function (newData) {
             // fill caches
             task = newData;
