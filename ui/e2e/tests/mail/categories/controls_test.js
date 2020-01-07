@@ -71,7 +71,7 @@ Scenario('[C85626] Mail categories can be renamed', function (I) {
     I.waitForVisible('.io-ox-mail-window');
 
     A.openConfiguration(I);
-    I.seeElement(SELECTORS.dialog);
+    I.waitForElement(SELECTORS.dialog);
     within(SELECTORS.dialog, async () => {
         I.say('Rename categories', 'blue');
         I.fillField({ css: '[data-id="uc1"] input[type="text"]' }, 'C85626-01');
