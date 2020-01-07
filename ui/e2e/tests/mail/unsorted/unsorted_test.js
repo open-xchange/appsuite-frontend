@@ -529,10 +529,11 @@ Scenario('[C12118] Remove recipients', async function (I, users, mail) {
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     mail.newMail();
+    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.click('CC');
-    I.waitForElement({ css: '.io-ox-mail-compose .cc .tt-input' }, 5);
+    I.waitForVisible({ css: '.io-ox-mail-compose .cc .tt-input' }, 5);
     I.click('BCC');
-    I.waitForElement({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
+    I.waitForVisible({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
     const fields = ['to', 'cc', 'bcc'];
     fields.forEach(function (field) {
         I.fillField('.io-ox-mail-compose div[data-extension-id="' + field + '"] input.tt-input', 'super01@ox.com');
