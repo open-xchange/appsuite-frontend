@@ -42,7 +42,7 @@ define('io.ox/mail/actions/source', [
 
     function setSource(data, dialog) {
         return api.getSource(data).done(function (src) {
-            dialog.find('textarea.mail-source-view').val(src || '');
+            dialog.find('textarea.mail-source-view').val(src || '').scrollTop();
             dialog.find('.modal-body').css({ visibility: 'visible' });
         });
     }
@@ -50,9 +50,10 @@ define('io.ox/mail/actions/source', [
     return function (baton) {
         var data = baton.first();
         require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-            new ModalDialog({ title: gt('Mail source') + ': ' + (data.subject || ''), width: 700, addClass: 'mail-source-dialog' })
+            new ModalDialog({ title: gt('Mail source') + ': ' + (data.subject || ''), width: 700, autoFocusOnIdle: false, addClass: 'mail-source-dialog' })
                 .addButton({ label: gt('Close'), action: 'close' })
                 .build(function () {
+                    var self = this;
                     this.$el.addClass('mail-source-dialog');
                     this.$body.append(
                         this.$source = $('<textarea class="form-control mail-source-view" readonly="readonly" aria-labelledby="mail-source">')
@@ -65,7 +66,10 @@ define('io.ox/mail/actions/source', [
                     $.when(
                         setSource(data, this.$el),
                         setAuthentification(data, this.$el)
-                    ).done(this.idle.bind(this));
+                    ).done(function () {
+                        self.idle();
+                        self.$el.find('textarea.mail-source-view').focus().scrollTop(0);
+                    });
                 })
                 .busy(true)
                 .open();
