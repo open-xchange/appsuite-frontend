@@ -277,9 +277,14 @@ define('io.ox/calendar/perspective', [
 
                                 updateModel.set({
                                     startDate: model.get('startDate'),
-                                    endDate: model.get('endDate'),
-                                    rrule: model.get('rrule')
+                                    endDate: model.get('endDate')
                                 });
+
+                                // only if there is a new rrule set (if this and future is called on an exception we don't want to use the rrule from the master)
+                                if (model.get('rrule')) {
+                                    updateModel.set('rrule', model.get('rrule'));
+                                }
+
                                 util.updateRecurrenceDate(updateModel, oldStartDate);
                                 apiUpdate(updateModel, _.extend(util.getCurrentRangeOptions(), {
                                     checkConflicts: true,
