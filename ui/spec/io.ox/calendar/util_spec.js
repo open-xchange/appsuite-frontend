@@ -703,4 +703,40 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
         });
     });
 
+    describe('createUpdateData', function () {
+        it('should work with all recurrence formats', function () {
+            var master = new models.Model({
+                    id: '1234567',
+                    startDate: { tzid: 'Europe/Berlin', value: '20200107T120000' },
+                    endDate: { tzid: 'Europe/Berlin', value: '20200107T130000' }
+                }),
+                exception = new models.Model({
+                    id: '1234568',
+                    recurrenceId: '20200108T110000Z'
+                });
+
+            util.createUpdateData(master, exception).should.deep.equal({
+                id: '1234567',
+                startDate: { tzid: 'Europe/Berlin', value: '20200108T120000' },
+                endDate: { tzid: 'Europe/Berlin', value: '20200108T130000' },
+                recurrenceId: '20200108T110000Z'
+            });
+
+            exception.set('recurrenceId', '20200108T110000');
+            util.createUpdateData(master, exception).should.deep.equal({
+                id: '1234567',
+                startDate: { tzid: 'Europe/Berlin', value: '20200108T110000' },
+                endDate: { tzid: 'Europe/Berlin', value: '20200108T120000' },
+                recurrenceId: '20200108T110000'
+            });
+
+            exception.set('recurrenceId', 'Europe/Berlin:20200108T110000');
+            util.createUpdateData(master, exception).should.deep.equal({
+                id: '1234567',
+                startDate: { tzid: 'Europe/Berlin', value: '20200108T110000' },
+                endDate: { tzid: 'Europe/Berlin', value: '20200108T120000' },
+                recurrenceId: 'Europe/Berlin:20200108T110000'
+            });
+        });
+    });
 });

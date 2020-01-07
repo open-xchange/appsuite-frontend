@@ -1388,15 +1388,17 @@ define('io.ox/calendar/util', [
             exception = exception instanceof Backbone.Model ? exception.attributes : exception;
 
             // deep copy
-            var result = JSON.parse(JSON.stringify(master));
+            var result = JSON.parse(JSON.stringify(master)),
+                // we have 4 possible formats for the recurrence id : Zulu, Date, dateTime, Timezone:localtime, see https://jira.open-xchange.com/browse/SCR-584
+                recurrenceId = _(exception.recurrenceId.split(':')).last();
 
             result.recurrenceId = exception.recurrenceId;
 
             // recreate dates
-            result.startDate.value = this.isAllday(master) ? moment(exception.recurrenceId).format('YYYYMMDD') : moment(exception.recurrenceId).tz(master.startDate.tzid).format('YYYYMMDD[T]HHmmss');
+            result.startDate.value = this.isAllday(master) ? moment(exception.recurrenceId).format('YYYYMMDD') : moment(recurrenceId).tz(master.startDate.tzid || moment().tz()).format('YYYYMMDD[T]HHmmss');
             // calculate duration and add it to startDate, then format
             result.endDate.value = this.isAllday(master) ? moment(moment(result.startDate.value).valueOf() + moment(master.endDate.value).valueOf() - moment(master.startDate.value).valueOf()).format('YYYYMMDD') :
-                moment.tz(moment(result.startDate.value).valueOf() + moment(master.endDate.value).valueOf() - moment(master.startDate.value).valueOf(), result.startDate.tzid).format('YYYYMMDD[T]HHmmss');
+                moment.tz(moment(result.startDate.value).valueOf() + moment(master.endDate.value).valueOf() - moment(master.startDate.value).valueOf(), result.startDate.tzid || moment().tz()).format('YYYYMMDD[T]HHmmss');
 
             return result;
         },
