@@ -261,13 +261,20 @@ define.async('io.ox/mail/toolbar', [
 
     var hasVacationNoticeAction;
     (function () {
-        var configReady = mailfilter.getConfig().then(function (config) {
+        var configReady = mailfilter.getConfig().then(function doneFilter(config) {
             hasVacationNoticeAction = !!_(config.actioncmds).findWhere({ id: 'vacation' });
+        }, function failFilter() {
+            hasVacationNoticeAction = false;
         });
 
         moduleReady = moduleReady.then(function () {
             return configReady;
         });
+
+        return function () {
+            if (!capabilities.has('mailfilter_v2') || !hasVacationNoticeAction) return;
+            this.link('vacation-notice', gt('Vacation notice'), onOpenVacationNotice);
+        };
     })();
 
     // view dropdown
