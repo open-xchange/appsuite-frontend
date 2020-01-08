@@ -181,13 +181,6 @@ module.exports.config = {
         });
     },
     teardown: function () {
-        const helper = new (require('@open-xchange/codecept-helper').helper)();
-        defaultContext.remove = function (auth) {
-            helper.executeSoapRequest('OXContextService', 'delete', {
-                ctx: { id: this.ctxdata.id },
-                auth: auth || this.auth
-            });
-        };
         if (defaultContext.id !== 10) defaultContext.remove();
         //HACK: defer killing selenium, because it's still needed for a few ms
         setTimeout(function () {
