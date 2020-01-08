@@ -282,15 +282,13 @@ define('io.ox/core/tk/contenteditable-editor', [
         // for empty lines we get no valid rect
         if (top === 0) {
             if (selection.modify) {
-                // copy the selection prior to changing it
-                var prevRange = selection.getRangeAt(0).cloneRange();
                 selection.modify('extend', 'backward', 'character');
                 range = selection.getRangeAt(0);
                 rect = range.getBoundingClientRect();
+                range.collapse();
                 top = rect.top + rect.height;
-                // restore selection to previous state
-                selection.removeAllRanges();
-                selection.addRange(prevRange);
+                // Safari will keep the selection if we do not collapse it
+                selection.collapseToEnd();
             } else {
                 var container = range.commonAncestorContainer;
                 top = $(container).offset().top + container.clientHeight;
