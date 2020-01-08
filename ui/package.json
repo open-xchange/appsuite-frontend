@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@open-xchange/appserver": "^0.8.0-pre3",
-    "@open-xchange/codecept-helper": "https://gitlab.open-xchange.com/frontend/codecept-helpers.git#feature/puppeteer",
+    "@open-xchange/codecept-helper": "^0.3.0",
     "@open-xchange/shared-grunt-config": "^0.15.0-pre5",
     "assemble-less": "^0.7.0",
     "chai": "^4.0.2",
