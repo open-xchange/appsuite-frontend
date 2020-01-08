@@ -46,6 +46,8 @@ define('io.ox/files/actions/delete', [
                     list.length
                 ) + '\n' + e.error);
             }
+
+            api.trigger('reload:listview');
         });
 
         // delete folders
