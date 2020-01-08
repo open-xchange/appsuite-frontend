@@ -334,8 +334,10 @@ define.async('io.ox/mail/toolbar', [
         index: 400,
         draw: (function () {
             var hasVacationNoticeAction,
-                configReady = mailfilter.getConfig().then(function (config) {
+                configReady = mailfilter.getConfig().then(function doneFilter(config) {
                     hasVacationNoticeAction = !!_(config.actioncmds).findWhere({ id: 'vacation' });
+                }, function failFilter() {
+                    hasVacationNoticeAction = false;
                 });
 
             moduleReady = moduleReady.then(function () {
