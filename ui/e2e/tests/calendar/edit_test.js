@@ -510,6 +510,7 @@ Scenario('[C7470] Delete a recurring appointment', async function (I) {
     I.click('.appointment', '.page.current');
     I.waitForVisible('.io-ox-sidepopup');
 
+    I.wait(0.2); // gentle wait for event listeners
     I.retry(5).click('Delete');
 
     I.waitForText('Do you want to delete all appointments of the series or just this appointment?');
