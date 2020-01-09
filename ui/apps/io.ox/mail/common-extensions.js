@@ -691,6 +691,23 @@ define('io.ox/mail/common-extensions', [
             flagPicker.draw(this, baton);
         },
 
+        unreadIndicator: function (baton) {
+            if (util.isEmbedded(baton.data)) return;
+            var self = this;
+
+            folderAPI.get(baton.data.folder_id).done(function (data) {
+                // see if the user is allowed to modify the read/unread status
+                // always allows for unified folder
+                var showUnreadIndicator = folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data);
+                if (!showUnreadIndicator) return;
+                self.append(
+                    $('<span class="unread-toggle">')
+                    .attr('aria-label', gt('Marked as unread'))
+                    .append($('<i class="fa fa-fircle" aria-hidden="true">'))
+                );
+            });
+        },
+
         unreadToggle: (function () {
 
             function makeAccessible(data, index, node) {

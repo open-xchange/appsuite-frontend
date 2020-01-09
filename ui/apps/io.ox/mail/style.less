@@ -1390,22 +1390,30 @@ body.dragging .categories-toolbar-container {
 
     // single mail: in a detail view or as list item (.thread-view-list)
     .mail-detail {
+        @padding-h: 15px;
+        @padding-v: 10px;
 
         list-style-type: none;
         border-bottom: 0;
 
         .contact-picture { display: none; }
 
+        &.unread .unread-toggle {
+            visibility: visible;
+        }
+
         .unread-toggle {
-            display: inline-block;
+            visibility: hidden;
             position: relative;
             top: 0;
             left: auto;
             float: right;
             bottom: auto;
             margin: 0;
+            padding-top: (@padding-v + 7);
+            padding-right: (@padding-h);
         }
-
+        
         .attachments .io-ox-inline-links {
             font-size: @phone-font-size;
             margin-left: 0;
@@ -1417,9 +1425,6 @@ body.dragging .categories-toolbar-container {
         }
 
         .detail-view-header {
-
-            @padding-h: 15px;
-            @padding-v: 10px;
 
             padding: (@padding-v + 4) 0 (@padding-v + 5) 0;
             font-size: @phone-font-size;
