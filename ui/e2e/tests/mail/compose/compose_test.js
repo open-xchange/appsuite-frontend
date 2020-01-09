@@ -234,8 +234,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.fillField('Title', 'Testdocument.txt');
     I.fillField('Note', 'Some content');
     I.click('Save');
-    I.waitForElement('.window-footer button[disabled]', 5);
-    I.waitForText('Save', 5, '.window-footer button');
+    I.waitForNetworkTraffic();
     I.click('Close');
 
     I.say('Add attachment to new draft');
