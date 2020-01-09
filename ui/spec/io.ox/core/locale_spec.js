@@ -163,13 +163,13 @@ define([
 
         it('returns valid default locale', function () {
             _.setCookie('locale', 'de_DE');
-            ox.serverConfig.languages = _(locale.meta.locales).omit('de_DE');
+            ox.serverConfig.languages = _(locale.meta.getLocales()).omit('de_DE');
             expect(locale.meta.getValidDefaultLocale()).to.equal('en_US');
         });
 
         it('returns valid default locale if en_US is not listed', function () {
             _.setCookie('locale', 'en_US');
-            ox.serverConfig.languages = _(locale.meta.locales).omit('en_US');
+            ox.serverConfig.languages = _(locale.meta.getLocales()).omit('en_US');
             expect(locale.meta.getValidDefaultLocale()).to.equal('ca_ES');
         });
 

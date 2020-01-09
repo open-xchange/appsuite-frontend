@@ -260,8 +260,12 @@ define('io.ox/core/locale/meta', function () {
         return mapToMoment[localeId] || 'en';
     }
 
+    function getLocales() {
+        return (ox.serverConfig && ox.serverConfig.locales) || locales;
+    }
+
     function getSupportedLocales() {
-        return _(locales)
+        return _(getLocales())
             .map(function (name, id) {
                 return { id: id, name: name };
             })
@@ -276,20 +280,22 @@ define('io.ox/core/locale/meta', function () {
     function isSupportedLocale(id) {
         // server down
         if (_.isEmpty(ox.serverConfig)) return false;
-        // check against server-side list of available translations
-        var hash = ox.serverConfig.languages;
-        if (hash[id]) return true;
-        if (hash.de_DE && /^de_(AT|CH)$/.test(id)) return true;
-        if (hash.en_GB && /^en_(GB|AU|CA|DE|IE|NZ|SG|ZA)$/.test(id)) return true;
-        if (hash.es_MX && /^es_(AR|BO|CL|CO|CR|DO|EC|SV|GT|HN|NI|PA|PE|PR|US)$/.test(id)) return true;
-        if (hash.fr_FR && /^fr_(CH|BE)$/.test(id)) return true;
-        if (hash.it_IT && id === 'it_CH') return true;
-        if (hash.nl_NL && id === 'nl_BE') return true;
+        // check against server-side list of available languages and locales
+        // also checking server config locales to support whitelisting and custom labels (see also Bug 68665)
+        var a = ox.serverConfig.languages,
+            b = ox.serverConfig.locales || a;
+        if (a[id] && b[id]) return true;
+        if (a.de_DE && b.de_DE && /^de_(AT|CH)$/.test(id)) return true;
+        if (a.en_GB && b.en_GB && /^en_(GB|AU|CA|DE|IE|NZ|SG|ZA)$/.test(id)) return true;
+        if (a.es_MX && b.es_MX && /^es_(AR|BO|CL|CO|CR|DO|EC|SV|GT|HN|NI|PA|PE|PR|US)$/.test(id)) return true;
+        if (a.fr_FR && b.fr_FR && /^fr_(CH|BE)$/.test(id)) return true;
+        if (a.it_IT && b.it_IT && id === 'it_CH') return true;
+        if (a.nl_NL && b.nl_NL && id === 'nl_BE') return true;
         return false;
     }
 
     function getLocaleName(id) {
-        return locales[id] || '';
+        return getLocales()[id] || '';
     }
 
     function deriveSupportedLanguageFromLocale(localeId) {
@@ -320,7 +326,7 @@ define('io.ox/core/locale/meta', function () {
         // compare against existing locales
         var split = locale.split('-');
         locale = split[0] + '_' + (split[1] || split[0]).toUpperCase();
-        return ([locale] in locales) ? locale : 'en_US';
+        return locale in getLocales() ? locale : 'en_US';
     }
 
     function getValidDefaultLocale() {
@@ -329,7 +335,7 @@ define('io.ox/core/locale/meta', function () {
         // server down, so no config available, return en_US
         if (_.isEmpty(ox.serverConfig)) return 'en_US';
         // special case: even en_US is not listed
-        var list = ox.serverConfig.languages;
+        var list = ox.serverConfig.locales || ox.serverConfig.languages;
         if (list.en_US) return 'en_US';
         // return first valid locale with en_US as ultimate default
         return _(list).keys()[0] || 'en_US';
@@ -355,7 +361,7 @@ define('io.ox/core/locale/meta', function () {
     }
 
     return {
-        locales: locales,
+        getLocales: getLocales,
         dateFormats: dateFormats,
         numberFormats: numberFormats,
         grouping: grouping,
