@@ -76,7 +76,8 @@ define('io.ox/calendar/perspective', [
                 .listenTo(this.collection, 'add', this.onAddAppointment)
                 .listenTo(this.collection, 'change', this.onChangeAppointment)
                 .listenTo(this.collection, 'remove', this.onRemoveAppointment)
-                .listenTo(this.collection, 'reset', this.onResetAppointments);
+                .listenTo(this.collection, 'reset', this.onResetAppointments)
+                .listenTo(this.collection, 'load:fail', this.onLoadFail);
         },
 
         onAddAppointment: $.noop,
@@ -85,6 +86,14 @@ define('io.ox/calendar/perspective', [
         onResetAppointments: $.noop,
 
         getName: $.noop,
+
+        onLoadFail: function (err) {
+            // see Bug 68641
+            if (err.code === 'CAL-5072') {
+                //#.Error message shown to user if there are too many selected appointments in a timeframe
+                yell('error', gt('Your current selection contains too many appointments for the chosen timeframe.'));
+            }
+        },
 
         showAppointment: (function () {
             function failHandler(e) {

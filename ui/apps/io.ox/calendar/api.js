@@ -139,11 +139,14 @@ define('io.ox/calendar/api', [
                         return result;
                     }).catch(function (err) {
                         if (err.code !== 'CAL-5072') throw err;
-
                         var start = moment(opt.params.rangeStart).utc(),
                             end = moment(opt.params.rangeEnd).utc(),
-                            middle = moment(start).add(end.diff(start, 'ms') / 2, 'ms');
-
+                            diff = end.diff(start, 'ms'),
+                            middle = moment(start).add(diff / 2, 'ms');
+                        // stop requests when timeframe is smaller than an hour, see Bug 68641
+                        if (diff <= 3600000) {
+                            throw err;
+                        }
                         return request(getParams(opt, start, middle), method).then(function (data1) {
                             return request(getParams(opt, middle, end), method).then(function (data2) {
                                 if (!_.isArray(data1)) return merge(data1, data2);
