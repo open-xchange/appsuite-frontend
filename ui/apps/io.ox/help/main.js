@@ -30,7 +30,7 @@ define('io.ox/help/main', [
             base = href.base || base;
             href = href.target || href;
         }
-        return base + '/l10n/' + ox.locale + '/' + href;
+        return base + '/l10n/' + ox.language + '/' + href;
     }
 
     function createInstance(options) {
