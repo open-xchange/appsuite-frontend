@@ -138,7 +138,7 @@ Scenario('remove mail from thread', async (I, users) => {
     I.waitForText('Reply', undefined, '.inline-toolbar');
     I.click('Reply');
     I.waitForVisible('.window-blocker.io-ox-busy');
-    I.waitForInvisible('.window-blocker.io-ox-busy');
+    I.waitForInvisible('.window-blocker.io-ox-busy', 15);
 
     I.click('Send');
     // wait a little for everything to be sent
@@ -155,6 +155,7 @@ Scenario('remove mail from thread', async (I, users) => {
     // make sure nothing is currently loading
     I.waitForElement('.fa-refresh.fa-spin-paused');
 
+    I.waitForElement('.mail-detail.expanded [data-toolbar]');
     I.click('Delete', '.mail-detail.expanded [data-toolbar]');
 
     // wait for refresh here, because the middleware needs to send new data
