@@ -173,8 +173,8 @@ define('io.ox/core/tk/list', [
             this.$el.scrollTop(0);
         },
 
-        renderNotification: function (type) {
-            var baton = ext.Baton({ app: this.app, options: this.options, listView: this }),
+        renderNotification: function (type, error) {
+            var baton = ext.Baton({ app: this.app, options: this.options, listView: this, error: error }),
                 point = ext.point(this.ref + '/notification/' + type),
                 isEmpty = !this.collection.length,
                 $notification = this.$('.notification').attr('role', type === 'error' ? 'alert' : 'presentation').empty();
@@ -188,9 +188,9 @@ define('io.ox/core/tk/list', [
             this.renderNotification('empty');
         },
 
-        renderError: function () {
+        renderError: function (error) {
             this.idle();
-            this.renderNotification('error');
+            this.renderNotification('error', error);
         },
 
         onReset: function () {

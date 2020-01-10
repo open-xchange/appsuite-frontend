@@ -746,6 +746,8 @@ define('io.ox/mail/detail/view', [
                 $('<p>').text(e.error),
                 $('<a href="#" role="button" data-action="retry">').text(gt('Retry'))
             );
+            // for counting user facing error
+            ox.trigger('yell:error', e);
         },
 
         toggle: function (state) {

@@ -411,6 +411,8 @@ define('io.ox/mail/listview', [
                     .text(gt('Retry'))
                     .on('click', { baton: baton }, retry)
             );
+            // trigger event to count a user facing error
+            ox.trigger('yell:error', baton.error);
         }
     });
 
