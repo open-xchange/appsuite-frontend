@@ -41,8 +41,8 @@ The package installs the file `/opt/open-xchange/etc/settings/open-xchange-dynam
 | `mainColor`           | `#283f73`             | dark       | The main highlight color. Setting only this variable might already be enough.
 | `linkColor`           | same as `mainColor`   | dark       | Text color for links and border-less buttons.
 | `logoURL`             |                       |            | URL of the logo in the top left corner of the top bar.
-| `logoWidth`           | `auto`                |            | Optional width of the logo as number of pixels or any CSS length unit. For best display on high-resolution screens, it is recommended to use a bigger image and specify a smaller size here.
-| `logoHeight`          | `auto`                |            | Optional height of the logo as number of pixels or any CSS length unit. The maximum value is 64. For best display on high-resolution screens, it is recommended to use a bigger image and specify a smaller size here.
+| `logoWidth`           | `60`                  |            | Width of the logo as number of pixels or any CSS length unit. Set to `auto` to use the native width of the image. For best display on high-resolution screens, it is recommended to use a bigger image and specify a smaller size here.
+| `logoHeight`          | `auto`                |            | Optional height of the logo as number of pixels or any CSS length unit. The maximum value is 64. Leave as `auto` to scale according to the specified width while preserving the aspect ratio. For best display on high-resolution screens, it is recommended to use a bigger image and specify either `auto` or a smaller size here.
 | `topbarBackground`    | same as `mainColor`   | dark       | Background color of the top bar.
 | `topbarHover`         | `rgba(0, 0, 0, 0.3)`  | dark       | Background of an item in the top bar when it has the keyboard focus, the mouse hovers it, or it is active.
 | `listSelected`        | `#ddd`                | light      | Background of selected items in the list view when the list view does not have the keyboard focus.
