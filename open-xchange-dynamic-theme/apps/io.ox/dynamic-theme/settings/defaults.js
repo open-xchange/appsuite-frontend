@@ -5,7 +5,7 @@ define('io.ox/dynamic-theme/settings/defaults', {
     loginColor: '#1f3d66',
     headerPrefixColor: '#6cbafc',
     headerColor: '#fff',
-    logoWidth: 'auto',
+    logoWidth: 60,
     logoHeight: 'auto',
     topbarBackground: '@io-ox-dynamic-theme-mainColor',
     topbarHover: 'rgba(0, 0, 0, 0.3)',
