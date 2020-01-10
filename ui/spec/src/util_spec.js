@@ -98,6 +98,47 @@ define([], function () {
             });
         });
 
+        describe('_.lfo', function () {
+
+            it('ensure scenario works', function () {
+                var resolveorder = [],
+                    resolve = done.bind(resolveorder);
+                return $.when(
+                    resolveAfter(1, 30).then(resolve),
+                    resolveAfter(2, 20).then(resolve),
+                    resolveAfter(3, 10).then(resolve)
+                ).then(function () {
+                    expect(resolveorder).to.deep.equal([3, 2, 1]);
+                });
+            });
+
+            it('ensures only last function invocation resolves', function () {
+                var resolveorder = [],
+                    resolve = done.bind(resolveorder);
+                // _.lfo Works with non-anonymous functions only
+                return $.when(
+                    resolveAfter(1, 30).then(_.lfo(resolve)),
+                    resolveAfter(2, 10).then(_.lfo(resolve)),
+                    resolveAfter(3, 20).then(_.lfo(resolve))
+                ).then(function () {
+                    expect(resolveorder).to.deep.equal([3]);
+                });
+            });
+
+            function resolveAfter(id, ms) {
+                var def = $.Deferred();
+                setTimeout(function () {
+                    def.resolve(id);
+                }, ms);
+                return def;
+            }
+
+            function done(id) {
+                this.push(id);
+            }
+
+        });
+
         describe('_.printf', function () {
             var str = 'The answer to life, the universe and everything is %1$s';
             it('should always return a string and ignore invalid args', function () {

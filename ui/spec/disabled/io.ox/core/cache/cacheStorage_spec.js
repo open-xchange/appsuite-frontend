@@ -163,11 +163,11 @@ define([
                     });
 
                     it('should initialize an empty cache', function (done) {
-                        $.when.apply([
+                        $.when(
                             this.cache1.keys(),
                             this.cache2.keys(),
                             this.cache3.keys()
-                        ]).then(function (keys1, keys2, keys3) {
+                        ).then(function (keys1, keys2, keys3) {
                             expect(keys1).to.be.empty;
                             expect(keys2).to.be.empty;
                             expect(keys3).to.be.empty;
