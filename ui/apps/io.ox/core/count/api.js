@@ -18,10 +18,11 @@ define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], func
 
     // we always need to expose the API even if tracking is disabled
     var api = _.extend({ queue: [], add: _.noop, uuid: uuids.randomUUID() }, Backbone.Events),
-        url = settings.get('count/url') || settings.get('tracker/url');
+        url = settings.get('count/url') || settings.get('tracker/url'),
+        enabled = url && !ox.debug && settings.get('count/enabled', true);
 
-    // having an URL means enabled, disable during dev by default
-    api.disabled = !url || !settings.get('count/enabled', !ox.debug);
+    // count/disabled is _only_ for dev purposes!
+    api.disabled = settings.get('count/disabled', !enabled);
 
     // return mock/noop API so that consumers don't have to worry
     if (api.disabled) return api;
