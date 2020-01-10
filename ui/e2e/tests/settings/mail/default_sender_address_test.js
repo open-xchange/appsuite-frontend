@@ -17,7 +17,7 @@ Feature('Settings > Mail');
 
 Before(async (users) => {
     var user = users.getRandom();
-    user.aliases = `${user.name}@${user.domain},foo@ox.io`;
+    user.aliases = [`${user.name}@${user.domain}`, 'foo@ox.io'];
     await users.create(user);
 });
 
@@ -34,6 +34,7 @@ Scenario('[C7781] Default sender address', async (I, users, contexts, mail) => {
     mail.newMail();
     I.click(`<${user.get('primaryEmail')}>`, '.mail-input');
     I.retry(5).click('Show names');
+    I.see('foo@ox.io');
     I.click('urbi@orbi.it');
     I.waitForVisible('.token-input.tt-input');
     I.fillField('To', user.get('primaryEmail'));
