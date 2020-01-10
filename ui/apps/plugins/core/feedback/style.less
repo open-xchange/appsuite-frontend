@@ -45,9 +45,15 @@
 .nps-rating {
 
     @score-color: #ccc;
-    @score-color-checked: @brand-primary;
+    @score-color-checked: @link-color;
 
     justify-content: space-between;
+    padding-top: 8px;
+
+    caption {
+        font-weight: 500;
+        line-height: 16px;
+    }
 
     label {
         padding-right: 4px;
@@ -69,7 +75,7 @@
     }
 
     input[type="radio"]:focus + .score {
-        text-shadow: 0 0 4px #000;
+        text-shadow: 0 0 4px @score-color-checked;
     }
 
 }

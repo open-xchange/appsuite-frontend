@@ -223,8 +223,9 @@ define('plugins/core/feedback/register', [
         },
 
         renderRating: function (value) {
+            var parsedValue = parseInt(value, 10);
             this.$('.score').each(function (index) {
-                $(this).toggleClass('checked', index <= value);
+                $(this).toggleClass('checked', index === parsedValue);
             });
         },
 
@@ -275,16 +276,17 @@ define('plugins/core/feedback/register', [
                 ratingView: StarRatingView,
                 title: gt('Please rate this product')
             },
-            modules: {
+            'star-rating-v1': {
                 ratingView: ModuleRatingView,
                 title: gt('Please rate the following application:')
             }
         },
-        dialogMode = settings.get('feedback/dialog', 'modules');
+        // url parameter for testing purpose only
+        dialogMode = _.url.hash('feedbackMode') || settings.get('feedback/mode', 'star-rating-v1');
 
     // make sure dialogMode is valid
     if (_(_(modes).keys()).indexOf(dialogMode) === -1) {
-        dialogMode = 'modules';
+        dialogMode = 'star-rating-v1';
     }
 
     function sendFeedback(data) {
