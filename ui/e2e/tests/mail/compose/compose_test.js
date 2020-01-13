@@ -211,7 +211,7 @@ Scenario('Compose with inline image, which is removed again', async function (I,
     I.dontSeeElement('.attachments');
 });
 
-Scenario('Compose with drivemail attachment and edit draft', async function (I, users, mail) {
+Scenario('Compose with drivemail attachment and edit draft', async function (I, users, mail, drive) {
     const [user] = users;
     const user2 = await users.create();
 
@@ -228,6 +228,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.login('app=io.ox/files');
 
     I.say('Create textfile in drive');
+    drive.waitForApp();
     I.clickToolbar('New');
     I.click('Add note');
     I.waitForVisible('.io-ox-editor');
@@ -239,6 +240,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
 
     I.say('Add attachment to new draft');
     I.openApp('Mail');
+    mail.waitForApp();
 
     // workflow 10: Compose with Drive Mail attachment
     mail.newMail();
