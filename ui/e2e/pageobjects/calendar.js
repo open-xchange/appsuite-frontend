@@ -71,7 +71,7 @@ module.exports = {
     deleteAppointment() {
         I.waitForText('Delete');
         I.click('Delete', '.io-ox-sidepopup .calendar-detail');
-        I.waitForText('Delete');
+        I.waitForVisible('.modal-footer .btn-primary');
         I.click('Delete', '.modal-dialog .modal-footer');
         I.waitForDetached('.modal');
     },
