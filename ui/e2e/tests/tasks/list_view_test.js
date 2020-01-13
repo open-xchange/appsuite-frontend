@@ -50,6 +50,7 @@ Scenario('check actions', async function (I, tasks) {
 
     I.waitForText('Best Task evor!!!11elf', 5, '.tasks-detailview');
     I.clickToolbar('Delete');
+    I.waitForVisible('.modal-footer');
     I.click('Delete', '.modal-footer');
     I.waitForVisible('.summary.empty');
     I.waitForDetached('.modal-backdrop.in');
