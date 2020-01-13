@@ -70,7 +70,7 @@ Scenario('[C114381] Sender address is shown in tooltip', async function (I, user
     I.say('Check to in "send objects"', 'blue');
     I.selectFolder('Sent');
     I.waitForVisible('.leftside .list-view .list-item .from');
-    I.see('C114381:sent');
+    I.waitForText('C114381:sent');
     let to = await getTooltipValue(I, { locator: '.leftside .list-view .list-item .from', attribute: 'title' });
     expect(to).to.be.equal(user2.get('primaryEmail'));
 
