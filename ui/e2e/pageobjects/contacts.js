@@ -51,9 +51,10 @@ module.exports = {
         if (input) I.fillField(field, input);
     },
     editMyContact() {
+        I.waitForVisible('.dropdown-toggle[aria-label="Support"]');
         I.waitForVisible('.contact-picture');
         I.click('.contact-picture');
-        I.waitForText('My contact data', 5, '.dropdown.open .dropdown-menu');
+        I.waitForText('My contact data', 30, '.dropdown.open .dropdown-menu');
         I.click('My contact data', '.dropdown.open .dropdown-menu');
         I.waitForVisible('.io-ox-contacts-edit-window');
     },
