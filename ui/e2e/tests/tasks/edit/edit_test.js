@@ -353,7 +353,7 @@ Scenario('[C7748] Remove an attachment from a Task', async function (I, tasks) {
     I.seeNumberOfElements('.file.io-ox-core-tk-attachment', 0);
     tasks.save();
     I.waitForText(testrailID, 10, '.tasks-detailview .title');
-    I.waitForDetached('.tasks-detailview .attachments-container');
+    I.waitForDetached('.tasks-detailview .attachments-container', 30);
 });
 
 Scenario('[C7749] Edit existing Task as participant', async function (I, users, tasks) {
