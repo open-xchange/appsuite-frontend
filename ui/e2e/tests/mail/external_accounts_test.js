@@ -22,13 +22,15 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C125352] No mail oauth service available', function (I) {
-    I.login();
-    I.openApp('Mail');
+Scenario('[C125352] No mail oauth service available', function (I, mail) {
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+
+    I.waitForText('Add mail account', 30, '.folder-tree .links.list-unstyled');
     I.click('Add mail account');
 
     ////Check to see whether mail account wizard is shown up
-    I.waitForElement('.add-mail-account-address');
+    I.waitForElement('.add-mail-account-address', 30);
     I.seeElement('.add-mail-account-password');
 });
 
