@@ -53,10 +53,6 @@ Scenario('[C114381] Sender address is shown in tooltip', async function (I, user
     const user1 = users[0];
     const user2 = users[1];
 
-    // USER1
-    I.say('Send mail and create draft', 'blue');
-    I.login('app=io.ox/mail');
-    console.log('>' + user1.get('primaryEmail'));
     await I.haveMail(getTestMail(user1, user2, {
         subject: 'C114381:sent',
         content: '<p style="background-color:#ccc">[C114381] Sender address is shown in draft tooltip</p>'
@@ -66,6 +62,11 @@ Scenario('[C114381] Sender address is shown in tooltip', async function (I, user
         content: '<p style="background-color:#ccc">[C114381] Sender address is shown in draft tooltip</p>',
         flags: 4
     }));
+
+    // USER1
+    I.say('Send mail and create draft', 'blue');
+    I.login('app=io.ox/mail');
+    console.log('>' + user1.get('primaryEmail'));
 
     I.say('Check to in "send objects"', 'blue');
     I.selectFolder('Sent');
