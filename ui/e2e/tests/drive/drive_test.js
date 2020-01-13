@@ -89,10 +89,12 @@ Scenario('[C45046] Upload new version', async function (I, drive) {
     await fs.promises.writeFile('build/e2e/C45046.txt', timestamp2);
     I.attachFile('.io-ox-viewer input.file-input', 'build/e2e/C45046.txt');
     I.click('Upload');
+    I.waitForNetworkTraffic();
     I.waitForText(timestamp2);
     I.wait(0.2);
+    I.waitForVisible('~Close viewer');
     I.retry(5).click('~Close viewer');
-    I.waitForDetached('.io-ox-viewer');
+    I.waitForDetached('.io-ox-viewer', 30);
 });
 
 Scenario('[C45048] Edit description', async function (I, drive) {
