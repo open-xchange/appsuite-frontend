@@ -1104,7 +1104,7 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users, calend
     I.retry(3).waitForElement({ css: `span[title="New appointment: ${subject}"]` });
 });
 
-Scenario('[C7455] Edit appointment by changing the timeframe', async function (I, users) {
+Scenario('[C7455] Edit appointment by changing the timeframe', async function (I, users, calendar) {
 
     //Create Appointment
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] }),
@@ -1123,7 +1123,7 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
     });
 
     I.login('app=io.ox/calendar&perspective=week:day');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    calendar.waitForApp();
 
     I.waitForVisible('.appointment');
     I.scrollTo('.page.current .appointment');

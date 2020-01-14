@@ -214,7 +214,7 @@ Scenario('[C73919] Copy a shared file to another folder', async function (I, use
     I.click('Copy');
     I.waitForText('Copy', 5, '.modal');
     I.pressKey('Arrow_Down');
-    I.click('Documents', '.modal');
+    I.retry(5).click('Documents', '.modal');
     I.waitForElement(locate('li.selected').withAttr({ 'aria-label': 'Documents' }).inside('.modal-body'));
     I.click('Copy', '.modal');
     I.waitForText('File has been copied', 5);
@@ -244,7 +244,7 @@ Scenario('[C73919] Copy a shared file to another folder', async function (I, use
     I.click('Shared files', '.detail-pane');
     I.waitForDetached('.busy-indicator.io-ox-busy');
     I.waitForText('document.txt');
-    I.click(locate('.io-ox-files-main .list-view li').withText('document.txt'));
+    I.retry(5).click(locate('.io-ox-files-main .list-view li').withText('document.txt'));
     I.see('Versions (2)', '.detail-pane');
     I.see('This file is shared with others', '.detail-pane');
 
