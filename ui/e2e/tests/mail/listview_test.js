@@ -49,7 +49,7 @@ async function getTooltipValue(I, opt) {
     return [].concat(tooltips)[0];
 }
 
-Scenario('[C114381] Sender address is shown in tooltip', async function (I, users) {
+Scenario('[C114381] Sender address is shown in tooltip', async function (I, users, mail) {
     const user1 = users[0];
     const user2 = users[1];
 
@@ -66,6 +66,7 @@ Scenario('[C114381] Sender address is shown in tooltip', async function (I, user
     // USER1
     I.say('Send mail and create draft', 'blue');
     I.login('app=io.ox/mail');
+    mail.waitForApp();
     console.log('>' + user1.get('primaryEmail'));
 
     I.say('Check to in "send objects"', 'blue');
@@ -87,8 +88,7 @@ Scenario('[C114381] Sender address is shown in tooltip', async function (I, user
     // USER2
     I.say(`login "${user2.get('primaryEmail')}"`, 'blue');
     I.login('app=io.ox/mail', { user: user2 });
-    I.waitForVisible('.io-ox-mail-window');
-    I.waitForVisible('.leftside .list-view .list-item .from');
+    mail.waitForApp();
 
     I.waitForText('C114381:sent');
     let from = await getTooltipValue(I, { locator: '.leftside .list-view .list-item .from', attribute: 'title' });
