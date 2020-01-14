@@ -32,12 +32,6 @@ upload:
     - export TASKS=$(ls */build/pkg -d | sed -E "s,([^\/ ]+)\/[^ ]+,:\1:upload,g")
     - test -n "$TASKS" && export TASKS="$TASKS wait4Project"
     - gradle --no-daemon $TASKS
-  only:
-    - develop
-    - master
-    - /^feature\//
-    - /^bug\//
-    - /^poc\//
   environment:
     name: packages/$CI_COMMIT_REF_NAME
     on_stop: "delete project on obs"
