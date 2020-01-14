@@ -45,6 +45,35 @@ define('plugins/core/feedback/register', [
             'io.ox/files'
         ];
 
+    // we want to limit spam, so offer a way to rate limit feedback
+    function allowedToGiveFeedback() {
+        // getSettings here for better readability later on
+        // relative time stored as 3M for 3 Month etc, or absolute time stored in iso format 2014-06-20
+        var limit = settings.get('feedback/limit'),
+            // timestamp
+            lastFeedback = settings.get('feedback/lastFeedback');
+
+        // lastFeedback from the future, not allowed
+        if (lastFeedback && lastFeedback > _.now()) {
+            return false;
+        } else if (lastFeedback && limit) {
+            // absolute date
+            if (limit.indexOf('-') !== -1) {
+                return moment(limit).valueOf() < _.now();
+            }
+            // relative date
+            // limit is stored as 3M for 3 Month etc, so we have to split the string and apply it to the time the last feedback was given
+            return moment(lastFeedback).add(limit.substring(0, limit.length - 1), limit.substring(limit.length - 1)).valueOf() < _.now();
+        }
+
+        return true;
+    }
+
+    function removeButtons() {
+        $('#io-ox-screens .feedback-button').remove();
+        $('#topbar-settings-dropdown [data-action="feedback"]').parent().remove();
+    }
+
     function getAppOptions(useWhitelist) {
         var currentApp = ox.ui.App.getCurrentApp(),
             apps = appApi.forLauncher().map(function (app) {
@@ -399,6 +428,9 @@ define('plugins/core/feedback/register', [
                     data = baton.data;
                     sendFeedback(data)
                         .done(function () {
+                            // save feedback time to make rate limit work
+                            settings.set('feedback/lastFeedback', _.now()).save();
+                            if (!allowedToGiveFeedback()) removeButtons();
                             //#. popup info message
                             yell('success', gt('Thank you for your feedback'));
                         })
@@ -426,6 +458,7 @@ define('plugins/core/feedback/register', [
         id: 'feedback',
         index: 240,
         extend: function () {
+            if (!allowedToGiveFeedback()) return;
             var currentSetting = settings.get('feedback/show', 'both');
             if (currentSetting === 'both' || currentSetting === 'topbar') {
                 this.append(
@@ -443,6 +476,7 @@ define('plugins/core/feedback/register', [
         id: 'feedback',
         draw: function () {
             if (_.device('smartphone')) return;
+            if (!allowedToGiveFeedback()) return;
             var currentSetting = settings.get('feedback/show', 'both');
             if (!(currentSetting === 'both' || currentSetting === 'side')) return;
             feedback.drawButton();
