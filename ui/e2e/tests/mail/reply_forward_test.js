@@ -139,6 +139,7 @@ Scenario('[C8818] Reply all', async (I, users) => {
     I.waitForText('Reply all');
     I.click('Reply all');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.waitForInvisible('.io-ox-busy'); // wait for loading icon to disappear
 
     // Verify To: is the original sender
     I.seeElement(locate('div.token').withText(sender.get('display_name')).inside('[data-extension-id=to]'));
