@@ -26,7 +26,7 @@
     "jquery-placeholder": "2.0.8",
     "jquery-imageloader": "https://github.com/beatak/jquery-imageloader.git#3e616c19ad3bb32e4e62679a348f8b18a80790d2",
     "textarea-helper": "https://github.com/Codecademy/textarea-helper.git#0.3.1",
-    "requirejs": "2.1.22",
+    "requirejs": "2.1.14",
     "bootstrap-accessibility-plugin": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git#5d5908aebdd26963b7f5322ae5b623a83b912862",
     "bootstrap-tokenfield": "https://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#b90b45fca2e8c8baea66372154f0ba21c9c615c3",
     "typeahead.js": "0.10.5",
