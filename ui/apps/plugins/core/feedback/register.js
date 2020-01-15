@@ -49,24 +49,39 @@ define('plugins/core/feedback/register', [
     function allowedToGiveFeedback() {
         // getSettings here for better readability later on
         // relative time stored as 3M for 3 Month etc, or absolute time stored in iso format 2014-06-20
-        var limit = settings.get('feedback/limit'),
+        var timeLimit = settings.get('feedback/timeLimit'),
+            maxNumberOfFeedbacks = settings.get('feedback/maxFeedbacksPerTimeslot'),
+            usedNumberOfFeedbacks = settings.get('feedback/usedFeedbacksPerTimeslot'),
             // timestamp
-            lastFeedback = settings.get('feedback/lastFeedback');
+            // we need to save the first feedback per timeslot, otherwise we could not use relative dates here (you are alloewd 3 feedbacks every month etc)
+            firstFeedbackInTimeslot = settings.get('feedback/firstFeedbackInTimeslot');
 
-        // lastFeedback from the future, not allowed
-        if (lastFeedback && lastFeedback > _.now()) {
-            return false;
-        } else if (lastFeedback && limit) {
+        // no max number per timeslot => infinite number of feedbacks allowed
+        if (!maxNumberOfFeedbacks) return true;
+
+        if (firstFeedbackInTimeslot && timeLimit) {
+            var tempTime;
             // absolute date
-            if (limit.indexOf('-') !== -1) {
-                return moment(limit).valueOf() < _.now();
-            }
+            if (timeLimit.indexOf('-') !== -1) {
+                tempTime = moment(timeLimit).valueOf();
+                // after specified date, need for reset?
+                if (tempTime < _.now() && tempTime > firstFeedbackInTimeslot && usedNumberOfFeedbacks !== 0) {
+                    usedNumberOfFeedbacks = 0;
+                    settings.set('feedback/usedFeedbacksPerTimeslot', 0).save();
+                }
             // relative date
-            // limit is stored as 3M for 3 Month etc, so we have to split the string and apply it to the time the last feedback was given
-            return moment(lastFeedback).add(limit.substring(0, limit.length - 1), limit.substring(limit.length - 1)).valueOf() < _.now();
+            } else {
+                // limit is stored as 3M for 3 Month etc, so we have to split the string and apply it to the time the last feedback was given
+                tempTime = moment(firstFeedbackInTimeslot).add(timeLimit.substring(0, timeLimit.length - 1), timeLimit.substring(timeLimit.length - 1)).valueOf();
+                // after relative time, need for reset?
+                if (tempTime < _.now() && usedNumberOfFeedbacks !== 0) {
+                    usedNumberOfFeedbacks = 0;
+                    settings.set('feedback/usedFeedbacksPerTimeslot', 0).save();
+                }
+            }
         }
 
-        return true;
+        return usedNumberOfFeedbacks < maxNumberOfFeedbacks;
     }
 
     function removeButtons() {
@@ -428,8 +443,10 @@ define('plugins/core/feedback/register', [
                     data = baton.data;
                     sendFeedback(data)
                         .done(function () {
-                            // save feedback time to make rate limit work
-                            settings.set('feedback/lastFeedback', _.now()).save();
+                            // update settings
+                            settings.set('feedback/usedFeedbacksPerTimeslot', settings.get('feedback/usedFeedbacksPerTimeslot', 0) + 1).save();
+                            if (settings.get('feedback/usedFeedbacksPerTimeslot') === 1) settings.set('feedback/firstFeedbackInTimeslot', _.now()).save();
+
                             if (!allowedToGiveFeedback()) removeButtons();
                             //#. popup info message
                             yell('success', gt('Thank you for your feedback'));
