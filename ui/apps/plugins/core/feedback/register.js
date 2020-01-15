@@ -50,11 +50,11 @@ define('plugins/core/feedback/register', [
         // getSettings here for better readability later on
         // relative time stored as 3M for 3 Month etc, or absolute time stored in iso format 2014-06-20
         var timeLimit = settings.get('feedback/timeLimit'),
-            maxNumberOfFeedbacks = settings.get('feedback/maxFeedbacksPerTimeslot'),
-            usedNumberOfFeedbacks = settings.get('feedback/usedFeedbacksPerTimeslot'),
+            maxNumberOfFeedbacks = settings.get('feedback/maxFeedbacks', 1),
+            usedNumberOfFeedbacks = settings.get('feedback/usedFeedbacks', 0),
             // timestamp
             // we need to save the first feedback per timeslot, otherwise we could not use relative dates here (you are alloewd 3 feedbacks every month etc)
-            firstFeedbackInTimeslot = settings.get('feedback/firstFeedbackInTimeslot');
+            firstFeedbackInTimeslot = settings.get('feedback/firstFeedbackTime');
 
         // no max number per timeslot => infinite number of feedbacks allowed
         if (!maxNumberOfFeedbacks) return true;
@@ -67,7 +67,7 @@ define('plugins/core/feedback/register', [
                 // after specified date, need for reset?
                 if (tempTime < _.now() && tempTime > firstFeedbackInTimeslot && usedNumberOfFeedbacks !== 0) {
                     usedNumberOfFeedbacks = 0;
-                    settings.set('feedback/usedFeedbacksPerTimeslot', 0).save();
+                    settings.set('feedback/usedFeedbacks', 0).save();
                 }
             // relative date
             } else {
@@ -76,7 +76,7 @@ define('plugins/core/feedback/register', [
                 // after relative time, need for reset?
                 if (tempTime < _.now() && usedNumberOfFeedbacks !== 0) {
                     usedNumberOfFeedbacks = 0;
-                    settings.set('feedback/usedFeedbacksPerTimeslot', 0).save();
+                    settings.set('feedback/usedFeedbacks', 0).save();
                 }
             }
         }
@@ -85,7 +85,6 @@ define('plugins/core/feedback/register', [
     }
 
     function toggleButtons(state) {
-        console.log('toggle', state);
         $('#io-ox-screens .feedback-button').toggle(state);
         $('#topbar-settings-dropdown [data-action="feedback"]').parent().toggle(state);
     }
@@ -445,8 +444,8 @@ define('plugins/core/feedback/register', [
                     sendFeedback(data)
                         .done(function () {
                             // update settings
-                            settings.set('feedback/usedFeedbacksPerTimeslot', settings.get('feedback/usedFeedbacksPerTimeslot', 0) + 1).save();
-                            if (settings.get('feedback/usedFeedbacksPerTimeslot') === 1) settings.set('feedback/firstFeedbackInTimeslot', _.now()).save();
+                            settings.set('feedback/usedFeedbacks', settings.get('feedback/usedFeedbacks', 0) + 1).save();
+                            if (settings.get('feedback/usedFeedbacks', 0) === 1) settings.set('feedback/firstFeedbackTime', _.now()).save();
 
                             if (!allowedToGiveFeedback()) toggleButtons(false);
                             //#. popup info message
@@ -503,7 +502,6 @@ define('plugins/core/feedback/register', [
 
     // update on refresh should work
     ox.on('refresh^', function () {
-        console.log('refresh');
         toggleButtons(allowedToGiveFeedback());
     });
 
