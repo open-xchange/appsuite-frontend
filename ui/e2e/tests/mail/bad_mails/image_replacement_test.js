@@ -44,12 +44,20 @@ Scenario('[C101622] Aggressive image replacements', async (I, mail) => {
 
         I.waitForVisible('.mail-detail-content img');
 
-        let height = await I.executeScript(function () {
-            return document.querySelector('.mail-detail-content img').offsetHeight;
-        });
+        let height;
+        // TODO: Might want to move this into a helper
+        // repeat check until img is loaded
+        for (let i = 0; i < 10; i++) {
+            height = await I.executeScript(function getImgHeight() {
+                return document.querySelector('.mail-detail-content img').offsetHeight;
+            });
+            if (height > 0) break;
+            I.say('Image not loaded yet, retrying...');
+            I.wait(0.5);
+        }
         expect(height).to.be.equal(314);
 
-        let width = await I.executeScript(function () {
+        let width = await I.executeScript(function getImgWidth() {
             return document.querySelector('.mail-detail-content img').offsetWidth;
         });
         expect(width).to.be.equal(236);
