@@ -22,7 +22,8 @@
 require({
     // inject version
     baseUrl: ox.base + "/apps",
-    waitSeconds: document.cookie.indexOf("selenium=true") != -1 ? 60 : 15 //_.browser.IE ? 20 : 10
+    // use 15 seconds as base or hash param to tweak the timeout
+    waitSeconds: document.cookie.indexOf('selenium=true') != -1 ? (60 * 10) : (_.url.hash('waitSeconds') || 15)
 });
 
 // jQuery AMD fix

@@ -203,11 +203,34 @@ $(window).load(function () {
     // teach require.js to use deferred objects
     var req = window.req = window.require;
     window.require = function (deps, success, fail) {
+        // ultimate fallback to remove endless throbber and reload with longer timeout
+        function handleError(e) {
+            // check if it is a timeout on the login screen, otherwise other
+            // fail handlers will take over
+            if (e.requireType === 'timeout' && $('#background-loader').is(':visible')) {
+                $('.throbber').hide();
+                $('#timeout-error').show();
+                $('#timeout-reload').on('click', function (e) {
+                    e.preventDefault();
+                    _.url.hash({ 'waitSeconds': 30 });
+                    location.reload();
+                });
+            }
+        }
+
+        var errorHandler = function (error) {
+            console.error('require.js: "' + error.requireType + '" for ' + error.requireModules, error.stack);
+            handleError(error);
+        };
+
         if (_.isArray(deps)) {
             // use deferred object
             _(deps).each(function (m) {
                 $(window).trigger('require:require', m);
             });
+            if (!fail) {
+                fail = errorHandler;
+            }
             var def = $.Deferred().done(success).fail(fail);
             req(deps, def.resolve, def.reject);
             return def.promise();
@@ -1089,6 +1112,6 @@ $(window).load(function () {
         'gettext io.ox/core/manifests io.ox/core/capabilities themes io.ox/core/settings';
 
     // load sources
-    require(dependencies.split(' '), loadSuccess, loadFail);
+    require(dependencies.split(' ')).then(loadSuccess, loadFail);
 
 });

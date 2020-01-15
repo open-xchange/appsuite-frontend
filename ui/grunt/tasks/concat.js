@@ -30,6 +30,7 @@ module.exports = function (grunt) {
                              //add backbone and dot.js may be a AMD-variant would be better
                              'bower_components/backbone/backbone.js',
                              'bower_components/backbone-validation/dist/backbone-validation.js',
+                             'src/util.js',
                              'bower_components/requirejs/require.js',
                              'lib/require-fix.js',
                              'lib/modernizr.js',
@@ -37,7 +38,6 @@ module.exports = function (grunt) {
                              'bower_components/jquery-placeholder/jquery.placeholder.js',
                              'bower_components/textarea-helper/textarea-helper.js',
                              'src/lazyload.js',
-                             'src/util.js',
                              'src/browser.js',
                              'src/plugins.js',
                              'src/jquery.plugins.js',

@@ -6,6 +6,8 @@
       <div class="bounce2"></div>
       <div class="bounce3"></div>
     </div>
+    <div id="timeout-error">
+    </div>
 </div>
 
 {{!-- Core Panel --}}
@@ -119,5 +121,22 @@
 
 {{!-- blur effect overlay for browsers without cssfilter support --}}
 <svg style="height:0;"><filter id="overlay-effect"><feGaussianBlur stdDeviation="2"/></filter></svg>
+
+<script>
+    /* inject correct language here at the very start manually*/
+  (function () {
+    var language = (navigator.language || navigator.userLanguage).substr(0, 2),
+      messages = {
+        'en': ['Connection timed out. Please try reloading the page.', 'Reload'],
+        'de': ['Zeitüberschreitung bei der Verbindung. Bitte laden Sie die Seite erneut.', 'Neu laden'],
+        'it': ['Connessione scaduta. Prova a ricaricare la pagina.', 'Ricarica la pagina'],
+        'fr': ['Délai de la connexion dépassé. Veuillez recharger la page.', 'Réessayer']
+      };
+
+    var msg = messages[language] || messages['en'];
+    document.getElementById('timeout-error').innerHTML = '<span>' + msg[0] +'</span><br><a href="#" class="timeout-reload">' + msg[1] + '</a>';
+
+  }());
+</script>
 
 <script src="{{ base }}/boot.js"></script>
