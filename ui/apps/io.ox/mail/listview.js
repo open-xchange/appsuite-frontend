@@ -572,7 +572,9 @@ define('io.ox/mail/listview', [
                 return memo || parseInt(obj.color_label || 0, 10);
             }, 0);
             data.color_label = color;
-            data.thread = thread;
+            data.thread = thread.map(function (entry, index) {
+                return _(entry).pick(_(data.thread[index]).keys());
+            });
             // set subject to first message in thread so a Thread has a constant subject
             data.subject = api.threads.subject(data) || data.subject || '';
             // done
