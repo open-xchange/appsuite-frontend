@@ -84,9 +84,10 @@ define('plugins/core/feedback/register', [
         return usedNumberOfFeedbacks < maxNumberOfFeedbacks;
     }
 
-    function removeButtons() {
-        $('#io-ox-screens .feedback-button').remove();
-        $('#topbar-settings-dropdown [data-action="feedback"]').parent().remove();
+    function toggleButtons(state) {
+        console.log('toggle', state);
+        $('#io-ox-screens .feedback-button').toggle(state);
+        $('#topbar-settings-dropdown [data-action="feedback"]').parent().toggle(state);
     }
 
     function getAppOptions(useWhitelist) {
@@ -447,7 +448,7 @@ define('plugins/core/feedback/register', [
                             settings.set('feedback/usedFeedbacksPerTimeslot', settings.get('feedback/usedFeedbacksPerTimeslot', 0) + 1).save();
                             if (settings.get('feedback/usedFeedbacksPerTimeslot') === 1) settings.set('feedback/firstFeedbackInTimeslot', _.now()).save();
 
-                            if (!allowedToGiveFeedback()) removeButtons();
+                            if (!allowedToGiveFeedback()) toggleButtons(false);
                             //#. popup info message
                             yell('success', gt('Thank you for your feedback'));
                         })
@@ -475,7 +476,6 @@ define('plugins/core/feedback/register', [
         id: 'feedback',
         index: 240,
         extend: function () {
-            if (!allowedToGiveFeedback()) return;
             var currentSetting = settings.get('feedback/show', 'both');
             if (currentSetting === 'both' || currentSetting === 'topbar') {
                 this.append(
@@ -485,6 +485,7 @@ define('plugins/core/feedback/register', [
                         feedback.show();
                     })
                 );
+                this.$ul.find('[data-action="feedback"]').parent().toggle(allowedToGiveFeedback());
             }
         }
     });
@@ -493,11 +494,17 @@ define('plugins/core/feedback/register', [
         id: 'feedback',
         draw: function () {
             if (_.device('smartphone')) return;
-            if (!allowedToGiveFeedback()) return;
             var currentSetting = settings.get('feedback/show', 'both');
             if (!(currentSetting === 'both' || currentSetting === 'side')) return;
             feedback.drawButton();
+            toggleButtons(allowedToGiveFeedback());
         }
+    });
+
+    // update on refresh should work
+    ox.on('refresh^', function () {
+        console.log('refresh');
+        toggleButtons(allowedToGiveFeedback());
     });
 
     ext.point('plugins/core/feedback').invoke('initialize', this);
