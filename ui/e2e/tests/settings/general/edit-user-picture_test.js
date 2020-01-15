@@ -59,6 +59,7 @@ Scenario('User can upload and remove a picture', async function (I, contacts, ma
     I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
 
     I.waitForInvisible('.edit-picture.empty');
+    I.waitForElement('.modal-dialog [data-action="apply"]:not([disabled])');
     I.click('Apply');
     I.waitForDetached('.edit-picture');
 
