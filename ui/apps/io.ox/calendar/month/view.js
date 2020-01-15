@@ -460,7 +460,7 @@ define('io.ox/calendar/month/view', [
             this.app = opt.app;
 
             this.model = new Backbone.Model({
-                date: opt.startDate || moment(this.app.props.get('date')),
+                date: opt.startDate || this.app.getDate(),
                 currentDate: moment() // stores the current date to detect day changes and update the today label
             });
             this.initializeSubviews();
