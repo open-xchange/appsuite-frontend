@@ -1107,8 +1107,7 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users, calend
 Scenario('[C7455] Edit appointment by changing the timeframe', async function (I, users, calendar) {
 
     //Create Appointment
-    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] }),
-        summary = 'Dinner for one';
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
     await I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
         summary: 'Dinner for one',
@@ -1126,23 +1125,23 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
     calendar.waitForApp();
 
     I.waitForVisible('.appointment');
-    I.scrollTo('.page.current .appointment');
+    I.scrollTo('.page.current .timeslot:nth-child(23)');
     I.dragAndDrop('.appointment .resizable-n', '.day .timeslot:nth-child(23)');
-    I.wait(0.5);
-
-    I.click(summary, '.appointment');
+    I.waitForVisible('.appointment:not(.resizing) .appointment-content .title-container');
+    I.wait(0.1);
+    I.retry(5).click('.appointment');
     I.waitForVisible('.io-ox-sidepopup');
     I.waitForText('11:00 – 1:00 PM');
     I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup');
-    I.scrollTo('.page.current .appointment');
+    I.scrollTo('.page.current .timeslot:nth-child(28)');
     I.dragAndDrop('.appointment .resizable-s', '.day .timeslot:nth-child(28)');
-    I.wait(0.5);
-
-    I.click(summary, '.appointment');
+    I.waitForVisible('.page.current .appointment:not(.resizing) .appointment-content .title-container');
+    I.wait(0.1);
+    I.retry(5).click('.appointment');
     I.waitForVisible('.io-ox-sidepopup');
     I.waitForText('11:00 – 2:00 PM');
-    I.click('~Close', '.io-ox-sidepopup');
+    I.retry(5).click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup');
 
     I.clickToolbar('View');
@@ -1159,7 +1158,6 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
 
     I.clickToolbar('View');
     I.click('List', '.smart-dropdown-container');
-    I.wait(1);
 
     I.waitForText('11:00 AM');
     I.waitForText('2:00 PM');
