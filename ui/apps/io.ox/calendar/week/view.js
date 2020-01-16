@@ -985,7 +985,7 @@ define('io.ox/calendar/week/view', [
             if (settings.get('showDeclinedAppointments', false) === false && util.getConfirmationStatus(model) === 'DECLINED') return;
 
             var appointmentStartDate = model.getMoment('startDate'),
-                startLocal = moment.max(appointmentStartDate, this.model.get('startDate')).local().clone(),
+                startLocal = moment.max(appointmentStartDate, moment(this.model.get('startDate'))).local().clone(),
                 endLocal = model.getMoment('endDate').local(),
                 start = moment(startLocal).startOf('day'),
                 end = moment(endLocal).startOf('day'),
