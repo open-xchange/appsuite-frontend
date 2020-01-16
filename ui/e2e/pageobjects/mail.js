@@ -19,7 +19,7 @@ module.exports = {
     },
     newMail() {
         I.waitForText('Compose', 5, '.io-ox-mail-window .classic-toolbar-container');
-        I.click('Compose', '.io-ox-mail-window .classic-toolbar-container');
+        I.clickToolbar('Compose');
         I.waitForFocus('.io-ox-mail-compose [placeholder="To"]');
     },
     send() {

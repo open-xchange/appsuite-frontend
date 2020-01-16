@@ -190,6 +190,7 @@ Scenario('Add typeahead suggestion via mouse', async (I, users, mail) => {
     const [user] = users;
 
     I.login('app=io.ox/mail');
+    mail.waitForApp();
     mail.newMail();
 
     let name = user.get('sur_name'),
