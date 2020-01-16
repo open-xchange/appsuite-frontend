@@ -17,15 +17,28 @@ define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], func
     'use strict';
 
     // we always need to expose the API even if tracking is disabled
-    var api = _.extend({ queue: [], add: _.noop, uuid: uuids.randomUUID() }, Backbone.Events),
+    var api = _.extend({ queue: [], add: _.noop }, Backbone.Events),
         url = settings.get('count/url') || settings.get('tracker/url'),
         enabled = url && !ox.debug && settings.get('count/enabled', true);
 
     // count/disabled is _only_ for dev purposes!
     api.disabled = settings.get('count/disabled', !enabled);
-
     // return mock/noop API so that consumers don't have to worry
     if (api.disabled) return api;
+
+    function getUUID() {
+        if (Modernizr.localstorage) {
+            var uuid = window.sessionStorage.getItem('countid');
+            if (!uuid) {
+                uuid = uuids.randomUUID();
+                window.sessionStorage.setItem('countid', uuid);
+            }
+            return uuid;
+        }
+        return uuids.randomUUID();
+    }
+
+    api.uuid = getUUID();
 
     var delay = parseInt(settings.get('count/delay', 15), 10) * 1000,
         brand = settings.get('count/brand') || settings.get('tracker/brand'),
