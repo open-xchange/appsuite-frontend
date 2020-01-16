@@ -291,6 +291,8 @@ define('plugins/core/feedback/register', [
     }
 
     var feedback = {
+        // not really used but helps with unit tests
+        allowedToGiveFeedback: allowedToGiveFeedback,
 
         show: function () {
             var options = {
