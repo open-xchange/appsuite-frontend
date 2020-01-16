@@ -50,7 +50,8 @@ define('plugins/core/feedback/register', [
         // getSettings here for better readability later on
         // relative time stored as 3M for 3 Month etc, or absolute time stored in iso format 2014-06-20
         var timeLimit = settings.get('feedback/timeLimit'),
-            maxNumberOfFeedbacks = settings.get('feedback/maxFeedbacks', 1),
+            // defaults is 1 if theres a limit, if not then we just allow infinite feedbacks
+            maxNumberOfFeedbacks = settings.get('feedback/maxFeedbacks', timeLimit ? 1 : undefined),
             usedNumberOfFeedbacks = settings.get('feedback/usedFeedbacks', 0),
             // timestamp
             // we need to save the first feedback per timeslot, otherwise we could not use relative dates here (you are alloewd 3 feedbacks every month etc)
