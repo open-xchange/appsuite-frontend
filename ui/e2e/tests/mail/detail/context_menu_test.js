@@ -51,7 +51,6 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users,
     I.waitForVisible('.thread-view.list-view .list-item');
     // we need to wait until the message is seen
     I.waitForDetached('.thread-view.list-view .list-item.unread');
-    I.wait(1);
 
     // Mark unread
     rightClick('Mark as unread');
@@ -60,8 +59,7 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users,
     // View source
     rightClick('View source');
     I.waitForElement('.mail-source-dialog');
-    I.waitForElement('//button[@data-action="close"]', '.modal-footer');
-    I.wait(1);
+    I.waitForVisible(locate('//button[@data-action="close"]').inside('.modal-footer'));
     I.click('Close', '.modal-footer');
     I.waitForDetached('.mail-source-dialog');
 
@@ -73,10 +71,10 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users,
     // Reply
     rightClick('Reply');
     I.waitForElement({ css: 'button[data-action="discard"]' });
+    I.waitForEnabled({ css: 'button[data-action="discard"]' });
     I.seeInField('subject', 'Re: ' + subject);
     // no better approach yet. I.waitForMailCompose() might be a good one
     I.waitForInvisible('.io-ox-busy');
-    I.wait(1);
     I.click('Discard');
 
     // // Shift-F10 (view source again)
@@ -95,8 +93,7 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users,
         let actionSelector = `//ul[@class="dropdown-menu"]//a[text()="${action}"]`;
         I.rightClick({ xpath: '//li[contains(@class, "list-item selectable")]' });
         I.waitForElement('.dropdown.open');
-        I.waitForElement({ xpath: actionSelector });
-        I.wait(1);
+        I.waitForVisible({ xpath: actionSelector });
         I.click({ xpath: actionSelector });
     }
 
