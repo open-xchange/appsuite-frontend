@@ -70,7 +70,7 @@ define('plugins/portal/twitter/network', ['io.ox/oauth/proxy'], function (proxy)
     };
 
     network.fetchUserID = function () {
-        return proxy.request({ api: 'twitter', url: 'https://api.twitter.com/1.1/account/verify_credentials.json', type: 'GET' }).then(function success(response) {
+        return proxy.request({ api: 'com.openexchange.oauth.twitter', url: 'https://api.twitter.com/1.1/account/verify_credentials.json', type: 'GET' }).then(function success(response) {
             var jsonResponse = JSON.parse(response);
 
             if (!jsonResponse.errors) {
