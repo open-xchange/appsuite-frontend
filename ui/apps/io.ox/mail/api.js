@@ -1797,7 +1797,8 @@ define('io.ox/mail/api', [
         var size = thread.length;
 
         // store data of most recent message as head
-        obj.head = _.extend({ threadSize: size }, obj);
+        // omit index here, because this will trigger render updates of list items when new messages arrive
+        obj.head = _({ threadSize: size }).chain().extend(obj).omit('index').value();
 
         // Use last item's id and folder_id.
         // As we got obj by reference, such changes affect the CID
