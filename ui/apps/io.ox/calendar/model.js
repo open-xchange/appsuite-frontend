@@ -208,6 +208,13 @@ define('io.ox/calendar/model', [
                 rrule[name] = value;
                 rrule[name.toLowerCase()] = _.isArray(value) ? attr[1].toLowerCase().split(',') : value.toLowerCase();
             });
+
+            // todo, figure out which rrules we want to support and rework this
+            if (!rrule.bysetpos && rrule.byday && !_.isArray(rrule.byday) && rrule.byday.length > 2) {
+                rrule.bysetpos = rrule.byday.substr(0, rrule.byday.length - 2);
+                rrule.byday = rrule.byday.substr(rrule.byday.length - 2);
+            }
+
             return rrule;
         },
 
