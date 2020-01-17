@@ -49,8 +49,9 @@ define('io.ox/calendar/actions/change-folder-alarms', [
                 )
             );
         })
-        .addAlternativeButton({ action: 'cancel', label: gt('Cancel') })
-        .addButton({ action: 'ok', label: gt('Ok'), className: 'btn-primary' })
+        .addCancelButton()
+        //#. 'Change' as text for an apply button to set a reminder of an appointment alert.
+        .addButton({ action: 'ok', label: gt('Change'), className: 'btn-primary' })
         .on('ok', function () {
             if (folderData['com.openexchange.calendar.provider'] === 'birthdays') {
                 require(['settings!io.ox/calendar'], function (settings) {

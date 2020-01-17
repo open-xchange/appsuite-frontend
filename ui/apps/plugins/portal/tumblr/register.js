@@ -228,11 +228,13 @@ define('plugins/portal/tumblr/register', [
         //disable widget till data is set by user
         model.set('candidate', true, { silent: true, validate: true });
 
-        var dialog = new ModalDialog({ title: gt('Edit Tumblr feed'), async: true, width: 400 }),
-            $url = $('<input id="tumblr_url" type="text" class="form-control" placeholder=".tumblr.com">'),
+        var $url = $('<input id="tumblr_url" type="text" class="form-control" placeholder=".tumblr.com">'),
             $description = $('<input id="tumblr_desc" type="text" class="form-control">'),
             $error = $('<div class="alert alert-danger" style="margin-top:15px;">').hide(),
-            props = model.get('props') || {};
+            props = model.get('props') || {},
+            isNew = _.isUndefined(props.url),
+            //#. 'Create Tumblr feed' and 'Edit Tumblr feed' as headers of a modal dialog to create or edit a Tumblr feed.
+            dialog = new ModalDialog({ title: isNew ? gt('Create Tumblr feed') : gt('Edit Tumblr feed'), async: true, width: 400 });
 
         dialog.build(function () {
             this.$body.append(
@@ -252,7 +254,8 @@ define('plugins/portal/tumblr/register', [
             );
         })
         .addCancelButton()
-        .addButton({ label: gt('Save'), action: 'save' })
+        //#. 'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
+        .addButton({ label: isNew ? gt('Create') : gt('Save'), action: 'save' })
         .on('cancel', function () {
             if (model.has('candidate') && _.isEmpty(model.attributes.props)) view.removeWidget();
         })

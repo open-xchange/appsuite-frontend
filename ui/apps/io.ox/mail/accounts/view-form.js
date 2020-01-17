@@ -346,8 +346,8 @@ define.async('io.ox/mail/accounts/view-form', [
                                 self.dialog.pause();
                                 var dialog = new ModalDialog({ title: gt('Warnings') })
                                     .build(function () { this.$body.append(messages); })
-                                    .addCancelButton()
-                                    .addButton('proceed', gt('Ignore Warnings'))
+                                    .addCancelButton({ left: true })
+                                    .addButton({ label: gt('Ignore Warnings'), action: 'proceed', className: 'btn-default' })
                                     .on('action', function (action) {
                                         self.dialog.resume();
                                         if (action === 'proceed') {
@@ -395,7 +395,9 @@ define.async('io.ox/mail/accounts/view-form', [
                     folder: id,
                     module: 'mail',
                     realNames: true,
-                    root: accountId
+                    root: accountId,
+                    //#. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
+                    button: gt('Select')
                 });
             }
         });
@@ -481,17 +483,17 @@ define.async('io.ox/mail/accounts/view-form', [
                             new mini.SelectView({ list: optionsRefreshRatePop, model: model, id: 'pop3_refresh_rate' }).render().$el
                         )
                     )
-                    .addClass('pop3'),
+                        .addClass('pop3'),
                     // expunge (pop3 only)
                     group(
                         checkbox('pop3_expunge_on_quit', gt('Remove copy from server after retrieving a message'), model)
                     )
-                    .addClass('pop3'),
+                        .addClass('pop3'),
                     // delete write-through (pop3)
                     group(
                         checkbox('pop3_delete_write_through', gt('Deleting messages on local storage also deletes them on server'), model)
                     )
-                    .addClass('pop3')
+                        .addClass('pop3')
                 )
             );
 
@@ -583,7 +585,7 @@ define.async('io.ox/mail/accounts/view-form', [
                                 ) :
                                 // just show path
                                 $('<input type="text" class="form-control" disabled="disabled">')
-                                .val($.trim(model.get(folder)).replace(/^default\d+\D/, ''))
+                                    .val($.trim(model.get(folder)).replace(/^default\d+\D/, ''))
                             )
                         );
                     })

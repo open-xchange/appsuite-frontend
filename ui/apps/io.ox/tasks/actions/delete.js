@@ -25,7 +25,9 @@ define('io.ox/tasks/actions/delete', [
         ox.load(['io.ox/backbone/views/modal']).done(function (ModalDialog) {
             // build popup
             var popup = new ModalDialog({
-                title: gt.ngettext(
+                //#. 'Delete task' or 'Delete tasks' as header for a modal dialog to confirm the deletion of one or more tasks.
+                title: gt.ngettext('Delete task', 'Delete tasks', numberOfTasks),
+                description: gt.ngettext(
                     'Do you really want to delete this task?',
                     'Do you really want to delete these tasks?',
                     numberOfTasks

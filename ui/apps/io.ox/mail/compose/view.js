@@ -21,7 +21,7 @@ define('io.ox/mail/compose/view', [
     'io.ox/core/notifications',
     'gettext!io.ox/mail',
     'io.ox/core/attachments/backbone',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/mail/compose/signatures',
     'io.ox/mail/sanitizer',
     'io.ox/mail/compose/util',
@@ -29,7 +29,7 @@ define('io.ox/mail/compose/view', [
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send',
     'io.ox/mail/compose/actions/save'
-], function (extensions, ext, composeAPI, mailAPI, mailUtil, settings, notifications, gt, Attachments, dialogs, signatureUtil, sanitizer, composeUtil) {
+], function (extensions, ext, composeAPI, mailAPI, mailUtil, settings, notifications, gt, Attachments, ModalDialog, signatureUtil, sanitizer, composeUtil) {
 
     'use strict';
 
@@ -640,28 +640,23 @@ define('io.ox/mail/compose/view', [
                 // add some extra space
                 // TODO maybe we could use a more dynamical approach
                 def = $.Deferred();
-                new dialogs.ModalDialog({ width: 550, container: _.device('smartphone') ? self.$el.closest('.window-container-center') : $('#io-ox-core') })
-                    .text(modalText)
-                    //#. "Discard message" appears in combination with "Cancel" (this action)
-                    //#. Translation should be distinguishable for the user
-                    .addPrimaryButton('delete', discardText, 'delete')
-                    .addAlternativeButton('savedraft', saveText, 'savedraft')
-                    .addButton('cancel', gt('Cancel'), 'cancel')
-                    .show()
-                    .then(function (action) {
-                        if (action === 'delete') {
-                            var isAutoDiscard = self.config.get('autoDiscard'),
-                                editFor = self.model.get('meta').editFor;
-                            def.resolve();
-                            if (!isDraft || !isAutoDiscard || !editFor) return;
-                            // only delete autosaved drafts that are not saved manually and have a msgref
-                            mailAPI.remove([{ id: editFor.originalId, folder_id: editFor.originalFolderId }]);
-                        } else if (action === 'savedraft') {
-                            self.saveDraft().then(def.resolve, def.reject);
-                        } else {
-                            def.reject();
-                        }
-                    });
+
+                new ModalDialog({ title: discardText, description: modalText })
+                    .addCancelButton()
+                    .addButton({ label: saveText, action: 'savedraft', placement: 'left', className: 'btn-default' })
+                    .addButton({ label: discardText, action: 'delete' })
+                    .on('savedraft', function () {
+                        self.saveDraft().then(def.resolve, def.reject);
+                    })
+                    .on('delete', function () {
+                        var isAutoDiscard = self.config.get('autoDiscard'),
+                            editFor = self.model.get('meta').editFor;
+                        def.resolve();
+                        if (!isDraft || !isAutoDiscard || !editFor) return;
+                        // only delete autosaved drafts that are not saved manually and have a msgref
+                        mailAPI.remove([{ id: editFor.originalId, folder_id: editFor.originalFolderId }]);
+                    })
+                    .open();
             }
 
             return def.then(function () {

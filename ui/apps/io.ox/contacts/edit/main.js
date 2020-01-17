@@ -168,10 +168,11 @@ define('io.ox/contacts/edit/main', [
                 this.getWindow().resume();
             }
 
-            //#. "Discard changes" appears in combination with "Cancel" (this action)
             //#. Translation must be distinguishable for the user
-            new ModalDialog({ title: gt('Do you really want to discard your changes?') })
-                .addCancelButton()
+            //#. "Discard changes" appears as a header of the modal dialog to discard changes while editing a contact
+            new ModalDialog({ title: gt('Discard changes'), description: gt('Do you really want to discard your changes?') })
+            .addCancelButton()
+                //#. "Discard changes" appears in combination with "Cancel" (this action)
                 .addButton({ label: gt.pgettext('dialog', 'Discard changes'), action: 'delete' })
                 .on('action', function (action) {
                     if (action === 'delete') def.resolve(); else def.reject();

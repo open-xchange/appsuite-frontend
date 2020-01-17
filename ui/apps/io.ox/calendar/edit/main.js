@@ -433,10 +433,14 @@ define('io.ox/calendar/edit/main', [
                     } else if (_.device('smartphone')) {
                         app.getWindow().resume();
                     }
-                    new ModalDialog({ title: gt('Do you really want to discard your changes?') })
+                    new ModalDialog({
+                        //#. 'Discard changes' as header text of an appointment to confirm to discard changes via a modal dialog.
+                        title: gt('Discard changes'),
+                        description: gt('Do you really want to discard your changes?')
+                    })
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
                         //#. Translation must be distinguishable for the user
-                        .addCancelButton({ left: true })
+                        .addCancelButton()
                         .addButton({ label: gt.pgettext('dialog', 'Discard changes'), action: 'delete' })
                         .on('action', function (action) {
                             if (action === 'delete') {

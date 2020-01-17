@@ -2,8 +2,8 @@ define([
     'io.ox/mail/compose/view',
     'io.ox/mail/compose/model',
     'io.ox/mail/compose/config',
-    'io.ox/core/tk/dialogs'
-], function (View, ComposeModel, ConfigModel, dialogs) {
+    'io.ox/backbone/views/modal'
+], function (View, ComposeModel, ConfigModel, ModalDialog) {
     'use strict';
 
     describe('Mail Compose', function () {
@@ -22,7 +22,7 @@ define([
 
             describe('should show confirm dialog', function () {
                 it('for dirty new mails', function () {
-                    var spy = sinon.spy(dialogs, 'ModalDialog'),
+                    var spy = sinon.spy(ModalDialog.prototype, 'open'),
                         view = new View({
                             model: new ComposeModel(),
                             config: new ConfigModel(),

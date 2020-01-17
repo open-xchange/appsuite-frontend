@@ -12,12 +12,11 @@
  */
 
 define('io.ox/mail/actions/attachmentQuota', [
-    'io.ox/core/tk/dialogs',
     'io.ox/core/notifications',
     'io.ox/core/strings',
     'settings!io.ox/core',
     'gettext!io.ox/mail'
-], function (dialogs, notifications, strings, coreSettings, gt) {
+], function (notifications, strings, coreSettings, gt) {
 
     'use strict';
 

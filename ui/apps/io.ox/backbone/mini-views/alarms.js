@@ -365,7 +365,7 @@ define('io.ox/backbone/mini-views/alarms', [
                         this.$body.append(alarmView.render().$el);
                         this.$el.addClass('alarms-view-dialog');
                     })
-                    .addCancelButton({ left: true })
+                    .addCancelButton()
                     .addButton({ action: 'apply', label: gt('Apply') })
                     .on('apply', function () {
                         // trigger event, so we know the user set the alarms manually

@@ -47,9 +47,10 @@ define('io.ox/settings/apps/settings/pane', [
 
             var id = $(e.currentTarget).closest('li').attr('data-id');
 
-            new ModalDialog({ title: gt('Do you want to revoke the access of this application?') })
+            //#. 'Revoke access' as header of a modal dialog to confirm to revoke access of an application.
+            new ModalDialog({ title: gt('Revoke access'), description: gt('Do you want to revoke the access of this application?') })
                 .addCancelButton()
-                .addButton({ title: gt('Revoke'), action: 'ok' })
+                .addButton({ label: gt('Revoke'), action: 'ok' })
                 .on('ok', function () {
                     collection.remove(id);
                     return http.GET({

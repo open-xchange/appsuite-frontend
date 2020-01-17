@@ -124,9 +124,9 @@ Scenario('[C7384] Save draft', async function (I, users, mail) {
     I.fillField('Subject', '' + testrailid + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, '' + text);
     I.click('Discard');
-    I.waitForElement('.io-ox-dialog-wrapper .modal-backdrop');
+    I.waitForElement('.modal-dialog');
     I.click('Save as draft');
-    I.waitForDetached('.io-ox-dialog-wrapper .modal-backdrop');
+    I.waitForDetached('.modal-dialog');
     //I.wait(1);
     I.selectFolder('Drafts');
     mail.selectMail(testrailid + ' - ' + subject, undefined, '.subject');
@@ -406,7 +406,6 @@ Scenario('[C8816] Cancel mail compose', async function (I, users, mail) {
     I.fillField('Subject', testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, testrailID + ' - ' + timestamp);
     I.click('Discard');
-    I.waitForElement('.io-ox-dialog-wrapper');
     I.see('Do you really want to discard your message?');
     I.click('Discard message');
 });
@@ -693,7 +692,7 @@ Scenario('[C163026] Change from display name when sending a mail', async functio
     I.waitForVisible('.modal-dialog [title="Use custom name"]', 5);
     I.click('.modal-dialog [title="Use custom name"]');
     I.fillField('.modal-body [title="Custom name"]', timestamp);
-    I.click('Save', { css: '.modal-footer' });
+    I.click('Edit', { css: '.modal-footer' });
     I.waitForDetached('.io-ox-dialog-wrapper', 5);
     I.waitForText(timestamp, 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .name');
     I.waitForText('<' + users[0].userdata.primaryEmail + '>', 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');

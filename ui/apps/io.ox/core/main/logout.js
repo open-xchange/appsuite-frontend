@@ -178,9 +178,10 @@ define('io.ox/core/main/logout', [
                     if (canRestore) {
                         $('#io-ox-core').show();
                         $('#background-loader').hide();
-                        new ModalDialog({ title: gt('Unsaved documents will be lost. Do you want to sign out now?') })
-                            .addButton({ label: gt('No'), action: 'No' })
-                            .addButton({ label: gt('Yes'), action: 'Yes' })
+                        //#. 'Sign out' and 'Cancel' as button texts of a modal dialog to confirm to sign out.
+                        new ModalDialog({ title: gt('Sign out'), description: gt('Unsaved documents will be lost. Do you want to sign out now?') })
+                            .addButton({ label: gt('Cancel'), action: 'No', className: 'btn-default' })
+                            .addButton({ label: gt('Sign out'), action: 'Yes' })
                             .on('No', function () { def.reject(); })
                             .on('Yes', function () {
                                 $('#io-ox-core').hide();

@@ -763,7 +763,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         )
                     );
                 },
-                target = baton.view.dialog.$el.find('.modal-footer'),
+                modalBody = baton.view.dialog.$el.find('.modal-body'),
                 arrayOfActions = baton.model.get('actioncmds');
 
             function checkForStopAction(array) {
@@ -787,7 +787,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
             toggleWarning();
 
-            if (!target.find('[type="checkbox"]').length) {
+            var target = baton.view.$el.find('.sectiontitle.conditions');
+
+            if (!modalBody.find('[type="checkbox"]').length) {
                 _.defer(function () {
                     target.prepend(drawcheckbox(checkForStopAction(arrayOfActions)).on('change', checkStopAction));
                     baton.view.$el.trigger('toggle:saveButton');

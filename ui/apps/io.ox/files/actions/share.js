@@ -82,8 +82,8 @@ define('io.ox/files/actions/share', [
         // add dialog buttons
         dialog
             .addCancelButton()
-            .addButton({ label: gt('Close'), action: 'share' })
-            .addAlternativeButton({ label: gt('Remove link'), action: 'remove' });
+            .addButton({ label: gt('Remove link'), action: 'remove', placement: 'left', className: 'btn-default' })
+            .addButton({ label: gt('Close'), action: 'share' });
 
         // initial state is "no send"
         toggleButtons(false);

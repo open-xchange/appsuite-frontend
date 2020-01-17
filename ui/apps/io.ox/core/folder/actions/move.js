@@ -217,6 +217,8 @@ define('io.ox/core/folder/actions/move', [
                 module: module,
                 root: module === 'infostore' ? '9' : '1',
                 title: gt('Move folder') + ': ' + model.get('title'),
+                //#. 'Move' as button text to confirm the destination where a mail folder shall be moved to via a picker dialog.
+                button: gt('Move'),
                 context: context,
                 persistent: 'folderpopup',
                 settings: settings

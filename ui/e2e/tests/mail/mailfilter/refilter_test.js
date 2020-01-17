@@ -104,11 +104,11 @@ Scenario('[C290530] Create and apply new filter rule', async (I, users) => {
     I.waitForElement(locate('.modal .folder[data-id="virtual/myfolders"]'));
     I.click('.modal .folder[data-id="virtual/myfolders"] .folder-arrow');
     I.click(locate('.modal .folder.selectable').withText('foo'));
-    I.click('Ok');
+    I.click('Select');
 
     I.click('Save and apply');
     I.waitForVisible(locate('.modal .folder.selected').withText('Inbox'));
-    I.click('Ok');
+    I.click('Apply', '.modal-footer');
 
     checkForFilteredMail(I);
 });
@@ -124,7 +124,7 @@ Scenario('[C290531] Edit and apply existing filter rule', async (I, users) => {
     I.fillField('Subject Contains', 'foo');
     I.click('Save and apply');
     I.waitForVisible(locate('.modal .folder.selected').withText('Inbox'));
-    I.click('Ok');
+    I.click('Apply', '.modal-footer');
 
     checkForFilteredMail(I);
 });

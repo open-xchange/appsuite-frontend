@@ -58,8 +58,9 @@ define('plugins/administration/groups/settings/toolbar', [
         },
         action: function (baton) {
             var id = baton.first().id, model = groupAPI.getModel(id);
+            //#. 'Delete group' as header of a modal dialog to confirm to delete a group.
             //#. %1$s is the group name
-            new ModalDialog({ title: gt('Do you really want to delete the group "%1$s"? This action cannot be undone!', model.get('display_name')) })
+            new ModalDialog({ title: gt('Delete group'), description: gt('Do you really want to delete the group "%1$s"? This action cannot be undone!', model.get('display_name')) })
                 .addCancelButton()
                 .addButton({ label: gt('Delete group'), action: 'delete' })
                 .on('delete', function () { groupAPI.remove(id); })

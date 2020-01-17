@@ -81,7 +81,7 @@ Scenario('[C8402] Search in different folders', async (I, users) => {
             .withText('Subfolder')
             .inside('.folder-picker-dialog'));
 
-    I.click('Ok');
+    I.click('Select');
     I.waitForInvisible('Select folder');
 
     I.waitForText('Second', 5, '.list-view');

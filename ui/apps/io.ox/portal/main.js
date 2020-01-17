@@ -732,13 +732,13 @@ define('io.ox/portal/main', [
                         var dialog = new ModalDialog({ title: gt('Delete widget'), description: gt('Do you really want to delete this widget?') })
                         .addCancelButton()
                         //#. Really delete portal widget - in contrast to "just disable"
-                        .addButton({ label: gt('Delete'), action: 'delete' })
                         .on('delete', function () { model.collection.remove(model); });
                         if (model.get('enabled')) {
                             //#. Just disable portal widget - in contrast to delete
                             dialog.addButton({ label: gt('Just disable widget'), action: 'disable', placement: 'left', className: 'btn-default' })
                                 .on('disable', function () { model.set('enabled', false, { validate: true }); });
                         }
+                        dialog.addButton({ label: gt('Delete'), action: 'delete' });
                         dialog.open();
                     } else {
                         model.collection.remove(model);

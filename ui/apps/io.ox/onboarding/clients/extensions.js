@@ -329,7 +329,7 @@ define('io.ox/onboarding/clients/extensions', [
                 //#. %1$s: a cell phone number
                 this.$body.text(gt('Link will be sent to %1$s', data.sms));
             })
-            .addCancelButton({ left: true })
+            .addCancelButton()
             .addButton({ action: 'apply', label: gt('Send') })
             .on('apply', function () {
                 api.execute(scenario, action, data)

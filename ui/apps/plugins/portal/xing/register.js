@@ -30,10 +30,11 @@ define('plugins/portal/xing/register', [
     'io.ox/core/api/user',
     'io.ox/core/notifications',
     'io.ox/backbone/views/modal',
+    'io.ox/core/settings/util',
     'io.ox/keychain/api',
     'gettext!plugins/portal',
     'less!plugins/portal/xing/xing'
-], function (ext, eventActions, activityParsers, api, userApi, notifications, ModalDialog, keychain, gt) {
+], function (ext, eventActions, activityParsers, api, userApi, notifications, ModalDialog, util, keychain, gt) {
 
     'use strict';
 
@@ -58,33 +59,58 @@ define('plugins/portal/xing/register', [
         });
     };
 
+    var getLanguages = function () {
+        return [
+            { label: 'de', value: 'de' },
+            { label: 'en', value: 'en' },
+            { label: 'es', value: 'es' },
+            { label: 'fr', value: 'fr' },
+            { label: 'it', value: 'it' },
+            { label: 'nl', value: 'nl' },
+            { label: 'pl', value: 'pl' },
+            { label: 'pt', value: 'pt' },
+            { label: 'ru', value: 'ru' },
+            { label: 'tr', value: 'tr' },
+            { label: 'zh', value: 'zh' }
+        ];
+    };
+
     createXingAccount = function (e) {
         e.preventDefault();
 
-        new ModalDialog()
+        //#. 'Create a XING Account' as a header of a modal dialog to create a XING account.
+        new ModalDialog({ title: gt('Create a XING Account') })
             .build(function () {
-                var availableLangs = 'de en es fr it nl pl pt ru tr zh'.split(' '), self = this, guid;
+                var self = this, guid,
+                    language = 'language',
+                    model = new Backbone.Model();
+                model.isConfigurable = true;
+                model.isConfigurable = function () { return true; };
+                model.set(language, getLanguages()[0].value);
 
                 this.$body.append(
-                    $('<div class="io-ox-xing submitted-data">').append(
-                        $('<p>').text(
-                            gt('Please select which of the following data we may use to create your %s account:', XING_NAME)
-                        ),
-                        $('<label>').text(gt('Mail address')).attr('for', guid = _.uniqueId('form-control-label-')).append(
-                            this.$email = $('<input type="text" name="email">').attr('id', guid)
-                        ),
-                        $('<label>').text(gt('First name')).attr('for', guid = _.uniqueId('form-control-label-')).append(
-                            this.$firstname = $('<input type="text" name="firstname">').attr('id', guid)
-                        ),
-                        $('<label>').text(gt('Last name')).attr('for', guid = _.uniqueId('form-control-label-')).append(
-                            this.$lastname = $('<input type="text" name="lastname">').attr('id', guid)
-                        ),
-                        $('<label>').text(gt('Language')).attr('for', guid = _.uniqueId('form-control-label-')).append(
-                            this.$language = $('<select name="language">').attr('id', guid).append(
-                                _(availableLangs).map(function (elem) { return $('<option>').val(elem).text(elem); })
-                            )
+                    $('<p>').text(
+                        gt('Please select which of the following data we may use to create your %s account:', XING_NAME)
+                    ),
+                    $('<div class="row">').append(
+                        $('<div class="col-sm-12">').append(
+                            $('<label for="mail_address">').text(gt('Mail address')),
+                            this.$email = $('<input id="mail_address" type="text" name="email" class="form-control">').attr('id', guid)
                         )
-                    )
+                    ),
+                    $('<div class="row">').append(
+                        $('<div class="col-sm-12">').append(
+                            $('<label for="first_name">').text(gt('First name')),
+                            this.$firstname = $('<input id="first_name" type="text" class="form-control" placeholder="">')
+                        )
+                    ),
+                    $('<div class="row">').append(
+                        $('<div class="col-sm-12">').append(
+                            $('<label for="last_name">').text(gt('Last name')),
+                            this.$lastname = $('<input id="last_name" type="text" class="form-control" placeholder="">')
+                        )
+                    ),
+                    util.compactSelect(language, gt('Language'), model, getLanguages())
                 );
 
                 userApi.getCurrentUser().done(function (userData) {
@@ -96,7 +122,8 @@ define('plugins/portal/xing/register', [
                 });
             })
             .addCancelButton()
-            .addButton({ label: gt('Accept'), action: 'accepted' })
+            //#. 'Create' as button text of a modal dialog to confirm to create a new XING-Account
+            .addButton({ label: gt('Create'), action: 'accepted' })
             .on('accepted', function () {
                 api.createProfile({
                     tandc_check: true,

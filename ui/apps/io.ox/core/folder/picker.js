@@ -15,11 +15,10 @@ define('io.ox/core/folder/picker', [
     'io.ox/core/folder/tree',
     'io.ox/mail/api',
     'io.ox/core/folder/api',
-    'io.ox/core/tk/dialogs',
     'io.ox/backbone/views/modal',
     'gettext!io.ox/core',
     'io.ox/core/capabilities'
-], function (TreeView, mailAPI, api, dialogs, ModalDialog, gt, capabilities) {
+], function (TreeView, mailAPI, api, ModalDialog, gt, capabilities) {
 
     'use strict';
 
@@ -141,15 +140,16 @@ define('io.ox/core/folder/picker', [
             .build(function () {
                 this.$el.addClass('folder-picker-dialog ' + o.addClass);
             })
-            .addCancelButton()
-            .addButton({ action: 'ok', label: o.button ? o.button : gt('Ok') });
+            .addCancelButton();
 
         if (!(capabilities.has('guest') && o.flat) && o.createFolderButton) {
-            dialog.addAlternativeButton({ action: 'create', label: o.createFolderText || gt('Create folder') });
+            dialog.addButton({ action: 'create', label: o.createFolderText || gt('Create folder'), placement: 'left', className: 'btn-default' });
         }
 
+        dialog.addButton({ action: 'ok', label: o.button ? o.button : gt('Ok') });
+
         if (o.alternativeButton) {
-            dialog.addAlternativeButton({ action: 'alternative', label: o.alternativeButton });
+            dialog.addButton({ action: 'alternative', label: o.alternativeButton });
         }
         dialog.$body.css({ height: o.height });
 

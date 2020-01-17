@@ -149,7 +149,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
             label: gt('Save'),
             action: 'save'
         })
-        .addCancelButton();
+        .addCancelButton({ left: true });
 
         //disable save button if no action is set
         if (actionArray.length === 0) myView.dialog.$el.find('.modal-footer[data-action="save"]').prop('disabled', true);
@@ -448,6 +448,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             async: true,
                             context: 'filter',
                             title: gt('Select the folder to apply the rule to'),
+                            //#. 'Apply' as button text to confirm the chosen email folder where a new filter rule shall be applied to via a picker dialog.
+                            button: gt('Apply'),
                             done: function (id, dialog) {
                                 dialog.close();
                                 var rule = self.$el.find('a[data-action="apply"]');
@@ -503,7 +505,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     onDelete: function (e) {
                         e.preventDefault();
 
-                        new ModalDialog({ title: gt('Do you really want to delete this filter rule?') })
+                        //#. 'Delete filter rule' as a header of a modal dialog to confirm to delete a mail filter rule.
+                        new ModalDialog({ title: gt('Delete filter rule'), description: gt('Do you really want to delete this filter rule?') })
                             .addCancelButton()
                             .addButton({ label: gt('Delete'), action: 'delete' })
                             .on('delete', function () {

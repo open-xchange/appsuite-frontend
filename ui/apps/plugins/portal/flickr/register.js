@@ -180,15 +180,17 @@ define('plugins/portal/flickr/register', [
         //disable widget till data is set by user
         model.set('candidate', true, { silent: true, validate: true });
 
-        var dialog = new ModalDialog({ title: gt('Edit Flickr photo stream'), async: true, width: 400 }),
-            $q = $('<input id="flickr_search" type="text" class="form-control" tabindex="0">'),
+        var $q = $('<input id="flickr_search" type="text" class="form-control" tabindex="0">'),
             $description = $('<input id="flickr_desc" type="text" class="form-control" tabindex="0">'),
             $method = $('<select id="flickr_option" class="form-control" tabindex="0">').append(
                 $('<option>').attr('value', 'flickr.photos.search').text(gt('Search photos')),
                 $('<option>').attr('value', 'flickr.people.getPublicPhotos').text(gt('Public photos by user'))
             ),
             $error = $('<div>').addClass('alert alert-danger').css('margin-top', '15px').hide(),
-            props = model.get('props') || {};
+            props = model.get('props') || {},
+            isNew = _.isUndefined(props.query),
+            //#. 'Create Flickr photo stream' and 'Edit Flickr photo stream' as headers of a modal dialog to create or edit a Flickr photo stream.
+            dialog = new ModalDialog({ title: isNew ? gt('Create Flickr photo stream') : gt('Edit Flickr photo stream'), async: true, width: 400 });
 
         dialog.build(function () {
             this.$body.append(
@@ -214,7 +216,8 @@ define('plugins/portal/flickr/register', [
             );
         })
         .addCancelButton()
-        .addButton({ label: gt('Save'), action: 'save' })
+        //#. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.
+        .addButton({ label: isNew ? gt('Create') : gt('Save'), action: 'save' })
         .on('cancel', function () {
             // if it's a new widget delete it, otherwise not
             if (model.has('candidate') && _.isEmpty(model.get('props'))) view.removeWidget();

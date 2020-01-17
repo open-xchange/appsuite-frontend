@@ -27,7 +27,7 @@ define('io.ox/core/tk/upload-problems', [
             .build(function () {
                 this.$el.addClass('upload-problems');
                 this.$body.append(
-                    $('<strong>').append(gt.ngettext(
+                    $('<span>').append(gt.ngettext(
                         'We encountered an issue for your upload',
                         'We encountered some issues for your upload',
                         errors.length

@@ -80,7 +80,8 @@ define('io.ox/core/folder/actions/common', [
             return function (id) {
 
                 folderAPI.get(id).done(function (folder) {
-                    new ModalDialog({ title: gt('Do you really want to empty folder "%s"?', folderAPI.getFolderTitle(folder.title, 30)) })
+                    //#. 'Delete all messages' as header et´´text to confirm to empty a selected folder and delete all messages via a modal dialog.
+                    new ModalDialog({ title: gt('Delete all messages'), description: gt('Do you really want to empty folder "%s"?', folderAPI.getFolderTitle(folder.title, 30)) })
                         .addCancelButton()
                         //#. empty is a verb in this case. Used when the contents of a folder should be deleted
                         .addButton({ label: gt('Empty folder'), action: 'delete' })

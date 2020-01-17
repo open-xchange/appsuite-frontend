@@ -40,6 +40,8 @@ define('io.ox/core/tk/dialogs', [
 
     var Dialog = function (options) {
 
+        if (ox.debug) console.warn('io.ox/core/tk/dialogs is deprecated. Please use io.ox/backbone/views/modal for modal dialogs. io.ox/core/tk/dialogs will be removed in future releases.');
+
         var o = _.extend({
                 width: 500,
                 underlayAction: null,

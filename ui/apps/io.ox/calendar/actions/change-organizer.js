@@ -108,8 +108,9 @@ define('io.ox/calendar/actions/change-organizer', [
                     // typeahead.$el.data('ttTypeahead').dropdown.close = $.noop;
                     // typeahead.$el.data('ttTypeahead').dropdown.empty = $.noop;
                 })
-                .addAlternativeButton({ action: 'cancel', label: gt('Cancel') })
-                .addButton({ action: 'ok', label: gt('Ok'), className: 'btn-primary' })
+                .addCancelButton()
+                //#. 'Change' as text for a button to apply the change of the organizer of an appointment.
+                .addButton({ action: 'ok', label: gt('Change'), className: 'btn-primary' })
                 .on('ok', function () {
                     var params = {
                         id: appointmentData.seriesId || appointmentData.id,

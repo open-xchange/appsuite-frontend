@@ -35,8 +35,9 @@ define('io.ox/core/tk/filestorageUtil', [
             if (!options.callbackCancel && !options.callbackIgnoreConflicts) {
                 dialog.addButton({ label: gt('Ok'), action: 'ok' });
             } else {
+                //#. 'Ignore conflicts' as button text of a modal dialog to confirm to ignore conflicts.
                 dialog.addCancelButton()
-                    .addButton({ label: gt('Ignore warnings'), action: 'ignorewarnings' });
+                    .addButton({ label: gt('Ignore conflicts'), action: 'ignorewarnings' });
             }
             dialog.build(function () {
                 // build a list of warnings

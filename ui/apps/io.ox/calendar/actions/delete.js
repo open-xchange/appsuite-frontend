@@ -85,7 +85,7 @@ define('io.ox/calendar/actions/delete', [
                 // we need a flat array to avoid object object text here
                 description: displayComment ? _([$('<div>').text(text), commentView]).flatten() : $('<div>').text(text)
             })
-            .addCancelButton({ left: true })
+            .addCancelButton({ left: hasSeries })
             .on('action', function (action) {
                 if (action === 'cancel') return;
                 cont(action);

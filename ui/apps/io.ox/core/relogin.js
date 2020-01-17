@@ -52,7 +52,7 @@ define('io.ox/core/relogin', [
                 $('<input type="password" name="relogin-password" class="form-control">').attr('id', guid)
             );
             this
-            .addButton({ className: 'btn-default', label: gt('Cancel'), placement: 'left', action: 'cancel' })
+            .addButton({ className: 'btn-default', label: gt('Cancel'), action: 'cancel' })
             .addButton({ action: 'relogin', label: gt('Sign in') })
             .on('cancel', function () {
                 ox.trigger('relogin:cancel');

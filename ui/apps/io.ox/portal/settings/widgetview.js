@@ -113,15 +113,14 @@ define('io.ox/portal/settings/widgetview', [
             if (!_.isEmpty(this.model.get('props'))) {
                 var dialog = new ModalDialog({ title: gt('Delete widget'), description: gt('Do you really want to delete this widget?') })
                 .addCancelButton()
-                .on('delete', function () { self.removeWidget(); })
-                //#. Really delete portal widget - in contrast to "just disable"
-                .addButton({ label: gt('Delete'), action: 'delete' });
-
+                .on('delete', function () { self.removeWidget(); });
                 if (this.model.get('enabled')) {
                     //#. Just disable portal widget - in contrast to delete
                     dialog.on('disable', function () { self.onToggle(e); })
                         .addButton({ label: gt('Just disable widget'), action: 'disable', placement: 'left', className: 'btn-default' });
                 }
+                //#. Really delete portal widget - in contrast to "just disable"
+                dialog.addButton({ label: gt('Delete'), action: 'delete' });
                 dialog.open();
             } else {
                 this.removeWidget();

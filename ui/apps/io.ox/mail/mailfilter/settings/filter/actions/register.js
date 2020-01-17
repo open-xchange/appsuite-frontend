@@ -356,7 +356,9 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                             module: 'mail',
                             root: '1',
                             settings: settings,
-                            persistent: 'folderpopup'
+                            persistent: 'folderpopup',
+                            //#. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
+                            button: gt('Select')
                         });
                     }
 
@@ -423,7 +425,9 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                             module: 'mail',
                             root: '1',
                             settings: settings,
-                            persistent: 'folderpopup'
+                            persistent: 'folderpopup',
+                            //#. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
+                            button: gt('Select')
                         });
                     }
 

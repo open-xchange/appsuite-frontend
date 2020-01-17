@@ -256,8 +256,8 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.checkOption('Use Drive Mail');
     I.fillField('Subject', 'Testsubject #1');
     I.click('Discard');
-    I.waitForText('Save as draft', 5, '.io-ox-dialog-popup');
-    I.click('Save as draft', '.io-ox-dialog-popup');
+    I.waitForText('Save as draft', 5, '.modal-dialog');
+    I.click('Save as draft', '.modal-dialog');
     I.waitForDetached('.io-ox-taskbar-container .taskbar-button');
 
     I.selectFolder('Drafts');

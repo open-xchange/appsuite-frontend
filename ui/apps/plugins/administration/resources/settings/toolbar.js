@@ -47,8 +47,9 @@ define('plugins/administration/resources/settings/toolbar', [
         collection: 'one',
         action: function (baton) {
             var id = baton.first().id, model = resourceAPI.getModel(id);
+            //#. 'Delete resource' as heade of a modal dialog to confirm to delete a resource
             //#. %1$s is the resource name
-            new ModalDialog({ title: gt('Do you really want to delete the resource "%1$s"? This action cannot be undone!', model.get('display_name')) })
+            new ModalDialog({ title: gt('Delete resource'), description: gt('Do you really want to delete the resource "%1$s"? This action cannot be undone!', model.get('display_name')) })
                 .addCancelButton()
                 .addButton({ label: gt('Delete resource'), action: 'delete' })
                 .on('delete', function () { resourceAPI.remove(id); })

@@ -201,8 +201,9 @@ define('io.ox/calendar/conflicts/conflictList', [
                     var hardConflict = !!_.find(conflicts, function (conflict) { return conflict.hard_conflict === true; });
 
                     // additional header
-                    this.$header.append(
-                        $('<div class="modal-subtitle">').text(gt('The new appointment conflicts with existing appointments.'))
+                    this.$body.append(
+                        $('<div class="modal-subtitle">').text(gt('The new appointment conflicts with existing appointments.')),
+                        $('<br>')
                     );
                     // conflicting resources cannot be ignored
                     if (hardConflict) {

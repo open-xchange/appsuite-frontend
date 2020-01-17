@@ -713,7 +713,7 @@ define('io.ox/backbone/views/recurrence-view', [
                 this.$el.addClass('recurrence-view-dialog');
                 this.$body.addClass('form-horizontal');
             })
-            .addCancelButton({ left: true })
+            .addCancelButton()
             .addButton({ label: gt('Apply'), action: 'apply' })
             .on('apply', function () {
                 if (!this.model.checkValidation()) {

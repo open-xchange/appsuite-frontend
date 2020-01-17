@@ -80,7 +80,7 @@ define('io.ox/tasks/toolbar', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('Delete'),
-            tooltip: gt('Delete task'),
+            tooltip: gt.pgettext('tooltip', 'Delete task'),
             ref: 'io.ox/tasks/actions/delete'
         },
         //

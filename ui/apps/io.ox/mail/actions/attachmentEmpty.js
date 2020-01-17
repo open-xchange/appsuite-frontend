@@ -12,9 +12,9 @@
  */
 
 define('io.ox/mail/actions/attachmentEmpty', [
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/mail'
-], function (dialogs, gt) {
+], function (ModalDialog, gt) {
 
     'use strict';
 
@@ -23,20 +23,22 @@ define('io.ox/mail/actions/attachmentEmpty', [
             emptyFile = files ? _(files).filter(function (file) { return file.size === 0; }).length > 0 : false;
 
         if (emptyFile) {
-            new dialogs.ModalDialog()
-                .text(gt('You attached an empty file. It could be, that this file has been deleted on your hard drive. Send it anyway?'))
-                .addPrimaryButton('send', gt('Yes, with empty attachment'), 'send')
-                .addButton('cancel', gt('Cancel'), 'cancel')
-                .show(function () {
-                    def.notify('empty attachment');
+
+            new ModalDialog({
+                //#. 'Empty file attachment' as header of a modal dialog to confirm or cancel sending an email with an empty attachment.
+                title: gt('Empty file attachment'),
+                description: gt('The attached file is empty. Maybe this file was deleted on your local hard drive. Do you want to send it anyway?')
+            })
+                .addCancelButton({ action: 'cancel' })
+                //#. 'Send with empty attachment' as button text of a modal dialog to confirm to send the mail also without a subject.
+                .addButton({ label: gt('Send with empty attachment'), action: 'send' })
+                .on('send', function () {
+                    def.resolve();
                 })
-                .done(function (action) {
-                    if (action === 'send') {
-                        def.resolve();
-                    } else {
-                        def.reject();
-                    }
-                });
+                .on('cancel', function () {
+                    def.reject();
+                })
+                .open();
         } else {
             def.resolve();
         }

@@ -476,7 +476,7 @@ Scenario('[C83386] Create mail filter based on mail', async function (I, users) 
     I.click({ css: '[data-id="default0/INBOX/Trash"]' }, '.folder-picker-dialog');
     I.waitForElement({ css: '[data-id="default0/INBOX/Trash"].selected' }, '.folder-picker-dialog');
     I.wait(1);
-    I.click('Ok');
+    I.click('Select');
     // save the form
     I.click('Save');
     I.waitForDetached('.modal-backdrop.in');

@@ -35,7 +35,7 @@ Scenario('[C163026] Change \'from\' display name when sending a mail', async (I,
     I.waitForElement({ css: 'input[name=overwrite]' });
     I.click({ css: 'input[name=overwrite]' });
     I.fillField('name', 'Entropy McDuck');
-    I.click('Save');
+    I.click('Edit');
     I.waitForDetached('io-ox-dialog-popup');
 
     // Verify the dislay name has changed
