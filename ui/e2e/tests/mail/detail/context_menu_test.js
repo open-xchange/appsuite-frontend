@@ -71,10 +71,11 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users,
     // Reply
     rightClick('Reply');
     I.waitForElement({ css: 'button[data-action="discard"]' });
-    I.waitForEnabled({ css: 'button[data-action="discard"]' });
     I.seeInField('subject', 'Re: ' + subject);
     // no better approach yet. I.waitForMailCompose() might be a good one
     I.waitForInvisible('.io-ox-busy');
+    I.waitForEnabled({ css: 'button[data-action="discard"]' });
+    I.wait(1);
     I.click('Discard');
 
     // // Shift-F10 (view source again)
