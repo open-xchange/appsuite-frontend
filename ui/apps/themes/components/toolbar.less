@@ -233,6 +233,12 @@
         float: left; // to support pull-right while keeping items in-order (a11y)
         height: 100%;
 
+        & >a.upsell i.fa.fa-star {
+            margin-left: 4px;
+            color: #ffc107;
+            font-size: 14px;
+        }
+
         & > a, & > button {
 
             height: 100%;
@@ -298,6 +304,11 @@
                 color: #fff;
                 outline: 0;
                 text-decoration: none;
+            }
+            &.upsell i.fa.fa-star {
+                margin-left: 4px;
+                color: #ffc107;
+                font-size: 14px;
             }
         }
         a.disabled {
