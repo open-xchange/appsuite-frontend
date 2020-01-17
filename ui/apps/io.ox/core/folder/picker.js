@@ -129,13 +129,15 @@ define('io.ox/core/folder/picker', [
             }
             return id;
         }
-        var dialog = new ModalDialog({
+        var params = {
             async: o.async,
             width: o.width,
             title: o.title,
             point: 'io.ox/core/folder/picker',
             help: o.help
-        })
+        };
+        if (_.isBoolean(o.autoFocusOnIdle)) _.extend(params, { autoFocusOnIdle: o.autoFocusOnIdle });
+        var dialog = new ModalDialog(params)
             .build(function () {
                 this.$el.addClass('folder-picker-dialog ' + o.addClass);
             })
