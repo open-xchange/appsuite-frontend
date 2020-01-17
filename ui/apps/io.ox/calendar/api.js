@@ -325,6 +325,9 @@ define('io.ox/calendar/api', [
                 options = options || {};
 
                 obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+                obj = _(obj).pick(function (value) {
+                    return value !== '' && value !== undefined && value !== null;
+                });
 
                 var params = {
                         action: 'new',
@@ -390,6 +393,10 @@ define('io.ox/calendar/api', [
                 options = options || {};
 
                 obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+                obj = _(obj).mapObject(function (value) {
+                    if (value === '') return null;
+                    return value;
+                });
 
                 var def,
                     params = {
