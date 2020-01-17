@@ -30,6 +30,7 @@
         edge,
         edgeChromium,
         phantom,
+        safari,
         MacOS,
         Linux,
         Windows,
@@ -107,6 +108,15 @@
             chromeIOS = ua.indexOf('CriOS/') > -1;
             firefoxIOS = ua.indexOf('FxiOS/') > -1;
 
+            safari = webkit && !Android && !chrome && !phantom && !uiwebview && !Blackberry && !chromeIOS && !firefoxIOS && !opera ?
+                (standalone ? iOS : (ua.split('Version/')[1] ? ua.split('Version/')[1].split(' Safari')[0] : undefined)) : undefined;
+
+            // special case for iPad on iOS 12.2+ due to the same user agent as macos. Checks for MacOS + Safari + !iPhone + touch
+            if (MacOS && safari && !iOS && nav.maxTouchPoints === 5) {
+                iOS = 12.2;
+                MacOS = false;
+            }
+
             // TODO: This needs to be updated, if better user agent is available
             // Edge is no Chrome, Webkit or Android.
             if (edge) {
@@ -136,8 +146,7 @@
                 /** is WebKit? */
                 WebKit: webkit,
                 /** Safari */
-                Safari: webkit && !Android && !chrome && !phantom && !uiwebview && !Blackberry && !chromeIOS && !firefoxIOS && !opera ?
-                    (standalone ? iOS : (ua.split('Version/')[1] ? ua.split('Version/')[1].split(' Safari')[0] : undefined)) : undefined,
+                Safari: safari,
                 /** PhantomJS (needed for headless spec runner) */
                 PhantomJS: webkit && phantom ?
                     ua.split('PhantomJS/')[1].split(' ')[0] : undefined,
