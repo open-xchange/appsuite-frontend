@@ -30,6 +30,7 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
     let url;
     I.say('Alice shares a folder with 2 appointments');
     session('Alice', async () => {
+        I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[0] });
         I.login('app=io.ox/calendar');
         calendar.newAppointment();
         I.fillField('Subject', 'simple appointment 1');
@@ -38,13 +39,12 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         calendar.newAppointment();
         I.fillField('Subject', 'simple appointment 2');
         // select tomorrow
-        await calendar.setDate('startDate', moment().add(1, 'day'));
+        await calendar.setDate('startDate', moment().add(2, 'day'));
         I.click('Create');
         I.waitToHide('.io-ox-calendar-edit');
 
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
         I.clickDropdown('Permissions / Invite people');
-
         I.waitForElement('.modal');
         I.click('~Select contacts');
         I.waitForElement('.modal .list-view.address-picker li.list-item');
@@ -55,7 +55,7 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         I.click({ css: 'button[data-action="select"]' });
         I.waitForDetached('.address-picker');
         I.waitForElement(locate('.permissions-view .row').at(2));
-        I.waitForText('Author');
+        I.waitForText('Author', 10, '.permissions-view');
         I.click('Author');
         I.clickDropdown('Viewer');
 
@@ -78,7 +78,8 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         I.see('simple appointment 2', { css: '.appointment-container' });
 
         I.say('check for missing edit rights');
-        I.click(locate('.appointment').inside('.weekview-container.week').at(1));
+        I.waitForVisible(locate('.appointment').inside('.page.current .weekview-container.week'));
+        I.retry(5).click(locate('.appointment').inside('.page.current .weekview-container.week'));
         I.waitForElement('.io-ox-sidepopup');
         I.dontSee('Edit', '.io-ox-sidepopup');
         I.click('~Close', '.io-ox-sidepopup');
