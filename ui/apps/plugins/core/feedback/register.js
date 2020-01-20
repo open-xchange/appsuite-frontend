@@ -43,6 +43,12 @@ define('plugins/core/feedback/register', [
             'io.ox/contacts',
             'io.ox/calendar',
             'io.ox/files'
+        ],
+        npsExtendedQuestions = [
+            gt('What is the primary reason for your score?'),
+            gt('WHY U NO GIVE 10?'),
+            gt('What is the answer to life the universe and everything?'),
+            gt('Who is awesome and is filling out this feedback form?')
         ];
 
     // we want to limit spam, so offer a way to rate limit feedback
@@ -341,7 +347,8 @@ define('plugins/core/feedback/register', [
                         if (dialogMode === 'nps') return;
 
                         var guid = _.uniqueId('feedback-note-'),
-                            text = dialogMode === 'nps-extended' ? gt('What is the primary reason for your score?') : gt('Comments and suggestions');
+                            // prepare for index out of bounds
+                            text = dialogMode === 'nps-extended' ? npsExtendedQuestions[settings.get('feedback/questionIndex') || 0] || gt('What is the primary reason for your score?') : gt('Comments and suggestions');
 
                         this.$body.append(
                             $('<label>').attr('for', guid).text(text),
