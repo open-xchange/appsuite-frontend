@@ -202,21 +202,29 @@ define('plugins/core/feedback/register', [
         className: 'nps-rating rating-view',
         name: 'nps-rating-v1',
 
+        initialize: function () {
+            // call super constructor
+            StarRatingView.prototype.initialize.apply(this, arguments);
+            // use value outside the range or the initial hover is set to 0 instead of nothing
+            this.value = -1;
+        },
+
         render: function () {
 
             this.$el.append(
-                $('<caption>').text(gt('Not likely at all')),
-                $('<div>').append(
+                $('<div class="score-wrapper">').append(
                     _.range(0, 11).map(function (i) {
                         return $('<label>').append(
                             $('<input type="radio" name="nps-rating" class="sr-only">').val(i)
                                 .attr('title', gt('%1$d of 10 points.', i)),
-                            $('<i class="fa fa-circle score" aria-hidden="true">'),
-                            (i % 5 === 0 ? $('<div class="score-number" aria-hidden="true">').text(i) : '')
+                            $('<span class="score" aria-hidden="true">').text(i)
                         );
                     })
                 ),
-                $('<caption>').text(gt('Extremely likely'))
+                $('<div class="caption-wrapper">').append(
+                    $('<caption>').text(gt('Not likely at all')),
+                    $('<caption>').text(gt('Very likely'))
+                )
             );
 
             return this;
@@ -270,7 +278,7 @@ define('plugins/core/feedback/register', [
             nps: {
                 ratingView: NpsRatingView,
                 //#. %1$s is the product name, for example 'OX App Suite'
-                title: gt('How likely is it that you would recommend %1$s to a friend?', ox.serverConfig.productName)
+                title: gt('How likely are you to recommend %1$s to a friend or colleague?', ox.serverConfig.productName)
             },
             stars: {
                 ratingView: StarRatingView,
@@ -303,13 +311,13 @@ define('plugins/core/feedback/register', [
                 enter: 'send',
                 point: 'plugins/core/feedback',
                 //#. %1$s is the product name, for example 'OX App Suite'
-                title: gt('How do you like %1$s?', ox.serverConfig.productName),
+                title: gt('We appreciate your feedback'),
                 class: dialogMode + '-feedback-view'
             };
 
             // nps view needs more space
             if (dialogMode === 'nps') {
-                options.width = 600;
+                options.width = 580;
             }
             new ModalDialog(options)
                 .extend({

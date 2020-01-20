@@ -44,33 +44,50 @@
 
 .nps-rating {
 
-    @score-color: #ccc;
-    @score-color-checked: @link-color;
+    @score-color: #dedede;
+    @score-color-checked: #51a7f0;
+    display: block;
 
-    justify-content: space-between;
-    padding-top: 8px;
+    padding-top: 16px;
 
-    caption {
-        font-weight: 500;
-        line-height: 16px;
+    .caption-wrapper {
+        display: flex;
+        justify-content: space-between;
+        caption {
+            font-weight: normal;
+            line-height: 16px;
+        }
     }
 
-    label {
-        padding-right: 4px;
-        vertical-align: top;
 
-        .score {
-            // don't make the circles too small since those are buttons as well
-            font-size: 24px;
-            line-height: 32px;
-            cursor: pointer;
-            color: @score-color;
+    .score-wrapper {
+        display: flex;
+        justify-content: center;
 
-            &.checked { color: @score-color-checked; }
-        }
+        label {
+            padding-right:4px;
+            padding-left:4px;
+            vertical-align: top;
 
-        .score-number {
-            text-align: center;
+            .score {
+                // don't make the circles too small since those are buttons as well
+                display: inline-block;
+                border-radius: 20px;
+                width: 40px;
+                height: 40px;
+                text-align: center;
+                font-size: 18px;
+                font-weight: 600;
+                line-height: 40px;
+                cursor: pointer;
+                color: #000;
+                background-color: @score-color;
+
+                &.checked {
+                    background-color: @score-color-checked;
+                    color: #fff
+                }
+            }
         }
     }
 
