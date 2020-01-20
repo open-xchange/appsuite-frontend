@@ -50,8 +50,7 @@ Scenario('[C7433] Create appointment by marking some timeframe', async (I, calen
     I.fillField('summary', apnt_subject);
     I.fillField('location', apnt_location);
     I.click('Create');
-
-    I.triggerRefresh();
+    I.waitForDetached('.io-ox-calendar-edit-window');
 
     // open overlay
     I.click(apnt_subject, '.appointment');
