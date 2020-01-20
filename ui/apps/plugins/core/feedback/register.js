@@ -267,6 +267,7 @@ define('plugins/core/feedback/register', [
             };
         }
     });
+
     // for custom dev
     ext.point('plugins/core/feedback').extend({
         id: 'process',
@@ -276,6 +277,11 @@ define('plugins/core/feedback/register', [
 
     var modes = {
             nps: {
+                ratingView: NpsRatingView,
+                //#. %1$s is the product name, for example 'OX App Suite'
+                title: gt('How likely are you to recommend %1$s to a friend or colleague?', ox.serverConfig.productName)
+            },
+            'nps-extended': {
                 ratingView: NpsRatingView,
                 //#. %1$s is the product name, for example 'OX App Suite'
                 title: gt('How likely are you to recommend %1$s to a friend or colleague?', ox.serverConfig.productName)
@@ -311,12 +317,11 @@ define('plugins/core/feedback/register', [
                 enter: 'send',
                 point: 'plugins/core/feedback',
                 //#. %1$s is the product name, for example 'OX App Suite'
-                title: gt('We appreciate your feedback'),
-                class: dialogMode + '-feedback-view'
+                title: gt('We appreciate your feedback')
             };
 
             // nps view needs more space
-            if (dialogMode === 'nps') {
+            if (dialogMode.indexOf('nps') === 0) {
                 options.width = 580;
             }
             new ModalDialog(options)
@@ -329,19 +334,22 @@ define('plugins/core/feedback/register', [
                     ratingView: function () {
                         this.ratingView = new modes[dialogMode].ratingView({ hover: settings.get('feedback/showHover', true) });
 
-                        this.$body.append(this.ratingView.render(this.$body).$el);
+                        this.$body.addClass(dialogMode + '-feedback-view').append(this.ratingView.render(this.$body).$el);
                     },
                     comment: function () {
                         if (dialogMode === 'nps') return;
-                        var guid = _.uniqueId('feedback-note-');
+
+                        var guid = _.uniqueId('feedback-note-'),
+                            text = dialogMode === 'nps-extended' ? gt('What is the primary reason for your score?') : gt('Comments and suggestions');
+
                         this.$body.append(
-                            $('<label>').attr('for', guid).text(gt('Comments and suggestions')),
+                            $('<label>').attr('for', guid).text(text),
                             $('<textarea class="feedback-note form-control" rows="5">').attr('id', guid)
                         );
                     },
                     infotext: function () {
                         // without comment field infotext makes no sense
-                        if (dialogMode === 'nps') return;
+                        if (dialogMode.indexOf('nps') === 0) return;
                         this.$body.append(
                             $('<div>').text(
                                 gt('Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly.')
