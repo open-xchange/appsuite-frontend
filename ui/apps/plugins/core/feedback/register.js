@@ -238,6 +238,7 @@ define('plugins/core/feedback/register', [
         },
 
         setValue: function (value) {
+            value = parseInt(value, 10);
             if (value < 0 || value > 11) return;
             this.value = value;
             this.renderRating(value);
@@ -368,7 +369,7 @@ define('plugins/core/feedback/register', [
                 .addButton({ action: 'send', label: gt('Send') })
                 .on('send', function () {
 
-                    if (this.ratingView.getValue() === 0) {
+                    if ((dialogMode.indexOf('nps') === 0 && this.ratingView.getValue() === -1) || (dialogMode.indexOf('nps') === -1 && this.ratingView.getValue() === 0)) {
                         yell('error', gt('Please select a rating.'));
                         this.idle();
                         return;
