@@ -263,33 +263,27 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
 });
 
 //TODO: step I see "11:21 AM – 12:21 PM" fails, seems to only happen at around 11am - 12 pm
-Scenario.skip('[C244785] Open event from invite notification in calendar', async (I, calendar, users) => {
-    const [userA, userB] = users;
+Scenario('[C244785] Open event from invite notification in calendar @flaky', async (I, users, calendar) => {
+    const [userA, userB] = users,
+        startTime = moment().add(10, 'minutes'),
+        endTime = moment().add(70, 'minutes'),
+
+        // check if start and end time is transitioning between am/pm
+        isTransitionTime = function () {
+            return startTime.format('A') !== endTime.format('A');
+        };
 
     await I.haveSetting({ 'io.ox/core': { autoOpenNotification: false } }, { user: userB });
 
     // 1. User#A: Create an appointment which starts in less than 15 minutes and invite User#B
     I.login(['app=io.ox/calendar&perspective=week:week'], { user: userA });
     calendar.waitForApp();
-    I.clickToolbar('New appointment');
-    I.waitForVisible('.io-ox-calendar-edit-window');
-    I.retry(5).fillField('Subject', 'Totally nerdy event');
+    calendar.newAppointment();
+    I.fillField('Subject', 'Totally nerdy event');
 
-    const startTime = moment().add(10, 'minutes'),
-        endTime = moment().add(70, 'minutes');
-
-    // check if start and end time is transitioning between am/pm
-    const isTransitionTime = function () {
-        return startTime.format('A') !== endTime.format('A');
-    };
-
-    I.click('~Start time');
-    I.pressKey('Enter');
-    I.pressKey(['Control', 'a']);
-    I.pressKey(startTime.format('hh:mm A'));
-    I.pressKey('Enter');
+    I.fillField(calendar.locators.starttime, startTime.format('hh:mm A'));
     I.fillField('Add contact/resource', userB.userdata.primaryEmail);
-    I.wait(0.5);
+    I.wait(0.2);
     I.pressKey('Enter');
 
     // save
@@ -313,7 +307,7 @@ Scenario.skip('[C244785] Open event from invite notification in calendar', async
     I.click('Open in calendar');
 
     // Expected Result: Calendar opens containing a side popup with detailed appointment information.
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    calendar.waitForApp();
     I.waitForText('Totally nerdy event', 5, '.appointment');
     I.seeElement('.io-ox-sidepopup');
     I.seeNumberOfElements('.calendar-detail.view', 1);
