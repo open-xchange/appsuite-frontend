@@ -35,7 +35,8 @@ define('io.ox/calendar/perspective', [
 
         events: function () {
             var events = {
-                'click .appointment': 'onClickAppointment'
+                'click .appointment': 'onClickAppointment',
+                'dblclick .appointment': 'onDoubleClick'
             };
             if (_.device('touch')) {
                 _.extend(events, {
@@ -179,8 +180,7 @@ define('io.ox/calendar/perspective', [
         onClickAppointment: function (e) {
             var target = $(e[(e.type === 'keydown') ? 'target' : 'currentTarget']);
             if (target.hasClass('appointment') && !this.model.get('lasso') && !target.hasClass('disabled')) {
-                var self = this,
-                    obj = util.cid(String(target.data('cid')));
+                var obj = util.cid(String(target.data('cid')));
                 if (!target.hasClass('current') || _.device('smartphone')) {
                     // ignore the "current" check on smartphones
                     this.$('.appointment')
@@ -193,27 +193,22 @@ define('io.ox/calendar/perspective', [
                 } else {
                     this.$('.appointment').removeClass('opac');
                 }
-
-                if (this.clickTimer === null && this.clicks === 0) {
-                    this.clickTimer = setTimeout(function () {
-                        clearTimeout(self.clickTimer);
-                        self.clicks = 0;
-                        self.clickTimer = null;
-                    }, 300);
-                }
-                this.clicks++;
-
-                if (this.clickTimer !== null && this.clicks === 2 && target.hasClass('modify') && e.type === 'click') {
-                    clearTimeout(this.clickTimer);
-                    this.clicks = 0;
-                    this.clickTimer = null;
-                    api.get(obj).done(function (model) {
-                        if (self.dialog) self.dialog.close();
-                        ext.point('io.ox/calendar/detail/actions/edit')
-                            .invoke('action', self, new ext.Baton({ data: model.toJSON() }));
-                    });
-                }
             }
+        },
+
+        onDoubleClick: function (e) {
+            var target = $(e.currentTarget), self = this;
+            if (!target.hasClass('appointment') || this.model.get('lasso') || target.hasClass('disabled')) return;
+
+            if (!target.hasClass('modify')) return;
+
+            var obj = util.cid(String(target.data('cid')));
+
+            api.get(obj).done(function (model) {
+                if (self.dialog) self.dialog.close();
+                ext.point('io.ox/calendar/detail/actions/edit')
+                    .invoke('action', self, new ext.Baton({ data: model.toJSON() }));
+            });
         },
 
         createAppointment: function (data) {
