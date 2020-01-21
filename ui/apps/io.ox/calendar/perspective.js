@@ -140,7 +140,18 @@ define('io.ox/calendar/perspective', [
                         });
 
                         api.get(obj).then(function (model) {
-                            if (model.cid !== self.detailCID) return;
+                            if (model.cid !== self.detailCID) {
+                                // this appointment was changed to an exception in the meantime, probably by another calendar client
+                                // switch to updated data, send info message and clean up
+                                if (model.get('seriesId') && model.get('seriesId') === obj.id) {
+                                    self.detailCID = model.cid;
+                                    yell('warning', gt('Appointment was changed in the meantime and was updated accordingly.'));
+                                } else {
+                                    // close the dialog correctly and show an error message. Avoid never ending busy spinner.
+                                    failHandler.call(self);
+                                    return;
+                                }
+                            }
                             popup.idle().append(detailView.draw(new ext.Baton({ model: model })));
                         }, failHandler.bind(self));
                     });

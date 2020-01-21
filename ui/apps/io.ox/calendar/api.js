@@ -29,6 +29,17 @@ define('io.ox/calendar/api', [
             if (data.rrule && !data.recurrenceId) return true;
             return false;
         },
+        removeFromPool = function (event) {
+            // cannot find event when it is recurrence master
+            var events = api.pool.getModel(util.cid(event));
+            if (events) events = [events];
+            else events = api.pool.findRecurrenceModels(event);
+            events.forEach(function (evt) {
+                evt.collection.remove(evt);
+                api.trigger('delete', evt.attributes);
+                api.trigger('delete:' + util.cid(evt), evt.attributes);
+            });
+        },
         // updates pool based on writing operations response (create update delete etc)
         processResponse = function (response, options) {
             if (!response) return;
@@ -42,17 +53,7 @@ define('io.ox/calendar/api', [
                 api.trigger('process:create:' + util.cid(event), event);
             });
 
-            _(response.deleted).each(function (event) {
-                // cannot find event when it is recurrence master
-                var events = api.pool.getModel(util.cid(event));
-                if (events) events = [events];
-                else events = api.pool.findRecurrenceModels(event);
-                events.forEach(function (evt) {
-                    evt.collection.remove(evt);
-                    api.trigger('delete', evt.attributes);
-                    api.trigger('delete:' + util.cid(evt), evt.attributes);
-                });
-            });
+            _(response.deleted).each(removeFromPool);
 
             _(response.updated).each(function (event) {
                 if (isRecurrenceMaster(event)) {
@@ -183,6 +184,17 @@ define('io.ox/calendar/api', [
                         extendedEntities: true
                     }
                 }).then(function (data) {
+                    if (data.id !== obj.id) {
+                        // something's wrong, probably an exception was created by another client.
+                        // remove from pool
+                        removeFromPool(obj);
+
+                        // real error vs just a new exception
+                        if (data.seriesId !== obj.id) {
+                            // to help in debugging if needed
+                            console.error('calendar error: id ' + obj.id + ' was requested, but id ' + data.id + ' was returned', obj, data);
+                        }
+                    }
                     if (isRecurrenceMaster(data)) return api.pool.get('detail').add(data);
                     api.pool.propagateAdd(data);
                     return api.pool.getModel(data);
