@@ -70,9 +70,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                     if (settings.get('features/flag/color')) translations.flag = gt('Set color flag');
 
                     _.extend(opt.defaults.actions, defaults);
-
                     _.extend(opt.actionsTranslations, translations);
-
                     _.extend(opt.actionCapabilities, { 'markmail': 'addflags', 'tag': 'addflags', 'flag': 'addflags' });
 
                     opt.actionsOrder.push('markmail', 'tag');
@@ -155,6 +153,43 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                     }
                 }
 
+            });
+        }
+
+        if (supportedActions.setflags) {
+            ext.point('io.ox/mail/mailfilter/actions').extend({
+
+                id: 'setflags',
+
+                index: 900,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'setflags': {
+                            'flags': [''],
+                            'id': 'setflags'
+                        }
+                    };
+                    _.extend(opt.defaults.actions, defaults);
+                    _.extend(opt.actionsTranslations, { 'setflags': gt('Set IMAP keywords') });
+                    _.extend(opt.actionCapabilities, { 'setflags': 'setflags' });
+
+                    opt.actionsOrder.push('setflags');
+                },
+
+                draw: function (baton, actionKey, amodel) {
+                    var inputId = _.uniqueId('setflags_');
+                    this.append(
+                        util.drawAction({
+                            actionKey: actionKey,
+                            inputId: inputId,
+                            title: baton.view.actionsTranslations.setflags,
+                            inputLabel: baton.view.actionsTranslations.setflags,
+                            inputOptions: { name: 'setflags', model: amodel, className: 'form-control', id: inputId },
+                            errorView: true
+                        })
+                    );
+                }
             });
         }
 

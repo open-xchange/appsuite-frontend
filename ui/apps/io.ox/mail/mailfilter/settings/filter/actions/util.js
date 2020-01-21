@@ -34,12 +34,29 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
         });
     }
 
+    function getSetFlagsInputValue(list) {
+        list = [].concat(list || []);
+        return _.map(list, function (value) {
+            return value.trim().replace(/^\$+/, '');
+        }).join(' ');
+    }
+
+    function getSetFlagsModelValue(value) {
+        value = value.toString().replace(/\s+/g, ' ').trim().split(' ');
+        if (!value) return '';
+        return _.map([].concat(value), function (value) {
+            return '$' + value.trim().replace(/^\$+/, '');
+        });
+    }
+
     var Input = mini.InputView.extend({
         events: { 'change': 'onChange', 'keyup': 'onKeyup', 'paste': 'onPaste' },
         onChange: function () {
             if (this.name === 'flags') {
                 var value = ((/customflag_/g.test(this.id)) || (/removeflags_/g.test(this.id))) ? ['$' + this.$el.val().toString()] : [this.$el.val()];
                 this.model.set(this.name, value);
+            } else if (this.name === 'setflags') {
+                this.model.set('flags', getSetFlagsModelValue(this.$el.val()));
             } else if (this.name === 'to') {
                 this.model.set(this.name, this.$el.val().trim());
             } else {
@@ -52,6 +69,8 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
         update: function () {
             if (/customflag_/g.test(this.id) || /removeflags_/g.test(this.id)) {
                 this.$el.val(this.model.get('flags')[0].replace(/^\$+/, ''));
+            } else if (/setflags_/g.test(this.id)) {
+                this.$el.val(getSetFlagsInputValue(this.model.get('flags')));
             } else if (/move_/g.test(this.id) || /copy_/g.test(this.id)) {
                 prepareFolderForDisplay(this.model.get('into'), this.$el);
             } else {
@@ -60,6 +79,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
         },
         onKeyup: function () {
             var state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
+            if (this.name === 'setflags') state = 'valid:';
             this.model.trigger(state + this.name);
             this.$el.trigger('toggle:saveButton');
         }

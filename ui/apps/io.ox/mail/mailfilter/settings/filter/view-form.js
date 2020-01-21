@@ -228,7 +228,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                     _.each(actions, function (val) {
                         if (val.to === '' || val.text === '') result = false;
-                        if (val.flags && val.flags[0] === '$') result = false;
+                        if (val.flags && val.flags[0] === '$' && val.id !== 'setflags') result = false;
                     });
 
                     return result;
@@ -619,7 +619,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             }
 
                             if (_.has(attrs, 'flags')) {
-                                if ($.trim(attrs.flags[0]) === '$') {
+                                if ($.trim(attrs.flags[0]) === '$' && attrs.id !== 'setflags') {
                                     this.trigger('invalid:flags');
                                     return 'error';
                                 }
