@@ -19,6 +19,11 @@
         .title {
             font-weight: bold;
             .ellipsis();
+            // fix some issues with descenders in firefox
+            padding-bottom: 2px;
+        }
+        & > .clearfix {
+            margin-top: -2px;
         }
     }
 }
