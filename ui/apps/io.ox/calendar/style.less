@@ -171,6 +171,23 @@
     width: ~"calc(100% - 32px)";
 }
 
+// portal
+// avoid cutting of descenders in firefox
+.widget[data-widget-type="calendar"] {
+    .item {
+        margin-bottom: 14px;
+        .summary {
+            padding-bottom: 2px;
+        }
+        .second-row {
+            margin-top: -2px;
+        }
+        .location {
+            padding-bottom: 2px;
+        }
+    }
+}
+
 .io-ox-calendar-main {
     .folder-tree [data-id="cal://0/allPublic"] .folder-node .folder-label .color-label {
         background-color: @foldertree-sidepanel-background!important;

@@ -25,9 +25,21 @@
                 // portal special: always bold - not only for unread or macos/ios
                 font-weight: bold;
                 padding-right: 8px;
+                // fix some descender issues in firefox
+                padding-bottom: 2px;
                 .ellipsis();
             }
         }
+
+        // fix some descender issues in firefox
+        margin-bottom: 14px;
+        .subject {
+            padding-bottom: 2px;
+        }
+        .row2 {
+            margin-top: -2px;
+        }
+
         .row1, .row2 {
             display: flex;
         }
