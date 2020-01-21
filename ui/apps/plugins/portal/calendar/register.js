@@ -18,7 +18,8 @@ define('plugins/portal/calendar/register', [
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'gettext!plugins/portal',
-    'settings!io.ox/calendar'
+    'settings!io.ox/calendar',
+    'less!io.ox/calendar/style'
 ], function (ext, api, folderAPI, util, gt, settings) {
 
     'use strict';
@@ -61,13 +62,13 @@ define('plugins/portal/calendar/register', [
                         .append(
                             $('<div class="clearfix">').append(
                                 $('<div class="pull-right">').text(date),
-                                $('<div class="bold ellipsis">').text(model.get('summary') || '')
+                                $('<div class="bold ellipsis summary">').text(model.get('summary') || '')
                             ),
-                            $('<div class="clearfix">').append(
+                            $('<div class="clearfix second-row">').css('margin-top', '-2px').append(
                                 $('<div class="accent pull-right">').text(
                                     isAllday ? gt('All day') : startTime + ' - ' + endTime
                                 ),
-                                $('<div class="gray ellipsis">').text(model.get('location') || '')
+                                $('<div class="gray ellipsis location">').text(model.get('location') || '')
                             )
                         )
                     );
