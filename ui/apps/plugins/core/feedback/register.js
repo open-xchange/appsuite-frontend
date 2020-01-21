@@ -46,9 +46,9 @@ define('plugins/core/feedback/register', [
         ],
         npsExtendedQuestions = [
             gt('What is the primary reason for your score?'),
-            gt('WHY U NO GIVE 10?'),
-            gt('What is the answer to life the universe and everything?'),
-            gt('Who is awesome and is filling out this feedback form?')
+            gt('How can we improve your experience?'),
+            gt('Which features do you value or use the most?'),
+            gt('What is the one thing we could do to make you happier?')
         ];
 
     // we want to limit spam, so offer a way to rate limit feedback
