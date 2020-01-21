@@ -85,6 +85,7 @@ module.exports.config = {
         // widgets
         autocomplete: './e2e/widgetobjects/contact-autocomplete',
         contactpicker: './e2e/widgetobjects/contact-picker',
+        mailfilter: './e2e/widgetobjects/settings-mailfilter',
         search: './e2e/widgetobjects/search'
     },
     bootstrap: function (done) {
