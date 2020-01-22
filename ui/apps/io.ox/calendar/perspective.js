@@ -292,8 +292,7 @@ define('io.ox/calendar/perspective', [
                             // get recurrence master object
                             api.get({ id: model.get('seriesId'), folder: model.get('folder') }, false).done(function (masterModel) {
                                 // calculate new dates if old dates are available use temporary new model to store data before the series split
-                                var updateModel = new calendarModel.Model(util.createUpdateData(masterModel, model)),
-                                    oldStartDate = masterModel.getMoment('startDate');
+                                var updateModel = new calendarModel.Model(util.createUpdateData(masterModel, model));
 
                                 updateModel.set({
                                     startDate: model.get('startDate'),
@@ -305,7 +304,7 @@ define('io.ox/calendar/perspective', [
                                     updateModel.set('rrule', model.get('rrule'));
                                 }
 
-                                util.updateRecurrenceDate(updateModel, oldStartDate);
+                                util.updateRecurrenceDate(updateModel, prevStartDate);
                                 apiUpdate(updateModel, _.extend(util.getCurrentRangeOptions(), {
                                     checkConflicts: true,
                                     recurrenceRange: 'THISANDFUTURE'
