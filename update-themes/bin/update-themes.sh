@@ -54,7 +54,7 @@ done
 # check for nodejs
 for candidate in nodejs node
 do
-  command -v $candidate > /dev/null && NODEJS=$candidate && break
+  command -v $candidate > /dev/null && $candidate -e "Number(process.versions.node.replace(/\..*/, '')) < 4 && process.exit(1)" && NODEJS=$candidate && break
 done
 
 if [ -z $NODEJS ]
