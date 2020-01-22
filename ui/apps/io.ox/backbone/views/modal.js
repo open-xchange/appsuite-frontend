@@ -186,6 +186,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 // 2: Primary button in footer
                 // 3: First tababble element in footer
                 _.defer(function () {
+                    if (self.disposed) return;
                     self.$el.toggleClass('compact', self.$body.is(':empty'));
                     var focusNode = a11y.getTabbable(self.$body).first();
                     if (focusNode.length === 0) focusNode = self.$footer.find('.btn-primary');
