@@ -38,7 +38,7 @@ do
         if [ ! -f $TESTFILE ]
         then
           echo "Themes up-to-date"
-          exit 0 
+          exit 0
         else
           echo "Themes need update"
           STRICT=1;
@@ -68,7 +68,7 @@ else
 fi
 
 # process other scripts if they exist
-[ -d "share/update-themes.d" ] && find "share/update-themes.d" -type f -executable -exec {} \; 
+[ -d "share/update-themes.d" ] && find "share/update-themes.d" -type f -executable -exec {} \;
 
 # delete dirty file _after_ we are done and exit cleanly
 [ -f $TESTFILE ] && rm $TESTFILE
