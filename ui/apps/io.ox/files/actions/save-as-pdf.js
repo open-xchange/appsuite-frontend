@@ -16,21 +16,12 @@ define('io.ox/files/actions/save-as-pdf', [
     'io.ox/files/api',
     'io.ox/core/extensions',
     'io.ox/backbone/views/modal',
-    'io.ox/core/tk/doc-converter-utils',
+    'io.ox/core/tk/doc-converter/utils',
+    'io.ox/core/tk/doc-converter/errormessages',
     'gettext!io.ox/files'
-], function (FolderApi, FilesApi, ext, ModalDialog, ConverterUtils, gt) {
+], function (FolderApi, FilesApi, ext, ModalDialog, ConverterUtils, ConverterError, gt) {
 
     'use strict';
-
-    /**
-     * Document conversion error messages
-     * Taken from 'io.ox/office/presenter/errormessages'
-     */
-    var DOC_CONVERTER_ERROR_MESSAGES = {
-        importError: gt('An error occurred loading the document so it cannot be displayed.'),
-        filterError: gt('An error occurred converting the document so it cannot be displayed.'),
-        passwordProtected: gt('This document is password protected and cannot be displayed.')
-    };
 
     return function (baton) {
 
@@ -64,7 +55,8 @@ define('io.ox/files/actions/save-as-pdf', [
                 saveas_filename: name + '.pdf',
                 saveas_folder_id: (isAccessWrite ? model.get('folder_id') : require('settings!io.ox/files').get('folder/documents'))
             };
-            return ConverterUtils.sendConverterRequest(model, fileOptions).done(function (response) {
+            return ConverterUtils.sendConverterRequest(model, fileOptions)
+            .done(function (response) {
                 //console.log('+++ save as pdf :: done - response : ', response);
 
                 if (('id' in response) && ('filename' in response)) {
@@ -82,9 +74,12 @@ define('io.ox/files/actions/save-as-pdf', [
                         notify('info', 'The PDF has been saved to "/drive/myfiles/documents" due to not having write access for the current folder.');
                     }
                 } else {
-                    errorMessage = DOC_CONVERTER_ERROR_MESSAGES[response && response.cause] || DOC_CONVERTER_ERROR_MESSAGES.importError;
+                    errorMessage = ConverterError.getErrorTextFromResponse(response) || ConverterError.getErrorText('importError');
                     notify('error', errorMessage);
                 }
+            })
+            .fail(function (response) {
+                notify('error', ConverterError.getErrorTextFromResponse(response));
             });
         }
 

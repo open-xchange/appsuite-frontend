@@ -9,7 +9,7 @@
  *
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
-define('io.ox/core/tk/doc-converter-utils', [
+define('io.ox/core/tk/doc-converter/utils', [
     'io.ox/core/http'
 ], function (CoreHTTP) {
 

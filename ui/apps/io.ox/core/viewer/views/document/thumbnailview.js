@@ -12,7 +12,7 @@
 define('io.ox/core/viewer/views/document/thumbnailview', [
     'io.ox/backbone/views/disposable',
     'io.ox/core/capabilities',
-    'io.ox/core/tk/doc-converter-utils',
+    'io.ox/core/tk/doc-converter/utils',
     'io.ox/core/viewer/util'
 ], function (DisposableView, Capabilities, DocConverterUtils, Util) {
 
