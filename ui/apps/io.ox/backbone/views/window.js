@@ -58,6 +58,7 @@ define('io.ox/backbone/views/window', [
                 return $(this).css('display') !== 'none';
             });
             var hasItems = items.length > 0;
+            $('html').toggleClass('taskbar-visible', hasItems);
             this.$el.toggleClass('f6-target', hasItems);
             if (hasItems) this.$el.removeAttr('aria-hidden');
             else this.$el.attr('aria-hidden', true);
