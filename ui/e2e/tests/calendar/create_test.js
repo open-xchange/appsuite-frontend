@@ -1418,13 +1418,13 @@ Scenario('[C7415] Create two reserved appointments at the same time', async func
         folder: 'cal://0/' + appointmentDefaultFolder,
         summary: testrailID,
         location: testrailID,
-        endDate: {
-            tzid: 'Europe/Berlin',
-            value: moment().startOf('day').add(12, 'hours').format('YYYYMMDD[T]HHmm00')
-        },
         startDate: {
             tzid: 'Europe/Berlin',
             value: moment().startOf('day').add(10, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().startOf('day').add(12, 'hours').format('YYYYMMDD[T]HHmm00')
         },
         attendees: [
             {
@@ -1437,13 +1437,16 @@ Scenario('[C7415] Create two reserved appointments at the same time', async func
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
     I.clickToolbar('Today');
+    I.waitForElement('.appointment-container [title="' + testrailID + ', ' + testrailID + '"]');
     expect(await I.grabNumberOfVisibleElements(`.appointment-container [title="${testrailID}, ${testrailID}"]`)).to.equal(1);
 
     I.say('Create appointment');
     calendar.newAppointment();
     I.fillField('Subject', testrailID);
     I.fillField('Location', testrailID);
-    I.fillField(calendar.locators.starttime, '11:00AM');
+    I.fillField(calendar.locators.startdate, moment().startOf('day').format('MM/DD/YYYY'));
+    I.clearField(calendar.locators.starttime);
+    I.fillField(calendar.locators.starttime, moment().startOf('day').add(11, 'hours').format('HH:mm') + 'AM');
     I.click('Create');
 
     I.say('Check appointment');
