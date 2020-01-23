@@ -257,7 +257,7 @@ define('io.ox/calendar/edit/extensions', [
         id: 'start-date',
         index: 400,
         draw: function (baton) {
-            baton.parentView.startDatePicker = new DatePicker({
+            var datepicker = baton.parentView.startDatePicker = new DatePicker({
                 model: baton.model,
                 className: 'col-sm-6 col-xs-12',
                 display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
@@ -281,8 +281,10 @@ define('io.ox/calendar/edit/extensions', [
                     }
 
                 });
-            this.append(baton.parentView.startDatePicker.render().$el);
-            baton.parentView.startDatePicker.nodes.timezoneField.attr('title', gt('Change timezone'));
+            this.append(datepicker.render().$el);
+            if (datepicker.nodes.timezoneField) {
+                datepicker.nodes.timezoneField.attr('title', gt('Change timezone'));
+            }
         }
     });
 
@@ -292,7 +294,7 @@ define('io.ox/calendar/edit/extensions', [
         index: 500,
         nextTo: 'start-date',
         draw: function (baton) {
-            baton.parentView.endDatePicker = new DatePicker({
+            var datepicker = baton.parentView.endDatePicker = new DatePicker({
                 model: baton.model,
                 className: 'col-sm-6 col-xs-12',
                 display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
@@ -316,8 +318,10 @@ define('io.ox/calendar/edit/extensions', [
                     }
 
                 });
-            this.append(baton.parentView.endDatePicker.render().$el);
-            baton.parentView.endDatePicker.nodes.timezoneField.attr('title', gt('Change timezone'));
+            this.append(datepicker.render().$el);
+            if (datepicker.nodes.timezoneField) {
+                datepicker.nodes.timezoneField.attr('title', gt('Change timezone'));
+            }
         }
     });
 
