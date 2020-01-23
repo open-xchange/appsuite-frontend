@@ -23,6 +23,24 @@ define('io.ox/mail/sanitizer', [
             FORCE_BODY: true,
             // keep HTML and style tags to display mails correctly in iframes
             WHOLE_DOCUMENT: true
+        },
+        processRule = function (rule) {
+            // see https://developer.mozilla.org/en-US/docs/Web/API/CSSRule#Type_constants for a full list (note most rule types are experimental or deprecated, only a few have actual use)
+            switch (rule.type) {
+                // standard css rules
+                case 1:
+                    return '.mail-detail-content ' + rule.cssText;
+                // media rules
+                case 4:
+                    var innerRules = '';
+                    // recursion: process the inner rules inside a media rule
+                    _(rule.cssRules).each(function (innerRule) {
+                        innerRules = innerRules + processRule(innerRule) + ' ';
+                    });
+                    return '@media ' + rule.media.mediaText + '{ ' + innerRules + '}';
+                default:
+                    return rule.cssText;
+            }
         };
 
     if (_.isEmpty(whitelist)) {
@@ -43,10 +61,11 @@ define('io.ox/mail/sanitizer', [
         // dompurify removes the title tag but keeps the text in it, creating strange artefacts
         if (currentNode.tagName === 'TITLE') currentNode.innerHTML = '';
         // add a class namespace to style nodes so that they overrule our stylesheets without !important
+        // if not for IE support we could just use a namespacerule here oh joy. Instead we have to parse every rule...
         if (currentNode.tagName === 'STYLE' && currentNode.sheet && currentNode.sheet.cssRules) {
             var rules = '';
             _(currentNode.sheet.cssRules).each(function (rule) {
-                rules = rules + '.mail-detail-content ' + rule.cssText + ' ';
+                rules = rules + processRule(rule) + ' ';
             });
             currentNode.innerHTML = rules;
         }

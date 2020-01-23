@@ -24,8 +24,9 @@ define('io.ox/contacts/addressbook/popup', [
     'gettext!io.ox/core',
     'settings!io.ox/contacts',
     'settings!io.ox/mail',
+    'io.ox/core/yell',
     'less!io.ox/contacts/addressbook/style'
-], function (http, folderAPI, ModalDialog, ListView, ext, util, api, collation, gt, gtCore, settings, mailSettings) {
+], function (http, folderAPI, ModalDialog, ListView, ext, util, api, collation, gt, gtCore, settings, mailSettings, yell) {
 
     'use strict';
 
@@ -149,6 +150,10 @@ define('io.ox/contacts/addressbook/popup', [
 
     var getAllMailAddresses = (function () {
 
+        var informUserOnce = _.once(function (limit) {
+            yell('warning', gt('This dialog is limited to %1$d entries and your address book exceeds this limitation. Therefore, some entries are not listed.', limit));
+        });
+
         return function (options) {
             options = options || {};
             return $.when(
@@ -192,6 +197,7 @@ define('io.ox/contacts/addressbook/popup', [
                 // emailAutoComplete doesn't work; need to clean up client-side anyway
                 data: data
             }).then(function (list) {
+                if (list && list.length === options.limit) informUserOnce(options.limit);
                 if (options.lists) return list;
                 return _.filter(list, function (item) {
                     return !item.distribution_list;

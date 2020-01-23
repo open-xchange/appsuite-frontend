@@ -22,6 +22,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
 
     'use strict';
 
+    var SIZELIMITS = { 'B': 2147483648, 'K': 2097152, 'M': 2048, 'G': 2 };
+
     var DropdownLinkView = mini.DropdownLinkView.extend({
         updateLabel: function () {
             this.$el.find('.dropdown-label').text(this.options.values[this.model.get(this.name)] || this.model.get(this.name));
@@ -32,12 +34,14 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         events: { 'change': 'onChange', 'keyup': 'onKeyup', 'paste': 'onPaste' },
 
         validationForSize: function () {
-            return /^[0-9]+$/.test(this.$el.val()) && parseInt(this.$el.val(), 10) < 2147483648 && parseInt(this.$el.val(), 10) >= 0;
+            var unit = this.model.get('unit');
+            return /^[0-9]+$/.test(this.$el.val()) &&
+                parseInt(this.$el.val(), 10) >= 0 &&
+                parseInt(this.$el.val(), 10) <= SIZELIMITS[unit];
         },
+
         onChange: function () {
-            if (this.name === 'size' && this.validationForSize()) {
-                this.model.set(this.name, this.$el.val());
-            } else if (this.name === 'values' || this.name === 'headers' || this.name === 'source') {
+            if (this.name === 'values' || this.name === 'headers' || this.name === 'source') {
                 this.model.set(this.name, [this.$el.val()]);
             } else {
                 this.model.set(this.name, this.$el.val());
@@ -50,7 +54,6 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
 
             if (this.name === 'sizeValue') {
                 state = this.validationForSize() ? 'valid:' : 'invalid:';
-
             } else {
                 state = $.trim(this.$el.val()) === '' && this.$el.prop('disabled') === false ? 'invalid:' : 'valid:';
             }

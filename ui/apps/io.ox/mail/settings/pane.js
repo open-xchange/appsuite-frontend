@@ -184,8 +184,10 @@ define.async('io.ox/mail/settings/pane', [
     );
 
     var hasVacationNoticeAction,
-        moduleReady = mailfilter.getConfig().then(function (config) {
+        moduleReady = mailfilter.getConfig().then(function doneFilter(config) {
             hasVacationNoticeAction = !!_(config.actioncmds).findWhere({ id: 'vacation' });
+        }, function failFilter() {
+            hasVacationNoticeAction = false;
         });
 
     //
