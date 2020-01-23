@@ -444,6 +444,7 @@ define('io.ox/core/tk/tokenfield', [
                         // remove wrongly calculated max-width
                         if (label.css('max-width') === '0px') label.css('max-width', 'none');
 
+                        if (self.options.dnd) node.attr('draggable', true);
                         // mouse hover tooltip / a11y title
                         label.attr({ 'aria-hidden': true, 'title': title });
                         //#. Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
@@ -637,58 +638,7 @@ define('io.ox/core/tk/tokenfield', [
 
             this.$el.parent().addClass(this.options.className);
 
-            // init drag 'n' drop sort
-            if (this.options.dnd) {
-                this.$el.closest('div.tokenfield').sortable({
-                    items: '> .token',
-                    connectWith: 'div.tokenfield',
-                    cancel: 'a.close',
-                    placeholder: 'token placeholder',
-                    revert: 0,
-                    tolerance: 'pointer',
-                    forcePlaceholderSize: true,
-                    // update: _.bind(this.resort, this),
-                    stop: function (e, ui) {
-                        if (this.isMultisort) {
-                            ui.item.after($(this).find('.active'));
-                        }
-                        self.resort();
-                    },
-                    start: function (e, ui) {
-                        // check for multisort
-                        if (ui.item.hasClass('active') && $(this).find('.active').length > 1) {
-                            // hide active tokens that are not dragged
-                            _($(this).find('.active')).each(function (item) {
-                                if (item !== ui.item[0]) {
-                                    $(item).hide();
-                                }
-                            });
-
-                            ui.item.append($('<span class="drag-counter badge">').text($(this).find('.active').length));
-                            // save data
-                            this.isMultisort = true;
-                            this.multisortData = _($(this).find('.active')).map(function (item) {
-                                return $(item).data().attrs.model;
-                            });
-                        } else {
-                            this.isMultisort = false;
-                            this.multisortData = [];
-                        }
-                    },
-                    receive: function (e, ui) {
-                        var tokenData = ui.sender[0].isMultisort ? ui.sender[0].multisortData : ui.item.data().attrs.model;
-                        self.collection.add(tokenData);
-                        self.resort();
-                    },
-                    remove: function (e, ui) {
-                        var tokenData = this.isMultisort ? this.multisortData : ui.item.data().attrs.model;
-                        self.collection.remove(tokenData);
-                        self.resort();
-                    }
-                }).droppable({
-                    hoverClass: 'drophover'
-                });
-            }
+            if (this.options.dnd) this.dragAndDropSupport();
 
             this.$el.closest('div.tokenfield').on('copy', function (e) {
                 // value might contain more than one id so split
@@ -719,6 +669,99 @@ define('io.ox/core/tk/tokenfield', [
 
             return this;
         },
+
+        dragAndDropSupport: (function () {
+            var sourceView, targetView, draggedItems, direction, lastX,
+                events = _.extend({}, Backbone.Events),
+                targetChanged = false;
+
+            return function () {
+                var self = this,
+                    tokenfield = this.$el.closest('div.tokenfield')
+                    .on('dragover', function (e) {
+                        e.preventDefault();
+                        if (targetView !== self) {
+                            var prevView = targetView;
+                            targetView = self;
+                            if (prevView) prevView.$el.closest('div.tokenfield').removeClass('drophover');
+                            if (targetView) targetView.$el.closest('div.tokenfield').addClass('drophover');
+                            if (prevView && targetView) {
+                                // only move item from one view to the other if previous exists to prevent the item to be attached to the view it was already in at the beginning
+                                targetView.$el.closest('div.tokenfield').find('.tokenfield, .token').last().after(draggedItems);
+                                targetChanged = true;
+                            }
+                        }
+
+                        if (lastX < e.screenX) direction = 'right';
+                        else if (lastX > e.screenX) direction = 'left';
+                        lastX = e.screenX;
+                    })
+                    .delegate('> .token', {
+                        'dragstart': function () {
+                            sourceView = self;
+                            draggedItems = tokenfield.find('.active');
+                            tokenfield.addClass('drophover');
+                            events.trigger('dragstart');
+                            // needs opacity != 1, otherwise chrome will have white background behind border radius
+                            draggedItems.css('opacity', '0.999').slice(1).hide();
+                            if (draggedItems.length > 1 && !_.browser.ie && !_.browser.edge) {
+                                $(this).append(
+                                    $('<span class="drag-counter badge">').text(draggedItems.length)
+                                );
+                            }
+                            // defer the visibility settings, as the browsers will create a snapshot of the dragged item right after this
+                            _.defer(function () {
+                                if (!draggedItems) return;
+                                draggedItems.first().css('visibility', 'hidden');
+                                draggedItems.attr('aria-grabbed', true);
+                            });
+                        },
+                        'dragenter': function () {
+                            var target = $(this);
+                            if (!target.is('[aria-dropeffect="move"]')) return;
+                            // insert element immediately, if dragged from one tokenfield to another
+                            if (!target.parent().is(draggedItems.parent()) || targetChanged) {
+                                target.before(draggedItems);
+                                targetChanged = false;
+                            } else if (draggedItems.first().index() < target.index()) {
+                                // only allow index change if mouse moves in the correct direction. prevents flickering and issues with different sized items
+                                if (draggedItems.offset().top < target.offset().top || direction === 'right') {
+                                    target.after(draggedItems);
+                                }
+                            } else if (draggedItems.offset().top > target.offset().top || direction === 'left') {
+                                target.before(draggedItems);
+                            }
+                        },
+                        'dragend stop': function () {
+                            if (!targetView) return;
+                            if (sourceView !== targetView) {
+                                // move models from one tokenfield to another
+                                var models = draggedItems.map(function () {
+                                    return $(this).data().attrs.model;
+                                }).toArray();
+                                sourceView.collection.remove(models);
+                                targetView.collection.add(models);
+                                sourceView.resort();
+                            }
+                            targetView.resort();
+                            targetView.$el.closest('div.tokenfield').removeClass('drophover');
+                            draggedItems.css('visibility', '').attr('aria-grabbed', false).show();
+                            events.trigger('dragend');
+                            draggedItems = null;
+                            sourceView = null;
+                        }
+                    });
+
+                this.listenTo(events, {
+                    'dragstart': function () {
+                        tokenfield.find('.token:not(.active)').attr('aria-dropeffect', 'move');
+                    },
+                    'dragend': function () {
+                        tokenfield.find('.token').attr('aria-dropeffect', '');
+                    }
+                });
+            };
+        }()),
 
         getModelByCID: function (cid) {
             return this.collection.get({ cid: cid });
