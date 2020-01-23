@@ -868,7 +868,7 @@ Scenario('[C7425] Create appointment with a group', async function (I, users, ca
     I.fillField('Location', data.location);
     I.fillField(calendar.locators.startdate, moment().startOf('day').format('MM/DD/YYYY'));
     I.clearField(calendar.locators.starttime);
-    I.fillField(calendar.locators.starttime, '11:00 AM');
+    I.fillField(calendar.locators.starttime, '11:00 PM');
 
     await calendar.addParticipant(groupName);
     I.waitForText(users[0].get('name'), 5);
