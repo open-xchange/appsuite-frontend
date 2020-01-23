@@ -97,11 +97,9 @@ module.exports = actor({
     },
 
     triggerRefresh() {
-        this.executeScript(function () {
-            ox.trigger('refresh^');
-        });
-        this.waitForElement('.fa-spin.fa-refresh');
-        this.waitForElement('.fa-spin-paused.fa-refresh');
+        this.clickToolbar('.fa-spin-paused.fa-refresh');
+        this.waitForDetached('.fa-spin.fa-refresh');
+        this.waitForVisible({ css: 'a.apptitle[aria-label="Refresh"]' });
     },
 
     async grabBackgroundImageFrom(selector) {
