@@ -186,9 +186,6 @@ define('io.ox/calendar/api', [
                 }).then(function (data) {
                     if (data.id !== obj.id) {
                         // something's wrong, probably an exception was created by another client.
-                        // remove from pool
-                        removeFromPool(obj);
-
                         // real error vs just a new exception
                         if (data.seriesId !== obj.id) {
                             // to help in debugging if needed

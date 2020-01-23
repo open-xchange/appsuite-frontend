@@ -144,6 +144,10 @@ define('io.ox/calendar/perspective', [
                                 // this appointment was changed to an exception in the meantime, probably by another calendar client
                                 // switch to updated data, send info message and clean up
                                 if (model.get('seriesId') && model.get('seriesId') === obj.id) {
+                                    _(api.pool.getByFolder(model.get('folder'))).each(function (collection) {
+                                        collection.expired = true;
+                                        collection.sync();
+                                    });
                                     self.detailCID = model.cid;
                                     yell('warning', gt('Appointment was changed in the meantime and was updated accordingly.'));
                                 } else {
