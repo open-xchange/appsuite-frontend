@@ -25,9 +25,8 @@ Before(async (users) => {
     await users.create();
     await users.create();
 });
-After(async (users, contexts) => {
+After(async (users) => {
     await users.removeAll();
-    await contexts.removeAll();
 });
 
 Scenario('Create appointment with all fields', async function (I, calendar) {
