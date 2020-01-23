@@ -401,6 +401,10 @@ define('plugins/core/feedback/register', [
                             client_version: ox.serverConfig.version + '-' + (ox.serverConfig.revision ? ox.serverConfig.revision : ('Rev' + ox.revision))
                         };
 
+                    if (dialogMode === 'nps-extended') {
+                        data.questionId = settings.get('feedback/questionIndex') || 0;
+                    }
+
                     _(_.browser).each(function (val, key) {
                         if (val && _(OS).indexOf(key) !== -1) {
                             data.operating_system = key;
