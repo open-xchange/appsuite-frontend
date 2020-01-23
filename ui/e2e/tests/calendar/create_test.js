@@ -25,8 +25,9 @@ Before(async (users) => {
     await users.create();
     await users.create();
 });
-After(async (users) => {
+After(async (users, contexts) => {
     await users.removeAll();
+    await contexts.removeAll();
 });
 
 Scenario('Create appointment with all fields', async function (I, calendar) {
@@ -866,6 +867,10 @@ Scenario('[C7425] Create appointment with a group', async function (I, users, ca
     calendar.newAppointment();
     I.fillField('Subject', data.subject);
     I.fillField('Location', data.location);
+    I.fillField(calendar.locators.startdate, moment().startOf('day').format('MM/DD/YYYY'));
+    I.clearField(calendar.locators.starttime);
+    I.fillField(calendar.locators.starttime, '11:00 AM');
+
     await calendar.addParticipant(groupName);
     I.waitForText(users[0].get('name'), 5);
     I.waitForText(users[1].get('name'), 5);

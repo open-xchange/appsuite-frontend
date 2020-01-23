@@ -1009,9 +1009,10 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users, calend
     await I.haveGroup({ name: groupName, display_name: groupName, members: [weebl.userdata.id, bob.userdata.id] });
 
     // Precondition: A simple appointment already exists
+    // having the appointment at the end of the day (11:00PM-12:00AM) assures that userB will receive a notification
     const folder = `cal://0/${await I.grabDefaultFolder('calendar', { user: userA })}`,
-        startTime = moment().add(1, 'hour'),
-        endTime = moment().add(2, 'hour'),
+        startTime = moment().startOf('day').add(23, 'hour'),
+        endTime = moment().startOf('day').add(24, 'hour'),
         subject = `${userA.userdata.name}s awesome appointment`;
     await I.haveAppointment({
         folder:  folder,
@@ -1024,7 +1025,7 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users, calend
     I.login(['app=io.ox/calendar&perspective=week:week'], { user: userA });
 
     // Expected Result: The calendar app is shown, including the existing appointment
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    calendar.waitForApp();
     I.waitForText(subject, 5, '.appointment');
 
     // 2. Select the appointment and click "Edit"
@@ -1164,7 +1165,7 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario('[C7460] Add attachments', async function (I) {
+Scenario('[C7460] Add attachments', async function (I, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
@@ -1172,8 +1173,8 @@ Scenario('[C7460] Add attachments', async function (I) {
 
     // Precondition: An appointment already exists
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`,
-        startTime = moment().add(1, 'hour'),
-        endTime = moment().add(2, 'hour'),
+        startTime = moment().startOf('day').add(13, 'hour'),
+        endTime = moment().startOf('day').add(15, 'hour'),
         subject = `Tiny Tinas ${startTime.format('h a')}s Tea Party`;
     await I.haveAppointment({
         folder:  folder,
@@ -1184,6 +1185,7 @@ Scenario('[C7460] Add attachments', async function (I) {
 
     // 1. Switch to Calendar
     I.login(['app=io.ox/calendar&perspective=week:week']);
+    calendar.waitForApp();
     I.waitForElement(locate('.appointment').withText(subject));
 
     // 2. Select the existing appointment, click "Edit"
@@ -1284,7 +1286,7 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario('[C7459] Remove attachments', async function (I) {
+Scenario('[C7459] Remove attachments', async function (I, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
@@ -1292,8 +1294,8 @@ Scenario('[C7459] Remove attachments', async function (I) {
 
     // Precondition: An appointment with file attachment exists
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`,
-        startTime = moment().add(1, 'hour'),
-        endTime = moment().add(2, 'hour'),
+        startTime = moment().startOf('day').add(1, 'hour'),
+        endTime = moment().startOf('day').add(2, 'hour'),
         subject = `Allhands ${startTime.format('h A')} Meeting`,
         appointment = await I.haveAppointment({
             folder:  folder,
@@ -1308,7 +1310,7 @@ Scenario('[C7459] Remove attachments', async function (I) {
     I.login('app=io.ox/calendar&perspective=week:week');
 
     // Expected Result: The calendar app shows up, including the existing appointment
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    calendar.waitForApp();
     I.waitForVisible('.appointment');
     I.see(subject, '.appointment');
 
@@ -1365,8 +1367,8 @@ Scenario('[C7458] Edit appointment by doubleclick', async function (I, calendar)
 
     // You already had created a non all-day appointment
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`,
-        startTime = moment().add(1, 'hour'),
-        endTime = moment().add(2, 'hour'),
+        startTime = moment().startOf('day').add(1, 'hour'),
+        endTime = moment().startOf('day').add(2, 'hour'),
         subject = `Mr. Torques ${startTime.format('h a')} explosions`;
     await I.haveAppointment({
         folder:  folder,
@@ -1377,7 +1379,7 @@ Scenario('[C7458] Edit appointment by doubleclick', async function (I, calendar)
 
     // 1. Double click to an appointment
     I.login(['app=io.ox/calendar&perspective=week:week']);
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    calendar.waitForApp();
     I.waitForText(subject, 5, '.appointment');
     calendar.doubleClick('.page.current .appointment');
 
