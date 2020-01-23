@@ -283,12 +283,7 @@ define('plugins/core/feedback/register', [
     });
 
     var modes = {
-            nps: {
-                ratingView: NpsRatingView,
-                //#. %1$s is the product name, for example 'OX App Suite'
-                title: gt('How likely are you to recommend %1$s to a friend or colleague?', ox.serverConfig.productName)
-            },
-            'nps-extended': {
+            'nps-v1': {
                 ratingView: NpsRatingView,
                 //#. %1$s is the product name, for example 'OX App Suite'
                 title: gt('How likely are you to recommend %1$s to a friend or colleague?', ox.serverConfig.productName)
@@ -328,7 +323,7 @@ define('plugins/core/feedback/register', [
             };
 
             // nps view needs more space
-            if (dialogMode.indexOf('nps') === 0) {
+            if (dialogMode === 'nps-v1') {
                 options.width = 580;
             }
             new ModalDialog(options)
@@ -344,11 +339,11 @@ define('plugins/core/feedback/register', [
                         this.$body.addClass(dialogMode + '-feedback-view').append(this.ratingView.render(this.$body).$el);
                     },
                     comment: function () {
-                        if (dialogMode === 'nps') return;
+                        if (dialogMode === 'nps-v1' && !settings.get('feedback/showQuestion', false)) return;
 
                         var guid = _.uniqueId('feedback-note-'),
                             // prepare for index out of bounds
-                            text = dialogMode === 'nps-extended' ? npsExtendedQuestions[settings.get('feedback/questionIndex') || 0] || gt('What is the primary reason for your score?') : gt('Comments and suggestions');
+                            text = dialogMode === 'nps-v1' ? npsExtendedQuestions[settings.get('feedback/questionIndex') || 0] || gt('What is the primary reason for your score?') : gt('Comments and suggestions');
 
                         this.$body.append(
                             $('<label>').attr('for', guid).text(text),
@@ -357,7 +352,7 @@ define('plugins/core/feedback/register', [
                     },
                     infotext: function () {
                         // without comment field infotext makes no sense
-                        if (dialogMode.indexOf('nps') === 0) return;
+                        if (dialogMode === 'nps-v1') return;
                         this.$body.append(
                             $('<div>').text(
                                 gt('Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly.')
@@ -376,7 +371,7 @@ define('plugins/core/feedback/register', [
                 .addButton({ action: 'send', label: gt('Send') })
                 .on('send', function () {
 
-                    if ((dialogMode.indexOf('nps') === 0 && this.ratingView.getValue() === -1) || (dialogMode.indexOf('nps') === -1 && this.ratingView.getValue() === 0)) {
+                    if ((dialogMode === 'nps-v1' && this.ratingView.getValue() === -1) || (dialogMode !== 'nps-v1' && this.ratingView.getValue() === 0)) {
                         yell('error', gt('Please select a rating.'));
                         this.idle();
                         return;
@@ -401,7 +396,7 @@ define('plugins/core/feedback/register', [
                             client_version: ox.serverConfig.version + '-' + (ox.serverConfig.revision ? ox.serverConfig.revision : ('Rev' + ox.revision))
                         };
 
-                    if (dialogMode === 'nps-extended') {
+                    if (dialogMode === 'nps-v1' && settings.get('feedback/showQuestion', false)) {
                         data.questionId = settings.get('feedback/questionIndex') || 0;
                     }
 
