@@ -145,7 +145,7 @@ Scenario('Compose new mail with signature below correctly placed initially', asy
     I.waitForVisible('.io-ox-mail-window');
 });
 
-Scenario('Reply to mail with signature above correctly placed and changed', async function (I, users) {
+Scenario('Reply to mail with plaintext signature above correctly placed and changed', async function (I, users) {
     let [user] = users;
     for (let signature of signatures) {
         var response = await I.haveSnippet(signature);
@@ -179,8 +179,9 @@ Scenario('Reply to mail with signature above correctly placed and changed', asyn
     await selectAndAssertSignature(I, 'First signature above', new RegExp(`^\\n\\n${signatures[0].plaintext}\\n\\n(>[^\\n]*(\\n)?)+$`));
 
     // insert some text at the very beginning
-    I.click('.io-ox-mail-compose textarea.plain-text');
-    I.pressKey('PageUp');
+    I.pressKey('Tab');
+    I.pressKey('Tab');
+    //I.click('.io-ox-mail-compose textarea.plain-text');
     I.pressKeys('some user input');
     expect(await grabValueFrom(I, '.io-ox-mail-compose textarea.plain-text')).to.match(
         new RegExp(`^some user input\\n\\n${signatures[0].plaintext}\\n\\n(>[^\\n]*(\\n)?)+$`)
