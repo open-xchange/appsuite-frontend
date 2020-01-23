@@ -107,16 +107,6 @@ module.exports = {
         cb.call(this, this.locators[MAPPING[label]]);
     },
 
-    async doubleClick(selector, context) {
-        const error = await I.executeScript(function (selector, context) {
-            var elem = $(context || document).find(selector);
-            if (!elem.length) return 'Could not find ' + selector + (context ? ' inside ' + context : '');
-            elem.click();
-            _.defer(elem.click.bind(elem));
-        }, selector, context);
-        if (error) throw error;
-    },
-
     async addParticipant(name, exists, context, addedParticipants) {
         if (!context) context = '*';
         if (!addedParticipants) addedParticipants = 1;
