@@ -34,12 +34,13 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         I.login('app=io.ox/calendar');
         calendar.newAppointment();
         I.fillField('Subject', 'simple appointment 1');
+        await calendar.setDate('startDate', moment().startOf('week').add(1, 'day'));
         I.click('Create');
         I.waitToHide('.io-ox-calendar-edit');
         calendar.newAppointment();
         I.fillField('Subject', 'simple appointment 2');
         // select tomorrow
-        await calendar.setDate('startDate', moment().add(2, 'day'));
+        await calendar.setDate('startDate', moment().startOf('week').add(3, 'day'));
         I.click('Create');
         I.waitToHide('.io-ox-calendar-edit');
 
