@@ -846,7 +846,7 @@ Scenario.skip('[C7428] Create appointment with internal participants', async fun
     I.waitForText(`New appointment: ${data.subject}`);
 });
 
-Scenario('[C7425] Create appointment with a group', async function (I, users, calendar) {
+Scenario('[C7425] Create appointment with a group', async function (I, users, calendar, mail) {
     const groupName = 'Awesome guys';
 
     await I.haveGroup({
@@ -894,6 +894,7 @@ Scenario('[C7425] Create appointment with a group', async function (I, users, ca
 
     I.say('Check Mail');
     I.openApp('Mail');
+    mail.waitForApp();
     I.waitForText(`New appointment: ${data.subject}`);
 
     await I.dontHaveGroup(groupName);
