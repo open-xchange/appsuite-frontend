@@ -143,7 +143,7 @@ Scenario('[C207509] Year view', async (I, calendar) => {
 });
 
 // TODO: shaky(?), msg: element (.appointment div[title="Private visibility"] span[title="Confidential"] i.fa-lock) still not visible after 5 sec
-Scenario.skip('[C236795] Visibility Flags', (I, calendar) => {
+Scenario('[C236795] Visibility Flags @flaky', (I, calendar) => {
     const createAppointment = (subject, startDate, startTime, visibility) => {
         I.clickToolbar('New appointment');
         I.waitForVisible('.io-ox-calendar-edit-window');
@@ -169,7 +169,7 @@ Scenario.skip('[C236795] Visibility Flags', (I, calendar) => {
             return appointmentLocator;
         }
         const [label, iconClass] = labelAndIcon;
-        return `${appointmentLocator} span[title="${label}"] i${iconClass}`;
+        return `${appointmentLocator} span[aria-label^="${label}"] i${iconClass}`;
     };
 
     const checkAppointment = (subject, visibility, time) => {
@@ -178,9 +178,8 @@ Scenario.skip('[C236795] Visibility Flags', (I, calendar) => {
         // CONFIDENTIAL => Secret
         let labelAndIcon;
         if (visibility === 'PRIVATE') {
-            labelAndIcon = ['Private', '.fa-user-circle'];
-        } else if (visibility === 'CONFIDENTIAL') labelAndIcon = ['Confidential', '.fa-lock'];
-
+            labelAndIcon = ['Appointment is private', '.fa-user-circle'];
+        } else if (visibility === 'CONFIDENTIAL') labelAndIcon = ['Appointment is confidential', '.fa-lock'];
         // Expected Result: You created 3 appointsments with visivilities of Public, Private, Secret
         // Each visibility is displayed as in the example
         I.waitForVisible(getAppointmentLocator(subject, labelAndIcon));
