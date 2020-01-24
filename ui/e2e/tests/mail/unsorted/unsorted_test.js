@@ -268,13 +268,14 @@ Scenario('[C7388] Send mail with different priorities', async function (I, users
     var testrailID = 'C7388';
     var timestamp = Math.round(+new Date() / 1000);
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
-    I.login('app=io.ox/mail', { user });
     let priorities = ['High', 'Normal', 'Low'];
+    I.login('app=io.ox/mail', { user });
+    mail.waitForApp();
     priorities.forEach(function (priority) {
         mail.newMail();
         I.click('Options');
-        I.waitForElement('.dropdown.open .dropdown-menu', 5);
-        I.click(priority);
+        I.waitForVisible('.dropdown.open .dropdown-menu', 5);
+        I.clickDropdown(priority);
         I.waitForDetached('.dropdown.open .dropdown-menu', 5);
         I.fillField('To', users[1].userdata.primaryEmail);
         I.pressKey('Enter');
@@ -284,6 +285,7 @@ Scenario('[C7388] Send mail with different priorities', async function (I, users
     });
     I.logout();
     I.login('app=io.ox/mail', { user: users[1] });
+    mail.waitForApp();
     I.selectFolder('Inbox');
     I.waitNumberOfVisibleElements('.list-view .list-item', priorities.length);
     priorities.forEach(function (priority, i) {
