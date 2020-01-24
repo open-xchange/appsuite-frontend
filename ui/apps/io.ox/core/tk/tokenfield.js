@@ -438,7 +438,8 @@ define('io.ox/core/tk/tokenfield', [
                             label = node.find('.token-label'),
                             token = model.get('token'),
                             hasLabel = token.label && token.label !== token.value,
-                            title = hasLabel ? token.label + ' ' + token.value : token.value;
+                            title = hasLabel ? token.label + ' ' + token.value : token.value,
+                            removeButton = node.find('.close');
 
                         // remove wrongly calculated max-width
                         if (label.css('max-width') === '0px') label.css('max-width', 'none');
@@ -447,6 +448,10 @@ define('io.ox/core/tk/tokenfield', [
                         label.attr({ 'aria-hidden': true, 'title': title });
                         //#. Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
                         node.attr('aria-label', gt('%1$s. Press backspace to delete.', title));
+
+                        // add proper tooltip and a11y to the remove button
+                        // no font awesome here, preserve default remove button style
+                        removeButton.text('').append($('<i aria-hidden=true>&times;</i>').attr('title', gt('Remove')));
 
                         // customize token
                         ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e, self.getInput());
