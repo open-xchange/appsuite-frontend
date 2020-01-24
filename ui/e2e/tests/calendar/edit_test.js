@@ -823,6 +823,7 @@ Scenario('[C7457] Edit appointment via toolbar', async function (I, calendar) {
     });
 
     I.login('app=io.ox/calendar');
+    calendar.waitForApp();
 
     // select the according day in the mini datepicker
     if (!moment().isSame(time, 'month')) I.retry(5).click('~Go to next month', calendar.locators.mini);
@@ -836,8 +837,10 @@ Scenario('[C7457] Edit appointment via toolbar', async function (I, calendar) {
     });
 
     I.click('.appointment', '.page.current');
+    I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Edit');
 
+    I.waitForVisible('.io-ox-calendar-edit-window');
     I.retry(5).fillField('Subject', 'Newsubject');
     I.fillField('Location', 'Newlocation');
     I.fillField('Description', 'Newdescription');
@@ -849,6 +852,7 @@ Scenario('[C7457] Edit appointment via toolbar', async function (I, calendar) {
         I.click(view);
 
         I.retry(5).click('.appointment', '.page.current');
+        I.waitForVisible('.io-ox-sidepopup');
         I.retry(5).see('Newsubject', '.calendar-detail');
         I.see('Newlocation', '.calendar-detail');
         I.see('Newdescription', '.calendar-detail');
