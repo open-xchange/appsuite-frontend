@@ -20,7 +20,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Hide and show Help topics based on user capabilities', async function (I, users, contacts) {
+Scenario.only('Hide and show Help topics based on user capabilities', async function (I, users, contacts) {
 
     // Disable calendar
     await users[0].doesntHaveCapability('calendar');
@@ -36,9 +36,10 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
 
     // Check if help shows info about disabled capability
     await within({ frame: '.inline-help-iframe' }, () => {
-        I.retry(5).click('Start Page');
-        I.retry(5).dontSee('Calendar');
-        I.see('Tasks');
+        I.waitForText('Start Page');
+        I.click('Start Page');
+        I.waitForText('Tasks');
+        I.dontSee('Calendar');
     });
 
     // Disable tasks
@@ -53,10 +54,11 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
 
     // Check if help shows info about disabled capability
     await within({ frame: '.inline-help-iframe' }, () => {
-        I.retry(5).click('Start Page');
-        I.retry(5).dontSee('Calendar');
+        I.waitForText('Start Page');
+        I.click('Start Page');
+        I.waitForText('Drive');
+        I.dontSee('Calendar');
         I.dontSee('Tasks');
-        I.see('Drive');
     });
 
     // Disable Drive
@@ -73,7 +75,8 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
 
     // Check if help shows info about disabled capability
     await within({ frame: '.inline-help-iframe' }, () => {
-        I.retry(5).click('Start Page');
+        I.waitForText('Start Page');
+        I.click('Start Page');
         I.retry(5).dontSee('Calendar');
         I.dontSee('Tasks');
         I.dontSee('Drive');
