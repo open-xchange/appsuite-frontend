@@ -314,7 +314,7 @@ define('io.ox/core/settings/pane', [
                 );
 
                 view.listenTo(this.model, 'change:language', function (language) {
-                    _.setCookie('language', language);
+                    _.setCookie('locale', language);
                 });
 
                 view.listenTo(ox, 'change:locale:data', function () {

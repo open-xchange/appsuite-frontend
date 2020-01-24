@@ -196,9 +196,9 @@ define('io.ox/contacts/edit/view', [
             });
         },
 
-        renderBirthday: function () {
-            return this.renderField('birthday', function (guid, label) {
-                return new common.DateSelectView({ name: 'birthday', model: this.model, label: label }).render().$el;
+        renderDate: function (name) {
+            return this.renderField(name, function (guid, label) {
+                return new common.DateSelectView({ name: name, model: this.model, label: label }).render().$el;
             });
         },
 
@@ -279,7 +279,8 @@ define('io.ox/contacts/edit/view', [
                         visible = (this.visible[name] = this.addressHasContent(name));
                         return this.renderAddress(name).toggleClass('hidden', !visible);
                     case 'birthday':
-                        return this.renderBirthday();
+                    case 'anniversary':
+                        return this.renderDate(name);
                     case 'note':
                         return this.renderNote();
                     case 'display_name':

@@ -58,8 +58,11 @@
 
 .client-onboarding {
 
-    [data-action='link/mailappinstall'] .app-icon {
-        background-image: url(@onboarding-mailapp);
+    [data-action='link/mailappinstall'] .app-icon[data-detail='Google Play'] {
+        background-image: url(@onboarding-mailapp-googleplay);
+    }
+    [data-action='link/mailappinstall'] .app-icon[data-detail='App Store'] {
+        background-image: url(@onboarding-mailapp-appstore);
     }
     [data-action='link/driveappinstall'] .app-icon[data-detail='Google Play'] {
         background-image: url(@onboarding-driveapp-googleplay);
