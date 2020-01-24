@@ -53,13 +53,16 @@ Scenario('[C252159] Generate link for sharing including subfolders', async funct
     I.say('Share folder with subfolder');
     I.waitForElement(myfiles);
     I.selectFolder('Music');
+    I.waitForDetached('.page.current .busy');
     I.clickToolbar('New');
+    I.waitForVisible('.dropdown.open .dropdown-menu');
     I.clickDropdown('Add new folder');
     I.waitForText('Add new folder');
     I.fillField('Folder name', 'A subfolder');
     I.click('Add');
     I.waitForDetached('.modal');
     I.clickToolbar('New');
+    I.waitForVisible('.dropdown.open .dropdown-menu');
     I.clickDropdown('Add new folder');
     I.fillField('Folder name', 'Second subfolder');
     I.click('Add');
