@@ -86,15 +86,15 @@ Scenario('[C85626] Mail categories can be renamed', function (I) {
     I.seeTextEquals('C85626-02', SELECTORS.toolbar + ' [data-id="uc2"] .category-name');
 });
 
-Scenario('[C85626] Categories can be enabled or disabled', function (I) {
+Scenario('[C85626] Categories can be enabled or disabled', function (I, mail) {
     I.haveSetting('io.ox/mail//categories/enabled', true);
 
     I.login('app=io.ox/mail');
-    I.waitForVisible('.io-ox-mail-window');
+    mail.waitForApp();
 
     I.say('Disable all categories except "General"', 'blue');
     A.openConfiguration(I);
-    I.seeElement(SELECTORS.dialog);
+    I.waitForVisible(SELECTORS.dialog);
     within(SELECTORS.dialog, async () => {
         // custom checkboxes so we use labels for toggling
         I.click(SELECTORS.checkbox2);
@@ -106,10 +106,11 @@ Scenario('[C85626] Categories can be enabled or disabled', function (I) {
         I.click('Save');
     });
     I.waitForDetached(SELECTORS.dialog);
-    I.wait(1);
+    I.waitForNetworkTraffic();
+    I.waitForInvisible({ css: '[data-id="promotion"]' });
 
     I.say('Ensure all tabss except "General" are hidden', 'blue');
-    I.seeElement({ css: '[data-id="general"]' }, SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="general"]' }, SELECTORS.toolbar);
     I.dontSeeElement({ css: '[data-id="promotion"]' }, SELECTORS.toolbar);
     I.dontSeeElement({ css: '[data-id="social"]' }, SELECTORS.toolbar);
     I.dontSeeElement({ css: '[data-id="purchases"]' }, SELECTORS.toolbar);
@@ -118,7 +119,7 @@ Scenario('[C85626] Categories can be enabled or disabled', function (I) {
 
     I.say('Enable all categories except "General"', 'blue');
     A.openConfiguration(I);
-    I.seeElement(SELECTORS.dialog);
+    I.waitForVisible(SELECTORS.dialog);
     within(SELECTORS.dialog, async () => {
         I.click(SELECTORS.checkbox2);
         I.click(SELECTORS.checkbox3);
@@ -129,15 +130,17 @@ Scenario('[C85626] Categories can be enabled or disabled', function (I) {
         I.click('Save');
     });
     I.waitForDetached(SELECTORS.dialog);
-    I.wait(1);
+    I.waitForNetworkTraffic();
 
     I.say('Check names of custom categories', 'blue');
-    I.seeElement({ css: '[data-id="general"]' }, SELECTORS.toolbar);
-    I.seeElement({ css: '[data-id="promotion"]' }, SELECTORS.toolbar);
-    I.seeElement({ css: '[data-id="social"]' }, SELECTORS.toolbar);
-    I.seeElement({ css: '[data-id="purchases"]' }, SELECTORS.toolbar);
-    I.seeElement({ css: '[data-id="uc1"]' }, SELECTORS.toolbar);
-    I.seeElement({ css: '[data-id="uc2"]' }, SELECTORS.toolbar);
+    I.waitForVisible(SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="promotion"]' }, SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="general"]' }, SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="promotion"]' }, SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="social"]' }, SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="purchases"]' }, SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="uc1"]' }, SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="uc2"]' }, SELECTORS.toolbar);
 });
 
 Scenario('[C85626] Support different aspects of categories', function (I) {
