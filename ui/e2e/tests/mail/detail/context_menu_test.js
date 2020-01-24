@@ -49,6 +49,7 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users,
     I.waitForElement(firstItem);
     I.click(firstItem);
     I.waitForVisible('.thread-view.list-view .list-item');
+    I.waitForDetached('.seen-unseen-indicator');
     // we need to wait until the message is seen
     I.waitForDetached('.thread-view.list-view .list-item.unread');
 
