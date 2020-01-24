@@ -69,8 +69,8 @@ module.exports = actor({
     },
 
     waitForNetworkTraffic() {
-        this.waitForElement('.fa-spin.fa-refresh');
-        this.waitForElement('.fa-spin-paused.fa-refresh');
+        this.waitForDetached('.fa-spin.fa-refresh');
+        this.waitForVisible({ css: 'a.apptitle[aria-label="Refresh"]' });
     },
 
     // Use the next two helpers together. Example that checks for old toolbar to be removed/redrawn after folder change:

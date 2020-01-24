@@ -341,9 +341,11 @@ Scenario('[C7363] Add files to a contact', async function (I, contacts) {
     contacts.selectContact(display_name);
     I.clickToolbar('Edit');
     I.waitForVisible('[data-app-name="io.ox/contacts/edit"]');
-    I.attachFile('input.file-input[type="file"]', 'e2e/media/files/generic/contact_picture.png');
+    I.waitForEnabled({ css: 'input.file-input[type="file"]' });
+    I.attachFile({ css: 'input.file-input[type="file"]' }, 'e2e/media/files/generic/contact_picture.png');
     I.waitForElement(locate().withText('contact_picture.png').inside('.attachment'));
     I.click('Save');
     I.waitForInvisible('[data-app-name="io.ox/contacts/edit"]');
+    I.waitForNetworkTraffic();
     I.waitForText('contact_picture.png');
 });
