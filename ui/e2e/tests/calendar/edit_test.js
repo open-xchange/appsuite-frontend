@@ -591,6 +591,7 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
     I.login('app=io.ox/calendar');
 
     I.waitForText('Testsubject');
+    I.waitForEnabled(locate('.appointment').at(2));
     I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
     I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Details');
@@ -616,9 +617,10 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
     I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup');
 
+    I.waitForEnabled(locate('.appointment').at(2));
     I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
     I.waitForVisible('.io-ox-sidepopup');
-    I.click('Details');
+    I.retry(5).click('Details');
     I.waitForText(`${users[1].userdata.display_name}`, 5, '.io-ox-sidepopup .details .organizer');
     I.click('~Close', '.io-ox-sidepopup');
 
