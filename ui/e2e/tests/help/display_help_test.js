@@ -20,7 +20,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario.only('Hide and show Help topics based on user capabilities', async function (I, users, contacts) {
+Scenario('Hide and show Help topics based on user capabilities', async function (I, users, contacts) {
 
     // Disable calendar
     await users[0].doesntHaveCapability('calendar');
