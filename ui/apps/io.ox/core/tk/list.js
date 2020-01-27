@@ -835,6 +835,8 @@ define('io.ox/core/tk/list', [
                         listLabel = this.getPreviousLabel(childAfter);
                         if (modelLabel !== listLabel) childAfter = childAfter.prev();
                     }
+                    // we need to add the new item to the list of items or we get wrong indices
+                    children.splice(index, 0, li);
                     childAfter.before(li);
                     // scroll position might have changed due to insertion
                     if (li[0].offsetTop <= this.el.scrollTop) {
@@ -842,6 +844,8 @@ define('io.ox/core/tk/list', [
                     }
                 } else {
                     this.$el.append(li);
+                    // we need to add the new item to the list of items or we get wrong indices
+                    children.push(li);
                 }
 
                 if (this.options.labels) {
