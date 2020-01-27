@@ -9,6 +9,7 @@
  *
  * @author Luca Stein <luca.stein@open-xchange.com>
  */
+const { expect } = require('chai');
 
 Feature('General > Help');
 
@@ -22,6 +23,13 @@ After(async function (users) {
 
 Scenario('Hide and show Help topics based on user capabilities', async function (I, users, contacts) {
 
+    const checkIfDisplayNone = async (capability) => {
+        I.waitForElement(`.listitem.cap-${capability}`);
+        const displayProperties = await I.grabCssPropertyFrom(locate(`.listitem.cap-${capability}`), 'display');
+        const result = displayProperties.every(displayProperty => displayProperty === 'none');
+        expect(result).to.be.true;
+    };
+
     // Disable calendar
     await users[0].doesntHaveCapability('calendar');
 
@@ -33,13 +41,17 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
     I.waitForElement('.io-ox-context-help');
     I.click('.io-ox-context-help');
     I.waitForElement('.io-ox-help-window');
+    I.waitForVisible('.inline-help-iframe');
 
     // Check if help shows info about disabled capability
-    await within({ frame: '.inline-help-iframe' }, () => {
+    await within({ frame: '.inline-help-iframe' }, async () => {
+        I.wait(1);
         I.waitForText('Start Page');
         I.click('Start Page');
+        I.waitForElement('li.listitem.cap-tasks');
+        I.scrollTo('.listitem.cap-tasks');
         I.waitForText('Tasks');
-        I.dontSee('Calendar');
+        await checkIfDisplayNone('calendar');
     });
 
     // Disable tasks
@@ -51,14 +63,19 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
     I.waitForElement('.io-ox-context-help');
     I.click('.io-ox-context-help');
     I.waitForElement('.io-ox-help-window');
+    I.waitForVisible('.inline-help-iframe');
 
     // Check if help shows info about disabled capability
-    await within({ frame: '.inline-help-iframe' }, () => {
+    await within({ frame: '.inline-help-iframe' }, async () => {
+        I.wait(1);
         I.waitForText('Start Page');
         I.click('Start Page');
+        I.waitForElement('li.listitem.cap-infostore');
+        I.scrollTo('li.listitem.cap-infostore');
         I.waitForText('Drive');
-        I.dontSee('Calendar');
-        I.dontSee('Tasks');
+
+        await checkIfDisplayNone('calendar');
+        await checkIfDisplayNone('tasks');
     });
 
     // Disable Drive
@@ -72,14 +89,17 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
     I.waitForElement('.io-ox-context-help');
     I.click('.io-ox-context-help');
     I.waitForElement('.io-ox-help-window');
+    I.waitForVisible('.inline-help-iframe');
 
     // Check if help shows info about disabled capability
-    await within({ frame: '.inline-help-iframe' }, () => {
+    await within({ frame: '.inline-help-iframe' }, async () => {
+        I.wait(1);
         I.waitForText('Start Page');
         I.click('Start Page');
-        I.retry(5).dontSee('Calendar');
-        I.dontSee('Tasks');
-        I.dontSee('Drive');
+
+        await checkIfDisplayNone('calendar');
+        await checkIfDisplayNone('tasks');
+        await checkIfDisplayNone('infostore');
     });
 
     I.logout();
