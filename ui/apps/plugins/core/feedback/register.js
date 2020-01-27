@@ -397,7 +397,8 @@ define('plugins/core/feedback/register', [
                         };
 
                     if (dialogMode === 'nps-v1' && settings.get('feedback/showQuestion', false)) {
-                        data.questionId = settings.get('feedback/questionIndex') || 0;
+                        // looks strange but works for index out of bounds and not set at all
+                        data.questionId = npsExtendedQuestions[settings.get('feedback/questionIndex') || 0] ? settings.get('feedback/questionIndex') || 0 : 0;
                     }
 
                     _(_.browser).each(function (val, key) {
