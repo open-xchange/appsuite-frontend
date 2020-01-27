@@ -84,7 +84,6 @@ Scenario('Create never ending appointment and check display in several views', a
     // check in month view
     calendar.switchView('Month');
     // for testing purposes
-    I.see('Testing is fun blabkahg');
     I.waitForVisible('.monthview-container .day .appointment .title');
     I.see('test caching', '.monthview-container .day .appointment .title');
 
