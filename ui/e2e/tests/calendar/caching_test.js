@@ -23,7 +23,7 @@ After(async function (users) {
 });
 
 // TODO: broken for last 5 runs (expected number of elements (.weekview-container.week .appointment .title) is 6, but found 4)
-Scenario.only('Create never ending appointment and check display in several views', async function (I, calendar) {
+Scenario('Create never ending appointment and check display in several views', async function (I, calendar) {
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();

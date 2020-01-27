@@ -59,7 +59,7 @@ Scenario('[C7433] Create appointment by marking some timeframe', async (I, calen
         I.see(apnt_subject);
         I.see(apnt_location);
         // check time / date - should be 1am to 3am, 2hrs
-        const apnt_date = await I.grabTextFrom('.date'); // expected: moment().format(L)
+        const apnt_date = await I.grabTextFrom('.notdate'); // expected: moment().format(L)
         const apnt_time = await I.grabTextFrom('.time'); // expected: 01:00 - 03:00 AM
         expect(apnt_date).to.contain(moment().format('l'));
         expect(apnt_time).to.contain('1:00 – 3:00 AM');

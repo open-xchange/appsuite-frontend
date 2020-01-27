@@ -200,7 +200,7 @@ module.exports.config = {
         },
         stepByStepReport: {
             enabled: true,
-            ignoredSteps: 'grab*',
+            ignoredSteps: ['grab*', 'login*', 'wait*'],
             screenshotsForAllureReport: true
         }
     },
