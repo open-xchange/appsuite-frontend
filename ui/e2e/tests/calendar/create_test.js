@@ -401,11 +401,12 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
     });
-    const date = moment().startOf('day').weekday(0);
+    const date = moment().startOf('week');
+    I.say(date);
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
-    I.retry(5).click(`~${date.format('l, dddd')}, CW ${date.week()}`, calendar.locators.mini);
+    I.retry(5).click({ css: `[aria-label*="${date.format('l, dddd')}, CW ${date.week()}"` }, calendar.locators.mini);
 
     I.say('Create');
     calendar.newAppointment();
