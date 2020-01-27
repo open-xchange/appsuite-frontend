@@ -29,7 +29,7 @@ Scenario('Create recurring appointments with one participant', async function (I
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
     });
-    const startDate = moment().startOf('week').add('8', 'day');
+    const startDate = moment().startOf('week').add('days', 1);
     I.say(startDate.format('MM/DD/YYYY'));
     I.login('app=io.ox/calendar&perspective=list');
     calendar.waitForApp();
@@ -192,7 +192,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     ['Month', 'Week', 'Workweek'].forEach(function (view) {
         calendar.withinPerspective(view, function (perspective) {
             I.say(perspective);
-            I.click({ css: `.date-picker td[aria-label^="${startDate.format('M/DD/YYYY')}"]` });
+            I.click({ css: `.date-picker td[aria-label*="${startDate.format('M/DD/YYYY')}"]` });
             I.waitForVisible(locate('.appointment .title').inside(perspective).withText('test recurring edit'));
             I.seeNumberOfElements(locate({ css: '.appointment' }).inside(perspective).withText('test recurring edit'), 3);
         });
