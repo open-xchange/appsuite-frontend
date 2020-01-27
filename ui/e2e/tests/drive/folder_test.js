@@ -443,6 +443,7 @@ Scenario('[C8388] Delete a folder', async (I, drive) => {
     const folder = await I.haveFolder({ title: folderName, module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
     I.login('app=io.ox/files&folder=' + folder);
     drive.waitForApp();
+    I.waitForEnabled('.folder-tree .contextmenu-control[title*="' + folderName + '"]');
     I.openFolderMenu(folderName);
     I.clickDropdown('Delete');
     I.waitForText('Do you really want to delete folder "' + folderName + '"?');
@@ -451,6 +452,7 @@ Scenario('[C8388] Delete a folder', async (I, drive) => {
     I.waitForInvisible(folderName);
     ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {
         I.selectFolder(f);
+        I.waitForEnabled('.folder-tree .contextmenu-control[title*="' + f + '"]');
         I.openFolderMenu(f);
         I.waitForText('Add new folder', '.dropdown.open .dropdown-menu');
         I.dontSee('Delete', '.dropdown.open .dropdown-menu');
