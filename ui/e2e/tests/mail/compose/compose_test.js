@@ -234,12 +234,13 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.waitForVisible('.io-ox-editor');
     I.fillField('Title', 'Testdocument.txt');
     I.fillField('Note', 'Some content');
+    I.waitForClickable(locate('button').withText('Save'));
     I.click('Save');
     I.waitForNetworkTraffic();
     I.click('Close');
 
     I.say('Add attachment to new draft');
-    I.openApp('Mail');
+    I.click(locate({ css: 'button[data-id="io.ox/mail"]' }).inside({ css: 'div[id="io-ox-appcontrol"]' }));
     mail.waitForApp();
 
     // workflow 10: Compose with Drive Mail attachment
