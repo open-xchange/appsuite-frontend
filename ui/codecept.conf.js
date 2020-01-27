@@ -197,6 +197,11 @@ module.exports.config = {
             project_id: process.env.TESTRAIL_PROJECTID || '1',
             runName: process.env.TESTRAIL_RUNNAME || 'test',
             enabled: process.env.TESTRAIL_ENABLED || false
+        },
+        stepByStepReport: {
+            enabled: true,
+            ignoredSteps: 'grab*',
+            screenshotsForAllureReport: true
         }
     },
     name: 'App Suite Core UI'
