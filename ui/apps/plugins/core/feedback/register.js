@@ -45,6 +45,51 @@ define('plugins/core/feedback/register', [
             'io.ox/files'
         ];
 
+    // we want to limit spam, so offer a way to rate limit feedback
+    function allowedToGiveFeedback() {
+        // getSettings here for better readability later on
+        // relative time stored as 3M for 3 Month etc, or absolute time stored in iso format 2014-06-20
+        var timeLimit = settings.get('feedback/timeLimit'),
+            // defaults is 1 if theres a limit, if not then we just allow infinite feedbacks
+            maxNumberOfFeedbacks = settings.get('feedback/maxFeedbacks', timeLimit ? 1 : undefined),
+            usedNumberOfFeedbacks = settings.get('feedback/usedFeedbacks', 0),
+            // timestamp
+            // we need to save the first feedback per timeslot, otherwise we could not use relative dates here (you are alloewd 3 feedbacks every month etc)
+            firstFeedbackInTimeslot = settings.get('feedback/firstFeedbackTime');
+
+        // no max number per timeslot => infinite number of feedbacks allowed
+        if (!maxNumberOfFeedbacks) return true;
+
+        if (firstFeedbackInTimeslot && timeLimit) {
+            var tempTime;
+            // absolute date
+            if (timeLimit.indexOf('-') !== -1) {
+                tempTime = moment(timeLimit).valueOf();
+                // after specified date, need for reset?
+                if (tempTime < _.now() && tempTime > firstFeedbackInTimeslot && usedNumberOfFeedbacks !== 0) {
+                    usedNumberOfFeedbacks = 0;
+                    settings.set('feedback/usedFeedbacks', 0).save();
+                }
+            // relative date
+            } else {
+                // limit is stored as 3M for 3 Month etc, so we have to split the string and apply it to the time the last feedback was given
+                tempTime = moment(firstFeedbackInTimeslot).add(timeLimit.substring(0, timeLimit.length - 1), timeLimit.substring(timeLimit.length - 1)).valueOf();
+                // after relative time, need for reset?
+                if (tempTime < _.now() && usedNumberOfFeedbacks !== 0) {
+                    usedNumberOfFeedbacks = 0;
+                    settings.set('feedback/usedFeedbacks', 0).save();
+                }
+            }
+        }
+
+        return usedNumberOfFeedbacks < maxNumberOfFeedbacks;
+    }
+
+    function toggleButtons(state) {
+        $('#io-ox-screens .feedback-button').toggle(state);
+        $('#topbar-settings-dropdown [data-action="feedback"]').parent().toggle(state);
+    }
+
     function getAppOptions(useWhitelist) {
         var currentApp = ox.ui.App.getCurrentApp(),
             apps = appApi.forLauncher().map(function (app) {
@@ -247,6 +292,8 @@ define('plugins/core/feedback/register', [
     }
 
     var feedback = {
+        // not really used but helps with unit tests
+        allowedToGiveFeedback: allowedToGiveFeedback,
 
         show: function () {
             var options = {
@@ -399,6 +446,11 @@ define('plugins/core/feedback/register', [
                     data = baton.data;
                     sendFeedback(data)
                         .done(function () {
+                            // update settings
+                            settings.set('feedback/usedFeedbacks', settings.get('feedback/usedFeedbacks', 0) + 1).save();
+                            if (settings.get('feedback/usedFeedbacks', 0) === 1) settings.set('feedback/firstFeedbackTime', _.now()).save();
+
+                            if (!allowedToGiveFeedback()) toggleButtons(false);
                             //#. popup info message
                             yell('success', gt('Thank you for your feedback'));
                         })
@@ -435,6 +487,7 @@ define('plugins/core/feedback/register', [
                         feedback.show();
                     })
                 );
+                this.$ul.find('[data-action="feedback"]').parent().toggle(allowedToGiveFeedback());
             }
         }
     });
@@ -446,7 +499,13 @@ define('plugins/core/feedback/register', [
             var currentSetting = settings.get('feedback/show', 'both');
             if (!(currentSetting === 'both' || currentSetting === 'side')) return;
             feedback.drawButton();
+            toggleButtons(allowedToGiveFeedback());
         }
+    });
+
+    // update on refresh should work
+    ox.on('refresh^', function () {
+        toggleButtons(allowedToGiveFeedback());
     });
 
     ext.point('plugins/core/feedback').invoke('initialize', this);
