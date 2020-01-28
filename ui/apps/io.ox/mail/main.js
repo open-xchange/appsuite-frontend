@@ -339,6 +339,31 @@ define('io.ox/mail/main', [
 
         },
 
+        'account-status-check': function () {
+            _.delay(function () {
+                accountAPI.all().done(function (data) {
+                    var relevantAccounts = data;
+
+                    _.each(relevantAccounts, function (accountData) {
+                        console.log('check', accountData);
+                        accountAPI.getStatus(accountData.id).done(function (obj) {
+                            console.log('status', obj);
+                            var node = app.treeView.getNodeView(accountData.root_folder);
+                            if (node) {
+                                if (obj[accountData.id].status !== 'ok') {
+                                    node.showStatusIcon(obj[accountData.id].message, 'accountStatus:' + obj[accountData.id].status, node.options.model_id);
+                                } else {
+                                    node.hideStatusIcon();
+                                    node.render();
+                                }
+                            }
+
+                        });
+                    });
+                });
+            }, 5000);
+        },
+
         'mail-quota': function (app) {
 
             if (_.device('smartphone')) return;
