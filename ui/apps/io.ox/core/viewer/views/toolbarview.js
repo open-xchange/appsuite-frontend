@@ -19,7 +19,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/backbone/views/actions/util',
     'io.ox/files/api',
     'io.ox/backbone/mini-views/helplink',
-    'io.ox/core/tk/doc-converter/utils',
+    'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
     'io.ox/files/util',

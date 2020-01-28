@@ -15,7 +15,7 @@ define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/viewer/views/document/thumbnailview',
     'io.ox/core/pdf/pdfdocument',
     'io.ox/core/pdf/pdfview',
-    'io.ox/core/tk/doc-converter/utils',
+    'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/tk/doc-utils/pageloader',
     'io.ox/core/pdf/pdfviewerlinkservice',
     'io.ox/core/viewer/util',

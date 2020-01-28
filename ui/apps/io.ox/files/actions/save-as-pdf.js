@@ -16,10 +16,9 @@ define('io.ox/files/actions/save-as-pdf', [
     'io.ox/files/api',
     'io.ox/core/extensions',
     'io.ox/backbone/views/modal',
-    'io.ox/core/tk/doc-converter/utils',
-    'io.ox/core/tk/doc-converter/errormessages',
+    'io.ox/core/tk/doc-converter-utils',
     'gettext!io.ox/files'
-], function (FolderApi, FilesApi, ext, ModalDialog, ConverterUtils, ConverterError, gt) {
+], function (FolderApi, FilesApi, ext, ModalDialog, ConverterUtils, gt) {
 
     'use strict';
 
@@ -74,12 +73,12 @@ define('io.ox/files/actions/save-as-pdf', [
                         notify('info', 'The PDF has been saved to "/drive/myfiles/documents" due to not having write access for the current folder.');
                     }
                 } else {
-                    errorMessage = ConverterError.getErrorTextFromResponse(response) || ConverterError.getErrorText('importError');
+                    errorMessage = ConverterUtils.getErrorTextFromResponse(response) || ConverterUtils.getErrorText('importError');
                     notify('error', errorMessage);
                 }
             })
             .fail(function (response) {
-                notify('error', ConverterError.getErrorTextFromResponse(response));
+                notify('error', ConverterUtils.getErrorTextFromResponse(response));
             });
         }
 

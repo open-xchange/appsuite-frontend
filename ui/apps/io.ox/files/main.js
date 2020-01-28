@@ -238,7 +238,7 @@ define('io.ox/files/main', [
             }
 
             function getConverterUrl(model) {
-                return require(['io.ox/core/tk/doc-converter/utils']).then(function (DocConverterUtils) {
+                return require(['io.ox/core/tk/doc-converter-utils']).then(function (DocConverterUtils) {
                     return DocConverterUtils.getEncodedConverterUrl(model, { async: true });
                 });
             }
