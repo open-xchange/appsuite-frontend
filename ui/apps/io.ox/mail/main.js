@@ -340,28 +340,35 @@ define('io.ox/mail/main', [
         },
 
         'account-status-check': function () {
-            _.delay(function () {
-                accountAPI.all().done(function (data) {
-                    var relevantAccounts = data;
+            accountAPI.all().done(function (data) {
+                var relevantAccounts = data;
 
-                    _.each(relevantAccounts, function (accountData) {
-                        console.log('check', accountData);
-                        accountAPI.getStatus(accountData.id).done(function (obj) {
-                            console.log('status', obj);
-                            var node = app.treeView.getNodeView(accountData.root_folder);
-                            if (node) {
-                                if (obj[accountData.id].status !== 'ok') {
-                                    node.showStatusIcon(obj[accountData.id].message, 'accountStatus:' + obj[accountData.id].status, node.options.model_id);
+                _.each(relevantAccounts, function (accountData) {
+                    accountAPI.getStatus(accountData.id).done(function (obj) {
+                        var node = app.treeView.getNodeView(accountData.root_folder),
+                            updateNode = function (node, accountStatus) {
+                                if (accountStatus.status !== 'ok') {
+                                    node.showStatusIcon(accountStatus.message, 'accountStatus:' + accountStatus.status, node.options.model_id);
                                 } else {
                                     node.hideStatusIcon();
                                     node.render();
                                 }
-                            }
-
-                        });
+                            };
+                        if (node) {
+                            updateNode(node, obj[accountData.id]);
+                        } else {
+                            // wait for node to appear
+                            app.treeView.on('appear:' + accountData.root_folder, function () {
+                                node = app.treeView.getNodeView(accountData.root_folder);
+                                if (node) {
+                                    updateNode(node, obj[accountData.id]);
+                                }
+                                app.treeView.off('appear:' + accountData.root_folder);
+                            });
+                        }
                     });
                 });
-            }, 5000);
+            });
         },
 
         'mail-quota': function (app) {
