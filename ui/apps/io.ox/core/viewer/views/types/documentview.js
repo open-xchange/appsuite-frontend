@@ -25,11 +25,6 @@ define('io.ox/core/viewer/views/types/documentview', [
 
     'use strict';
 
-    var PDF_ERROR_NOTIFICATIONS = {
-        general: gt('An error occurred converting the document so it cannot be displayed.'),
-        passwordProtected: gt('This document is password protected and cannot be displayed.')
-    };
-
     // defines how many pages are loaded before and after the visible pages
     var NON_VISIBLE_PAGES_TO_LOAD_BESIDE = 1;
 
@@ -693,7 +688,8 @@ define('io.ox/core/viewer/views/types/documentview', [
              */
             function pdfDocumentLoadError(response) {
                 console.warn('Core.Viewer.DocumentView.show(): failed loading PDF document. Cause: ', response.cause);
-                var notificationText = PDF_ERROR_NOTIFICATIONS[response.cause] || PDF_ERROR_NOTIFICATIONS.general;
+                //var notificationText = PDF_ERROR_NOTIFICATIONS[response.cause] || PDF_ERROR_NOTIFICATIONS.general;
+                var notificationText = DocConverterUtils.getErrorTextFromResponse(response) || DocConverterUtils.getErrorText('importError');
                 var notificationIconClass = (response.cause === 'passwordProtected') ? 'fa-lock' : null;
 
                 // display error message
@@ -710,7 +706,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             }
 
             if (isPasswordProtected(this.model)) {
-                this.displayDownloadNotification(PDF_ERROR_NOTIFICATIONS.passwordProtected, 'fa-lock');
+                this.displayDownloadNotification(DocConverterUtils.getErrorText('passwordProtected'), 'fa-lock');
                 this.documentLoad.reject();
                 return this;
             }
