@@ -348,12 +348,14 @@ define('io.ox/mail/main', [
                         var node = app.treeView.getNodeView(accountData.root_folder),
                             updateNode = function (node, accountStatus) {
                                 if (accountStatus.status !== 'ok') {
-                                    node.showStatusIcon(accountStatus.message, 'checkAccountStatus', node.options.model_id);
+                                    //#. Shown as a tooltip when a mail account doesn't work correctly. Click brings user to the settings page
+                                    node.showStatusIcon(gt('There is a problem with this account. Click for more information'), 'checkAccountStatus', node.options.model_id);
                                 } else {
                                     node.hideStatusIcon();
                                     node.render();
                                 }
                             };
+
                         if (node) {
                             updateNode(node, obj[accountData.id]);
                         } else {
