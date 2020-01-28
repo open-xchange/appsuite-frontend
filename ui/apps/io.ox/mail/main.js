@@ -348,7 +348,7 @@ define('io.ox/mail/main', [
                         var node = app.treeView.getNodeView(accountData.root_folder),
                             updateNode = function (node, accountStatus) {
                                 if (accountStatus.status !== 'ok') {
-                                    node.showStatusIcon(accountStatus.message, 'accountStatus:' + accountStatus.status, node.options.model_id);
+                                    node.showStatusIcon(accountStatus.message, 'checkAccountStatus', node.options.model_id);
                                 } else {
                                     node.hideStatusIcon();
                                     node.render();
@@ -367,6 +367,13 @@ define('io.ox/mail/main', [
                             });
                         }
                     });
+                });
+            });
+
+            app.treeView.on('checkAccountStatus', function () {
+                ox.launch('io.ox/settings/main', { folder: 'virtual/settings/io.ox/settings/accounts' }).done(function () {
+                    // special handling for settings (bad, but apparently solved differently)
+                    this.setSettingsPane({ folder: 'virtual/settings/io.ox/settings/accounts' });
                 });
             });
         },
