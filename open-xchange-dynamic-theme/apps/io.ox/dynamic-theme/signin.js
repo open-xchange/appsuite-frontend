@@ -12,6 +12,7 @@ define('io.ox/dynamic-theme/signin', [
             src: vars.headerLogo,
             alt: ox.serverConfig.productName
         }));
+        delete vars.headerLogo;
     }
 
     less.setVars(vars);
