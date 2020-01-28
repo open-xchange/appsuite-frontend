@@ -43,6 +43,12 @@ define('plugins/core/feedback/register', [
             'io.ox/contacts',
             'io.ox/calendar',
             'io.ox/files'
+        ],
+        npsExtendedQuestions = [
+            gt('What is the primary reason for your score?'),
+            gt('How can we improve your experience?'),
+            gt('Which features do you value or use the most?'),
+            gt('What is the one thing we could do to make you happier?')
         ];
 
     // we want to limit spam, so offer a way to rate limit feedback
@@ -202,33 +208,43 @@ define('plugins/core/feedback/register', [
         className: 'nps-rating rating-view',
         name: 'nps-rating-v1',
 
+        initialize: function () {
+            // call super constructor
+            StarRatingView.prototype.initialize.apply(this, arguments);
+            // use value outside the range or the initial hover is set to 0 instead of nothing
+            this.value = -1;
+        },
+
         render: function () {
 
             this.$el.append(
-                $('<caption>').text(gt('Not likely at all')),
-                $('<div>').append(
+                $('<div class="score-wrapper">').append(
                     _.range(0, 11).map(function (i) {
                         return $('<label>').append(
                             $('<input type="radio" name="nps-rating" class="sr-only">').val(i)
                                 .attr('title', gt('%1$d of 10 points.', i)),
-                            $('<i class="fa fa-circle score" aria-hidden="true">'),
-                            (i % 5 === 0 ? $('<div class="score-number" aria-hidden="true">').text(i) : '')
+                            $('<span class="score" aria-hidden="true">').text(i)
                         );
                     })
                 ),
-                $('<caption>').text(gt('Extremely likely'))
+                $('<div class="caption-wrapper">').append(
+                    $('<caption>').text(gt('Not likely at all')),
+                    $('<caption>').text(gt('Very likely'))
+                )
             );
 
             return this;
         },
 
         renderRating: function (value) {
+            var parsedValue = parseInt(value, 10);
             this.$('.score').each(function (index) {
-                $(this).toggleClass('checked', index <= value);
+                $(this).toggleClass('checked', index === parsedValue);
             });
         },
 
         setValue: function (value) {
+            value = parseInt(value, 10);
             if (value < 0 || value > 11) return;
             this.value = value;
             this.renderRating(value);
@@ -258,6 +274,7 @@ define('plugins/core/feedback/register', [
             };
         }
     });
+
     // for custom dev
     ext.point('plugins/core/feedback').extend({
         id: 'process',
@@ -266,25 +283,26 @@ define('plugins/core/feedback/register', [
     });
 
     var modes = {
-            nps: {
+            'nps-v1': {
                 ratingView: NpsRatingView,
                 //#. %1$s is the product name, for example 'OX App Suite'
-                title: gt('How likely is it that you would recommend %1$s to a friend?', ox.serverConfig.productName)
+                title: gt('How likely are you to recommend %1$s to a friend or colleague?', ox.serverConfig.productName)
             },
             stars: {
                 ratingView: StarRatingView,
                 title: gt('Please rate this product')
             },
-            modules: {
+            'star-rating-v1': {
                 ratingView: ModuleRatingView,
                 title: gt('Please rate the following application:')
             }
         },
-        dialogMode = settings.get('feedback/dialog', 'modules');
+        // url parameter for testing purpose only
+        dialogMode = _.url.hash('feedbackMode') || settings.get('feedback/mode', 'star-rating-v1');
 
     // make sure dialogMode is valid
     if (_(_(modes).keys()).indexOf(dialogMode) === -1) {
-        dialogMode = 'modules';
+        dialogMode = 'star-rating-v1';
     }
 
     function sendFeedback(data) {
@@ -301,13 +319,12 @@ define('plugins/core/feedback/register', [
                 enter: 'send',
                 point: 'plugins/core/feedback',
                 //#. %1$s is the product name, for example 'OX App Suite'
-                title: gt('How do you like %1$s?', ox.serverConfig.productName),
-                class: dialogMode + '-feedback-view'
+                title: gt('We appreciate your feedback')
             };
 
             // nps view needs more space
-            if (dialogMode === 'nps') {
-                options.width = 600;
+            if (dialogMode === 'nps-v1') {
+                options.width = 580;
             }
             new ModalDialog(options)
                 .extend({
@@ -319,19 +336,23 @@ define('plugins/core/feedback/register', [
                     ratingView: function () {
                         this.ratingView = new modes[dialogMode].ratingView({ hover: settings.get('feedback/showHover', true) });
 
-                        this.$body.append(this.ratingView.render(this.$body).$el);
+                        this.$body.addClass(dialogMode + '-feedback-view').append(this.ratingView.render(this.$body).$el);
                     },
                     comment: function () {
-                        if (dialogMode === 'nps') return;
-                        var guid = _.uniqueId('feedback-note-');
+                        if (dialogMode === 'nps-v1' && !settings.get('feedback/showQuestion', false)) return;
+
+                        var guid = _.uniqueId('feedback-note-'),
+                            // prepare for index out of bounds
+                            text = dialogMode === 'nps-v1' ? npsExtendedQuestions[settings.get('feedback/questionIndex') || 0] || gt('What is the primary reason for your score?') : gt('Comments and suggestions');
+
                         this.$body.append(
-                            $('<label>').attr('for', guid).text(gt('Comments and suggestions')),
+                            $('<label>').attr('for', guid).text(text),
                             $('<textarea class="feedback-note form-control" rows="5">').attr('id', guid)
                         );
                     },
                     infotext: function () {
                         // without comment field infotext makes no sense
-                        if (dialogMode === 'nps') return;
+                        if (dialogMode === 'nps-v1') return;
                         this.$body.append(
                             $('<div>').text(
                                 gt('Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly.')
@@ -350,7 +371,7 @@ define('plugins/core/feedback/register', [
                 .addButton({ action: 'send', label: gt('Send') })
                 .on('send', function () {
 
-                    if (this.ratingView.getValue() === 0) {
+                    if ((dialogMode === 'nps-v1' && this.ratingView.getValue() === -1) || (dialogMode !== 'nps-v1' && this.ratingView.getValue() === 0)) {
                         yell('error', gt('Please select a rating.'));
                         this.idle();
                         return;
@@ -374,6 +395,11 @@ define('plugins/core/feedback/register', [
                             language: ox.language,
                             client_version: ox.serverConfig.version + '-' + (ox.serverConfig.revision ? ox.serverConfig.revision : ('Rev' + ox.revision))
                         };
+
+                    if (dialogMode === 'nps-v1' && settings.get('feedback/showQuestion', false)) {
+                        // looks strange but works for index out of bounds and not set at all
+                        data.questionId = npsExtendedQuestions[settings.get('feedback/questionIndex') || 0] ? settings.get('feedback/questionIndex') || 0 : 0;
+                    }
 
                     _(_.browser).each(function (val, key) {
                         if (val && _(OS).indexOf(key) !== -1) {

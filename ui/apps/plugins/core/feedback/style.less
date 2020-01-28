@@ -44,34 +44,96 @@
 
 .nps-rating {
 
-    @score-color: #ccc;
-    @score-color-checked: @brand-primary;
+    @score-color: #dedede;
+    @score-color-checked: #51a7f0;
+    display: block;
 
-    justify-content: space-between;
+    padding-top: 16px;
 
-    label {
-        padding-right: 4px;
-        vertical-align: top;
-
-        .score {
-            // don't make the circles too small since those are buttons as well
-            font-size: 24px;
-            line-height: 32px;
-            cursor: pointer;
-            color: @score-color;
-
-            &.checked { color: @score-color-checked; }
+    .caption-wrapper {
+        display: flex;
+        justify-content: space-between;
+        caption {
+            font-weight: normal;
+            line-height: 16px;
         }
+    }
 
-        .score-number {
-            text-align: center;
+
+    .score-wrapper {
+        display: flex;
+        justify-content: center;
+
+        label {
+            padding-right: 4px;
+            padding-left: 4px;
+            vertical-align: top;
+
+            .score {
+                // don't make the circles too small since those are buttons as well
+                display: inline-block;
+                border-radius: 20px;
+                width: 40px;
+                height: 40px;
+                text-align: center;
+                font-size: 18px;
+                font-weight: 600;
+                line-height: 40px;
+                cursor: pointer;
+                color: #000;
+                background-color: @score-color;
+
+                &.checked {
+                    background-color: @score-color-checked;
+                    color: #fff
+                }
+            }
         }
     }
 
     input[type="radio"]:focus + .score {
-        text-shadow: 0 0 4px #000;
+        text-shadow: 0 0 4px @score-color-checked;
     }
 
+}
+
+@media all and (max-width: 550px) {
+    .nps-rating .score-wrapper label {
+        padding-right: 2px;
+        padding-left: 2px;
+
+        .score {
+            border-radius: 16px;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            font-size: 16px;
+        }
+    }
+}
+
+@media all and (max-width: 420px) {
+    .nps-rating .score-wrapper label {
+        padding-right: 2px;
+        padding-left: 2px;
+
+        .score {
+            border-radius: 12px;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            font-size: 14px;
+        }
+    }
+}
+
+.nps-v1-feedback-view {
+    & > label {
+        font-weight: normal;
+        padding-top: 24px;
+        color: #000;
+        font-size: 14px;
+    }
 }
 
 .star-rating {
