@@ -322,16 +322,17 @@ define('io.ox/mail/main', [
 
                     _.each(relevantAccounts, function (accountData) {
                         accountAPI.getStatus(accountData.id).done(function (obj) {
+                            var node = app.treeView.getNodeView(accountData.root_folder);
+
+                            if (!node) return;
+
                             if (obj[accountData.id].status === 'invalid_ssl') {
                                 var event = modus ? 'accountlink:sslexamine' : 'accountlink:ssl',
                                     data = modus ? error : node.options.model_id;
 
                                 app.addAccountErrorHandler(accountData.root_folder, event, data);
 
-                            } else if ((!obj[accountData.id].status || obj[accountData.id].status === 'ok')) {
-                                var node = app.treeView.getNodeView(accountData.root_folder);
-                                if (!node) return;
-
+                            } else if (!obj[accountData.id].status || obj[accountData.id].status === 'ok') {
                                 node.hideStatusIcon();
                                 node.render();
                             }
