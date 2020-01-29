@@ -264,6 +264,32 @@ define('io.ox/mail/main', [
             app.treeView = tree;
         },
 
+        'account-error-handling': function (app) {
+
+            app.addAccountErrorHandler = function (folderId, callbackEvent, data) {
+                console.log(folderId, callbackEvent, data);
+                var node = app.treeView.getNodeView(folderId),
+                    updateNode = function (node) {
+                        //#. Shown as a tooltip when a mail account doesn't work correctly. Click brings user to the settings page
+                        node.showStatusIcon(gt('There is a problem with this account. Click for more information'), 'checkAccountStatus', data || node.options.model_id);
+                    };
+
+                if (node) {
+                    updateNode(node);
+
+                } else {
+                    // wait for node to appear
+                    app.treeView.on('appear:' + folderId, function () {
+                        node = app.treeView.getNodeView(folderId);
+
+                        if (node) updateNode(node);
+
+                        app.treeView.off('appear:' + folderId);
+                    });
+                }
+            };
+        },
+
         'folder-view-ssl-events': function (app) {
 
             if (coreSettings.get('security/acceptUntrustedCertificates') || !coreSettings.get('security/manageCertificates')) return;
@@ -296,20 +322,18 @@ define('io.ox/mail/main', [
 
                     _.each(relevantAccounts, function (accountData) {
                         accountAPI.getStatus(accountData.id).done(function (obj) {
-                            var node = app.treeView.getNodeView(accountData.root_folder);
+                            if (obj[accountData.id].status === 'invalid_ssl') {
+                                var event = modus ? 'accountlink:sslexamine' : 'accountlink:ssl',
+                                    data = modus ? error : node.options.model_id;
 
-                            if (node) {
-                                if (obj[accountData.id].status === 'invalid_ssl') {
+                                app.addAccountErrorHandler(accountData.root_folder, event, data);
 
-                                    var event = modus ? 'accountlink:sslexamine' : 'accountlink:ssl',
-                                        data = modus ? error : node.options.model_id;
+                            } else if ((!obj[accountData.id].status || obj[accountData.id].status === 'ok')) {
+                                var node = app.treeView.getNodeView(accountData.root_folder);
+                                if (!node) return;
 
-                                    node.showStatusIcon(obj[accountData.id].message, event, data);
-
-                                } else {
-                                    node.hideStatusIcon();
-                                    node.render();
-                                }
+                                node.hideStatusIcon();
+                                node.render();
                             }
 
                         });
@@ -340,33 +364,12 @@ define('io.ox/mail/main', [
         },
 
         'account-status-check': function () {
+
             accountAPI.all().done(function (data) {
-                var relevantAccounts = data;
-
-                _.each(relevantAccounts, function (accountData) {
+                _.each(data, function (accountData) {
                     accountAPI.getStatus(accountData.id).done(function (obj) {
-                        var node = app.treeView.getNodeView(accountData.root_folder),
-                            updateNode = function (node, accountStatus) {
-                                if (accountStatus.status !== 'ok') {
-                                    //#. Shown as a tooltip when a mail account doesn't work correctly. Click brings user to the settings page
-                                    node.showStatusIcon(gt('There is a problem with this account. Click for more information'), 'checkAccountStatus', node.options.model_id);
-                                } else {
-                                    node.hideStatusIcon();
-                                    node.render();
-                                }
-                            };
-
-                        if (node) {
-                            updateNode(node, obj[accountData.id]);
-                        } else {
-                            // wait for node to appear
-                            app.treeView.on('appear:' + accountData.root_folder, function () {
-                                node = app.treeView.getNodeView(accountData.root_folder);
-                                if (node) {
-                                    updateNode(node, obj[accountData.id]);
-                                }
-                                app.treeView.off('appear:' + accountData.root_folder);
-                            });
+                        if (obj[accountData.id].status !== 'ok') {
+                            app.addAccountErrorHandler(accountData.root_folder, 'checkAccountStatus');
                         }
                     });
                 });
@@ -374,7 +377,6 @@ define('io.ox/mail/main', [
 
             app.treeView.on('checkAccountStatus', function () {
                 ox.launch('io.ox/settings/main', { folder: 'virtual/settings/io.ox/settings/accounts' }).done(function () {
-                    // special handling for settings (bad, but apparently solved differently)
                     this.setSettingsPane({ folder: 'virtual/settings/io.ox/settings/accounts' });
                 });
             });
