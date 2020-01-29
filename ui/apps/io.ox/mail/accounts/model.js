@@ -179,7 +179,10 @@ define('io.ox/mail/accounts/model', [
                                 // reload settings to fetch unifiedInboxIdentifier
                                 return settings.reload();
                             });
+                        } else {
+                            def = $.when();
                         }
+
                         def.then(function () {
                             folderAPI.refresh();
                         });
