@@ -11,7 +11,7 @@
  */
 define('io.ox/core/tk/doc-converter-utils', [
     'io.ox/core/http',
-    'gettext!io.ox/office/presenter/main'
+    'gettext!io.ox/core'
 ], function (CoreHTTP, gt) {
 
     'use strict';
