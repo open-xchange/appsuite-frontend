@@ -63,7 +63,7 @@ define('io.ox/core/boot/config', [
         // fetch fresh manifests
         return http.GET({
             module: 'apps/manifests',
-            params: { action: 'config', version: ox.packageVersion },
+            params: { action: 'config', version: ox.version },
             appendSession: type === 'user',
             failOnError: true
         })

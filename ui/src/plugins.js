@@ -401,15 +401,13 @@
                 var base = [ox.apiRoot, '/apps/load/', ox.version].join(''),
                     // default to the value from apache documentation
                     limit = ox.serverConfig.limitRequestLine || 8190,
-                    requests = [], url, modules = module.split(','),
-                    version = '?version=' + ox.packageVersion;
+                    requests = [], url, modules = module.split(',');
 
                 while (modules.length > 0) {
                     url = base;
-                    while (modules[0] && url.length + 1 + modules[0].length + version.length < limit) {
+                    while (modules[0] && url.length + 1 + modules[0].length < limit) {
                         url += ',' + modules.shift();
                     }
-                    url += version;
                     requests.push($.ajax({ url: url, dataType: 'text' }));
                 }
                 $.when.apply(this, requests)

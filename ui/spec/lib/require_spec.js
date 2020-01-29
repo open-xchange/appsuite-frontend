@@ -17,9 +17,6 @@ define(function () {
         function mkModule(name) {
             return 'define("' + name.replace(/\.js$/, '') + '", function() { return true; });';
         }
-        function moduleListFrom(xhr) {
-            return xhr.url.split('?')[0].split(',');
-        }
 
         it('should fetch static files via apps/load api', function () {
             var recordAppsLoad = sinon.spy();
@@ -27,7 +24,7 @@ define(function () {
             fakeServer.autoRespond = true;
             sinon.FakeXMLHttpRequest.useFilters = false;
             fakeServer.respondWith('GET', /api\/apps\/load/, function (xhr) {
-                var modules = moduleListFrom(xhr);
+                var modules = xhr.url.split(',');
                 modules.shift();
                 recordAppsLoad();
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, modules.map(mkModule).join('\n/*:oxsep:*/\n'));
@@ -37,28 +34,7 @@ define(function () {
                 sinon.FakeXMLHttpRequest.useFilters = true;
                 fakeServer.restore();
                 expect(recordAppsLoad.calledOnce, 'apps/load called once').to.be.true;
-                require.undef('file/doesnt/exist');
             });
-        });
-
-        it('should append version string', function () {
-            var fakeServer = sinon.fakeServer.create(), version;
-            fakeServer.autoRespond = true;
-            sinon.FakeXMLHttpRequest.useFilters = false;
-            fakeServer.respondWith('GET', /api\/apps\/load/, function (xhr) {
-                version = xhr.url.split('?')[1];
-                var modules = moduleListFrom(xhr);
-                modules.shift();
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, modules.map(mkModule).join('\n/*:oxsep:*/\n'));
-            });
-
-            return require(['file/doesnt/exist2']).then(function () {
-                sinon.FakeXMLHttpRequest.useFilters = true;
-                fakeServer.restore();
-                expect(version).to.match(/version=[0-9.-]+$/);
-                require.undef('file/doesnt/exist2');
-            });
-
         });
 
         describe('respects url limits', function () {
@@ -69,13 +45,13 @@ define(function () {
                 fakeServer.autoRespond = true;
                 sinon.FakeXMLHttpRequest.useFilters = false;
                 fakeServer.respondWith('GET', /api\/apps\/load/, function (xhr) {
-                    var modules = moduleListFrom(xhr);
+                    var modules = xhr.url.split(',');
                     modules.shift();
                     recordAppsLoad(modules.length);
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, modules.map(mkModule).join('\n/*:oxsep:*/\n'));
                 });
 
-                ox.serverConfig.limitRequestLine = 120;
+                ox.serverConfig.limitRequestLine = 100;
                 testModules = ['tests/longList1', 'tests/longList2', 'tests/longList3'];
                 testModules.push('tests/longList4', 'tests/longList5');
 
