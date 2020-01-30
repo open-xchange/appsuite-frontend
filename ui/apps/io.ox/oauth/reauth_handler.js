@@ -39,6 +39,7 @@ define('io.ox/oauth/reauth_handler', [
             })
             .on('reauthorize', function () {
                 account.reauthorize().then(function () {
+                    ox.trigger('account:reauthorized', account);
                     ox.trigger('please:refresh');
                 });
             })

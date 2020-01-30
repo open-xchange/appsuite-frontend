@@ -384,6 +384,17 @@ define('io.ox/mail/main', [
         },
 
         'OAuth-reauthorize': function (app) {
+
+            ox.on('account:reauthorized', function (account) {
+                if (!account) return;
+
+                var mailAccount = _(account.get('associations')).filter({ module: 'mail' })[0];
+                if (!mailAccount) return;
+
+                var node = app.treeView.getNodeView(mailAccount.folder);
+                if (!node) return;
+                node.hideStatusIcon();
+            });
             require([
                 'io.ox/oauth/keychain',
                 'io.ox/oauth/reauth_handler'
