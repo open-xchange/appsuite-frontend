@@ -45,11 +45,20 @@ define('io.ox/calendar/week/view', [
                 context = _.uniqueId('.drag-'),
                 // need this active tracker since mousemove events are throttled and may trigger the mousemove event
                 // even after the undelegate function has been called
-                active = true;
+                active = true,
+                started = false,
+                stopped = false;
+
             if (e.which !== 1) return;
-            opt.start.call(this, opt.event);
+
+            _.delay(function () {
+                if (stopped) return;
+                opt.start.call(this, opt.event);
+                started = true;
+            }.bind(this), 300);
 
             this.delegate('mousemove' + context, opt.updateContext, _.throttle(function (e) {
+                if (!started) return;
                 if (e.which !== 1) return;
                 if (!active) return;
                 opt.update.call(self, e);
@@ -65,6 +74,8 @@ define('io.ox/calendar/week/view', [
 
             if (opt.clear) this.delegate('focusout' + context, clear);
             $(document).on('mouseup' + context, function (e) {
+                stopped = true;
+                if (!started) return;
                 clear();
                 opt.end.call(self, e);
             });
