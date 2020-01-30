@@ -54,22 +54,7 @@ define('io.ox/core/viewer/views/types/typesutil', [
 
             var modelType = typesMap[(model.isEncrypted() ? model.getGuardType() : model.getFileType())] || 'defaultview';
 
-            /**
-             *  +++ ... temporary bugfix for assigning mail-compose spreadsheet-attachments
-             *      to the viewers 'documentview' mode via "documentconverter" ... +++
-             *
-             *  - This temporarily (intended just for release 7.10.2 ) fixes Bug #63315
-             *    ... "Due to new Mail Compose API: Preview for attached documents fails"
-             *    [https://bugs.open-xchange.com/show_bug.cgi?id=63315]
-             *
-             *  - TODO: ... there has to be another follow-up fix for Bug #64002
-             *          ... "Cannot fetch spreadsheet preview for mail compose attachments"
-             *          ... [https://bugs.open-xchange.com/show_bug.cgi?id=64002]
-             *
-             *          - once the api can be used reliably, reactivate the commented line (2 lines beneath).
-             */
-            // if (modelType === 'spreadsheetview' && (!Capabilities.has('spreadsheet') || !this.isNativeDocumentType(model))) {
-            if (modelType === 'spreadsheetview' && (!Capabilities.has('spreadsheet') || !this.isNativeDocumentType(model) || model.isComposeAttachment())) {
+            if (modelType === 'spreadsheetview' && (!Capabilities.has('spreadsheet') || !this.isNativeDocumentType(model))) {
                 modelType = 'documentview';
             }
 
