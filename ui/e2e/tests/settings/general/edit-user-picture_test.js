@@ -111,17 +111,16 @@ Scenario('User can rotate her/his picture', async function (I, contacts, mail) {
     contacts.editMyContactPhoto();
 
     I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
-
+    I.waitForInvisible('.edit-picture.empty');
     image = await I.grabCssPropertyFrom('.contact-photo-upload .contact-photo', 'backgroundImage');
     expect(Array.isArray(image) ? image[0] : image).to.not.be.empty;
-
+    I.wait(0.2);
     // rotate (portrait to landscape)
     const height = await I.grabAttributeFrom('.cr-image', 'height');
     I.click('.inline-actions button[data-action="rotate-right"]');
     const width = await I.grabAttributeFrom('.cr-image', 'width');
     expect(Array.isArray(height) ? height[0] : height).to.be.equal(Array.isArray(width) ? width[0] : width);
 
-    I.waitForInvisible('.edit-picture.empty');
     I.click('Apply');
     I.waitForInvisible('.edit-picture');
 
