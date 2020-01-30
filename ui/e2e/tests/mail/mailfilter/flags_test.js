@@ -64,7 +64,7 @@ Scenario('Set IMAP tags rule: no tags', async function (I, users, settings, mail
     const value = await I.executeScript(function (cid) {
         return require('io.ox/mail/api').pool.get('detail').get(cid).get('user');
     }, cid);
-    expect(value).to.eql(['']);
+    expect(value).to.eql([]);
 });
 
 Scenario('Set IMAP tags: two tags', async function (I, users, settings, mailfilter, mail) {
