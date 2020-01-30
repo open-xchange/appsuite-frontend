@@ -504,6 +504,7 @@ Scenario('[C7470] Delete a recurring appointment', async function (I) {
     ['Week', 'Day', 'Month', 'List', 'Workweek'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
+        if (view === 'Day') I.click({ css: `.date-picker td[aria-label*="${time.format('M/DD/YYYY')}"]` });
         I.waitForVisible(locate('.appointment').inside('.page.current'));
     });
 
