@@ -30,25 +30,30 @@ EOF
 for argument in "${@}"; do
     case ${argument} in
         -h|--help)
-            usage 1
+            usage
+            exit 0
         ;;
         --timestamp=*)
             NOW=${argument##--timestamp=}
         ;;
         *)
             echo "${0}: Error, unknown argument: ${argument}"
-            usage 1
+            usage
+            exit 1
         ;;
     esac
 done
-
-## cd ##
 
 NOW=$(echo "${NOW}" | grep -s '[0-9]\{8\}\.[0-9]\{6\}' -)
 if [ -z "${NOW}" ]; then
     echo "Timestamp invalid, make sure to generate it using 'date -u +%Y%m%d.%H%M%S'"
     exit 1
 fi
+
+command -v /opt/open-xchange/sbin/appsuiteui-history && /opt/open-xchange/sbin/appsuiteui-history -t $NOW
+
+## cd ## || exit 0
+
 if [ ! -f core ]; then
     echo "HTML files not found in $(pwd)" >&2
     exit 1
