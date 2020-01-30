@@ -266,12 +266,12 @@ define('io.ox/mail/main', [
 
         'account-error-handling': function (app) {
 
-            app.addAccountErrorHandler = function (folderId, callbackEvent, data) {
+            app.addAccountErrorHandler = function (folderId, callbackEvent, data, overwrite) {
                 console.log(folderId, callbackEvent, data);
                 var node = app.treeView.getNodeView(folderId),
                     updateNode = function (node) {
                         //#. Shown as a tooltip when a mail account doesn't work correctly. Click brings user to the settings page
-                        node.showStatusIcon(gt('There is a problem with this account. Click for more information'), 'checkAccountStatus', data || node.options.model_id);
+                        node.showStatusIcon(gt('There is a problem with this account. Click for more information'), callbackEvent || 'checkAccountStatus', data || node.options.model_id, overwrite);
                     };
 
                 if (node) {
@@ -379,6 +379,25 @@ define('io.ox/mail/main', [
             app.treeView.on('checkAccountStatus', function () {
                 ox.launch('io.ox/settings/main', { folder: 'virtual/settings/io.ox/settings/accounts' }).done(function () {
                     this.setSettingsPane({ folder: 'virtual/settings/io.ox/settings/accounts' });
+                });
+            });
+        },
+
+        'OAuth-reauthorize': function (app) {
+            require([
+                'io.ox/oauth/keychain',
+                'io.ox/oauth/reauth_handler'
+            ]).then(function (keychain, reauthHandler) {
+                ox.on('http:error:OAUTH-0040 http:error:MSG-0114', function (err) {
+                    var account = keychain.accounts.get(err.error_params[reauthHandler.columnForError(err.code)]);
+                    if (!account) return;
+                    var mailAccount = _(account.get('associations')).filter({ module: 'mail' })[0];
+                    if (!mailAccount) return;
+                    app.addAccountErrorHandler(mailAccount.folder, 'OAuthReauthorize', { account: account, err: err }, true);
+                });
+
+                app.treeView.on('OAuthReauthorize', function (data) {
+                    reauthHandler.showDialog(data.account, data.err);
                 });
             });
         },
