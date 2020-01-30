@@ -29,12 +29,10 @@ Scenario('Create recurring appointments with one participant', async function (I
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
     });
-    const startDate = moment().startOf('week').add('days', 1);
-    I.say(startDate.format('MM/DD/YYYY'));
+    const startDate = moment().add(1, 'months').startOf('week').add(1, 'days');
+
     I.login('app=io.ox/calendar&perspective=list');
     calendar.waitForApp();
-
-    I.selectFolder('Calendar');
     calendar.newAppointment();
 
     I.fillField('Subject', 'test recurring');
@@ -81,19 +79,16 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.login('app=io.ox/calendar&perspective=list', { user: users[1] });
     calendar.waitForApp();
 
-    I.selectFolder('Calendar');
-
     I.waitForText('test recurring', 5, calendar.locators.listview);
     I.seeNumberOfElements('.list-view .appointment .title', 5);
-
-    I.click('test recurring', '.list-view .list-item .title');
+    I.wait(0.2);
+    I.click(locate('.appointment').withText('test recurring').inside('.list-view').at(1).as('Appointment'));
 
     I.waitForDetached('.rightside .multi-selection-message');
     I.waitForText('test recurring', 5, '.rightside');
     I.waitForText('invite location', 5, '.rightside');
 
-    I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
-    I.click('Change status');
+    I.clickToolbar({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
 
     I.waitForElement('.modal-dialog');
     I.click('Change series', '.modal-dialog');
@@ -101,7 +96,6 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.click('Accept', '.modal-dialog');
 
     I.waitForDetached('.modal-dialog', 5);
-
     I.waitForElement('.rightside .participant a.accepted[title="' + users[1].userdata.primaryEmail + '"]');
 
     I.logout();
@@ -188,11 +182,12 @@ Scenario('Create recurring appointments with one participant', async function (I
 
 
     // check in Month view
-
+    I.click(locate('.btn-next').inside('.date-picker'));
+    I.click({ css: `.date-picker td[aria-label*="${startDate.format('M/DD/YYYY')}"]` });
     ['Month', 'Week', 'Workweek'].forEach(function (view) {
         calendar.withinPerspective(view, function (perspective) {
             I.say(perspective);
-            I.click({ css: `.date-picker td[aria-label*="${startDate.format('M/DD/YYYY')}"]` });
+            //I.click({ css: `.date-picker td[aria-label*="${startDate.format('M/DD/YYYY')}"]` });
             I.waitForVisible(locate('.appointment .title').inside(perspective).withText('test recurring edit'));
             I.seeNumberOfElements(locate({ css: '.appointment' }).inside(perspective).withText('test recurring edit'), 3);
         });
@@ -205,7 +200,6 @@ Scenario('Create recurring appointments with one participant', async function (I
     calendar.waitForApp();
 
     I.selectFolder('Calendar');
-
     I.waitForText('test recurring edit', 5, calendar.locators.listview);
     I.seeNumberOfElements('.list-view .appointment .title', 4);
 
