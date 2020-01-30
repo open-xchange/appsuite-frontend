@@ -178,18 +178,21 @@ define('io.ox/calendar/perspective', [
         },
 
         onClickAppointment: function (e) {
+            this.lock = false;
             var target = $(e[(e.type === 'keydown') ? 'target' : 'currentTarget']);
             if (target.hasClass('appointment') && !this.model.get('lasso') && !target.hasClass('disabled')) {
-                var obj = util.cid(String(target.data('cid')));
                 if (!target.hasClass('current') || _.device('smartphone')) {
-                    // ignore the "current" check on smartphones
-                    this.$('.appointment')
-                        .removeClass('current opac')
-                        .not(this.$('[data-master-id="' + obj.folder + '.' + obj.id + '"]'))
-                        .addClass((this.collection.length > this.limit || _.device('smartphone')) ? '' : 'opac'); // do not add opac class on phones or if collection is too large
-                    this.$('[data-master-id="' + obj.folder + '.' + obj.id + '"]').addClass('current');
-                    this.showAppointment(e, obj);
-
+                    _.delay(function () {
+                        if (this.lock) return;
+                        var obj = util.cid(String(target.data('cid')));
+                        // ignore the "current" check on smartphones
+                        this.$('.appointment')
+                            .removeClass('current opac')
+                            .not(this.$('[data-master-id="' + obj.folder + '.' + obj.id + '"]'))
+                            .addClass((this.collection.length > this.limit || _.device('smartphone')) ? '' : 'opac'); // do not add opac class on phones or if collection is too large
+                        this.$('[data-master-id="' + obj.folder + '.' + obj.id + '"]').addClass('current');
+                        this.showAppointment(e, obj);
+                    }.bind(this), 200);
                 } else {
                     this.$('.appointment').removeClass('opac');
                 }
@@ -204,6 +207,7 @@ define('io.ox/calendar/perspective', [
 
             var obj = util.cid(String(target.data('cid')));
 
+            this.lock = true;
             api.get(obj).done(function (model) {
                 if (self.dialog) self.dialog.close();
                 ext.point('io.ox/calendar/detail/actions/edit')
