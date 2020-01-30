@@ -852,7 +852,7 @@ Scenario('[C7457] Edit appointment via toolbar', async function (I, calendar) {
         I.click(view);
 
         I.retry(5).click('.appointment', '.page.current');
-        I.waitForVisible('.io-ox-sidepopup');
+        if (view !== 'List') I.waitForVisible('.io-ox-sidepopup');
         I.retry(5).see('Newsubject', '.calendar-detail');
         I.see('Newlocation', '.calendar-detail');
         I.see('Newdescription', '.calendar-detail');
