@@ -299,6 +299,17 @@ define('io.ox/mail/api', [
             return sanitizer.sanitize(data);
         });
     }
+    function sanitizeMailData(data) {
+        data.attachments = sanitizeAttachments(data.attachments);
+
+        if (_.isArray(data.nested_msgs)) {
+            data.nested_msgs = data.nested_msgs.map(function (nested_msg) {
+                nested_msg.attachments = sanitizeAttachments(nested_msg.attachments);
+                return nested_msg;
+            });
+        }
+        return data;
+    }
 
     api.get = function (obj, options) {
         var cid = _.isObject(obj) ? _.cid(obj) : obj,
@@ -336,14 +347,7 @@ define('io.ox/mail/api', [
             delete data.cid;
 
             var t1 = _.now();
-            data.attachments = sanitizeAttachments(data.attachments);
-
-            if (_.isArray(data.nested_msgs)) {
-                data.nested_msgs = data.nested_msgs.map(function (nested_msg) {
-                    nested_msg.attachments = sanitizeAttachments(nested_msg.attachments);
-                    return nested_msg;
-                });
-            }
+            data = sanitizeMailData(data);
             // trigger timing event for sanitize duration
             ox.trigger('timing:mail:sanitize', _.now() - t1);
 
@@ -1099,7 +1103,7 @@ define('io.ox/mail/api', [
                 folder: obj.folder || obj.folder_id,
                 view: 'html',
                 decrypt: obj.security && obj.security.decrypted
-            }, false);
+            }, false).then(sanitizeMailData);
         } else if ('parent' in obj) {
             // nested message!?
             var id = obj.id, parent = obj.parent;
@@ -1120,7 +1124,7 @@ define('io.ox/mail/api', [
                         return false;
                     })
                     .first().value();
-            });
+            }).then(sanitizeMailData);
         }
         console.error('api.getUnmodified(). Invalid case.', obj);
         return $.Deferred().resolve(obj);
