@@ -93,14 +93,21 @@ Scenario('[C8366] Edit description', async (I, drive) => {
 });
 
 const checkIfFoldersExist = (I, layout) => {
-    I.see('Documents', layout);
-    I.see('Music', layout);
-    I.see('Pictures', layout);
-    I.see('Videos', layout);
+    if (layout === '.grid-layout') {
+        // there are &#8203 between each letter, this is needed as they are also there in drive
+        I.see('D​o​c​u​m​e​n​t​s', layout);
+        I.see('M​u​s​i​c', layout);
+        I.see('P​i​c​t​u​r​e​s', layout);
+        I.see('V​i​d​e​o​s', layout);
+    } else {
+        I.see('Documents', layout);
+        I.see('Music', layout);
+        I.see('Pictures', layout);
+        I.see('Videos', layout);
+    }
 };
 
-// TODO: Bug in Drive Icon View has html entities in it.
-Scenario.skip('[C8368] View change @bug', async (I, drive) => {
+Scenario('[C8368] View change @bug', async (I, drive) => {
     await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -111,7 +118,8 @@ Scenario.skip('[C8368] View change @bug', async (I, drive) => {
     I.clickDropdown('Icons');
     I.waitForElement('.file-list-view.complete.grid-layout');
     checkIfFoldersExist(I, '.grid-layout');
-    I.see('document');
+    // there are &#8203 between each letter, this is needed as they are also there in drive
+    I.see('d​o​c​u​m​e​n​t');
 
     I.clickToolbar('View');
     I.clickDropdown('Tiles');
