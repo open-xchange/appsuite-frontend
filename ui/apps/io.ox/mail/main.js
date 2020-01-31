@@ -625,7 +625,10 @@ define('io.ox/mail/main', [
                 if (!app.changingFolders && app.listView.collection) {
                     // Bug 58207: manual gc, delay to avoid visual distractions for the user
                     var collection = app.listView.collection;
-                    setTimeout(collection.reset.bind(collection), 0);
+                    _.defer(function () {
+                        collection.reset();
+                        collection.setComplete(false);
+                    });
                 }
                 app.listView.model.set('thread', !!value);
             });
