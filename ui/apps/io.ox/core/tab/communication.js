@@ -146,7 +146,10 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
             localStorage.setItem(storageKey, jsonString);
             this.clearStorage(storageKey);
 
-            if (propagateToSelfWindow) this.events.trigger(key, parameters);
+            if (propagateToSelfWindow) {
+                this.events.trigger(key, parameters);
+                this.handleListener({ propagate: key, parameters: parameters });
+            }
         },
 
         /**
