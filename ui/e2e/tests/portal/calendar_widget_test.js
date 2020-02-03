@@ -10,6 +10,8 @@
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
 
+const moment = require('moment');
+
 Feature('Portal');
 
 Before(async function (users) {
@@ -20,7 +22,21 @@ After(async function (users) {
     await users.removeAll();
 });
 
+// if the month changes between today and tomorrow
+async function goToDate(I, date) {
+    var day = await I.executeScript(function (date) {
+        const monthName = moment(date).format('MMMM');
+        if (monthName !== $('.switch-mode').text().split(' ')[0]) {
+            $('.btn-next').click();
+        }
+        return moment(date).format('D');
+    }, date);
+    I.click({ xpath: '//td[text() = "' + day + '"]' });
+}
+
 Scenario('Create new appointment and check display in portal widget', async function (I, calendar) {
+    // add one day to secure that the appointment will be in the future
+    const day = moment().startOf('day').add('1', 'day').add('1', 'hour');
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
@@ -47,6 +63,8 @@ Scenario('Create new appointment and check display in portal widget', async func
 
     I.fillField('Subject', 'test portal widget');
     I.fillField('Location', 'portal widget location');
+    I.fillField('.time-field', '2:00 PM');
+    await calendar.setDate('startDate', day);
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -55,6 +73,7 @@ Scenario('Create new appointment and check display in portal widget', async func
     // check in week view
     I.clickToolbar('View');
     I.click('Week');
+    await goToDate(I, day);
     I.waitForVisible('.weekview-container.week button.weekday.today');
 
     I.see('test portal widget', '.weekview-container.week .appointment .title');
@@ -80,6 +99,8 @@ Scenario('Create new appointment and check display in portal widget', async func
 
     I.fillField('Subject', 'second test portal widget ');
     I.fillField('Location', 'second portal widget location');
+    I.fillField('.time-field', '2:00 PM');
+    await calendar.setDate('startDate', day);
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -90,6 +111,7 @@ Scenario('Create new appointment and check display in portal widget', async func
     // check in week view
     I.clickToolbar('View');
     I.click('Week', '.dropdown.open .dropdown-menu');
+    await goToDate(I, day);
     I.waitForVisible('.weekview-container.week button.weekday.today');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 2);
 });
