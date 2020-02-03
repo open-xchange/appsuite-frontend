@@ -97,13 +97,14 @@
             var self = $(this);
             clearTimeout(self.data('busy-timeout'));
 
-            // TODO: discuss other possibilities other than immediate flag
-            self.addClass('io-ox-busy ' + (options.immediate ? 'immediate' : ''));
+            // in case element has .immediate and it's not wanted -> remove it
+            self.addClass('io-ox-busy').toggleClass('immediate', options.immediate);
 
             if (!options.empty) return;
+            // if immediate and empty is true, instantly apply empty(). otherwise spinner is shown on non empty element
             self.data('busy-timeout', setTimeout(function () {
                 self.empty();
-            }, 300));
+            }, options.immediate ? 0 : 300));
         });
     };
 
