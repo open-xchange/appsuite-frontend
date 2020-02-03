@@ -23,8 +23,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-// TODO reenable this, as soon as the grabCSSPropertyFrom is fixed in codecept. See https://github.com/Codeception/CodeceptJS/pull/2059
-Scenario.skip('Create appointment and check if the color is correctly applied and removed', async function (I, users, calendar) {
+Scenario('Create appointment and check if the color is correctly applied and removed @flaky', async function (I, users, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -52,6 +51,7 @@ Scenario.skip('Create appointment and check if the color is correctly applied an
     // get appointment color
     let [appointmentColor] = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
     // check if the color is the same
+
     expect(folderColor).equal(appointmentColor);
 
     I.say('Change color');
@@ -70,7 +70,7 @@ Scenario.skip('Create appointment and check if the color is correctly applied an
     // check if the color is the same
     expect(folderColor).not.equal(appointmentColor);
     // the color might differ if the appointment has .hover class which is not predictable
-    expect(appointmentColor).be.oneOf(['rgba(181, 54, 54, 1)', 'rgba(200, 70, 70, 1)']);
+    expect(appointmentColor).be.oneOf(['rgb(181, 54, 54)', 'rgb(200, 70, 70)']);
 
     I.say('Change color back to folder color');
     I.click('test appointment one', '.workweek .appointment .title');
@@ -87,16 +87,8 @@ Scenario.skip('Create appointment and check if the color is correctly applied an
     [appointmentColor] = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
     // check if the color is the same
     expect(folderColor).equal(appointmentColor);
-    expect(appointmentColor).not.to.be.oneOf(['rgba(181, 54, 54, 1)', 'rgba(200, 70, 70, 1)']);
+    expect(appointmentColor).not.to.be.oneOf(['rgb(181, 54, 54, 1)', 'rgb(200, 70, 70, 1)']);
 
-    // remove, if reintroduced think about using dialogs-pageobject
-    // I.click('test appointment one', '.workweek .appointment .title');
-    // I.waitForText('Delete', 5, '.io-ox-sidepopup');
-    // I.click('Delete', '.io-ox-sidepopup');
-    // I.waitForText('Delete', 5, '.modal-dialog');
-    // I.click('Delete', '.modal-dialog');
-    // I.waitForDetached('.modal-dialog');
-    // I.waitForDetached('.io-ox-dialog-sidepopup');
 });
 
 // TODO reenable this, as soon as the grabCSSPropertyFrom is fixed in codecept. See https://github.com/Codeception/CodeceptJS/pull/2059
