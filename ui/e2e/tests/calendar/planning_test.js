@@ -109,13 +109,13 @@ Scenario('test planning view lasso', async function (I) {
     I.waitForVisible('.freetime-view-header');
     I.waitForVisible('.freetime-view-body');
 
-    // scroll to start (I.scrollTo doesnt work)
-    I.executeScript(function () {
-        $('.freetime-time-view-body').scrollLeft(0);
-    });
+    I.waitForNetworkTraffic();
+    I.waitForVisible('.freetime-table-cell:nth-child(6)');
+    I.scrollTo('.freetime-table-cell:nth-child(6)');
 
     // lasso
     I.dragAndDrop('.freetime-table-cell:nth-child(6)', '.freetime-table-cell:nth-child(8)');
+    I.waitForVisible('.freetime-lasso');
 
     I.click('Create appointment');
 
