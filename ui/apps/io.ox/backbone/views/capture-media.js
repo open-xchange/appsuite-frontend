@@ -104,7 +104,7 @@ define('io.ox/backbone/views/capture-media', [
                         model.set('message', MESSAGES.unspecified);
                     }, 800);
 
-                    video.addClass('hidden').attr('url', '').parent().addClass('io-ox-busy');
+                    video.addClass('hidden').attr('url', '').parent().busy({ immediate: true });
                     mediaDevices.getStream(constraints).then(function (stream) {
                         model.set({ 'access': true, 'stream': stream, 'message': '' });
                         video[0].srcObject = stream;
@@ -173,8 +173,8 @@ define('io.ox/backbone/views/capture-media', [
                     this.listenTo(this.model, 'change:device', this.setStream);
 
                     function ready() {
+                        self.$('.stream-container').idle();
                         self.$('button.btn-primary').removeAttr('disabled').removeClass('disabled');
-                        self.$('.stream-container').removeClass('io-ox-busy');
                         // reset style to allow proper bound calculation
                         $(this).removeClass('hidden').removeAttr('style');
                         if (_.device('!desktop')) self.$('.switchcamera').show();

@@ -892,7 +892,7 @@ define('io.ox/core/tk/list', [
         busy: function () {
             if (this.isBusy) return;
             this.$('.notification').css('display', 'none');
-            this.addBusyIndicator().addClass('io-ox-busy').find('i').remove();
+            this.addBusyIndicator().busy({ immediate: true }).find('i').remove();
             this.isBusy = true;
             return this;
         },

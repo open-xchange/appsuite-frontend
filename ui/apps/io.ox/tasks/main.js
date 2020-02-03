@@ -368,7 +368,7 @@ define('io.ox/tasks/main', [
             //detailview lfo callbacks
             showTask = function (obj) {
                 // be busy
-                app.right.busy(true);
+                app.right.busy({ empty: true });
                 // cids should also work
                 if (_.isString(obj)) obj = _.cid(obj);
                 //remove unnecessary information

@@ -136,7 +136,7 @@ define('io.ox/calendar/list/view', [
             if (_.device('smartphone') && this.app.props.get('checkboxes') === true) return;
             if (obj instanceof Backbone.Model) obj = obj.attributes;
             // be busy
-            this.app.right.busy(true);
+            this.app.right.busy({ empty: true });
             var self = this,
                 lfoShow = _.lfo(function (appointmentModel) {
                     // we need to check folder api first when list perspective is used for search results. Those can contain appointments where the user has no right to see the folder

@@ -573,7 +573,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         startPdfDocumentWaitMessage: function () {
             this.PdfDocumentWaitTimer = window.setTimeout(function () {
-                this.displayDownloadNotification(gt('Your preview is being generated.'), 'io-ox-busy', gt('\n Alternatively you can download the file.'));
+                this.displayDownloadNotification(gt('Your preview is being generated.'), 'io-ox-busy immediate', gt('\n Alternatively you can download the file.'));
             }.bind(this), 5000);
         },
 
@@ -678,7 +678,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 this.viewerEvents.trigger('viewer:document:selectthumbnail', this.currentDominantPageIndex)
                     .trigger('viewer:document:loaded')
                     .trigger('viewer:document:pagechange', this.currentDominantPageIndex, pageCount);
-                this.$el.removeClass('io-ox-busy');
+                this.$el.idle();
                 // resolve the document load Deferred: thsi document view is fully loaded.
                 this.documentLoad.resolve();
             }
@@ -725,7 +725,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.startPdfDocumentWaitMessage();
 
             // display loading animation
-            this.$el.addClass('io-ox-busy');
+            this.$el.busy({ immediate: true });
 
             // wait for PDF document to finish loading
             var pdfLoadPromise = $.when(this.pdfDocument.getLoadPromise());

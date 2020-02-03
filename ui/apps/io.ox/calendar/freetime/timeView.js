@@ -572,7 +572,7 @@ define('io.ox/calendar/freetime/timeView', [
                 this.keepScrollpos = this.positionToTime(oldScrollPos / oldWidth * 100);
             }
             // render busy animation
-            this.bodyNode.busy(true);
+            this.bodyNode.busy({ empty: true });
             // get fresh appointments
             var self = this,
                 from,

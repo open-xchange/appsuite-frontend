@@ -130,10 +130,9 @@
         // it makes sense to fetch preview urls here because it uses canvasresize. This may put too heavy load an cpu and memory otherwise
         if (this.previewUrl) {
             var self = this;
-            // don't use busy function to avoid 300ms delay
-            node.addClass('io-ox-busy');
+            node.busy({ immediate: true });
             this.previewUrl().done(function (url) {
-                node.removeClass('io-ox-busy');
+                node.idle();
                 node.attr('data-original', url);
                 delete self.previewUrl;
                 createImg();

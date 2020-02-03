@@ -44,15 +44,15 @@ define('io.ox/find/view-placeholder', [
         },
 
         hideSpinner: function () {
-            this.ui.action.removeClass('io-ox-busy');
+            this.ui.action.idle();
         },
 
         showSpinner: function () {
-            this.ui.action.addClass('io-ox-busy');
+            this.ui.action.busy({ immediate: true });
         },
 
         disable: function () {
-            // only real change. We wnat to avoiud screenreader talking with every folderchange
+            // only real change. We want to avoid screenreader talking with every folderchange
             if (this.ui.field.prop('disabled') === true) return;
             this.ui.field.prop('disabled', true);
             this.ui.action.prop('disabled', true);
@@ -61,7 +61,7 @@ define('io.ox/find/view-placeholder', [
         },
 
         enable: function () {
-            // only real change. We wnat to avoiud screenreader talking with every folderchange
+            // only real change. We want to avoid screenreader talking with every folderchange
             if (this.ui.field.prop('disabled') === false) return;
             this.ui.field.prop('disabled', false);
             this.ui.action.prop('disabled', false);

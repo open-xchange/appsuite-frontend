@@ -565,7 +565,7 @@ define('io.ox/calendar/invitations/register', [
                 });
             }
 
-            self.$el.busy(true);
+            self.$el.busy({ empty: true });
             performConfirm(true);
         }
 
@@ -724,7 +724,7 @@ define('io.ox/calendar/invitations/register', [
 
             this.reminder = accepted ? false : parseInt(this.$el.find('.reminder-select').val(), 10);
 
-            self.$el.busy(true);
+            self.$el.busy({ empty: true });
 
             self.api.confirm({
                 folder: this.model.get('folder_id'),

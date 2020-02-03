@@ -86,13 +86,23 @@
         return button;
     };
 
-    $.fn.busy = function (empty) {
+    $.fn.busy = function (options) {
+        if (options === true) options = { empty: true };
+        options = _.extend({
+            empty: false,
+            immediate: false
+        }, options);
+
         return this.each(function () {
             var self = $(this);
             clearTimeout(self.data('busy-timeout'));
+
+            // TODO: discuss other possibilities other than immediate flag
+            self.addClass('io-ox-busy ' + (options.immediate ? 'immediate' : ''));
+
+            if (!options.empty) return;
             self.data('busy-timeout', setTimeout(function () {
-                self.addClass('io-ox-busy');
-                if (empty) self.empty();
+                self.empty();
             }, 300));
         });
     };
@@ -101,7 +111,7 @@
         return this.each(function () {
             var self = $(this);
             clearTimeout(self.data('busy-timeout'));
-            self.removeClass('io-ox-busy');
+            self.removeClass('io-ox-busy immediate');
         });
     };
 

@@ -810,8 +810,7 @@ define('io.ox/mail/detail/view', [
 
             this.on({
                 'load': function () {
-                    // add busy manually to avoid 300ms busy spinner delay (looks strange when mail is toggled)
-                    this.$('section.body').addClass('io-ox-busy').empty();
+                    this.$('section.body').busy({ immediate: true }).empty();
                 },
                 'load:done': function () {
                     this.$('section.body').idle();
