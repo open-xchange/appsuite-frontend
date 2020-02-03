@@ -982,7 +982,7 @@ Scenario('[C7431] Create appointment via doubleclick @flaky', async function (I,
         I.retry(5).fillField('Subject', data.subject);
         I.seeInField(calendar.locators.starttime, '12:00 PM');
         I.click('Create');
-        I.waitForVisible({ css: '.appointment' });
+        I.waitForVisible({ css: '.page.current .appointment' });
         await I.removeAllAppointments();
     }
 

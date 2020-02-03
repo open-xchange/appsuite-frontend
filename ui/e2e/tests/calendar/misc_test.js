@@ -173,7 +173,7 @@ Scenario('[C236795] Visibility Flags @flaky', (I, calendar) => {
     };
 
     const checkAppointment = (subject, visibility, time) => {
-        createAppointment(subject, moment().startOf('isoWeek'), time, visibility);
+        createAppointment(subject, moment().startOf('week').add(1, 'days'), time, visibility);
         // PRIVATE => Private
         // CONFIDENTIAL => Secret
         let labelAndIcon;
@@ -265,12 +265,12 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
 Scenario('[C244785] Open event from invite notification in calendar @flaky', async (I, users, calendar) => {
     const [userA, userB] = users,
         startTime = moment().add(10, 'minutes'),
-        endTime = moment().add(70, 'minutes'),
+        endTime = moment().add(70, 'minutes');
 
-        // check if start and end time is transitioning between am/pm
-        isTransitionTime = function () {
+    // check if start and end time is transitioning between am/pm
+    /*         isTransitionTime = function () {
             return startTime.format('A') !== endTime.format('A');
-        };
+        }; */
 
     await I.haveSetting({ 'io.ox/core': { autoOpenNotification: false } }, { user: userB });
 
@@ -295,7 +295,7 @@ Scenario('[C244785] Open event from invite notification in calendar @flaky', asy
     I.waitForVisible({ css: '*[data-app-name="io.ox/mail"]' });
 
     // 3. User#B: Open the notification area from top bar
-    I.waitForText('1', 10, '#io-ox-notifications-icon');
+    I.waitForText('1', 30, '#io-ox-notifications-icon');
     I.click('1', '#io-ox-notifications-icon');
     I.waitForElement('#io-ox-notifications-icon.open');
 
@@ -314,8 +314,8 @@ Scenario('[C244785] Open event from invite notification in calendar @flaky', asy
     I.see(`${startTime.format('ddd, M/D/YYYY')}`, '.io-ox-sidepopup .date');
 
     // Have to check since transition times are shown differently
-    isTransitionTime() ? I.see(`${startTime.format('h:mm')} ${startTime.format('A')} – ${endTime.format('h:mm')} ${endTime.format('A')}`) :
-        I.see(`${startTime.format('h:mm')} – ${endTime.format('h:mm')} ${startTime.format('A')}`);
+    //isTransitionTime() ? I.see(`${startTime.format('h:mm')} ${startTime.format('A')} – ${endTime.format('h:mm')} ${endTime.format('A')}`) :
+    I.see(`${startTime.format('h:mm')} – ${endTime.format('h:mm')} ${endTime.format('A')}`);
 
     //I.see(`${startTime.format('h:mm')} – ${endTime.format('h:mm')} ${startTime.format('A')}CEST`, '.io-ox-sidepopup .time');
     I.see(`${userA.userdata.sur_name}, ${userA.userdata.given_name}`, '.io-ox-sidepopup');
