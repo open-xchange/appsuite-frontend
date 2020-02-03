@@ -194,6 +194,7 @@ define('io.ox/mail/compose/model', [
                     // append two empty lines
                     header.push('', '');
 
+                    var unquoted = /^forward-inline$/.test(data.meta.type) && settings.get('forwardunquoted', false);
                     if (data.contentType === 'text/html') {
                         data.content = mailUtil.getDefaultStyle().node.get(0).outerHTML
                             + $('<blockquote type="cite">').append(
@@ -202,12 +203,13 @@ define('io.ox/mail/compose/model', [
                                     return $('<div>').text(line);
                                 }),
                                 data.content
-                            ).prop('outerHTML');
+                            ).prop(unquoted ? 'innerHTML' : 'outerHTML');
                     } else if (data.contentType === 'text/plain') {
+                        var indent = unquoted ? '' : '> ';
                         data.content = '\n' +
-                            header.map(function (line) { return '> ' + line; }).join('\n') +
+                            header.map(function (line) { return indent + line; }).join('\n') +
                             ' \n' +
-                            data.content.trim().split('\n').map(function (l) { return '> ' + l; }).join('\n');
+                            data.content.trim().split('\n').map(function (l) { return indent + l; }).join('\n');
                     }
 
                     return data;
