@@ -92,7 +92,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
 });
 
 // TODO reenable this, as soon as the grabCSSPropertyFrom is fixed in codecept. See https://github.com/Codeception/CodeceptJS/pull/2059
-Scenario.skip('Changing calendar color should change appointment color that uses calendar color', async function (I, users, calendar) {
+Scenario('Changing calendar color should change appointment color that uses calendar color @flaky', async function (I, users, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -134,6 +134,7 @@ Scenario.skip('Changing calendar color should change appointment color that uses
 
     I.say('Change calendar color to dark green');
     I.click('.folder-options');
+    I.waitForVisible('.io-ox-calendar-color-picker-container  a[title="dark green"]');
     const [darkGreen] = await I.grabCssPropertyFrom({ css: 'a[title="dark green"] > i' }, 'background-color');
     I.click('dark green');
 
