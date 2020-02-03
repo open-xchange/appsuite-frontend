@@ -64,7 +64,9 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
-    I.waitForText('test recurring', 5, calendar.locators.listview);
+    I.waitForText('Load appointments until', 5, calendar.locators.listview);
+    I.click('Load appointments until');
+    I.waitForVisible(locate('.appointment').withText('test recurring').inside('.list-view').at(5).as('Appointment 5'));
     I.seeNumberOfElements('.list-view .appointment .title', 5);
 
     I.logout();
@@ -79,7 +81,9 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.login('app=io.ox/calendar&perspective=list', { user: users[1] });
     calendar.waitForApp();
 
-    I.waitForText('test recurring', 5, calendar.locators.listview);
+    I.waitForText('Load appointments until', 5, calendar.locators.listview);
+    I.click('Load appointments until');
+    I.waitForVisible(locate('.appointment').withText('test recurring').inside('.list-view').at(5).as('Appointment 5'));
     I.seeNumberOfElements('.list-view .appointment .title', 5);
     I.wait(0.2);
     I.click(locate('.appointment').withText('test recurring').inside('.list-view').at(1).as('Appointment'));
@@ -104,10 +108,10 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.login('app=io.ox/calendar&perspective=list');
     calendar.waitForApp();
 
-    I.selectFolder('Calendar');
-
-    I.waitForText('test recurring', 5, '.list-view .appointment:nth-child(5) .title');
-    I.click('test recurring', '.list-view .list-item:nth-child(5) .title');
+    I.waitForText('Load appointments until', 5, calendar.locators.listview);
+    I.click('Load appointments until');
+    I.waitForText('test recurring', 5, locate('.appointment').inside('.list-view').at(3).as('Appointment 3'));
+    I.click(locate('.appointment').withText('test recurring').inside('.list-view').at(3).as('Appointment 3'));
 
     // owner
     I.waitForElement('.rightside .participant a.accepted[title="' + users[0].userdata.primaryEmail + '"]');
@@ -199,7 +203,8 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.login('app=io.ox/calendar&perspective=list', { user: users[1] });
     calendar.waitForApp();
 
-    I.selectFolder('Calendar');
+    I.waitForText('Load appointments until', 5, calendar.locators.listview);
+    I.click('Load appointments until');
     I.waitForText('test recurring edit', 5, calendar.locators.listview);
     I.seeNumberOfElements('.list-view .appointment .title', 4);
 
