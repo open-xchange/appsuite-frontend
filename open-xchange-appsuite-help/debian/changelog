@@ -1,3 +1,9 @@
+open-xchange-appsuite-help (7.10.1-27) stable; urgency=medium
+
+  * Build for patch 2020-02-10 (5570)
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 04 Feb 2020 08:27:35 +0000
+
 open-xchange-appsuite-help (7.10.1-26) stable; urgency=medium
 
   * Build for patch 2020-01-20 (5545)

@@ -1,3 +1,9 @@
+open-xchange-appsuite-spamexperts (7.10.1-27) stable; urgency=medium
+
+  * Build for patch 2020-02-10 (5570)
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Tue, 04 Feb 2020 08:28:43 +0000
+
 open-xchange-appsuite-spamexperts (7.10.1-26) stable; urgency=medium
 
   * Build for patch 2020-01-20 (5545)
