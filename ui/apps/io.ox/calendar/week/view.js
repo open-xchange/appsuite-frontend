@@ -1138,6 +1138,9 @@ define('io.ox/calendar/week/view', [
                     start = startLocal.add(1, 'day').startOf('day').clone();
                     maxCount++;
                 } else {
+                    // Check if we have too much nodes. This happens when a multiple day appointment is edited and spans less days than before
+                    // remove those excess nodes
+                    this.$('[data-cid="' + model.cid + '"]').slice(maxCount + 1).remove();
                     break;
                 }
             }
