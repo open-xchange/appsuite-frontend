@@ -766,32 +766,60 @@ define('io.ox/core/desktop', [
             return this.setSavePoints([]);
         },
 
-        removeRestorePoint: function (id) {
-            var self = this;
-            return this.getSavePoints().then(function (list) {
-                list = list || [];
+        removeRestorePoint: (function () {
+            var hash = {};
+            // Issue caused by multiple almost simultaneous removeRestorePoint calls.
+            // All callbacks work on same state of that list as getSavePoints (t3, t4...)
+            // resolves before setSavePoints of previous calls (t1, t2...). Minimal
+            // solution/workaround as backport (reduce potential impacts) by maintaining
+            // a list of deleted ids
+            function getPoint(list, id) {
                 var ids = _(list).pluck('id'),
-                    pos = _(ids).indexOf(id),
-                    point = list[pos];
-                list = list.slice();
-                if (pos > -1) {
-                    list.splice(pos, 1);
-                }
-                // if this is a point that's restored by id we need to remove it in the settings
-                if (point && point.restoreById) {
-                    var pointsById = coreSettings.get('savepoints', []);
-                    ids = _(pointsById).pluck('id');
                     pos = _(ids).indexOf(id);
-                    if (pos > -1) {
-                        pointsById.splice(pos, 1);
-                        coreSettings.set('savepoints', pointsById).save();
-                    }
-                }
-                return self.setSavePoints(list).then(function () {
-                    return list;
+                return list[pos];
+            }
+
+            function cleanupHash(list) {
+                _(hash).each(function (value, id) {
+                    if (getPoint(list, id)) return;
+                    // point finally removed
+                    delete hash[id];
                 });
-            });
-        },
+            }
+
+            return function (id) {
+                hash[id] = true;
+                return this.getSavePoints().then(function (list) {
+                    list = (list || []).slice();
+                    // remove already removed ones from 'removeHash'
+                    cleanupHash(list);
+
+                    var ids = _(list).pluck('id');
+                    // loop all 'to be removed' ones
+                    _(hash).each(function (value, id) {
+                        var pos = _(ids).indexOf(id),
+                            point = list[pos];
+                        if (pos > -1) {
+                            list.splice(pos, 1);
+                        }
+                        // if this is a point that's restored by id we need to remove it in the settings
+                        if (point && point.restoreById) {
+                            var pointsById = coreSettings.get('savepoints', []);
+                            ids = _(pointsById).pluck('id');
+                            pos = _(ids).indexOf(id);
+                            if (pos > -1) {
+                                pointsById.splice(pos, 1);
+                                coreSettings.set('savepoints', pointsById).save();
+                            }
+                        }
+
+                    });
+                    return self.setSavePoints(list).then(function () {
+                        return list;
+                    });
+                });
+            };
+        })(),
 
         restore: function () {
             var self = this;
