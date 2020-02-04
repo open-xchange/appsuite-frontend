@@ -44,14 +44,15 @@ Scenario('[C8362] Add note', (I, drive) => {
 });
 
 // Bug: File input is not selectable (display: none), which is also a pot. a11y bug
-Scenario.skip('[C8364] Upload new file', (I, drive) => {
+Scenario('[C8364] Upload new file', (I, drive) => {
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.clickToolbar('New');
     I.waitForText('Upload files');
     I.click('Upload files');
-    I.attachFile('.dropdown.open input[name=file]', 'e2e/media/files/0kb/document.txt');
-    // TODO: Continue when Bug is fixed
+    // the input field is created on demand when Upload files is clicked. This click also closes the dropdown
+    I.attachFile({ css: '[aria-label="Drive toolbar. Use cursor keys to navigate."] .dropdown input[name=file]' }, 'e2e/media/files/0kb/document.txt');
+    I.waitForText('document.txt');
 });
 
 // Note: This is not accessible H4 and textarea does not have a label
