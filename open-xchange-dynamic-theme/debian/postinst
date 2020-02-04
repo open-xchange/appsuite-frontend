@@ -1,46 +1,31 @@
-Name:           open-xchange-dynamic-theme
-Version:        @OXVERSION@
-%define         ox_release @OXREVISION@
-Release:        %{ox_release}_<CI_CNT>.<B_CNT>
-Group:          Applications/Productivity
-Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
-License:        CC-BY-NC-SA-3.0
-Summary:        Dynamic theme with colors read from ConfigCascade
-Source:         %{name}_%{version}.orig.tar.bz2
+#!/bin/bash
+# postinst script for open-xchange-core
+#
+# see: dh_installdeb(1)
 
-BuildArch:      noarch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-root
+set -e
 
-Requires(post): open-xchange-appsuite-manifest
-Requires:       nodejs >= 0.10
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <postinst> `abort-remove'
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
 
-%description
-Dynamic theme with colors read from ConfigCascade
+UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
+if [ -x $UPDATE ]; then $UPDATE --later; fi
 
-%if 0%{?rhel_version} || 0%{?fedora_version}
-%define docroot /var/www/html/
-%else
-%define docroot /srv/www/htdocs/
-%endif
-
-%prep
-%setup -q
-
-%build
-
-%install
-cp -rv --preserve=mode * %{buildroot}
-
-%clean
-%{__rm} -rf %{buildroot}
-
-%define update /opt/open-xchange/appsuite/share/update-themes.sh
-
-%post
-if [ $1 -eq 1 -a -x %{update} ]; then %{update} --later; fi
 . /opt/open-xchange/lib/oxfunctions.sh
-if [ ${1:-0} -eq 2 ]; then
-    # only when updating
+
+postFix() {
+    # e.g 7.8.4-26 -> 784
+    local version=${1%-*}
+    version=${version//[-.]/}
 
     # prevent bash from expanding, see bug 13316
     GLOBIGNORE='*'
@@ -81,16 +66,21 @@ EOF
         fi
         ox_scr_done ${SCR}
     }
-fi
+}
 
-%postun
-if [ -x %{update} ]; then %{update} --later; fi
+case "$1" in
+    configure)
+        test -n "$2" && {
+            # we are in update mode, run postFix to apply fixes
+            postFix "$2"
+        }
+    ;;
 
-%files
-%defattr(-,root,root)
-%dir /opt/open-xchange
-/opt/open-xchange/appsuite
-/opt/open-xchange/dynamic-theme
-%config(noreplace) /opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
 
-@OXCHANGELOG@
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
