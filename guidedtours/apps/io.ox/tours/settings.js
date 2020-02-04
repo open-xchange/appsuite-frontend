@@ -29,20 +29,10 @@ define('io.ox/tours/settings', [
         var tour = new Tour()
         .step()
             .title(gt('Opening the settings'))
-            .content(gt('To open the settings, click the user image on the upper right side of the menu bar. Select Settings.'))
-            .hotspot('#topbar-settings-dropdown a[data-name="io.ox/settings"]')
-            .spotlight('#topbar-settings-dropdown a[data-name="io.ox/settings"]')
-            .referTo('#topbar-settings-dropdown')
-            .waitFor('.smart-dropdown-container #topbar-settings-dropdown a[data-name="io.ox/settings"]')
-            .on('before:show', function () {
-                // without smart-dropdowns onClick handler may cause hiding
-                _.defer(function () {
-                    $('#topbar-settings-dropdown:not(:visible)').dropdown('toggle');
-                });
-            })
-            .on('hide', function () {
-                $('#topbar-settings-dropdown:visible').dropdown('toggle');
-            })
+            .content(gt('To open the settings, click on the settings icon on the upper right side of the menu bar.'))
+            .hotspot('#io-ox-settings-topbar-icon i')
+            .spotlight('#io-ox-settings-topbar-icon a')
+            .referTo('#io-ox-settings-topbar-icon a')
             .end()
         .step()
             .title(gt('How the settings are organized'))
