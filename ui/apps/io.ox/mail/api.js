@@ -285,7 +285,7 @@ define('io.ox/mail/api', [
         return preferred;
     }
 
-    function sanitizeAttachments(attachments) {
+    function sanitizeAttachments(attachments, options) {
         if (!_.isArray(attachments)) {
             // make sure we always have data.attachments (see bug 58631)
             return [{ content: '', content_type: 'text/plain', disp: 'inline', id: '1', sanitized: true, size: 0, truncated: false }];
@@ -296,15 +296,15 @@ define('io.ox/mail/api', [
             if (!/^text\/(plain|html)/i.test(data.content_type)) return data;
             // only clean-up text and html; otherwise we lose data (see bug 43727)
             data.content_type = String(data.content_type).toLowerCase().split(';')[0];
-            return sanitizer.sanitize(data);
+            return sanitizer.sanitize(data, options);
         });
     }
-    function sanitizeMailData(data) {
-        data.attachments = sanitizeAttachments(data.attachments);
+    function sanitizeMailData(data, options) {
+        data.attachments = sanitizeAttachments(data.attachments, options);
 
         if (_.isArray(data.nested_msgs)) {
             data.nested_msgs = data.nested_msgs.map(function (nested_msg) {
-                nested_msg.attachments = sanitizeAttachments(nested_msg.attachments);
+                nested_msg.attachments = sanitizeAttachments(nested_msg.attachments, options);
                 return nested_msg;
             });
         }
@@ -343,7 +343,7 @@ define('io.ox/mail/api', [
             // delete potential 'cid' attribute (see bug 40136); otherwise the mail gets lost
             delete data.cid;
 
-            data = sanitizeMailData(data);
+            data = sanitizeMailData(data, { noImages: obj.view === 'noimg' });
 
             // either update or add model
             if (model) {
