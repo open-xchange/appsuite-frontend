@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-01-28 13:28+0100\n"
+"PO-Revision-Date: 2020-01-31 13:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -718,7 +718,7 @@ msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 msgid "Please enter a valid phone number. Allowed characters are: %1$s"
 msgstr ""
 "Bitte geben Sie eine gültige Telefonnummer ein. Folgende Zeichen sind "
-"erlaubt: %1$s"
+"zulässig: %1$s"
 
 #: apps/io.ox/backbone/validation.js module:io.ox/core
 msgid "Please enter a valid object"
@@ -4922,7 +4922,7 @@ msgstr "Alle meine öffentlichen Termine"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 msgid "Accessing global address book is not permitted"
-msgstr "Der Zugriff auf das globale Adressbuch ist nicht erlaubt"
+msgstr "Der Zugriff auf das globale Adressbuch ist nicht zulässig"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 msgid ""
@@ -6240,7 +6240,7 @@ msgid ""
 "the background. Only one refresh per subscription and per session is allowed."
 msgstr ""
 "Eine Aktualisierung nimmt einige Zeit in Anspruch und läuft im Hintergrund "
-"ab. Pro Abonnement und Sitzung ist nur eine Aktualisierung erlaubt."
+"ab. Pro Abonnement und Sitzung ist nur eine Aktualisierung zulässig."
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid ""
@@ -8273,7 +8273,7 @@ msgstr "Ihr Passwort"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your credentials will be sent over a secure connection only"
 msgstr ""
-"Ihre Anmeldedaten werden ausschließlich über eine sichere Verbindung gesendet"
+"Ihre Zugangsdaten werden ausschließlich über eine sichere Verbindung gesendet"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -11587,7 +11587,7 @@ msgid ""
 "accounts might stop working. In this case, you can use your old password to "
 "recover all account passwords."
 msgstr ""
-"Aus Sicherheitsgründen sind alle Anmeldedaten mit dem Passwort Ihres "
+"Aus Sicherheitsgründen sind alle Zugangsdaten mit dem Passwort Ihres "
 "primären Kontos verschlüsselt. Wenn Sie Ihr primäres Passwort ändern, "
 "funktionieren Ihre externen Konten eventuell nicht mehr. In diesem Fall "
 "können Sie Ihr altes Passwort zum Wiederherstellen aller Konto-Passwörter "
