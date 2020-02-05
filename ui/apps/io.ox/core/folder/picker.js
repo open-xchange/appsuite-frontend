@@ -194,6 +194,7 @@ define('io.ox/core/folder/picker', [
             });
             tree.on('afterAppear', function () {
                 _.defer(function () {
+                    if (tree.disposed) return;
                     tree.$('.tree-container .selectable.selected').focus().trigger('click');
                 });
             });

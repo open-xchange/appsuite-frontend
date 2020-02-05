@@ -156,6 +156,7 @@ define('io.ox/core/tk/list', [
 
         // called when the view model changes (not collection models)
         onModelChange: function () {
+            if (this.disposed) return;
             this.load();
         },
 
@@ -249,6 +250,7 @@ define('io.ox/core/tk/list', [
             if (children.length > 1) {
                 // see bug #46319 : handle 'select all' -> 'move'
                 _.defer(function () {
+                    if (this.disposed) return;
                     this.$el.trigger('scroll');
                 }.bind(this));
             }
@@ -426,14 +428,17 @@ define('io.ox/core/tk/list', [
                     '-webkit-transform': 'translate3d(0,-70px,0)'
                 });
                 setTimeout(function () {
+                    if (self.disposed) return;
                     self.pullToRefreshIndicator.removeAttr('style').remove();
                 }, 100);
 
             } else {
                 // fancy remove with scale-out animation
                 setTimeout(function () {
+                    if (self.disposed) return;
                     self.pullToRefreshIndicator.addClass('scale-down');
                     setTimeout(function () {
+                        if (self.disposed) return;
                         self.pullToRefreshIndicator
                             .removeAttr('style')
                             .removeClass('scale-down');
@@ -581,6 +586,7 @@ define('io.ox/core/tk/list', [
                         }
                         if (timer) clearTimeout(timer);
                         timer = setTimeout(function () {
+                            if (self.disposed) return;
                             self.selection.isScrolling = false;
                         }, 500);
                     });
@@ -596,7 +602,10 @@ define('io.ox/core/tk/list', [
                     return this;
                 },
 
-                render: _.debounce(this.renderListItems.bind(this), 10),
+                render: _.debounce(function () {
+                    if (this.disposed) return;
+                    this.renderListItems();
+                }.bind(this), 10),
 
                 iterate: function (fn) {
                     try {

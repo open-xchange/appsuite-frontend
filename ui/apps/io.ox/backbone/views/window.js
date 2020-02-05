@@ -351,7 +351,9 @@ define('io.ox/backbone/views/window', [
                 settings.set('features/floatingWindows/preferredMode/apps', preferences).save();
             }
             this.keepInWindow(this.model.get('mode') === 'maximized');
-            _.defer(function () { $(window).trigger('resize'); });
+            _.defer(function () {
+                $(window).trigger('resize');
+            });
         },
 
         toggleMode: function () {

@@ -95,6 +95,7 @@ define('io.ox/notes/detail-view', [
             var THROTTLE = 60 * 1000;
 
             this.throttledUpdateContent = _.throttle(function () {
+                if (this.disposed) return;
                 this.updateContentImmediately();
             }, THROTTLE, { leading: false });
 
@@ -104,6 +105,7 @@ define('io.ox/notes/detail-view', [
             };
 
             this.updateTitle = _.throttle(function () {
+                if (this.disposed) return;
                 this.updateTitleImmediately();
             }, THROTTLE, { leading: false });
 
@@ -111,6 +113,7 @@ define('io.ox/notes/detail-view', [
             this.$('.note-title input').on('input', this.updateTitle.bind(this));
 
             var updateLastModified = setInterval(function () {
+                if (this.disposed) return;
                 this.renderLastModified();
             }.bind(this), 10000);
 

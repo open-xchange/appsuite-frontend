@@ -562,7 +562,10 @@ define('io.ox/calendar/freetime/timeView', [
         },
 
         // use debounce because participants can change rapidly if groups or distributionlists are resolved
-        getAppointments: _.debounce(function () { this.getAppointmentsInstant(true); }, 10),
+        getAppointments: _.debounce(function () {
+            if (this.disposed) return;
+            this.getAppointmentsInstant(true);
+        }, 10),
 
         getAppointmentsInstant: function (addOnly) {
             // save scrollposition or it is lost when the busy animation is shown

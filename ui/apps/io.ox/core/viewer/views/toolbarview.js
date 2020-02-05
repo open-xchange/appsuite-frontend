@@ -850,6 +850,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Update inner toolbar.
          */
         updateToolbar: _.debounce(function () {
+            if (this.disposed) return;
             if (!this.model) { return; }
 
             var isDriveFile = this.model.isFile();

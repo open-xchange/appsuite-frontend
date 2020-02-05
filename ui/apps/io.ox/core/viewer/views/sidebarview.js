@@ -123,7 +123,9 @@ define('io.ox/core/viewer/views/sidebarview', [
             this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.setModel);
 
             // bind scroll handler
-            this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
+            this.$el.on('scroll', _.throttle(function () {
+                this.onScrollHandler();
+            }.bind(this), 500));
             this.initTabNavigation();
         },
 
@@ -151,6 +153,7 @@ define('io.ox/core/viewer/views/sidebarview', [
          * @param {jQuery.Event} event
          */
         onScrollHandler: function (event) {
+            if (this.disposed) return;
             this.viewerEvents.trigger('viewer:sidebar:scroll', event);
         },
 

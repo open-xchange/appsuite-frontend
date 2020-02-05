@@ -126,6 +126,7 @@ define('io.ox/core/tk/upload', [
             var target = $(e.target).hasClass('dndignore') ? $(e.target).parent() : $(e.target);
             target.removeClass('hover');
             _.defer(function () {
+                if (this.disposed) return;
                 // are still some hovered elements left?
                 if (this.$('.hover').length || this.$el.hasClass('hover')) return;
                 this.hide();

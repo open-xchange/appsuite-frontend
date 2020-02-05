@@ -286,6 +286,8 @@ define('io.ox/core/folder/node', [
             // share the inner timers (side-effects and evil debugging)
 
             this.onSort = _.debounce(function () {
+                if (this.disposed) return;
+
                 // check
                 if (!this.$) return;
 
@@ -305,6 +307,7 @@ define('io.ox/core/folder/node', [
             }, 10);
 
             this.repaint = _.throttle(function () {
+                if (this.disposed) return;
                 if (this.model !== null) this.render();
             }, 10);
         },

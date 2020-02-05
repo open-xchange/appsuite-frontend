@@ -360,6 +360,7 @@ define('io.ox/calendar/perspective', [
 
         // id must be set in URL
         followDeepLink: function (cid) {
+            if (this.disposed) return;
             if (!cid) return;
             var e, self = this;
 

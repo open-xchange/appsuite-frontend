@@ -60,6 +60,8 @@ define('io.ox/chat/views/fileList', ['io.ox/backbone/views/disposable', 'io.ox/c
         },
 
         onAdd: _.debounce(function (model, collection, options) {
+            if (this.disposed) return;
+
             this.$('ul').prepend(
                 options.changes.added.map(this.renderItem, this)
             );

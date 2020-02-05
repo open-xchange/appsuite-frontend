@@ -640,6 +640,7 @@ define('io.ox/mail/detail/view', [
             body.css('min-height', this.model.get('visualHeight') || null);
             // draw
             _.delay(function () {
+                if (view.disposed) return;
                 ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
                 // global event for tracking purposes
                 ox.trigger('mail:detail:body:render', view);
@@ -649,6 +650,8 @@ define('io.ox/mail/detail/view', [
         },
 
         onChangeRecipients: _.debounce(function () {
+            if (this.disposed) return;
+
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, model: this.model, view: this }),
                 node = this.$('.recipients').empty();

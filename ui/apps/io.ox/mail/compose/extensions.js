@@ -154,6 +154,7 @@ define('io.ox/mail/compose/extensions', [
         onAccountUpdate: function () {
             // sometimes updated state isn't available via middleware instantly
             _.delay(function () {
+                if (this.disposed) return;
                 this.updateSenderList({ useCache: false }).then(this.renderDropdown.bind(this));
             }.bind(this), 1000);
         },
@@ -671,6 +672,7 @@ define('io.ox/mail/compose/extensions', [
             attachmentView.$footer.append(node);
 
             var update = _.debounce(function () {
+                    if (attachmentView.disposed) return;
                     var hasUploadedAttachments = baton.model.get('attachments').some(function (model) {
                             return model.get('group') === 'mail';
                         }),

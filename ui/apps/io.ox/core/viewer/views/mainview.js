@@ -137,7 +137,6 @@ define('io.ox/core/viewer/views/mainview', [
         onKeydown: function (event) {
             var viewerRootEl = this.$el;
             var swiper = this.displayerView.swiper;
-            var self = this;
 
             var handleChangeSlide = _.throttle(function (direction) {
                 if (!swiper) { return; }
@@ -174,6 +173,7 @@ define('io.ox/core/viewer/views/mainview', [
             function handleLeftRightArrowKey(direction) {
                 // need to use defer here in order to let the toolbar navigation select the action link first
                 _.defer(function () {
+                    if (self.disposed) return;
                     var toolbarFocused = $.contains(self.toolbarView.el, document.activeElement);
                     // if the focus is inside the toolbar cursor left/right switches between toolbar links, otherwise between slides
                     if (!toolbarFocused) {

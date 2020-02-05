@@ -83,7 +83,12 @@ define('io.ox/core/folder/tree', [
             if (options.abs) this.$el.addClass('abs');
 
             // add contextmenu?
-            if (options.contextmenu) _.defer(this.renderContextMenu.bind(this));
+            if (options.contextmenu) {
+                _.defer(function () {
+                    if (this.disposed) return;
+                    this.renderContextMenu();
+                }.bind(this));
+            }
         },
 
         // convenience function
@@ -113,7 +118,10 @@ define('io.ox/core/folder/tree', [
             if (id === undefined) return;
             this.onAppear(id, function () {
                 // defer selection; might be too fast otherwise
-                _.defer(this.selection.set.bind(this.selection, id));
+                _.defer(function () {
+                    if (this.disposed) return;
+                    this.selection.set(id);
+                }.bind(this));
                 this.trigger('afterAppear');
             });
         },
@@ -200,7 +208,7 @@ define('io.ox/core/folder/tree', [
             if (!pos.target.is('a.contextmenu-control')) pos.target = pos.target.find('.contextmenu-control').first();
 
             _.defer(function () {
-
+                if (this.disposed) return;
                 this.$dropdownMenu.css({ top: pos.top, left: pos.left, bottom: 'auto' }).empty().busy();
                 this.dropdown.$toggle = pos.target;
                 this.$dropdownToggle.dropdown('toggle');

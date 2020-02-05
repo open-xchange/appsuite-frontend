@@ -1329,8 +1329,8 @@ define('io.ox/core/viewer/views/displayerview', [
             }
 
             _.defer(function () {
-                this.fullscreenPromise.resolve();
-            }.bind(this));
+                this.resolve();
+            }.bind(this.fullScreenPromise));
         },
 
         /**
