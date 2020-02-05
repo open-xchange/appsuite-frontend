@@ -479,7 +479,6 @@ define('io.ox/core/viewer/views/toolbarview', [
         }
     });
 
-    // tested: no
     new Action(TOOLBAR_ACTION_ID + '/popoutstandalone', {
         capabilities: 'infostore',
         device: '!smartphone',
@@ -490,8 +489,48 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
         action: function (baton) {
             if (!FileUtils.isFileVersionUploading(baton.data.id, FILE_VERSION_IS_UPLOADING_MSG)) {
-                var fileModel = baton.model.isFile() ? baton.model : { file: baton.data };
-                ox.launch('io.ox/files/detail/main', fileModel);
+
+                if (ox.tabHandlingEnabled) {
+                    require(['io.ox/core/api/tab']).then(function (TabAPI) {
+                        // the url attributes to launch the popout viewer
+                        var urlAttrs = { app: 'io.ox/files/detail' };
+
+                        if (baton.model.isFile()) {
+                            _.extend(urlAttrs, {
+                                id: baton.model.get('id'),
+                                folder: baton.model.get('folder_id')
+                                // version: baton.model.get('verions')    todo: version handling - DOCS-1618
+                            });
+
+                        } else if (baton.model.isMailAttachment()) {
+                            _.extend(urlAttrs, {
+                                id: baton.data.mail.id,
+                                folder: baton.data.mail.folder_id,
+                                attachment: baton.data.id
+                            });
+
+                        } else if (baton.model.isPIMAttachment()) {
+                            _.extend(urlAttrs, {
+                                module: baton.data.module,
+                                id: baton.data.attached,
+                                folder: baton.data.folder,
+                                attachment: baton.data.id
+                            });
+
+                        } else if (baton.model.isComposeAttachment()) {
+                            _.extend(urlAttrs, {
+                                space: baton.data.space,
+                                attachment: baton.data.id
+                            });
+                        }
+
+                        var tabUrl = TabAPI.createUrl(urlAttrs);
+                        TabAPI.openChildTab(tabUrl);
+                    });
+
+                } else {
+                    ox.launch('io.ox/files/detail/main', baton.model.isFile() ? baton.model : { file: baton.data });
+                }
             }
         }
     });
@@ -506,8 +545,10 @@ define('io.ox/core/viewer/views/toolbarview', [
         action: $.noop
     });
 
-    // tested: no
     new Action(TOOLBAR_ACTION_ID + '/close', {
+        matches: function (baton) {
+            return !baton.context.standalone || !ox.tabHandlingEnabled;
+        },
         action: function (baton) {
             return baton.context.onClose(baton.e);
         }

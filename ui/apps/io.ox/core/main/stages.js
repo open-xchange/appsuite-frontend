@@ -287,7 +287,7 @@ define('io.ox/core/main/stages', [
                 // remember first started app
                 options.first = true;
                 debug('Auto launch:', details.app, options);
-                if (/detail\/main$/.test(details.app)) {
+                if (/detail\/main$/.test(details.app) && details.app.indexOf('files/detail/main') < 0) {
                     // TODO: NEEDS REFACTORING
                     // This is a !temporary! workaround as we need to change how deeplinks and
                     // windows are handled overall

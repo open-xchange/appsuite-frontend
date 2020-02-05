@@ -192,7 +192,7 @@ define('io.ox/core/viewer/views/mainview', [
                         isDropdownMenuItem = escTarget.parents('.dropdown-menu').length > 0,
                         isDropdownToggler = escTarget.attr('data-toggle') === 'dropdown' && escTarget.attr('aria-expanded') === 'true';
                     // close the viewer only if user is not on a dropdown menu, or a dropdown menu item
-                    if (!isDropdownMenuItem && !isDropdownToggler) {
+                    if (!isDropdownMenuItem && !isDropdownToggler && !(ox.tabHandlingEnabled && this.standalone)) {
                         this.viewerCloseHandler();
                     }
                     break;

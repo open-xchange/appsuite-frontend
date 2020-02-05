@@ -16,12 +16,16 @@ define('io.ox/files/detail/main', [
     'io.ox/files/api',
     'gettext!io.ox/files',
     'io.ox/core/notifications',
+    'io.ox/core/api/tab',
     'io.ox/files/actions'
-], function (api, gt, notifications) {
+], function (api, gt, notifications, tabAPI) {
 
     'use strict';
 
     var NAME = 'io.ox/files/detail';
+
+    var MODEL_CHANGE_EVENTS_FOR_TAB_PROPAGATION = 'change:cid change:filename change:title change:com.openexchange.file.sanitizedFilename change:file_size change:last_modified change:description change:folder_id change:object_permissions change:permissions change:current_version change:number_of_versions change:version';
+    var MODEL_CHANGE_EVENTS_FOR_RENAME = 'change:com.openexchange.file.sanitizedFilename change:filename change:title';
 
     ox.ui.App.mediator(NAME, {
         'show-file': function (app) {
@@ -30,6 +34,10 @@ define('io.ox/files/detail/main', [
 
             function fileRenameHandler(model) {
                 app.setTitle(model.getDisplayName());
+            }
+
+            function fileChangeHandler(model) {
+                tabAPI.propagate('refresh-file', _.pick(model.toJSON(), 'folder_id', 'id'));
             }
 
             function showModel(data) {
@@ -57,14 +65,23 @@ define('io.ox/files/detail/main', [
                 app.setTitle(title);
 
                 if (fileModel) {
-                    app.listenTo(fileModel, 'change:com.openexchange.file.sanitizedFilename change:filename change:title', fileRenameHandler);
+                    app.listenTo(fileModel, MODEL_CHANGE_EVENTS_FOR_RENAME, fileRenameHandler);
 
                     app.on('quit', function () {
-                        app.stopListening(fileModel, 'change:com.openexchange.file.sanitizedFilename change:filename change:title', fileRenameHandler);
+                        app.stopListening(fileModel, MODEL_CHANGE_EVENTS_FOR_RENAME, fileRenameHandler);
                     });
 
                     api.once('delete:' + _.ecid(data), function () {
                         app.quit();
+                    });
+                }
+
+                // propagate file changes to all browser tabs
+                if (ox.tabHandlingEnabled && fileModel) {
+                    app.listenTo(fileModel, MODEL_CHANGE_EVENTS_FOR_TAB_PROPAGATION, fileChangeHandler);
+
+                    app.on('quit', function () {
+                        app.stopListening(fileModel, MODEL_CHANGE_EVENTS_FOR_TAB_PROPAGATION, fileChangeHandler);
                     });
                 }
             }
@@ -123,6 +140,11 @@ define('io.ox/files/detail/main', [
             app.mediate();
             win.show();
 
+            function showErrorAndCloseApp(error) {
+                notifications.yell(error);
+                app.close();
+            }
+
             // handle mail attachments
             if (options.file) {
                 var mail = options.file.mail;
@@ -136,38 +158,75 @@ define('io.ox/files/detail/main', [
                 return app.showFile(options);
             }
 
-            var cid = options.cid, obj;
-            if (cid !== undefined) {
-                // called from files app
-                obj = _.cid(cid);
-                app.setUrlParameter({ folder: obj.folder_id, id: obj.id });
-                app.showFile(obj);
-                return;
-            }
+            // var cid = options.cid, obj;
+            // if (cid !== undefined) {
+            //     // called from files app
+            //     obj = _.cid(cid);
+            //     app.setUrlParameter({ folder: obj.folder_id, id: obj.id });
+            //     app.showFile(obj);
+            //     return;
+            // }
 
-            // deep-link
-            obj = _.clone(app.getState());
+            // deep-link and 'open in new browser tab'
+            var obj = _.clone(app.getState());
 
-            if (obj.folder && obj.id) {
-                if (obj.attachment) {
-                    // is mail attachment
-                    require(['io.ox/mail/api', 'io.ox/mail/util'], function (mailAPI, mailUtil) {
-                        mailAPI.get({ folder: obj.folder, id: obj.id }).then(function success(mail) {
-                            var attachments = mailUtil.getAttachments(mail),
-                                attachment = _.find(attachments, function (attachment) {
-                                    return attachment.id === obj.attachment;
-                                });
-                            app.showFile({ file: attachment });
-                            app.setUrlParameter(obj);
-                        }, function fail(error) {
-                            notifications.yell(error);
-                            app.close();
+            if (obj.space && obj.attachment) {
+                // mail compose attachment
+                require(['io.ox/mail/compose/api']).then(function (composeAPI) {
+
+                    return composeAPI.space.get(obj.space);
+
+                }).then(function (data) {
+                    var attachment = _.extend({ space: obj.space }, _.find(data.attachments, function (attachment) {
+                        return attachment.id === obj.attachment;
+                    }));
+
+                    return app.showFile({ file: attachment });
+
+                }, showErrorAndCloseApp);
+
+            } else if (obj.module && obj.id && obj.folder && obj.attachment) {
+                // pim attachment
+                require(['io.ox/core/api/attachment']).then(function (attachmentAPI) {
+
+                    return attachmentAPI.getAll({
+                        folder_id: obj.folder,
+                        id: obj.id,
+                        module: obj.module
+
+                    }).then(function (attachments) {
+                        var attachmentId = parseInt(obj.attachment, 10);
+                        var attachment = _.find(attachments, function (attachment) {
+                            return attachment.id === attachmentId;
                         });
-                    });
-                } else {
-                    app.showFile(obj);
-                    app.setUrlParameter(obj);
-                }
+
+                        app.showFile({ file: attachment });
+
+                    }, showErrorAndCloseApp);
+                });
+
+            } else if (obj.id && obj.folder && obj.attachment) {
+                // mail attachment
+                require(['io.ox/mail/api', 'io.ox/mail/util']).then(function (mailAPI, mailUtil) {
+
+                    return mailAPI.get({ folder: obj.folder, id: obj.id }).then(function success(mail) {
+                        var attachments = mailUtil.getAttachments(mail);
+                        var attachment = _.find(attachments, function (attachment) {
+                            return attachment.id === obj.attachment;
+                        });
+
+                        app.showFile({ file: attachment });
+
+                    }, showErrorAndCloseApp);
+                });
+
+            } else if (obj.id && obj.folder) {
+                // file
+                app.showFile(obj);
+
+            } else if (options.id && options.folder) {
+                app.setUrlParameter(_.pick(options, 'id', 'folder'));
+                app.showFile({ id: options.id, folder_id: options.folder });
             }
         });
     }
