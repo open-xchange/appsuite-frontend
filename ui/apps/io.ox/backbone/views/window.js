@@ -58,6 +58,7 @@ define('io.ox/backbone/views/window', [
                 return $(this).css('display') !== 'none';
             });
             var hasItems = items.length > 0;
+            $('html').toggleClass('taskbar-visible', hasItems);
             this.$el.toggleClass('f6-target', hasItems);
             if (hasItems) this.$el.removeAttr('aria-hidden');
             else this.$el.attr('aria-hidden', true);
@@ -411,7 +412,7 @@ define('io.ox/backbone/views/window', [
             if (this.minimizing) return;
             var self = this;
             var taskBarEl = taskbar.addByCid(this.model.cid);
-            var windowWidth = this.model.get('mode') === 'normal' ? this.$el.width() : $('body').width();
+            var windowWidth = this.$el.width();
             var left = taskBarEl.offset().left + taskBarEl.width() / 2 - windowWidth / 2;
             var top = $('body').height() - this.$el.height() / 2;
 
