@@ -44,9 +44,9 @@ for argument in "${@}"; do
     esac
 done
 
-NOW=$(echo "${NOW}" | grep -s '[0-9]\{8\}\.[0-9]\{6\}' -)
+NOW=$(echo "${NOW}" | grep -s '[0-9a-zA-Z._-]\+' -)
 if [ -z "${NOW}" ]; then
-    echo "Timestamp invalid, make sure to generate it using 'date -u +%Y%m%d.%H%M%S'"
+    echo "Timestamp invalid, it must only contain letters, numbers, dots, and hyphens."
     exit 1
 fi
 
@@ -60,9 +60,9 @@ if [ ! -f core ]; then
 fi
 
 VERSION=$(sed -n \
-    's/^.*v=\([0-9A-Za-z._-]*\)\.[0-9]\{8\}\.[0-9]\{6\}.*$/\1/p' \
-    ui | head -n1)
+    's/^.*v=\([0-9a-zA-Z._-]\+\).*$/\1/p' \
+    ui | head -n1 | cut -d . -f 1-3)
 
 for f in ui core signin boot.js; do
-    sed -i "s/${VERSION}"'\.[0-9]\{8\}\.[0-9]\{6\}/'"${VERSION}.${NOW}/g" "$f"
+    sed -i "s/${VERSION}"'\.[0-9a-zA-Z._-]\+/'"${VERSION}.${NOW}/g" "$f"
 done
