@@ -343,7 +343,6 @@ define('io.ox/calendar/list/listview', [
             e.preventDefault();
             if (this.tail) this.tail.remove();
             this.loader.collection = this.originalCollection;
-            // must send paginate: true because pagination in calendar is somehow special
             this.paginate();
         },
 
