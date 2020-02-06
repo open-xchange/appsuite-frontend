@@ -243,7 +243,7 @@ define('io.ox/core/tk/tokenfield', [
         register: function () {
             var self = this;
             // register custom event when token is clicked
-            this.$el.tokenfield().parent().on('click mousedown', '.token', function (e) {
+            this.$wrapper.on('click mousedown', '.token', function (e) {
                 // create new event set attrs property like it's used in the non-custom events
                 var evt = $.extend(true, {}, e, {
                     type: 'tokenfield:clickedtoken',
@@ -448,7 +448,11 @@ define('io.ox/core/tk/tokenfield', [
                         // mouse hover tooltip / a11y title
                         label.attr({ 'aria-hidden': true, 'title': title });
                         //#. Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
-                        node.attr('aria-label', gt('%1$s. Press backspace to delete.', title));
+                        node.attr({
+                            role: 'listitem',
+                            'aria-label': title,
+                            'aria-describedby': self.descriptionId
+                        });
 
                         // add proper tooltip and a11y to the remove button
                         // no font awesome here, preserve default remove button style
@@ -536,6 +540,11 @@ define('io.ox/core/tk/tokenfield', [
                     isMail: o.isMail,
                     minWidth: 0
                 });
+
+            this.$wrapper = this.$el.closest('div.tokenfield').attr('role', 'list').prepend(
+                $('<div class="sr-only">').attr('id', this.descriptionId = _.uniqueId('instructions-')).text(gt('Press spacebar to grab and re-order. Press backspace to delete.')),
+                this.$live = $('<div class="sr-only" aria-live="assertive">')
+            );
 
             this.register();
 
@@ -640,7 +649,7 @@ define('io.ox/core/tk/tokenfield', [
 
             if (this.options.dnd) this.dragAndDropSupport();
 
-            this.$el.closest('div.tokenfield').on('copy', function (e) {
+            this.$wrapper.on('copy', function (e) {
                 // value might contain more than one id so split
                 var values = e.target.value.split(', ');
 
@@ -677,17 +686,17 @@ define('io.ox/core/tk/tokenfield', [
 
             return function () {
                 var self = this,
-                    tokenfield = this.$el.closest('div.tokenfield')
+                    tokenfield = this.$wrapper
                     .on('dragover', function (e) {
                         e.preventDefault();
                         if (targetView !== self) {
                             var prevView = targetView;
                             targetView = self;
-                            if (prevView) prevView.$el.closest('div.tokenfield').removeClass('drophover');
-                            if (targetView) targetView.$el.closest('div.tokenfield').addClass('drophover');
+                            if (prevView) prevView.$wrapper.removeClass('drophover');
+                            if (targetView) targetView.$wrapper.addClass('drophover');
                             if (prevView && targetView) {
                                 // only move item from one view to the other if previous exists to prevent the item to be attached to the view it was already in at the beginning
-                                targetView.$el.closest('div.tokenfield').find('.tokenfield, .token').last().after(draggedItems);
+                                targetView.$wrapper.find('.tokenfield, .token').last().after(draggedItems);
                                 targetChanged = true;
                             }
                         }
@@ -698,21 +707,22 @@ define('io.ox/core/tk/tokenfield', [
                     })
                     .delegate('> .token', {
                         'dragstart': function () {
-                            sourceView = self;
+                            var current = $(this);
+                            sourceView = targetView = self;
                             draggedItems = tokenfield.find('.active');
                             tokenfield.addClass('drophover');
                             events.trigger('dragstart');
                             // needs opacity != 1, otherwise chrome will have white background behind border radius
-                            draggedItems.css('opacity', '0.999').slice(1).hide();
+                            draggedItems.css('opacity', '0.999').not(current).hide();
                             if (draggedItems.length > 1 && !_.browser.ie && !_.browser.edge) {
-                                $(this).append(
+                                current.append(
                                     $('<span class="drag-counter badge">').text(draggedItems.length)
                                 );
                             }
                             // defer the visibility settings, as the browsers will create a snapshot of the dragged item right after this
                             _.defer(function () {
                                 if (!draggedItems) return;
-                                draggedItems.first().css('visibility', 'hidden');
+                                current.css('visibility', 'hidden');
                                 draggedItems.attr('aria-grabbed', true);
                             });
                         },
@@ -744,7 +754,7 @@ define('io.ox/core/tk/tokenfield', [
                                 sourceView.resort();
                             }
                             targetView.resort();
-                            targetView.$el.closest('div.tokenfield').removeClass('drophover');
+                            targetView.$wrapper.removeClass('drophover');
                             draggedItems.css('visibility', '').attr('aria-grabbed', false).show();
                             events.trigger('dragend');
                             draggedItems = null;
@@ -758,6 +768,109 @@ define('io.ox/core/tk/tokenfield', [
                     },
                     'dragend': function () {
                         tokenfield.find('.token').attr('aria-dropeffect', '');
+                    }
+                });
+
+                //
+                // Keyboard support
+                //
+
+                var preventCleanup = false,
+                    initialIndex;
+
+                function announce(action, token, index, length) {
+                    var msg;
+                    switch (action) {
+                        case 'grab':
+                            msg = gt('%1$s, grabbed. Current position in list: %2$s of %3$s. Press up and down arrow to change position, Spacebar to drop, Escape to cancel.', token.data('attrs').label, index, length);
+                            break;
+                        case 'move':
+                            msg = gt('%1$s. New position in list: %2$s of %3$s', token.data('attrs').label, index, length);
+                            break;
+                        case 'drop':
+                            msg = gt('%1$s, dropped. Final position in list: %2$s of %3$s', token.data('attrs').label, index, length);
+                            break;
+                        case 'cancel':
+                            msg = gt('%1$s, dropped. Re-order cancelled.', token.data('attrs').label);
+                        // no default
+                    }
+                    self.$live.text(msg);
+                }
+
+                function cleanup() {
+                    var prevent = preventCleanup;
+                    preventCleanup = false;
+                    if (prevent) return;
+                    self.resort();
+                    self.$wrapper.find('.token')
+                        .off('keydown', moveListener)
+                        .off('blur', cleanup)
+                        .removeClass('grabbed')
+                        .attr('aria-grabbed', false);
+                }
+
+                function moveListener(e) {
+                    var target = $(e.target), tokens = self.$wrapper.find('> .token');
+                    switch (e.which) {
+                        case 8: // backspace
+                        case 27: // escape
+                        case 46: // delete
+                            if (e.which === 27) e.stopImmediatePropagation();
+                            if (initialIndex === tokens.length - 1) tokens.last().after(target);
+                            else tokens.eq(initialIndex).before(target);
+                            target.focus();
+                            announce('cancel', target);
+                            preventCleanup = false;
+                            return cleanup();
+                        case 32: // spacebar
+                            e.preventDefault();
+                            e.stopPropagation();
+                            announce('drop', target, tokens.index(target) + 1, tokens.length);
+                            preventCleanup = false;
+                            return cleanup();
+                        case 37: // left arrow
+                        case 38: // up arrow
+                            e.stopImmediatePropagation();
+                            preventCleanup = true;
+                            var prev = target.prev('.token');
+                            if (prev.length) {
+                                prev.insertAfter(target);
+                                announce('move', target, tokens.index(target), tokens.length);
+                            }
+                            target.focus();
+                            break;
+                        case 39: // right arrow
+                        case 40: // down arrow
+                            e.stopImmediatePropagation();
+                            preventCleanup = true;
+                            var next = target.next('.token');
+                            if (next.length) {
+                                next.insertBefore(target);
+                                announce('move', target, tokens.index(target) + 2, tokens.length);
+                            }
+                            target.focus();
+                            break;
+                        // no default
+                    }
+                }
+
+                this.$wrapper.delegate('.token.active', 'keydown', function (e) {
+                    var target = $(e.target);
+                    if (e.which === 32) {
+                        e.preventDefault();
+                        preventCleanup = false;
+                        target
+                            .on('blur', cleanup)
+                            .on('keydown', moveListener)
+                            .addClass('grabbed')
+                            .attr('aria-grabbed', true);
+                        // make sure that this listener is executed first and can prevent propagation
+                        var keydown = $._data(e.target, 'events').keydown;
+                        keydown.unshift(keydown.pop());
+
+                        var tokens = self.$wrapper.find('> .token');
+                        initialIndex = tokens.index(target);
+                        announce('grab', target, initialIndex + 1, tokens.length);
                     }
                 });
             };
@@ -777,7 +890,20 @@ define('io.ox/core/tk/tokenfield', [
                     model: model
                 });
             });
+            // keep focus and active classes
+            var focusedValue = $.contains(this.$wrapper.get(0), document.activeElement) && ($(document.activeElement).data('attrs') || {}).value;
+            var activeValues = this.$wrapper.find('> .token.active').toArray().map(function (el) {
+                return $(el).data('attrs').value;
+            });
+            // reset token triggers a redraw
             this.$el.tokenfield('setTokens', tokens, false);
+            // reapply focus and active classes
+            this.$wrapper.find('> .token').each(function () {
+                var $this = $(this),
+                    value = $this.data('attrs').value;
+                if (activeValues.indexOf(value) >= 0) $this.addClass('active');
+                if (value === focusedValue) $this.focus();
+            });
             this.redrawLock = false;
         },
 

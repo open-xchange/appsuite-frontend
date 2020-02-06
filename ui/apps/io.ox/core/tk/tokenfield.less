@@ -53,6 +53,10 @@
             background-color: transparent;
             border: none;
         }
+
+        &.grabbed {
+            transform: rotate(2deg);
+        }
     }
 
     // background color if dropable widget is active
@@ -60,9 +64,7 @@
         background-color: #eee;
 
         .token-input {
-            // temporary override style attribute
-            width: 0 !important;
-            background-color: #eee;
+            display: none;
         }
 
     }
