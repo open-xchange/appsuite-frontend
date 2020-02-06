@@ -198,6 +198,10 @@ module.exports.config = {
             project_id: process.env.TESTRAIL_PROJECTID || '1',
             runName: process.env.TESTRAIL_RUNNAME || 'test',
             enabled: process.env.TESTRAIL_ENABLED || false
+        },
+        browserLogReport: {
+            require: './e2e/plugins/browserLogReport',
+            enabled: true
         }
     },
     name: 'App Suite Core UI'
