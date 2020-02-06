@@ -62,6 +62,7 @@ Scenario('[C114335] Links in emails can be disabled on a per-folder basis', asyn
         I.waitForElement(firstItem);
         I.click(firstItem);
         I.waitForVisible('.thread-view.list-view .list-item');
+        I.waitForVisible('.mail-detail-frame');
         // check content
         within({ frame: '.mail-detail-frame' }, callback);
         I.logout();
