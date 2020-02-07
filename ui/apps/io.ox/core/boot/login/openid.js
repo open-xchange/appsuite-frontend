@@ -60,7 +60,8 @@ define('io.ox/core/boot/login/openid', [
         }
         window.addEventListener('message', listener, false);
         window.setTimeout(function () {
-            if (def.state() === 'pending') def.reject({ reason: 'timeout', oidc_session_listener: listener });
+            window.removeEventListener('message', listener);
+            if (def.state() === 'pending') def.reject({ reason: 'timeout' });
         }, 10000);
         return def;
     }
@@ -100,15 +101,21 @@ define('io.ox/core/boot/login/openid', [
             id: 'openid_connect_retry',
             after: 'default',
             render: function () {
-                var dialog = this;
-                // default extension registers ok button, but we want a different action, here
-                this.off('ok');
-                this.on('ok', function () {
-                    silentRelogin().then(function success() {
+                var dialog = this,
+                    cancelled = false;
+                function retry() {
+                    silentRelogin().then(function () {
                         dialog.trigger('relogin:success');
-                    }, function fail() {
-                        dialog.trigger('relogin:continue');
+                        dialog.close();
+                    }, function () {
+                        if (!cancelled) retry();
                     });
+                }
+
+                // retry forever
+                retry();
+                dialog.on('close', function () {
+                    cancelled = true;
                 });
             }
         });
@@ -124,34 +131,7 @@ define('io.ox/core/boot/login/openid', [
                     baton.preventDefault();
                     baton.data.reloginState = 'success';
                     return { reason: 'relogin:success' };
-                }, function (result) {
-                    if (result.reason === 'timeout') {
-                        var point = ext.point('io.ox/core/relogin'),
-                            action = point.extend;
-                        if (point.has('oidc_waitForSessionPropagation')) action = point.replace;
-                        // call with point as context, because it operates on "this"
-                        action.call(point, {
-                            id: 'oidc_waitForSessionPropagation',
-                            index: '200',
-                            render: function () {
-                                var dialog = this;
-                                function listener(event) {
-                                    if (event.origin !== ox.abs) return;
-                                    ox.session = event.data;
-                                    dialog.trigger('relogin:success');
-                                    dialog.close();
-                                }
-                                window.addEventListener('message', listener, false);
-                                if (_.isFunction(result.oidc_session_listener)) {
-                                    window.removeEventListener('message', result.oidc_session_listener);
-                                    delete result.oidc_session_listener;
-                                }
-                                dialog.on('close', function () {
-                                    window.removeEventListener('message', listener);
-                                });
-                            }
-                        });
-                    }
+                }, function () {
                     // let some other extension handle this
                     return $.when({ reason: 'relogin:continue' });
                 });
