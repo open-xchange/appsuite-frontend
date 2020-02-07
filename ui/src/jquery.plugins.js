@@ -101,10 +101,13 @@
             self.addClass('io-ox-busy').toggleClass('immediate', options.immediate);
 
             if (!options.empty) return;
-            // if immediate and empty is true, instantly apply empty(). otherwise spinner is shown on non empty element
-            self.data('busy-timeout', setTimeout(function () {
+            if (options.immediate) {
                 self.empty();
-            }, options.immediate ? 0 : 300));
+            } else {
+                self.data('busy-timeout', setTimeout(function () {
+                    self.empty();
+                }, 300));
+            }
         });
     };
 
