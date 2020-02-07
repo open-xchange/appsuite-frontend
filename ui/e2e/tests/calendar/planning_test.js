@@ -331,7 +331,7 @@ Scenario('[C7445] Check availability of resources and participants', async funct
     await I.dontHaveResource('Colors');
 });
 
-Scenario('[C252157] Fine grid for high zoom levels @flaky', async function (I, users) {
+Scenario('[C252157] Fine grid for high zoom levels ', async function (I, users) {
 
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });

@@ -73,14 +73,34 @@ Scenario('[C85620] Global address book is the default folder - check first login
     });
 });
 
-Scenario('[C7355] - Create a new private folder @incomplete', function (I, contacts) {
-    const name = 'C7355 ' + Math.round(+new Date() / 1000);
+Scenario('[C7355] - Create a new private folder', function (I, contacts) {
+    const folderName = 'C7355';
+
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
-    contacts.newAddressbook(name);
-    I.selectFolder(name);
+    contacts.newAddressbook(folderName);
+    I.waitForVisible(locate({ css: '[aria-label="My address books"] .folder:not(.selected) .folder-label' }).at(1).withText(folderName).as(folderName));
+
 });
 
-Scenario.skip('[C7356] - Create a new public folder @incomplete', function () {
-    // deleted - rewrite this
+Scenario('[C7356] - Create a new public folder ', function (I, users, contacts) {
+    const folderName = 'C7356';
+
+    I.login('app=io.ox/contacts');
+    contacts.waitForApp();
+
+    I.click('Add new address book');
+    I.waitForVisible('.modal-body');
+    I.fillField('[placeholder="New address book"][type="text"]', folderName);
+    I.checkOption('Add as public folder');
+    I.click('Add');
+    I.waitForDetached('.modal-body');
+    // Verfiy new folder is sorted correctly
+    I.waitForVisible(locate({ css: '[aria-label="Public address books"] .folder-label' }).at(2).withText(folderName));
+    I.selectFolder('C7356');
+    I.logout();
+
+    I.login('app=io.ox/contacts', { user: users[1] });
+    contacts.waitForApp();
+    I.dontSee(folderName);
 });

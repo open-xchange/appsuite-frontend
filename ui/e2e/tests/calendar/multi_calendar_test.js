@@ -145,7 +145,7 @@ Scenario('Create appointments in monthview', async function (I, users) {
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario('Create appointments in dayview @flaky', async function (I, users, calendar) {
+Scenario('Create appointments in dayview ', async function (I, users, calendar) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },

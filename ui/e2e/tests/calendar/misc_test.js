@@ -142,8 +142,7 @@ Scenario('[C207509] Year view', async (I, calendar) => {
     I.see('January', '.monthview-container');
 });
 
-// TODO: shaky(?), msg: element (.appointment div[title="Private visibility"] span[title="Confidential"] i.fa-lock) still not visible after 5 sec
-Scenario('[C236795] Visibility Flags @flaky', (I, calendar) => {
+Scenario('[C236795] Visibility Flags ', (I, calendar) => {
     const createAppointment = (subject, startDate, startTime, visibility) => {
         I.clickToolbar('New appointment');
         I.waitForVisible('.io-ox-calendar-edit-window');
@@ -261,8 +260,7 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
     I.see('17', '.weekview-container .weekview-toolbar .weekday');
 });
 
-//TODO: step I see "11:21 AM – 12:21 PM" fails, seems to only happen at around 11am - 12 pm
-Scenario('[C244785] Open event from invite notification in calendar @flaky', async (I, users, calendar) => {
+Scenario('[C244785] Open event from invite notification in calendar ', async (I, users, calendar) => {
     const [userA, userB] = users,
         startTime = moment().add(10, 'minutes'),
         endTime = moment().add(70, 'minutes');
