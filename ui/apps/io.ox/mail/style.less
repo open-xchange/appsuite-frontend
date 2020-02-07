@@ -58,15 +58,32 @@
         }
     }
 }
-
+// fix for truncated letters on windows 10, see Bug 68163
 html.windows {
-    .preview-right .mail-item .list-item .from {
-        max-height: inherit;
-        line-height: 17px;
-        margin-top: -1px;
+    .preview-right .mail-item .list-item-row {
+        .from {
+            max-height: 18px;
+            padding-bottom: 2px;
+        }
+        .subject {
+            height: 18px;
+            margin-top: -2px;
+            padding-bottom: 2px;
+        }
+        .text-preview {
+            margin-top: -2px;
+        }
     }
-    .detail-view-row.row-1 .from {
-        margin-bottom: -1px;
+    .detail-view-row {
+        .from {
+            margin-bottom: -1px;
+        }
+        .recipients {
+            padding-bottom: 2px;
+        }
+        .inline-toolbar-container {
+            margin-top: -2px;
+        }
     }
 }
 
