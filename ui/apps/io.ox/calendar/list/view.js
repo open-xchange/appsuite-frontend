@@ -144,7 +144,14 @@ define('io.ox/calendar/list/view', [
                     // if the appointment data itself can tell the UI if it's a shared folder or not we can drop this check. tbd
                     var def = self.app.props.get('find-result') ? folderAPI.get(appointmentModel.get('folder')) : $.when();
                     def.always(function (result) {
-                        self.drawAppointment(appointmentModel, { noFolderCheck: result && result.error });
+                        // we use lfo here and wait for a folder api call. This might cause some ugly race conditions. The appointmentModel might be updated by a list or refresh call in the meantime, just make sure it's a fully featured model
+                        if (appointmentModel.get('attendees')) {
+                            self.drawAppointment(appointmentModel, { noFolderCheck: result && result.error });
+                            return;
+                        }
+                        api.get(obj).then(function (fullModel) {
+                            self.drawAppointment(fullModel, { noFolderCheck: result && result.error });
+                        });
                     });
                 });
 
