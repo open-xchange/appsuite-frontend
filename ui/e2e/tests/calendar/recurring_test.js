@@ -110,8 +110,8 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     I.waitForText('Load appointments until', 5, calendar.locators.listview);
     I.click('Load appointments until');
-    I.waitForText('test recurring', 5, locate('.appointment').inside('.list-view').at(3).as('Appointment 3'));
-    I.click(locate('.appointment').withText('test recurring').inside('.list-view').at(3).as('Appointment 3'));
+    I.waitForText('test recurring', 5, locate('.appointment').inside('.list-view').at(2).as('Appointment 3'));
+    I.click(locate('.appointment').withText('test recurring').inside('.list-view').at(2).as('Appointment 3'));
 
     // owner
     I.waitForElement('.rightside .participant a.accepted[title="' + users[0].userdata.primaryEmail + '"]');
@@ -187,7 +187,7 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     // check in Month view
     I.click(locate('.btn-next').inside('.date-picker'));
-    I.click({ css: `.date-picker td[aria-label*="${startDate.format('M/DD/YYYY')}"]` });
+    I.click({ css: `.date-picker td[aria-label*="${startDate.format('M/D/YYYY')}"]` });
     ['Month', 'Week', 'Workweek'].forEach(function (view) {
         calendar.withinPerspective(view, function (perspective) {
             I.say(perspective);
