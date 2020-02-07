@@ -10,6 +10,7 @@ buildscript {
     dependencies {
         classpath("com.openexchange.build", "project-type-scanner", "[1.2.1,2.0[")
         classpath("com.openexchange.build", "gradle-git", "[3.0.1,4.0[")
+        classpath("com.openexchange.build", "install", "[3.0,4.0[")
         classpath("com.openexchange.build", "licensing")
         classpath("com.openexchange.build", "packaging", "[4.0,5.0[")
         classpath("com.openexchange.build", "opensuse-build-service-client", "[1.5.0,2.0[")
