@@ -207,14 +207,28 @@ define('io.ox/files/detail/main', [
 
             } else if (obj.id && obj.folder && obj.attachment) {
                 // mail attachment
-                require(['io.ox/mail/api', 'io.ox/mail/util']).then(function (mailAPI, mailUtil) {
 
-                    return mailAPI.get({ folder: obj.folder, id: obj.id }).then(function success(mail) {
+                require(['io.ox/mail/api', 'io.ox/mail/util']).then(function (mailAPI, mailUtil) {
+                    var mailOptions = { folder: obj.folder, id: obj.id };
+                    if (obj.decrypt && obj.cryptoAuth) {  // Must decrypt Guard email again if checking attachments
+                        _.extend(mailOptions, {
+                            decrypt: true,
+                            cryptoAuth: obj.cryptoAuth
+                        });
+                    }
+                    return mailAPI.get(mailOptions).then(function success(mail) {
                         var attachments = mailUtil.getAttachments(mail);
                         var attachment = _.find(attachments, function (attachment) {
                             return attachment.id === obj.attachment;
                         });
-
+                        if (obj.decrypt) {  // Add decryption info to attachment for file viewer
+                            _.extend(attachment, {
+                                security: {
+                                    decrypted: true,
+                                    authentication: obj.cryptoAuth
+                                }
+                            });
+                        }
                         app.showFile({ file: attachment });
 
                     }, showErrorAndCloseApp);

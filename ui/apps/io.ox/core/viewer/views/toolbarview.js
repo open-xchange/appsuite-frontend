@@ -508,6 +508,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                                 folder: baton.data.mail.folder_id,
                                 attachment: baton.data.id
                             });
+                            // Handle decrypted attachments
+                            if (baton.data.security && baton.data.security.decrypted) {
+                                _.extend(urlAttrs, {
+                                    decrypt: true,
+                                    cryptoAuth: baton.data.security.authentication
+                                });
+                            }
 
                         } else if (baton.model.isPIMAttachment()) {
                             _.extend(urlAttrs, {
