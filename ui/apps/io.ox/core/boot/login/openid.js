@@ -101,22 +101,18 @@ define('io.ox/core/boot/login/openid', [
             id: 'openid_connect_retry',
             after: 'default',
             render: function () {
-                var dialog = this,
-                    cancelled = false;
+                var dialog = this;
                 function retry() {
                     silentRelogin().then(function () {
                         dialog.trigger('relogin:success');
                         dialog.close();
-                    }, function () {
-                        if (!cancelled) retry();
+                    }, function (result) {
+                        if (result.reason === 'timeout') retry();
                     });
                 }
 
-                // retry forever
+                // retry forever when running into timeout
                 retry();
-                dialog.on('close', function () {
-                    cancelled = true;
-                });
             }
         });
         ext.point('io.ox/core/boot/login').extend({
