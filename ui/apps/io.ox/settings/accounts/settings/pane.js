@@ -58,6 +58,16 @@ define('io.ox/settings/accounts/settings/pane', [
                                 if (!model) return;
                                 model.set('status', s.status !== 'ok' ? s : s.status);
                             }
+                            collection.filter(function (model) {
+                                return !model.has('status') && model.has('associations');
+                            }).forEach(function (model) {
+                                var relatedStatus = model.get('associations').reduce(function (acc, related) {
+                                    related = collection.get((related.module || '') + related.id);
+                                    if (related && related.has('status')) return related.get('status');
+                                    return acc;
+                                }, 'ok');
+                                if (relatedStatus) model.set('status', relatedStatus);
+                            });
                         });
                     },
                     showNoticeFields: ['security/acceptUntrustedCertificates'],
