@@ -229,7 +229,7 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
         },
 
         currency: function (n, code) {
-            return getNumber(n, { style: 'currency', currency: code || 'EUR', currencyDisplay: 'symbol', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            return getNumber(n, { style: 'currency', currency: code || meta.getCurrency(currentLocaleId), currencyDisplay: 'symbol', minimumFractionDigits: 2, maximumFractionDigits: 2 });
         },
 
         percent: function (n, d) {

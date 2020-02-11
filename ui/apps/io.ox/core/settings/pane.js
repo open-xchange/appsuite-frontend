@@ -326,7 +326,7 @@ define('io.ox/core/settings/pane', [
 
                 function getExample() {
                     return moment().format('dddd, L LT') + '   ' +
-                        locale.currency(1234.56, 'EUR') + '\n' +
+                        locale.currency(1234.56) + '\n' +
                         gt('First day of the week: %1$s', locale.getFirstDayOfWeek());
                 }
 
