@@ -602,9 +602,8 @@
 .popover {
 
     &.timezones {
-        width: auto;
+        max-width: initial;
         min-width: 236px;
-        width: 280px;
 
         &:focus {
             outline: 1px solid @brand-primary;
@@ -615,7 +614,10 @@
 
         .popover-content ul {
 
-            .time { float: right; }
+            .time {
+                margin-left: 16px;
+                float: right;
+            }
 
             .label {
                 float: right;
