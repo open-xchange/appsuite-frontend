@@ -360,7 +360,64 @@ define('io.ox/core/locale/meta', function () {
         return def;
     }
 
+    var currencyMap = {
+        AR: 'ARS',
+        AT: 'EUR',
+        AU: 'AUD',
+        BE: 'EUR',
+        BO: 'BOB',
+        BR: 'BRL',
+        CA: 'CAD',
+        CH: 'CHF',
+        CL: 'CLP',
+        CN: 'CNY',
+        CO: 'COP',
+        CR: 'CRC',
+        CZ: 'CZK',
+        DE: 'EUR',
+        DK: 'DKK',
+        DO: 'DOP',
+        EC: 'USD',
+        ES: 'EUR',
+        FI: 'EUR',
+        FR: 'EUR',
+        GB: 'GBP',
+        GT: 'GTQ',
+        HN: 'HNL',
+        HU: 'HUF',
+        IE: 'EUR',
+        IT: 'EUR',
+        JP: 'JPY',
+        LV: 'EUR',
+        MX: 'MXN',
+        NI: 'NIO',
+        NL: 'EUR',
+        NO: 'NOK',
+        NZ: 'NZD',
+        PA: 'PAB',
+        PE: 'PEN',
+        PL: 'PLN',
+        PR: 'USD',
+        PY: 'PYG',
+        RO: 'RON',
+        RU: 'RUB',
+        SE: 'SEK',
+        SG: 'SGD',
+        SK: 'EUR',
+        SV: 'USD',
+        TR: 'TRY',
+        TW: 'TWD',
+        US: 'USD',
+        ZA: 'ZAR'
+    };
+
+    function getCurrency(locale) {
+        var country = locale.substr(3);
+        return currencyMap[country] || 'USD';
+    }
+
     return {
+        getCurrency: getCurrency,
         getLocales: getLocales,
         dateFormats: dateFormats,
         numberFormats: numberFormats,
