@@ -1230,7 +1230,7 @@ define('io.ox/calendar/util', [
                     break;
                 case 'list':
                     rangeStart = moment().startOf('day').utc();
-                    rangeEnd = moment().startOf('day').add((app.listView.collection.offset || 0) + 1, 'month').utc();
+                    rangeEnd = moment().startOf('day').add((app.listView.loader.collection.range || 1), 'month').utc();
                     break;
                 default:
             }
