@@ -318,7 +318,6 @@ define('plugins/core/feedback/register', [
                 async: true,
                 enter: 'send',
                 point: 'plugins/core/feedback',
-                //#. %1$s is the product name, for example 'OX App Suite'
                 title: gt('We appreciate your feedback')
             };
 
@@ -370,8 +369,10 @@ define('plugins/core/feedback/register', [
                 .addCancelButton()
                 .addButton({ action: 'send', label: gt('Send') })
                 .on('send', function () {
+                    var isNps = dialogMode === 'nps-v1',
+                        rating = this.ratingView.getValue();
 
-                    if ((dialogMode === 'nps-v1' && this.ratingView.getValue() === -1) || (dialogMode !== 'nps-v1' && this.ratingView.getValue() === 0)) {
+                    if ((isNps && rating === -1) || (!isNps && rating === 0)) {
                         yell('error', gt('Please select a rating.'));
                         this.idle();
                         return;
@@ -382,7 +383,7 @@ define('plugins/core/feedback/register', [
                         OS = ['iOS', 'MacOS', 'Android', 'Windows', 'Windows8'],
                         data = {
                             // feedback
-                            score: this.ratingView.getValue(),
+                            score: rating,
                             app: this.ratingView.appSelect ? this.ratingView.appSelect.val() : 'general',
                             entry_point: (currentApp ? currentApp.get('name') : 'general'),
                             comment: this.$('.feedback-note').val() || '',
@@ -396,7 +397,9 @@ define('plugins/core/feedback/register', [
                             client_version: ox.serverConfig.version + '-' + (ox.serverConfig.revision ? ox.serverConfig.revision : ('Rev' + ox.revision))
                         };
 
-                    if (dialogMode === 'nps-v1' && settings.get('feedback/showQuestion', false)) {
+                    if (isNps) { ox.trigger('feedback:nps', rating); }
+
+                    if (isNps && settings.get('feedback/showQuestion', false)) {
                         // looks strange but works for index out of bounds and not set at all
                         data.questionId = npsExtendedQuestions[settings.get('feedback/questionIndex') || 0] ? settings.get('feedback/questionIndex') || 0 : 0;
                     }
