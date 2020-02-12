@@ -47,13 +47,12 @@ define('io.ox/backbone/views/window', [
             if (!model) return;
             model.set('minimized', false);
             collection.add(model);
-            this.updateAriaAttributes();
         },
         addByCid: function (cid) {
             // minimizing a window moves it to the last position
             return this.add(this.$el.find('[data-cid="' + cid + '"]')).show();
         },
-        updateAriaAttributes: function () {
+        updateTaskbar: function () {
             var items = this.$el.find('li').filter(function () {
                 return $(this).css('display') !== 'none';
             });
@@ -64,8 +63,10 @@ define('io.ox/backbone/views/window', [
             else this.$el.attr('aria-hidden', true);
         },
         add: function (el) {
+            var isAddedToDom = el.parent().length === 0;
             this.$el.append(el);
-            this.updateAriaAttributes();
+            // we only need to update this for new nodes, if append was just used to change the order there is no need to update (is done via minimize attribute listener)
+            if (isAddedToDom) this.updateTaskbar();
             return el;
         },
         render: function () {
@@ -458,7 +459,7 @@ define('io.ox/backbone/views/window', [
 
     function remove() {
         collection.remove(this.model);
-        taskbar.updateAriaAttributes();
+        taskbar.updateTaskbar();
     }
 
     var TaskbarElement = DisposableView.extend({
@@ -529,7 +530,7 @@ define('io.ox/backbone/views/window', [
             this.$el.toggle(this.model.get('minimized'));
             // don't grab the focus if this is just called from the render function (savepoints start minimized but shouldn't grab the focus when drawn for the first time)
             if (!options.isRender && this.model.get('minimized')) this.$el.find('[data-action="restore"]').focus();
-            taskbar.updateAriaAttributes();
+            taskbar.updateTaskbar();
         },
 
         render: function () {
@@ -580,11 +581,18 @@ define('io.ox/backbone/views/window', [
             });
         }
 
+        var toggleNonFloating = function () {
+            model.set('minimized', !this.state.visible);
+            // minimizing a window moves it to the last position
+            if (!this.state.visible) taskbar.add(taskbarItem.$el);
+        };
+
         if (!options.lazyload) {
             app.on('change:title', function (app, title) { model.set('title', title); });
 
             model.once('quit', function () { app.quit(); });
             app.once('quit', function () { model.trigger('close'); });
+            app.getWindow().on('quit', function () { this.off('hide show', toggleNonFloating); });
         }
 
         if (!collection.findWhere({ appId: app.id })) collection.add(model);
@@ -594,11 +602,7 @@ define('io.ox/backbone/views/window', [
         app.taskbarItem = taskbarItem;
 
         if (!options.lazyload) {
-            app.getWindow().on('hide show', function () {
-                model.set('minimized', !this.state.visible);
-                // minimizing a window moves it to the last position
-                if (!this.state.visible) taskbar.add(taskbarItem.$el);
-            });
+            app.getWindow().on('hide show', toggleNonFloating);
         }
 
         return taskbarItem;
