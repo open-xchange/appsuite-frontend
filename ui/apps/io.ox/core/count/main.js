@@ -16,7 +16,8 @@ define('io.ox/core/count/main', [
     'io.ox/core/count/timing',
     'io.ox/core/count/errors',
     'io.ox/core/count/eyeballtime',
-    'io.ox/core/count/lifetime'
+    'io.ox/core/count/lifetime',
+    'io.ox/core/count/nps'
 ], function (api) {
 
     'use strict';
