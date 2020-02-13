@@ -203,6 +203,12 @@ module.exports.config = {
         browserLogReport: {
             require: './e2e/plugins/browserLogReport',
             enabled: true
+        },
+        filterSuite: {
+            enabled: true,
+            require: '@open-xchange/codecept-helper/src/plugins/filterSuite',
+            suite: [], //'./testlist.json',
+            report: 'suite_report.json'
         }
     },
     rerun: {
