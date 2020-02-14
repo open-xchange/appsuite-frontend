@@ -260,13 +260,14 @@ define('plugins/core/feedback/register', [
             feedbackService = {
                 sendFeedback: function (data) {
                     if (!data) return $.when();
-
+                    var type = settings.get('feedback/mode', 'star-rating-v1');
                     return http.PUT({
                         module: 'userfeedback',
                         params: {
                             action: 'store',
-                            //type is always star-rating-v1 for now (all UI implementations still work)
-                            type: settings.get('feedback/mode', 'star-rating-v1')
+                            // stars is a legacy type, map this to star-rating-v1
+                            // if 'feedback/mode' is really set to stars, this means someone has forcefully overwritten the default config, backend will usually not send this (only nps-v1 and star-rating-v1 is valid).
+                            type: (type === 'stars' ? 'star-rating-v1' : type)
                         },
                         data: data
                     });
