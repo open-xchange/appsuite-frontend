@@ -207,8 +207,9 @@ module.exports.config = {
         filterSuite: {
             enabled: true,
             require: '@open-xchange/codecept-helper/src/plugins/filterSuite',
-            suite: [], //'./testlist.json',
-            report: 'suite_report.json'
+            suite: process.env.FILTER_SUITE || [],
+            filter: process.env.runOnly === 'true' ? () => false : undefined,
+            report: process.env.FILTER_REPORT || 'filter_report.json'
         }
     },
     rerun: {

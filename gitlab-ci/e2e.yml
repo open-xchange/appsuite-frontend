@@ -52,22 +52,21 @@ run e2e tests:
     PROVISIONING_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/
     CONTEXT_ID: $CI_JOB_ID
     CHROME_ARGS: '--no-sandbox'
-    PARTITIONS: '@shaky ^Accessibility ^Contacts ^Login ^Mail\sCompose ^Calendar.(?!>\sImport|>\sCreate) ^Calendar.(?=>\sImport|>\sCreate) ^Mail\s> ^Drive ^Portal ^Sharing ^General ^Settings ^Tasks ^Mailfilter'
+    FILTER_SUITE: ./e2e/suites/job$CI_NODE_INDEX.json
+    FILTER_REPORT: filter_report_$CI_NODE_INDEX.json
   script:
-    # make PARTITIONS an array
-    - PARTITIONS=(${PARTITIONS})
     - cd ui
     - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
-    # on node 1 run shaky tests. Never fail the pipeline
-    # - '[ "$CI_NODE_INDEX" -eq "1" ] && yarn e2e -g "${PARTITION[${CI_NODE_INDEX} - 1]}" || true'
-    # read this like: this is node x (with x not being 1) -- run tests selected for this node -- return the result of testrun only for the current node
-    # RegEx: Starts with one of the trigger words of the list, but does not contain @shaky anywhere
-    - PATTERN=${PARTITIONS[$CI_NODE_INDEX - 1]}
-    - if [ ${CI_NODE_INDEX} -ne "1" ]; then PATTERN+="\s?((?!"; PATTERN+=${PARTITIONS[0]}; PATTERN+=").)*$"; fi;
-    - yarn e2e -g "$PATTERN" || [ "$CI_NODE_INDEX" -eq "1" ];
+    - mkdir -p ./build/e2e
+    - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/filter_report.json -q -O ./build/e2e/suite.json || rm -f ./build/e2e/suite.json
+    - "[ -f ./build/e2e/suite.json ] || runOnly=true npx codeceptjs run -o '{ \"plugins\": { \"filterSuite\": { \"suite\": [], \"report\": \"suite.json\" } } }'"
+    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/partition.js')" ./build/e2e/suite.json $CI_NODE_TOTAL ./e2e/suites
+    - yarn e2e
   tags:
     - e2e
   parallel: 15
+  # reasonable timeout, enforce better partitioning
+  timeout: 20 minutes
   artifacts:
     when: always
     paths:
