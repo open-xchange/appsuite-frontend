@@ -558,6 +558,7 @@ define('io.ox/backbone/views/window', [
     // options: lazyload - used by restore points to create taskbarentries without starting the app
     var addNonFloatingApp = function (app, options) {
         if (!app) return;
+        var win = app.getWindow();
 
         // no duplicates
         if (collection.findWhere({ appId: app.id }) && collection.findWhere({ appId: app.id }).get('win')) return;
@@ -568,11 +569,11 @@ define('io.ox/backbone/views/window', [
 
         // in case of lazyloading a non floating app only the window is missing
         if (model) {
-            model.set('win', app.getWindow());
+            model.set('win', win);
         } else {
             model = new WindowModel({
                 floating: false,
-                win: app.getWindow(),
+                win: win,
                 title: app.getTitle() || '',
                 closable: true,
                 minimized: !!options.lazyload,
@@ -592,7 +593,8 @@ define('io.ox/backbone/views/window', [
 
             model.once('quit', function () { app.quit(); });
             app.once('quit', function () { model.trigger('close'); });
-            app.getWindow().on('quit', function () { this.off('hide show', toggleNonFloating); });
+            app.on('docs:beforequit', function () { win.off('hide show', toggleNonFloating); });
+            win.on('quit', function () { win.off('hide show', toggleNonFloating); });
         }
 
         if (!collection.findWhere({ appId: app.id })) collection.add(model);
@@ -602,7 +604,7 @@ define('io.ox/backbone/views/window', [
         app.taskbarItem = taskbarItem;
 
         if (!options.lazyload) {
-            app.getWindow().on('hide show', toggleNonFloating);
+            win.on('hide show', toggleNonFloating);
         }
 
         return taskbarItem;
