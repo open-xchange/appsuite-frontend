@@ -147,16 +147,29 @@ Enable tracking in App Suite UI
 Respect "do not track" browser setting
 
 
-### PIWIK
+### Matomo, formerly known as Piwik
 
 <config>io.ox/core//tracking/piwik/enabled=`<bool>`</config>
-Enable Piwik adapter for tracking
+Enable Matomo adapter for tracking
 
-<config>io.ox/core//tracking/piwik/url=`<string>`</config>
-Piwik server url
+<config>io.ox/core//tracking/piwik/lib=`<string>`</config>
+Matomo js library url
+
+<config>io.ox/core//tracking/piwik/api=`<string>`</config>
+Matomo url of server endpoint
 
 <config>io.ox/core//tracking/piwik/id=`<string>`</config>
-Piwik id
+Matomo id
+
+
+### Piwik Pro
+
+<config>io.ox/core//tracking/piwikpro/enabled=`<bool>`</config>
+Enable Piwik Pro adapter for tracking
+
+<config>io.ox/core//tracking/piwikpro/lib=`<string>`</config>
+Piwik Pro js library url
+
 
 ### Google Analytics
 
