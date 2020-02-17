@@ -51,7 +51,6 @@ Scenario('[C85624] Configure postal addresses map service', async (I, contacts) 
     };
 
     await I.haveSetting('io.ox/tours//server/disableTours', true);
-    await I.haveSetting('io.ox/tours//whatsNew/neverShowAgain', true);
     await I.haveContact({
         folder_id: `${await I.grabDefaultFolder('contacts')}`,
         last_name: 'Bar',

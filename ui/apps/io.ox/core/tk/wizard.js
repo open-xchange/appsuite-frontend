@@ -441,6 +441,10 @@ define('io.ox/core/tk/wizard', [
             var dir = this.getDirections(),
                 footer = this.$('.wizard-footer').empty();
 
+            // show step numbers
+            if (this.parent.options.showStepNumbers) {
+                footer.append($('<span class="wizard-step-number">').text((this.parent.currentStep + 1) + '/' + this.parent.steps.length));
+            }
             // show "Back" button
             if (dir.back) this.addButton(footer, { action: 'back', className: 'btn-default', label: this.getLabelBack() });
             // show "Start" or Next" button
@@ -750,6 +754,11 @@ define('io.ox/core/tk/wizard', [
 
             var $el = this.$el;
             var bounds = getBounds(elem), popupWidth = $el.width(), popupHeight = $el.height();
+
+            if (this.options.noAutoAlign) {
+                alignCenter();
+                return;
+            }
 
             function setOffset(key, value, size, available) {
                 value = Math.min(Math.max(16, value), available - size - 16);
