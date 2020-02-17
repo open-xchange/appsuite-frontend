@@ -111,13 +111,39 @@ define('io.ox/mail/compose/extensions', [
                 caret: true
             });
 
-            this.listenTo(this.model, 'change:from', this.renderDropdown);
+            this.listenTo(ox, 'account:create account:delete', this.onAccountUpdate.bind(this));
+            this.listenTo(ox, 'change:customDisplayNames', this.onSenderUpdate.bind(this));
+            this.listenTo(this.model, 'change:from', this.onSenderUpdate);
             this.listenTo(this.config, 'change:sendDisplayName', function (model, value) {
                 settings.set('sendDisplayName', value);
             });
         },
 
-        render: function () {
+        onAccountUpdate: function () {
+            // sometimes updated state isn't available via middleware instantly
+            _.delay(function () {
+                this.updateSenderList({ useCache: false }).then(this.renderDropdown.bind(this));
+            }.bind(this), 1000);
+        },
+
+        onSenderUpdate: function () {
+            this.renderDropdown();
+        },
+
+        updateSenderList: function (options) {
+            var opt = _.extend({ useCache: false }, options);
+            return sender.getAddressesOptions(opt).then(function (list) {
+                this.list = list;
+                // ensure display name is set
+                this.list.sortedAddresses.forEach(function (item) {
+                    var address = item.option,
+                        defaultname = settings.get(['customDisplayNames', address[1], 'defaultName']);
+                    if (!defaultname) settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
+                });
+            }.bind(this));
+        },
+
+        render: function (/*options*/) {
             // label
             this.$el.empty().append(
                 $('<label class="maillabel col-xs-2">').text(gt('From')),
@@ -126,11 +152,8 @@ define('io.ox/mail/compose/extensions', [
                     this.dropdown.render().$el.attr({ 'data-dropdown': 'from' })
                 )
             );
-            // ready to draw dropdown
-            sender.getAddressesOptions().then(function (list) {
-                this.list = list;
-                this.renderDropdown();
-            }.bind(this));
+            // update sender list and draw dropdown
+            this.updateSenderList().then(this.renderDropdown.bind(this));
             return this;
         },
 

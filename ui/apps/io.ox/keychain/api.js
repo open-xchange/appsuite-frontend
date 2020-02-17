@@ -139,6 +139,7 @@ define('io.ox/keychain/api', [
         return invokeExtension(account.accountType, 'remove', account)
                 .always(function () {
                     require(['io.ox/core/folder/api'], function (api) {
+                        ox.trigger('account:delete');
                         api.propagate('account:delete');
                     });
                 });

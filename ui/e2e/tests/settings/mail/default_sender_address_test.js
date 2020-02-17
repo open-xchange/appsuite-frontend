@@ -33,7 +33,7 @@ Scenario('[C7781] Default sender address', async (I, users, contexts, mail) => {
     I.login('app=io.ox/mail');
     mail.newMail();
     I.click(`<${user.get('primaryEmail')}>`, '.mail-input');
-    I.waitForText('urbi@orbi.it');
+    I.retry(5).click('Show names');
     I.click('urbi@orbi.it');
     I.waitForVisible('.token-input.tt-input');
     I.fillField('To', user.get('primaryEmail'));
