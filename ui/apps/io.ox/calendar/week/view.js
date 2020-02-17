@@ -28,62 +28,11 @@ define('io.ox/calendar/week/view', [
     'io.ox/calendar/extensions',
     'io.ox/calendar/week/extensions',
     'less!io.ox/calendar/week/style'
-], function (ext, PerspectiveView, util, coreUtil, api, folderAPI, gt, settings, coreSettings, Dropdown, capabilities, print, DisposableView) {
+], function (ext, perspective, util, coreUtil, api, folderAPI, gt, settings, coreSettings, Dropdown, capabilities, print) {
 
     'use strict';
 
-    var BasicView = DisposableView.extend({
-
-        constructor: function (opt) {
-            this.opt = _.extend({}, this.options || {}, opt);
-            Backbone.View.prototype.constructor.call(this, opt);
-        },
-
-        mouseDragHelper: function (opt) {
-            var self = this,
-                e = opt.event,
-                context = _.uniqueId('.drag-'),
-                // need this active tracker since mousemove events are throttled and may trigger the mousemove event
-                // even after the undelegate function has been called
-                active = true,
-                started = false,
-                stopped = false;
-
-            if (e.which !== 1) return;
-
-            _.delay(function () {
-                if (stopped) return;
-                opt.start.call(this, opt.event);
-                started = true;
-            }.bind(this), 300);
-
-            this.delegate('mousemove' + context, opt.updateContext, _.throttle(function (e) {
-                if (!started) return;
-                if (e.which !== 1) return;
-                if (!active) return;
-                opt.update.call(self, e);
-            }, 100));
-
-            function clear() {
-                active = false;
-                self.undelegate('mousemove' + context);
-                self.undelegate('focusout' + context);
-                $(document).off('mouseup' + context);
-                if (opt.clear) opt.clear.call(self);
-            }
-
-            if (opt.clear) this.delegate('focusout' + context, clear);
-            $(document).on('mouseup' + context, function (e) {
-                stopped = true;
-                if (!started) return;
-                clear();
-                opt.end.call(self, e);
-            });
-        }
-
-    });
-
-    var WeekViewHeader = BasicView.extend({
+    var WeekViewHeader = perspective.DragHelper.extend({
 
         className: 'header',
 
@@ -229,7 +178,7 @@ define('io.ox/calendar/week/view', [
 
     });
 
-    var WeekViewToolbar = BasicView.extend({
+    var WeekViewToolbar = perspective.DragHelper.extend({
 
         className: 'weekview-toolbar',
 
@@ -364,7 +313,7 @@ define('io.ox/calendar/week/view', [
 
     });
 
-    var AppointmentContainer = BasicView.extend({
+    var AppointmentContainer = perspective.DragHelper.extend({
 
         initialize: function (opt) {
             var self = this;
@@ -723,6 +672,7 @@ define('io.ox/calendar/week/view', [
             this.mouseDragHelper({
                 event: e,
                 updateContext: '.appointment-panel',
+                delay: 300,
                 start: function (e) {
                     node = $(e.target).closest('.appointment');
                     model = this.opt.view.collection.get(node.attr('data-cid'));
@@ -1435,6 +1385,7 @@ define('io.ox/calendar/week/view', [
             this.mouseDragHelper({
                 event: e,
                 updateContext: '.day',
+                delay: 300,
                 start: function (e) {
                     node = target.closest('.appointment');
                     model = this.opt.view.collection.get(node.attr('data-cid'));
@@ -1533,7 +1484,7 @@ define('io.ox/calendar/week/view', [
 
     });
 
-    return PerspectiveView.extend({
+    return perspective.View.extend({
 
         className: 'weekview-container',
 
@@ -1571,7 +1522,7 @@ define('io.ox/calendar/week/view', [
             if (this.model.get('mode') === 'day') this.listenTo(settings, 'change:mergeview', this.onChangeMergeView);
             if (this.model.get('mode') === 'workweek') this.listenTo(settings, 'change:numDaysWorkweek change:workweekStart', this.getCallback('onChangeWorkweek'));
 
-            PerspectiveView.prototype.initialize.call(this, opt);
+            perspective.View.prototype.initialize.call(this, opt);
         },
 
         initializeSubviews: function () {

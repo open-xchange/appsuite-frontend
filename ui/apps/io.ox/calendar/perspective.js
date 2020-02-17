@@ -24,11 +24,11 @@ define('io.ox/calendar/perspective', [
     'settings!io.ox/calendar',
     'io.ox/core/folder/api',
     'io.ox/backbone/views/disposable'
-], function (ext, api, calendarModel, util, detailView, dialogs, yell, gt, capabilities, settings, folderAPI, disposableView) {
+], function (ext, api, calendarModel, util, detailView, dialogs, yell, gt, capabilities, settings, folderAPI, DisposableView) {
 
     'use strict';
 
-    return disposableView.extend({
+    var Perspective = DisposableView.extend({
 
         clickTimer:     null, // timer to separate single and double click
         clicks:         0, // click counter
@@ -377,5 +377,65 @@ define('io.ox/calendar/perspective', [
         }
 
     });
+
+    var DragHelper = DisposableView.extend({
+
+        constructor: function (opt) {
+            this.opt = _.extend({}, this.options || {}, opt);
+            Backbone.View.prototype.constructor.call(this, opt);
+        },
+
+        mouseDragHelper: function (opt) {
+            var self = this,
+                e = opt.event,
+                context = _.uniqueId('.drag-'),
+                // need this active tracker since mousemove events are throttled and may trigger the mousemove event
+                // even after the undelegate function has been called
+                active = true,
+                started = false,
+                updated = false,
+                stopped = false,
+                delay = opt.delay || 0;
+
+            if (e.which !== 1) return;
+
+            _.delay(function () {
+                if (stopped) return;
+                opt.start.call(this, opt.event);
+                started = true;
+            }.bind(this), delay);
+
+            this.delegate('mousemove' + context, opt.updateContext, _.throttle(function (e) {
+                if (!started) return;
+                if (e.which !== 1) return;
+                if (!active) return;
+                updated = true;
+                opt.update.call(self, e);
+            }, 100));
+
+            function clear() {
+                active = false;
+                self.undelegate('mousemove' + context);
+                self.undelegate('focusout' + context);
+                $(document).off('mouseup' + context);
+                if (opt.clear) opt.clear.call(self);
+            }
+
+            if (opt.clear) this.delegate('focusout' + context, clear);
+            $(document).on('mouseup' + context, function (e) {
+                stopped = true;
+                if (!started) opt.start.call(self, opt.event);
+                if (!updated) opt.update.call(self, e);
+                clear();
+                opt.end.call(self, e);
+            });
+        }
+
+    });
+
+    return {
+        View: Perspective,
+        DragHelper: DragHelper
+    };
 
 });

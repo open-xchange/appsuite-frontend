@@ -1,7 +1,6 @@
 
 const actor = require('@open-xchange/codecept-helper').actor;
 const _ = require('underscore');
-const { util } = require('@open-xchange/codecept-helper');
 
 module.exports = actor({
     //remove previously created appointments by appointment title
@@ -32,7 +31,7 @@ module.exports = actor({
         this.clickToolbar('New appointment');
         this.waitForVisible('.io-ox-calendar-edit-window');
 
-        this.fillField('Subject', subject);
+        this.retry(5).fillField('Subject', subject);
         this.see(folder, '.io-ox-calendar-edit-window .folder-selection');
 
         if (location) {

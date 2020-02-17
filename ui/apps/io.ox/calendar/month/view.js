@@ -22,43 +22,11 @@ define('io.ox/calendar/month/view', [
     'less!io.ox/calendar/month/style',
     'io.ox/calendar/extensions',
     'io.ox/calendar/month/extensions'
-], function (ext, PerspectiveView, util, api, gt, settings, print) {
+], function (ext, perspective, util, api, gt, settings, print) {
 
     'use strict';
 
-    var BasicView = Backbone.View.extend({
-
-        constructor: function (opt) {
-            this.opt = _.extend({}, this.options || {}, opt);
-            Backbone.View.prototype.constructor.call(this, opt);
-        },
-
-        mouseDragHelper: function (opt) {
-            var self = this,
-                e = opt.event,
-                context = _.uniqueId('.drag-'),
-                // need this active tracker since mousemove events are throttled and may trigger the mousemove event
-                // even after the undelegate function has been called
-                active = true;
-            if (e.which !== 1) return;
-            opt.start.call(this, opt.event);
-
-            this.delegate('mousemove' + context, opt.updateContext, _.throttle(function (e) {
-                if (e.which !== 1) return;
-                if (!active) return;
-                opt.update.call(self, e);
-            }, 100));
-            $(document).on('mouseup' + context, function (e) {
-                active = false;
-                self.undelegate('mousemove' + context);
-                $(document).off('mouseup' + context);
-                opt.end.call(self, e);
-            });
-        }
-
-    });
-
-    var ToolbarView = BasicView.extend({
+    var ToolbarView = perspective.DragHelper.extend({
 
         className: 'header',
 
@@ -140,7 +108,7 @@ define('io.ox/calendar/month/view', [
 
     });
 
-    var MonthView = BasicView.extend({
+    var MonthView = perspective.DragHelper.extend({
 
         tagName: 'table',
 
@@ -342,6 +310,7 @@ define('io.ox/calendar/month/view', [
             this.mouseDragHelper({
                 event: e,
                 updateContext: '.day',
+                delay: 300,
                 start: function (e) {
                     inDeadzone = true;
                     node = $(e.target).closest('.appointment');
@@ -361,7 +330,8 @@ define('io.ox/calendar/month/view', [
                         first = false;
                     }
 
-                    var target = $(e.currentTarget), cell, targetDate;
+                    var target = $(e.target).closest('.day'), cell, targetDate;
+                    if (target.length === 0) return;
                     diff = moment(target.data('date')).diff(startDate, 'days');
                     targetDate = model.getMoment('startDate').add(diff, 'days');
                     cell = this.$('#' + targetDate.format('YYYY-M-D') + ' .list');
@@ -448,7 +418,7 @@ define('io.ox/calendar/month/view', [
         }
     });
 
-    return PerspectiveView.extend({
+    return perspective.View.extend({
 
         className: 'monthview-container',
 
@@ -469,7 +439,7 @@ define('io.ox/calendar/month/view', [
 
             this.setStartDate(this.model.get('date'), { silent: true });
 
-            PerspectiveView.prototype.initialize.call(this, opt);
+            perspective.View.prototype.initialize.call(this, opt);
         },
 
         initializeSubviews: function () {

@@ -31,7 +31,7 @@ Scenario('Opening multiple windows', async function (I, users, calendar) {
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'Participants test');
+    I.retry(5).fillField('Subject', 'Participants test');
     I.click('.fa.fa-address-book');
     I.waitForEnabled('.modal-content .search-field');
     I.fillField('.modal-content .search-field', users[1].get('primaryEmail'));

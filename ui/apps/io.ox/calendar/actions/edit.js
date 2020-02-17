@@ -13,10 +13,8 @@
 
 define('io.ox/calendar/actions/edit', [
     'io.ox/calendar/edit/main',
-    'io.ox/calendar/api',
-    'io.ox/core/notifications',
     'io.ox/calendar/util'
-], function (m, api, notifications, util) {
+], function (m, util) {
 
     'use strict';
 

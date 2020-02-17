@@ -33,7 +33,7 @@ let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) 
     I.waitForText('Appointments in public calendar');
     I.click('Create in public calendar');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.fillField('Subject', subject);
+    I.retry(5).fillField('Subject', subject);
     I.see(folder, '.io-ox-calendar-edit-window .folder-selection');
     if (startTime) {
         I.click('~Start time');

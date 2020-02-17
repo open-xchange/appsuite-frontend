@@ -127,7 +127,7 @@ Scenario('[C7450] Edit private appointment', async function (I, calendar) {
     // edit the appointment
     I.doubleClick('.page.current .appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.selectOption('Visibility', 'Standard');
+    I.retry(5).selectOption('Visibility', 'Standard');
 
     I.click('Save');
     I.waitForDetached('.io-ox-calendar-edit-window');
@@ -173,6 +173,7 @@ Scenario('[C7451] Edit yearly series via doubleclick', async function (I, calend
     I.click('Edit series');
 
     I.waitForVisible('.io-ox-calendar-edit-window');
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
     I.wait(0.5); // gently wait for listeners
     await calendar.setDate('startDate', time.add(1, 'day'));
 
@@ -260,7 +261,7 @@ Scenario('[C7465] Edit appointment in shared folder as author', async function (
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     // 2. Change Subject, Location and Description.
-    I.fillField('Subject', 'Changedappointment');
+    I.retry(5).fillField('Subject', 'Changedappointment');
     I.fillField('Location', 'Changedlocation');
     I.fillField('Description', 'Changeddescription');
 
@@ -291,7 +292,7 @@ Scenario('[C234659] Split appointment series', async function (I, users, calenda
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'Testsubject');
+    I.retry(5).fillField('Subject', 'Testsubject');
     await calendar.setDate('startDate', moment().startOf('week').add(1, 'day'));
     I.click('~Start time');
     I.click('4:00 PM');
@@ -324,7 +325,7 @@ Scenario('[C234659] Split appointment series', async function (I, users, calenda
 
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('input.add-participant.tt-input', users[1].userdata.primaryEmail);
+    I.retry(5).fillField('input.add-participant.tt-input', users[1].userdata.primaryEmail);
     I.pressKey('Enter');
 
     // save
@@ -352,7 +353,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'Testsubject');
+    I.retry(5).fillField('Subject', 'Testsubject');
     await calendar.setDate('startDate', moment().startOf('week').add(1, 'day'));
     I.click('~Start time');
     I.click('4:00 PM');
@@ -385,7 +386,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
 
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.click('~Start time');
+    I.retry(5).click('~Start time');
     I.click('5:00 PM');
 
     I.click('Save', '.io-ox-calendar-edit-window');
@@ -402,7 +403,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
 
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'Changedsubject');
+    I.retry(5).fillField('Subject', 'Changedsubject');
 
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
@@ -1043,6 +1044,7 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users, calend
 
     // Expected Result: The edit dialog is shown
     I.waitForVisible('.io-ox-calendar-edit-window');
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
 
     // 3. Locate the "Participants" section and add some OX users, groups and resources as participants. This may include external mail accounts which are not handled by OX
     await calendar.addParticipant(userB.userdata.primaryEmail);
@@ -1202,6 +1204,7 @@ Scenario('[C7460] Add attachments', async function (I, calendar) {
 
     // Expected Result: The appointment edit dialog is shown
     I.waitForVisible('.io-ox-calendar-edit-window');
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
 
     // 3. Locate the "Attachments" area and add files as attachments either by the browsers upload dialog or drag&drop from the file manager or desktop
     I.pressKey('Pagedown');
@@ -1329,6 +1332,7 @@ Scenario('[C7459] Remove attachments', async function (I, calendar) {
 
     // Expected Result: The edit dialog is shown
     I.waitForVisible('.io-ox-calendar-edit-window');
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
 
     // 3. At the edit dialog, locate the Attachments area and remove one or more attachments from the appointment
     I.pressKey('Pagedown');
@@ -1397,7 +1401,7 @@ Scenario('[C7458] Edit appointment by doubleclick', async function (I, calendar)
     const explosions = 'EXPLOSIONS',
         explosionSubject = `${explosions} at ${startTime.format('h a')}`,
         description = `Lorem ${explosions} sit dolor!`;
-    I.fillField('Subject', explosionSubject);
+    I.retry(5).fillField('Subject', explosionSubject);
     I.fillField('Location', 'Pandora');
     I.fillField('Description', description);
 

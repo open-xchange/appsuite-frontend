@@ -214,7 +214,7 @@ Scenario('[C7443] Check availability of participants', async function (I, users,
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'Abdancen');
+    I.retry(5).fillField('Subject', 'Abdancen');
     I.fillField('Location', 'Dancefloor');
 
     await calendar.addParticipant(users[1].get('name'));
@@ -224,6 +224,7 @@ Scenario('[C7443] Check availability of participants', async function (I, users,
 
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
 
     await calendar.addParticipant(users[1].get('name'));
     await calendar.addParticipant(users[2].get('name'));
@@ -252,7 +253,7 @@ Scenario('[C7444] Check availability of resources', async function (I, calendar)
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'How to conquer the world');
+    I.retry(5).fillField('Subject', 'How to conquer the world');
     I.fillField('Location', 'Secret volcano lair');
 
     await calendar.addParticipant('EvilLair');
@@ -262,6 +263,7 @@ Scenario('[C7444] Check availability of resources', async function (I, calendar)
 
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
 
     await calendar.addParticipant('EvilLair');
     await calendar.addParticipant('LaserSharks');
@@ -293,7 +295,7 @@ Scenario('[C7445] Check availability of resources and participants', async funct
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'Color Easter Eggs');
+    I.retry(5).fillField('Subject', 'Color Easter Eggs');
     I.fillField('Location', 'Easter Bunny house');
 
     await calendar.addParticipant('Eggs');
@@ -307,9 +309,11 @@ Scenario('[C7445] Check availability of resources and participants', async funct
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.click('Find a free time');
+    I.wait(1);
+    I.retry(5).click('Find a free time');
     I.waitForVisible({ css: '.freetime-popup' });
 
+    I.wait(1);
     await calendar.addParticipant('Eggs', true, '.freetime-view');
     await calendar.addParticipant('Colors', true, '.freetime-view');
     await calendar.addParticipant(users[1].get('name'), true, '.freetime-view');

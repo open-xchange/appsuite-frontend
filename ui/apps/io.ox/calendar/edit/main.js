@@ -64,7 +64,7 @@ define('io.ox/calendar/edit/main', [
                 data = data.toJSON();
                 if (action === 'thisandfuture') data = util.createUpdateData(data, originalData);
                 baton.data = data;
-            });
+            }, notifications.yell);
         }
     }, {
         id: 'appointment-model',
