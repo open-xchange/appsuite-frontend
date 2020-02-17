@@ -103,6 +103,7 @@ define('io.ox/calendar/actions/subscribe-shared', [
 
         render: function () {
 
+            var $checkbox;
             var preparedValueTrue =  _.copy(this.model.attributes['com.openexchange.calendar.extendedProperties'], true);
             preparedValueTrue.usedForSync.value = 'true';
 
@@ -136,7 +137,7 @@ define('io.ox/calendar/actions/subscribe-shared', [
                 $('<div class="item-name">').append(
                     $('<div>').text(this.model.attributes.display_title || this.model.attributes.title)
                 ),
-                new mini.CustomCheckboxView({
+                $checkbox = new mini.CustomCheckboxView({
                     name: 'com.openexchange.calendar.extendedProperties',
                     model: this.model,
                     label: gt('Sync via DAV'),
@@ -147,9 +148,10 @@ define('io.ox/calendar/actions/subscribe-shared', [
                 }).render().$el.attr('title', gt('sync via DAV'))
             );
 
-            if (!this.model.get('subscribed')) {
-                this.$el.addClass('disabled');
-                this.$el.find('input[name="com.openexchange.calendar.extendedProperties"]').prop('disabled', true).attr('data-state', 'manual');
+            if (!this.model.get('subscribed') || preparedValueFalse.usedForSync.protected) {
+                $checkbox
+                    .addClass('disabled')
+                    .find('input[name="com.openexchange.calendar.extendedProperties"]').prop('disabled', true).attr('data-state', 'manual');
 
             }
             return this;
