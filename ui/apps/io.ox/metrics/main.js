@@ -19,6 +19,7 @@ define('io.ox/metrics/main', [
     'io.ox/core/http',
     'io.ox/metrics/extensions',
     'io.ox/metrics/adapters/default',
+    'io.ox/metrics/adapters/pro',
     'io.ox/metrics/adapters/analytics',
     'io.ox/metrics/adapters/console',
     'io.ox/metrics/adapters/context'

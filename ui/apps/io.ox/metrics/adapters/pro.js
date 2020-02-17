@@ -19,30 +19,49 @@ define('io.ox/metrics/adapters/pro', [
 
     'use strict';
 
-    if (!settings.get('tracking/piwik/enabled', false)) return;
+    if (!settings.get('tracking/piwikpro/enabled', false)) return;
 
     var point = ext.point('io.ox/metrics/adapter'),
-        lib = settings.get('tracking/piwik/url/lib'),
-        api = settings.get('tracking/piwik/url/api'),
-        id = settings.get('tracking/piwik/id', 1),
+        lib = settings.get('tracking/piwikpro/url/lib'),
         maxlength = 200;
 
     // piwik uses global var to allow pushing before tracker is fully loaded
     window._paq = window._paq || [];
 
-    if (!api || !lib) console.log('Error: Piwik is enabled but no backend URL was configured!');
+    if (!lib) console.log('Error: Piwik Pro is enabled but no backend URL was configured!');
 
-    point.extend({
-        id: 'piwik',
+    var self;
+
+    point.extend(self = {
+        id: 'piwik-pro',
         setup: function () {
-            _paq.push(['setTrackerUrl', api]);
-            _paq.push(['setSiteId', ox.debug ? 2 : id]);
-            _paq.push(['setUserId', this.getUserHash()]);
-            //_paq.push(['trackPageView']);
-            _paq.push(['enableLinkTracking']);
-            // lazy
-            require([lib]);
+            this.consents = undefined;
+            self.track(['setUserId', this.getUserHash()]);
+            require([lib], function () {
+                self.getConsents();
+                // workaround when user updates consence in widget
+                $('body').on('click', '.ppms_cm_centered_buttons button', function () {
+                    _.delay(self.getConsents, 1000);
+                });
+            });
         },
+
+        getConsents: function () {
+            // https://developers.piwik.pro/en/latest/consent_manager/js_api/index.html#get-compliance-settings
+            window.ppms.cm.api('getComplianceSettings', callback, callback);
+
+            function callback(data) {
+                self.consents = data.consents || data || {};
+                if (!self.consents.analytics) return;
+                if (self.consents.analytics.status !== 1) return;
+                self.enabled = true;
+            }
+        },
+
+        track: function (array) {
+            if (self.enabled) window._paq.push(array);
+        },
+
         trackVisit: function (list) {
             var self = this,
                 result = [];
@@ -67,11 +86,10 @@ define('io.ox/metrics/adapters/pro', [
         trackEvent: function (baton) {
             var data = baton.data;
             // category, action, name, value
-            _paq.push(['trackEvent', data.app, baton.id || data.target, data.action, data.detail || data.value]);
+            self.track(['trackEvent', data.app, baton.id || data.target, data.action, data.detail || data.value]);
         },
         trackPage: function (baton) {
-            //_paq.push(['setUserId', this.getUserHash() ]);
-            _paq.push(['trackPageView', baton.data.trackingId || baton.data.name || baton.data.id]);
+            self.track(['trackPageView', baton.data.trackingId || baton.data.name || baton.data.id]);
         },
         trackVariable: function (data) {
             // important: index range in piwiks default settings is 1 to 5
@@ -82,7 +100,7 @@ define('io.ox/metrics/adapters/pro', [
                 return;
             }
             // http://developer.piwik.org/guides/tracking-javascript-guide#custom-variables
-            _paq.push(['setCustomVariable', data.index, data.id, String(data.value), data.scope || 'visit']);
+            self.track(['setCustomVariable', data.index, data.id, String(data.value), data.scope || 'visit']);
         }
     });
 
