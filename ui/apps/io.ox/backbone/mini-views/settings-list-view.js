@@ -121,7 +121,7 @@ define('io.ox/backbone/mini-views/settings-list-view', [
                 $placeholder = undefined;
 
                 $current.css('opacity', '').attr('aria-grabbed', false);
-                this.$('> li').attr('aria-dropeffect', '');
+                this.$('> li').removeAttr('aria-dropeffect');
 
                 if (indexBefore !== $current.index()) this.trigger('order:changed');
             },

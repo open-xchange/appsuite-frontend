@@ -35,6 +35,7 @@ class MyHelper extends Helper {
     /*
      * Overwrite native puppeteer d&d, because it does not work for every case
      * Maybe this is going to be fixed in the future by puppeteer, then this can be removed.
+     * Note that this does not work on MacOS, as there the "page.mouse.move" will always move the cursor to the screen position of the users mouse
      */
     async dragAndDrop(srcSelector, targetSelector) {
         const wdio = this.helpers['WebDriver'];

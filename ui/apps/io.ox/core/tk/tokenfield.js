@@ -449,7 +449,6 @@ define('io.ox/core/tk/tokenfield', [
                         label.attr({ 'aria-hidden': true, 'title': title });
                         //#. Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
                         node.attr({
-                            role: 'listitem',
                             'aria-label': title,
                             'aria-describedby': self.descriptionId
                         });
@@ -541,7 +540,7 @@ define('io.ox/core/tk/tokenfield', [
                     minWidth: 0
                 });
 
-            this.$wrapper = this.$el.closest('div.tokenfield').attr('role', 'list').prepend(
+            this.$wrapper = this.$el.closest('div.tokenfield').prepend(
                 $('<div class="sr-only">').attr('id', this.descriptionId = _.uniqueId('instructions-')).text(gt('Press spacebar to grab and re-order. Press backspace to delete.')),
                 this.$live = $('<div class="sr-only" aria-live="assertive">')
             );
@@ -743,8 +742,9 @@ define('io.ox/core/tk/tokenfield', [
                             }
                         },
                         'dragend stop': function () {
-                            if (!targetView) return;
+                            targetView = self;
                             if (sourceView !== targetView) {
+                                console.log('drag from one to other');
                                 // move models from one tokenfield to another
                                 var models = draggedItems.map(function () {
                                     return $(this).data().attrs.model;
@@ -767,7 +767,7 @@ define('io.ox/core/tk/tokenfield', [
                         tokenfield.find('.token:not(.active)').attr('aria-dropeffect', 'move');
                     },
                     'dragend': function () {
-                        tokenfield.find('.token').attr('aria-dropeffect', '');
+                        tokenfield.find('.token').removeAttr('aria-dropeffect');
                     }
                 });
 

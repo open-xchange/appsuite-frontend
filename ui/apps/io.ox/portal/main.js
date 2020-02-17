@@ -773,7 +773,7 @@ define('io.ox/portal/main', [
             var draggedItem;
             appBaton.$.widgets.delegate('li', {
                 'dragstart': function dragstart() {
-                    draggedItem = $(this);
+                    draggedItem = $(this).css('opacity', '0.999');
                     _.defer(function () {
                         if (!draggedItem) return;
                         draggedItem
@@ -800,7 +800,7 @@ define('io.ox/portal/main', [
                     draggedItem
                         .css('visibility', '')
                         .attr('aria-grabbed', false);
-                    appBaton.$.widgets.children().attr('aria-dropeffect', '');
+                    appBaton.$.widgets.children().removeAttr('aria-dropeffect');
                     draggedItem = null;
                     widgets.getCollection().trigger('order-changed', 'portal');
                     widgets.save(appBaton.$.widgets);
