@@ -31,7 +31,8 @@ postFix() {
     GLOBIGNORE='*'
 
     SCR=SCR-606
-    ox_scr_todo ${SCR} && {
+    if ox_scr_todo ${SCR}
+    then
         pfile=/opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties
         VALUE=$(ox_read_property io.ox/dynamic-theme//logoWidth $pfile)
         if [ "auto" = "${VALUE//[[:space:]]/}" ]
@@ -65,15 +66,16 @@ EOF
         ox_set_property io.ox/dynamic-theme//logoWidth 60 $pfile
         fi
         ox_scr_done ${SCR}
-    }
+    fi
 }
 
 case "$1" in
     configure)
-        test -n "$2" && {
+        if [ -n "$2" ]
+        then
             # we are in update mode, run postFix to apply fixes
             postFix "$2"
-        }
+        fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
