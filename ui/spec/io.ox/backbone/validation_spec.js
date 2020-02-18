@@ -27,7 +27,7 @@ define(['io.ox/backbone/validation'], function (validation) {
                 expect(validation.formats.anyFloat('100,00'), 'validating 100,00').to.be.true;
             });
             it('should reject no-number,3', function () {
-                expect(validation.formats.anyFloat('no-number,3')).to.equal('Bitte geben Sie eine gültige Zahl ein.');
+                expect(validation.formats.anyFloat('no-number,3')).to.equal('Bitte geben Sie eine gültige Zahl ein');
             });
         });
 
