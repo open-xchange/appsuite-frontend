@@ -46,7 +46,8 @@ if [ ${1:-0} -eq 2 ]; then
     GLOBIGNORE='*'
 
     SCR=SCR-606
-    ox_scr_todo ${SCR} && {
+    if ox_scr_todo ${SCR}
+    then
         pfile=/opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties
         VALUE=$(ox_read_property io.ox/dynamic-theme//logoWidth $pfile)
         if [ "auto" = "${VALUE//[[:space:]]/}" ]
@@ -80,7 +81,7 @@ EOF
         ox_set_property io.ox/dynamic-theme//logoWidth 60 $pfile
         fi
         ox_scr_done ${SCR}
-    }
+    fi
 fi
 
 %postun
