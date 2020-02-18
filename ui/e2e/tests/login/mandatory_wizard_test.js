@@ -33,7 +33,7 @@ Scenario('[C7341] Use first run mandatory wizard', async function (I, users) {
     I.wait(1);
     I.waitForInvisible('#background-loader.busy', 30);
     // make sure we have an english UI
-    I.click('.dropup');
+    I.click('.dropdown');
     I.waitForText('English (United States)');
     I.click('English (United States)');
     I.fillField('User name', `${user.get('name')}@${user.context.id}`);
