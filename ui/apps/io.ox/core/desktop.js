@@ -1298,6 +1298,17 @@ define('io.ox/core/desktop', [
                 };
 
                 this.show = function (cont, resume) {
+                    // this is for apps that have a lot of rampup to do
+                    // once they are ready trigger revealApp and it shows up
+                    if (this.app && this.app.get('startHidden')) {
+                        this.app.once('revealApp', function () {
+                            self.app.set('startHidden', false);
+                            // setting resume true, forces the app to become the current window.
+                            self.show(cont, true);
+                        });
+                        return this;
+                    }
+
                     var appchange = false;
                     // the viewer can be a plugged application that must have a different handling that the root application
                     var appPlugged = this.app && this.app.options.plugged;

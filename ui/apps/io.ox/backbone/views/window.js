@@ -558,6 +558,17 @@ define('io.ox/backbone/views/window', [
     // options: lazyload - used by restore points to create taskbarentries without starting the app
     var addNonFloatingApp = function (app, options) {
         if (!app) return;
+
+        // this is for apps that have a lot of rampup to do
+        // once they are ready trigger revealApp and it shows up
+        if (app.get('startHidden')) {
+            app.once('revealApp', function () {
+                app.set('startHidden', false);
+                addNonFloatingApp(app, options);
+            });
+            return;
+        }
+
         var win = app.getWindow();
 
         // no duplicates
