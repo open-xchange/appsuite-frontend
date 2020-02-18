@@ -159,10 +159,11 @@ define('io.ox/core/folder/favorites', [
         });
     }
 
-    function remove(id, model) {
+    function remove(id, model, module) {
         model = model || api.pool.getModel(id);
-        if (!model.get('module')) return;
-        var collectionId = 'virtual/favorites/' + model.get('module'),
+        module = module || model.get('module');
+        if (!module) return;
+        var collectionId = 'virtual/favorites/' + module,
             collection = api.pool.getCollection(collectionId);
         collection.remove(model);
         api.trigger('favorite:remove');
@@ -196,7 +197,7 @@ define('io.ox/core/folder/favorites', [
     }
 
     function onRemove(e) {
-        remove(e.data.id);
+        remove(e.data.id, undefined, e.data.module);
     }
 
     function a(action, text) {
