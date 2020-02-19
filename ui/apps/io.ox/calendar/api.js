@@ -324,7 +324,8 @@ define('io.ox/calendar/api', [
                                 return api.pool.get('detail').add(obj);
                             }
                             var cid = util.cid(obj);
-                            return api.pool.getModel(cid);
+                            // in case of caching issues still return the request results. no one wants empty reminders
+                            return api.pool.getModel(cid) || obj;
                         });
                     });
                 };
@@ -1017,6 +1018,16 @@ define('io.ox/calendar/api', [
                 collections = this.getByFolder(folder).filter(function (collection) {
                     return !!collection.get(cid);
                 });
+            // if this is a cid from a public folder we need to check the allPublic collections too
+            var folderData = folderApi.pool.getModel(folder);
+            if (folderData && folderData.is('public')) {
+                collections.push.apply(
+                    collections,
+                    this.getByFolder('cal://0/allPublic').filter(function (collection) {
+                        return !!collection.get(cid);
+                    })
+                );
+            }
             if (collections.length === 0) return [this.get('detail')];
             return collections;
         },
