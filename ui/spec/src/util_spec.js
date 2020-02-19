@@ -330,6 +330,28 @@ define([], function () {
                 expect(result.id).to.equal('.\\1337\\.');
             });
 
+            it('should handle chronos ids in old and new format', function () {
+                // old recurrence id format
+                var cid = _.cid({ folder: 'cal://0/1337', id: '12345', recurrenceId: '20200219T140000' });
+                expect(cid).to.equal('cal://0/1337.12345.20200219T140000');
+
+                cid = _.cid(cid);
+                expect(cid.folder).to.equal('cal://0/1337');
+                expect(cid.folder_id).to.equal('cal://0/1337');
+                expect(cid.id).to.equal('12345');
+                expect(cid.recurrenceId).to.equal('20200219T140000');
+
+                // new recurrence id format
+                cid = _.cid({ folder: 'cal://0/1337', id: '12345', recurrenceId: 'Europe/Berlin:20200219T140000' });
+                expect(cid).to.equal('cal://0/1337.12345.Europe/Berlin:20200219T140000');
+
+                cid = _.cid(cid);
+                expect(cid.folder).to.equal('cal://0/1337');
+                expect(cid.folder_id).to.equal('cal://0/1337');
+                expect(cid.id).to.equal('12345');
+                expect(cid.recurrenceId).to.equal('Europe/Berlin:20200219T140000');
+            });
+
             // manual tests since karma is broken atm
             // var result = _.cid({ folder: 'fol.der', id: '.1337.' });
             // console.log(result === 'fol\\.der.\\.1337\\.');
