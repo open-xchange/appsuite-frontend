@@ -264,6 +264,32 @@ define('io.ox/mail/main', [
             app.treeView = tree;
         },
 
+        'account-error-handling': function (app) {
+
+            app.addAccountErrorHandler = function (folderId, callbackEvent, data, overwrite) {
+                console.log(folderId, callbackEvent, data);
+                var node = app.treeView.getNodeView(folderId),
+                    updateNode = function (node) {
+                        //#. Shown as a tooltip when a mail account doesn't work correctly. Click brings user to the settings page
+                        node.showStatusIcon(gt('There is a problem with this account. Click for more information'), callbackEvent || 'checkAccountStatus', data || node.options.model_id, overwrite);
+                    };
+
+                if (node) {
+                    updateNode(node);
+
+                } else {
+                    // wait for node to appear
+                    app.treeView.on('appear:' + folderId, function () {
+                        node = app.treeView.getNodeView(folderId);
+
+                        if (node) updateNode(node);
+
+                        app.treeView.off('appear:' + folderId);
+                    });
+                }
+            };
+        },
+
         'folder-view-ssl-events': function (app) {
 
             if (coreSettings.get('security/acceptUntrustedCertificates') || !coreSettings.get('security/manageCertificates')) return;
@@ -298,18 +324,17 @@ define('io.ox/mail/main', [
                         accountAPI.getStatus(accountData.id).done(function (obj) {
                             var node = app.treeView.getNodeView(accountData.root_folder);
 
-                            if (node) {
-                                if (obj[accountData.id].status === 'invalid_ssl') {
+                            if (!node) return;
 
-                                    var event = modus ? 'accountlink:sslexamine' : 'accountlink:ssl',
-                                        data = modus ? error : node.options.model_id;
+                            if (obj[accountData.id].status === 'invalid_ssl') {
+                                var event = modus ? 'accountlink:sslexamine' : 'accountlink:ssl',
+                                    data = modus ? error : node.options.model_id;
 
-                                    node.showStatusIcon(obj[accountData.id].message, event, data);
+                                app.addAccountErrorHandler(accountData.root_folder, event, data);
 
-                                } else {
-                                    node.hideStatusIcon();
-                                    node.render();
-                                }
+                            } else if (!obj[accountData.id].status || obj[accountData.id].status === 'ok') {
+                                node.hideStatusIcon();
+                                node.render();
                             }
 
                         });
@@ -337,6 +362,55 @@ define('io.ox/mail/main', [
                 updateStatus(hostname);
             });
 
+        },
+
+        'account-status-check': function () {
+
+            accountAPI.all().done(function (data) {
+                _.each(data, function (accountData) {
+                    accountAPI.getStatus(accountData.id).done(function (obj) {
+                        if (obj[accountData.id].status !== 'ok') {
+                            app.addAccountErrorHandler(accountData.root_folder, 'checkAccountStatus');
+                        }
+                    });
+                });
+            });
+
+            app.treeView.on('checkAccountStatus', function () {
+                ox.launch('io.ox/settings/main', { folder: 'virtual/settings/io.ox/settings/accounts' }).done(function () {
+                    this.setSettingsPane({ folder: 'virtual/settings/io.ox/settings/accounts' });
+                });
+            });
+        },
+
+        'OAuth-reauthorize': function (app) {
+
+            ox.on('account:reauthorized', function (account) {
+                if (!account) return;
+
+                var mailAccount = _(account.get('associations')).filter({ module: 'mail' })[0];
+                if (!mailAccount) return;
+
+                var node = app.treeView.getNodeView(mailAccount.folder);
+                if (!node) return;
+                node.hideStatusIcon();
+            });
+            require([
+                'io.ox/oauth/keychain',
+                'io.ox/oauth/reauth_handler'
+            ]).then(function (keychain, reauthHandler) {
+                ox.on('http:error:OAUTH-0040 http:error:MSG-0114', function (err) {
+                    var account = keychain.accounts.get(err.error_params[reauthHandler.columnForError(err.code)]);
+                    if (!account) return;
+                    var mailAccount = _(account.get('associations')).filter({ module: 'mail' })[0];
+                    if (!mailAccount) return;
+                    app.addAccountErrorHandler(mailAccount.folder, 'OAuthReauthorize', { account: account, err: err }, true);
+                });
+
+                app.treeView.on('OAuthReauthorize', function (data) {
+                    reauthHandler.showDialog(data.account, data.err);
+                });
+            });
         },
 
         'mail-quota': function (app) {

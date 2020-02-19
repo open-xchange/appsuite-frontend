@@ -742,7 +742,8 @@ define('io.ox/core/api/account', [
      */
     api.getStatus = function (id) {
         var p = { action: 'status' };
-        if (id) p.id = id;
+        // id 0 is the default account, so use an exact check here
+        if (id !== undefined) p.id = id;
 
         return http.GET({
             module: 'account',
