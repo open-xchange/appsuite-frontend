@@ -609,7 +609,8 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
             testResource = {
                 description: 'Now with 20% more PEW PEW',
                 display_name: 'Deathstar',
-                email1: '',
+                email1: 'sith@dark.side',
+                mailaddress: 'sith@dark.side',
                 id: 319,
                 type: 3
             },
@@ -619,7 +620,9 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 cuType: 'RESOURCE',
                 entity: 319,
                 partStat: 'ACCEPTED',
-                resource: _.clone(testResource)
+                resource: _.clone(testResource),
+                email: 'sith@dark.side',
+                uri: 'mailto:sith@dark.side'
             },
             // test contact object
             testContact = {

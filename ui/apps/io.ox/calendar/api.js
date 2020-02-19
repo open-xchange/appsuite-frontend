@@ -636,8 +636,8 @@ define('io.ox/calendar/api', [
                     until: moment().startOf('day').utc().add(1, 'day').format(util.ZULU_FORMAT)
                 }, options);
 
-                // entity for users ressources etc, uri for externals
-                var order = _(list).map(function (attendee) { return attendee.entity || attendee.uri; }),
+                // only use uri. entity only works for internal users/resources, which can also appear as external in some cases, causing ugly issues
+                var order = _(list).map(function (attendee) { return attendee.uri; }),
                     def = $.Deferred();
 
                 http.PUT({
@@ -651,7 +651,7 @@ define('io.ox/calendar/api', [
                 }).then(function (items) {
                     // response order might not be the same as in the request. Fix that.
                     items.sort(function (a, b) {
-                        return order.indexOf(a.attendee.entity || a.attendee.uri) - order.indexOf(b.attendee.entity || b.attendee.uri);
+                        return order.indexOf(a.attendee.uri) - order.indexOf(b.attendee.uri);
                     });
                     def.resolve(items);
                 },
