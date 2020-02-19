@@ -82,6 +82,11 @@ EOF
         fi
         ox_scr_done ${SCR}
     fi
+
+    # OXUIB-98
+    if contains "[“”]" /opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties; then
+        sed -i 's/[“”]/"/g' /opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties
+    fi
 fi
 
 %postun
