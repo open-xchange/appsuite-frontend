@@ -491,6 +491,10 @@
 }
 
 .floating-window {
+    @headerHeight: 48px;
+    @headerColor: linear-gradient(0deg, #eee, #f5f5f5);
+    @headerTextColor: #333;
+    @headerIconColor: #7a707a;
 
     // needed or you move the UI when the window overlaps at the right side or bottom
     position: fixed;
@@ -499,19 +503,33 @@
     background: transparent;
     outline: 0;
     max-height: 100%;
+    border-radius: 6px;
+    .floating-window-content, .floating-window-content {
+        border-radius: 6px;
+    }
+    .window-container-center, .window-footer, .floating-body {
+        border-radius: 0 0 6px 6px;
+    }
 
-    .floating-window-content { .elevation-2(); }
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .floating-window-content {
+        .elevation-2();
+    }
     &.active {
         z-index: 14;
         .floating-window-content { .elevation-3(); }
         .floating-header {
-            background: #333;
+            background: @headerColor;
             h1 {
-                color: white;
+                color: @headerTextColor;
             }
             .controls {
                 button {
-                    color: white;
+                    color: @headerIconColor;
                 }
             }
         }
@@ -587,7 +605,7 @@
         pointer-events: none;
     }
 
-    @headerHeight: 32px;
+
     .ios & {
         &.header-top .window-header  { position: relative; }
     }
@@ -595,10 +613,12 @@
     .floating-header {
         height: @headerHeight;
         bottom: auto;
-        background: #e0e0e0;
-        padding: 0 8px 0 16px;
+        background: @headerColor;
+        padding: 0 12px 0 20px;
         display: flex;
-
+        border-radius: 6px 6px 0px 0px;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        border-width: 0 1px 1px 1px;
 
         cursor: move;
 
@@ -624,7 +644,7 @@
             flex-shrink: 0;
 
             button {
-                color: #5b5b5b;
+                color: @headerIconColor;
                 line-height: @headerHeight - 2;
                 padding: 0 8px;
                 display: inline-block;

@@ -19,8 +19,8 @@ body {
 }
 
 .elevation-1() { box-shadow: 0  6px 12px rgba(0, 0, 0, 0.175); }
-.elevation-2() { box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); }
-.elevation-3() { box-shadow: 0 20px 70px rgba(0, 0, 0, 0.5);  }
+.elevation-2() { box-shadow: 0 10px 20px 5px rgba(0, 0, 0, 0.2); }
+.elevation-3() { box-shadow: 0 15px 70px 10px rgba(0, 0, 0, 0.5);  }
 
 textarea,
 .user-select-text { .user-select(text); }
@@ -237,8 +237,8 @@ div.hopscotch-bubble {
         /* icon-spin */
         animation: fa-spin 1.5s infinite linear, 1ms make-visible forwards;
         animation-delay: 300ms;
-        .relogin-required & { 
-            animation: 1ms make-visible forwards; 
+        .relogin-required & {
+            animation: 1ms make-visible forwards;
         }
     }
 
