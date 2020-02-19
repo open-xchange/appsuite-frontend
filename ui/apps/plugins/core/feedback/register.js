@@ -55,7 +55,7 @@ define('plugins/core/feedback/register', [
     function allowedToGiveFeedback() {
         // getSettings here for better readability later on
         // relative time stored as 3M for 3 Month etc, or absolute time stored in iso format 2014-06-20
-        var timeLimit = settings.get('feedback/timeLimit'),
+        var timeLimit = settings.get('feedback/timeLimit', dialogMode === 'nps-v1' ? '6M' : undefined),
             // defaults is 1 if theres a limit, if not then we just allow infinite feedbacks
             maxNumberOfFeedbacks = settings.get('feedback/maxFeedbacks', timeLimit ? 1 : undefined),
             usedNumberOfFeedbacks = settings.get('feedback/usedFeedbacks', 0),
