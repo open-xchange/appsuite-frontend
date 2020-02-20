@@ -81,7 +81,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         id: 'retrigger-change',
         index: INDEX += 100,
         draw: function (ed) {
-            ed.on('keyup SetContent Change', _.throttle(this.trigger.bind(this, 'change'), 50));
+            ed.on('keyup input SetContent Change', _.throttle(this.trigger.bind(this, 'change'), 50));
         }
     });
 
