@@ -491,8 +491,9 @@
 }
 
 .floating-window {
-    @headerHeight: 48px;
-    @headerColor: linear-gradient(0deg, #eee, #f5f5f5);
+    @headerHeight: 40px;
+    @headerColor: linear-gradient(0deg, #f5f5f5, #fff);
+    @headerColorInactive:#f5f5f5;
     @headerTextColor: #333;
     @headerIconColor: #7a707a;
 
@@ -613,7 +614,7 @@
     .floating-header {
         height: @headerHeight;
         bottom: auto;
-        background: @headerColor;
+        background: @headerColorInactive;
         padding: 0 12px 0 20px;
         display: flex;
         border-radius: 6px 6px 0px 0px;
