@@ -80,6 +80,45 @@ run e2e tests:
       - /^poc\//
       - /^e2e\//
 
+merge filter report:
+  stage: report
+  image: gitlab.open-xchange.com:4567/frontend/dev_env/puppeteer:latest
+  dependencies:
+    - run e2e tests
+  needs:
+    - run e2e tests
+  variables:
+    LAUNCH_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/appsuite/
+    PROVISIONING_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/
+    CONTEXT_ID: $CI_JOB_ID
+    CHROME_ARGS: '--no-sandbox'
+    FILTER_SUITE: ./merged_reports.json
+    FILTER_REPORT: filter_report_missing.json
+  script:
+    - cd ui
+    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
+    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./build/e2e/filter_report_*.json > $FILTER_SUITE
+    # ignore any failing tests
+    - yarn e2e -i || true
+    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./build/e2e/$FILTER_REPORT $FILTER_SUITE > ./build/e2e/filter_report.json
+  tags:
+    - e2e
+  allow_failure: true
+  when: always
+  artifacts:
+    when: always
+    paths:
+      - ui/build/e2e/filter_report.json
+      - ui/merged_reports.json
+    expire_in: 1 day
+  only:
+    changes:
+      - ui/**/*
+  except:
+    refs:
+      - /^poc\//
+      - /^e2e\//
+
 generate e2e report:
   stage: report
   image: gitlab.open-xchange.com:4567/frontend/dev_env/allure:latest
@@ -123,14 +162,14 @@ publish e2e report:
     GIT_STRATEGY: none
   dependencies:
     - generate e2e report
-  needs:
-    - generate e2e report
+    - merge filter report
   script:
     # fail if there is no history being generated. Prevents empty reports from being "published".
     - find ui/build/allure-report/ -name history.json > /dev/null
     - docker cp ui/build/allure-report/. reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG
     - docker exec reports rm -f /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
     - docker exec reports ln -sf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
+    - docker cp ui/build/e2e/filter_report.json reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG/ || true
   environment:
     name: reports/$CI_COMMIT_REF_SLUG
     url: http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/
