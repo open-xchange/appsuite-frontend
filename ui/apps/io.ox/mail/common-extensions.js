@@ -644,7 +644,14 @@ define('io.ox/mail/common-extensions', [
                 view.render();
 
                 // add attachment actions
-                var toolbarView = new ToolbarView({ el: view.$header.find('.links')[0], inline: true, simple: true, dropdown: false, point: 'io.ox/mail/attachment/links' });
+                var toolbarView = new ToolbarView({
+                    el: view.$header.find('.links')[0],
+                    inline: true,
+                    simple: true,
+                    dropdown: false,
+                    strict: false,
+                    point: 'io.ox/mail/attachment/links'
+                });
 
                 view.renderInlineLinks = function () {
                     var models = this.getValidModels();
