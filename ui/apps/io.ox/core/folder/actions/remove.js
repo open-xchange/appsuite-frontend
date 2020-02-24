@@ -34,12 +34,13 @@ define('io.ox/core/folder/actions/remove', [
 
     return function (id, options) {
 
+        //#. 'Delete calendar' and 'Delete folder' as header of modal dialog to delete a shared calendar or folder.
         var model = api.pool.getModel(id),
+            deleteTitle = model.get('module') === 'calendar' ? gt('Delete calendar') : gt('Delete folder'),
             deleteNotice = model.get('module') === 'calendar' ? gt('Do you really want to delete calendar "%s"?', model.get('title')) : gt('Do you really want to delete folder "%s"?', model.get('title')),
             shareNotice = model.get('module') === 'calendar' ? gt('This calendar is shared with others. It won\'t be available for them any more.') : gt('This folder is shared with others. It won\'t be available for them any more.');
 
-        //#. 'Delete calendar' as header of modal dialog to delete a shared calendar.
-        new ModalDialog({ title: gt('Delete calendar'), description: model.get('permissions').length > 1 ? shareNotice : deleteNotice })
+        new ModalDialog({ title: deleteTitle, description: model.get('permissions').length > 1 ? shareNotice : deleteNotice })
             .addCancelButton()
             .addButton({ label: gt('Delete'), action: 'delete' })
             .on('delete', function () { handler(id, options); })
