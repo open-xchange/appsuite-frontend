@@ -102,6 +102,16 @@ Show rating string on mouse hover in feedback dialog.
 <config>io.ox/core//feedback/showModuleSelect=`<bool>`</config>
 Defines if the feedback dialog is aware of it's current App and the rating is based on this. If set to "true" every App can be rated regardless which App is currently running.
 
+<config>io.ox/core//feedback/mode`<string>`</config>
+Default value is `star-rating-v1` (`star-rating-v1|nps-v1`)
+
+<config>io.ox/core//feedback/timeLimit`<string>`</config>
+A timeframe that can specified as absolute date or a relative date (example: `3M` for 3 Months). Default values are `undefined` (star-rating) and `6M` (nps-rating)
+
+<config>io.ox/core//feedback/maxFeedbacks`<number>`</config>
+Maximum number of feedbacks that are allowed in one timeframe: Default value is `1`.
+
+
 ## Misc
 
 <config>io.ox/core//refreshInterval=`<number>`</config>
