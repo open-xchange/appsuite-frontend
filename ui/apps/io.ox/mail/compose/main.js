@@ -284,6 +284,7 @@ define('io.ox/mail/compose/main', [
                     def.resolve({ app: app });
                     ox.trigger('mail:' + app.model.get('meta').type + ':ready', obj, app);
                 }, function fail(e) {
+                    console.error('Startup of mail compose failed', e);
                     if (app.view) {
                         app.view.dirty(false);
                         app.view.removeLogoutPoint();
