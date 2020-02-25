@@ -230,8 +230,13 @@ define('io.ox/portal/main', [
             if (_.isUndefined(draggable) || _.isNull(draggable)) {
                 draggable = true;
             }
+            draggable = draggable && !_.device('touch');
             this.addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''))
-                .addClass(draggable ? ' draggable' : ' protected');
+                .addClass(draggable ? ' draggable' : ' protected')
+                .attr({
+                    draggable: draggable,
+                    'aria-grabbed': draggable || undefined
+                });
         }
     });
 
@@ -765,24 +770,47 @@ define('io.ox/portal/main', [
                 });
             }
 
-            // make sortable, but not for Touch devices
-            if (!_.device('touch')) {
-                require(['static/3rd.party/jquery-ui.min.js']).done(function () {
-                    appBaton.$.widgets.sortable({
-                        cancel: 'li.protected',
-                        containment: win.nodes.main,
-                        delay: 150,
-                        items: '> li.draggable:visible',
-                        scroll: true,
-                        // default 'intersect' by 50%
-                        tolerance: 'pointer',
-                        update: function () {
-                            widgets.getCollection().trigger('order-changed', 'portal');
-                            widgets.save(appBaton.$.widgets);
-                        }
+            var draggedItem;
+            appBaton.$.widgets.delegate('li', {
+                'dragstart': function dragstart() {
+                    draggedItem = $(this).css('opacity', '0.999');
+                    _.defer(function () {
+                        if (!draggedItem) return;
+                        draggedItem
+                            .css('visibility', 'hidden')
+                            .attr('aria-grabbed', true);
                     });
-                });
-            }
+
+                    // find possible drop targets
+                    draggedItem
+                        .nextUntil('.protected')
+                        .attr('aria-dropeffect', 'move');
+                    draggedItem
+                        .prevUntil('.protected')
+                        .attr('aria-dropeffect', 'move');
+                },
+                'dragenter': function dragenter() {
+                    var target = $(this);
+                    if (!target.is('[aria-dropeffect="move"]')) return;
+                    if (draggedItem.index() < target.index()) target.after(draggedItem);
+                    else target.before(draggedItem);
+                },
+                'dragend drop': function dragend() {
+                    if (!draggedItem) return;
+                    draggedItem
+                        .css('visibility', '')
+                        .attr('aria-grabbed', false);
+                    appBaton.$.widgets.children().removeAttr('aria-dropeffect');
+                    draggedItem = null;
+                    widgets.getCollection().trigger('order-changed', 'portal');
+                    widgets.save(appBaton.$.widgets);
+                }
+            });
+            app.getWindowNode().on('dragover', function (e) {
+                if (!draggedItem) return;
+                e.preventDefault();
+                e.originalEvent.dataTransfer.dropEffect = 'move';
+            });
         });
 
         var lazyLayout = _.debounce(function () {

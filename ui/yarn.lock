@@ -57,10 +57,10 @@
   dependencies:
     jquery ">=1.7.1"
 
-"@open-xchange/bootstrap-tokenfield@0.13.1":
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/@open-xchange/bootstrap-tokenfield/-/bootstrap-tokenfield-0.13.1.tgz#c4c1bddd360b2ef01c8d4d40514b92316fd257aa"
-  integrity sha512-+W43i/lK24Tof53sQoygzhhvRORAScUzdYtPTMl6EEd1Pt+FutAGrBcE9dqWfHiuwzOyJZNAtGFPeSoGFj+CQA==
+"@open-xchange/bootstrap-tokenfield@0.13.2":
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/@open-xchange/bootstrap-tokenfield/-/bootstrap-tokenfield-0.13.2.tgz#be4e6b75f042bfaa8186a4694e4fbe1c2dda8b08"
+  integrity sha512-BPR56hDsEALl0f+7NQvxq9ipX4fC5NKVJcpq5gTv+NyqgwPqMwyBZ+C1ePoIAkwsdzNLVh8sS+LWqoDw0A3gKg==
 
 "@open-xchange/codecept-helper@^0.3.0":
   version "0.3.0"

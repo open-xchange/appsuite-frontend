@@ -417,7 +417,6 @@ define('io.ox/portal/widgets', [
                     // reset old state
                     self.update(old_state);
                     collection.trigger('sort');
-                    widgetList.sortable('cancel');
                     notifications.yell('error', gt('Could not save settings.'));
                 }
             );
