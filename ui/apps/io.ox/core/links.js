@@ -211,6 +211,11 @@ define('io.ox/core/links', [
     var gdprHandler = function (e) {
         e.preventDefault();
         var data = $(this).data();
+        require(['io.ox/settings/personalData/api'], function (gdprAPI) {
+            // this triggers a redraw of the view if it was drawn before (usually this is only done on 'refresh^')
+            gdprAPI.trigger('updateStatus');
+        });
+
         ox.launch('io.ox/settings/main', { folder: data.folder }).done(function () {
             // special handling for settings (bad, but apparently solved differently)
             this.setSettingsPane({ folder: data.folder });
