@@ -490,7 +490,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         action: function (baton) {
             if (!FileUtils.isFileVersionUploading(baton.data.id, FILE_VERSION_IS_UPLOADING_MSG)) {
 
-                if (ox.tabHandlingEnabled) {
+                if (ox.tabHandlingEnabled && (_.url.hash('office:disable-openInTabs') !== 'true')) {
                     require(['io.ox/core/api/tab']).then(function (TabAPI) {
                         // the url attributes to launch the popout viewer
                         var urlAttrs = { app: 'io.ox/files/detail' };
@@ -554,7 +554,7 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     new Action(TOOLBAR_ACTION_ID + '/close', {
         matches: function (baton) {
-            return !baton.context.standalone || !ox.tabHandlingEnabled;
+            return !baton.context.standalone || !ox.tabHandlingEnabled || (_.url.hash('office:disable-openInTabs') === 'true');
         },
         action: function (baton) {
             return baton.context.onClose(baton.e);
