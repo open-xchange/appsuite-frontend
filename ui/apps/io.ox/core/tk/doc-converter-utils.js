@@ -246,6 +246,7 @@ define('io.ox/core/tk/doc-converter-utils', [
         // the Guard parameters
         var file_options = null;
         var file_options_params = null;
+        var security = null;
         var meta = null;
         // the resulting params
         var params = null;
@@ -272,9 +273,12 @@ define('io.ox/core/tk/doc-converter-utils', [
                 params.decrypt = true;
                 params.cryptoAuth = file_options_params ? file_options_params.cryptoAuth : '';
                 params.cryptoAction = file_options_params ? file_options_params.cryptoAction : '';
+
             } else { // Call for viewer, crypto info will be in originalModel
-                params.cryptoAuth = originalModel.auth ? originalModel.auth : '';
-                params.decrypt = Boolean(originalModel && originalModel.security && originalModel.security.decrypted);
+                security = originalModel && originalModel.security;
+
+                params.cryptoAuth = (security && security.authentication) || originalModel.auth || '';
+                params.decrypt = Boolean(security && security.decrypted);
             }
 
         } else if (model.isPIMAttachment()) {

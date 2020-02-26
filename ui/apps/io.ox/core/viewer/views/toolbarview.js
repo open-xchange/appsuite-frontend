@@ -512,7 +512,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                             if (baton.data.security && baton.data.security.decrypted) {
                                 _.extend(urlAttrs, {
                                     decrypt: true,
-                                    cryptoAuth: baton.data.security.authentication
+                                    cryptoAuth: baton.data.security.authentication || baton.data.auth
                                 });
                             }
 
