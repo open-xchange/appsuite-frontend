@@ -106,11 +106,27 @@ Defines if the feedback dialog is aware of it's current App and the rating is ba
 Default value is `star-rating-v1` (`star-rating-v1|nps-v1`)
 
 <config>io.ox/core//feedback/timeLimit`<string>`</config>
-A timeframe that can specified as absolute date or a relative date (example: `3M` for 3 Months). Default values are `undefined` (star-rating) and `6M` (nps-rating)
+A timeframe that can specified as absolute date or a relative date. example: `3M` for 3 Months (this is case sensitive), `2020-02-26` for February 26 2020. Default values are `undefined` (star-rating) and `6M` (nps-rating)
 
 <config>io.ox/core//feedback/maxFeedbacks`<number>`</config>
 Maximum number of feedbacks that are allowed in one timeframe: Default value is `1`.
 
+to allow infinte feedback set
+`io.ox/core//feedback/timeLimit` = `false`
+`io.ox/core//feedback/maxFeedbacks` = `undefined`
+
+<config>io.ox/core//feedback/showQuestion`<bool>`</config>
+Only relevant for nps rating. If set to true, an additional question with answer field for free text will be shown. Default `false`.
+
+<config>io.ox/core//feedback/maxFeedbacks`<number>`</config>
+Only relevant for nps rating. If io.ox/core//feedback/showQuestion is set to true you can choose from the folowing questions by setting it to the index of the question you want (0-3):
+
+    index 0: „What is the primary reason for your score?“
+    index 1: „How can we improve your experience?“
+    index 2: „Which features do you value or use the most?“
+    index 3: „What is the one thing we could do to make you happier?“
+
+Default is `0`.
 
 ## Misc
 
