@@ -1,6 +1,6 @@
 {
   "name": "open-xchange-appsuite-saml",
-  "version": "7.8.4-61",
+  "version": "7.8.4-62",
   "dependencies": {},
   "optionalDependencies": {
     "assemble-less": "^0.7.0",
