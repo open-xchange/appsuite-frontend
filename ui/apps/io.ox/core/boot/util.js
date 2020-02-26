@@ -11,9 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/boot/util', [
-    'io.ox/core/capabilities'
-], function (capabilities) {
+define('io.ox/core/boot/util', [], function () {
 
     'use strict';
 
@@ -161,7 +159,6 @@ define('io.ox/core/boot/util', [
 
         checkTabHandlingSupport: function () {
             return !ox.serverConfig.openInSingleTab
-                && (capabilities.has('text') || capabilities.has('spreadsheet') || capabilities.has('presentation'))
                 && !_.device('ie && ie <= 11')  // no old internet explorer
                 && !_.device('smartphone')      // no mobile
                 && !_.device('tablet')          // no tablet
