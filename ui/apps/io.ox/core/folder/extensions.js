@@ -247,7 +247,7 @@ define('io.ox/core/folder/extensions', [
                     tree: tree,
                     parent: tree
                 })
-                .render().$el.addClass('unified-folders')
+                .render().$el.addClass('unified-folders').attr('role', 'treeitem')
             );
         },
 

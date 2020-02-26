@@ -50,6 +50,21 @@ Scenario('Mail - List view w/o mail', async (I) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
+Scenario('Mail - List view unified mail w/o mail', async (I, mail) => {
+    I.login('app=io.ox/mail');
+    await I.executeAsyncScript((done) => {
+        require(['io.ox/core/api/account'], function (api) {
+            api.update({ id: 0, personal: null, unified_inbox_enabled: true }).done(done);
+        });
+    });
+
+    I.refreshPage();
+    mail.waitForApp();
+    I.see('Unified mail');
+
+    expect(await I.grabAxeReport()).to.be.accessible;
+});
+
 Scenario('Mail - Compose window (with exceptions)', async (I) => {
     // Exceptions:
     // Typeahead missing label (critical), TinyMCE toolbar invalid role (minor issue)
