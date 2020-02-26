@@ -241,6 +241,10 @@ define('io.ox/files/detail/main', [
             } else if (options.id && options.folder) {
                 app.setUrlParameter(_.pick(options, 'id', 'folder'));
                 app.showFile({ id: options.id, folder_id: options.folder });
+
+            } else if (options.cid) {
+                app.setUrlParameter(_.pick(_.cid(options.cid), 'id', 'folder'));
+                app.showFile(_.cid(options.cid));
             }
         });
     }
