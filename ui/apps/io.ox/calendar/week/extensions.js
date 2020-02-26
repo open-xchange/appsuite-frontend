@@ -39,6 +39,8 @@ define('io.ox/calendar/week/extensions', [
             var model = baton.model;
             if (util.isAllday(model)) return;
             if (!this.hasClass('modify')) return;
+            // nodes may be reused or cloned, make sure to remove excess resize handles
+            this.find('.resizable-handle').remove();
             if (model.getMoment('startDate').local().isSame(baton.date, 'day')) this.append($('<div class="resizable-handle resizable-n" aria-hidden="true">'));
             if (model.getMoment('endDate').local().isSame(baton.date, 'day')) this.append($('<div class="resizable-handle resizable-s" aria-hidden="true">'));
         }
