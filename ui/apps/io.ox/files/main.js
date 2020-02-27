@@ -1584,6 +1584,13 @@ define('io.ox/files/main', [
                 if (folderAPI.isBeingDeleted(folder)) return;
                 switchToDefaultFolder(error);
             });
+        },
+
+        'password-error-handling': function (app) {
+            app.listenTo(ox, 'http:error:FILE_STORAGE-0056 CHECK_CURRENT_FOLDER', function (error) {
+                error.error = gt('Authentication failed for this file storage account');
+                notifications.yell(error);
+            });
         }
     });
 
