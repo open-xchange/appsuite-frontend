@@ -38,7 +38,8 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 panelBody = this.find('.sidebar-panel-body'),
                 versionCounter = 1,
                 isUpToDate = _.contains(_.pluck(versions, 'version'), model.get('version')),
-                tableNode;
+                tableNode,
+                versionCounterSupport = !(/^(owncloud|webdav|nextcloud)$/.test(model.get('folder_id').split(':')[0]));
 
             function getVersionsTable() {
 
@@ -74,9 +75,11 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 return version2.last_modified - version1.last_modified;
             }
 
-            if (!model || !_.isArray(versions)) {
-                panelBody.empty();
-                return;
+            if (versionCounterSupport) {
+                if (!model || !_.isArray(versions)) {
+                    panelBody.empty();
+                    return;
+                }
             }
 
             var def = isUpToDate ? $.when(versions) : FilesAPI.versions.load(model.toJSON(), { cache: false });

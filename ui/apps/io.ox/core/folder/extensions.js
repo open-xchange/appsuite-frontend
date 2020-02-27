@@ -200,7 +200,7 @@ define('io.ox/core/folder/extensions', [
     function openAddStorageAccount(e) {
         e.preventDefault();
         require(['io.ox/files/actions/add-storage-account'], function (addStorageAccount) {
-            addStorageAccount();
+            addStorageAccount(e.data.cap);
         });
     }
 
@@ -349,11 +349,17 @@ define('io.ox/core/folder/extensions', [
         addStorageAccount: (function () {
             var links = $('<li class="links" role="presentation">');
 
+            function getAvailableNonOauthServices() {
+                var services = ['nextcloud', 'webdav', 'owncloud'];
+                return _.filter(services, function (service) { return capabilities.has('filestorage_' + service); });
+            }
+
             function draw() {
                 getAvailableServices().done(function (services) {
-                    if (services.length > 0) {
+                    var availableNonOauthServices = getAvailableNonOauthServices();
+                    if (services.length > 0 || availableNonOauthServices.length) {
                         links.empty().show().append(
-                            $('<a href="#" data-action="add-storage-account" role="treeitem">').text(gt('Add storage account')).on('click', openAddStorageAccount)
+                            $('<a href="#" data-action="add-storage-account" role="treeitem">').text(gt('Add storage account')).on('click', { 'cap': availableNonOauthServices }, openAddStorageAccount)
                         );
                     } else {
                         links.hide();
