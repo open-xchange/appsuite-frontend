@@ -132,7 +132,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
                 ),
                 drawDeleteButton('action')
             );
-        } else if (/discard_/g.test(o.inputId) || /keep_/g.test(o.inputId)) {
+        } else if (/discard_/g.test(o.inputId) || /keep_/g.test(o.inputId) || /guard_/g.test(o.inputId)) {
             return $('<li>').addClass('filter-settings-view ' + o.addClass + ' row').attr('data-action-id', o.actionKey).append(
                 $('<div>').addClass('col-sm-4 singleline').append(
                     $('<span>').addClass('list-title').text(o.title)

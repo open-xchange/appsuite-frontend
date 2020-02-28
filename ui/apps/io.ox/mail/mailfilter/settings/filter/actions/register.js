@@ -19,9 +19,10 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
     'io.ox/mail/mailfilter/settings/filter/actions/util',
     'io.ox/core/folder/picker',
     'io.ox/core/api/mailfilter',
+    'io.ox/core/capabilities',
     'settings!io.ox/mail'
 
-], function (ext, gt, mini, util, picker, api, settings) {
+], function (ext, gt, mini, util, picker, api, capabilities, settings) {
 
     'use strict';
 
@@ -299,6 +300,43 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
 
                 draw: function (baton, actionKey, amodel, filterValues, action) {
                     var inputId = _.uniqueId('keep_');
+                    this.append(
+                        util.drawAction({
+                            actionKey: actionKey,
+                            inputId: inputId,
+                            title: baton.view.actionsTranslations[action.id]
+                        })
+                    );
+                }
+
+            });
+        }
+
+        if (supportedActions.guard && capabilities.has('guard-mail')) {
+            ext.point('io.ox/mail/mailfilter/actions').extend({
+
+                id: 'guard',
+
+                index: 700,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'guard': {
+                            'id': 'guard'
+                        }
+                    };
+                    _.extend(opt.defaults.actions, defaults);
+                    _.extend(opt.actionsTranslations, {
+                        'guard': gt('Encrypt the email')
+                    });
+
+                    _.extend(opt.actionCapabilities, { 'guard': 'guard' });
+
+                    opt.actionsOrder.push('guard');
+                },
+
+                draw: function (baton, actionKey, amodel, filterValues, action) {
+                    var inputId = _.uniqueId('guard_');
                     this.append(
                         util.drawAction({
                             actionKey: actionKey,

@@ -18,8 +18,9 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
     'io.ox/backbone/mini-views',
     'io.ox/mail/mailfilter/settings/filter/tests/util',
     'io.ox/backbone/mini-views/datepicker',
+    'io.ox/core/capabilities',
     'io.ox/core/api/mailfilter'
-], function (ext, gt, mini, util, DatePicker, api) {
+], function (ext, gt, mini, util, DatePicker, capabilities, api) {
 
     'use strict';
 
@@ -1149,6 +1150,48 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     //     defaults: baton.view.defaults.tests[baton.view.defaults.conditionsMapping[condition.id]]
                     // });
                 }
+            });
+        }
+
+
+        if (supportedConditions.signature && capabilities.has('guard-mail')) {
+            ext.point('io.ox/mail/mailfilter/tests').extend({
+
+                id: 'signature',
+
+                index: 500,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'signature': {
+                            'id': 'signature'
+                        }
+                    };
+                    _.extend(opt.defaults.tests, defaults);
+                    _.extend(opt.conditionsTranslation, {
+                        'signature': gt('Signed and verified')
+                    });
+
+                    _.extend(opt.conditionsMapping, { 'signature': ['signature'] });
+
+                    opt.conditionsOrder.push('signature');
+                },
+
+                draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
+                    var inputId = _.uniqueId('signature');
+
+                    this.append(
+                        util.drawCondition({
+                            conditionKey: conditionKey,
+                            inputId: inputId,
+                            title: baton.view.conditionsTranslation.signature,
+                            errorView: true,
+                            addClass: addClass
+                        })
+                    );
+
+                }
+
             });
         }
 
