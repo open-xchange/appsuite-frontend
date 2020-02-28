@@ -63,6 +63,12 @@ Scenario('Mail - List view unified mail w/o mail', async (I, mail) => {
     I.see('Unified mail');
 
     expect(await I.grabAxeReport()).to.be.accessible;
+
+    await I.executeAsyncScript((done) => {
+        require(['io.ox/core/api/account'], function (api) {
+            api.update({ id: 0, personal: null, unified_inbox_enabled: false }).done(done);
+        });
+    });
 });
 
 Scenario('Mail - Compose window (with exceptions)', async (I) => {
