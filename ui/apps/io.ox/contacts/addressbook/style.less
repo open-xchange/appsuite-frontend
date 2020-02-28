@@ -147,13 +147,13 @@
             -webkit-filter: saturate(0);
             background-color: #eee;
         }
-        &.initials, &.distribution-list, &.label {
+        &.initials, &.distribution-list, &.resource, &.label {
             color: white;
             background-color: rgba(0, 0, 0, 0.30);
         }
     }
 
-    .initials, .distribution-list, .label {
+    .initials, .distribution-list, .resource, .label {
         color: rgba(0, 0, 0, 0.60);
         font-weight: bold;
         display: flex;
@@ -173,10 +173,15 @@
         &.pink { background-color: #FFC2DE; }
     }
 
-    .distribution-list, .label {
+    .distribution-list, .label, .resource {
         font-size: 14px;
         color: #fff;
         background-color: #555;
+    }
+
+    .resource {
+        font-size: 24px;
+        line-height: 24px;
     }
 
     .list-item .display_name {

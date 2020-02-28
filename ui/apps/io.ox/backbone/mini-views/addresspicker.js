@@ -15,11 +15,12 @@ define('io.ox/backbone/mini-views/addresspicker', [
     'io.ox/backbone/mini-views/abstract',
     'io.ox/participants/model',
     'io.ox/contacts/api',
+    'io.ox/core/api/resource',
     'io.ox/core/capabilities',
     'io.ox/mail/util',
     'gettext!io.ox/core',
     'less!io.ox/backbone/mini-views/addresspicker'
-], function (AbstractView, pModel, api, capabilities, util, gt) {
+], function (AbstractView, pModel, api, resourceAPI, capabilities, util, gt) {
 
     'use strict';
 
@@ -33,38 +34,43 @@ define('io.ox/backbone/mini-views/addresspicker', [
 
         initialize: function (opt) {
             this.opt = _.extend({
-                process: $.noop // a function to process the pickeroutput
+                process: $.noop, // a function to process the pickeroutput
+                resources: false
             }, opt);
         },
 
         onClick: function openAddressBookPicker(e) {
             e.preventDefault();
-
-            var self = this;
+            var options = this.opt;
             require(['io.ox/contacts/addressbook/popup'], function (popup) {
-                var useGABOnly = self.opt.useGABOnly || (self.opt.isPermission && !capabilities.has('invite_guests'));
+                var useGABOnly = options.useGABOnly || (options.isPermission && !capabilities.has('invite_guests'));
                 popup.open(function (result) {
-                    _.each(result, function (singleData) {
+                    _(result).each(function (item) {
                         var member;
-                        if (singleData.folder_id) {
-                            api.get(singleData).done(function (data) {
-                                // specifiy address field (email1, email2, ...)
-                                if (singleData.field) data.field = singleData.field;
+                        if (item.folder_id === 'virtual/resource') {
+                            resourceAPI.get({ id: item.id }).done(function (data) {
+                                data = _.extend(data, { type: 3, field: 'email1' });
                                 member = new pModel.Participant(data);
-                                self.opt.process(e, member, singleData);
+                                options.process(e, member, item);
+                            });
+                        } else if (item.folder_id) {
+                            api.get(item).done(function (data) {
+                                // specifiy address field (email1, email2, ...)
+                                if (item.field) data.field = item.field;
+                                member = new pModel.Participant(data);
+                                options.process(e, member, item);
                             });
                         } else {
                             member = new pModel.Participant({
-                                display_name: util.parseRecipient(singleData.array[1])[0],
-                                email1: singleData.array[1],
+                                display_name: util.parseRecipient(item.array[1])[0],
+                                email1: item.array[1],
                                 field: 'email1',
                                 type: 5
                             });
-                            self.opt.process(e, member, singleData);
+                            options.process(e, member, item);
                         }
-
                     });
-                }, useGABOnly);
+                }, { useGABOnly: useGABOnly, resources: options.resources });
             });
         },
 

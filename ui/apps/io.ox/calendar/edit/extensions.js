@@ -673,7 +673,9 @@ define('io.ox/calendar/edit/extensions', [
                 convertToAttendee: true,
                 collection: baton.model.getAttendees(),
                 blacklist: settings.get('participantBlacklist') || false,
-                scrollIntoView: true
+                scrollIntoView: true,
+                // handed over to the picker
+                resources: true
             });
 
             this.append(baton.parentView.addParticipantsView.$el);

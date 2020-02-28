@@ -108,7 +108,8 @@ define('io.ox/participants/add', [
             placeholder: gt('Add contact/resource') + ' \u2026',
             label: gt('Add contact/resource'),
             extPoint: 'io.ox/participants/add',
-            blacklist: false
+            blacklist: false,
+            resources: false
         },
 
         initialize: function (o) {
@@ -250,7 +251,8 @@ define('io.ox/participants/add', [
                             return;
                         }
                         self.options.collection.add(member);
-                    }
+                    },
+                    resources: this.options.resources
                 });
                 this.$el.append(
                     this.addresspicker.render().$el

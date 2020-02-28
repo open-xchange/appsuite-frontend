@@ -19,6 +19,7 @@ define('io.ox/contacts/addressbook/popup', [
     'io.ox/core/extensions',
     'io.ox/contacts/util',
     'io.ox/contacts/api',
+    'io.ox/core/api/resource',
     'l10n/ja_JP/io.ox/collation',
     'gettext!io.ox/contacts',
     'gettext!io.ox/core',
@@ -26,7 +27,7 @@ define('io.ox/contacts/addressbook/popup', [
     'settings!io.ox/mail',
     'io.ox/core/yell',
     'less!io.ox/contacts/addressbook/style'
-], function (http, folderAPI, ModalDialog, ListView, ext, util, api, collation, gt, gtCore, settings, mailSettings, yell) {
+], function (http, folderAPI, ModalDialog, ListView, ext, util, api, resourceAPI, collation, gt, gtCore, settings, mailSettings, yell) {
 
     'use strict';
 
@@ -53,6 +54,7 @@ define('io.ox/contacts/addressbook/popup', [
     // feature toggles
     var useInitials = settings.get('picker/useInitials', true),
         useInitialsColor = useInitials && settings.get('picker/useInitialsColor', true),
+        useResources = settings.get('picker/useResources', true),
         useLabels = settings.get('picker/useLabels', false),
         closeOnDoubleClick = settings.get('picker/closeOnDoubleClick', true),
         useGlobalAddressBook = settings.get('picker/globalAddressBook', true),
@@ -158,11 +160,13 @@ define('io.ox/contacts/addressbook/popup', [
             options = options || {};
             return $.when(
                 fetchAddresses(options),
+                useResources ? fetchResources() : $.when(),
                 useLabels ? fetchLabels() : $.when()
             )
-            .then(function (contacts, labels) {
+            .then(function (contacts, resources, labels) {
                 var result = [], hash = {};
                 processAddresses(contacts, result, hash, options);
+                if (useResources) processResources(resources, result, hash, options);
                 if (useLabels) processLabels(labels[0], result, hash);
                 return { items: result, hash: hash, index: buildIndex(result) };
             });
@@ -203,6 +207,10 @@ define('io.ox/contacts/addressbook/popup', [
                     return !item.distribution_list;
                 });
             });
+        }
+
+        function fetchResources() {
+            return resourceAPI.search('*');
         }
 
         function fetchLabels() {
@@ -304,6 +312,7 @@ define('io.ox/contacts/addressbook/popup', [
                 // allow sorters to have special handling for sortnames and addresses
                 sort_name_without_mail: sort_name.join('_').toLowerCase().replace(/\s/g, '_'),
                 title: item.title,
+                token: address,
                 rank: 1000 + ((folder_id === '6' ? 10 : 0) + rank) * 10 + i,
                 user_id: item.internal_userid
             };
@@ -312,13 +321,47 @@ define('io.ox/contacts/addressbook/popup', [
         function processLists(item) {
             // avoid needless pmodel display name lookups/redraws after 'select' (bug 51755)
             if (!item.mark_as_distributionlist) return false;
-            return _.map(item.distribution_list, function (listitem) {
-                return _.extend(listitem, { mail_full_name: util.getMailFullName(listitem) });
+            return _.map(item.distribution_list, function (item) {
+                return _.extend(item, {
+                    mail_full_name: util.getMailFullName(item),
+                    token: item.display_name + ' - ' + gt('Distribution list')
+                });
             });
         }
 
         function getDisplayName(str) {
             return $.trim(str).replace(/^["']+|["']+$/g, '');
+        }
+
+        function processResources(list, result, hash) {
+            list.forEach(function (item, i) {
+                var address = item.mailaddress,
+                    full_name = util.getFullName(item);
+                item = {
+                    caption: address,
+                    cid: 'virtual/resource.' + item.id,
+                    display_name: item.display_name,
+                    email: address,
+                    first_name: '',
+                    folder_id: 'virtual/resource',
+                    full_name: full_name,
+                    full_name_html: util.getFullName(item, true),
+                    image: '',
+                    id: String(item.id),
+                    initials: '',
+                    initial_color: '',
+                    keywords: (full_name + ' ' + address).toLowerCase(),
+                    last_name: '',
+                    mail_full_name: util.getMailFullName(item),
+                    resource: true,
+                    // all lower-case to be case-insensitive; replace spaces to better match server-side collation
+                    sort_name: item.display_name.toLowerCase().replace(/\s/g, '_'),
+                    title: full_name,
+                    token: full_name + ' - ' + gt('Resource'),
+                    rank: i
+                };
+                result.push((hash[item.cid] = item));
+            });
         }
 
         function processLabels(list, result, hash) {
@@ -370,6 +413,7 @@ define('io.ox/contacts/addressbook/popup', [
                     // all lower-case to be case-insensitive; replace spaces to better match server-side collation
                     sort_name: item.display_name.toLowerCase().replace(/\s/g, '_'),
                     title: item.title,
+                    token: addresses,
                     rank: i
                 };
                 result.push((hash[item.cid] = item));
@@ -436,7 +480,8 @@ define('io.ox/contacts/addressbook/popup', [
             point: 'io.ox/contacts/addressbook-popup',
             help: 'ox.appsuite.user.sect.email.send.addressbook.html',
             title: gt('Select contacts'),
-            useGABOnly: false
+            useGABOnly: false,
+            resources: false
         }, options);
 
         if (options.useGABOnly) folder = 'folder/6';
@@ -525,6 +570,7 @@ define('io.ox/contacts/addressbook/popup', [
                             $('<select class="form-control folder-dropdown invisible">').append(
                                 this.options.useGABOnly ? $() : $('<option value="all">').text(gt('All folders')),
                                 this.options.useGABOnly || useLabels ? $() : $('<option value="all_lists">').text(gt('All distribution lists')),
+                                useResources && this.options.resources ? $('<option value="all_resources">').text(gt('All resources')) : $(),
                                 useLabels ? $('<option value="all_labels">').text(gt('All groups')) : $()
                             ).attr('aria-label', gt('Apply filter')).val(folder)
                         )
@@ -555,11 +601,17 @@ define('io.ox/contacts/addressbook/popup', [
 
                 // hide body initially / add busy animation
                 this.busy(true);
+                var options = this.options;
 
                 function success(response) {
                     if (this.disposed) return;
                     cachedResponse = response;
-                    this.items = response.items.sort(sorter);
+                    // filter based on options
+                    var items = response.items;
+                    if (!options.resources) {
+                        items = items.filter(function (item) { return !item.resource; });
+                    }
+                    this.items = items.sort(sorter);
                     this.store.setHash(response.hash);
                     this.index = response.index;
                     this.search('');
@@ -577,7 +629,8 @@ define('io.ox/contacts/addressbook/popup', [
                 this.on('open', function () {
                     _.defer(function () {
                         if (cachedResponse && !this.options.useGABOnly) return success.call(this, cachedResponse);
-                        getAllMailAddresses({ useGABOnly: this.options.useGABOnly }).then(success.bind(this), fail.bind(this));
+                        getAllMailAddresses(_(this.options).pick('useGABOnly'))
+                            .then(success.bind(this), fail.bind(this));
                     }.bind(this));
                 });
             },
@@ -597,10 +650,13 @@ define('io.ox/contacts/addressbook/popup', [
                         this.lastJSON = null;
                     }
                     // apply folder-based filter
-                    var folder = this.folder;
+                    var folder = this.folder,
+                        resources = this.options.resources;
                     result = _(result).filter(function (item) {
+                        if (!resources && item.resource) return false;
                         if (folder === 'all') return item.folder_id !== collected_id;
                         if (folder === 'all_lists') return item.list;
+                        if (folder === 'all_resources') return item.resource;
                         if (folder === 'all_labels') return item.label;
                         if (/^folder\//.test(folder)) return item.folder_id === folder.substr(7);
                         if (/^department\//.test(folder)) return item.department === folder.substr(11);
@@ -720,7 +776,7 @@ define('io.ox/contacts/addressbook/popup', [
                     // pick relavant values
                     this.tokenview.render(_.map(list, function (obj) {
                         return {
-                            title: obj.list ? obj.display_name + ' - ' + gt('Distribution list') : obj.email,
+                            title: obj.token,
                             cid: obj.cid,
                             dist_list_length: obj.list ? obj.list.length : undefined };
                     }));
@@ -875,6 +931,8 @@ define('io.ox/contacts/addressbook/popup', [
         '  <div class="list-item-content">' +
         '    <% if (item.list) { %>' +
         '      <div class="contact-picture distribution-list" aria-hidden="true"><i class="fa fa-align-justify" aria-hidden="true"></i></div>' +
+        '    <% } else if (item.resource) { %>' +
+        '      <div class="contact-picture resource" aria-hidden="true"><i class="fa fa-tag" aria-hidden="true"></i></div>' +
         '    <% } else if (item.label) { %>' +
         '      <div class="contact-picture label" aria-hidden="true"><i class="fa fa-users" aria-hidden="true"></i></div>' +
         '    <% } else if (item.image) { %>' +
@@ -1074,8 +1132,7 @@ define('io.ox/contacts/addressbook/popup', [
                 return this;
             }
 
-            // TODO: gt comment
-            if (this.opt.useLabels) {
+            if (this.opt.useLabels || this.opt.useResources) {
                 //#. %1$d is number of selected items (addresses/groups) in the list
                 selectionLabel = gt.format(gt.ngettext('%1$d item selected', '%1$d items selected', length), length);
                 description = gt('The selected items. Press Backspace or Delete to remove.');
