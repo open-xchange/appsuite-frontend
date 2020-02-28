@@ -29,9 +29,9 @@ async function goToDate(I, date) {
         if (monthName !== $('.switch-mode').text().split(' ')[0]) {
             $('.btn-next').click();
         }
-        return moment(date).format('D');
+        return moment(date).format('M/DD/YYYY');
     }, date);
-    I.click({ xpath: '//td[text() = "' + day + '"]' });
+    I.click({ css: `td[aria-label*="${day}"` });
 }
 
 Scenario('Create new appointment and check display in portal widget', async function (I, calendar) {
