@@ -267,10 +267,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     if (testsPart.id === 'size') {
                         if (testsPart.size.toString().trim() === '') {
                             this.model.set('test', { id: 'true' });
-                        } else {
-                            // clean up size model
-                            delete testsPart.sizeValue;
-                            delete testsPart.unit;
                         }
                     }
 
@@ -293,14 +289,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                 if (nestedTest.zone === 'original' && nestedTest.id === 'currentdate') self.model.attributes.test.tests[key].tests[nestedKey].zone = returnTzOffset(nestedTest.datevalue[0]);
                             });
                         }
-
-                        // clean up size model
-                        if (test.id === 'size') {
-                            delete test.sizeValue;
-                            delete test.unit;
-                        }
                     });
-
                 }
 
                 // if there is a stop action it should always be the last

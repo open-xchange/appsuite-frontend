@@ -44,20 +44,34 @@ define('io.ox/mail/mailfilter/settings/model', [
                         if (self.get('rulename') !== oldRulename && self.get('rulename') !== gt('New rule')) return;
                         self.set('rulename', newRulename);
                     });
+                },
+                toJSON: function () {
+                    var data = JSON.parse(JSON.stringify(this.attributes)),
+                        list = [];
+                    // first level
+                    if (data.test) list.push(data.test);
+                    _.each(data.test.tests, function (obj) {
+                        // second level
+                        list.push(obj);
+                        // third level
+                        if (obj.tests) list = list.concat(obj.tests);
+                    });
+                    _.each(list, removeClientOnlyProperties);
+                    return data;
                 }
             },
 
             update: function (model) {
                 //yell on reject
                 return settingsUtil.yellOnReject(
-                    api.update(model.attributes)
+                    api.update(model.toJSON())
                 );
 
             },
             create: function (model) {
                 //yell on reject
                 return settingsUtil.yellOnReject(
-                    api.create(model.attributes)
+                    api.create(model.toJSON())
                 );
             }
 
@@ -74,6 +88,13 @@ define('io.ox/mail/mailfilter/settings/model', [
 
         return factory;
 
+    }
+
+    function removeClientOnlyProperties(data) {
+        if (data.id === 'size') {
+            delete data.sizeValue;
+            delete data.unit;
+        }
     }
 
     function provideEmptyModel() {
