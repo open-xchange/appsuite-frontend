@@ -37,12 +37,12 @@ const SELECTORS = {
 const A = {
     toggle: function (I) {
         I.clickToolbar('View');
-        I.waitForVisible({ css: 'a[data-name="categories"]' }, 'body > .dropdown');
+        I.waitForVisible({ css: 'a[data-name="categories"]' }, 5, 'body > .dropdown');
         I.click({ css: 'a[data-name="categories"]' }, 'body > .dropdown');
     },
     openConfiguration: function (I) {
         I.clickToolbar('View');
-        I.waitForVisible({ css: 'a[data-name="categories-config"]' }, 'body > .dropdown');
+        I.waitForVisible({ css: 'a[data-name="categories-config"]' }, 5, 'body > .dropdown');
         I.click({ css: 'a[data-name="categories-config"]' }, 'body > .dropdown');
     }
 };
@@ -110,7 +110,7 @@ Scenario('[C85626] Categories can be enabled or disabled', function (I, mail) {
     I.waitForInvisible({ css: '[data-id="promotion"]' });
 
     I.say('Ensure all tabss except "General" are hidden', 'blue');
-    I.waitForVisible({ css: '[data-id="general"]' }, SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="general"]' }, 5, SELECTORS.toolbar);
     I.dontSeeElement({ css: '[data-id="promotion"]' }, SELECTORS.toolbar);
     I.dontSeeElement({ css: '[data-id="social"]' }, SELECTORS.toolbar);
     I.dontSeeElement({ css: '[data-id="purchases"]' }, SELECTORS.toolbar);
@@ -134,13 +134,13 @@ Scenario('[C85626] Categories can be enabled or disabled', function (I, mail) {
 
     I.say('Check names of custom categories', 'blue');
     I.waitForVisible(SELECTORS.toolbar);
-    I.waitForVisible({ css: '[data-id="promotion"]' }, SELECTORS.toolbar);
-    I.waitForVisible({ css: '[data-id="general"]' }, SELECTORS.toolbar);
-    I.waitForVisible({ css: '[data-id="promotion"]' }, SELECTORS.toolbar);
-    I.waitForVisible({ css: '[data-id="social"]' }, SELECTORS.toolbar);
-    I.waitForVisible({ css: '[data-id="purchases"]' }, SELECTORS.toolbar);
-    I.waitForVisible({ css: '[data-id="uc1"]' }, SELECTORS.toolbar);
-    I.waitForVisible({ css: '[data-id="uc2"]' }, SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="promotion"]' }, 5, SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="general"]' }, 5, SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="promotion"]' }, 5, SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="social"]' }, 5, SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="purchases"]' }, 5, SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="uc1"]' }, 5, SELECTORS.toolbar);
+    I.waitForVisible({ css: '[data-id="uc2"]' }, 5, SELECTORS.toolbar);
 });
 
 Scenario('[C85626] Support different aspects of categories', function (I) {
@@ -274,7 +274,7 @@ Scenario.skip('[C96951] Conversations', async function (I, users) {
 
     I.say('Enable Conversations/Threads', 'blue');
     I.click('Sort', '.list-view-control');
-    I.waitForVisible({ css: '[data-name="thread"]' }, { css: 'body > .dropdown' });
+    I.waitForVisible({ css: '[data-name="thread"]' }, 5, { css: 'body > .dropdown' });
     I.click({ css: '[data-name="thread"]' }, { css: 'body > .dropdown' });
     I.wait(2);
 
