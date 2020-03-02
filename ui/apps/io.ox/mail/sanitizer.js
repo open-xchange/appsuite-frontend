@@ -29,7 +29,9 @@ define('io.ox/mail/sanitizer', [
             switch (rule.type) {
                 // standard css rules
                 case 1:
-                    return '.mail-detail-content ' + rule.cssText;
+                    //avoid double prefix if someone decides to sanitize this twice
+                    var prefix = rule.cssText.indexOf('.mail-detail-content ') > -1 ? '' : '.mail-detail-content ';
+                    return prefix + rule.cssText;
                 // media rules
                 case 4:
                     var innerRules = '';
