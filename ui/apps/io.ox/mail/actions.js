@@ -458,6 +458,16 @@ define('io.ox/mail/actions', [
             // mappings for different invokation sources
             var files = baton.list || baton.array(),
                 selection =  baton.array()[0];
+
+            if (selection && selection.security && selection.security.authentication) {
+                // copy security auth to all files in the list
+                _(files).each(function (file) {
+                    // decrypted but missing auth?, add it
+                    if (file && file.security && file.security.decrypted && !file.security.authentication) {
+                        file.security.authentication = selection.security.authentication;
+                    }
+                });
+            }
             ox.load(['io.ox/mail/actions/viewer']).done(function (action) {
                 action({
                     files: files,
