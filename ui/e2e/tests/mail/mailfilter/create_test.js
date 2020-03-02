@@ -397,7 +397,7 @@ Scenario('Filter mail using validated size', async function (I) {
 
     // invalid
     I.say('Enter valid value for GB');
-    I.fillField('sizeValue', '2');
+    I.fillField('sizeValue', '1');
     I.waitForElement(enabledButton);
 });
 

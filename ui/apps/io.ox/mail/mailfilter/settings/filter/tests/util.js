@@ -22,6 +22,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
 
     'use strict';
 
+    // prevent values that cause int32 overflow on mw
     var SIZELIMITS = { 'B': 2147483648, 'K': 2097152, 'M': 2048, 'G': 2 };
 
     var DropdownLinkView = mini.DropdownLinkView.extend({
@@ -37,7 +38,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
             var unit = this.model.get('unit');
             return /^[0-9]+$/.test(this.$el.val()) &&
                 parseInt(this.$el.val(), 10) >= 0 &&
-                parseInt(this.$el.val(), 10) <= SIZELIMITS[unit];
+                parseInt(this.$el.val(), 10) < SIZELIMITS[unit];
         },
 
         onChange: function () {
