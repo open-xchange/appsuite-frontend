@@ -189,7 +189,7 @@ define('io.ox/calendar/model', [
             }
             if (this.get('interval') > 1) args.push('INTERVAL=' + this.get('interval'));
             // when this is an allday appointment the util part of an rrule must not have a Time
-            if (this.get('until')) args.push(util.isAllday(this.model) ? 'UNTIL=' + moment(this.get('until')).format('YYYYMMDD') : 'UNTIL=' + moment(this.get('until')).utc().endOf('day').format(util.ZULU_FORMAT));
+            if (this.get('until')) args.push(util.isAllday(this.model) ? 'UNTIL=' + moment(this.get('until')).format('YYYYMMDD') : 'UNTIL=' + moment(this.get('until')).endOf('day').format(util.ZULU_FORMAT));
             if (this.get('occurrences')) args.push('COUNT=' + this.get('occurrences'));
             if (args.length > 0) this.model.set('rrule', args.join(';'));
             else this.model.set('rrule', null);
