@@ -28,7 +28,8 @@ define('io.ox/calendar/settings/defaults', function () {
         notifyAcceptedDeclinedAsParticipant: false,
         deleteInvitationMailAfterAction: true,
         numDaysWorkweek: 5,
-        workweekStart: 1 // 0 = sunday, 1 = monday ...
+        workweekStart: 1, // 0 = sunday, 1 = monday ...
+        showPastReminders: true
     };
 
     return settingsDefaults;
