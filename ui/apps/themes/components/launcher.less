@@ -396,13 +396,11 @@
         cursor: pointer;
 
         .title {
-            position: absolute;
-            top: 75%;
-            left: 0;
             color: @launcher-fg;
             font-size: @launcher-text-size;
             text-align: center;
             width: @launcher-size;
+            margin-bottom: 7px;
             .smartphone & {
                 font-size: 14px;
                 top: 70%;
@@ -431,7 +429,7 @@
         }
         .icon {
             width: @svg-wrap-size;
-            height: 100%;
+            flex: 1;
             // no icons on smartphone as it is a dropdown there
 
         }
