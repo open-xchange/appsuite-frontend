@@ -230,6 +230,26 @@ define('io.ox/core/folder/extensions', [
         }
     }
 
+    function openSubscriptionForSharedDialog(e) {
+        require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
+            var module = e.data.baton.module,
+                isContact = module === 'contacts';
+
+            subscribe.open({
+                module: module,
+                help: isContact ? 'ox.appsuite.user.sect.contacts.folder.usedforsync.html' : 'ox.appsuite.user.sect.tasks.folder.usedforsync.html',
+                title: isContact ? gt('Shared address books') : gt('Shared task folders'),
+                point: isContact ? 'io.ox/core/folder/subscribe-shared-address-books' : 'io.ox/core/folder/subscribe-shared-tasks-folders',
+                sections: {
+                    public: isContact ? gt('Public address books') : gt('Public tasks folders'),
+                    shared: isContact ? gt('Shared address books') : gt('Shared tasks folders'),
+                    private: gt('Private'),
+                    hidden: isContact ? gt('Hidden address books') : gt('Hidden tasks folders')
+                }
+            });
+        });
+    }
+
     var extensions = {
 
         unifiedFolders: function (tree) {
@@ -402,6 +422,23 @@ define('io.ox/core/folder/extensions', [
                     )
                 );
             });
+        },
+
+        subscribeShared: function (baton) {
+            if (baton.extension.capabilities && !upsell.visible(baton.extension.capabilities)) return;
+            var self = this, title;
+
+            if (baton.module === 'contacts') {
+                title = gt('Subscribe to shared address book');
+            } else {
+                return;
+            }
+
+            self.append(
+                $('<li role="presentation">').append(
+                    $('<a href="#" data-action="subscribe-external-account" role="treeitem">').text(title).on('click', { baton: baton }, openSubscriptionForSharedDialog)
+                )
+            );
         },
 
         treeLinks: function () {
@@ -712,6 +749,12 @@ define('io.ox/core/folder/extensions', [
             draw: extensions.subscribe
         },
         {
+            id: 'subscribeShared',
+            index: 350,
+            capabilities: ['subscription'],
+            draw: extensions.subscribeShared
+        },
+        {
             id: 'my-contact-data',
             index: 400,
             draw: extensions.myContactData
@@ -849,6 +892,29 @@ define('io.ox/core/folder/extensions', [
                 }
             });
         }
+
+        if (module === 'tasks') {
+            ext.point('io.ox/core/foldertree/' + module + '/links').extend({
+                index: 250,
+                id: 'shared',
+                draw: function (baton) {
+                    if (baton.context !== 'app') return;
+
+                    var module = baton.module,
+                        folder = api.getDefaultFolder(module),
+                        title = gt('Subscribe shared folder');
+
+                    // guests might have no default folder
+                    if (!folder) return;
+
+                    this.append(
+                        $('<li role="presentation">').append(
+                            $('<a href="#" data-action="add-subfolder" role="treeitem">').text(title).on('click', { baton: baton }, openSubscriptionForSharedDialog)
+                        )
+                    );
+                }
+            });
+        }
     });
 
     //
@@ -920,8 +986,19 @@ define('io.ox/core/folder/extensions', [
         index: 500,
         draw: function () {
             this.link('shared', gt('Subscribe shared Calendar'), function () {
-                require(['io.ox/calendar/actions/subscribe-shared'], function (subscribe) {
-                    subscribe.open();
+                require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
+                    subscribe.open({
+                        module: 'calendar',
+                        help: 'ox.appsuite.user.sect.calendar.folder.usedforsync.html',
+                        title: gt('Subscribe shared calendars'),
+                        point: 'io.ox/core/folder/subscribe-shared-calendar',
+                        sections: {
+                            public: gt('Public calendars'),
+                            shared: gt('Shared calendars'),
+                            private: gt('Private'),
+                            hidden: gt('Hidden calendars')
+                        }
+                    });
                 });
             });
         }

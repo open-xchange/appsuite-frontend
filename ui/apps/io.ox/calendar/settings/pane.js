@@ -296,8 +296,19 @@ define('io.ox/calendar/settings/pane', [
             index: 100,
             render: function () {
                 function openDialog() {
-                    require(['io.ox/calendar/actions/subscribe-shared'], function (subscribe) {
-                        subscribe.open();
+                    require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
+                        subscribe.open({
+                            module: 'calendar',
+                            help: 'ox.appsuite.user.sect.calendar.folder.usedforsync.html',
+                            title: gt('Subscribe shared calendars'),
+                            point: 'io.ox/core/folder/subscribe-shared-calendar',
+                            sections: {
+                                public: gt('Public calendars'),
+                                shared: gt('Shared calendars'),
+                                private: gt('Private'),
+                                hidden: gt('Hidden calendars')
+                            }
+                        });
                     });
                 }
 
