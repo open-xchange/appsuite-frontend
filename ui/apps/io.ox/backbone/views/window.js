@@ -606,7 +606,7 @@ define('io.ox/backbone/views/window', [
 
             model.once('quit', function () { app.quit(); });
             app.once('quit', function () { model.trigger('close'); });
-            app.on('docs:beforequit', function () { win.off('hide show', toggleNonFloating); });
+            app.on('app:deregistertaskbar', function () { win.off('hide show', toggleNonFloating); });
             win.on('quit', function () { win.off('hide show', toggleNonFloating); });
         }
 

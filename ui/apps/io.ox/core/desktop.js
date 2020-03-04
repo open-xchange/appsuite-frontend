@@ -560,7 +560,7 @@ define('io.ox/core/desktop', [
                         self.trigger('launch', self);
                         ox.trigger('app:start', self);
                         // add cloasable apps that don't use floating windows to the taskbar
-                        if (self.get('closable') && !self.get('floating') && !_.device('smartphone')) FloatingWindow.addNonFloatingApp(self);
+                        if (self.get('closable') && !self.get('floating') && !_.device('smartphone')) FloatingWindow.addNonFloatingApp(self, options);
                     },
                     function fail() {
                         var autoStart = require('settings!io.ox/core').get('autoStart');
