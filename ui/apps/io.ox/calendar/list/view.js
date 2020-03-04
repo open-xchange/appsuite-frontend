@@ -21,11 +21,11 @@ define('io.ox/calendar/list/view', [
     'io.ox/calendar/util',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/list/style'
-], function (ext, actionsUtil, api, folderAPI, PerspectiveView, viewDetail, util, gt) {
+], function (ext, actionsUtil, api, folderAPI, perspective, viewDetail, util, gt) {
 
     'use strict';
 
-    return PerspectiveView.extend({
+    return perspective.View.extend({
 
         events: {},
 
@@ -99,7 +99,7 @@ define('io.ox/calendar/list/view', [
 
             app.listView.load();
 
-            PerspectiveView.prototype.initialize.call(this, opt);
+            perspective.View.prototype.initialize.call(this, opt);
         },
 
         onUpdateFolders: function (folders) {

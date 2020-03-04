@@ -148,7 +148,7 @@ Scenario.skip('[C236795] Visibility Flags', (I, calendar) => {
     const createAppointment = (subject, startDate, startTime, visibility) => {
         I.clickToolbar('New appointment');
         I.waitForVisible('.io-ox-calendar-edit-window');
-        I.fillField('Subject', subject);
+        I.retry(5).fillField('Subject', subject);
         calendar.setDate('startDate', startDate);
         I.click('~Start time');
         I.click(startTime);
@@ -275,7 +275,7 @@ Scenario.skip('[C244785] Open event from invite notification in calendar', async
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.fillField('Subject', 'Totally nerdy event');
+    I.retry(5).fillField('Subject', 'Totally nerdy event');
 
     const startTime = moment().add(10, 'minutes'),
         endTime = moment().add(70, 'minutes');
@@ -370,7 +370,7 @@ Scenario('[C252158] All my public appointments', (I, users) => {
     I.waitForText('Appointments in public calendar');
     I.click('Create in public calendar');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.fillField('Subject', subject);
+    I.retry(5).fillField('Subject', subject);
     I.see('Cal#A', '.io-ox-calendar-edit-window .folder-selection');
     I.click('~Start time');
     I.pressKey('Enter');
@@ -435,7 +435,7 @@ Scenario('[C265147] Appointment organizer should be marked in attendee list', as
     const subject = `${userA.userdata.name}s awesome appointment`;
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.fillField('Subject', subject);
+    I.retry(5).fillField('Subject', subject);
     const startTime = moment().add(10, 'minutes');
     I.click('~Start time');
     I.pressKey('Enter');

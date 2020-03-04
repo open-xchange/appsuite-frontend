@@ -976,7 +976,7 @@ Scenario.skip('[C7431] Create appointment via doubleclick', async function (I, c
         // there are 48 timeslots use 25th here
         I.doubleClick('.io-ox-pagecontroller.current .day .timeslot:nth-child(25)');
         I.waitForVisible('.io-ox-calendar-edit-window');
-        I.fillField('Subject', data.subject);
+        I.retry(5).fillField('Subject', data.subject);
         I.seeInField(calendar.locators.starttime, '12:00 PM');
         I.click('Create');
         I.waitForVisible({ css: '.appointment' });
@@ -992,7 +992,7 @@ Scenario.skip('[C7431] Create appointment via doubleclick', async function (I, c
     I.click('Month', '.smart-dropdown-container');
     I.retry(5).doubleClick('.io-ox-pagecontroller.current .day .list');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.fillField('Subject', data.subject);
+    I.retry(5).fillField('Subject', data.subject);
     I.click('Create');
     I.waitForVisible('.appointment', 5);
 });
@@ -1008,7 +1008,7 @@ Scenario('[C256455] Create all-day appointment via date label', async function (
     var createOnfirstDay = async function () {
         I.click('.io-ox-pagecontroller.current .weekday:first-child');
         I.waitForVisible('.io-ox-calendar-edit-window');
-        I.fillField('Subject', 'Grillen');
+        I.retry(5).fillField('Subject', 'Grillen');
         I.fillField('Location', 'Olpe');
         I.seeCheckboxIsChecked({ css: '[name="allDay"]' });
         I.seeInField({ css: '[data-attribute="startDate"] .datepicker-day-field' }, startDate.format('M/D/YYYY'));
@@ -1292,7 +1292,7 @@ Scenario('[C274406] Change organizer of appointment with external attendees', as
     I.wait(1);
     I.click('Edit');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'));
+    I.retry(5).click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'));
     I.click('Save');
 
     I.say('Check');

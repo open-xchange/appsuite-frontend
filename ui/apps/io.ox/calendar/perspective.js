@@ -24,18 +24,19 @@ define('io.ox/calendar/perspective', [
     'settings!io.ox/calendar',
     'io.ox/core/folder/api',
     'io.ox/backbone/views/disposable'
-], function (ext, api, calendarModel, util, detailView, dialogs, yell, gt, capabilities, settings, folderAPI, disposableView) {
+], function (ext, api, calendarModel, util, detailView, dialogs, yell, gt, capabilities, settings, folderAPI, DisposableView) {
 
     'use strict';
 
-    return disposableView.extend({
+    var Perspective = DisposableView.extend({
 
         clickTimer:     null, // timer to separate single and double click
         clicks:         0, // click counter
 
         events: function () {
             var events = {
-                'click .appointment': 'onClickAppointment'
+                'click .appointment': 'onClickAppointment',
+                'dblclick .appointment': 'onDoubleClick'
             };
             if (_.device('touch')) {
                 _.extend(events, {
@@ -177,43 +178,41 @@ define('io.ox/calendar/perspective', [
         },
 
         onClickAppointment: function (e) {
+            this.lock = false;
             var target = $(e[(e.type === 'keydown') ? 'target' : 'currentTarget']);
             if (target.hasClass('appointment') && !this.model.get('lasso') && !target.hasClass('disabled')) {
-                var self = this,
-                    obj = util.cid(String(target.data('cid')));
                 if (!target.hasClass('current') || _.device('smartphone')) {
-                    // ignore the "current" check on smartphones
-                    this.$('.appointment')
-                        .removeClass('current opac')
-                        .not(this.$('[data-master-id="' + obj.folder + '.' + obj.id + '"]'))
-                        .addClass((this.collection.length > this.limit || _.device('smartphone')) ? '' : 'opac'); // do not add opac class on phones or if collection is too large
-                    this.$('[data-master-id="' + obj.folder + '.' + obj.id + '"]').addClass('current');
-                    this.showAppointment(e, obj);
-
+                    _.delay(function () {
+                        if (this.lock) return;
+                        var obj = util.cid(String(target.data('cid')));
+                        // ignore the "current" check on smartphones
+                        this.$('.appointment')
+                            .removeClass('current opac')
+                            .not(this.$('[data-master-id="' + obj.folder + '.' + obj.id + '"]'))
+                            .addClass((this.collection.length > this.limit || _.device('smartphone')) ? '' : 'opac'); // do not add opac class on phones or if collection is too large
+                        this.$('[data-master-id="' + obj.folder + '.' + obj.id + '"]').addClass('current');
+                        this.showAppointment(e, obj);
+                    }.bind(this), 200);
                 } else {
                     this.$('.appointment').removeClass('opac');
                 }
-
-                if (this.clickTimer === null && this.clicks === 0) {
-                    this.clickTimer = setTimeout(function () {
-                        clearTimeout(self.clickTimer);
-                        self.clicks = 0;
-                        self.clickTimer = null;
-                    }, 300);
-                }
-                this.clicks++;
-
-                if (this.clickTimer !== null && this.clicks === 2 && target.hasClass('modify') && e.type === 'click') {
-                    clearTimeout(this.clickTimer);
-                    this.clicks = 0;
-                    this.clickTimer = null;
-                    api.get(obj).done(function (model) {
-                        if (self.dialog) self.dialog.close();
-                        ext.point('io.ox/calendar/detail/actions/edit')
-                            .invoke('action', self, new ext.Baton({ data: model.toJSON() }));
-                    });
-                }
             }
+        },
+
+        onDoubleClick: function (e) {
+            var target = $(e.currentTarget), self = this;
+            if (!target.hasClass('appointment') || this.model.get('lasso') || target.hasClass('disabled')) return;
+
+            if (!target.hasClass('modify')) return;
+
+            var obj = util.cid(String(target.data('cid')));
+
+            this.lock = true;
+            api.get(obj).done(function (model) {
+                if (self.dialog) self.dialog.close();
+                ext.point('io.ox/calendar/detail/actions/edit')
+                    .invoke('action', self, new ext.Baton({ data: model.toJSON() }));
+            });
         },
 
         createAppointment: function (data) {
@@ -378,5 +377,65 @@ define('io.ox/calendar/perspective', [
         }
 
     });
+
+    var DragHelper = DisposableView.extend({
+
+        constructor: function (opt) {
+            this.opt = _.extend({}, this.options || {}, opt);
+            Backbone.View.prototype.constructor.call(this, opt);
+        },
+
+        mouseDragHelper: function (opt) {
+            var self = this,
+                e = opt.event,
+                context = _.uniqueId('.drag-'),
+                // need this active tracker since mousemove events are throttled and may trigger the mousemove event
+                // even after the undelegate function has been called
+                active = true,
+                started = false,
+                updated = false,
+                stopped = false,
+                delay = opt.delay || 0;
+
+            if (e.which !== 1) return;
+
+            _.delay(function () {
+                if (stopped) return;
+                opt.start.call(this, opt.event);
+                started = true;
+            }.bind(this), delay);
+
+            this.delegate('mousemove' + context, opt.updateContext, _.throttle(function (e) {
+                if (!started) return;
+                if (e.which !== 1) return;
+                if (!active) return;
+                updated = true;
+                opt.update.call(self, e);
+            }, 100));
+
+            function clear() {
+                active = false;
+                self.undelegate('mousemove' + context);
+                self.undelegate('focusout' + context);
+                $(document).off('mouseup' + context);
+                if (opt.clear) opt.clear.call(self);
+            }
+
+            if (opt.clear) this.delegate('focusout' + context, clear);
+            $(document).on('mouseup' + context, function (e) {
+                stopped = true;
+                if (!started) opt.start.call(self, opt.event);
+                if (!updated) opt.update.call(self, e);
+                clear();
+                opt.end.call(self, e);
+            });
+        }
+
+    });
+
+    return {
+        View: Perspective,
+        DragHelper: DragHelper
+    };
 
 });

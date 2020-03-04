@@ -130,7 +130,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.click('Edit all future appointments', '.modal-dialog');
 
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.fillField('Subject', 'test recurring edit');
+    I.retry(5).fillField('Subject', 'test recurring edit');
     I.fillField('Location', 'invite location edit');
     I.click('Save', '.io-ox-calendar-edit-window');
 
@@ -150,7 +150,7 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'test recurring edit new');
+    I.retry(5).fillField('Subject', 'test recurring edit new');
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window');
 
@@ -167,7 +167,7 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'test recurring edit new edit');
+    I.retry(5).fillField('Subject', 'test recurring edit new edit');
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window');
 

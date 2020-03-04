@@ -61,7 +61,7 @@ Scenario('Create new appointment and check display in portal widget', async func
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'test portal widget');
+    I.retry(5).fillField('Subject', 'test portal widget');
     I.fillField('Location', 'portal widget location');
     I.fillField('.time-field', '2:00 PM');
     await calendar.setDate('startDate', day);
@@ -97,7 +97,7 @@ Scenario('Create new appointment and check display in portal widget', async func
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'second test portal widget ');
+    I.retry(5).fillField('Subject', 'second test portal widget ');
     I.fillField('Location', 'second portal widget location');
     I.fillField('.time-field', '2:00 PM');
     await calendar.setDate('startDate', day);

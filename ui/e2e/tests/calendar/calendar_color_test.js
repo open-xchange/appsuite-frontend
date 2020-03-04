@@ -59,7 +59,7 @@ Scenario.skip('Create appointment and check if the color is correctly applied an
     I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/edit"]');
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.click('Appointment color', '.color-picker-dropdown');
+    I.retry(5).click('Appointment color', '.color-picker-dropdown');
     I.click('dark red');
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
@@ -77,7 +77,7 @@ Scenario.skip('Create appointment and check if the color is correctly applied an
     I.waitForText('Edit', 5, '.io-ox-sidepopup');
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.click('Appointment color', '.color-picker-dropdown');
+    I.retry(5).click('Appointment color', '.color-picker-dropdown');
     I.click('Use calendar color');
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
@@ -134,7 +134,7 @@ Scenario.skip('Changing calendar color should change appointment color that uses
     I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/edit"]');
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.click('Appointment color', '.color-picker-dropdown');
+    I.retry(5).click('Appointment color', '.color-picker-dropdown');
     const [darkRed] = await I.grabCssPropertyFrom({ css: 'a[title="dark red"] > i' }, 'background-color');
     I.click('dark red');
     I.click('Save', '.io-ox-calendar-edit-window');

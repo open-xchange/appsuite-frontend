@@ -16,7 +16,7 @@ define('io.ox/calendar/year/view', [
     'io.ox/calendar/perspective',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/year/style'
-], function (Datepicker, PerspectiveView, gt) {
+], function (Datepicker, perspective, gt) {
 
     'use strict';
 
@@ -205,7 +205,7 @@ define('io.ox/calendar/year/view', [
 
     });
 
-    var View = PerspectiveView.extend({
+    var View = perspective.View.extend({
 
         className: 'year-view',
 
@@ -222,7 +222,7 @@ define('io.ox/calendar/year/view', [
             this.listenToDOM(window, 'resize', this.onWindowResize);
             this.on('show', this.onShow);
 
-            PerspectiveView.prototype.initialize.call(this, opt);
+            perspective.View.prototype.initialize.call(this, opt);
         },
 
         renderViews: function () {
