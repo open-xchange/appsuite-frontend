@@ -630,7 +630,10 @@ define('io.ox/mail/detail/content', [
                 ext.point('io.ox/mail/detail/source').invoke('process', $(), baton);
 
                 if (baton.isHTML) {
-                    baton.source = sanitizer.simpleSanitize(baton.source);
+                    baton.source = sanitizer.sanitize({
+                        content_type: 'text/html',
+                        content: baton.source
+                    }).content;
                     // robust constructor for large HTML -- no jQuery here to avoid its caches
                     content = document.createElement('HTML');
                     content.innerHTML = baton.source;
