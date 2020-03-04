@@ -103,8 +103,16 @@
                 var def = $.Deferred();
                 initialization.then(
                     function success() {
-                        var tx = db.transaction('filecache', 'readonly');
-                        var request = tx.objectStore('filecache').get(name);
+                        var tx, request;
+                        try {
+                            tx = db.transaction('filecache', 'readonly');
+                            request = tx.objectStore('filecache').get(name);
+                        } catch (e) {
+                            if (ox.debug === true) {
+                                console.warn('FileCache: Cannot access IndexedDB anymore. Might be deleted in the meantime?');
+                            }
+                            return def.reject();
+                        }
                         request.onsuccess = function (e) {
                             if (!e.target.result) {
                                 def.reject();
@@ -126,8 +134,14 @@
 
             fileCache.cache = function (name, contents) {
                 initialization.done(function () {
-                    var tx = db.transaction('filecache', 'readwrite');
-                    tx.objectStore('filecache').put({ name: name, contents: contents, version: ox.version });
+                    try {
+                        var tx = db.transaction('filecache', 'readwrite');
+                        tx.objectStore('filecache').put({ name: name, contents: contents, version: ox.version });
+                    } catch (e) {
+                        if (ox.debug === true) {
+                            console.warn('FileCache: Cannot access IndexedDB anymore. Might be deleted in the meantime?');
+                        }
+                    }
                 });
             };
 
