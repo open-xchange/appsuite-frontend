@@ -1218,7 +1218,7 @@ define('io.ox/calendar/week/view', [
             }
 
             function cont(e, f) {
-                var pivot, folder, startDate, endDate;
+                var pivot, folder, startDate, endDate, startCoords = {}, deadzone = 3;
 
                 this.mouseDragHelper({
                     event: e,
@@ -1227,9 +1227,12 @@ define('io.ox/calendar/week/view', [
                         pivot = $(e.target);
                         folder = f;
                         this.$el.addClass('no-select');
+                        startCoords.x = e.pageX;
+                        startCoords.y = e.pageY;
                     },
                     update: function (e) {
                         var start = pivot, end = $(e.target), day, days = this.$('.day');
+                        if (Math.abs(startCoords.x - e.pageX) < deadzone && Math.abs(startCoords.y - e.pageY) < deadzone) return;
                         if (this.model.get('mode') === 'day') {
                             days = pivot.parent();
                             start = days.children().eq(start.index());
