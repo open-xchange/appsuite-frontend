@@ -426,7 +426,7 @@ define('io.ox/calendar/perspective', [
             $(document).on('mouseup' + context, function (e) {
                 stopped = true;
                 if (!started) opt.start.call(self, opt.event);
-                if (!updated) opt.update.call(self, e);
+                if (!updated && delay > 0) opt.update.call(self, e);
                 clear();
                 opt.end.call(self, e);
             });
