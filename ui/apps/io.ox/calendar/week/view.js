@@ -1311,7 +1311,8 @@ define('io.ox/calendar/week/view', [
             }
 
             return function (e) {
-                var pivot, node, model, startDate, endDate, startOffset, endOffset;
+                var pivot, node, model, startDate, endDate, startOffset, endOffset,
+                    startCoords = {}, deadzone = 3;
 
                 this.mouseDragHelper({
                     event: e,
@@ -1328,9 +1329,12 @@ define('io.ox/calendar/week/view', [
                         startOffset = model.getMoment('startDate').minutes() % (60 / this.model.get('gridSize'));
                         endOffset = model.getMoment('endDate').minutes() % (60 / this.model.get('gridSize'));
                         this.$el.addClass('no-select');
+                        startCoords.x = e.pageX;
+                        startCoords.y = e.pageY;
                     },
                     update: function (e) {
                         var start = pivot, end = $(e.target), day, days = this.$('.day');
+                        if (Math.abs(startCoords.x - e.pageX) < deadzone && Math.abs(startCoords.y - e.pageY) < deadzone) return;
                         if (this.model.get('mode') === 'day') {
                             days = pivot.parent();
                             start = days.children().eq(start.index());
