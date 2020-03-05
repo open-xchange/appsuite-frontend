@@ -230,7 +230,7 @@ define(['io.ox/mail/detail/content'], function (content) {
 
         it('should simplify links', function () {
             var result = process('text <a href="http://localhost/path?query" target="_blank">http://localhost/path?query</a> &lt;<a href="http://localhost/path?query" target="_blank">http://localhost/path?query</a>&gt; text');
-            expect(result.content.innerHTML).to.equal('text <a target="_blank" href="http://localhost/path?query" rel="noopener">http://localhost/path?query</a> text');
+            expect(result.content.innerHTML).to.equal('text <a href="http://localhost/path?query" target="_blank" rel="noopener">http://localhost/path?query</a> text');
         });
 
         describe('mail addresses', function () {
@@ -247,7 +247,7 @@ define(['io.ox/mail/detail/content'], function (content) {
 
             it('should skip mailto as part of a domain name', function () {
                 var result = process('<p><a href="http://mailtool.somehwere.tld">http://mailtool.somehwere.tld</a></p>');
-                expect(result.content.innerHTML).to.equal('<p><a target="_blank" href="http://mailtool.somehwere.tld" rel="noopener">http://mailtool.somehwere.tld</a></p>');
+                expect(result.content.innerHTML).to.equal('<p><a href="http://mailtool.somehwere.tld" target="_blank" rel="noopener">http://mailtool.somehwere.tld</a></p>');
             });
 
             it('should detect email addresses (text/html; &#64;)', function () {
