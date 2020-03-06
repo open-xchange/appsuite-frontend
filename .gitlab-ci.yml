@@ -40,13 +40,9 @@ stages:
 # this distributes workload onto 2 runners instead of one and basically halves build time
 lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist:
   <<: *build_ui
-  tags:
-    - openstack
 
 copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist:
   <<: *build_ui
-  tags:
-    - openstack
 
 build ui docker image:
   dependencies:
