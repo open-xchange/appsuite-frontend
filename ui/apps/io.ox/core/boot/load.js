@@ -234,7 +234,7 @@ define('io.ox/core/boot/load', [
         if (coreSettings.get('autoStart') !== 'io.ox/mail/main') return;
 
         var folder = 'default0/INBOX',
-            sort = mailSettings.get(['viewOptions', folder, 'sort'], 610);
+            sort = mailSettings.get(['viewOptions', folder, 'sort'], 661);
 
         // edge case: no prefetch if sorting is 'from-to' (need too many settings we don't have yet)
         if (sort === 'from-to') return;

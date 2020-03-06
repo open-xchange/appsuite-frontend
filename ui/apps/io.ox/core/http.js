@@ -54,6 +54,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '655': 'original_folder_id',
                 '656': 'content_type',
                 '660': 'flagged',
+                // received_date or sent_date (com.openexchange.mail.preferSentDate)
+                '661': 'date',
                 // they both add the same property; never use simultaneously!
                 '662': 'text_preview',
                 '663': 'text_preview',
@@ -1446,7 +1448,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
             mail: (function () {
 
-                var generic = '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
+                var generic = '102,600,601,602,603,604,605,606,607,608,609,610,611,614,652,656,661',
                     // original_id, original_folder_id
                     unseen = generic + ',654,655',
                     all = generic + ',X-Open-Xchange-Share-URL',

@@ -94,7 +94,7 @@ define('io.ox/mail/api', [
                 columns: '601,600,611,102',
                 extendColumns: 'io.ox/mail/api/all',
                 // received_date
-                sort: '610',
+                sort: '661',
                 order: 'desc',
                 deleted: showDeleted,
                 // allow DB cache
@@ -102,7 +102,7 @@ define('io.ox/mail/api', [
             },
             list: {
                 action: 'list',
-                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652',
+                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,661',
                 extendColumns: 'io.ox/mail/api/list'
             },
             get: {
@@ -121,7 +121,7 @@ define('io.ox/mail/api', [
                 folder: 'default0/INBOX',
                 columns: '601,600,611',
                 extendColumns: 'io.ox/mail/api/all',
-                sort: '610',
+                sort: '661',
                 order: 'desc',
                 getData: function (query, options) {
                     var map = { from: 603, to: 604, cc: 605, subject: 607, text: -1 }, composite = [];
@@ -174,7 +174,7 @@ define('io.ox/mail/api', [
         params: {
             all: function (options) {
                 if (options.sort === 'thread') {
-                    options.sort = 610;
+                    options.sort = 661;
                 }
                 return options;
             }
@@ -625,8 +625,8 @@ define('io.ox/mail/api', [
             action: 'threadedAll',
             // +flags +color_label
             columns: options.columns || '601,600,611,102',
-            sort: options.sort || '610',
-            sortKey: 'threaded-' + (options.sort || '610'),
+            sort: options.sort || '661',
+            sortKey: 'threaded-' + (options.sort || '661'),
             konfetti: true,
             order: options.order || 'desc',
             includeSent: !accountAPI.is('sent|drafts', options.folder),
@@ -1333,12 +1333,12 @@ define('io.ox/mail/api', [
                 action: 'all',
                 folder: 'default0/INBOX',
                 //received_date, id, folder_id, flags
-                columns: '610,600,601,611',
+                columns: '610,600,601,611,661',
                 // only unseen mails are interesting here!
                 unseen: 'true',
                 // any reason to see them?
                 deleted: 'false',
-                sort: '610',
+                sort: '661',
                 order: 'desc',
                 // not really sure if limit works as expected
                 // if I only fetch 10 mails and my inbox has some unread mails but the first 10 are seen
@@ -1351,14 +1351,14 @@ define('io.ox/mail/api', [
             // check most recent mail
             var recent = _(unseen).filter(function (obj) {
                 // ignore mails 'mark as deleted'
-                return obj.received_date > lastUnseenMail && (obj.flags & 2) !== 2;
+                return obj.date > lastUnseenMail && (obj.flags & 2) !== 2;
             });
 
             // Trigger even if no new mails are added to ensure read mails are removed
             api.trigger('new-mail', recent, unseen);
 
             if (recent.length > 0) {
-                lastUnseenMail = recent[0].received_date;
+                lastUnseenMail = recent[0].date;
                 api.newMailTitle(true);
             } else {
                 // if no new mail set lastUnseenMail to now, to prevent mark as unread to trigger new mail
@@ -1703,7 +1703,7 @@ define('io.ox/mail/api', [
                 folder: api.allMessagesFolder,
                 // need original_id and original_folder_id
                 columns: '600,654,655',
-                sort: '610',
+                sort: '661',
                 order: 'desc',
                 unseen: true,
                 deleted: false,
@@ -1723,7 +1723,7 @@ define('io.ox/mail/api', [
                     folder: api.allMessagesFolder,
                     // need original_id and original_folder_id
                     columns: http.defaultColumns.mail.unseen,
-                    sort: '610',
+                    sort: '661',
                     order: 'desc',
                     unseen: true,
                     deleted: false,
@@ -1737,7 +1737,7 @@ define('io.ox/mail/api', [
                     folder: params.folder,
                     categoryid: params.category_id || params.categoryid,
                     columns: http.defaultColumns.mail.all,
-                    sort: params.sort || '610',
+                    sort: params.sort || '661',
                     order: params.order || 'desc',
                     includeSent: !accountAPI.is('sent|drafts', params.folder),
                     max: (params.offset || 0) + 300,
@@ -1750,7 +1750,7 @@ define('io.ox/mail/api', [
                 folder: params.folder,
                 categoryid: params.category_id || params.categoryid,
                 columns: http.defaultColumns.mail.all,
-                sort: params.sort || '610',
+                sort: params.sort || '661',
                 order: params.order || 'desc',
                 deleted: showDeleted,
                 timezone: 'utc'

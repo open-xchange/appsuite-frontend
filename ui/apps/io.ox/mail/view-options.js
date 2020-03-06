@@ -57,7 +57,7 @@ define('io.ox/mail/view-options', [
                     if (year) {
                         start = Date.UTC(year, 0, 1);
                         end = Date.UTC(year, 11, 31);
-                        filters.push(['and', ['>', { field: 'received_date' }, String(start)], ['<', { field: 'received_date' }, String(end)]]);
+                        filters.push(['and', ['>', { field: 'date' }, String(start)], ['<', { field: 'date' }, String(end)]]);
                     }
                     if (criteria.words) {
                         _(criteria.words.split(' ')).each(function (word) {
@@ -70,16 +70,16 @@ define('io.ox/mail/view-options', [
                         });
                     }
                     if (criteria.attachment === 'true') filters.push(['=', { field: 'content_type' }, 'multipart/mixed']);
-                    if (criteria.after) filters.push(['>', { field: 'received_date' }, String(criteria.after)]);
-                    if (criteria.before) filters.push(['<', { field: 'received_date' }, String(criteria.before)]);
+                    if (criteria.after) filters.push(['>', { field: 'date' }, String(criteria.after)]);
+                    if (criteria.before) filters.push(['<', { field: 'date' }, String(criteria.before)]);
 
                     var folder = criteria.folder === 'all' ? mailAPI.allMessagesFolder : baton.app.folder.get();
 
                     return {
                         action: 'search',
                         folder: folder,
-                        columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL',
-                        sort: params.sort || '610',
+                        columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,661,X-Open-Xchange-Share-URL',
+                        sort: params.sort || '661',
                         order: params.order || 'desc',
                         timezone: 'utc',
                         data: { filter: ['and'].concat(filters) }
@@ -117,7 +117,7 @@ define('io.ox/mail/view-options', [
                 })
                 .on('search', function (criteria) {
                     listView.connect(collectionLoader);
-                    listView.model.set({ criteria: criteria, thread: false, sort: 610, order: 'desc' });
+                    listView.model.set({ criteria: criteria, thread: false, sort: 661, order: 'desc' });
                     listView.$el.parent().find('.grid-options [data-name="thread"]').addClass('disabled');
                 })
                 .on('cancel', function () {
@@ -167,7 +167,7 @@ define('io.ox/mail/view-options', [
 
             view.listenTo(baton.app, 'folder:change', onFolderChange);
 
-            view.option('sort', 610, gt('Date'), { radio: true })
+            view.option('sort', 661, gt('Date'), { radio: true })
                 .option('sort', 'from-to', account.is('sent|drafts', folder) ? gt('To') : gt('From'), { radio: true })
                 .option('sort', 651, gt('Unread'), { radio: true })
                 .option('sort', 608, gt('Size'), { radio: true })

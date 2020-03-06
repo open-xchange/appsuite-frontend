@@ -86,7 +86,7 @@ define('io.ox/mail/common-extensions', [
             //#. Color is used as a noun
             //#. %1$s - color name, used to describe a mail that has a color flag
             if (baton.data.color_label && settings.get('features/flag/color')) parts.push(gt('Color %1$s', flagPicker.colorName(baton.data.color_label)));
-            parts.push(util.getDisplayName(fromlist[0]), data.subject, util.getTime(data.received_date));
+            parts.push(util.getDisplayName(fromlist[0]), data.subject, util.getTime(data.date));
             if (size > 1) parts.push(gt.format('Thread contains %1$d messages', size));
             if (data.attachment) parts.push(gt('has attachments'));
 
@@ -155,7 +155,7 @@ define('io.ox/mail/common-extensions', [
         },
 
         date: function (baton, options) {
-            var data = baton.data, t = data.received_date;
+            var data = baton.data, t = data.date;
             options = _.extend({
                 fulldate: baton.app && baton.app.props.get('exactDates'),
                 smart: !(baton.app && baton.app.props.get('exactDates'))
