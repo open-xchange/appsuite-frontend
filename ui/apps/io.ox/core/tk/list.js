@@ -63,16 +63,12 @@ define('io.ox/core/tk/list', [
         ),
 
         onItemFocus: function () {
-            this.$el.attr('tabindex', -1);
-            this.$el.addClass('has-focus');
+            this.toggleFocus(true);
         },
 
         onItemBlur: function () {
-            if (this.mousedown) {
-                return;
-            }
-            this.$el.attr('tabindex', 0);
-            this.$el.removeClass('has-focus');
+            if (this.mousedown) return;
+            this.toggleFocus(false);
         },
 
         onKeepFocus: function (e) {
@@ -453,12 +449,13 @@ define('io.ox/core/tk/list', [
 
             var li = this.$el.find('li[data-cid="' + $.escape(this.getCompositeKey(model)) + '"]'),
                 baton = this.getBaton(model),
-                index = model.changed.index;
+                index = model.changed.index,
+                changedKeys = _.keys(model.changed);
 
             // change position?
             if (index !== undefined) li.attr('data-index', index);
-            // draw via extensions
-            ext.point(this.ref + '/item').invoke('draw', li.children().eq(1).empty(), baton);
+            // draw via extensions but not if only the index has changed
+            if (index === undefined || changedKeys.length > 1) ext.point(this.ref + '/item').invoke('draw', li.children().eq(1).empty(), baton);
             // forward event
             this.trigger('change', model);
         },
@@ -487,6 +484,12 @@ define('io.ox/core/tk/list', [
                 swipe: false,
                 labels: false
             }, options);
+
+            this.toggleFocus = _.debounce(function (state) {
+                if (this.disposed) return;
+                this.$el.attr('tabindex', state ? -1 : 0);
+                this.$el.toggleClass('has-focus', state);
+            }, 10);
 
             var events = {}, dndEnabled = false, self = this;
 

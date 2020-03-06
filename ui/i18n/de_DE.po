@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-11-21 14:06+0100\n"
+"PO-Revision-Date: 2020-02-27 10:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -153,41 +153,41 @@ msgstr "Bei Ende Ton abspielen."
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Send mail %1$s before start."
-msgstr "E-Mail %1$s vor Start senden."
+msgstr "%1$s vor Start E-Mail senden."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Send mail %1$s after start."
-msgstr "E-Mail %1$s nach Start senden."
+msgstr "%1$s nach Start E-Mail senden."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Send mail %1$s before end."
-msgstr "E-Mail %1$s vor Ende senden."
+msgstr "%1$s vor Ende E-Mail senden."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Send mail %1$s after end."
-msgstr "E-Mail %1$s nach Ende senden."
+msgstr "%1$s nach Ende E-Mail senden."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Send mail at %1$s."
-msgstr "E-Mail am %1$s senden."
+msgstr "Am %1$s E-Mail senden."
 
 #. Used to display reminders for appointments
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Send mail at start."
-msgstr "E-Mail am Beginn senden."
+msgstr "Am Beginn E-Mail senden."
 
 #. Used to display reminders for appointments
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Send mail at end."
-msgstr "E-Mail am Ende senden."
+msgstr "Am Ende E-Mail senden."
 
 #. Used to display reminders for appointments
 #. %1$s: the reminder type, SMS etc
@@ -450,7 +450,7 @@ msgstr "Pink"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Light sky blue"
-msgstr "Helles Himmelblau"
+msgstr "helles Himmelblau"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Plum"
@@ -463,7 +463,7 @@ msgstr "Keine Farbe"
 #. title of toggle button within password field
 #: apps/io.ox/backbone/mini-views/common.js module:io.ox/core
 msgid "toggle password visibility"
-msgstr "Passwort-Sichtbarkeit umschalten"
+msgstr "Passwort-Sichtbarkeit an/aus"
 
 #: apps/io.ox/backbone/mini-views/copy-to-clipboard.js module:io.ox/core
 msgid "Copy to clipboard"
@@ -616,11 +616,11 @@ msgstr "100%"
 
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
 msgid "Drag to reorder items"
-msgstr "Zum Neusortieren der Elemente ziehen"
+msgstr "Zum Neusortieren der Objekte ziehen"
 
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
 msgid "Use cursor keys to reorder items"
-msgstr "Verwenden Sie die Pfeiltasten zum Neusortieren von Elementen"
+msgstr "Verwenden Sie die Pfeiltasten zum Neusortieren von Objekten"
 
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
 msgid "%1$s moved to position %2$s of %3$s"
@@ -656,21 +656,21 @@ msgstr "Aktionen. Verwenden Sie die Pfeiltasten zum Navigieren."
 
 #: apps/io.ox/backbone/validation.js module:io.ox/core
 msgid "Please enter a valid number"
-msgstr "Bitte geben Sie eine gültige Zahl ein."
+msgstr "Bitte geben Sie eine gültige Zahl ein"
 
 #: apps/io.ox/backbone/validation.js module:io.ox/core
 msgid "Please enter a date in the past"
-msgstr "Bitte geben Sie ein Datum in der Vergangenheit ein."
+msgstr "Bitte geben Sie ein Datum in der Vergangenheit ein"
 
 #: apps/io.ox/backbone/validation.js module:io.ox/core
 msgid "Please enter a valid email address"
-msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein"
 
 #: apps/io.ox/backbone/validation.js module:io.ox/core
 msgid "Please enter a valid phone number. Allowed characters are: %1$s"
 msgstr ""
 "Bitte geben Sie eine gültige Telefonnummer ein. Folgende Zeichen sind "
-"erlaubt: %1$s"
+"zulässig: %1$s"
 
 #: apps/io.ox/backbone/validation.js module:io.ox/core
 msgid "Please enter a valid object"
@@ -718,11 +718,11 @@ msgstr "Heute: %1$s"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 msgid "Go to previous month"
-msgstr "Zu vorherigem Monat gehen"
+msgstr "Weiter zum vorherige Monat"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 msgid "Go to next month"
-msgstr "Zu nächstem Monat gehen"
+msgstr "Weiter zum nächsten Monat"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/year/view.js module:io.ox/calendar
@@ -745,19 +745,19 @@ msgstr "KW %1$d"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 msgid "Go to previous year"
-msgstr "Zu vorherigem Jahr gehen"
+msgstr "Weiter zum vorherigen Jahr"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 msgid "Go to next year"
-msgstr "Zu nächstem Jahr gehen"
+msgstr "Weiter zum nächsten Jahr"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 msgid "Go to previous decade"
-msgstr "Zu vorherigem Jahrzehnt gehen"
+msgstr "Weiter zum vorherigen Jahrzehnt"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 msgid "Go to next decade"
-msgstr "Zu nächstem Jahrzehnt gehen"
+msgstr "Weiter zum nächsten Jahrzehnt"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 msgid "Change photo"
@@ -926,7 +926,7 @@ msgstr "Bitte geben Sie ein Datum nach dem Startdatum ein"
 
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
-msgstr "Wählen Sie bitte mindestens einen Tag"
+msgstr "Bitte wählen Sie mindestens einen Tag"
 
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Edit recurrence"
@@ -1029,7 +1029,7 @@ msgid ""
 "This appointment is part of a series. Do you want to confirm the whole "
 "series or just one appointment within the series?"
 msgstr ""
-"Dieser Termin ist Teil einer Serie. Wollen Sie die gesamte Serie oder nur "
+"Dieser Termin ist Teil einer Serie. Möchten Sie die gesamte Serie oder nur "
 "einen Termin innerhalb der Serie bestätigen?"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -1037,7 +1037,7 @@ msgid ""
 "This appointment is part of a series. Do you want to decline the whole "
 "series or just one appointment within the series?"
 msgstr ""
-"Dieser Termin ist Teil einer Serie. Wollen Sie die gesamte Serie oder nur "
+"Dieser Termin ist Teil einer Serie. Möchten Sie die gesamte Serie oder nur "
 "einen Termin innerhalb der Serie ablehnen?"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -1181,7 +1181,7 @@ msgid ""
 "confirmation for the whole series or just for this appointment within the "
 "series?"
 msgstr ""
-"Dieser Termin ist Teil einer Serie. Wollen Sie Ihre Bestätigung für die "
+"Dieser Termin ist Teil einer Serie. Möchten Sie Ihre Bestätigung für die "
 "gesamte Serie oder nur für diesen Termin innerhalb der Serie ändern?"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
@@ -1328,7 +1328,7 @@ msgid ""
 "This appointment is part of a series. Do you want to delete all appointments "
 "of the series or just this appointment?"
 msgstr ""
-"Dieser Termin ist Teil einer Serie. Wollen Sie alle Termine der Serie oder "
+"Dieser Termin ist Teil einer Serie. Möchten Sie alle Termine der Serie oder "
 "nur diesen Termin löschen?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
@@ -1336,7 +1336,7 @@ msgid ""
 "This appointment is part of a series. Do you want to delete this and all "
 "future appointments of the series or just this appointment?"
 msgstr ""
-"Dieser Termin ist Teil einer Serie. Wollen Sie diesen und alle zukünftigen "
+"Dieser Termin ist Teil einer Serie. Möchten Sie diesen und alle zukünftigen "
 "Termine der Serie oder nur diesen Termin löschen?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
@@ -1379,7 +1379,7 @@ msgstr "iCal-URL"
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Login"
-msgstr "Login"
+msgstr "Anmelden"
 
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 msgid "Your default reminders will be applied to this calendar."
@@ -1476,7 +1476,7 @@ msgstr "Privat"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden calendars"
-msgstr "Versteckte Kalender"
+msgstr "Ausgeblendete Kalender"
 
 #: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
 msgid "no color"
@@ -1584,7 +1584,7 @@ msgstr "Termin bearbeiten"
 #: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar
 msgid "Create appointment"
-msgstr "Termin erstellen"
+msgstr "Termin anlegen"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
@@ -2118,6 +2118,10 @@ msgstr "Ordner"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendar account error"
 msgstr "Kalender-Kontofehler"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+msgid "Edit accounts"
+msgstr "Konten bearbeiten"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Try again"
@@ -3052,11 +3056,11 @@ msgstr "Trennen"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Click to merge all folders into one column"
-msgstr "Klicken Sie hier, um alle Ordner in einer Spalte zusammenzuführen"
+msgstr "Zum Zusammenführen aller Ordner in einer Spalte bitte hier klicken"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Click to split all folders into separate columns"
-msgstr "Klicken Sie hier, um alle Ordner in separate Spalten aufzuteilen"
+msgstr "Zum Aufteilen aller Ordner in separate Spalten bitte hier klicken"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "%s %s, create all-day appointment"
@@ -3064,7 +3068,7 @@ msgstr "%s %s, ganztägigen Termin erstellen"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Create all-day appointment"
-msgstr "Ganztägigen Termin erstellen"
+msgstr "Ganztägigen Termin anlegen"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
@@ -3119,7 +3123,7 @@ msgstr "Neue Verteilerliste"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Add to address book"
-msgstr "Zu Adressbuch hinzufügen"
+msgstr "Zum Adressbuch hinzufügen"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -3190,6 +3194,15 @@ msgstr "Details"
 #: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 msgid "Select print layout"
 msgstr "Drucklayout wählen"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid ""
+"This dialog is limited to %1$d entries and your address book exceeds this "
+"limitation. Therefore, some entries are not listed."
+msgstr ""
+"Dieses Dialogfeld ist auf %1$d Einträge beschränkt. Ihr Adressbuch "
+"überschreitet diese Einschränkung. Daher werden einige Einträge nicht "
+"aufgeführt."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/contacts/common-extensions.js apps/io.ox/contacts/main.js
@@ -3302,12 +3315,12 @@ msgstr "Kontakt-Details"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
-msgstr "Liste anlegen"
+msgstr "Liste erstellen"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
-msgstr "Verteilerliste anlegen"
+msgstr "Verteilerliste erstellen"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
@@ -3713,7 +3726,7 @@ msgstr "Pager"
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
 msgid "Telephone primary"
-msgstr "Haupttelefon "
+msgstr "Haupttelefon"
 
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
@@ -3909,7 +3922,7 @@ msgstr "Dies ist eine ungültige E-Mail-Adresse."
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Empty name and description found."
-msgstr "Leeres Namens- und Beschreibungsfeld "
+msgstr "Leeres Namens- und Beschreibungsfeld"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Edit to set a name."
@@ -4189,7 +4202,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid "Click to add photo"
-msgstr "Klicken, um Foto hinzuzufügen"
+msgstr "Zum Hinzufügen eines Fotos bitte hier klicken"
 
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
@@ -4203,15 +4216,15 @@ msgstr "Server-Version"
 
 #: apps/io.ox/core/api/attachment.js module:io.ox/core
 msgid "Saved appointment attachment"
-msgstr "Termin-Anhang wurde gespeichert"
+msgstr "Terminanhang wurde gespeichert"
 
 #: apps/io.ox/core/api/attachment.js module:io.ox/core
 msgid "Saved task attachment"
-msgstr "Aufgaben-Anhang wurde gespeichert"
+msgstr "Aufgabenanhang wurde gespeichert"
 
 #: apps/io.ox/core/api/attachment.js module:io.ox/core
 msgid "Saved contact attachment"
-msgstr "Kontakt-Anhang wurde gespeichert"
+msgstr "Kontaktanhang wurde gespeichert"
 
 #: apps/io.ox/core/api/attachment.js module:io.ox/core
 msgid "Saved attachment"
@@ -4219,7 +4232,7 @@ msgstr "Anhang wurde gespeichert"
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
-msgstr "Vorschau umschalten"
+msgstr "Vorschau an/aus"
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
@@ -4420,7 +4433,7 @@ msgstr "Auswahl-Details"
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
 #: module:io.ox/files
 msgid "No elements selected"
-msgstr "Keine Elemente markiert"
+msgstr "Keine Objekte markiert"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Results"
@@ -4478,7 +4491,7 @@ msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
 msgstr ""
-"Applikation konnte nicht gestartet werden. Vielleicht haben Sie "
+"Die Applikation konnte nicht gestartet werden. Vielleicht haben Sie "
 "Verbindungsprobleme. Bitte versuchen Sie es erneut."
 
 #: apps/io.ox/core/download.js module:io.ox/core
@@ -4782,7 +4795,7 @@ msgid ""
 "Could not delete folder. This can be due to insufficient permissions in your "
 "trash folder or this might be a special folder that cannot be deleted."
 msgstr ""
-"Ordner konnte nicht gelöscht werden. Dies kann an unzureichenden "
+"Der Ordner konnte nicht gelöscht werden. Dies kann an unzureichenden "
 "Berechtigungen für Ihren Papierkorb liegen oder es handelt sich um einen "
 "speziellen Ordner, der nicht gelöscht werden kann."
 
@@ -4846,7 +4859,7 @@ msgstr "Alle meine öffentlichen Termine"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 msgid "Accessing global address book is not permitted"
-msgstr "Der Zugriff auf das globale Adressbuch ist nicht erlaubt"
+msgstr "Der Zugriff auf das globale Adressbuch ist nicht zulässig"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 msgid ""
@@ -4934,7 +4947,7 @@ msgstr "Anzeigen"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Hide"
-msgstr "Nicht anzeigen"
+msgstr "Ausblenden"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Refresh this calendar"
@@ -5004,7 +5017,7 @@ msgstr "Freigegebene Aufgaben"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden tasks"
-msgstr "Versteckte Aufgaben"
+msgstr "Ausgeblendete Aufgaben"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Personal calendar"
@@ -5146,7 +5159,7 @@ msgstr "Vorhandene Termine ignorieren"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Ignore existing events"
-msgstr "Vorhandene Ereignisse ignorieren."
+msgstr "Vorhandene Ereignisse ignorieren"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Note on CSV files:"
@@ -5158,7 +5171,7 @@ msgid ""
 "Supported separators are comma and semi-colon."
 msgstr ""
 "Der erste Eintrag einer gültigen CSV-Datei muss passende Spaltennamen "
-"definieren. Unterstütztes Trennzeichen ist das Komma und das Semikolon."
+"definieren. Unterstützte Trennzeichen sind das Komma und das Semikolon."
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Learn more"
@@ -5463,8 +5476,8 @@ msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
 msgstr ""
-"Der Ordner namens \"%1$s\" wird versteckt. Zum Zugreifen auf diesen Ordner "
-"müssen Sie die Einstellung \"Versteckte Dateien und Ordner anzeigen\" "
+"Der Ordner namens \"%1$s\" wird ausgeblendet. Zum Zugreifen auf diesen "
+"Ordner müssen Sie die Einstellung \"Versteckte Dateien und Ordner anzeigen\" "
 "aktivieren."
 
 #: apps/io.ox/core/media-devices.js module:io.ox/core
@@ -5677,7 +5690,7 @@ msgstr "Benutzer/Gruppe hinzufügen"
 #. error message when selected user or group can not be used
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "This is not a valid user or group."
-msgstr "Benutzer bzw. Gruppe ist ungültig"
+msgstr "Der Benutzer bzw. die Gruppe ist ungültig."
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -5728,7 +5741,7 @@ msgstr "Bitte geben Sie ein korrektes Passwort ein"
 
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Failed to sign in"
-msgstr "Anmelden ist fehlgeschlagen"
+msgstr "Das Anmelden ist fehlgeschlagen"
 
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your IP address has changed"
@@ -5850,7 +5863,7 @@ msgstr "Fehleranalyse"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Show request body"
-msgstr "Anfragetext einblenden"
+msgstr "Anfragetext anzeigen"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
@@ -5858,7 +5871,7 @@ msgstr "Anfrage-Body ausblenden"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Show stack trace"
-msgstr "Stacktrace einblenden"
+msgstr "Stacktrace anzeigen"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide stack trace"
@@ -6164,7 +6177,7 @@ msgid ""
 "the background. Only one refresh per subscription and per session is allowed."
 msgstr ""
 "Eine Aktualisierung nimmt einige Zeit in Anspruch und läuft im Hintergrund "
-"ab. Pro Abonnement und Sitzung ist nur eine Aktualisierung erlaubt."
+"ab. Pro Abonnement und Sitzung ist nur eine Aktualisierung zulässig."
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid ""
@@ -6355,7 +6368,7 @@ msgstr "Erinnerung für Aufgabe %1$s."
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, c-format
 msgid "Reminder for appointment %1$s."
-msgstr "Erinnerung für Termin %1$s"
+msgstr "Erinnerung für Termin %1$s."
 
 #: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
@@ -6408,7 +6421,7 @@ msgstr ""
 #. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
-msgstr "%1$s, %2$s hinzugefügt."
+msgstr "%1$s, %2$s wurde hinzugefügt."
 
 #. %1$s is the display name of an added user or mail recipient
 #. %1$s is the added search query
@@ -6842,7 +6855,7 @@ msgstr "Nächste Seite"
 
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
-msgstr "Zum Abspielen der Audio-Datei bitte klicken"
+msgstr "Zum Abspielen der Audio-Datei bitte hier klicken"
 
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
@@ -6914,8 +6927,8 @@ msgstr "Für dieses Bild ist leider keine Voransicht verfügbar."
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 msgid "An error occurred loading the document so it cannot be displayed."
 msgstr ""
-"Beim Laden des Dokuments ist ein Fehler aufgetreten. Es kann nicht angezeigt "
-"werden."
+"Beim Laden des Dokuments ist ein Fehler aufgetreten, sodass es nicht "
+"angezeigt werden kann."
 
 #: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this file."
@@ -7575,7 +7588,7 @@ msgstr "Erweiterte Einstellungen"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Show hidden files and folders"
-msgstr "Versteckte Dateien und Ordner anzeigen"
+msgstr "Ausgeblendete Dateien und Ordner anzeigen"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "File version history"
@@ -7671,7 +7684,7 @@ msgstr "Interne Benutzer"
 
 #: apps/io.ox/files/share/model.js module:io.ox/core
 msgid "Please set password"
-msgstr "Legen Sie bitte ein Passwort fest"
+msgstr "Bitte legen Sie ein Passwort fest"
 
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -7883,7 +7896,7 @@ msgstr "ein Jahr"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Expires in"
-msgstr "Läuft ab in "
+msgstr "Läuft ab in"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 #: apps/io.ox/settings/security/certificates/settings/utils.js
@@ -8118,7 +8131,7 @@ msgid ""
 "The unrecoverable items have been cleaned up successfully. Please refresh "
 "this page to see the changes."
 msgstr ""
-"Die nicht wiederherstellbaren Objekte wurden erfolgreich aufgeräumt. Bitte "
+"Die nicht wiederherstellbaren Objekte wurden erfolgreich bereinigt. Bitte "
 "aktualisieren Sie die Seite, um die Änderungen zu sehen."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
@@ -8197,7 +8210,7 @@ msgstr "Ihr Passwort"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your credentials will be sent over a secure connection only"
 msgstr ""
-"Ihre Anmeldedaten werden ausschließlich über eine sichere Verbindung gesendet"
+"Ihre Zugangsdaten werden ausschließlich über eine sichere Verbindung gesendet"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -8210,7 +8223,7 @@ msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Failed to connect."
-msgstr "Verbindung ist fehlgeschlagen"
+msgstr "Die Verbindung ist fehlgeschlagen."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Manual"
@@ -8493,8 +8506,8 @@ msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
-"Die Datei \"%1$s\" kann nicht hochgeladen werden, da sie die maximale "
-"Dateigröße von %2$s überschreitet."
+"Die Datei \"%1$s\" kann nicht hochgeladen werden. Sie überschreitet die "
+"maximale Dateigröße von %2$s."
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -8509,8 +8522,8 @@ msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
 msgstr ""
-"Die Datei \"%1$s\" kann nicht hochgeladen werden, da sie das Infostore-"
-"Kontingentlimit von %2$s überschreitet"
+"Die Datei \"%1$s\" kann nicht hochgeladen werden. Sie überschreitet das "
+"Infostore-Kontingentlimit von %2$s."
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -8942,6 +8955,12 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Antw. an"
 
+#. %s is a list of filenames separeted by commas
+#. it is used by screenreaders to indicate which files are currently added to the list of attachments
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Added %s to attachments."
+msgstr "%s zu Anhängen hinzugefügt."
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Namen anzeigen"
@@ -8972,12 +8991,12 @@ msgstr ""
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js
 msgid "Show carbon copy input field"
-msgstr "Cc-Eingabefeld anzeigen"
+msgstr "CC-Eingabefeld anzeigen"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js
 msgid "Show blind carbon copy input field"
-msgstr "Bcc-Eingabefeld anzeigen"
+msgstr "BCC-Eingabefeld anzeigen"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Drop attachments here"
@@ -8986,12 +9005,6 @@ msgstr "Anhänge hier ablegen"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Mail size: %1$s"
 msgstr "E-Mail-Größe: %1$s"
-
-#. %s is a list of filenames separeted by commas
-#. it is used by screenreaders to indicate which files are currently added to the list of attachments
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Added %s to attachments."
-msgstr "%s zu Anhängen hinzugefügt."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add local file"
@@ -9018,7 +9031,7 @@ msgstr "Einfügen"
 
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
 msgid "Please select a valid image File to insert"
-msgstr "Wählen Sie bitte eine gültige Bild-Datei zum Einfügen."
+msgstr "Bitte wählen Sie eine gültige Bild-Datei zum Einfügen."
 
 #. %s is the product name
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
@@ -10155,7 +10168,7 @@ msgstr "Keine Nachricht markiert"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "%1$d message selected"
 msgid_plural "%1$d messages selected"
-msgstr[0] "%1$d Nachrichten markiert"
+msgstr[0] "%1$d Nachricht markiert"
 msgstr[1] "%1$d Nachrichten markiert"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -10843,7 +10856,7 @@ msgstr "Scannen Sie den QR-Code mit Ihrem Authentifikator."
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
 msgid "Click to copy URL to clipboard"
-msgstr "Klicken Sie, um die URL in die Zwischenablage zu kopieren"
+msgstr "Zum Kopieren der URL in die Zwischenablage bitte hier klicken"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
@@ -10915,7 +10928,7 @@ msgstr "Zwei-Faktor-Authentifizierung wählen"
 msgid "Please select a device to use for additional authentication"
 msgstr ""
 "Bitte wählen Sie ein Gerät aus, das Sie für eine zusätzliche "
-"Authentifizierung verwenden können."
+"Authentifizierung verwenden können"
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
 msgid "New code sent."
@@ -10991,8 +11004,8 @@ msgstr "Zeitüberschreitung"
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "Error authenticating. Please reload browser and try again."
 msgstr ""
-"Fehler bei der Authentifizierung. Bitte aktualisieren Sie die Webseite und "
-"versuchen Sie es erneut."
+"Fehler bei der Authentifizierung. Laden Sie den Browser neu und versuchen "
+"Sie es erneut."
 
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
 msgid "Topics"
@@ -11479,7 +11492,7 @@ msgstr "Feldeintrag löschen"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
-msgstr "Es wurden mehr als die derzeit angezeigten %1$s Elemente gefunden."
+msgstr "Es wurden mehr als die derzeit angezeigten %1$s Objekte gefunden."
 
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "Allow connections with untrusted certificates"
@@ -11502,7 +11515,7 @@ msgid ""
 "accounts might stop working. In this case, you can use your old password to "
 "recover all account passwords."
 msgstr ""
-"Aus Sicherheitsgründen sind alle Anmeldedaten mit dem Passwort Ihres "
+"Aus Sicherheitsgründen sind alle Zugangsdaten mit dem Passwort Ihres "
 "primären Kontos verschlüsselt. Wenn Sie Ihr primäres Passwort ändern, "
 "funktionieren Ihre externen Konten eventuell nicht mehr. In diesem Fall "
 "können Sie Ihr altes Passwort zum Wiederherstellen aller Konto-Passwörter "
@@ -11832,7 +11845,7 @@ msgstr "Zertifikatsdetails"
 #: apps/io.ox/settings/security/certificates/settings/utils.js
 #: module:io.ox/settings/certificates
 msgid "Trust certificate"
-msgstr "Zertifikat trauen"
+msgstr "Zertifikat vertrauen"
 
 #. Context: Session Management. Active session on platform/os.
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
@@ -12294,11 +12307,11 @@ msgstr "Die Kosten dürfen nur zwei Dezimalstellen haben."
 msgid "Progress must be a valid number between 0 and 100"
 msgstr ""
 "Der Fortschritt muss mit einer gültigen Ziffer zwischen 0 und 100 angegeben "
-"werden."
+"werden"
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Recurring tasks need a valid start date."
-msgstr "Serienaufgaben benötigen ein gültiges Startdatum"
+msgstr "Serienaufgaben benötigen ein gültiges Startdatum."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Recurring tasks need a valid due date."
@@ -12528,7 +12541,7 @@ msgid ""
 "You can now add additional verification options to enhance the security of "
 "your account."
 msgstr ""
-"Sie können nun zusätzliche Verifizierungsmöglichkeiten hinzufügen, um die "
+"Sie können nun zusätzliche Verifizierungsoptionen hinzufügen, um die "
 "Sicherheit Ihres Kontos zu erhöhen."
 
 #. %1$s is the product name, e.g. OX App Suite
@@ -12696,25 +12709,43 @@ msgid "It's awesome"
 msgstr "Ist super"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "%1$d of 5 stars"
-msgstr "%1$d von 5 Sternen"
+msgid "What is the primary reason for your score?"
+msgstr "Was ist der Hauptgrund für Ihre Wertung?"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Not likely at all"
-msgstr "Sehr unwahrscheinlich"
+msgid "How can we improve your experience?"
+msgstr "Wie können wir Ihr Nutzungserlebnis verbessern?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Which features do you value or use the most?"
+msgstr "Welche Funktionen schätzen oder nutzen Sie am meisten?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "What is the one thing we could do to make you happier?"
+msgstr "Mit welcher Maßnahme können wir Ihr Nutzungserlebnis verbessern?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "%1$d of 5 stars"
+msgstr "%1$d von 5 Sternen"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "%1$d of 10 points."
 msgstr "%1$d von 10 Punkten."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Extremely likely"
+msgid "Not likely at all"
+msgstr "Sehr unwahrscheinlich"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Very likely"
 msgstr "Sehr wahrscheinlich"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How likely is it that you would recommend %1$s to a friend?"
-msgstr "Wie wahrscheinlich ist es, dass Sie %1$s einem Freund weiterempfehlen?"
+msgid "How likely are you to recommend %1$s to a friend or colleague?"
+msgstr ""
+"Wie wahrscheinlich ist es, dass Sie %1$s einem Freund oder Kollegen "
+"weiterempfehlen?"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Please rate this product"
@@ -12724,10 +12755,9 @@ msgstr "Bitte bewerten Sie dieses Produkt"
 msgid "Please rate the following application:"
 msgstr "Bitte bewerten Sie die folgende Applikation:"
 
-#. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How do you like %1$s?"
-msgstr "Wie gefällt Ihnen %1$s?"
+msgid "We appreciate your feedback"
+msgstr "Wir freuen uns über Ihr Feedback"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Comments and suggestions"
@@ -12744,7 +12774,7 @@ msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Please select a rating."
-msgstr "Wählen Sie bitte eine Bewertung."
+msgstr "Bitte wählen Sie eine Bewertung."
 
 #. popup info message
 #: apps/plugins/core/feedback/register.js module:io.ox/core
@@ -12906,12 +12936,12 @@ msgstr "Alle Erinnerungen entfernen"
 #. Reminders (notifications) about appointments
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 msgid "Appointment reminders"
-msgstr "Termin-Erinnerungen"
+msgstr "Terminerinnerungen"
 
 #. Title of generic desktop notification about new reminders for appointments
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 msgid "New appointment reminders"
-msgstr "Neue Termin-Erinnerungen"
+msgstr "Neue Terminerinnerungen"
 
 #. Body text of generic desktop notification about new reminders for appointments
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
@@ -12921,7 +12951,7 @@ msgstr "Sie haben neue Terminerinnerungen"
 #. Title of the desktop notification about new reminder for a specific appointment
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 msgid "New appointment reminder"
-msgstr "Neue Termin-Erinnerung"
+msgstr "Neue Terminerinnerung"
 
 #. Reminders (notifications) about appointments
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
@@ -12941,7 +12971,7 @@ msgstr "Termin-Einladungen"
 #. Title of the desktop notification about new invitation to a specific appointment
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 msgid "New appointment invitation"
-msgstr "Neue Termin-Einladung"
+msgstr "Neue Termineinladung"
 
 #. Body text of generic desktop notification about new invitations to appointments
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
@@ -12997,12 +13027,12 @@ msgstr "Alle Benachrichtigungen für überfällige Aufgaben ausblenden."
 #. Reminders (notifications) about tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Task reminders"
-msgstr "Aufgaben-Erinnerungen"
+msgstr "Aufgabenerinnerungen"
 
 #. Title for a generic desktop notification about new reminders for tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "New task reminders"
-msgstr "Neue Aufgaben-Erinnerungen"
+msgstr "Neue Aufgabenerinnerungen"
 
 #. Content for a generic desktop notification about new reminders for tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
@@ -13012,7 +13042,7 @@ msgstr "Sie haben neue Aufgabenerinnerungen"
 #. Title for a desktop notification about a new reminder for a specific task
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "New task reminder"
-msgstr "Neue Aufgaben-Erinnerung"
+msgstr "Neue Aufgabenerinnerung"
 
 #. Reminders (notifications) about tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
@@ -13022,12 +13052,12 @@ msgstr "Alle Aufgaben-Erinnerungen ausblenden."
 #. Inviations (notifications) to tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Task invitations"
-msgstr "Aufgaben-Einladungen"
+msgstr "Aufgabeneinladungen"
 
 #. Title for a generic desktop notification about new invitations to tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "New task invitations"
-msgstr "Neue Aufgaben-Einladungen"
+msgstr "Neue Aufgabeneinladungen"
 
 #. Content for a generic desktop notification about new invitations to tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
@@ -13037,7 +13067,7 @@ msgstr "Sie haben neue Aufgabeneinladungen"
 #. Title for a desktop notification about a new invitation to a specific task
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "New task invitation"
-msgstr "Neue Aufgaben-Einladung"
+msgstr "Neue Aufgabeneinladung"
 
 #. Inviations (notifications) to tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
@@ -13094,7 +13124,7 @@ msgstr "Es wurde kein Benutzer mit dem angegebenen Namen gefunden."
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Edit Flickr photo stream"
-msgstr "Flickr Foto-Stream bearbeiten"
+msgstr "Flickr Fotostream bearbeiten"
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Search photos"
@@ -13147,7 +13177,7 @@ msgstr "%s herunterladen"
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Please use the \"Connect your device\" wizard to download %s"
 msgstr ""
-"Verwenden Sie bitte den Assistenten \"Ihr Gerät verbinden\" zum "
+"Bitte verwenden Sie den Assistenten \"Ihr Gerät verbinden\" zum "
 "Herunterladen von %s"
 
 #. Product name will be inserted to advertise the product. I.e. "Get OX Drive" but meant in terms of gettings a piece of software from a online store
@@ -13201,7 +13231,7 @@ msgstr "Meine neuesten Dateien"
 
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "No files have been changed recently"
-msgstr "Es wurden kürzlich keine Dateien geändert."
+msgstr "Es wurden kürzlich keine Dateien geändert"
 
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "1 file has been changed recently"
@@ -13345,7 +13375,7 @@ msgstr "Favoriten"
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet this to your followers?"
-msgstr "An Ihre Follower weiterleiten (retweet)?"
+msgstr "An Ihre Follower weiterleiten (Retweet)?"
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -13412,7 +13442,7 @@ msgstr "Passwortstärke: sehr stark"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Legendary!"
-msgstr "Passwortstärke: Legendär!"
+msgstr "Passwortstärke: legendär!"
 
 #. %1$s are some example characters
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
@@ -13555,7 +13585,7 @@ msgstr "%1$s hat das Profil aktualisiert:"
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Successfully reauthorized your %s account"
-msgstr "Ihr %s-Konto wurde erfolgreich neu autorisiert."
+msgstr "Ihr %s-Konto wurde erfolgreich neu autorisiert"
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/xing/main.js
@@ -13664,266 +13694,126 @@ msgstr "Einladen zu %s"
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
 
-#~ msgid "Selected - %1$s"
-#~ msgstr "Gewählt: %1$s"
+#~ msgid "Send SMS %1$s before start."
+#~ msgstr "%1$s vor Beginn SMS senden."
 
-#, fuzzy
-#~ msgid "%1$s Toolbar. Use cursor keys to navigate."
-#~ msgstr "%1$s-Werkzeugleiste. Verwenden Sie die Pfeiltasten zum Navigieren."
+#~ msgid "Send SMS %1$s after start."
+#~ msgstr "%1$s nach Beginn SMS senden."
 
-#, fuzzy
-#~ msgid "%1$s Toolbar. Use cursor keys to navigate"
-#~ msgstr "%1$s-Werkzeugleiste. Verwenden Sie die Pfeiltasten zum Navigieren."
+#~ msgid "Send SMS %1$s before end."
+#~ msgstr "%1$s vor Ende SMS senden."
 
-#~ msgid "Confidential"
-#~ msgstr "Vertraulich"
+#~ msgid "Send SMS %1$s after end."
+#~ msgstr "%1$s nach Ende SMS senden."
 
-#, fuzzy
-#~ msgid "Appointment is a repeating"
-#~ msgstr "Termin ist Teil einer Serie"
+#~ msgid "Send SMS at %1$s."
+#~ msgstr "Am %1$s SMS senden."
 
-#~ msgid "Recurrence"
-#~ msgstr "Wiederholung"
+#~ msgid "Send SMS at start."
+#~ msgstr "Bei Beginn SMS senden."
 
-#, fuzzy
-#~ msgid "Link will be send to %1$s "
-#~ msgstr "Der Link wird an %1$s gesendet "
+#~ msgid "Send SMS at end."
+#~ msgstr "Am Ende SMS senden."
 
-#~ msgid "%1$s Toolbar"
-#~ msgstr "%1$s-Werkzeugleiste"
+#~ msgid "Discard changes"
+#~ msgstr "Änderungen verwerfen"
 
 #~ msgid ""
-#~ "One or more attached files exceed the size limit per email. Therefore, "
-#~ "the files are not sent as attachments but kept on the server. The email "
-#~ "you have sent just contains links to download these files."
+#~ "Your current selection contains too many appointments for the chosen "
+#~ "timeframe."
 #~ msgstr ""
-#~ "Ein oder mehrere der angehängten Dateien überschreiten die "
-#~ "Größenbeschränkung pro E-Mail. Die Dateien werden deshalb nicht als "
-#~ "Anhänge gesendet, sondern auf dem Server gespeichert. Die von Ihnen "
-#~ "gesendete E-Mail enthält lediglich Links zum Herunterladen dieser Dateien."
+#~ "Ihre aktuelle Auswahl enthält zu viele Termine für den gewählten "
+#~ "Zeitrahmen."
 
-#~ msgid "Change reminder"
-#~ msgstr "Erinnerung ändern"
+#~ msgid "Appointment was changed in the meantime and was updated accordingly."
+#~ msgstr ""
+#~ "Der Termin wurde zwischenzeitlich geändert und entsprechend aktualisiert."
 
-#~ msgid "Upload local image"
-#~ msgstr "Lokales Bild hochladen"
+#~ msgid "Delete items"
+#~ msgstr "Objekte löschen"
+
+#~ msgid "Delete distribution list"
+#~ msgstr "Verteilerliste löschen"
+
+#~ msgid "Delete calendar"
+#~ msgstr "Kalender löschen"
 
 #~ msgid ""
-#~ "Let´s automatically configure your device, by clicking the button below."
+#~ "An error occurred while loading the document so it cannot be displayed."
 #~ msgstr ""
-#~ "Lassen Sie Ihr Gerät automatisch konfigurieren, indem Sie auf die "
-#~ "Schaltfläche unten klicken."
-
-#~ msgid "Show or hide actions for advanced users."
-#~ msgstr "Aktionen für fortgeschrittene Anwender ein- oder ausblenden."
-
-#~ msgid "Expert user?"
-#~ msgstr "Experte?"
-
-#~ msgid "Hide options for expert users."
-#~ msgstr "Optionen für Experten ausblenden."
-
-#~ msgid "Configure now"
-#~ msgstr "Jetzt konfigurieren"
-
-#~ msgid "Edit image"
-#~ msgstr "Bild bearbeiten"
-
-#~ msgid "Upload image"
-#~ msgstr "Bild hochladen"
-
-#~ msgid "Take photo"
-#~ msgstr "Foto machen"
-
-#~ msgid "Rotate image"
-#~ msgstr "Bild drehen"
-
-#~ msgid "Visibility Help"
-#~ msgstr "Sichtbarkeit-Hilfe"
-
-#~ msgid "The appointment is visible for all users in shared calendars."
-#~ msgstr "Der Termin ist in freigegebenen Ordnern für alle Benutzer sichtbar."
+#~ "Beim Laden des Dokuments ist ein Fehler aufgetreten, sodass es nicht "
+#~ "angezeigt werden kann."
 
 #~ msgid ""
-#~ "In shared calendars, the appointment is displayed as a simple time slot "
-#~ "for non-attending users."
+#~ "An error occurred while converting the document so it cannot be displayed."
 #~ msgstr ""
-#~ "In freigegebenen Kalendern wird der Termin für nicht teilnehmende "
-#~ "Benutzer als einfaches Zeitfenster angezeigt."
+#~ "Beim Konvertieren des Dokuments ist ein Fehler aufgetreten, sodass es "
+#~ "nicht angezeigt werden kann."
 
 #~ msgid ""
-#~ "The appointment is not visible to non-attending users in shared calendars "
-#~ "at all. The appointment is not considered for conflicts and does not "
-#~ "appear in the scheduling view. This option cannot be used, if the "
-#~ "appointment blocks resources."
+#~ "The PDF could not be exported. The file name contains invalid characters:"
 #~ msgstr ""
-#~ "Der Termin ist für nicht teilnehmende Benutzer in freigegebenen Kalendern "
-#~ "nicht sichtbar. Der Termin wird für Konflikte nicht berücksichtigt und "
-#~ "erscheint nicht in der Planungsansicht. Diese Option kann nicht verwendet "
-#~ "werden, wenn der Termin Ressourcen blockiert."
+#~ "Die PDF-Datei konnte nicht exportiert werden. Der Dateiname enthält "
+#~ "ungültige Zeichen:"
 
-#~ msgid "Create contact"
-#~ msgstr "Kontakt anlegen"
+#~ msgid "Delete previous versions"
+#~ msgstr "Vorherige Versionen löschen"
 
-#~ msgid "Some fields contain invalid data"
-#~ msgstr "Einige Felder enthalten ungültige Daten"
+#~ msgid "Delete item"
+#~ msgid_plural "Delete items"
+#~ msgstr[0] "Objekt löschen"
+#~ msgstr[1] "Objekte löschen"
 
-#~ msgid "Show all fields"
-#~ msgstr "Alle Felder anzeigen"
-
-#~ msgid "Personal"
-#~ msgstr "Persönlich"
-
-#~ msgid "Job"
-#~ msgstr "Job"
-
-#~ msgid "Mail and Messaging"
-#~ msgstr "E-Mail und Messaging"
-
-#~ msgid "Phone numbers"
-#~ msgstr "Telefonnummern"
-
-#~ msgid "Miscellaneous"
-#~ msgstr "Diverses"
-
-#~ msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-#~ msgstr ""
-#~ "Ihr gewähltes Bild überschreitet die maximal zulässige Dateigröße von %1$s"
+#~ msgid "Empty file attachment"
+#~ msgstr "Leerer Dateianhang"
 
 #~ msgid ""
-#~ "This filetype is not supported as contact picture. Only image types (JPG, "
-#~ "GIF, BMP or PNG) are supported."
+#~ "The attached file is empty. Maybe this file was deleted on your local "
+#~ "hard drive. Do you want to send it anyway?"
 #~ msgstr ""
-#~ "Dieser Dateityp wird für Kontaktbilder nicht unterstützt. Nur Bildformate "
-#~ "(JPG, GIF, BMP oder PNG) werden unterstützt."
+#~ "Die angehängte Datei ist leer. Vielleicht wurde diese Datei auf Ihrer "
+#~ "lokalen Festplatte gelöscht. Möchten Sie sie trotzdem senden?"
 
-#, fuzzy
-#~ msgid "Listview"
-#~ msgstr "Listenansicht"
+#~ msgid "Send with empty attachment"
+#~ msgstr "Mit leerem Anhang senden"
 
-#, fuzzy
-#~ msgid "Localpart"
-#~ msgstr "Lokalteil"
+#~ msgid "Delete mail"
+#~ msgstr "E-Mail löschen"
 
-#~ msgid ""
-#~ "Some settings (e.g. language and timezone) require a relogin to take "
-#~ "effect."
+#~ msgid "Marked as unread"
+#~ msgstr "Als ungelesen markiert"
+
+#~ msgid "Delete filter rule"
+#~ msgstr "Filterregel löschen"
+
+#~ msgid "Set IMAP keywords"
+#~ msgstr "IMAP-Schlüsselwörter festlegen"
+
+#~ msgid "Sign out from device"
+#~ msgstr "Vom Gerät abmelden"
+
+#~ msgctxt "tooltip"
+#~ msgid "Delete task"
+#~ msgstr "Aufgabe löschen"
+
+#~ msgid "Create Flickr photo stream"
+#~ msgstr "Flickr-Fotostream erstellen"
+
+#~ msgid "Create Tumblr feed"
+#~ msgstr "Tumblr-Feed erstellen"
+
+#~ msgid "Create a XING Account"
+#~ msgstr "XING-Konto anlegen"
+
+#~ msgid "Extremely likely"
+#~ msgstr "Sehr wahrscheinlich"
+
+#~ msgid "How likely is it that you would recommend %1$s to a friend?"
 #~ msgstr ""
-#~ "Einige Einstellungen (z.B. Sprache und Zeitzone) werden erst nach einer "
-#~ "Neuanmeldung wirksam."
+#~ "Wie wahrscheinlich ist es, dass Sie %1$s einem Freund weiterempfehlen?"
 
-#~ msgid "The setting requires a relogin to take effect."
-#~ msgstr ""
-#~ "Zum Aktivieren der Einstellung ist ein erneutes Anmelden erforderlich."
-
-#~ msgid "Relogin"
-#~ msgstr "Erneut anmelden"
-
-#~ msgid "flickr.photos.search"
-#~ msgstr "flickr.photos.search"
-
-#~ msgid "flickr.people.getPublicPhotos"
-#~ msgstr "flickr.people.getPublicPhotos"
-
-#~ msgid "Quick launch %s"
-#~ msgstr "Schnellzugriff %s"
-
-#~ msgid "Please select your mail account provider"
-#~ msgstr "Bitte wählen Sie Ihren E-Mail-Anbieter"
-
-#~ msgid ""
-#~ "This is a suspicious email because we could not verify that it is really "
-#~ "from %1$s."
-#~ msgstr ""
-#~ "Dies ist eine verdächtige E-Mail, da wir nicht verifizieren konnten, dass "
-#~ "sie tatsächlich von %1$s stammt."
-
-#~ msgid ""
-#~ "Do you want to confirm the whole series or just one appointment within "
-#~ "the series?"
-#~ msgstr ""
-#~ "Wollen Sie die komplette Serie oder einen einzelnen Termin aus der Serie "
-#~ "bestätigen?"
-
-#~ msgid ""
-#~ "Do you want to decline the whole series or just one appointment within "
-#~ "the series?"
-#~ msgstr ""
-#~ "Möchten Sie die gesamte Serie oder nur einen Termin innerhalb der Serie "
-#~ "ablehnen?"
-
-#~ msgid ""
-#~ "Do you want to delete the whole series or just this appointment within "
-#~ "the series?"
-#~ msgstr ""
-#~ "Wollen Sie die komplette Serie oder nur diesen Termin aus der Serie "
-#~ "löschen?"
-
-#~ msgid ""
-#~ "Do you want to delete this and all future appointments or just this "
-#~ "appointment within the series?"
-#~ msgstr ""
-#~ "Wollen Sie diesen Termin und alle zukünftigen Termine der Serie oder nur "
-#~ "diesen Termin aus der Serie löschen?"
-
-#~ msgid "Do you want to delete this appointment?"
-#~ msgstr "Wollen Sie diesen Termin löschen?"
-
-#~ msgid "This appointment"
-#~ msgstr "Dieser Termin"
-
-#~ msgid "All future appointments"
-#~ msgstr "Alle zukünftigen Termine"
-
-#~ msgid "Add distribution list"
-#~ msgstr "Verteilerliste hinzufügen"
-
-#~ msgid "You cannot move items to virtual folders"
-#~ msgstr "Objekte können nicht in virtuelle Ordner verschoben werden"
-
-#~ msgid "12 hours"
-#~ msgstr "12 Stunden"
-
-#~ msgid "24 hours"
-#~ msgstr "24 Stunden"
-
-#~ msgid "Sunday"
-#~ msgstr "Sonntag"
-
-#~ msgid "Monday"
-#~ msgstr "Montag"
-
-#~ msgid "Week that contains January 1st"
-#~ msgstr "Woche, die den 1. Januar enthält"
-
-#~ msgid "Week that contains the first Thursday"
-#~ msgstr "Woche, die den ersten Donnerstag enthält"
-
-#~ msgid "Numbers"
-#~ msgstr "Numerisch"
-
-#~ msgid "First day of week"
-#~ msgstr "Erster Tag der Woche"
-
-#~ msgid "First week of year"
-#~ msgstr "Erste Woche des Jahres"
-
-#~ msgid ""
-#~ "Some settings (language, timezone, theme) require a page reload or "
-#~ "relogin to take effect."
-#~ msgstr ""
-#~ "Einige Einstellungen (Sprache, Zeitzone, Design) werden erst nach dem "
-#~ "erneuten Laden der Seite oder einer Neuanmeldung wirksam."
-
-#~ msgid ""
-#~ "Some settings (language, timezone, theme) require a relogin to take "
-#~ "effect."
-#~ msgstr ""
-#~ "Einige Einstellungen (Sprache, Zeitzone, Design) werden erst nach einer "
-#~ "Neuanmeldung wirksam."
-
-#~ msgid "Your feedback"
-#~ msgstr "Ihr Feedback"
+#~ msgid "How do you like %1$s?"
+#~ msgstr "Wie gefällt Ihnen %1$s?"
 
 #~ msgid " Finished moving folder \"%1$s\""
 #~ msgstr " Verschieben des Ordners \"%1$s\" beendet"
@@ -14014,6 +13904,17 @@ msgstr "Zu %s hinzufügen"
 #, fuzzy
 #~ msgid "%1$s Press backspace to delete."
 #~ msgstr "%1$s Rücktaste zum Löschen drücken."
+
+#~ msgid "%1$s Toolbar"
+#~ msgstr "%1$s-Werkzeugleiste"
+
+#, fuzzy
+#~ msgid "%1$s Toolbar. Use cursor keys to navigate"
+#~ msgstr "%1$s-Werkzeugleiste. Verwenden Sie die Pfeiltasten zum Navigieren."
+
+#, fuzzy
+#~ msgid "%1$s Toolbar. Use cursor keys to navigate."
+#~ msgstr "%1$s-Werkzeugleiste. Verwenden Sie die Pfeiltasten zum Navigieren."
 
 #~ msgid "%1$s day"
 #~ msgstr "%1$s Tag"
@@ -14205,6 +14106,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "12 hour"
 #~ msgstr "12 Stunden"
 
+#~ msgid "12 hours"
+#~ msgstr "12 Stunden"
+
 #~ msgid "12:00"
 #~ msgstr "12:00"
 
@@ -14264,6 +14168,9 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "23:00"
 #~ msgstr "23:00"
+
+#~ msgid "24 hours"
+#~ msgstr "24 Stunden"
 
 #~ msgid "3"
 #~ msgstr "3"
@@ -14462,6 +14369,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Add cipher code"
 #~ msgstr "Verschlüsselung hinzufügen"
 
+#~ msgid "Add distribution list"
+#~ msgstr "Verteilerliste hinzufügen"
+
 #~ msgid "Add folder"
 #~ msgstr "Ordner hinzufügen"
 
@@ -14564,6 +14474,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgstr[0] "Alle Dateiversionen, die älter als 1 Tag sind, werden gelöscht"
 #~ msgstr[1] ""
 #~ "Alle Dateiversionen, die älter als %1$d Tag sind, werden gelöscht"
+
+#~ msgid "All future appointments"
+#~ msgstr "Alle zukünftigen Termine"
 
 #~ msgid "All future events"
 #~ msgstr "Alle zukünftigen Ereignisse"
@@ -14670,6 +14583,10 @@ msgstr "Zu %s hinzufügen"
 #~ msgstr ""
 #~ "Termin-Einladung. %1$s %2$s %3$s %4$s %5$s. Drücken Sie die Eingabetaste "
 #~ "zum Öffnen."
+
+#, fuzzy
+#~ msgid "Appointment is a repeating"
+#~ msgstr "Termin ist Teil einer Serie"
 
 #~ msgid "Appointment list"
 #~ msgstr "Terminliste"
@@ -15086,6 +15003,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Change folder"
 #~ msgstr "Ordner wechseln"
 
+#~ msgid "Change reminder"
+#~ msgstr "Erinnerung ändern"
+
 #~ msgid "Change start date"
 #~ msgstr "Startdatum ändern"
 
@@ -15244,8 +15164,14 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Compose new mail"
 #~ msgstr "Neue E-Mail verfassen"
 
+#~ msgid "Confidential"
+#~ msgstr "Vertraulich"
+
 #~ msgid "Configure %1$s"
 #~ msgstr "%1 konfigurieren"
+
+#~ msgid "Configure now"
+#~ msgstr "Jetzt konfigurieren"
 
 #~ msgid "Configure you inbox tabs"
 #~ msgstr "Konfigurieren Sie Ihre Posteingangs-Tabs"
@@ -15356,6 +15282,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr ""
 #~ "Anlegen eines %s-Accounts unter Verwendung der hier gesicherten Daten"
+
+#~ msgid "Create contact"
+#~ msgstr "Kontakt anlegen"
 
 #~ msgid "Create distibution list"
 #~ msgstr "Verteilerliste erstellen"
@@ -15671,8 +15600,22 @@ msgstr "Zu %s hinzufügen"
 #~ msgstr ""
 #~ "Soll das Startdatum auch auf das neue Fälligkeitsdatum gesetzt werden?"
 
+#~ msgid ""
+#~ "Do you want to confirm the whole series or just one appointment within "
+#~ "the series?"
+#~ msgstr ""
+#~ "Wollen Sie die komplette Serie oder einen einzelnen Termin aus der Serie "
+#~ "bestätigen?"
+
 #~ msgid "Do you want to create a %s account?"
 #~ msgstr "Wollen Sie einen %s-Account anlegen?"
+
+#~ msgid ""
+#~ "Do you want to decline the whole series or just one appointment within "
+#~ "the series?"
+#~ msgstr ""
+#~ "Möchten Sie die gesamte Serie oder nur einen Termin innerhalb der Serie "
+#~ "ablehnen?"
 
 #~ msgid ""
 #~ "Do you want to delete the whole series or just one appointment within the "
@@ -15680,6 +15623,23 @@ msgstr "Zu %s hinzufügen"
 #~ msgstr ""
 #~ "Wollen Sie die komplette Serie oder nur einen einzelnen Termin aus der "
 #~ "Serie löschen?"
+
+#~ msgid ""
+#~ "Do you want to delete the whole series or just this appointment within "
+#~ "the series?"
+#~ msgstr ""
+#~ "Wollen Sie die komplette Serie oder nur diesen Termin aus der Serie "
+#~ "löschen?"
+
+#~ msgid ""
+#~ "Do you want to delete this and all future appointments or just this "
+#~ "appointment within the series?"
+#~ msgstr ""
+#~ "Wollen Sie diesen Termin und alle zukünftigen Termine der Serie oder nur "
+#~ "diesen Termin aus der Serie löschen?"
+
+#~ msgid "Do you want to delete this appointment?"
+#~ msgstr "Wollen Sie diesen Termin löschen?"
 
 #~ msgid ""
 #~ "Do you want to edit the whole series or just one appointment within the "
@@ -15842,6 +15802,9 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Edit feed"
 #~ msgstr "Feed bearbeiten"
+
+#~ msgid "Edit image"
+#~ msgstr "Bild bearbeiten"
 
 #~ msgid "Edit picture"
 #~ msgstr "Bild bearbeiten"
@@ -16136,6 +16099,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Expand timeframe by one month"
 #~ msgstr "Zeitrahmen um einen Monat erweitern"
 
+#~ msgid "Expert user?"
+#~ msgstr "Experte?"
+
 #~ msgid "Expiration: %1$d"
 #~ msgstr "Läuft ab: %1$d"
 
@@ -16242,6 +16208,12 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Firefox %1$s on %2$s"
 #~ msgstr "Firefox %1$s auf %2$s"
+
+#~ msgid "First day of week"
+#~ msgstr "Erster Tag der Woche"
+
+#~ msgid "First week of year"
+#~ msgstr "Erste Woche des Jahres"
 
 #~ msgid "Fit to screen height"
 #~ msgstr "An Bildschirmhöhe anpassen"
@@ -16472,6 +16444,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Hide names"
 #~ msgstr "Namen ausblenden"
 
+#~ msgid "Hide options for expert users."
+#~ msgstr "Optionen für Experten ausblenden."
+
 #~ msgid "Hide side panel"
 #~ msgstr "Seitenleiste ausblenden"
 
@@ -16652,6 +16627,13 @@ msgstr "Zu %s hinzufügen"
 #~ "Wenn Sie mehrere E-Mails gemeinsam bearbeiten möchten, aktivieren Sie die "
 #~ "Kontrollfelder links neben den E-Mails. Falls die Kontrollfelder nicht "
 #~ "angezeigt werden, klicken Sie links unten auf das Symbol."
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "In freigegebenen Kalendern wird der Termin für nicht teilnehmende "
+#~ "Benutzer als einfaches Zeitfenster angezeigt."
 
 #~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
@@ -16868,6 +16850,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Jersey"
 #~ msgstr "Jersey"
 
+#~ msgid "Job"
+#~ msgstr "Job"
+
 #~ msgid "Join"
 #~ msgstr "Beitreten"
 
@@ -16988,6 +16973,12 @@ msgstr "Zu %s hinzufügen"
 #~ msgstr "Lesotho"
 
 #~ msgid ""
+#~ "Let´s automatically configure your device, by clicking the button below."
+#~ msgstr ""
+#~ "Lassen Sie Ihr Gerät automatisch konfigurieren, indem Sie auf die "
+#~ "Schaltfläche unten klicken."
+
+#~ msgid ""
 #~ "Let´s automatically configure your device, by clicking the button below. "
 #~ "It´s that simple!"
 #~ msgstr ""
@@ -17032,6 +17023,10 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Link / URL"
 #~ msgstr "Link/URL"
 
+#, fuzzy
+#~ msgid "Link will be send to %1$s "
+#~ msgstr "Der Link wird an %1$s gesendet "
+
 #~ msgid "LinkedIn"
 #~ msgstr "LinkedIn"
 
@@ -17043,6 +17038,10 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "List of public calendars and events"
 #~ msgstr "Liste der öffentlichen Kalender und Ereignisse"
+
+#, fuzzy
+#~ msgid "Listview"
+#~ msgstr "Listenansicht"
 
 #~ msgid "Lithuania"
 #~ msgstr "Litauen"
@@ -17059,6 +17058,10 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Loading the full mail might lead to performance problems."
 #~ msgstr ""
 #~ "Das Laden der vollständigen E-Mail könnte zu Performance-Problemen führen."
+
+#, fuzzy
+#~ msgid "Localpart"
+#~ msgstr "Lokalteil"
 
 #~ msgid "Logged in: %1$s"
 #~ msgstr "Angemeldet: %1$s"
@@ -17095,6 +17098,9 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Mail Thread Details"
 #~ msgstr "E-Mail-Thread-Details"
+
+#~ msgid "Mail and Messaging"
+#~ msgstr "E-Mail und Messaging"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Accounts für E-Mail und soziale Netzwerke"
@@ -17218,6 +17224,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Minutes"
 #~ msgstr "Minuten"
 
+#~ msgid "Miscellaneous"
+#~ msgstr "Diverses"
+
 #~ msgid "Mobile"
 #~ msgstr "Mobiltelefon"
 
@@ -17233,6 +17242,9 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Moldova"
 #~ msgstr "Moldawien"
+
+#~ msgid "Monday"
+#~ msgstr "Montag"
 
 #~ msgid "Mongolia"
 #~ msgstr "Mongolei"
@@ -17496,6 +17508,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Numbering on/off"
 #~ msgstr "Nummerierung an/aus"
 
+#~ msgid "Numbers"
+#~ msgstr "Numerisch"
+
 #~ msgid "OAuth application overview"
 #~ msgstr "OAuth-Applikationsübersicht"
 
@@ -17549,6 +17564,16 @@ msgstr "Zu %s hinzufügen"
 #~ msgid_plural "%1$s items were found."
 #~ msgstr[0] "Es wurde ein Objekt gefunden."
 #~ msgstr[1] "Es wurden %1$s Objekte gefunden."
+
+#~ msgid ""
+#~ "One or more attached files exceed the size limit per email. Therefore, "
+#~ "the files are not sent as attachments but kept on the server. The email "
+#~ "you have sent just contains links to download these files."
+#~ msgstr ""
+#~ "Ein oder mehrere der angehängten Dateien überschreiten die "
+#~ "Größenbeschränkung pro E-Mail. Die Dateien werden deshalb nicht als "
+#~ "Anhänge gesendet, sondern auf dem Server gespeichert. Die von Ihnen "
+#~ "gesendete E-Mail enthält lediglich Links zum Herunterladen dieser Dateien."
 
 #~ msgid "OneDrive"
 #~ msgstr "OneDrive"
@@ -17683,6 +17708,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Permissions: %1$s"
 #~ msgstr "Berechtigungen"
 
+#~ msgid "Personal"
+#~ msgstr "Persönlich"
+
 #~ msgid "Personal message (optional)"
 #~ msgstr "Persönliche Nachricht (optional)"
 
@@ -17697,6 +17725,9 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Phone alt"
 #~ msgstr "Telefonnummer alternativ"
+
+#~ msgid "Phone numbers"
+#~ msgstr "Telefonnummern"
 
 #~ msgid "Pick a time here"
 #~ msgstr "Wählen Sie eine Zeit"
@@ -17814,6 +17845,9 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Please select at least one participant"
 #~ msgstr "Bitte wählen Sie mindestens einen Teilnehmer"
+
+#~ msgid "Please select your mail account provider"
+#~ msgstr "Bitte wählen Sie Ihren E-Mail-Anbieter"
 
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Bitte geben Sie diese fehlenden Variablen an:"
@@ -17972,6 +18006,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Qatar"
 #~ msgstr "Katar"
 
+#~ msgid "Quick launch %s"
+#~ msgstr "Schnellzugriff %s"
+
 #~ msgid "Quick launch 1"
 #~ msgstr "Schnellstart 1"
 
@@ -18044,6 +18081,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Recipients can edit"
 #~ msgstr "Empfänger können bearbeiten"
 
+#~ msgid "Recurrence"
+#~ msgstr "Wiederholung"
+
 #~ msgid "Recurring tasks need a valid end date."
 #~ msgstr "Serienaufgaben benötigen ein gültiges Enddatum."
 
@@ -18052,6 +18092,9 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Related articles"
 #~ msgstr "Verwandte Artikel"
+
+#~ msgid "Relogin"
+#~ msgstr "Erneut anmelden"
 
 #~ msgid "Remind me again %1$s"
 #~ msgstr "Erneut erinnern %1$s"
@@ -18124,6 +18167,9 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Romania"
 #~ msgstr "Rumänien"
+
+#~ msgid "Rotate image"
+#~ msgstr "Bild drehen"
 
 #~ msgid "Rule applies from"
 #~ msgstr "Die Regel gilt ab"
@@ -18296,6 +18342,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Select the platform of your device:"
 #~ msgstr "Wählen Sie die Plattform Ihres Geräts:"
 
+#~ msgid "Selected - %1$s"
+#~ msgstr "Gewählt: %1$s"
+
 #~ msgid "Selected message was moved successfully."
 #~ msgid_plural "Selected messages has been moved successfully."
 #~ msgstr[0] "Ausgewählte Nachricht wurde erfolgreich verschoben."
@@ -18445,6 +18494,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Show Tabs for inbox"
 #~ msgstr "Tabs für Posteingang anzeigen"
 
+#~ msgid "Show all fields"
+#~ msgstr "Alle Felder anzeigen"
+
 #~ msgid "Show all images for"
 #~ msgstr "Alle Bilder anzeigen für"
 
@@ -18515,6 +18567,9 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Show next day"
 #~ msgstr "Nächsten Tag anzeigen"
+
+#~ msgid "Show or hide actions for advanced users."
+#~ msgstr "Aktionen für fortgeschrittene Anwender ein- oder ausblenden."
 
 #~ msgid "Show original message"
 #~ msgstr "Ursprüngliche Nachricht anzeigen"
@@ -18599,12 +18654,36 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Somalia"
 #~ msgstr "Somalia"
 
+#~ msgid "Some fields contain invalid data"
+#~ msgstr "Einige Felder enthalten ungültige Daten"
+
 #~ msgid ""
 #~ "Some files cannot be uploaded because they exceed the maximum file size "
 #~ "of %1$s"
 #~ msgstr ""
 #~ "Einige Dateien können nicht hochgeladen werden, da sie die maximale "
 #~ "Dateigröße von %1$s überschreiten."
+
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Einige Einstellungen (z.B. Sprache und Zeitzone) werden erst nach einer "
+#~ "Neuanmeldung wirksam."
+
+#~ msgid ""
+#~ "Some settings (language, timezone, theme) require a page reload or "
+#~ "relogin to take effect."
+#~ msgstr ""
+#~ "Einige Einstellungen (Sprache, Zeitzone, Design) werden erst nach dem "
+#~ "erneuten Laden der Seite oder einer Neuanmeldung wirksam."
+
+#~ msgid ""
+#~ "Some settings (language, timezone, theme) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Einige Einstellungen (Sprache, Zeitzone, Design) werden erst nach einer "
+#~ "Neuanmeldung wirksam."
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Jemand hat eine Datei für Sie freigegeben"
@@ -18756,6 +18835,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Sudan"
 #~ msgstr "Sudan"
 
+#~ msgid "Sunday"
+#~ msgstr "Sonntag"
+
 #~ msgid "Superscript"
 #~ msgstr "Hochstellung"
 
@@ -18805,6 +18887,9 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Tajikistan"
 #~ msgstr "Tadschikistan"
+
+#~ msgid "Take photo"
+#~ msgstr "Foto machen"
 
 #~ msgid "Tanzania"
 #~ msgstr "Tansania"
@@ -18923,6 +19008,17 @@ msgstr "Zu %s hinzufügen"
 #~ "aus Ihren sozialen Netzwerken."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Der Termin ist für nicht teilnehmende Benutzer in freigegebenen Kalendern "
+#~ "nicht sichtbar. Der Termin wird für Konflikte nicht berücksichtigt und "
+#~ "erscheint nicht in der Planungsansicht. Diese Option kann nicht verwendet "
+#~ "werden, wenn der Termin Ressourcen blockiert."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -19002,6 +19098,9 @@ msgstr "Zu %s hinzufügen"
 #~ "data-attribute=\"day\">Mittwoch</a> <a href=\"#\" data-widget=\"number\" "
 #~ "data-attribute=\"interval\">alle <span class=\"number-control\">2</span> "
 #~ "Monate</a> statt."
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "Der Termin ist in freigegebenen Ordnern für alle Benutzer sichtbar."
 
 #~ msgid "The appointment is visible for all users in shared folders."
 #~ msgstr "Der Termin ist in freigegebenen Ordnern für alle Benutzer sichtbar."
@@ -19213,6 +19312,10 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "The setting has been saved."
 #~ msgstr "Die Einstellung wurde gespeichert."
 
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr ""
+#~ "Zum Aktivieren der Einstellung ist ein erneutes Anmelden erforderlich."
+
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "
 #~ "e.g Basic settings, E-Mail or My contact data."
@@ -19321,6 +19424,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "This account cannot be validated"
 #~ msgstr "Dieser Account kann nicht validiert werden."
 
+#~ msgid "This appointment"
+#~ msgstr "Dieser Termin"
+
 #~ msgid ""
 #~ "This appointment is an exception. Changing the series does not affect "
 #~ "exceptions."
@@ -19424,6 +19530,13 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "This file is locked by you"
 #~ msgstr "Diese Datei wurde durch Sie gesperrt"
 
+#~ msgid ""
+#~ "This filetype is not supported as contact picture. Only image types (JPG, "
+#~ "GIF, BMP or PNG) are supported."
+#~ msgstr ""
+#~ "Dieser Dateityp wird für Kontaktbilder nicht unterstützt. Nur Bildformate "
+#~ "(JPG, GIF, BMP oder PNG) werden unterstützt."
+
 #~ msgid "This folder has publications and/or subscriptions"
 #~ msgstr "Dieser Ordner enthält Veröffentlichungen und/oder Abonnements"
 
@@ -19442,6 +19555,13 @@ msgstr "Zu %s hinzufügen"
 #~ "Diese Tour gibt Ihnen eine kurze Einführung in das Produkt. Weitere "
 #~ "Informationen finden Sie in den Guided Tours für die einzelnen Apps und "
 #~ "in der Online-Hilfe."
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Dies ist eine verdächtige E-Mail, da wir nicht verifizieren konnten, dass "
+#~ "sie tatsächlich von %1$s stammt."
 
 #, fuzzy
 #~ msgid "This is how your message text will look."
@@ -19897,6 +20017,12 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Upgrade to premium"
 #~ msgstr "Upgrade auf Premium"
 
+#~ msgid "Upload image"
+#~ msgstr "Bild hochladen"
+
+#~ msgid "Upload local image"
+#~ msgstr "Lokales Bild hochladen"
+
 #~ msgid "Upload new file"
 #~ msgstr "Neue Datei hochladen"
 
@@ -20012,6 +20138,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Viewer Toolbar"
 #~ msgstr "Viewer-Werkzeugleiste"
 
+#~ msgid "Visibility Help"
+#~ msgstr "Sichtbarkeit-Hilfe"
+
 #~ msgid "We could not verify that this email is really from %1$s."
 #~ msgstr ""
 #~ "Wir konnten nicht verifizieren, dass diese E-Mail wirklich von %1$s "
@@ -20022,6 +20151,12 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Week View"
 #~ msgstr "Wochenansicht"
+
+#~ msgid "Week that contains January 1st"
+#~ msgstr "Woche, die den 1. Januar enthält"
+
+#~ msgid "Week that contains the first Thursday"
+#~ msgstr "Woche, die den ersten Donnerstag enthält"
 
 #~ msgid "Weekend Day"
 #~ msgstr "Wochenendtag"
@@ -20231,6 +20366,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "You can't present the same document more than once."
 #~ msgstr "Sie können das gleiche Dokument nicht mehr als einmal präsentieren."
 
+#~ msgid "You cannot move items to virtual folders"
+#~ msgstr "Objekte können nicht in virtuelle Ordner verschoben werden"
+
 #~ msgid "You do not have the appropriate permissions to read the document."
 #~ msgstr ""
 #~ "Sie haben nicht die entsprechenden Berechtigungen zum Lesen des Dokuments."
@@ -20389,6 +20527,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Your email address will be included when sending this feedback"
 #~ msgstr "Beim Senden des Feedback wird Ihre E-Mail-Adresse mit versendet."
 
+#~ msgid "Your feedback"
+#~ msgstr "Ihr Feedback"
+
 #~ msgid "Your messages"
 #~ msgstr "Ihre Nachrichten"
 
@@ -20400,6 +20541,10 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Your reply has been sent"
 #~ msgstr "Ihre Antwort wurde gesendet"
+
+#~ msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+#~ msgstr ""
+#~ "Ihr gewähltes Bild überschreitet die maximal zulässige Dateigröße von %1$s"
 
 #, fuzzy
 #~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"
@@ -20558,6 +20703,12 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "files"
 #~ msgstr "Dateien"
+
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.people.getPublicPhotos"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.photos.search"
 
 #~ msgid "friday"
 #~ msgstr "Freitag"

@@ -236,7 +236,7 @@ define.async('io.ox/mail/toolbar', [
         capabilities: 'mail_categories',
         collection: 'some',
         matches: function (baton) {
-            return !!baton.app.props.categories;
+            return !!baton.app.props.get('categories');
         },
         action: $.noop
     });

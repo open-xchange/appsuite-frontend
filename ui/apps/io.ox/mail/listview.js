@@ -551,11 +551,6 @@ define('io.ox/mail/listview', [
             var data = api.threads.head(model.toJSON());
             // get thread with recent data
             var thread = api.threads.get(model.cid);
-            // add proper picture
-            var isThread = thread.length > 1,
-                useRecipientAddress = !isThread && account.is('sent|drafts', data.folder_id),
-                address = useRecipientAddress ? data.to : data.from;
-            data.picture = address && address[0] && address[0][1];
 
             // get unseen flag for entire thread
             var unseen = _(thread).reduce(function (memo, obj) {
@@ -572,7 +567,9 @@ define('io.ox/mail/listview', [
                 return memo || parseInt(obj.color_label || 0, 10);
             }, 0);
             data.color_label = color;
-            data.thread = thread;
+            data.thread = thread.map(function (entry, index) {
+                return _(entry).pick(_(data.thread[index]).keys());
+            });
             // set subject to first message in thread so a Thread has a constant subject
             data.subject = api.threads.subject(data) || data.subject || '';
             // done

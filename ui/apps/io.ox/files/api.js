@@ -544,6 +544,36 @@ define('io.ox/files/api', [
 
     var pool = Pool.create('files', { Collection: api.Collection, Model: api.Model });
 
+    // overwrite "add" of this pool instance
+    pool.add = _.wrap(pool.add, function (add, cid, data) {
+        if (_.isUndefined(data)) { data = cid; cid = 'detail'; }
+        var collection = this.get(cid), valid, expired = [];
+        data = [].concat(data);
+
+        // find modules that are expired (changed in another browser or by a shared user etc)
+        if (cid === 'detail') {
+            data.forEach(function (item) {
+                valid = !collection.get(_.cid(item)) || (collection.get(_.cid(item)) && collection.get(_.cid(item)).get('last_modified') >= item.last_modified);
+                if (valid) {
+                    item.expired = false;
+                } else {
+                    item.expired = true;
+                    expired.push(_.cid(item));
+                }
+            });
+        }
+
+        // perform the original add
+        var result = add.call(this, cid, data);
+
+        if (expired.length > 0) {
+            // trigger event for the expired models, so views can update
+            collection.trigger('expired_models', expired);
+        }
+
+        return result;
+    });
+
     // guess 23 is "meta"
     // 711 is "number of versions", needed for fixing Bug 52006,
     // number of versions often changes when editing files

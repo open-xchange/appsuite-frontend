@@ -229,28 +229,10 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
         add: function (cid, data) {
             if (arguments.length === 1) { data = cid; cid = 'detail'; }
-            var collection = this.get(cid), valid, expired = [];
+            var collection = this.get(cid);
             data = _([].concat(data)).map(this.map, collection);
 
-            // find modules that are expired (changed in another browser or by a shared user etc)
-            if (cid === 'detail') {
-                _(data).each(function (item) {
-                    valid = !collection.get(_.cid(item)) || (collection.get(_.cid(item)) && collection.get(_.cid(item)).get('last_modified') >= item.last_modified);
-                    if (!valid) {
-                        item.expired = true;
-                        expired.push(_.cid(item));
-                    } else {
-                        item.expired = false;
-                    }
-                });
-            }
-
             collection.add(data, { merge: true, parse: true });
-
-            if (expired.length > 0) {
-                // trigger event for the expired models, so views can update
-                collection.trigger('expired_models', expired);
-            }
 
             return collection;
         },

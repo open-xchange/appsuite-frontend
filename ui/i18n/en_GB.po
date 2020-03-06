@@ -1,12 +1,12 @@
 # Timothy Friesen <tim@workshop-chapina.com>, 2013, 2014, 2015, 2016, 2016, 2017, 2018, 2019.
 # Eric Bischoff <eric@workshop-chapina.com>, 2013, 2015.
 # Sandrine Burriel <sandrine@workshop-chapina.com>, 2015.
-# timothy <timothy@workshop-chapina.com>, 2019.
+# timothy <timothy@workshop-chapina.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-11-17 11:42-0700\n"
+"PO-Revision-Date: 2020-02-27 10:32+0100\n"
 "Last-Translator: timothy <timothy@workshop-chapina.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 19.08.1\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -42,7 +42,7 @@ msgstr "Audio"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Mail"
-msgstr "Email"
+msgstr "E-mail"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "SMS"
@@ -721,6 +721,12 @@ msgstr "Go to next month"
 #: apps/io.ox/calendar/year/view.js module:io.ox/calendar
 msgid "CW"
 msgstr "CW"
+
+#. CW is calender week and %1$d is the week number
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "Today,"
+msgstr "Today,"
 
 #. CW is calender week and %1$d is the week number
 #. %1$d = Calendar week
@@ -1452,9 +1458,9 @@ msgstr "Shared calendars"
 #: apps/io.ox/calendar/common-extensions.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js
-#: apps/io.ox/calendar/view-grid-template.js
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
+#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Private"
 
@@ -2099,6 +2105,10 @@ msgid "Calendar account error"
 msgstr "Calendar account error"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
+msgid "Edit accounts"
+msgstr "Edit e-mail account"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Try again"
 msgstr "Try again"
 
@@ -2149,10 +2159,10 @@ msgstr "Show previous month"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
-#: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
-#: module:plugins/portal apps/plugins/portal/calendar/register.js
+#: apps/io.ox/core/tk/datepicker.js module:io.ox/core
+#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js module:io.ox/tasks
+#: apps/plugins/portal/birthdays/register.js module:plugins/portal
+#: apps/plugins/portal/calendar/register.js
 msgid "Today"
 msgstr "Today"
 
@@ -2184,8 +2194,8 @@ msgstr "Next Month"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-msgid "Selected - %1$s"
-msgstr "Selected - %1$s"
+msgid "%1$s"
+msgstr "%1$s"
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
@@ -3166,6 +3176,14 @@ msgid "Select print layout"
 msgstr "Select print layout"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid ""
+"This dialog is limited to %1$d entries and your address book exceeds this "
+"limitation. Therefore, some entries are not listed."
+msgstr ""
+"This dialogue is limited to %1$d entries and your address book exceeds this "
+"limitation. Therefore, some entries are not listed."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/contacts/common-extensions.js apps/io.ox/contacts/main.js
 #: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/participants/views.js module:io.ox/core
@@ -4104,6 +4122,10 @@ msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
 msgstr[0] "Distribution list with 1 entry"
 msgstr[1] "Distribution list with %1$d entries"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Private contact"
+msgstr "Private contact"
 
 #. %1$s is a map service, like "Google Maps"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -5190,7 +5212,7 @@ msgstr "Currently refreshing"
 #: apps/io.ox/settings/security/settings/pane.js
 msgctxt "app"
 msgid "Mail"
-msgstr "Email"
+msgstr "E-mail"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
@@ -8044,7 +8066,7 @@ msgstr "Failed to recover accounts"
 
 #: apps/io.ox/mail/accounts/keychain.js module:io.ox/keychain
 msgid "Mail account"
-msgstr "Email account"
+msgstr "E-mail account"
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "The account must be named"
@@ -8478,11 +8500,11 @@ msgstr "Create reminder"
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Mail reminder"
-msgstr "Email reminder"
+msgstr "E-mail reminder"
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Mail reminder for"
-msgstr "Email reminder for"
+msgstr "E-mail reminder for"
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Reminder has been created"
@@ -8490,7 +8512,7 @@ msgstr "Reminder has been created"
 
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail
 msgid "Mail source"
-msgstr "Email source"
+msgstr "E-mail source"
 
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail
 msgid "Authentication details"
@@ -8730,7 +8752,7 @@ msgstr "You mentioned \"%s\" in your e-mail, but there are no files attached."
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Mail has no recipient."
-msgstr "Email has no recipient."
+msgstr "E-mail has no recipient."
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Empty subject"
@@ -8817,6 +8839,12 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Reply to"
 
+#. %s is a list of filenames separeted by commas
+#. it is used by screenreaders to indicate which files are currently added to the list of attachments
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Added %s to attachments."
+msgstr "Added %s to attachments."
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Show names"
@@ -8860,13 +8888,7 @@ msgstr "Drop attachments here"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Mail size: %1$s"
-msgstr "Mail size: %1$s"
-
-#. %s is a list of filenames separeted by commas
-#. it is used by screenreaders to indicate which files are currently added to the list of attachments
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Added %s to attachments."
-msgstr "Added %s to attachments."
+msgstr "E-mail size: %1$s"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add local file"
@@ -9255,7 +9277,7 @@ msgstr "Error: Failed to load message content"
 
 #: apps/io.ox/mail/import.js module:io.ox/mail
 msgid "Mail has been imported"
-msgstr "Email has been imported"
+msgstr "E-mail has been imported"
 
 #: apps/io.ox/mail/import.js module:io.ox/mail
 msgid "Drop EML file here for import"
@@ -10208,6 +10230,13 @@ msgstr "Register now"
 msgid "Change IMAP subscriptions"
 msgstr "Change IMAP subscriptions"
 
+#: apps/io.ox/mail/settings/signatures/register.js module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Signature"
+msgstr "Signature"
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Signature name"
 msgstr "Signature name"
@@ -10253,12 +10282,6 @@ msgid "No preview available"
 msgstr "No preview available"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
-#: apps/io.ox/settings/security/certificates/settings/utils.js
-#: module:io.ox/settings/certificates
-msgid "Signature"
-msgstr "Signature"
-
-#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add new signature"
 msgstr "Add new signature"
 
@@ -10288,11 +10311,11 @@ msgstr "Top 10 you received email from"
 
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Mails per week-day (%)"
-msgstr "Email messages per weekday (%)"
+msgstr "E-mail messages per weekday (%)"
 
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Mails per hour (%)"
-msgstr "Email messages per hour (%)"
+msgstr "E-mail messages per hour (%)"
 
 #: apps/io.ox/mail/statistics.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgid "Statistics"
@@ -12521,26 +12544,48 @@ msgctxt "rating"
 msgid "It's awesome"
 msgstr "It's awesome"
 
+# needed for patch
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "What is the primary reason for your score?"
+msgstr "What is the primary reason for your score?"
+
+# needed for patch
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "How can we improve your experience?"
+msgstr "How can we improve your experience?"
+
+# needed for patch
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Which features do you value or use the most?"
+msgstr "Which features do you value or use the most?"
+
+# needed for patch
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "What is the one thing we could do to make you happier?"
+msgstr "What is the one thing we could do to make you happier?"
+
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "%1$d of 5 stars"
 msgstr "%1$d of 5 stars"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Not likely at all"
-msgstr "Not likely at all"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "%1$d of 10 points."
 msgstr "%1$d of 10 points."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Extremely likely"
-msgstr "Extremely likely"
+msgid "Not likely at all"
+msgstr "Not likely at all"
 
+# needed for patch
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Very likely"
+msgstr "Very likely"
+
+# needed for patch
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How likely is it that you would recommend %1$s to a friend?"
-msgstr "How likely is it that you would recommend %1$s to a friend?"
+msgid "How likely are you to recommend %1$s to a friend or colleague?"
+msgstr "How likely are you to recommend %1$s to a friend or colleague?"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Please rate this product"
@@ -12550,10 +12595,10 @@ msgstr "Please rate this product"
 msgid "Please rate the following application:"
 msgstr "Please rate the following application:"
 
-#. %1$s is the product name, for example 'OX App Suite'
+# needed for patch
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How do you like %1$s?"
-msgstr "How do you like %1$s?"
+msgid "We appreciate your feedback"
+msgstr "We appreciate your feedback"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Comments and suggestions"
@@ -12792,7 +12837,7 @@ msgstr "You have new e-mail"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #, c-format
 msgid "Mail from %1$s, %2$s"
-msgstr "E-Mail from %1$s, %2$s"
+msgstr "E-mail from %1$s, %2$s"
 
 #. %1$s task title
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
@@ -13393,7 +13438,7 @@ msgstr ""
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Mail address"
-msgstr "E-Mail address"
+msgstr "E-mail address"
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
@@ -13482,123 +13527,60 @@ msgstr "Invite to %s"
 msgid "Add on %s"
 msgstr "Add on %s"
 
-#~ msgid "%1$s Toolbar"
-#~ msgstr "%1$s Tool bar"
+#~| msgid "Send mail %1$s before start."
+#~ msgid "Send SMS %1$s before start."
+#~ msgstr "Send SMS %1$s before start."
 
-#~ msgid "Change reminder"
-#~ msgstr "Change reminder"
+#~| msgid "Send mail %1$s after start."
+#~ msgid "Send SMS %1$s after start."
+#~ msgstr "Send SMS %1$s after start."
 
-#~ msgid "Confidential"
-#~ msgstr "Confidential"
+#~| msgid "Send mail %1$s before end."
+#~ msgid "Send SMS %1$s before end."
+#~ msgstr "Send SMS %1$s before end."
 
-#~ msgid "Recurrence"
-#~ msgstr "Recurrence"
+#~| msgid "Send mail %1$s after end."
+#~ msgid "Send SMS %1$s after end."
+#~ msgstr "Send SMS %1$s after end."
 
-#~ msgid ""
-#~ "One or more attached files exceed the size limit per email. Therefore, "
-#~ "the files are not sent as attachments but kept on the server. The email "
-#~ "you have sent just contains links to download these files."
-#~ msgstr ""
-#~ "One or more attached files exceed the size limit per email. Therefore, "
-#~ "the files were not sent as attachments but kept on the server. The email "
-#~ "you have sent contains links to download these files."
+#~| msgid "Send mail at %1$s."
+#~ msgid "Send SMS at %1$s."
+#~ msgstr "Send SMS at %1$s."
 
-#~ msgid "Edit image"
-#~ msgstr "Edit image"
+#~| msgid "Send mail at start."
+#~ msgid "Send SMS at start."
+#~ msgstr "Send SMS at start."
 
-#~ msgid "Upload image"
-#~ msgstr "Upload image"
-
-#~ msgid "Take photo"
-#~ msgstr "Take photo"
-
-#~ msgid "Rotate image"
-#~ msgstr "Rotate image"
-
-#~ msgid "Visibility Help"
-#~ msgstr "Visibility Help"
-
-#~ msgid "The appointment is visible for all users in shared calendars."
-#~ msgstr "The appointment is visible for all users in shared calendars."
+#~| msgid "Send mail at end."
+#~ msgid "Send SMS at end."
+#~ msgstr "Send SMS at end."
 
 #~ msgid ""
-#~ "In shared calendars, the appointment is displayed as a simple time slot "
-#~ "for non-attending users."
+#~ "Your current selection contains too many appointments for the chosen "
+#~ "timeframe."
 #~ msgstr ""
-#~ "In shared calendars, the appointment is displayed as a simple time slot "
-#~ "for non-attending users."
+#~ "Your current selection contains too many appointments for the chosen time "
+#~ "frame."
 
-#~ msgid ""
-#~ "The appointment is not visible to non-attending users in shared calendars "
-#~ "at all. The appointment is not considered for conflicts and does not "
-#~ "appear in the scheduling view. This option cannot be used, if the "
-#~ "appointment blocks resources."
+#~ msgid "Appointment was changed in the meantime and was updated accordingly."
 #~ msgstr ""
-#~ "The appointment is not visible to non-attending users in shared calendars "
-#~ "at all. The appointment is not considered for conflicts and does not "
-#~ "appear in the scheduling view. This option cannot be used if the "
-#~ "appointment blocks resources."
+#~ "Appointment was changed in the meantime and was updated accordingly."
 
-#~ msgid "Listview"
-#~ msgstr "List view"
+#~| msgid "Mark as unread"
+#~ msgid "Marked as unread"
+#~ msgstr "Marked as unread"
 
-#~ msgid "Create contact"
-#~ msgstr "Create contact"
+#~ msgid "Set IMAP keywords"
+#~ msgstr "Set IMAP keywords"
 
-#~ msgid "Some fields contain invalid data"
-#~ msgstr "Some fields contain invalid data"
+#~ msgid "Extremely likely"
+#~ msgstr "Extremely likely"
 
-#~ msgid "Show all fields"
-#~ msgstr "Show all fields"
+#~ msgid "How do you like %1$s?"
+#~ msgstr "How do you like %1$s?"
 
-#~ msgid "Personal"
-#~ msgstr "Personal"
-
-#~ msgid "Job"
-#~ msgstr "Job"
-
-#~ msgid "Mail and Messaging"
-#~ msgstr "Email and Messaging"
-
-#~ msgid "Phone numbers"
-#~ msgstr "Phone numbers"
-
-#~ msgid "Miscellaneous"
-#~ msgstr "Miscellaneous"
-
-#~ msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-#~ msgstr "Your selected picture exceeds the maximum allowed file size of %1$s"
-
-#~ msgid ""
-#~ "This filetype is not supported as contact picture. Only image types (JPG, "
-#~ "GIF, BMP or PNG) are supported."
-#~ msgstr ""
-#~ "This filetype is not supported as contact picture. Only image types (JPG, "
-#~ "GIF, BMP or PNG) are supported."
-
-#~| msgid "Upload local file"
-#~ msgid "Upload local image"
-#~ msgstr "Upload local image"
-
-#~ msgid "Localpart"
-#~ msgstr "Localpart"
-
-#~ msgid ""
-#~ "Let´s automatically configure your device, by clicking the button below."
-#~ msgstr ""
-#~ "Let's automatically configure your device, by clicking the button below."
-
-#~ msgid "Show or hide actions for advanced users."
-#~ msgstr "Show or hide actions for advanced users."
-
-#~ msgid "Expert user?"
-#~ msgstr "Expert user?"
-
-#~ msgid "Hide options for expert users."
-#~ msgstr "Hide options for expert users."
-
-#~ msgid "Configure now"
-#~ msgstr "Configure now"
+#~ msgid "How likely is it that you would recommend %1$s to a friend?"
+#~ msgstr "How likely is it that you would recommend %1$s to a friend?"
 
 #, fuzzy
 #~| msgid "is not a valid user or group."
@@ -13663,6 +13645,9 @@ msgstr "Add on %s"
 
 #~ msgid "%1$s Options"
 #~ msgstr "%1$s Options"
+
+#~ msgid "%1$s Toolbar"
+#~ msgstr "%1$s Tool bar"
 
 #, fuzzy
 #~| msgid "%1$s of %2$s"
@@ -14182,6 +14167,9 @@ msgstr "Add on %s"
 #~ msgid "Change folder"
 #~ msgstr "Change folder"
 
+#~ msgid "Change reminder"
+#~ msgstr "Change reminder"
+
 #~ msgid "Change state"
 #~ msgstr "Change state"
 
@@ -14308,8 +14296,14 @@ msgstr "Add on %s"
 #~ msgid "Composing a new E-Mail"
 #~ msgstr "Composing a new email"
 
+#~ msgid "Confidential"
+#~ msgstr "Confidential"
+
 #~ msgid "Configure %1$s"
 #~ msgstr "Configure %1$s"
+
+#~ msgid "Configure now"
+#~ msgstr "Configure now"
 
 #~ msgid "Configure your inbox tabs"
 #~ msgstr "Configure your inbox tabs"
@@ -14674,6 +14668,9 @@ msgstr "Add on %s"
 #~ "Edit a setting on the right side. In most of the cases, the changes are "
 #~ "activated immediately."
 
+#~ msgid "Edit image"
+#~ msgstr "Edit image"
+
 #~ msgid "Editing multiple E-Mails"
 #~ msgstr "Editing multiple email messages"
 
@@ -14841,6 +14838,9 @@ msgstr "Add on %s"
 
 #~ msgid "Expand timeframe by one month"
 #~ msgstr "Expand timeframe by one month"
+
+#~ msgid "Expert user?"
+#~ msgstr "Expert user?"
 
 #~ msgid "Expiration: %1$d"
 #~ msgstr "Expiration: %1$d"
@@ -15050,6 +15050,9 @@ msgstr "Add on %s"
 #~ msgid "Hide names"
 #~ msgstr "Hide names"
 
+#~ msgid "Hide options for expert users."
+#~ msgstr "Hide options for expert users."
+
 #~ msgid "Hide side panel"
 #~ msgstr "Hide side panel"
 
@@ -15169,6 +15172,13 @@ msgstr "Add on %s"
 #~ "displayed, click the icon on the bottom left side."
 
 #~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+
+#~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
 #~ "non-attending users."
 #~ msgstr ""
@@ -15257,6 +15267,9 @@ msgstr "Add on %s"
 #~ msgid "January"
 #~ msgstr "January"
 
+#~ msgid "Job"
+#~ msgstr "Job"
+
 #~ msgid "Join"
 #~ msgstr "Join"
 
@@ -15316,6 +15329,11 @@ msgstr "Add on %s"
 #~ msgid "Leave the presentation"
 #~ msgstr "Leave the presentation"
 
+#~ msgid ""
+#~ "Let´s automatically configure your device, by clicking the button below."
+#~ msgstr ""
+#~ "Let's automatically configure your device, by clicking the button below."
+
 #~ msgid "Liked a link: %s"
 #~ msgstr "Liked a link: %s"
 
@@ -15345,6 +15363,9 @@ msgstr "Add on %s"
 #~ msgid "List of public calendars and events"
 #~ msgstr "List of public calendars and events"
 
+#~ msgid "Listview"
+#~ msgstr "List view"
+
 #~ msgid "Load Error"
 #~ msgstr "Load error"
 
@@ -15353,6 +15374,9 @@ msgstr "Add on %s"
 
 #~ msgid "Loading the full mail might lead to performance problems."
 #~ msgstr "Loading the full e-mail might lead to performance problems."
+
+#~ msgid "Localpart"
+#~ msgstr "Localpart"
 
 #~ msgid "Login must not be empty."
 #~ msgstr "Login must not be empty."
@@ -15371,6 +15395,9 @@ msgstr "Add on %s"
 
 #~ msgid "Mail Thread Details"
 #~ msgstr "E-mail Thread Details"
+
+#~ msgid "Mail and Messaging"
+#~ msgstr "Email and Messaging"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Email and Social Accounts"
@@ -15440,6 +15467,9 @@ msgstr "Add on %s"
 
 #~ msgid "Minutes"
 #~ msgstr "Minutes"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Miscellaneous"
 
 #~ msgid "Mobile"
 #~ msgstr "Mobile"
@@ -15646,6 +15676,15 @@ msgstr "Add on %s"
 #~ msgstr[0] "One item was found."
 #~ msgstr[1] "%1$s items were found."
 
+#~ msgid ""
+#~ "One or more attached files exceed the size limit per email. Therefore, "
+#~ "the files are not sent as attachments but kept on the server. The email "
+#~ "you have sent just contains links to download these files."
+#~ msgstr ""
+#~ "One or more attached files exceed the size limit per email. Therefore, "
+#~ "the files were not sent as attachments but kept on the server. The email "
+#~ "you have sent contains links to download these files."
+
 #~ msgid "OneDrive"
 #~ msgstr "OneDrive"
 
@@ -15727,11 +15766,17 @@ msgstr "Add on %s"
 #~ msgid "Permissions: %1$s"
 #~ msgstr "Permissions"
 
+#~ msgid "Personal"
+#~ msgstr "Personal"
+
 #~ msgid "Phone (private)"
 #~ msgstr "Phone (private)"
 
 #~ msgid "Phone alt"
 #~ msgstr "Phone alt"
+
+#~ msgid "Phone numbers"
+#~ msgstr "Phone numbers"
 
 #~ msgid "Pick a time here"
 #~ msgstr "Pick a time here"
@@ -15939,6 +15984,9 @@ msgstr "Add on %s"
 #~ msgid "Recipients can edit"
 #~ msgstr "Recipients can edit"
 
+#~ msgid "Recurrence"
+#~ msgstr "Recurrence"
+
 #~ msgid "Recurring tasks need a valid end date."
 #~ msgstr "Recurring tasks need a valid end date."
 
@@ -15987,6 +16035,9 @@ msgstr "Add on %s"
 #, fuzzy
 #~ msgid "Right"
 #~ msgstr "tonight"
+
+#~ msgid "Rotate image"
+#~ msgstr "Rotate image"
 
 #~ msgid "Rule applies from"
 #~ msgstr "Rule applies from"
@@ -16089,6 +16140,9 @@ msgstr "Add on %s"
 
 #~ msgid "Select page"
 #~ msgstr "Select page"
+
+#~ msgid "Selected - %1$s"
+#~ msgstr "Selected - %1$s"
 
 #~ msgid "Selected message was moved successfully."
 #~ msgid_plural "Selected messages has been moved successfully."
@@ -16193,6 +16247,9 @@ msgstr "Add on %s"
 #~ msgid "Show Tabs for inbox"
 #~ msgstr "Show Tabs for inbox"
 
+#~ msgid "Show all fields"
+#~ msgstr "Show all fields"
+
 #~ msgid "Show all images for"
 #~ msgstr "Show all images for"
 
@@ -16251,6 +16308,9 @@ msgstr "Add on %s"
 #~ msgid "Show next day"
 #~ msgstr "Show next day"
 
+#~ msgid "Show or hide actions for advanced users."
+#~ msgstr "Show or hide actions for advanced users."
+
 #~ msgid "Show original publication"
 #~ msgstr "Show original publication"
 
@@ -16308,6 +16368,9 @@ msgstr "Add on %s"
 #~ "Social accounts are only used to download contact and/or calendar data"
 #~ msgstr ""
 #~ "Social accounts are only used to download contact and/or calendar data"
+
+#~ msgid "Some fields contain invalid data"
+#~ msgstr "Some fields contain invalid data"
 
 #~ msgid ""
 #~ "Some files cannot be uploaded because they exceed the maximum file size "
@@ -16433,6 +16496,9 @@ msgstr "Add on %s"
 #~ msgid "Tag mail with"
 #~ msgstr "Tag mail with"
 
+#~ msgid "Take photo"
+#~ msgstr "Take photo"
+
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 
@@ -16516,6 +16582,17 @@ msgstr "Add on %s"
 #~ "social network news."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used if the "
+#~ "appointment blocks resources."
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -16596,6 +16673,9 @@ msgstr "Add on %s"
 #~ "\" data-attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number"
 #~ "\" data-attribute=\"interval\">every <span class=\"number-control\">2</"
 #~ "span> months</a>."
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "The appointment is visible for all users in shared calendars."
 
 #~ msgid "The calendar views display a calendar sheet with the appointments."
 #~ msgstr "The calendar views display a calendar sheet with the appointments."
@@ -16896,6 +16976,13 @@ msgstr "Add on %s"
 
 #~ msgid "This file is locked by you"
 #~ msgstr "This file is locked by you"
+
+#~ msgid ""
+#~ "This filetype is not supported as contact picture. Only image types (JPG, "
+#~ "GIF, BMP or PNG) are supported."
+#~ msgstr ""
+#~ "This filetype is not supported as contact picture. Only image types (JPG, "
+#~ "GIF, BMP or PNG) are supported."
 
 #~ msgid "This folder has publications and/or subscriptions"
 #~ msgstr "This folder has publications and/or subscriptions"
@@ -17253,6 +17340,13 @@ msgstr "Add on %s"
 #~ msgid "Upload handling"
 #~ msgstr "Upload local file"
 
+#~ msgid "Upload image"
+#~ msgstr "Upload image"
+
+#~| msgid "Upload local file"
+#~ msgid "Upload local image"
+#~ msgstr "Upload local image"
+
 #~ msgid "Upload new files"
 #~ msgstr "Upload new files"
 
@@ -17344,6 +17438,9 @@ msgstr "Add on %s"
 
 #~ msgid "Viewer Toolbar"
 #~ msgstr "Viewer Tool bar"
+
+#~ msgid "Visibility Help"
+#~ msgstr "Visibility Help"
 
 #~ msgid "We could not verify that this email is really from %1$s."
 #~ msgstr "We could not verify that this e-mail is really from %1$s."
@@ -17592,6 +17689,9 @@ msgstr "Add on %s"
 
 #~ msgid "Your reply has been sent"
 #~ msgstr "Your reply has been sent"
+
+#~ msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+#~ msgstr "Your selected picture exceeds the maximum allowed file size of %1$s"
 
 #, fuzzy
 #~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"

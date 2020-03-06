@@ -1,0 +1,37 @@
+Date: Mon, 27 Jan 2020 07:18:07 +0000 (UTC)
+From: User two <user.two@sandbox-4.open-xchange.com>
+To: User five <user.five@sandbox-4.open-xchange.com>
+Message-ID: <856815497.926.1580109487289@sandbox.open-xchange.com.novalocal>
+Subject: test?
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
+X-OX-Meta: p0ihi/Sos7WfqePKRvWrOg==
+X-OX-Security: fOuoQ4uC3gBJjo5YCwTkr25KJtga1nUx6YYBm93LhOB3xWOv+b33/Qe7MM9/9
+ OND2b2fZG4u5NX8pd+pXlnbduuNDXh+2mZx9gejaZtXJgoEbT02UeqXEd/5Ow2HvG9bu5IapSlY
+ cvg=
+X-OX-Shared-Attachments: pFvLmq4zlfu9GuqyPqcZ9J5002YGiol8
+X-Mailer: Open-Xchange Mailer v7.10.3-Rev3
+X-Originating-Client: open-xchange-appsuite
+X-OX-Marker: e0ac5bc8-840b-454b-92a0-8bd87bea6a2c
+
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+<style>
+.xss {
+font-size: 20px;
+content:"lel"
+}
+</style>
+ </head>
+ <body>
+  <div class="default-style">
+   test
+<a class=xss style='font:"xss{color:color><img src onerror=document.write("hacked:"+document.domain+ox.session)>http://test.com/;}'href=http://test>XSS?</a>
+  </div>
+ </body>
+</html>
