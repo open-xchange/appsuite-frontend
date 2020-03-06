@@ -6,10 +6,15 @@ build ui docker image:
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
     - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG}
   stage: test
+  tags:
+    - docker
+
 
 .tag docker image: &add_tag
   stage: deploy
   dependencies: [] # none
+  tags:
+    - docker
   script:
     - "[ -z $TAG_NAME ] && export TAG_NAME=$(echo $CI_JOB_NAME | sed 's/tag //') || true"
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
