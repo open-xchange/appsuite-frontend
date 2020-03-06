@@ -52,6 +52,38 @@ define('io.ox/mail/compose/extensions', [
         reply_to: /*#. Must not exceed 8 characters. e.g. German would be: "Antworten an", needs to be abbreviated like "Antw. an" as space is very limited */ gt.pgettext('compose', 'Reply to')
     };
 
+    // helper function used by upload local file and drag and drop
+    // manages a11y messages and makes a quota check before the file is uploaded
+    var attachmentUploadHelper = function (model, files) {
+        // also support events
+        files = files.target ? files.target.files : files;
+        var self = this,
+            attachmentCollection = model.get('attachments'),
+            accumulatedSize = attachmentCollection.filter(function (m) {
+                var size = m.get('size');
+                return typeof size !== 'undefined';
+            })
+            .map(function (m) { return m.get('size'); })
+            .reduce(function (m, n) { return m + n; }, 0);
+
+        if (attachmentQuota.checkQuota(files, accumulatedSize)) {
+            //#. %s is a list of filenames separeted by commas
+            //#. it is used by screenreaders to indicate which files are currently added to the list of attachments
+            self.trigger('aria-live-update', gt('Added %s to attachments.', _(files).map(function (file) { return file.name; }).join(', ')));
+            var models = _(files).map(function (file) {
+                var attachment = new Attachments.Model({ filename: file.name, origin: { file: file } });
+                composeUtil.uploadAttachment({
+                    model: model,
+                    filename: file.filename,
+                    origin: { file: file },
+                    attachment: attachment
+                });
+                return attachment;
+            });
+            model.attachFiles(models);
+        }
+    };
+
     var IntermediateModel = Backbone.Model.extend({
         initialize: function (opt) {
             this.config = opt.config;
@@ -533,17 +565,7 @@ define('io.ox/mail/compose/extensions', [
                     $(window).trigger('resize');
                 },
                 'drop': function (files) {
-                    var models = _(files).map(function (file) {
-                        var attachment = new Attachments.Model({ filename: file.name, origin: { file: file } });
-                        composeUtil.uploadAttachment({
-                            model: baton.model,
-                            filename: file.filename,
-                            origin: { file: file },
-                            attachment: attachment
-                        });
-                        return attachment;
-                    });
-                    baton.model.attachFiles(models);
+                    attachmentUploadHelper.call(baton.view.$el.find('[data-extension-id="add_attachments"]'), baton.model, files);
                     $(window).trigger('resize');
                 }
             });
@@ -688,33 +710,6 @@ define('io.ox/mail/compose/extensions', [
         },
 
         attachment: (function () {
-            function addLocalFile(model, e) {
-                var self = this,
-                    attachmentCollection = model.get('attachments'),
-                    accumulatedSize = attachmentCollection.filter(function (m) {
-                        var size = m.get('size');
-                        return typeof size !== 'undefined';
-                    })
-                    .map(function (m) { return m.get('size'); })
-                    .reduce(function (m, n) { return m + n; }, 0);
-
-                if (attachmentQuota.checkQuota(e.target.files, accumulatedSize)) {
-                    //#. %s is a list of filenames separeted by commas
-                    //#. it is used by screenreaders to indicate which files are currently added to the list of attachments
-                    self.trigger('aria-live-update', gt('Added %s to attachments.', _(e.target.files).map(function (file) { return file.name; }).join(', ')));
-                    var models = _(e.target.files).map(function (file) {
-                        var attachment = new Attachments.Model({ filename: file.name, origin: { file: file } });
-                        composeUtil.uploadAttachment({
-                            model: model,
-                            filename: file.filename,
-                            origin: { file: file },
-                            attachment: attachment
-                        });
-                        return attachment;
-                    });
-                    model.attachFiles(models);
-                }
-            }
 
             function openFilePicker(model) {
                 var self = this;
@@ -745,7 +740,7 @@ define('io.ox/mail/compose/extensions', [
 
             return function (baton) {
                 var fileInput = $('<input type="file" name="file">').css('display', 'none')
-                        .on('change', addLocalFile.bind(this, baton.model))
+                        .on('change', attachmentUploadHelper.bind(this, baton.model))
                         // multiple is off on smartphones in favor of camera roll/capture selection
                         .prop('multiple', _.device('!smartphone'));
 
