@@ -40,17 +40,16 @@ Scenario('[C274425] Month label in Calendar week view', async function (I, users
     expect(await I.grabTextFrom('.weekview-container .header .info')).to.equal('December 2019 - January 2020 CW 1');
 });
 
-Scenario('[C207509] Year view', async (I) => {
+Scenario('[C207509] Year view', async (I, calendar) => {
     // 1. Go to Calendar
     I.login(['app=io.ox/calendar']);
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    calendar.waitForApp();
 
     // 2. Switch to year view (View -> Year)
-    I.clickToolbar('View');
-    I.click('Year');
+    calendar.switchView('Year');
 
     // Expected Result: Year view opens.
-    I.seeElement('.year-view');
+    I.waitForElement('.year-view');
 
     // Expected Result: The year view displays each day of the year separated in month.
     I.seeNumberOfElements('.year-view .month-container', 12);
@@ -71,15 +70,15 @@ Scenario('[C207509] Year view', async (I) => {
         [1800, 'width: 16.6667%;']
     ]);
 
-    const resizeAndCheckStyle = async (width, style) => {
+    const resizeAndCheckStyle = (width, style) => {
         I.resizeWindow(width, 1000);
-        const styles = await I.grabAttributeFrom('.year-view .month-container', 'style');
-        styles.forEach(css => expect(css).to.include(style));
+        I.seeNumberOfVisibleElements(`.year-view .month-container[style*="${style}"]`, 12);
     };
+
 
     // Expected Result: Layout switches between a one-, two-, four or six-columned view
     // TODO: actually there is also a three columned layout, need to verify this is correct
-    sizesAndStyles.forEach(async (style, width) => await resizeAndCheckStyle(width, style));
+    sizesAndStyles.forEach((style, width) => resizeAndCheckStyle(width, style));
 
     // 4. Use the arrow icons at the top of the view to move between years.
     const actualYearString = await I.grabTextFrom('.year-view .info'),
