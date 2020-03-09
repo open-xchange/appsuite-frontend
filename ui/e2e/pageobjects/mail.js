@@ -20,12 +20,13 @@ module.exports = {
     newMail() {
         I.waitForText('Compose', 5, '.io-ox-mail-window .classic-toolbar-container');
         I.clickToolbar('Compose');
+        I.waitForVisible('.io-ox-mail-compose [placeholder="To"]', 30);
         I.waitForFocus('.io-ox-mail-compose [placeholder="To"]');
     },
     send() {
         I.click('Send');
         I.wait(0.5);
         I.waitToHide('.io-ox-mail-compose-window');
-        I.waitToHide('.generic-toolbar.mail-progress');
+        I.waitToHide('.generic-toolbar.mail-progress', 45);
     }
 };

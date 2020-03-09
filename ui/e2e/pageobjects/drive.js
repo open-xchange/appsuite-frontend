@@ -1,4 +1,4 @@
-const { I } = inject();
+const { I, dialogs } = inject();
 
 module.exports = {
     waitForApp() {
@@ -15,13 +15,10 @@ module.exports = {
         I.waitForText('Details', 10, '.io-ox-viewer .sidebar-panel-title');
     },
     shareItem(type) {
-        I.waitForVisible(locate({ css: '[data-dropdown="io.ox/files/toolbar/share"]' }).inside('.classic-toolbar-container'));
-        I.wait(1);
-        I.click(locate({ css: '[data-dropdown="io.ox/files/toolbar/share"]' }).inside('.classic-toolbar-container'));
-        I.wait(1);
+        I.clickToolbar('Share');
         I.clickDropdown(type);
         I.waitForDetached('.dropdown.open');
-        I.waitForVisible('.modal-dialog');
+        dialogs.waitForVisible();
         I.waitForFocus('.modal-dialog input[type="text"][id^="form-control-label"]');
     }
 };

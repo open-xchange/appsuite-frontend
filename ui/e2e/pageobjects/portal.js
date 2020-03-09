@@ -1,4 +1,4 @@
-const { I } = inject();
+const { I, dialogs } = inject();
 
 module.exports = {
 
@@ -21,8 +21,8 @@ module.exports = {
         this.openDropdown();
         I.click(`${name}`, this.locators.dropdown);
         if (name === 'Inbox') {
-            I.waitForVisible('.modal-dialog');
-            I.click('Save');
+            dialogs.waitForVisible();
+            dialogs.clickButton('Save');
         }
         I.waitForElement(`~${name}`);
     }

@@ -1,4 +1,4 @@
-const { I } = inject();
+const { I, dialogs } = inject();
 
 module.exports = {
     waitForApp(isContactsFolder = false) {
@@ -21,25 +21,21 @@ module.exports = {
     },
     newAddressbook(name) {
         I.click('Add new address book');
-        I.waitForElement('.modal-body');
+        dialogs.waitForVisible();
         I.fillField('[placeholder="New address book"][type="text"]', name);
-        I.click('Add');
-        I.waitForDetached('.modal-body');
+        dialogs.clickButton('Add');
+        I.waitForDetached('.modal-dialog');
     },
     newContact() {
         I.waitForDetached('.dropdown-toggle.disabled');
-        I.waitForText('New contact', 30, '.classic-toolbar-visible .dropdown-toggle');
-        I.click('New contact', '.classic-toolbar-visible .dropdown-toggle');
-        I.waitForText('New contact', 30, '.dropdown.open .dropdown-menu');
-        I.click('New contact', '.dropdown.open .dropdown-menu');
+        I.clickToolbar('New contact');
+        I.clickDropdown('New contact');
         I.waitForText('Add personal info');
     },
     newDistributionlist() {
         I.waitForDetached('.dropdown-toggle.disabled');
-        I.waitForText('New contact', 30, '.classic-toolbar-visible .dropdown-toggle');
-        I.click('New contact', '.classic-toolbar-visible .dropdown-toggle');
-        I.waitForText('New distribution list', 30, '.dropdown.open .dropdown-menu');
-        I.click('New distribution list', '.dropdown.open .dropdown-menu');
+        I.clickToolbar('New contact');
+        I.clickDropdown('New distribution list');
         I.waitForText('Participants');
     },
     addContactsField(fieldType, field, input) {

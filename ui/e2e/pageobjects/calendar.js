@@ -1,4 +1,4 @@
-const { I, contactpicker, autocomplete } = inject();
+const { I, contactpicker, autocomplete, dialogs } = inject();
 
 const MAPPING = {
     'Day': 'dayview',
@@ -71,9 +71,9 @@ module.exports = {
     deleteAppointment() {
         I.waitForText('Delete');
         I.click('Delete', '.io-ox-sidepopup .calendar-detail');
-        I.waitForVisible('.modal-footer .btn-primary');
-        I.click('Delete', '.modal-dialog .modal-footer');
-        I.waitForDetached('.modal');
+        dialogs.waitForVisible();
+        dialogs.clickButton('Delete');
+        I.waitForDetached('.modal-dialog');
     },
 
     // attr: [startDate, endDate, until]
@@ -135,7 +135,7 @@ module.exports = {
     },
 
     switchView: function (view) {
-        I.click(locate({ css: '[data-dropdown="view"]' }).inside('.classic-toolbar-container'));
+        I.clickToolbar('View');
         I.waitForElement('.dropdown.open');
         I.clickDropdown(view);
     }
