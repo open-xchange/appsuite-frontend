@@ -21,7 +21,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('check actions', async function (I, tasks) {
+Scenario('check actions', async function (I, tasks, dialogs) {
     I.login('app=io.ox/tasks');
     tasks.waitForApp();
     tasks.newTask();
@@ -50,8 +50,8 @@ Scenario('check actions', async function (I, tasks) {
 
     I.waitForText('Best Task evor!!!11elf', 5, '.tasks-detailview');
     I.clickToolbar('Delete');
-    I.waitForVisible('.modal-footer');
-    I.click('Delete', '.modal-footer');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
     I.waitForVisible('.summary.empty');
-    I.waitForDetached('.modal-backdrop.in');
+    I.waitForDetached('.modal-dialog');
 });

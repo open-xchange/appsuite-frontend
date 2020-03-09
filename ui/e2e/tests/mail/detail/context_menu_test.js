@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C248438] Context menu can be opened by right click', async (I, users, mail) => {
+Scenario('[C248438] Context menu can be opened by right click', async (I, users, mail, dialogs) => {
 
     const icke = users[0].userdata.email1,
         subject = 'Context menu can be opened by right click';
@@ -59,24 +59,24 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users,
 
     // View source
     rightClick('View source');
-    I.waitForElement('.mail-source-dialog');
-    I.waitForVisible(locate('//button[@data-action="close"]').inside('.modal-footer'));
-    I.click('Close', '.modal-footer');
-    I.waitForDetached('.mail-source-dialog');
+    dialogs.waitForVisible();
+    I.seeElement('.mail-source-dialog');
+    dialogs.clickButton('Close');
+    I.waitForDetached('.modal-dialog');
 
     // Move
     rightClick('Move');
-    I.waitForElement('.folder-picker-dialog');
-    I.click('Cancel');
+    dialogs.waitForVisible();
+    I.seeElement('.folder-picker-dialog');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
 
     // Reply
     rightClick('Reply');
-    I.waitForElement({ css: 'button[data-action="discard"]' });
-    I.seeInField('subject', 'Re: ' + subject);
-    // no better approach yet. I.waitForMailCompose() might be a good one
+    I.waitForVisible('.io-ox-mail-compose [placeholder="To"]', 30);
     I.waitForInvisible('.io-ox-busy');
-    I.waitForEnabled({ css: 'button[data-action="discard"]' });
-    I.wait(1);
+    I.seeInField('subject', 'Re: ' + subject);
+    I.waitForElement({ css: 'button[data-action="discard"]:not(:disabled)' });
     I.click('Discard');
 
     // // Shift-F10 (view source again)

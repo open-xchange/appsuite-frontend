@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C83387] Create mail filter based on moving mail', async (I, users) => {
+Scenario('[C83387] Create mail filter based on moving mail', async (I, users, mail, dialogs) => {
 
     // 1. Login User#A
     // 2. Go to Mail and send a mail to User#B
@@ -45,21 +45,21 @@ Scenario('[C83387] Create mail filter based on moving mail', async (I, users) =>
     // 4. Go to Mail module and select the previous send mail
 
     I.login('app=io.ox/mail');
-    I.waitForVisible({ css: '[data-ref="io.ox/mail/listview"]' });
+    mail.waitForApp();
     I.retry(5).click('.list-item[aria-label*="Subject#1"]');
 
     // 5. Open context menu either in detailed view or in top bar
     I.waitForVisible('~More actions');
     I.click('~More actions');
-    I.waitForVisible('.smart-dropdown-container');
 
     // 6. Click "Move"
-    I.click('Move', '.smart-dropdown-container');
-    I.waitForText('Move');
+    I.clickDropdown('Move');
+    dialogs.waitForVisible();
+    I.waitForText('Move', 5, dialogs.locators.header);
 
     // 7. Select "Create filter rule" checkbox
 
-    I.click(locate('label').withText('Create filter rule'));
+    I.checkOption('Create filter rule', dialogs.locators.footer);
 
     // 8. Choose destination folder (e.g. TRASH)
 
@@ -68,12 +68,10 @@ Scenario('[C83387] Create mail filter based on moving mail', async (I, users) =>
             .withText('Trash')
             .inside('.folder-picker-dialog'));
 
-    I.waitForEnabled({ css: '[data-action="ok"]' });
-
     // 9. Hit "Move"
 
-    I.click({ css: '[data-action="ok"]' });
-    I.waitForText('Create new rule');
+    dialogs.clickButton('Move');
+    I.waitForText('Create new rule', 5, dialogs.locators.header);
 
     // 10. Set a name for the filter
     // Filter name is already set. Check if it prefilled.
@@ -88,7 +86,7 @@ Scenario('[C83387] Create mail filter based on moving mail', async (I, users) =>
     I.seeInField({ css: '[id*="move"]' }, 'Trash');
 
     // 11. Save filter
-    I.click('Save');
+    dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
 
     // 12. As User#A send again a mail to User#B

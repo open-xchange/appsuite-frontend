@@ -22,7 +22,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('request a new download and cancel it', async function (I) {
+Scenario('request a new download and cancel it', async function (I, dialogs) {
     I.login('app=io.ox/settings');
 
     I.waitForText('Download personal data', 5);
@@ -66,9 +66,9 @@ Scenario('request a new download and cancel it', async function (I) {
         // cancel again, we don't want to clutter the filesystem
         I.click('Cancel download request');
     });
-
-    I.waitForText('Do you really want to cancel the current download request?', 5);
-    I.click('Cancel download request', '.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Do you really want to cancel the current download request?', 5, dialogs.locators.body);
+    dialogs.clickButton('Cancel download request');
 
     within('.io-ox-personal-data-settings', () => {
         // check if view switches correctly and buttons are enabled again

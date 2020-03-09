@@ -23,22 +23,26 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C125002] Enable user feedback dialog', function (I) {
+Scenario('[C125002] Enable user feedback dialog', function (I, mail, dialogs) {
     I.login();
+    mail.waitForApp();
     I.waitForVisible('~Feedback');
-    I.click('.feedback-button');
-    I.waitForText('Please rate the following application', 5, '.modal');
-    I.grabTitle('#star-rating');
+    I.click('~Feedback');
+    dialogs.waitForVisible();
+    I.see('Please rate the following application');
 });
 
-Scenario('[C125004] App aware user feedback', function (I, mail, drive, contacts, calendar, portal, tasks) {
+Scenario('[C125004] App aware user feedback', function (I, mail, drive, contacts, calendar, portal, tasks, dialogs) {
 
+    // Check if 'appType' is the value selected by default
     function testFeedback(appType = 'general') {
         I.waitForVisible('~Feedback');
-        I.click('.feedback-button');
-        I.waitForText('Please rate the following application:', 5, '.modal');
+        I.click('~Feedback');
+        dialogs.waitForVisible();
+        I.waitForText('Please rate the following application', 5, dialogs.locators.body);
         I.waitForValue('.feedback-select-box', appType);
-        I.click('Cancel');
+        dialogs.clickButton('Cancel');
+        I.waitForDetached('.modal-dialog');
     }
 
     I.login('app=io.ox/mail');
@@ -65,21 +69,20 @@ Scenario('[C125004] App aware user feedback', function (I, mail, drive, contacts
     tasks.waitForApp();
     testFeedback();
 
-
 });
 
-Scenario('[C125005] Provide user feedback', function (I, mail) {
+Scenario('[C125005] Provide user feedback', function (I, mail, dialogs) {
 
     const appArr = ['Mail', 'General', 'Calendar', 'Address Book', 'Drive'];
     const giveFeedback = (app) => {
-        I.click('.feedback-button');
-        I.waitForVisible({ css: 'select.feedback-select-box' });
-        I.waitForText('Please rate the following application:');
-        I.see(app);
+        I.click('~Feedback');
+        dialogs.waitForVisible();
+        I.waitForText('Please rate the following application:', 5, dialogs.locators.body);
+        I.see(app); // check if app is in options dropdown
         I.selectOption('.feedback-select-box', app);
         I.click(locate('.star-rating label').at(getRandom()));
         I.fillField('.feedback-note', 'It is awesome');
-        I.click('Send');
+        dialogs.clickButton('Send');
         I.waitForText('Thank you for your feedback');
         I.waitForDetached('.modal-dialog');
     };
@@ -92,6 +95,12 @@ Scenario('[C125005] Provide user feedback', function (I, mail) {
     I.waitForVisible('~Feedback');
     //Open Feedback dialog and rate each app in turn
     appArr.forEach(giveFeedback);
+
+    // Open Feedback dialog and try to send feedback without rating
+    I.click('~Feedback');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Send');
+    I.waitForText('Please select a rating.');
 
 });
 

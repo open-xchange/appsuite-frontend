@@ -21,7 +21,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7486] Remove a file', async (I, users) => {
+Scenario('[C7486] Remove a file', async (I, users, portal, dialogs) => {
 
     // Add a file to drive
     const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
@@ -41,13 +41,14 @@ Scenario('[C7486] Remove a file', async (I, users) => {
 
     //Verify file widget on Portal
     I.openApp('Portal');
-    I.waitForVisible('.io-ox-portal');
+    portal.waitForApp();
     I.waitForElement('~testdocument.odt');
+    I.wait(1); // sometimes the widget is clicked causing the viewer to be opened
 
     // remove file widget from portal
     I.click('~testdocument.odt, Disable widget');
-    I.waitForVisible({ css: '.modal-dialog' });
-    I.click('Delete', '.modal-dialog');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
 
     // verify that the file widget is removed
     I.dontSee('~testdocument.odt');

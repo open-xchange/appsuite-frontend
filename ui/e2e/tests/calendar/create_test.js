@@ -29,7 +29,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('Create appointment with all fields', async function (I, calendar) {
+Scenario('Create appointment with all fields', async function (I, calendar, dialogs) {
     const data = { subject: 'test title', location: 'test location' };
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -69,8 +69,9 @@ Scenario('Create appointment with all fields', async function (I, calendar) {
     I.click(appointment);
     I.waitForText('Delete');
     I.click('Delete');
-    I.waitForVisible('.modal-dialog .modal-footer');
-    I.click('Delete', '.modal-dialog .modal-footer');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached(appointment);
 });
 
@@ -185,7 +186,7 @@ Scenario('[C7412] Create private appointment @contentReview @bug', async functio
     }));
 });
 
-Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December, no end', async function (I, calendar) {
+Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December, no end', async function (I, calendar, dialogs) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -202,10 +203,11 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
 
     I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'), '.io-ox-calendar-edit-window');
     I.click(`Every ${date.format('dddd')}.`);
-    I.waitForElement('.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Edit recurrence', 5, dialogs.locators.header);
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Yearly');
     I.see('Every year in December on day 16.');
-    I.click('Apply', '.modal-dialog');
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     I.see('Every year in December on day 16.');
 
@@ -230,7 +232,7 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
     }));
 });
 
-Scenario('[C7418] Create a Yearly recurring appointment last day of week in december, ends after 5', async function (I, calendar) {
+Scenario('[C7418] Create a Yearly recurring appointment last day of week in december, ends after 5', async function (I, calendar, dialogs) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -250,12 +252,13 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
 
     I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'), '.io-ox-calendar-edit-window');
     I.click(`Every ${date.format('dddd')}.`);
-    I.waitForElement('.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Edit recurrence', 5, dialogs.locators.header);
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Yearly');
     I.waitForText('Weekday');
     I.click({ css: 'input[value="weekday"]' });
     I.see('Every year on the first Sunday in December.');
-    I.click('Apply', '.modal-dialog');
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     I.see('Every year on the first Sunday in December.');
 
@@ -285,7 +288,7 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
     }));
 });
 
-Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/2020', async function (I, calendar) {
+Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/2020', async function (I, calendar, dialogs) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -308,13 +311,14 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
     I.click(`Every ${date.format('dddd')}.`);
 
     I.say('Create > Recurrence');
-    I.waitForElement('.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Edit recurrence', 5, dialogs.locators.header);
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Monthly');
     I.selectOption('.modal-dialog [name="until"]', 'On specific date');
     I.waitForElement(locate('~Date (M/D/YYYY)').inside('.modal-dialog'));
     await calendar.setDate('until', moment(date).add(6, 'years'));
     I.see('Every month on day 10.');
-    I.click('Apply', '.modal-dialog');
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     I.see('Every month on day 10.');
 
@@ -339,7 +343,7 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
 
 });
 
-Scenario('[C7420] Create a monthly recurring appointment every second Monday every month never ends', async function (I, calendar) {
+Scenario('[C7420] Create a monthly recurring appointment every second Monday every month never ends', async function (I, calendar, dialogs) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -361,12 +365,13 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
     I.say('Create > Recurrence');
     I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'), '.io-ox-calendar-edit-window');
     I.click(`Every ${date.format('dddd')}.`);
-    I.waitForElement('.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Edit recurrence', 5, dialogs.locators.header);
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Monthly');
     I.waitForText('Weekday');
     I.click({ css: 'input[value="weekday"]' });
     I.see('Every month on the second Monday.');
-    I.click('Apply', '.modal-dialog');
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     I.see('Every month on the second Monday.');
 
@@ -395,7 +400,7 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
 
 });
 
-Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday ends after 3', async function (I, calendar) {
+Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday ends after 3', async function (I, calendar, dialogs) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -416,7 +421,6 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
     I.say('Create > Recurrence');
     calendar.recurAppointment(date);
     within(calendar.locators.recurrenceview, function () {
-        I.waitForElement('.modal-dialog');
         I.selectOption('.modal-dialog [name="recurrence_type"]', 'Weekly');
         I.fillField('Interval', 2);
         I.selectOption('.modal-dialog [name="until"]', 'After a number of occurrences');
@@ -424,8 +428,8 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
         I.fillField('.modal-dialog [name="occurrences"]', '3');
         I.pressKey('Enter');
         I.see('Every 2 weeks on Sunday.');
-        I.click('Apply', '.modal-dialog');
     });
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     I.see('Every 2 weeks on Sunday.');
 
@@ -501,7 +505,7 @@ Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thu
     }));
 });
 
-Scenario('[C7423] Create daily recurring appointment every day ends after 5', async function (I, calendar) {
+Scenario('[C7423] Create daily recurring appointment every day ends after 5', async function (I, calendar, dialogs) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -529,8 +533,8 @@ Scenario('[C7423] Create daily recurring appointment every day ends after 5', as
         I.fillField('[name="occurrences"]', '5');
         I.pressKey('Enter');
         I.see('Every day.');
-        I.click('Apply');
     });
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     I.see('Every day.');
 
@@ -554,7 +558,7 @@ Scenario('[C7423] Create daily recurring appointment every day ends after 5', as
     }));
 });
 
-Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12', async function (I, calendar) {
+Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12', async function (I, calendar, dialogs) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -586,9 +590,8 @@ Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12',
         I.fillField('[name="occurrences"]', '8'); // just repeat 8 times to stay in the current month
         I.pressKey('Enter');
         I.see('Every 2 days.');
-        I.click('Apply', '.modal-dialog');
     });
-
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     I.see('Every 2 days.');
 
@@ -1038,7 +1041,7 @@ Scenario('[C7436] Create appointment without any infos', async function (I, cale
     I.see('Please enter a value');
 });
 
-Scenario('[C271749] Show prompt on event creation in public calendar', async function (I, calendar) {
+Scenario('[C271749] Show prompt on event creation in public calendar', async function (I, calendar, dialogs) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -1051,10 +1054,11 @@ Scenario('[C271749] Show prompt on event creation in public calendar', async fun
     I.click('Add new calendar');
     I.waitForText('Personal calendar');
     I.click('Personal calendar');
-    I.waitForVisible('.modal-body');
+    dialogs.waitForVisible();
+    I.waitForText('Add new calendar', 5, dialogs.locators.header);
     I.fillField('Calendar name', 'Cal#A');
     I.checkOption('Add as public calendar');
-    I.click('Add');
+    dialogs.clickButton('Add');
     I.waitForDetached('.modal');
 
     // Open create new appointment dialog
@@ -1412,7 +1416,7 @@ Scenario('[C7414] Create two appointments at the same time (one is shown as free
     I.waitForDetached(locate('.modal-open .modal-title').withText('Conflicts detected'));
 });
 
-Scenario('[C7415] Create two reserved appointments at the same time', async function (I, users, calendar) {
+Scenario('[C7415] Create two reserved appointments at the same time', async function (I, users, calendar, dialogs) {
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
@@ -1456,8 +1460,9 @@ Scenario('[C7415] Create two reserved appointments at the same time', async func
     I.click('Create');
 
     I.say('Check appointment');
-    I.waitForElement(locate('.modal-open .modal-title').withText('Conflicts detected'));
-    I.click('Ignore conflicts');
+    dialogs.waitForVisible();
+    I.waitForText('Conflicts detected', 5, dialogs.locators.header);
+    dialogs.clickButton('Ignore conflicts');
     I.waitForDetached('.modal-open');
     I.retry(5).click('~Refresh');
     I.waitForElement('#io-ox-refresh-icon .fa-spin');

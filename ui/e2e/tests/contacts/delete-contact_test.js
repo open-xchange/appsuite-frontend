@@ -21,7 +21,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7366] Multiple contacts', async function (I, search, contacts) {
+Scenario('[C7366] Multiple contacts', async function (I, search, contacts, dialogs) {
     const testrailID = 'C7366';
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',
@@ -43,12 +43,14 @@ Scenario('[C7366] Multiple contacts', async function (I, search, contacts) {
     I.click('.select-all');
     I.waitForElement('.fa-spin-paused');
     I.clickToolbar('Delete');
-    I.waitForVisible('.modal-dialog');
-    I.click('.btn.btn-primary', '.modal-footer');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
+    I.waitForInvisible('.io-ox-busy');
     I.dontSee('C7367, C7367');
 });
 
-Scenario('[C7367] Single Contact', async function (I, contacts) {
+Scenario('[C7367] Single Contact', async function (I, contacts, dialogs) {
     const testrailID = 'C7367',
         displayName = testrailID + ', ' + testrailID,
         contact = {
@@ -65,8 +67,8 @@ Scenario('[C7367] Single Contact', async function (I, contacts) {
     contacts.selectContact(displayName);
 
     I.clickToolbar('Delete');
-    I.waitForVisible('.modal-dialog');
-    I.click('.btn.btn-primary', '.modal-footer');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached({ css: '[aria-label="' + displayName + '"]' });
 });

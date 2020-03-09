@@ -23,7 +23,7 @@ After(async function (users) {
 
 const util = require('./util');
 
-Scenario('Add external participant as contact', async function (I, contacts) {
+Scenario('Add external participant as contact', async function (I, contacts, dialogs) {
     const haloview = locate({ css: '.io-ox-sidepopup .io-ox-halo' }).as('Halo View');
 
     I.login('app=io.ox/contacts');
@@ -54,8 +54,9 @@ Scenario('Add external participant as contact', async function (I, contacts) {
 
     I.say('Confirm dirtycheck is working properly');
     I.click('Discard', '.io-ox-contacts-edit-window');
-    I.waitForText('Do you really want to discard your changes?', 5, '.modal-dialog');
-    I.click('Cancel');
+    dialogs.waitForVisible();
+    I.waitForText('Do you really want to discard your changes?', 5, dialogs.locators.body);
+    dialogs.clickButton('Cancel');
     I.waitForDetached('.modal-dialog');
 
     I.say('Save contact as `Lastname`');

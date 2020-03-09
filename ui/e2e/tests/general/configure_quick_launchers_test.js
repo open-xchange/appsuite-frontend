@@ -22,15 +22,15 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C287801] Configure quick launchers', function (I) {
+Scenario('[C287801] Configure quick launchers', function (I, mail, dialogs) {
     I.login();
-    I.waitForElement('~Mail', '#io-ox-quicklaunch');
-    I.waitForElement('~Calendar', '#io-ox-quicklaunch');
-    I.waitForVisible('~Drive', '#io-ox-quicklaunch');
+    mail.waitForApp();
+
+    // Changing configuration and cancelling the dialog
     I.rightClick('#io-ox-quicklaunch');
-    I.waitForElement('.modal.in');
-    within('.modal.in', () => {
-        I.waitForText('Change quick launch icons', 5, { css: '.modal-header h1' });
+    dialogs.waitForVisible();
+    I.waitForText('Change quick launch icons', 5, dialogs.locators.header);
+    within(dialogs.locators.body, () => {
         I.see('Position 1');
         I.see('Mail', { css: '[id="settings-apps/quickLaunch0"]' });
         I.see('Position 2');
@@ -43,16 +43,20 @@ Scenario('[C287801] Configure quick launchers', function (I) {
         I.waitForText('Calendar', 5, { css: '[id="settings-apps/quickLaunch0"]' });
         I.selectOption({ css: '[id="settings-apps/quickLaunch2"]' }, 'Portal');
         I.waitForText('Calendar', 5, { css: '[id="settings-apps/quickLaunch0"]' });
-        I.click('Cancel');
     });
-    I.waitForInvisible('Change quick launch icons');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
+
+    // Check if cancelling the dialog didn't change the icons
     I.seeElement('~Mail', '#io-ox-quicklaunch');
     I.seeElement('~Calendar', '#io-ox-quicklaunch');
     I.seeElement('~Drive', '#io-ox-quicklaunch');
+
+    // Changing configuration and applying the settings
     I.rightClick('#io-ox-quicklaunch');
-    I.waitForElement('.modal.in');
-    within('.modal.in', () => {
-        I.waitForText('Change quick launch icons', 5, { css: '.modal-header h1' });
+    dialogs.waitForVisible();
+    I.waitForText('Change quick launch icons', 5, dialogs.locators.header);
+    within(dialogs.locators.body, () => {
         I.see('Position 1');
         I.see('Mail', { css: '[id="settings-apps/quickLaunch0"]' });
         I.see('Position 2');
@@ -65,9 +69,11 @@ Scenario('[C287801] Configure quick launchers', function (I) {
         I.waitForText('Calendar', 5, { css: '[id="settings-apps/quickLaunch0"]' });
         I.selectOption({ css: '[id="settings-apps/quickLaunch2"]' }, 'Portal');
         I.waitForText('Calendar', 5, { css: '[id="settings-apps/quickLaunch0"]' });
-        I.click('Save changes');
     });
-    I.waitForInvisible('Change quick launch icons');
+    dialogs.clickButton('Save changes');
+    I.waitForDetached('.modal-dialog');
+
+    // Check if configuration was applied
     I.seeElement('~Address Book', '#io-ox-quicklaunch');
     I.seeElement('~Tasks', '#io-ox-quicklaunch');
     I.seeElement('~Portal', '#io-ox-quicklaunch');

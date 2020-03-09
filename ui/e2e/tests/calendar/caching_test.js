@@ -23,7 +23,7 @@ After(async function (users) {
 });
 
 // TODO: broken for last 5 runs (expected number of elements (.weekview-container.week .appointment .title) is 6, but found 4)
-Scenario('Create never ending appointment and check display in several views', async function (I, calendar) {
+Scenario('Create never ending appointment and check display in several views', async function (I, calendar, dialogs) {
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
@@ -58,9 +58,11 @@ Scenario('Create never ending appointment and check display in several views', a
 
     I.checkOption('All day', '.io-ox-calendar-edit-window');
     calendar.recurAppointment();
+    dialogs.waitForVisible();
+    I.waitForText('Edit recurrence', 5, dialogs.locators.header);
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
 
-    I.click('Apply', '.modal-dialog');
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
 
     // save

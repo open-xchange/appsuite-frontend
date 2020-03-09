@@ -23,7 +23,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7785] Set vacation notice', async function (I, users) {
+Scenario('[C7785] Set vacation notice', async function (I, users, mail, dialogs) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     }, { user: users[1] });
@@ -34,7 +34,7 @@ Scenario('[C7785] Set vacation notice', async function (I, users) {
 
     I.waitForVisible('.form-group.buttons [data-action="edit-vacation-notice"]');
     I.click('Vacation notice ...', '.form-group.buttons [data-action="edit-vacation-notice"]');
-    I.waitForElement('.modal');
+    dialogs.waitForVisible();
 
     // check for all expexted elements
     I.seeElement('.modal-header input[name="active"]');
@@ -52,7 +52,7 @@ Scenario('[C7785] Set vacation notice', async function (I, users) {
     I.see('Show advanced options');
 
     // enable
-    I.click('.modal-header .checkbox.switch.large');
+    I.click('.checkbox.switch.large', dialogs.locators.header);
 
 
     I.seeElement('.modal input[name="activateTimeFrame"]:not([disabled])');
@@ -62,32 +62,32 @@ Scenario('[C7785] Set vacation notice', async function (I, users) {
     I.fillField('.modal input[name="subject"]', 'Vacation subject');
     I.fillField('.modal textarea[name="text"]', 'Vacation text');
 
-    I.click('Apply changes');
+    dialogs.clickButton('Apply changes');
 
     I.see('Vacation notice ...', '.settings-detail-pane [data-action="edit-vacation-notice"]');
 
     I.waitForElement('.settings-detail-pane [data-action="edit-vacation-notice"] .fa-toggle-on');
-    I.waitForDetached('.modal');
+    I.waitForDetached('.modal-dialog');
 
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[1] });
+    mail.waitForApp();
 
     // compose mail for user 0
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
-    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[0].get('primaryEmail'));
-    I.fillField('.io-ox-mail-compose [name="subject"]', 'Test subject');
+    mail.newMail();
+    I.fillField('To', users[0].get('primaryEmail'));
+    I.fillField('Subject', 'Test subject');
     I.fillField({ css: 'textarea.plain-text' }, 'Test text');
     I.seeInField({ css: 'textarea.plain-text' }, 'Test text');
 
-    I.click('Send');
+    mail.send();
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
 
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[0] });
+    mail.waitForApp();
 
     // check for mail
     I.waitForVisible('.io-ox-mail-window .leftside ul li.unread');
@@ -98,6 +98,7 @@ Scenario('[C7785] Set vacation notice', async function (I, users) {
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[1] });
+    mail.waitForApp();
 
     // check for vacation notice
     I.waitForVisible('.io-ox-mail-window .leftside ul li.unread');
@@ -125,7 +126,7 @@ Scenario('[C163027] User gets notified if a vacation notice is avtive (banner in
     I.see('Your vacation notice is active', '.window-body .leftside .alert');
 });
 
-Scenario('[C110281] Vacation notice is time zone capable', async function (I, users) {
+Scenario('[C110281] Vacation notice is time zone capable', async function (I, users, mail, dialogs) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' },
@@ -141,36 +142,35 @@ Scenario('[C110281] Vacation notice is time zone capable', async function (I, us
 
     I.waitForVisible('.form-group.buttons [data-action="edit-vacation-notice"]');
     I.click('Vacation notice ...', '.form-group.buttons [data-action="edit-vacation-notice"]');
-    I.waitForElement('.modal');
+    dialogs.waitForVisible();
 
     // enable
-    I.click('.modal-header .checkbox.switch.large');
+    I.click('.modal-header .checkbox.switch.large', dialogs.locators.header);
 
     I.fillField('.modal input[name="subject"]', 'Vacation subject');
     I.fillField('.modal textarea[name="text"]', 'Vacation text');
 
-    I.click('Send vacation notice during this time only');
-    I.click('Apply changes');
+    I.checkOption('Send vacation notice during this time only');
+    dialogs.clickButton('Apply changes');
 
     I.see('Vacation notice ...', '.form-group.buttons [data-action="edit-vacation-notice"]');
 
     I.waitForElement('.form-group.buttons [data-action="edit-vacation-notice"] .fa-toggle-on');
-    I.waitForDetached('.modal');
+    I.waitForDetached('.modal-dialog');
 
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[0] });
+    mail.waitForApp();
 
     // compose mail for user 1
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
-    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].get('primaryEmail'));
-    I.fillField('.io-ox-mail-compose [name="subject"]', 'Test subject');
+    mail.newMail();
+    I.fillField('To', users[1].get('primaryEmail'));
+    I.fillField('Subject', 'Test subject');
     I.fillField({ css: 'textarea.plain-text' }, 'Test text');
     I.seeInField({ css: 'textarea.plain-text' }, 'Test text');
 
-    I.click('Send');
+    mail.send();
 
     // check for mail
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);

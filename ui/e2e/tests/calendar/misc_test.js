@@ -188,7 +188,7 @@ Scenario.skip('[C236795] Visibility Flags', (I, calendar) => {
     };
 
     I.login(['app=io.ox/calendar&perspective=week:week']);
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    calendar.waitForApp();
 
     // 1. Create 3 appointments:
     // Set 1 of the 3 different visibilities to each appointment
@@ -197,11 +197,10 @@ Scenario.skip('[C236795] Visibility Flags', (I, calendar) => {
     checkAppointment('Secret visibility', 'PRIVATE', '2:00 PM');
 });
 
-Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (I) => {
+Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (I, calendar) => {
     I.say('1. Sign in, switch to calendar');
     I.login(['app=io.ox/calendar&perspective=week:week']);
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
-    I.waitForElement('.window-sidepanel .date-picker');
+    calendar.waitForApp();
 
     // Expected Result: The current month switches as you click the "previous" or "next" month button
     I.say('2. Switch month by using the arrows of the mini calendar on the left');
@@ -265,14 +264,14 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
 });
 
 //TODO: step I see "11:21 AM – 12:21 PM" fails, seems to only happen at around 11am - 12 pm
-Scenario.skip('[C244785] Open event from invite notification in calendar', async (I, users) => {
+Scenario.skip('[C244785] Open event from invite notification in calendar', async (I, calendar, users) => {
     const [userA, userB] = users;
 
     await I.haveSetting({ 'io.ox/core': { autoOpenNotification: false } }, { user: userB });
 
     // 1. User#A: Create an appointment which starts in less than 15 minutes and invite User#B
     I.login(['app=io.ox/calendar&perspective=week:week'], { user: userA });
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    calendar.waitForApp();
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.retry(5).fillField('Subject', 'Totally nerdy event');
@@ -331,19 +330,19 @@ Scenario.skip('[C244785] Open event from invite notification in calendar', async
     I.see(`${userB.userdata.sur_name}, ${userB.userdata.given_name}`, '.io-ox-sidepopup');
 });
 
-Scenario('[C252158] All my public appointments', (I, users) => {
+Scenario('[C252158] All my public appointments', (I, users, calendar, dialogs) => {
     const [userA, userB] = users;
 
     // 1. User#A: Login and go to Calendar
     I.login(['app=io.ox/calendar&perspective=week:week'], { user: userA });
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    calendar.waitForApp();
 
     // 2. User#A: Create a public calendar (Cal#A)
     I.waitForText('Add new calendar');
     I.click('Add new calendar');
-    I.waitForText('Personal calendar');
-    I.click('Personal calendar');
-    I.waitForVisible('.modal-body');
+    I.clickDropdown('Personal calendar');
+    dialogs.waitForVisible();
+    I.waitForElement('input', 5, dialogs.locators.body);
     I.fillField('Calendar name', 'Cal#A');
     I.checkOption('Add as public calendar');
     I.click('Add');
@@ -421,7 +420,7 @@ Scenario('[C252158] All my public appointments', (I, users) => {
     I.dontSee(subject);
 });
 
-Scenario('[C265147] Appointment organizer should be marked in attendee list', async (I, users) => {
+Scenario('[C265147] Appointment organizer should be marked in attendee list', async (I, calendar, users) => {
     const [userA, userB] = users;
 
     await I.haveSetting({ 'io.ox/core': { autoOpenNotification: false } }, { user: userB });
@@ -429,7 +428,7 @@ Scenario('[C265147] Appointment organizer should be marked in attendee list', as
     // 1. Login as User#A
     // 2. Go to Calendar
     I.login(['app=io.ox/calendar&perspective=week:week'], { user: userA });
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    calendar.waitForApp();
 
     // 3. Create new appointment
     const subject = `${userA.userdata.name}s awesome appointment`;
@@ -474,7 +473,7 @@ Scenario('[C265147] Appointment organizer should be marked in attendee list', as
     I.seeElement(organizerLocator);
 });
 
-Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared Calendar', async function (I, users) {
+Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared Calendar', async function (I, users, calendar, dialogs) {
 
     const sharedCalendarName = `${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New calendar`;
 
@@ -489,19 +488,21 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
     // share folder for preconditions
     // TODO should be part of the haveFolder helper
     I.login('app=io.ox/calendar');
+    calendar.waitForApp();
 
     I.waitForText('New calendar');
     I.rightClick({ css: '[aria-label^="New calendar"]' });
     I.waitForText('Permissions / Invite people');
     I.wait(0.2); // Just wait a little extra for all event listeners
     I.click('Permissions / Invite people');
+    dialogs.waitForVisible();
     I.waitForText('Permissions for folder "New calendar"');
     I.fillField('.modal-dialog .tt-input', users[1].userdata.primaryEmail);
     I.waitForText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, undefined, '.tt-dropdown-menu');
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
-    I.click('Save');
-    I.waitToHide('.share-permissions-dialog');
+    dialogs.clickButton('Save');
+    I.waitForDetached('.share-permissions-dialog .modal-dialog');
 
     I.logout();
 
@@ -517,6 +518,7 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
     I.retry(5).click('Add new calendar');
     I.click('Subscribe shared Calendar');
 
+    dialogs.waitForVisible();
     I.waitForText('Subscribe shared calendars');
 
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="subscribed"]' }));
@@ -526,7 +528,7 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
     I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="subscribed"]' }));
     I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="com.openexchange.calendar.extendedProperties"]' }));
 
-    I.click('Save');
+    dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
 
     I.waitForInvisible(locate('*').withText(sharedCalendarName));
@@ -534,6 +536,7 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
     I.click('Add new calendar');
     I.click('Subscribe shared Calendar');
 
+    dialogs.waitForVisible();
     I.waitForText('Subscribe shared calendars');
 
     I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="subscribed"]' }));
@@ -545,7 +548,7 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
 
     I.click(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'label' }).withText('Sync via DAV'));
 
-    I.click('Save');
+    dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
 
     I.waitForText(sharedCalendarName);

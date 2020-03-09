@@ -25,7 +25,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7753] Delete single Task', async function (I, users, tasks) {
+Scenario('[C7753] Delete single Task', async function (I, users, tasks, dialogs) {
     const testrailID = 'C7753';
     const testrailName = 'Delete single Task';
 
@@ -47,15 +47,15 @@ Scenario('[C7753] Delete single Task', async function (I, users, tasks) {
     I.waitForText(testrailID, 5, '.window-body');
     I.waitForText(testrailID, 5, '.tasks-detailview .title');
     I.clickToolbar('Delete');
-    I.waitForElement('.modal-body', 5);
-    I.waitForText('Do you really want to delete this task?');
-    I.click('Delete', '.modal-footer');
-    I.waitForDetached('.modal-body', 5);
+    dialogs.waitForVisible();
+    I.waitForText('Do you really want to delete this task?', 5, dialogs.locators.body);
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
     I.waitForText('No elements selected');
     I.waitForText('Empty', 5, '.vgrid');
 });
 
-Scenario('[C7754] Delete several Task at the same time', async function (I, users, tasks) {
+Scenario('[C7754] Delete several Task at the same time', async function (I, users, tasks, dialogs) {
     const testrailID = 'C7754',
         testrailName = 'Delete several Task at the same time',
         taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] }),
@@ -72,15 +72,15 @@ Scenario('[C7754] Delete several Task at the same time', async function (I, user
     I.seeNumberOfElements('li.selected.vgrid-cell', numberOfTasks);
     I.waitForText(numberOfTasks + ' items selected', 5, '.task-detail-container');
     I.clickToolbar('Delete');
-    I.waitForElement('.modal-body');
-    I.waitForText('Do you really want to delete these tasks?');
-    I.click('Delete', '.modal-footer');
-    I.waitForDetached('.modal-body');
+    dialogs.waitForVisible();
+    I.waitForText('Do you really want to delete these tasks?', 5, dialogs.locators.body);
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
     I.waitForText('No elements selected');
     I.waitForText('Empty', 5, '.vgrid');
 });
 
-Scenario('[C7755] Delete recurring Task', async function (I, tasks) {
+Scenario('[C7755] Delete recurring Task', async function (I, tasks, dialogs) {
     const testrailID = 'C7755',
         testrailName = 'Delete recurring Task';
 
@@ -104,10 +104,10 @@ Scenario('[C7755] Delete recurring Task', async function (I, tasks) {
     I.login('app=io.ox/tasks');
     tasks.waitForApp();
     I.clickToolbar('Delete');
-    I.waitForElement('.modal-body');
-    I.waitForText('Do you really want to delete this task?');
-    I.click('Delete', '.modal-footer');
-    I.waitForDetached('.modal-body');
+    dialogs.waitForVisible();
+    I.waitForText('Do you really want to delete this task?', 5, dialogs.locators.body);
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
     I.waitForText('No elements selected');
     I.waitForText('Empty', 5, '.vgrid');
 });

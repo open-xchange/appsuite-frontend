@@ -29,9 +29,9 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('use planning view opened from edit view', async function (I) {
+Scenario('use planning view opened from edit view', async function (I, calendar, dialogs) {
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    calendar.waitForApp();
 
     I.clickToolbar('New appointment');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar/edit"]' });
@@ -40,6 +40,7 @@ Scenario('use planning view opened from edit view', async function (I) {
 
     I.click('Find a free time');
 
+    dialogs.waitForVisible();
     I.waitForVisible('.freetime-view-header');
     I.waitForVisible('.freetime-view-body');
 
@@ -49,7 +50,8 @@ Scenario('use planning view opened from edit view', async function (I) {
     });
     I.click('.timeline-day:first-child .freetime-hour:nth-child(6)');
 
-    I.click('Apply changes', '.modal-footer');
+    dialogs.clickButton('Apply changes');
+    I.waitForDetached('.modal-dialog');
 
     I.waitForInvisible('.freetime-view-header');
     I.waitForInvisible('.freetime-view-body');

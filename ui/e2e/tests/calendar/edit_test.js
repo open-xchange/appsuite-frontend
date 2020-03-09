@@ -26,7 +26,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7449] Move appointment to folder', async function (I, calendar) {
+Scenario('[C7449] Move appointment to folder', async function (I, calendar, dialogs) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -62,14 +62,13 @@ Scenario('[C7449] Move appointment to folder', async function (I, calendar) {
     I.click('~More actions', '.io-ox-sidepopup');
     I.click('Move');
 
-    I.waitForVisible('.modal-dialog');
+    dialogs.waitForVisible();
     within('.modal-dialog', function () {
         I.click('.folder-arrow', '~My calendars');
         I.waitForVisible({ css: '[title="New calendar"]' });
         I.click({ css: '[title="New calendar"]' });
-        I.wait(0.5); // wait until disabled is removed
-        I.click('Move');
     });
+    dialogs.clickButton('Move');
     I.waitForDetached('.modal-dialog');
 
     // disable the other folder
@@ -226,6 +225,7 @@ Scenario('[C7465] Edit appointment in shared folder as author', async function (
     // share folder for preconditions
     // TODO should be part of the haveFolder helper
     I.login('app=io.ox/calendar');
+    calendar.waitForApp();
 
     I.waitForText('New calendar');
     I.rightClick({ css: '[aria-label^="New calendar"]' });
@@ -281,7 +281,7 @@ Scenario('[C7465] Edit appointment in shared folder as author', async function (
     });
 });
 
-Scenario('[C234659] Split appointment series', async function (I, users, calendar) {
+Scenario('[C234659] Split appointment series', async function (I, users, calendar, dialogs) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -300,12 +300,10 @@ Scenario('[C234659] Split appointment series', async function (I, users, calenda
     I.click('Repeat', '.io-ox-calendar-edit-window');
     I.click('Every Monday.');
 
-    I.waitForElement('.modal-dialog');
-
+    dialogs.waitForVisible();
+    I.waitForText('Edit recurrence', 5, dialogs.locators.header);
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
-
-    I.click('Apply', '.modal-dialog');
-
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
 
     // create
@@ -342,7 +340,7 @@ Scenario('[C234659] Split appointment series', async function (I, users, calenda
     I.see(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, '.io-ox-sidepopup');
 });
 
-Scenario('[C234679] Exceptions changes on series modification', async function (I, calendar) {
+Scenario('[C234679] Exceptions changes on series modification', async function (I, calendar, dialogs) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -361,11 +359,10 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
     I.click('Repeat', '.io-ox-calendar-edit-window');
     I.click('Every Monday.');
 
-    I.waitForElement('.modal-dialog');
-
+    dialogs.waitForVisible();
+    I.waitForText('Edit recurrence', 5, dialogs.locators.header);
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
-
-    I.click('Apply', '.modal-dialog');
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
 
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -529,7 +526,7 @@ Scenario('[C7470] Delete a recurring appointment', async function (I) {
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario('[C274402] Change organizer of appointment with internal attendees', async function (I, users, calendar) {
+Scenario('[C274402] Change organizer of appointment with internal attendees', async function (I, users, calendar, dialogs) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -559,14 +556,15 @@ Scenario('[C274402] Change organizer of appointment with internal attendees', as
     I.click('~More actions', '.io-ox-sidepopup');
     I.click('Change organizer');
 
-    I.waitForVisible('.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Change organizer', 5, dialogs.locators.header);
     I.fillField('Select new organizer', users[1].userdata.primaryEmail);
     I.waitForVisible(locate('*').withText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
 
     I.fillField('Add a message to the notification email for the other participants.', 'Testcomment');
-    I.click('Change');
+    dialogs.clickButton('Change');
     I.waitForDetached('.modal-dialog');
 
     I.waitForVisible(locate('.io-ox-label a.expandable-toggle').withText('Details').inside('.io-ox-sidepopup'));
@@ -574,7 +572,7 @@ Scenario('[C274402] Change organizer of appointment with internal attendees', as
     I.waitForText(`${users[1].userdata.display_name}`, 5, '.io-ox-sidepopup .details .organizer');
 });
 
-Scenario('[274409] Change organizer of series with internal attendees', async function (I, users) {
+Scenario('[274409] Change organizer of series with internal attendees', async function (I, users, dialogs) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, 'chronos/allowChangeOfOrganizer': true }
@@ -606,14 +604,15 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
     I.waitForText('Do you want to edit this and all future appointments or the whole series?');
     I.click('Edit all future appointments');
 
-    I.waitForVisible('.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Change organizer', 5, dialogs.locators.header);
     I.fillField('Select new organizer', users[1].userdata.primaryEmail);
     I.waitForVisible(locate('*').withText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
 
     I.fillField('Add a message to the notification email for the other participants.', 'Testcomment');
-    I.click('Change');
+    dialogs.clickButton('Change');
     I.waitForDetached('.modal-dialog');
 
     I.click('~Close', '.io-ox-sidepopup');
@@ -633,7 +632,7 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
 });
 
 // TODO: shaky, msg: 'Text "Do you want to delete all appointments of the series or just this appointment?" was not found on page after 5 sec'
-Scenario('[C265149] As event organizer I can add a textual reason why an event was canceled', async function (I, users) {
+Scenario('[C265149] As event organizer I can add a textual reason why an event was canceled', async function (I, users, dialogs) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
@@ -681,8 +680,9 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.waitForVisible('.io-ox-sidepopup');
     I.waitForText('Delete', 5, '.io-ox-sidepopup');
     I.retry(5).click('Delete', '.io-ox-sidepopup');
-    I.waitForText('Do you really want to delete this appointment?');
-    I.click('Delete appointment', '.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Do you really want to delete this appointment?', 5, dialogs.locators.body);
+    dialogs.clickButton('Delete appointment');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 
@@ -691,8 +691,9 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.waitForVisible('.io-ox-sidepopup');
     I.waitForText('Delete', 5, '.io-ox-sidepopup');
     I.retry(5).click('Delete', '.io-ox-sidepopup');
-    I.waitForText('Do you want to delete all appointments of the series or just this appointment?');
-    I.click('Delete all appointments', '.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Do you want to delete all appointments of the series or just this appointment?', 5, dialogs.locators.body);
+    dialogs.clickButton('Delete all appointments');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 
@@ -701,9 +702,10 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.waitForVisible('.io-ox-sidepopup');
     I.waitForText('Delete', 5, '.io-ox-sidepopup');
     I.retry(5).click('Delete', '.io-ox-sidepopup');
-    I.waitForText('Delete appointment');
-    I.see('Add a message to the notification email for the other participants.');
-    I.click('Delete appointment', '.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Delete appointment', 5, dialogs.locators.header);
+    I.waitForText('Add a message to the notification email for the other participants.', 5, dialogs.locators.body);
+    dialogs.clickButton('Delete appointment');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 
@@ -712,9 +714,10 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.waitForVisible('.io-ox-sidepopup');
     I.waitForText('Delete', 5, '.io-ox-sidepopup');
     I.retry(5).click('Delete', '.io-ox-sidepopup');
-    I.waitForText('Delete appointment');
-    I.see('Add a message to the notification email for the other participants.');
-    I.click('Delete all appointments', '.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Delete appointment', 5, dialogs.locators.header);
+    I.waitForText('Add a message to the notification email for the other participants.', 5, dialogs.locators.body);
+    dialogs.clickButton('Delete all appointments');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 

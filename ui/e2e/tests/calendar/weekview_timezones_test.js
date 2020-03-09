@@ -22,7 +22,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Create appointment and switch timezones', async function (I) {
+Scenario('Create appointment and switch timezones', async function (I, dialogs) {
 
     await I.haveSetting('io.ox/core//timezone', 'Europe/Berlin');
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
@@ -54,9 +54,10 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.waitForText('Add timezone', 5);
     I.click('Add timezone');
 
-    I.waitForVisible('.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Time zone', 5, dialogs.locators.body);
     I.selectOption('Time zone', '+09:00 JST Asia/Tokyo');
-    I.click('Add', '.modal-dialog');
+    dialogs.clickButton('Add');
     I.waitForDetached('.modal-dialog');
 
     I.waitForText('Asia/Tokyo', '.rightside li');
@@ -81,10 +82,12 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.floating-window-content [data-attribute="startDate"] .timezone');
     I.click('.floating-window-content [data-attribute="startDate"] .timezone');
-    I.waitForVisible('.modal-dialog [name="startTimezone"]');
+
+    dialogs.waitForVisible();
+    I.waitForText('Start date timezone', 5, dialogs.locators.body);
     I.selectOption('Start date timezone', '+09:00 JST Asia/Tokyo');
     I.selectOption('End date timezone', '+09:00 JST Asia/Tokyo');
-    I.click('Change');
+    dialogs.clickButton('Change');
     I.waitForDetached('.modal-dialog');
 
     I.waitForText('Europe/Berlin: ');
@@ -92,8 +95,8 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.waitForText('4:00 – 5:00 PM');
 
     I.click('Discard', '.floating-window-content');
-    I.waitForVisible('.modal-dialog');
-    I.click('Discard changes', '.modal-dialog');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Discard changes');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached('.floating-window-content');
 

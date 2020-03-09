@@ -24,21 +24,21 @@ After(async function (users) {
 
 const { expect } = require('chai');
 
-Scenario('Opening multiple windows', async function (I, users, calendar) {
+Scenario('Opening multiple windows', async function (I, users, calendar, dialogs) {
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
 
-    I.clickToolbar('New appointment');
-    I.waitForVisible('.io-ox-calendar-edit-window');
+    calendar.newAppointment();
 
     I.retry(5).fillField('Subject', 'Participants test');
     I.click('.fa.fa-address-book');
+    dialogs.waitForVisible();
     I.waitForEnabled('.modal-content .search-field');
     I.fillField('.modal-content .search-field', users[1].get('primaryEmail'));
     I.waitForEnabled('.modal-content .list-item-content');
     I.click(users[1].get('sur_name'), '.modal-content .list-item-content');
-    I.click('Select');
-    I.wait(0.5);
+    dialogs.clickButton('Select');
+    I.waitForDetached('.modal-dialog');
 
     I.click('Create');
     I.waitForDetached('.io-ox-calendar-edit-window');

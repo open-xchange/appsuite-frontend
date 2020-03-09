@@ -23,7 +23,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C114352] Create folder in copy/move dialog', async (I, users, drive) => {
+Scenario('[C114352] Create folder in copy/move dialog', async (I, users, drive, dialogs) => {
     await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.odt');
 
     // 1. Go to Drive
@@ -38,29 +38,30 @@ Scenario('[C114352] Create folder in copy/move dialog', async (I, users, drive) 
     // 3. Open context menu and select "Move"
     I.click('~More actions');
     I.clickDropdown('Move');
-    I.waitForText('Move', 5, '.modal');
+    dialogs.waitForVisible();
+    I.waitForText('Move', 5, dialogs.locators.header);
 
     // 4. Select "My files" and click "Create folder"
     // "My files" is already selected by default.
-    I.click('Create folder');
-    I.waitForText('Add new folder');
+    dialogs.clickButton('Create folder');
+    I.waitForText('Add new folder', 5, dialogs.locators.header);
 
     // 5. Choose a name and hit "Add"
     I.fillField({ css: '[data-point="io.ox/core/folder/add-popup"] input' }, 'Foobar');
-    I.click('Add');
-    I.waitForText('Move', 5, '.modal-footer');
-    I.waitForText('Foobar', 5, '.modal-body .selected');
+    dialogs.clickButton('Add');
+    I.waitForText('Move', 5, dialogs.locators.header);
+    I.waitForElement('.selected[aria-label="Foobar"]');
+
     // 6. Select the new folder and "Move"
     // Folder is already selected by default.
-    I.wait(1);
-    I.click('Move', '.modal-footer');
+    dialogs.clickButton('Move');
     I.waitForText('File has been moved');
     I.waitForInvisible('File has been moved');
     I.selectFolder('Foobar');
     I.waitForText('testdocument.odt', 5, '.list-view');
 });
 
-Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', async (I, users, drive) => {
+Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', async (I, users, drive, dialogs) => {
 
     /*
      * Preconditions:
@@ -81,20 +82,22 @@ Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', a
 
     I.login('app=io.ox/files');
     drive.waitForApp();
+
+    // Doubleclick through folders in listview until we reach the end (folderC)
     I.waitForElement(locate('.list-item').withText('folderA').inside('.list-view'));
     I.doubleClick(locate('.list-item').withText('folderA').inside('.list-view'));
     I.waitForElement(locate('.list-item').withText('folderB').inside('.list-view'));
     I.doubleClick(locate('.list-item').withText('folderB').inside('.list-view'));
     I.waitForElement(locate('.list-item').withText('folderC').inside('.list-view'));
     I.click(locate('.list-item').withText('folderC').inside('.list-view'));
-    I.waitForText('folderC');
-    I.click('.list-item[aria-label*="folderC"]');
+
     drive.shareItem('Create sharing link');
     const url = await I.grabValueFrom('.share-wizard input[type="text"]');
-    I.click('Close', '.modal-footer');
+    dialogs.clickButton('Close');
+    I.waitForDetached('.modal-dialog');
     I.logout();
 
-    // 4. Open the sharing link in another browser tab
+    // Open the sharing link in another browser tab
     I.amOnPage(Array.isArray(url) ? url[0] : url);
     drive.waitForApp();
 
@@ -102,16 +105,14 @@ Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', a
     I.dontSee('folderA', '.breadcrumb-view');
     I.dontSee('folderB', '.breadcrumb-view');
 
-    I.waitForVisible('.folder-tree');
-
     I.dontSee('folderA', '.folder-tree');
     I.dontSee('folderB', '.folder-tree');
     I.see('folderC', '.folder-tree');
 
 });
 
-// TODO: shaky (element (.file-list-view.complete) still not present on page after 30 sec)
-Scenario.skip('[C257247] Restore deleted items', async (I, drive) => {
+// TODO: @bug 68484 - unskip when fixed from backend
+Scenario.skip('[C257247] Restore deleted items', async (I, drive, dialogs) => {
 
     // Preconditions: At least one file and one folder in Drive
 
@@ -125,71 +126,58 @@ Scenario.skip('[C257247] Restore deleted items', async (I, drive) => {
     I.login('app=io.ox/files');
     drive.waitForApp();
 
-    // 1. Delete the folder
+    deleteFolder('testfolder'); // 1. Delete the folder
+    restoreFolder('testfolder'); // 2. Switch to Trash, select the previously deleted folder and use "restore" from the toolbar
 
-    I.click('.list-item[aria-label*="testfolder"]');
-    I.waitForVisible('~Delete');
-
-    I.click('~Delete');
-    I.waitForVisible('.modal-dialog');
-
-    I.click('Delete');
-    I.waitForInvisible('.modal-dialog');
-    I.dontSee('testfolder');
-
-    // 2. Switch to Trash, select the previously deleted folder and use "restore" from the toolbar Expected Result
-
-    I.selectFolder('Trash');
-    drive.waitForApp();
-    I.waitForElement(locate('.list-item').withText('testfolder').inside('.list-view'));
-    I.click(locate('.list-item').withText('testfolder').inside('.list-view'));
-    I.waitForVisible('~Details');
-
-    I.click('~More actions');
-    I.clickDropdown('Restore');
-
-    I.waitForVisible('.io-ox-alert-info');
-    I.see('Restored into folder:');
-    I.see('Drive/My files');
-    I.click('.io-ox-alert-info .close');
-    I.waitForInvisible('.io-ox-alert-info');
+    deleteFile('testdocument.odt'); // 1. Delete the file
+    restoreFile('testdocument.odt'); // 2. Switch to Trash, select the previously deleted file and use "restore" from the toolbar
 
     I.selectFolder('My files');
-    drive.waitForApp();
-    I.waitForElement(locate('.list-item').withText('testfolder').inside('.list-view'));
-
-    // 3. Repeat Step 1 and 2 with a file.
-
-    I.click('.list-item[aria-label*="testdocument.odt"]');
-    I.waitForVisible('~Delete');
-
-    I.click('~Delete');
-    I.waitForVisible('.modal-dialog');
-
-    I.click('Delete');
-    I.waitForInvisible('.modal-dialog');
-    I.dontSee('testdocument.odt');
-
-    I.selectFolder('Trash');
-    drive.waitForApp();
-    I.waitForElement('.list-item[aria-label*="testdocument.odt"]');
-
-    I.click('.list-item[aria-label*="testdocument.odt"]');
-    I.waitForVisible('~Details');
-
-    I.click('~More actions');
-    I.clickDropdown('Restore');
-
-    I.waitForVisible('.io-ox-alert-info');
-    I.see('Restored into folder:');
-    I.see('Drive/My files');
-    I.click('.io-ox-alert-info .close');
-    I.waitForInvisible('.io-ox-alert-info');
-
-    I.selectFolder('My files');
-    drive.waitForApp();
     I.triggerRefresh();
     I.waitForText('testdocument.odt', 5, '.list-view');
+
+    //----------------------------------------------------------
+
+    function deleteFile(name) {
+        I.selectFolder('My files');
+        drive.waitForApp();
+        I.click(`.list-item[aria-label*="${name}"]`);
+
+        I.waitForVisible('~Delete');
+        I.click('~Delete');
+
+        dialogs.waitForVisible();
+        dialogs.clickButton('Delete');
+        I.waitForDetached('.modal-dialog');
+
+        I.dontSee(`${name}`);
+    }
+
+    function restoreFile(name) {
+        I.selectFolder('Trash');
+        drive.waitForApp();
+        I.waitForElement(locate('.list-item').withText(`${name}`).inside('.list-view'));
+        I.click(locate('.list-item').withText(`${name}`).inside('.list-view'));
+        I.waitForVisible('~Details');
+
+        I.clickToolbar('~More actions');
+        I.clickDropdown('Restore');
+
+        I.waitForVisible('.io-ox-alert-info');
+        I.see('Restored into folder:', '.io-ox-alert-info');
+        I.see('Drive/My files', '.io-ox-alert-info');
+        I.click('.io-ox-alert-info .close');
+        I.waitForDetached('.io-ox-alert-info');
+    }
+
+    function deleteFolder(name) {
+        return deleteFile(name);
+    }
+
+
+    function restoreFolder(name) {
+        return restoreFile(name);
+    }
 
 });
 

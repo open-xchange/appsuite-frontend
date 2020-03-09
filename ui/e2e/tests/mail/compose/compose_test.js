@@ -211,7 +211,7 @@ Scenario('Compose with inline image, which is removed again', async function (I,
     I.dontSeeElement('.attachments');
 });
 
-Scenario('Compose with drivemail attachment and edit draft', async function (I, users, mail, drive) {
+Scenario('Compose with drivemail attachment and edit draft', async function (I, users, mail, drive, dialogs) {
     const [user] = users;
     const user2 = await users.create();
 
@@ -236,6 +236,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.fillField('Note', 'Some content');
     I.waitForClickable(locate('button').withText('Save'));
     I.click('Save');
+    I.waitForEnabled(locate('button').withText('Save'), 10);
     I.waitForNetworkTraffic();
     I.click('Close');
 
@@ -249,16 +250,17 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     // attach from drive
     I.click('Attachments');
     I.clickDropdown('Add from Drive');
+    dialogs.waitForVisible();
     I.waitForText('Testdocument.txt');
-    I.click('Add');
+    dialogs.clickButton('Add');
 
     I.waitForText('Use Drive Mail');
     I.checkOption('Use Drive Mail');
     I.fillField('Subject', 'Testsubject #1');
     I.click('Discard');
-    I.waitForText('Save as draft', 5, '.modal-dialog');
-    I.click('Save as draft', '.modal-dialog');
-    I.waitForDetached('.io-ox-taskbar-container .taskbar-button');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Save as draft');
+    I.waitForDetached('.io-ox-mail-compose-window');
 
     I.selectFolder('Drafts');
     mail.selectMail('Testsubject #1');

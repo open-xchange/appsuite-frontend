@@ -65,36 +65,43 @@ Scenario('[C8374] Public files: Add a file', (I, drive) => {
 
 // Note: The title of this test, does not really reflect what is tested here (again)
 // A better title would be something like: Public files: Moving files to root folder not possible
-Scenario('[C8375] Public files: Move a file', async (I, drive) => {
+Scenario('[C8375] Public files: Move a file', async (I, drive, dialogs) => {
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
+
     I.waitForText('document.txt', undefined, '.file-list-view');
     I.click(locate('li.list-item').withText('document.txt'));
     I.clickToolbar('~More actions');
     I.clickDropdown('Move');
+
+    dialogs.waitForVisible();
     I.waitForText('Public files', undefined, '.folder-picker-dialog');
     I.click('~Public files', '.folder-picker-dialog');
     I.waitForElement('.modal-footer .btn[data-action="ok"][disabled]');
 });
 
-Scenario('[C8376] Add a subfolder', async (I, drive) => {
+Scenario('[C8376] Add a subfolder', async (I, drive, dialogs) => {
     I.login('app=io.ox/files');
     drive.waitForApp();
+
     I.openFolderMenu('My files');
     I.clickDropdown('Add new folder');
-    I.waitForText('Add new folder', 5, '.modal-dialog');
+
+    dialogs.waitForVisible();
+    I.waitForText('Add new folder', 5, dialogs.locators.header);
     I.fillField('Folder name', 'Testfolder');
-    I.click('Add', '.modal-footer');
-    I.waitForDetached('.modal');
+    dialogs.clickButton('Add');
+    I.waitForDetached('.modal-dialog');
     I.waitForText('Testfolder', 5, '.file-list-view');
 });
 
-Scenario('[C8377] Invite a person', (I, users, drive) => {
+Scenario('[C8377] Invite a person', (I, users, drive, dialogs) => {
     function share(publicFolder) {
         I.clickToolbar('Share');
-        I.click('Invite people');
+        I.clickDropdown('Invite people');
+        dialogs.waitForVisible();
         I.waitForText('Share folder');
         if (!publicFolder) {
             I.click('Send notification by email');
@@ -102,22 +109,27 @@ Scenario('[C8377] Invite a person', (I, users, drive) => {
         }
         I.dontSeeCheckboxIsChecked('Send notification by email');
         I.click('~Select contacts');
-        I.waitForElement('.modal .list-view.address-picker li.list-item');
+        dialogs.waitForVisible();
+        I.waitForElement('.modal-body .list-view.address-picker li.list-item'); // check if list items are loaded
+
         I.fillField('Search', users[1].get('name'));
         I.waitForText(users[1].get('name'), 5, '.address-picker');
         I.retry(5).click('.address-picker .list-item');
-        I.click({ css: 'button[data-action="select"]' });
+        dialogs.clickButton('Select');
+        I.waitForText('Share folder', 5, dialogs.locators.header);
+
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.dontSee('Guest', '.permissions-view');
         I.seeNumberOfElements('.permissions-view .permission.row', 2);
         I.click('Author');
         I.clickDropdown('Viewer');
-        I.click('Share', '.modal');
-        I.waitToHide('.modal');
+        dialogs.clickButton('Share');
+        I.waitForDetached('.modal-dialog');
     }
     session('Alice', () => {
         I.login('app=io.ox/files');
         drive.waitForApp();
+
         I.selectFolder('My shares');
         // sometimes this is not fast enough and there are 4 objects
         I.retry(3).seeNumberOfElements('.list-view li.list-item', 0);
@@ -135,6 +147,7 @@ Scenario('[C8377] Invite a person', (I, users, drive) => {
     session('Bob', () => {
         I.login('app=io.ox/files', { user: users[1] });
         drive.waitForApp();
+
         I.selectFolder('Shared files');
         I.waitForText(users[0].get('name'));
         I.selectFolder(users[0].get('name'));
@@ -155,10 +168,13 @@ Scenario('[C8377] Invite a person', (I, users, drive) => {
         I.selectFolder('Public files');
         I.clickToolbar('New');
         I.clickDropdown('Add new folder');
-        I.waitForText('Add new folder', 1, '.modal-dialog');
+
+        dialogs.waitForVisible();
+        I.waitForText('Add new folder', 5, dialogs.locators.header);
         I.fillField('Folder name', publicFolderName);
-        I.pressKey('Enter');
-        I.waitForDetached('.modal');
+        dialogs.clickButton('Add');
+        I.waitForDetached('.modal-dialog');
+
         drive.waitForApp();
         I.selectFolder(publicFolderName);
         share(true);
@@ -177,7 +193,7 @@ Scenario('[C8377] Invite a person', (I, users, drive) => {
 
 });
 
-Scenario('[C8378] Invite a group', async (I, users, drive) => {
+Scenario('[C8378] Invite a group', async (I, users, drive, dialogs) => {
     // Testrail description:
     // 1. Go to Drive
     // 2. Choose a folder and click the gear button (Context Menu)
@@ -203,14 +219,16 @@ Scenario('[C8378] Invite a group', async (I, users, drive) => {
     drive.waitForApp();
     I.clickToolbar('Share');
     I.clickDropdown('Invite people');
-    I.waitForText('Send notification by email');
-    I.click('Send notification by email');
+
+    dialogs.waitForVisible();
+    I.waitForText('Send notification by email', 5, dialogs.locators.footer);
+    I.checkOption('Send notification by email');
     I.fillField('input.tt-input', groupName);
     I.waitForVisible('.tt-dropdown-menu');
     I.pressKey('Enter');
     I.waitForText('Group', 5);
-    I.click('Share', '.modal-dialog');
-    I.waitToHide('.modal');
+    dialogs.clickButton('Share');
+    I.waitForDetached('.modal-dialog');
 
     for (let i = 1; i <= 2; i++) {
         I.logout();
@@ -218,9 +236,11 @@ Scenario('[C8378] Invite a group', async (I, users, drive) => {
         drive.waitForApp();
         I.openFolderMenu(folderName);
         I.clickDropdown('Permissions / Invite people');
+        dialogs.waitForVisible();
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.see('Author', '.permissions-view .row .role');
-        I.click('Close', '.modal-dialog');
+        dialogs.clickButton('Close');
+        I.waitForDetached('.modal-dialog');
     }
 });
 
@@ -335,7 +355,7 @@ Scenario('[C8385] Uninvite a person', async (I, users, drive) => {
     });
 });
 
-Scenario('[C8386] Uninvite a group', async (I, users, drive) => {
+Scenario('[C8386] Uninvite a group', async (I, users, drive, dialogs) => {
     // Testrail description
     // A group has permission in the folder
     // 1. Choose a folder
@@ -362,13 +382,15 @@ Scenario('[C8386] Uninvite a group', async (I, users, drive) => {
         drive.waitForApp();
         I.clickToolbar('Share');
         I.clickDropdown('Invite people');
-        I.waitForText('Send notification by email');
-        I.click('Send notification by email');
+        dialogs.waitForVisible();
+        I.waitForText('Send notification by email', 5, dialogs.locators.footer);
+        I.checkOption('Send notification by email');
         I.fillField('input.tt-input', groupName);
         I.waitForVisible('.tt-dropdown-menu');
         I.pressKey('Enter');
         I.waitForText('Group', 5);
-        I.click('Share', '.modal-dialog');
+        dialogs.clickButton('Share');
+        I.waitForDetached('.modal-dialog');
     });
 
     session('Bob', () => {
@@ -376,19 +398,23 @@ Scenario('[C8386] Uninvite a group', async (I, users, drive) => {
         drive.waitForApp();
         I.openFolderMenu(folderName);
         I.clickDropdown('Permissions / Invite people');
+        dialogs.waitForVisible();
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.see('Author', '.permissions-view .row .role');
-        I.click('Close', '.modal-dialog');
+        dialogs.clickButton('Close');
+        I.waitForDetached('.modal-dialog');
     });
 
     session('Alice', () => {
         I.clickToolbar('Share');
         I.waitForText('Invite people', 5, '.dropdown.open');
         I.click('Invite people', '.dropdown.open');
+        dialogs.waitForVisible();
         I.waitForElement('.modal-dialog .btn[title="Actions"]');
         I.click('.modal-dialog .btn[title="Actions"]');
         I.clickDropdown('Revoke access');
-        I.click('Share', '.modal-dialog');
+        dialogs.clickButton('Share');
+        I.waitForDetached('.modal-dialog');
     });
 
     session('Bob', () => {
@@ -399,7 +425,7 @@ Scenario('[C8386] Uninvite a group', async (I, users, drive) => {
 
 });
 
-Scenario('[C8387] Rename a folder', async (I, drive) => {
+Scenario('[C8387] Rename a folder', async (I, drive, dialogs) => {
     // Testrail description:
     // A custom folder in Drive exists.
     // 1. Switch to drive, select a non -default folder
@@ -416,11 +442,12 @@ Scenario('[C8387] Rename a folder', async (I, drive) => {
     drive.waitForApp();
     I.openFolderMenu(folderName);
     I.clickDropdown('Rename');
+    dialogs.waitForVisible();
     I.waitForText('Rename folder');
     // A11y issue here: There is no label for this input present
     I.fillField('.modal-body input[type="text"]', 'C8387-renamed');
-    I.click('Rename', '.modal-footer');
-    I.waitForDetached('.modal-footer');
+    dialogs.clickButton('Rename');
+    I.waitForDetached('.modal-dialog');
     ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {
         I.selectFolder(f);
         I.openFolderMenu(f);
@@ -431,7 +458,7 @@ Scenario('[C8387] Rename a folder', async (I, drive) => {
 
 });
 
-Scenario('[C8388] Delete a folder', async (I, drive) => {
+Scenario('[C8388] Delete a folder', async (I, drive, dialogs) => {
     // Testrail description:
     // A custom folder exists in Drive
     // 1. Choose a custom folder
@@ -443,12 +470,15 @@ Scenario('[C8388] Delete a folder', async (I, drive) => {
     const folder = await I.haveFolder({ title: folderName, module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
     I.login('app=io.ox/files&folder=' + folder);
     drive.waitForApp();
+
     I.waitForEnabled('.folder-tree .contextmenu-control[title*="' + folderName + '"]');
     I.openFolderMenu(folderName);
     I.clickDropdown('Delete');
+
+    dialogs.waitForVisible();
     I.waitForText('Do you really want to delete folder "' + folderName + '"?');
-    I.click('Delete', '.modal-footer');
-    I.waitForDetached('.modal-footer');
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
     I.waitForInvisible(folderName);
     ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {
         I.selectFolder(f);

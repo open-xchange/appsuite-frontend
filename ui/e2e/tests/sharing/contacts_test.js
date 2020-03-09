@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C104306] contact folders using “Permisions” dialog and sharing link', async (I, users, contacts, mail) => {
+Scenario('[C104306] contact folders using “Permisions” dialog and sharing link', async (I, users, contacts, mail, dialogs) => {
     let url;
     // Alice shares a folder with 2 contacts
     session('Alice', async () => {
@@ -41,8 +41,9 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
 
         I.openFolderMenu('Contacts');
         I.clickDropdown('Permissions / Invite people');
+        dialogs.waitForVisible();
 
-        I.waitForText('Permissions for folder');
+        I.waitForText('Permissions for folder', 5, dialogs.locators.header);
         I.click('~Select contacts');
         I.waitForElement('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));
@@ -55,8 +56,8 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         I.click('Author');
         I.clickDropdown('Viewer');
 
-        I.click('Save', '.modal');
-        I.waitForDetached('.modal');
+        dialogs.clickButton('Save');
+        I.waitForDetached('.modal-dialog');
 
         I.openFolderMenu('Contacts');
         I.clickDropdown('Create sharing link');
@@ -108,15 +109,17 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         I.waitForElement('.btn[title="Actions"]');
         I.click('.btn[title="Actions"]');
         I.clickDropdown('Revoke access');
-        I.click('Save');
-        I.waitToHide('.modal');
+        dialogs.waitForVisible();
+        dialogs.clickButton('Save');
+        I.waitForDetached('.modal-dialog');
 
         I.click({ css: '.folder-tree [title="Actions for Contacts"]' });
         I.clickDropdown('Create sharing link');
+        dialogs.waitForVisible();
         I.waitForText('Sharing link created for folder');
         I.waitForFocus('.share-wizard input[type="text"]');
-        I.click('Remove link');
-        I.waitForDetached('.modal');
+        dialogs.clickButton('Remove link');
+        I.waitForDetached('.modal-dialog');
         I.waitForText('The link has been removed');
     });
 

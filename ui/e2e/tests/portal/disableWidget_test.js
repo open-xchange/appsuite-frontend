@@ -21,7 +21,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7485] Disable a widget', async (I, users) => {
+Scenario('[C7485] Disable a widget', async (I, users, dialogs) => {
     let [user] = users;
     await I.haveMail({
         attachments: [{
@@ -45,8 +45,9 @@ Scenario('[C7485] Disable a widget', async (I, users) => {
     I.click('Add widget');
     I.waitForVisible('.io-ox-portal-settings-dropdown');
     I.click('Inbox');
-    I.waitForVisible('.modal-dialog');
-    I.click('Save');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Save');
+    I.waitForDetached('.modal-dialog');
 
     // Disable Inbox widget
     I.click('Customize this page');

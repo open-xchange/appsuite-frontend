@@ -89,7 +89,7 @@ Scenario.skip('Create appointment and check if the color is correctly applied an
     expect(folderColor).equal(appointmentColor);
     expect(appointmentColor).not.to.be.oneOf(['rgba(181, 54, 54, 1)', 'rgba(200, 70, 70, 1)']);
 
-    // remove
+    // remove, if reintroduced think about using dialogs-pageobject
     // I.click('test appointment one', '.workweek .appointment .title');
     // I.waitForText('Delete', 5, '.io-ox-sidepopup');
     // I.click('Delete', '.io-ox-sidepopup');

@@ -42,7 +42,7 @@ Scenario('Contacts - Modal Dialog - New address book (with exceptions)', async (
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });
 
-Scenario('Contacts - Modal Dialog - Import', async (I, contacts) => {
+Scenario('Contacts - Modal Dialog - Import', async (I, contacts, dialogs) => {
 
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
@@ -50,7 +50,7 @@ Scenario('Contacts - Modal Dialog - Import', async (I, contacts) => {
     I.click('.folder-arrow', '~My address books');
     I.openFolderMenu('Contacts');
     I.clickDropdown('Import');
-    I.waitForElement('.modal .modal-title');
+    dialogs.waitForVisible();
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });

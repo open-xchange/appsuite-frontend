@@ -23,17 +23,19 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C110279] Primary mail account name can be changed', async function (I) {
+Scenario('[C110279] Primary mail account name can be changed', async function (I, dialogs) {
     const name = 'Räuber Hotzenplotz';
     await I.haveFolder({ title: 'Personal', module: 'mail', parent: 'default0/INBOX' });
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/settings/accounts');
 
     I.say(`rename to "${name}"`, 'blue');
     I.retry(10).click('Edit');
-    I.waitForElement('.modal-body input[name="name"]');
+
+    dialogs.waitForVisible();
     I.fillField('Account name', name);
-    I.click('Save');
-    I.waitForDetached('.modal-body');
+    dialogs.clickButton('Save');
+    I.waitForDetached('.modal-dialog');
+
     I.waitForText('Account updated');
     I.waitForElement('.close', '.io-ox-alert');
     I.click('.close', '.io-ox-alert');

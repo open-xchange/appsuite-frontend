@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C83383] mail folders using “Permisions” dialog', async (I, users) => {
+Scenario('[C83383] mail folders using “Permisions” dialog', async (I, users, dialogs) => {
     // Alice shares a mail folder
     I.login('app=io.ox/mail');
     I.waitForText('Spam', 5, '.folder-tree');
@@ -33,6 +33,7 @@ Scenario('[C83383] mail folders using “Permisions” dialog', async (I, users)
     I.clickDropdown('Permissions');
     I.waitForText('Permissions for folder');
     I.click('~Select contacts');
+    dialogs.waitForVisible();
     I.waitForElement('.modal .list-view.address-picker li.list-item');
     I.fillField('Search', users[1].get('name'));
     I.waitForText(users[1].get('name'), 5, '.address-picker');
@@ -43,8 +44,8 @@ Scenario('[C83383] mail folders using “Permisions” dialog', async (I, users)
     I.click('Author');
     I.clickDropdown('Viewer');
 
-    I.click('Save', '.modal');
-    I.waitToHide('.modal');
+    dialogs.clickButton('Save');
+    I.waitForDetached('.modal-dialog');
 
     I.logout();
 

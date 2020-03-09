@@ -44,7 +44,7 @@ Scenario('User start with no picture', async function (I, contacts, mail) {
     I.click('Discard');
 });
 
-Scenario('User can upload and remove a picture', async function (I, contacts, mail) {
+Scenario('User can upload and remove a picture', async function (I, contacts, mail, dialogs) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
@@ -54,13 +54,13 @@ Scenario('User can upload and remove a picture', async function (I, contacts, ma
 
     // open and check empty-state
     contacts.editMyContactPhoto();
+    dialogs.waitForVisible();
 
     // upload image (2.2 MB)
     I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
 
     I.waitForInvisible('.edit-picture.empty');
-    I.waitForElement('.modal-dialog [data-action="apply"]:not([disabled])');
-    I.click('Apply');
+    dialogs.clickButton('Apply');
     I.waitForDetached('.edit-picture');
 
     // picture-uploader
@@ -68,7 +68,7 @@ Scenario('User can upload and remove a picture', async function (I, contacts, ma
 
     let listenerID = I.registerNodeRemovalListener('#io-ox-topbar-dropdown-icon .contact-picture');
     I.click('Save');
-    I.waitForInvisible('.contact-edit');
+    I.waitForDetached('.contact-edit');
     I.waitForNodeRemoval(listenerID);
     I.waitForElement('.contact-picture');
 
@@ -79,25 +79,27 @@ Scenario('User can upload and remove a picture', async function (I, contacts, ma
 
     // TODO: BUG
     // There are likely to be accessibility issues due to mishandled focus
-    I.waitForVisible('.modal-footer [data-action="remove"]:not([disabled])');
-    I.click('Remove photo');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Remove photo');
+
 
     I.waitForVisible('.edit-picture.empty');
-    I.click('Apply');
-    I.waitForDetached('.modal');
+    dialogs.clickButton('Apply');
+    I.waitForDetached('.modal-dialog');
 
     let listenerID2 = I.registerNodeRemovalListener('#io-ox-topbar-dropdown-icon .contact-picture');
     I.click('Save');
-    I.waitForInvisible('.contact-edit');
+    I.waitForDetached('.contact-edit');
     I.waitForNodeRemoval(listenerID2);
     I.waitForElement('.contact-picture');
 
     // check again
     contacts.editMyContactPhoto();
+    dialogs.waitForVisible();
     I.waitForVisible('.edit-picture.in.empty');
 });
 
-Scenario('User can rotate her/his picture', async function (I, contacts, mail) {
+Scenario('User can rotate her/his picture', async function (I, contacts, mail, dialogs) {
     let image;
 
     I.login('app=io.ox/mail');
@@ -109,6 +111,7 @@ Scenario('User can rotate her/his picture', async function (I, contacts, mail) {
 
     // open and check empty-state
     contacts.editMyContactPhoto();
+    dialogs.waitForVisible();
 
     I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
     I.waitForInvisible('.edit-picture.empty');
@@ -121,11 +124,12 @@ Scenario('User can rotate her/his picture', async function (I, contacts, mail) {
     const width = await I.grabAttributeFrom('.cr-image', 'width');
     expect(Array.isArray(height) ? height[0] : height).to.be.equal(Array.isArray(width) ? width[0] : width);
 
-    I.click('Apply');
+    dialogs.clickButton('Apply');
+    I.waitForDetached('.modal-dialog');
     I.waitForInvisible('.edit-picture');
 
     //picture-uploader
     I.click('Discard');
-    I.waitForVisible('.modal-footer [data-action="delete"]');
-    I.click('.modal-footer [data-action="delete"]');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Discard changes');
 });

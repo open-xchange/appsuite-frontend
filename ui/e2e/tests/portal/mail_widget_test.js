@@ -24,7 +24,7 @@ After(async function (users) {
 });
 
 
-Scenario('adding a mail containing XSS code', async function (I, users, portal) {
+Scenario('adding a mail containing XSS code', async function (I, users, portal, dialogs) {
     let [user] = users;
     await I.haveMail({
         attachments: [{
@@ -63,6 +63,7 @@ Scenario('adding a mail containing XSS code', async function (I, users, portal) 
     I.waitForText('Test subject <img src="x" onerror="alert(666);">', 5, `.io-ox-portal-window .widgets li.widget[data-widget-id="${widgetId}"] .title`);
 
     I.click(`.io-ox-portal-window .widgets li.widget[data-widget-id="${widgetId}"] .disable-widget`);
-    I.click('Delete', '.modal-dialog');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
     I.waitForDetached(`.io-ox-portal-window .widgets li.widget[data-widget-id="${widgetId}"]`);
 });

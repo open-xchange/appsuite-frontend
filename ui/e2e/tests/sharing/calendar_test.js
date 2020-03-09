@@ -26,7 +26,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing link', async (I, users, calendar) => {
+Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing link', async (I, users, calendar, dialogs) => {
     let url;
     I.say('Alice shares a folder with 2 appointments');
     session('Alice', async () => {
@@ -46,7 +46,8 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
 
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
         I.clickDropdown('Permissions / Invite people');
-        I.waitForElement('.modal');
+
+        dialogs.waitForVisible();
         I.click('~Select contacts');
         I.waitForElement('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));
@@ -60,8 +61,8 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         I.click('Author');
         I.clickDropdown('Viewer');
 
-        I.click('Save', '.modal');
-        I.waitToHide('.modal');
+        dialogs.clickButton('Save');
+        I.waitForDetached('.modal-dialog');
 
         I.click({ css: `.folder-tree [title="Actions for ${users[0].get('sur_name')}, ${users[0].get('given_name')}"]` });
         I.click(locate('a').withText('Create sharing link').inside('.dropdown'));
@@ -115,14 +116,14 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
     session('Alice', () => {
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
         I.clickDropdown('Permissions / Invite people');
-        I.waitForElement('.modal');
+        dialogs.waitForVisible();
         I.waitForVisible({ css: `[aria-label="${users[1].get('sur_name')}, ${users[1].get('given_name')}, Internal user."]` });
         I.click(locate({ css: 'button[title="Actions"]' }).inside('.modal'));
         I.waitForText('Revoke access');
         I.click('Revoke access');
         I.waitForInvisible({ css: `[aria-label="${users[1].get('sur_name')}, ${users[1].get('given_name')}, Internal user."]` });
-        I.click('Save');
-        I.waitForDetached('.modal');
+        dialogs.clickButton('Save');
+        I.waitForDetached('.modal-dialog');
 
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
         I.clickDropdown('Create sharing link');

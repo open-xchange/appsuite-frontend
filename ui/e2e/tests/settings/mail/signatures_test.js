@@ -70,12 +70,13 @@ Scenario('Sanitize entered signature source code', async function (I) {
     }
 });
 
-Scenario('[C7766] Create new signature', function (I, mail) {
+Scenario('[C7766] Create new signature', function (I, mail, dialogs) {
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
 
     I.waitForText('Add new signature');
     I.click('Add new signature');
+    dialogs.waitForVisible();
 
     I.waitForVisible('.contenteditable-editor iframe');
     I.fillField('Signature name', 'Testsignaturename');
@@ -84,7 +85,7 @@ Scenario('[C7766] Create new signature', function (I, mail) {
         I.appendField('body', 'Testsignaturecontent');
     });
 
-    I.click('Save');
+    dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
 
     // assert existance of signature
@@ -96,6 +97,7 @@ Scenario('[C7766] Create new signature', function (I, mail) {
     I.selectOption('Default signature for replies or forwards', 'No signature');
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     mail.newMail();
 
@@ -108,7 +110,7 @@ Scenario('[C7766] Create new signature', function (I, mail) {
 
 });
 
-Scenario('[C7767] Define signature position', async function (I, users, mail) {
+Scenario('[C7767] Define signature position', async function (I, users, mail, dialogs) {
     const [user] = users;
     await I.haveMail({
         attachments: [{
@@ -134,15 +136,19 @@ Scenario('[C7767] Define signature position', async function (I, users, mail) {
     I.see('Testsignaturecontent');
 
     I.click('Edit');
+    dialogs.waitForVisible();
     I.waitForVisible('.contenteditable-editor iframe');
     I.selectOption('#signature-position', 'Add signature above quoted text');
-    I.click('Save');
+    dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
 
     I.click('Edit');
+    dialogs.waitForVisible();
     I.waitForVisible('.contenteditable-editor iframe');
+    let option = await I.grabValueFrom('.modal-dialog select');
     I.see('Add signature above quoted text');
-    I.retry(5).click('Cancel');
+    expect(option).to.equal('above');
+    dialogs.clickButton('Cancel');
     I.waitForDetached('.modal-dialog');
 
     // disable default siganture
@@ -150,6 +156,7 @@ Scenario('[C7767] Define signature position', async function (I, users, mail) {
     I.selectOption('Default signature for replies or forwards', 'No signature');
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     // reply to mail
     mail.selectMail('Test subject');
@@ -169,7 +176,7 @@ Scenario('[C7767] Define signature position', async function (I, users, mail) {
     });
 });
 
-Scenario('[C7768] Edit signature', async function (I, mail) {
+Scenario('[C7768] Edit signature', async function (I, mail, dialogs) {
     await I.haveSnippet({
         content: '<p>Testsignaturecontent</p>',
         displayname: 'Testsignaturename',
@@ -183,13 +190,14 @@ Scenario('[C7768] Edit signature', async function (I, mail) {
     I.see('Testsignaturecontent');
 
     I.click('Edit');
+    dialogs.waitForVisible();
     I.waitForVisible('.contenteditable-editor iframe');
     I.fillField('Signature name', 'Newsignaturename');
     within({ frame: '.contenteditable-editor iframe' }, () => {
         I.fillField('body', 'Newsignaturecontent');
     });
 
-    I.click('Save');
+    dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
 
     // assert existance of signature
@@ -200,6 +208,7 @@ Scenario('[C7768] Edit signature', async function (I, mail) {
     I.selectOption('Default signature for replies or forwards', 'No signature');
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     mail.newMail();
 
@@ -301,7 +310,7 @@ Scenario('[C7770] Set default signature', async function (I, users) {
 
 });
 
-Scenario('[C85619] Edit signature with HTML markup', async function (I) {
+Scenario('[C85619] Edit signature with HTML markup', async function (I, mail, dialogs) {
 
     await I.haveSnippet({
         content: '<p>Testsignaturecontent</p>',
@@ -316,6 +325,7 @@ Scenario('[C85619] Edit signature with HTML markup', async function (I) {
     I.see('Testsignaturecontent');
 
     I.click('Edit');
+    dialogs.waitForVisible();
     I.waitForVisible('.contenteditable-editor iframe');
     I.fillField('Signature name', 'Newsignaturename');
     within({ frame: '.contenteditable-editor iframe' }, () => {
@@ -324,7 +334,7 @@ Scenario('[C85619] Edit signature with HTML markup', async function (I) {
         I.pressKey(['Control', 'a']);
     });
     I.click('.mce-i-bold');
-    I.click('Save');
+    dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
 
     // assert changes
@@ -332,10 +342,10 @@ Scenario('[C85619] Edit signature with HTML markup', async function (I) {
     I.see('Newsignaturecontent');
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     // compose a mail
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose-window .editor iframe');
+    mail.newMail();
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
         I.retry(5).seeElement(locate('strong').withText('Newsignaturecontent'));
     });

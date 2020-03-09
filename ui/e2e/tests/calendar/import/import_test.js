@@ -256,7 +256,7 @@ examples.add(['[C104276] Import emClient iCal', 'yahoo_2016_full', function (I) 
     I.seeNumberOfElements(fulltime, 1);
 }]);
 
-Data(examples).Scenario('Import Calendar data', async (I, current, users) => {
+Data(examples).Scenario('Import Calendar data', async (I, current, users, dialogs) => {
     I.login('app=io.ox/calendar&perspective=week:week');
     I.waitForText('My calendars');
     I.waitForText('Birthdays');
@@ -271,10 +271,9 @@ Data(examples).Scenario('Import Calendar data', async (I, current, users) => {
     I.waitForElement(locate('.dropdown.open').withText('Import'));
     I.wait(0.2);
     I.retry(3).click('Import');
-    I.waitForElement('.modal');
+    dialogs.waitForVisible();
     I.attachFile('.file-input', `e2e/media/imports/calendar/${current.filename}.ics`);
-    // click('Import') -> element not interactable
-    I.click('.modal [data-action="import"]');
+    dialogs.clickButton('Import');
     I.waitForText('Data imported successfully', 30, '.io-ox-alert');
     I.waitToHide('.io-ox-alert');
 

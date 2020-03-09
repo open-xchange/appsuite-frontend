@@ -37,23 +37,23 @@ Scenario('Open the help app in a floating window', async function (I) {
     I.waitForDetached('.io-io-help-window', 5);
 });
 
-Scenario('Open the help app in a modal', async function (I, mail) {
+Scenario('Open the help app in a modal', async function (I, mail, dialogs) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
     mail.newMail();
 
     I.click('~Select contacts');
-    I.waitForVisible('.modal.addressbook-popup', 5);
+    dialogs.waitForVisible();
 
-    I.click('~Online help', '.modal.addressbook-popup');
+    I.click('~Online help', dialogs.locators.header);
     I.waitForVisible('.modal.inline-help', 5);
-    I.see('OX App Suite Help', '.modal.inline-help');
+    I.see('OX App Suite Help', dialogs.locators.header);
 
-    I.click('Close', '.modal.inline-help');
-    I.waitForDetached('.modal.inline-help', 5);
+    dialogs.clickButton('Close');
+    I.waitForDetached('.modal.inline-help');
 
-    I.click('Cancel', '.modal.addressbook-popup');
-    I.waitForDetached('.modal.addressbook-popup', 5);
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
 });
 
 Scenario('Check help window for supposed language', function (I) {

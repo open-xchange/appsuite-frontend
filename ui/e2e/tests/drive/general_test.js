@@ -56,13 +56,13 @@ Scenario('[C8364] Upload new file', (I, drive) => {
 });
 
 // Note: This is not accessible H4 and textarea does not have a label
-Scenario('[C8366] Edit description', async (I, drive) => {
+Scenario('[C8366] Edit description', async (I, drive, dialogs) => {
     await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
 
     let sidebarDescription = locate({ css: '.viewer-sidebar-pane .sidebar-panel-body .description' }).as('Sidebar'),
-        modelEditDescription = locate({ css: 'div.modal' }).as('Modal: Edit description');
+        descriptionTextarea = dialogs.locators.main.find('textarea.form-control');
 
     I.waitForText('document.txt', 1, '.file-list-view');
     I.click(locate('li.list-item').withText('document.txt'));
@@ -70,10 +70,11 @@ Scenario('[C8366] Edit description', async (I, drive) => {
     I.say('Add description');
     I.waitForText('Add a description');
     I.click('Add a description');
-    I.waitForElement(modelEditDescription.find('textarea.form-control'));
-    I.fillField(modelEditDescription.find('textarea.form-control'), 'Test description');
-    I.click('Save');
-    I.waitForDetached(modelEditDescription);
+    dialogs.waitForVisible();
+    I.waitForElement(descriptionTextarea);
+    I.fillField(descriptionTextarea, 'Test description');
+    dialogs.clickButton('Save');
+    I.waitForDetached('.modal-dialog');
 
     I.say('Check description #1');
     I.waitForElement({ xpath: '//div[contains(@class, "viewer-sidebar-pane")]//*[text()="Test description"]' });
@@ -83,12 +84,12 @@ Scenario('[C8366] Edit description', async (I, drive) => {
     I.click(locate('li.list-item').withText('document.txt'));
     I.waitForText('Edit description');
     I.click('button.description-button');
-    I.waitForElement(modelEditDescription.find('textarea.form-control'));
-    I.fillField(modelEditDescription.find('textarea.form-control'), 'Test description changed');
-    I.click('Save');
+    dialogs.waitForVisible();
+    I.fillField(descriptionTextarea, 'Test description changed');
+    dialogs.clickButton('Save');
+    I.waitForDetached('.modal-dialog');
 
     I.say('Check description #2');
-    I.waitForDetached(modelEditDescription);
     I.waitForVisible(sidebarDescription);
     I.waitForText('Test description changed', 5, sidebarDescription);
 });

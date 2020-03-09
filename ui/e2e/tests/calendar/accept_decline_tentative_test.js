@@ -25,7 +25,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Create appointments with participants who will accept/decline/accept tentative', async function (I, users, calendar) {
+Scenario('Create appointments with participants who will accept/decline/accept tentative', async function (I, users, calendar, dialogs) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -64,8 +64,8 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
     I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
-    I.waitForElement('.modal-dialog');
-    I.click('Accept', '.modal-dialog');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Accept');
     I.waitForDetached('.modal-dialog', 5);
     I.waitForElement('.rightside .participant a.accepted[title="' + users[1].userdata.primaryEmail + '"]');
     I.logout();
@@ -81,8 +81,8 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
     I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
-    I.waitForElement('.modal-dialog');
-    I.click('Decline', '.modal-dialog');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Decline');
     I.waitForDetached('.modal-dialog', 5);
     I.waitForElement('.rightside .participant a.declined[title="' + users[2].userdata.primaryEmail + '"]');
     I.logout();
@@ -98,8 +98,8 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
     I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
-    I.waitForElement('.modal-dialog');
-    I.click('Tentative', '.modal-dialog');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Tentative');
     I.waitForDetached('.modal-dialog', 5);
     I.waitForElement('.rightside .participant a.tentative[title="' + users[3].userdata.primaryEmail + '"]');
     I.logout();

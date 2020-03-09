@@ -25,7 +25,7 @@ After(async (users) => {
 });
 
 // TODO: shaky (element (body) is not in DOM or there is no element(body) with text "The share you are looking for does not exist." after 30 sec)
-Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', async (I, users, tasks, mail) => {
+Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', async (I, users, tasks, mail, dialogs) => {
     let url;
     // Alice shares a folder with 2 tasks
     session('Alice', async () => {
@@ -47,6 +47,7 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
         I.waitForText('Permissions for folder');
 
         I.click('~Select contacts');
+        dialogs.waitForVisible();
         I.waitForVisible('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));
         I.waitForText(users[1].get('name'), 5, '.address-picker');
@@ -58,8 +59,8 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
         I.waitForText('Viewer', '.dropdown');
         I.click('Viewer');
 
-        I.click('Save', '.modal');
-        I.waitToHide('.modal');
+        dialogs.clickButton('Save');
+        I.waitForDetached('.modal-dialog');
 
         I.openFolderMenu('Tasks');
         I.clickDropdown('Create sharing link');
@@ -111,8 +112,9 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
         I.waitForElement('.btn[title="Actions"]');
         I.click('.btn[title="Actions"]');
         I.clickDropdown('Revoke access');
-        I.click('Save');
-        I.waitToHide('.modal');
+        dialogs.waitForVisible();
+        dialogs.clickButton('Save');
+        I.waitForDetached('.modal-dialog');
 
         I.click({ css: '.folder-tree [title="Actions for Tasks"]' });
         I.clickDropdown('Create sharing link');

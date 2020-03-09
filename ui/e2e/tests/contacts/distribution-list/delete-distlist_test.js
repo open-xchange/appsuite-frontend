@@ -23,7 +23,7 @@ After(async function (users) {
 
 const util = require('./util');
 
-Scenario('[C7379] Single distribution list', async function (I, contacts) {
+Scenario('[C7379] Single distribution list', async function (I, contacts, dialogs) {
     const display_name = util.uniqueName('C7379'),
         listElement = { css: '[aria-label="' + display_name + '"]' };
     await I.haveContact({ display_name: display_name, folder_id: await I.grabDefaultFolder('contacts'), mark_as_distributionlist: true });
@@ -33,13 +33,13 @@ Scenario('[C7379] Single distribution list', async function (I, contacts) {
     I.waitForElement(listElement);
     I.click(listElement);
     I.clickToolbar('Delete');
-    I.waitForElement('.modal-footer');
-    I.click('Delete', '.modal-footer');
-    I.waitForDetached('.modal-body');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
     I.dontSee(listElement);
 });
 
-Scenario('[C7378] Multiple distribution lists', async function (I, search, contacts) {
+Scenario('[C7378] Multiple distribution lists', async function (I, search, contacts, dialogs) {
     const display_name = util.uniqueName('C7378'),
         defaultFolder = await I.grabDefaultFolder('contacts'),
         distributionLists = [];
@@ -54,9 +54,9 @@ Scenario('[C7378] Multiple distribution lists', async function (I, search, conta
 
     I.click('.select-all');
     I.clickToolbar('Delete');
-    I.waitForElement('.modal-footer');
-    I.click('Delete', '.modal-footer');
-    I.waitForDetached('.modal-body');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
     I.waitForText('No matching items found.');
     for (let i = 1; i <= 2; i++) I.dontSee(`${display_name} - ${i}`);
 });

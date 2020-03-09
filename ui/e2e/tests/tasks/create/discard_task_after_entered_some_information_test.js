@@ -23,7 +23,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7736] Discard Task after entered some information', async (I, tasks) => {
+Scenario('[C7736] Discard Task after entered some information', async (I, tasks, dialogs) => {
 
     // 1. Create a new task and enter a title and then discard this task.
 
@@ -34,11 +34,11 @@ Scenario('[C7736] Discard Task after entered some information', async (I, tasks)
     I.fillField('.title-field', 'Foobar');
 
     I.click('Discard');
-    I.waitForVisible('.modal-dialog');
-    I.see('Discard changes');
+    dialogs.waitForVisible();
 
     // 2. Click "Discard changes"
 
-    I.click('Discard changes');
+    dialogs.clickButton('Discard changes');
+    I.waitForDetached('.modal-dialog');
     I.dontSeeElement('[data-page-id="undefined/listView"] .selectable');
 });

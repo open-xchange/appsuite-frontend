@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7466] Delete one appointment of an series', async function (I, users, calendar) {
+Scenario('[C7466] Delete one appointment of an series', async function (I, users, calendar, dialogs) {
     const testrailID = 'C7466';
     await I.haveSetting('io.ox/core//autoOpenNotification', false);
     await I.haveSetting('io.ox/core//showDesktopNotifications', false);
@@ -72,9 +72,9 @@ Scenario('[C7466] Delete one appointment of an series', async function (I, users
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup');
     I.waitForText('Delete', undefined, '.io-ox-sidepopup');
     I.click('Delete', '.io-ox-sidepopup');
-    I.waitForVisible('.modal');
-    I.click('Delete this appointment', '.modal');
-    I.waitForDetached('.modal');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete this appointment');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached('.appointment-panel [aria-label^="' + testrailID + ', ' + testrailID + '"]');
 
     I.say('Check');

@@ -166,7 +166,7 @@ Scenario('[C7742] Mark Task as Undone', async function (I, tasks) {
     I.waitForText('Not started', 5, '.tasks-detailview .badge-notstarted');
 });
 
-Scenario('[C7743] Move single Task', async function (I, tasks) {
+Scenario('[C7743] Move single Task', async function (I, tasks, dialogs) {
     const testrailID = 'C7743',
         testrailName = 'Move single Task',
         taskDefaultFolder = await I.grabDefaultFolder('tasks');
@@ -181,13 +181,14 @@ Scenario('[C7743] Move single Task', async function (I, tasks) {
 
     I.clickToolbar('~More actions');
     I.click('Move');
-    I.waitForText('Move', 5, '.modal-open .modal-title');
+    dialogs.waitForVisible();
+    I.waitForText('Move', 5, dialogs.locators.header);
     I.waitForElement('.modal .section .folder-arrow');
     I.click('.modal .section .folder-arrow');
     I.waitForElement(`.modal .section.open [aria-label="${testrailID}"]`, 5);
     I.click(`.modal [aria-label="${testrailID}"]`);
     I.waitForEnabled('.modal button.btn-primary');
-    I.click('Move', '.modal');
+    dialogs.clickButton('Move');
     I.waitForElement('.launcher-icon.fa-refresh.fa-spin');
     I.waitForDetached('.launcher-icon.fa-refresh.fa-spin');
     I.selectFolder(testrailID);
@@ -265,7 +266,7 @@ Scenario('[C7745] Mark several Task as Undone at the same time', async function 
     }
 });
 
-Scenario('[C7746] Move several tasks to an other folder at the same time', async function (I, tasks) {
+Scenario('[C7746] Move several tasks to an other folder at the same time', async function (I, tasks, dialogs) {
     const testrailID = 'C7746',
         testrailName = 'Move several tasks to an other folder at the same time',
         numberOfTasks = 3,
@@ -290,15 +291,16 @@ Scenario('[C7746] Move several tasks to an other folder at the same time', async
     I.waitForText(numberOfTasks + ' items selected', 5, '.task-detail-container .message');
 
     I.clickToolbar('~More actions');
-    I.click('Move');
-    I.waitForText('Move', 5, '.modal-open .modal-title');
+    I.clickDropdown('Move');
+    dialogs.waitForVisible();
+    I.waitForText('Move', 5, dialogs.locators.header);
     I.waitForElement('.modal .section .folder-arrow');
     I.click('.modal .section .folder-arrow');
     I.waitForElement(`.modal .section.open [aria-label="${testrailID}"]`, 5);
     I.click(`.modal [aria-label="${testrailID}"]`);
     I.waitForEnabled('.modal button.btn-primary');
-    I.click('Move', '.modal-footer');
-    I.waitForDetached('.modal');
+    dialogs.clickButton('Move');
+    I.waitForDetached('.modal-dialog');
     I.triggerRefresh();
     I.selectFolder(testrailID);
     tasks.waitForApp();

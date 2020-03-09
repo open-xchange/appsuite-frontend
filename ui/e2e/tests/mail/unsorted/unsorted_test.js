@@ -112,7 +112,7 @@ Scenario('[C7382] Compose plain text mail', async function (I, users, mail) {
     I.waitForText(subject, 5, '.io-ox-mail-detail-window');
 });
 
-Scenario('[C7384] Save draft', async function (I, users, mail) {
+Scenario('[C7384] Save draft', async function (I, users, mail, dialogs) {
     const [user] = users;
     var testrailid = 'C7384';
     var text = Math.round(+new Date() / 1000);
@@ -124,8 +124,8 @@ Scenario('[C7384] Save draft', async function (I, users, mail) {
     I.fillField('Subject', '' + testrailid + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, '' + text);
     I.click('Discard');
-    I.waitForElement('.modal-dialog');
-    I.click('Save as draft');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Save as draft');
     I.waitForDetached('.modal-dialog');
     //I.wait(1);
     I.selectFolder('Drafts');
@@ -297,11 +297,12 @@ Scenario('[C7388] Send mail with different priorities', async function (I, users
     });
 });
 
-Scenario('[C7389] Send mail with attached vCard', async function (I, users, mail) {
+Scenario('[C7389] Send mail with attached vCard', async function (I, users, mail, dialogs) {
     let [user] = users;
     var subject = `C7389 - ${Math.round(+new Date() / 1000)}`;
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
+    mail.waitForApp();
     mail.newMail();
     I.click('Options');
     I.waitForElement('.dropdown.open .dropdown-menu', 5);
@@ -322,8 +323,9 @@ Scenario('[C7389] Send mail with attached vCard', async function (I, users, mail
 
     //confirm dirtycheck is working properly
     I.click('Discard');
-    I.waitForText('Do you really want to discard your changes?', 5, '.modal-dialog');
-    I.click('Cancel');
+    dialogs.waitForVisible();
+    I.waitForText('Do you really want to discard your changes?', 5, dialogs.locators.body);
+    dialogs.clickButton('Cancel');
     I.waitForDetached('.modal-dialog');
 
     I.click('Save');
@@ -679,22 +681,29 @@ Scenario('[C101620] Very long TO field', async function (I, users, mail) {
     });
 });
 
-Scenario('[C163026] Change from display name when sending a mail', async function (I, users, mail) {
+Scenario('[C163026] Change from display name when sending a mail', async function (I, users, mail, dialogs) {
     let [user] = users;
     var timestamp = Math.round(+new Date() / 1000);
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
+
     I.login('app=io.ox/mail', { user });
+    mail.waitForApp();
+
     mail.newMail();
     I.see(users[0].userdata.given_name + ' ' + users[0].userdata.sur_name, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .name');
     I.see('<' + users[0].userdata.primaryEmail + '>', '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');
+
     I.click('.io-ox-mail-compose [data-dropdown="from"] .fa-caret-down');
     I.waitForVisible('.dropdown.open [data-name="edit-real-names"]', 5);
-    I.click('.dropdown.open .dropdown-menu [data-name="edit-real-names"]');
-    I.waitForVisible('.modal-dialog [title="Use custom name"]', 5);
-    I.click('.modal-dialog [title="Use custom name"]');
-    I.fillField('.modal-body [title="Custom name"]', timestamp);
-    I.click('Edit', { css: '.modal-footer' });
-    I.waitForDetached('.io-ox-dialog-wrapper', 5);
+    I.clickDropdown('Edit names');
+
+    dialogs.waitForVisible();
+    I.waitForVisible('.modal-dialog input[title="Use custom name"]', 5); // check for checkbox to be visible
+    I.click('input[title="Use custom name"]', dialogs.locators.body);
+    I.fillField('.modal-body input[title="Custom name"]', timestamp);
+    dialogs.clickButton('Edit');
+    I.waitForDetached('.modal-dialog');
+
     I.waitForText(timestamp, 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .name');
     I.waitForText('<' + users[0].userdata.primaryEmail + '>', 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');
     I.click('.io-ox-mail-compose [data-dropdown="from"] .fa-caret-down');
@@ -704,33 +713,38 @@ Scenario('[C163026] Change from display name when sending a mail', async functio
     I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');
     I.waitForText('This email just contains your email address as sender. Your real name is not used.', 5, '.io-ox-mail-compose .sender-realname .mail-input');
 });
-Scenario('[C207507] Forgot mail attachment hint', async function (I, users) {
+Scenario('[C207507] Forgot mail attachment hint', async function (I, users, mail, dialogs) {
     let [user] = users;
     var testrailID = 'C207507';
     I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
-    I.waitForVisible('.io-ox-mail-window');
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose.container', 5);
-    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 'super01@ox.de');
-    I.fillField('.io-ox-mail-compose [name="subject"]', testrailID);
+    mail.waitForApp();
+
+    mail.newMail();
+    I.fillField('To', 'super01@ox.de');
+    I.fillField('Subject', testrailID);
     I.fillField('.io-ox-mail-compose .plain-text', 'see attachment');
     I.click('Send', '.floating-window-content');
-    I.waitForElement('.modal-open .modal-dialog', 5);
-    I.waitForText('Forgot attachment?', 5, '.modal-open .modal-dialog .modal-title');
-    I.click('Cancel', '.modal-footer');
-    I.waitForDetached('.modal-open .modal-dialog', 5);
-    I.fillField('.io-ox-mail-compose [name="subject"]', 'see attachment');
+
+    // Test if attachment is mentioned in mail
+    dialogs.waitForVisible();
+    I.waitForText('Forgot attachment?', 5, dialogs.locators.header);
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
+
+    I.fillField('Subject', 'see attachment');
     I.fillField('.io-ox-mail-compose .plain-text', testrailID);
     I.click('Send', '.floating-window-content');
-    I.waitForElement('.modal-open .modal-dialog', 5);
-    I.waitForText('Forgot attachment?', 5, '.modal-open .modal-dialog .modal-title');
-    I.click('Cancel', '.modal-footer');
-    I.waitForDetached('.modal-open .modal-dialog', 5);
+
+    // Test if attachment is mentioned in subject
+    dialogs.waitForVisible();
+    I.waitForText('Forgot attachment?', 5, dialogs.locators.header);
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
 });
 
 // TODO: skipped until backend server with feautre support is available
-Scenario.skip('[C273801] Download infected file', async function (I, users) {
+Scenario.skip('[C273801] Download infected file', async function (I, users, dialogs) {
     let [user] = users;
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/Virus_attached!.eml' }, { user: users[0] });
     I.haveSetting('io.ox/mail//layout', 'vertical');
@@ -741,13 +755,18 @@ Scenario.skip('[C273801] Download infected file', async function (I, users) {
     I.click(locate('.list-item').withText('Virus attached!').inside('.list-view'));
     I.waitForElement(locate('[data-action="io.ox/mail/attachment/actions/download"]').withText('Download').inside('.mail-detail-pane'));
     I.click(locate('[data-action="io.ox/mail/attachment/actions/download"]').withText('Download').inside('.mail-detail-pane'));
-    I.waitForElement(locate('.modal-open .modal-title').withText('Malicious file detected'));
-    I.waitForElement(locate('.modal-open button').withText('Download infected file'));
-    I.waitForElement(locate('.modal-open button').withText('Cancel'));
+
+    dialogs.waitForVisible();
+    I.waitForText('Malicious file detected', 5, dialogs.locators.header);
+    I.see('Download infected file', dialogs.locators.footer);
+    I.see('Cancel', dialogs.locators.footer);
+    // I.waitForElement(locate('.modal-open .modal-title').withText('Malicious file detected'));
+    // I.waitForElement(locate('.modal-open button').withText('Download infected file'));
+    // I.waitForElement(locate('.modal-open button').withText('Cancel'));
 });
 
 // TODO: skipped until backend server with feautre support is available
-Scenario.skip('[C273802] Download multiple files (one infected)', async function (I, users) {
+Scenario.skip('[C273802] Download multiple files (one infected)', async function (I, users, dialogs) {
     let [user] = users;
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/C273802.eml' }, { user: users[0] });
     I.haveSetting('io.ox/mail//layout', 'vertical');
@@ -759,9 +778,14 @@ Scenario.skip('[C273802] Download multiple files (one infected)', async function
     I.waitForElement(locate('.toggle-details').withText('2 attachments').inside('.mail-attachment-list .header'));
     I.waitForElement(locate('[data-action="io.ox/mail/attachment/actions/download"]').withText('Download').inside('.mail-detail-pane'));
     I.click(locate('[data-action="io.ox/mail/attachment/actions/download"]').withText('Download').inside('.mail-detail-pane'));
-    I.waitForElement(locate('.modal-open .modal-title').withText('Malicious file detected'));
-    I.waitForElement(locate('.modal-open button').withText('Download infected file'));
-    I.waitForElement(locate('.modal-open button').withText('Cancel'));
+
+    dialogs.waitForVisible();
+    I.waitForText('Malicious file detected', 5, dialogs.locators.header);
+    I.see('Download infected file', dialogs.locators.footer);
+    I.see('Cancel', dialogs.locators.footer);
+    // I.waitForElement(locate('.modal-open .modal-title').withText('Malicious file detected'));
+    // I.waitForElement(locate('.modal-open button').withText('Download infected file'));
+    // I.waitForElement(locate('.modal-open button').withText('Cancel'));
 });
 
 Scenario('[C274142]- Disable autoselect in mail list layout', async function (I, users) {
