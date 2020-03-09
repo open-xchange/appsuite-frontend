@@ -25,7 +25,7 @@ After(async (users) => {
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C208269] Edit users contact information', async (I) => {
+Scenario('[C208269] Edit users contact information', async (I, dialogs) => {
 
     function addContactsField(fieldType, field, input) {
         I.click({ css: `.dropdown[data-add="${fieldType}"] button` }, '.contact-edit');
@@ -118,9 +118,10 @@ Scenario.skip('[C208269] Edit users contact information', async (I) => {
 
     // add picture
     I.click('.contact-photo', '.io-ox-contacts-edit-window');
+    dialogs.waitForVisible();
     I.waitForVisible('.edit-picture');
     I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/images/ox_logo.png');
-    I.click('Apply');
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     // takes an unknown moment until the image appears
     I.waitForVisible('.contact-photo-upload .contact-photo', 1);
