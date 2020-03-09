@@ -127,6 +127,7 @@ define('io.ox/calendar/perspective', [
                 if (_.device('smartphone')) {
                     var p = self.app.pages.getPage('detailView');
                     api.get(obj).then(function (model) {
+
                         var b = new ext.Baton({ data: model.toJSON(), model: model });
                         p.idle().empty().append(detailView.draw(b));
                         self.app.pages.getToolbar('detailView').setBaton(b);

@@ -19,10 +19,15 @@ define('io.ox/calendar/api', [
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'io.ox/calendar/model',
-    'io.ox/core/capabilities'
-], function (http, Pool, CollectionLoader, folderApi, util, models, capabilities) {
+    'io.ox/core/capabilities',
+    'settings!io.ox/calendar'
+], function (http, Pool, CollectionLoader, folderApi, util, models, capabilities, settings) {
 
     'use strict';
+
+    var fields = ['lastModified', 'color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'rrule', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp'];
+
+    if (settings.get('feature/showEverybodyDeclinedWarning', true)) fields.push('attendees');
 
     var isRecurrenceMaster = function (data) {
             // do not add model to pool if it is a master model of a recurring event
@@ -95,7 +100,7 @@ define('io.ox/calendar/api', [
             return response;
         },
 
-        defaultFields = ['lastModified', 'color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'rrule', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp'].join(','),
+        defaultFields = fields.join(','),
 
         api = {
             // used externally by itip updates in mail invites

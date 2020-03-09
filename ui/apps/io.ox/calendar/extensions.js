@@ -15,8 +15,9 @@ define('io.ox/calendar/extensions', [
     'io.ox/core/extensions',
     'io.ox/calendar/util',
     'io.ox/core/folder/api',
+    'settings!io.ox/calendar',
     'gettext!io.ox/calendar'
-], function (ext, util, folderAPI, gt) {
+], function (ext, util, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -62,7 +63,8 @@ define('io.ox/calendar/extensions', [
                 var model = baton.model,
                     folderModel = folderAPI.pool.getModel(model.get('folder')),
                     folder = folderModel.toJSON(),
-                    folderId = model.get('folder');
+                    folderId = model.get('folder'),
+                    allDeclined = util.allAttendeesDeclined(model);
 
                 // cleanup classes to redraw correctly
                 this.removeClass('modify private disabled needs-action accepted declined tentative');
@@ -84,7 +86,6 @@ define('io.ox/calendar/extensions', [
                     if (canModifiy) this.addClass('modify');
                     this.addClass(util.getShownAsClass(model) + ' ' + util.getConfirmationClass(conf));
                 }
-
                 this
                     .append(
                         $('<div class="appointment-content" aria-hidden="true">').attr('title', getTitle(model)).append(
@@ -98,6 +99,14 @@ define('io.ox/calendar/extensions', [
                     .attr({
                         'data-extension': 'default'
                     });
+
+                if (settings.get('feature/showEverybodyDeclinedWarning', true) && allDeclined) {
+                    //.# Warning shown in the calendar app if all other attendees in a meeting have canceled an appointment.
+                    var message = gt('All other attendees have declined, the appointment will probably not take place.');
+                    $('.title-container', this).prepend(
+                        $('<span class="all-declined-warning">').attr('aria-label', message).append(
+                            $('<i class="fa fa-warning" aria-hidden="true">').attr('title', message)));
+                }
             };
         }())
     });
