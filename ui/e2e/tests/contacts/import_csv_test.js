@@ -25,8 +25,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-// TODO: shaky(?) fails at 'I see "Business St. 23 Berlin Berlin 13370", {"css":"address"}'
-Scenario.skip('[C104269] Import App Suite CSV', async (I, contacts) => {
+Scenario('[C104269] Import App Suite CSV', async (I, contacts, dialogs) => {
 // this scenario also covers:
 // [C104268] Import App Suite vCard
 // [C104277] Import Outlook vCard
@@ -211,7 +210,7 @@ Scenario.skip('[C104269] Import App Suite CSV', async (I, contacts) => {
         I.see('Some notes\n\nFor Hans', { css: '.note' });
         I.see('hans@example.com', { css: 'dd a' });
         I.see('+11 111 1111', { css: 'dd a' });
-        I.see('Business St. 23\nBerlin Berlin 13370', { css: 'address' });
+        I.see('Business St. 23\n13370 Berlin', { css: 'address' });
         I.see('Homestreet 23\nHometown NRW 44135', { css: 'address' });
         // delete on first iteration
         if (suffix === 'contact') deleteSelectedContacts();
@@ -274,13 +273,13 @@ Scenario.skip('[C104269] Import App Suite CSV', async (I, contacts) => {
 
     function importCSV(file, type) {
         I.click('.folder-options.contextmenu-control');
-        I.waitForText('Import');
-        I.click('Import');
-        I.waitForElement('.modal');
+        I.clickDropdown('Import');
+        dialogs.waitForVisible();
         I.selectOption('Format', type === 'csv' ? 'CSV' : 'VCARD');
         I.attachFile('.file-input', 'e2e/media/imports/contacts/' + file + '.' + type);
         // click('Import') -> element not interactable
-        I.click('.modal [data-action="import"]');
+        dialogs.clickButton('Import');
+        I.waitForDetached('.modal-dialog');
         I.waitForText('Data imported successfully');
     }
 
@@ -296,16 +295,11 @@ Scenario.skip('[C104269] Import App Suite CSV', async (I, contacts) => {
     }
 
     function deleteSelectedContacts() {
-        clickToolbarAction('io.ox/contacts/actions/delete');
-        I.waitForElement('.modal-dialog');
-        I.click('Delete', '.modal-dialog');
+        I.clickToolbar('Delete');
+        dialogs.waitForVisible();
+        dialogs.clickButton('Delete');
+        I.waitForDetached('.modal-dialog');
         I.waitForDetached('.vgrid-cell');
-    }
-
-    function clickToolbarAction(action) {
-        action = '[data-action="' + action + '"]';
-        I.waitForElement({ css: action + ':not(.disabled)' });
-        I.click({ css: action });
     }
 
     async function hasContactImage() {
