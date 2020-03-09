@@ -314,7 +314,7 @@
         <script type="text/template" class="calendar-week-view">
             <h1 class="calendar-title"><%- meta.title %></h1>
         <% data.forEach(function (week) { %>
-            <table class="week-view">
+            <table class="week-view" <% if (meta.weekdays.length === 1) { %> style="width:50%; display:inline-table;" <% } %> >
                 <thead>
                     <tr>
                         <th class="label"></th>
@@ -354,6 +354,20 @@
                 <% }); %>
                 </tbody>
             </table>
+            <% if(meta.weekdays.length === 1) { %>
+                <div class="week-view-event-list">
+                    <div class="event-list-header"><%- meta.eventListLabel %></div>
+                    <% _(week[0].list).each(function (event) { %>
+                            <div class="event">
+                                <div class="date"><%- event.date %></div>
+                                <div class="summary"><%- event.summary %></div>
+                                <% if (event.location) { %>
+                                    <div class="location"><%- event.location %></div>
+                                <% }%>
+                            </div>
+                        <% }); %>
+                </div>
+            <% } %>
         <% }); %>
         </script>
 

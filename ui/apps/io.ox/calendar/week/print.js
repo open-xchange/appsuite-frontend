@@ -16,8 +16,9 @@ define('io.ox/calendar/week/print', [
     'io.ox/calendar/util',
     'io.ox/core/print',
     'settings!io.ox/calendar',
-    'io.ox/core/folder/api'
-], function (api, util, print, settings, folderAPI) {
+    'io.ox/core/folder/api',
+    'gettext!io.ox/calendar'
+], function (api, util, print, settings, folderAPI, gt) {
 
     'use strict';
 
@@ -97,6 +98,11 @@ define('io.ox/calendar/week/print', [
         return event.hour;
     }
 
+    function getDate(data) {
+        var strings = util.getDateTimeIntervalMarkup(data, { output: 'strings' });
+        return strings.dateStr + ' ' + strings.timeStr;
+    }
+
     return {
 
         open: function (selection, win) {
@@ -131,6 +137,13 @@ define('io.ox/calendar/week/print', [
                                 start: minHour,
                                 end: maxHour,
                                 date: weekStart.date(),
+                                list: _(collection.toJSON()).map(function (event) {
+                                    return {
+                                        summary: event.summary,
+                                        location: event.location,
+                                        date: getDate(event)
+                                    };
+                                }),
                                 slots: collection
                                     .chain()
                                     .filter(getFilter(dayStart, dayEnd))
@@ -157,7 +170,8 @@ define('io.ox/calendar/week/print', [
                     }),
                     weekdays: _.range(0, selection.numberOfColumns || 7).map(function (index) {
                         return moment(selection.start).startOf('day').add(index, 'days').format('dddd');
-                    })
+                    }),
+                    eventListLabel: gt('appointments')
                 },
 
                 selector: '.calendar-week-view',
