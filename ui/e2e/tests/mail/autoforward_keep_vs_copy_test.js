@@ -49,8 +49,7 @@ Scenario('checks if an auto forward rule with copy statement is handled correctl
     I.waitForDetached('.modal-dialog');
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('checks if an auto forward rule with keep statement is handled correctly', function (I) {
+Scenario('checks if an auto forward rule with keep statement is handled correctly', function (I, dialogs) {
     I.haveMailFilterRule({
         'rulename': 'autoforward',
         'actioncmds': [
@@ -72,11 +71,11 @@ Scenario.skip('checks if an auto forward rule with keep statement is handled cor
     I.waitForVisible({ css: '[data-action="edit-auto-forward"] .fa-toggle-on' });
     I.click('Auto forward ...');
 
-    I.waitForElement('.modal-dialog');
+    dialogs.waitForVisible();
     I.seeCheckboxIsChecked('Keep a copy of the message');
 
-    I.click('Cancel', '.modal-dialog');
-    I.waitForInvisible('.modal-dialog');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
 });
 
 Scenario('checks if an auto forward rule with keep statement is written correctly', function (I, users, dialogs) {
