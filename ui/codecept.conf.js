@@ -82,6 +82,7 @@ module.exports.config = {
         drive: './e2e/pageobjects/drive',
         settings: './e2e/pageobjects/settings',
         tasks: './e2e/pageobjects/tasks',
+        dialogs: './e2e/pageobjects/dialogs',
         // widgets
         autocomplete: './e2e/widgetobjects/contact-autocomplete',
         contactpicker: './e2e/widgetobjects/contact-picker',
