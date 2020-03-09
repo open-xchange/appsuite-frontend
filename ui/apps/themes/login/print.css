@@ -399,6 +399,30 @@ h1.calendar-title {
     position: absolute;
 }
 
+.week-view-event-list {
+    display: inline;
+    position: absolute;
+    padding-right: 1.5cm;
+}
+
+.week-view-event-list .event-list-header {
+    font-weight: bold;
+    border-bottom: 1px solid #C0C0C0;
+    padding-left: 8px;
+    line-height: 20px;
+}
+
+.week-view-event-list .event {
+    padding-left: 8px;
+    padding-top: 8px;
+    margin-bottom: 8px;
+    border-top: 1px solid #C0C0C0;
+}
+
+.week-view-event-list .event .summary{
+    font-weight: bold;
+}
+
 .recovery-code {
     font-size: 3em;
     font-weight: bold;
