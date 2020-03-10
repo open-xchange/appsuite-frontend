@@ -552,7 +552,7 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
 });
 
 Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Sunday, change to daylight saving', async function (I, users, calendar) {
-
+    // see: OXUIB-146 Fix daylight saving issues
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar');
 
     await I.haveAppointment({
@@ -603,7 +603,7 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart S
 });
 
 Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Sunday, change from daylight saving', async function (I, users, calendar) {
-
+    // see: OXUIB-146 Fix daylight saving issues
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar');
 
     await I.haveAppointment({
@@ -654,7 +654,7 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart S
 });
 
 Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Monday, change to daylight saving', async function (I, users, calendar) {
-
+    // see: OXUIB-146 Fix daylight saving issues
     I.haveSetting('io.ox/core//localeData/firstDayOfWeek', 'monday');
 
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar');
@@ -707,7 +707,7 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart M
 });
 
 Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Monday, change from daylight saving', async function (I, users, calendar) {
-
+    // see: OXUIB-146 Fix daylight saving issues
     I.haveSetting('io.ox/core//localeData/firstDayOfWeek', 'monday');
 
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar');
