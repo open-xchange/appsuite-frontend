@@ -550,3 +550,211 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
 
     I.waitForText(sharedCalendarName);
 });
+
+Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Sunday, change to daylight saving', async function (I, users, calendar) {
+
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar');
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Sunday 12-13 date with daylight saving change',
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: '20200329T120000'
+        },
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: '20200329T130000'
+        }
+    });
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Monday 12-13 date without daylight saving change',
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: '20200330T120000'
+        },
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: '20200330T130000'
+        }
+    });
+
+    I.login('app=io.ox/calendar&perspective=week:week', { user: users[0] });
+    calendar.waitForApp();
+    // jump to daylight saving change
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-03-29"))');
+
+    // grab css
+    I.waitForElement('.day:nth-child(2) .appointment');
+    const topOfAppointment1 = await I.executeScript(function (el) {
+        return $(el).get(0).style.top;
+    }, '.day:nth-child(2) .appointment');
+
+    I.waitForElement('.day:nth-child(3) .appointment');
+    const topOfAppointment2 = await I.executeScript(function (el) {
+        return $(el).get(0).style.top;
+    }, '.day:nth-child(3) .appointment');
+
+    // must be 50% because we set the appointments to 12 o clock
+    expect(topOfAppointment1).to.equal('50%');
+    expect(topOfAppointment2).to.equal('50%');
+});
+
+Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Sunday, change from daylight saving', async function (I, users, calendar) {
+
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar');
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Sunday 12-13 date with daylight saving change',
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: '20201025T120000'
+        },
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: '20201025T130000'
+        }
+    });
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Monday 12-13 date without daylight saving change',
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: '20201026T120000'
+        },
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: '20201026T130000'
+        }
+    });
+
+    I.login('app=io.ox/calendar&perspective=week:week', { user: users[0] });
+    calendar.waitForApp();
+    // jump to daylight saving change
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-10-25"))');
+
+    // grab css
+    I.waitForElement('.day:nth-child(2) .appointment');
+    const topOfAppointment1 = await I.executeScript(function (el) {
+        return $(el).get(0).style.top;
+    }, '.day:nth-child(2) .appointment');
+
+    I.waitForElement('.day:nth-child(3) .appointment');
+    const topOfAppointment2 = await I.executeScript(function (el) {
+        return $(el).get(0).style.top;
+    }, '.day:nth-child(3) .appointment');
+
+    // must be 50% because we set the appointments to 12 o clock
+    expect(topOfAppointment1).to.equal('50%');
+    expect(topOfAppointment2).to.equal('50%');
+});
+
+Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Monday, change to daylight saving', async function (I, users, calendar) {
+
+    I.haveSetting('io.ox/core//localeData/firstDayOfWeek', 'monday');
+
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar');
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Saturday 12-13 date without daylight saving change',
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: '20200328T120000'
+        },
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: '20200328T130000'
+        }
+    });
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Sunday 12-13 date with daylight saving change',
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: '20200329T120000'
+        },
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: '20200329T130000'
+        }
+    });
+
+    I.login('app=io.ox/calendar&perspective=week:week', { user: users[0] });
+    calendar.waitForApp();
+    // jump to daylight saving change
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-03-23"))');
+
+    // grab css
+    I.waitForElement('.day:nth-child(7) .appointment');
+    const topOfAppointment1 = await I.executeScript(function (el) {
+        return $(el).get(0).style.top;
+    }, '.day:nth-child(7) .appointment');
+
+    I.waitForElement('.day:nth-child(8) .appointment');
+    const topOfAppointment2 = await I.executeScript(function (el) {
+        return $(el).get(0).style.top;
+    }, '.day:nth-child(8) .appointment');
+
+    // must be 50% because we set the appointments to 12 o clock
+    expect(topOfAppointment1).to.equal('50%');
+    expect(topOfAppointment2).to.equal('50%');
+});
+
+Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Monday, change from daylight saving', async function (I, users, calendar) {
+
+    I.haveSetting('io.ox/core//localeData/firstDayOfWeek', 'monday');
+
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar');
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Saturday 12-13 date without daylight saving change',
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: '20201024T120000'
+        },
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: '20201024T130000'
+        }
+    });
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Sunday 12-13 date with daylight saving change',
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: '20201025T120000'
+        },
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: '20201025T130000'
+        }
+    });
+
+    I.login('app=io.ox/calendar&perspective=week:week', { user: users[0] });
+    calendar.waitForApp();
+    // jump to daylight saving change
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-10-19"))');
+
+    // grab css
+    I.waitForElement('.day:nth-child(7) .appointment');
+    const topOfAppointment1 = await I.executeScript(function (el) {
+        return $(el).get(0).style.top;
+    }, '.day:nth-child(7) .appointment');
+
+    I.waitForElement('.day:nth-child(8) .appointment');
+    const topOfAppointment2 = await I.executeScript(function (el) {
+        return $(el).get(0).style.top;
+    }, '.day:nth-child(8) .appointment');
+
+    // must be 50% because we set the appointments to 12 o clock
+    expect(topOfAppointment1).to.equal('50%');
+    expect(topOfAppointment2).to.equal('50%');
+});
