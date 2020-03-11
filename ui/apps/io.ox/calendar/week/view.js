@@ -1116,7 +1116,7 @@ define('io.ox/calendar/week/view', [
                 node = node.get(maxCount) ? $(node.get(maxCount)) : $(node).first().clone();
 
                 // daylight saving time change?
-                var offset = start._offset - model.getMoment('startDate')._offset;
+                var offset = start._offset - model.getMoment('startDate').tz(start.tz())._offset;
 
                 node
                     .addClass(endLocal.diff(startLocal, 'minutes') < 120 / this.model.get('gridSize') ? 'no-wrap' : '')
