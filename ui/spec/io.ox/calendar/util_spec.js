@@ -129,14 +129,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
 
         describe('should translate recurrence strings', function () {
 
-            var data = {
-                    day_in_month: 13,
-                    days: 1,
-                    interval: 1,
-                    month: 1,
-                    recurrence_type: 1
-                },
-                localeWeek = {
+            var localeWeek = {
                     dow: moment.localeData().firstDayOfWeek(),
                     doy: moment.localeData().firstDayOfYear()
                 };
@@ -145,171 +138,223 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 moment.updateLocale('de', { week: localeWeek });
             });
 
+            function getEvent() {
+                return new models.Model({
+                    startDate: {
+                        value: '20200309T180000',
+                        tzid: 'Europe/Berlin'
+                    },
+                    endDate: {
+                        value: '20200309T190000',
+                        tzid: 'Europe/Berlin'
+                    }
+                });
+            }
+
             it('Only works for de_DE', function () {
                 expect(ox.locale).to.equal('de_DE');
             });
 
             // Daily
             it('Every day', function () {
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=DAILY');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Täglich.');
             });
 
             it('Every 10 days', function () {
-                data.interval = 10;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=DAILY;INTERVAL=10');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Alle 10 Tage.');
+            });
+
+            it('Every day till specific date', function () {
+                let event = getEvent();
+                event.set('rrule', 'FREQ=DAILY;UNTIL=20200313T225959Z');
+
+                var str = util.getRecurrenceString(event);
+                expect(str).to.equal('Täglich. Die Serie endet am 13.3.2020.');
+            });
+
+            it('Every day till a specific number of recurrences', function () {
+                let event = getEvent();
+                event.set('rrule', 'FREQ=DAILY;COUNT=3');
+
+                var str = util.getRecurrenceString(event);
+                expect(str).to.equal('Täglich. Die Serie endet nach 3 Ereignissen.');
             });
 
             // Weekly
             it('Weekly on Monday', function () {
-                data.days = util.days.MONDAY;
-                data.interval = 1;
-                data.recurrence_type = 2;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=WEEKLY;BYDAY=MO');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Jeden Montag.');
             });
 
             it('Weekly on Monday and Tuesday', function () {
-                data.days = util.days.MONDAY | util.days.TUESDAY;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=WEEKLY;BYDAY=MO,TU');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Jeden Montag und Dienstag.');
             });
 
             it('Weekly on Monday, Tuesday, Wednesday', function () {
-                data.days = util.days.MONDAY | util.days.TUESDAY | util.days.WEDNESDAY;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=WEEKLY;BYDAY=MO,TU,WE');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Jeden Montag, Dienstag, Mittwoch.');
             });
 
             it('On workdays', function () {
-                data.days = 2 + 4 + 8 + 16 + 32;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('An Werktagen.');
             });
 
             it('On weekends', function () {
-                data.days = 1 + 64;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=WEEKLY;BYDAY=SU,SA');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Jedes Wochenende.');
             });
 
             it('Weekly on all days -> Every day', function () {
-                data.interval = 1;
-                data.days = 127;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR,SA');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Täglich.');
             });
 
             // Weekly - interval > 1
             it('Every 2 weeks on Monday', function () {
-                data.days = util.days.MONDAY;
-                data.interval = 2;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=WEEKLY;BYDAY=MO;INTERVAL=2');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Alle 2 Wochen am Montag.');
             });
 
             // test if superessive days and start of the week work well together
             it('Every 2 weeks on Monday with start of week = 3', function () {
                 moment.updateLocale('de', { week: { dow: 3, doy: localeWeek.doy } });
-                data.days = util.days.MONDAY;
-                data.interval = 2;
-                var str = util.getRecurrenceString(data);
+
+                let event = getEvent();
+                event.set('rrule', 'FREQ=WEEKLY;BYDAY=MO;INTERVAL=2');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Alle 2 Wochen am Montag.');
             });
 
             it('Every 2 weeks on Monday, Tuesday, Wednesday', function () {
-                data.days = util.days.MONDAY | util.days.TUESDAY | util.days.WEDNESDAY;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=WEEKLY;BYDAY=MO,TU,WE;INTERVAL=2');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Alle 2 Wochen am Montag, Dienstag, Mittwoch.');
             });
 
             it('Every 2 weeks on workdays', function () {
-                data.days = 2 + 4 + 8 + 16 + 32;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;INTERVAL=2');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Alle 2 Wochen an Werktagen.');
             });
 
             it('Every 2 weeks on weekends', function () {
-                data.days = 1 + 64;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=WEEKLY;BYDAY=SU,SA;INTERVAL=2');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Alle 2 Wochen am Wochenende.');
             });
 
             it('Every 2 weeks on all days', function () {
-                data.days = 127;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SU,SA;INTERVAL=2');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Täglich alle 2 Wochen.');
             });
 
             // Monthly
             it('Monthly on day 11', function () {
-                data.day_in_month = 11;
-                data.days = null;
-                data.interval = 1;
-                data.recurrence_type = 3;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=MONTHLY;BYMONTHDAY=11');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Monatlich am 11.');
             });
 
             it('Every 2 months on day 11', function () {
-                data.interval = 2;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=MONTHLY;BYMONTHDAY=11;INTERVAL=2');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Alle 2 Monate am 11.');
             });
 
             // Monthly - specific days
             it('Monthly on the first Friday', function () {
-                data.day_in_month = 1;
-                data.days = util.days.FRIDAY;
-                data.interval = 1;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=MONTHLY;BYDAY=FR;BYSETPOS=1');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Monatlich am ersten Freitag.');
             });
 
             it('Monthly on the last Sunday', function () {
-                data.day_in_month = -1;
-                data.days = util.days.SUNDAY;
-                data.interval = 1;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=MONTHLY;BYDAY=SU;BYSETPOS=-1');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Monatlich am fünften / letzten Sonntag.');
             });
 
             // Monthly - specific days - interval > 1
             it('Every 3 months on the first Friday', function () {
-                data.day_in_month = 1;
-                data.days = util.days.FRIDAY;
-                data.interval = 3;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=MONTHLY;BYDAY=FR;BYSETPOS=1;INTERVAL=3');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Alle 3 Monate am ersten Freitag.');
             });
 
             it('Every 3 months on the last Sunday', function () {
-                data.days = util.days.SUNDAY;
-                data.day_in_month = 5;
-                data.interval = 3;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=MONTHLY;BYDAY=SU;BYSETPOS=-1;INTERVAL=3');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Alle 3 Monate am fünften / letzten Sonntag.');
             });
 
             // Yearly
             it('Yearly on January 29', function () {
-                data.day_in_month = 29;
-                data.days = null;
-                data.interval = 1;
-                data.month = 0;
-                data.recurrence_type = 4;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=YEARLY;BYMONTH=1;BYMONTHDAY=29');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Jährlich am 29. Januar.');
             });
 
             // Yearly - specific days
             it('Yearly on the first Friday of July', function () {
-                data.day_in_month = 1;
-                data.days = util.days.FRIDAY;
-                data.interval = 1;
-                data.month = 6;
-                var str = util.getRecurrenceString(data);
+                let event = getEvent();
+                event.set('rrule', 'FREQ=YEARLY;BYMONTH=7;BYDAY=FR;BYSETPOS=1');
+
+                var str = util.getRecurrenceString(event);
                 expect(str).to.equal('Jährlich am ersten Freitag im Juli.');
             });
 
