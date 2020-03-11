@@ -46,8 +46,11 @@ define('io.ox/contacts/distrib/create-dist-view', [
             baton.app.getWindow().setHeader(
                 $('<div class="header">').append(
                     $('<h1 class="sr-only">').text(header),
-                    // save/create button
-                    $('<button type="button" class="btn btn-primary" data-action="save">').text(buttonText).on('click', function () {
+                    // save/create button, add marker attribute so we can track errors in participants add field correctly
+                    $('<button type="button" class="btn btn-primary" data-action="save">').attr('noAutoAddParticipants', true).text(buttonText).on('click', function () {
+                        // wait if there was an error so the user has a chance to react (invalid data in the input field etc)
+                        var error = baton.addParticipantView.resolve();
+                        if (error) return;
                         baton.member.resolve().always(function () {
                             baton.model.save();
                         });
@@ -140,6 +143,8 @@ define('io.ox/contacts/distrib/create-dist-view', [
                 view.$el
             );
             view.render().$el.addClass('col-md-6');
+
+            this.baton.addParticipantView = view;
         }
     });
 
