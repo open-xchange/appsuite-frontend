@@ -570,6 +570,19 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart S
 
     await I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Sunday 12-13 date with daylight saving change',
+        startDate: {
+            tzid: 'America/New_York',
+            value: '20200329T060000'
+        },
+        endDate: {
+            tzid: 'America/New_York',
+            value: '20200329T070000'
+        }
+    });
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
         summary: 'Monday 12-13 date without daylight saving change',
         startDate: {
             tzid: 'Europe/Berlin',
@@ -578,6 +591,19 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart S
         endDate: {
             tzid: 'Europe/Berlin',
             value: '20200330T130000'
+        }
+    });
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Monday 12-13 date without daylight saving change',
+        startDate: {
+            tzid: 'America/New_York',
+            value: '20200330T060000'
+        },
+        endDate: {
+            tzid: 'America/New_York',
+            value: '20200330T070000'
         }
     });
 
@@ -592,14 +618,26 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart S
         return $(el).get(0).style.top;
     }, '.day:nth-child(2) .appointment');
 
-    I.waitForElement('.day:nth-child(3) .appointment');
+    I.waitForElement('.day:nth-child(2) .appointment');
     const topOfAppointment2 = await I.executeScript(function (el) {
+        return $(el).get(1).style.top;
+    }, '.day:nth-child(2) .appointment');
+
+    I.waitForElement('.day:nth-child(3) .appointment');
+    const topOfAppointment3 = await I.executeScript(function (el) {
         return $(el).get(0).style.top;
+    }, '.day:nth-child(3) .appointment');
+
+    I.waitForElement('.day:nth-child(3) .appointment');
+    const topOfAppointment4 = await I.executeScript(function (el) {
+        return $(el).get(1).style.top;
     }, '.day:nth-child(3) .appointment');
 
     // must be 50% because we set the appointments to 12 o clock
     expect(topOfAppointment1).to.equal('50%');
     expect(topOfAppointment2).to.equal('50%');
+    expect(topOfAppointment3).to.equal('50%');
+    expect(topOfAppointment4).to.equal('50%');
 });
 
 Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Sunday, change from daylight saving', async function (I, users, calendar) {
@@ -621,6 +659,19 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart S
 
     await I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Sunday 12-13 date with daylight saving change',
+        startDate: {
+            tzid: 'America/New_York',
+            value: '20201025T070000'
+        },
+        endDate: {
+            tzid: 'America/New_York',
+            value: '20201025T080000'
+        }
+    });
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
         summary: 'Monday 12-13 date without daylight saving change',
         startDate: {
             tzid: 'Europe/Berlin',
@@ -629,6 +680,19 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart S
         endDate: {
             tzid: 'Europe/Berlin',
             value: '20201026T130000'
+        }
+    });
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Monday 12-13 date without daylight saving change',
+        startDate: {
+            tzid: 'America/New_York',
+            value: '20201026T070000'
+        },
+        endDate: {
+            tzid: 'America/New_York',
+            value: '20201026T080000'
         }
     });
 
@@ -643,14 +707,26 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart S
         return $(el).get(0).style.top;
     }, '.day:nth-child(2) .appointment');
 
-    I.waitForElement('.day:nth-child(3) .appointment');
+    I.waitForElement('.day:nth-child(2) .appointment');
     const topOfAppointment2 = await I.executeScript(function (el) {
+        return $(el).get(1).style.top;
+    }, '.day:nth-child(2) .appointment');
+
+    I.waitForElement('.day:nth-child(3) .appointment');
+    const topOfAppointment3 = await I.executeScript(function (el) {
         return $(el).get(0).style.top;
+    }, '.day:nth-child(3) .appointment');
+
+    I.waitForElement('.day:nth-child(3) .appointment');
+    const topOfAppointment4 = await I.executeScript(function (el) {
+        return $(el).get(1).style.top;
     }, '.day:nth-child(3) .appointment');
 
     // must be 50% because we set the appointments to 12 o clock
     expect(topOfAppointment1).to.equal('50%');
     expect(topOfAppointment2).to.equal('50%');
+    expect(topOfAppointment3).to.equal('50%');
+    expect(topOfAppointment4).to.equal('50%');
 });
 
 Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Monday, change to daylight saving', async function (I, users, calendar) {
@@ -674,6 +750,19 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart M
 
     await I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Saturday 12-13 date without daylight saving change',
+        startDate: {
+            tzid: 'America/New_York',
+            value: '20200328T070000'
+        },
+        endDate: {
+            tzid: 'America/New_York',
+            value: '20200328T080000'
+        }
+    });
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
         summary: 'Sunday 12-13 date with daylight saving change',
         startDate: {
             tzid: 'Europe/Berlin',
@@ -682,6 +771,19 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart M
         endDate: {
             tzid: 'Europe/Berlin',
             value: '20200329T130000'
+        }
+    });
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Sunday 12-13 date with daylight saving change',
+        startDate: {
+            tzid: 'America/New_York',
+            value: '20200329T060000'
+        },
+        endDate: {
+            tzid: 'America/New_York',
+            value: '20200329T070000'
         }
     });
 
@@ -696,14 +798,26 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart M
         return $(el).get(0).style.top;
     }, '.day:nth-child(7) .appointment');
 
-    I.waitForElement('.day:nth-child(8) .appointment');
+    I.waitForElement('.day:nth-child(7) .appointment');
     const topOfAppointment2 = await I.executeScript(function (el) {
+        return $(el).get(1).style.top;
+    }, '.day:nth-child(7) .appointment');
+
+    I.waitForElement('.day:nth-child(8) .appointment');
+    const topOfAppointment3 = await I.executeScript(function (el) {
         return $(el).get(0).style.top;
+    }, '.day:nth-child(8) .appointment');
+
+    I.waitForElement('.day:nth-child(8) .appointment');
+    const topOfAppointment4 = await I.executeScript(function (el) {
+        return $(el).get(1).style.top;
     }, '.day:nth-child(8) .appointment');
 
     // must be 50% because we set the appointments to 12 o clock
     expect(topOfAppointment1).to.equal('50%');
     expect(topOfAppointment2).to.equal('50%');
+    expect(topOfAppointment3).to.equal('50%');
+    expect(topOfAppointment4).to.equal('50%');
 });
 
 Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Monday, change from daylight saving', async function (I, users, calendar) {
@@ -727,6 +841,19 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart M
 
     await I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Saturday 12-13 date without daylight saving change',
+        startDate: {
+            tzid: 'America/New_York',
+            value: '20201024T060000'
+        },
+        endDate: {
+            tzid: 'America/New_York',
+            value: '20201024T070000'
+        }
+    });
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
         summary: 'Sunday 12-13 date with daylight saving change',
         startDate: {
             tzid: 'Europe/Berlin',
@@ -735,6 +862,19 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart M
         endDate: {
             tzid: 'Europe/Berlin',
             value: '20201025T130000'
+        }
+    });
+
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Sunday 12-13 date with daylight saving change',
+        startDate: {
+            tzid: 'America/New_York',
+            value: '20201025T070000'
+        },
+        endDate: {
+            tzid: 'America/New_York',
+            value: '20201025T080000'
         }
     });
 
@@ -749,12 +889,24 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart M
         return $(el).get(0).style.top;
     }, '.day:nth-child(7) .appointment');
 
-    I.waitForElement('.day:nth-child(8) .appointment');
+    I.waitForElement('.day:nth-child(7) .appointment');
     const topOfAppointment2 = await I.executeScript(function (el) {
+        return $(el).get(1).style.top;
+    }, '.day:nth-child(7) .appointment');
+
+    I.waitForElement('.day:nth-child(8) .appointment');
+    const topOfAppointment3 = await I.executeScript(function (el) {
         return $(el).get(0).style.top;
+    }, '.day:nth-child(8) .appointment');
+
+    I.waitForElement('.day:nth-child(8) .appointment');
+    const topOfAppointment4 = await I.executeScript(function (el) {
+        return $(el).get(1).style.top;
     }, '.day:nth-child(8) .appointment');
 
     // must be 50% because we set the appointments to 12 o clock
     expect(topOfAppointment1).to.equal('50%');
     expect(topOfAppointment2).to.equal('50%');
+    expect(topOfAppointment3).to.equal('50%');
+    expect(topOfAppointment4).to.equal('50%');
 });
