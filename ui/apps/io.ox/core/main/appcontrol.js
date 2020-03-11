@@ -110,6 +110,10 @@ define('io.ox/core/main/appcontrol', [
             // check for compose apps
             if (this.model.get('closable') && _.device('smartphone')) {
                 icon = ox.ui.appIcons[this.model.options.name];
+                // some apps have icons for the taskbar, better than using the fallback
+                if (!icon && this.model.options.userContentIcon) {
+                    icon = '<i class="' + this.model.options.userContentIcon + '">';
+                }
             }
 
             this.$icon = icon ? $(icon) : $(icons.fallback).find('text > tspan').text(firstLetter).end();
