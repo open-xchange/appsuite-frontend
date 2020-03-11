@@ -130,12 +130,13 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
         describe('should translate recurrence strings', function () {
 
             var localeWeek = {
-                    dow: moment.localeData().firstDayOfWeek(),
-                    doy: moment.localeData().firstDayOfYear()
-                };
+                dow: moment.localeData().firstDayOfWeek(),
+                doy: moment.localeData().firstDayOfYear()
+            };
 
             afterEach(function () {
                 moment.updateLocale('de', { week: localeWeek });
+                moment.tz.setDefault('Europe/Berlin');
             });
 
             function getEvent() {
@@ -153,6 +154,114 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
 
             it('Only works for de_DE', function () {
                 expect(ox.locale).to.equal('de_DE');
+            });
+
+            // Different timezones
+            it('Create recurring appointment in a different timezone (-4)', function () {
+                // America/Caracas: -4
+                moment.tz.setDefault('America/Caracas');
+
+                var event = new models.Model({
+                    startDate: {
+                        value: '20200309T010000',
+                        tzid: 'Europe/Berlin'
+                    },
+                    endDate: {
+                        value: '20200309T020000',
+                        tzid: 'Europe/Berlin'
+                    },
+                    rrule: 'FREQ=DAILY;UNTIL=20200313T225959Z'
+                });
+
+                expect(util.getRecurrenceString(event)).to.equal('Täglich. Die Serie endet am 12.3.2020.');
+            });
+
+            it('Create recurring appointment in a different timezone (+4)', function () {
+                // Asia/Muscat: +4
+                moment.tz.setDefault('Asia/Muscat');
+
+                var event = new models.Model({
+                    startDate: {
+                        value: '20200309T220000',
+                        tzid: 'Europe/Berlin'
+                    },
+                    endDate: {
+                        value: '20200309T230000',
+                        tzid: 'Europe/Berlin'
+                    },
+                    rrule: 'FREQ=DAILY;UNTIL=20200313T225959Z'
+                });
+
+                expect(util.getRecurrenceString(event)).to.equal('Täglich. Die Serie endet am 14.3.2020.');
+            });
+
+            it('Create recurring appointment in a different timezone (without day change)', function () {
+                // Asia/Muscat: +4
+                moment.tz.setDefault('Asia/Muscat');
+
+                var event = new models.Model({
+                    startDate: {
+                        value: '20200309T120000',
+                        tzid: 'Europe/Berlin'
+                    },
+                    endDate: {
+                        value: '20200309T130000',
+                        tzid: 'Europe/Berlin'
+                    },
+                    rrule: 'FREQ=DAILY;UNTIL=20200313T225959Z'
+                });
+
+                expect(util.getRecurrenceString(event)).to.equal('Täglich. Die Serie endet am 13.3.2020.');
+            });
+
+            // All day events
+            it('Recurring all day event', function () {
+                var event = new models.Model({
+                    startDate: {
+                        value: '20200309'
+                    },
+                    endDate: {
+                        value: '20200310'
+                    },
+                    rrule: 'FREQ=DAILY;UNTIL=20200313'
+                });
+
+                var str = util.getRecurrenceString(event);
+                expect(str).to.equal('Täglich. Die Serie endet am 13.3.2020.');
+            });
+
+            it('Recurring all day event of a different timezone (-4)', function () {
+                moment.tz.setDefault('Asia/Caracas');
+
+                var event = new models.Model({
+                    startDate: {
+                        value: '20200309'
+                    },
+                    endDate: {
+                        value: '20200310'
+                    },
+                    rrule: 'FREQ=DAILY;UNTIL=20200313'
+                });
+
+                var str = util.getRecurrenceString(event);
+                expect(str).to.equal('Täglich. Die Serie endet am 13.3.2020.');
+            });
+
+            it('Recurring all day event of a different timezone (+4)', function () {
+                moment.tz.setDefault('Asia/Muscat');
+
+                var event = new models.Model({
+                    startDate: {
+                        value: '20200309'
+                    },
+                    endDate: {
+                        value: '20200310'
+                    },
+                    rrule: 'FREQ=DAILY;UNTIL=20200313'
+                });
+
+                var str = util.getRecurrenceString(event);
+                expect(str).to.equal('Täglich. Die Serie endet am 13.3.2020.');
             });
 
             // Daily

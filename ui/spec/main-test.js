@@ -52,6 +52,7 @@ require([
         run: function () {
             return require(['settings!io.ox/core', 'settings!io.ox/mail']).then(function (settings, mailSettings) {
                 settings.set('autoStart', 'none');
+                moment.tz.setDefault('Europe/Berlin');
                 mailSettings.set('whitelist', {
                     'allowedTags': ['a', 'area', 'b', 'basefont', 'bdo', 'blockquote', 'body', 'br', 'button', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'dd', 'del', 'dir', 'div', 'dl', 'dt', 'em', 'font', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'hr', 'html', 'i', 'img', 'ins', 'label', 'legend', 'li', 'map', 'ol', 'optgroup', 'option', 'p', 'pre', 's', 'select', 'span', 'strike', 'strong', 'style', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time', 'tr', 'tt', 'u', 'ul', 'wbr'],
                     'allowedAttributes': ['abbr', 'align', 'alink', 'alt', 'axis', 'background', 'bgcolor', 'border', 'cellpadding', 'cellspacing', 'char', 'charoff', 'clear', 'color', 'cols', 'colspan', 'compact', 'coords', 'datetime', 'dir', 'disabled', 'face', 'for', 'frame', 'headers', 'height', 'href', 'hspace', 'ismap', 'label', 'link', 'media', 'multiple', 'name', 'nohref', 'noshade', 'nowrap', 'readonly', 'rows', 'rowspan', 'rules', 'scope', 'selected', 'shape', 'size', 'span', 'src', 'start', 'summary', 'tabindex', 'target', 'text', 'type', 'usemap', 'valign', 'value', 'version', 'vlink', 'vspace', 'width', 'xmlns']
