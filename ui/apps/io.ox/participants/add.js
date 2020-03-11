@@ -148,7 +148,10 @@ define('io.ox/participants/add', [
         },
 
         resolve: function (e) {
-            if (e.type === 'keydown' && e.which !== 13) return;
+            if (e && e.type === 'keydown' && e.which !== 13) return;
+            // sometimes focousout happens together with a click on another element that handles adding participants manually (usually save buttons, so errors can be handled correctly)
+            if (e && e.type === 'focusout' && e.relatedTarget && $(e.relatedTarget).attr('noAutoAddParticipants')) return;
+
             var val = this.typeahead.$el.typeahead('val'),
                 list = coreUtil.getAddresses(val),
                 participants = [];
@@ -161,7 +164,7 @@ define('io.ox/participants/add', [
                     field: 'email1', type: 5
                 });
             });
-            this.addParticipant(e, participants, val);
+            return this.addParticipant(e, participants, val);
         },
 
         setFocus: function () {
@@ -178,6 +181,9 @@ define('io.ox/participants/add', [
             if (error) return;
             // now really validate address
             list = this.getValidAddresses(list);
+
+            // check for error but don't block (there might be other valid addresses)
+            if (list.length !== [].concat(data).length) error = 'invalid addresses';
 
             if (this.options.convertToAttendee) {
                 list = _(list).chain().map(function (item) {
@@ -204,6 +210,8 @@ define('io.ox/participants/add', [
 
             // clean typeahad input
             if (value) this.typeahead.$el.typeahead('val', '');
+            // return possible errors, so views can react
+            return error;
         },
 
         getValidAddresses: function (list) {
