@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-02-18 11:55+0100\n"
+"PO-Revision-Date: 2020-03-11 10:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -3082,6 +3082,10 @@ msgctxt "a11y"
 msgid "at %1$s"
 msgstr "Ort: %1$s"
 
+#: apps/io.ox/calendar/week/print.js module:io.ox/calendar
+msgid "appointments"
+msgstr "Termine"
+
 #. %1$s A month name
 #. %2$s Another month name
 #. %3$s A four digit year
@@ -4888,6 +4892,14 @@ msgstr ""
 "speziellen Ordner, der nicht gelöscht werden kann."
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+msgid "Delete calendar"
+msgstr "Kalender löschen"
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+msgid "Delete folder"
+msgstr "Ordner löschen"
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete calendar \"%s\"?"
 msgstr "Wollen Sie Kalender %s wirklich löschen?"
 
@@ -4908,11 +4920,6 @@ msgid ""
 msgstr ""
 "Dieser Ordner wurde für andere freigegeben. Er wird nicht mehr für sie "
 "verfügbar sein."
-
-#. 'Delete calendar' as header of modal dialog to delete a shared calendar.
-#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
-msgid "Delete calendar"
-msgstr "Kalender löschen"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
@@ -6548,11 +6555,6 @@ msgstr "%1$s, %2$s wurde hinzugefügt."
 msgid "Added %1$s."
 msgstr "%1$s wurde hinzugefügt."
 
-#. Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-msgid "%1$s. Press backspace to delete."
-msgstr "%1$s. Drücken Sie die Rücktaste zum Löschen."
-
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
 #. %1$s is the removed search query
@@ -6566,6 +6568,33 @@ msgstr "%1$s, %2$s entfernt."
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s."
 msgstr "%1$s wurde entfernt."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "Press spacebar to grab and re-order. Press backspace to delete."
+msgstr ""
+"Drücken Sie die Leertaste zum Markieren und Neusortieren. Drücken Sie die "
+"Rücktaste zum Löschen."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid ""
+"%1$s, grabbed. Current position in list: %2$s of %3$s. Press up and down "
+"arrow to change position, Spacebar to drop, Escape to cancel."
+msgstr ""
+"%1$s, markiert. Aktuelle Position in der Liste: %2$s von %3$s. Verwenden Sie "
+"zum Ändern der Position die Pfeiltasten nach oben und unten, Die Leertaste "
+"zum Ablegen, Escape zum Abbrechen."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "%1$s. New position in list: %2$s of %3$s"
+msgstr "%1$s. Neue Position in der Liste: %2$s von %3$s"
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "%1$s, dropped. Final position in list: %2$s of %3$s"
+msgstr "%1$s, abgelegt. Endposition in Liste: %2$s of %3$s"
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "%1$s, dropped. Re-order cancelled."
+msgstr "%1$s, abgelegt. Neusortierung abgebrochen."
 
 #: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
 msgid "Unable to upload file"
@@ -9100,6 +9129,12 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Antw. an"
 
+#. %s is a list of filenames separeted by commas
+#. it is used by screenreaders to indicate which files are currently added to the list of attachments
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Added %s to attachments."
+msgstr "%s zu Anhängen hinzugefügt."
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Namen anzeigen"
@@ -9138,12 +9173,6 @@ msgstr "Anhänge hier ablegen"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Mail size: %1$s"
 msgstr "E-Mail-Größe: %1$s"
-
-#. %s is a list of filenames separeted by commas
-#. it is used by screenreaders to indicate which files are currently added to the list of attachments
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Added %s to attachments."
-msgstr "%s zu Anhängen hinzugefügt."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add local file"
@@ -9690,6 +9719,11 @@ msgstr "IMAP-Schlüsselwort entfernen"
 msgid "Keep"
 msgstr "Behalten"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Encrypt the email"
+msgstr "E-Mail verschlüsseln"
+
 #. File a message into a folder
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
@@ -9887,6 +9921,11 @@ msgstr "Zeichenkette"
 #: module:io.ox/mailfilter
 msgid "Source"
 msgstr "Quelle"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Signed and verified"
+msgstr "Signiert und verifiziert"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -10294,6 +10333,13 @@ msgstr ""
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Thread"
 msgstr "Konversation"
+
+#. Shown as a tooltip when a mail account doesn't work correctly. Click brings user to the settings page
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "There is a problem with this account. Click for more information"
+msgstr ""
+"Es liegt ein Problem mit diesem Konto vor. Klicken Sie für weitere "
+"Informationen."
 
 #. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -12925,7 +12971,6 @@ msgstr "Bitte bewerten Sie dieses Produkt"
 msgid "Please rate the following application:"
 msgstr "Bitte bewerten Sie die folgende Applikation:"
 
-#. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "We appreciate your feedback"
 msgstr "Wir freuen uns über Ihr Feedback"
@@ -13881,6 +13926,9 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "%1$s. Press backspace to delete."
+#~ msgstr "%1$s. Drücken Sie die Rücktaste zum Löschen."
 
 #~ msgid "Ignore warnings"
 #~ msgstr "Warnhinweise ignorieren"
