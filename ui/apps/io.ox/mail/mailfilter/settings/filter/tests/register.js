@@ -1154,27 +1154,27 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
         }
 
 
-        if (supportedConditions.signature && capabilities.has('guard-mail')) {
+        if (supportedConditions.guard_verify && capabilities.has('guard-mail')) {
             ext.point('io.ox/mail/mailfilter/tests').extend({
 
-                id: 'signature',
+                id: 'guard_verify',
 
                 index: 500,
 
                 initialize: function (opt) {
                     var defaults = {
-                        'signature': {
-                            'id': 'signature'
+                        'guard_verify': {
+                            'id': 'guard_verify'
                         }
                     };
                     _.extend(opt.defaults.tests, defaults);
                     _.extend(opt.conditionsTranslation, {
-                        'signature': gt('Signed and verified')
+                        'guard_verify': gt('Signed and verified')
                     });
 
-                    _.extend(opt.conditionsMapping, { 'signature': ['signature'] });
+                    _.extend(opt.conditionsMapping, { 'guard_verify': ['guard_verify'] });
 
-                    opt.conditionsOrder.push('signature');
+                    opt.conditionsOrder.push('guard_verify');
                 },
 
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
@@ -1184,7 +1184,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         util.drawCondition({
                             conditionKey: conditionKey,
                             inputId: inputId,
-                            title: baton.view.conditionsTranslation.signature,
+                            title: baton.view.conditionsTranslation.guard_verify,
                             errorView: true,
                             addClass: addClass
                         })

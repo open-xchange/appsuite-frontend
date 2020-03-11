@@ -312,27 +312,27 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
             });
         }
 
-        if (supportedActions.guard && capabilities.has('guard-mail')) {
+        if (supportedActions.guard_encrypt && capabilities.has('guard-mail')) {
             ext.point('io.ox/mail/mailfilter/actions').extend({
 
-                id: 'guard',
+                id: 'guard_encrypt',
 
                 index: 700,
 
                 initialize: function (opt) {
                     var defaults = {
-                        'guard': {
-                            'id': 'guard'
+                        'guard_encrypt': {
+                            'id': 'guard_encrypt'
                         }
                     };
                     _.extend(opt.defaults.actions, defaults);
                     _.extend(opt.actionsTranslations, {
-                        'guard': gt('Encrypt the email')
+                        'guard_encrypt': gt('Encrypt the email')
                     });
 
-                    _.extend(opt.actionCapabilities, { 'guard': 'guard' });
+                    _.extend(opt.actionCapabilities, { 'guard_enrypt': 'guard_encrypt' });
 
-                    opt.actionsOrder.push('guard');
+                    opt.actionsOrder.push('guard_encrypt');
                 },
 
                 draw: function (baton, actionKey, amodel, filterValues, action) {
