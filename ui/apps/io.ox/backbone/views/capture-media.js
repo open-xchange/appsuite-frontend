@@ -15,10 +15,9 @@ define('io.ox/backbone/views/capture-media', [
     'io.ox/backbone/views/modal',
     'io.ox/backbone/mini-views/common',
     'io.ox/core/media-devices',
-    'io.ox/core/yell',
     'gettext!io.ox/core',
     'less!io.ox/backbone/views/capture-media'
-], function (ModalDialog, MiniViews, mediaDevices, yell, gt) {
+], function (ModalDialog, MiniViews, mediaDevices, gt) {
 
     'use strict';
 

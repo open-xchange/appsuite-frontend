@@ -15,8 +15,9 @@ define('io.ox/mail/categories/picker', [
     'io.ox/mail/categories/api',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/views/actions/util',
+    'io.ox/core/yell',
     'gettext!io.ox/mail'
-], function (api, Dropdown, actionsUtil, gt) {
+], function (api, Dropdown, actionsUtil, yell, gt) {
 
     var PickerDropdown = Dropdown.extend({
 
@@ -62,7 +63,7 @@ define('io.ox/mail/categories/picker', [
                 sourcename: api.collection.get(source).get('name'),
                 target: category,
                 targetname: name
-            });
+            }).fail(yell);
         },
 
         onLink: function (data) {
