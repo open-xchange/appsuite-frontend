@@ -389,6 +389,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                 }, function failure(err) {
                     if (!baton.catchErrors) throw err;
                     if (err && err.error) baton.error = err.error;
+                    if (err && err.code) baton.errorCode = err.code;
                     if (err && err.warnings) baton.warning = err.warnings;
                     baton.rejected = true;
                     if (baton.isPropagationStopped()) return;
