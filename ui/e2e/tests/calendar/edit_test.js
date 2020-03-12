@@ -679,7 +679,8 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.waitForVisible('.appointment');
     I.click('Appointment1', '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
-    I.retry(5).click('Delete');
+    I.waitForText('Delete', 5, '.io-ox-sidepopup');
+    I.retry(5).click('Delete', '.io-ox-sidepopup');
     I.waitForText('Do you really want to delete this appointment?');
     I.click('Delete appointment', '.modal-dialog');
     I.waitForDetached('.modal-dialog');
@@ -688,7 +689,8 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     // Delete recurring appointment without additional participants => no comment field
     I.click('Appointment2', '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
-    I.retry(5).click('Delete');
+    I.waitForText('Delete', 5, '.io-ox-sidepopup');
+    I.retry(5).click('Delete', '.io-ox-sidepopup');
     I.waitForText('Do you want to delete all appointments of the series or just this appointment?');
     I.click('Delete all appointments', '.modal-dialog');
     I.waitForDetached('.modal-dialog');
@@ -697,7 +699,8 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     // Delete single appointment with additional participants => comment field
     I.click('Appointment3', '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
-    I.retry(5).click('Delete');
+    I.waitForText('Delete', 5, '.io-ox-sidepopup');
+    I.retry(5).click('Delete', '.io-ox-sidepopup');
     I.waitForText('Delete appointment');
     I.see('Add a message to the notification email for the other participants.');
     I.click('Delete appointment', '.modal-dialog');
@@ -707,7 +710,8 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     // Delete recurring appointment with additional participants => comment field
     I.click('Appointment4', '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
-    I.retry(5).click('Delete');
+    I.waitForText('Delete', 5, '.io-ox-sidepopup');
+    I.retry(5).click('Delete', '.io-ox-sidepopup');
     I.waitForText('Delete appointment');
     I.see('Add a message to the notification email for the other participants.');
     I.click('Delete all appointments', '.modal-dialog');
