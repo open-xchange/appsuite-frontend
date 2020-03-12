@@ -144,6 +144,9 @@ define('io.ox/mail/compose/actions/send', [
 
                         win.idle().show();
                     }
+
+                    // special errors. Those are handled in 'io.ox/mail/compose/main'
+                    if (baton.errorCode === 'MSGCS-0007' || baton.errorCode === 'MSGCS-0011') return;
                     // TODO: check if backend just says "A severe error occurred"
                     notifications.yell('error', text);
                     return;
