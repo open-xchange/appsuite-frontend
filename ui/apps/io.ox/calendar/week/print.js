@@ -171,7 +171,7 @@ define('io.ox/calendar/week/print', [
                     weekdays: _.range(0, selection.numberOfColumns || 7).map(function (index) {
                         return moment(selection.start).startOf('day').add(index, 'days').format('dddd');
                     }),
-                    eventListLabel: gt('appointments')
+                    eventListLabel: gt('Appointments')
                 },
 
                 selector: '.calendar-week-view',
