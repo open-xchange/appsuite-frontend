@@ -143,37 +143,20 @@ define('io.ox/mail/compose/extensions', [
                 caret: true
             });
 
-            this.listenTo(ox, 'account:create account:delete', this.onAccountUpdate.bind(this));
-            this.listenTo(ox, 'change:customDisplayNames', this.onSenderUpdate.bind(this));
-            this.listenTo(this.model, 'change:from', this.onSenderUpdate);
+            this.addresses = sender.getAddressesCollection();
+            this.addresses.update();
+            this.listenTo(ox, 'account:create account:delete', this.updateSenderList);
+            this.listenTo(ox, 'change:customDisplayNames', this.updateSenderList);
+            this.listenTo(this.addresses, 'reset', this.renderDropdown);
+            this.listenTo(this.model, 'change:from', this.updateSenderList);
             this.listenTo(this.config, 'change:sendDisplayName', function (model, value) {
                 settings.set('sendDisplayName', value);
             });
         },
 
-        onAccountUpdate: function () {
-            // sometimes updated state isn't available via middleware instantly
-            _.delay(function () {
-                if (this.disposed) return;
-                this.updateSenderList({ useCache: false }).then(this.renderDropdown.bind(this));
-            }.bind(this), 1000);
-        },
-
-        onSenderUpdate: function () {
-            this.renderDropdown();
-        },
-
         updateSenderList: function (options) {
             var opt = _.extend({ useCache: false }, options);
-            return sender.getAddressesOptions(opt).then(function (list) {
-                this.list = list;
-                // ensure display name is set
-                this.list.sortedAddresses.forEach(function (item) {
-                    var address = item.option,
-                        defaultname = settings.get(['customDisplayNames', address[1], 'defaultName']);
-                    if (!defaultname) settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
-                });
-            }.bind(this));
+            this.addresses.update(opt);
         },
 
         render: function (/*options*/) {
@@ -185,8 +168,7 @@ define('io.ox/mail/compose/extensions', [
                     this.dropdown.render().$el.attr({ 'data-dropdown': 'from' })
                 )
             );
-            // update sender list and draw dropdown
-            this.updateSenderList().then(this.renderDropdown.bind(this));
+            this.renderDropdown();
             return this;
         },
 
@@ -205,38 +187,19 @@ define('io.ox/mail/compose/extensions', [
 
         setDropdownOptions: function () {
             var self = this;
-            if (!this.list || !this.list.sortedAddresses.length) return;
+            this.addresses.forEach(function (address, index) {
+                var defaultname = settings.get(['customDisplayNames', address.get('email'), 'defaultName']);
+                if (!defaultname) settings.set(['customDisplayNames', address.get('email'), 'defaultName'], address.get('name'));
 
-            var defaultAddress = settings.get('defaultSendAddress', '').trim();
+                if (index === 1) self.dropdown.divider();
 
-            // prepare list
-            var sortedAddresses = _(this.list.sortedAddresses)
-                .chain()
-                .map(function (address) {
-                    var array = mailUtil.getSender(address.option, self.config.get('sendDisplayName'));
-                    return { key: _(array).compact().join(' ').toLowerCase(), array: array };
-                })
-                .sortBy('key')
-                .pluck('array')
-                .value();
-
-            // draw default address first
-            sortedAddresses = _(sortedAddresses).filter(function (item) {
-                if (item[1] !== defaultAddress) return true;
-                self.dropdown.option('from', item, function () {
-                    return self.getItemNode(item);
-                });
-                if (sortedAddresses.length > 1) self.dropdown.divider();
-                return false;
-            });
-
-            _(sortedAddresses).each(function (item) {
+                var item = mailUtil.getSender(address.toArray(), self.config.get('sendDisplayName'));
                 self.dropdown.option('from', item, function () {
                     return self.getItemNode(item);
                 });
             });
 
-            if (_.device('smartphone')) return;
+            if (_.device('smartphone') || this.addresses.length === 0) return;
 
             // append options to toggle and edit names
             this.dropdown

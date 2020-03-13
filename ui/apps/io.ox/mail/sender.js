@@ -20,27 +20,41 @@ define('io.ox/mail/sender', [
 
     'use strict';
 
-    // helper: sort by mail address (across all accounts)
-    function sorter(a, b) {
-        a = a.value;
-        b = b.value;
-        return a < b ? -1 : +1;
-    }
+    var that,
+        SenderModel = Backbone.Model.extend({
+            initialize: function (data) {
+                this.set('name', data[0]);
+                this.set('email', data[1]);
+            },
+            quoted: function () {
+                return util.formatSender(this.get(name), this.get('email'));
+            },
+            unquoted: function () {
+                return util.formatSender(this.get(name), this.get('email'), false);
+            },
+            toArray: function () {
+                return [this.get(0), this.get(1)];
+            }
+        }),
+        SenderList = Backbone.Collection.extend({
+            model: SenderModel,
+            comparator: function (a1, a2) {
+                if (a1.get('email') === this.defaultAddress) return -1;
+                if (a2.get('email') === this.defaultAddress) return 1;
+                return a1.toString().toLowerCase() < a2.toString().toLowerCase() ? -1 : 1;
+            },
+            update: function (options) {
+                var self = this;
+                that.getAddresses(options).then(function (addresses, primary) {
+                    self.defaultAddress = that.getDefaultSendAddress() || primary[1];
+                    self.reset(addresses);
+                });
+                return this;
+            }
+        }),
+        senders;
 
-    /**
-     * returns sender object
-     * considers potential existing telephone numbers
-     * @param  {array} data
-     * @return { object} value, text, display_name, address
-     */
-    function getSender(data) {
-        return {
-            text: util.formatSender(data[0], data[1], false),
-            value: util.formatSender(data[0], data[1])
-        };
-    }
-
-    var that = {
+    that = {
 
         /**
          * user data
@@ -98,26 +112,9 @@ define('io.ox/mail/sender', [
             );
         },
 
-        getAddressesOptions: function (options) {
-            // fallback address - if any other request fails we have the default send address
-            var fallbackAddress = settings.get('defaultSendAddress', '').trim();
-
-            // append options to select-box
-            return that.getAddresses(options).then(function (addresses, primary) {
-                var defaultAddress = fallbackAddress || primary[1],
-                    list = [].concat(addresses);
-
-                // process with mail addresses and phone numbers
-                list = _(list).map(function (address) {
-                    var sender = getSender(address);
-                    return { value: sender.value, option: address };
-                });
-
-                return {
-                    sortedAddresses: list.sort(sorter),
-                    defaultAddress: defaultAddress
-                };
-            });
+        getAddressesCollection: function () {
+            if (!senders) senders = new SenderList();
+            return senders;
         }
     };
 

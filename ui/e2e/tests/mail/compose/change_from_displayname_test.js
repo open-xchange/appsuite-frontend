@@ -77,3 +77,27 @@ Scenario('[OXUIB-142] personal field of primary account should be respected', as
     // Verify the dislay name has changed
     I.see('Entropy McDuck');
 });
+
+Scenario('update account with mail compose app open', async (I, users, mail) => {
+    let [user] = users;
+    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
+
+    I.login('app=io.ox/mail');
+    mail.newMail();
+
+    // verify default display name
+    I.see(`${user.get('given_name')} ${user.get('sur_name')}`);
+    I.click('Discard');
+
+    I.openApp('Settings', { folder: 'virtual/settings/io.ox/settings/accounts' });
+    I.waitForText('Edit');
+    I.click('Edit');
+    I.fillField('Your name', 'Entropy McDuck');
+    I.click('Save');
+
+    I.openApp('Mail');
+    mail.newMail();
+
+    // Verify the dislay name has changed
+    I.see('Entropy McDuck');
+});
