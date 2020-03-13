@@ -18,16 +18,17 @@ define.async('io.ox/mail/accounts/keychain', [
     'io.ox/core/capabilities',
     'io.ox/core/event',
     'io.ox/mail/accounts/model',
+    'io.ox/core/api/filestorage',
     'gettext!io.ox/keychain',
     //pre fetch dependencies for io.ox/mail/accounts/model - saves 1 request
     'io.ox/backbone/validation',
     'io.ox/keychain/model'
-], function (ext, accountAPI, userAPI, capabilities, Events, AccountModel, gt) {
+], function (ext, accountAPI, userAPI, capabilities, Events, AccountModel, filestorageAPI, gt) {
 
     'use strict';
 
     var moduleDeferred = $.Deferred(),
-        extension;
+        extension, extensionFileservice;
 
     ext.point('io.ox/keychain/model').extend({
         id: 'mail',
@@ -39,10 +40,13 @@ define.async('io.ox/mail/accounts/keychain', [
     });
 
     var accounts = {};
+    var fileAccounts = {};
 
     function init(evt, data) {
-        return accountAPI.all().done(function (allAccounts) {
+        return $.when(accountAPI.all(), filestorageAPI.getAllAccounts()).done(function (allAccounts, allFileAccounts) {
+            allFileAccounts = allFileAccounts.models;
             accounts = {};
+            fileAccounts = {};
             if (data) {
                 accounts[data.id] = data;
                 data.accountType = 'mail';
@@ -64,6 +68,15 @@ define.async('io.ox/mail/accounts/keychain', [
                  * FIXME: save one API call here, if data.personal can be assured
                  */
             });
+
+            _(allFileAccounts).each(function (account) {
+                if (account.get('id') !== 'infostore') {
+                    account = account.attributes;
+                    fileAccounts[account.id] = account;
+                    account.accountType = 'fileAccount';
+                }
+            });
+
             if (evt) {
                 evt = evt.namespace ? evt.type + '.' + evt.namespace : evt.type;
                 if (evt === 'create:account') {
@@ -130,9 +143,24 @@ define.async('io.ox/mail/accounts/keychain', [
         }
     };
 
+    extensionFileservice = {
+        id: 'fileservice',
+        index: 200,
+        displayName: gt('File Sevice'),
+        actionName: 'fileservice',
+        getAll: function () {
+            return _(fileAccounts).map(function (account) { return account; });
+        },
+        get: function (id) {
+            return fileAccounts[id];
+        }
+    };
+
     Events.extend(extension);
+    Events.extend(extensionFileservice);
 
     ext.point('io.ox/keychain/api').extend(extension);
+    ext.point('io.ox/keychain/api').extend(extensionFileservice);
 
     return moduleDeferred;
 });

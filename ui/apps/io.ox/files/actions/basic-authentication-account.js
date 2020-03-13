@@ -47,7 +47,7 @@ define('io.ox/files/actions/basic-authentication-account', [
                     )
                 );
 
-                input.on('change', function () { //?
+                input.on('change', function () {
                     var alert = self.find('.alert');
                     if (alert.length && alert.attr('errorAttributes').indexOf('displayname') !== -1) {
                         alert.remove();
@@ -68,7 +68,7 @@ define('io.ox/files/actions/basic-authentication-account', [
                     )
                 );
 
-                input.on('change', function () { //?
+                input.on('change', function () {
                     var alert = self.find('.alert');
                     if (alert.length && alert.attr('errorAttributes').indexOf('login') !== -1) {
                         alert.remove();

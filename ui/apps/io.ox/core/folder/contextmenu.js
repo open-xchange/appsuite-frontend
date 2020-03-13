@@ -227,36 +227,6 @@ define('io.ox/core/folder/contextmenu', [
         }()),
 
         //
-        // Credentials
-        //
-        credentials: (function () {
-
-            function canChangeCredentials(id) {
-                return /^(owncloud|webdav|nextcloud)$/.test(id.split(':')[0]);
-            }
-
-            function handler(e) {
-                ox.load(['io.ox/files/actions/basic-authentication-account']).done(function (update) {
-                    filestorage.getAccount(e.data).done(function (account) {
-                        update('update', account);
-                    });
-
-                });
-            }
-
-            return function (baton) {
-                if (!canChangeCredentials(baton.data.id)) return;
-                contextUtils.addLink(this, {
-                    action: 'credentials',
-                    data: { id: _.last(baton.data.account_id.split('/')), filestorageService: baton.data.id.split(':')[0] },
-                    enabled: true,
-                    handler: handler,
-                    text: gt('Credentials')
-                });
-            };
-        }()),
-
-        //
         // Remove folder
         //
         removeFolder: (function () {
@@ -866,11 +836,6 @@ define('io.ox/core/folder/contextmenu', [
             id: 'empty',
             index: 6500,
             draw: extensions.empty
-        },
-        {
-            id: 'changeCredentials',
-            index: 6550,
-            draw: extensions.credentials
         },
         {
             id: 'delete',
