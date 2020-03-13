@@ -223,6 +223,10 @@ define('io.ox/core/api/filestorage', [
                         addToIdsCache([account]);
                         api.trigger('create', accountsCache.get(account));
 
+                        require(['io.ox/core/api/account'], function (accountAPI) {
+                            accountAPI.trigger('create:account');
+                        });
+
                         return accountsCache.get(account);
                     });
                 });

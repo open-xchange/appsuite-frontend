@@ -75,7 +75,6 @@ define('io.ox/files/actions/add-storage-account', [
 
         _.each(this.options.caps, function (cap) {
             filestorageApi.getService(cap).done(function (data) {
-                console.log(data);
                 view.collection.add([{ id: data.attributes.id, displayName: data.attributes.displayName, type: 'basicAuthentication' }]);
             });
         });
