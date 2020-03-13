@@ -20,11 +20,12 @@ module.exports = function (grunt) {
         momentLanguages.push(file.split('.').shift());
     });
 
-    var version = String(grunt.config('pkg.version') + '.' + grunt.template.date(new Date(), 'yyyymmdd.hhMMss'));
+    var pkgVersion = process.env.VERSION || grunt.config('pkg.version'),
+        version = String(pkgVersion + '.' + grunt.template.date(new Date(), 'yyyymmdd.hhMMss'));
 
     var process_options = {
         version: version,
-        revision: String(grunt.config('pkg.version').slice(grunt.config('pkg.version').indexOf('-') + 1)),
+        revision: String(pkgVersion.split('-')[1]),
         enable_debug: String(grunt.config('local.debug')),
         base: 'v=' + version,
         cap: String(grunt.config('local.cap') || ''),
