@@ -360,7 +360,7 @@ define('io.ox/mail/util', [
             if (!enabled) return [null, address];
             // default or custom
             var custom = settings.get(['customDisplayNames', address], {}),
-                name = (custom.overwrite ? custom.name : custom.defaultName) || '';
+                name = (custom.overwrite ? custom.name : item[0] || custom.defaultName) || '';
             return [name, address];
         },
 
