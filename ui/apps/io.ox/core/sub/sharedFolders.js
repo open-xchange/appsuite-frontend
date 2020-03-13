@@ -24,11 +24,11 @@ define('io.ox/core/sub/sharedFolders', [
     'use strict';
 
     var options = {},
-        extendedProperties;
+        properties;
 
     function open(opt) {
         options = opt;
-        extendedProperties = 'com.openexchange.' + options.module + '.extendedProperties';
+        properties = 'used_for_sync';
 
         ext.point(options.point).extend({
             id: 'sections',
@@ -115,16 +115,16 @@ define('io.ox/core/sub/sharedFolders', [
                 self.opt.dialog.hash[this.get('id')].subscribed = this.get('subscribed');
 
                 if (!val) {
-                    var falseValue = _.copy(self.model.get(extendedProperties), true); //?
-                    falseValue.usedForSync.value = 'false';
-                    self.model.set(extendedProperties, falseValue); //?
-                    self.model.trigger(extendedProperties); //?
+                    var falseValue = _.copy(self.model.get(properties), true);
+                    falseValue.value = 'false';
+                    self.model.set(properties, falseValue);
+                    self.model.trigger(properties);
                 }
             });
 
-            this.model.on('change:' + extendedProperties, function () { //?
+            this.model.on('change:' + properties, function () {
                 if (!self.opt.dialog.hash[this.get('id')]) self.opt.dialog.hash[this.get('id')] = {};
-                self.opt.dialog.hash[this.get('id')][extendedProperties] = this.get(extendedProperties);
+                self.opt.dialog.hash[this.get('id')][properties] = this.get(properties);
             });
 
         },
@@ -132,16 +132,16 @@ define('io.ox/core/sub/sharedFolders', [
         render: function () {
 
             var $checkbox;
-            var preparedValueTrue =  _.copy(this.model.attributes[extendedProperties], true); //?
-            preparedValueTrue.usedForSync.value = 'true';
+            var preparedValueTrue =  _.copy(this.model.attributes[properties], true); //?
+            preparedValueTrue.value = 'true';
 
-            var preparedValueFalse =  _.copy(this.model.attributes[extendedProperties], true); //?
-            preparedValueFalse.usedForSync.value = 'false';
+            var preparedValueFalse =  _.copy(this.model.attributes[properties], true); //?
+            preparedValueFalse.value = 'false';
 
             var Switch = mini.SwitchView.extend({
                 update: function () {
                     var el = this.$el.closest('.list-group-item'),
-                        input = el.find('input[name="' + extendedProperties + '"]');
+                        input = el.find('input[name="' + properties + '"]');
 
                     if (!this.model.get('subscribed')) {
                         input.prop('disabled', true).attr('data-state', 'manual');
@@ -166,7 +166,7 @@ define('io.ox/core/sub/sharedFolders', [
                     $('<div>').text(this.model.attributes.display_title || this.model.attributes.title)
                 ),
                 $checkbox = new mini.CustomCheckboxView({
-                    name: extendedProperties,
+                    name: properties,
                     model: this.model,
                     label: gt('Sync via DAV'),
                     customValues: {
@@ -176,10 +176,10 @@ define('io.ox/core/sub/sharedFolders', [
                 }).render().$el.attr('title', gt('sync via DAV'))
             );
 
-            if (!this.model.get('subscribed') || preparedValueFalse.usedForSync.protected) {
+            if (!this.model.get('subscribed') || preparedValueFalse.protected) {
                 $checkbox
                     .addClass('disabled')
-                    .find('input[name="' + extendedProperties + '"]').prop('disabled', true).attr('data-state', 'manual');
+                    .find('input[name="' + properties + '"]').prop('disabled', true).attr('data-state', 'manual');
 
             }
             return this;
@@ -193,7 +193,7 @@ define('io.ox/core/sub/sharedFolders', [
 
         _.each(section, function (item) {
 
-            if (!item[extendedProperties]) return;
+            if (!item[properties]) return;
 
             var newItem = new ItemView({
                 model: new ItemModel(item),
@@ -217,7 +217,10 @@ define('io.ox/core/sub/sharedFolders', [
 
             // cleanup
             _.each(sections, function (section) {
-                if (!_.isEmpty(pageData[section])) dialogData[section] = pageData[section];
+                if (!_.isEmpty(pageData[section]) && pageData[section][0][properties]) {
+                    dialogData[section] = pageData[section];
+                }
+
             });
 
             return {
