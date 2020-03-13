@@ -49,3 +49,31 @@ Scenario('[C163026] Change \'from\' display name when sending a mail', async (I,
     I.click({ css: 'div.smart-dropdown-container' });
     I.dontSee('Entropy McDuck');
 });
+
+Scenario('[OXUIB-142] personal field of primary account should be respected', async (I, users, mail) => {
+    let [user] = users;
+    const customDisplayNames = {};
+    customDisplayNames[`${user.get('primaryEmail')}`] = {
+        name: `${user.get('given_name')} ${user.get('sur_name')}`,
+        overwrite: false,
+        defaultName: `${user.get('given_name')} ${user.get('sur_name')}`
+    };
+    await I.haveSetting({
+        'io.ox/mail': {
+            features: { registerProtocolHandler: false },
+            customDisplayNames,
+            sendDisplayName: true
+        }
+    });
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/settings/accounts');
+    I.waitForText('Edit');
+    I.click('Edit');
+    I.fillField('Your name', 'Entropy McDuck');
+    I.click('Save');
+
+    I.openApp('Mail');
+    mail.newMail();
+
+    // Verify the dislay name has changed
+    I.see('Entropy McDuck');
+});
