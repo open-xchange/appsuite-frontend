@@ -686,9 +686,11 @@ define('io.ox/calendar/util', [
                     lastOccurence = moment(data.until);
                 } else {
                     var tzid = data.endDate.tzid || 'UTC';
-                    // set('date') only sets the date but keeps the time
-                    var created = moment.tz(data.endDate.value, tzid).set('date', moment.tz(data.until, tzid).date());
-                    lastOccurence = created.clone().tz(moment().tz());
+                    // this code part expects, that the date of the last occurence is equal to the until date in the rrule.
+                    // whereas this is not required by the RFC, all checked clients stick to that
+                    // the until date is either directly on the end of the appointment or refers to the end of the same day
+                    var diffToStartOfDay = that.getMoment(data.endDate).diff(that.getMoment(data.endDate).startOf('day'), 'ms');
+                    lastOccurence = moment.tz(data.until, tzid).startOf('day').add(diffToStartOfDay, 'ms').tz(moment().tz());
                 }
 
                 str = gt('The series ends on %1$s.', lastOccurence.format('l'));
