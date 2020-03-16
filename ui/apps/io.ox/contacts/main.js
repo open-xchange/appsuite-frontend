@@ -842,6 +842,14 @@ define('io.ox/contacts/main', [
             ext.point('io.ox/contacts/sidepanel').invoke('draw', node, ext.Baton({ app: app }));
         },
 
+        'detailviewResizehandler': function (app) {
+            if (_.device('smartphone')) return;
+            app.right.toggleClass('small-width', app.right.width() < 500);
+            $(document).on('resize', function () {
+                app.right.toggleClass('small-width', app.right.width() < 500);
+            });
+        },
+
         'metrics': function (app) {
 
             require(['io.ox/metrics/main'], function (metrics) {

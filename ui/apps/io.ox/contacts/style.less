@@ -147,6 +147,15 @@
 
 .contact-detail-edit  { width: 100%; }
 
+// css react to listview resize. less padding for really small views
+.scrollable-pane.small-width .contact-detail {
+    .dl-horizontal {
+        @small-width: 120px;
+        dt { width: @small-width; }
+        dd { margin-left: @small-width + 32px; }
+    }
+}
+
 .contact-detail {
 
     width: 100%;
