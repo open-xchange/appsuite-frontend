@@ -252,7 +252,10 @@ define.async('io.ox/oauth/keychain', [
             var relatedAccount = accounts.filter(function (a) {
                 return a.get('associations').map(function (as) { return as.folder; }).indexOf(folder) >= 0;
             })[0];
-            if (relatedAccount) relatedAccount.fetch();
+            if (!relatedAccount) return;
+            getAllAcccounts().then(function (data) {
+                accounts.reset(data);
+            });
         });
     }
 
