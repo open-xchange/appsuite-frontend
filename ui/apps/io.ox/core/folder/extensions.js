@@ -406,21 +406,25 @@ define('io.ox/core/folder/extensions', [
 
         subscribe: function (baton) {
             if (baton.extension.capabilities && !upsell.visible(baton.extension.capabilities)) return;
-            var self = this, title;
+            var self = this, listelement, link;
+
+            link = $('<a href="#" data-action="subscribe-external-account" role="treeitem">');
+            listelement = $('<li role="presentation">');
+
+            self.append(
+                listelement.append(
+                    link.on('click', { baton: baton }, openSubscriptionDialog)
+                )
+            );
 
             require(['io.ox/core/sub/subscriptions'], function (sub) {
                 // if there is nothing configured we do not show the "subscribe" button
                 if (baton.module === 'contacts' && sub.availableServices.contacts) {
-                    title = gt('Subscribe to address book');
+                    link.text(gt('Subscribe to address book'));
                 } else {
+                    listelement.remove();
                     return;
                 }
-
-                self.append(
-                    $('<li role="presentation">').append(
-                        $('<a href="#" data-action="subscribe-external-account" role="treeitem">').text(title).on('click', { baton: baton }, openSubscriptionDialog)
-                    )
-                );
             });
         },
 
@@ -436,7 +440,7 @@ define('io.ox/core/folder/extensions', [
 
             self.append(
                 $('<li role="presentation">').append(
-                    $('<a href="#" data-action="subscribe-external-account" role="treeitem">').text(title).on('click', { baton: baton }, openSubscriptionForSharedDialog)
+                    $('<a href="#" data-action="subscribe-shared-address-book" role="treeitem">').text(title).on('click', { baton: baton }, openSubscriptionForSharedDialog)
                 )
             );
         },
@@ -743,21 +747,21 @@ define('io.ox/core/folder/extensions', [
 
     ext.point('io.ox/core/foldertree/contacts/links').extend(
         {
+            id: 'my-contact-data',
+            index: 400,
+            draw: extensions.myContactData
+        },
+        {
             id: 'subscribe',
-            index: 300,
+            index: 500,
             capabilities: ['subscription'],
             draw: extensions.subscribe
         },
         {
             id: 'subscribeShared',
-            index: 350,
+            index: 550,
             capabilities: ['subscription'],
             draw: extensions.subscribeShared
-        },
-        {
-            id: 'my-contact-data',
-            index: 400,
-            draw: extensions.myContactData
         }
     );
 
