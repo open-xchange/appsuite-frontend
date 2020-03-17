@@ -420,7 +420,7 @@ define('io.ox/core/folder/extensions', [
             require(['io.ox/core/sub/subscriptions'], function (sub) {
                 // if there is nothing configured we do not show the "subscribe" button
                 if (baton.module === 'contacts' && sub.availableServices.contacts) {
-                    link.text(gt('Subscribe to address book'));
+                    link.text(gt('Subscribe address book'));
                 } else {
                     listelement.remove();
                     return;
@@ -433,7 +433,7 @@ define('io.ox/core/folder/extensions', [
             var self = this, title;
 
             if (baton.module === 'contacts') {
-                title = gt('Subscribe to shared address book');
+                title = gt('Subscribe shared address book');
             } else {
                 return;
             }
