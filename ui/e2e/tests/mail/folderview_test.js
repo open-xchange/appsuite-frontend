@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('Mark folders as favorites', async (I, mail) => {
+Scenario('[OXUIB-64] Mark folders as favorites', async (I, mail) => {
     await I.haveSetting('io.ox/core//favorites/mail', ['default0']);
     I.login('app=io.ox/mail');
     mail.waitForApp();
