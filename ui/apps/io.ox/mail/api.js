@@ -503,6 +503,10 @@ define('io.ox/mail/api', [
                         // checking the first id is enough, all id's must be from the same folder anyway when using our UI
                         if (accountAPI.is('trash', ids[0].folder_id)) {
                             api.trigger('deleted-mails-from-trash');
+                        } else if (!force) {
+                            // mails were moved to trash folder if this is was no hard delete
+                            // invalidate trash folder pool, they have new mails now
+                            resetFolderByType('trash');
                         }
                     })
                     .fail(function () {

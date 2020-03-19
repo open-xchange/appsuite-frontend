@@ -290,7 +290,10 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
         },
 
         resetFolder: function (ids) {
-            var list = _(this.getByFolder(ids));
+            // get list of collections for each folder, then put them in one array and remove duplicates
+            // should work if ids is an array of folder ids or a single id as a string
+            var self = this,
+                list = _([].concat(ids)).chain().map(function (id) { return self.getByFolder(id); }).flatten().uniq();
             list.invoke('expire');
             return list;
         },
