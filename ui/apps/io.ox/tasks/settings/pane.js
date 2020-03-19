@@ -80,7 +80,7 @@ define('io.ox/tasks/settings/pane', [
                     require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
                         subscribe.open({
                             module: 'tasks',
-                            help: 'ox.appsuite.user.sect.tasks.folder.usedforsync.html',
+                            help: 'ox.appsuite.user.sect.tasks.folder.displayshared.html',
                             title: gt('Subscribe shared task folders'),
                             point: 'io.ox/core/folder/subscribe-shared-tasks-folders',
                             sections: {

@@ -299,7 +299,7 @@ define('io.ox/calendar/settings/pane', [
                     require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
                         subscribe.open({
                             module: 'calendar',
-                            help: 'ox.appsuite.user.sect.calendar.folder.usedforsync.html',
+                            help: 'ox.appsuite.user.sect.calendar.folder.displayshared.html',
                             title: gt('Subscribe shared calendars'),
                             point: 'io.ox/core/folder/subscribe-shared-calendar',
                             sections: {
