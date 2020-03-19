@@ -98,8 +98,6 @@ If a plugin is designed only for specific devices, screen sizes or languages, th
 }
 ```
 
-The full list of available device tests is documented in the [Device reference]({{ site.baseurl }}/ui/miscellaneous/device.html).
-
 In case you have to consider more than one aspect use the same logial operators like you would do when calling  `_.device` directly:
 
 ```js
@@ -109,7 +107,7 @@ In case you have to consider more than one aspect use the same logial operators 
 }
 ```
 
-The full list of available device tests is documented in the [Device reference](http://oxpedia.org/wiki/index.php?title=AppSuite:Device_reference).
+For a full list of available device tests please see `ui/src/browser.js`.
 
 # Multiple declarations in one file
 

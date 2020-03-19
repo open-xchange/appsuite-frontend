@@ -28,9 +28,9 @@ Your App should work on devices with this resolution.
 
 We extended underscore with a new function called `_.device`.
 The `_.device()` function can be used to retrieve informations about the device.
-For more details please visit [the main article](../miscellaneous/device).
+For more details please see `ui/src/browser.js`.
 The device class 'smartphone' is used to determine a mobile device and is detected by several criteria.
-For more details, see this [article about smartphone classification](../miscellaneous/device-classification).
+For more details please see `ui/src/browser.js`.
 
 Please note that information about device orientation may change during usage.
 
