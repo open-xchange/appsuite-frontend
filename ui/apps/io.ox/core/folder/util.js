@@ -292,7 +292,7 @@ define('io.ox/core/folder/util', [
                 return (rights >> 21 & 127) && is('mail', data);
             case 'changepermissions':
             case 'change:permissions':
-                return isAdmin;
+                return isAdmin && !!(data.capabilities & 1);
             case 'viewproperties':
                 // view properties
                 return !isMail && !is('account', data) && (data.capabilities & 1);
