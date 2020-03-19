@@ -239,6 +239,7 @@ define('io.ox/core/folder/contextmenu', [
 
             return function (baton) {
 
+                if ((/^(owncloud|webdav|nextcloud)$/.test(baton.data.id.split(':')[0])) && baton.data.folder_id === '1') return;
                 if (!api.can('remove:folder', baton.data)) return;
                 var folderId = baton.data.id || baton.app.folder.get(),
                     model = api.pool.getModel(folderId);

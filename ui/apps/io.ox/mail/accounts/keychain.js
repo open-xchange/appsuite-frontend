@@ -146,7 +146,6 @@ define.async('io.ox/mail/accounts/keychain', [
     extensionFileservice = {
         id: 'fileservice',
         index: 200,
-        displayName: gt('File Sevice'),
         actionName: 'fileservice',
         getAll: function () {
             return _(fileAccounts).map(function (account) { return account; });

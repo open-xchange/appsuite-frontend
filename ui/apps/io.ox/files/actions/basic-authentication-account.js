@@ -26,12 +26,14 @@ define('io.ox/files/actions/basic-authentication-account', [
         var def = $.Deferred(),
             baton = ext.Baton({});
 
-        function collectValues(dialog) {
+        function asembleData(dialog) {
             return {
-                newDisplayname: dialog.$body.find('.add-storage-account-displayname').val(),
-                newUsername: dialog.$body.find('.add-storage-account-login').val(),
-                newPassword: dialog.$body.find('.add-storage-account-password').val(),
-                newUrl: dialog.$body.find('.add-storage-account-url').val()
+                'displayName': dialog.$body.find('.add-storage-account-displayname').val().trim(),
+                'configuration': {
+                    'login': dialog.$body.find('.add-storage-account-login').val().trim(),
+                    'password': dialog.$body.find('.add-storage-account-password').val().trim(),
+                    'url': dialog.$body.find('.add-storage-account-url').val().trim()
+                }
             };
         }
 
@@ -159,16 +161,8 @@ define('io.ox/files/actions/basic-authentication-account', [
         .addCancelButton()
         .addButton(action === 'create' ? { label: gt('Add'), action: 'add' } : { label: gt('Update'), action: 'update' })
         .on('add', function () {
-            var values = collectValues(this),
-                createOptions = {
-                    'filestorageService': service.get('id'),
-                    'displayName': values.newDisplayname,
-                    'configuration': {
-                        'login': values.newUsername,
-                        'password': values.newPassword,
-                        'url': values.newUrl
-                    }
-                };
+            var createOptions = asembleData(this);
+            createOptions.filestorageService = service.get('id');
 
             return filestorageApi.createAccount(createOptions)
                 .then(function () {
@@ -179,18 +173,10 @@ define('io.ox/files/actions/basic-authentication-account', [
 
         })
         .on('update', function () {
+            var updateOptions = asembleData(this);
+            updateOptions.id = service.get('id');
+            updateOptions.filestorageService = service.get('filestorageService');
 
-            var values = collectValues(this),
-                updateOptions = {
-                    'id': service.get('id'),
-                    'filestorageService': service.get('filestorageService'),
-                    'displayName': values.newDisplayname,
-                    'configuration': {
-                        'login': values.newUsername,
-                        'password': values.newPassword,
-                        'url': values.newUrl
-                    }
-                };
             return filestorageApi.updateAccount(updateOptions)
                 .then(function () {
                     def.resolve();
