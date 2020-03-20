@@ -91,8 +91,9 @@ Scenario('update account with mail compose app open', async (I, users, mail) => 
     I.click('Discard');
 
     I.openApp('Settings', { folder: 'virtual/settings/io.ox/settings/accounts' });
-    I.waitForText('Edit');
-    I.click('Edit');
+    I.waitForVisible('.settings-list-item a.action');
+    I.waitForText('Edit', 5, '.settings-list-item');
+    I.retry(5).click('Edit');
     I.fillField('Your name', 'Entropy McDuck');
     I.click('Save');
 
