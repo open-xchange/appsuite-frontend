@@ -521,7 +521,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                                 module: baton.data.module,
                                 id: baton.data.attached,
                                 folder: baton.data.folder,
-                                attachment: baton.data.id
+                                attachment: baton.data.id || baton.data.managedId
                             });
 
                         } else if (baton.model.isComposeAttachment()) {
