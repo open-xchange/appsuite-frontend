@@ -66,8 +66,9 @@ Scenario('[OXUIB-142] personal field of primary account should be respected', as
         }
     });
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/settings/accounts');
-    I.waitForText('Edit');
-    I.click('Edit');
+    I.waitForVisible('.settings-list-item a.action');
+    I.waitForText('Edit', 5, '.settings-list-item');
+    I.retry(5).click('Edit');
     I.fillField('Your name', 'Entropy McDuck');
     I.click('Save');
 
