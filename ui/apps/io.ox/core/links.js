@@ -42,16 +42,41 @@ define('io.ox/core/links', [
         e.preventDefault();
         var data = $(this).data(),
             // special handling for text and spreadsheet
-            options = /^io.ox\/office\//.test(data.app) ?
+            linkObj = null, // data link's URL parameter object
+            isOfficeApp = /^io.ox\/office\//.test(data.app),
+            options = isOfficeApp ?
                 { action: 'load', file: { folder_id: data.folder, id: data.id } } :
                 _(data).pick('folder', 'folder_id', 'id', 'cid');
 
-        ox.launch(data.app + '/main', options).done(function () {
-            // special handling for settings (bad, but apparently solved differently)
-            if (_.isFunction(this.setSettingsPane)) this.setSettingsPane(options);
-            // set proper folder
-            else if (data.folder && this.folder.get() !== data.folder) this.folder.set(data.folder);
-        });
+        if (isOfficeApp) {
+            if (false) { // ox.tabHandlingEnabled
+                // new tab
+                require(['io.ox/core/api/tab'], function (tabApi) {
+                    tabApi.openChildTab(data.link);
+                });
+            } else {
+                linkObj = JSON.parse('{"' + decodeURI(data.link).replace(/"/g, '\\"').replace(/&/g, '","').replace(new RegExp('=', 'g'), '":"') + '"}');
+
+                if (linkObj.comment) {
+                    options.comment_id = linkObj.comment;
+                }
+
+                // same tab
+                // comment mit in die optionen eingeben
+                oxLaunch(options);
+            }
+        } else {
+            oxLaunch(options);
+        }
+
+        function oxLaunch(options) {
+            ox.launch(data.app + '/main', options).done(function () {
+                // special handling for settings (bad, but apparently solved differently)
+                if (_.isFunction(this.setSettingsPane)) this.setSettingsPane(options);
+                // set proper folder
+                else if (data.folder && this.folder.get() !== data.folder) this.folder.set(data.folder);
+            });
+        }
     };
 
     $(document).on('click', '.deep-link-app', appHandler);
