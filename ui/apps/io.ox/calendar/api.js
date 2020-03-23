@@ -795,7 +795,24 @@ define('io.ox/calendar/api', [
                         return obj;
                     });
 
-                    api.trigger('resetChronosAlarms', data);
+                    // no filtering active
+                    if (settings.get('showPastReminders', true)) {
+                        api.trigger('resetChronosAlarms', data);
+                        return;
+                    }
+
+                    api.getList(data).done(function (models) {
+                        data = _(data).filter(function (alarm) {
+                            var model = _(models).findWhere({ cid: util.cid({ id: alarm.eventId, folder: alarm.folder, recurrenceId: alarm.recurrenceId }) });
+
+                            // if alarm is scheduled after the appointments end we will show it
+                            if (model.getMoment('endDate').valueOf() < moment(alarm.time).valueOf()) return true;
+
+                            // if the appointment is over we will not show any alarm for it
+                            return model.getMoment('endDate').valueOf() > _.now();
+                        });
+                        api.trigger('resetChronosAlarms', data);
+                    });
                 });
             },
 
