@@ -368,6 +368,10 @@
         }
     }
 
+    a.lcell {
+        height: @launcher-size;
+    }
+
     .lcell {
         display: flex;
         flex-direction: column;
@@ -376,7 +380,7 @@
         white-space: normal;
 
         margin: @launcher-spacing;
-        height: @launcher-size;
+        height: 84px;
         width: @launcher-size;
 
         svg.indicator { display: none; }
@@ -400,7 +404,6 @@
             font-size: @launcher-text-size;
             text-align: center;
             width: @launcher-size;
-            margin-bottom: 7px;
             .smartphone & {
                 font-size: 14px;
                 top: 70%;
