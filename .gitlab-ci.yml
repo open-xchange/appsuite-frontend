@@ -58,10 +58,12 @@ build ui:
     L10N_PACKAGE_NAME: open-xchange-appsuite-l10n
     build_script: eval "grunt \$${build_tasks_$$CI_NODE_INDEX}"
     build_tasks_1: lint copy_build compile_po concat uglify:dist_largeFiles less copy_dist
-    build_tasks_2: copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
+    build_tasks_2: copy_build compile_po concat uglify:dist uglify:dist_i18n version_txt create_i18n_properties copy_dist
   before_script:
     - "[ -z \"$VERSION\" ] && export VERSION=$(git describe --match '[0-9]*.[0-9]*.[0-9]*')"
     - echo "Building version $VERSION"
+  tags:
+    - openstack
   only:
     changes:
       - ui/**/*

@@ -15,7 +15,7 @@
     "node": ">=8.0.0"
   },
   "devDependencies": {
-    "@open-xchange/appserver": "^0.8.0-pre3",
+    "@open-xchange/appserver": "^0.8.0-pre1",
     "@open-xchange/codecept-helper": "^0.3.0",
     "@open-xchange/shared-grunt-config": "^0.15.0-pre5",
     "assemble-less": "^0.7.0",
