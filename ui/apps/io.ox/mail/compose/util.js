@@ -100,8 +100,16 @@ define('io.ox/mail/compose/util', [
             }
 
             return _.defer(process);
-        }
+        },
 
+        infoLine: function (opt) {
+            return $('<div class="info-line">').append(
+                opt.icon ? $('<i class="fa" aria-hidden="true">').addClass(opt.icon) : $(),
+                $('<span class="text">').append(
+                    $.txt(opt.text)
+                )
+            );
+        }
     };
 
 });
