@@ -49,7 +49,7 @@ define('io.ox/core/links', [
                 _(data).pick('folder', 'folder_id', 'id', 'cid');
 
         if (isOfficeApp) {
-            if (ox.tabHandlingEnabled) {
+            if (false) { // ox.tabHandlingEnabled
                 // new tab
                 require(['io.ox/core/api/tab'], function (tabApi) {
                     tabApi.openChildTab(data.link);
