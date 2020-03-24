@@ -406,43 +406,33 @@ define('io.ox/core/folder/extensions', [
 
         subscribe: function (baton) {
             if (baton.extension.capabilities && !upsell.visible(baton.extension.capabilities)) return;
-            var self = this, listelement, link;
+            var self = this;
 
-            link = $('<a href="#" data-action="subscribe-external-account" role="treeitem">');
-            listelement = $('<li role="presentation">');
-
-            self.append(
-                listelement.append(
-                    link.on('click', { baton: baton }, openSubscriptionDialog)
-                )
-            );
+            this.link('subscribe', gt('Subscribe address book'), function (e) {
+                e.data = { baton: baton };
+                openSubscriptionDialog(e);
+            });
 
             require(['io.ox/core/sub/subscriptions'], function (sub) {
                 // if there is nothing configured we do not show the "subscribe" button
-                if (baton.module === 'contacts' && sub.availableServices.contacts) {
-                    link.text(gt('Subscribe address book'));
-                } else {
-                    listelement.remove();
-                    return;
+                if (!baton.module === 'contacts' && !sub.availableServices.contacts) {
+                    self.$el.find('[data-name=subscribeShared]').closest('li').remove();
                 }
             });
         },
 
         subscribeShared: function (baton) {
             if (baton.extension.capabilities && !upsell.visible(baton.extension.capabilities)) return;
-            var self = this, title;
+            var self = this;
 
             if (baton.module === 'contacts') {
-                title = gt('Subscribe shared address book');
+                self.link('subscribeShared', gt('Subscribe shared address book'), function (e) {
+                    e.data = { baton: baton };
+                    openSubscriptionForSharedDialog(e);
+                });
             } else {
                 return;
             }
-
-            self.append(
-                $('<li role="presentation">').append(
-                    $('<a href="#" data-action="subscribe-shared-address-book" role="treeitem">').text(title).on('click', { baton: baton }, openSubscriptionForSharedDialog)
-                )
-            );
         },
 
         treeLinks: function () {
@@ -507,11 +497,19 @@ define('io.ox/core/folder/extensions', [
             // check if users can edit their own data (see bug 34617)
             if (settings.get('user/internalUserEdit', true) === false) return;
 
-            this.append(
-                $('<li role="presentation">').append(
-                    $('<a href="#" data-action="my-contact-data" role="treeitem">').text(gt('My contact data')).on('click', openUserSettingsDialog)
-                )
-            );
+            this.link('my-contact-data', gt('My contact data'), function (e) {
+                openUserSettingsDialog(e);
+            });
+        },
+
+        addNewAddressBook: function (baton) {
+            var module = baton.module,
+                folder = api.getDefaultFolder(module);
+
+            this.link('add-new-address-book', gt('Personal address book'), function (e) {
+                e.data = { folder: folder, module: module };
+                addFolder(e);
+            });
         },
 
         rootFolders: function (tree) {
@@ -744,8 +742,12 @@ define('io.ox/core/folder/extensions', [
     //
     // Contacts
     //
-
-    ext.point('io.ox/core/foldertree/contacts/links').extend(
+    ext.point('io.ox/core/foldertree/contacts/links/subscribe').extend(
+        {
+            id: 'add-new_address_book',
+            index: 300,
+            draw: extensions.addNewAddressBook
+        },
         {
             id: 'my-contact-data',
             index: 400,
@@ -764,6 +766,29 @@ define('io.ox/core/folder/extensions', [
             draw: extensions.subscribeShared
         }
     );
+
+    ext.point('io.ox/core/foldertree/contacts/links').extend({
+        index: 200,
+        id: 'private-contacts',
+        draw: function (baton) {
+            if (baton.context !== 'app') return;
+            if (capabilities.has('guest')) return;
+            var dropdown = new DropdownView({
+                attributes: { role: 'presentation' },
+                tagName: 'li',
+                className: 'dropdown',
+                $toggle: $('<a href="#" data-action="add-subfolder" data-toggle="dropdown">').append(
+                    gt('Add new address book'),
+                    $('<i class="fa fa-caret-down" aria-hidden="true">')
+                )
+            });
+            ext.point('io.ox/core/foldertree/contacts/links/subscribe').invoke('draw', dropdown, baton);
+            if (dropdown.$ul.children().length === 0) return;
+            this.append(dropdown.render().$el);
+            // make sure, this is a treeitem. render-function of dropdown appends role="button" to $toggle
+            dropdown.$toggle.attr('role', 'treeitem');
+        }
+    });
 
     // helper
 
@@ -872,53 +897,62 @@ define('io.ox/core/folder/extensions', [
         // Links
         //
 
-        if (module !== 'calendar') {
-            ext.point('io.ox/core/foldertree/' + module + '/links').extend({
-                index: 200,
-                id: 'private',
+        if (module === 'tasks') {
+
+            ext.point('io.ox/core/foldertree/' + module + '/links/subscribe').extend({
+                index: 100,
+                id: 'personal',
                 draw: function (baton) {
-                    if (baton.context !== 'app') return;
-
                     var module = baton.module,
-                        folder = api.getDefaultFolder(module),
-                        title = gt('Add new folder');
-
-                    if (module === 'contacts') title = gt('Add new address book');
-
-                    // guests might have no default folder
-                    if (!folder) return;
-
-                    this.append(
-                        $('<li role="presentation">').append(
-                            $('<a href="#" data-action="add-subfolder" role="treeitem">').text(title).on('click', { folder: folder, module: module }, addFolder)
-                        )
-                    );
+                        folder = api.getDefaultFolder(module);
+                    this.link('add-new-folder', gt('Personal folder'), function (e) {
+                        e.data = { folder: folder, module: module };
+                        addFolder(e);
+                    });
                 }
             });
-        }
 
-        if (module === 'tasks') {
-            ext.point('io.ox/core/foldertree/' + module + '/links').extend({
-                index: 250,
+            ext.point('io.ox/core/foldertree/' + module + '/links/subscribe').extend({
+                index: 200,
                 id: 'shared',
                 draw: function (baton) {
                     if (baton.context !== 'app') return;
 
-                    var module = baton.module,
-                        folder = api.getDefaultFolder(module),
-                        title = gt('Subscribe shared folder');
+                    var folder = api.getDefaultFolder(module);
 
                     // guests might have no default folder
                     if (!folder) return;
 
-                    this.append(
-                        $('<li role="presentation">').append(
-                            $('<a href="#" data-action="add-subfolder" role="treeitem">').text(title).on('click', { baton: baton }, openSubscriptionForSharedDialog)
-                        )
-                    );
+                    this.link('shared', gt('Subscribe shared folder'), function (e) {
+                        e.data = { baton: baton };
+                        openSubscriptionForSharedDialog(e);
+                    });
                 }
             });
         }
+
+        ext.point('io.ox/core/foldertree/tasks/links').extend({
+            index: 200,
+            id: 'dropdown',
+            draw: function (baton) {
+                if (baton.context !== 'app') return;
+                if (capabilities.has('guest')) return;
+                var dropdown = new DropdownView({
+                    attributes: { role: 'presentation' },
+                    tagName: 'li',
+                    className: 'dropdown',
+                    $toggle: $('<a href="#" data-action="add-subfolder" data-toggle="dropdown">').append(
+                        gt('Add new folder'),
+                        $('<i class="fa fa-caret-down" aria-hidden="true">')
+                    )
+                });
+                ext.point('io.ox/core/foldertree/tasks/links/subscribe').invoke('draw', dropdown, baton);
+                if (dropdown.$ul.children().length === 0) return;
+                this.append(dropdown.render().$el);
+                // make sure, this is a treeitem. render-function of dropdown appends role="button" to $toggle
+                dropdown.$toggle.attr('role', 'treeitem');
+            }
+        });
     });
 
     //
@@ -1023,7 +1057,7 @@ define('io.ox/core/folder/extensions', [
 
     ext.point('io.ox/core/foldertree/calendar/links').extend({
         index: 200,
-        id: 'private',
+        id: 'private-calendar',
         draw: function (baton) {
             if (baton.context !== 'app') return;
             if (capabilities.has('guest')) return;
@@ -1036,7 +1070,7 @@ define('io.ox/core/folder/extensions', [
                     $('<i class="fa fa-caret-down" aria-hidden="true">')
                 )
             });
-            ext.point('io.ox/core/foldertree/calendar/links/subscribe').invoke('draw', dropdown);
+            ext.point('io.ox/core/foldertree/calendar/links/subscribe').invoke('draw', dropdown, baton);
             if (dropdown.$ul.children().length === 0) return;
             this.append(dropdown.render().$el);
             // make sure, this is a treeitem. render-function of dropdown appends role="button" to $toggle
