@@ -31,7 +31,7 @@ Scenario('[C8817] - Send E-Mail to contact', function (I, users, search, contact
     I.waitForElement({ css: '[href="mailto:' + users[0].userdata.primaryEmail + '"]' });
     I.click({ css: '[href="mailto:' + users[0].userdata.primaryEmail + '"]' });
     I.waitForVisible('.io-ox-mail-compose');
-    I.waitForElement('.floating-window-content .container.io-ox-mail-compose .mail-compose-fields');
+    I.waitForElement('.floating-window-content .io-ox-mail-compose .mail-compose-fields');
     I.waitForVisible({ css: 'textarea.plain-text' });
     I.wait(0.2);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + subject);

@@ -313,14 +313,13 @@ Scenario('[C7813] Filter mail using regex', async function (I, users) {
 
 });
 
-Scenario('[C7814] Filter mail using IsBiggerThan', async function (I, users) {
+Scenario('Filter mail by size Filter mail using IsBiggerThan', async function (I, users, mail) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
     createFilterRule(I, 'TestCase0400', 'Size', 'Is bigger than', null, 'Red', true);
-
     I.fillField('sizeValue', '512');
     // save the form
     I.click('Save');
@@ -347,8 +346,7 @@ Scenario('[C7814] Filter mail using IsBiggerThan', async function (I, users) {
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
     // Open Filepicker
-    I.click('Attachments');
-    I.click('Add from Drive');
+    I.click(mail.locators.compose.drivefile);
 
     I.waitForText('Principia.txt');
     I.click(locate('div.name').withText('Principia.txt').inside('.io-ox-fileselection'));
@@ -549,7 +547,6 @@ Scenario('[C274412] Filter mail by size', async function (I, users, mail, dialog
         I.waitForDetached('.modal-dialog');
         I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
     }
-
     let [user] = users;
     let listItem = locate('.list-item-row').withChild('.flag_1').withText('C274412').as('Mail in list view');
 
@@ -572,7 +569,7 @@ Scenario('[C274412] Filter mail by size', async function (I, users, mail, dialog
     I.fillField('Subject', 'C274412');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
-    I.attachFile('.mail-input [name="file"]', 'e2e/media/files/generic/2MB.dat');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'e2e/media/files/generic/2MB.dat');
 
     mail.send();
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
@@ -598,7 +595,7 @@ Scenario('[C274412] Filter mail by size', async function (I, users, mail, dialog
     I.fillField('Subject', 'C274412');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
-    I.attachFile('.mail-input [name="file"]', 'e2e/media/files/generic/2MB.dat');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'e2e/media/files/generic/2MB.dat');
 
     mail.send();
     I.waitForElement('~Sent, 2 total. Right click for more options.', 30);
@@ -624,7 +621,7 @@ Scenario('[C274412] Filter mail by size', async function (I, users, mail, dialog
     I.fillField('Subject', 'C274412');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
-    I.attachFile('.mail-input [name="file"]', 'e2e/media/files/generic/2MB.dat');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'e2e/media/files/generic/2MB.dat');
 
     mail.send();
     I.waitForElement('~Sent, 3 total. Right click for more options.', 30);

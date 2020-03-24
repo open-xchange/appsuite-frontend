@@ -32,10 +32,11 @@ Scenario('[C7380] Send saved draft mail', async function (I, users, mail) {
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     mail.newMail();
+
     I.fillField('To', users[1].userdata.primaryEmail);
     I.fillField('Subject', '' + testrailId + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, '' + text);
-    I.click('Discard');
+    I.click('~Close', '.floating-header');
     I.waitForText('Save as draft');
     I.click('Save as draft');
     I.waitForDetached('.io-ox-mail-compose');
@@ -123,7 +124,7 @@ Scenario('[C7384] Save draft', async function (I, users, mail, dialogs) {
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', '' + testrailid + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, '' + text);
-    I.click('Discard');
+    I.click('~Close', '.floating-header');
     dialogs.waitForVisible();
     dialogs.clickButton('Save as draft');
     I.waitForDetached('.modal-dialog');
@@ -273,7 +274,7 @@ Scenario('[C7388] Send mail with different priorities', async function (I, users
     mail.waitForApp();
     priorities.forEach(function (priority) {
         mail.newMail();
-        I.click('Options');
+        I.click(mail.locators.compose.options);
         I.waitForVisible('.dropdown.open .dropdown-menu', 5);
         I.clickDropdown(priority);
         I.waitForDetached('.dropdown.open .dropdown-menu', 5);
@@ -304,7 +305,7 @@ Scenario('[C7389] Send mail with attached vCard', async function (I, users, mail
     I.login('app=io.ox/mail', { user });
     mail.waitForApp();
     mail.newMail();
-    I.click('Options');
+    I.click(mail.locators.compose.options);
     I.waitForElement('.dropdown.open .dropdown-menu', 5);
     I.click('Attach Vcard');
     I.fillField('To', users[1].userdata.primaryEmail);
@@ -322,7 +323,7 @@ Scenario('[C7389] Send mail with attached vCard', async function (I, users, mail
     I.waitForElement('.io-ox-contacts-edit-window', 5);
 
     //confirm dirtycheck is working properly
-    I.click('Discard');
+    I.click('~Close', '.floating-header');
     dialogs.waitForVisible();
     I.waitForText('Do you really want to discard your changes?', 5, dialogs.locators.body);
     dialogs.clickButton('Cancel');
@@ -407,7 +408,7 @@ Scenario('[C8816] Cancel mail compose', async function (I, users, mail) {
     I.pressKey('Enter');
     I.fillField('Subject', testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, testrailID + ' - ' + timestamp);
-    I.click('Discard');
+    I.click('~Close', '.floating-header');
     I.see('Do you really want to discard your message?');
     I.click('Discard message');
 });
@@ -416,6 +417,7 @@ Scenario('[C8820] Forward attachments', async function (I, users, mail) {
     let [user, user2, user3] = users;
     var subject = `C8820 - ${Math.round(+new Date() / 1000)}`;
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
+    await I.haveSetting('io.ox/mail//attachments/layout/detail/open', true);
     I.login('app=io.ox/mail', { user });
 
     //login user 1 and send mail with attachements
@@ -424,10 +426,10 @@ Scenario('[C8820] Forward attachments', async function (I, users, mail) {
     I.pressKey('Enter');
     I.fillField('Subject', subject);
     I.fillField({ css: 'textarea.plain-text' }, subject);
-    I.attachFile('.io-ox-mail-compose-window input[type=file]', 'e2e/media/files/generic/testdocument.odt');
-    I.attachFile('.io-ox-mail-compose-window input[type=file]', 'e2e/media/files/generic/testdocument.rtf');
-    I.attachFile('.io-ox-mail-compose-window input[type=file]', 'e2e/media/files/generic/testpresentation.ppsm');
-    I.attachFile('.io-ox-mail-compose-window input[type=file]', 'e2e/media/files/generic/testspreadsheed.xlsm');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type=file]', 'e2e/media/files/generic/testdocument.odt');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type=file]', 'e2e/media/files/generic/testdocument.rtf');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type=file]', 'e2e/media/files/generic/testpresentation.ppsm');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type=file]', 'e2e/media/files/generic/testspreadsheed.xlsm');
     mail.send();
     I.selectFolder('Sent');
     I.waitForVisible({ css: `div[title="${user2.userdata.primaryEmail}"]` });
@@ -437,6 +439,7 @@ Scenario('[C8820] Forward attachments', async function (I, users, mail) {
     I.login('app=io.ox/mail', { user: user2 });
     I.selectFolder('Inbox');
     mail.selectMail(subject);
+    I.waitForElement('.mail-attachment-list');
     I.click('4 attachments');
     I.waitForElement('.mail-attachment-list.open');
     I.waitForElement('.mail-attachment-list.open [title="testdocument.odt"]');
@@ -690,6 +693,7 @@ Scenario('[C163026] Change from display name when sending a mail', async functio
     mail.waitForApp();
 
     mail.newMail();
+
     I.see(users[0].userdata.given_name + ' ' + users[0].userdata.sur_name, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .name');
     I.see('<' + users[0].userdata.primaryEmail + '>', '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');
 

@@ -38,11 +38,12 @@ Scenario('[C7776] Insert the original email text to a reply', async (I, users) =
     I.waitForText('plain text', 5, listview);
     I.click('.list-item.selectable', listview);
     I.waitForVisible('h1.subject');
+    I.waitForText('Reply');
     I.click('Reply');
     I.waitForElement('.io-ox-mail-compose textarea');
     I.seeInField('textarea', '> This is simple plain text!');
 
-    I.click('Discard');
+    I.click('~Close', '.floating-header');
     I.logout();
 
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mail/settings/compose', { user });
@@ -53,6 +54,7 @@ Scenario('[C7776] Insert the original email text to a reply', async (I, users) =
     I.waitForText('plain text', 5, listview);
     I.click('.list-item.selectable', listview);
     I.waitForVisible('h1.subject');
+    I.waitForText('Reply');
     I.click('Reply');
     I.waitForText('Re: plain text');
     I.waitForElement('.io-ox-mail-compose .editor iframe');

@@ -76,8 +76,9 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users,
     I.waitForVisible('.io-ox-mail-compose [placeholder="To"]', 30);
     I.waitForInvisible('.io-ox-busy');
     I.seeInField('subject', 'Re: ' + subject);
-    I.waitForElement({ css: 'button[data-action="discard"]:not(:disabled)' });
-    I.click('Discard');
+    // discard mail
+    I.click('~Close', '.floating-header');
+
 
     // // Shift-F10 (view source again)
     // --- DOES NOT WORK YET -----

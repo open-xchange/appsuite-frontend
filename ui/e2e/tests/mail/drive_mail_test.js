@@ -32,7 +32,7 @@ Scenario('[C85691] Cloud icon is used for drive-mail', async function (I, users,
     I.fillField('To', users[1].get('primaryEmail'));
     I.fillField('Subject', 'Git Gud');
 
-    I.attachFile('.io-ox-mail-compose-window input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
     I.click('Use Drive Mail', '.share-attachments');
     mail.send();
 
@@ -65,7 +65,7 @@ Scenario('[C85685] Send drive-mail to internal recipient', async (I, users, mail
     // 4. Select a file
     // I use a helper function here and directly feed the file into the input field
     const batFile = 'testdocument.odt';
-    I.attachFile('.io-ox-mail-compose-window input[type="file"]', `e2e/media/files/generic/${batFile}`);
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `e2e/media/files/generic/${batFile}`);
 
     // Expected Result: Attachment section opens containing a link: "Drive Mail"
     I.waitForText('ODT', undefined, '.io-ox-mail-compose-window');
@@ -127,7 +127,7 @@ Scenario('[C85690] Expire date can be forced', async function (I, users, mail) {
     I.fillField('To', users[1].get('primaryEmail'));
     I.fillField('Subject', 'Plus Ultra!');
 
-    I.attachFile('.io-ox-mail-compose-window input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
 
     I.click('Use Drive Mail', '.share-attachments');
     I.click('Options', '.mail-attachment-list');
