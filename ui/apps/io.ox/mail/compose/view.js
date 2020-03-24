@@ -46,6 +46,19 @@ define('io.ox/mail/compose/view', [
             index: 300,
             id: 'discard',
             draw: extensions.buttons.discard
+        },
+        {
+            index: 400,
+            id: 'composetoolbar',
+            draw: function (baton) {
+                var node = $('<ul data-extension-id="composetoolbar" class="composetoolbar list-unstyled list-inline">');
+                ext.point(POINT + '/composetoolbar').invoke('draw', node, baton);
+                this.append(node);
+            },
+            redraw: function (baton) {
+                var node = this.find('.composetoolbar');
+                ext.point(POINT + '/composetoolbar').invoke('redraw', node, baton);
+            }
         }
     );
 
@@ -117,25 +130,35 @@ define('io.ox/mail/compose/view', [
             draw: extensions.subject
         },
         {
-            id: 'composetoolbar',
+            id: 'composetoolbar-mobile',
             index: INDEX += 100,
             draw: function (baton) {
-                var node = $('<div data-extension-id="composetoolbar" class="row composetoolbar">');
-                ext.point(POINT + '/composetoolbar').invoke('draw', node, baton);
+                if (_.device('!smartphone')) return;
+                var node = $('<div data-extension-id="composetoolbar-mobile" class="composetoolbar-mobile">');
+                ext.point(POINT + '/composetoolbar-mobile').invoke('draw', node, baton);
                 this.append(node);
             },
             redraw: function (baton) {
+                if (_.device('!smartphone')) return;
                 var node = this.find('.row.composetoolbar');
-                ext.point(POINT + '/composetoolbar').invoke('redraw', node, baton);
+                ext.point(POINT + '/composetoolbar-mobile').invoke('redraw', node, baton);
             }
         },
         {
             id: 'attachments',
             index: INDEX += 100,
             draw: function (baton) {
-                var node = $('<div data-extension-id="attachments" class="row attachments">');
+                var node = $('<div data-extension-id="attachments" class="attachments">');
                 ext.point(POINT + '/attachments').invoke('draw', node, baton);
                 this.append(node);
+
+                // toggle visibility of row
+                var collection = baton.model.get('attachments');
+                collection.on('add remove reset', toggle);
+                toggle();
+                function toggle() {
+                    node.toggleClass('empty', !collection.fileAttachments().length);
+                }
             }
         },
         {
@@ -147,6 +170,12 @@ define('io.ox/mail/compose/view', [
             }
         }
     );
+
+    ext.point(POINT + '/recipientActions').extend({
+        id: 'recipientActions',
+        index: 100,
+        draw: extensions.recipientActions
+    });
 
     ext.point(POINT + '/recipientActionLink').extend(
         {
@@ -161,19 +190,19 @@ define('io.ox/mail/compose/view', [
         }
     );
 
+    ext.point(POINT + '/recipientActionsMobile').extend({
+        id: 'recipientActionsMobile',
+        index: 100,
+        draw: extensions.recipientActionsMobile
+    });
+
     ext.point(POINT + '/recipientActionLinkMobile').extend({
         id: 'mobile',
         index: 100,
         draw: extensions.recipientActionLinkMobile
     });
 
-    ext.point(POINT + '/recipientActions').extend({
-        id: 'recipientActions',
-        index: 100,
-        draw: extensions.recipientActions
-    });
-
-    ext.point(POINT + '/menu').extend(
+    ext.point(POINT + '/menu-mobile').extend(
         {
             id: 'security',
             index: 100,
@@ -183,6 +212,19 @@ define('io.ox/mail/compose/view', [
             id: 'signatures',
             index: 200,
             draw: signatureUtil.extensions.menu
+        },
+        {
+            id: 'options',
+            index: 300,
+            draw: extensions.optionsmenumobile
+        }
+    );
+
+    ext.point(POINT + '/menu').extend(
+        {
+            id: 'security',
+            index: 100,
+            draw: extensions.security
         },
         {
             id: 'options',
@@ -206,18 +248,9 @@ define('io.ox/mail/compose/view', [
 
     ext.point(POINT + '/menuoptions').extend(
         {
-            id: 'editor',
+            id: 'signatures',
             index: 100,
-            draw: function () {
-                if (_.device('smartphone')) return;
-                var menu = this.data('view')
-                    .header(gt('Editor'));
-
-                ext.point(POINT + '/editors').each(function (point) {
-                    if (!point.mode && !point.label) return;
-                    menu.option('editorMode', point.mode, point.label, { prefix: gt('Editor'), radio: true });
-                });
-            }
+            draw: signatureUtil.extensions.options
         },
         {
             id: 'priority',
@@ -242,19 +275,30 @@ define('io.ox/mail/compose/view', [
                     .option('vcard', 1, gt('Attach Vcard'), { prefix: gt('Options'), toggleValue: 0 })
                     .option('requestReadReceipt', true, gt('Request read receipt'), { prefix: gt('Options') });
             }
+        },
+        {
+            id: 'editor',
+            index: 400,
+            draw: function () {
+                if (_.device('smartphone')) return;
+                var menu = this.data('view')
+                    .header(gt('Editor'));
+
+                ext.point(POINT + '/editors').each(function (point) {
+                    if (!point.mode && !point.label) return;
+                    menu.option('editorMode', point.mode, point.label, { prefix: gt('Editor'), radio: true });
+                });
+            }
         }
     );
 
-    ext.point(POINT + '/composetoolbar').extend(
+    ext.point(POINT + '/composetoolbar-mobile').extend(
         {
             id: 'add_attachments',
             index: 100,
             draw: function (baton) {
                 var node = $('<div data-extension-id="add_attachments" class="mail-input">');
-                // dont use col-xs and col-sm here, breaks style in landscape mode
-                node.addClass(_.device('smartphone') ? 'col-xs-5' : 'col-xs-offset-2 col-xs-3');
-
-                extensions.attachment.call(node, baton);
+                extensions.attachmentmobile.call(node, baton);
                 this.append(node);
             }
         },
@@ -264,11 +308,56 @@ define('io.ox/mail/compose/view', [
             draw: function (baton) {
                 var node = $('<div class="pull-right text-right">');
 
-                ext.point(POINT + '/menu').invoke('draw', node, baton);
+                ext.point(POINT + '/menu-mobile').invoke('draw', node, baton);
 
                 this.append(
-                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-7">').append(node)
+                    $('<div data-extension-id="composetoolbar-menu">').append(node)
                 );
+            }
+        }
+    );
+
+    ext.point(POINT + '/composetoolbar').extend(
+        {
+            id: 'toggle-toolbar',
+            index: 50,
+            draw: function (baton) {
+                var node = $('<li data-extension-id="toggle-toolbar" class="toggle">');
+                extensions.toggleToolbar.call(node, baton);
+                this.append(node);
+            }
+        },
+        {
+            id: 'add_attachments',
+            index: 100,
+            draw: function (baton) {
+                var node = $('<li data-extension-id="add_attachments">');
+                // dont use col-xs and col-sm here, breaks style in landscape mode
+                node.addClass(_.device('smartphone') ? 'col-xs-5' : '');
+
+                extensions.attachment.call(node, baton);
+                this.append(node);
+            }
+        },
+        {
+            id: 'add_attachments_drive',
+            index: 300,
+            draw: function (baton) {
+                var node = $('<li data-extension-id="add_attachments_drive">');
+                // dont use col-xs and col-sm here, breaks style in landscape mode
+                node.addClass(_.device('smartphone') ? 'col-xs-5' : '');
+
+                extensions.attachmentdrive.call(node, baton);
+                this.append(node);
+            }
+        },
+        {
+            id: 'menus',
+            index: 1000,
+            draw: function (baton) {
+                var node =  $('<li data-extension-id="composetoolbar-menu">').addClass('dropup');
+                ext.point(POINT + '/menu').invoke('draw', node, baton);
+                this.append(node);
             }
         }
     );
@@ -277,11 +366,13 @@ define('io.ox/mail/compose/view', [
         id: 'attachmentPreview',
         index: 100,
         draw: function (baton) {
-            var node = $('<div data-extension-id="attachmentPreview" class="col-xs-12">');
+            var node = $('<div data-extension-id="attachmentPreview">');
+
             extensions.attachmentPreviewList.call(node, baton);
             extensions.attachmentSharing.call(node, baton);
             extensions.mailSize.call(node, baton);
             extensions.imageResizeOption.call(node, baton);
+
             node.appendTo(this);
         }
     });
@@ -402,7 +493,8 @@ define('io.ox/mail/compose/view', [
 
     var MailComposeView = Backbone.View.extend({
 
-        className: 'io-ox-mail-compose container f6-target',
+        //className: 'io-ox-mail-compose container f6-target',
+        className: 'io-ox-mail-compose f6-target',
 
         events: {
             'click [data-action="add"]': 'toggleTokenfield',
@@ -789,6 +881,13 @@ define('io.ox/mail/compose/view', [
             return $.when(content).then(function (content) {
                 return self.loadEditor(content);
             }).then(function () {
+                // TOOO-784: streamline
+                if (this.app.get('window') && this.app.get('window').floating) {
+                    this.app.get('window').floating.$el.toggleClass('text-editor', this.config.get('editorMode') === 'text');
+                    this.app.get('window').floating.$el.toggleClass('html-editor', this.config.get('editorMode') !== 'text');
+                    this.app.getWindowNode().trigger('scroll');
+                }
+
                 this.editorContainer.idle();
                 // reset tinyMCE's undo stack
                 if (!_.isFunction(this.editor.tinymce)) return;

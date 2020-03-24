@@ -455,6 +455,9 @@ Value is `custom` or `none`. If `custom` is set, signature from `io.ox/mail//mob
 <config>io.ox/mail//mobileSignature=`<string>`</config>
 Mobile signature as plain text string.
 
+<config>io.ox/mail//compose/signatureLimit=`<number>`</config>
+Number of signatures listed in options dropdown of mail compose (default 2).
+
 ## Misc
 
 <config>io.ox/mail//attachOriginalMessage=`<bool>`</config>

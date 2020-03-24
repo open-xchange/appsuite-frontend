@@ -25,6 +25,50 @@ define('io.ox/mail/compose/signatures', [
 
     var extensions = {
 
+        options: function (baton) {
+            if (_.device('smartphone')) return;
+
+            var dropdown = this.data('view'),
+                LIMIT = settings.get('compose/signatureLimit', 2);
+
+            function draw(collection) {
+                var overflow = collection.length - LIMIT;
+                dropdown.header(gt('Signatures'));
+                dropdown.option('signatureId', '', gt('No signature'));
+
+                collection.each(function (model, index) {
+                    if (index >= LIMIT) return;
+                    dropdown.option('signatureId', model.get('id'), model.get('displayname'));
+                });
+                if (overflow > 0) {
+                    //#. %1$s: number of additional signatures in context of a signatures dropdown
+                    dropdown.link('settings', gt('%1$s more...', overflow), function () {
+                        var options = { id: 'io.ox/mail/settings/signatures' };
+                        ox.launch('io.ox/settings/main', options).done(function () {
+                            // minimize this window, so it doesn't overlap the setting the user wants to manage now
+                            if (baton.view.app.getWindow().floating) baton.view.app.getWindow().floating.onMinimize();
+                            this.setSettingsPane(options);
+                        });
+                    }, { icon: true });
+                }
+                dropdown.link('settings', gt('Edit signatures...'), function () {
+                    var options = { id: 'io.ox/mail/settings/signatures' };
+                    ox.launch('io.ox/settings/main', options).done(function () {
+                        // minimize this window, so it doesn't overlap the setting the user wants to manage now
+                        if (baton.view.app.getWindow().floating) baton.view.app.getWindow().floating.onMinimize();
+                        this.setSettingsPane(options);
+                    });
+                }, { icon: true });
+            }
+
+            baton.view.signaturesLoading.done(function (collection) {
+                var refresh = draw.bind(null, collection);
+                baton.view.listenTo(collection, 'add remove reset', refresh);
+                refresh();
+            });
+
+        },
+
         menu: function (baton) {
             if (_.device('smartphone')) return;
             var self = this,

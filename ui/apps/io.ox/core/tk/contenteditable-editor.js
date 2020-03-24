@@ -374,7 +374,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         opt = _.extend({
             toolbar1: '*undo *redo | bold italic underline | bullist numlist outdent indent',
-            advanced: '*styleselect | *fontselect fontsizeselect | link image *emoji | forecolor backcolor',
+            advanced: '*styleselect | *fontselect fontsizeselect | removeformat | link image *emoji | forecolor backcolor',
             toolbar2: '',
             toolbar3: '',
             plugins: 'autoresize autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
@@ -404,7 +404,8 @@ define('io.ox/core/tk/contenteditable-editor', [
         var originalToolbarConfig = opt.toolbar1.replace(/\s*\|\s*/g, ' ');
         opt.toolbar1 = opt.toolbar1.replace(/\*/g, '');
 
-        var fixed_toolbar = '.contenteditable-editor[data-editor-id="' + editorId + '"] > .mce-tinymce > .mce-stack-layout > .mce-top-part';
+        var fixed_toolbar = '.contenteditable-editor[data-editor-id="' + editorId + '"] > .mce-tinymce > .mce-stack-layout > .mce-top-part',
+            fixed_container = '.contenteditable-editor[data-editor-id="' + editorId + '"] > .mce-tinymce > .mce-stack-layout > .mce-container';
 
         var options = {
             script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.min.js',
@@ -485,6 +486,8 @@ define('io.ox/core/tk/contenteditable-editor', [
                     if (this.oxContext && this.oxContext.signature) {
                         $(this.contentDocument.getElementsByTagName('html')[0]).addClass('signature-editor');
                     }
+                    // move toolbar to bottom
+                    $(fixed_toolbar).detach().insertAfter($(fixed_container));
                     // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
                     $(fixed_toolbar).find('span.mce-txt').attr('tabindex', -1);
                     // adjust toolbar
@@ -834,27 +837,19 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         (function () {
             if (_.device('smartphone')) return;
-            var scrollPane = opt.scrollpane || opt.app && opt.app.getWindowNode(),
-                composeFields = scrollPane.find('.mail-compose-fields'),
-                fixed = false;
+            var scrollPane = opt.scrollpane || opt.app && opt.app.getWindowNode();
 
             // keep fixed toolbar in window, when window is dragged
             if (opt.app && opt.app.get('floating') && opt.app.get('window').floating) {
-                opt.app.get('window').floating.on('move', function () {
-                    if (fixed) {
-                        $(fixed_toolbar).css('top', opt.view.$el.parent().offset().top);
-                    }
-                });
+                opt.app.get('window').floating.on('move', reposition);
             }
+            scrollPane.on('scroll', reposition);
 
-            scrollPane.on('scroll', function () {
-                var scrollTop = scrollPane.scrollTop() || 0;
-                fixed = scrollTop > (composeFields.height() + 14);
-                $(fixed_toolbar).css('top', fixed ? opt.view.$el.parent().offset().top : 0);
-                composeFields.css('margin-bottom', fixed ? 40 : 0);
-                $el.toggleClass('toolbar-fixed', fixed);
-            });
-
+            function reposition() {
+                // toolbar as bottom anchor
+                var anchor = opt.app.get('window').nodes.footer;
+                $(fixed_toolbar).css('top', Math.round(anchor.offset().top) - $(fixed_toolbar).outerHeight());
+            }
         }());
 
         this.destroy = function () {
