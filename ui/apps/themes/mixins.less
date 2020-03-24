@@ -53,9 +53,22 @@
     .text-overflow();
 }
 
-.placeholder(@color) {
-    ::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder {
-        color: @color
+.placeholder(@color, @weight: normal) {
+    &::-webkit-input-placeholder {
+        color: @color;
+        font-weight: @weight;
+    }
+    &:-moz-placeholder{
+        color: @color;
+        font-weight: @weight;
+    }
+    &::-moz-placeholder {
+        color: @color;
+        font-weight: @weight;
+    }
+    &:-ms-input-placeholder {
+        color: @color;
+        font-weight: @weight;
     }
 }
 
