@@ -497,9 +497,11 @@ define('io.ox/core/folder/extensions', [
             // check if users can edit their own data (see bug 34617)
             if (settings.get('user/internalUserEdit', true) === false) return;
 
-            this.link('my-contact-data', gt('My contact data'), function (e) {
-                openUserSettingsDialog(e);
-            });
+            this.append(
+                $('<li role="presentation">').append(
+                    $('<a href="#" data-action="my-contact-data" role="treeitem">').text(gt('My contact data')).on('click', openUserSettingsDialog)
+                )
+            );
         },
 
         addNewAddressBook: function (baton) {
@@ -742,16 +744,20 @@ define('io.ox/core/folder/extensions', [
     //
     // Contacts
     //
+
+    ext.point('io.ox/core/foldertree/contacts/links').extend(
+        {
+            id: 'my-contact-data',
+            index: 400,
+            draw: extensions.myContactData
+        }
+    );
+
     ext.point('io.ox/core/foldertree/contacts/links/subscribe').extend(
         {
             id: 'add-new_address_book',
             index: 300,
             draw: extensions.addNewAddressBook
-        },
-        {
-            id: 'my-contact-data',
-            index: 400,
-            draw: extensions.myContactData
         },
         {
             id: 'subscribe',
