@@ -250,7 +250,7 @@ define('io.ox/calendar/settings/pane', [
             }
         },
         //
-        // Notifications
+        // Email Notifications
         //
         {
             id: 'notifications',
@@ -263,6 +263,23 @@ define('io.ox/calendar/settings/pane', [
                             util.checkbox('notifyAcceptedDeclinedAsCreator', gt('Receive notification as appointment creator when participants accept or decline'), settings),
                             util.checkbox('notifyAcceptedDeclinedAsParticipant', gt('Receive notification as appointment participant when other participants accept or decline'), settings),
                             util.checkbox('deleteInvitationMailAfterAction', gt('Automatically delete the invitation email after the appointment has been accepted or declined'), settings)
+                        )
+                    )
+                );
+            }
+        },
+        //
+        // Alarms
+        //
+        {
+            id: 'alarms',
+            index: INDEX += 100,
+            render: function () {
+                this.$el.append(
+                    util.fieldset(gt('Reminders'),
+                        $('<div class="form-group">').append(
+                            //#. label for a checkbox that determines if we show reminders for appointments that are already over
+                            util.checkbox('showPastReminders', gt('Show reminders for past appointments'), settings)
                         )
                     )
                 );

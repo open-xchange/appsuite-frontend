@@ -265,16 +265,7 @@ define('plugins/notifications/calendar/register', [
                 var alarmsToAdd = [],
                     now = new moment().utc().format(util.ZULU_FORMAT),
                     nextAlarmTime,
-                    getIds = function () {
-                        var ids = [];
-                        subview.collection.forEach(function (model) {
-                            ids.push(util.cid({ folder: model.get('folder'), id: model.get('eventId'), recurrenceId: model.get('recurrenceId') }));
-                        });
-                        return ids;
-                    },
                     timerFunction = function () {
-                        var ids = getIds();
-
                         nextAlarmTime = undefined;
                         now = new moment().utc().format(util.ZULU_FORMAT);
                         var temp = [];
@@ -282,12 +273,13 @@ define('plugins/notifications/calendar/register', [
                             if (alarm.time <= now) {
                                 if (alarm.action === 'AUDIO') {
                                     playAlarm(alarm);
-                                } else if (_(ids).indexOf(util.cid({ folder: alarm.folder, id: alarm.eventId, recurrenceId: alarm.recurrenceId })) > -1) {
-                                    // acknowledge duplicates (only one alarm per event)
-                                    calAPI.acknowledgeAlarm(alarm);
                                 } else {
+                                    // prevent duplicates
+                                    if (subview.collection.findWhere({ appointmentCid: alarm.appointmentCid }) && !subview.collection.get(alarm.id)) {
+                                        calAPI.acknowledgeAlarm(subview.collection.findWhere({ appointmentCid: alarm.appointmentCid }).attributes);
+                                        subview.removeNotifications([subview.collection.findWhere({ appointmentCid: alarm.appointmentCid }).attributes]);
+                                    }
                                     subview.addNotifications(alarm);
-                                    ids = getIds();
                                 }
                             } else {
                                 if (!nextAlarmTime || nextAlarmTime > alarm.time) {
@@ -327,18 +319,6 @@ define('plugins/notifications/calendar/register', [
                     nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarmTime).valueOf() - new moment(now).valueOf());
                 }
 
-                var ids = getIds();
-                alarmsToAdd = _(alarmsToAdd).uniq(function (alarm) {
-                    return util.cid({ folder: alarm.folder, id: alarm.eventId, recurrenceId: alarm.recurrenceId });
-                });
-                alarmsToAdd = alarmsToAdd.filter(function (alarm) {
-                    if (_(ids).indexOf(util.cid({ folder: alarm.folder, id: alarm.eventId, recurrenceId: alarm.recurrenceId })) > -1 && !subview.collection.get(alarm.id)) {
-                        // acknowledge duplicates (only one alarm per event)
-                        calAPI.acknowledgeAlarm(alarm);
-                        return false;
-                    }
-                    return true;
-                });
                 subview.resetNotifications(alarmsToAdd);
             });
             //react to changes in settings

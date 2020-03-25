@@ -19,8 +19,9 @@ define('io.ox/calendar/api', [
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'io.ox/calendar/model',
-    'io.ox/core/capabilities'
-], function (http, Pool, CollectionLoader, folderApi, util, models, capabilities) {
+    'io.ox/core/capabilities',
+    'settings!io.ox/calendar'
+], function (http, Pool, CollectionLoader, folderApi, util, models, capabilities, settings) {
 
     'use strict';
 
@@ -534,7 +535,7 @@ define('io.ox/calendar/api', [
             confirm: function (obj, options) {
                 options = options || {};
                 // no empty string comments (clutters database)
-                // if comment schould be deleted, send null. Just like in settings
+                // if comment should be deleted, send null. Just like in settings
                 if (obj.attendee.comment === '') delete obj.attendee.comment;
 
                 // make sure alarms are explicitely set to null when declining, otherwise the user is reminded of declined appointments, we don't want that
@@ -772,22 +773,74 @@ define('io.ox/calendar/api', [
             },
 
             getAlarms: function () {
+                var params = {
+                    action: 'pending',
+                    rangeEnd: moment.utc().add(10, 'hours').format(util.ZULU_FORMAT),
+                    actions: 'DISPLAY,AUDIO'
+                };
+
+                if (!settings.get('showPastReminders', true)) {
+                    // longest reminder time is 4 weeks before the appointment start. So 30 days should work just fine to reduce the ammount of possible reminders
+                    params.rangeStart = moment.utc().startOf('day').subtract(30, 'days').format(util.ZULU_FORMAT);
+                }
+
                 return http.GET({
                     module: 'chronos/alarm',
-                    params: {
-                        action: 'pending',
-                        rangeEnd: moment.utc().add(10, 'hours').format(util.ZULU_FORMAT),
-                        actions: 'DISPLAY,AUDIO'
-                    }
+                    params: params
                 })
                 .then(function (data) {
+                    // only one alarm per event per type, keep the newest one
+                    data = _(data).chain().groupBy('action').map(function (alarms) {
+                        var alarmsPerEvent = _(alarms).groupBy(function (alarm) { return util.cid({ id: alarm.eventId, folder: alarm.folder, recurrenceId: alarm.recurrenceId }); });
+
+                        alarmsPerEvent = _(alarmsPerEvent).map(function (eventAlarms) {
+                            var alarmsToAcknowledge = 0;
+                            // keep the next alarm that is ready to show acknowledge older ones, newer ones are untouched, those still need to pop up
+                            // yes length -1 is correct, we want to keep at least one
+                            for (; alarmsToAcknowledge < eventAlarms.length - 1; alarmsToAcknowledge++) {
+                                // all further alarms are in the future;
+                                if (moment(eventAlarms[alarmsToAcknowledge].time).valueOf() > _.now()) {
+                                    // we want to keep the newest alarm that is ready to show if there is one
+                                    if (alarmsToAcknowledge > 0) alarmsToAcknowledge--;
+                                    break;
+                                }
+                            }
+                            // acknowledge old alarms
+                            api.acknowledgeAlarm(eventAlarms.slice(0, alarmsToAcknowledge));
+                            // slice acknowledged alarms
+                            eventAlarms = eventAlarms.slice(alarmsToAcknowledge);
+
+                            return eventAlarms;
+                        });
+
+                        return alarmsPerEvent;
+                    }).flatten().value();
+
                     // add alarmId as id (makes it easier to use in backbone collections)
                     data = _(data).map(function (obj) {
                         obj.id = obj.alarmId;
+                        obj.appointmentCid = util.cid({ id: obj.eventId, folder: obj.folder, recurrenceId: obj.recurrenceId });
                         return obj;
                     });
 
-                    api.trigger('resetChronosAlarms', data);
+                    // no filtering active
+                    if (settings.get('showPastReminders', true)) {
+                        api.trigger('resetChronosAlarms', data);
+                        return;
+                    }
+
+                    api.getList(data).done(function (models) {
+                        data = _(data).filter(function (alarm) {
+                            var model = _(models).findWhere({ cid: alarm.appointmentCid });
+
+                            // if alarm is scheduled after the appointments end we will show it
+                            if (model.getMoment('endDate').valueOf() < moment(alarm.time).valueOf()) return true;
+
+                            // if the appointment is over we will not show any alarm for it
+                            return model.getMoment('endDate').valueOf() > _.now();
+                        });
+                        api.trigger('resetChronosAlarms', data);
+                    });
                 });
             },
 
@@ -934,6 +987,9 @@ define('io.ox/calendar/api', [
                 return collection;
             }
         };
+
+    // if the setting for past appointment reminders changes, we must get fresh ones , might be less or more alarms now
+    settings.on('change:showPastReminders', api.getAlarms);
 
     ox.on('refresh^', function () {
         api.refresh();
