@@ -713,10 +713,13 @@ Scenario('[C163026] Change from display name when sending a mail', async functio
     I.click('.io-ox-mail-compose [data-dropdown="from"] .fa-caret-down');
     I.waitForVisible('.dropdown.open [data-name="edit-real-names"]', 5);
     I.click('.dropdown [data-name="sendDisplayName"]');
+    I.waitForElement('.dropdown.open [data-value^="[null,"]');
     I.click('.dropdown [data-name="from"]');
     I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');
+    I.dontSee(timestamp.toString(), '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .name');
     I.waitForText('This email just contains your email address as sender. Your real name is not used.', 5, '.io-ox-mail-compose .sender-realname .mail-input');
 });
+
 Scenario('[C207507] Forgot mail attachment hint', async function (I, users, mail, dialogs) {
     let [user] = users;
     var testrailID = 'C207507';

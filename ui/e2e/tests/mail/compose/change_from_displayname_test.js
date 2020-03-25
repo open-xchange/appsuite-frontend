@@ -21,35 +21,6 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C163026] Change \'from\' display name when sending a mail', async (I, users, mail) => {
-    let [user] = users;
-    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
-    // Log in and switch to mail app
-    I.login('app=io.ox/mail');
-    mail.newMail();
-
-    // Navigate to the name change dialog
-    I.click(user.get('primaryEmail'));
-    I.click('Edit names');
-
-    I.waitForElement({ css: 'input[name=overwrite]' });
-    I.click({ css: 'input[name=overwrite]' });
-    I.fillField('name', 'Entropy McDuck');
-    I.click('Edit');
-    I.waitForDetached('io-ox-dialog-popup');
-
-    // Verify the dislay name has changed
-    I.see('Entropy McDuck');
-
-    // Turn off display names
-    I.click(user.get('primaryEmail'));
-    I.click('Show names');
-
-    // Close the dropdown
-    I.click({ css: 'div.smart-dropdown-container' });
-    I.dontSee('Entropy McDuck');
-});
-
 Scenario('[OXUIB-142] personal field of primary account should be respected', async (I, users, mail) => {
     let [user] = users;
     const customDisplayNames = {};
