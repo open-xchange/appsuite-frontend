@@ -56,11 +56,11 @@ Scenario('Create appointment and switch timezones', async function (I, dialogs) 
 
     dialogs.waitForVisible();
     I.waitForText('Time zone', 5, dialogs.locators.body);
-    I.selectOption('Time zone', '+09:00 JST Asia/Tokyo');
+    I.selectOption('Time zone', '(+09:00) JST Tokyo');
     dialogs.clickButton('Add');
     I.waitForDetached('.modal-dialog');
 
-    I.waitForText('Asia/Tokyo', '.rightside li');
+    I.waitForText('Asia/Tokyo', 5, '.rightside li');
 
     // switch to calendar
     I.openApp('Calendar');
@@ -85,8 +85,8 @@ Scenario('Create appointment and switch timezones', async function (I, dialogs) 
 
     dialogs.waitForVisible();
     I.waitForText('Start date timezone', 5, dialogs.locators.body);
-    I.selectOption('Start date timezone', '+09:00 JST Asia/Tokyo');
-    I.selectOption('End date timezone', '+09:00 JST Asia/Tokyo');
+    I.selectOption('Start date timezone', '(+09:00) JST Tokyo');
+    I.selectOption('End date timezone', '(+09:00) JST Tokyo');
     dialogs.clickButton('Change');
     I.waitForDetached('.modal-dialog');
 

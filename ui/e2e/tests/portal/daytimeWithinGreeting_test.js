@@ -28,8 +28,8 @@ Scenario('[C7497] Daytime within Greeting', async (I) => {
 
     let currentHour = moment().hour(),
         counter = 0;
-    const timeZones = ['US/Pacific', 'Antarctica/Mawson', 'America/Aruba',
-        'Asia/Tomsk', 'Cuba', 'Japan'];
+    const timeZones = ['America/Vancouver', 'Antarctica/Mawson', 'America/Barbados',
+        'Asia/Tomsk', 'America/Havana', 'Asia/Tokyo'];
 
     function checkTime() {
         if (currentHour >= 4 && currentHour <= 11) {
@@ -42,13 +42,11 @@ Scenario('[C7497] Daytime within Greeting', async (I) => {
     }
     function changeTimezoneAndGoToPortal(timezone) {
         I.click('#io-ox-settings-topbar-icon');
-        I.waitForText('Basic settings');
         I.waitForText('Time zone');
-        I.selectOption({ css: 'select[name="timezone"]' }, timezone); // -7
+        I.selectOption('Time zone', timezone); // -7
         I.waitForVisible('.io-ox-alert');
-        I.logout();
-        I.login();
         I.openApp('Portal');
+        I.refreshPage();
         I.waitForVisible('.greeting-phrase');
     }
     async function updateCurrentTime() {
