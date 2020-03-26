@@ -146,12 +146,13 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: [
-                            'build/pdf.combined.js',
+                            'build/pdf.js',
+                            'build/pdf.worker.js',
                             'web/images/*'
                         ],
                         cwd: 'bower_components/pdfjs-dist',
                         dest: 'build/apps/pdfjs-dist/'
-                        // pdfjs now has it's own define: define('pdfjs-dist/build/pdf.combined', ...)
+                        // pdfjs now has it's own define: define('pdfjs-dist/build/pdf', ...)
                     },
                     {
                         expand: true,

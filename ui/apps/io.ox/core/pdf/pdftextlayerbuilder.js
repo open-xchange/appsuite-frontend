@@ -17,8 +17,9 @@
 define('io.ox/core/pdf/pdftextlayerbuilder', [
     'io.ox/core/pdf/pdfpolyfill',
     'io.ox/core/pdf/pdfcustomstyle',
-    'pdfjs-dist/build/pdf.combined'
-], function (Polyfill, CustomStyle, PDFJSCombined) {
+    'pdfjs-dist/build/pdf',
+    'pdfjs-dist/build/pdf.worker'
+], function (Polyfill, CustomStyle, PDFJSLib) {
     'use strict';
 
     /*
@@ -207,7 +208,6 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
     // --------------------------
     // - PDFTextLayerBuilder.js -
     // --------------------------
-    var PDFJS = PDFJSCombined.PDFJS;
 
     var MAX_TEXT_DIVS_TO_RENDER = 100000;
 
@@ -357,8 +357,7 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
                     textDiv.dataset.isWhitespace = true;
                     return;
                 }
-                var tx = PDFJS.Util.transform(this.viewport.transform,
-                        geom.transform);
+                var tx = PDFJSLib.Util.transform(this.viewport.transform, geom.transform);
                 var angle = Math.atan2(tx[1], tx[0]);
                 if (style.vertical) {
                     angle += Math.PI / 2;
@@ -391,7 +390,7 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
                 // when e.g. the Font Inspector is off but the Stepper
                 // is on, but it's
                 // not worth the effort to do a more accurate test.
-                if (PDFJS.pdfBug) {
+                if (PDFJSLib.pdfBug) {
                     textDiv.dataset.fontName = geom.fontName;
                 }
                 // Storing into dataset will convert number into string.
