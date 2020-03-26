@@ -815,7 +815,7 @@ Scenario('[C274484] Attendees can change the appointment', async function (I, us
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7428] Create appointment with internal participants', async function (I, users, calendar) {
+Scenario('[C7428] Create appointment with internal participants ', async function (I, users, calendar) {
     const data = { subject: 'Einkaufen', location: 'Wursttheke' };
 
     I.login('app=io.ox/calendar&perspective="week:day"');
@@ -904,8 +904,7 @@ Scenario('[C7425] Create appointment with a group', async function (I, users, ca
     await I.dontHaveGroup(groupName);
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7429] Create appointment via Contact', async function (I, users, contacts, calendar) {
+Scenario('[C7429] Create appointment via Contact ', async function (I, users, contacts, calendar) {
     const data = { subject: 'Wichtige Dinge', location: 'Kneipe' };
 
     I.login('app=io.ox/contacts');
@@ -966,8 +965,7 @@ Scenario('[C7430] Create appointment via Icon', async function (I, calendar) {
     }));
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7431] Create appointment via doubleclick', async function (I, calendar) {
+Scenario('[C7431] Create appointment via doubleclick ', async function (I, calendar) {
     const data = { subject: 'Todesstern testen' };
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
@@ -982,7 +980,7 @@ Scenario.skip('[C7431] Create appointment via doubleclick', async function (I, c
         I.retry(5).fillField('Subject', data.subject);
         I.seeInField(calendar.locators.starttime, '12:00 PM');
         I.click('Create');
-        I.waitForVisible({ css: '.appointment' });
+        I.waitForVisible({ css: '.page.current .appointment' });
         await I.removeAllAppointments();
     }
 
@@ -1230,8 +1228,7 @@ Scenario('[C7442] Set date from date-picker', async function (I, calendar) {
 
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7413] Create appointment with an attachment', async function (I, calendar) {
+Scenario('[C7413] Create appointment with an attachment ', async function (I, calendar) {
     // Preconditions: You are at the Calendar-tab
     I.login(['app=io.ox/calendar&perspective=week:week']);
     calendar.waitForApp();
@@ -1310,70 +1307,58 @@ Scenario('[C274406] Change organizer of appointment with external attendees', as
     I.dontSee('Change organizer');
 });
 
-// Skip for now, request fails with:
-// Ignored invalid data [id, field Visibility, severity MAJOR, message Unable to store a 'private' classification]
-Scenario.skip('[C274651] Create secret appointment @contentReview', async function (I, users) {
-    let testrailID = 'C274651';
-    var timestamp = Math.round(+new Date() / 1000);
+Scenario('[C274651] Create secret appointment ', async function (I, users, calendar) {
+    const testrailID = 'C274651',
+        startDate = moment().startOf('week').add('1', 'day'),
+        folder =
+        {
+            module: 'event',
+            subscribed: 1,
+            title: testrailID,
+            permissions: [
+                {
+                    bits: 403710016,
+                    entity: users[0].userdata.id,
+                    group: false
+                }, {
+                    bits: 4227332,
+                    entity: users[1].userdata.id,
+                    group: false
+                }
+            ],
+            parent: 'cal://0/' + await I.grabDefaultFolder('calendar', { user: users[0] })
+        };
+
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
-    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
-    const folder = {
-        module: 'event',
-        subscribed: 1,
-        title: testrailID,
-        permissions: [
-            {
-                bits: 403710016,
-                entity: users[0].userdata.id,
-                group: false
-            }, {
-                bits: 4227332,
-                entity: users[1].userdata.id,
-                group: false
-            }
-        ],
-        parent: 'cal://0/' + appointmentDefaultFolder
-    };
     const sharedFolderID = await I.haveFolder(folder, { user: users[0] });
-    await I.haveAppointment({
-        folder: sharedFolderID,
-        endDate: {
-            tzid: 'Europe/Berlin',
-            value: moment().startOf('isoWeek').add(10, 'hours').format('YYYYMMDD[T]HHmm00')
-        },
-        startDate: {
-            tzid: 'Europe/Berlin',
-            value: moment().startOf('isoWeek').add(8, 'hours').format('YYYYMMDD[T]HHmm00')
-        },
-        attendees: [
-            {
-                partStat: 'ACCEPTED',
-                entity: users[0].userdata.id
-            }
-        ],
-        class: 'PRIVATE',
-        visibility: 'PRIVATE',
-        alarms: [],
-        transp: 'OPAQUE',
-        attendeePrivileges: 'DEFAULT',
-        summary: timestamp,
-        location: timestamp,
-        description: timestamp
-
-    }, { user: users[0] });
-    I.login('app=io.ox/calendar', { user: users[1] });
-    I.doubleClick('~Shared calendars');
-    I.waitForVisible({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]` });
-    I.doubleClick({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]` });
-    ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
+    // Login and create secret appointment in shared calendar
+    I.login('app=io.ox/calendar', { user: users[0] });
+    calendar.waitForApp();
+    I.selectFolder(testrailID);
+    calendar.newAppointment();
+    I.fillField('Subject', testrailID);
+    I.pressKey('Enter');
+    await calendar.setDate('startDate', startDate);
+    I.selectOption('Visibility', 'Secret');
+    I.click('Create');
+    I.waitForDetached('.io-ox-calendar-edit-window');
+    // Check secret appointment in all views
+    ['Workweek', 'Week', 'Day', 'Month'].forEach((view) => {
         I.clickToolbar('View');
-        I.click(view);
-        I.waitForText('Private');
-        I.dontSee(timestamp);
-        I.dontSee(timestamp);
+        I.clickDropdown(view);
+        if (view === 'Day') I.click(`.date-picker [aria-label*="${startDate.format('M/D/YYYY')}"]`);
+        I.waitForElement('.page.current .private-flag');
     });
+    I.logout();
+
+    //Login user 2, check that secret appointment is not visible in shared calendar
+    I.login(`app=io.ox/calendar&perspective="week"&folder=${sharedFolderID}`, { user: users[1] });
+    calendar.waitForApp();
+    I.waitForVisible({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]` });
+    I.dontSeeElement('.appointment');
+
 });
 
 Scenario('[C7414] Create two appointments at the same time (one is shown as free)', async function (I, users, calendar) {
@@ -1507,9 +1492,7 @@ Scenario('[C7446] Create recurring whole-day appointment', async function (I, us
 });
 
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7447] Private appointment with participants', async function (I, users, calendar) {
-    //var timestamp = Math.round(+new Date() / 1000);
+Scenario('[C7447] Private appointment with participants ', async function (I, users, calendar) {
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
@@ -1572,8 +1555,7 @@ Scenario('[C7448] Cannot create private appointment', async function (I, users, 
     expect(await I.grabNumberOfVisibleElements('option[value="CONFIDENTIAL"]')).to.equal(0);
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C234658] Create appointments and show this in cumulatively view', async function (I, calendar) {
+Scenario('[C234658] Create appointments and show this in cumulatively view ', async function (I, calendar) {
     const
         Moment = require('moment'),
         MomentRange = require('moment-range'),

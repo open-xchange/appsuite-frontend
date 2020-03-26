@@ -331,8 +331,7 @@ Scenario('[C7445] Check availability of resources and participants', async funct
     await I.dontHaveResource('Colors');
 });
 
-// TODO reenable this, as soon as the grabCSSPropertyFrom is fixed in codecept. See https://github.com/Codeception/CodeceptJS/pull/2059
-Scenario.skip('[C252157] Fine grid for high zoom levels', async function (I, users) {
+Scenario('[C252157] Fine grid for high zoom levels ', async function (I, users) {
 
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
@@ -360,25 +359,25 @@ Scenario.skip('[C252157] Fine grid for high zoom levels', async function (I, use
 
     // 100%
     var [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
-    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, transparent 1px)');
+    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, rgba(0, 0, 0, 0) 1px)');
 
     // 200%
     I.click('.fa-plus');
 
     [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
-    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, transparent 1px)');
+    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, rgba(0, 0, 0, 0) 1px)');
 
     // 400%
     I.click('.fa-plus');
 
     [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
-    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, transparent 1px)');
+    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, rgba(0, 0, 0, 0) 1px)');
 
     // 1000%
     I.click('.fa-plus');
 
     [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
-    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(51, 51, 51) 0px, transparent 1px, transparent 50px, rgb(136, 136, 136) 51px, transparent 51px, transparent 99px, rgb(136, 136, 136) 100px, transparent 100px, transparent 149px)');
+    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(51, 51, 51) 0px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 50px, rgb(136, 136, 136) 51px, rgba(0, 0, 0, 0) 51px, rgba(0, 0, 0, 0) 99px, rgb(136, 136, 136) 100px, rgba(0, 0, 0, 0) 100px, rgba(0, 0, 0, 0) 149px)');
 
     await I.dontHaveResource('Zebra');
     await I.dontHaveResource('Tiger');

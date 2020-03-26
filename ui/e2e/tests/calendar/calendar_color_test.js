@@ -23,8 +23,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-// TODO reenable this, as soon as the grabCSSPropertyFrom is fixed in codecept. See https://github.com/Codeception/CodeceptJS/pull/2059
-Scenario.skip('Create appointment and check if the color is correctly applied and removed', async function (I, users, calendar) {
+Scenario('Create appointment and check if the color is correctly applied and removed ', async function (I, users, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -52,6 +51,7 @@ Scenario.skip('Create appointment and check if the color is correctly applied an
     // get appointment color
     let [appointmentColor] = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
     // check if the color is the same
+
     expect(folderColor).equal(appointmentColor);
 
     I.say('Change color');
@@ -70,7 +70,7 @@ Scenario.skip('Create appointment and check if the color is correctly applied an
     // check if the color is the same
     expect(folderColor).not.equal(appointmentColor);
     // the color might differ if the appointment has .hover class which is not predictable
-    expect(appointmentColor).be.oneOf(['rgba(181, 54, 54, 1)', 'rgba(200, 70, 70, 1)']);
+    expect(appointmentColor).be.oneOf(['rgb(181, 54, 54)', 'rgb(200, 70, 70)']);
 
     I.say('Change color back to folder color');
     I.click('test appointment one', '.workweek .appointment .title');
@@ -87,20 +87,12 @@ Scenario.skip('Create appointment and check if the color is correctly applied an
     [appointmentColor] = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
     // check if the color is the same
     expect(folderColor).equal(appointmentColor);
-    expect(appointmentColor).not.to.be.oneOf(['rgba(181, 54, 54, 1)', 'rgba(200, 70, 70, 1)']);
+    expect(appointmentColor).not.to.be.oneOf(['rgb(181, 54, 54, 1)', 'rgb(200, 70, 70, 1)']);
 
-    // remove, if reintroduced think about using dialogs-pageobject
-    // I.click('test appointment one', '.workweek .appointment .title');
-    // I.waitForText('Delete', 5, '.io-ox-sidepopup');
-    // I.click('Delete', '.io-ox-sidepopup');
-    // I.waitForText('Delete', 5, '.modal-dialog');
-    // I.click('Delete', '.modal-dialog');
-    // I.waitForDetached('.modal-dialog');
-    // I.waitForDetached('.io-ox-dialog-sidepopup');
 });
 
 // TODO reenable this, as soon as the grabCSSPropertyFrom is fixed in codecept. See https://github.com/Codeception/CodeceptJS/pull/2059
-Scenario.skip('Changing calendar color should change appointment color that uses calendar color', async function (I, users, calendar) {
+Scenario('Changing calendar color should change appointment color that uses calendar color ', async function (I, users, calendar) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -142,21 +134,22 @@ Scenario.skip('Changing calendar color should change appointment color that uses
 
     I.say('Change calendar color to dark green');
     I.click('.folder-options');
+    I.waitForVisible('.io-ox-calendar-color-picker-container a[title="dark green"]');
     const [darkGreen] = await I.grabCssPropertyFrom({ css: 'a[title="dark green"] > i' }, 'background-color');
+    I.say(darkGreen);
     I.click('dark green');
-
-    // click some stuff
-    // I.clickToolbar('View');
-    // I.click('Workweek');
+    I.waitForDetached('.dropdown.open');
     I.waitForText('test appointment one', 5, '.workweek');
 
     I.say('Check correctly applied colors');
+    I.wait(0.2);
     // get folder color
     const [folderColor] = await I.grabCssPropertyFrom({ css: 'li.selected[aria-label^="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label' }, 'background-color');
     // get appointment colors
     const [appointmentOneColor] = await I.grabCssPropertyFrom('.workweek .appointment[aria-label*="test appointment one"]', 'background-color');
     const [appointmentTwoColor] = await I.grabCssPropertyFrom('.workweek .appointment[aria-label*="test appointment two"]', 'background-color');
+    I.say(appointmentTwoColor);
     expect(folderColor, 'folderColor equals darkGreen').equal(darkGreen);
     expect(appointmentOneColor, 'appointment one color equals darkRed').equal(darkRed);
-    expect(appointmentTwoColor, 'appointment two color equals darkGreen').equal(darkGreen);
+    expect(appointmentTwoColor, 'appointment two color equals darkGreen').be.oneOf([darkGreen, 'rgb(49, 93, 34)']);
 });

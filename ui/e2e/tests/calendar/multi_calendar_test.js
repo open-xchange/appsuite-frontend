@@ -145,7 +145,7 @@ Scenario('Create appointments in monthview', async function (I, users) {
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('Create appointments in dayview', async function (I, users) {
+Scenario('Create appointments in dayview ', async function (I, users, calendar) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -155,7 +155,7 @@ Scenario.skip('Create appointments in dayview', async function (I, users) {
     await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
+    calendar.waitForApp();
 
     // create in Day view
     I.clickToolbar('View');

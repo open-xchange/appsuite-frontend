@@ -142,8 +142,7 @@ Scenario('[C207509] Year view', async (I, calendar) => {
     I.see('January', '.monthview-container');
 });
 
-// TODO: shaky(?), msg: element (.appointment div[title="Private visibility"] span[title="Confidential"] i.fa-lock) still not visible after 5 sec
-Scenario.skip('[C236795] Visibility Flags', (I, calendar) => {
+Scenario('[C236795] Visibility Flags ', (I, calendar) => {
     const createAppointment = (subject, startDate, startTime, visibility) => {
         I.clickToolbar('New appointment');
         I.waitForVisible('.io-ox-calendar-edit-window');
@@ -169,18 +168,17 @@ Scenario.skip('[C236795] Visibility Flags', (I, calendar) => {
             return appointmentLocator;
         }
         const [label, iconClass] = labelAndIcon;
-        return `${appointmentLocator} span[title="${label}"] i${iconClass}`;
+        return `${appointmentLocator} span[aria-label^="${label}"] i${iconClass}`;
     };
 
     const checkAppointment = (subject, visibility, time) => {
-        createAppointment(subject, moment().startOf('isoWeek'), time, visibility);
+        createAppointment(subject, moment().startOf('week').add(1, 'days'), time, visibility);
         // PRIVATE => Private
         // CONFIDENTIAL => Secret
         let labelAndIcon;
         if (visibility === 'PRIVATE') {
-            labelAndIcon = ['Private', '.fa-user-circle'];
-        } else if (visibility === 'CONFIDENTIAL') labelAndIcon = ['Confidential', '.fa-lock'];
-
+            labelAndIcon = ['Appointment is private', '.fa-user-circle'];
+        } else if (visibility === 'CONFIDENTIAL') labelAndIcon = ['Appointment is confidential', '.fa-lock'];
         // Expected Result: You created 3 appointsments with visivilities of Public, Private, Secret
         // Each visibility is displayed as in the example
         I.waitForVisible(getAppointmentLocator(subject, labelAndIcon));
@@ -262,34 +260,27 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
     I.see('17', '.weekview-container .weekview-toolbar .weekday');
 });
 
-//TODO: step I see "11:21 AM – 12:21 PM" fails, seems to only happen at around 11am - 12 pm
-Scenario.skip('[C244785] Open event from invite notification in calendar', async (I, calendar, users) => {
-    const [userA, userB] = users;
+Scenario('[C244785] Open event from invite notification in calendar ', async (I, users, calendar) => {
+    const [userA, userB] = users,
+        startTime = moment().add(10, 'minutes'),
+        endTime = moment().add(70, 'minutes');
+
+    // check if start and end time is transitioning between am/pm
+    /*         isTransitionTime = function () {
+            return startTime.format('A') !== endTime.format('A');
+        }; */
 
     await I.haveSetting({ 'io.ox/core': { autoOpenNotification: false } }, { user: userB });
 
     // 1. User#A: Create an appointment which starts in less than 15 minutes and invite User#B
     I.login(['app=io.ox/calendar&perspective=week:week'], { user: userA });
     calendar.waitForApp();
-    I.clickToolbar('New appointment');
-    I.waitForVisible('.io-ox-calendar-edit-window');
-    I.retry(5).fillField('Subject', 'Totally nerdy event');
+    calendar.newAppointment();
+    I.fillField('Subject', 'Totally nerdy event');
 
-    const startTime = moment().add(10, 'minutes'),
-        endTime = moment().add(70, 'minutes');
-
-    // check if start and end time is transitioning between am/pm
-    const isTransitionTime = function () {
-        return startTime.format('A') !== endTime.format('A');
-    };
-
-    I.click('~Start time');
-    I.pressKey('Enter');
-    I.pressKey(['Control', 'a']);
-    I.pressKey(startTime.format('hh:mm A'));
-    I.pressKey('Enter');
+    I.fillField(calendar.locators.starttime, startTime.format('hh:mm A'));
     I.fillField('Add contact/resource', userB.userdata.primaryEmail);
-    I.wait(0.5);
+    I.wait(0.2);
     I.pressKey('Enter');
 
     // save
@@ -302,7 +293,7 @@ Scenario.skip('[C244785] Open event from invite notification in calendar', async
     I.waitForVisible({ css: '*[data-app-name="io.ox/mail"]' });
 
     // 3. User#B: Open the notification area from top bar
-    I.waitForText('1', 10, '#io-ox-notifications-icon');
+    I.waitForText('1', 30, '#io-ox-notifications-icon');
     I.click('1', '#io-ox-notifications-icon');
     I.waitForElement('#io-ox-notifications-icon.open');
 
@@ -313,7 +304,7 @@ Scenario.skip('[C244785] Open event from invite notification in calendar', async
     I.click('Open in calendar');
 
     // Expected Result: Calendar opens containing a side popup with detailed appointment information.
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    calendar.waitForApp();
     I.waitForText('Totally nerdy event', 5, '.appointment');
     I.seeElement('.io-ox-sidepopup');
     I.seeNumberOfElements('.calendar-detail.view', 1);
@@ -321,8 +312,8 @@ Scenario.skip('[C244785] Open event from invite notification in calendar', async
     I.see(`${startTime.format('ddd, M/D/YYYY')}`, '.io-ox-sidepopup .date');
 
     // Have to check since transition times are shown differently
-    isTransitionTime() ? I.see(`${startTime.format('h:mm')} ${startTime.format('A')} – ${endTime.format('h:mm')} ${endTime.format('A')}`) :
-        I.see(`${startTime.format('h:mm')} – ${endTime.format('h:mm')} ${startTime.format('A')}`);
+    //isTransitionTime() ? I.see(`${startTime.format('h:mm')} ${startTime.format('A')} – ${endTime.format('h:mm')} ${endTime.format('A')}`) :
+    I.see(`${startTime.format('h:mm')} – ${endTime.format('h:mm')} ${endTime.format('A')}`);
 
     //I.see(`${startTime.format('h:mm')} – ${endTime.format('h:mm')} ${startTime.format('A')}CEST`, '.io-ox-sidepopup .time');
     I.see(`${userA.userdata.sur_name}, ${userA.userdata.given_name}`, '.io-ox-sidepopup');
