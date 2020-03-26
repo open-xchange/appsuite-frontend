@@ -23,7 +23,8 @@ define('io.ox/core/tk/contenteditable-editor', [
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'gettext!io.ox/core',
-    'less!io.ox/core/tk/contenteditable-editor-content',
+    // load content styles as text file otherwise they would not only be applied to the iframe but the whole UI
+    'text!themes/default/io.ox/core/tk/contenteditable-editor-content.css',
     'less!io.ox/core/tk/contenteditable-editor'
 ], function (capabilities, ext, textproc, mailAPI, mailUtil, DOMPurify, settings, mailSettings, gt, contentCss) {
 

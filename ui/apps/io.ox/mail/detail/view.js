@@ -25,7 +25,8 @@ define('io.ox/mail/detail/view', [
     'io.ox/core/a11y',
     'io.ox/core/capabilities',
     'gettext!io.ox/mail',
-    'less!io.ox/mail/detail/content',
+    // load content styles as text file otherwise they would not only be applied to the iframe but the whole UI
+    'text!themes/default/io.ox/mail/detail/content.css',
     'less!io.ox/mail/detail/style',
     'less!io.ox/mail/style',
     'io.ox/mail/actions'
