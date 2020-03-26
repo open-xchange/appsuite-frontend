@@ -42,7 +42,9 @@ define('io.ox/mail/sanitizer', [
         if (currentNode.tagName === 'STYLE' && currentNode.sheet && currentNode.sheet.cssRules) {
             var rules = '';
             _(currentNode.sheet.cssRules).each(function (rule) {
-                rules = rules + '.mail-detail-content ' + rule.cssText + ' ';
+                //avoid double prefix if someone decides to sanitize this twice
+                var prefix = rule.cssText.indexOf('.mail-detail-content ') > -1 ? '' : '.mail-detail-content ';
+                rules = rules + prefix + rule.cssText + ' ';
             });
             currentNode.innerHTML = rules;
         }

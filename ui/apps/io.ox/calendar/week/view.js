@@ -1656,12 +1656,13 @@ define('io.ox/calendar/week/view', [
         print: function () {
             var folders = this.model.get('folders'),
                 title = gt('Appointments');
-            if (_(folders).keys().length === 1) title = folders[_(folders).keys()[0]].display_title || folders[_(folders).keys()[0]].title;
+            if (folders.length === 1) title = folders[0].display_title || folders[0].title;
             print.request('io.ox/calendar/week/print', {
                 start: this.model.get('startDate').valueOf(),
                 end: this.model.get('startDate').clone().add(this.model.get('numColumns'), 'days').valueOf(),
-                folders: folders,
-                title:  title
+                folders: _(folders).pluck('id'),
+                title:  title,
+                numberOfColumns: this.model.get('numColumns')
             });
         }
 
