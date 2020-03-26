@@ -647,6 +647,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 var lastScrollPosition = this.getInitialScrollPosition(this.model.get('id')) || 0;
                 // the PDF link service. connects the Viewer with named actions and annotation links of the PDF
                 var pdfLinkService = new PDFViewerLinkService({
+                    externalLinkTarget: 2, // Open external links in a new window
                     pdfDocument: this.pdfDocument.getPDFJSDocument(),
                     eventHub: this.viewerEvents
                 });

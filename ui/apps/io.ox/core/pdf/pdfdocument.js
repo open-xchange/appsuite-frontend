@@ -22,8 +22,6 @@ define('io.ox/core/pdf/pdfdocument', [
 
     'use strict';
 
-    var PDFJS = PDFJSLib.PDFJS;
-
     // class PDFDocument =======================================================
 
     /**
@@ -39,55 +37,43 @@ define('io.ox/core/pdf/pdfdocument', [
      */
     function PDFDocument(pdfConverterURL) {
 
-        var self = this,
+        var self = this;
 
-            loadDef = $.Deferred(),
+        var loadDef = $.Deferred();
 
-            // the resulting PDF.js document after loading
-            pdfjsDocument = null,
+        // the resulting PDF.js document after loading
+        var pdfjsDocument = null;
 
-            // the total page count of the document {Number}
-            pageCount = 0,
+        // the total page count of the document {Number}
+        var pageCount = 0;
 
-            // the size of the first page is treated as default page size {width, height}
-            defaultPageSize = null,
+        // the size of the first page is treated as default page size {width, height}
+        var defaultPageSize = null;
 
-            // the size of the first page is treated as default page size {[{width, height}, ...]}
-            pageSizes = [],
+        // the size of the first page is treated as default page size {[{width, height}, ...]}
+        var pageSizes = [];
 
-            // whether to enable range requests support
-            enableRangeRequests = Settings.get('pdf/enableRangeRequests');
+        // whether to enable range requests support, if not present the default is true
+        var enableRangeRequests = (Settings.get('pdf/enableRangeRequests') !== false);
 
-        /**
-         * Range request support. If the server supports range requests the PDF will be fetched in chunks.
-         */
-        PDFJS.disableRange = !enableRangeRequests;
+        // Document initialization / loading parameters object
+        var params = {
+            // The URL of the PDF.
+            url: pdfConverterURL,
 
-        /**
-         * Streaming of PDF file data.
-         */
-        PDFJS.disableStream = !enableRangeRequests;
+            // Range request support. If the server supports range requests the PDF will be fetched in chunks.
+            disableRange: !enableRangeRequests,
 
-        /**
-         * Pre-fetching of PDF file data. PDF.js will automatically keep fetching more data even if it isn't needed to display the current page.
-         * NOTE: It is also necessary to disable streaming, see above, in order for disabling of pre-fetching to work correctly.
-         */
-        PDFJS.disableAutoFetch = !enableRangeRequests;
+            // Streaming of PDF file data.
+            disableStream: !enableRangeRequests,
 
-        /**
-         * set verbosity level for PDF.js to errors only
-         */
-        PDFJS.verbosity = PDFJS.VERBOSITY_LEVELS.errors;
+            // Pre-fetching of PDF file data. PDF.js will automatically keep fetching more data even if it isn't needed to display the current page.
+            // NOTE: It is also necessary to disable streaming, see above, in order for disabling of pre-fetching to work correctly.
+            disableAutoFetch: !enableRangeRequests,
 
-        /**
-         * Open external links in a new window
-         */
-        PDFJS.externalLinkTarget = PDFJS.LinkTarget.BLANK;
-
-        /**
-         * Path for image resources, mainly for annotation icons. Include trailing slash.
-         */
-        PDFJS.imageResourcesPath = ox.base + '/apps/pdfjs-dist/web/images/';
+            // set verbosity level for PDF.js to errors only
+            verbosity: PDFJSLib.VerbosityLevel.ERRORS
+        };
 
         // ---------------------------------------------------------------------
 
@@ -96,7 +82,7 @@ define('io.ox/core/pdf/pdfdocument', [
 
             if (_.isNumber(pageNumber) && (pageNumber > 0) && (pageNumber <= pageCount)) {
                 self.getPDFJSPage(pageNumber).then(function (pdfjsPage) {
-                    var viewport = pdfjsPage.getViewport(PDFView.getAdjustedZoom(1.0));
+                    var viewport = pdfjsPage.getViewport({ scale: PDFView.getAdjustedZoom(1.0) });
                     return def.resolve(PDFView.getNormalizedSize({ width: viewport.width, height: viewport.height }));
                 });
             }
@@ -205,8 +191,37 @@ define('io.ox/core/pdf/pdfdocument', [
 
         // ---------------------------------------------------------------------
 
-        // convert document to PDF
-        PDFJS.getDocument(pdfConverterURL).promise.then(function (document) {
+        /**
+         * Convert document to PDF
+         *
+         * @param {Object} params
+         *  @param {String} params.url
+         *   The URL of the PDF.
+         *
+         *  @param {Boolean} params.disableRange
+         *   Disable range request support. When enabled, and if the server supports
+         *   partial content requests, then the PDF will be fetched in chunks.
+         *
+         *  @param {Boolean} params.disableStream
+         *   Disable streaming of PDF file data.
+         *
+         *  @param {Boolean} params.disableAutoFetch
+         *   Disable pre-fetching of PDF file data. When range requests are enabled
+         *   PDF.js will automatically keep fetching more data even if it isn't
+         *   needed to display the current page.
+         *   NOTE: It is also necessary to disable streaming, see above,
+         *   in order for disabling of pre-fetching to work correctly.
+         *
+         *  @param {Number} params.verbosity
+         *   Controls the logging level; the constants from {VerbosityLevel} should be used.
+         *
+         *  @param {String} params.cMapUrl
+         *   The URL to the predefined Adobe CMaps. Include trailing slash.
+         *
+         *  @param {Boolean} params.cMapPacked
+         *   Specifies if the Adobe CMaps are binary packed.
+         */
+        PDFJSLib.getDocument(params).promise.then(function (document) {
             var error = true;
             // the original getPage() function
             var origGetPageFunction = document && document.transport && document.transport.getPage;
