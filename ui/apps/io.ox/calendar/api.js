@@ -795,13 +795,12 @@ define('io.ox/calendar/api', [
 
                         alarmsPerEvent = _(alarmsPerEvent).map(function (eventAlarms) {
                             var alarmsToAcknowledge = 0;
-                            // keep the next alarm that is ready to show acknowledge older ones, newer ones are untouched, those still need to pop up
-                            // yes length -1 is correct, we want to keep at least one
+                            // yes length -1 is correct we want to keep at least one
                             for (; alarmsToAcknowledge < eventAlarms.length - 1; alarmsToAcknowledge++) {
-                                // all further alarms are in the future;
-                                if (moment(eventAlarms[alarmsToAcknowledge].time).valueOf() > _.now()) {
+                                // current alarm is already in the future or next alarm is in the future
+                                if (moment(eventAlarms[alarmsToAcknowledge].time).valueOf() > _.now() ||
+                                    (moment(eventAlarms[alarmsToAcknowledge].time).valueOf() < _.now() && moment(eventAlarms[alarmsToAcknowledge + 1].time).valueOf() > _.now())) {
                                     // we want to keep the newest alarm that is ready to show if there is one
-                                    if (alarmsToAcknowledge > 0) alarmsToAcknowledge--;
                                     break;
                                 }
                             }
@@ -845,8 +844,10 @@ define('io.ox/calendar/api', [
             },
 
             acknowledgeAlarm: function (obj) {
+
                 if (!obj) return $.Deferred().reject();
                 if (_(obj).isArray()) {
+                    if (obj.length === 0) return $.when();
                     http.pause();
                     _(obj).each(function (alarm) {
                         api.acknowledgeAlarm(alarm);
