@@ -25,9 +25,12 @@ define('io.ox/mail/api-legacy', [
     // Some external code uses direct endpoints for sending emails and they should
     // be able to do this with one request. So we keep the old ui - code with the common endpoints for them
 
-    var api = {};
+    // Important: Please be aware of the difference of 'api' and 'legacyapi'. The later one only contains functions and properties
+    // declared in this file
 
-    api.SENDTYPE = {
+    var legacyapi = {};
+
+    legacyapi.SENDTYPE = {
         NORMAL: 0,
         REPLY: 1,
         FORWARD: 2,
@@ -36,12 +39,13 @@ define('io.ox/mail/api-legacy', [
     };
 
     // composition space id
-    api.csid = function () {
+    legacyapi.csid = function () {
         return _.uniqueId() + '.' + _.now();
     };
 
     var react = function (action, obj, view) {
-        var isDraft = (action === 'edit'),
+        var api = this,
+            isDraft = (action === 'edit'),
             isAlternative = (view === 'alternative');
 
         if (isAlternative) view = obj.content_type === 'text/plain' ? 'text' : 'html';
@@ -56,7 +60,7 @@ define('io.ox/mail/api-legacy', [
 
         // attach original message on touch devices?
         var attachOriginalMessage = obj.attachOriginalMessage || (view === 'text' && _.device('touch') && settings.get('attachOriginalMessage', false) === true),
-            csid = api.csid();
+            csid = legacyapi.csid();
 
         return http.PUT({
             module: 'mail',
@@ -115,8 +119,8 @@ define('io.ox/mail/api-legacy', [
      * @param  {string} view (html or text)
      * @return { deferred} done returns prepared object
      */
-    api.replyall = function (obj, view) {
-        return react('replyall', obj, view);
+    legacyapi.replyall = function (obj, view) {
+        return react.call(this, 'replyall', obj, view);
     };
 
     /**
@@ -125,8 +129,8 @@ define('io.ox/mail/api-legacy', [
      * @param  {string} view (html or text)
      * @return { deferred} done returns prepared object
      */
-    api.reply = function (obj, view) {
-        return react('reply', obj, view);
+    legacyapi.reply = function (obj, view) {
+        return react.call(this, 'reply', obj, view);
     };
 
     /**
@@ -135,8 +139,8 @@ define('io.ox/mail/api-legacy', [
      * @param  {string} view (html or text)
      * @return { deferred} done returns prepared object
      */
-    api.forward = function (obj, view) {
-        return react('forward', obj, view);
+    legacyapi.forward = function (obj, view) {
+        return react.call(this, 'forward', obj, view);
     };
 
     /**
@@ -145,8 +149,8 @@ define('io.ox/mail/api-legacy', [
      * @param  {string} view (html or text)
      * @return { deferred} done returns prepared object
      */
-    api.edit = function (obj, view) {
-        return react('edit', obj, view);
+    legacyapi.edit = function (obj, view) {
+        return react.call(this, 'edit', obj, view);
     };
 
     /**
@@ -158,7 +162,8 @@ define('io.ox/mail/api-legacy', [
      * @fires  api#refresh.list
      * @return { deferred }
      */
-    api.send = function (data, files, form) {
+    legacyapi.send = function (data, files, form) {
+        var api = this;
         var deferred,
             flatten = function (recipient) {
                 var name = $.trim(recipient[0] || '').replace(/^["']+|["']+$/g, ''),
@@ -206,11 +211,11 @@ define('io.ox/mail/api-legacy', [
 
         deferred = handleSendXHR2(data, files, deferred);
 
-        var DELAY = api.SEND_REFRESH_DELAY,
-            isSaveDraft = data.flags === api.FLAGS.DRAFT,
+        var DELAY = legacyapi.SEND_REFRESH_DELAY,
+            isSaveDraft = data.flags === legacyapi.FLAGS.DRAFT,
             csid = data.csid;
 
-        api.queue.add(csid, deferred.abort);
+        legacyapi.queue.add(csid, deferred.abort);
 
         return deferred
             .done(function () {
@@ -225,10 +230,10 @@ define('io.ox/mail/api-legacy', [
             .progress(function (e) {
                 // no progress for saving a draft
                 if (isSaveDraft) return;
-                api.queue.update(csid, e.loaded, e.total);
+                legacyapi.queue.update(csid, e.loaded, e.total);
             })
             .always(function () {
-                api.queue.remove(csid);
+                legacyapi.queue.remove(csid);
             })
             .then(function (text) {
                 // wait a moment, then update mail index
@@ -290,7 +295,7 @@ define('io.ox/mail/api-legacy', [
     };
 
     // delay to refresh mail list and folders after sending a message
-    api.SEND_REFRESH_DELAY = 5000;
+    legacyapi.SEND_REFRESH_DELAY = 5000;
 
     function handleSendXHR2(data, files) {
 
@@ -321,7 +326,7 @@ define('io.ox/mail/api-legacy', [
         });
     }
 
-    api.queue = (function () {
+    legacyapi.queue = (function () {
 
         function pct(loaded, total) {
             if (!total) return 0;
@@ -357,5 +362,5 @@ define('io.ox/mail/api-legacy', [
         };
     }());
 
-    return api;
+    return legacyapi;
 });

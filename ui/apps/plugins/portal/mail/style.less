@@ -22,6 +22,8 @@
         .sender {
             font-weight: bold;
             margin-right: 70px;
+             // fix some descender issues in firefox
+            padding-bottom: 2px;
             .ellipsis();
         }
         .date {
@@ -29,6 +31,15 @@
         }
         .row1 {
             line-height: 16px;
+        }
+
+        // fix some descender issues in firefox
+        margin-bottom: 14px;
+        .subject {
+            padding-bottom: 2px;
+        }
+        .row2 {
+            margin-top: -2px;
         }
     }
 }

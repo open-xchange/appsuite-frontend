@@ -55,6 +55,27 @@ Scenario('[C101622] Aggressive image replacements @shaky', async (I) => {
     });
 });
 
+Scenario('[OXUIB-134] XSS after loading external images automatically', async (I, mail) => {
+    await Promise.all([
+        I.haveSetting('io.ox/mail//features/registerProtocolHandler', false),
+        I.haveSetting('io.ox/mail//allowHtmlImages', true),
+        I.haveMail({
+            folder: 'default0/INBOX',
+            path: 'e2e/media/mails/oxuib-39.eml'
+        })
+    ]);
+
+    I.login();
+    mail.waitForApp();
+    mail.selectMail('test?');
+
+    I.waitForElement('.mail-detail-frame');
+    within({ frame: '.mail-detail-frame' }, () => {
+        I.waitForElement({ css: 'a' });
+        I.see('XSS?');
+    });
+});
+
 Scenario('[OXUIB-39] XSS after loading external images on demand', async (I, mail) => {
     await Promise.all([
         I.haveSetting('io.ox/mail//features/registerProtocolHandler', false),

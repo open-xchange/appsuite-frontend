@@ -1765,7 +1765,8 @@ define('io.ox/calendar/week/view', [
                 start: this.model.get('startDate').valueOf(),
                 end: this.model.get('startDate').clone().add(this.model.get('numColumns'), 'days').valueOf(),
                 folders: _(folders).pluck('id'),
-                title:  title
+                title:  title,
+                numberOfColumns: this.model.get('numColumns')
             });
         }
 

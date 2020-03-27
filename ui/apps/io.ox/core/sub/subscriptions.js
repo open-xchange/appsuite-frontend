@@ -102,7 +102,7 @@ define.async('io.ox/core/sub/subscriptions', [
                             enabled = keychainAPI.isEnabled(accountType);
 
                             if (!enabled) {
-                                console.error('I do not know keys of accountType ' + accountType + '! I suppose a needed plugin was not registered in the server configuration.');
+                                console.error('Keys for ' + accountType + ' are missing. A needed plugin was not registered in the server config.');
                             }
 
                             // remove formdescription entry when oauth service isn't available
@@ -138,7 +138,6 @@ define.async('io.ox/core/sub/subscriptions', [
                         // TODO: should this info come from the backend?
                         self.model.set('wantedScopes', self.app.subscription.wantedOAuthScopes);
                     }
-
                     if (services.length > 0) {
                         var baton = ext.Baton({
                             view: self,
@@ -162,7 +161,7 @@ define.async('io.ox/core/sub/subscriptions', [
                         popup.addPrimaryButton('cancel', gt('Cancel')).show();
                     }
 
-                    if (services.length < 4) popup.getPopup().css('width', '432px');
+                    if (services.length <= 3) $('.modal-dialog', popup.$el).css('width', '440px');
 
                     popup.on('cancel', function () {
                         popup.close();
