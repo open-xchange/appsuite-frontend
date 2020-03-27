@@ -296,6 +296,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/count/eyeballtime.js',
                             'apps/io.ox/core/count/nps.js',
                             'apps/io.ox/core/count/lifetime.js',
+                            'apps/io.ox/core/count/sendmail.js',
                             'apps/io.ox/core/count/main.js',
                             // mail app
                             'apps/io.ox/mail/util.js',
