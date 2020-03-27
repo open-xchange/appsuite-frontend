@@ -16,8 +16,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/mail/mailfilter/settings/filter/tests/util',
     'settings!io.ox/core'
-], function (gt, ext, mini, Dropdown, coreSettings) {
+], function (gt, ext, mini, Dropdown, util, coreSettings) {
 
     'use strict';
 
@@ -474,14 +475,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 appliedConditions = baton.model.get('test'),
                 ConditionModel = Backbone.Model.extend({
                     validate: function (attrs) {
-                        function sizeValidation(size) {
-                            return /^[0-9]+$/.test(size) && parseInt(size, 10) < 2147483648 && parseInt(size, 10) >= 0;
-                        }
-
                         var emptyValuesAllowed = ['exists', 'not exists'];
                         if (_.has(attrs, 'size')) {
-
-                            if (!sizeValidation(attrs.sizeValue)) {
+                            var isValid = util.validateSize({ unit: attrs.unit, size: attrs.sizeValue });
+                            if (!isValid) {
                                 this.trigger('invalid:sizeValue');
                                 return 'sizeValue';
                             }

@@ -16,8 +16,9 @@ define('io.ox/calendar/week/print', [
     'io.ox/calendar/util',
     'io.ox/core/print',
     'settings!io.ox/calendar',
-    'io.ox/core/folder/api'
-], function (api, util, print, settings, folderAPI) {
+    'io.ox/core/folder/api',
+    'gettext!io.ox/calendar'
+], function (api, util, print, settings, folderAPI, gt) {
 
     'use strict';
 
@@ -97,6 +98,11 @@ define('io.ox/calendar/week/print', [
         return event.hour;
     }
 
+    function getDate(data) {
+        var strings = util.getDateTimeIntervalMarkup(data, { output: 'strings' });
+        return strings.dateStr + ' ' + strings.timeStr;
+    }
+
     return {
 
         open: function (selection, win) {
@@ -131,6 +137,13 @@ define('io.ox/calendar/week/print', [
                                 start: minHour,
                                 end: maxHour,
                                 date: weekStart.date(),
+                                list: _(collection.toJSON()).map(function (event) {
+                                    return {
+                                        summary: event.summary,
+                                        location: event.location,
+                                        date: getDate(event)
+                                    };
+                                }),
                                 slots: collection
                                     .chain()
                                     .filter(getFilter(dayStart, dayEnd))
@@ -147,16 +160,18 @@ define('io.ox/calendar/week/print', [
                 },
 
                 meta: {
-                    title: selection.title + ': ' + moment(selection.start).formatInterval(moment(selection.end), 'date'),
+                    // subtract a day to avoid confusion. Week from Monday 2nd to Sunday 8th would show till 9th instead
+                    title: selection.title + ': ' + moment(selection.start).formatInterval(moment(selection.end).subtract(1, 'day'), 'date'),
                     timeLabels: _.range(24).map(function (hour) {
                         return {
                             value: hour,
                             label: moment().startOf('hour').hour(hour).format('LT')
                         };
                     }),
-                    weekdays: _.range(0, 7).map(function (index) {
-                        return moment().startOf('week').add(index, 'days').format('dddd');
-                    })
+                    weekdays: _.range(0, selection.numberOfColumns || 7).map(function (index) {
+                        return moment(selection.start).startOf('day').add(index, 'days').format('dddd');
+                    }),
+                    eventListLabel: gt('Appointments')
                 },
 
                 selector: '.calendar-week-view',

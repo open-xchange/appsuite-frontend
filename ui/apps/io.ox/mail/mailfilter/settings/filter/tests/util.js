@@ -22,22 +22,30 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
 
     'use strict';
 
-    var SIZELIMITS = { 'B': 2147483648, 'K': 2097152, 'M': 2048, 'G': 2 };
-
     var DropdownLinkView = mini.DropdownLinkView.extend({
         updateLabel: function () {
             this.$el.find('.dropdown-label').text(this.options.values[this.model.get(this.name)] || this.model.get(this.name));
         }
     });
 
+    var validateSize = (function () {
+        // prevent values that cause int32 overflow on mw
+        var SIZELIMITS = { 'B': 2147483648, 'K': 2097152, 'M': 2048, 'G': 2 };
+        return function (data) {
+            return /^[0-9]+$/.test(data.size) &&
+                parseInt(data.size, 10) >= 0 &&
+                parseInt(data.size, 10) < SIZELIMITS[data.unit];
+        };
+    }());
+
     var Input = mini.InputView.extend({
         events: { 'change': 'onChange', 'keyup': 'onKeyup', 'paste': 'onPaste' },
 
         validationForSize: function () {
-            var unit = this.model.get('unit');
-            return /^[0-9]+$/.test(this.$el.val()) &&
-                parseInt(this.$el.val(), 10) >= 0 &&
-                parseInt(this.$el.val(), 10) <= SIZELIMITS[unit];
+            return validateSize({
+                size: parseInt(this.$el.val(), 10),
+                unit: this.model.get('unit')
+            });
         },
 
         onChange: function () {
@@ -319,6 +327,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         returnDefault: returnDefault,
         DropdownLinkView: DropdownLinkView,
         handleUnsupportedComparisonValues: handleUnsupportedComparisonValues,
-        handleSpecialComparisonValues: handleSpecialComparisonValues
+        handleSpecialComparisonValues: handleSpecialComparisonValues,
+        validateSize: validateSize
     };
 });

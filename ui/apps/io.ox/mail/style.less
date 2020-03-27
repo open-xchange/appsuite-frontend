@@ -60,7 +60,8 @@
 }
 // fix for truncated letters on windows 10, see Bug 68163
 html.windows {
-    .preview-right .mail-item .list-item-row {
+    .preview-right .mail-item .list-item {
+        margin-bottom: -2px;
         .from {
             max-height: 18px;
             padding-bottom: 2px;
@@ -70,8 +71,9 @@ html.windows {
             margin-top: -2px;
             padding-bottom: 2px;
         }
-        .text-preview {
+        .list-item-row:last-child{
             margin-top: -2px;
+            padding-bottom: 2px;
         }
     }
     .detail-view-row {
@@ -284,7 +286,7 @@ html.macos .preview-right, html.ios {
         font-weight: 800;
         color: #000;
     }
-    .mail-item.list-view.has-focus .list-item.unread.selected .from .person {
+    .visible-selection.mail-item.list-view.has-focus .list-item.unread.selected .from .person {
         color: #fff;
     }
 }

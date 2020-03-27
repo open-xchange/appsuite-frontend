@@ -368,6 +368,10 @@
         }
     }
 
+    a.lcell {
+        height: @launcher-size;
+    }
+
     .lcell {
         display: flex;
         flex-direction: column;
@@ -376,7 +380,7 @@
         white-space: normal;
 
         margin: @launcher-spacing;
-        height: @launcher-size;
+        height: 84px;
         width: @launcher-size;
 
         svg.indicator { display: none; }
@@ -396,9 +400,6 @@
         cursor: pointer;
 
         .title {
-            position: absolute;
-            top: 75%;
-            left: 0;
             color: @launcher-fg;
             font-size: @launcher-text-size;
             text-align: center;
@@ -431,7 +432,7 @@
         }
         .icon {
             width: @svg-wrap-size;
-            height: 100%;
+            flex: 1;
             // no icons on smartphone as it is a dropdown there
 
         }

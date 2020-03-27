@@ -387,10 +387,17 @@ Scenario('Filter mail using validated size', async function (I) {
     I.click('GB', '.dropdown.open');
     I.waitForElement(disabledButton);
 
-    // invalid
+    // valid
     I.say('Enter valid value for GB');
-    I.fillField('sizeValue', '2');
+    I.fillField('sizeValue', '1');
     I.waitForElement(enabledButton);
+
+    // invalid, add action (triggers redraw)
+    I.say('Enter invalid value for GB and trigger redraw');
+    I.fillField('sizeValue', '3');
+    I.click('Add action');
+    I.click('Keep');
+    I.waitForElement(disabledButton);
 });
 
 Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users) {
