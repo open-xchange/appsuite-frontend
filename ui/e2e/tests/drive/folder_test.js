@@ -490,9 +490,7 @@ Scenario('[C8388] Delete a folder', async (I, drive, dialogs) => {
     });
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-// msg: 'element (.dropdown.open .dropdown-menu) still not present on page after 5 sec'
-Scenario.skip('[C8389] Move a folder', async (I, drive) => {
+Scenario('[C8389] Move a folder', async (I, drive) => {
     // Testrail description:
     // A folder hierarchy e.g.: My files Subfolder a SubSubFolder 1 Subfolder b
     // 1. Choose a folder
@@ -525,7 +523,7 @@ Scenario.skip('[C8389] Move a folder', async (I, drive) => {
     ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {
         I.selectFolder(f);
         I.openFolderMenu(f);
-        I.waitForElement('.dropdown.open .dropdown-menu');
+        I.waitForVisible('.smart-dropdown-container');
         I.dontSee('Move', '.dropdown.open .dropdown-menu');
         I.pressKey('Escape');
     });
