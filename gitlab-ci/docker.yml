@@ -7,10 +7,9 @@ stages:
 build ui docker image:
   script:
     # copy everything to docker directory, this way we get files from all built packages, ui, tours, help etc
-    - mkdir -p docker
     - cp -r */build docker
     - cp -r */dist docker
-    - docker build --pull -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG} ./
+    - docker build --pull -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG} docker/
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
     - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG}
   stage: test
