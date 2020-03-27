@@ -791,7 +791,8 @@ define('io.ox/calendar/week/view', [
 
         options: {
             overlap: 0.35, // visual overlap of appointments [0.0 - 1.0]
-            minCellHeight:  24
+            // keep in sync with css styles (appointment min-height)
+            minCellHeight:  27
         },
 
         events: function () {
