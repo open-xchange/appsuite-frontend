@@ -357,6 +357,9 @@ define('io.ox/core/main/appcontrol', [
                     })
                 )
             );
+
+            if (ox.openedInBrowserTab) return;
+
             if ((/^https?:/).test(action)) {
                 logo.wrap(
                     $('<a class="btn btn-link logo-btn">').attr({
@@ -374,8 +377,7 @@ define('io.ox/core/main/appcontrol', [
                         target: '_blank'
                     })
                 );
-            } else if (action && !ox.openedInBrowserTab) {
-                // ox.openedInBrowserTab is only true, when ox.tabHandlingEnabled is true and the window is no a core tab
+            } else if (action) {
                 var autoStart = settings.get('autoStart');
                 if (action === 'autoStart') {
                     if (autoStart === 'none') return;
