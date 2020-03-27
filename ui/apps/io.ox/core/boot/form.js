@@ -190,7 +190,7 @@ define('io.ox/core/boot/form', [
             $('#io-ox-login-header').css({ background: 'linear-gradient(rgba(0,0,0,' + lc.topVignette.transparency + '),rgba(0,0,0,0)' });
             createElementComposition(lc.header.sorting, toolbarElements, toolbar);
             $('#io-ox-login-toolbar *').css({ color: lc.header.textColor });
-            if (_.device('smartphone')) toolbar.append($('<div id="login-title-mobile">').text(lc.header.title));
+            if (_.device('smartphone')) toolbar.append($('<div id="login-title-mobile">').text(lc.title));
 
             // teaser and boxposition
             var $teaser = $('<div id="io-ox-login-teaser" class="col-sm-6">').html(lc.teaser);
@@ -204,7 +204,7 @@ define('io.ox/core/boot/form', [
 
             // form
             $('#box-form-header')
-                .text(lc.header.title)
+                .text(lc.title)
                 .css({ color: lc.form.header.textColor,
                     background: lc.form.header.background });
             $('#box-form-body *').css({ color: lc.form.textColor });
@@ -229,7 +229,7 @@ define('io.ox/core/boot/form', [
             }
 
             // apply custom css
-            $('head').append($('<style type="text/css">').text(lc.customCss));
+            $('head').append($('<style type="text/css">').text(util.scopeCustomCss(lc.customCss, '#io-ox-login-screen')));
         }
 
         function createElementComposition(sorting, elements, target) {
@@ -256,7 +256,7 @@ define('io.ox/core/boot/form', [
 
         function getLoginConfiguration(options) {
             var lc = _.extend(getDefaultLogin(), sc.loginPage, options);
-            lc.header.title = lc.header.title || sc.productName;
+            lc.title = lc.title || sc.productName;
 
             return lc;
         }
@@ -270,9 +270,8 @@ define('io.ox/core/boot/form', [
                 'topVignette': {
                     'transparency': '0.1'
                 },
+                'title': 'App Suite',
                 'header': {
-                    'title': 'App Suite',
-                    'background': 'radial-gradient(circle, rgb(123, 123, 123) 29%, rgb(74, 74, 74) 72%)',
                     'textColor': '#fffff',
                     'linkColor': '#94c1ec',
                     'sorting': '$logo,$language,$spacer'
@@ -377,8 +376,8 @@ define('io.ox/core/boot/form', [
 
         // set language select to link color defined by the given configuration
         var lc = getLoginConfiguration();
-        $('#io-ox-languages *').css('color', lc.header.textColor);
-        $('#io-ox-languages * > a:not([role="menuitem"]),#language-select,.caret').css('color', lc.header.linkColor);
+        $('#io-ox-languages *:not([role="menuitem"])').css('color', lc.header.textColor);
+        $('#io-ox-languages * > a:not([role="menuitem"]),#language-select,.toggle-text,.caret').css('color', lc.header.linkColor);
 
         // update header
         $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '\u00A0') + ' ').removeAttr('aria-hidden');
@@ -411,7 +410,7 @@ define('io.ox/core/boot/form', [
         // update productname in password reset dialog
         $('#io-ox-password-forget-form .help-block').text(
             //#. %1$s is the product name, e.g. OX App Suite
-            gt('Please enter your email address associated with %1$s. You will receive an email that contains a link to reset your password.', lc.header.title)
+            gt('Please enter your email address associated with %1$s. You will receive an email that contains a link to reset your password.', lc.title)
         );
 
         util.debug('Set default locale');
