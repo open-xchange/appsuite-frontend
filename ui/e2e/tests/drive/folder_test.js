@@ -598,3 +598,13 @@ Scenario('[C8390] Folder tree', async (I, drive) => {
     I.dontSee('Videos', '.folder-tree');
     I.dontSee('Folders', '.folder-tree');
 });
+
+Scenario('Folder contextmenu opening and closing', (I, drive) => {
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    I.selectFolder('Documents');
+    I.openFolderMenu('Documents');
+    I.waitForVisible('.smart-dropdown-container');
+    I.pressKey('Escape');
+    I.waitForDetached('.smart-dropdown-container');
+});

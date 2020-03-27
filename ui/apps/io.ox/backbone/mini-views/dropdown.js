@@ -152,7 +152,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         onKeyDown: function (e) {
             // select first or last item, if already open
-            if (!this.$el.hasClass('open') || !this.$overlay) return;
+            if (!this.$el.hasClass('open') || !this.$overlay) {
+                e.stopImmediatePropagation();
+                return;
+            }
             // special focus handling, because the $ul is no longer a child of the view
             var items = a11y.getTabbable(this.$ul);
             if (e.which === 40) items.first(':visible').focus();
