@@ -27,7 +27,7 @@ define('io.ox/backbone/views/window', [
         backdrop = $('<div id="floating-window-backdrop">'),
         minimalPixelsInside = 100,
         // shift for new windows in px
-        shift = 20;
+        shift = 30;
 
     var TaskbarView = DisposableView.extend({
         tagName: 'ul',
