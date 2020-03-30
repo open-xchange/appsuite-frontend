@@ -88,7 +88,8 @@ define('io.ox/backbone/views/window', [
             mode: 'normal', // normal, maximized
             title: '',
             showInTaskbar: true,
-            size: 'width-md' // -xs, -sm, -md, -lg
+            size: 'width-md', // -xs, -sm, -md, -lg,
+            wasMoved: false
         },
 
         initialize: function (options) {
@@ -262,6 +263,11 @@ define('io.ox/backbone/views/window', [
         },
 
         drag: function (e) {
+
+            if (!this.model.get('wasMoved') && (this.$el.css('left') !== e.clientX - this.model.get('offsetX') + 'px' || this.$el.css('top') !== e.clientY - this.model.get('offsetY') + 'px')) {
+                this.model.set('wasMoved', true);
+            }
+
             // apply changes and adjust to window
             this.$el.css({
                 left: e.clientX - this.model.get('offsetX') + 'px',
@@ -364,6 +370,23 @@ define('io.ox/backbone/views/window', [
             this.model.set('mode', this.model.get('mode') === 'maximized' ? 'normal' : 'maximized');
         },
 
+        shift: function () {
+            // no auto positioning for moved windows
+            if (this.model.get('wasMoved')) return;
+
+            // get occupied positions of unmoved windows (number of unmoved windows is not enough here because ther might be gaps due to minimized/closed windows)
+            var occupiedPositions = _(collection.filter({ minimized: false, floating: true, wasMoved: false })).chain().without(this.model).pluck('attributes').pluck('shift').value(),
+                nextValidPosition = _.difference(_.range(occupiedPositions.length), occupiedPositions)[0];
+
+            if (!nextValidPosition) nextValidPosition = occupiedPositions.length;
+            this.$el.css({
+                left: this.$el.position().left + nextValidPosition * shift + 'px',
+                top: this.$el.position().top + nextValidPosition * shift + 'px'
+            });
+
+            this.model.set('shift', nextValidPosition);
+        },
+
         activate: function (e) {
             if (this.$el.hasClass('active')) return;
             collection.each(function (windowModel) { windowModel.trigger('deactivate'); });
@@ -379,12 +402,7 @@ define('io.ox/backbone/views/window', [
 
             // shift new windows, so they don't fully overlap each other
             if (e && e.firstTime) {
-                // length -1 because we need to subtract the current window
-                var numberOfOpenWindows = Math.max(0, collection.filter({ minimized: false, floating: true }).length - 1);
-                this.$el.css({
-                    left: this.$el.position().left + numberOfOpenWindows * shift + 'px',
-                    top: this.$el.position().top + numberOfOpenWindows * shift + 'px'
-                });
+                this.shift();
             }
 
             this.keepInWindow();
@@ -449,6 +467,8 @@ define('io.ox/backbone/views/window', [
             this.$el.toggle(!minimized);
             if (minimized) return this.deactivate();
             this.activate();
+            // shift window if needed (no 100% overlapping)
+            this.shift();
         },
 
         render: function () {
