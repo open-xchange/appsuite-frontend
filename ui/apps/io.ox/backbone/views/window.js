@@ -25,7 +25,9 @@ define('io.ox/backbone/views/window', [
         container = '#io-ox-core',
         // used when dragging, prevents iframe event issues
         backdrop = $('<div id="floating-window-backdrop">'),
-        minimalPixelsInside = 100;
+        minimalPixelsInside = 100,
+        // shift for new windows in px
+        shift = 20;
 
     var TaskbarView = DisposableView.extend({
         tagName: 'ul',
@@ -375,11 +377,23 @@ define('io.ox/backbone/views/window', [
 
             if ($(container).width() < this.$el.width()) this.model.set('mode', 'normal');
 
-            if (this.model.get('lazy')) return this.model.set('lazy', false);
+            // shift new windows, so they don't fully overlap each other
+            if (e && e.firstTime) {
+                // length -1 because we need to subtract the current window
+                var numberOfOpenWindows = Math.max(0, collection.filter({ minimized: false, floating: true }).length - 1);
+                this.$el.css({
+                    left: this.$el.position().left + numberOfOpenWindows * shift + 'px',
+                    top: this.$el.position().top + numberOfOpenWindows * shift + 'px'
+                });
+            }
+
             this.keepInWindow();
             if (e && e.firstTime && this.model.get('mode') === 'maximized') {
                 this.$el.css('top', Math.max(0, Math.min(32, $(container).height() - this.$el.height())));
             }
+
+            if (this.model.get('lazy')) return this.model.set('lazy', false);
+
             ox.trigger('change:document:title', this.model.get('title'));
         },
 
