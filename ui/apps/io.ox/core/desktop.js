@@ -1306,6 +1306,8 @@ define('io.ox/core/desktop', [
                             // setting resume true, forces the app to become the current window.
                             self.show(cont, true);
                         });
+                        // for apps that need DOM access while loading  e.g. to calculate width
+                        if (this.app.get('prefetchDom')) this.nodes.outer.prependTo(pane);
                         return this;
                     }
 
