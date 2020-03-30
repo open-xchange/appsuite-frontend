@@ -142,7 +142,7 @@ Scenario('[C207509] Year view', async (I, calendar) => {
     I.see('January', '.monthview-container');
 });
 
-Scenario('[C236795] Visibility Flags ', (I, calendar) => {
+Scenario('[C236795] Visibility Flags', (I, calendar) => {
     const createAppointment = (subject, startDate, startTime, visibility) => {
         I.clickToolbar('New appointment');
         I.waitForVisible('.io-ox-calendar-edit-window');
@@ -260,7 +260,7 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
     I.see('17', '.weekview-container .weekview-toolbar .weekday');
 });
 
-Scenario('[C244785] Open event from invite notification in calendar ', async (I, users, calendar) => {
+Scenario('[C244785] Open event from invite notification in calendar', async (I, users, calendar) => {
     const [userA, userB] = users,
         startTime = moment().add(10, 'minutes'),
         endTime = moment().add(70, 'minutes');
