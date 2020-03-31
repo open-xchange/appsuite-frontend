@@ -347,13 +347,15 @@ define('io.ox/core/folder/extensions', [
         },
 
         addStorageAccount: (function () {
-            var links = $('<li class="links" role="presentation">');
+            var links = $('<li class="links list-unstyled" role="treeitem">');
 
             function draw() {
                 getAvailableServices().done(function (services) {
                     if (services.length > 0) {
                         links.empty().show().append(
-                            $('<a href="#" data-action="add-storage-account" role="treeitem">').text(gt('Add storage account')).on('click', openAddStorageAccount)
+                            $('<ul class="list-unstyled">').append(
+                                $('<li role="presentation">').append(
+                                    $('<a href="#" data-action="add-storage-account" role="treeitem">').text(gt('Add storage account')).on('click', openAddStorageAccount)))
                         );
                     } else {
                         links.hide();

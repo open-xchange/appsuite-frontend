@@ -13,11 +13,14 @@
 
 .vgrid-cell.tasks {
 
+    padding-bottom: 11px;
+
     .vgrid-cell-checkbox { padding-top: 11px; }
 
     .first-row {
         display: flex;
         display: -webkit-flex;
+        line-height: 18px;
     }
 
     .end_date {
@@ -32,7 +35,7 @@
     .status {
         margin-left: 0.5em;
         float: right;
-        padding-bottom: 1px;
+        margin-top: -1px;
     }
 
     .priority {
@@ -64,8 +67,9 @@
     }
 
     .second-row {
-        margin-top: 5px;
-        height: 17px;
+        margin-top: 8px;
+        height: 16px;
+        overflow: visible;
     }
 
     .participants {
@@ -97,7 +101,7 @@
     .io-ox-inline-links:first-child { margin: 0 0 26px 0; }
 
     .task-header {
-       margin-bottom: 15px;
+       margin-bottom: 16px;
        padding-top: 1px;
 
        &:after {
@@ -109,8 +113,9 @@
             height: 0;
         }
         .title {
-            margin: 0 0 16px 0;
+            margin: 0 0 10px 0;
             font-size: 24px;
+            padding-top: 1px;
         }
     }
 
@@ -131,8 +136,8 @@
         line-height: 20px;
 
         .state {
-            margin-bottom: 3px;
-            margin-top: 1px;
+            margin-bottom: 2px;
+            margin-top: 2px;
         }
     }
 
