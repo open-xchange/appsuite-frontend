@@ -1303,11 +1303,27 @@ define('io.ox/core/desktop', [
                     if (this.app && this.app.get('startHidden')) {
                         this.app.once('revealApp', function () {
                             self.app.set('startHidden', false);
+
+                            if (self.app.get('prefetchDom')) {
+                                self.nodes.outer
+                                    .removeAttr('aria-hidden')
+                                    .css('visibility', '');
+                            }
+
                             // setting resume true, forces the app to become the current window.
                             self.show(cont, true);
                         });
+
                         // for apps that need DOM access while loading  e.g. to calculate width
-                        if (this.app.get('prefetchDom')) this.nodes.outer.prependTo(pane);
+                        if (this.app.get('prefetchDom')) {
+                            // for a11y to hide app and prevent focus loss, but enable css calculations
+                            this.nodes.outer
+                                .attr('aria-hidden', true)
+                                .css('visibility', 'hidden');
+
+                            this.nodes.outer.prependTo(pane);
+                        }
+
                         return this;
                     }
 
