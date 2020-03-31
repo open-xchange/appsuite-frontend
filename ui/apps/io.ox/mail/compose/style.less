@@ -76,6 +76,9 @@
         .composetoolbar > li.toggle {
             padding: 0 1px;
             border-radius: 3px;
+        }
+
+        .composetoolbar li {
             &.checked { background-color: #e6e6e6; }
             &.disabled {
                 i.fa { color: #aaaaaa; }
@@ -153,6 +156,21 @@
             color: #767676;
         }
         &.no-realname .sender-realname { display: flex; }
+
+        .info-line {
+            i.fa {
+                padding-right: 16px;
+                font-size: 18px;
+            }
+            &.stripes-green { .stripes(#eaffe5, #dcf0d7, #4E7321) }
+
+            // mixin: stripesgenerator.com
+            .stripes(@pri, @sec, @text) {
+                background-image: linear-gradient(45deg, @pri 41.67%, @sec 41.67%, @sec 50%, @pri 50%, @pri 91.67%, @sec 91.67%, @sec 100%);
+                background-size: 7.07px 7.07px;
+                i.fa, .text { color: @text}
+            }
+        }
 
         .attachments {
             @width: 120px;
@@ -406,21 +424,6 @@
     }
 
     .io-ox-mail-compose-window.header-top .window-header .btn[data-action="save"] { display:none; }
-
-    .info-line {
-        i.fa {
-            padding-right: 16px;
-            font-size: 18px;
-        }
-        &.stripes-green { .stripes(#eaffe5, #dcf0d7, #4E7321) }
-
-        // mixin: stripesgenerator.com
-        .stripes(@pri, @sec, @text) {
-            background-image: linear-gradient(45deg, @pri 41.67%, @sec 41.67%, @sec 50%, @pri 50%, @pri 91.67%, @sec 91.67%, @sec 100%);
-            background-size: 7.07px 7.07px;
-            i.fa, .text { color: @text}
-        }
-    }
 }
 
 .share-attachments-view-dialog {
