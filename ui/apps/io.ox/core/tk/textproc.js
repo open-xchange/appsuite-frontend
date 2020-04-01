@@ -215,9 +215,9 @@ define('io.ox/core/tk/textproc', [
                     // https://www.w3.org/TR/css-text-3/#white-space-processing
                     var str = item.nodeValue;
                     // remove leading whitespace only after a segment brak
-                    if (i === 0 || isBlockElement(all[i - 1].nodeType)) str = str.replace(/^\s+/g, '');
+                    if (i === 0 || isBlockElement(all[i - 1])) str = str.replace(/^\s+/g, '');
                     // remove trailing whitespace only before a segment break
-                    if (i === all.length - 1 || isBlockElement(all[i + 1].nodeType)) str = str.replace(/\s+$/g, '');
+                    if (i === all.length - 1 || isBlockElement(all[i + 1])) str = str.replace(/\s+$/g, '');
                     return str
                         // replace all newlines and tags by spaces
                         .replace(/[\n\t]/g, ' ')
