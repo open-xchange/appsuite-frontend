@@ -29,7 +29,7 @@ define('io.ox/mail/compose/signatures', [
             if (_.device('smartphone')) return;
 
             var dropdown = this.data('view'),
-                LIMIT = settings.get('compose/signatureLimit', 2);
+                LIMIT = settings.get('compose/signatureLimit', 8);
 
             function draw(collection) {
                 var overflow = collection.length - LIMIT;

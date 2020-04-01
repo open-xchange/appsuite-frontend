@@ -1280,8 +1280,8 @@ define('io.ox/core/desktop', [
                     element.css('padding-right', width);
                 }
 
-                this.setHeader = function (node) {
-                    var position = _.device('!desktop') ? 'top' : coreSettings.get('features/windowHeaderPosition', 'bottom');
+                this.setHeader = function (node, position) {
+                    position = position || (_.device('!desktop') ? 'top' : coreSettings.get('features/windowHeaderPosition', 'bottom'));
                     if (position === 'top') {
                         this.nodes.header.append(node.addClass('container'));
                         this.nodes.outer.addClass('header-top');
