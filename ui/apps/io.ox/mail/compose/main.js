@@ -279,6 +279,13 @@ define('io.ox/mail/compose/main', [
             win.nodes.header.addClass('sr-only');
             win.nodes.body.addClass('sr-only');
 
+            // improve title in compose context
+            if (win.floating) {
+                win.floating.$('.floating-header [data-action="close"]')
+                    .attr('aria-label', gt('Save and close'))
+                    .find('.fa').attr('title', gt('Save and close'));
+            }
+
             win.busy().show(function () {
                 POINT.cascade(app, { data: obj || {}, config: config, win: win }).then(function success() {
                     def.resolve({ app: app });
