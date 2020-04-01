@@ -567,8 +567,8 @@ define('io.ox/mail/compose/view', [
         onChangeSaved: function (state) {
             if (this.autoSaveState === state) return;
             if (state === 'dirty') this.inlineYell('');
-            else if (state === 'saving') this.inlineYell('Saving...');
-            else if (state === 'saved' && this.autoSaveState === 'saving') this.inlineYell('Saved');
+            else if (state === 'saving') this.inlineYell(gt('Saving...'));
+            else if (state === 'saved' && this.autoSaveState === 'saving') this.inlineYell(gt('Saved'));
             this.autoSaveState = state;
         },
 
