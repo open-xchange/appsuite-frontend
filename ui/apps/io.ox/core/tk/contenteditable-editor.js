@@ -844,7 +844,9 @@ define('io.ox/core/tk/contenteditable-editor', [
             if (opt.app && opt.app.get('floating') && opt.app.get('window').floating) {
                 opt.app.get('window').floating.on('move', reposition);
             }
+
             scrollPane.on('scroll', reposition);
+            $(window).on('resize', reposition);
 
             function reposition() {
                 // toolbar as bottom anchor
