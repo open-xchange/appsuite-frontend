@@ -16,8 +16,9 @@ define('io.ox/find/main', [
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'settings!io.ox/core',
-    'gettext!io.ox/core'
-], function (PlaceholderView, folderAPI, ext, settings, gt) {
+    'gettext!io.ox/core',
+    'io.ox/core/api/jobs'
+], function (PlaceholderView, folderAPI, ext, settings, gt, jobsAPI) {
 
     'use strict';
 
@@ -31,6 +32,13 @@ define('io.ox/find/main', [
             //toString
             return _.compact(parts).join(':');
         };
+
+    // add generic listener for long running search querries
+    jobsAPI.on('added:find', function () {
+        require(['io.ox/core/yell'], function (yell) {
+            yell('info', gt('Please wait, your search may take a while'));
+        });
+    });
 
     // multi instance pattern
     var createInstance = function (opt) {
