@@ -29,7 +29,7 @@ async function goToDate(I, date) {
         if (monthName !== $('.switch-mode').text().split(' ')[0]) {
             $('.btn-next').click();
         }
-        return moment(date).format('M/DD/YYYY');
+        return moment(date).format('M/D/YYYY');
     }, date);
     I.retry(5).click({ css: `td[aria-label*="${day}"` });
 }
