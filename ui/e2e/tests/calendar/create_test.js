@@ -1795,3 +1795,51 @@ Scenario('[C7426] Create appointment with internal and external participants', a
         checkAppointment();
     });
 });
+
+Scenario('[OXUIB-182] Choose correct start time on time change dates', function (I, calendar) {
+    // last sunday of march
+    const summerTimeChangeDate = moment().month('March').endOf('month').startOf('week');
+    // last sunday of October
+    const winterTimeChangeDate = moment().month('October').endOf('month').startOf('week');
+
+    const startTimeslot = locate('.page.current .day .timeslot').at(21);
+    const endTimeslot = locate('.page.current .day .timeslot').at(24);
+
+    const changeDate = (date) => {
+        //click the right month in date-picker
+        I.click('.switch-mode');
+        I.click(locate('.month.switch-mode')
+                .inside('.date-picker')
+                .withAttr({ 'data-value': `${date.month()}` })
+        );
+        I.waitForText(date.format('MMMM'), 5, '.switch-mode');
+        I.click(`.date[aria-label^="${date.format('M/DD')}"]`, '.date-picker');
+        calendar.waitForApp();
+        I.waitForVisible(startTimeslot);
+        I.waitForEnabled(startTimeslot);
+        I.doubleClick(startTimeslot);
+        verifyTime('10:00 AM', '11:00 AM');
+        I.waitForVisible(startTimeslot);
+        I.waitForEnabled(startTimeslot);
+        I.waitForVisible(endTimeslot);
+        I.wait(0.2);
+        I.dragAndDrop(startTimeslot, endTimeslot);
+        verifyTime('10:00 AM', '12:00 PM');
+    };
+
+    const verifyTime = (startTime, endTime) => {
+        I.waitForVisible(calendar.locators.starttime);
+        I.waitForVisible(calendar.locators.endtime);
+        // verify the correct start time
+        I.seeInField(calendar.locators.starttime, startTime);
+        I.seeInField(calendar.locators.endtime, endTime);
+        I.click('Discard');
+        I.waitForDetached('.io-ox-calendar-edit-window');
+    };
+
+    I.login('app=io.ox/calendar&perspective=week:week');
+
+    calendar.waitForApp();
+    changeDate(summerTimeChangeDate);
+    changeDate(winterTimeChangeDate);
+});

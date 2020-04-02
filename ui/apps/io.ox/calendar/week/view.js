@@ -1035,18 +1035,26 @@ define('io.ox/calendar/week/view', [
             var target = $(e.currentTarget),
                 index = this.$('.day').index(target.parent()),
                 startDate = this.model.get('startDate').clone(),
-                folder = this.opt.app.folder.get();
+                folder = this.opt.app.folder.get(),
+                offset = 60 / this.model.get('gridSize') * target.index(),
+                endDate;
 
             if (this.model.get('mergeView')) folder = this.opt.app.folders.list()[index];
             else startDate.add(index, 'days');
-
-            startDate.add(60 / this.model.get('gridSize') * target.index(), 'minutes');
+            var startOfDay = startDate.clone();
+            startDate.add(offset + this.getDSTOffset(startOfDay, offset), 'minutes');
+            endDate = startDate.clone().add(60, 'minutes');
 
             this.opt.view.createAppointment({
-                startDate: { value: startDate.format('YYYYMMDD[T]HHmmss'), tzid:  startDate.tz() },
-                endDate: { value: startDate.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid:  startDate.tz() },
+                startDate: { value: startDate.format('YYYYMMDD[T]HHmmss'), tzid: startDate.tz() },
+                endDate: { value: endDate.format('YYYYMMDD[T]HHmmss'), tzid: endDate.tz() },
                 folder: folder
             });
+        },
+
+        getDSTOffset: function (startDate, offset) {
+            var endDate = startDate.clone().add(offset, 'minutes');
+            return startDate._offset - endDate._offset;
         },
 
         onAddAppointment: function (model) {
@@ -1240,6 +1248,8 @@ define('io.ox/calendar/week/view', [
                     },
                     update: function (e) {
                         var start = pivot, end = $(e.target), day, days = this.$('.day');
+                        function minutesToAdd(position, timeSlots) { return position / timeSlots * 24 * 60; }
+
                         if (this.model.get('mode') === 'day') {
                             days = pivot.parent();
                             start = days.children().eq(start.index());
@@ -1261,8 +1271,16 @@ define('io.ox/calendar/week/view', [
                                 top: (top / numTimeslots * 100) + '%',
                                 height: ((bottom - top) / numTimeslots * 100) + '%'
                             });
-                            if (start.parent().is(day)) startDate = this.model.get('startDate').clone().add(days.index(day), 'days').add(top / numTimeslots * 24 * 60, 'minutes');
-                            if (end.parent().is(day)) endDate = this.model.get('startDate').clone().add(days.index(day), 'days').add(bottom / numTimeslots * 24 * 60, 'minutes');
+                            if (start.parent().is(day)) {
+                                var startDay = this.model.get('startDate').clone().add(days.index(day), 'days'),
+                                    minutesToStart = minutesToAdd(top, numTimeslots);
+                                startDate = startDay.clone().add(minutesToStart + this.getDSTOffset(startDay, minutesToStart), 'minutes');
+                            }
+                            if (end.parent().is(day)) {
+                                var endDay = this.model.get('startDate').clone().add(days.index(day), 'days'),
+                                    minutesToEnd = minutesToAdd(bottom, numTimeslots);
+                                endDate = endDay.clone().add(minutesToEnd + this.getDSTOffset(endDay, minutesToEnd), 'minutes');
+                            }
                         }
                         start.parent().prevAll().find('.lasso').remove();
                         day.nextAll().addBack().find('.lasso').remove();
