@@ -788,6 +788,7 @@ define('io.ox/core/desktop', [
             }
 
             return function (id) {
+                var self = this;
                 hash[id] = true;
                 return this.getSavePoints().then(function (list) {
                     list = (list || []).slice();
