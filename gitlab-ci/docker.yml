@@ -22,6 +22,10 @@ build ui docker image:
   only:
     changes:
       - ui/**/*
+  except:
+    refs:
+      - /^e2e\//
+
 
 .tag docker image: &add_tag
   stage: deploy

@@ -206,8 +206,8 @@ module.exports.config = {
         }
     },
     rerun: {
-        minSuccess: 20,
-        maxReruns: 20
+        minSuccess: 10,
+        maxReruns: 10
     },
     name: 'App Suite Core UI'
 };

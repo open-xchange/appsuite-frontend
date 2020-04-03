@@ -73,12 +73,18 @@ build ui:
       - open-xchange-appsuite-manifest/**/*
       - gitlab-ci/*
       - .gitlab-ci.yml
+  except:
+    refs:
+      - /^e2e\//
 
 build update-themes:
   extends: .build ui plugin
   variables:
     PROJECT_PATH: update-themes
     PACKAGE_NAME: open-xchange-appsuite-manifest
+  except:
+    refs:
+      - /^e2e\//
 
   before_script:
     - cd ${PROJECT_PATH}
@@ -113,6 +119,10 @@ test ui:
   only:
     changes:
       - ui/**/*
+  except:
+    refs:
+      - /^e2e\//
+
 
 run e2e tests:
   extends: .default_cache
@@ -131,6 +141,9 @@ build help:
       - open-xchange-appsuite-help/**/*
       - gitlab-ci/*
       - .gitlab-ci.yml
+  except:
+    refs:
+      - /^e2e\//
 
 build guidedtours:
   extends: .build ui plugin
@@ -143,6 +156,9 @@ build guidedtours:
       - open-xchange-guidedtours/**/*
       - gitlab-ci/*
       - .gitlab-ci.yml
+  except:
+    refs:
+      - /^e2e\//
 
 build spamexperts:
   extends: .build ui plugin
@@ -153,6 +169,9 @@ build spamexperts:
       - open-xchange-appsuite-spamexperts/**/*
       - gitlab-ci/*
       - .gitlab-ci.yml
+  except:
+    refs:
+      - /^e2e\//
 
 build dynamic-theme:
   extends: .build ui plugin
@@ -163,3 +182,6 @@ build dynamic-theme:
       - open-xchange-dynamic-theme/**/*
       - gitlab-ci/*
       - .gitlab-ci.yml
+  except:
+    refs:
+      - /^e2e\//
