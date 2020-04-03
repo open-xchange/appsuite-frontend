@@ -49,10 +49,26 @@ define('plugins/core/feedback/register', [
             gt('How can we improve your experience?'),
             gt('Which features do you value or use the most?'),
             gt('What is the one thing we could do to make you happier?')
-        ];
+        ],
+        firstLogin = settings.get('firstLogin');
+
+    // set initial fist login value
+    // this code should only run once per user
+    if (!firstLogin) {
+        // just find the earliest time we have available
+        firstLogin = Math.min((ox.rampup && ox.rampup.user && ox.rampup.user.creation_date) ? ox.rampup.user.creation_date : _.now(), settings.get('feedback/firstFeedbackTime', _.now()));
+        settings.set('firstLogin', firstLogin).save();
+    }
 
     // we want to limit spam, so offer a way to rate limit feedback
     function allowedToGiveFeedback() {
+        var startTime = settings.get('feedback/startTime');
+
+        if (startTime) {
+            startTime = startTime.indexOf('-') !== -1 ? moment(startTime).valueOf() : moment(firstLogin).add(startTime.substring(0, startTime.length - 1), startTime.substring(startTime.length - 1)).valueOf();
+            if (startTime > _.now()) return false;
+        }
+
         // getSettings here for better readability later on
         // relative time stored as 3M for 3 Month etc, or absolute time stored in iso format 2014-06-20
         var timeLimit = settings.get('feedback/timeLimit', dialogMode === 'nps-v1' ? '6M' : undefined),
@@ -299,7 +315,7 @@ define('plugins/core/feedback/register', [
             }
         },
         // url parameter for testing purpose only
-        dialogMode = _.url.hash('feedbackMode') || settings.get('feedback/mode', 'star-rating-v1');
+        dialogMode = 'nps-v1'; //_.url.hash('feedbackMode') || settings.get('feedback/mode', 'star-rating-v1');
 
     // make sure dialogMode is valid
     if (_(_(modes).keys()).indexOf(dialogMode) === -1) {
