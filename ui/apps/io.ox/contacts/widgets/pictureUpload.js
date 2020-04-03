@@ -22,8 +22,8 @@ define('io.ox/contacts/widgets/pictureUpload', [
 
     'use strict';
 
-    // disabled for IE (no Promies, no File API Constructor)
-    var disableEditPicture = _.device('IE');
+    // disabled for IE and non-chrome based Edge (no Promies, no File API Constructor);
+    var disableEditPicture = (_.device('IE') || _.device('edge')) && !_.device('edgechromium');
 
     function getContent(file) {
         var def = $.Deferred(),
