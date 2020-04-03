@@ -346,10 +346,10 @@ define('io.ox/mail/api', [
             // delete potential 'cid' attribute (see bug 40136); otherwise the mail gets lost
             delete data.cid;
 
-            var t1 = _.now();
+            var t1 = window.performance ? window.performance.now() : _.now();
             data = sanitizeMailData(data, { noImages: obj.view === 'noimg' });
             // trigger timing event for sanitize duration
-            ox.trigger('timing:mail:sanitize', _.now() - t1);
+            ox.trigger('timing:mail:sanitize', (window.performance ? window.performance.now() : _.now()) - t1);
 
             // either update or add model
             if (model) {

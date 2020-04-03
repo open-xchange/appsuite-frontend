@@ -21,7 +21,8 @@ define('io.ox/core/count/sendmail', ['io.ox/core/count/api'], function (api) {
         if (!mail) return;
         // check if the new mail model (7.10.2) is used, old compose(api) will be ignored
         if (mail.security && mail.meta) {
-            api.add('sm', { e: mail.security.encrypt, s: mail.security.sign, t: mail.meta.type });
+            // send integers for booleans (0,1)
+            api.add('sm', { e: +mail.security.encrypt, s: +mail.security.sign, t: mail.meta.type });
         }
     });
 

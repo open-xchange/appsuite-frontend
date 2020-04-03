@@ -32,6 +32,9 @@ define('io.ox/core/count/timing', [
     });
 
     ox.on('timing:mail:sanitize', function (duration) {
-        api.add('t/m/sanitize', { d: duration });
+        // sanitizing is fast, we try to measure hundreths
+        // duration type is a performance timestamp (window.performance)
+        var d = Number(duration.toFixed(0));
+        api.add('t/m/sanitize', { d: d });
     });
 });
