@@ -217,6 +217,7 @@ define('io.ox/core/boot/form', [
                 'border-color': lc.form.button.color
             }).attr({ 'data-i18n': 'Sign in' }).text(gt('Sign in'));
             if (lc.newPassword) $('#io-ox-login-password').val('');
+            $('#io-ox-information-message').html(lc.informationMessage);
 
             // footer
             footer.css({ background: lc.footer.color });
@@ -289,6 +290,7 @@ define('io.ox/core/boot/form', [
                         'textColor': '#ffffff'
                     }
                 },
+                // 'informationMessage': '<div style="text-align: center;">Watch out for phishing mails. For more details see: <a style="color: #ffc800;" href="https://en.wikipedia.org/wiki/Phishing">Wikipedia Phishing</a></div>',
                 'footer': {
                     'sorting': '$spacer,$copyright,Version: $version,$privacy,$imprint,$spacer',
                     'privacy': 'https://www.open-xchange.com/privacy/',

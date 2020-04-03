@@ -246,6 +246,11 @@ html.baseline {
             display: flex;
             justify-content: center;
 
+            .flex-column {
+                display: flex;
+                flex-direction: column;
+            }
+
             #box-form {
                 width: 420px;
                 text-align: center;
@@ -360,6 +365,14 @@ html.baseline {
                     }
                 }
             }
+        }
+
+        #io-ox-information-message {
+            display: flex;
+            margin: 0 auto;
+            margin-top: 8px;
+            width: 420px;
+            z-index: 1;
         }
     }
 
@@ -525,6 +538,10 @@ html.baseline {
                 .row {
                     width: 100%;
 
+                    .flex-column {
+                        height: 100%;
+                    }
+
                     #box-form {
                         padding: 0;
                         width: 100%;
@@ -566,6 +583,10 @@ html.baseline {
                         }
                     }
                 }
+            }
+
+            #io-ox-information-message {
+                display: none;
             }
         }
 
