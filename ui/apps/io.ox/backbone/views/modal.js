@@ -374,6 +374,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // use disableFormElements here, so when resuming, the correct disabled status can be set again (resume -> idle -> enableFormElements needs the correct marker classes)
             this.disableFormElements();
             this.toggleAriaHidden(false);
+            this.trigger('pause');
         },
 
         resume: function () {
@@ -387,6 +388,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             $(document.body).addClass('modal-open');
             this.toggleAriaHidden(true);
             this.idle();
+            this.trigger('resume');
         }
     });
 

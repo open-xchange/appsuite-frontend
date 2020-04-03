@@ -941,6 +941,10 @@ define('io.ox/files/share/permissions', [
             dialogConfig.on('change:disabled', function () {
                 dialog.$footer.find('[name="sendNotifications"]').prop('disabled', dialogConfig.get('disabled'));
             });
+            // set correct status after resume, picker might set disabled status while the dialog is paused
+            dialog.on('resume', function () {
+                dialog.$footer.find('[name="sendNotifications"]').prop('disabled', dialogConfig.get('disabled'));
+            });
 
             dialog.$el.addClass('share-permissions-dialog');
 
