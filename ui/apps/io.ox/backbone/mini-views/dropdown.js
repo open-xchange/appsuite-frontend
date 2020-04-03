@@ -53,6 +53,9 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         resetDropdownOverlay: function () {
+            // force cleanup backdrop on mobile
+            $(document).trigger('click.bs.dropdown.data-api');
+
             if (!this.$overlay) return;
             this.$ul.removeAttr('data-original-id');
             this.$placeholder.before(this.$ul).detach();
