@@ -49,15 +49,14 @@ define('plugins/core/feedback/register', [
             gt('How can we improve your experience?'),
             gt('Which features do you value or use the most?'),
             gt('What is the one thing we could do to make you happier?')
-        ],
-        firstLogin = settings.get('firstLogin');
+        ];
 
     // set initial fist login value
     // this code should only run once per user
-    if (!firstLogin) {
+    //TODO make this reliable, namespace this or not (maybe useful for other purposes)?
+    if (!settings.get('firstLogin')) {
         // just find the earliest time we have available
-        firstLogin = Math.min((ox.rampup && ox.rampup.user && ox.rampup.user.creation_date) ? ox.rampup.user.creation_date : _.now(), settings.get('feedback/firstFeedbackTime', _.now()));
-        settings.set('firstLogin', firstLogin).save();
+        settings.set('firstLogin', Math.min((ox.rampup && ox.rampup.user && ox.rampup.user.creation_date) ? ox.rampup.user.creation_date : _.now(), settings.get('feedback/firstFeedbackTime', _.now()))).save();
     }
 
     // we want to limit spam, so offer a way to rate limit feedback
@@ -65,7 +64,7 @@ define('plugins/core/feedback/register', [
         var startTime = settings.get('feedback/startTime');
 
         if (startTime) {
-            startTime = startTime.indexOf('-') !== -1 ? moment(startTime).valueOf() : moment(firstLogin).add(startTime.substring(0, startTime.length - 1), startTime.substring(startTime.length - 1)).valueOf();
+            startTime = startTime.indexOf('-') !== -1 ? moment(startTime).valueOf() : moment(settings.get('firstLogin')).add(startTime.substring(0, startTime.length - 1), startTime.substring(startTime.length - 1)).valueOf();
             if (startTime > _.now()) return false;
         }
 

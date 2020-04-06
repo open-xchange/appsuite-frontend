@@ -105,5 +105,49 @@ define([
             expect(feedback.allowedToGiveFeedback()).to.be.false;
             expect(settings.get('feedback/usedFeedbacks')).to.equal(3);
         });
+
+        it('startDate should work with absolute time', function () {
+            settings.set('feedback/timeLimit', undefined);
+            settings.set('feedback/maxFeedbacks', undefined);
+            settings.set('feedback/usedFeedbacks', undefined);
+            settings.set('feedback/firstFeedbackTime', undefined);
+
+            // true without startTime
+            expect(feedback.allowedToGiveFeedback()).to.be.true;
+
+            settings.set('feedback/startTime', '2020-01-16T12:00');
+
+            // false with starttime in the future
+            expect(feedback.allowedToGiveFeedback()).to.be.false;
+
+            // true with startTime in the past
+            settings.set('feedback/startTime', '2020-01-16T10:00');
+            expect(feedback.allowedToGiveFeedback()).to.be.true;
+        });
+
+        it('startDate should work with relative time', function () {
+            settings.set('feedback/timeLimit', undefined);
+            settings.set('feedback/maxFeedbacks', undefined);
+            settings.set('feedback/usedFeedbacks', undefined);
+            settings.set('feedback/firstFeedbackTime', undefined);
+            settings.set('feedback/startTime', undefined);
+
+            // true without startTime
+            expect(feedback.allowedToGiveFeedback()).to.be.true;
+
+            // set to 3 days old since first login
+            settings.set('feedback/startTime', '3d');
+            settings.set('firstLogin', _.now());
+
+
+            // false because user didn't use appsuite long enough
+            expect(feedback.allowedToGiveFeedback()).to.be.false;
+
+            // first login five days ago 5 * 24 * 60 * 60 * 1000
+            settings.set('firstLogin', _.now() - 432000000);
+
+            // true because user used appsuite long enough
+            expect(feedback.allowedToGiveFeedback()).to.be.true;
+        });
     });
 });
