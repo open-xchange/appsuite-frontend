@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-03-11 09:45+0100\n"
+"PO-Revision-Date: 2020-04-07 09:57+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -352,8 +352,8 @@ msgid ""
 "a file to see the details."
 msgstr ""
 "Die Seitenleiste \"Dateidetails\" bietet zusätzliche Informationen zu Ihren "
-"Dateien. Aktivieren Sie einfach die Option \"Dateidetails\" aus dem Dropdown-"
-"Menü \"Ansicht\" und wählen Sie eine Datei, um die Details zu sehen."
+"Dateien. Aktivieren Sie einfach die Option \"Dateidetails\" aus dem "
+"Aufklappmenü \"Ansicht\" und wählen Sie eine Datei, um die Details zu sehen."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Add another account"
@@ -374,132 +374,83 @@ msgstr ""
 msgid "The Drive app tour.txt"
 msgstr "Die Drive-App tour.txt"
 
+#. %s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "Willkommen bei %s"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"This guided tour will briefly introduce you to the product. Get more "
-"detailed information in the tours for the single apps or in the online help."
+"This tour will give you a quick introduction to the product in five steps."
 msgstr ""
-"Diese Guided Tour bietet Ihnen eine kurze Einführung in das Produkt. "
-"Ausführliche Informationen erhalten Sie in den Guided Tours der einzelnen "
-"Apps oder in der Online-Hilfe."
+"Diese Tour gibt Ihnen in fünf Schritten eine kurze Einführung in das Produkt."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Launching an app"
-msgstr "Eine App starten"
+msgid "Navigation"
+msgstr "Navigation"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app click on an entry inside the app launcher menu."
-msgstr ""
-"Um eine App zu starten, klicken Sie auf einen Eintrag im App-Startmenü."
+msgid "All apps can be found in the app menu on the top right."
+msgstr "Im App-Menü oben rechts finden Sie alle Apps."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Displaying the help or the settings"
-msgstr "Hilfe oder Einstellungen anzeigen"
+msgid "Personal settings"
+msgstr "Persönliche Einstellungen"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"To display the help or the settings, click the System menu icon in the menu "
-"bar."
+"Your personal data can be changed in the account dropdown. You can also sign "
+"out from there."
 msgstr ""
-"Um die Hilfe oder die Einstellungen anzuzeigen, klicken Sie in der "
-"Menüleiste auf das Symbol Systemmenü."
+"Ihre persönlichen Daten können in der Aufklappmenü des Kontos geändert "
+"werden. Sie können sich auch von dort aus abmelden."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Creating new items"
-msgstr "Neue Objekte anlegen"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/mail.js
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr ""
-"Um eine neue E-Mail zu verfassen, klicken Sie in der Werkzeugleiste auf "
-"Verfassen."
+msgid "Settings"
+msgstr "Einstellungen"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Opening or closing the folder tree"
-msgstr "Den Ordnerbaum öffnen oder schließen"
+msgid "Customize the product to your needs in the settings area."
+msgstr "Passen Sie das Produkt im Einstellungsbereich an Ihre Bedürfnisse an."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Help"
+msgstr "Hilfe"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"To open or close the folder tree, click on View >  Folder view on the right "
-"side of the toolbar."
+"If you need assistance or have further questions, you can use the help app."
 msgstr ""
-"Um den Ordnerbaum zu öffnen oder zu schließen, klicken Sie rechts in der "
-"Werkzeugleiste auf Ansicht > Ordneransicht."
+"Wenn Sie Hilfe benötigen oder weitere Fragen haben, können Sie die Hilfe-App "
+"verwenden."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Searching for objects"
-msgstr "Objekte suchen"
+msgid "Cancel tour"
+msgstr "Tour abbrechen"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To search for objects, click the Search icon in the menu bar."
-msgstr ""
-"Um nach Objekten zu suchen, klicken Sie in der Menüleiste auf das Symbol "
-"Suchen."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The toolbar"
-msgstr "Die Werkzeugleiste"
-
+#. %s is the getting started tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"Depending on the app, the toolbar contains various functions for creating, "
-"editing and organizing objects."
+"You can restart this tour at any time by clicking on the account icon and "
+"choose \"%s\""
 msgstr ""
-"In der Werkzeugleiste finden Sie je nach App verschiedene Funktionen zum "
-"Anlegen, Bearbeiten und Organisieren von Objekten."
+"Sie können diese Tour jederzeit neu starten, indem Sie auf das Kontosymbol "
+"klicken und \"%s\" auswählen."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The folder tree"
-msgstr "Der Ordnerbaum"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Use the folder tree to open the folder containing the objects that you want "
-"to view in the list."
-msgstr ""
-"Im Ordnerbaum öffnen Sie den Ordner, dessen Objekte Sie in der Liste sehen "
-"möchten."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The list"
-msgstr "Die Liste"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Use the list to select an object, show its contents or activate functions."
-msgstr ""
-"In der Liste wählen Sie ein Objekt, um seine Inhalte anzuzeigen oder "
-"Funktionen auszuführen."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The Detail view"
-msgstr "Die Detailansicht"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The Detail view displays an object's content. Depending on the app, further "
-"functions for organizing objects can be found in the Detail view."
-msgstr ""
-"Die Detailansicht zeigt Inhalte von Objekten. Je nach App finden Sie in der "
-"Detailansicht weitere Funktionen zum Organisieren von Objekten."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Further information"
-msgstr "Weitere Informationen"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Detailed instructions for the single apps are located in System menu > Help."
-msgstr ""
-"Ausführliche Anleitungen zu allen Apps finden Sie im Systemmenü > Hilfe."
+#. Tour name; general introduction
+#: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
+msgid "Getting started"
+msgstr "Einstieg"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Composing a new email"
 msgstr "Eine neue E-Mail verfassen"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To compose a new email, click on Compose in the toolbar."
+msgstr ""
+"Um eine neue E-Mail zu verfassen, klicken Sie in der Werkzeugleiste auf "
+"Verfassen."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Entering the recipient's name"
@@ -639,11 +590,6 @@ msgstr ""
 "Um die E-Mail-Einstellungen zu öffnen, klicken Sie auf das Symbol Systemmenü "
 "in der oberen rechten Seite der Menüleiste. Wählen Sie Einstellungen. "
 "Klicken Sie auf der linken Seite auf E-Mail."
-
-#. Tour name; general introduction
-#: apps/io.ox/tours/main.js module:io.ox/tours
-msgid "Getting started"
-msgstr "Einstieg"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -842,7 +788,7 @@ msgstr ""
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
-"Zm Abmelden klicken Sie in der Menüleiste rechts oben auf das Symbol "
+"Zum Abmelden klicken Sie in der Menüleiste rechts oben auf das Symbol "
 "Abmelden."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
@@ -948,6 +894,101 @@ msgstr ""
 "Kontrollfelder links neben den Aufgaben. Wenn die Kontrollfelder nicht "
 "angezeigt werden, klicken Sie rechts in der Werkzeugleiste auf Ansicht > "
 "Kontrollfelder."
+
+#~ msgid ""
+#~ "This guided tour will briefly introduce you to the product. Get more "
+#~ "detailed information in the tours for the single apps or in the online "
+#~ "help."
+#~ msgstr ""
+#~ "Diese Guided Tour bietet Ihnen eine kurze Einführung in das Produkt. "
+#~ "Ausführliche Informationen erhalten Sie in den Guided Tours der einzelnen "
+#~ "Apps oder in der Online-Hilfe."
+
+#~ msgid "Launching an app"
+#~ msgstr "Eine App starten"
+
+#~ msgid "To launch an app click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "Um eine App zu starten, klicken Sie auf einen Eintrag im App-Startmenü."
+
+#~ msgid "Displaying the help or the settings"
+#~ msgstr "Hilfe oder Einstellungen anzeigen"
+
+#~ msgid ""
+#~ "To display the help or the settings, click the System menu icon in the "
+#~ "menu bar."
+#~ msgstr ""
+#~ "Um die Hilfe oder die Einstellungen anzuzeigen, klicken Sie in der "
+#~ "Menüleiste auf das Symbol Systemmenü."
+
+#~ msgid "Creating new items"
+#~ msgstr "Neue Objekte anlegen"
+
+#~ msgid "Opening or closing the folder tree"
+#~ msgstr "Den Ordnerbaum öffnen oder schließen"
+
+#~ msgid ""
+#~ "To open or close the folder tree, click on View >  Folder view on the "
+#~ "right side of the toolbar."
+#~ msgstr ""
+#~ "Um den Ordnerbaum zu öffnen oder zu schließen, klicken Sie rechts in der "
+#~ "Werkzeugleiste auf Ansicht > Ordneransicht."
+
+#~ msgid "Searching for objects"
+#~ msgstr "Objekte suchen"
+
+#~ msgid "To search for objects, click the Search icon in the menu bar."
+#~ msgstr ""
+#~ "Um nach Objekten zu suchen, klicken Sie in der Menüleiste auf das Symbol "
+#~ "Suchen."
+
+#~ msgid "The toolbar"
+#~ msgstr "Die Werkzeugleiste"
+
+#~ msgid ""
+#~ "Depending on the app, the toolbar contains various functions for "
+#~ "creating, editing and organizing objects."
+#~ msgstr ""
+#~ "In der Werkzeugleiste finden Sie je nach App verschiedene Funktionen zum "
+#~ "Anlegen, Bearbeiten und Organisieren von Objekten."
+
+#~ msgid "The folder tree"
+#~ msgstr "Der Ordnerbaum"
+
+#~ msgid ""
+#~ "Use the folder tree to open the folder containing the objects that you "
+#~ "want to view in the list."
+#~ msgstr ""
+#~ "Im Ordnerbaum öffnen Sie den Ordner, dessen Objekte Sie in der Liste "
+#~ "sehen möchten."
+
+#~ msgid "The list"
+#~ msgstr "Die Liste"
+
+#~ msgid ""
+#~ "Use the list to select an object, show its contents or activate functions."
+#~ msgstr ""
+#~ "In der Liste wählen Sie ein Objekt, um seine Inhalte anzuzeigen oder "
+#~ "Funktionen auszuführen."
+
+#~ msgid "The Detail view"
+#~ msgstr "Die Detailansicht"
+
+#~ msgid ""
+#~ "The Detail view displays an object's content. Depending on the app, "
+#~ "further functions for organizing objects can be found in the Detail view."
+#~ msgstr ""
+#~ "Die Detailansicht zeigt Inhalte von Objekten. Je nach App finden Sie in "
+#~ "der Detailansicht weitere Funktionen zum Organisieren von Objekten."
+
+#~ msgid "Further information"
+#~ msgstr "Weitere Informationen"
+
+#~ msgid ""
+#~ "Detailed instructions for the single apps are located in System menu > "
+#~ "Help."
+#~ msgstr ""
+#~ "Ausführliche Anleitungen zu allen Apps finden Sie im Systemmenü > Hilfe."
 
 #~ msgid ""
 #~ "To open the settings, click the user image on the upper right side of the "
@@ -3637,9 +3678,6 @@ msgstr ""
 #~ msgid "Hello World"
 #~ msgstr "Hallo Welt"
 
-#~ msgid "Help"
-#~ msgstr "Hilfe"
-
 #~ msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 #~ msgstr "<br><br>%1$s hat eine Veröffentlichung für Sie freigegeben:<br>%2$s"
 
@@ -5823,9 +5861,6 @@ msgstr ""
 
 #~ msgid "Set color"
 #~ msgstr "Farbe zuweisen"
-
-#~ msgid "Settings"
-#~ msgstr "Einstellungen"
 
 #~ msgctxt "app"
 #~ msgid "Settings"
