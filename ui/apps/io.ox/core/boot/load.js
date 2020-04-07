@@ -97,7 +97,7 @@ define('io.ox/core/boot/load', [
     }, {
         id: 'compositionSpaces',
         run: function () {
-            // guests don't have webail for example
+            // guests don't have webmail for example
             if (!capabilities.has('webmail')) return;
 
             ox.rampup.compositionSpaces = $.when(
