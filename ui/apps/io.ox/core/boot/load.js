@@ -97,6 +97,9 @@ define('io.ox/core/boot/load', [
     }, {
         id: 'compositionSpaces',
         run: function () {
+            // guests don't have webail for example
+            if (!capabilities.has('webmail')) return;
+
             ox.rampup.compositionSpaces = $.when(
                 http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject,meta' } }),
                 require(['gettext!io.ox/mail'])
