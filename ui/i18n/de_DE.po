@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-03-11 10:14+0100\n"
+"PO-Revision-Date: 2020-04-07 09:52+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -2197,8 +2197,9 @@ msgid "Successfully refreshed calendar"
 msgstr "Kalender erfolgreich aktualisiert"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
-#: apps/plugins/portal/calendar/register.js module:plugins/portal
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/print.js
+#: apps/io.ox/calendar/week/view.js apps/plugins/portal/calendar/register.js
+#: module:plugins/portal
 msgid "Appointments"
 msgstr "Termine"
 
@@ -3081,10 +3082,6 @@ msgstr "Direkter Link"
 msgctxt "a11y"
 msgid "at %1$s"
 msgstr "Ort: %1$s"
-
-#: apps/io.ox/calendar/week/print.js module:io.ox/calendar
-msgid "appointments"
-msgstr "Termine"
 
 #. %1$s A month name
 #. %2$s Another month name
@@ -9178,6 +9175,14 @@ msgstr "E-Mail-Größe: %1$s"
 msgid "Add local file"
 msgstr "Lokale Datei hinzufügen"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Hide toolbar"
+msgstr "Werkzeugleiste ausblenden"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Show toolbar"
+msgstr "Werkzeugleiste anzeigen"
+
 #. broken image inside a mail
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
 msgid "One of the embedded images could not be used."
@@ -9395,6 +9400,15 @@ msgstr "Signaturen"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 msgid "No signature"
 msgstr "Keine Signatur"
+
+#. %1$s: number of additional signatures in context of a signatures dropdown
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+msgid "%1$s more..."
+msgstr "%1$s weitere..."
+
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+msgid "Edit signatures..."
+msgstr "Signaturen bearbeiten..."
 
 #: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
 msgid "Manage signatures"
@@ -13927,6 +13941,794 @@ msgstr "Einladen zu %s"
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
 
+#~ msgid "Creating a new appointment"
+#~ msgstr "Einen neuen Termin anlegen"
+
+#, fuzzy
+#~ msgid "To create a new appointment, click on New in the toolbar."
+#~ msgstr ""
+#~ "Um einen neuen Termin anzulegen, klicken Sie in der Werkzeugleiste auf "
+#~ "Neu."
+
+#, fuzzy
+#~ msgid "Entering the appointment's data"
+#~ msgstr "Termindaten eingeben"
+
+#~ msgid ""
+#~ "Enter the subject, the start and the end date of the appointment. Other "
+#~ "details are optional."
+#~ msgstr ""
+#~ "Geben Sie den Betreff, den Beginn und das Ende des Termins ein. Andere "
+#~ "Angaben sind optional."
+
+#~ msgid "Creating recurring appointments"
+#~ msgstr "Wiederkehrende Termine anlegen"
+
+#~ msgid ""
+#~ "To create recurring appointments, enable Repeat. Functions for setting "
+#~ "the recurrence parameters are shown."
+#~ msgstr ""
+#~ "Um wiederkehrende Termine anzulegen, aktivieren Sie Wiederholen. "
+#~ "Funktionen zum Einstellen der Wiederholungsparameter werden eingeblendet."
+
+#~ msgid "Inviting other participants"
+#~ msgstr "Andere Teilnehmer einladen"
+
+#~ msgid ""
+#~ "To invite other participants, enter their names in the field below "
+#~ "Participants. To avoid appointment conflicts, click on Find a free time "
+#~ "at the upper right side."
+#~ msgstr ""
+#~ "Um andere Teilnehmer einzuladen, geben Sie ihre Namen in das Feld "
+#~ "unterhalb von Teilnehmer ein. Um Terminkonflikte zu vermeiden, klicken "
+#~ "Sie oben rechts auf Verfügbaren Zeitraum finden."
+
+#~ msgid "Using the reminder function"
+#~ msgstr "Die Erinnerungsfunktion verwenden"
+
+#~ msgid "To not miss the appointment, use the reminder function."
+#~ msgstr ""
+#~ "Um den Termin nicht zu versäumen, verwenden Sie die Erinnerungsfunktion."
+
+#~ msgid "Adding attachments"
+#~ msgstr "Anhänge hinzufügen"
+
+#, fuzzy
+#~ msgid ""
+#~ "Further down you can add documents as attachments to the appointment."
+#~ msgstr ""
+#~ "Weiter unten können Sie dem Termin Dokumente als Anlagen hinzufügen."
+
+#~ msgid "Creating the appointment"
+#~ msgstr "Den Termin anlegen"
+
+#, fuzzy
+#~ msgid "To create the appointment, click on Create at the lower left side."
+#~ msgstr "Um den Termin anzulegen, klicken Sie links unten auf Anlegen."
+
+#~ msgid "Selecting a view"
+#~ msgstr "Eine Ansicht wählen"
+
+#, fuzzy
+#~ msgid ""
+#~ "To select one of the views like Day, Month or List, click on View in the "
+#~ "toolbar. Select a menu entry from the Layout section."
+#~ msgstr ""
+#~ "Um eine der Ansichten wie Tag, Monat oder Liste zu wählen, klicken Sie in "
+#~ "der Werkzeugleiste auf Ansicht. Wählen Sie unter Layout einen Menüeintrag."
+
+#, fuzzy
+#~ msgid "The calendar views"
+#~ msgstr "Die Kalenderansichten"
+
+#~ msgid ""
+#~ "The calendar views display a calendar sheet with the appointments for the "
+#~ "selected time range."
+#~ msgstr ""
+#~ "In den Kalenderansichten wird ein Kalenderblatt mit den Terminen für den "
+#~ "ausgewählten Zeitraum angezeigt."
+
+#~ msgid "The List view"
+#~ msgstr "Die Ansicht Liste"
+
+#~ msgid ""
+#~ "The List view shows a list of the appointments in the current folder. If "
+#~ "clicking on an appointment, the appointment's data and some functions are "
+#~ "displayed in the Detail view."
+#~ msgstr ""
+#~ "In der Listenansicht wird eine Liste der Termine im aktuellen Ordner "
+#~ "angezeigt. Wenn Sie auf einen Termin klicken, werden die Daten des "
+#~ "Termins und einige Funktionen in der Detailansicht angezeigt."
+
+#~ msgid "Creating a new contact"
+#~ msgstr "Einen neuen Kontakt anlegen"
+
+#, fuzzy
+#~ msgid "To create a new contact, click on New > Add contact in the toolbar."
+#~ msgstr ""
+#~ "Um einen neuen Kontakt anzulegen, klicken Sie in der Werkzeugleiste auf "
+#~ "Neu > Kontakt hinzufügen."
+
+#~ msgid "Navigation bar"
+#~ msgstr "Navigationsleiste"
+
+#~ msgid ""
+#~ "Click on a letter on the left side of the navigation bar in order to "
+#~ "display the corresponding contacts from the selected address book."
+#~ msgstr ""
+#~ "Klicken Sie links in der Navigationsleiste auf einen Buchstaben, um aus "
+#~ "dem geöffneten Adressbuch die entsprechenden Kontakte anzuzeigen."
+
+#, fuzzy
+#~ msgid "Sending an email to a contact"
+#~ msgstr "Eine E-Mail an einen Kontakt senden"
+
+#, fuzzy
+#~ msgid ""
+#~ "To send an email to the contact, click on an email address or on Send "
+#~ "email in the toolbar."
+#~ msgstr ""
+#~ "Um eine E-Mail an den Kontakt zu senden, klicken Sie auf eine E-Mail-"
+#~ "Adresse oder in der Werkzeugleiste auf E-Mail versenden."
+
+#~ msgid "Editing multiple contacts"
+#~ msgstr "Mehrere Kontakte bearbeiten"
+
+#, fuzzy
+#~ msgid ""
+#~ "To edit multiple contacts at once, enable the checkboxes on the left side "
+#~ "of the contacts. If the checkboxes are not displayed, click on View > "
+#~ "Checkboxes on the right side of the toolbar."
+#~ msgstr ""
+#~ "Wenn Sie mehrere Kontakte gemeinsam bearbeiten möchten, aktivieren Sie "
+#~ "die Kontrollfelder links neben den Kontakten. Wenn die Kontrollfelder "
+#~ "nicht angezeigt werden, klicken Sie rechts in der Werkzeugleiste auf "
+#~ "Ansicht > Kontrollfelder."
+
+#~ msgid "The Drive app"
+#~ msgstr "Die Drive-App"
+
+#~ msgid ""
+#~ "Welcome to your cloud storage app. This Guided Tour will introduce you to "
+#~ "your new online storage solution - your one point to access online stored "
+#~ "files from all your accounts. This is where you can upload and save your "
+#~ "files, share them and synchronize them with different devices.  "
+#~ msgstr ""
+#~ "Willkommen in Ihrer Cloud-Speicher-App. Diese Guided Tour macht Sie mit "
+#~ "Ihrer neuen Online-Speicherlösung bekannt - Ihr zentraler Zugriffspunkt "
+#~ "auf online gespeicherte Dateien von allen Ihren Konten. Von dort können "
+#~ "Sie Ihre Dateien hochladen und speichern, für andere freigeben und mit "
+#~ "anderen Geräten synchronisieren. "
+
+#~ msgid "Folder tree"
+#~ msgstr "Der Ordnerbaum"
+
+#, fuzzy
+#~ msgid ""
+#~ "On the left you can see the folder tree. It displays your folder "
+#~ "structure and allows you to navigate to specific folders and subfolders. "
+#~ "To make your life easier, we have already included folders for your "
+#~ "Documents, Music, Pictures and Videos."
+#~ msgstr ""
+#~ "Auf der linken Seite sehen Sie den Ordnerbaum. Er zeigt Ihre "
+#~ "Ordnerstruktur und ermöglicht Ihnen das Navigieren zu bestimmten Ordnern "
+#~ "und Unterordnern. Um Ihr Leben zu erleichtern, haben wir bereits Ordner "
+#~ "für Ihre Dokumente, Musik, Bilder und Videos vorgesehen."
+
+#~ msgid "Folder content"
+#~ msgstr "Ordnerinhalt"
+
+#, fuzzy
+#~ msgid ""
+#~ "Clicking on a folder displays all the subfolders, documents, media and "
+#~ "other files that it contains."
+#~ msgstr ""
+#~ "Durch Klicken auf einen Ordner werden alle Unterordner, Dokumente, "
+#~ "Medien- und andere Dateien in diesem Ordner angezeigt."
+
+#, fuzzy
+#~ msgid "Select a view"
+#~ msgstr "Eine Ansicht wählen"
+
+#, fuzzy
+#~ msgid "Different views are available. Just select the one you like best."
+#~ msgstr ""
+#~ "Es sind unterschiedliche Ansichten verfügbar. Wählen Sie einfach "
+#~ "diejenige, die Ihnen am besten gefällt."
+
+#~ msgid "Toolbar"
+#~ msgstr "Werkzeugleiste"
+
+#, fuzzy
+#~ msgid ""
+#~ "At the top you can find the toolbar with many functions and additional "
+#~ "options. You can easily create new folders, new files and much more."
+#~ msgstr ""
+#~ "Oben finden Sie die Werkzeugleiste mit vielen Funktionen und zusätzlichen "
+#~ "Optionen. Sie können ganz einfach neue Ordner, neue Dateien und vieles "
+#~ "mehr erstellen."
+
+#~ msgid "Upload a new file"
+#~ msgstr "Eine neue Datei hochladen"
+
+#~ msgid ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+#~ msgstr ""
+#~ "Um eine neue Datei von Ihrem lokalen Gerät hochzuladen, klicken Sie "
+#~ "einfach auf \"Lokale Datei hinzufügen\" und wählen Sie die Datei, die Sie "
+#~ "hochladen möchten. Es ist sogar noch einfacher, wenn Sie Dateien mit Drag "
+#~ "& Drop von Ihrem lokalen Gerät in Drive ziehen. Die hochgeladene Datei "
+#~ "ist nun auf allen Ihren Geräten in Drive verfügbar."
+
+#, fuzzy
+#~ msgid "Preview files"
+#~ msgstr "Dateivorschau"
+
+#, fuzzy
+#~ msgid ""
+#~ "Clicking on the view icon leads you to a preview of the selected file."
+#~ msgstr ""
+#~ "Nach einem Klick auf das Symbol \"Ansicht\" werden Sie zu einer Vorschau "
+#~ "der ausgewählten Datei weitergeleitet."
+
+#~ msgid "Preview mode"
+#~ msgstr "Vorschaumodus"
+
+#, fuzzy
+#~ msgid ""
+#~ "From preview you can also select other options to help you manage and "
+#~ "work on your files."
+#~ msgstr ""
+#~ "In der Vorschau können Sie auch andere Optionen wählen, die Ihnen beim "
+#~ "Verwalten und Bearbeiten Ihrer Dateien helfen."
+
+#, fuzzy
+#~ msgid "Share files"
+#~ msgstr "Dateien freigeben"
+
+#~ msgid ""
+#~ "Here you can share files with your colleagues and external contacts. You "
+#~ "can also collaborate on a document and set different access rights."
+#~ msgstr ""
+#~ "Hier können Sie Dateien für Ihre Kollegen und externen Kontakte "
+#~ "freigeben. Sie können auch gemeinsam an einem Dokument arbeiten und "
+#~ "unterschiedliche Zugriffsrechte festlegen."
+
+#, fuzzy
+#~ msgid "Sharing options"
+#~ msgstr "Freigabeoptionen"
+
+#, fuzzy
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folders. Use Invite "
+#~ "people if you want to manage access rights and allow recipients to create "
+#~ "and edit files. Or just get a link to let others view and download your "
+#~ "files. You can use an expiration date and password protection if you like."
+#~ msgstr ""
+#~ "Wählen Sie aus zwei Alternativen, um Ihre Dateien und Ordner freizugeben. "
+#~ "Verwenden Sie 'Andere einladen', falls Sie Zugriffsrechte verwalten und "
+#~ "Empfängern das Erstellen und Bearbeiten von Dateien ermöglichen möchten. "
+#~ "Oder lassen Sie sich einfach einen Link erstellen, um anderen das Sehen "
+#~ "und Herunterladen Ihrer Dateien zu ermöglichen. Wenn Sie möchten, können "
+#~ "Sie ein Ablaufdatum und einen Passwortschutz verwenden."
+
+#~ msgid "Collaborating"
+#~ msgstr "Zusammenarbeit"
+
+#~ msgid ""
+#~ "Sharing files by inviting people does not only offer your recipients the "
+#~ "option to create and edit files. Internal and external participants are "
+#~ "also able to collaborate with you on text documents and spreadsheets at "
+#~ "the same time."
+#~ msgstr ""
+#~ "Das Freigeben von Dateien durch das Einladen anderer Personen bietet den "
+#~ "Empfängern die Möglichkeit, Dateien zu erstellen und zu bearbeiten. "
+#~ "Darüber hinaus können interne und externe Teilnehmer gleichzeitig mit "
+#~ "Ihnen an Textdokumenten und Tabellen arbeiten."
+
+#~ msgid "Edit documents"
+#~ msgstr "Dokumente bearbeiten"
+
+#, fuzzy
+#~ msgid ""
+#~ "Did you know that you can edit text documents and spreadsheets online? "
+#~ "Drive will automatically update your edited file, but thanks to "
+#~ "versioning the original file stays available."
+#~ msgstr ""
+#~ "Wussten Sie, dass Sie Textdokumente und Tabellen online bearbeiten "
+#~ "können? Drive aktualisiert automatisch die bearbeitete Datei, aber dank "
+#~ "Versionsverwaltung bleibt die Originaldatei verfügbar."
+
+#, fuzzy
+#~ msgid ""
+#~ "The file details side bar offers additional information about your files. "
+#~ "Just enable the File details option from the View drop down menu and "
+#~ "select a file to see the details."
+#~ msgstr ""
+#~ "Die Seitenleiste \"Dateidetails\" bietet zusätzliche Informationen zu "
+#~ "Ihren Dateien. Aktivieren Sie einfach die Option \"Dateidetails\" aus dem "
+#~ "Dropdown-Menü \"Ansicht\" und wählen Sie eine Datei, um die Details zu "
+#~ "sehen."
+
+#, fuzzy
+#~ msgid "Add another account"
+#~ msgstr "Weiteres Konto hinzufügen"
+
+#, fuzzy
+#~ msgid ""
+#~ "Drive allows you to connect to other storage solutions if you already "
+#~ "have a cloud storage account you use to save and sync your files. Simply "
+#~ "click on the appropriate logo to access your existing data."
+#~ msgstr ""
+#~ "Drive ermöglicht Verbindungen zu anderen Speicherlösungen, wenn Sie "
+#~ "bereits ein Cloud-Speicherkonto haben, das Sie zum Speichern und "
+#~ "Synchronisieren Ihrer Dateien verwenden. Klicken Sie einfach auf das "
+#~ "entsprechende Logo, um auf Ihre vorhandenen Daten zuzugreifen."
+
+#~ msgid "The Drive app tour.txt"
+#~ msgstr "Die Drive-App tour.txt"
+
+#, fuzzy
+#~ msgid ""
+#~ "This tour will give you a quick introduction to the product in five steps."
+#~ msgstr ""
+#~ "Diese Tour gibt Ihnen eine kurze Einführung in das Produkt in fünf "
+#~ "Schritten."
+
+#~ msgid "Navigation"
+#~ msgstr "Navigation"
+
+#, fuzzy
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr "Alle Apps finden Sie im App-Menü oben rechts."
+
+#~ msgid "Personal settings"
+#~ msgstr "Persönliche Einstellungen"
+
+#, fuzzy
+#~ msgid ""
+#~ "Your personal data can be changed in the account dropdown. You can also "
+#~ "sign out from there."
+#~ msgstr ""
+#~ "Ihre persönlichen Daten können in der Dropdown-Liste des Kontos geändert "
+#~ "werden. Sie können sich auch von dort aus abmelden."
+
+#, fuzzy
+#~ msgid "Customize the product to your needs in the settings area."
+#~ msgstr ""
+#~ "Passen Sie das Produkt im Einstellungsbereich an Ihre Bedürfnisse an."
+
+#~ msgid ""
+#~ "If you need assistance or have further questions, you can use the help "
+#~ "app."
+#~ msgstr ""
+#~ "Wenn Sie Hilfe benötigen oder weitere Fragen haben, können Sie die Hilfe-"
+#~ "App verwenden."
+
+#~ msgid "Cancel tour"
+#~ msgstr "Tour abbrechen"
+
+#~ msgid ""
+#~ "You can restart this tour at any time by clicking on the account icon and "
+#~ "choose \"%s\""
+#~ msgstr ""
+#~ "Sie können diese Tour jederzeit neu starten, indem Sie auf das "
+#~ "Kontosymbol klicken und \"%s\" auswählen."
+
+#, fuzzy
+#~ msgid "Getting started"
+#~ msgstr "Einstieg"
+
+#, fuzzy
+#~ msgid "Composing a new email"
+#~ msgstr "Eine neue E-Mail verfassen"
+
+#, fuzzy
+#~ msgid "To compose a new email, click on Compose in the toolbar."
+#~ msgstr ""
+#~ "Um eine neue E-Mail zu verfassen, klicken Sie in der Werkzeugleiste auf "
+#~ "Verfassen."
+
+#~ msgid "Entering the recipient's name"
+#~ msgstr "Den Empfänger bestimmen"
+
+#, fuzzy
+#~ msgid ""
+#~ "Enter the recipient's name into the recipients field. As soon as you "
+#~ "typed the first letters, suggestions from the address books are "
+#~ "displayed. To accept a recipient suggestion, click on it."
+#~ msgstr ""
+#~ "Geben Sie den Namen des Empfängers in die Empfängerzeile ein. Sobald Sie "
+#~ "die ersten Buchstaben eingetippt haben, werden Vorschläge aus den "
+#~ "Adressbüchern angezeigt. Klicken Sie auf einen Vorschlag, um diesen als "
+#~ "Empfänger zu übernehmen."
+
+#~ msgid "Entering the subject"
+#~ msgstr "Den Betreff eingeben"
+
+#~ msgid "Enter the subject into the subject field."
+#~ msgstr "Geben Sie den Betreff in die Betreffzeile ein."
+
+#~ msgid "Further functions"
+#~ msgstr "Weitere Funktionen"
+
+#~ msgid ""
+#~ "In this area you can find further functions, e.g. for adding attachments."
+#~ msgstr ""
+#~ "In diesem Bereich finden Sie weitere Funktionen, z.B. für das Hinzufügen "
+#~ "von Anhängen."
+
+#, fuzzy
+#~ msgid "Entering the email text"
+#~ msgstr "Den E-Mail-Text eingeben"
+
+#, fuzzy
+#~ msgid ""
+#~ "Enter the email text into the main area. If the text format was set to "
+#~ "HTML in the options, you can format the email text. To do so select a "
+#~ "text part and then click an icon in the formatting bar."
+#~ msgstr ""
+#~ "Geben Sie den E-Mail-Text in den Hauptbereich ein. Wenn das Textformat in "
+#~ "den Optionen auf HTML eingestellt wurde, können Sie den E-Mail-Text "
+#~ "formatieren. Markieren Sie dazu einen Textteil und klicken Sie dann auf "
+#~ "ein Symbol in der Formatierleiste."
+
+#, fuzzy
+#~ msgid "Sending the email"
+#~ msgstr "Die E-Mail senden"
+
+#, fuzzy
+#~ msgid "To send the email, click on Send"
+#~ msgstr "Um die E-Mail zu senden, klicken Sie auf Senden"
+
+#, fuzzy
+#~ msgid "Sorting your emails"
+#~ msgstr "Ihre E-Mails sortieren"
+
+#, fuzzy
+#~ msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Um die E-Mails zu sortieren, klicken Sie auf Sortieren nach. Wählen Sie "
+#~ "ein Sortierkriterium."
+
+#, fuzzy
+#~ msgid ""
+#~ "To choose between the different views, click on View in the toolbar. "
+#~ "Select a menu entry in the layout."
+#~ msgstr ""
+#~ "Um zwischen den verschiedenen Ansichten zu wählen, klicken Sie in der "
+#~ "Werkzeugleiste auf Ansicht. Wählen Sie unter Layout einen Menüeintrag."
+
+#, fuzzy
+#~ msgid "Opening an email in a separate window"
+#~ msgstr "Eine E-Mail in einem eigenen Fenster öffnen"
+
+#~ msgid ""
+#~ "If double-clicking on an email in the list, the email is opened in a "
+#~ "separate window."
+#~ msgstr ""
+#~ "Ein Doppelklick auf eine E-Mail in der Liste öffnet die E-Mail in einem "
+#~ "eigenen Fenster."
+
+#, fuzzy
+#~ msgid "Reading email conversations"
+#~ msgstr "E-Mail-Konversationen lesen"
+
+#, fuzzy
+#~ msgid ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "Um eine E-Mail einer Konversation zu öffnen oder zu schließen, klicken "
+#~ "Sie im Header auf eine freie Stelle."
+
+#~ msgid "Halo view"
+#~ msgstr "Die Halo View"
+
+#~ msgid ""
+#~ "To receive information about the sender or other recipients, open the "
+#~ "Halo view by clicking on a name."
+#~ msgstr ""
+#~ "Um Informationen zum Absender oder anderen Empfängern zu erhalten, öffnen "
+#~ "Sie die Halo View, indem Sie einen Namen anklicken."
+
+#, fuzzy
+#~ msgid "Editing multiple emails"
+#~ msgstr "Mehrere E-Mails bearbeiten"
+
+#, fuzzy
+#~ msgid ""
+#~ "In order to edit multiple emails at once, enable the checkboxes on the "
+#~ "left side of the emails. If the checkboxes are not displayed, click on "
+#~ "View > Checkboxes on the right side of the toolbar."
+#~ msgstr ""
+#~ "Wenn Sie mehrere E-Mails gemeinsam bearbeiten möchten, aktivieren Sie die "
+#~ "Kontrollfelder links neben den E-Mails. Wenn die Kontrollfelder nicht "
+#~ "angezeigt werden, klicken Sie rechts in der Werkzeugleiste auf Ansicht > "
+#~ "Kontrollfelder."
+
+#, fuzzy
+#~ msgid "Opening the email settings"
+#~ msgstr "Die E-Mail-Einstellungen öffnen"
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "Um die E-Mail-Einstellungen zu öffnen, klicken Sie auf das Symbol "
+#~ "Systemmenü in der oberen rechten Seite der Menüleiste. Wählen Sie "
+#~ "Einstellungen. Klicken Sie auf der linken Seite auf E-Mail."
+
+#, fuzzy
+#~ msgid "Second Factor Authentication"
+#~ msgstr "Zwei-Faktor-Authentifizierung"
+
+#~ msgid "Adding verification option"
+#~ msgstr "Verifizierungsoption hinzufügen"
+
+#~ msgid ""
+#~ "Various options for additional verification depends on your installation."
+#~ msgstr ""
+#~ "Verschiedene Optionen für eine zusätzliche Überprüfung hängen von Ihrer "
+#~ "Installation ab."
+
+#, fuzzy
+#~ msgid "Adding a code via text message"
+#~ msgstr "Einen Code per SMS hinzufügen"
+
+#, fuzzy
+#~ msgid ""
+#~ "Selecting the option for a code via text message, for example, will then "
+#~ "ask you for a phone number."
+#~ msgstr ""
+#~ "Wenn Sie zum Beispiel die Option für einen Code per SMS auswählen, werden "
+#~ "Sie nach einer Telefonnummer gefragt."
+
+#~ msgid "Authentication Requests"
+#~ msgstr "Authentifizierungsanfragen"
+
+#, fuzzy
+#~ msgid ""
+#~ "Then the next time you log in, you will have to verify your identitity by "
+#~ "entering the number sent to your phone."
+#~ msgstr ""
+#~ "Dann müssen Sie beim nächsten Anmelden Ihre Identität bestätigen, indem "
+#~ "Sie die Nummer eingeben, die an Ihr Telefon gesendet wurde."
+
+#, fuzzy
+#~ msgid "Removing"
+#~ msgstr "Entfernen"
+
+#, fuzzy
+#~ msgid ""
+#~ "Devices can be removed once added if you so choose.  See help for "
+#~ "additional details."
+#~ msgstr ""
+#~ "Hinzugefügte Geräte können bei Bedarf wieder entfernt werden. Weitere "
+#~ "Informationen finden Sie in der Hilfe."
+
+#, fuzzy
+#~ msgid ""
+#~ "As an additional security feature, you can now require a second method of "
+#~ "authentication, such as a text message, before logging into your "
+#~ "account.  Would you like to see some information on this now?"
+#~ msgstr ""
+#~ "Zur zusätzlichen Sicherheit können Sie für das Anmelden an Ihrem Konto "
+#~ "eine zweite Authentifizierungsmethode hinzufügen, wie zum Beispiel eine "
+#~ "SMS. Möchten Sie dazu nun weitere Informationen?"
+
+#~ msgid "The Portal"
+#~ msgstr "Das Portal"
+
+#~ msgid ""
+#~ "The Portal informs you about current emails, appointments or social "
+#~ "network news."
+#~ msgstr ""
+#~ "Das Portal informiert Sie über aktuelle E-Mails, Termine oder Neuigkeiten "
+#~ "aus Ihren sozialen Netzwerken."
+
+#~ msgid "Reading the details"
+#~ msgstr "Details lesen"
+
+#, fuzzy
+#~ msgid "To read the details, click on an entry in a square."
+#~ msgstr ""
+#~ "Lesen Sie Details, indem Sie in einer Kachel einen Eintrag anklicken."
+
+#~ msgid "Drag and drop"
+#~ msgstr "Drag and drop"
+
+#, fuzzy
+#~ msgid ""
+#~ "To change the layout, drag a square's title to another position and drop "
+#~ "it there."
+#~ msgstr ""
+#~ "Ändern Sie das Layout, indem Sie eine Kachel an ihrem Titel anfassen und "
+#~ "an eine andere Position ziehen."
+
+#, fuzzy
+#~ msgid "Closing a square"
+#~ msgstr "Eine Kachel schließen"
+
+#, fuzzy
+#~ msgid "If you no longer want to display a square, click the delete icon."
+#~ msgstr "Um eine Kachel auszublenden, klicken Sie auf das Löschsymbol."
+
+#, fuzzy
+#~ msgid "Customizing the Portal"
+#~ msgstr "Das Portal anpassen"
+
+#, fuzzy
+#~ msgid ""
+#~ "To display a square again or to display further information sources, "
+#~ "click on Customize this page."
+#~ msgstr ""
+#~ "Um eine Kachel wieder zu öffnen oder weitere Informationsquellen "
+#~ "anzuzeigen, klicken Sie auf Diese Seite personalisieren."
+
+#~ msgid "Opening the settings"
+#~ msgstr "Die Einstellungen öffnen"
+
+#~ msgid ""
+#~ "To open the settings, click on the settings icon on the upper right side "
+#~ "of the menu bar."
+#~ msgstr ""
+#~ "Um die Einstellungen zu öffnen, klicken Sie in der Menüleiste rechts oben "
+#~ "auf das Einstellungssymbol."
+
+#~ msgid "How the settings are organized"
+#~ msgstr "Organisation der Einstellungen"
+
+#~ msgid ""
+#~ "The settings are organized in topics. Select the topic on the left side, "
+#~ "e.g Basic settings or Mail."
+#~ msgstr ""
+#~ "Die Einstellungen werden in Themen organisiert. Wählen Sie das Thema auf "
+#~ "der linken Seite, wie z.B. Grundeinstellungen oder E-Mail."
+
+#, fuzzy
+#~ msgid "Editing settings"
+#~ msgstr "Die Einstellungen bearbeiten"
+
+#~ msgid ""
+#~ "Edit a setting on the right side. In most of the cases, the changes are "
+#~ "activated immediately."
+#~ msgstr ""
+#~ "Auf der rechten Seite bearbeiten Sie eine Einstellung. In den meisten "
+#~ "Fällen werden die Änderungen sofort wirksam."
+
+#, fuzzy
+#~ msgid "Opening the help"
+#~ msgstr "Die Hilfe öffnen"
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Um die Hilfe zu öffnen, klicken Sie in der Menüleiste rechts oben auf das "
+#~ "Anwenderbild. Wählen Sie Hilfe. Die Hilfe zur aktuellen App wird "
+#~ "angezeigt. Um die vollständige Hilfe zu durchblättern, klicken Sie oben "
+#~ "im Fenster auf Startseite oder auf Inhaltsverzeichnis."
+
+#~ msgid "Signing out"
+#~ msgstr "Abmelden"
+
+#~ msgid ""
+#~ "To sign out, click the System menu icon on the upper right side of the "
+#~ "menu bar. Select Sign out."
+#~ msgstr ""
+#~ "Zm Abmelden klicken Sie in der Menüleiste rechts oben auf das Symbol "
+#~ "Systemmenü. Wählen Sie Abmelden."
+
+#, fuzzy
+#~ msgid ""
+#~ "To sign out, click the logout icon on the upper right side of the menu "
+#~ "bar."
+#~ msgstr ""
+#~ "Zum Abmelden klicken Sie in der Menüleiste rechts oben auf das Symbol "
+#~ "Abmelden."
+
+#~ msgid "Creating a new task"
+#~ msgstr "Eine neue Aufgabe erstellen"
+
+#, fuzzy
+#~ msgid "To create a new task, click on New in the toolbar."
+#~ msgstr ""
+#~ "Um eine neue Aufgabe anzulegen, klicken Sie in der Werkzeugleiste auf Neu."
+
+#, fuzzy
+#~ msgid "Entering the task's data"
+#~ msgstr "Aufgabendaten eingeben"
+
+#~ msgid "Enter the subject, the start date, and a description."
+#~ msgstr "Geben Sie den Betreff, den Beginn und eine Beschreibung ein."
+
+#~ msgid "Adding further details"
+#~ msgstr "Details hinzufügen"
+
+#~ msgid "To add further details, click on Expand form."
+#~ msgstr ""
+#~ "Wenn Sie weitere Angaben machen möchten, klicken Sie auf Formular "
+#~ "erweitern."
+
+#~ msgid "Creating recurring tasks"
+#~ msgstr "Wiederkehrende Aufgaben erstellen"
+
+#~ msgid ""
+#~ "To create recurring tasks, enable Repeat. Functions for setting the "
+#~ "recurrence parameters are shown."
+#~ msgstr ""
+#~ "Um wiederkehrende Aufgaben anzulegen, aktivieren Sie Wiederholen. "
+#~ "Funktionen zum Einstellen der Wiederholungsparameter werden eingeblendet."
+
+#~ msgid "To not miss the task, use the reminder function."
+#~ msgstr ""
+#~ "Um die Aufgabe nicht zu versäumen, verwenden Sie die Erinnerungsfunktion."
+
+#~ msgid "Tracking the editing status"
+#~ msgstr "Bearbeitungsstand verfolgen"
+
+#~ msgid "To track the editing status, enter the current progress."
+#~ msgstr ""
+#~ "Um den Stand der Bearbeitung zu verfolgen, tragen Sie den aktuellen "
+#~ "Fortschritt ein."
+
+#~ msgid ""
+#~ "To invite other participants, enter their names in the field below "
+#~ "Participants. You can add documents as attachment to the task."
+#~ msgstr ""
+#~ "Um andere Teilnehmer einzuladen, geben Sie ihre Namen in das Feld "
+#~ "unterhalb von Teilnehmer ein. Sie können der Aufgabe Dokumente als "
+#~ "Anlagen hinzufügen."
+
+#~ msgid "Entering billing information"
+#~ msgstr "Abrechnungsinformationen eintragen"
+
+#, fuzzy
+#~ msgid "To enter billing information, click on Show details."
+#~ msgstr ""
+#~ "Wenn Sie Abrechnungsinformationen eintragen möchten, klicken Sie auf "
+#~ "Details anzeigen."
+
+#~ msgid "Creating the task"
+#~ msgstr "Die Aufgabe anlegen"
+
+#, fuzzy
+#~ msgid "To create the task, click on Create."
+#~ msgstr "Um die Aufgabe anzulegen, klicken Sie auf Anlegen."
+
+#, fuzzy
+#~ msgid "Sorting tasks"
+#~ msgstr "Aufgaben sortieren"
+
+#, fuzzy
+#~ msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Um die Aufgaben zu sortieren, klicken Sie auf das Symbol Sortieren. "
+#~ "Wählen Sie ein Sortierkriterium."
+
+#~ msgid "Editing multiple tasks"
+#~ msgstr "Mehrere Aufgaben bearbeiten"
+
+#, fuzzy
+#~ msgid ""
+#~ "To edit multiple tasks at once, enable the checkboxes at the left side of "
+#~ "the tasks. If the checkboxes are not displayed, click on View > "
+#~ "Checkboxes on the right side of the toolbar."
+#~ msgstr ""
+#~ "Wenn Sie mehrere Aufgaben gemeinsam bearbeiten möchten, aktivieren Sie "
+#~ "die Kontrollfelder links neben den Aufgaben. Wenn die Kontrollfelder "
+#~ "nicht angezeigt werden, klicken Sie rechts in der Werkzeugleiste auf "
+#~ "Ansicht > Kontrollfelder."
+
+#~ msgid "appointments"
+#~ msgstr "Termine"
+
 #~ msgid "%1$s. Press backspace to delete."
 #~ msgstr "%1$s. Drücken Sie die Rücktaste zum Löschen."
 
@@ -14556,9 +15358,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Added %s, %s."
 #~ msgstr "%s, %s hinzugefügt."
-
-#~ msgid "Adding further details"
-#~ msgstr "Details hinzufügen"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Abonnement wird hinzugefügt. Dies kann eine Weile dauern ..."
@@ -15205,13 +16004,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Click here to quit the help center"
 #~ msgstr "Zum Verlassen der Hilfeseiten klicken Sie hier"
 
-#~ msgid ""
-#~ "Click on a letter on the left side of the navigation bar in order to "
-#~ "display the corresponding contacts from the selected address book."
-#~ msgstr ""
-#~ "Klicken Sie links in der Navigationsleiste auf einen Buchstaben, um aus "
-#~ "dem geöffneten Adressbuch die entsprechenden Kontakte anzuzeigen."
-
 #~ msgid "Click on a sentence to choose when to repeat the appointment."
 #~ msgstr ""
 #~ "Durch Klicken auf einen Satz können Sie wählen, wann der Termin "
@@ -15455,32 +16247,11 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Creating Files"
 #~ msgstr "Dateien anlegen"
 
-#~ msgid "Creating a new appointment"
-#~ msgstr "Einen neuen Termin anlegen"
-
-#~ msgid "Creating a new contact"
-#~ msgstr "Einen neuen Kontakt anlegen"
-
-#~ msgid "Creating a new task"
-#~ msgstr "Eine neue Aufgabe erstellen"
-
 #~ msgid "Creating a note"
 #~ msgstr "Eine Notiz anlegen"
 
 #~ msgid "Creating new items"
 #~ msgstr "Neue Objekte erzeugen"
-
-#~ msgid "Creating recurring appointments"
-#~ msgstr "Wiederkehrende Termine anlegen"
-
-#~ msgid "Creating recurring tasks"
-#~ msgstr "Wiederkehrende Aufgaben erstellen"
-
-#~ msgid "Creating the appointment"
-#~ msgstr "Den Termin anlegen"
-
-#~ msgid "Creating the task"
-#~ msgstr "Die Aufgabe anlegen"
 
 #~ msgid "Croatia"
 #~ msgstr "Kroatien"
@@ -15838,9 +16609,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Draft saved at %1$s"
 #~ msgstr "Entwurf gespeichert um %1$s"
 
-#~ msgid "Drag and drop"
-#~ msgstr "Drag and drop"
-
 #~ msgid "Drawing"
 #~ msgstr "Zeichnung"
 
@@ -15933,13 +16701,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Edit a group of feeds"
 #~ msgstr "Eine Feeds-Gruppe bearbeiten"
 
-#~ msgid ""
-#~ "Edit a setting on the right side. In most of the cases, the changes are "
-#~ "activated immediately."
-#~ msgstr ""
-#~ "Auf der rechten Seite bearbeiten Sie eine Einstellung. In den meisten "
-#~ "Fällen werden die Änderungen sofort wirksam."
-
 #~ msgid "Edit categories"
 #~ msgstr "Kategorien bearbeiten"
 
@@ -15957,12 +16718,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Editing multiple E-Mails"
 #~ msgstr "Mehrere E-Mails bearbeiten"
-
-#~ msgid "Editing multiple contacts"
-#~ msgstr "Mehrere Kontakte bearbeiten"
-
-#~ msgid "Editing multiple tasks"
-#~ msgstr "Mehrere Aufgaben bearbeiten"
 
 #~ msgid "Egypt"
 #~ msgstr "Ägypten"
@@ -16094,30 +16849,11 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Enter the subject on the right side of the recipient."
 #~ msgstr "Rechts neben dem Empfänger geben Sie den Betreff ein."
 
-#~ msgid ""
-#~ "Enter the subject, the start and the end date of the appointment. Other "
-#~ "details are optional."
-#~ msgstr ""
-#~ "Geben Sie den Betreff, den Beginn und das Ende des Termins ein. Andere "
-#~ "Angaben sind optional."
-
-#~ msgid "Enter the subject, the start date, and a description."
-#~ msgstr "Geben Sie den Betreff, den Beginn und eine Beschreibung ein."
-
-#~ msgid "Entering billing information"
-#~ msgstr "Abrechnungsinformationen eintragen"
-
 #~ msgid "Entering the E-Mail text"
 #~ msgstr "Den E-Mail Text eingeben"
 
 #~ msgid "Entering the data"
 #~ msgstr "Termindaten eingeben"
-
-#~ msgid "Entering the recipient's name"
-#~ msgstr "Den Empfänger bestimmen"
-
-#~ msgid "Entering the subject"
-#~ msgstr "Den Betreff eingeben"
 
 #~ msgid "Entire thread"
 #~ msgstr "Gesamten Thread"
@@ -16388,9 +17124,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Folder settings"
 #~ msgstr "Ordner-Einstellungen"
 
-#~ msgid "Folder tree"
-#~ msgstr "Der Ordnerbaum"
-
 #~ msgid "Folder type"
 #~ msgstr "Ordnertyp"
 
@@ -16455,9 +17188,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Further down you can add attachments to the appointment."
 #~ msgstr ""
 #~ "Weiter unten können Sie dem Termin Dokumente als Anlagen hinzufügen."
-
-#~ msgid "Further functions"
-#~ msgstr "Weitere Funktionen"
 
 #~ msgid "Further information"
 #~ msgstr "Weitere Informationen"
@@ -16543,9 +17273,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Haiti"
 #~ msgstr "Haiti"
 
-#~ msgid "Halo view"
-#~ msgstr "Die Halo View"
-
 #~ msgid "Has Attachment"
 #~ msgstr "Enthält Anhang"
 
@@ -16615,9 +17342,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "How likely is it you would recommend %1$s to a friend?"
 #~ msgstr ""
 #~ "Wie wahrscheinlich ist es, dass Sie %1$s einem Freund weiterempfehlen?"
-
-#~ msgid "How the settings are organized"
-#~ msgstr "Organisation der Einstellungen"
 
 #~ msgid "Hungary"
 #~ msgstr "Ungarn"
@@ -16937,9 +17661,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgstr ""
 #~ "Laden Sie andere per E-Mail ein. Jeder Empfänger erhält einen "
 #~ "individuellen Link zum Zugriff auf die geteilten Dateien."
-
-#~ msgid "Inviting other participants"
-#~ msgstr "Andere Teilnehmer einladen"
 
 #~ msgid "Iran"
 #~ msgstr "Iran"
@@ -17468,9 +18189,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Nauru"
 #~ msgstr "Nauru"
 
-#~ msgid "Navigation bar"
-#~ msgstr "Navigationsleiste"
-
 #~ msgid "Nepal"
 #~ msgstr "Nepal"
 
@@ -17756,9 +18474,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Die E-Mail Einstellungen öffnen"
-
-#~ msgid "Opening the settings"
-#~ msgstr "Die Einstellungen öffnen"
 
 #~ msgid "Originally Published"
 #~ msgstr "Ursprünglich veröffentlicht"
@@ -18204,9 +18919,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Read-only mode"
 #~ msgstr "Schreibgeschützter Lesezugriff"
 
-#~ msgid "Reading the details"
-#~ msgstr "Details lesen"
-
 #~ msgid "Receive notification for appointment changes"
 #~ msgstr "Benachrichtigung bei Terminänderungen"
 
@@ -18496,9 +19208,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgstr[0] "Ausgewählte Nachricht wurde erfolgreich verschoben."
 #~ msgstr[1] "Ausgewählte Nachrichten wurden erfolgreich verschoben."
 
-#~ msgid "Selecting a view"
-#~ msgstr "Eine Ansicht wählen"
-
 #~ msgid "Send as internal link"
 #~ msgstr "Als internen Link versenden"
 
@@ -18756,9 +19465,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Signed in as:"
 #~ msgstr "Angemeldet als:"
-
-#~ msgid "Signing out"
-#~ msgstr "Abmelden"
 
 #~ msgid "Simple Pad"
 #~ msgstr "Einfacher Texteditor"
@@ -19115,9 +19821,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "The Icons view displays an icon for each file."
 #~ msgstr "Die Symbolansicht zeigt für jede Datei ein Symbol."
 
-#~ msgid "The List view"
-#~ msgstr "Die Ansicht Liste"
-
 #~ msgid ""
 #~ "The List view shows a sidebar with appointments and a display area with "
 #~ "the data of the selected appointment. This view corresponds to the view "
@@ -19142,9 +19845,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgstr ""
 #~ "Das Symbol Neue Objekte zeigt die Anzahl ungelesener E-Mails oder "
 #~ "sonstiger Benachrichtigungen. Anklicken öffnet den Infobereich."
-
-#~ msgid "The Portal"
-#~ msgstr "Das Portal"
 
 #~ msgid ""
 #~ "The Portal informs you about current E-Mails, appointments or social "
@@ -19780,11 +20480,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Title"
 #~ msgstr "Titel"
 
-#~ msgid "To add further details, click on Expand form."
-#~ msgstr ""
-#~ "Wenn Sie weitere Angaben machen möchten, klicken Sie auf Formular "
-#~ "erweitern."
-
 #~ msgid ""
 #~ "To change the layout, drag a tile's background to another position and "
 #~ "drop it there."
@@ -19824,20 +20519,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgstr ""
 #~ "Um eine Notiz anzulegen, klicken Sie oben auf das Symbol. Wählen Sie Add "
 #~ "note."
-
-#~ msgid ""
-#~ "To create recurring appointments, enable Repeat. Functions for setting "
-#~ "the recurrence parameters are shown."
-#~ msgstr ""
-#~ "Um wiederkehrende Termine anzulegen, aktivieren Sie Wiederholen. "
-#~ "Funktionen zum Einstellen der Wiederholungsparameter werden eingeblendet."
-
-#~ msgid ""
-#~ "To create recurring tasks, enable Repeat. Functions for setting the "
-#~ "recurrence parameters are shown."
-#~ msgstr ""
-#~ "Um wiederkehrende Aufgaben anzulegen, aktivieren Sie Wiederholen. "
-#~ "Funktionen zum Einstellen der Wiederholungsparameter werden eingeblendet."
 
 #~ msgid "To create the appointment, click on Create at the upper right side."
 #~ msgstr "Um den Termin anzulegen, klicken Sie rechts oben auf Anlegen."
@@ -19883,23 +20564,6 @@ msgstr "Zu %s hinzufügen"
 #~ "Um diesen Bereich zu füllen, ziehen Sie bitte E-Mails auf den Titel "
 #~ "dieses Tabs und legen sie diese dort ab."
 
-#~ msgid ""
-#~ "To invite other participants, enter their names in the field below "
-#~ "Participants. To avoid appointment conflicts, click on Find a free time "
-#~ "at the upper right side."
-#~ msgstr ""
-#~ "Um andere Teilnehmer einzuladen, geben Sie ihre Namen in das Feld "
-#~ "unterhalb von Teilnehmer ein. Um Terminkonflikte zu vermeiden, klicken "
-#~ "Sie oben rechts auf Verfügbaren Zeitraum finden."
-
-#~ msgid ""
-#~ "To invite other participants, enter their names in the field below "
-#~ "Participants. You can add documents as attachment to the task."
-#~ msgstr ""
-#~ "Um andere Teilnehmer einzuladen, geben Sie ihre Namen in das Feld "
-#~ "unterhalb von Teilnehmer ein. Sie können der Aufgabe Dokumente als "
-#~ "Anlagen hinzufügen."
-
 #~ msgid "To launch an app, click on a tile's headline."
 #~ msgstr ""
 #~ "Starten Sie eine App, indem Sie in einer Kachel auf eine Überschrift "
@@ -19914,10 +20578,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "To not miss the appointment, use the reminder functions."
 #~ msgstr ""
 #~ "Um den Termin nicht zu verpassen, verwenden Sie die Erinnerungsfunktion."
-
-#~ msgid "To not miss the task, use the reminder function."
-#~ msgstr ""
-#~ "Um die Aufgabe nicht zu versäumen, verwenden Sie die Erinnerungsfunktion."
 
 #~ msgid "To open or close the folder tree, click the Toggle folder icon."
 #~ msgstr ""
@@ -19950,13 +20610,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgstr ""
 #~ "Lesen Sie Details, indem Sie in einer Kachel einen Eintrag anklicken."
 
-#~ msgid ""
-#~ "To receive information about the sender or other recipients, open the "
-#~ "Halo view by clicking on a name."
-#~ msgstr ""
-#~ "Um Informationen zum Absender oder anderen Empfängern zu erhalten, öffnen "
-#~ "Sie die Halo View, indem Sie einen Namen anklicken."
-
 #~ msgid "To search for objects, click the Toggle search icon."
 #~ msgstr ""
 #~ "Um nach Objekten zu suchen, klicken Sie auf das Symbol Suche an/aus."
@@ -19984,18 +20637,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "To send the E-Mail, click on Send on the upper right side."
 #~ msgstr "Um die E-Mail zu senden, klicken Sie rechts oben auf Senden."
-
-#~ msgid ""
-#~ "To sign out, click the System menu icon on the upper right side of the "
-#~ "menu bar. Select Sign out."
-#~ msgstr ""
-#~ "Zm Abmelden klicken Sie in der Menüleiste rechts oben auf das Symbol "
-#~ "Systemmenü. Wählen Sie Abmelden."
-
-#~ msgid "To track the editing status, enter the current progress."
-#~ msgstr ""
-#~ "Um den Stand der Bearbeitung zu verfolgen, tragen Sie den aktuellen "
-#~ "Fortschritt ein."
 
 #~ msgid "To upload a file, click the icon at the top. Select Upload new file."
 #~ msgstr ""
@@ -20060,9 +20701,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Town"
 #~ msgstr "Stadt"
-
-#~ msgid "Tracking the editing status"
-#~ msgstr "Bearbeitungsstand verfolgen"
 
 #, fuzzy
 #~ msgid "Trinidad and Tobago"
@@ -20228,9 +20866,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "User manual"
 #~ msgstr "Benutzerhandbuch"
-
-#~ msgid "Using the reminder function"
-#~ msgstr "Die Erinnerungsfunktion verwenden"
 
 #~ msgid "Using the reminder functions"
 #~ msgstr "Die Erinnerungsfunktion verwenden"
