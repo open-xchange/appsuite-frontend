@@ -298,6 +298,11 @@ define('io.ox/mail/compose/main', [
                     }
                     app.quit();
 
+                    if (e && e.error) {
+                        require(['io.ox/core/yell'], function (yell) {
+                            yell(e);
+                        });
+                    }
                     def.reject(e);
                 });
             });
@@ -335,8 +340,8 @@ define('io.ox/mail/compose/main', [
             default:
                 break;
         }
-        require(['io.ox/core/notifications'], function (notifications) {
-            notifications.yell(error);
+        require(['io.ox/core/yell'], function (yell) {
+            yell(error);
         });
     });
 
