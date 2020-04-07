@@ -93,7 +93,7 @@ Scenario('[C265555] Change the Signature', async function (I, mail, dialogs) {
     I.fillField('To', 'foo@bar');
     I.fillField('Subject', 'test subject');
 
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
     dialogs.waitForVisible();
     dialogs.clickButton('Save as draft');
     I.waitForDetached('.modal-dialog');

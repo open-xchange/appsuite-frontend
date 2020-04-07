@@ -36,7 +36,7 @@ Scenario('[C7380] Send saved draft mail', async function (I, users, mail) {
     I.fillField('To', users[1].userdata.primaryEmail);
     I.fillField('Subject', '' + testrailId + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, '' + text);
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
     I.waitForText('Save as draft');
     I.click('Save as draft');
     I.waitForDetached('.io-ox-mail-compose');
@@ -124,7 +124,7 @@ Scenario('[C7384] Save draft', async function (I, users, mail, dialogs) {
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', '' + testrailid + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, '' + text);
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
     dialogs.waitForVisible();
     dialogs.clickButton('Save as draft');
     I.waitForDetached('.modal-dialog');
@@ -408,7 +408,7 @@ Scenario('[C8816] Cancel mail compose', async function (I, users, mail) {
     I.pressKey('Enter');
     I.fillField('Subject', testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, testrailID + ' - ' + timestamp);
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
     I.see('Do you really want to discard your message?');
     I.click('Discard message');
 });

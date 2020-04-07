@@ -59,7 +59,7 @@ Scenario('update account with mail compose app open', async (I, users, mail) => 
 
     // verify default display name
     I.see(`${user.get('given_name')} ${user.get('sur_name')}`);
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
 
     I.openApp('Settings', { folder: 'virtual/settings/io.ox/settings/accounts' });
     I.waitForVisible('.settings-list-item a.action');

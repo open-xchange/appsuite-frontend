@@ -45,7 +45,7 @@ Scenario('[C7778] Forwarding mail inline/attachment', async (I, users, mail) => 
     I.wait(0.5);
 
     I.waitToHide('Saving');
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
     I.waitForDetached('.io-ox-mail-compose-window');
     I.logout();
 

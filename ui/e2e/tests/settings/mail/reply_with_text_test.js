@@ -23,7 +23,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7776] Insert the original email text to a reply', async (I, users) => {
+Scenario('[C7776] Insert the original email text to a reply', async (I, users, mail) => {
     const user = users[0];
     const listview = locate('.list-view-control').as('List View');
 
@@ -43,7 +43,7 @@ Scenario('[C7776] Insert the original email text to a reply', async (I, users) =
     I.waitForElement('.io-ox-mail-compose textarea');
     I.seeInField('textarea', '> This is simple plain text!');
 
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
     I.logout();
 
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mail/settings/compose', { user });

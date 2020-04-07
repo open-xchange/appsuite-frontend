@@ -242,7 +242,7 @@ Scenario('[C7769] Delete signature', async function (I) {
 
 });
 
-Scenario('[C7770] Set default signature', async function (I, users) {
+Scenario('[C7770] Set default signature', async function (I, users, mail) {
     const [user] = users;
     await I.haveMail({
         attachments: [{
@@ -291,7 +291,7 @@ Scenario('[C7770] Set default signature', async function (I, users) {
         I.wait(0.5);
         I.see('Testsignaturecontent1');
     });
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
 
     I.waitForDetached('.io-ox-mail-compose-window');
 

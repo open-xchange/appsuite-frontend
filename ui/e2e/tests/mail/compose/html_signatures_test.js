@@ -129,12 +129,12 @@ Scenario('Compose new mail with signature above correctly placed and changed', a
     await selectAndAssertSignature(I, mail, 'First signature above', new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[0].content}</div>`));
 
     // // discard mail
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
     I.click('Discard message');
     I.waitForVisible('.io-ox-mail-window');
 });
 
-Scenario('Compose new mail with signature below correctly placed initially', async function (I) {
+Scenario('Compose new mail with signature below correctly placed initially', async function (I, mail) {
     for (let signature of signatures) {
         var response = await I.haveSnippet(signature);
         signature.id = response.data;
@@ -157,7 +157,7 @@ Scenario('Compose new mail with signature below correctly placed initially', asy
     });
 
     //discard mail
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
     I.waitForVisible('.io-ox-mail-window');
 });
 
@@ -213,12 +213,12 @@ Scenario('Reply to mail with signature above correctly placed and changed', asyn
     await selectAndAssertSignature(I, mail, 'First signature above', new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[0].content}</div><blockquote type="cite">.*</blockquote>$`));
 
     // discard mail
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
     I.click('Discard message');
     I.waitForVisible('.io-ox-mail-window');
 });
 
-Scenario('Reply to mail with signature below correctly placed initially', async function (I, users) {
+Scenario('Reply to mail with signature below correctly placed initially', async function (I, users, mail) {
     let [user] = users;
 
     for (let signature of signatures) {
@@ -249,6 +249,6 @@ Scenario('Reply to mail with signature below correctly placed initially', async 
     });
 
     // discard mail
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
     I.waitForVisible('.io-ox-mail-window');
 });

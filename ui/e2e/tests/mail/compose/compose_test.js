@@ -41,7 +41,7 @@ Scenario('Compose and discard with/without prompts', async function (I, users, m
 
     // workflow 1: Compose & discard
     mail.newMail();
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
     I.dontSee('Do you really want to discard your message?');
     I.waitForDetached('.io-ox-mail-compose');
 
@@ -65,13 +65,13 @@ Scenario('Compose and discard with/without prompts', async function (I, users, m
     text = Array.isArray(text) ? text[0] : text;
     expect(text).to.contain('My unique signature content');
     I.see('VCF', '.io-ox-mail-compose .mail-attachment-list');
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
     I.dontSee('Do you really want to discard your message?');
 
     // workflow 4: Compose with subject, then discard
     mail.newMail();
     I.fillField('Subject', 'Test');
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
     I.see('Do you really want to discard your message?');
     I.click('Discard message');
 
@@ -106,7 +106,7 @@ Scenario('Compose and discard with/without prompts', async function (I, users, m
         '>  \\n' +
         '> Testcontent'
     ));
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
     I.dontSee('Do you really want to discard your message?');
 });
 
@@ -254,7 +254,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.waitForText('Use Drive Mail');
     I.checkOption('Use Drive Mail');
     I.fillField('Subject', 'Testsubject #1');
-    I.click('~Close', '.floating-header');
+    I.click(mail.locators.compose.close);
     dialogs.waitForVisible();
     dialogs.clickButton('Save as draft');
     I.waitForDetached('.io-ox-mail-compose-window');
