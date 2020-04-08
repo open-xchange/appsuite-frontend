@@ -866,7 +866,7 @@ define('io.ox/mail/compose/extensions', [
             if (_.device('smartphone')) return;
 
             var parent = this,
-                window = baton.app.get('window').floating.$el,
+                floatingView = baton.app.get('window').floating,
                 node = $('<a href="#" class="f6-target">')
                 .append($('<i class="fa fa-font" aria-hidden="true">'))
                 .on('click', function () {
@@ -879,13 +879,11 @@ define('io.ox/mail/compose/extensions', [
             baton.config.on('change:toolbar', update);
             function update() {
                 var value = baton.config.get('toolbar');
-                window.toggleClass('no-toolbar', !value);
+                floatingView.$el.toggleClass('no-toolbar', !value);
                 node.attr('aria-label', value ? gt('Hide toolbar') : gt('Show toolbar'));
                 parent.toggleClass('checked', value);
-                baton.app.get('window').floating.onResize();
-                $(window).trigger('resize.tinymce');
+                floatingView.onResize();
             }
-
 
             // toggle state
             status();
