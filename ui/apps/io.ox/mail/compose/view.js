@@ -25,11 +25,12 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/compose/signatures',
     'io.ox/mail/sanitizer',
     'io.ox/mail/compose/util',
+    'io.ox/backbone/mini-views/common',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send',
     'io.ox/mail/compose/actions/save'
-], function (extensions, ext, composeAPI, mailAPI, mailUtil, settings, notifications, gt, Attachments, ModalDialog, signatureUtil, sanitizer, composeUtil) {
+], function (extensions, ext, composeAPI, mailAPI, mailUtil, settings, notifications, gt, Attachments, ModalDialog, signatureUtil, sanitizer, composeUtil, mini) {
 
     'use strict';
 
@@ -257,6 +258,7 @@ define('io.ox/mail/compose/view', [
             index: 200,
             draw: function () {
                 this.data('view')
+                    .divider()
                     .header(gt.pgettext('E-Mail', 'Priority'))
                     //#. E-Mail priority
                     .option('priority', 'high', gt.pgettext('E-Mail priority', 'High'), { prefix: gt.pgettext('E-Mail', 'Priority'), radio: true })
@@ -271,6 +273,7 @@ define('io.ox/mail/compose/view', [
             index: 300,
             draw: function () {
                 this.data('view')
+                    .divider()
                     .header(gt('Options'))
                     .option('vcard', 1, gt('Attach Vcard'), { prefix: gt('Options'), toggleValue: 0 })
                     .option('requestReadReceipt', true, gt('Request read receipt'), { prefix: gt('Options') });
@@ -282,11 +285,55 @@ define('io.ox/mail/compose/view', [
             draw: function () {
                 if (_.device('smartphone')) return;
                 var menu = this.data('view')
+                    .divider()
                     .header(gt('Editor'));
 
                 ext.point(POINT + '/editors').each(function (point) {
                     if (!point.mode && !point.label) return;
                     menu.option('editorMode', point.mode, point.label, { prefix: gt('Editor'), radio: true });
+                });
+            }
+        },
+        {
+            id: 'saveAndClose',
+            index: 500,
+            draw: function (baton) {
+                var saveAndClose = function () {
+                    baton.view.saveDraft().then(function () {
+                        // to prevent "do you want to save" dialog on quit. We just saved the data so that would be pointless
+                        baton.config.set('autoDismiss', true);
+                        baton.app.quit();
+                    });
+                };
+
+                this.data('view').divider().link('settings', gt('Save draft and close'), function () {
+
+                    // 2 settings:
+                    // saveOnCloseDontShowAgain, user setting, determines if user wants to be reminded again
+                    // saveOnCloseShow, server setting, determines if the dialog should show up at all
+                    if (!settings.get('didYouKnow/saveOnCloseDontShowAgain', false) && settings.get('didYouKnow/saveOnCloseShow', true)) {
+                        new ModalDialog({ title: gt('Did you know?'), description: gt('Your changes are automatically saved while you compose your email until you finally send it.') })
+                            .build(function () {
+                                this.$el.find('.modal-footer').prepend(new mini.CustomCheckboxView(
+                                    {
+                                        model: settings,
+                                        label: gt('Do not show again.'),
+                                        defaultVal: false,
+                                        name: 'didYouKnow/saveOnCloseDontShowAgain'
+                                    }
+                                ).render().$el.addClass('pull-left'));
+
+                                settings.once('changed:didYouKnow/saveOnCloseDontShowAgain', function () {
+                                    settings.save();
+                                });
+                            })
+                            .addButton({ label: gt('OK'), action: 'ok' })
+                            .on('ok', saveAndClose)
+                            .open();
+                        return;
+                    }
+
+                    saveAndClose();
                 });
             }
         }
