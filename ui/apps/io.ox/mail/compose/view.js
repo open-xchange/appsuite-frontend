@@ -704,19 +704,34 @@ define('io.ox/mail/compose/view', [
 
         // has three states, dirty, saving, saved
         onChangeSaved: function (state) {
-            if (this.autoSaveState === state) return;
-            if (state === 'dirty') this.inlineYell('');
+            // just return when dirty and keep showing last saved date
+            if (this.autoSaveState === state || state === 'dirty') return;
             else if (state === 'saving') this.inlineYell(gt('Saving...'));
-            else if (state === 'saved' && this.autoSaveState === 'saving') this.inlineYell(gt('Saved'));
+            //#. %s is a relative date from now, examples: 5 seconds ago, 5 minutes ago etc
+            else if (state === 'saved' && this.autoSaveState === 'saving') {
+                var lastSave = moment();
+                this.inlineYell(function () { return gt('Draft saved %s', lastSave.fromNow()); });
+            }
             this.autoSaveState = state;
         },
 
         inlineYell: function (text) {
+            // clear timer if it's there
+            clearInterval(this.inlineYellTimer);
             if (!this.$el.is(':visible')) return;
             if (_.device('smartphone')) return;
+            var node = this.$el.closest('.io-ox-mail-compose-window').find('.inline-yell');
 
+            if (typeof text === 'function') {
+                this.inlineYellTimer = setInterval(function () {
+                    node.text(text());
+                }, 1000);
+            } else {
+                node.text(text);
+            }
             // only fade in once, then leave it there
-            this.$el.closest('.io-ox-mail-compose-window').find('.inline-yell').text(text).fadeIn();
+            if (node.is(':visible')) return;
+            node.fadeIn();
         },
 
         dirty: function (state) {
@@ -734,6 +749,7 @@ define('io.ox/mail/compose/view', [
         clean: function () {
             // mark as not dirty
             this.dirty(false);
+            clearInterval(this.inlineYellTimer);
             // clean up editors
             for (var id in this.editorHash) {
                 this.editorHash[id].then(function (editor) {
