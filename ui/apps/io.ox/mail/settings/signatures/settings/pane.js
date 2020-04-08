@@ -101,7 +101,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 if (signature.content) signature.content = DOMPurify.sanitize(signature.content) + '';
                 editor.setContent(signature.content);
                 baton.view.editor = editor;
-            });
+                this.$el.addClass('ready');
+            }.bind(this));
         }
     });
 

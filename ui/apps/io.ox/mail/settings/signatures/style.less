@@ -77,11 +77,17 @@
 input.error { border-color: #b94a48; }
 
 .io-ox-signature-dialog {
-    .form-group {
-        position: relative;
+
+    .mce-top-part {
+        border: 1px solid #ccc;
+        border-top-color: transparent;
     }
 
-    .mce-top-part{
-        border-top: 1px #ccc solid;
+    // show toolbar after moving to bottom
+    .mce-top-part { display: none };
+    &.ready .mce-top-part { display: block; }
+
+    .form-group {
+        position: relative;
     }
 }
