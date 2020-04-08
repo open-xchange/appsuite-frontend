@@ -80,7 +80,6 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
                 class: 'io-ox-signature-edit',
                 keepalive: mailAPI.keepalive,
-                scrollpane: container,
                 oxContext: { signature: true },
                 imageLoader: {
                     upload: function (file) {

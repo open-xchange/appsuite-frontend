@@ -824,33 +824,37 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         this.show = function () {
             $el.show();
-            // set display to empty sting because of overide 'display' property in css
+            // set display to empty string because of overide 'display' property in css
             $(fixed_toolbar).css('display', '');
             window.toolbar = $(fixed_toolbar);
             $(window).on('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', resizeEditorDebounced);
+            if (!opt.oxContext.signature) {
+                $(window).on('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', reposition);
+            }
             $(window).trigger('resize');
         };
 
         this.hide = function () {
             $el.hide();
             $(window).off('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', resizeEditorDebounced);
+            $(window).off('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', reposition);
         };
+
+        function reposition() {
+            var anchor = opt.app.get('window').nodes.footer;
+            $(fixed_toolbar).css('top', Math.round(anchor.offset().top) - $(fixed_toolbar).outerHeight());
+        }
 
         (function () {
             if (_.device('smartphone')) return;
-            var scrollPane = opt.scrollpane || opt.app && opt.app.getWindowNode();
+            if (opt.oxContext.signature) return;
 
+            var scrollPane = opt.app.getWindowNode(),
+                win = opt.app.get('window'),
+                floating = win && win.floating;
             // keep fixed toolbar in window, when window is dragged
-            if (opt.app && opt.app.get('floating') && opt.app.get('window').floating) {
-                opt.app.get('window').floating.on('move', reposition);
-            }
+            floating.on('move', reposition);
             scrollPane.on('scroll', reposition);
-
-            function reposition() {
-                // toolbar as bottom anchor
-                var anchor = opt.app.get('window').nodes.footer;
-                $(fixed_toolbar).css('top', Math.round(anchor.offset().top) - $(fixed_toolbar).outerHeight());
-            }
         }());
 
         this.destroy = function () {
@@ -859,7 +863,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             // have to unset active editor manually. may be removed for future versions of tinyMCE
             delete tinyMCE.EditorManager.activeEditor;
             tinyMCE.EditorManager.remove(ed);
-            ed = undefined;
+            ed = opt = undefined;
         };
 
         var intervals = [];
