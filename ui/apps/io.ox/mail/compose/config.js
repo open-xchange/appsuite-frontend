@@ -33,7 +33,7 @@ define('io.ox/mail/compose/config', [
                 autoDismiss: false,
                 preferredEditorMode: mode,
                 editorMode: mode,
-                toolbar: mode !== 'text',
+                toolbar: true,
                 sendDisplayName: !!settings.get('sendDisplayName', true),
                 // signatures
                 defaultSignatureId: '',

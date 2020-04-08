@@ -25,9 +25,12 @@
     }
 
     // toggle tinymce toolbar
+    &.text-editor .mce-top-part,
+    &.no-toolbar .mce-top-part {
+        display: none;
+    }
     &.html-editor {
         @tiny-toolbar-height: 40px + 1px;
-        &.no-toolbar .mce-top-part { display: none; }
         &:not(.no-toolbar) .window-body {  bottom: 64px + @tiny-toolbar-height; }
     }
 
