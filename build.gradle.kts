@@ -63,17 +63,9 @@ configure<com.openexchange.obs.gradle.plugin.BuildserviceExtension> {
             create("DebianBuster") {
                 depends("Debian:Buster", "standard")
             }
-            create("RHEL6") {
-                // TODO go down to the base RHEL 6 repository
-                depends("backend-master", "RHEL6")
-            }
             create("RHEL7") {
                 // TODO go down to the base RHEL 7 repository
                 depends("backend-master", "RHEL7")
-            }
-            create("SLE_12") {
-                // TODO go to SP4
-                depends("backend-master", "SLE_12")
             }
         }
     }

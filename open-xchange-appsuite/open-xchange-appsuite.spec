@@ -14,18 +14,9 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 Provides:       open-xchange-documents-ui-viewer = %{version}
 Obsoletes:      open-xchange-documents-ui-viewer < %{version}
 
-%if 0%{?suse_version}
-Requires:       apache2
-%endif
-%if 0%{?fedora_version} || 0%{?rhel_version}
 Requires:       httpd
-%endif
 
-%if 0%{?rhel_version} || 0%{?fedora_version}
 %define docroot /var/www/html/
-%else
-%define docroot /srv/www/htdocs/
-%endif
 
 %description
 OX App Suite HTML5 client

@@ -17,11 +17,7 @@ Requires:       nodejs >= 0.10
 %description
 Dynamic theme with colors read from ConfigCascade
 
-%if 0%{?rhel_version} || 0%{?fedora_version}
 %define docroot /var/www/html/
-%else
-%define docroot /srv/www/htdocs/
-%endif
 
 %prep
 %setup -q

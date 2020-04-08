@@ -12,11 +12,7 @@ Summary:        OX App Suite online help
 Source:         %{name}_%{version}.orig.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 
-%if 0%{?rhel_version} || 0%{?fedora_version}
 %define docroot /var/www/html/
-%else
-%define docroot /srv/www/htdocs/
-%endif
 
 %description
 OX App Suite help files
