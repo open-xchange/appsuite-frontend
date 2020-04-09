@@ -24,7 +24,8 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C83383] mail folders using “Permisions” dialog', async (I, users, dialogs) => {
+// skip due to MWB-219
+Scenario.skip('[C83383] mail folders using “Permisions” dialog', async (I, users, dialogs) => {
     // Alice shares a mail folder
     I.login('app=io.ox/mail');
     I.waitForText('Spam', 5, '.folder-tree');
