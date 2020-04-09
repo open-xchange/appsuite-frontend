@@ -920,6 +920,7 @@ Scenario('[C7429] Create appointment via Contact', async function (I, users, con
 
     I.say('Create Appointment');
     I.waitForVisible(locate({ css: '.io-ox-calendar-edit-window' }));
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
     I.fillField('Subject', 'Wichtige Dinge tun');
     I.fillField('Location', 'Kneipe');
     I.click('Create');
