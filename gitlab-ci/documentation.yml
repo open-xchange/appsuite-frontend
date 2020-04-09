@@ -27,6 +27,9 @@ build documentation:
     changes:
       - documentation/**/*
       - ui/package.json
+  except:
+    refs:
+      - /^e2e\//
 
 deploy documentation:
   stage: deploy
