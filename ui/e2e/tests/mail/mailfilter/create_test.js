@@ -412,7 +412,7 @@ Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users, ma
     I.see('Is smaller than', '.dropdown.open');
     I.click('Is smaller than', '.dropdown.open');
 
-    I.fillField('sizeValue', '930');
+    I.fillField('sizeValue', '2048');
     // save the form
     I.click('Save');
 
