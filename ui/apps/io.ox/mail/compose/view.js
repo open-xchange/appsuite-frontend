@@ -52,7 +52,11 @@ define('io.ox/mail/compose/view', [
             index: 400,
             id: 'composetoolbar',
             draw: function (baton) {
-                var node = $('<ul data-extension-id="composetoolbar" class="composetoolbar list-unstyled list-inline">');
+                var node = $('<ul data-extension-id="composetoolbar" class="composetoolbar list-unstyled list-inline">')
+                    .attr({
+                        'aria-label': gt('Actions. Use cursor keys to navigate.'),
+                        'role': 'toolbar'
+                    });
                 ext.point(POINT + '/composetoolbar').invoke('draw', node, baton);
                 this.append(node);
             },
@@ -356,7 +360,6 @@ define('io.ox/mail/compose/view', [
                 var node = $('<div class="pull-right text-right">');
 
                 ext.point(POINT + '/menu-mobile').invoke('draw', node, baton);
-
                 this.append(
                     $('<div data-extension-id="composetoolbar-menu">').append(node)
                 );
@@ -369,7 +372,7 @@ define('io.ox/mail/compose/view', [
             id: 'toggle-toolbar',
             index: 50,
             draw: function (baton) {
-                var node = $('<li data-extension-id="toggle-toolbar" class="toggle">');
+                var node = $('<li role="presentation" data-extension-id="toggle-toolbar" class="toggle">');
                 extensions.toggleToolbar.call(node, baton);
                 this.append(node);
             }
@@ -378,7 +381,7 @@ define('io.ox/mail/compose/view', [
             id: 'add_attachments',
             index: 100,
             draw: function (baton) {
-                var node = $('<li data-extension-id="add_attachments">');
+                var node = $('<li role="presentation" data-extension-id="add_attachments">');
                 // dont use col-xs and col-sm here, breaks style in landscape mode
                 node.addClass(_.device('smartphone') ? 'col-xs-5' : '');
 
@@ -390,7 +393,7 @@ define('io.ox/mail/compose/view', [
             id: 'add_attachments_drive',
             index: 300,
             draw: function (baton) {
-                var node = $('<li data-extension-id="add_attachments_drive">');
+                var node = $('<li role="presentation" data-extension-id="add_attachments_drive">');
                 // dont use col-xs and col-sm here, breaks style in landscape mode
                 node.addClass(_.device('smartphone') ? 'col-xs-5' : '');
 
@@ -402,7 +405,7 @@ define('io.ox/mail/compose/view', [
             id: 'menus',
             index: 1000,
             draw: function (baton) {
-                var node =  $('<li data-extension-id="composetoolbar-menu">').addClass('dropup');
+                var node =  $('<li role="presentation" data-extension-id="composetoolbar-menu">').addClass('dropup');
                 ext.point(POINT + '/menu').invoke('draw', node, baton);
                 this.append(node);
             }

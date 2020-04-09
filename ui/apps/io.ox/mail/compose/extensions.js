@@ -517,8 +517,8 @@ define('io.ox/mail/compose/extensions', [
 
         optionsmenu: (function () {
             return function (baton) {
-                var a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('aria-label', gt('Options')).append(
-                    $('<i class="fa fa-bars" aria-hidden="true">')
+                var a = $('<a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">').attr('aria-label', gt('Options')).append(
+                    $('<i class="fa fa-bars" aria-hidden="true">').attr('title', gt('Options'))
                 );
                 var dropdown = new Dropdown({
                     model: new IntermediateModel({
@@ -533,8 +533,8 @@ define('io.ox/mail/compose/extensions', [
                 });
 
                 ext.point(POINT + '/menuoptions').invoke('draw', dropdown.$el, baton);
-
-                this.append(dropdown.render().$el);
+                // prevent div wraper
+                this.append(dropdown.render().$el.children());
             };
         }()),
 
@@ -806,9 +806,11 @@ define('io.ox/mail/compose/extensions', [
                     // file input
                     fileInput,
                     // local file
-                    $('<a href="#" data-toggle="dropdown">')
+                    $('<a href="#" role="button" data-toggle="dropdown" tabindex="-1">')
                         .attr('aria-label', gt('Add local file'))
-                        .append($('<i class="fa fa-paperclip" aria-hidden="true">'))
+                        .append(
+                            $('<i class="fa fa-paperclip" aria-hidden="true">')
+                                .attr('title', gt('Add local file')))
                         .on('click', function () {
                             //WORKAROUND "bug" in Chromium (no change event triggered when selecting the same file again,
                             //in file picker dialog - other browsers still seem to work)
@@ -853,9 +855,12 @@ define('io.ox/mail/compose/extensions', [
                 if (!capabilities.has('infostore')) return;
 
                 this.append(
-                    $('<a href="#" class="f6-target">')
+                    $('<a href="#" role="button" tabindex="-1">')
                         .attr('aria-label', gt('Add from Drive'))
-                        .append($('<i class="fa fa-cloud" aria-hidden="true">'))
+                        .append(
+                            $('<i class="fa fa-cloud" aria-hidden="true">')
+                            .attr('title', gt('Add from Drive'))
+                        )
                         .on('click', openFilePicker.bind(this, baton.model))
                 );
             };
@@ -867,12 +872,12 @@ define('io.ox/mail/compose/extensions', [
 
             var parent = this,
                 floatingView = baton.app.get('window').floating,
-                node = $('<a href="#" class="f6-target">')
-                .append($('<i class="fa fa-font" aria-hidden="true">'))
-                .on('click', function () {
-                    if (parent.hasClass('disabled')) return;
-                    baton.config.set('toolbar', !baton.config.get('toolbar'));
-                });
+                node = $('<a href="#" role="button" tabindex="0">')
+                    .append($('<i class="fa fa-font" aria-hidden="true">'))
+                    .on('click', function () {
+                        if (parent.hasClass('disabled')) return;
+                        baton.config.set('toolbar', !baton.config.get('toolbar'));
+                    });
 
             // toggle toolbar
             update();
@@ -881,6 +886,7 @@ define('io.ox/mail/compose/extensions', [
                 var value = baton.config.get('toolbar');
                 floatingView.$el.toggleClass('no-toolbar', !value);
                 node.attr('aria-label', value ? gt('Hide toolbar') : gt('Show toolbar'));
+                node.find('i').attr('title', value ? gt('Hide toolbar') : gt('Show toolbar'));
                 parent.toggleClass('checked', value);
                 floatingView.onResize();
             }
