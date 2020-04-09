@@ -25,7 +25,6 @@ Scenario('[C7343] Launch "Portal" application', async function (I) {
     I.login('app=io.ox/mail');
     I.waitForElement('.fa-spin.fa-refresh');
     I.waitForElement('.fa-spin-paused.fa-refresh');
-    I.say('Remove me');
 
     I.click('#io-ox-launcher');
     I.waitForElement('.launcher-dropdown');
