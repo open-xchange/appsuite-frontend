@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-11-25 13:20+0100\n"
+"PO-Revision-Date: 2020-04-09 09:53+0200\n"
 "Last-Translator: Tim van Oosten <tim@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 19.08.0\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -1223,8 +1223,8 @@ msgid ""
 "This appointment is part of a series. Do you want to change your reminders "
 "for the whole series or just for this appointment within the series?"
 msgstr ""
-"Deze afspraak is onderdeel van een reeks. Wilt u uw herinneringen voor de"
-" hele reeks aanpassen of alleen voor deze afspraak in de reeks?"
+"Deze afspraak is onderdeel van een reeks. Wilt u uw herinneringen voor de "
+"hele reeks aanpassen of alleen voor deze afspraak in de reeks?"
 
 #. %1$s:  is the calendar's name
 #: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
@@ -4572,7 +4572,7 @@ msgstr "Geen exporteer-formaat beschikbaar"
 
 #: apps/io.ox/core/export.js module:io.ox/core
 msgid "Include distribution lists"
-msgstr "Distributielijst insluiten"
+msgstr "Distributielijst toevoegen"
 
 #. %1$s inline menu title for better accessibility
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
@@ -5374,8 +5374,8 @@ msgstr[1] ""
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 msgid "Refresh. Current interval (%1$s min) can be customized in settings."
 msgstr ""
-"Vernieuwen. Huidige interval (%1$s min) kan aangepast worden in de"
-" instellingen."
+"Vernieuwen. Huidige interval (%1$s min) kan aangepast worden in de "
+"instellingen."
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/upsell/register.js module:plugins/portal
@@ -8943,12 +8943,12 @@ msgstr ""
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js
 msgid "Show carbon copy input field"
-msgstr "Toon kopie aan invoer veld"
+msgstr "Toon kopie aan invoerveld"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js
 msgid "Show blind carbon copy input field"
-msgstr "Toon blinde kopie aan invoer veld"
+msgstr "Toon \"blinde kopie aan\" invoerveld"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Drop attachments here"
@@ -9225,7 +9225,7 @@ msgstr "Laag"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Attach Vcard"
-msgstr "vCard insluiten"
+msgstr "vCard toevoegen"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
