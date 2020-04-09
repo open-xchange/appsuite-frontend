@@ -38,7 +38,7 @@ Scenario('[C7758] Set timezone', async (I, users) => {
 
     // check major timezones
     var timezones = {
-        'Australia/South': '10:30 PM', // +10.5
+        'Australia/Adelaide': '10:30 PM', // +10.5
         'Asia/Hong_Kong': '8:00 PM', // +8
         'America/New_York': '8:00 AM', // -4
         'America/Los_Angeles': '5:00 AM', // -7
@@ -47,8 +47,8 @@ Scenario('[C7758] Set timezone', async (I, users) => {
 
     for (var id in timezones) {
         I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
-        I.waitForElement({ css: 'select[name="timezone"]' });
-        I.selectOption({ css: 'select[name="timezone"]' }, id);
+        I.waitForText('Time zone');
+        I.selectOption('Time zone', id);
         I.waitForVisible('.io-ox-alert');
         I.logout();
         I.login(['app=io.ox/calendar&perspective=month']);

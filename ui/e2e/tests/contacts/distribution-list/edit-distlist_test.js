@@ -24,7 +24,7 @@ After(async function (users) {
 
 var util = require('./util');
 
-Scenario.skip('Add an existing distribution list', function (I, contacts) {
+Scenario('Add an existing distribution list', async function (I, contacts, dialogs) {
     const title = 'test distribution list one';
 
     I.login('app=io.ox/contacts');
@@ -33,13 +33,17 @@ Scenario.skip('Add an existing distribution list', function (I, contacts) {
     // create new address book
     I.waitForText('Add new address book', 5);
     I.click('Add new address book');
-    I.waitForVisible('.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForVisible('input', 5, dialogs.locators.body);
     I.fillField('New address book', 'test address book');
-    I.click('Add');
+    dialogs.clickButton('Add');
     I.waitForDetached('.modal-dialog');
 
     // create distribution list
+    let listenerID = I.registerNodeRemovalListener('.classic-toolbar');
     I.selectFolder('test address book');
+    I.waitForNodeRemoval(listenerID);
+
     I.waitForText('Empty'); // Empty in list view
     contacts.newDistributionlist();
 
@@ -55,6 +59,8 @@ Scenario.skip('Add an existing distribution list', function (I, contacts) {
     I.click('Create list');
     I.waitForDetached('.io-ox-contacts-distrib-window');
     I.waitForText(title, undefined, '.contact-detail');
+    I.waitForVisible('.io-ox-alert');
+    I.click('.close', '.io-ox-alert');
 
     // create second list
     contacts.newDistributionlist();
@@ -62,17 +68,18 @@ Scenario.skip('Add an existing distribution list', function (I, contacts) {
 
     // search in address book for distribution list one
     I.click('~Select contacts');
-    I.waitForVisible('.modal-header input.search-field', 5);
-    I.waitForEnabled('.modal-header input.search-field', 5);
+    dialogs.waitForVisible();
+    I.waitForVisible('input.search-field', 5, dialogs.locators.header);
+    I.waitForEnabled('input.search-field', 5, dialogs.locators.header); // search field disabled until list is loaded
+    I.waitForFocus('.modal-header input.search-field'); // search field must be focused, otherwise marked string might be deleted
     I.fillField('~Search', title);
     I.waitForText(title, 5, '.modal li.list-item');
     I.click(title, '.modal li.list-item');
-    I.pressKey('Enter');
     I.waitForText('4 addresses selected', 5);
     I.see(title, 'li.token');
 
-    I.click('Select');
-    I.waitForDetached('.modal-header input.search-field', 5);
+    dialogs.clickButton('Select');
+    I.waitForDetached('.modal-dialog');
 
     // add another address just for good measurement
     I.fillField('Add contact', 'testdude5@test.case');
@@ -183,7 +190,7 @@ Scenario('[C7374] Change name', async function (I, users, contacts) {
     });
 });
 
-Scenario('[C7375] Move list', async function (I, users, contacts) {
+Scenario('[C7375] Move list', async function (I, users, contacts, dialogs) {
     await users.create();
     const testrailID = 'C7375',
         display_name = await util.createDistributionList(I, users, testrailID);
@@ -194,14 +201,16 @@ Scenario('[C7375] Move list', async function (I, users, contacts) {
     contacts.selectContact(display_name);
     I.clickToolbar('~More actions');
     I.click('Move');
-    I.waitForText('Move', 5, '.modal-open .modal-title');
+
+    dialogs.waitForVisible();
+    I.waitForText('Move', 5, dialogs.locators.header);
     I.waitForElement('.modal .section .folder-arrow');
     I.click('.modal .section .folder-arrow');
     I.waitForElement(`.modal .section.open [aria-label="${testrailID}"]`, 5);
     I.click(`.modal [aria-label="${testrailID}"]`);
-    I.waitForEnabled('.modal button.btn-primary');
-    I.click('Move', '.modal');
-    I.waitForDetached('.modal.launcher-icon.fa-refresh.fa-spin');
+    dialogs.clickButton('Move');
+    I.waitForDetached('.modal-dialog');
+
     I.selectFolder('Contacts');
     I.waitForDetached(`~${display_name}`);
     I.selectFolder(testrailID);
@@ -214,7 +223,7 @@ Scenario('[C7375] Move list', async function (I, users, contacts) {
     });
 });
 
-Scenario('[C7377] Copy list', async function (I, users, contacts) {
+Scenario('[C7377] Copy list', async function (I, users, contacts, dialogs) {
     await users.create();
     const testrailID = 'C7377',
         display_name =  await util.createDistributionList(I, users, testrailID);
@@ -231,14 +240,15 @@ Scenario('[C7377] Copy list', async function (I, users, contacts) {
     });
 
     I.clickToolbar('~More actions');
-    I.click('Copy');
-    I.waitForText('Copy', 5, '.modal-open .modal-title');
+    I.clickDropdown('Copy');
+    dialogs.waitForVisible();
+    I.waitForText('Copy', 5, dialogs.locators.header);
     I.waitForElement('.modal .section .folder-arrow');
     I.click('.modal .section .folder-arrow');
     I.waitForElement(`.modal .section.open [aria-label="${testrailID}"]`, 5);
     I.click(`.modal [aria-label="${testrailID}"]`);
-    I.click('Copy', '.modal-footer');
-    I.waitForDetached('.modal-body');
+    dialogs.clickButton('Copy');
+    I.waitForDetached('.modal-dialog');
 
     ['Contacts', testrailID].forEach(function (folderName) {
         I.selectFolder(folderName);

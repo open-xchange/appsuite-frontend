@@ -43,7 +43,7 @@ Scenario('[C114338] Flag an E-Mail with a color flag (flaggedAndColor)', async (
     await me.login({ color: true, star: true });
     me.selectMail();
     me.clickToolbarAction('color');
-    I.click('.smart-dropdown-container.flag-picker [data-action="color-yellow"]');
+    me.waitAndClick('.smart-dropdown-container.flag-picker [data-action="color-yellow"]');
     I.waitForElement(colorFlag);
     me.clickToolbarAction('flag');
     I.waitForElement(flagged);

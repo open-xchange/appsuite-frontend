@@ -48,5 +48,5 @@ Scenario('[C85616] Progress bar for sending mail', async (I, users) => {
     // 3. Verify that the mail is sent successfully
 
     // wait for mail delivery
-    I.waitForVisible(locate('.list-item[aria-label*="My Subject"]').inside('.list-view'));
+    I.waitForVisible(locate('.list-item[aria-label*="My Subject"]').inside('.list-view'), 30);
 });

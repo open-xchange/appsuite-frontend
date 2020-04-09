@@ -29,7 +29,7 @@ Scenario('[C8819] Default mail priority', async (I, mail) => {
     I.login('app=io.ox/mail');
     mail.newMail();
     // Click 'Options' Dropdown
-    I.click('Options');
+    I.click(mail.locators.compose.options);
     //Check default mail priority
     I.clickDropdown('Normal');
 });

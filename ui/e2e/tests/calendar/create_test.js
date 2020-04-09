@@ -29,7 +29,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('Create appointment with all fields', async function (I, calendar) {
+Scenario('Create appointment with all fields', async function (I, calendar, dialogs) {
     const data = { subject: 'test title', location: 'test location' };
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -69,8 +69,9 @@ Scenario('Create appointment with all fields', async function (I, calendar) {
     I.click(appointment);
     I.waitForText('Delete');
     I.click('Delete');
-    I.waitForVisible('.modal-dialog .modal-footer');
-    I.click('Delete', '.modal-dialog .modal-footer');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached(appointment);
 });
 
@@ -95,7 +96,7 @@ Scenario('Fullday appointments', async function (I, calendar) {
 
 //See Bug 64409
 // TODO: shaky (element (~Start time) is not in DOM or there is no element(~Start time) with value "9:52 AM" after 30 sec)
-Scenario.skip('Enter start time and press enter key', function (I, calendar) {
+Scenario('Enter start time and press enter key', function (I, calendar) {
     I.login('app=io.ox/calendar');
 
     calendar.waitForApp();
@@ -167,7 +168,7 @@ Scenario('[C7412] Create private appointment @contentReview @bug', async functio
     });
 
     I.say('Login with second user');
-    I.login('app=io.ox/calendar', { user: users[1] });
+    I.login('app=io.ox/calendar&perspective=week:week', { user: users[1] });
     calendar.waitForApp();
 
     I.retry(5).click({ css: `[aria-label*="${today.format('l, dddd')}, CW ${today.week()}"]` }, calendar.locators.mini);
@@ -179,13 +180,13 @@ Scenario('[C7412] Create private appointment @contentReview @bug', async functio
     I.doubleClick({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${title}"]` });
 
     I.say('Check views');
-    ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
+    ['Day', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
         I.waitForText('Private');
         I.dontSee(somedetail);
     }));
 });
 
-Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December, no end', async function (I, calendar) {
+Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December, no end', async function (I, calendar, dialogs) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -202,25 +203,21 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
 
     I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'), '.io-ox-calendar-edit-window');
     I.click(`Every ${date.format('dddd')}.`);
-    I.waitForElement('.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Edit recurrence', 5, dialogs.locators.header);
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Yearly');
     I.see('Every year in December on day 16.');
-    I.click('Apply', '.modal-dialog');
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     I.see('Every year in December on day 16.');
 
     I.click('Create');
     I.waitForDetached('.io-ox-calendar-edit-window');
 
-    if (moment().isSame(date, 'week')) {
-        I.waitForVisible('.io-ox-sidepopup');
-        I.click('~Close', '.io-ox-sidepopup');
-    }
-
     I.say('Check next occurence');
     const diffMonth = date.diff(moment().startOf('month'), 'months');
     for (let i = 0; i < diffMonth; i++) I.click('~Go to next month', calendar.locators.mini);
-    I.click(`~${date.format('l, dddd')}, CW ${date.week()}`, calendar.locators.mini);
+    I.click({ css: `[aria-label*="${date.format('l, dddd')}, CW ${date.week()}"]` }, calendar.locators.mini);
     ['Workweek', 'Week', 'Day', 'Month'].forEach(perspective => calendar.withinPerspective(perspective, (locator) => {
         I.waitForVisible(locate('.appointment').inside(locator));
         I.see('Testappointment');
@@ -235,7 +232,7 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
     }));
 });
 
-Scenario('[C7418] Create a Yearly recurring appointment last day of week in december, ends after 5', async function (I, calendar) {
+Scenario('[C7418] Create a Yearly recurring appointment last day of week in december, ends after 5', async function (I, calendar, dialogs) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -255,23 +252,19 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
 
     I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'), '.io-ox-calendar-edit-window');
     I.click(`Every ${date.format('dddd')}.`);
-    I.waitForElement('.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Edit recurrence', 5, dialogs.locators.header);
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Yearly');
     I.waitForText('Weekday');
     I.click({ css: 'input[value="weekday"]' });
     I.see('Every year on the first Sunday in December.');
-    I.click('Apply', '.modal-dialog');
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     I.see('Every year on the first Sunday in December.');
 
     // create
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window');
-
-    if (moment().isSame(date, 'week')) {
-        I.waitForVisible('.io-ox-sidepopup');
-        I.click('~Close', '.io-ox-sidepopup');
-    }
 
     I.say('Check next occurence');
     const diffMonth = date.diff(moment().startOf('month'), 'months');
@@ -295,7 +288,7 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
     }));
 });
 
-Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/2020', async function (I, calendar) {
+Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/2020', async function (I, calendar, dialogs) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -307,7 +300,7 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
     calendar.waitForApp();
 
     // and select the correct date
-    I.retry(5).click(`~${date.format('l, dddd')}, CW ${date.week()}`, calendar.locators.mini);
+    I.retry(5).click(`//td[contains(@aria-label, "${date.format('l, dddd')}, CW ${date.week()}")]`, calendar.locators.mini);
 
     I.say('Create');
     calendar.newAppointment();
@@ -318,13 +311,14 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
     I.click(`Every ${date.format('dddd')}.`);
 
     I.say('Create > Recurrence');
-    I.waitForElement('.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Edit recurrence', 5, dialogs.locators.header);
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Monthly');
     I.selectOption('.modal-dialog [name="until"]', 'On specific date');
     I.waitForElement(locate('~Date (M/D/YYYY)').inside('.modal-dialog'));
     await calendar.setDate('until', moment(date).add(6, 'years'));
     I.see('Every month on day 10.');
-    I.click('Apply', '.modal-dialog');
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     I.see('Every month on day 10.');
 
@@ -349,7 +343,7 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
 
 });
 
-Scenario('[C7420] Create a monthly recurring appointment every second Monday every month never ends', async function (I, calendar) {
+Scenario('[C7420] Create a monthly recurring appointment every second Monday every month never ends', async function (I, calendar, dialogs) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -361,7 +355,7 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
-    I.retry(5).click(`~${date.format('l, dddd')}, CW ${date.week()}`, calendar.locators.mini);
+    I.retry(5).click(`//td[contains(@aria-label, "${date.format('l, dddd')}, CW ${date.week()}")]`, calendar.locators.mini);
 
     I.say('Create');
     calendar.newAppointment();
@@ -371,12 +365,13 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
     I.say('Create > Recurrence');
     I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'), '.io-ox-calendar-edit-window');
     I.click(`Every ${date.format('dddd')}.`);
-    I.waitForElement('.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Edit recurrence', 5, dialogs.locators.header);
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Monthly');
     I.waitForText('Weekday');
     I.click({ css: 'input[value="weekday"]' });
     I.see('Every month on the second Monday.');
-    I.click('Apply', '.modal-dialog');
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     I.see('Every month on the second Monday.');
 
@@ -405,17 +400,18 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
 
 });
 
-Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday ends after 3', async function (I, calendar) {
+Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday ends after 3', async function (I, calendar, dialogs) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
     });
-    const date = moment().startOf('day').weekday(0);
+    const date = moment().startOf('week');
+    I.say(date);
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
-    I.retry(5).click(`~${date.format('l, dddd')}, CW ${date.week()}`, calendar.locators.mini);
+    I.retry(5).click({ css: `[aria-label*="${date.format('l, dddd')}, CW ${date.week()}"` }, calendar.locators.mini);
 
     I.say('Create');
     calendar.newAppointment();
@@ -425,7 +421,6 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
     I.say('Create > Recurrence');
     calendar.recurAppointment(date);
     within(calendar.locators.recurrenceview, function () {
-        I.waitForElement('.modal-dialog');
         I.selectOption('.modal-dialog [name="recurrence_type"]', 'Weekly');
         I.fillField('Interval', 2);
         I.selectOption('.modal-dialog [name="until"]', 'After a number of occurrences');
@@ -433,8 +428,8 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
         I.fillField('.modal-dialog [name="occurrences"]', '3');
         I.pressKey('Enter');
         I.see('Every 2 weeks on Sunday.');
-        I.click('Apply', '.modal-dialog');
     });
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     I.see('Every 2 weeks on Sunday.');
 
@@ -510,7 +505,7 @@ Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thu
     }));
 });
 
-Scenario('[C7423] Create daily recurring appointment every day ends after 5', async function (I, calendar) {
+Scenario('[C7423] Create daily recurring appointment every day ends after 5', async function (I, calendar, dialogs) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -538,8 +533,8 @@ Scenario('[C7423] Create daily recurring appointment every day ends after 5', as
         I.fillField('[name="occurrences"]', '5');
         I.pressKey('Enter');
         I.see('Every day.');
-        I.click('Apply');
     });
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     I.see('Every day.');
 
@@ -563,7 +558,7 @@ Scenario('[C7423] Create daily recurring appointment every day ends after 5', as
     }));
 });
 
-Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12', async function (I, calendar) {
+Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12', async function (I, calendar, dialogs) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -595,9 +590,8 @@ Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12',
         I.fillField('[name="occurrences"]', '8'); // just repeat 8 times to stay in the current month
         I.pressKey('Enter');
         I.see('Every 2 days.');
-        I.click('Apply', '.modal-dialog');
     });
-
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     I.see('Every 2 days.');
 
@@ -821,7 +815,7 @@ Scenario('[C274484] Attendees can change the appointment', async function (I, us
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7428] Create appointment with internal participants', async function (I, users, calendar) {
+Scenario('[C7428] Create appointment with internal participants', async function (I, users, calendar) {
     const data = { subject: 'Einkaufen', location: 'Wursttheke' };
 
     I.login('app=io.ox/calendar&perspective="week:day"');
@@ -831,7 +825,7 @@ Scenario.skip('[C7428] Create appointment with internal participants', async fun
     calendar.newAppointment();
     I.fillField('Subject', data.subject);
     I.fillField('Location', data.location);
-    calendar.addAttendee(users[1].get('name'), 'picker');
+    calendar.addParticipantByPicker(users[1].get('name'));
     I.click('Create');
 
     I.say('Check Views');
@@ -856,12 +850,12 @@ Scenario.skip('[C7428] Create appointment with internal participants', async fun
     I.waitForText(`New appointment: ${data.subject}`);
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7425] Create appointment with a group', async function (I, users, calendar) {
+Scenario('[C7425] Create appointment with a group', async function (I, users, calendar, mail) {
+    const groupName = 'Awesome guys';
 
     await I.haveGroup({
-        name: 'Awesome guys',
-        display_name: 'Awesome guys',
+        name: groupName,
+        display_name: groupName,
         members: [
             users[0].userdata.id,
             users[1].userdata.id
@@ -876,7 +870,11 @@ Scenario.skip('[C7425] Create appointment with a group', async function (I, user
     calendar.newAppointment();
     I.fillField('Subject', data.subject);
     I.fillField('Location', data.location);
-    calendar.addAttendee('Awesome guys');
+    I.fillField(calendar.locators.startdate, moment().startOf('day').format('MM/DD/YYYY'));
+    I.clearField(calendar.locators.starttime);
+    I.fillField(calendar.locators.starttime, '11:00 PM');
+
+    await calendar.addParticipant(groupName);
     I.waitForText(users[0].get('name'), 5);
     I.waitForText(users[1].get('name'), 5);
     I.click('Create');
@@ -900,11 +898,13 @@ Scenario.skip('[C7425] Create appointment with a group', async function (I, user
 
     I.say('Check Mail');
     I.openApp('Mail');
+    mail.waitForApp();
     I.waitForText(`New appointment: ${data.subject}`);
+
+    await I.dontHaveGroup(groupName);
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7429] Create appointment via Contact', async function (I, users, contacts, calendar) {
+Scenario('[C7429] Create appointment via Contact', async function (I, users, contacts, calendar) {
     const data = { subject: 'Wichtige Dinge', location: 'Kneipe' };
 
     I.login('app=io.ox/contacts');
@@ -920,6 +920,7 @@ Scenario.skip('[C7429] Create appointment via Contact', async function (I, users
 
     I.say('Create Appointment');
     I.waitForVisible(locate({ css: '.io-ox-calendar-edit-window' }));
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
     I.fillField('Subject', 'Wichtige Dinge tun');
     I.fillField('Location', 'Kneipe');
     I.click('Create');
@@ -965,8 +966,7 @@ Scenario('[C7430] Create appointment via Icon', async function (I, calendar) {
     }));
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7431] Create appointment via doubleclick', async function (I, calendar) {
+Scenario('[C7431] Create appointment via doubleclick', async function (I, calendar) {
     const data = { subject: 'Todesstern testen' };
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
@@ -978,10 +978,10 @@ Scenario.skip('[C7431] Create appointment via doubleclick', async function (I, c
         // there are 48 timeslots use 25th here
         I.doubleClick('.io-ox-pagecontroller.current .day .timeslot:nth-child(25)');
         I.waitForVisible('.io-ox-calendar-edit-window');
-        I.fillField('Subject', data.subject);
+        I.retry(5).fillField('Subject', data.subject);
         I.seeInField(calendar.locators.starttime, '12:00 PM');
         I.click('Create');
-        I.waitForVisible({ css: '.appointment' });
+        I.waitForVisible({ css: '.page.current .appointment' });
         await I.removeAllAppointments();
     }
 
@@ -994,7 +994,7 @@ Scenario.skip('[C7431] Create appointment via doubleclick', async function (I, c
     I.click('Month', '.smart-dropdown-container');
     I.retry(5).doubleClick('.io-ox-pagecontroller.current .day .list');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.fillField('Subject', data.subject);
+    I.retry(5).fillField('Subject', data.subject);
     I.click('Create');
     I.waitForVisible('.appointment', 5);
 });
@@ -1010,7 +1010,7 @@ Scenario('[C256455] Create all-day appointment via date label', async function (
     var createOnfirstDay = async function () {
         I.click('.io-ox-pagecontroller.current .weekday:first-child');
         I.waitForVisible('.io-ox-calendar-edit-window');
-        I.fillField('Subject', 'Grillen');
+        I.retry(5).fillField('Subject', 'Grillen');
         I.fillField('Location', 'Olpe');
         I.seeCheckboxIsChecked({ css: '[name="allDay"]' });
         I.seeInField({ css: '[data-attribute="startDate"] .datepicker-day-field' }, startDate.format('M/D/YYYY'));
@@ -1040,7 +1040,7 @@ Scenario('[C7436] Create appointment without any infos', async function (I, cale
     I.see('Please enter a value');
 });
 
-Scenario('[C271749] Show prompt on event creation in public calendar', async function (I, calendar) {
+Scenario('[C271749] Show prompt on event creation in public calendar', async function (I, calendar, dialogs) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -1053,10 +1053,11 @@ Scenario('[C271749] Show prompt on event creation in public calendar', async fun
     I.click('Add new calendar');
     I.waitForText('Personal calendar');
     I.click('Personal calendar');
-    I.waitForVisible('.modal-body');
+    dialogs.waitForVisible();
+    I.waitForText('Add new calendar', 5, dialogs.locators.header);
     I.fillField('Calendar name', 'Cal#A');
     I.checkOption('Add as public calendar');
-    I.click('Add');
+    dialogs.clickButton('Add');
     I.waitForDetached('.modal');
 
     // Open create new appointment dialog
@@ -1067,10 +1068,11 @@ Scenario('[C271749] Show prompt on event creation in public calendar', async fun
 });
 
 // "datepicker open" doesn't work reliable when running puppeteer headerless
-Scenario.skip('[C7440] Start/End date autoadjustment', async function (I, calendar) {
+Scenario('[C7440] Start/End date autoadjustment', async function (I, calendar) {
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
     calendar.newAppointment();
+
     // strings are usually the same, but if this test is run around midnight, we may get a one day difference, so we must calculate that
     var startString = await calendar.getDate('startDate'),
         endString = await calendar.getDate('endDate'),
@@ -1083,14 +1085,15 @@ Scenario.skip('[C7440] Start/End date autoadjustment', async function (I, calend
     async function check(direction, toChange) {
         // start today
         I.click({ css: '[data-attribute="' + toChange + '"] .datepicker-day-field' });
-        I.waitForElement('.date-picker.open');
+        I.waitForVisible('.date-picker.open');
         I.click('.date-picker.open .btn-today');
+        I.waitForDetached('.datepicker.open');
         // change month
         I.click({ css: '[data-attribute="' + toChange + '"] .datepicker-day-field' });
         I.click('.date-picker.open .btn-' + direction);
         // quite funny selector but this makes sure we don't click on one of the greyed out days of last month (:not selector does not work...)
         I.click('.date-picker.open tr:first-child .date:last-child');
-        I.wait(1);
+        I.waitForDetached('.date-picker.open');
 
         //check if the fields are updated to the expected values
         startString = await calendar.getDate('startDate');
@@ -1102,13 +1105,14 @@ Scenario.skip('[C7440] Start/End date autoadjustment', async function (I, calend
     // start today
     I.click({ css: '[data-attribute="endDate"] .datepicker-day-field' });
     I.click('.date-picker.open .btn-today');
+    I.waitForDetached('.datepicker.open');
     // change month
     I.click({ css: '[data-attribute="endDate"] .datepicker-day-field' });
     I.click('.date-picker.open .btn-next');
     // quite funny selector but this makes sure we don't click on one of the greyed out days of last month (:not selector does not work...)
     I.click('.date-picker.open tr:first-child .date:last-child');
+    I.waitForDetached('.datepicker.open');
 
-    I.wait(1);
     var newStartString = await calendar.getDate('startDate'),
         newEndString = await calendar.getDate('endDate');
     expect(newStartString).to.equal(startString);
@@ -1139,7 +1143,7 @@ Scenario('[C7441] Start/End time autocompletion', async function (I, calendar) {
     check('1:00 PM', 'endDate', '10:00 AM', '1:00 PM');
 });
 
-Scenario.skip('[C7442] Set date from date-picker', async function (I, calendar) {
+Scenario('[C7442] Set date from date-picker', async function (I, calendar) {
 
     I.login('app=io.ox/calendar&perspective=week:day');
     calendar.waitForApp();
@@ -1225,8 +1229,7 @@ Scenario.skip('[C7442] Set date from date-picker', async function (I, calendar) 
 
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7413] Create appointment with an attachment', async function (I, calendar) {
+Scenario('[C7413] Create appointment with an attachment', async function (I, calendar) {
     // Preconditions: You are at the Calendar-tab
     I.login(['app=io.ox/calendar&perspective=week:week']);
     calendar.waitForApp();
@@ -1271,7 +1274,7 @@ Scenario('[C274406] Change organizer of appointment with external attendees', as
     calendar.newAppointment();
     I.fillField('Subject', subject);
     I.fillField('Location', 'Globe Theatre');
-    calendar.addAttendee(users[1].get('name'));
+    await calendar.addParticipant(users[1].get('name'));
     I.fillField('.add-participant.tt-input', 'ExcellentExternalExterminator@Extraterrestrial.ex');
     I.pressKey('Enter');
     I.click('Create');
@@ -1279,89 +1282,84 @@ Scenario('[C274406] Change organizer of appointment with external attendees', as
     I.say('Check');
     I.waitForText(subject, undefined, '.appointment');
     I.click(subject, '.appointment');
+    I.waitForElement('.calendar-detail .more-dropdown .dropdown-toggle');
+    I.wait(1);
     I.click('.calendar-detail .more-dropdown .dropdown-toggle');
     I.waitForElement('.smart-dropdown-container.open');
     I.dontSee('Change organizer');
     I.click('.smart-dropdown-container');
 
     I.say('Edit appointment');
+    I.waitForText('Edit');
+    I.wait(1);
     I.click('Edit');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'));
+    I.retry(5).click(locate({ css: 'div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'));
     I.click('Save');
 
     I.say('Check');
     I.waitForText(subject, undefined, '.appointment');
-    I.retry().click(subject, '.appointment');
+    I.wait(1);
+    I.click(subject, '.appointment');
+    I.waitForElement('.calendar-detail .more-dropdown .dropdown-toggle');
+    I.wait(1);
     I.click('.calendar-detail .more-dropdown .dropdown-toggle');
     I.waitForElement('.smart-dropdown-container.open');
     I.dontSee('Change organizer');
 });
 
-// Skip for now, request fails with:
-// Ignored invalid data [id, field Visibility, severity MAJOR, message Unable to store a 'private' classification]
-Scenario.skip('[C274651] Create secret appointment @contentReview', async function (I, users) {
-    let testrailID = 'C274651';
-    var timestamp = Math.round(+new Date() / 1000);
+Scenario('[C274651] Create secret appointment', async function (I, users, calendar) {
+    const testrailID = 'C274651',
+        startDate = moment().startOf('week').add('1', 'day'),
+        folder =
+        {
+            module: 'event',
+            subscribed: 1,
+            title: testrailID,
+            permissions: [
+                {
+                    bits: 403710016,
+                    entity: users[0].userdata.id,
+                    group: false
+                }, {
+                    bits: 4227332,
+                    entity: users[1].userdata.id,
+                    group: false
+                }
+            ],
+            parent: 'cal://0/' + await I.grabDefaultFolder('calendar', { user: users[0] })
+        };
+
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
-    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
-    const folder = {
-        module: 'event',
-        subscribed: 1,
-        title: testrailID,
-        permissions: [
-            {
-                bits: 403710016,
-                entity: users[0].userdata.id,
-                group: false
-            }, {
-                bits: 4227332,
-                entity: users[1].userdata.id,
-                group: false
-            }
-        ],
-        parent: 'cal://0/' + appointmentDefaultFolder
-    };
     const sharedFolderID = await I.haveFolder(folder, { user: users[0] });
-    await I.haveAppointment({
-        folder: sharedFolderID,
-        endDate: {
-            tzid: 'Europe/Berlin',
-            value: moment().startOf('isoWeek').add(10, 'hours').format('YYYYMMDD[T]HHmm00')
-        },
-        startDate: {
-            tzid: 'Europe/Berlin',
-            value: moment().startOf('isoWeek').add(8, 'hours').format('YYYYMMDD[T]HHmm00')
-        },
-        attendees: [
-            {
-                partStat: 'ACCEPTED',
-                entity: users[0].userdata.id
-            }
-        ],
-        class: 'PRIVATE',
-        visibility: 'PRIVATE',
-        alarms: [],
-        transp: 'OPAQUE',
-        attendeePrivileges: 'DEFAULT',
-        summary: timestamp,
-        location: timestamp,
-        description: timestamp
-
-    }, { user: users[0] });
-    I.login('app=io.ox/calendar', { user: users[1] });
-    I.doubleClick('~Shared calendars');
-    I.waitForVisible({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]` });
-    I.doubleClick({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]` });
-    ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
+    // Login and create secret appointment in shared calendar
+    I.login('app=io.ox/calendar', { user: users[0] });
+    calendar.waitForApp();
+    I.selectFolder(testrailID);
+    calendar.newAppointment();
+    I.fillField('Subject', testrailID);
+    I.pressKey('Enter');
+    await calendar.setDate('startDate', startDate);
+    I.selectOption('Visibility', 'Secret');
+    I.click('Create');
+    I.waitForDetached('.io-ox-calendar-edit-window');
+    // Check secret appointment in all views
+    ['Workweek', 'Week', 'Day', 'Month'].forEach((view) => {
         I.clickToolbar('View');
-        I.click(view);
-        I.waitForText('Private');
-        I.dontSee(timestamp);
-        I.dontSee(timestamp);
+        I.clickDropdown(view);
+        if (view === 'Day') I.click(`.date-picker [aria-label*="${startDate.format('M/D/YYYY')}"]`);
+        I.waitForElement('.page.current .private-flag');
     });
+    I.logout();
+
+    //Login user 2, check that secret appointment is not visible in shared calendar
+    I.login(`app=io.ox/calendar&perspective="week"&folder=${sharedFolderID}`, { user: users[1] });
+    calendar.waitForApp();
+    I.waitForVisible({ css: `[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]` });
+    I.dontSeeElement('.appointment');
+
 });
 
 Scenario('[C7414] Create two appointments at the same time (one is shown as free)', async function (I, users, calendar) {
@@ -1404,8 +1402,7 @@ Scenario('[C7414] Create two appointments at the same time (one is shown as free
     I.waitForDetached(locate('.modal-open .modal-title').withText('Conflicts detected'));
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7415] Create two reserved appointments at the same time', async function (I, users, calendar) {
+Scenario('[C7415] Create two reserved appointments at the same time', async function (I, users, calendar, dialogs) {
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
@@ -1417,13 +1414,13 @@ Scenario.skip('[C7415] Create two reserved appointments at the same time', async
         folder: 'cal://0/' + appointmentDefaultFolder,
         summary: testrailID,
         location: testrailID,
-        endDate: {
-            tzid: 'Europe/Berlin',
-            value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
-        },
         startDate: {
             tzid: 'Europe/Berlin',
-            value: moment().format('YYYYMMDD[T]HHmm00')
+            value: moment().startOf('day').add(10, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().startOf('day').add(12, 'hours').format('YYYYMMDD[T]HHmm00')
         },
         attendees: [
             {
@@ -1436,17 +1433,22 @@ Scenario.skip('[C7415] Create two reserved appointments at the same time', async
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
     I.clickToolbar('Today');
+    I.waitForElement('.appointment-container [title="' + testrailID + ', ' + testrailID + '"]');
     expect(await I.grabNumberOfVisibleElements(`.appointment-container [title="${testrailID}, ${testrailID}"]`)).to.equal(1);
 
     I.say('Create appointment');
     calendar.newAppointment();
     I.fillField('Subject', testrailID);
     I.fillField('Location', testrailID);
+    I.fillField(calendar.locators.startdate, moment().startOf('day').format('MM/DD/YYYY'));
+    I.clearField(calendar.locators.starttime);
+    I.fillField(calendar.locators.starttime, moment().startOf('day').add(11, 'hours').format('HH:mm') + 'AM');
     I.click('Create');
 
     I.say('Check appointment');
-    I.waitForElement(locate('.modal-open .modal-title').withText('Conflicts detected'));
-    I.click('Ignore conflicts');
+    dialogs.waitForVisible();
+    I.waitForText('Conflicts detected', 5, dialogs.locators.header);
+    dialogs.clickButton('Ignore conflicts');
     I.waitForDetached('.modal-open');
     I.retry(5).click('~Refresh');
     I.waitForElement('#io-ox-refresh-icon .fa-spin');
@@ -1480,19 +1482,18 @@ Scenario('[C7446] Create recurring whole-day appointment', async function (I, us
     I.waitForDetached('.recurrence-view-dialog');
     I.click('Create');
 
-    const selector = '.appointment-panel [aria-label="Birthday of Linus Torvalds, Helsinki Imbiss"]';
-    ['1969-12-28', '1968-12-28', '1967-12-28', '1975-12-28', '1995-12-28', '2025-12-28'].forEach(async (datestring) => {
+    const selector = '.appointment-panel [aria-label*="Birthday of Linus Torvalds, Helsinki Imbiss"]';
+    const list = ['1969-12-28', '1968-12-28', '1967-12-28', '1975-12-28', '1995-12-28', '2025-12-28'];
+    await Promise.all(list.map(async function (datestring) {
         I.say(`Check ${datestring}`);
         await I.executeScript(`ox.ui.apps.get("io.ox/calendar").setDate(new moment("${datestring}"))`);
         I.waitForVisible(selector);
         expect(await I.grabNumberOfVisibleElements(selector)).to.equal(1);
-    });
+    }));
 });
 
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7447] Private appointment with participants', async function (I, users, calendar) {
-    //var timestamp = Math.round(+new Date() / 1000);
+Scenario('[C7447] Private appointment with participants', async function (I, users, calendar) {
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
@@ -1555,8 +1556,7 @@ Scenario('[C7448] Cannot create private appointment', async function (I, users, 
     expect(await I.grabNumberOfVisibleElements('option[value="CONFIDENTIAL"]')).to.equal(0);
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C234658] Create appointments and show this in cumulatively view', async function (I, calendar) {
+Scenario('[C234658] Create appointments and show this in cumulatively view', async function (I, calendar) {
     const
         Moment = require('moment'),
         MomentRange = require('moment-range'),

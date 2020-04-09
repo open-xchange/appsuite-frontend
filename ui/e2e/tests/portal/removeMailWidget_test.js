@@ -21,7 +21,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7487] Remove a mail', async (I, users) => {
+Scenario('[C7487] Remove a mail', async (I, users, portal, mail, dialogs) => {
     let [user] = users;
     await I.haveMail({
         attachments: [{
@@ -37,7 +37,7 @@ Scenario('[C7487] Remove a mail', async (I, users) => {
     });
 
     I.login('app=io.ox/mail');
-    I.waitForVisible('.io-ox-mail-window');
+    mail.waitForApp();
 
     // click on first email
     I.waitForText('Test subject', 5, '.io-ox-mail-window .leftside');
@@ -49,11 +49,14 @@ Scenario('[C7487] Remove a mail', async (I, users) => {
 
     // remove mail widget from portal
     I.openApp('Portal');
+    portal.waitForApp();
     I.waitForElement('~Test subject');
     I.waitForElement('~Test subject, Disable widget');
     I.click('~Test subject, Disable widget');
-    I.waitForVisible({ css: '.modal-dialog' });
-    I.click('Delete', '.modal-dialog');
+
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
 
     // verify that the widget is removed
     I.dontSee('~Test subject');

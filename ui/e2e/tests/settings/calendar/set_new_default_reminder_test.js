@@ -23,7 +23,7 @@ After(async (users) => {
 });
 
 
-Scenario('[C7867] Set new default reminder', async function (I) {
+Scenario('[C7867] Set new default reminder', async function (I, calendar, dialogs) {
     const alaramNotification = 'Notification';
     const alaramTime = '45 minutes';
     const alaramRelated = 'before start';
@@ -39,17 +39,19 @@ Scenario('[C7867] Set new default reminder', async function (I) {
             .withChild(locate('label').withText('Default reminder'))
         .find('button')
     );
-    I.waitForText('Edit reminders');
-    I.click('Add reminder', '.modal-dialog');
+
+    dialogs.waitForVisible();
+    I.waitForText('Edit reminders', dialogs.locators.header);
+    I.click('Add reminder', dialogs.locators.body);
     I.selectOption('.alarm-action', alaramNotification);
     I.selectOption('.alarm-time', alaramTime);
     I.selectOption('.alarm-related', alaramRelated);
-    I.click({ css: '[data-action="apply"]' });
+    dialogs.clickButton('Apply');
     I.openApp('Calendar');
+    calendar.waitForApp();
 
     // Check whether Notify 45 minutes before start is shown on appoitment creation window
-    I.clickToolbar('New appointment');
-    I.waitForText('Subject', 30, '.io-ox-calendar-edit');
+    calendar.newAppointment();
     I.see('Notify 45 minutes before start.');
 });
 

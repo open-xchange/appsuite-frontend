@@ -44,25 +44,25 @@ Scenario('[C8362] Add note', (I, drive) => {
 });
 
 // Bug: File input is not selectable (display: none), which is also a pot. a11y bug
-Scenario.skip('[C8364] Upload new file', (I, drive) => {
+Scenario('[C8364] Upload new file', (I, drive) => {
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.clickToolbar('New');
     I.waitForText('Upload files');
     I.click('Upload files');
-    I.attachFile('.dropdown.open input[name=file]', 'e2e/media/files/0kb/document.txt');
-    // TODO: Continue when Bug is fixed
+    // the input field is created on demand when Upload files is clicked. This click also closes the dropdown
+    I.attachFile({ css: '[aria-label="Drive toolbar. Use cursor keys to navigate."] .dropdown input[name=file]' }, 'e2e/media/files/0kb/document.txt');
+    I.waitForText('document.txt');
 });
 
 // Note: This is not accessible H4 and textarea does not have a label
-// TODO: shaky (reference: element is not attached to the page document)
-Scenario.skip('[C8366] Edit description', async (I, drive) => {
+Scenario('[C8366] Edit description', async (I, drive, dialogs) => {
     await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
 
     let sidebarDescription = locate({ css: '.viewer-sidebar-pane .sidebar-panel-body .description' }).as('Sidebar'),
-        modelEditDescription = locate({ css: 'div.modal' }).as('Modal: Edit description');
+        descriptionTextarea = dialogs.locators.main.find('textarea.form-control');
 
     I.waitForText('document.txt', 1, '.file-list-view');
     I.click(locate('li.list-item').withText('document.txt'));
@@ -70,38 +70,46 @@ Scenario.skip('[C8366] Edit description', async (I, drive) => {
     I.say('Add description');
     I.waitForText('Add a description');
     I.click('Add a description');
-    I.waitForElement(modelEditDescription.find('textarea.form-control'));
-    I.fillField(modelEditDescription.find('textarea.form-control'), 'Test description');
-    I.click('Save');
-    I.waitForDetached(modelEditDescription);
+    dialogs.waitForVisible();
+    I.waitForElement(descriptionTextarea);
+    I.fillField(descriptionTextarea, 'Test description');
+    dialogs.clickButton('Save');
+    I.waitForDetached('.modal-dialog');
 
     I.say('Check description #1');
-    I.seeTextEquals('Test description', sidebarDescription);
+    I.waitForElement({ xpath: '//div[contains(@class, "viewer-sidebar-pane")]//*[text()="Test description"]' });
 
     I.say('Edit description');
     I.waitForText('document.txt', 1, '.file-list-view');
     I.click(locate('li.list-item').withText('document.txt'));
     I.waitForText('Edit description');
     I.click('button.description-button');
-    I.waitForElement(modelEditDescription.find('textarea.form-control'));
-    I.fillField(modelEditDescription.find('textarea.form-control'), 'Test description changed');
-    I.click('Save');
+    dialogs.waitForVisible();
+    I.fillField(descriptionTextarea, 'Test description changed');
+    dialogs.clickButton('Save');
+    I.waitForDetached('.modal-dialog');
 
     I.say('Check description #2');
-    I.waitForDetached(modelEditDescription);
     I.waitForVisible(sidebarDescription);
     I.waitForText('Test description changed', 5, sidebarDescription);
 });
 
 const checkIfFoldersExist = (I, layout) => {
-    I.see('Documents', layout);
-    I.see('Music', layout);
-    I.see('Pictures', layout);
-    I.see('Videos', layout);
+    if (layout === '.grid-layout') {
+        // there are &#8203 between each letter, this is needed as they are also there in drive
+        I.see('D​o​c​u​m​e​n​t​s', layout);
+        I.see('M​u​s​i​c', layout);
+        I.see('P​i​c​t​u​r​e​s', layout);
+        I.see('V​i​d​e​o​s', layout);
+    } else {
+        I.see('Documents', layout);
+        I.see('Music', layout);
+        I.see('Pictures', layout);
+        I.see('Videos', layout);
+    }
 };
 
-// TODO: Bug in Drive Icon View has html entities in it.
-Scenario.skip('[C8368] View change @bug', async (I, drive) => {
+Scenario('[C8368] View change @bug', async (I, drive) => {
     await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -112,7 +120,8 @@ Scenario.skip('[C8368] View change @bug', async (I, drive) => {
     I.clickDropdown('Icons');
     I.waitForElement('.file-list-view.complete.grid-layout');
     checkIfFoldersExist(I, '.grid-layout');
-    I.see('document');
+    // there are &#8203 between each letter, this is needed as they are also there in drive
+    I.see('d​o​c​u​m​e​n​t');
 
     I.clickToolbar('View');
     I.clickDropdown('Tiles');
@@ -154,7 +163,7 @@ Scenario('[C8369] Search', async (I, drive) => {
     I.waitForText('No matching items found.');
     I.click('~Cancel search');
     searchFor(I, 'd');
-    I.waitNumberOfVisibleElements('.file-list-view .list-item', 4);
+    I.waitNumberOfVisibleElements('.file-list-view .list-item', 3);
 });
 
 Scenario('[C8371] Delete file', async (I, drive) => {
@@ -176,8 +185,7 @@ Scenario('[C8371] Delete file', async (I, drive) => {
     I.waitForDetached(locate('li.list-item').withText('document.txt'));
 });
 
-// TODO: shaky, 227 of 238 (element (.fa-spin.fa-refresh) still not present on page after 30 sec)
-Scenario.skip('[C45039] Breadcrumb navigation', async (I, drive) => {
+Scenario('[C45039] Breadcrumb navigation', async (I, drive) => {
     const parent = await I.haveFolder({ title: 'Folders', module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
     await Promise.all([
         I.haveFolder({ title: 'subfolder1', module: 'infostore', parent }),
@@ -189,15 +197,15 @@ Scenario.skip('[C45039] Breadcrumb navigation', async (I, drive) => {
     I.login('app=io.ox/files&folder=' + subsubFolder);
     drive.waitForApp();
     I.waitForText('subfolder3', 5, '.breadcrumb-view');
-    I.click('subfolder3', '.breadcrumb-view');
+    I.retry(5).click({ xpath: '//div[text()="subfolder3"][@role="presentation"]' });
     drive.waitForApp();
     I.waitForText('subsubfolder1', 5, '.list-view');
     I.waitForText('subsubfolder2', 5, '.list-view');
-    I.click('subsubfolder2', '.list-view');
+    I.retry(5).click({ xpath: '//div[text()="subsubfolder2"][@role="presentation"]' });
     I.click('Drive', '.breadcrumb-view');
     drive.waitForApp();
-    I.waitForText('Public files', 5, '.list-view');
-    I.doubleClick('Public files', '.list-view');
+    I.waitForElement({ xpath: '//div[@role="presentation"][text()="Public files"]' });
+    I.retry(5).doubleClick({ xpath: '//div[text()="Public files"][@role="presentation"]' });
 });
 
 const checkFileOrder = (I, files) => {

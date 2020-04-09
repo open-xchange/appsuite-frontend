@@ -45,13 +45,14 @@ Scenario('[C8825] Add and replace signatures', async function (I, mail) {
 
     I.login('app=io.ox/mail');
     mail.newMail();
-    I.click('Signatures');
+    I.click(mail.locators.compose.options);
+
     I.waitForText('My signature', 5, '.dropdown.open .dropdown-menu');
     I.click('My signature', '.dropdown.open .dropdown-menu');
     within({ frame: '#mce_0_ifr' }, () => {
         I.waitForText('Very original and clever signature');
     });
-    I.click('Signatures');
+    I.click(mail.locators.compose.options);
     I.waitForText('Super signature', 5, '.dropdown.open .dropdown-menu');
     I.click('Super signature', '.dropdown.open .dropdown-menu');
     within({ frame: '#mce_0_ifr' }, () => {
@@ -60,7 +61,7 @@ Scenario('[C8825] Add and replace signatures', async function (I, mail) {
     });
 });
 
-Scenario('[C265555] Change the Signature', async function (I, mail) {
+Scenario('[C265555] Change the Signature', async function (I, mail, dialogs) {
 
     const firstSignatureContent = 'Very original and clever signature',
         secondSignatureContent = 'Super original and fabulous signature',
@@ -84,24 +85,31 @@ Scenario('[C265555] Change the Signature', async function (I, mail) {
     await I.haveSetting({ 'io.ox/mail': { defaultSignature: firstSignature.data } });
 
     I.login('app=io.ox/mail');
+    mail.waitForApp();
     mail.newMail();
     within({ frame: '#mce_0_ifr' }, () => {
         I.waitForText(firstSignatureContent);
     });
     I.fillField('To', 'foo@bar');
     I.fillField('Subject', 'test subject');
-    I.click('Discard');
-    I.click('Save as draft');
-    I.waitForNetworkTraffic();
+
+    I.click(mail.locators.compose.close);
+    dialogs.waitForVisible();
+    dialogs.clickButton('Save as draft');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-mail-compose');
 
     I.selectFolder('Drafts');
     mail.selectMail('test subject');
+
     I.clickToolbar('.io-ox-mail-window .classic-toolbar [data-action="more"]');
     I.waitForElement('.dropdown.open');
-    I.click('Move', '.dropdown.open .dropdown-menu');
-    I.waitForVisible('.modal-footer');
-    I.click('Move', '.modal-footer');
+    I.clickDropdown('Move');
+
+    dialogs.waitForVisible();
+    dialogs.clickButton('Move');
+    I.waitForDetached('.modal-dialog');
+
     I.dontSee('test subject');
     I.selectFolder('Inbox');
     I.waitForText('test subject', 5, '.list-view li[data-index="0"]');
@@ -114,7 +122,7 @@ Scenario('[C265555] Change the Signature', async function (I, mail) {
     });
     // some focus event still needs to happen
     I.wait(0.5);
-    I.click('Signatures');
+    I.click(mail.locators.compose.options);
     I.waitForElement('.dropdown.open');
     I.click('Super signature', '.dropdown.open .dropdown-menu');
     within({ frame: '#mce_1_ifr' }, () => {
@@ -134,7 +142,7 @@ Scenario('Use image-only signature', async function (I, mail) {
 
     I.login('app=io.ox/mail');
     mail.newMail();
-    I.click('Signatures');
+    I.click(mail.locators.compose.options);
     I.waitForText('My image signature');
     I.click('My image signature');
     within({ frame: '#mce_0_ifr' }, () => {

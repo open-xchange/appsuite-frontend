@@ -49,6 +49,7 @@ Scenario('[C8405] Find mails based on a date range', async (I, users) => {
     I.waitForVisible('.search-box');
     I.click('.search-box');
 
+    I.waitForElement('.search-box .token-input');
     I.fillField('.search-box .token-input', '01.01.2016 - 31.12.2016');
 
     // 3. Select '01.01.2016 - 31.12.2016 as daterange'

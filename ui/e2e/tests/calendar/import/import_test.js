@@ -149,7 +149,7 @@ examples.add(['[C104301] Import Outlook.com iCal', 'outlookcom_2016_recurring', 
     I.see('Mon, 11/28/2016', sidePopup);
     I.see('1:30', sidePopup);
     I.see('2:00 PM', sidePopup);
-    I.see('Every day. The series ends on 12/1/2016.', sidePopup);
+    I.see('Every day. The series ends on 12/2/2016.', sidePopup);
 }]);
 
 examples.add(['[C104299] Import Google iCal', 'google_2016_simple', function (I) {
@@ -207,7 +207,7 @@ examples.add(['[C104292] Import Thunderbird iCal', 'thunderbird_45_recurring', f
     I.see('Tue, 11/29/2016', sidePopup);
     I.see('10:30', sidePopup);
     I.see('11:30 AM', sidePopup);
-    I.see('Every day. The series ends on 12/1/2016.', sidePopup);
+    I.see('Every day. The series ends on 12/2/2016.', sidePopup);
 }]);
 examples.add(['[C104292] Import Thunderbird iCal', 'thunderbird_45_full', function (I) {
     I.waitForText('Recurring', 5, appointment + ' .title');
@@ -216,7 +216,7 @@ examples.add(['[C104292] Import Thunderbird iCal', 'thunderbird_45_full', functi
 }]);
 
 examples.add(['[C104276] Import emClient iCal', 'emclient_7', function (I) {
-    I.waitForText('Simple appointment', 5, appointment + ' .title');
+    I.waitForElement(locate('.title').withText('Simple appointment').inside(appointment));
     I.seeNumberOfElements(appointment, 6);
     I.seeNumberOfElements(fulltime, 1);
     I.click(locate(appointment).withText('Simple appointment'));
@@ -256,7 +256,7 @@ examples.add(['[C104276] Import emClient iCal', 'yahoo_2016_full', function (I) 
     I.seeNumberOfElements(fulltime, 1);
 }]);
 
-Data(examples).Scenario('Import Calendar data', async (I, current, users) => {
+Data(examples).Scenario('Import Calendar data', async (I, current, users, dialogs) => {
     I.login('app=io.ox/calendar&perspective=week:week');
     I.waitForText('My calendars');
     I.waitForText('Birthdays');
@@ -269,11 +269,11 @@ Data(examples).Scenario('Import Calendar data', async (I, current, users) => {
     );
     I.click(`.folder-options[title="Actions for ${folderName}"]`);
     I.waitForElement(locate('.dropdown.open').withText('Import'));
+    I.wait(0.2);
     I.retry(3).click('Import');
-    I.waitForElement('.modal');
+    dialogs.waitForVisible();
     I.attachFile('.file-input', `e2e/media/imports/calendar/${current.filename}.ics`);
-    // click('Import') -> element not interactable
-    I.click('.modal [data-action="import"]');
+    dialogs.clickButton('Import');
     I.waitForText('Data imported successfully', 30, '.io-ox-alert');
     I.waitToHide('.io-ox-alert');
 

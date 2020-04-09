@@ -280,8 +280,7 @@ Scenario('[C7360] Discard modification', async function (I, contacts) {
     I.dontSee('Holger');
 });
 
-// TODO: Found an actual bug
-Scenario.skip('[C7358] Remove contact picture', async function (I, search, contacts) {
+Scenario('[C7358] Remove contact picture', async function (I, search, contacts, dialogs) {
     const expect = require('chai').expect;
     const testrailID = 'C7358';
     const phone = '+4917113371337';
@@ -296,18 +295,20 @@ Scenario.skip('[C7358] Remove contact picture', async function (I, search, conta
     I.fillField('Cell phone', phone);
 
     // upload photo
-    I.waitForVisible('.contact-photo-upload .contact-photo');
-    I.seeElement('.empty');
+    I.waitForVisible('.contact-photo-upload .contact-photo.empty');
     I.click('.contact-photo', '.io-ox-contacts-edit-window');
+
+    dialogs.waitForVisible();
     I.waitForVisible('.edit-picture');
     I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
-    I.click('Apply');
+    dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
+
     let image_contact = await I.grabCssPropertyFrom('.contact-photo-upload .contact-photo', 'backgroundImage');
     expect(Array.isArray(image_contact) ? image_contact[0] : image_contact).to.not.be.empty;
     I.click('Save');
-
     I.waitForDetached('.io-ox-contacts-edit-window');
+
     search.doSearch(testrailID + ' ' + testrailID);
     I.click('[aria-label="' + testrailID + ', ' + testrailID + '"]');
     I.waitForElement('.contact-header');
@@ -316,13 +317,23 @@ Scenario.skip('[C7358] Remove contact picture', async function (I, search, conta
     // remove contact photo
     I.clickToolbar('Edit');
     I.waitForVisible('.io-ox-contacts-edit-window');
+
     I.click('.contact-photo', '.io-ox-contacts-edit-window');
+
+    dialogs.waitForVisible();
     I.waitForVisible('.edit-picture');
-    I.click('Remove photo');
-    I.click('Apply');
-    I.waitForDetached('.modal');
-    I.seeElement('.empty');
+    dialogs.clickButton('Remove photo');
+    dialogs.clickButton('Apply');
+    I.waitForDetached('.modal-dialog');
+
+    I.waitForElement('.contact-photo.empty');
     I.click('Save');
+
+    I.waitForDetached('.io-ox-contacts-edit-window');
+
+    // check in detail and list view
+    I.waitForVisible('.leftside .contact-photo.empty');
+    I.waitForVisible('.rightside .contact-photo.empty');
 });
 
 Scenario('[C7363] Add files to a contact', async function (I, contacts) {
@@ -341,9 +352,11 @@ Scenario('[C7363] Add files to a contact', async function (I, contacts) {
     contacts.selectContact(display_name);
     I.clickToolbar('Edit');
     I.waitForVisible('[data-app-name="io.ox/contacts/edit"]');
-    I.attachFile('input.file-input[type="file"]', 'e2e/media/files/generic/contact_picture.png');
+    I.waitForEnabled({ css: 'input.file-input[type="file"]' });
+    I.attachFile({ css: 'input.file-input[type="file"]' }, 'e2e/media/files/generic/contact_picture.png');
     I.waitForElement(locate().withText('contact_picture.png').inside('.attachment'));
     I.click('Save');
     I.waitForInvisible('[data-app-name="io.ox/contacts/edit"]');
+    I.waitForNetworkTraffic();
     I.waitForText('contact_picture.png');
 });

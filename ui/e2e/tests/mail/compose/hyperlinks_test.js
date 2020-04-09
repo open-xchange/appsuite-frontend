@@ -59,7 +59,7 @@ Scenario('[C8821] Send mail with Hyperlink', async function (I, mail) {
     });
     // sometimes it takes a little while to open the link
     let i = 0;
-    for (i; i < 10 && (await I.grabNumberOfOpenTabs()) < 2; i++) {
+    for (i; i < 30 && (await I.grabNumberOfOpenTabs()) < 2; i++) {
         I.wait(0.1);
     }
     expect(i + 1, 'number of open tabs is 2 within 1s').to.be.below(10);

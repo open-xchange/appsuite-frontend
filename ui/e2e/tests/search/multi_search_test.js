@@ -11,7 +11,9 @@
  *
  */
 /// <reference path="../../steps.d.ts" />
-const { expect } = require('chai');
+
+const expect = require('chai').expect;
+
 Feature('Mail > Search');
 
 Before(async (users) => {
@@ -41,6 +43,24 @@ function getTestMail(from, to, opt) {
     };
 }
 
+Scenario('Supports delayed autoselect', async function (I, mail, search) {
+
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+    var query = 'my-input';
+
+    I.say('enter query');
+    I.click(search.locators.box);
+    I.waitForVisible(search.locators.field);
+    I.fillField(search.locators.field, query);
+
+    I.dontSeeElement('.autocomplete-item');
+    I.pressKey('Enter');
+
+    I.say('check created token');
+    I.waitForText(query, 2, '.token-label');
+});
+
 Scenario('[C8407] Perform a multi search', async function (I, users) {
     const [user1, user2] = users;
 
@@ -55,6 +75,8 @@ Scenario('[C8407] Perform a multi search', async function (I, users) {
     //let searchField = 'input[type=search]';
 
     I.login('app=io.ox/mail', { user: user2 });
+
+    I.waitForVisible('.search-box');
     I.click('.search-box');
     I.waitForFocus(searchField);
     I.fillField(searchField, 'test');
@@ -83,6 +105,8 @@ Scenario('[C8406] Delete a string from multi search', async function (I, users) 
     //let searchField = 'input[type=search]';
 
     I.login('app=io.ox/mail', { user: user2 });
+
+    I.waitForVisible('.search-box');
     I.click('.search-box');
     I.waitForFocus(searchField);
     I.fillField(searchField, 'test');
@@ -99,16 +123,18 @@ Scenario('[C8406] Delete a string from multi search', async function (I, users) 
     I.waitForVisible('.list-view [data-index="0"]');
     I.waitForVisible('.list-view [data-index="1"]');
 
-
 });
 
 Scenario('[C8408] Try to run a script in search', async function (I) {
-
     I.login();
+    I.waitForElement('.search-box');
     I.click('.search-box');
     I.waitForFocus(searchField);
-    I.fillField(searchField, '<script>alert(1)</script>');
+
+    I.fillField(searchField, '<script>document.body.innerHTML=\'I am a hacker\'</script>');
+    I.waitForElement('.tt-suggestions');
     I.pressKey('Enter');
-    let text = await I.grabPopupText();
-    expect(!!text).to.be.false;
+
+    I.wait(1);
+    expect(await I.grabHTMLFrom({ xpath: '//body' })).to.not.equal('I am a hacker');
 });

@@ -41,7 +41,7 @@ Scenario('Compose and discard with/without prompts', async function (I, users, m
 
     // workflow 1: Compose & discard
     mail.newMail();
-    I.click('Discard');
+    I.click(mail.locators.compose.close);
     I.dontSee('Do you really want to discard your message?');
     I.waitForDetached('.io-ox-mail-compose');
 
@@ -64,15 +64,14 @@ Scenario('Compose and discard with/without prompts', async function (I, users, m
     let text = await I.grabValueFrom({ css: 'textarea.plain-text' });
     text = Array.isArray(text) ? text[0] : text;
     expect(text).to.contain('My unique signature content');
-    I.see('1 attachment', '.io-ox-mail-compose');
     I.see('VCF', '.io-ox-mail-compose .mail-attachment-list');
-    I.click('Discard');
+    I.click(mail.locators.compose.close);
     I.dontSee('Do you really want to discard your message?');
 
     // workflow 4: Compose with subject, then discard
     mail.newMail();
     I.fillField('Subject', 'Test');
-    I.click('Discard');
+    I.click(mail.locators.compose.close);
     I.see('Do you really want to discard your message?');
     I.click('Discard message');
 
@@ -107,7 +106,7 @@ Scenario('Compose and discard with/without prompts', async function (I, users, m
         '>  \\n' +
         '> Testcontent'
     ));
-    I.click('Discard');
+    I.click(mail.locators.compose.close);
     I.dontSee('Do you really want to discard your message?');
 });
 
@@ -142,8 +141,7 @@ Scenario('Compose mail with different attachments', async function (I, users, ma
     // attach from drive
     I.say('📢 add drive file', 'blue');
     I.waitForInvisible('.window-blocker');
-    I.retry(5).click('Attachments');
-    I.click('Add from Drive');
+    I.click(mail.locators.compose.drivefile);
     I.waitForText('Testdocument.txt');
     I.click('Add');
 
@@ -211,7 +209,7 @@ Scenario('Compose with inline image, which is removed again', async function (I,
     I.dontSeeElement('.attachments');
 });
 
-Scenario('Compose with drivemail attachment and edit draft', async function (I, users, mail) {
+Scenario('Compose with drivemail attachment and edit draft', async function (I, users, mail, drive, dialogs) {
     const [user] = users;
     const user2 = await users.create();
 
@@ -228,34 +226,38 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.login('app=io.ox/files');
 
     I.say('Create textfile in drive');
+    drive.waitForApp();
     I.clickToolbar('New');
     I.click('Add note');
     I.waitForVisible('.io-ox-editor');
     I.fillField('Title', 'Testdocument.txt');
     I.fillField('Note', 'Some content');
+    I.waitForClickable(locate('button').withText('Save'));
     I.click('Save');
-    I.waitForText('Save', 5, '.window-footer button');
+    I.waitForEnabled(locate('button').withText('Save'), 10);
+    I.waitForNetworkTraffic();
     I.click('Close');
 
     I.say('Add attachment to new draft');
-    I.openApp('Mail');
+    I.click(locate({ css: 'button[data-id="io.ox/mail"]' }).inside({ css: 'div[id="io-ox-appcontrol"]' }));
+    mail.waitForApp();
 
     // workflow 10: Compose with Drive Mail attachment
     mail.newMail();
 
     // attach from drive
-    I.click('Attachments');
-    I.clickDropdown('Add from Drive');
+    I.click(mail.locators.compose.drivefile);
+    dialogs.waitForVisible();
     I.waitForText('Testdocument.txt');
-    I.click('Add');
+    dialogs.clickButton('Add');
 
     I.waitForText('Use Drive Mail');
     I.checkOption('Use Drive Mail');
     I.fillField('Subject', 'Testsubject #1');
-    I.click('Discard');
-    I.waitForText('Save as draft', 5, '.io-ox-dialog-popup');
-    I.click('Save as draft', '.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-taskbar-container .taskbar-button');
+    I.click(mail.locators.compose.close);
+    dialogs.waitForVisible();
+    dialogs.clickButton('Save as draft');
+    I.waitForDetached('.io-ox-mail-compose-window');
 
     I.selectFolder('Drafts');
     mail.selectMail('Testsubject #1');
@@ -313,9 +315,9 @@ Scenario('Compose mail with vcard and read receipt', async function (I, users, m
 
     I.fillField('To', user2.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject');
-    I.click('Options');
+    I.click(mail.locators.compose.options);
     I.click('Attach Vcard');
-    I.click('Options');
+    I.click(mail.locators.compose.options);
     I.click('Request read receipt');
     mail.send();
 
@@ -357,6 +359,7 @@ Scenario('Compose mail, refresh and continue work at restore point', async funct
     I.refreshPage();
 
     I.waitForText('Mail: Testsubject', 30, '#io-ox-taskbar');
+    I.wait(1);
     I.click('Mail: Testsubject', '#io-ox-taskbar');
 
     I.waitForText('Subject', 30, '.io-ox-mail-compose');

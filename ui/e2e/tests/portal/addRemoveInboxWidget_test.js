@@ -21,7 +21,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7488] [C7484] Add/Remove Inbox widget', async (I, users) => {
+Scenario('[C7488] [C7484] Add/Remove Inbox widget', async (I, users, dialogs) => {
     let [user] = users;
     await I.haveMail({
         attachments: [{
@@ -45,8 +45,8 @@ Scenario('[C7488] [C7484] Add/Remove Inbox widget', async (I, users) => {
     I.click('Add widget');
     I.waitForVisible('.io-ox-portal-settings-dropdown');
     I.click('Inbox');
-    I.waitForVisible('.modal-dialog');
-    I.click('Save');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Save');
 
     //Verify mail is shown in the list
     I.waitForElement('~Inbox');
@@ -55,8 +55,8 @@ Scenario('[C7488] [C7484] Add/Remove Inbox widget', async (I, users) => {
 
     // remove Inbox widget from portal
     I.click('~Inbox, Disable widget');
-    I.waitForVisible({ css: '.modal-dialog' });
-    I.click('Delete', '.modal-dialog');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
 
     // verify that the widget is removed
     I.dontSee('~Inbox');

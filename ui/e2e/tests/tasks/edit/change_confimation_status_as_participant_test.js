@@ -58,7 +58,7 @@ Scenario('[C125311] Change confimation status as participant', async function (I
     // 4. Open notification mail
 
     mail.selectMail('Where is the money Lebowski?');
-    I.waitForVisible('.notifications');
+    I.waitForVisible({ xpath: '//section[@class="notifications"]' });
 
     // 5. Set the task status alternating to 'Accepted', 'Tentative' and 'Declined'
 

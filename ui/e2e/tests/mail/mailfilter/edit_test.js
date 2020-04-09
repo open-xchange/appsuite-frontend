@@ -24,7 +24,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7790] Edit filter rule @contentReview', async function (I, users) {
+Scenario('[C7790] Edit filter rule @contentReview', async function (I, users, dialogs) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     }, { user: users[1] });
@@ -57,7 +57,7 @@ Scenario('[C7790] Edit filter rule @contentReview', async function (I, users) {
     I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mailfilter-settings h1');
     I.see('Mail Filter Rules');
     I.click('Edit', '.settings-list-view');
-    I.waitForElement('.modal-dialog');
+    dialogs.waitForVisible();
 
     // edit filter
     I.fillField('rulename', 'Redirect mails with subject something that matters to ' + users[1].get('primaryEmail'));
@@ -65,7 +65,7 @@ Scenario('[C7790] Edit filter rule @contentReview', async function (I, users) {
     I.fillField('to', users[1].get('primaryEmail'));
 
     // save rule
-    I.click('Save');
+    dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
 
     I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');

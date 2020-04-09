@@ -23,19 +23,19 @@ After(async function (users) {
     await users.removeAll();
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C110279] Primary mail account name can be changed', async function (I) {
+Scenario('[C110279] Primary mail account name can be changed', async function (I, dialogs) {
     const name = 'Räuber Hotzenplotz';
     await I.haveFolder({ title: 'Personal', module: 'mail', parent: 'default0/INBOX' });
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/settings/accounts');
 
     I.say(`rename to "${name}"`, 'blue');
-    I.waitForVisible('.io-ox-accounts-settings a[data-action="edit"]');
-    I.click('Edit', '.io-ox-accounts-settings a[data-action="edit"]');
-    I.waitForElement('.modal-body input[name="name"]');
+    I.retry(10).click('Edit');
+
+    dialogs.waitForVisible();
     I.fillField('Account name', name);
-    I.click('Save');
-    I.waitForDetached('.modal-body');
+    dialogs.clickButton('Save');
+    I.waitForDetached('.modal-dialog');
+
     I.waitForText('Account updated');
     I.waitForElement('.close', '.io-ox-alert');
     I.click('.close', '.io-ox-alert');
@@ -46,7 +46,7 @@ Scenario.skip('[C110279] Primary mail account name can be changed', async functi
 
     I.say('check mail folder view', 'blue');
     I.openApp('Mail');
-    I.waitForVisible('.tree-container');
+    I.waitForElement('.tree-container');
     I.waitForText(name);
     I.seeTextEquals(name, '.tree-container [data-id= "virtual/myfolders"] > .folder-node .folder-label');
 });

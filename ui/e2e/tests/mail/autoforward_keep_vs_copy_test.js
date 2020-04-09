@@ -20,7 +20,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('checks if an auto forward rule with copy statement is handled correctly', function (I) {
+Scenario('checks if an auto forward rule with copy statement is handled correctly', function (I, dialogs) {
 
     I.haveMailFilterRule({
         'rulename': 'autoforward',
@@ -42,15 +42,14 @@ Scenario('checks if an auto forward rule with copy statement is handled correctl
     I.waitForVisible({ css: '[data-action="edit-auto-forward"] .fa-toggle-on' });
     I.click('Auto forward ...');
 
-    I.waitForElement('.modal-dialog');
+    dialogs.waitForVisible();
     I.seeCheckboxIsChecked('Keep a copy of the message');
 
-    I.click('Cancel', '.modal-dialog');
-    I.waitForInvisible('.modal-dialog');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('checks if an auto forward rule with keep statement is handled correctly', function (I) {
+Scenario('checks if an auto forward rule with keep statement is handled correctly', function (I, dialogs) {
     I.haveMailFilterRule({
         'rulename': 'autoforward',
         'actioncmds': [
@@ -72,14 +71,14 @@ Scenario.skip('checks if an auto forward rule with keep statement is handled cor
     I.waitForVisible({ css: '[data-action="edit-auto-forward"] .fa-toggle-on' });
     I.click('Auto forward ...');
 
-    I.waitForElement('.modal-dialog');
+    dialogs.waitForVisible();
     I.seeCheckboxIsChecked('Keep a copy of the message');
 
-    I.click('Cancel', '.modal-dialog');
-    I.waitForInvisible('.modal-dialog');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
 });
 
-Scenario('checks if an auto forward rule with keep statement is written correctly', function (I, users) {
+Scenario('checks if an auto forward rule with keep statement is written correctly', function (I, users, dialogs) {
     let [user] = users;
 
     user.hasConfig('com.openexchange.mail.filter.blacklist.actions', 'copy');
@@ -94,26 +93,23 @@ Scenario('checks if an auto forward rule with keep statement is written correctl
     I.waitForElement({ css: '[data-action="edit-auto-forward"]' });
     I.click('Auto forward ...');
 
-    I.waitForElement('.modal-dialog');
-    I.waitForElement('.modal-dialog .checkbox.switch.large');
-
-    I.click('.modal-dialog .checkbox.switch.large');
+    dialogs.waitForVisible();
+    I.click('.checkbox.switch.large', dialogs.locators.header);
     I.fillField('Forward all incoming emails to this address', 'test@tester.com');
-    I.waitForVisible('.modal-dialog .checkbox.custom.small [name="copy"]:not(disabled)');
-    I.click('Keep a copy of the message');
-
-    I.click('Apply changes', '.modal-dialog');
-    I.waitForInvisible('.modal-dialog');
+    I.checkOption('Keep a copy of the message');
+    dialogs.clickButton('Apply changes');
+    I.waitForDetached('.modal-dialog');
 
     I.waitForVisible({ css: '[data-action="edit-auto-forward"] .fa-toggle-on' });
     I.click('Auto forward ...');
-    I.waitForElement('.modal-dialog');
+    dialogs.waitForVisible();
     I.seeCheckboxIsChecked('Keep a copy of the message');
-    I.click('Cancel', '.modal-dialog');
-    I.waitForInvisible('.modal-dialog');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
+    I.waitForVisible({ css: '[data-action="edit-auto-forward"] .fa-toggle-on' });
 });
 
-Scenario('checks if an auto forward rule with copy statement is written correctly', function (I) {
+Scenario('checks if an auto forward rule with copy statement is written correctly', function (I, dialogs) {
 
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
@@ -125,21 +121,19 @@ Scenario('checks if an auto forward rule with copy statement is written correctl
     I.waitForElement({ css: '[data-action="edit-auto-forward"]' });
     I.click('Auto forward ...');
 
-    I.waitForElement('.modal-dialog');
-    I.waitForElement('.modal-dialog .checkbox.switch.large');
-
-    I.click('.modal-dialog .checkbox.switch.large');
+    dialogs.waitForVisible();
+    I.click('.checkbox.switch.large', dialogs.locators.header);
     I.fillField('Forward all incoming emails to this address', 'test@tester.com');
-    I.waitForVisible('.modal-dialog .checkbox.custom.small [name="copy"]:not(disabled)');
-    I.click('Keep a copy of the message');
+    I.checkOption('Keep a copy of the message');
 
-    I.click('Apply changes', '.modal-dialog');
-    I.waitForInvisible('.modal-dialog');
+    dialogs.clickButton('Apply changes');
+    I.waitForDetached('.modal-dialog');
 
     I.waitForVisible({ css: '[data-action="edit-auto-forward"] .fa-toggle-on' });
     I.click('Auto forward ...');
-    I.waitForElement('.modal-dialog');
+    dialogs.waitForVisible();
     I.seeCheckboxIsChecked('Keep a copy of the message');
-    I.click('Cancel', '.modal-dialog');
-    I.waitForInvisible('.modal-dialog');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
+    I.waitForVisible({ css: '[data-action="edit-auto-forward"] .fa-toggle-on' });
 });

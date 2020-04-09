@@ -22,8 +22,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-// TODO: properly configure GDPR on e2e backend
-Scenario.skip('request a new download and cancel it', async function (I) {
+Scenario('request a new download and cancel it', async function (I, dialogs) {
     I.login('app=io.ox/settings');
 
     I.waitForText('Download personal data', 5);
@@ -67,9 +66,9 @@ Scenario.skip('request a new download and cancel it', async function (I) {
         // cancel again, we don't want to clutter the filesystem
         I.click('Cancel download request');
     });
-
-    I.waitForText('Do you really want to cancel the current download request?', 5);
-    I.click('Cancel download request', '.modal-dialog');
+    dialogs.waitForVisible();
+    I.waitForText('Do you really want to cancel the current download request?', 5, dialogs.locators.body);
+    dialogs.clickButton('Cancel download request');
 
     within('.io-ox-personal-data-settings', () => {
         // check if view switches correctly and buttons are enabled again
@@ -79,8 +78,7 @@ Scenario.skip('request a new download and cancel it', async function (I) {
     });
 });
 
-// TODO: properly configure GDPR on e2e backend
-Scenario.skip('open direct link to data export settings page', async function (I) {
+Scenario('open direct link to data export settings page', async function (I) {
     I.login('app=io.ox/settings&folder=virtual/settings/personaldata');
 
     //list view
@@ -92,8 +90,7 @@ Scenario.skip('open direct link to data export settings page', async function (I
     I.waitForText('Download your personal data', 5);
 });
 
-// TODO: properly configure GDPR on e2e backend
-Scenario.skip('show only available options', async function (I, users) {
+Scenario('show only available options', async function (I, users) {
     await I.dontHaveCapability('tasks', users[0]);
     I.login('app=io.ox/settings');
 

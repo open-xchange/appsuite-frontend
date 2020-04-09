@@ -25,14 +25,13 @@ After(async (users) => {
 });
 
 Scenario('[C12122] Auto-size recipient fields', async function (I, mail) {
-
     let height;
 
     I.login('app=io.ox/mail');
     mail.newMail();
 
     height = await I.grabCssPropertyFrom({ css: '[data-extension-id="to"]' }, 'height');
-    expect(parseInt(height, 10)).to.be.lessThan(35);
+    expect(parseInt(height, 10)).to.be.most(40);
 
     I.click({ css: '[placeholder="To"]' });
     for (let i = 0; i < 5; i++) {
@@ -42,13 +41,13 @@ Scenario('[C12122] Auto-size recipient fields', async function (I, mail) {
     }
 
     height = await I.grabCssPropertyFrom({ css: '[data-extension-id="to"]' }, 'height');
-    expect(parseInt(height, 10)).to.be.greaterThan(35);
+    expect(parseInt(height, 10)).to.be.greaterThan(40);
 
     for (let i = 1; i < 5; i++) {
-        I.click('~Remove', `~testmail${i}@testmail.com. Press backspace to delete.`);
+        I.click('~Remove', `~testmail${i}@testmail.com`);
     }
 
     height = await I.grabCssPropertyFrom({ css: '[data-extension-id="to"]' }, 'height');
-    expect(parseInt(height, 10)).to.be.lessThan(35);
+    expect(parseInt(height, 10)).to.be.most(40);
 
 });

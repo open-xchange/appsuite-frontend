@@ -4,58 +4,90 @@ var defaultContext;
 // please create .env file based on .evn-example
 require('dotenv').config();
 
-['LAUNCH_URL', 'SELENIUM_HOST', 'PROVISIONING_URL', 'CONTEXT_ID'].forEach(function notdefined(key) {
+const codeceptDriver = process.env.CODECEPT_DRIVER || 'puppeteer';
+const requiredEnvVars = ['LAUNCH_URL', 'PROVISIONING_URL', 'CONTEXT_ID'];
+if (codeceptDriver === 'webdriver') requiredEnvVars.push('SELENIUM_HOST');
+
+requiredEnvVars.forEach(function notdefined(key) {
     if (process.env[key]) return;
     console.error('\x1b[31m', `ERROR: Missing value for environment variable '${key}'. Please specify a '.env' file analog to '.env-example'.`);
     process.exit();
 });
 
+const helpers = {
+    Puppeteer: {
+        url: process.env.LAUNCH_URL,
+        smartWait: 1000,
+        waitForTimeout: 5000,
+        browser: 'chrome',
+        restart: true,
+        windowSize: '1280x1024',
+        uniqueScreenshotNames: true,
+        timeouts: {
+            script: 5000
+        },
+        chrome: {
+            args: [`--unsafely-treat-insecure-origin-as-secure=${process.env.LAUNCH_URL}`].concat((process.env.CHROME_ARGS || '').split(' '))
+        },
+        // set HEADLESS=false in your terminal to show chrome window
+        show: process.env.HEADLESS ? process.env.HEADLESS === 'false' : false
+    },
+    WebDriver: {
+        url: process.env.LAUNCH_URL,
+        host: process.env.SELENIUM_HOST,
+        smartWait: 1000,
+        waitForTimeout: 30000,
+        browser: 'chrome',
+        restart: true,
+        windowSize: 'maximize',
+        uniqueScreenshotNames: true,
+        desiredCapabilities: {
+            browserName: 'chrome',
+            chromeOptions: {
+                args: ['no-sandbox']
+            }
+        },
+        timeouts: {
+            script: 5000
+        }
+    },
+    OpenXchange: {
+        require: './e2e/helper',
+        mxDomain: process.env.MX_DOMAIN,
+        serverURL: process.env.PROVISIONING_URL,
+        contextId: process.env.CONTEXT_ID,
+        filestoreId: process.env.FILESTORE_ID,
+        smtpServer: process.env.SMTP_SERVER || 'localhost',
+        imapServer: process.env.IMAP_SERVER || 'localhost'
+    }
+};
+
+if (codeceptDriver !== 'puppeteer') delete helpers.Puppeteer;
+if (codeceptDriver !== 'webdriver') delete helpers.WebDriver;
+
 module.exports.config = {
     tests: './e2e/tests/**/*_test.js',
     timeout: 10000,
     output: './build/e2e/',
-    helpers: {
-        WebDriver: {
-            url: process.env.LAUNCH_URL,
-            host: process.env.SELENIUM_HOST,
-            smartWait: 1000,
-            waitForTimeout: 30000,
-            browser: 'chrome',
-            restart: true,
-            windowSize: 'maximize',
-            uniqueScreenshotNames: true,
-            desiredCapabilities: {
-                browserName: 'chrome',
-                chromeOptions: {
-                    args: ['no-sandbox']
-                }
-            },
-            timeouts: {
-                script: 5000
-            }
-        },
-        OpenXchange: {
-            require: './e2e/helper',
-            mxDomain: process.env.MX_DOMAIN,
-            serverURL: process.env.PROVISIONING_URL,
-            contextId: process.env.CONTEXT_ID,
-            filestoreId: process.env.FILESTORE_ID,
-            smtpServer: process.env.SMTP_SERVER || 'localhost',
-            imapServer: process.env.IMAP_SERVER || 'localhost'
-        }
-    },
+    helpers,
     include: {
         I: './e2e/actor',
         users: './e2e/users',
         contexts: './e2e/contexts',
-        search: './e2e/actor_search',
+        // pageobjects
         contacts: './e2e/pageobjects/contacts',
         calendar: './e2e/pageobjects/calendar',
-        contactpicker: './e2e/pageobjects/contact-picker',
         mail: './e2e/pageobjects/mail',
         portal: './e2e/pageobjects/portal',
         drive: './e2e/pageobjects/drive',
-        tasks: './e2e/pageobjects/tasks'
+        settings: './e2e/pageobjects/settings',
+        tasks: './e2e/pageobjects/tasks',
+        dialogs: './e2e/pageobjects/dialogs',
+        // widgets
+        autocomplete: './e2e/widgetobjects/contact-autocomplete',
+        contactpicker: './e2e/widgetobjects/contact-picker',
+        mailfilter: './e2e/widgetobjects/settings-mailfilter',
+        search: './e2e/widgetobjects/search'
     },
     bootstrap: function (done) {
         // setup chai
@@ -151,13 +183,6 @@ module.exports.config = {
         });
     },
     teardown: function () {
-        const helper = new (require('@open-xchange/codecept-helper').helper)();
-        defaultContext.remove = function (auth) {
-            helper.executeSoapRequest('OXContextService', 'delete', {
-                ctx: { id: this.ctxdata.id },
-                auth: auth || this.auth
-            });
-        };
         if (defaultContext.id !== 10) defaultContext.remove();
         //HACK: defer killing selenium, because it's still needed for a few ms
         setTimeout(function () {
@@ -174,7 +199,15 @@ module.exports.config = {
             project_id: process.env.TESTRAIL_PROJECTID || '1',
             runName: process.env.TESTRAIL_RUNNAME || 'test',
             enabled: process.env.TESTRAIL_ENABLED || false
+        },
+        browserLogReport: {
+            require: './e2e/plugins/browserLogReport',
+            enabled: true
         }
+    },
+    rerun: {
+        minSuccess: 10,
+        maxReruns: 10
     },
     name: 'App Suite Core UI'
 };

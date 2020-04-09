@@ -27,7 +27,7 @@ Scenario('[C7778] Forwarding mail inline/attachment', async (I, users, mail) => 
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
-
+    await I.haveSetting('io.ox/mail//attachments/layout/detail/open', true);
     await I.haveMail({
         folder: 'default0/INBOX',
         path: 'e2e/tests/settings/mail/test.eml'
@@ -45,7 +45,7 @@ Scenario('[C7778] Forwarding mail inline/attachment', async (I, users, mail) => 
     I.wait(0.5);
 
     I.waitToHide('Saving');
-    I.click('Discard');
+    I.click(mail.locators.compose.close);
     I.waitForDetached('.io-ox-mail-compose-window');
     I.logout();
 
@@ -58,14 +58,11 @@ Scenario('[C7778] Forwarding mail inline/attachment', async (I, users, mail) => 
     I.waitForVisible('h1.subject');
     I.click('Forward');
     I.waitForText('Fwd: Richtig gutes Zeug');
-    I.see('1 attachment');
     I.waitForFocus('[placeholder="To"]');
     I.fillField('To', user.get('primaryEmail'));
     mail.send();
     I.triggerRefresh();
     mail.selectMail('Fwd: Richtig gutes Zeug');
     I.waitForVisible('h1.subject');
-    I.waitForText('1 attachment');
-    I.click('1 attachment');
     I.see('Richtig_gutes_Zeug.eml');
 });

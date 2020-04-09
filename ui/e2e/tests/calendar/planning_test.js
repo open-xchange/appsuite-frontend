@@ -29,9 +29,9 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('use planning view opened from edit view', async function (I) {
+Scenario('use planning view opened from edit view', async function (I, calendar, dialogs) {
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    calendar.waitForApp();
 
     I.clickToolbar('New appointment');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar/edit"]' });
@@ -40,6 +40,7 @@ Scenario('use planning view opened from edit view', async function (I) {
 
     I.click('Find a free time');
 
+    dialogs.waitForVisible();
     I.waitForVisible('.freetime-view-header');
     I.waitForVisible('.freetime-view-body');
 
@@ -49,7 +50,8 @@ Scenario('use planning view opened from edit view', async function (I) {
     });
     I.click('.timeline-day:first-child .freetime-hour:nth-child(6)');
 
-    I.click('Apply changes', '.modal-footer');
+    dialogs.clickButton('Apply changes');
+    I.waitForDetached('.modal-dialog');
 
     I.waitForInvisible('.freetime-view-header');
     I.waitForInvisible('.freetime-view-body');
@@ -99,6 +101,7 @@ Scenario('use planning view as Standalone app', async function (I) {
     I.click('Create');
 });
 
+// TODO: shaky, msg: 'Cannot read property 'x' of null'
 Scenario('test planning view lasso', async function (I) {
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
@@ -108,13 +111,13 @@ Scenario('test planning view lasso', async function (I) {
     I.waitForVisible('.freetime-view-header');
     I.waitForVisible('.freetime-view-body');
 
-    // scroll to start (I.scrollTo doesnt work)
-    I.executeScript(function () {
-        $('.freetime-time-view-body').scrollLeft(0);
-    });
+    I.waitForNetworkTraffic();
+    I.waitForVisible('.freetime-table-cell:nth-child(6)');
+    I.scrollTo('.freetime-table-cell:nth-child(6)');
 
     // lasso
     I.dragAndDrop('.freetime-table-cell:nth-child(6)', '.freetime-table-cell:nth-child(8)');
+    I.waitForVisible('.freetime-lasso');
 
     I.click('Create appointment');
 
@@ -176,8 +179,8 @@ Scenario('check planning view options and minimizing behavior', async function (
     I.waitForVisible({ css: '[data-name="compact"]' });
     I.waitForVisible({ css: '[data-name="showFineGrid"]' });
     I.waitForVisible({ css: '[data-name="showFree"]' });
-    I.waitForVisible({ css: '[data-value="week"]' });
-    I.waitForVisible({ css: '[data-value="month"]' });
+    I.waitForVisible({ css: '[data-value="week"][data-name="dateRange"]' });
+    I.waitForVisible({ css: '[data-value="month"][data-name="dateRange"]' });
     I.waitForVisible({ css: '[data-name="onlyWorkingHours"]' });
 
     I.pressKey('Escape');
@@ -203,7 +206,7 @@ var addAttendee = function (I, name, context) {
     I.pressKey('Enter');
 };
 
-Scenario.skip('[C7443] Check availability of participants', async function (I, users) {
+Scenario('[C7443] Check availability of participants', async function (I, users, calendar) {
 
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
@@ -213,27 +216,29 @@ Scenario.skip('[C7443] Check availability of participants', async function (I, u
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'Abdancen');
+    I.retry(5).fillField('Subject', 'Abdancen');
     I.fillField('Location', 'Dancefloor');
 
-    addAttendee(I, users[1].get('name'));
-    addAttendee(I, users[2].get('name'));
+    await calendar.addParticipant(users[1].get('name'));
+    await calendar.addParticipant(users[2].get('name'));
 
     I.click('Create');
 
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
 
-    addAttendee(I, users[1].get('name'));
-    addAttendee(I, users[2].get('name'));
+    await calendar.addParticipant(users[1].get('name'));
+    await calendar.addParticipant(users[2].get('name'));
 
     I.click('Find a free time');
     I.waitForVisible({ css: '.freetime-popup' });
-    I.seeNumberOfVisibleElements('~Abdancen', 3);
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[1]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[2]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[3]' });
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7444] Check availability of resources', async function (I) {
+Scenario('[C7444] Check availability of resources', async function (I, calendar) {
 
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
@@ -244,36 +249,38 @@ Scenario.skip('[C7444] Check availability of resources', async function (I) {
     await I.dontHaveResource('Evil Lair');
     await I.dontHaveResource('Laser Sharks');
 
-    await I.haveResource({ description: 'Evil lair under an active volcano', display_name: 'Evil Lair', name: 'Evil Lair', mailaddress: 'lair@evil.inc' });
-    await I.haveResource({ description: 'Evil sharks equipped with lazers', display_name: 'Laser Sharks', name: 'Laser Sharks', mailaddress: 'lasersharks@evil.inc' });
+    await I.haveResource({ description: 'Evil lair under an active volcano', display_name: 'EvilLair', name: 'EvilLair', mailaddress: 'lair@evil.inc' });
+    await I.haveResource({ description: 'Evil sharks equipped with lazers', display_name: 'LaserSharks', name: 'LaserSharks', mailaddress: 'lasersharks@evil.inc' });
 
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'How to conquer the world');
+    I.retry(5).fillField('Subject', 'How to conquer the world');
     I.fillField('Location', 'Secret volcano lair');
 
-    addAttendee(I, 'Evil Lair');
-    addAttendee(I, 'Laser Sharks');
+    await calendar.addParticipant('EvilLair');
+    await calendar.addParticipant('LaserSharks');
 
     I.click('Create');
 
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
 
-    addAttendee(I, 'Evil Lair');
-    addAttendee(I, 'Laser Sharks');
+    await calendar.addParticipant('EvilLair');
+    await calendar.addParticipant('LaserSharks');
 
     I.click('Find a free time');
     I.waitForVisible({ css: '.freetime-popup' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[1]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[2]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[3]' });
 
-    I.seeNumberOfVisibleElements('.freetime-table .appointment', 3);
-
-    await I.dontHaveResource('Evil Lair');
-    await I.dontHaveResource('Laser Sharks');
+    await I.dontHaveResource('EvilLair');
+    await I.dontHaveResource('LaserSharks');
 });
 
-Scenario.skip('[C7445] Check availability of resources and participants', async function (I, users) {
+Scenario('[C7445] Check availability of resources and participants', async function (I, users, calendar) {
 
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
@@ -290,37 +297,41 @@ Scenario.skip('[C7445] Check availability of resources and participants', async 
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'Color Easter Eggs');
+    I.retry(5).fillField('Subject', 'Color Easter Eggs');
     I.fillField('Location', 'Easter Bunny house');
 
-    addAttendee(I, 'Eggs');
-    addAttendee(I, 'Colors');
+    await calendar.addParticipant('Eggs');
+    await calendar.addParticipant('Colors');
 
-    addAttendee(I, users[1].get('name'));
-    addAttendee(I, users[2].get('name'));
+    await calendar.addParticipant(users[1].get('name'));
+    await calendar.addParticipant(users[2].get('name'));
 
     I.click('Create');
 
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.click('Find a free time');
+    I.wait(1);
+    I.retry(5).click('Find a free time');
     I.waitForVisible({ css: '.freetime-popup' });
 
-    addAttendee(I, 'Eggs', '.freetime-view-header');
-    addAttendee(I, 'Colors', '.freetime-view-header');
-
-    addAttendee(I, users[1].get('name'), '.freetime-view-header');
-    addAttendee(I, users[2].get('name'), '.freetime-view-header');
     I.wait(1);
+    await calendar.addParticipant('Eggs', true, '.freetime-view');
+    await calendar.addParticipant('Colors', true, '.freetime-view');
+    await calendar.addParticipant(users[1].get('name'), true, '.freetime-view');
+    await calendar.addParticipant(users[2].get('name'), true, '.freetime-view');
 
-    I.seeNumberOfVisibleElements('.freetime-table .appointment', 5);
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[1]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[2]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[3]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[4]' });
+    I.waitForElement({ xpath: '//div[@class="appointments"]/*[5]' });
 
     await I.dontHaveResource('Eggs');
     await I.dontHaveResource('Colors');
 });
 
-Scenario('[C252157] Fine grid for high zoom levels', async function (I, users) {
+Scenario('[C252157] Fine grid for high zoom levels ', async function (I, users) {
 
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
@@ -348,25 +359,25 @@ Scenario('[C252157] Fine grid for high zoom levels', async function (I, users) {
 
     // 100%
     var [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
-    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, transparent 1px)');
+    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, rgba(0, 0, 0, 0) 1px)');
 
     // 200%
     I.click('.fa-plus');
 
     [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
-    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, transparent 1px)');
+    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, rgba(0, 0, 0, 0) 1px)');
 
     // 400%
     I.click('.fa-plus');
 
     [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
-    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, transparent 1px)');
+    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, rgba(0, 0, 0, 0) 1px)');
 
     // 1000%
     I.click('.fa-plus');
 
     [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
-    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(51, 51, 51) 0px, transparent 1px, transparent 50px, rgb(136, 136, 136) 51px, transparent 51px, transparent 99px, rgb(136, 136, 136) 100px, transparent 100px, transparent 149px)');
+    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(51, 51, 51) 0px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 50px, rgb(136, 136, 136) 51px, rgba(0, 0, 0, 0) 51px, rgba(0, 0, 0, 0) 99px, rgb(136, 136, 136) 100px, rgba(0, 0, 0, 0) 100px, rgba(0, 0, 0, 0) 149px)');
 
     await I.dontHaveResource('Zebra');
     await I.dontHaveResource('Tiger');

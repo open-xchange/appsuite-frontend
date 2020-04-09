@@ -24,7 +24,6 @@ Scenario('Contacts - List view w/o contact', async (I, contacts) => {
 
 Scenario('Contacts - List view with contact detail view', async (I) => {
     I.login('app=io.ox/contacts');
-    I.waitForNetworkTraffic();
     I.waitForElement('.contact-detail');
 
     expect(await I.grabAxeReport()).to.be.accessible;
@@ -43,7 +42,7 @@ Scenario('Contacts - Modal Dialog - New address book (with exceptions)', async (
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });
 
-Scenario('Contacts - Modal Dialog - Import', async (I, contacts) => {
+Scenario('Contacts - Modal Dialog - Import', async (I, contacts, dialogs) => {
 
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
@@ -51,34 +50,46 @@ Scenario('Contacts - Modal Dialog - Import', async (I, contacts) => {
     I.click('.folder-arrow', '~My address books');
     I.openFolderMenu('Contacts');
     I.clickDropdown('Import');
-    I.waitForElement('.modal .modal-title');
+    dialogs.waitForVisible();
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-// TODO: shaky (element not interactable)
-Scenario.skip('Contacts - Modal Dialog - Create sharing link (with exceptions)', async (I, contacts) => {
+Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', async (I, contacts) => {
     // Exceptions:
     // Typeahead missing label (critical)
     // Textinput, password and textarea have missing visual labels (critical)
-
     const excludes = { exclude: [
         ['.tt-hint'], ['.tt-input'],
         ['[placeholder="Password"]'],
         ['[placeholder="Message (optional)"]'],
         ['input[type="text"].form-control']
     ] };
+    const defaultFolder = await I.grabDefaultFolder('contacts');
 
+    await I.haveFolder({
+        title: 'Krawall',
+        module: 'contacts',
+        parent: defaultFolder
+    });
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
-    I.waitForText('My address books');
+
+    I.waitForElement(locate('.folder-arrow').inside('~My address books').as('My address books folder arrow'));
     I.click('.folder-arrow', '~My address books');
-    I.openFolderMenu('Contacts');
+    I.waitForText('Krawall');
+    I.click('Krawall');
+    I.openFolderMenu('Krawall');
     I.clickDropdown('Create sharing link');
     I.waitForText('Sharing link created for folder');
-    I.waitForFocus('.share-wizard input[type="text"]');
+    I.waitForFocus('.share-wizard .link-group input[type="text"]');
 
+    I.say('Axe report');
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
+
+    I.say('Cleanup');
+    I.click('Remove link');
+    I.waitForText('The link has been removed');
 });
 
 Scenario('Contacts - New contact window', async (I, contacts) => {

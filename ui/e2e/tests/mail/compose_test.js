@@ -23,7 +23,7 @@ After(async function (users) {
 
 // https://testrail.open-xchange.com/index.php?/cases/view/7382
 // TODO: shaky, failed (10 runs on 2019-11-28)
-Scenario.skip('Compose plain text mail', function (I, users) {
+Scenario.skip('Compose plain text mail', function (I, users, mail) {
     const [user] = users;
     // 0) log in to settings and set compose mode to html
     I.login('app=io.ox/settings', { user });
@@ -53,10 +53,10 @@ Scenario.skip('Compose plain text mail', function (I, users) {
     I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
 
     // 2) Select "Plain Text" as text format under "Options"
-    I.click('Options');
+    I.click(mail.locators.compose.options);
     I.click('Plain Text');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text');
-    I.waitForInvisible('.io-ox-mail-compose .editable-toolbar');
+    I.waitForInvisible('.io-ox-mail-compose .contenteditable-editor');
 
     // 3) Set a recipient, add a subject and mail text
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));

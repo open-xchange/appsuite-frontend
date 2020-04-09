@@ -20,7 +20,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('adds and removes a autoforward rule', function (I) {
+Scenario('adds and removes a autoforward rule', function (I, mail, dialogs) {
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main .rightside h1');
     I.see('Basic settings', '.rightside h1');
@@ -31,16 +31,15 @@ Scenario('adds and removes a autoforward rule', function (I) {
     I.see('Mail', '.rightside h1');
 
     I.waitForElement({ css: '[data-action="edit-auto-forward"]' });
-    I.see('Auto forward ...', { css: '[data-action="edit-auto-forward"]' });
     I.click('Auto forward ...', '.form-group.buttons [data-action="edit-auto-forward"]');
-    I.waitForElement({ css: '[data-point="io.ox/mail/auto-forward/edit"]' });
 
     // check for all expexted elements
+    dialogs.waitForVisible();
     I.seeElement('.modal-header input[name="active"]');
 
     // buttons
-    I.see('Cancel', '.modal-footer');
-    I.see('Apply changes', '.modal-footer');
+    I.see('Cancel', dialogs.locators.footer);
+    I.see('Apply changes', dialogs.locators.footer);
 
     // // form elements
     I.seeElement({ css: 'input[name="to"][disabled]' });
@@ -48,7 +47,7 @@ Scenario('adds and removes a autoforward rule', function (I) {
     I.seeElement({ css: 'input[name="processSub"][disabled]' });
 
     // enable
-    I.click('.modal-header .checkbox.switch.large');
+    I.click('.checkbox.switch.large', dialogs.locators.header);
 
     I.seeElement({ css: 'input[name="to"]:not([disabled])' });
     I.seeElement({ css: 'input[name="copy"]:not([disabled])' });
@@ -60,9 +59,8 @@ Scenario('adds and removes a autoforward rule', function (I) {
     I.fillField({ css: 'input[name="to"]' }, 'test@oxtest.com');
 
     // button enabled?
-    I.waitForElement('.modal-footer [data-action="save"]:not([disabled])');
-
-    I.click('.modal-footer button[data-action="save"]');
+    dialogs.clickButton('Apply changes');
+    I.waitForDetached('.modal-dialog');
 
     I.see('Auto forward ...', { css: '[data-action="edit-auto-forward"]' });
 
@@ -71,16 +69,16 @@ Scenario('adds and removes a autoforward rule', function (I) {
 
     // check notification in mail
     I.openApp('Mail');
-    I.waitForElement('.window-container.io-ox-mail-window');
+    mail.waitForApp();
     I.waitForElement({ css: 'a[data-action="edit-autoforward-notice"]' });
-    I.seeElement({ css: 'a[data-action="edit-autoforward-notice"]' });
     I.see('Auto forwarding is active', { css: 'a[data-action="edit-autoforward-notice"]' });
 
     I.click({ css: 'a[data-action="edit-autoforward-notice"]' });
-    I.waitForElement({ css: '[data-point="io.ox/mail/auto-forward/edit"]' });
+    dialogs.waitForVisible();
 
     I.seeInField({ css: 'input[name="to"]' }, 'test@oxtest.com');
     I.seeElement({ css: 'input[name="processSub"]:checked' });
 
-    I.click('Cancel', '.modal-footer');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
 });

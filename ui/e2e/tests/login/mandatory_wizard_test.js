@@ -23,8 +23,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-// TODO: shaky (element (body) is not in DOM or there is no element(body) with text "Welcome to OX App Suite" after 30 sec)
-Scenario.skip('[C7341] Use first run mandatory wizard', async function (I, users) {
+Scenario('[C7341] Use first run mandatory wizard', async function (I, users) {
     const [user] = users;
     const first_name = 'John';
     const last_name = 'Wayne';
@@ -32,9 +31,15 @@ Scenario.skip('[C7341] Use first run mandatory wizard', async function (I, users
 
     I.amOnPage('/');
     I.wait(1);
+    I.waitForInvisible('#background-loader.busy', 30);
+    // make sure we have an english UI
+    I.click('.dropdown');
+    I.waitForText('English (United States)');
+    I.click('English (United States)');
     I.fillField('User name', `${user.get('name')}@${user.context.id}`);
     I.fillField('Password', user.get('password'));
     I.click('Sign in');
+    I.waitForInvisible('#background-loader.busy', 20);
     I.waitForText('Welcome to OX App Suite');
     I.click('Start tour');
     I.waitForFocus('.form-control');
@@ -42,10 +47,12 @@ Scenario.skip('[C7341] Use first run mandatory wizard', async function (I, users
     I.fillField('last_name', last_name);
     I.pressKey('Enter');
     I.click('Next');
+    let listenerID = I.registerNodeRemovalListener('.wizard-container');
     I.click('Finish');
-    I.waitForVisible('#io-ox-launcher');
-    I.waitForNetworkTraffic();
+    I.waitForNodeRemoval(listenerID);
+    I.waitForVisible('#io-ox-launcher', 5);
     I.waitForVisible('.contact-picture');
+    I.wait(1);
     I.click('.contact-picture');
     I.waitForText('My contact data');
     I.click('My contact data');

@@ -1,4 +1,4 @@
-const { I, contactpicker } = inject();
+const { I, contactpicker, autocomplete, dialogs } = inject();
 
 const MAPPING = {
     'Day': 'dayview',
@@ -13,7 +13,7 @@ module.exports = {
 
     locators: {
         // main
-        view: locate({ css: '.io-ox-calendar-main .classic-toolbar .dropdown > a' }).as('View'),
+        view: locate({ xpath: '//ul[@class="classic-toolbar"]//li[@class="dropdown pull-right"]' }).as('View'),
         edit: locate({ css: '.io-ox-calendar-edit-window' }).as('Edit Dialog'),
         dropdown: locate({ css: '.smart-dropdown-container' }).as('Dropdown'),
         mini: locate({ css: '.window-sidepanel .date-picker' }).as('Mini Calendar'),
@@ -24,7 +24,7 @@ module.exports = {
         endtime: locate({ css: '[data-attribute="endDate"] .time-field' }).as('Ends at'),
         repeat: locate({ css: '.io-ox-calendar-edit-window div.checkbox.custom.small' }).find('label').withText('Repeat').as('Repeat'),
         participants: locate({ css: '.participantsrow' }).as('Participants List'),
-
+        addparticipants: locate({ css: '.add-participant.tt-input' }).as('Add participant field'),
         // views
         dayview: locate({ css: '.weekview-container.day' }).as('Day View'),
         workweekview: locate({ css: '.weekview-container.workweek' }).as('Workweek View'),
@@ -36,14 +36,29 @@ module.exports = {
     },
 
     waitForApp() {
-        I.waitForNetworkTraffic();
-        I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-        I.waitForVisible(locate({ css: '*[data-app-name="io.ox/calendar"]' }).as('Calendar container'));
+        // wait for nodes to be visible
+        I.waitForVisible(locate({ css: '*[data-app-name="io.ox/calendar"]' }).as('Calendar container'), 10);
+        I.waitForVisible({ css: '.io-ox-calendar-main .classic-toolbar-container .classic-toolbar' }, 5);
+        I.waitForVisible({ css: '.io-ox-calendar-main .tree-container' }, 5);
+        I.waitForVisible({ css: '.io-ox-calendar-main .window-sidepanel .date-picker' }, 5);
+
+        // wait for perspectives
+        I.waitForElement({ css: '.io-ox-pagecontroller.page[data-page-id="io.ox/calendar/month"]' }, 5);
+        I.waitForElement({ css: '.io-ox-pagecontroller.page[data-page-id="io.ox/calendar/week:day"]' }, 5);
+        I.waitForElement({ css: '.io-ox-pagecontroller.page[data-page-id="io.ox/calendar/week:workweek"]' }, 5);
+        I.waitForElement({ css: '.io-ox-pagecontroller.page[data-page-id="io.ox/calendar/week:week"]' }, 5);
+        I.waitForElement({ css: '.io-ox-pagecontroller.page[data-page-id="io.ox/calendar/list"]' }, 5);
+        I.waitForElement({ css: '.io-ox-pagecontroller.page[data-page-id="io.ox/calendar/year"]' }, 5);
+
+        // wait current perspective
+        I.waitForElement({ css: '.io-ox-pagecontroller.page.current' }, 5);
     },
 
     newAppointment() {
+        I.wait(1);
         I.clickToolbar({ css: '[data-action="io.ox/calendar/detail/actions/create"]' });
         I.waitForVisible(this.locators.edit);
+        I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
     },
 
     recurAppointment(date) {
@@ -56,18 +71,17 @@ module.exports = {
     deleteAppointment() {
         I.waitForText('Delete');
         I.click('Delete', '.io-ox-sidepopup .calendar-detail');
-        I.waitForText('Delete');
-        I.click('Delete', '.modal-dialog .modal-footer');
+        dialogs.waitForVisible();
+        dialogs.clickButton('Delete');
+        I.waitForDetached('.modal-dialog');
     },
 
     // attr: [startDate, endDate, until]
     async setDate(attr, value) {
         I.click('~Date (M/D/YYYY)', locate({ css: `[data-attribute="${attr}"]` }));
         I.waitForElement('.date-picker.open');
-        await I.executeScript(function (attr, newDate) {
-            // fillfield works only for puppeteer, pressKey(11/10....) only for webdriver
-            $(`.dateinput[data-attribute="${attr}"] .datepicker-day-field`).val(newDate).datepicker('update');
-        }, attr, value.format('L'));
+        I.click(`.dateinput[data-attribute="${attr}"] .datepicker-day-field`);
+        I.fillField(`.dateinput[data-attribute="${attr}"] .datepicker-day-field`, value.format('L'));
         I.pressKey('Enter');
         I.waitForDetached('.date-picker.open');
     },
@@ -93,20 +107,36 @@ module.exports = {
         cb.call(this, this.locators[MAPPING[label]]);
     },
 
-    doubleClick() {
-        I.doubleClick.apply(I, arguments);
+    async addParticipant(name, exists, context, addedParticipants) {
+        if (!context) context = '*';
+        if (!addedParticipants) addedParticipants = 1;
+
+        // does suggestion exists (for contact, user, ...)
+        exists = typeof exists === 'boolean' ? exists : true;
+        let number = await I.grabNumberOfVisibleElements(locate('.participant-wrapper').inside(context)) + addedParticipants;
+        // input field
+        I.waitForVisible(this.locators.addparticipants.inside(context));
+        I.waitForEnabled(this.locators.addparticipants.inside(context));
+        I.fillField(this.locators.addparticipants.inside(context), name);
+        // tokenfield/typeahead
+        exists ?
+            autocomplete.select(name, context.replace('.', '')) :
+            I.pressKey('Enter');
+        I.waitForInvisible(autocomplete.locators.suggestions);
+        // note: might be more than one that get's added (group)
+        I.waitForElement({ css: `.participant-wrapper:nth-of-type(${number})` });
     },
 
-    addAttendee: function (name, mode) {
-        if (mode !== 'picker') {
-            I.fillField('.add-participant.tt-input', name);
-            I.waitForVisible('.tt-dropdown-menu .tt-suggestion');
-            return I.pressKey('Enter');
-        }
-        // picker
+    addParticipantByPicker: function (name) {
         I.click('~Select contacts');
         contactpicker.add(name);
         contactpicker.close();
         I.waitForText(name, 5, this.locators.participants);
+    },
+
+    switchView: function (view) {
+        I.clickToolbar('View');
+        I.waitForElement('.dropdown.open');
+        I.clickDropdown(view);
     }
 };

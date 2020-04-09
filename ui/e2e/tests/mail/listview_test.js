@@ -49,15 +49,10 @@ async function getTooltipValue(I, opt) {
     return [].concat(tooltips)[0];
 }
 
-// TODO: shaky (element (.leftside .list-view .list-item .from) still not visible after 30 sec)
-Scenario.skip('[C114381] Sender address is shown in tooltip', async function (I, users) {
+Scenario('[C114381] Sender address is shown in tooltip', async function (I, users, mail) {
     const user1 = users[0];
     const user2 = users[1];
 
-    // USER1
-    I.say('Send mail and create draft', 'blue');
-    I.login('app=io.ox/mail');
-    console.log('>' + user1.get('primaryEmail'));
     await I.haveMail(getTestMail(user1, user2, {
         subject: 'C114381:sent',
         content: '<p style="background-color:#ccc">[C114381] Sender address is shown in draft tooltip</p>'
@@ -68,10 +63,16 @@ Scenario.skip('[C114381] Sender address is shown in tooltip', async function (I,
         flags: 4
     }));
 
+    // USER1
+    I.say('Send mail and create draft', 'blue');
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+    console.log('>' + user1.get('primaryEmail'));
+
     I.say('Check to in "send objects"', 'blue');
     I.selectFolder('Sent');
     I.waitForVisible('.leftside .list-view .list-item .from');
-    I.see('C114381:sent');
+    I.waitForText('C114381:sent');
     let to = await getTooltipValue(I, { locator: '.leftside .list-view .list-item .from', attribute: 'title' });
     expect(to).to.be.equal(user2.get('primaryEmail'));
 
@@ -87,10 +88,9 @@ Scenario.skip('[C114381] Sender address is shown in tooltip', async function (I,
     // USER2
     I.say(`login "${user2.get('primaryEmail')}"`, 'blue');
     I.login('app=io.ox/mail', { user: user2 });
-    I.waitForVisible('.io-ox-mail-window');
-    I.waitForVisible('.leftside .list-view .list-item .from');
+    mail.waitForApp();
 
-    I.see('C114381:sent');
+    I.waitForText('C114381:sent');
     let from = await getTooltipValue(I, { locator: '.leftside .list-view .list-item .from', attribute: 'title' });
     expect(from).to.be.equal(user1.get('primaryEmail'));
 
@@ -130,16 +130,16 @@ Scenario('remove mail from thread', async (I, users) => {
 
     I.login('', { user });
 
-    I.waitForText('Sent', 5, '.folder-node');
+    I.waitForText('Sent');
 
     I.selectFolder('Sent');
-    I.waitForText('Test subject', 5, '.subject');
+    I.waitForText('Test subject');
     I.click('.list-item[aria-label*="Test subject"]');
 
     I.waitForText('Reply', undefined, '.inline-toolbar');
     I.click('Reply');
     I.waitForVisible('.window-blocker.io-ox-busy');
-    I.waitForInvisible('.window-blocker.io-ox-busy');
+    I.waitForInvisible('.window-blocker.io-ox-busy', 15);
 
     I.click('Send');
     // wait a little for everything to be sent
@@ -156,6 +156,7 @@ Scenario('remove mail from thread', async (I, users) => {
     // make sure nothing is currently loading
     I.waitForElement('.fa-refresh.fa-spin-paused');
 
+    I.waitForElement('.mail-detail.expanded [data-toolbar]');
     I.click('Delete', '.mail-detail.expanded [data-toolbar]');
 
     // wait for refresh here, because the middleware needs to send new data

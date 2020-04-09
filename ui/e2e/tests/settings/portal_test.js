@@ -324,7 +324,7 @@ Scenario('[C7834] Modify widget color', async function (I) {
     I.waitForElement((locate('span').withText('My latest files')).inside('li.widget-color-blue'));
 });
 
-Scenario('[C7832] Remove widgets', async function (I) {
+Scenario('[C7832] Remove widgets', async function (I, dialogs) {
 
     I.login(['app=io.ox/portal']);
 
@@ -343,8 +343,9 @@ Scenario('[C7832] Remove widgets', async function (I) {
 
     // Remove the first widget
     I.click('a[title="Remove ' + widget1 + '"]');
-    I.waitForElement('.modal-dialog');
-    I.click('Delete');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
 
     // Remove the second widget
     I.click('a[title="Remove ' + widget2 + '"]');

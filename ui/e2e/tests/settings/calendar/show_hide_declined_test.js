@@ -29,7 +29,7 @@ Scenario('[C7865] Configure to show/hide declined appointments', async (I) => {
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'Appointment 1');
+    I.retry(5).fillField('Subject', 'Appointment 1');
     I.fillField('Location', 'test location');
 
     I.click('~Start time');
@@ -41,7 +41,7 @@ Scenario('[C7865] Configure to show/hide declined appointments', async (I) => {
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    I.fillField('Subject', 'Appointment 2');
+    I.retry(5).fillField('Subject', 'Appointment 2');
     I.fillField('Location', 'test location');
 
     I.click('~Start time');

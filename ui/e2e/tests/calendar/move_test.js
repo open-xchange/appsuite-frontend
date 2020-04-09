@@ -67,6 +67,7 @@ Scenario('Move appointment to different folder', async function (I) {
     I.click(folderPicker.find('.selectable[aria-label^="New calendar"]'));
     I.waitForText(folderName, folderPicker);
     I.waitForElement(locate({ css: '.btn-primary:not(disabled)' }).as('Enabled move button'));
+    I.wait(0.2);
     I.click('Move');
     I.waitForDetached(folderPicker);
 

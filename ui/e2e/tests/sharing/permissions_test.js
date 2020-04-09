@@ -24,8 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-// TODO: shaky (element (body) is not in DOM or there is no element(body) with text "Hello from Bob" after 30 sec)
-Scenario.skip('[C45032] Edit Permissions at "My shares"', async function (I, users, drive) {
+Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, drive, dialogs) {
     session('Alice', () => {
         I.login('app=io.ox/files');
         drive.waitForApp();
@@ -33,15 +32,13 @@ Scenario.skip('[C45032] Edit Permissions at "My shares"', async function (I, use
         I.selectFolder('My shares');
         drive.waitForApp();
         // sometimes this is not fast enough and there are 4 objects
-        I.seeNumberOfElements('.list-view li.list-item', 0);
+        I.waitForInvisible({ xpath: '//li[contains(@class, "list-item selectable")]' });
 
         //I.shareFolder('Music');
         I.click('My files', '.folder-tree');
         I.selectFolder('Music');
-        drive.waitForApp();
-        I.clickToolbar('Share');
-        I.clickDropdown('Invite people');
-        I.waitForText('Share folder');
+        I.waitForVisible(locate('.breadcrumb-tail[data-module="infostore"]').withText('Music'));
+        drive.shareItem('Invite people');
         I.click('Send notification by email');
         I.dontSeeCheckboxIsChecked('Send notification by email');
         I.click('~Select contacts');
@@ -50,21 +47,23 @@ Scenario.skip('[C45032] Edit Permissions at "My shares"', async function (I, use
         I.waitForText(users[1].get('name'), 5, '.address-picker');
         I.waitForText(users[1].get('primaryEmail'));
         I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
-        I.click({ css: 'button[data-action="select"]' });
+        dialogs.clickButton('Select');
         I.waitForDetached('.address-picker');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.dontSee('Guest', '.permissions-view');
-        I.seeNumberOfElements('.permissions-view .permission.row', 2);
+        I.waitForElement({ xpath: '//div[contains(@class, "permission row")][1]' });
+        I.waitForElement({ xpath: '//div[contains(@class, "permission row")][2]' });
+        I.waitForText('Author');
         I.click('Author');
         I.clickDropdown('Viewer');
-        I.click('Share', '.modal');
-        I.waitForDetached('.modal');
+        dialogs.clickButton('Share');
+        I.waitForDetached('.modal-dialog');
 
         I.selectFolder('My shares');
         I.waitForElement(locate('.displayname').withText('Music').inside('.list-view'));
-        I.seeNumberOfElements('.list-view li.list-item', 1);
+        I.waitForElement({ xpath: '//li[contains(@class, "list-item selectable file-type-folder")]' });
 
-        I.click('Music', '.list-view .displayname');
+        I.retry(5).click('Music', '.list-view .displayname');
     });
 
     session('Bob', () => {
@@ -77,7 +76,7 @@ Scenario.skip('[C45032] Edit Permissions at "My shares"', async function (I, use
         I.selectFolder(users[0].get('name'));
         I.waitForText('Music', 5, '.list-view');
         I.selectFolder('Music');
-        I.retry(3).dontSee('New', '.classic-toolbar');
+        I.waitForInvisible('New', '.classic-toolbar');
         I.selectFolder(users[0].get('name'));
     });
 
@@ -92,19 +91,23 @@ Scenario.skip('[C45032] Edit Permissions at "My shares"', async function (I, use
         //close the dropdown
         I.click('.smart-dropdown-container');
 
-        I.click('Share', '.modal');
-        I.waitForDetached('.modal');
+        dialogs.waitForVisible();
+        dialogs.clickButton('Share');
+        I.waitForDetached('.modal-dialog');
     });
 
     session('Bob', () => {
         I.triggerRefresh();
 
         I.selectFolder('Music');
-        I.clickToolbar('New');
+        I.retry(5).clickToolbar('New');
         I.clickDropdown('Add new folder');
-        I.waitForText('Add new folder');
+        dialogs.waitForVisible();
+        I.waitForText('Add new folder', 5, dialogs.locators.header);
         I.fillField('Folder name', 'Hello from Bob');
-        I.click('Add');
+        I.wait(1);
+        dialogs.clickButton('Add');
+        I.waitForDetached('.modal-dialog');
     });
 
     session('Alice', () => {
@@ -117,7 +120,7 @@ Scenario.skip('[C45032] Edit Permissions at "My shares"', async function (I, use
 });
 
 // TODO: shaky, failed (10 runs on 2019-11-28)
-Scenario.skip('[C107063] Revoke Permissions at "My shares"', async function (I, users, drive) {
+Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users, drive, dialogs) {
     session('Alice', () => {
         I.login('app=io.ox/files');
         drive.waitForApp();
@@ -127,9 +130,7 @@ Scenario.skip('[C107063] Revoke Permissions at "My shares"', async function (I, 
 
         //I.shareFolder('Music');
         I.selectFolder('Music');
-        I.clickToolbar('Share');
-        I.clickDropdown('Invite people');
-        I.waitForText('Share folder');
+        drive.shareItem('Invite people');
         I.click('Send notification by email');
         I.dontSeeCheckboxIsChecked('Send notification by email');
         I.click('~Select contacts');
@@ -138,15 +139,16 @@ Scenario.skip('[C107063] Revoke Permissions at "My shares"', async function (I, 
         I.waitForText(users[1].get('name'), 5, '.address-picker');
         I.waitForText(users[1].get('primaryEmail'));
         I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
-        I.click({ css: 'button[data-action="select"]' });
+        dialogs.clickButton('Select');
         I.waitForDetached('.address-picker');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.dontSee('Guest', '.permissions-view');
         I.seeNumberOfElements('.permissions-view .permission.row', 2);
         I.click('Author');
         I.clickDropdown('Viewer');
-        I.click('Share', '.modal');
-        I.waitForDetached('.modal');
+        dialogs.waitForVisible();
+        dialogs.clickButton('Share');
+        I.waitForDetached('.modal-dialog');
 
         I.selectFolder('My shares');
         I.waitForElement(locate('.displayname').withText('Music').inside('.list-view'));
@@ -159,6 +161,8 @@ Scenario.skip('[C107063] Revoke Permissions at "My shares"', async function (I, 
     session('Bob', () => {
         I.login('app=io.ox/files', { user: users[1] });
         drive.waitForApp();
+        I.click({ css: 'li.folder[aria-label^="Shared files"] .folder-arrow' });
+        I.waitForText(users[0].get('name'), 5, '.folder-tree');
         I.selectFolder(users[0].get('name'));
         I.waitForText('Music', 5, '.list-view');
     });
@@ -176,17 +180,18 @@ Scenario.skip('[C107063] Revoke Permissions at "My shares"', async function (I, 
     });
 });
 
-Scenario('[C73919] Copy a shared file to another folder', async function (I, users) {
+Scenario('[C73919] Copy a shared file to another folder', async function (I, users, drive, dialogs) {
     // the test case also shares with an external user, this is left out for now.
 
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
+    drive.waitForApp();
     I.waitForText('document.txt', 5, '.file-list-view');
 
     I.click(locate('.list-view li').withText('document.txt'));
     I.clickToolbar('~View');
-    I.waitForVisible('.io-ox-viewer');
+    drive.waitForViewer();
     I.waitForEnabled({ css: '.io-ox-viewer input.file-input' });
     I.attachFile('.io-ox-viewer input.file-input', 'e2e/media/files/0kb/document.txt');
     I.click('Upload');
@@ -195,29 +200,26 @@ Scenario('[C73919] Copy a shared file to another folder', async function (I, use
     I.waitForDetached('.io-ox-viewer');
     I.see('Versions (2)', '.detail-pane');
 
-    //I.shareFile
-    I.clickToolbar('Share');
-    I.click('Invite people');
-    I.waitForText('Share file');
+    drive.shareItem('Invite people');
     I.click('~Select contacts');
     I.waitForElement('.modal .list-view.address-picker li.list-item');
     I.fillField('Search', users[1].get('name'));
     I.waitForText(users[1].get('name'), 5, '.address-picker');
     I.waitForText(users[1].get('primaryEmail'));
     I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
-    I.click({ css: 'button[data-action="select"]' });
+    dialogs.clickButton('Select');
     I.waitForElement(locate('.permissions-view .row').at(1));
-    I.click('Share', '.modal');
-    I.waitForDetached('.modal');
+    dialogs.clickButton('Share');
+    I.waitForDetached('.modal-dialog');
     I.see('This file is shared with others', '.detail-pane');
 
     I.clickToolbar('~More actions');
     I.click('Copy');
     I.waitForText('Copy', 5, '.modal');
     I.pressKey('Arrow_Down');
-    I.click('Documents', '.modal');
+    I.retry(5).click('Documents', '.modal');
     I.waitForElement(locate('li.selected').withAttr({ 'aria-label': 'Documents' }).inside('.modal-body'));
-    I.click('Copy', '.modal');
+    dialogs.clickButton('Copy');
     I.waitForText('File has been copied', 5);
 
     I.selectFolder('Documents');
@@ -245,17 +247,19 @@ Scenario('[C73919] Copy a shared file to another folder', async function (I, use
     I.click('Shared files', '.detail-pane');
     I.waitForDetached('.busy-indicator.io-ox-busy');
     I.waitForText('document.txt');
-    I.click(locate('.io-ox-files-main .list-view li').withText('document.txt'));
+    I.retry(5).click(locate('.io-ox-files-main .list-view li').withText('document.txt'));
     I.see('Versions (2)', '.detail-pane');
     I.see('This file is shared with others', '.detail-pane');
 
     I.clickToolbar(locate('.io-ox-files-main .classic-toolbar [aria-label="More actions"]'));
     I.click(locate('.dropdown.open.more-dropdown li').withText('Copy'));
+    dialogs.waitForVisible();
     I.waitForText('Copy', 5, '.modal');
     I.pressKey('Arrow_Down');
     I.click('Documents', '.modal');
     I.waitForElement(locate('li.selected').withAttr({ 'aria-label': 'Documents' }).inside('.modal-body'));
-    I.click('Copy', '.modal');
+    dialogs.clickButton('Copy');
+    I.waitForDetached('.modal-dialog');
     I.waitForText('File has been copied', 5);
 
     I.selectFolder('My files');

@@ -20,7 +20,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7491] Delete an appointment', async (I) => {
+Scenario('[C7491] Delete an appointment', async (I, dialogs) => {
     // set settings
     await I.haveSetting('io.ox/portal//widgets/user', '{}');
     await I.haveSetting('io.ox/core//autoOpenNotification', false);
@@ -81,8 +81,8 @@ Scenario('[C7491] Delete an appointment', async (I) => {
     I.waitForText('Delete', undefined, '.io-ox-sidepopup');
 
     I.click('Delete', '.io-ox-sidepopup');
-    I.waitForText('Delete', '.modal-dialog');
-    I.click('Delete', '.modal-dialog');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
 
     // Verify the popup closes itself and the widget updates its list of appointments
     I.waitForDetached('.modal-dialog');

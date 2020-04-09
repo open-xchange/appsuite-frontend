@@ -21,7 +21,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7489] Inbox widget: open mails', async (I, users) => {
+Scenario('[C7489] Inbox widget: open mails', async (I, users, portal, dialogs) => {
     let [user] = users;
     await I.haveMail({
         attachments: [{
@@ -41,12 +41,11 @@ Scenario('[C7489] Inbox widget: open mails', async (I, users) => {
 
     //Add Inbox widget to Portal
     I.login('app=io.ox/portal');
-    I.waitForVisible('.io-ox-portal');
+    portal.waitForApp();
     I.click('Add widget');
-    I.waitForVisible('.io-ox-portal-settings-dropdown');
-    I.click('Inbox');
-    I.waitForVisible('.modal-dialog');
-    I.click('Save');
+    I.clickDropdown('Inbox');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Save');
 
     //Open mail from Inbox widget
     I.waitForElement('~Inbox');
@@ -66,5 +65,5 @@ Scenario('[C7489] Inbox widget: open mails', async (I, users) => {
     I.see('Delete', '.io-ox-sidepopup .inline-toolbar');
     I.seeElement('.dropdown.more-dropdown', '.io-ox-sidepopup .inline-toolbar');
     I.seeElement('.close', '.io-ox-sidepopup');
-    I.clickToolbar('.close');
+    I.click('.close');
 });

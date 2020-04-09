@@ -26,6 +26,7 @@ After(async function (users) {
 function createFilterRule(I, name, condition, value, flag) {
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
+    I.waitForElement({ css: 'li .folder[data-id="virtual/settings/io.ox/mail"]>.folder-node' });
     I.selectFolder('Mail');
     I.waitForVisible('.rightside h1');
 
@@ -40,7 +41,7 @@ function createFilterRule(I, name, condition, value, flag) {
 
     // create a test rule and check the inintial display
     I.click('Add new rule');
-    I.see('Create new rule');
+    I.waitForText('Create new rule');
     I.see('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.');
     I.see('Please define at least one action.');
 
@@ -60,7 +61,7 @@ function createFilterRule(I, name, condition, value, flag) {
 
 }
 
-Scenario('[C7792] Filter mail on sender', async function (I, users) {
+Scenario('[C7792] Filter mail on sender', async function (I, users, mail) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -72,25 +73,23 @@ Scenario('[C7792] Filter mail on sender', async function (I, users) {
     I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
-
+    mail.waitForApp();
     // compose mail
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.newMail();
+
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'TestCase0368');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
-    I.click('Send');
+    mail.send();
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.waitForElement('.vsplit .flag_2', 30);
 
 });
 
-// TODO: shaky, 219 of 237 (I see "There is no rule defined")
-Scenario.skip('[C7793] Filter mail on any recipient', async function (I, users) {
+Scenario('[C7793] Filter mail on any recipient', async function (I, users, mail) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -102,24 +101,23 @@ Scenario.skip('[C7793] Filter mail on any recipient', async function (I, users) 
     I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     // compose mail
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.newMail();
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'TestCase0369');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
-    I.click('Send');
+    mail.send();
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.waitForElement('.vsplit .flag_1', 30);
 
 });
 
-Scenario('[C7794] Filter mail on to-field', async function (I, users) {
+Scenario('[C7794] Filter mail on to-field', async function (I, users, mail) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -131,24 +129,23 @@ Scenario('[C7794] Filter mail on to-field', async function (I, users) {
     I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     // compose mail
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.newMail();
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'TestCase0373');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
-    I.click('Send');
+    mail.send();
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.waitForElement('.vsplit .flag_1', 30);
 
 });
 
-Scenario('[C7795] Filter mail on subject', async function (I, users) {
+Scenario('[C7795] Filter mail on subject', async function (I, users, mail) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -160,23 +157,22 @@ Scenario('[C7795] Filter mail on subject', async function (I, users) {
     I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     // compose mail
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.newMail();
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'TestCase0374');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
-    I.click('Send');
+    mail.send();
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.waitForElement('.vsplit .flag_1', 30);
 });
 
-Scenario('[C7796] Filter mail on cc-field', async function (I, users) {
+Scenario('[C7796] Filter mail on cc-field', async function (I, users, mail) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -188,11 +184,10 @@ Scenario('[C7796] Filter mail on cc-field', async function (I, users) {
     I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     // compose mail
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.newMail();
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
     I.click('CC');
     I.fillField('.io-ox-mail-compose div[data-extension-id="cc"] input.tt-input', user.get('primaryEmail'));
@@ -201,14 +196,13 @@ Scenario('[C7796] Filter mail on cc-field', async function (I, users) {
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
-    I.click('Send');
+    mail.send();
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.waitForElement('.vsplit .flag_1', 30);
 });
 
-// TODO: reply-to header isn't set so rule didn't get applied
-Scenario.skip('[C7797] Filter mail on header', async function (I, users) {
+Scenario('[C7797] Filter mail on header', async function (I, users, mail) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -218,30 +212,29 @@ Scenario.skip('[C7797] Filter mail on header', async function (I, users) {
     I.click('Matches');
     I.waitForVisible('.open.dropdownlink');
     I.click('Contains');
-    I.fillField('headers', 'Reply-To');
+    I.fillField('headers', 'Delivered-To');
     // save the form
     I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     // compose mail
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text, .io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.newMail();
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
 
     I.fillField('.io-ox-mail-compose [name="subject"]', 'TestCase0381');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
-    I.click('Send');
+    mail.send();
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.waitForElement('.vsplit .flag_1', 30);
 });
 
-Scenario('[C7800] Filter mail on envelope', async function (I, users) {
+Scenario('[C7800] Filter mail on envelope', async function (I, users, mail) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -257,11 +250,10 @@ Scenario('[C7800] Filter mail on envelope', async function (I, users) {
     I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     // compose mail
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.newMail();
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].get('primaryEmail'));
     I.click('BCC');
     I.fillField('.io-ox-mail-compose div[data-extension-id="bcc"] input.tt-input', users[0].get('primaryEmail'));
@@ -270,7 +262,7 @@ Scenario('[C7800] Filter mail on envelope', async function (I, users) {
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
-    I.click('Send');
+    mail.send();
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.waitForElement('.vsplit .flag_1', 30);

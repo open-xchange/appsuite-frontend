@@ -93,7 +93,7 @@ Scenario('[C7732] Create a Task in a shared folder without rights', async functi
     I.waitForElement(locate('.classic-toolbar .disabled').withText('New').as('disabled "New" button in toolbar'));
 });
 
-// TODO: edit view and detail view timestamps differ about an hour
+// TODO: edit view and detail view timestamps differ about an hour, see Bug 68542
 Scenario.skip('[C7727] Create task with all fields', async function (I, tasks) {
     const testrailID = 'C7727';
     const testrailName = 'Create task with all fields';

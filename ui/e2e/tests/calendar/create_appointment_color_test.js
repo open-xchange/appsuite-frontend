@@ -14,6 +14,7 @@
 /// <reference path="../../steps.d.ts" />
 
 const expect = require('chai').expect;
+
 Feature('Calendar > Create');
 
 Before(async (users) => {
@@ -32,11 +33,11 @@ let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) 
     I.waitForText('Appointments in public calendar');
     I.click('Create in public calendar');
     I.waitForVisible('.io-ox-calendar-edit-window');
-    I.fillField('Subject', subject);
+    I.retry(5).fillField('Subject', subject);
     I.see(folder, '.io-ox-calendar-edit-window .folder-selection');
     if (startTime) {
-        I.click('~Start time');
-        I.click(startTime);
+        I.retry(3).click('~Start time');
+        I.retry(3).click(startTime);
     }
     if (color) {
         I.click('Appointment color', '.color-picker-dropdown');
@@ -51,50 +52,58 @@ let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) 
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 };
 
-Scenario.skip('[C264519] Create appointments with colors in public folder', async function (I, users) {
+Scenario('[C264519] Create appointments with colors in public folder', async function (I, users, calendar, dialogs) {
 
     let [user_a, user_b] = users;
     let selectInsideFolder = (node) => locate(node)
-            .inside(locate('div.folder-node')
-                    .withAttr({ title: 'New calendar' })
-            );
+            .inside(folderLocator);
 
-    const createAppointment = uncurriedCreateAppointment(I);
+    const createAppointment = uncurriedCreateAppointment(I),
+        folderLocator = locate({ css: 'div.folder-node' }).withAttr({ title: 'New calendar' });
 
     //login user a
     I.login('app=io.ox/calendar', { user: user_a });
-    I.waitForText('Add new calendar');
-    // add new public calendar
-    I.click('Add new calendar');
-    I.waitForText('Personal calendar');
-    I.click('Personal calendar');
-    I.waitForVisible('.modal-body');
-    I.checkOption('Add as public calendar');
-    I.click('Add');
-    I.waitToHide('.modal');
-    I.wait(1);
-    // give user b permissions
-    I.click('.fa.fa-caret-right');
+    calendar.waitForApp();
+
+    I.say('Create public calendar');
+    I.waitForText('Add new calendar', 5, '.folder-tree');
+    I.click('Add new calendar', '.folder-tree');
+
+    I.clickDropdown('Personal calendar');
+
+    dialogs.waitForVisible();
+    I.waitForText('Add as public calendar', 5, dialogs.locators.body);
+    I.checkOption('Add as public calendar', dialogs.locators.body);
+    dialogs.clickButton('Add');
+    I.waitForDetached('.modal-dialog');
+
+    I.say('Grant permission to user b');
+    I.click('.folder-node .folder-arrow .fa.fa-caret-right');
     I.selectFolder('New calendar');
-    I.click(selectInsideFolder('a'));
-    I.waitForText('Permissions / Invite people');
-    I.click('Permissions / Invite people');
-    I.waitForFocus('.form-control.tt-input');
+    I.retry(3).click(selectInsideFolder({ css: 'a.folder-options' }));
+
+    I.clickDropdown('Permissions / Invite people');
+    dialogs.waitForVisible();
+    I.waitForElement('.form-control.tt-input', 5, dialogs.locators.header);
     I.fillField('.form-control.tt-input', user_b.get('primaryEmail'));
     I.pressKey('Enter');
-    I.click('Save');
-    I.waitForDetached('.modal');
-    //create 2 test appointments with different colors
+    dialogs.clickButton('Save');
+    I.waitForDetached('.modal-dialog');
+
+    I.say('create 2 test appointments with different colors');
     createAppointment({ subject: 'testing is fun', folder: 'New calendar', startTime: '8:00 AM', color: 'dark green' });
     createAppointment({ subject: 'testing is awesome', folder: 'New calendar', startTime: '10:00 AM', color: 'dark cyan' });
     I.logout();
-    //login user b
+
+    I.say('Login user b');
     I.waitForVisible('#io-ox-login-screen');
     I.login('app=io.ox/calendar', { user: user_b });
-    I.waitForVisible('.fa.fa-caret-right');
-    I.click('.fa.fa-caret-right');
+    calendar.waitForApp();
+
+    I.waitForVisible('.folder-node .folder-arrow .fa.fa-caret-right');
+    I.click('.folder-node .folder-arrow .fa.fa-caret-right');
     I.selectFolder('New calendar');
-    I.click(selectInsideFolder('div.color-label'));
+    I.retry(3).click(selectInsideFolder({ css: 'div.color-label' }));
     //check if public appointments are there
     I.see('testing is fun', '.workweek .appointment .title-container');
     I.see('testing is awesome', '.workweek .appointment .title-container');

@@ -10,6 +10,8 @@
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
 
+const moment = require('moment');
+
 Feature('Portal');
 
 Before(async function (users) {
@@ -20,7 +22,21 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Create new appointment and check display in portal widget', async function (I, calendar) {
+// if the month changes between today and tomorrow
+async function goToDate(I, date) {
+    var day = await I.executeScript(function (date) {
+        const monthName = moment(date).format('MMMM');
+        if (monthName !== $('.switch-mode').text().split(' ')[0]) {
+            $('.btn-next').click();
+        }
+        return moment(date).format('M/D/YYYY');
+    }, date);
+    I.retry(5).click({ css: `td[aria-label*="${day}"` });
+}
+
+Scenario('Create new appointment and check display in portal widget', async function (I, portal, calendar, dialogs) {
+    // add one day to secure that the appointment will be in the future
+    const day = moment().startOf('day').add('1', 'day').add('1', 'hour');
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
@@ -31,30 +47,32 @@ Scenario('Create new appointment and check display in portal widget', async func
 
     // make sure portal widget is empty
     I.openApp('Portal');
-    I.waitForVisible('.io-ox-portal [data-widget-id="calendar_0"]');
+    portal.waitForApp();
     I.see('You don\'t have any appointments in the near future.', { css: '[data-widget-id="calendar_0"] li.line' });
 
     I.openApp('Calendar');
+    calendar.waitForApp();
     I.clickToolbar('View');
     I.click('List', '.dropdown.open .dropdown-menu');
 
     // create in List view
     I.selectFolder('Calendar');
-    I.clickToolbar('View');
-    I.click('List', '.dropdown.open .dropdown-menu');
-    I.clickToolbar('New appointment');
-    I.waitForVisible('.io-ox-calendar-edit-window');
+    calendar.waitForApp();
+    calendar.switchView('List');
+    calendar.newAppointment();
 
-    I.fillField('Subject', 'test portal widget');
+    I.retry(5).fillField('Subject', 'test portal widget');
     I.fillField('Location', 'portal widget location');
+    I.fillField('.time-field', '2:00 PM');
+    await calendar.setDate('startDate', day);
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
     // check in week view
-    I.clickToolbar('View');
-    I.click('Week');
+    calendar.switchView('Week');
+    await goToDate(I, day);
     I.waitForVisible('.weekview-container.week button.weekday.today');
 
     I.see('test portal widget', '.weekview-container.week .appointment .title');
@@ -62,34 +80,35 @@ Scenario('Create new appointment and check display in portal widget', async func
 
     // check in portal
     I.openApp('Portal');
+    portal.waitForApp();
     I.waitForVisible('.io-ox-portal [data-widget-id="calendar_0"] li.item div');
     I.see('test portal widget', { css: '[data-widget-id="calendar_0"] li.item div' });
 
     // create a second appointment
     I.openApp('Calendar');
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
-    I.clickToolbar('View');
-    I.click('List', '.dropdown.open .dropdown-menu');
+    calendar.waitForApp();
+    calendar.switchView('List');
 
     // create in List view
     I.selectFolder('Calendar');
-    I.clickToolbar('View');
-    I.click('List', '.dropdown.open .dropdown-menu');
-    I.clickToolbar('New appointment');
-    I.waitForVisible('.io-ox-calendar-edit-window');
+    calendar.switchView('List');
+    calendar.newAppointment();
 
-    I.fillField('Subject', 'second test portal widget ');
+    I.retry(5).fillField('Subject', 'second test portal widget ');
     I.fillField('Location', 'second portal widget location');
+    I.fillField('.time-field', '2:00 PM');
+    await calendar.setDate('startDate', day);
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
-    I.waitForVisible('.modal-dialog');
-    I.click('Ignore conflicts', '.modal-dialog');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Ignore conflicts');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
     // check in week view
-    I.clickToolbar('View');
-    I.click('Week', '.dropdown.open .dropdown-menu');
+    calendar.switchView('Week');
+    await goToDate(I, day);
     I.waitForVisible('.weekview-container.week button.weekday.today');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 2);
 });

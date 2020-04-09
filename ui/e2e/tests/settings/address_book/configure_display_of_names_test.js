@@ -23,8 +23,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-// TODO: shaky
-Scenario.skip('[C7862] Configure display name representation', async (I, contacts) => {
+Scenario('[C7862] Configure display name representation', async (I, contacts) => {
     const folder = await I.grabDefaultFolder('contacts'),
         firstName = 'Foo',
         lastName = 'Bar';
@@ -46,8 +45,9 @@ Scenario.skip('[C7862] Configure display name representation', async (I, contact
     I.waitForElement('.contact-grid-container');
     const firstNameLocator = locate('.first_name').withText(firstName).inside('.contact-detail').as('first name node'),
         lastNameLocator = locate('.last_name').withText(lastName).inside('.contact-detail').as('last name node');
-    // shaky: sometimes changed setting not reflected in detail view
-    I.waitForVisible(firstNameLocator.before(lastNameLocator).as(`'${firstName} ${lastName}'`), 5, '.fullname');
+    I.wait(1); //wait for listeners to be attached
+    I.click('.selectable.contact');
+    I.waitForElement(firstNameLocator.before(lastNameLocator).as(`'${firstName} ${lastName}'`), 5, '.fullname');
 
     // Go back to settings and switch to other display style
     I.say('Setting: lastname, firstname');
@@ -57,6 +57,8 @@ Scenario.skip('[C7862] Configure display name representation', async (I, contact
 
     // Go back to contacts app and verify it
     I.openApp('Address Book');
-    contacts.waitForApp();
-    I.waitForVisible(lastNameLocator.before(firstNameLocator).as(`'${lastName}, ${firstName}'`), 5, '.fullname');
+    contacts.waitForApp(true);
+    I.wait(1); //wait for listeners to be attached
+    I.click('.selectable.contact');
+    I.waitForElement(lastNameLocator.before(firstNameLocator).as(`'${lastName}, ${firstName}'`), 5, '.fullname');
 });

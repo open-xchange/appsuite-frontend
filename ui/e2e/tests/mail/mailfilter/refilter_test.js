@@ -17,6 +17,10 @@ Before(async (users) => {
     await users.create();
 });
 
+After(async (users) => {
+    await users.removeAll();
+});
+
 function setup(I, user) {
     return Promise.all([
         I.haveMail({
@@ -47,7 +51,7 @@ function sampleRule(I) {
 function extendedLogin(I) {
     I.login();
     I.waitForText('nothing special');
-    I.see('foobar', '.subject');
+    I.waitForText('foobar', 5, '.subject');
     I.openApp('Settings', { folder: 'virtual/settings/io.ox/mailfilter' });
     I.waitForText('Add new rule', 30, '.settings-detail-pane');
 }
@@ -66,30 +70,33 @@ function checkForFilteredMail(I) {
 }
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C290529] Refilter mails in INBOX folder', async (I, users) => {
+Scenario('[C290529] Refilter mails in INBOX folder', async (I, users, dialogs) => {
     const [user] = users;
     await setup(I, user);
     await sampleRule(I);
     extendedLogin(I);
 
     I.click('Apply');
+    dialogs.waitForVisible();
     I.waitForElement(locate('.modal .folder.selected').withText('Inbox'));
-    I.click('Ok');
+    dialogs.clickButton('Apply');
+    I.waitForDetached('.modal-dialog');
 
     checkForFilteredMail(I);
 });
 //TODO: I see "foobar", ".subject" fails, stale element reference
-Scenario.skip('[C290530] Create and apply new filter rule', async (I, users) => {
+Scenario('[C290530] Create and apply new filter rule', async (I, users, dialogs) => {
     const [user] = users;
     await setup(I, user);
     extendedLogin(I);
 
     I.click('Add new rule');
+    dialogs.waitForVisible();
 
     I.fillField('Rule name', 'move foobar mails');
 
     I.click('Add condition');
-    I.click(locate('.dropdown.open li').withText('Subject'));
+    I.clickDropdown('Subject');
     // wait for focus events to settle
     I.wait(0.5);
     I.fillField('Subject Contains', 'foobar');
@@ -97,35 +104,34 @@ Scenario.skip('[C290530] Create and apply new filter rule', async (I, users) => 
     I.click('Add action');
     I.click('File into');
     I.click('Select folder');
+    dialogs.waitForVisible();
     I.waitForElement(locate('.modal .folder[data-id="virtual/myfolders"]'));
     I.click('.modal .folder[data-id="virtual/myfolders"] .folder-arrow');
     I.click(locate('.modal .folder.selectable').withText('foo'));
-    I.click('Ok');
+    dialogs.clickButton('Select');
 
-    I.click('Save and apply');
+    I.waitForText('Create new rule', 5, dialogs.locators.header);
+    dialogs.clickButton('Save and apply');
     I.waitForVisible(locate('.modal .folder.selected').withText('Inbox'));
-    I.click('Ok');
+    dialogs.clickButton('Apply');
+    I.waitForDetached('.modal-dialog');
 
     checkForFilteredMail(I);
 });
 
-// TODO: shaky, 145 of 178 (stale element reference: element is not attached to the page document)
-Scenario.skip('[C290531] Edit and apply existing filter rule', async (I, users) => {
+Scenario('[C290531] Edit and apply existing filter rule', async (I, users, dialogs) => {
     const [user] = users;
     await setup(I, user);
     await sampleRule(I);
     extendedLogin(I);
 
     I.click('Edit');
+    dialogs.waitForVisible();
     I.fillField('Rule name', 'no foo in inbox');
     I.fillField('Subject Contains', 'foo');
-    I.click('Save and apply');
+    dialogs.clickButton('Save and apply');
     I.waitForVisible(locate('.modal .folder.selected').withText('Inbox'));
-    I.click('Ok');
+    dialogs.clickButton('Apply');
 
     checkForFilteredMail(I);
-});
-
-After(async (users) => {
-    await users.removeAll();
 });

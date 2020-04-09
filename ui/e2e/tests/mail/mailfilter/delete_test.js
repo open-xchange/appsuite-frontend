@@ -24,7 +24,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7789] Delete filter rule @contentReview', async function (I, users) {
+Scenario('[C7789] Delete filter rule @contentReview', async function (I, users, dialogs) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     }, { user: users[1] });
@@ -50,9 +50,9 @@ Scenario('[C7789] Delete filter rule @contentReview', async function (I, users) 
     I.see('Mail Filter Rules');
 
     I.click('.settings-list-view [title="Remove Redirect mails with subject Test subject to ' + users[2].get('primaryEmail') + '"]');
-    I.waitForElement('.modal-dialog');
-    I.see('Do you really want to delete this filter rule?');
-    I.click('Delete');
+    dialogs.waitForVisible();
+    I.waitForText('Do you really want to delete this filter rule?', 5, dialogs.locators.body);
+    dialogs.clickButton('Delete');
     I.waitForDetached('.modal-dialog');
     I.see('There is no rule defined');
 

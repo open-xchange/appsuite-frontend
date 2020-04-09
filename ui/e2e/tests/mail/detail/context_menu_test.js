@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C248438] Context menu can be opened by right click', async (I, users, mail) => {
+Scenario('[C248438] Context menu can be opened by right click', async (I, users, mail, dialogs) => {
 
     const icke = users[0].userdata.email1,
         subject = 'Context menu can be opened by right click';
@@ -49,34 +49,36 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users,
     I.waitForElement(firstItem);
     I.click(firstItem);
     I.waitForVisible('.thread-view.list-view .list-item');
+    I.waitForDetached('.seen-unseen-indicator');
     // we need to wait until the message is seen
     I.waitForDetached('.thread-view.list-view .list-item.unread');
 
     // Mark unread
-    rightClick();
-    I.clickDropdown('Mark as unread');
+    rightClick('Mark as unread');
     I.waitForElement('.thread-view.list-view .list-item.unread');
 
     // View source
-    rightClick();
-    I.clickDropdown('View source');
-    I.waitForElement('.mail-source-dialog');
-    I.click('Close', '.modal-footer');
+    rightClick('View source');
+    dialogs.waitForVisible();
+    I.seeElement('.mail-source-dialog');
+    dialogs.clickButton('Close');
+    I.waitForDetached('.modal-dialog');
 
     // Move
-    rightClick();
-    I.clickDropdown('Move');
-    I.waitForElement('.folder-picker-dialog');
-    I.click('Cancel');
+    rightClick('Move');
+    dialogs.waitForVisible();
+    I.seeElement('.folder-picker-dialog');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
 
     // Reply
-    rightClick();
-    I.clickDropdown('Reply');
-    I.waitForElement({ css: 'button[data-action="discard"]:not(.disabled)' });
+    rightClick('Reply');
+    I.waitForVisible('.io-ox-mail-compose [placeholder="To"]', 30);
+    I.waitForInvisible('.io-ox-busy');
     I.seeInField('subject', 'Re: ' + subject);
-    // no better approach yet. I.waitForMailCompose() might be a good one
-    I.wait(1);
-    I.click('Discard');
+    // discard mail
+    I.click(mail.locators.compose.close);
+
 
     // // Shift-F10 (view source again)
     // --- DOES NOT WORK YET -----
@@ -86,18 +88,16 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users,
     // I.click('Close');
 
     // Delete
-    rightClick();
-    I.seeNumberOfElements('.leftside .list-view .list-item', 1);
-    I.clickDropdown('Delete');
+    rightClick('Delete');
+    // I.seeNumberOfElements('.leftside .list-view .list-item', 1);
     I.waitForDetached('.leftside .list-view .list-item');
 
-    function rightClick() {
-        I.executeScript(function () {
-            var e = $.Event('contextmenu', { pageY: 200, pageX: 350 });
-            // eslint-disable-next-line no-undef
-            list.$el.trigger(e);
-        });
+    function rightClick(action) {
+        let actionSelector = `//ul[@class="dropdown-menu"]//a[text()="${action}"]`;
+        I.rightClick({ xpath: '//li[contains(@class, "list-item selectable")]' });
         I.waitForElement('.dropdown.open');
+        I.waitForVisible({ xpath: actionSelector });
+        I.click({ xpath: actionSelector });
     }
 
     // function shiftF10() {

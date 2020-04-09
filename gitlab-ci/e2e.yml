@@ -8,7 +8,7 @@ deploy e2e dev server:
     DOCKER_HOST: docker.ui.cloud.open-xchange.com
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     CONTAINER_NAME: e2e-develop
-    SERVER: http://10.20.28.164/appsuite/
+    SERVER: http://10.50.0.57/appsuite/
   script:
     - docker stop $CONTAINER_NAME || true
     - docker wait $CONTAINER_NAME || true
@@ -27,7 +27,7 @@ deploy e2e testserver:
     DOCKER_HOST: docker.ui.cloud.open-xchange.com
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     CONTAINER_NAME: e2e_$CI_PIPELINE_ID
-    SERVER: http://10.20.28.164/appsuite/
+    SERVER: http://10.50.0.57/appsuite/
   script:
     - docker pull $DOCKER_IMAGE
     - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e $DOCKER_IMAGE e2e
@@ -39,12 +39,11 @@ deploy e2e testserver:
   except:
     refs:
       - /^poc\//
+      - /^e2e\//
 
 run e2e tests:
   stage: e2e
-  image: gitlab.open-xchange.com:4567/frontend/dev_env:latest
-  services:
-    - selenium/standalone-chrome:3.141.59-oxygen
+  image: gitlab.open-xchange.com:4567/frontend/dev_env/puppeteer:latest
   dependencies: []
   needs:
     - deploy e2e testserver
@@ -52,7 +51,7 @@ run e2e tests:
     LAUNCH_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/appsuite/
     PROVISIONING_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/
     CONTEXT_ID: $CI_JOB_ID
-    SELENIUM_HOST: selenium-standalone-chrome
+    CHROME_ARGS: '--no-sandbox'
     PARTITIONS: '@shaky ^Accessibility ^Contacts ^Login ^Mail\sCompose ^Calendar.(?!>\sImport|>\sCreate) ^Calendar.(?=>\sImport|>\sCreate) ^Mail\s> ^Drive ^Portal ^Sharing ^General ^Settings ^Tasks ^Mailfilter'
   script:
     # make PARTITIONS an array
@@ -80,6 +79,7 @@ run e2e tests:
   except:
     refs:
       - /^poc\//
+      - /^e2e\//
 
 generate e2e report:
   stage: report
@@ -88,8 +88,7 @@ generate e2e report:
     GIT_STRATEGY: none
   dependencies:
     - run e2e tests
-  needs:
-    - run e2e tests
+    - run new e2e test
   script:
     # fail if there are no test results, prevents history from getting lost in some cases
     - find ui/build/e2e/ -name *.xml > /dev/null
@@ -114,6 +113,7 @@ generate e2e report:
       - /^release-/
       - /^feature\//
       - /^bug\//
+      - /^e2e\//
     changes:
       - ui/**/*
 
@@ -145,6 +145,7 @@ publish e2e report:
       - /^release-/
       - /^feature\//
       - /^bug\//
+      - /^e2e\//
     changes:
       - ui/**/*
 
@@ -170,8 +171,6 @@ remove e2e report:
 stop e2e testserver:
   stage: cleanup
   dependencies: []
-  needs:
-    - run e2e tests
   variables:
     GIT_STRATEGY: none
     DOCKER_HOST: docker.ui.cloud.open-xchange.com
@@ -185,6 +184,37 @@ stop e2e testserver:
   only:
     changes:
       - ui/**/*
+  except:
+    refs:
+      - /^poc\//
+
+deploy e2e testserver new test:
+  extends: deploy e2e testserver
+  variables:
+    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:develop
+    CONTAINER_NAME: e2e_$CI_PIPELINE_ID
+    SERVER: http://10.20.28.164/appsuite/
+  only:
+    refs:
+      - /^e2e\//
+  except:
+    refs:
+      - /^poc\//
+
+run new e2e test:
+  extends: run e2e tests
+  needs:
+    - deploy e2e testserver new test
+  script:
+  - cd ui
+  - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
+  - echo ${CI_COMMIT_REF_NAME//e2e\//}
+  - npx codeceptjs run-rerun --grep "${CI_COMMIT_REF_NAME//e2e\//}"
+  parallel: 5
+  only:
+    refs:
+      - /^e2e\//
   except:
     refs:
       - /^poc\//

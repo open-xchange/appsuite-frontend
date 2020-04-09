@@ -203,7 +203,7 @@ Scenario('[C7482] Add a mail to portal', async function (I, users, mail) {
     I.waitForDetached('.io-ox-sidepopup', 5);
 });
 
-Scenario('[C7475] Add inbox widget', async function (I, users) {
+Scenario('[C7475] Add inbox widget', async function (I, portal, users, dialogs) {
     // TODO: Need to add Appointment, latest file(upload?)
     //const moment = require('moment');
     const testrailID = 'C7475',
@@ -218,12 +218,16 @@ Scenario('[C7475] Add inbox widget', async function (I, users) {
     });
     I.haveSetting('io.ox/portal//widgets/user', '{}');
     I.login('app=io.ox/portal');
+    portal.waitForApp();
+
     I.waitForElement('.io-ox-portal .header .add-widget');
     I.click('Add widget');
-    I.waitForText('Inbox', 5, '.dropdown.open');
-    I.click('Inbox', '.dropdown.open');
-    I.waitForElement('.modal');
-    I.click('Save', '.modal');
+    I.clickDropdown('Inbox');
+
+    dialogs.waitForVisible();
+    dialogs.clickButton('Save');
+    I.waitForDetached('.modal-dialog');
+
     I.waitForElement(locate('.widget .item').withText(subject));
     I.click(subject, '.widget .item');
     I.waitForElement('.io-ox-sidepopup');
@@ -231,7 +235,7 @@ Scenario('[C7475] Add inbox widget', async function (I, users) {
     I.waitForText(user.display_name, undefined, '.io-ox-sidepopup');
     I.waitForText(user.primaryEmail, undefined, '.io-ox-sidepopup');
     I.click('Inbox', '.widget');
-    I.waitForDetached('.modal');
+    I.waitForDetached('.io-ox-sidepopup');
 });
 
 Scenario('[C7476] Add task widget', async function (I, users) {
@@ -304,15 +308,11 @@ Scenario('[C7477] Add appointment widget', async function (I, users) {
     I.waitForDetached('.io-ox-sidepopup', 5);
 });
 
-Scenario('[C7478] Add user data widget', async function (I, users) {
+Scenario('[C7478] Add user data widget', async function (I, users, portal, dialogs) {
     await I.haveSetting('io.ox/portal//widgets/user', '{}');
     I.login('app=io.ox/portal');
-    I.waitForElement('.io-ox-portal .header .add-widget');
-    I.click('Add widget');
-    I.waitForElement('.dropdown.open [data-type="userSettings"]');
-    I.click('User data', '.dropdown.open');
-    I.waitForElement('.widget');
-    I.waitForText('User data', undefined, '.widget .title');
+    portal.waitForApp();
+    portal.addWidget('User data');
     I.click('My contact data', '.widget');
     I.waitForElement({ css: '.io-ox-contacts-edit-window' });
     I.waitForText(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, undefined, { css: '.io-ox-contacts-edit-window .contact-summary' });
@@ -320,12 +320,14 @@ Scenario('[C7478] Add user data widget', async function (I, users) {
     I.waitForDetached({ css: '.io-ox-contacts-edit-window' });
     //Dirty ... I.click('My password', { css: '.io-ox-portal [data-widget-type="userSettings"] .action' }); is not working here
     I.click('My password', '.widget');
-    I.waitForText('Change password', undefined, '.modal');
+
+    dialogs.waitForVisible();
+    I.waitForText('Change password', 5, dialogs.locators.header);
     I.see('Your current password');
     I.see('New password');
     I.see('Repeat new password');
-    I.click('Cancel', '.modal');
-    I.waitForDetached('.modal');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
 });
 
 Scenario('[C7480] Add recently changed files widget', async function (I, users) {

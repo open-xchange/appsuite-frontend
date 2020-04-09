@@ -26,12 +26,12 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7433] Create appointment by marking some timeframe', async (I) =>{
+Scenario('[C7433] Create appointment by marking some timeframe', async (I, calendar) => {
     const apnt_subject = 'C7433-' + Math.random().toString(36).substring(7);
     const apnt_location = 'C7433-' + Math.random().toString(36).substring(7);
 
     I.login('app=io.ox/calendar&perspective="week:day"');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    calendar.waitForApp();
 
     I.clickToolbar('Today');
 
@@ -47,16 +47,10 @@ Scenario('[C7433] Create appointment by marking some timeframe', async (I) =>{
     });
     I.waitForVisible('.floating-window');
     I.waitForText('Create appointment');
-
     I.fillField('summary', apnt_subject);
-
     I.fillField('location', apnt_location);
-
     I.click('Create');
-
-    I.click('#io-ox-refresh-icon');
-    I.waitForElement('#io-ox-refresh-icon .fa-spin');
-    I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+    I.waitForDetached('.io-ox-calendar-edit-window');
 
     // open overlay
     I.click(apnt_subject, '.appointment');
@@ -64,11 +58,9 @@ Scenario('[C7433] Create appointment by marking some timeframe', async (I) =>{
     await within('.io-ox-sidepopup', async () => {
         I.see(apnt_subject);
         I.see(apnt_location);
-
         // check time / date - should be 1am to 3am, 2hrs
         const apnt_date = await I.grabTextFrom('.date'); // expected: moment().format(L)
         const apnt_time = await I.grabTextFrom('.time'); // expected: 01:00 - 03:00 AM
-
         expect(apnt_date).to.contain(moment().format('l'));
         expect(apnt_time).to.contain('1:00 – 3:00 AM');
     });

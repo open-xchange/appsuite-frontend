@@ -23,7 +23,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7771] Permanently remove deleted mails', async (I, users) => {
+Scenario('[C7771] Permanently remove deleted mails', async (I, users, mail, dialogs) => {
     const user = users[0];
 
     await I.haveMail({
@@ -42,14 +42,20 @@ Scenario('[C7771] Permanently remove deleted mails', async (I, users) => {
     I.waitForVisible('.io-ox-mail-settings');
     I.click('Permanently remove deleted emails');
 
-    I.click('Mail');
+    I.openApp('Mail');
+    mail.waitForApp();
+
     I.waitForText('Delete this');
     I.click('.list-item.selectable');
     I.waitForVisible('h1.subject');
     I.wait(1);
     I.click('Delete');
-    I.waitForText('Do you want to permanently delete this mail?');
-    I.click('Delete', '.modal-footer');
+
+    dialogs.waitForVisible();
+    I.waitForText('Do you want to permanently delete this mail?', dialogs.locators.body);
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
+
     I.selectFolder('Trash');
     I.waitForText('Empty');
 });

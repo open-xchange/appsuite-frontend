@@ -37,23 +37,23 @@ Scenario('Open the help app in a floating window', async function (I) {
     I.waitForDetached('.io-io-help-window', 5);
 });
 
-Scenario('Open the help app in a modal', async function (I, mail) {
+Scenario('Open the help app in a modal', async function (I, mail, dialogs) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
     mail.newMail();
 
     I.click('~Select contacts');
-    I.waitForVisible('.modal.addressbook-popup', 5);
+    dialogs.waitForVisible();
 
-    I.click('~Online help', '.modal.addressbook-popup');
+    I.click('~Online help', dialogs.locators.header);
     I.waitForVisible('.modal.inline-help', 5);
-    I.see('OX App Suite Help', '.modal.inline-help');
+    I.see('OX App Suite Help', dialogs.locators.header);
 
-    I.click('Close', '.modal.inline-help');
-    I.waitForDetached('.modal.inline-help', 5);
+    dialogs.clickButton('Close');
+    I.waitForDetached('.modal.inline-help');
 
-    I.click('Cancel', '.modal.addressbook-popup');
-    I.waitForDetached('.modal.addressbook-popup', 5);
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
 });
 
 Scenario('Check help window for supposed language', function (I) {
@@ -61,8 +61,8 @@ Scenario('Check help window for supposed language', function (I) {
     // check major languages
     var languages = {
         'de_DE': ['help/l10n/de_DE/ox.appsuite.user.sect.settings.globalsettings.html', 'Deutsch (Deutschland)', 'Grundeinstellungen anpassen', '~Schließen'],
-        'en_US': ['help/l10n/en_US/ox.appsuite.user.sect.settings.globalsettings.html', 'English (United States)', 'Customizing the Basic Settings', '~Close'],
-        'en_GB': ['help/l10n/en_GB/ox.appsuite.user.sect.settings.globalsettings.html', 'English (United Kingdom)', 'Customizing the basic settings', '~Close'],
+        'en_US': ['help/l10n/en_US/ox.appsuite.user.sect.settings.globalsettings.html', 'English (United States)', 'How to customize the basic settings:', '~Close'],
+        'en_GB': ['help/l10n/en_GB/ox.appsuite.user.sect.settings.globalsettings.html', 'English (United Kingdom)', 'How to customise the basic settings:', '~Close'],
         'es_ES': ['help/l10n/es_ES/ox.appsuite.user.sect.settings.globalsettings.html', 'Español (Espana)', 'Personalización de la configuración básica', '~Cerrar'],
         'es_MX': ['help/l10n/es_MX/ox.appsuite.user.sect.settings.globalsettings.html', 'Español (México)', 'Personalización de la configuración básica', '~Cerrar'],
         'fr_FR': ['help/l10n/fr_FR/ox.appsuite.user.sect.settings.globalsettings.html', 'Français (France)', 'Personnaliser les réglages de base', '~Fermer'],
@@ -76,9 +76,10 @@ Scenario('Check help window for supposed language', function (I) {
     };
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
-    I.waitForNetworkTraffic();
 
-    for (const id in languages) {
+    I.waitForText('Basic settings', 5, '.rightside');
+
+    for (let id in languages) {
         I.say(languages[id][1]);
         //Select language
         I.waitForElement({ css: 'select[name="language"]' });
@@ -88,7 +89,9 @@ Scenario('Check help window for supposed language', function (I) {
         I.waitForVisible('.io-ox-alert', 30);
         I.refreshPage();
         I.refreshPage();
-        I.waitForNetworkTraffic();
+
+        I.waitForInvisible('#background-loader.busy', 20);
+        I.waitForVisible('#settings-language', 5);
 
         //open help window
         I.click('.io-ox-context-help');
@@ -97,6 +100,7 @@ Scenario('Check help window for supposed language', function (I) {
         //check language in help window
         I.waitForElement(locate('.inline-help-iframe').withAttr({ src: languages[id][0] }).inside('.io-ox-help-window'), 10);
         within({ frame: '.inline-help-iframe' }, () => {
+            I.wait(1);
             I.waitForText(languages[id][2], 20);
         });
 
@@ -105,3 +109,5 @@ Scenario('Check help window for supposed language', function (I) {
         I.waitForDetached('.io-ox-help-window');
     }
 });
+
+

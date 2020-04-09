@@ -24,7 +24,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7787] Add filter rule', async function (I, users) {
+Scenario('[C7787] Add filter rule', async function (I, users, mail, dialogs) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     }, { user: users[1] });
@@ -45,6 +45,7 @@ Scenario('[C7787] Add filter rule', async function (I, users) {
 
     // create a test rule and check the inintial display
     I.click('Add new rule');
+    dialogs.waitForVisible();
     I.see('Create new rule');
     I.see('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.');
     I.see('Please define at least one action.');
@@ -77,30 +78,30 @@ Scenario('[C7787] Add filter rule', async function (I, users) {
     I.seeElement('.modal button[data-action="save"]');
     I.seeElement('.modal [data-action-id="0"] button.remove');
     // save the form
-    I.click('Save');
+    dialogs.clickButton('Save');
 
     I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[1] });
+    mail.waitForApp();
 
     // compose mail for user 0
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.newMail();
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[0].get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'Test subject');
     I.fillField({ css: 'textarea.plain-text' }, 'Test text');
     I.seeInField({ css: 'textarea.plain-text' }, 'Test text');
 
-    I.click('Send');
+    mail.send();
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
 
 
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[2] });
+    mail.waitForApp();
 
     // check for mail
     I.waitForVisible('.io-ox-mail-window .leftside ul li.unread');
@@ -159,7 +160,7 @@ Scenario('[C7810] Filter mail using contains', async function (I, users) {
 
     // compose mail
     I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.waitForElement('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.wait(1);
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'xxxTestCase0395xxx');
@@ -170,7 +171,7 @@ Scenario('[C7810] Filter mail using contains', async function (I, users) {
 
     // second mail
     I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.waitForElement('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.wait(1);
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'TestCasexxx0395');
@@ -312,14 +313,13 @@ Scenario('[C7813] Filter mail using regex', async function (I, users) {
 
 });
 
-Scenario('[C7814] Filter mail using IsBiggerThan', async function (I, users) {
+Scenario('Filter mail by size Filter mail using IsBiggerThan', async function (I, users, mail) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
     createFilterRule(I, 'TestCase0400', 'Size', 'Is bigger than', null, 'Red', true);
-
     I.fillField('sizeValue', '512');
     // save the form
     I.click('Save');
@@ -346,8 +346,7 @@ Scenario('[C7814] Filter mail using IsBiggerThan', async function (I, users) {
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
     // Open Filepicker
-    I.click('Attachments');
-    I.click('Add from Drive');
+    I.click(mail.locators.compose.drivefile);
 
     I.waitForText('Principia.txt');
     I.click(locate('div.name').withText('Principia.txt').inside('.io-ox-fileselection'));
@@ -400,7 +399,7 @@ Scenario('Filter mail using validated size', async function (I) {
     I.waitForElement(disabledButton);
 });
 
-Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users) {
+Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users, mail) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -413,7 +412,7 @@ Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users) {
     I.see('Is smaller than', '.dropdown.open');
     I.click('Is smaller than', '.dropdown.open');
 
-    I.fillField('sizeValue', '930');
+    I.fillField('sizeValue', '2048');
     // save the form
     I.click('Save');
 
@@ -436,29 +435,28 @@ Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users) {
     I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0401'), 30);
 });
 
-Scenario('[C83386] Create mail filter based on mail', async function (I, users) {
+Scenario('[C83386] Create mail filter based on mail', async function (I, users, mail, dialogs) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     }, { user: users[0] });
 
     I.login('app=io.ox/mail', { user: users[0] });
+    mail.waitForApp();
 
     // compose mail for user 1
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.newMail();
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'Test subject');
     I.fillField({ css: 'textarea.plain-text' }, 'Test text');
     I.seeInField({ css: 'textarea.plain-text' }, 'Test text');
 
-    I.click('Send');
-    I.waitForDetached('.io-ox-mail-compose-window');
+    mail.send();
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
 
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[1] });
+    mail.waitForApp();
 
     // check for mail
     I.waitForVisible('.io-ox-mail-window .leftside ul li.unread');
@@ -466,10 +464,9 @@ Scenario('[C83386] Create mail filter based on mail', async function (I, users) 
     I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
     I.see('Test subject', '.mail-detail-pane');
     I.waitForElement('~Trash');
-    I.click('~More actions', '.inline-toolbar');
-    I.waitForElement('.dropdown.open');
-    I.see('Create filter rule', '.dropdown.open');
-    I.click('Create filter rule');
+    I.retry(5).click('~More actions', '.inline-toolbar');
+    I.clickDropdown('Create filter rule');
+    dialogs.waitForVisible();
     I.waitForText('Create new rule');
 
     // add action
@@ -483,31 +480,31 @@ Scenario('[C83386] Create mail filter based on mail', async function (I, users) 
     I.click({ css: '[data-id="default0/INBOX/Trash"]' }, '.folder-picker-dialog');
     I.waitForElement({ css: '[data-id="default0/INBOX/Trash"].selected' }, '.folder-picker-dialog');
     I.wait(1);
-    I.click('Ok');
+    I.click('Select');
     // save the form
-    I.click('Save');
-    I.waitForDetached('.modal-backdrop.in');
+    dialogs.clickButton('Save');
+    I.waitForDetached('.modal-dialog');
 
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[0] });
+    mail.waitForApp();
 
     // compose mail for user 1
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    mail.newMail();
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'Test subject');
     I.fillField({ css: 'textarea.plain-text' }, 'Test text');
     I.seeInField({ css: 'textarea.plain-text' }, 'Test text');
 
-    I.click('Send');
+    mail.send();
     I.waitForDetached('.io-ox-mail-compose-window');
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
 
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[1] });
+    mail.waitForApp();
 
     // check for mail
     I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
@@ -516,16 +513,17 @@ Scenario('[C83386] Create mail filter based on mail', async function (I, users) 
 
 });
 
-Scenario('[C274412] Filter mail by size', async function (I, users) {
+Scenario('[C274412] Filter mail by size', async function (I, users, mail, dialogs) {
     function createOrEditFilterRule(I, name, oldSize, newSize, edit) {
         I.openApp('Settings', { folder: 'virtual/settings/io.ox/mailfilter' });
         I.waitForText('Mail Filter Rules', 30, '.settings-detail-pane h1');
 
         if (edit) {
             I.click('Edit', '.settings-list-view');
-            I.waitForElement('.modal-dialog');
+            dialogs.waitForVisible();
         } else {
             I.click('Add new rule');
+            dialogs.waitForVisible();
             I.see('Create new rule');
             I.fillField('rulename', name);
 
@@ -545,11 +543,10 @@ Scenario('[C274412] Filter mail by size', async function (I, users) {
 
         I.fillField('sizeValue', '1');
 
-        I.click('Save');
+        dialogs.clickButton('Save');
         I.waitForDetached('.modal-dialog');
         I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
     }
-
     let [user] = users;
     let listItem = locate('.list-item-row').withChild('.flag_1').withText('C274412').as('Mail in list view');
 
@@ -563,20 +560,18 @@ Scenario('[C274412] Filter mail by size', async function (I, users) {
     createOrEditFilterRule(I, 'C274412', 'Byte', 'Byte');
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     // compose mail
     I.say('Compose #1');
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
-    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
-    I.fillField('.io-ox-mail-compose [name="subject"]', 'C274412');
+    mail.newMail();
+    I.fillField('To', user.get('primaryEmail'));
+    I.fillField('Subject', 'C274412');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
-    I.attachFile('.mail-input [name="file"]', 'e2e/media/files/generic/2MB.dat');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'e2e/media/files/generic/2MB.dat');
 
-    I.click('Send');
-    I.wait(1);
+    mail.send();
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.see('C274412', '.subject');
@@ -591,21 +586,18 @@ Scenario('[C274412] Filter mail by size', async function (I, users) {
     createOrEditFilterRule(I, null, 'Byte', 'kB', true);
 
     I.openApp('Mail');
-    I.waitForElement('.io-ox-mail-window');
+    mail.waitForApp();
 
     // compose mail
     I.say('Compose #2');
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
-    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
-    I.fillField('.io-ox-mail-compose [name="subject"]', 'C274412');
+    mail.newMail();
+    I.fillField('To', user.get('primaryEmail'));
+    I.fillField('Subject', 'C274412');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
-    I.attachFile('.mail-input [name="file"]', 'e2e/media/files/generic/2MB.dat');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'e2e/media/files/generic/2MB.dat');
 
-    I.click('Send');
-    I.wait(1);
+    mail.send();
     I.waitForElement('~Sent, 2 total. Right click for more options.', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.see('C274412', '.subject');
@@ -620,21 +612,18 @@ Scenario('[C274412] Filter mail by size', async function (I, users) {
     createOrEditFilterRule(I, null, 'kB', 'MB', true);
 
     I.openApp('Mail');
-    I.waitForElement('.io-ox-mail-window');
+    mail.waitForApp();
 
     // compose mail
     I.say('Compose #3');
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
-    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
-    I.fillField('.io-ox-mail-compose [name="subject"]', 'C274412');
+    mail.newMail();
+    I.fillField('To', user.get('primaryEmail'));
+    I.fillField('Subject', 'C274412');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
-    I.attachFile('.mail-input [name="file"]', 'e2e/media/files/generic/2MB.dat');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'e2e/media/files/generic/2MB.dat');
 
-    I.click('Send');
-    I.wait(1);
+    mail.send();
     I.waitForElement('~Sent, 3 total. Right click for more options.', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
     I.see('C274412', '.subject');

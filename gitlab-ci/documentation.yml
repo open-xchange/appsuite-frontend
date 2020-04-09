@@ -4,7 +4,12 @@ build documentation:
   image: gitlab.open-xchange.com:4567/engineering/documentation:latest
   stage: build
   script:
-    - export VERSION=`grep '"version":' ui/package.json | cut -d\" -f4 | cut -d- -f1`
+    - VERSION=develop
+    - if [ "$CI_COMMIT_REF_NAME" !== "develop" ]; then
+        VERSION=`grep '"version":' ui/package.json | cut -d\" -f4 | cut -d- -f1`;
+      fi
+    - echo $VERSION
+    - export VERSION=$VERSION
     - ln -s $CI_PROJECT_DIR/documentation /documentation/jekyll/_ui
     - cd /documentation
     - bundle exec jekyll b --baseurl /$VERSION --config _config.yml
@@ -22,6 +27,9 @@ build documentation:
     changes:
       - documentation/**/*
       - ui/package.json
+  except:
+    refs:
+      - /^e2e\//
 
 deploy documentation:
   stage: deploy
@@ -29,6 +37,7 @@ deploy documentation:
     GIT_STRATEGY: none
   script:
     - export VERSION=`ls doku --sort=time | cut -f1 | head -n1`
+    - echo $VERSION
     - mkdir -p /var/www/documentation/$VERSION/ui
     - rsync -aHAX --delete doku/$VERSION/ui/ /var/www/documentation/$VERSION/ui
     - mkdir -p /var/www/documentation/$VERSION/assets

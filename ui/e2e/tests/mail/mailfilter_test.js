@@ -23,31 +23,25 @@ After(async function (users) {
 });
 
 
-Scenario('add and removes Mail Filter Rules', async function (I) {
-    I.login('app=io.ox/settings');
+Scenario('add and removes Mail Filter Rules', async function (I, dialogs) {
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
     I.waitForVisible('.io-ox-settings-main');
-    I.selectFolder('Mail');
-    I.waitForVisible('.settings-detail-pane h1');
-
-    // open mailfilter settings
-    I.selectFolder('Filter Rules');
 
     // checks the h1 and the empty message
-
     I.waitForVisible('.settings-detail-pane .io-ox-mailfilter-settings h1');
     I.see('Mail Filter Rules');
-
     I.see('There is no rule defined');
 
     // create a test rule and check the inintial display
     I.click('Add new rule');
-    I.see('Create new rule');
+    dialogs.waitForVisible();
+    I.waitForText('Create new rule', 5, dialogs.locators.header);
     I.see('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.');
     I.see('Please define at least one action.');
 
     // add action
     I.click('Add action');
-    I.click('Keep');
+    I.clickDropdown('Keep');
 
     // warnig gone?
     I.dontSee('Please define at least one action.');
@@ -59,7 +53,7 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
 
     // add condition
     I.click('Add condition');
-    I.click('From');
+    I.clickDropdown('From');
 
     // alert gone?
     I.dontSee('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.');
@@ -102,38 +96,41 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
 
     // open folder picker
     I.click('Select folder');
+    dialogs.waitForVisible();
     I.see('Select folder', '.modal-dialog h1');
 
     // create a new folder
-    I.waitForElement('.modal[data-point="io.ox/core/folder/picker"] li.selected');
-    I.click('Create folder', '.modal[data-point="io.ox/core/folder/picker"]');
+    I.waitForElement('[data-point="io.ox/core/folder/picker"] li.selected', 5, dialogs.locators.main);
+    dialogs.clickButton('Create folder');
 
     // cancel the add popup
     I.waitForElement('.modal[data-point="io.ox/core/folder/add-popup"]');
-    I.waitForText('Add new folder', '.modal[data-point="io.ox/core/folder/add-popup"]');
-    I.click('Cancel', '.modal[data-point="io.ox/core/folder/add-popup"]');
+    I.waitForText('Add new folder', 5, dialogs.locators.header);
+    dialogs.clickButton('Cancel');
+    I.waitForText('Select folder', 5, dialogs.locators.header);
 
     // cancel the picker
-    I.click('Cancel', '.modal[data-point="io.ox/core/folder/picker"]');
+    dialogs.clickButton('Cancel');
+    I.waitForText('Create new rule', 5, dialogs.locators.header);
     I.dontSeeElement('.modal[data-point="io.ox/core/folder/picker"]');
 
     // cancel the form
-    I.click('Cancel');
+    dialogs.clickButton('Cancel');
 
     // create a fresh rule
     I.click('Add new rule');
 
     // add a "from" condition
     I.click('Add condition');
-    I.click('From');
+    I.clickDropdown('From');
 
     // add "keep" action
     I.click('Add action');
-    I.click('Keep');
+    I.clickDropdown('Keep');
 
     // set comparison to "Exists"
     I.click('Contains');
-    I.click('Exists');
+    I.clickDropdown('Exists');
 
     // check if "Exists" is properly set
     I.see('Exists', '.dropdown-label');
@@ -141,7 +138,7 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
 
     // reset comparison to "Contains"
     I.click('Exists');
-    I.click('Contains');
+    I.clickDropdown('Contains');
 
     // set the value
     I.fillField('.io-ox-mailfilter-edit [data-test-id="0"] input[name="values"]', 'Test Value');
@@ -165,8 +162,8 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.seeInField('.io-ox-mailfilter-edit [data-test-id="1"] input[name="values"]', '');
 
     // save the form
-    I.click('Save');
-    I.waitForDetached('.io-ox-mailfilter-edit');
+    dialogs.clickButton('Save');
+    I.waitForDetached('.io-ox-mailfilter-edit .modal-dialog');
     // wait for requests to settle
     I.waitForDetached('.fa-refresh.fa-spin');
     I.waitNumberOfVisibleElements('.settings-detail-pane li.settings-list-item', 1);
@@ -198,8 +195,8 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.seeInField('.io-ox-mailfilter-edit [data-test-id="1"] input[name="headers"]', 'Test headers');
 
     // save the form
-    I.click('Save');
-    I.waitForDetached('.io-ox-mailfilter-edit');
+    dialogs.clickButton('Save');
+    I.waitForDetached('.io-ox-mailfilter-edit .modal-dialog');
     // wait for requests to settle
     I.waitForDetached('.fa-refresh.fa-spin');
     I.waitNumberOfVisibleElements('.settings-detail-pane li.settings-list-item', 1);
@@ -220,10 +217,10 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.seeElement('.io-ox-mailfilter-edit [data-action-id="0"] .remove');
 
     I.click('Add condition');
-    I.click('Size');
+    I.clickDropdown('Size');
 
     // check size validation
-    I.seeElement('.io-ox-mailfilter-edit li[data-test-id="2"] .row.has-error');
+    I.waitForElement('.io-ox-mailfilter-edit li[data-test-id="2"] .row.has-error');
     I.seeElement('.modal button[data-action="save"][disabled]');
 
     // add action to redraw
@@ -231,7 +228,7 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.click('Keep');
 
     // check size validation
-    I.seeElement('.io-ox-mailfilter-edit li[data-test-id="2"] .row.has-error');
+    I.waitForElement('.io-ox-mailfilter-edit li[data-test-id="2"] .row.has-error');
     I.seeElement('.modal button[data-action="save"][disabled]');
     I.fillField('.io-ox-mailfilter-edit [data-test-id="2"] input[name="sizeValue"]', 'sdsds');
 
@@ -263,7 +260,7 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.seeElement('.modal button[data-action="save"][disabled]');
 
     I.click('Matches', '.io-ox-mailfilter-edit li[data-test-id="2"]');
-    I.click('Exists', '.smart-dropdown-container .dropdown-menu');
+    I.clickDropdown('Exists');
 
     // add action to redraw
     I.click('Add action');
@@ -273,11 +270,12 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.seeElement('.modal button[data-action="save"][disabled]');
 
     // cancel the form
-    I.click('Cancel');
+    dialogs.clickButton('Cancel');
 
     I.click('.settings-detail-pane li.settings-list-item[data-id="0"] a[data-action="delete"]');
-    I.waitForVisible('.modal-dialog');
-    I.click('.modal-dialog button[data-action="delete"]');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
 
     I.waitForVisible('.settings-detail-pane .hint');
 });

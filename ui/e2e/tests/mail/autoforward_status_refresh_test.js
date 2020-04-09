@@ -20,7 +20,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('checks if an auto forward rule is correctly listet after a status update', function (I) {
+Scenario('checks if an auto forward rule is correctly listed after a status update', function (I, dialogs) {
 
     I.haveMailFilterRule({
         'rulename': 'autoforward',
@@ -42,18 +42,17 @@ Scenario('checks if an auto forward rule is correctly listet after a status upda
     I.waitForVisible({ css: '[data-action="edit-auto-forward"] .fa-toggle-on' });
     I.click('Auto forward ...');
 
-    I.waitForElement('.modal-dialog');
-
-    I.click('.modal-dialog .checkbox.switch.large');
-    I.click('Apply changes', '.modal-dialog');
-    I.waitForInvisible('.modal-dialog');
+    dialogs.waitForVisible();
+    I.click('.checkbox.switch.large', dialogs.locators.header);
+    dialogs.clickButton('Apply changes');
+    I.waitForDetached('.modal-dialog');
 
     I.selectFolder('Filter Rules');
     I.waitForElement('.io-ox-settings-window .io-ox-mailfilter-settings');
     I.waitForElement('.io-ox-mailfilter-settings .settings-list-item.disabled');
 });
 
-Scenario('checks if an avacation notice rule is correctly listet after a status update', function (I, users) {
+Scenario('checks if an avacation notice rule is correctly listed after a status update', function (I, users, dialogs) {
     let [user] = users;
 
     I.haveMailFilterRule({
@@ -76,11 +75,10 @@ Scenario('checks if an avacation notice rule is correctly listet after a status 
 
     I.click('Vacation notice ...');
 
-    I.waitForElement('.modal-dialog');
-
-    I.click('.modal-dialog .checkbox.switch.large');
-    I.click('Apply changes', '.modal-dialog');
-    I.waitForInvisible('.modal-dialog');
+    dialogs.waitForVisible();
+    I.click('.checkbox.switch.large', dialogs.locators.header);
+    dialogs.clickButton('Apply changes');
+    I.waitForDetached('.modal-dialog');
 
     I.selectFolder('Filter Rules');
     I.waitForElement('.io-ox-settings-window .io-ox-mailfilter-settings');

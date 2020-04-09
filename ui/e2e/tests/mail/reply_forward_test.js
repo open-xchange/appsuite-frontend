@@ -114,8 +114,7 @@ Scenario('[C7402] Mark one single mail as read or unread', async (I, users) => {
         locate('.list-item').withText('Hail Eris'))); // List
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C8818] Reply all', async (I, users) => {
+Scenario('[C8818] Reply all', async (I, users) => {
     const [recipient, sender, cc] = users;
 
     // Preparation
@@ -140,6 +139,7 @@ Scenario.skip('[C8818] Reply all', async (I, users) => {
     I.waitForText('Reply all');
     I.click('Reply all');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.waitForInvisible('.io-ox-busy'); // wait for loading icon to disappear
 
     // Verify To: is the original sender
     I.seeElement(locate('div.token').withText(sender.get('display_name')).inside('[data-extension-id=to]'));
@@ -148,6 +148,8 @@ Scenario.skip('[C8818] Reply all', async (I, users) => {
     // Verify the subject is "Re: Hail Eris"
     I.seeInField('Subject', 'Re: Hail Eris');
 
+    I.waitForElement('.window-footer [data-action="send"]:not([disabled])');
+    I.wait(0.8);
     I.click('Send');
     I.waitForInvisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);

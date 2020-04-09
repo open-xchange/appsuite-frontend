@@ -23,7 +23,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7786] Set auto-forward', async function (I, users) {
+Scenario('[C7786] Set auto-forward', async function (I, users, mail, dialogs) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     }, { user: users[0] });
@@ -40,14 +40,14 @@ Scenario('[C7786] Set auto-forward', async function (I, users) {
     I.waitForElement({ css: '[data-action="edit-auto-forward"]' });
     I.see('Auto forward ...', { css: '[data-action="edit-auto-forward"]' });
     I.click('Auto forward ...', '.form-group.buttons [data-action="edit-auto-forward"]');
-    I.waitForElement({ css: '[data-point="io.ox/mail/auto-forward/edit"]' });
+    dialogs.waitForVisible();
 
     // check for all expexted elements
     I.seeElement('.modal-header input[name="active"]');
 
     // buttons
-    I.see('Cancel', '.modal-footer');
-    I.see('Apply changes', '.modal-footer');
+    I.see('Cancel', dialogs.locators.footer);
+    I.see('Apply changes', dialogs.locators.footer);
 
     // form elements
     I.seeElement({ css: 'input[name="to"][disabled]' });
@@ -55,7 +55,7 @@ Scenario('[C7786] Set auto-forward', async function (I, users) {
     I.seeElement({ css: 'input[name="processSub"][disabled]' });
 
     // enable
-    I.click('.modal-header .checkbox.switch.large');
+    I.click('.checkbox.switch.large', dialogs.locators.header);
 
     I.seeElement({ css: 'input[name="to"]:not([disabled])' });
     I.seeElement({ css: 'input[name="copy"]:not([disabled])' });
@@ -67,9 +67,7 @@ Scenario('[C7786] Set auto-forward', async function (I, users) {
     I.fillField({ css: 'input[name="to"]' }, users[1].get('primaryEmail'));
 
     // button enabled?
-    I.waitForElement('.modal-footer [data-action="save"]:not([disabled])');
-
-    I.click('.modal-footer button[data-action="save"]');
+    dialogs.clickButton('Apply changes');
 
     I.see('Auto forward ...', { css: '[data-action="edit-auto-forward"]' });
 
@@ -77,22 +75,25 @@ Scenario('[C7786] Set auto-forward', async function (I, users) {
     I.waitForInvisible({ css: '[data-point="io.ox/mail/auto-forward/edit"]' });
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     // compose mail for user 0
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
-    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[0].get('primaryEmail'));
-    I.fillField('.io-ox-mail-compose [name="subject"]', 'Test subject');
+    mail.newMail();
+    // I.clickToolbar('Compose');
+    // I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    // I.wait(1);
+    I.fillField('To', users[0].get('primaryEmail'));
+    I.fillField('Subject', 'Test subject');
     I.fillField({ css: 'textarea.plain-text' }, 'Test text');
     I.seeInField({ css: 'textarea.plain-text' }, 'Test text');
 
-    I.click('Send');
+    mail.send();
     I.waitForDetached('.io-ox-mail-compose');
 
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[1] });
+    mail.waitForApp();
 
     // check for mail
     I.waitForVisible('.io-ox-mail-window .leftside ul li.unread');
