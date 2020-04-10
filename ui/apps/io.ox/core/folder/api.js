@@ -660,6 +660,8 @@ define('io.ox/core/folder/api', [
                     return get(id, { cache: options.cache }).pipe(
                         null,
                         function fail(error) {
+                            // need to create a copy of the error, because http.resume will throw the same error if the /PUT multiple fails (see Bug 57323)
+                            error = _.extend({}, error);
                             error.id = id;
                             return $.when(options.errors ? error : undefined);
                         }
