@@ -211,8 +211,17 @@ define('io.ox/core/tk/text-editor', [
 
         function resizeEditor() {
             if (el === null) return;
-            var toolbarHeight = (textarea.closest('.io-ox-mail-compose-window').hasClass('header-top') ? 0 : $('[data-extension-id="header"]').parent().outerHeight());
-            textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - toolbarHeight)));
+            // container node of floating window
+            var windowContainer = textarea.closest('.window-container-center'),
+                windowFooter = windowContainer.find('.window-footer'),
+                // to field subject etc
+                fields = windowContainer.find('.mail-compose-fields');
+
+            if (windowContainer.length !== 1 && fields.length !== 1 && windowFooter.length !== 1) return;
+
+            // 12px is the bottom margin, keep in sync with css
+            // there is a strange 6px height difference between the text area and the container, couldn't find the cause yet
+            textarea.css('minHeight', Math.max(300, windowContainer.outerHeight() - fields.outerHeight() - windowFooter.outerHeight() - 12 - 6));
         }
 
         this.show = function () {
