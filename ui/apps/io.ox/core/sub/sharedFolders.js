@@ -176,7 +176,7 @@ define('io.ox/core/sub/sharedFolders', [
                 }).render().$el.attr('title', gt('sync via DAV'))
             );
 
-            if (!this.model.get('subscribed') || preparedValueFalse.protected) {
+            if (!this.model.get('subscribed') || preparedValueFalse.protected === 'true') {
                 $checkbox
                     .addClass('disabled')
                     .find('input[name="' + properties + '"]').prop('disabled', true).attr('data-state', 'manual');
