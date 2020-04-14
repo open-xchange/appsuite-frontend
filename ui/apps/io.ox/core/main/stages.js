@@ -63,6 +63,24 @@ define('io.ox/core/main/stages', [
         return autoStart;
     };
 
+    /**
+     * Disables the specified items in the extension point.
+     */
+    var disableItems = function (point, ids) {
+        ids.forEach(point.disable, point);
+    };
+
+    /**
+     * Disables all but the specified items in the extension point.
+     */
+    var filterItems = function (point, ids) {
+        point.each(function (item) {
+            if (ids.indexOf(item.id) < 0) {
+                point.disable(item.id);
+            }
+        });
+    };
+
     // som
 
     ext.point('io.ox/core/stages').extend({
@@ -229,6 +247,36 @@ define('io.ox/core/main/stages', [
             debug('Stage "load"', baton);
 
             return baton.loaded;
+        }
+    }, {
+        /**
+         * Popout Viewer - modify topbars if opened in a new browser tab - DOCS-1881
+         */
+        id: 'popoutViever',
+        index: 605,
+        run: function () {
+            // tab handling enabled in general
+            if (!ox.tabHandlingEnabled) return;
+            // tab handling disabled in URL for Selenium tests
+            if (_.url.hash('office:disable-openInTabs') === 'true') return;
+            // the Popout Viewer app
+            if (_.url.hash('app') !== 'io.ox/files/detail') return;
+
+            // hide controls in the top bar
+            var appControlPoint = ext.point('io.ox/core/appcontrol');
+            disableItems(appControlPoint, ['quicklauncher']);
+
+            // hide controls in the right section of the top bar
+            var rightSectionPoint = ext.point('io.ox/core/appcontrol/right');
+            disableItems(rightSectionPoint, ['launcher', 'refresh', 'notifications', 'settings']);
+
+            // hide top-level entries in the extension point
+            var dropDownPoint = ext.point('io.ox/core/appcontrol/right/dropdown');
+            filterItems(dropDownPoint, ['about', 'logout']);
+
+            // hide all logout items (e.g. Guard) but the global logout
+            var signOutsPoint = ext.point('io.ox/core/appcontrol/right/dropdown/signouts');
+            filterItems(signOutsPoint, ['logout']);
         }
     }, {
         id: 'topbars',

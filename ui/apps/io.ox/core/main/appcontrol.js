@@ -358,7 +358,7 @@ define('io.ox/core/main/appcontrol', [
                 )
             );
 
-            if (ox.openedInBrowserTab) return;
+            if (ox.openedInBrowserTab || (ox.tabHandlingEnabled && _.url.hash('app') === 'io.ox/files/detail')) return;
 
             if ((/^https?:/).test(action)) {
                 logo.wrap(
