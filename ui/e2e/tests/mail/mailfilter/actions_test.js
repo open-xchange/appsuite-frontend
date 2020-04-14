@@ -80,7 +80,7 @@ Scenario('[C7801] Keep filtered mail', async function (I, users, mail) {
     mail.send();
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
-    I.see('C7801', '.subject');
+    I.waitForText('C7801', 5, '.subject');
 });
 
 Scenario('[C7802] Discard filtered mail', async function (I, users) {
@@ -324,6 +324,6 @@ Scenario('[C7809] Mark mail as deleted filtered mail', async function (I, users)
 
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
-    I.see('TestCase0394', '.unread.deleted .subject');
+    I.waitForText('TestCase0394', 5, '.unread.deleted .subject');
 
 });

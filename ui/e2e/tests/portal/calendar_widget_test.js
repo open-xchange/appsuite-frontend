@@ -48,7 +48,7 @@ Scenario('Create new appointment and check display in portal widget', async func
     // make sure portal widget is empty
     I.openApp('Portal');
     portal.waitForApp();
-    I.see('You don\'t have any appointments in the near future.', { css: '[data-widget-id="calendar_0"] li.line' });
+    I.waitForText('You don\'t have any appointments in the near future.', 10, { css: '[data-widget-id="calendar_0"] li.line' });
 
     I.openApp('Calendar');
     calendar.waitForApp();

@@ -574,7 +574,7 @@ Scenario('[C274412] Filter mail by size', async function (I, users, mail, dialog
     mail.send();
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
-    I.see('C274412', '.subject');
+    I.waitForText('C274412', 5, '.subject');
 
     I.waitForElement(listItem, 30);
     I.click(listItem);
@@ -600,7 +600,7 @@ Scenario('[C274412] Filter mail by size', async function (I, users, mail, dialog
     mail.send();
     I.waitForElement('~Sent, 2 total. Right click for more options.', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
-    I.see('C274412', '.subject');
+    I.waitForText('C274412', 5, '.subject');
 
     I.waitForElement(listItem, 30);
     I.click(listItem);
@@ -626,7 +626,7 @@ Scenario('[C274412] Filter mail by size', async function (I, users, mail, dialog
     mail.send();
     I.waitForElement('~Sent, 3 total. Right click for more options.', 30);
     I.waitForElement('~Inbox, 1 unread, 1 total. Right click for more options.', 30);
-    I.see('C274412', '.subject');
+    I.waitForText('C274412', 5, '.subject');
 
     I.waitForElement(listItem, 30);
 });
