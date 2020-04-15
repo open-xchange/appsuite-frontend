@@ -108,8 +108,9 @@ module.exports = actor({
     },
 
     clickDropdown(text) {
-        this.waitForText(text, 10, '.dropdown.open .dropdown-menu');
-        this.click(text, '.dropdown.open .dropdown-menu');
+        // supports .dropdown and .dropup
+        this.waitForText(text, 10, '[class*="drop"].open .dropdown-menu');
+        this.click(text, '[class*="drop"].open .dropdown-menu');
     },
 
     openFolderMenu(folderName) {
