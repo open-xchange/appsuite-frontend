@@ -61,8 +61,8 @@ define('io.ox/mail/compose/view', [
                 this.append(node);
             },
             redraw: function (baton) {
-                var node = this.find('.composetoolbar');
-                ext.point(POINT + '/composetoolbar').invoke('redraw', node, baton);
+                var node = baton.app.getWindow().nodes.footer.find('.composetoolbar').empty();
+                ext.point(POINT + '/composetoolbar').invoke('draw', node, baton);
             }
         }
     );
@@ -1064,6 +1064,11 @@ define('io.ox/mail/compose/view', [
                 e.preventDefault();
                 this.$el.parents().find('button[data-action="send"]').focus();
             }
+        },
+
+        onChangeSignatures: function () {
+            // redraw composetoolbar
+            ext.point(POINT + '/buttons').invoke('redraw', undefined, this.baton);
         },
 
         render: function () {

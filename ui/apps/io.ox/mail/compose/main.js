@@ -127,9 +127,10 @@ define('io.ox/mail/compose/main', [
                     });
                 });
             }
-            return def.then(function (list) {
-                this.config.set('signatures', list);
-                return list;
+            return def.then(function (collection) {
+                var refresh = _.debounce(this.view.onChangeSignatures.bind(this.view));
+                this.view.listenTo(collection, 'add remove reset', refresh, 200);
+                return collection;
             }.bind(this));
         }
     }, {

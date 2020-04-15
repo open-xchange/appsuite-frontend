@@ -31,8 +31,9 @@ define('io.ox/mail/compose/signatures', [
             var dropdown = this.data('view'),
                 LIMIT = settings.get('compose/signatureLimit', 8);
 
-            function draw(collection) {
-                var overflow = collection.length - LIMIT;
+            function draw() {
+                var collection = baton.config.get('signatures'),
+                    overflow = collection.length - LIMIT;
                 dropdown.header(gt('Signatures'));
                 dropdown.option('signatureId', '', gt('No signature'));
 
@@ -61,12 +62,7 @@ define('io.ox/mail/compose/signatures', [
                 }, { icon: true });
             }
 
-            baton.view.signaturesLoading.done(function (collection) {
-                var refresh = draw.bind(null, collection);
-                baton.view.listenTo(collection, 'add remove reset', refresh);
-                refresh();
-            });
-
+            baton.view.signaturesLoading.done(draw);
         },
 
         menu: function (baton) {
