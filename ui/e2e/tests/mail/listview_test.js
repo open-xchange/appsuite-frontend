@@ -98,7 +98,7 @@ Scenario('[C114381] Sender address is shown in tooltip', async function (I, user
 });
 
 Scenario('remove mail from thread', async (I, users) => {
-    I.haveSetting('io.ox/mail//viewOptions', {
+    await I.haveSetting('io.ox/mail//viewOptions', {
         'default0/INBOX': {
             order: 'desc',
             thread: true
@@ -169,7 +169,7 @@ Scenario('remove mail from thread', async (I, users) => {
     // this should even be in the '.list-view .selected' context, but it needs more logic for threads
     I.waitForText('Test subject', 5, '.list-view');
 
-    I.seeNumberOfVisibleElements('.list-view .selectable', 2);
+    I.waitNumberOfVisibleElements('.list-view .selectable', 2);
     I.clickToolbar('~Delete');
     I.seeNumberOfVisibleElements('.list-view .selectable', 1);
 });

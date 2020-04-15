@@ -54,7 +54,7 @@ Scenario('[C7433] Create appointment by marking some timeframe', async (I, calen
 
     // open overlay
     I.click(apnt_subject, '.appointment');
-    I.waitForVisible('.io-ox-sidepopup');
+    I.waitForVisible('.io-ox-sidepopup .date');
     await within('.io-ox-sidepopup', async () => {
         I.see(apnt_subject);
         I.see(apnt_location);

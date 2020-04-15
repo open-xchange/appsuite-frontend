@@ -53,21 +53,20 @@ Scenario('[C125311] Change confimation status as participant', async function (I
 
     I.login('app=io.ox/mail', { user: users[1] });
     mail.waitForApp();
-    I.triggerRefresh();
 
     // 4. Open notification mail
 
     mail.selectMail('Where is the money Lebowski?');
-    I.waitForVisible({ xpath: '//section[@class="notifications"]' });
+    I.waitForText('1', 30, '.notifications-icon .number');
 
     // 5. Set the task status alternating to 'Accepted', 'Tentative' and 'Declined'
 
     I.click('Accept');
     I.waitForText('You have accepted this task');
     I.click('Show task details');
-    I.waitForVisible('.io-ox-sidepopup');
-    I.waitForVisible('~More actions');
-    I.wait(0.2);
+    I.waitForVisible('.io-ox-sidepopup .participants-view .participant');
+    // wait for toolbar to settle :/
+    I.wait(0.5);
 
     let actions = [{ text: 'Tentative', class: 'tentative' }, { text: 'Decline', class: 'declined' }, { text: 'Accept', class: 'accepted' }];
 

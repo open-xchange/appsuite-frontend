@@ -847,6 +847,8 @@ Scenario('[C7457] Edit appointment via toolbar', async function (I, calendar) {
 
     I.click('.appointment', '.page.current');
     I.waitForVisible('.io-ox-sidepopup');
+    // wait for toolbar to settle
+    I.wait(0.5);
     I.retry(5).click('Edit');
 
     I.waitForVisible('.io-ox-calendar-edit-window');

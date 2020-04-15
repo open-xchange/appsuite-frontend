@@ -25,7 +25,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7781] Default sender address', async (I, users, contexts, mail) => {
+Scenario('[C7781] Default sender address', async (I, users, mail) => {
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
@@ -41,5 +41,6 @@ Scenario('[C7781] Default sender address', async (I, users, contexts, mail) => {
     I.fillField('Subject', 'Richtig gutes Zeug');
     mail.send();
     I.triggerRefresh();
+    mail.selectMail('Richtig gutes Zeug');
     I.waitForText('urbi@orbi.it', 30);
 });
