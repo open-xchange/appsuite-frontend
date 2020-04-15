@@ -1,3 +1,9 @@
+open-xchange-dynamic-theme (7.10.2-22) stable; urgency=medium
+
+  * Build for patch 2020-04-14 (5676)
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Thu, 09 Apr 2020 08:37:00 +0000
+
 open-xchange-dynamic-theme (7.10.2-21) stable; urgency=medium
 
   * Build for patch 2020-03-23 (5652)
