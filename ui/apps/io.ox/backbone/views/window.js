@@ -544,7 +544,10 @@ define('io.ox/backbone/views/window', [
                     } else {
                         a11y.focusListSelection($('.window-container:visible').first());
                     }
+                    // some apps have a special way of closing. Mail compose closes with a big delay for example (waits for errors on send before it fully closes etc)
+                    // make sure collection and taskbar are properly cleaned up
                     collection.remove(model);
+                    taskbar.updateTaskbar();
                 }
             });
         },
