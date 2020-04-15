@@ -137,6 +137,7 @@ define('io.ox/core/viewer/views/mainview', [
         onKeydown: function (event) {
             var viewerRootEl = this.$el;
             var swiper = this.displayerView.swiper;
+            var self = this;
 
             var handleChangeSlide = _.throttle(function (direction) {
                 if (!swiper) { return; }

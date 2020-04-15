@@ -1330,7 +1330,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
             _.defer(function () {
                 this.resolve();
-            }.bind(this.fullScreenPromise));
+            }.bind(this.fullscreenPromise));
         },
 
         /**
