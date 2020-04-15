@@ -725,7 +725,7 @@ define('io.ox/mail/compose/view', [
             if (typeof text === 'function') {
                 this.inlineYellTimer = setInterval(function () {
                     node.text(text());
-                }, 1000);
+                }, 10000);
             } else {
                 node.text(text);
             }
