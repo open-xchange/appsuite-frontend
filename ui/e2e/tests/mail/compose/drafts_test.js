@@ -61,3 +61,83 @@ Scenario('[C114967] Draft is created automatically on logout', async function (I
         I.waitForText(defaultText, 5, { css: 'body' });
     });
 });
+
+Scenario('Did you know dialog is correctly shown on save and close', async function (I, mail) {
+
+    I.login('app=io.ox/mail');
+
+    // save draft and close, click ok
+    mail.newMail();
+
+    I.click({ css: '[data-extension-id="composetoolbar-menu"] a' });
+    I.waitForText('Save draft and close', 5);
+    I.click('Save draft and close');
+
+    I.waitForText('Did you know?', 5);
+
+    I.click('OK');
+
+    I.waitForInvisible('.io-ox-mail-compose', 5);
+
+
+    // save draft and close check checkbox
+    mail.newMail();
+
+    I.click({ css: '[data-extension-id="composetoolbar-menu"] a' });
+    I.waitForText('Save draft and close', 5);
+    I.click('Save draft and close');
+
+    I.waitForText('Did you know?', 5);
+
+    I.checkOption('Do not show again.');
+
+    I.click('OK');
+
+    I.waitForInvisible('.io-ox-mail-compose', 5);
+
+    // save draft, no "did you know" dialog should pop up
+    mail.newMail();
+
+    I.click({ css: '[data-extension-id="composetoolbar-menu"] a' });
+    I.waitForText('Save draft and close', 5);
+    I.click('Save draft and close');
+
+    I.waitForInvisible('.io-ox-mail-compose', 5);
+
+    // logout or we get problems with the settings not working correctly
+    I.logout();
+
+    // should reappear if setting is set
+    await I.haveSetting({ 'io.ox/mail': { 'didYouKnow/saveOnCloseDontShowAgain': false } });
+
+    I.login('app=io.ox/mail');
+
+    mail.newMail();
+
+    I.click({ css: '[data-extension-id="composetoolbar-menu"] a' });
+    I.waitForText('Save draft and close', 5);
+    I.click('Save draft and close');
+
+    I.waitForText('Did you know?', 5);
+
+    I.click('OK');
+
+    I.waitForInvisible('.io-ox-mail-compose', 5);
+
+    // logout or we get problems with the settings not working correctly
+    I.logout();
+
+    // should not appear if disabled by server setting
+    await I.haveSetting({ 'io.ox/mail': { 'didYouKnow/saveOnCloseDontShowAgain': false, 'didYouKnow/saveOnCloseShow': false } });
+
+    I.login('app=io.ox/mail');
+
+    mail.newMail();
+
+    I.click({ css: '[data-extension-id="composetoolbar-menu"] a' });
+    I.waitForText('Save draft and close', 5);
+    I.click('Save draft and close');
+
+    I.waitForInvisible('.io-ox-mail-compose', 5);
+
+});
