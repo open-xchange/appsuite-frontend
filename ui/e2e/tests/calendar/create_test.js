@@ -56,7 +56,7 @@ Scenario('Create appointment with all fields', async function (I, calendar, dial
 
     ['Day', 'Week', 'Workweek', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, (location) => {
         appointment = appointmentSelector.inside(location).as(`appointment element in ${perspective}`);
-        I.see('test title', appointment);
+        I.waitForText('test title', 5, appointment);
         I.see('test location', appointment);
         I.seeElement(appointment.find(perspective === 'List' ?
             '.private-flag' :
@@ -90,7 +90,7 @@ Scenario('Fullday appointments', async function (I, calendar) {
     I.waitForDetached('.io-ox-calendar-edit-window');
 
     I.click(data.subject, '.weekview-container.week .appointment');
-    I.see('5 days', '.io-ox-sidepopup .calendar-detail');
+    I.waitForText('5 days', 5, '.io-ox-sidepopup .calendar-detail');
     calendar.deleteAppointment();
 });
 

@@ -52,7 +52,7 @@ Scenario('Move appointment to different folder', async function (I) {
     I.say('Open Sideboard');
     I.waitForVisible('.weekview-container.week .appointment');
     I.click('.weekview-container.week .appointment');
-    I.waitForVisible('.io-ox-sidepopup');
+    I.waitForVisible('.io-ox-sidepopup .inline-toolbar .more-dropdown');
 
     I.say('Move Action');
     I.click('.io-ox-sidepopup .inline-toolbar .more-dropdown');

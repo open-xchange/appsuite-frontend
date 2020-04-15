@@ -55,12 +55,12 @@ Scenario('Create appointments with participants who will accept/decline/accept t
 
     I.say('User 1');
     await I.haveSetting(usersettings, { user: users[1] });
-    I.login('app=io.ox/calendar&perspective="list"', { user: users[1] });
+    I.login('app=io.ox/calendar&perspective=list', { user: users[1] });
     calendar.waitForApp();
     I.selectFolder('Calendar');
 
     I.say('Accept');
-    I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
+    I.waitForText('test invite accept/decline/accept tentative', 5, '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
     I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
@@ -72,12 +72,12 @@ Scenario('Create appointments with participants who will accept/decline/accept t
 
     I.say('User 2');
     await I.haveSetting(usersettings, { user: users[2] });
-    I.login('app=io.ox/calendar&perspective="list"', { user: users[2] });
+    I.login('app=io.ox/calendar&perspective=list', { user: users[2] });
     calendar.waitForApp();
     I.selectFolder('Calendar');
 
     I.say('Decline');
-    I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
+    I.waitForText('test invite accept/decline/accept tentative', 5, '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
     I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
@@ -89,12 +89,12 @@ Scenario('Create appointments with participants who will accept/decline/accept t
 
     I.say('User 3');
     await I.haveSetting(usersettings, { user: users[3] });
-    I.login('app=io.ox/calendar&perspective="list"', { user: users[3] });
+    I.login('app=io.ox/calendar&perspective=list', { user: users[3] });
     calendar.waitForApp();
     I.selectFolder('Calendar');
 
     I.say('Tentative');
-    I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
+    I.waitForText('test invite accept/decline/accept tentative', 5, '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
     I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
@@ -105,13 +105,13 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.logout();
 
     I.say('Owner');
-    I.login('app=io.ox/calendar&perspective="list"', { user: users[0] });
+    I.login('app=io.ox/calendar&perspective=list', { user: users[0] });
     calendar.waitForApp();
     I.selectFolder('Calendar');
 
     // check in list view
     I.say('Check list view');
-    I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
+    I.waitForText('test invite accept/decline/accept tentative', 5, '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
     // owner
     I.waitForElement('.rightside .participant a.accepted[title="' + users[0].userdata.primaryEmail + '"]');
