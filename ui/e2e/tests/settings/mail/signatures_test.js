@@ -72,16 +72,22 @@ Scenario('Sanitize entered signature source code', async function (I) {
 
 Scenario('[C7766] Create new signature', function (I, mail, dialogs) {
 
-    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
+    // init compose instance
+    I.login(['app=io.ox/mail']);
+    mail.waitForApp();
+    mail.newMail();
+    I.click(mail.locators.compose.options);
+    I.click({ css: '[data-action=minimize]' });
 
+    I.openApp('Settings', { folder: 'virtual/settings/io.ox/mail/settings/signatures' });
     I.waitForText('Add new signature');
     I.click('Add new signature');
     dialogs.waitForVisible();
 
-    I.waitForVisible('.contenteditable-editor iframe');
+    I.waitForVisible('.io-ox-signature-dialog .contenteditable-editor iframe');
     I.fillField('Signature name', 'Testsignaturename');
 
-    within({ frame: '.contenteditable-editor iframe' }, () => {
+    within({ frame: '.io-ox-signature-dialog .contenteditable-editor iframe' }, () => {
         I.appendField('body', 'Testsignaturecontent');
     });
 
@@ -96,12 +102,12 @@ Scenario('[C7766] Create new signature', function (I, mail, dialogs) {
     I.selectOption('Default signature for new messages', 'No signature');
     I.selectOption('Default signature for replies or forwards', 'No signature');
 
-    I.openApp('Mail');
-    mail.waitForApp();
-
-    mail.newMail();
-
+    // use compose instance to check signature menu refresh
+    I.waitForVisible('#io-ox-taskbar-container button');
+    I.click('#io-ox-taskbar-container button');
+    I.waitForElement(mail.locators.compose.options);
     I.click(mail.locators.compose.options);
+
     I.clickDropdown('Testsignaturename');
 
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {

@@ -47,14 +47,13 @@ Scenario('[C8825] Add and replace signatures', async function (I, mail) {
     mail.newMail();
     I.click(mail.locators.compose.options);
 
-    I.waitForText('My signature', 5, '.dropdown.open .dropdown-menu');
-    I.click('My signature', '.dropdown.open .dropdown-menu');
+    I.clickDropdown('My signature');
     within({ frame: '#mce_0_ifr' }, () => {
         I.waitForText('Very original and clever signature');
     });
     I.click(mail.locators.compose.options);
-    I.waitForText('Super signature', 5, '.dropdown.open .dropdown-menu');
-    I.click('Super signature', '.dropdown.open .dropdown-menu');
+
+    I.clickDropdown('Super signature');
     within({ frame: '#mce_0_ifr' }, () => {
         I.waitForText('Super original and fabulous signature');
         I.dontSee('Very original and clever signature');
@@ -103,7 +102,6 @@ Scenario('[C265555] Change the Signature', async function (I, mail, dialogs) {
     mail.selectMail('test subject');
 
     I.clickToolbar('.io-ox-mail-window .classic-toolbar [data-action="more"]');
-    I.waitForElement('.dropdown.open');
     I.clickDropdown('Move');
 
     dialogs.waitForVisible();
@@ -123,8 +121,7 @@ Scenario('[C265555] Change the Signature', async function (I, mail, dialogs) {
     // some focus event still needs to happen
     I.wait(0.5);
     I.click(mail.locators.compose.options);
-    I.waitForElement('.dropdown.open');
-    I.click('Super signature', '.dropdown.open .dropdown-menu');
+    I.clickDropdown('Super signature');
     within({ frame: '#mce_1_ifr' }, () => {
         I.waitForVisible(locate('div.io-ox-signature').withText(secondSignatureContent));
         I.waitForVisible(locate('blockquote').withText(firstSignatureContent));

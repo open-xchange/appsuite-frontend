@@ -275,9 +275,8 @@ Scenario('[C7388] Send mail with different priorities', async function (I, users
     priorities.forEach(function (priority) {
         mail.newMail();
         I.click(mail.locators.compose.options);
-        I.waitForVisible('.dropdown.open .dropdown-menu', 5);
         I.clickDropdown(priority);
-        I.waitForDetached('.dropdown.open .dropdown-menu', 5);
+        I.waitForDetached('.dropup.open .dropdown-menu', 5);
         I.fillField('To', users[1].userdata.primaryEmail);
         I.pressKey('Enter');
         I.fillField('Subject', testrailID + ' - ' + timestamp + ' Priority: ' + priority + '');
@@ -306,8 +305,7 @@ Scenario('[C7389] Send mail with attached vCard', async function (I, users, mail
     mail.waitForApp();
     mail.newMail();
     I.click(mail.locators.compose.options);
-    I.waitForElement('.dropdown.open .dropdown-menu', 5);
-    I.click('Attach Vcard');
+    I.clickDropdown('Attach Vcard');
     I.fillField('To', users[1].userdata.primaryEmail);
     I.fillField('Subject', subject);
     I.fillField({ css: 'textarea.plain-text' }, subject);
