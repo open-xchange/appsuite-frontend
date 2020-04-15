@@ -147,6 +147,15 @@
 
 .contact-detail-edit  { width: 100%; }
 
+// css react to listview resize. less padding for really small views
+.scrollable-pane.small-width .contact-detail {
+    .dl-horizontal {
+        @small-width: 120px;
+        dt { width: @small-width; }
+        dd { margin-left: @small-width + 32px; }
+    }
+}
+
 .contact-detail {
 
     width: 100%;
@@ -344,9 +353,9 @@
     h1 {
         font-size: 24px;
         // to stop descenders(Unterlängen) from being cut of
-        line-height: 28px;
+        line-height: 32px;
         font-weight: normal;
-        margin: 0 0 8px 0;
+        margin: 0 0 4px 0;
         overflow: hidden;
         text-overflow: ellipsis;
         .first_name, .last_name {
