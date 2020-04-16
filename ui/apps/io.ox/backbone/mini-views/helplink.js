@@ -28,6 +28,7 @@ define('io.ox/backbone/mini-views/helplink', [
     //  base            {string} The base of the help site
     //  iconClass       {string} These classes are added to the i-tag
     //  content         {object or string} The object to display. If unset, the help icon will be displayed
+    //  context         {string} Translated label of current context. Is used as part of aria-label/titel
 
     var HelpLinkView = Backbone.View.extend({
 
@@ -82,6 +83,7 @@ define('io.ox/backbone/mini-views/helplink', [
                 content: $('<i class="fa" aria-hidden="true">').attr('title', gt('Online help')),
                 href: 'index.html',
                 iconClass: 'fa-question-circle',
+                context: '',
                 modal: false
             }, options);
 
@@ -101,6 +103,13 @@ define('io.ox/backbone/mini-views/helplink', [
                     target: '_blank',
                     'aria-label': gt('Online help')
                 });
+
+            if (this.options.context) {
+                //#. label of help icon
+                //#. %1$s current context (example: Inbox categories)
+                var label = gt('Online help: %1$s', this.options.context);
+                this.$el.attr('aria-label', label).find('i').attr('title', label).end();
+            }
             return this;
         }
     });
