@@ -2,7 +2,7 @@
 title: Login page
 ---
 # Introduction
-With 7.10.4 a new, configurable login page has been introduced which offers a custom pages without a custom theme. The configuration will be loaded as part from the appsuite-configration. That means, it also supports multi-tenancy.
+With 7.10.4 a new, configurable login page has been introduced which offers a custom page without a custom theme. The configuration will be loaded as part from the appsuite-configration. That means, it also supports multi-tenancy.
 
 # Configuration
 To configure the login page, different attributes in the `as-config.yml` to change the appearance of the login screen can be set. Every not configured property will fall back to its default.
@@ -29,12 +29,12 @@ default:
         backgroundImage: "radial-gradient(at 33% 50%, #3b6aad, #1f3f6b)"
         backgroundColor: "radial-gradient(at 33% 50%, #3b6aad, #1f3f6b)"
         #teaser: "<div>any html ... </div>"
-        logo: "https://www.open-xchange.com/typo3conf/ext/sem_ox_content/Resources/Public/Images/ox-logo-new.png"
+        logo: "data:image/svg+xml,%3Csvg width='180px' height='64px' viewBox='0 0 180 64' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg id='ox_logo_white' fill='%23FFFFFF' fill-rule='nonzero'%3E%3Cpath d='M68.9893238,14.336 L68.9893238,49.664 C68.9893238,50.304 69.2455516,50.944 69.7259786,51.456 C69.2455516,50.976 68.6049822,50.72 67.9323843,50.72 L20.7544484,50.72 C20.113879,50.72 19.4733096,50.976 18.9928826,51.456 C19.4733096,50.976 19.7295374,50.304 19.7295374,49.664 L19.7295374,14.336 C19.7295374,13.696 19.4733096,13.056 18.9928826,12.544 C19.4733096,13.024 20.113879,13.28 20.7544484,13.28 L67.9323843,13.28 C68.5729537,13.28 69.2135231,13.024 69.7259786,12.544 C69.2455516,13.056 68.9893238,13.696 68.9893238,14.336 M88.6868327,45.568 L88.6868327,18.432 C88.6868327,8.256 80.4234875,0 70.2384342,0 L18.4483986,0 C8.2633452,0 0,8.256 0,18.432 L0,45.568 C0,55.744 8.2633452,64 18.4483986,64 L70.2384342,64 C80.4234875,64 88.6868327,55.744 88.6868327,45.568' id='Shape'%3E%3C/path%3E%3Cpath d='M133.046263,43.2 C133.046263,43.936 132.725979,44.608 132.245552,45.056 L114.822064,62.464 C113.893238,63.424 112.6121,64 111.170819,64 L86.1565836,64 L118.729537,31.456 C119.209964,31.008 119.818505,30.72 120.523132,30.72 C119.818505,30.72 119.177936,30.432 118.729537,29.984 L88.7188612,0 L115.846975,0 L132.245552,16.384 C132.758007,16.864 133.046263,17.504 133.046263,18.24 C133.046263,17.504 133.366548,16.832 133.846975,16.384 L150.245552,0 L177.373665,0 L147.330961,29.984 C146.850534,30.432 146.241993,30.72 145.537367,30.72 C146.241993,30.72 146.882562,31.008 147.330961,31.456 L179.935943,64 L154.921708,64 C153.480427,64 152.199288,63.392 151.270463,62.464 L133.846975,45.056 C133.33452,44.608 133.046263,43.936 133.046263,43.2' id='Path'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E"
         topVignette:
             transparency: "0.1"
         header:
             title: "App Suite"
-            textColor: "#fffff"
+            textColor: "#ffffff"
             linkColor: "#94c1ec"
             sorting: "$logo,$language,$spacer"
         loginBox: "right"
@@ -47,14 +47,14 @@ default:
             button:
                 color: "#3662a0"
                 textColor: "#ffffff"
-        # informationMessage: '<div style="text-align: center;">Watch out for phishing mails. For more details see: <a style="color: #ffc800;" href="https://en.wikipedia.org/wiki/Phishing">Wikipedia Phishing</a></div>',
+        # informationMessage: "<div>any html ... </div>"
         footer:
             sorting: "$spacer,$copyright,Version: $version,$privacy,$imprint,$spacer"
             privacy: "https://www.open-xchange.com/privacy/"
             imprint: "https://www.open-xchange.com/legal/"
             copyright: "(c) $year OX Software GmbH"
-            background: "rgba(0, 0, 0, 0.15)"
-                  textColor: "#ffffff"
+            color: "rgba(0, 0, 0, 0.15)"
+            textColor: "#ffffff"
             linkColor: "#94c1ec"
         #customCss: "#any-selector { text-transform: uppercase; }"
 ```
@@ -68,14 +68,30 @@ The attribute 'loginPage' is the root container that contains the whole configur
 <config>backgroundImage</config>
 The attribute 'backgroundImage' sets the background. It can be used with any valid values within css 'background', like a color, gradient or image url.
 
+examples
+
+```yaml
+backgroundImage: "#ddfbe6"
+backgroundImage: "radial-gradient(at 33% 50%, #3b6aad, #1f3f6b)"
+backgroundImage: "url(https://www.path-to-a-picture.jpg)"
+```
+
 <config>backgroundColor</config>
 The attribute 'backgroundColor' is used as a layer beyond the image while it's getting loaded or if the image can't be loaded at all. It can be used with any valid values within css 'background', like a color, gradient or image url.
 
 <config>teaser</config>
-The value of the attribute 'teaser' will be interpreted as HTML to display custom content next to the login box. The teaser will not shown if the login box is centered (see `loginBox`) or the screen is too small.
+The value of the attribute 'teaser' will be interpreted as HTML to display custom content next to the login box. The teaser will not be shown if the login box is centered (see `loginBox`) or the screen is too small.
 
 <config>logo</config>
+
 The logo can be an image url or SVG.
+
+examples
+
+```yaml
+logo: "https://www.open-xchange.com/typo3conf/ext/sem_ox_content/Resources/Public/Images/ox-logo-new.png"
+logo: "data:image/svg+xml,%3Csvg width='180px' height='64px' viewBox='0 0 180 64' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg id='ox_logo_white' fill='%23FFFFFF' fill-rule='nonzero'%3E%3Cpath d='M68.9893238,14.336 L68.9893238,49.664 C68.9893238,50.304 69.2455516,50.944 69.7259786,51.456 C69.2455516,50.976 68.6049822,50.72 67.9323843,50.72 L20.7544484,50.72 C20.113879,50.72 19.4733096,50.976 18.9928826,51.456 C19.4733096,50.976 19.7295374,50.304 19.7295374,49.664 L19.7295374,14.336 C19.7295374,13.696 19.4733096,13.056 18.9928826,12.544 C19.4733096,13.024 20.113879,13.28 20.7544484,13.28 L67.9323843,13.28 C68.5729537,13.28 69.2135231,13.024 69.7259786,12.544 C69.2455516,13.056 68.9893238,13.696 68.9893238,14.336 M88.6868327,45.568 L88.6868327,18.432 C88.6868327,8.256 80.4234875,0 70.2384342,0 L18.4483986,0 C8.2633452,0 0,8.256 0,18.432 L0,45.568 C0,55.744 8.2633452,64 18.4483986,64 L70.2384342,64 C80.4234875,64 88.6868327,55.744 88.6868327,45.568' id='Shape'%3E%3C/path%3E%3Cpath d='M133.046263,43.2 C133.046263,43.936 132.725979,44.608 132.245552,45.056 L114.822064,62.464 C113.893238,63.424 112.6121,64 111.170819,64 L86.1565836,64 L118.729537,31.456 C119.209964,31.008 119.818505,30.72 120.523132,30.72 C119.818505,30.72 119.177936,30.432 118.729537,29.984 L88.7188612,0 L115.846975,0 L132.245552,16.384 C132.758007,16.864 133.046263,17.504 133.046263,18.24 C133.046263,17.504 133.366548,16.832 133.846975,16.384 L150.245552,0 L177.373665,0 L147.330961,29.984 C146.850534,30.432 146.241993,30.72 145.537367,30.72 C146.241993,30.72 146.882562,31.008 147.330961,31.456 L179.935943,64 L154.921708,64 C153.480427,64 152.199288,63.392 151.270463,62.464 L133.846975,45.056 C133.33452,44.608 133.046263,43.936 133.046263,43.2' id='Path'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E"
+```
 
 <config>loginBox</config>
 The attribute 'loginBox' describes the position of the login box on the page: `left`, `right` or `centered`.
@@ -87,7 +103,7 @@ The value of the attribute 'informationMessage' will be interpreted as HTML to d
 With attribute 'customCss' custom css rules can be applied for elements within the `div id="io-ox-login-screen"`. Note that the css rules will be scoped to the `io-ox-login-screen` id such that no other elements outside of the login page are affected.
 
 ### Section "topVignette":
-To get a better contrast for the page header, a vignette shadow at the top of the page can be set.
+To get a better contrast for the page header, a vignette shadow at the top of the page can be set. This is useful if the background of the login page is too bright and it gets hard to read the text of the header.
 
 <config>transparency</config>
 This sets the transparency of the top vigenette between 0 and 1. Please note, that this is also a **string**.
@@ -105,7 +121,7 @@ The attribute 'textColor' sets the color of the text within the header. Any vali
 The attribute 'linkColor' sets the color of links within the header. Any valid values for css 'color' can be used.
 
 <config>sorting</config>
-The attribute 'sorting' describes the order of the header elements logo and language selector. It expecteds a comma separated list of elements, each element starting with `$`. Possible elements are `$language`, `$logo`, `$spacer`. The `$spacer` is used to determine the alignment of the element.
+The attribute 'sorting' describes the order of the [header](#section-header) elements logo and language selector. It expecteds a comma separated list of elements, each element starting with `$`. Possible elements are `$language`, `$logo` and `$spacer`. The `$spacer` is used to determine the alignment of the element.
 If the first element is the `$spacer`, following elements will be right aligned. If the `$spacer` is between `$logo` and `$language`, the logo will be left and the language selector will be right aligned.
 
 ### Section "form":
@@ -144,11 +160,99 @@ The attribute 'imprint' sets the link url to the legal.
 <config>copyright</config>
 The attribute 'copyright' describes the copyright text. The placeholder `$year` will be replaced by the current year, `(c)` will be replaced by the unicode copyright sign.
 
-<config>background</config>
-The attribute 'background' sets the background color of the footer like the css attribute 'background'. Transparency can be achieved with RGBA values.
+<config>color</config>
+The attribute 'color' sets the background color of the footer like the css attribute 'background'. Transparency can be achieved with RGBA values.
 
 <config>textColor</config>
 The attribute 'textColor' sets the text color within the footer. Any valid values for css 'color' can be used.
 
 <config>linkColor</config>
 The attribute 'linkColor' sets the color of links within within the footer. Any valid values for css 'color' can be used.
+
+# Multi tenancy
+
+For each tenant an own login page configuration can be set by setting the attributes for the different hosts like it is described in [Custom Host Configuration]({{ site.baseurl }}/middleware/administration/custom_host_configuration.html).
+
+# Example configurations
+
+**Default login page** (see section [Default configuration](#default-configuration))
+
+![Default login page](default_theme.png)
+
+
+**Orange theme example**
+
+![Orange theme example](orange_theme.png)
+
+```yaml
+default:
+    host: all
+    loginPage:
+        backgroundImage: "radial-gradient(at 66% 50%, #FAD961, #F76B1C)"
+        backgroundColor: "radial-gradient(at 66% 50%, #FAD961, #F76B1C)"
+        teaser: "<div style=\"display: flex;flex-direction: column;justify-content: center;height: 100%;\"><h1 style=\"text-transform: uppercase;font-family: monospace;font-size: 64px;text-align: center;font-weight: 700;\">lorem ipsum sit dolor</h1></div>"
+        topVignette:
+            transparency: "0.1"
+        header:
+            title: "App Suite"
+            textColor: "#FFFFFF"
+            linkColor: "#FFFFFF"
+            sorting: "$spacer,$language,$logo"
+        loginBox: "left"
+        form:
+            textColor: "#333333"
+            linkColor: "#7A707A"
+            header:
+                background: "#F5F5F5"
+                textColor: "#333333"
+            button:
+                color: "#F5A623"
+                textColor: "#FFFFFF"
+        footer:
+            sorting: "$spacer,$copyright,Version: $version,$privacy,$imprint,$spacer"
+            privacy: "https://www.open-xchange.com/privacy/"
+            imprint: "https://www.open-xchange.com/legal/"
+            copyright: "(c) $year OX Software GmbH"
+            color: "#FFFFFF"
+            textColor: "#333333"
+            linkColor: "#4064AC"
+```
+
+
+**Picture theme example**
+
+![Picture theme example](picture_theme.png)
+
+```yaml
+default:
+    host: all
+    loginPage:
+        backgroundImage: "url(https://images.pexels.com/photos/462162/pexels-photo-462162.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260)"
+        backgroundColor: "radial-gradient(at 33% 50%, #3b6aad, #1f3f6b)"
+        topVignette:
+            transparency: "0.5"
+        header:
+            title: "App Suite"
+            textColor: "#ffffff"
+            linkColor: "#ffffff"
+            sorting: "$logo,$language,$spacer"
+        loginBox: "center"
+        form:
+            textColor: "#333333"
+            linkColor: "#3C61AA"
+            header:
+                background: "rgba(0, 0, 0, 0.50)"
+                textColor: "#ffffff"
+            button:
+                color: "#3C61AA"
+                textColor: "#ffffff"
+        informationMessage: "<div style=\"text-align: center; color: #ffffff\">Watch out for phishing mails. For more details see: <a style=\"color: #ffffff;text-decoration: underline\" href=\"https://en.wikipedia.org/wiki/Phishing\">Wikipedia Phishing</a></div>"
+        footer:
+            sorting: "$spacer,$copyright,Version: $version,$privacy,$imprint,$spacer"
+            privacy: "https://www.open-xchange.com/privacy/"
+            imprint: "https://www.open-xchange.com/legal/"
+            copyright: "(c) $year OX Software GmbH"
+            color: "#ffffff"
+            textColor: "#333333"
+            linkColor: "#3C61AA"
+```
