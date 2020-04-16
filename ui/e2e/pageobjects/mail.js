@@ -8,8 +8,7 @@ module.exports = {
             options: locate({ css: '[data-extension-id="composetoolbar-menu"] .dropdown a' })
                     .withChild('.dropdown-label')
                     .withText('Options').as('Options dropdown'),
-            localfile: locate({ css: '.composetoolbar a[aria-label="Add local file"]' }).as('Add local file'),
-            drivefile: locate({ css: '.composetoolbar a[aria-label="Add from Drive"]' }).as('Add from Drive')
+            attachments: locate(({ css: '.composetoolbar div[data-extension-id="add_attachments"] a' })).as('Attachments dropdown')
         }
     },
 

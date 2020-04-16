@@ -166,7 +166,7 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
     I.click(`.folder-picker-dialog [data-id="default0/INBOX/${folder}"]`);
     I.waitForVisible(`.folder-picker-dialog [data-id="default0/INBOX/${folder}"].selected`, 5);
     I.wait(1);
-    I.click('Select');
+    I.click('Ok');
 
     // save the form
     I.click('Save');

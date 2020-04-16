@@ -141,7 +141,8 @@ Scenario('Compose mail with different attachments', async function (I, users, ma
     // attach from drive
     I.say('📢 add drive file', 'blue');
     I.waitForInvisible('.window-blocker');
-    I.click(mail.locators.compose.drivefile);
+    I.click(mail.locators.compose.attachments);
+    I.clickDropdown('Add from Drive');
     I.waitForText('Testdocument.txt');
     I.click('Add');
 
@@ -246,7 +247,8 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     mail.newMail();
 
     // attach from drive
-    I.click(mail.locators.compose.drivefile);
+    I.click(mail.locators.compose.attachments);
+    I.clickDropdown('Add from Drive');
     dialogs.waitForVisible();
     I.waitForText('Testdocument.txt');
     dialogs.clickButton('Add');
