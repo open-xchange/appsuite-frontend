@@ -278,7 +278,7 @@ define('io.ox/core/a11y', [], function () {
     }
 
     function trapFocus(el, e) {
-        var items = getTabbable(el);
+        var items = getTabbable(el).filter('[tabindex!="-1"]');
         if (!items.length) return;
         // if the element that sended the event is an iframe then we need to get the index of the active element inside of that iframe
         var index = $(document.activeElement).is('iframe') ? items.index($(document.activeElement).contents()[0].activeElement) : items.index(document.activeElement),
