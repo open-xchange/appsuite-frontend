@@ -274,7 +274,6 @@ Scenario('[C7388] Send mail with different priorities', async function (I, users
     mail.waitForApp();
     priorities.forEach(function (priority) {
         mail.newMail();
-        pause()
         I.click(mail.locators.compose.options);
         I.waitForVisible('.dropdown.open .dropdown-menu', 5);
         I.clickDropdown(priority);
