@@ -93,10 +93,12 @@ define('io.ox/mail/categories/tabs', [
         },
 
         getHelpViewIcon: function () {
-            return $('<li class="help" aria-hidden="true">').append(
+            return $('<li class="help" role="presentation">').append(
                 new HelpLinkView({
-                    href: 'ox.appsuite.user.sect.email.manage.categories.html'
-                }).render().$el
+                    href: 'ox.appsuite.user.sect.email.manage.categories.html',
+                    context: gt('Inbox categories')
+                })
+                .render().$el
             );
         },
 
