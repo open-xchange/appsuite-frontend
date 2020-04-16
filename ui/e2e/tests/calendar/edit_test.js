@@ -564,7 +564,7 @@ Scenario('[C274402] Change organizer of appointment with internal attendees', as
     I.pressKey('Enter');
 
     I.fillField('Add a message to the notification email for the other participants.', 'Testcomment');
-    dialogs.clickButton('Change');
+    dialogs.clickButton('Ok');
     I.waitForDetached('.modal-dialog');
 
     I.waitForVisible(locate('.io-ox-label a.expandable-toggle').withText('Details').inside('.io-ox-sidepopup'));
@@ -612,7 +612,7 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
     I.pressKey('Enter');
 
     I.fillField('Add a message to the notification email for the other participants.', 'Testcomment');
-    dialogs.clickButton('Change');
+    dialogs.clickButton('Ok');
     I.waitForDetached('.modal-dialog');
 
     I.click('~Close', '.io-ox-sidepopup');

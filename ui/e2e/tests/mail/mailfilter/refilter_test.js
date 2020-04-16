@@ -79,7 +79,7 @@ Scenario('[C290529] Refilter mails in INBOX folder', async (I, users, dialogs) =
     I.click('Apply');
     dialogs.waitForVisible();
     I.waitForElement(locate('.modal .folder.selected').withText('Inbox'));
-    dialogs.clickButton('Apply');
+    dialogs.clickButton('Ok');
     I.waitForDetached('.modal-dialog');
 
     checkForFilteredMail(I);
@@ -108,12 +108,12 @@ Scenario('[C290530] Create and apply new filter rule', async (I, users, dialogs)
     I.waitForElement(locate('.modal .folder[data-id="virtual/myfolders"]'));
     I.click('.modal .folder[data-id="virtual/myfolders"] .folder-arrow');
     I.click(locate('.modal .folder.selectable').withText('foo'));
-    dialogs.clickButton('Select');
+    dialogs.clickButton('Ok');
 
     I.waitForText('Create new rule', 5, dialogs.locators.header);
     dialogs.clickButton('Save and apply');
     I.waitForVisible(locate('.modal .folder.selected').withText('Inbox'));
-    dialogs.clickButton('Apply');
+    dialogs.clickButton('Ok');
     I.waitForDetached('.modal-dialog');
 
     checkForFilteredMail(I);
@@ -131,7 +131,7 @@ Scenario('[C290531] Edit and apply existing filter rule', async (I, users, dialo
     I.fillField('Subject Contains', 'foo');
     dialogs.clickButton('Save and apply');
     I.waitForVisible(locate('.modal .folder.selected').withText('Inbox'));
-    dialogs.clickButton('Apply');
+    dialogs.clickButton('Ok');
 
     checkForFilteredMail(I);
 });

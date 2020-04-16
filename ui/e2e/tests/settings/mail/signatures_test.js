@@ -101,7 +101,7 @@ Scenario('[C7766] Create new signature', function (I, mail, dialogs) {
 
     mail.newMail();
 
-    I.click(mail.locators.compose.options);
+    I.click(mail.locators.compose.signatures);
     I.clickDropdown('Testsignaturename');
 
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
@@ -168,7 +168,7 @@ Scenario('[C7767] Define signature position', async function (I, users, mail, di
     });
     I.wait(0.5); // there still might be a focus event somewhere
 
-    I.click(mail.locators.compose.options);
+    I.click(mail.locators.compose.signatures);
     I.clickDropdown('Testsignaturename');
 
     await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
@@ -212,7 +212,7 @@ Scenario('[C7768] Edit signature', async function (I, mail, dialogs) {
 
     mail.newMail();
 
-    I.click(mail.locators.compose.options);
+    I.click(mail.locators.compose.signatures);
     I.clickDropdown('Newsignaturename');
 
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {

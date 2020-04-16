@@ -48,7 +48,7 @@ Scenario('[C7753] Delete single Task', async function (I, users, tasks, dialogs)
     I.waitForText(testrailID, 5, '.tasks-detailview .title');
     I.clickToolbar('Delete');
     dialogs.waitForVisible();
-    I.waitForText('Do you really want to delete this task?', 5, dialogs.locators.body);
+    I.waitForText('Do you really want to delete this task?', 5, dialogs.locators.header);
     dialogs.clickButton('Delete');
     I.waitForDetached('.modal-dialog');
     I.waitForText('No elements selected');
@@ -73,7 +73,7 @@ Scenario('[C7754] Delete several Task at the same time', async function (I, user
     I.waitForText(numberOfTasks + ' items selected', 5, '.task-detail-container');
     I.clickToolbar('Delete');
     dialogs.waitForVisible();
-    I.waitForText('Do you really want to delete these tasks?', 5, dialogs.locators.body);
+    I.waitForText('Do you really want to delete these tasks?', 5, dialogs.locators.header);
     dialogs.clickButton('Delete');
     I.waitForDetached('.modal-dialog');
     I.waitForText('No elements selected');
@@ -105,7 +105,7 @@ Scenario('[C7755] Delete recurring Task', async function (I, tasks, dialogs) {
     tasks.waitForApp();
     I.clickToolbar('Delete');
     dialogs.waitForVisible();
-    I.waitForText('Do you really want to delete this task?', 5, dialogs.locators.body);
+    I.waitForText('Do you really want to delete this task?', 5, dialogs.locators.header);
     dialogs.clickButton('Delete');
     I.waitForDetached('.modal-dialog');
     I.waitForText('No elements selected');

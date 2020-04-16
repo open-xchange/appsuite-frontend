@@ -325,7 +325,7 @@ Scenario('[C7389] Send mail with attached vCard', async function (I, users, mail
     //confirm dirtycheck is working properly
     I.click('~Close', '.floating-header');
     dialogs.waitForVisible();
-    I.waitForText('Do you really want to discard your changes?', 5, dialogs.locators.body);
+    I.waitForText('Do you really want to discard your changes?', 5, dialogs.locators.header);
     dialogs.clickButton('Cancel');
     I.waitForDetached('.modal-dialog');
 
@@ -705,7 +705,7 @@ Scenario('[C163026] Change from display name when sending a mail', async functio
     I.waitForVisible('.modal-dialog input[title="Use custom name"]', 5); // check for checkbox to be visible
     I.click('input[title="Use custom name"]', dialogs.locators.body);
     I.fillField('.modal-body input[title="Custom name"]', timestamp);
-    dialogs.clickButton('Edit');
+    dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
 
     I.waitForText(timestamp, 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .name');

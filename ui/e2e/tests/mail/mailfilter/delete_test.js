@@ -51,7 +51,7 @@ Scenario('[C7789] Delete filter rule @contentReview', async function (I, users, 
 
     I.click('.settings-list-view [title="Remove Redirect mails with subject Test subject to ' + users[2].get('primaryEmail') + '"]');
     dialogs.waitForVisible();
-    I.waitForText('Do you really want to delete this filter rule?', 5, dialogs.locators.body);
+    I.waitForText('Do you really want to delete this filter rule?', 5, dialogs.locators.header);
     dialogs.clickButton('Delete');
     I.waitForDetached('.modal-dialog');
     I.see('There is no rule defined');
