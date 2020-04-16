@@ -54,7 +54,7 @@ const signatures = [{
 }];
 
 async function selectAndAssertSignature(I, mail, name, compare) {
-    I.click(mail.locators.compose.options);
+    I.click(mail.locators.compose.signatures);
     I.click(name);
     let result = await grabValueFrom(I, '.io-ox-mail-compose textarea.plain-text');
     if (compare instanceof RegExp) expect(result).to.match(compare);

@@ -63,7 +63,7 @@ const signatures = [{
 }];
 
 async function selectAndAssertSignature(I, mail, name, compare) {
-    I.click(mail.locators.compose.options);
+    I.click(mail.locators.compose.signatures);
     I.click(name);
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
         let result = await I.grabHTMLFrom('body');

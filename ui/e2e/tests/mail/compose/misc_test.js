@@ -44,7 +44,7 @@ Scenario('[C12122] Auto-size recipient fields', async function (I, mail) {
     expect(parseInt(height, 10)).to.be.greaterThan(40);
 
     for (let i = 1; i < 5; i++) {
-        I.click('~Remove', `~testmail${i}@testmail.com`);
+        I.click('~Remove', `.token[aria-label^="testmail${i}@testmail.com"]`);
     }
 
     height = await I.grabCssPropertyFrom({ css: '[data-extension-id="to"]' }, 'height');

@@ -8,6 +8,7 @@ module.exports = {
             options: locate({ css: '[data-extension-id="composetoolbar-menu"] .dropdown a' })
                     .withChild('.dropdown-label')
                     .withText('Options').as('Options dropdown'),
+            signatures: locate({ css: '[data-extension-id="composetoolbar-menu"] .dropdown.signatures a' }),
             attachments: locate(({ css: '.composetoolbar div[data-extension-id="add_attachments"] a' })).as('Attachments dropdown')
         }
     },
