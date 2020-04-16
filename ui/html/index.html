@@ -104,7 +104,7 @@
           /* fix broken URL */
           var path = location.pathname;
           if (/^\/\//.test(path)) {
-            location.href = location.href.replace(path, path.substr(1));
+            location.href = location.href.replace(path, path.replace(/^\/*/, '/'));
           }
 
         </script>
