@@ -28,7 +28,9 @@ define('io.ox/tours/main', [
         id: 'tours',
         index: 1000,
         run: function () {
-            if (_.device('smartphone')) {
+
+            // no tours for guests, they are just annoying when you receive a sharing link etc
+            if (_.device('smartphone') || capabilities.has('guest')) {
                 //tablets are fine just disable phones
                 return $.when();
             }
