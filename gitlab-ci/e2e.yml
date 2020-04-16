@@ -8,7 +8,7 @@ deploy e2e dev server:
     DOCKER_HOST: docker.ui.cloud.open-xchange.com
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     CONTAINER_NAME: e2e-develop
-    SERVER: http://10.20.28.164/appsuite/
+    SERVER: http://10.50.0.57/appsuite/
   script:
     - docker stop $CONTAINER_NAME || true
     - docker wait $CONTAINER_NAME || true
@@ -27,7 +27,7 @@ deploy e2e testserver:
     DOCKER_HOST: docker.ui.cloud.open-xchange.com
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     CONTAINER_NAME: e2e_$CI_PIPELINE_ID
-    SERVER: http://10.20.28.164/appsuite/
+    SERVER: http://10.50.0.57/appsuite/
   script:
     - docker pull $DOCKER_IMAGE
     - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e $DOCKER_IMAGE e2e
@@ -194,7 +194,7 @@ deploy e2e testserver new test:
     DOCKER_HOST: docker.ui.cloud.open-xchange.com
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE:develop
     CONTAINER_NAME: e2e_$CI_PIPELINE_ID
-    SERVER: http://10.20.28.164/appsuite/
+    SERVER: http://10.50.0.57/appsuite/
   only:
     refs:
       - /^e2e\//

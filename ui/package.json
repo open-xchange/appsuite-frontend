@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@open-xchange/appserver": "^0.8.0-pre3",
-    "@open-xchange/codecept-helper": "^0.3.0",
+    "@open-xchange/codecept-helper": "^0.4.0",
     "@open-xchange/shared-grunt-config": "^0.15.0-pre5",
     "assemble-less": "^0.7.0",
     "axe-core": "3.3.2",
