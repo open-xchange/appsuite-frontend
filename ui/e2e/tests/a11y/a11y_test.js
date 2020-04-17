@@ -29,4 +29,3 @@ require('./drive');
 require('./portal');
 require('./tasks');
 require('./settings');
-require('./general.js');

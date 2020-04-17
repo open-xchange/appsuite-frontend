@@ -55,9 +55,11 @@ Scenario('Create appointment with all fields', async function (I, calendar, dial
     let appointment;
 
     ['Day', 'Week', 'Workweek', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, (location) => {
-        appointment = appointmentSelector.inside(location).as(`appointment element in ${perspective}`);
-        I.see('test title', appointment);
-        I.see('test location', appointment);
+        I.say(location);
+        appointment = appointmentSelector.inside(location);
+        //.as(`appointment element in ${perspective}`);
+        I.waitForText('test title', 5, appointment);
+        I.waitForText('test location', 5, appointment);
         I.seeElement(appointment.find(perspective === 'List' ?
             '.private-flag' :
             '.confidential-flag')

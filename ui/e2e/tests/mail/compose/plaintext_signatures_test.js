@@ -186,7 +186,9 @@ Scenario('Reply to mail with plaintext signature above correctly placed and chan
     // insert some text at the very beginning
     I.fillField('Subject', 'Reply to mail with plaintext signature');
     I.pressKey('Tab');
-
+    I.pressKey('Tab');
+    I.pressKey('Tab');
+    I.pressKey('Tab');
     I.pressKeys('some user input');
     expect(await grabValueFrom(I, '.io-ox-mail-compose textarea.plain-text')).to.match(
         new RegExp(`^some user input\\n\\n${signatures[0].plaintext}\\n\\n(>[^\\n]*(\\n)?)+$`)
