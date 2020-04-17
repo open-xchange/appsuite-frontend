@@ -521,6 +521,12 @@ define('io.ox/mail/compose/extensions', [
                     $('<i class="fa fa-bars" aria-hidden="true">').attr('title', gt('Options'))
                 );
                 var dropdown = new Dropdown({
+                    tagName: 'li',
+                    attributes: {
+                        'role': 'presentation',
+                        'data-extension-id': 'composetoolbar-menu'
+                    },
+                    dropup: true,
                     model: new IntermediateModel({
                         model: baton.model,
                         config: baton.config,
@@ -533,8 +539,7 @@ define('io.ox/mail/compose/extensions', [
                 });
 
                 ext.point(POINT + '/menuoptions').invoke('draw', dropdown.$el, baton);
-                // prevent div wraper
-                this.append(dropdown.render().$el.children());
+                this.append(dropdown.render().$el);
             };
         }()),
 

@@ -76,7 +76,9 @@ Scenario('[C7766] Create new signature', function (I, mail, dialogs) {
     I.login(['app=io.ox/mail']);
     mail.waitForApp();
     mail.newMail();
+
     I.click(mail.locators.compose.options);
+    I.pressKey('Escape');
     I.click({ css: '[data-action=minimize]' });
 
     I.openApp('Settings', { folder: 'virtual/settings/io.ox/mail/settings/signatures' });

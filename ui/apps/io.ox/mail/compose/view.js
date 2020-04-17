@@ -52,6 +52,7 @@ define('io.ox/mail/compose/view', [
             index: 400,
             id: 'composetoolbar',
             draw: function (baton) {
+                if (_.device('smartphone')) return;
                 var node = $('<ul data-extension-id="composetoolbar" class="composetoolbar list-unstyled list-inline">')
                     .attr({
                         'aria-label': gt('Actions. Use cursor keys to navigate.'),
@@ -61,6 +62,7 @@ define('io.ox/mail/compose/view', [
                 this.append(node);
             },
             redraw: function (baton) {
+                if (_.device('smartphone')) return;
                 var node = baton.app.getWindow().nodes.footer.find('.composetoolbar').empty();
                 ext.point(POINT + '/composetoolbar').invoke('draw', node, baton);
             }
@@ -225,19 +227,6 @@ define('io.ox/mail/compose/view', [
         }
     );
 
-    ext.point(POINT + '/menu').extend(
-        {
-            id: 'security',
-            index: 100,
-            draw: extensions.security
-        },
-        {
-            id: 'options',
-            index: 300,
-            draw: extensions.optionsmenu
-        }
-    );
-
     ext.point(POINT + '/editors').extend(
         {
             id: 'plain-text',
@@ -283,9 +272,10 @@ define('io.ox/mail/compose/view', [
                     .option('requestReadReceipt', true, gt('Request read receipt'), { prefix: gt('Options') });
             }
         },
+        // guard: index 400
         {
             id: 'editor',
-            index: 400,
+            index: 500,
             draw: function () {
                 if (_.device('smartphone')) return;
                 var menu = this.data('view')
@@ -300,7 +290,7 @@ define('io.ox/mail/compose/view', [
         },
         {
             id: 'saveAndClose',
-            index: 500,
+            index: 600,
             draw: function (baton) {
                 var saveAndClose = function () {
                     baton.view.saveDraft().then(function () {
@@ -402,13 +392,14 @@ define('io.ox/mail/compose/view', [
             }
         },
         {
+            id: 'security',
+            index: 100,
+            draw: extensions.security
+        },
+        {
             id: 'menus',
             index: 1000,
-            draw: function (baton) {
-                var node =  $('<li role="presentation" data-extension-id="composetoolbar-menu">').addClass('dropup');
-                ext.point(POINT + '/menu').invoke('draw', node, baton);
-                this.append(node);
-            }
+            draw: extensions.optionsmenu
         }
     );
 
