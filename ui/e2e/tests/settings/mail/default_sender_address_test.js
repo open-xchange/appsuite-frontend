@@ -29,7 +29,7 @@ Scenario('[C7781] Default sender address', async (I, users, contexts, mail) => {
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
-    await I.haveAnAlias('urbi@orbi.it', { user, ctx: { id: contexts[0].id } });
+    await I.haveAnAlias('urbi@orbi.it', { user });
     I.login('app=io.ox/mail');
     mail.newMail();
     I.click(`<${user.get('primaryEmail')}>`, '.mail-input');

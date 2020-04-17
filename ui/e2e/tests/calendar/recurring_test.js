@@ -99,7 +99,6 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.waitForText('Change confirmation status', 5, dialogs.locators.header);
     dialogs.clickButton('Accept');
     I.waitForDetached('.modal-dialog');
-
     I.waitForElement('.rightside .participant a.accepted[title="' + users[1].userdata.primaryEmail + '"]');
 
     I.logout();

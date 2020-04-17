@@ -518,6 +518,7 @@ Scenario('[C8389] Move a folder', async (I, drive) => {
     I.click('Move', '.modal-dialog');
     I.waitForText('File has been moved');
     I.waitForInvisible('File has been moved');
+    I.wait(0.2);
     I.selectFolder('Subfolder b');
     I.waitForElement(locate('.filename').withText('SubSubFolder 1').inside('.list-view'));
     ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {

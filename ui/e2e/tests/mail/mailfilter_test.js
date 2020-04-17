@@ -218,6 +218,7 @@ Scenario('add and removes Mail Filter Rules', async function (I, dialogs) {
 
     I.click('Add condition');
     I.clickDropdown('Size');
+    pause()
 
     // check size validation
     I.waitForElement('.io-ox-mailfilter-edit li[data-test-id="2"] .row.has-error');
@@ -245,7 +246,6 @@ Scenario('add and removes Mail Filter Rules', async function (I, dialogs) {
     I.seeElement('.modal button[data-action="save"][disabled]');
 
     I.fillField('.io-ox-mailfilter-edit [data-test-id="2"] input[name="sizeValue"]', '22');
-
     // check size validation
     I.dontSeeElement('.io-ox-mailfilter-edit li[data-test-id="2"] .row.has-error');
     I.dontSeeElement('.modal button[data-action="save"][disabled]');
