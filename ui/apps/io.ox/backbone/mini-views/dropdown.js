@@ -97,7 +97,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         adjustBounds: function () {
-            var bounds = this.$ul.get(0).getBoundingClientRect(),
+            var isDropUp = !!this.options.dropup,
+                bounds = this.$ul.get(0).getBoundingClientRect(),
                 margins = {
                     top: parseInt(this.$ul.css('margin-top') || 0, 10),
                     left: parseInt(this.$ul.css('margin-left') || 0, 10)
@@ -113,8 +114,16 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 availableWidth = $(window).width(),
                 availableHeight = $(window).height(),
                 topbar = $('#io-ox-appcontrol');
-            // hits bottom ?
-            if (bounds.top + bounds.height > availableHeight - this.margin) {
+
+            if (isDropUp) {
+                var top = this.$el.get(0).getBoundingClientRect().top;
+                positions.top = top - bounds.height;
+                // adjust height
+                positions.height = bounds.height;
+                positions.height = Math.min(availableHeight - this.margin - positions.top, positions.height);
+            } else if ((bounds.top + bounds.height > availableHeight - this.margin)) {
+                // hits bottom
+
                 // left or right?
                 if ((offset.left + width + bounds.width + this.margin) < availableWidth) {
                     // enough room on right side
