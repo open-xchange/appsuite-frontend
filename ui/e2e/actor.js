@@ -116,5 +116,13 @@ module.exports = actor({
         const item = `.folder-tree .contextmenu-control[title*="${folderName}"]`;
         this.waitForVisible(item);
         this.click(item);
+    },
+
+    // the native codecept doubleclick does not work with appointments
+    // this can be removed in 7.10.4
+    safeDoubleClick(item) {
+        this.click(item);
+        this.wait(0.1);
+        this.click(item);
     }
 });

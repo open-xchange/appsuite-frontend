@@ -124,7 +124,7 @@ Scenario('[C7450] Edit private appointment', async function (I, calendar) {
     });
 
     // edit the appointment
-    I.doubleClick('.page.current .appointment');
+    I.safeDoubleClick('.page.current .appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.retry(5).selectOption('Visibility', 'Standard');
 
@@ -257,7 +257,7 @@ Scenario('[C7465] Edit appointment in shared folder as author', async function (
     I.waitForText('Testappointment');
 
     // 1. Double click to the appointment
-    I.doubleClick('.page.current .appointment');
+    I.safeDoubleClick('.page.current .appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     // 2. Change Subject, Location and Description.
@@ -804,7 +804,7 @@ Scenario('[C7453] Edit appointment, set the all day checkmark', async function (
     I.login('app=io.ox/calendar');
     I.waitForElement(appointment);
 
-    I.doubleClick('.page.current .appointment');
+    I.safeDoubleClick('.page.current .appointment');
     I.waitForElement('.io-ox-calendar-edit-window');
     I.waitForText('All day');
     I.checkOption('All day');
@@ -1399,7 +1399,7 @@ Scenario('[C7458] Edit appointment by doubleclick', async function (I, calendar)
     I.login(['app=io.ox/calendar&perspective=week:week']);
     calendar.waitForApp();
     I.waitForText(subject, 5, '.appointment');
-    I.doubleClick('.page.current .appointment');
+    I.safeDoubleClick('.page.current .appointment');
 
     // Expected Result: Edit tab is opened.
     I.waitForVisible('.io-ox-calendar-edit-window');
