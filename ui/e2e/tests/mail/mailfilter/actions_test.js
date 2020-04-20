@@ -198,12 +198,12 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
 
 });
 
-// only works for external accounts
-Scenario.skip('[C7805] Reject with reason filtered mail', async function (I, users) {
+Scenario('[C7805] Reject with reason filtered mail', async function (I, users, mail) {
+    const [user1, user2] = users;
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
-    });
+    }, { user: user2 });
 
     createFilterRule(I, 'TestCase0390', 'Reject with reason');
     I.fillField('text', 'TestCase0390');
@@ -211,25 +211,25 @@ Scenario.skip('[C7805] Reject with reason filtered mail', async function (I, use
     // save the form
     I.click('Save');
     I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.logout();
 
-    I.openApp('Mail');
+    I.login(['app=io.ox/mail'], { user: user2 });
+    mail.waitForApp();
+    mail.newMail();
 
     // compose mail
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
-    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[0].get('primaryEmail'));
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user1.get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'TestCase0390');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
     I.click('Send');
+    I.waitForElement({ css: '[aria-label^="Sent, 1 total"]' }, 10);
+    I.waitForElement({ css: '[aria-label^="Inbox, 1 unread, 1 total"]' });
 
-    I.waitForElement('~Sent, 1 total');
-    I.wait(1);
-    I.waitForElement('~Inbox, 1 unread, 1 total');
-    I.see('Automatically rejected mail', '.subject');
-    I.see('The following reason was given: TestCase0390', '.text-preview');
+    I.waitForText('Rejected: TestCase0390', 5, '.subject .drag-title');
+    I.click('.list-item.selectable.unread');
+    I.waitForText('was automatically rejected: TestCase0390', 5, '.text-preview');
 
 });
 
