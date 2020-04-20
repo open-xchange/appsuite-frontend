@@ -82,7 +82,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 }
             }
 
-            var def = isUpToDate ? $.when(versions) : FilesAPI.versions.load(model.toJSON(), { cache: false });
+            var def = isUpToDate ? $.when(versions) : FilesAPI.versions.load(model.toJSON(), { cache: false, adjustVersion: !versionCounterSupport });
 
             return def.then(function (allVersions) {
                 versions = allVersions;
@@ -254,7 +254,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
         render: function () {
             if (!this.model) return this;
-            var count = this.model.get('number_of_versions') || 0;
+            var count = this.model.get('versions') ? this.model.get('versions').length : this.model.get('number_of_versions') || 0;
             this.setPanelHeader(gt('Versions (%1$d)', count));
             // show the versions panel only if we have at least 2 versions
             this.$el.toggle(count > 1);
