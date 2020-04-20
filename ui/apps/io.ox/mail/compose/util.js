@@ -50,7 +50,6 @@ define('io.ox/mail/compose/util', [
                     data = _({ group: 'mail', space: space, uploaded: 1 }).extend(data);
                     attachment.set(data);
                     // trigger is important, extensionpoint cascade on save needs it to resolve or fail correctly.
-                    attachment.complete = true;
                     attachment.trigger('upload:complete', data);
                 }, function fail(error) {
                     if (error.error === 'abort') return;
