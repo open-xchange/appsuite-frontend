@@ -45,7 +45,7 @@ define('io.ox/mail/compose/util', [
                 attachment.set('uploaded', 0);
 
                 return def.progress(function (e) {
-                    attachment.set('uploaded', e.loaded / e.total);
+                    attachment.set('uploaded', Math.min(e.loaded / e.total, 0.999));
                 }).then(function success(data) {
                     data = _({ group: 'mail', space: space, uploaded: 1 }).extend(data);
                     attachment.set(data);
