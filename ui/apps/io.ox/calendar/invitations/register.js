@@ -383,11 +383,11 @@ define('io.ox/calendar/invitations/register', [
                 .then(
                     function done(data) {
                         // api refresh
-                        var refresh = require(['io.ox/calendar/api']).then(
-                            function (api) {
+                        var yell = self.options.yell,
+                            refresh = require(['io.ox/calendar/api']).then(function (api) {
                                 api.updatePoolData({ updated: data });
                                 api.refresh();
-                                if (self.options.yell !== false) {
+                                if (yell !== false) {
                                     notifications.yell('success', success[action]);
                                 }
                             });
