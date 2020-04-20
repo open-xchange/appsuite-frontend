@@ -1632,9 +1632,7 @@ define('io.ox/files/api', [
         },
 
         load: function (file, options) {
-
-            options = _.extend({ cache: true }, options);
-
+            options = _.extend({ cache: true, adjustVersion: false }, options);
             // skip if we don't have a model to add data
             var cid = _.cid(file), model = pool.get('detail').get(cid);
             if (!model) return $.when([]);
@@ -1654,7 +1652,17 @@ define('io.ox/files/api', [
                 appendColumns: true
             })
             .then(function (data) {
-                model.set({ versions: data, number_of_versions: data.length });
+                var attributes = {
+                    versions: data,
+                    number_of_versions: data.length
+                };
+
+                if (model.get('version') === null && options.adjustVersion) {
+                    attributes.version = null;
+                    _.last(data).version = null;
+                }
+                model.set(attributes);
+
                 // make sure we always get the same result (just data; not timestamp)
                 return data;
             });

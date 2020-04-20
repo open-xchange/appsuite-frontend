@@ -171,7 +171,8 @@ define('io.ox/core/api/filestorage', [
                 return http.GET({
                     module: 'fileaccount',
                     params: {
-                        action: 'all'
+                        action: 'all',
+                        connectionCheck: true
                     }
                 })
                 .then(function (accounts) {
@@ -222,6 +223,10 @@ define('io.ox/core/api/filestorage', [
                         accountsCache.add(account);
                         addToIdsCache([account]);
                         api.trigger('create', accountsCache.get(account));
+
+                        require(['io.ox/core/api/account'], function (accountAPI) {
+                            accountAPI.trigger('create:account');
+                        });
 
                         return accountsCache.get(account);
                     });

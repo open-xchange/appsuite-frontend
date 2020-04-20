@@ -85,7 +85,7 @@ define('io.ox/settings/accounts/views', [
             render: function () {
                 var self = this,
                     title = self.getTitle(),
-                    canEdit = ext.point('io.ox/settings/accounts/' + self.model.get('accountType') + '/settings/detail').pluck('draw').length > 0,
+                    canEdit = self.model.get('accountType') === 'fileAccount' ? true : ext.point('io.ox/settings/accounts/' + self.model.get('accountType') + '/settings/detail').pluck('draw').length > 0,
                     canDelete = self.model.get('id') !== 0;
                 self.$el.attr({
                     'data-id': self.model.get('id'),
@@ -114,10 +114,11 @@ define('io.ox/settings/accounts/views', [
             onDelete: function (e) {
 
                 e.preventDefault();
-
-                var account = this.model.pick('id', 'accountType', 'folder'),
+                var account = this.model.pick('id', 'accountType', 'folder', 'rootFolder'),
                     self = this;
-
+                if (account.accountType === 'fileAccount') {
+                    account.folder = account.rootFolder;
+                }
                 require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                     new ModalDialog({
                         async: true,
@@ -156,6 +157,7 @@ define('io.ox/settings/accounts/views', [
                                 // update folder tree
                                 require(['io.ox/core/api/account', 'io.ox/core/folder/api'], function (accountAPI, folderAPI) {
                                     accountAPI.getUnifiedInbox().done(function (unifiedInbox) {
+                                        accountAPI.trigger('refresh.list');
                                         if (!unifiedInbox) return folderAPI.refresh();
                                         var prefix = unifiedInbox.split('/')[0];
                                         folderAPI.pool.unfetch(prefix);
@@ -177,7 +179,12 @@ define('io.ox/settings/accounts/views', [
                     model: this.model,
                     node: this.el
                 };
-                createExtpointForSelectedAccount(e);
+                if (this.model.get('accountType') === 'fileAccount') {
+                    ox.load(['io.ox/files/actions/basic-authentication-account']).done(function (update) {
+                        update('update', e.data.model);
+                    });
+
+                } else { createExtpointForSelectedAccount(e); }
             }
         });
 

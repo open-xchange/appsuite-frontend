@@ -38,7 +38,8 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 panelBody = this.find('.sidebar-panel-body'),
                 versionCounter = 1,
                 isUpToDate = _.contains(_.pluck(versions, 'version'), model.get('version')),
-                tableNode;
+                tableNode,
+                versionCounterSupport = !(/^(owncloud|webdav|nextcloud)$/.test(model.get('folder_id').split(':')[0]));
 
             function getVersionsTable() {
 
@@ -55,9 +56,9 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 // avoid unnecessary model changes / change events
                 .clone(versionSorter)
                 .sort(versionSorter)
-                .each(function (version) {
+                .each(function (version, id, versions) {
                     var entryRow = $('<tr class="version">');
-                    Ext.point(POINT + '/version').invoke('draw', entryRow, Ext.Baton({ data: version, viewerEvents: viewerEvents, isViewer: isViewer, latestVersion: versionCounter === versions.length }));
+                    Ext.point(POINT + '/version').invoke('draw', entryRow, Ext.Baton({ data: version, viewerEvents: viewerEvents, isViewer: isViewer, latestVersion: versionCounter === versions.length, last_modified: id === 0 }));
                     table.append(entryRow);
                     versionCounter++;
                 });
@@ -74,12 +75,14 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 return version2.last_modified - version1.last_modified;
             }
 
-            if (!model || !_.isArray(versions)) {
-                panelBody.empty();
-                return;
+            if (versionCounterSupport) {
+                if (!model || !_.isArray(versions)) {
+                    panelBody.empty();
+                    return;
+                }
             }
 
-            var def = isUpToDate ? $.when(versions) : FilesAPI.versions.load(model.toJSON(), { cache: false });
+            var def = isUpToDate ? $.when(versions) : FilesAPI.versions.load(model.toJSON(), { cache: false, adjustVersion: !versionCounterSupport });
 
             return def.then(function (allVersions) {
                 versions = allVersions;
@@ -126,8 +129,10 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             var dropdown = new ActionDropdownView({ point: 'io.ox/files/versions/links/inline' });
 
             dropdown.once('rendered', function () {
-                var $toggle = this.$('> .dropdown-toggle');
-                if (baton.data.current_version) $toggle.addClass('current');
+                var $toggle = this.$('> .dropdown-toggle'),
+                    versionCounterSupport = !(/^(owncloud|webdav|nextcloud)$/.test(baton.data.folder_id.split(':')[0]));
+                if (baton.data.current_version || (baton.last_modified && !versionCounterSupport)) $toggle.addClass('current');
+
                 Util.setClippedLabel($toggle, baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename);
             });
 
@@ -249,7 +254,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
         render: function () {
             if (!this.model) return this;
-            var count = this.model.get('number_of_versions') || 0;
+            var count = this.model.get('versions') ? this.model.get('versions').length : this.model.get('number_of_versions') || 0;
             this.setPanelHeader(gt('Versions (%1$d)', count));
             // show the versions panel only if we have at least 2 versions
             this.$el.toggle(count > 1);
