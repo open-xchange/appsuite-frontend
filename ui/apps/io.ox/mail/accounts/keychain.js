@@ -72,8 +72,11 @@ define.async('io.ox/mail/accounts/keychain', [
             _(allFileAccounts).each(function (account) {
                 if (account.get('id') !== 'infostore') {
                     account = account.attributes;
+
+                    var error = account.hasError ? { message: account.error } : account.status = 'ok';
                     fileAccounts[account.id] = account;
                     account.accountType = 'fileAccount';
+                    account.status = error;
                 }
             });
 
@@ -93,6 +96,7 @@ define.async('io.ox/mail/accounts/keychain', [
         moduleDeferred.resolve({ message: 'Loaded mail keychain' });
     });
     accountAPI.on('create:account refresh.all refresh.list', init);
+    filestorageAPI.on('update', init);
 
     function trigger(evt) {
         return function () {

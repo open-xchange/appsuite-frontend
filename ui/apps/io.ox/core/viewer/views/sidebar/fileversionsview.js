@@ -56,9 +56,9 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 // avoid unnecessary model changes / change events
                 .clone(versionSorter)
                 .sort(versionSorter)
-                .each(function (version) {
+                .each(function (version, id, versions) {
                     var entryRow = $('<tr class="version">');
-                    Ext.point(POINT + '/version').invoke('draw', entryRow, Ext.Baton({ data: version, viewerEvents: viewerEvents, isViewer: isViewer, latestVersion: versionCounter === versions.length }));
+                    Ext.point(POINT + '/version').invoke('draw', entryRow, Ext.Baton({ data: version, viewerEvents: viewerEvents, isViewer: isViewer, latestVersion: versionCounter === versions.length, last_modified: id === 0 }));
                     table.append(entryRow);
                     versionCounter++;
                 });
@@ -129,8 +129,10 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             var dropdown = new ActionDropdownView({ point: 'io.ox/files/versions/links/inline' });
 
             dropdown.once('rendered', function () {
-                var $toggle = this.$('> .dropdown-toggle');
-                if (baton.data.current_version) $toggle.addClass('current');
+                var $toggle = this.$('> .dropdown-toggle'),
+                    versionCounterSupport = !(/^(owncloud|webdav|nextcloud)$/.test(baton.data.folder_id.split(':')[0]));
+                if (baton.data.current_version || (baton.last_modified && !versionCounterSupport)) $toggle.addClass('current');
+
                 Util.setClippedLabel($toggle, baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename);
             });
 

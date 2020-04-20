@@ -171,7 +171,8 @@ define('io.ox/core/api/filestorage', [
                 return http.GET({
                     module: 'fileaccount',
                     params: {
-                        action: 'all'
+                        action: 'all',
+                        connectionCheck: true
                     }
                 })
                 .then(function (accounts) {

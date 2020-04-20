@@ -157,10 +157,7 @@ define('io.ox/settings/accounts/views', [
                                 // update folder tree
                                 require(['io.ox/core/api/account', 'io.ox/core/folder/api'], function (accountAPI, folderAPI) {
                                     accountAPI.getUnifiedInbox().done(function (unifiedInbox) {
-                                        require(['io.ox/core/api/account'], function (accountAPI) {
-                                            accountAPI.trigger('refresh.list');
-                                        });
-
+                                        accountAPI.trigger('refresh.list');
                                         if (!unifiedInbox) return folderAPI.refresh();
                                         var prefix = unifiedInbox.split('/')[0];
                                         folderAPI.pool.unfetch(prefix);
