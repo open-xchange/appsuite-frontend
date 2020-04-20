@@ -639,18 +639,34 @@ Scenario('[C12121] Display and hide recipient fields', async function (I, mail) 
     I.waitForInvisible({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
 });
 
-Scenario.skip('[C83384] Automatically bcc all messages', async function (I, mail) {
+Scenario('[C83384] Automatically bcc all messages', async function (I, mail, users) {
     await Promise.all([
         I.haveSetting('io.ox/mail//messageFormat', 'text'),
-        I.haveSetting('io.ox/mail//autobcc', 'super01@ox.com')
+        users.create()
     ]);
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mail/settings/compose');
     I.waitForText('Always add the following recipient to blind carbon copy (BCC)', 5, '.settings-detail-pane');
-    I.seeInField('Always add the following recipient to blind carbon copy (BCC)', 'super01@ox.com');
+    I.fillField('Always add the following recipient to blind carbon copy (BCC)', users[1].get('primaryEmail'));
     I.openApp('Mail');
     mail.newMail();
-    I.see('super01@ox.com', '.io-ox-mail-compose div[data-extension-id="bcc"] div.token');
-    //TODO: After consultation with Markus a mail should also be sent and verified here
+    I.see(`${users[1].get('given_name')} ${users[1].get('sur_name')}`, '.io-ox-mail-compose div[data-extension-id="bcc"] div.token');
+    I.fillField('To', users[0].get('primaryEmail'));
+    I.fillField('Subject', 'Forever alone');
+    I.fillField({ css: 'textarea.plain-text' }, 'Sending this (not only) to myself');
+    mail.send();
+    I.waitForText('Forever alone', 30);
+    mail.selectMail('Forever alone');
+    within({ frame: '.mail-detail-pane .mail-detail-frame' }, () => {
+        I.waitForText('Sending this (not only) to myself');
+    });
+    I.dontSee(users[1].get('primaryEmail'));
+    I.logout();
+    I.login({ user: users[1] });
+    I.selectFolder('Inbox');
+    mail.selectMail('Forever alone');
+    within({ frame: '.mail-detail-pane .mail-detail-frame' }, () => {
+        I.waitForText('Sending this (not only) to myself');
+    });
 });
 
 Scenario('[C101615] Emojis', async function (I, users, mail) {
