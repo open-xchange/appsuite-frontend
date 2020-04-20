@@ -7,8 +7,8 @@
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  * © 2020 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author <Daniel.Dickhaus@open-xchange.com>
- * @author <Jorin.Laatsch@open-xchange.com>
+ * @author Daniel Dickhaus <Daniel.Dickhaus@open-xchange.com>
+ * @author Jorin Laatsch <Jorin.Laatsch@open-xchange.com>
  */
 /// <reference path="../../steps.d.ts" />
 
@@ -22,10 +22,10 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7352] Open the online app', async function (I) {
-I.login();
-I.clickToolbar('~Support');
-I.waitForText('Help');
-I.click('Help');
-I.waitForText('OX App Suite Help')
+Scenario('[7acfb1bb-68de-4115-b865-f7517386f318][C7352] Open the online app', async function (I) {
+    I.login();
+    I.clickToolbar('~Support');
+    I.waitForText('Help');
+    I.click('Help');
+    I.waitForText('OX App Suite Help')
 });
