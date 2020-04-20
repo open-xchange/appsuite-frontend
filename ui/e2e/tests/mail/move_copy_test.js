@@ -186,7 +186,7 @@ Scenario('[C7410] Copy several mails from inbox to a sub-folder', async function
     A.check(I, subjects, folder);
 });
 
-Scenario.skip('[C114349] Create folder within move dialog', async function (I, users, mail) {
+Scenario('[C114349] Create folder within move dialog', async function (I, users, mail) {
     let [user] = users,
         folder = 'C114349-move',
         subject = 'C114349-move';
@@ -196,6 +196,7 @@ Scenario.skip('[C114349] Create folder within move dialog', async function (I, u
     mail.waitForApp();
 
     A.select(I, 1);
+    I.waitForVisible({ css: '.detail-view-header [aria-label="More actions"]' });
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/move');
     A.createFolderInDialog(I, subject);
     I.click('Move', '.folder-picker-dialog');
@@ -215,6 +216,7 @@ Scenario('[C114349] Create folder within copy dialog', async function (I, users,
     mail.waitForApp();
 
     A.select(I, 1);
+    I.waitForVisible({ css: '.detail-view-header [aria-label="More actions"]' });
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/copy');
     A.createFolderInDialog(I, subject);
     I.click('Copy', '.folder-picker-dialog');
