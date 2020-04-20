@@ -240,7 +240,7 @@ Scenario('[C7769] Delete signature', async function (I) {
     I.waitForText('Testsignaturename');
     I.see('Testsignaturecontent');
 
-    I.click('a[title="Delete"]');
+    I.click('~Delete');
     I.waitForDetached('.settings-list-item');
 
     I.dontSee('Testsignaturename');
