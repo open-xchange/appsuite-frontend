@@ -178,10 +178,20 @@ define('io.ox/files/actions/basic-authentication-account', [
             updateOptions.filestorageService = service.get('filestorageService');
 
             return filestorageApi.updateAccount(updateOptions)
-                .then(function () {
+                .done(function () {
+                    var errorAttributes = ['hasError', 'error', 'error_params', 'error_id', 'error_desc', 'error_stack', 'code', 'status'];
+                    _.each(errorAttributes, function (val) {
+                        service.unset(val);
+                    });
+                    service.set('displayName', updateOptions.displayName);
+                    service.set('configuration', updateOptions.configuration);
                     def.resolve();
                     baton.popup.close();
+                    filestorageApi.trigger('refresh:basicAccount', service.get('qualifiedId'));
                     yell('success', gt('Account updated successfully'));
+                }).fail(function () {
+                    yell('error', gt('The entered credential or authentication information does not work'));
+                    baton.popup.idle();
                 });
 
         })
