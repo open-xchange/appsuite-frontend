@@ -250,6 +250,7 @@ run new e2e test:
   - echo ${CI_COMMIT_REF_NAME//e2e\//}
   - npx codeceptjs run-rerun --grep "${CI_COMMIT_REF_NAME//e2e\//}"
   parallel: 5
+  timeout: 60 minutes
   only:
     refs:
       - /^e2e\//
