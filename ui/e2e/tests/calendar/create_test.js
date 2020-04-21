@@ -1647,3 +1647,34 @@ Scenario('Prevent XSS in folder dropdown', async function (I, calendar, contacts
     calendar.waitForApp();
     calendar.newAppointment();
 });
+
+Scenario('[C7432] Create all-day appointment via doubleclick', async function (I, calendar, dialogs) {
+    const appointmentPanel = '.io-ox-pagecontroller.current .appointment-panel',
+        subject = 'Meetup ',
+        location = 'Conference Room ';
+
+    I.login('app=io.ox/calendar');
+
+    ['Day', 'Week', 'Workweek'].forEach(perspective => calendar.withinPerspective(perspective, (viewName) => {
+        I.waitForElement(appointmentPanel);
+        I.doubleClick(appointmentPanel);
+        I.waitForText('Create appointment');
+
+        I.waitForElement(locate('.io-ox-calendar-edit-window'), 5);
+        within('.io-ox-calendar-edit-window', () => {
+            I.retry(5).fillField('Subject', subject + viewName);
+            I.fillField('Location', location + viewName);
+            I.click('Create');
+        });
+        I.waitForDetached('.window-container.io-ox-calendar-edit-window');
+
+        I.waitForText(subject + viewName, 5, appointmentPanel);
+        I.wait(0.5); // gentle wait for event listeners
+        I.click('.appointment', '.page.current');
+        I.waitForVisible('.io-ox-sidepopup');
+        I.waitForText('Delete', 5, '.io-ox-sidepopup');
+        I.wait(0.5); // gentle wait for event listeners
+        I.click('Delete');
+        dialogs.clickButton('Delete appointment');
+    }));
+});
