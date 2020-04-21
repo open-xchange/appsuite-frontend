@@ -427,6 +427,53 @@ Scenario('[C45025] Create shared object with multiple users (external users) wit
         I.waitForText('here is bob', 5, '.white-page.letter.plain-text');
         I.dontSee('Edit', '.viewer-toolbar');
     });
+});
 
-    // TODO: could be also checked with google accounts etc.
+Scenario('[C83277] Create shared object with expiration date', async function (I, users, drive, dialogs) {
+    await users.create();
+
+    let link,
+        locators = {
+            toolbar: locate({ css: '.window-body.classic-toolbar-visible' }),
+            textArea: locate({ css: '.io-ox-editor textarea.content.form-control' }),
+            footer: locate({ css: '.io-ox-editor-window .window-footer' }),
+            textFile: locate({ css: '.list-item.selectable.file-type-txt' }),
+            dropDownLocator: locate({ css: '.dropdown.open' }),
+            dialog: locate({ css: '.modal-dialog' })
+        };
+
+    session('Alice', async () => {
+        const folder = await I.grabDefaultFolder('infostore');
+        await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+        I.login('app=io.ox/files');
+        drive.waitForApp();
+
+        I.click(locators.textFile);
+        I.wait(0.2); // gentle wait for event listeners
+        I.waitForText('Share', locators.toolbar);
+        I.click('Share', locators.toolbar);
+        I.waitForVisible('.dropdown.open .dropdown-header');
+        I.seeNumberOfVisibleElements('.dropdown.open .dropdown-header', 2);
+        I.click('Create sharing link', locators.dropDownLocator);
+
+        I.waitForElement(locators.dialog);
+        within(locators.dialog, async () => {
+            I.waitForText('Sharing link created for file "document.txt"');
+            I.waitForVisible('a.apptitle[aria-label="Refresh"]');
+            link = await I.grabValueFrom({ css: '.link-group > input[type="text"]' });
+            I.say('The sharing link is: ' + JSON.stringify(link));
+            I.waitForText('one month', '.form-group.expiresgroup');
+            I.click('one month', '.form-group.expiresgroup');
+        });
+        I.click('one week', '.smart-dropdown-container.dropdown.open.dropup');
+        dialogs.clickButton('Close', locators.dialog);
+        I.waitForDetached(locators.dialog);
+    });
+
+    session('Bob', () => {
+        I.say('Bob says: ' + link);
+        I.login('app=io.ox', { user: users[0] });
+        I.amOnPage(link);
+        I.waitForText('document', { css: '.white-page.letter.plain-text' });
+    });
 });
