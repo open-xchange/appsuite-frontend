@@ -91,7 +91,7 @@ merge filter report:
     LAUNCH_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/appsuite/
     PROVISIONING_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/
     CONTEXT_ID: $CI_JOB_ID
-    CHROME_ARGS: '--no-sandbox'
+    CHROME_ARGS: '--no-sandbox --kiosk-printing'
     FILTER_SUITE: ./merged_reports.json
     FILTER_REPORT: filter_report_missing.json
   script:

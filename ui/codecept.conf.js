@@ -27,7 +27,10 @@ const helpers = {
             script: 5000
         },
         chrome: {
-            args: [`--unsafely-treat-insecure-origin-as-secure=${process.env.LAUNCH_URL}`].concat((process.env.CHROME_ARGS || '').split(' '))
+            args: [
+                `--unsafely-treat-insecure-origin-as-secure=${process.env.LAUNCH_URL}`,
+                '--kiosk-printing'
+            ].concat((process.env.CHROME_ARGS || '').split(' '))
         },
         // set HEADLESS=false in your terminal to show chrome window
         show: process.env.HEADLESS ? process.env.HEADLESS === 'false' : false
