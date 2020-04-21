@@ -77,7 +77,9 @@ Scenario('[C7766] Create new signature', function (I, mail, dialogs) {
     mail.waitForApp();
     mail.newMail();
 
+    // predcondition: check signature menu refresh
     I.click(mail.locators.compose.options);
+    I.waitForText('Signatures', 10, '.dropdown.open .dropdown-menu');
     I.pressKey('Escape');
     I.click({ css: '[data-action=minimize]' });
 
