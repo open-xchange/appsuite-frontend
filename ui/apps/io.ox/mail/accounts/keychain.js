@@ -70,7 +70,7 @@ define.async('io.ox/mail/accounts/keychain', [
             });
 
             _(allFileAccounts).each(function (account) {
-                if (account.get('id') !== 'infostore') {
+                if (/owncloud|nextcloud|webdav/.test(account.get('filestorageService'))) {
                     account = account.attributes;
 
                     var error = account.hasError ? { message: account.error } : account.status = 'ok';
