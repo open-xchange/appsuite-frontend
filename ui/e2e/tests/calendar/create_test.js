@@ -1610,3 +1610,77 @@ Scenario('[OXUIB-244] Mark all day appointments as free not respected for new ap
     I.seeCheckboxIsChecked('All day');
     I.dontSeeCheckboxIsChecked('Show as free');
 });
+
+Scenario('[C7435] Create appointment via email', async function (I, mail, users, calendar) {
+    await Promise.all([
+        users.create(),
+        users.create()
+    ]);
+
+    const day = moment().add(1, 'month').startOf('month').add(1, 'week').isoWeekday(2).format('M/D/YYYY'), // tuesday within next month for a stable clickable future appointment
+        calendarDay = `//td[contains(@aria-label, "${day}")]`,
+        title = 'Appointment via mail';
+
+    await session('Alice', async () => {
+        await I.haveMail({
+            attachments: [{
+                content: 'Hello world!',
+                content_type: 'text/html',
+                disp: 'inline'
+            }],
+            from: [[users[0].get('display_name'), users[0].get('primaryEmail')]],
+            sendtype: 0,
+            subject: title,
+            to: [[users[0].get('display_name'), users[0].get('primaryEmail')]],
+            cc: [[users[1].get('display_name'), users[1].get('primaryEmail')],
+                [users[2].get('display_name'), users[2].get('primaryEmail')]]
+        }, { user: users[0] });
+
+        I.login('app=io.ox/mail');
+        mail.waitForApp();
+        mail.selectMail('Appointment via mail');
+        I.waitForVisible('.mail-detail-pane .dropdown-toggle[aria-label="More actions"]');
+        I.click('~More actions', '.mail-detail-pane');
+        I.clickDropdown('Invite to appointment');
+
+        I.waitForElement('.io-ox-calendar-edit-window');
+        within('.io-ox-calendar-edit-window', async () => {
+            I.waitForText(title);
+            I.retry(5).fillField('Location', 'Conference Room 123');
+            I.click('.datepicker-day-field');
+            I.waitForFocus('.datepicker-day-field');
+            I.fillField(calendar.locators.startdate, day);
+            I.pressKey('Enter');
+            I.clearField(calendar.locators.starttime);
+            I.fillField(calendar.locators.starttime, '01:00 PM');
+            I.pressKey('Enter');
+            I.clearField(calendar.locators.endtime);
+            I.fillField(calendar.locators.endtime, '03:00 PM');
+            I.pressKey('Enter');
+            I.click('Create');
+        });
+        I.waitForDetached('.io-ox-calendar-edit-window');
+
+        I.openApp('Calendar');
+
+        I.waitForElement('~Go to next month', calendar.locators.mini);
+        I.retry(5).click('~Go to next month', calendar.locators.mini);
+        I.retry(5).click(calendarDay, calendar.locators.mini);
+        ['Day', 'Week', 'Workweek', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
+            I.waitForText(title, 5, '.page.current .appointment');
+        }));
+    });
+
+
+    await session('Bob', () => {
+        I.login('app=io.ox/calendar', { user: users[1] });
+        calendar.waitForApp();
+        I.waitForElement('~Go to next month', calendar.locators.mini);
+        I.retry(5).click('~Go to next month', calendar.locators.mini);
+        I.retry(5).click(calendarDay, calendar.locators.mini);
+        ['Day', 'Week', 'Workweek', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
+            I.waitForText(title, 5, '.page.current .appointment');
+        }));
+    });
+});
+
