@@ -86,8 +86,8 @@ const H = {
     }
 };
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7407] Move mail from inbox to a sub-folder', async function (I, users, mail) {
+
+Scenario('[C7407] Move mail from inbox to a sub-folder', async function (I, users, mail) {
     let [user] = users,
         folder = 'C7407',
         subject = 'C7407';
@@ -100,6 +100,7 @@ Scenario.skip('[C7407] Move mail from inbox to a sub-folder', async function (I,
     I.login('app=io.ox/mail');
     mail.waitForApp();
     A.select(I, 1);
+    I.waitForVisible({ css: '.detail-view-header [aria-label="More actions"]' });
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/move');
     A.selectFolderInDialog(I, folder);
     I.click('Move', '.folder-picker-dialog');
