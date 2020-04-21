@@ -368,3 +368,25 @@ Scenario('Compose mail, refresh and continue work at restore point', async funct
     I.seeInField('Subject', 'Testsubject');
     I.seeInField('.io-ox-mail-compose textarea.plain-text', 'Testcontent');
 });
+
+// FIXME: Can't interact with FileChoosers at the moment
+Scenario('[C8826] Cancel adding attachment', async function (I, mail) {
+    if (!I.amUsingPuppeteer()) {
+        return; // Can't do it
+    }
+    I.login();
+    // Compose a new Mail
+    mail.newMail();
+
+    // Click 'Add Attachment'
+    I.click('~Add local file');
+    // -> The native file browsing dialog shows up
+    await Promise.all([
+        I.waitForFileChooser(),
+        I.click('~Add local file')
+    ]);
+    // Hit 'Cancel'
+    await I.cancelFileChooser();
+    // -> The browsers dialog dismisses, no file is added as attachment
+    // FIXME: How are attachments visualized in new mail compose? Check that no attachment shows up
+});

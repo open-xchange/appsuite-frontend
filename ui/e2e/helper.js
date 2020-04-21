@@ -59,7 +59,40 @@ class MyHelper extends Helper {
         await page.mouse.move(endX, endY);
         await page.mouse.up();
     }
+    // Expose some puppeteer functionality
+    amUsingPuppeteer() {
+        const helper = this.helpers['Puppeteer'];
+        return !!helper;
+    }
+    /*
+     * Wait for the file chooser dialog to appear
+     * FIXME: With the chromium version included in codeceptjs
+     *   the puppeteer API interacting with file choosers apparently
+     *   does not work. 
+     */
+    async waitForFileChooser(timeout) {
+        if (!timeout) {
+            timeout = 2;
+        }
+        const helper = this.helpers['Puppeteer'];
+        helper.ox = helper.ox || {};
+        const { page } = helper;
+        helper.ox.fileChooser = await page.waitForFileChooser({ timeout: timeout * 1000 });
+    }
 
+    /*
+     * Cancel the file chooser dialog
+     */
+    async cancelFileChooser() {
+        const helper = this.helpers['Puppeteer'];
+        if (helper.ox && helper.ox.fileChooser) {
+            await helper.ox.fileChooser.fileChooser.cancel();
+            delete helper.ox.fileChooser;
+        } else {
+            // Error out!
+            helper.fail('There is no file chooser I can work on. Have you captured one using I.waitForFileChooser?');
+        }
+    }
 }
 
 module.exports = MyHelper;
