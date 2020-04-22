@@ -35,7 +35,7 @@ Scenario('use planning view opened from edit view', async function (I, calendar,
 
     I.clickToolbar('New appointment');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar/edit"]' });
-
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
     I.fillField('Subject', 'Planning View Test');
 
     I.click('Find a free time');
@@ -90,7 +90,7 @@ Scenario('use planning view as Standalone app', async function (I) {
     I.waitForInvisible('.freetime-view-body');
 
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar/edit"]' });
-
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
     I.fillField('Subject', 'Planning View Test2');
 
     I.waitForValue({ css: '[data-attribute="startDate"] .time-field' }, '12:00 PM');
@@ -125,7 +125,7 @@ Scenario('test planning view lasso', async function (I) {
     I.waitForInvisible('.freetime-view-body');
 
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar/edit"]' });
-
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
     I.fillField('Subject', 'Planning View Test2');
 
     I.waitForValue({ css: '[data-attribute="startDate"] .time-field' }, '12:30 PM');
