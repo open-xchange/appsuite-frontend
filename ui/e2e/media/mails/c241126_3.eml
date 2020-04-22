@@ -1,0 +1,363 @@
+Return-Path: <pschumacher@qa.open-xchange.com>
+X-Original-To: tthamm@qa.open-xchange.com
+Delivered-To: tthamm@qa.open-xchange.com
+Received: from null (unknown [10.242.2.31])
+	by dovecot.qa.open-xchange.com (Postfix) with ESMTPS id 5B29D10EFF4
+	for <tthamm@qa.open-xchange.com>; Wed, 21 Mar 2018 11:57:45 +0100 (CET)
+Date: Wed, 21 Mar 2018 11:57:45 +0100 (CET)
+From: Philipp Schumacher <pschumacher@qa.open-xchange.com>
+Reply-To: Philipp Schumacher <pschumacher@qa.open-xchange.com>
+To: tthamm <tthamm@qa.open-xchange.com>
+Message-ID: <Appointment.12aee5ff-714c-4d2f-b2b2-b3b1459d2f0b.1521629864995@ox7100.oxps.int>
+In-Reply-To: <Appointment.12aee5ff-714c-4d2f-b2b2-b3b1459d2f0b.@ox7100.oxps.int>
+References: <Appointment.12aee5ff-714c-4d2f-b2b2-b3b1459d2f0b.@ox7100.oxps.int>
+Subject: Appointment canceled: #1
+MIME-Version: 1.0
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_28_300677346.1521629864995"
+X-Priority: 3 (normal)
+X-Mailer: Open-Xchange Mailer v7.10.0-Rev3
+Auto-Submitted: auto-generated
+X-Originating-Client: open-xchange-appsuite
+
+------=_Part_28_300677346.1521629864995
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_29_1661960949.1521629865029"
+
+------=_Part_29_1661960949.1521629865029
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Philipp Schumacher has deleted an appointment, or you have been removed as a participant:
+
+
+
+====[       #1       ]====
+
+All times will be shown in the timezone Central European Time
+
+When: Thursday, March 22, 2018 12:00 PM - 1:00 PM
+
+
+
+
+== Details: ==
+
+Show as: Reserved
+Created: Wednesday, March 21, 2018 11:57 AM - Wednesday, March 21, 2018 11:57 AM
+
+
+
+
+
+------=_Part_29_1661960949.1521629865029
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!doctype html>
+<html>
+ <head> 
+  <title></title> 
+  <meta charset="UTF-8"> 
+  <style type="text/css">
+            .content {
+ white-space: normal;
+ color: black;
+ font-family: Arial, Helvetica, sans-serif;
+ font-size: 12px;
+ cursor: default;
+}
+/* shown_as */
+
+
+.shown_as.reserved { background-color: #08c; } /* blue */
+.shown_as.temporary { background-color: #fc0; } /* yellow */
+.shown_as.absent { background-color: #913F3F; } /* red */
+.shown_as.free { background-color: #8EB360; } /* green */
+
+.shown_as_label.reserved { color: #08c; } /* blue */
+.shown_as_label.temporary { color: #fc0; } /* yellow */
+.shown_as_label.absent { color: #913F3F; } /* red */
+.shown_as_label.free { color: #8EB360; } /* green */
+
+em {
+ font-weight: bold;
+}
+
+/* Detail view */
+
+.timezone {
+ margin-bottom: 2em;
+}
+
+.justification, .attachmentNote {
+ margin-top: 2em;
+ margin-bottom: 2em;
+}
+
+.calendar-detail .action {
+ float: right;
+ margin-right: 1em;
+}
+
+.calendar-detail .link {
+ cursor: pointer;
+ text-decoration: underline;
+ color: #00a0cd;
+}
+
+.calendar-detail .calendar-buttons {
+ height: 2em;
+ text-align: right;
+ line-height: 2em;
+ border-bottom: 1px solid #f0f0f0;
+}
+
+.calendar-detail .date {
+    font-size: 11pt;
+    color: #ccc;
+}
+
+.calendar-detail .interval {
+    color: #555;
+    white-space: nowrap;
+    float: right;
+}
+
+.calendar-detail .day {
+    color: #888;
+}
+
+.calendar-detail .title {
+    font-size: 18pt;
+    line-height: 22pt;
+    margin: 0.25em 0 0.25em 0;
+}
+
+.calendar-detail .location {
+    font-size: 11pt;
+    color: #888;
+    margin-bottom: 1em;
+}
+
+.calendar-detail .label {
+    font-size: 9pt;
+    color: #888;
+    clear: both;
+    border-bottom: 1px solid #ccc;
+    padding: 1em 0 0.25em 0em;
+    margin-bottom: 0.5em;
+}
+
+.calendar-detail .note {
+    max-width: 550px;
+    margin: 2em 0 1em 0;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+    cursor: text;
+}
+
+.calendar-detail .participants {
+    min-height: 2em;
+}
+
+.calendar-detail .participants table {
+    text-align: left;
+    vertical-align: left;
+}
+
+.calendar-detail .participant {
+    line-height: 1.2 em;
+}
+
+.calendar-detail .detail-label {
+    display: inline-block;
+    width: 110px;
+    white-space: nowrap;
+    color: #666;
+}
+
+.calendar-detail .detail {
+    white-space: nowrap;
+}
+
+.calendar-detail .detail.shown_as {
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+}
+
+.calendar-detail .participant .status { font-weight: bold; }
+.calendar-detail .participant .status.accepted { color: #8EB360; } /* green */
+.calendar-detail .participant .status.declined { color: #913F3F; } /* red */
+.calendar-detail .participant .status.tentative { color: #c80; } /* orange */
+
+.calendar-detail .participant .comment {
+    color: #888;
+    display: block;
+    white-space: normal;
+    padding-left: 1em;
+}
+
+.calendar-detail .group {
+    margin: 0.75em 0 0.25em 0;
+    color: #333;
+}
+
+.person, .person-link {
+ color: #00A0CD;
+}
+
+.clear-title {
+ font-family: OpenSans, Helvetica, Arial, sans-serif;
+ font-weight: 200;
+ font-size: 20pt;
+ line-height: 1.15em;
+}
+
+.calendar-action {
+ margin-bottom: 2em;
+ font-family: OpenSans, Helvetica, Arial, sans-serif;
+ font-weight: 200;
+ font-size: 12pt;
+}
+
+.calendar-action .changes{
+    margin-top: 2em;
+ font-size: 11pt;
+}
+
+.calendar-action .changes .original {
+    font-weight: bold;
+}
+
+.calendar-action .changes .recurrencePosition {
+    font-weight: bold;
+}
+
+.calendar-action .changes .updated {
+    color: green;
+    font-weight: bold;
+}
+
+.calendar-action .status {  }
+.calendar-action  .status.accepted { color: #8EB360; } /* green */
+.calendar-action  .status.declined { color: #913F3F; } /* red */
+.calendar-action  .status.tentative { color: #c80; } /* orange */
+
+        </style> 
+ </head>
+ <body> 
+  <div class="content"> 
+   <div class="timezone">
+     All times will be shown in the timezone 
+    <em>Central European Time</em> 
+   </div> 
+   <div class="calendar-action">
+    <span class="person">Philipp Schumacher</span> has deleted an appointment, or you have been removed as a participant:
+   </div> 
+   <div class="calendar-detail"> 
+    <div class="date"> 
+     <div class="interval">
+       12:00 PM - 1:00 PM 
+     </div> 
+     <div class="day">
+       Thursday, March 22, 2018 
+     </div> 
+    </div> 
+    <div class="title clear-title">
+      #1 
+    </div> 
+    <div class="location"> 
+    </div> 
+    <div class="note"> 
+    </div> 
+   </div> 
+   <div> 
+    <div class="label">
+      Details: 
+    </div>
+    <span class="detail-label">Show as:&nbsp;</span>
+    <span class="detail"><span class="shown_as_label reserved">Reserved</span></span>
+    <br> 
+    <span class="detail-label">Created:&nbsp;</span>
+    <span class="detail"><span>Wednesday, March 21, 2018 11:57 AM</span> <span>-</span> <span>Philipp Schumacher</span></span> 
+   </div> 
+   <div class="justification"> 
+   </div> 
+  </div> 
+ </body>
+</html>
+------=_Part_29_1661960949.1521629865029
+Content-Type: text/calendar; charset=UTF-8; method=CANCEL
+Content-Transfer-Encoding: 7bit
+
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Open-Xchange//7.10.0-Rev3//EN
+METHOD:CANCEL
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+BEGIN:STANDARD
+DTSTART:16010101T030000
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+RRULE:FREQ=YEARLY;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010101T020000
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+RRULE:FREQ=YEARLY;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20180321T105721Z
+ATTENDEE;CN=tthamm;PARTSTAT=NEEDS-ACTION;CUTYPE=INDIVIDUAL:mailto:tthamm@qa
+ .open-xchange.com
+ATTENDEE;CN=Philipp Schumacher;PARTSTAT=ACCEPTED;CUTYPE=INDIVIDUAL:mailto:p
+ schumacher@qa.open-xchange.com
+CLASS:PUBLIC
+CREATED:20180321T105721Z
+DTEND;TZID=Europe/Berlin:20180322T130000
+DTSTART;TZID=Europe/Berlin:20180322T120000
+LAST-MODIFIED:20180321T105721Z
+ORGANIZER;CN=Philipp Schumacher:mailto:pschumacher@qa.open-xchange.com
+SEQUENCE:0
+SUMMARY:#1
+TRANSP:OPAQUE
+UID:12aee5ff-714c-4d2f-b2b2-b3b1459d2f0b
+X-MICROSOFT-CDO-BUSYSTATUS:BUSY
+END:VEVENT
+END:VCALENDAR
+
+------=_Part_29_1661960949.1521629865029--
+
+------=_Part_28_300677346.1521629864995
+Content-Type: application/ics; charset=UTF-8; method=CANCEL; name=cancel.ics
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=cancel.ics
+
+QkVHSU46VkNBTEVOREFSDQpWRVJTSU9OOjIuMA0KUFJPRElEOi0vL09wZW4tWGNoYW5nZS8vNy4x
+MC4wLVJldjMvL0VODQpNRVRIT0Q6Q0FOQ0VMDQpCRUdJTjpWVElNRVpPTkUNClRaSUQ6RXVyb3Bl
+L0Jlcmxpbg0KQkVHSU46U1RBTkRBUkQNCkRUU1RBUlQ6MTYwMTAxMDFUMDMwMDAwDQpUWk9GRlNF
+VEZST006KzAyMDANClRaT0ZGU0VUVE86KzAxMDANClJSVUxFOkZSRVE9WUVBUkxZO0lOVEVSVkFM
+PTE7QllNT05USD0xMDtCWURBWT0tMVNVDQpFTkQ6U1RBTkRBUkQNCkJFR0lOOkRBWUxJR0hUDQpE
+VFNUQVJUOjE2MDEwMTAxVDAyMDAwMA0KVFpPRkZTRVRGUk9NOiswMTAwDQpUWk9GRlNFVFRPOisw
+MjAwDQpSUlVMRTpGUkVRPVlFQVJMWTtJTlRFUlZBTD0xO0JZTU9OVEg9MztCWURBWT0tMVNVDQpF
+TkQ6REFZTElHSFQNCkVORDpWVElNRVpPTkUNCkJFR0lOOlZFVkVOVA0KRFRTVEFNUDoyMDE4MDMy
+MVQxMDU3MjFaDQpBVFRFTkRFRTtDTj10dGhhbW07UEFSVFNUQVQ9TkVFRFMtQUNUSU9OO0NVVFlQ
+RT1JTkRJVklEVUFMOm1haWx0bzp0dGhhbW1AcWENCiAub3Blbi14Y2hhbmdlLmNvbQ0KQVRURU5E
+RUU7Q049UGhpbGlwcCBTY2h1bWFjaGVyO1BBUlRTVEFUPUFDQ0VQVEVEO0NVVFlQRT1JTkRJVklE
+VUFMOm1haWx0bzpwDQogc2NodW1hY2hlckBxYS5vcGVuLXhjaGFuZ2UuY29tDQpDTEFTUzpQVUJM
+SUMNCkNSRUFURUQ6MjAxODAzMjFUMTA1NzIxWg0KRFRFTkQ7VFpJRD1FdXJvcGUvQmVybGluOjIw
+MTgwMzIyVDEzMDAwMA0KRFRTVEFSVDtUWklEPUV1cm9wZS9CZXJsaW46MjAxODAzMjJUMTIwMDAw
+DQpMQVNULU1PRElGSUVEOjIwMTgwMzIxVDEwNTcyMVoNCk9SR0FOSVpFUjtDTj1QaGlsaXBwIFNj
+aHVtYWNoZXI6bWFpbHRvOnBzY2h1bWFjaGVyQHFhLm9wZW4teGNoYW5nZS5jb20NClNFUVVFTkNF
+OjANClNVTU1BUlk6IzENClRSQU5TUDpPUEFRVUUNClVJRDoxMmFlZTVmZi03MTRjLTRkMmYtYjJi
+Mi1iM2IxNDU5ZDJmMGINClgtTUlDUk9TT0ZULUNETy1CVVNZU1RBVFVTOkJVU1kNCkVORDpWRVZF
+TlQNCkVORDpWQ0FMRU5EQVINCg==
+------=_Part_28_300677346.1521629864995--
