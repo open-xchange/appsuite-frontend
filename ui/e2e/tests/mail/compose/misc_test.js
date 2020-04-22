@@ -17,7 +17,8 @@ Feature('Mail Compose');
 const expect = require('chai').expect;
 
 Before(async (users) => {
-    await users.create();
+    await users.create(); // Sender
+    await users.create(); // Recipient
 });
 
 After(async (users) => {
@@ -63,4 +64,54 @@ Scenario('[Bug 62794] no drag and drop of pictures while composing a new mail', 
     within({ frame: '.editor iframe' }, () => {
         I.waitForElement('body img');
     });
+});
+
+Scenario('[C271752] Reduce image size for image attachments in mail compose', async (I, mail, users) => {
+    let [sender, recipient] = users;
+
+    // enable Image resize setting
+    await I.haveSetting('io.ox/mail//features/imageResize', true);
+
+    // Login as 'sender'
+    I.login('app=io.ox/mail', { user: sender });
+
+    // compose mail
+    mail.newMail();
+    I.fillField('To', recipient.get('primaryEmail'));
+    I.fillField('Subject', 'Reduced Image size Test');
+    I.say('📢 add local file', 'blue');
+
+    // attach Image
+    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/1030x1030.png');
+    I.waitForDetached('.io-ox-fileselection');
+
+    // switch Image size
+    I.waitForText('Original');
+    I.click('Image size: Original');
+    I.click('Small (320 px)');
+    I.dontSee('Original');
+
+    // send Mail to 'recipient' and logout
+    mail.send();
+    I.logout();
+
+    /////////////////// Continue as 'recipient' ///////////////////////
+    // Log in as second user and navigate to mail app
+    I.login('app=io.ox/mail', { user: recipient });
+
+    I.waitForText('Reduced Image size Test');
+
+    // Open mail
+    mail.selectMail('Reduced Image size Test');
+
+    // Verify Attachment
+    I.waitForText('1 attachment');
+    I.click('1 attachment');
+    I.see('1030x1030.png');
+
+    // Let's view the content
+    I.click('1030x1030.png');
+    I.waitForElement('.dropdown.open');
+    I.click('View', '.dropdown.open .dropdown-menu');
+    I.waitForText('Shares', 20);
 });
