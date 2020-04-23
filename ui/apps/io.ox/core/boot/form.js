@@ -277,7 +277,7 @@ define('io.ox/core/boot/form', [
                     'linkColor': '#94c1ec',
                     'sorting': '$logo,$language,$spacer'
                 },
-                'loginBox': 'right',
+                'loginBox': 'center',
                 'form': {
                     'textColor': '#333333',
                     'linkColor': '#94c1ec',
