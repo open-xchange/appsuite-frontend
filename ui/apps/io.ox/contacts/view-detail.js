@@ -28,11 +28,13 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/tk/attachments',
     'io.ox/core/http',
     'io.ox/core/locale/postal-address',
+    'io.ox/switchboard/presence',
+    'io.ox/backbone/views/actions/util',
     'io.ox/backbone/views/toolbar',
     'io.ox/backbone/views/action-dropdown',
     'static/3rd.party/purify.min.js',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, coreUtil, capabilities, gt, settings, attachments, http, postalAddress, ToolbarView, ActionDropdownView, DOMPurify) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, coreUtil, capabilities, gt, settings, attachments, http, postalAddress, presence, actionsUtil, ToolbarView, ActionDropdownView, DOMPurify) {
 
     'use strict';
 
@@ -241,6 +243,48 @@ define('io.ox/contacts/view-detail', [
                 // a11y: headings must not be empty
                 this.append(
                     $('<h2 class="location hidden-xs">').text(value)
+                );
+            }
+        },
+        {
+            index: 400,
+            id: 'actions',
+            draw: function (baton) {
+                this.append(
+                    presence.getPresenceString(baton.data.email1),
+                    $('<div class="actions">').append(
+                        // Call
+                        $('<button class="btn btn-link" data-action="call">').append(
+                            $('<i class="fa fa-phone" aria-hidden="true">'),
+                            $.txt('Call')
+                        ),
+                        // Email
+                        $('<button class="btn btn-link" data-action="send">').append(
+                            $('<i class="fa fa-envelope" aria-hidden="true">'),
+                            $.txt('Email')
+                        ),
+                        // Invite
+                        $('<button class="btn btn-link" data-action="invite">').append(
+                            $('<i class="fa fa-calendar-plus-o" aria-hidden="true">'),
+                            $.txt('Invite')
+                        )
+                    )
+                    .on('click', 'button', baton.data, function (e) {
+                        var action = $(e.currentTarget).data('action'),
+                            baton = ext.Baton({ data: [e.data] });
+                        switch (action) {
+                            case 'call':
+                                ox.trigger('call', { id: String(e.data.email1).toLowerCase().trim() });
+                                break;
+                            case 'send':
+                                actionsUtil.invoke('io.ox/contacts/actions/send', baton);
+                                break;
+                            case 'invite':
+                                actionsUtil.invoke('io.ox/contacts/actions/invite', baton);
+                                break;
+                            // no default
+                        }
+                    })
                 );
             }
         }
