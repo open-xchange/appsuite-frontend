@@ -21,8 +21,8 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C208266] - Export single contact', async function (I, dialogs) {
-    const testrailID = 'C208266';
+Scenario('[C208267] - Export multiple contact', async function (I, dialogs) {
+    const testrailID = 'C208267';
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',
         folder_id: await I.grabDefaultFolder('contacts'),
@@ -31,11 +31,13 @@ Scenario('[C208266] - Export single contact', async function (I, dialogs) {
 
     };
     I.haveContact(contact);
+    I.haveContact(contact);
     I.login('app=io.ox/contacts');
     I.waitForElement('.vgrid-cell.contact');
     I.selectFolder('Contacts');
     I.waitForElement(locate('.contact').withText(contact.display_name).inside('.vgrid-scrollpane-container'));
     I.click(locate('.contact').withText(contact.display_name).inside('.vgrid-scrollpane-container'));
+    I.pressKey(['Control','a']);
     I.click('~More actions');
     I.click('Export');
     dialogs.waitForVisible();
@@ -45,8 +47,8 @@ Scenario('[C208266] - Export single contact', async function (I, dialogs) {
     I.waitForDetached('.modal-dialog');
     I.amInPath('/build/e2e/downloads/');
     I.wait(1);
-    I.waitForFile(testrailID + ' ' + testrailID + '.vcf', 10)
-    I.seeFile(testrailID + ' ' + testrailID + '.vcf');
+    I.waitForFile('Contacts.vcf', 10)
+    I.seeFile('Contacts.vcf');
     I.seeInThisFile('BEGIN:VCARD');
     I.click('~More actions');
     I.click('Export');
@@ -57,7 +59,7 @@ Scenario('[C208266] - Export single contact', async function (I, dialogs) {
     I.waitForDetached('.modal-dialog');
     I.amInPath('/build/e2e/downloads/');
     I.wait(1);
-    I.waitForFile(testrailID + ' ' + testrailID + '.csv', 10);
-    I.seeFile(testrailID + ' ' + testrailID + '.csv');
+    I.waitForFile('Contacts.csv', 10);
+    I.seeFile('Contacts.csv');
     I.seeInThisFile('"Display name",');
 });
