@@ -247,7 +247,7 @@ Scenario('Create recurring appointments with one participant', async function (I
 });
 
 
-Scenario('[Bug 63392] Recurring appointment can\'t changed to "Never ends"', async function (I, calendar, dialogs) {
+Scenario('[Bug 63392][OXUIB-212] Recurring appointment can\'t changed to "Never ends"', async function (I, calendar, dialogs) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },

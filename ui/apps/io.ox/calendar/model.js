@@ -267,8 +267,19 @@ define('io.ox/calendar/model', [
                 default:
                     changes.recurrence_type = 0;
             }
-            if (rrule.count) changes.occurrences = parseInt(rrule.count, 10) || 1;
-            if (rrule.UNTIL) changes.until = moment(rrule.UNTIL).subtract(date.hour(), 'hours').valueOf() || 0;
+            if (rrule.count) {
+                changes.occurrences = parseInt(rrule.count, 10) || 1;
+            } else {
+                // we need to remove old and now invalid data too (might happen during series updates etc)
+                this.unset('occurrences');
+            }
+
+            if (rrule.UNTIL) {
+                changes.until = moment(rrule.UNTIL).subtract(date.hour(), 'hours').valueOf() || 0;
+            } else {
+                // we need to remove old and now invalid data too (might happen during series updates etc)
+                this.unset('until');
+            }
             changes.interval = parseInt(rrule.interval, 10) || 1;
             this.set(changes);
         }
