@@ -46,7 +46,6 @@ Scenario('[C208267] - Export multiple contact', async function (I, dialogs) {
     dialogs.clickButton('Export');
     I.waitForDetached('.modal-dialog');
     I.amInPath('/build/e2e/downloads/');
-    I.wait(1);
     I.waitForFile('Contacts.vcf', 10)
     I.seeFile('Contacts.vcf');
     I.seeInThisFile('BEGIN:VCARD');
@@ -58,7 +57,6 @@ Scenario('[C208267] - Export multiple contact', async function (I, dialogs) {
     dialogs.clickButton('Export');
     I.waitForDetached('.modal-dialog');
     I.amInPath('/build/e2e/downloads/');
-    I.wait(1);
     I.waitForFile('Contacts.csv', 10);
     I.seeFile('Contacts.csv');
     I.seeInThisFile('"Display name",');
