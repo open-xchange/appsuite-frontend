@@ -44,7 +44,6 @@ Scenario('[C208266] - Export single contact', async function (I, dialogs) {
     dialogs.clickButton('Export');
     I.waitForDetached('.modal-dialog');
     I.amInPath('/build/e2e/downloads/');
-    I.wait(1);
     I.waitForFile(testrailID + ' ' + testrailID + '.vcf', 10)
     I.seeFile(testrailID + ' ' + testrailID + '.vcf');
     I.seeInThisFile('BEGIN:VCARD');
@@ -56,7 +55,6 @@ Scenario('[C208266] - Export single contact', async function (I, dialogs) {
     dialogs.clickButton('Export');
     I.waitForDetached('.modal-dialog');
     I.amInPath('/build/e2e/downloads/');
-    I.wait(1);
     I.waitForFile(testrailID + ' ' + testrailID + '.csv', 10);
     I.seeFile(testrailID + ' ' + testrailID + '.csv');
     I.seeInThisFile('"Display name",');
