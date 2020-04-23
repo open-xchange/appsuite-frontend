@@ -33,6 +33,11 @@ module.exports = {
         I.waitForVisible('.io-ox-mail-compose [placeholder="To"]', 30);
         I.waitForFocus('.io-ox-mail-compose [placeholder="To"]');
     },
+    addAttachment(path) {
+        var ext = path.match(/\.(.{3,4})$/)[1];
+        I.attachFile({ css: 'input[type=file]' }, path);
+        I.waitForText(ext.toUpperCase(), 5, '.inline-items.preview');
+    },
     send() {
         I.click('Send');
         I.wait(0.5);
