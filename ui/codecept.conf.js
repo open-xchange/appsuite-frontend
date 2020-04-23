@@ -62,7 +62,8 @@ const helpers = {
         filestoreId: process.env.FILESTORE_ID,
         smtpServer: process.env.SMTP_SERVER || 'localhost',
         imapServer: process.env.IMAP_SERVER || 'localhost'
-    }
+    },
+    FileSystem: {}
 };
 
 if (codeceptDriver !== 'puppeteer') delete helpers.Puppeteer;
