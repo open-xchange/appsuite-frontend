@@ -34,11 +34,9 @@ Scenario('[C7357] Export a address book', async function (I, dialogs) {
     dialogs.clickButton('Export');
     I.waitForDetached('.modal-dialog');
     I.amInPath('/build/e2e/downloads/');
-    I.wait(1);
     I.waitForFile('Global address book.vcf', 10)
     I.seeFile('Global address book.vcf');
     I.seeInThisFile('BEGIN:VCARD');
-
     I.selectFolder('Global address book');
     I.openFolderMenu('Global address book');
     I.waitForVisible('.dropdown-menu a[data-action="export"]');
@@ -49,7 +47,6 @@ Scenario('[C7357] Export a address book', async function (I, dialogs) {
     dialogs.clickButton('Export');
     I.waitForDetached('.modal-dialog');
     I.amInPath('/build/e2e/downloads/');
-    I.wait(1);
     I.waitForFile('Global address book.csv', 10);
     I.seeFile('Global address book.csv');
     I.seeInThisFile('"Display name",');
