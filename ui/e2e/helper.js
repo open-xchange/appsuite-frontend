@@ -354,6 +354,16 @@ class MyHelper extends Helper {
 
     }
 
+    async haveMailAccount(account, options) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        const response = await httpClient.put('/appsuite/api/account', account, {
+            params: {
+                action: 'new',
+                session: session
+            }
+        });
+        return response.data;
+    }
 }
 
 module.exports = MyHelper;
