@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-07 09:52+0200\n"
+"PO-Revision-Date: 2020-04-23 13:13+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -550,7 +550,7 @@ msgid ""
 msgstr ""
 "Verwenden Sie die Pfeiltasten zum Ändern des Datums. Zum Ändern des Jahres "
 "drücken Sie gleichzeitig die Strg-Taste. Zum Ändern des Monats verwenden Sie "
-"die Umschalttaste. Das Datumsfenster können Sie mit der Esc-Taste wieder "
+"die Umschalttaste. Den Datumswähler können Sie mit der Esc-Taste wieder "
 "schließen."
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
@@ -672,19 +672,66 @@ msgstr "%1$s an Position %2$s von %3$s verschoben"
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-msgid "Standard timezone"
-msgstr "Standard-Zeitzone"
-
-#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js apps/io.ox/files/favorites.js
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Favorites"
 msgstr "Favoriten"
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
-msgid "All timezones"
-msgstr "Alle Zeitzonen"
+msgid "Local system timezone"
+msgstr "Zeitzone des lokalen Systems"
+
+#. Timezon region
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "America"
+msgstr "Amerika"
+
+#. Timezon region / Atlantic Ocean
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Atlantic"
+msgstr "Atlantik"
+
+#. Timezon region
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Europe"
+msgstr "Europa"
+
+#. Timezon region
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Africa"
+msgstr "Afrika"
+
+#. Timezon region / Indian Ocean
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Indian Ocean"
+msgstr "Indischer Ozean"
+
+#. Timezon region
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Asia"
+msgstr "Asien"
+
+#. Timezon region
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Australia"
+msgstr "Australien"
+
+#. Timezon region / Pacific Ocean
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Pacific"
+msgstr "Pazifik"
+
+#. Timezon region
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Antarctica"
+msgstr "Antarktis"
+
+#. Timezon region
+#. vcard (electronic business card) field
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+msgid "Other"
+msgstr "Weitere"
 
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
@@ -694,7 +741,8 @@ msgstr "%1$s-Werkzeugleiste. Verwenden Sie die Pfeiltasten zum Navigieren."
 
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
-#: apps/io.ox/backbone/views/toolbar.js
+#: apps/io.ox/backbone/views/toolbar.js apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Actions. Use cursor keys to navigate."
 msgstr "Aktionen. Verwenden Sie die Pfeiltasten zum Navigieren."
 
@@ -1300,16 +1348,6 @@ msgstr ""
 "Teilnehmer hinzu."
 
 #: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/delete.js
-#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/core/boot/i18n.js
-#: module:io.ox/core/boot apps/io.ox/core/relogin.js module:io.ox/core
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "Password"
-msgstr "Passwort"
-
-#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
 msgid "Organizer changed"
 msgstr "Organisator geändert"
 
@@ -1358,6 +1396,15 @@ msgstr ""
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Create in public calendar"
 msgstr "In öffentlichem Kalender anlegen"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/relogin.js module:io.ox/core
+#: apps/io.ox/files/share/wizard.js module:io.ox/files
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+msgid "Password"
+msgstr "Passwort"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid ""
@@ -2432,6 +2479,15 @@ msgstr ""
 "Die E-Mail-Benachrichtigung nach Bestätigen oder Ablehnen des Termins "
 "automatisch löschen"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Reminders"
+msgstr "Erinnerungen"
+
+#. label for a checkbox that determines if we show reminders for appointments that are already over
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Show reminders for past appointments"
+msgstr "Erinnerungen für vergangene Termine anzeigen"
+
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
 msgid "Add calendar"
@@ -3141,6 +3197,10 @@ msgstr "%s %s, ganztägigen Termin erstellen"
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Create all-day appointment"
 msgstr "Ganztägigen Termin anlegen"
+
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "Standard timezone"
+msgstr "Standard-Zeitzone"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
@@ -4108,11 +4168,6 @@ msgstr "Geschäftlich"
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 msgid "Home"
 msgstr "Privat"
-
-#. vcard (electronic business card) field
-#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-msgid "Other"
-msgstr "Weitere"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
@@ -6472,6 +6527,7 @@ msgid "Don't remind me again"
 msgstr "Nicht wieder erinnern"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "OK"
 msgstr "OK"
 
@@ -9218,6 +9274,10 @@ msgid "Compose"
 msgstr "Verfassen"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Save and close"
+msgstr "Speichern und schließen"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
 "The mail draft could not be found on the server. It was sent or deleted in "
 "the meantime."
@@ -9456,8 +9516,36 @@ msgid "Request read receipt"
 msgstr "Lesebestätigung anfordern"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Save draft and close"
+msgstr "Entwurf speichern und schließen"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Did you know?"
+msgstr "Schon gewusst?"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid ""
+"Your changes are automatically saved while you compose your email until you "
+"finally send it."
+msgstr ""
+"Bis zum Senden Ihrer E-Mail werden Ihre Änderungen beim Verfassen "
+"automatisch gespeichert."
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Do not show again."
+msgstr "Nicht wieder anzeigen."
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Couldn't load editor"
 msgstr "Editor konnte nicht geladen werden"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Saving..."
+msgstr "Speichern ..."
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Draft saved %s"
+msgstr "Entwurf gespeichert %s"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -9841,7 +9929,7 @@ msgstr "Größer"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "datepicker"
-msgstr "Minikalender"
+msgstr "Datumswähler"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -13941,6 +14029,13 @@ msgstr "Einladen zu %s"
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
 
+#, fuzzy
+#~ msgid "Saved"
+#~ msgstr "Gespeichert"
+
+#~ msgid "All timezones"
+#~ msgstr "Alle Zeitzonen"
+
 #~ msgid "Creating a new appointment"
 #~ msgstr "Einen neuen Termin anlegen"
 
@@ -15637,9 +15732,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "August"
 #~ msgstr "August"
-
-#~ msgid "Australia"
-#~ msgstr "Australien"
 
 #~ msgid "Austria"
 #~ msgstr "Österreich"
