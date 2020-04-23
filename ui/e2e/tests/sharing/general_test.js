@@ -467,5 +467,30 @@ Scenario('[C83277] Create shared object with expiration date', async function (I
     await session('Bob', () => {
         I.amOnPage(link);
         I.waitForText('document.txt', 15, '.viewer-toolbar-filename');
+
+    });
+});
+
+Scenario('[C110280] Personalized no-reply share mails', async function (I, users, dialogs) {
+    await users.create();
+
+    session('Alice', async () => {
+        I.login('app=io.ox/files');
+        I.waitForText('Documents', '.generic-sidebar-content');
+        I.rightClick('Documents', '.generic-sidebar-content');
+        I.waitForText('Permissions / Invite people', '.smart-dropdown-container.dropdown.open');
+        I.click('Permissions / Invite people', '.smart-dropdown-container.dropdown.open');
+        I.waitForElement(locate('input').withAttr({ 'placeholder': 'Add people' }), '.modal-dialog');
+        I.fillField(locate('input').withAttr({ 'placeholder': 'Add people' }), users[1].userdata.primaryEmail);
+        I.pressKey('Enter');
+        I.waitForText(users[1].userdata.sur_name, 5, '.modal-dialog .permissions-view');
+        dialogs.clickButton('Share');
+    });
+
+    session('Bob', async () => {
+        I.login('app=io.ox/mail', { user: users[1] });
+        I.waitForText(`test.user-${users[0].userdata.sur_name}`);
+        I.click('.list-item.selectable');
+        I.waitForText(`<${users[0].userdata.primaryEmail}>`, '.mail-detail-pane');
     });
 });
