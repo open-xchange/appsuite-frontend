@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C288515] Export data from calendar module', async (I, settings, mail) =>{
+Scenario.skip('[C288515] Export data from calendar module', async (I, settings, mail) =>{
 
     const moment = require('moment');
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar');
