@@ -903,3 +903,14 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart M
     expect(topOfAppointment3).to.equal('50%');
     expect(topOfAppointment4).to.equal('50%');
 });
+
+Scenario('[C85743] Special-Use flags', async function (I, dialogs) {
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/settings/accounts');
+    I.waitForText('Edit');
+    I.retry(10).click('Edit');
+    dialogs.waitForVisible();
+    I.scrollTo('#sent_fullname');
+    I.seeInField('#sent_fullname', 'INBOX/Sent');
+    I.dontSeeInField('#sent_fullname', 'INBOX/Sent Items');  // Default if no special use folder exists on imap (AdminUser.properties:SENT_MAILFOLDER_EN_US)
+    I.dontSeeInField('#sent_fullname', 'INBOX/Sent Messages');
+});
