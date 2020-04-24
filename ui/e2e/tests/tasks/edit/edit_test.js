@@ -453,8 +453,7 @@ Scenario('[C7751] Close Task with the X', function (I, tasks) {
     I.waitForVisible('.io-ox-tasks-edit-window');
     I.see('Create');
     I.see('Discard');
-    I.seeElement('~Close');
-    I.click('~Close');
+    I.click('~Close', '.io-ox-tasks-edit-window');
     I.waitForDetached('.io-ox-tasks-edit-window');
 });
 
@@ -470,10 +469,10 @@ Scenario('[C7752] Close Task with the X after adding some information', function
     I.click('Discard');
     I.waitForText('Do you really want to discard your changes?');
     I.click('Cancel');
-    I.click('~Close');
+    I.click('~Close', '.io-ox-tasks-edit-window');
     I.waitForText('Do you really want to discard your changes?');
     I.click('Cancel');
-    I.click('~Close');
+    I.click('~Close', '.io-ox-tasks-edit-window');
     I.waitForText('Do you really want to discard your changes?');
     I.click('Discard changes');
     I.waitForDetached('.io-ox-tasks-edit-window');
