@@ -33,9 +33,7 @@ Scenario('use planning view opened from edit view', async function (I, calendar,
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
 
-    I.clickToolbar('New appointment');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar/edit"]' });
-    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
+    calendar.newAppointment();
     I.fillField('Subject', 'Planning View Test');
 
     I.click('Find a free time');
