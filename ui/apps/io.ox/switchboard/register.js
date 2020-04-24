@@ -15,6 +15,6 @@ define('io.ox/switchboard/register', [], function () {
     'use strict';
 
     ox.on('core:ready', function () {
-        require(['io.ox/switchboard/main']);
+        require(['io.ox/switchboard/actions']);
     });
 });

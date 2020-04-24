@@ -28,7 +28,6 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
             reconnectionDelay: 1000,        // delay for the first retry
             reconnectionDelayMax: 10 * 60 * 1000      // 10 min. max delay between a reconnect (reached after aprox. 10 retries)
         };
-    window.io = io;
     ox.websocketlog = [];
 
     function getId() {
@@ -51,6 +50,7 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
     }
 
     function connectSocket() {
+        if (true) return;
         ox.socketConnectionId = connectionId;
         var def = $.Deferred();
         // connect Websocket
