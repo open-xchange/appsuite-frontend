@@ -11,28 +11,93 @@
  */
 
 define('io.ox/switchboard/actions', [
-    'io.ox/switchboard/main',
+    'io.ox/switchboard/api',
+    'io.ox/core/extensions',
     'io.ox/backbone/views/modal',
     'io.ox/core/tk/sounds-util',
     'io.ox/backbone/views/actions/util'
-], function (api, Modal, Sound, actionsUtil) {
+], function (api, ext, Modal, Sound, actionsUtil) {
 
     'use strict';
 
     var Action = actionsUtil.Action;
 
     new Action('io.ox/switchboard/call-user', {
+        collection: 'some',
+        matches: function (baton) {
+            // you cannot call yourself
+            if (justMyself(baton)) return false;
+            return isGAB(baton);
+        },
         action: function (baton) {
+            var recipients = getRecipients(baton);
             // TODO: Nice dialog
-            new Modal({ title: 'Calling...', description: 'Calling user ' + baton.user })
-                .addButton({ label: 'Cancel', action: 'cancel' })
+            new Modal({ title: 'Calling ...', description: 'Calling ' + recipients.join(', ') })
+                .addCancelButton()
                 .on('cancel', function () {
                     api.cancel();
                 })
                 .open();
-
-            api.call(baton.user);
+            api.call(recipients);
         }
     });
 
+    new Action('io.ox/switchboard/wall-user', {
+        collection: 'some',
+        matches: function (baton) {
+            return isGAB(baton);
+        },
+        action: function (baton) {
+            var recipients = getRecipients(baton);
+            new Modal({ title: 'Send message' })
+                .addCancelButton()
+                .addButton({ label: 'Send', action: 'send' })
+                .build(function () {
+                    this.$body.append('<textarea class="form-control message" rows="5" placeholder="Message"></textarea>');
+                })
+                .on('send', function () {
+                    var message = this.$('textarea.message').val();
+                    api.propagate('wall', recipients, { message: message });
+                })
+                .open();
+        }
+    });
+
+    function justMyself(baton) {
+        return baton.array().every(function (data) { return data.email1 === api.userId; });
+    }
+
+    function isGAB(baton) {
+        // call/chat only works for users, so
+        // make sure we are in global address book
+        return baton.array().every(function (data) {
+            return data.folder_id === 6 && data.email1;
+        });
+    }
+
+    function getRecipients(baton) {
+        return _(baton.array()).map(function (data) {
+            return String(data.email1).toLowerCase().trim();
+        });
+    }
+
+    // add links to toolbar
+    ext.point('io.ox/contacts/toolbar/links').extend(
+        {
+            id: 'call',
+            before: 'send',
+            prio: 'hi',
+            mobile: 'hi',
+            title: 'Call',
+            ref: 'io.ox/switchboard/call-user'
+        },
+        {
+            id: 'wall',
+            before: 'call',
+            prio: 'hi',
+            mobile: 'hi',
+            title: 'Chat',
+            ref: 'io.ox/switchboard/wall-user'
+        }
+    );
 });

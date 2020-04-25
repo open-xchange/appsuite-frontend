@@ -342,6 +342,9 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 .append(
                     // if the checkbox should have a color, add the information here
                     options.color ? addColor($checkMark, options.color).attr({ 'data-color': options.color, 'data-color-label': options.color }) : $checkMark,
+                    // add an icon?
+                    options.icon || $(),
+                    // add text/label
                     _.isFunction(text) ? text() : $.txt(text)
                 );
 

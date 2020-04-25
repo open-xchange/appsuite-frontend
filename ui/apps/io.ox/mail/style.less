@@ -526,6 +526,17 @@ html.macos .preview-right, html.ios {
         .picture(@picture-width, @picture-width);
     }
 
+    .detail-view-header > .presence {
+        position: absolute;
+        right: 0;
+        top: 40px;
+        .icon {
+            border: 2px solid white;
+            border-radius: 10px;
+            box-sizing: content-box;
+        }
+    }
+
     &.no-padding .contact-picture { right: 0; }
 
     .io-ox-label {
@@ -536,6 +547,11 @@ html.macos .preview-right, html.ios {
     .recipients .person-link {
         color: #333;
         @media(max-width: 900px) { white-space: normal; }
+        .presence .icon {
+            width: 8px;
+            height: 8px;
+            margin-right: 4px;
+        }
     }
 
     .detail-view-header {

@@ -1,3 +1,14 @@
-{
-    "namespace": "core"
-}
+[
+    {
+        "path": "io.ox/switchboard/extensions",
+        "namespace": "core",
+        "requires": "switchboard",
+        "device": "!smartphone"
+    },
+    {
+        "namespace": ["io.ox/contacts/view-detail"],
+        "path": "io.ox/switchboard/actions",
+        "requires": "switchboard",
+        "device": "!smartphone"
+    }
+]

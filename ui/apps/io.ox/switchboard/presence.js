@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/switchboard/presence', [], function () {
+define('io.ox/switchboard/presence', ['io.ox/switchboard/api'], function (api) {
 
     'use strict';
 
@@ -22,31 +22,41 @@ define('io.ox/switchboard/presence', [], function () {
         // returns jQuery node
         getPresenceString: function (userId) {
             var presence = this.getPresence(userId);
-            return createPresenceNode(presence).append(
-                $('<span class="state">').text(this.getStateString(presence))
+            return createPresenceNode(presence.availability, presence.id).append(
+                $('<span class="availability">').text(this.getAvailabilityString(presence))
             );
+        },
+
+        // returns jQuery node
+        getPresenceIcon: function (userId) {
+            var presence = this.getPresence(userId);
+            return createPresenceNode(presence.availability, presence.id);
+        },
+
+        getFixedPresenceIcon: function (availability) {
+            return createPresenceIcon(availability);
         },
 
         // returns jQuery node
         getPresenceDot: function (userId) {
             var presence = this.getPresence(userId);
-            return createPresenceNode(presence);
+            return createPresenceNode(presence.availability, presence.id).addClass('dot');
         },
 
         getPresence: function (userId) {
-            userId = trim(userId);
+            userId = api.trim(userId);
             if (!users[userId]) {
-                users[userId] = {
-                    id: userId,
-                    lastSeen: _.now() - Math.random() * 30 * 60000,
-                    state: getRandomState()
-                };
+                users[userId] = { id: userId, lastSeen: 0, availability: 'offline' };
+                api.socket.emit('presence-get', userId, function (data) {
+                    exports.changePresence(userId, data);
+                    if (api.isMyself(userId)) exports.trigger('change-own-availability', data.availability);
+                });
             }
             return users[userId];
         },
 
-        getStateString: function (presence) {
-            switch (presence.state) {
+        getAvailabilityString: function (presence) {
+            switch (presence.availability) {
                 case 'online':
                     return 'Online now';
                 case 'busy':
@@ -66,49 +76,50 @@ define('io.ox/switchboard/presence', [], function () {
             }
         },
 
-        updateState: function (userId, state) {
+        changePresence: function (userId, changes) {
             var presence = this.getPresence(userId);
-            if (state !== 'offline') presence.lastSeen = _.now();
-            if (state === presence.state) return;
-            presence.state = state;
+            if (changes.availability === presence.availability) return;
+            _.extend(presence, changes, { lastSeen: _.now() });
             // update all DOM nodes for this user
             $('.presence[data-id="' + $.escape(presence.id) + '"]')
-                .attr('class', 'presence ' + presence.state)
-                .find('.state').text(this.getStateString(presence));
+                .removeClass('online absent busy offline')
+                .addClass(presence.availability)
+                .find('.availability').text(this.getAvailabilityString(presence));
+        },
+
+        changeOwnAvailability: function (availability) {
+            this.changePresence(api.userId, { availability: availability });
+            api.socket.emit('presence-change', availability);
+            exports.trigger('change-own-availability', availability);
+        },
+
+        getMyAvailability: function () {
+            return (users[api.userId] || {}).availability || 'offline';
         },
 
         users: users
     };
 
-    function createPresenceNode(presence) {
-        return $('<div class="presence">')
-            .addClass(presence.state)
-            .attr('data-id', presence.id)
-            .append(
-                $('<span class="icon" aria-hidden="true"><i class="fa"></i></span>')
-            );
+    // create template
+    var tmpl = $('<div class="presence">')
+        .append('<span class="icon" aria-hidden="true"><i class="fa"></i></span>');
+
+    function createPresenceNode(availability, id) {
+        return createPresenceIcon(availability).attr('data-id', id);
     }
 
-    // just to make sure we always use the same string
-    function trim(userId) {
-        return String(userId).toLowerCase().trim();
+    function createPresenceIcon(availability) {
+        return tmpl.clone().addClass(availability);
     }
 
-    function getRandomState() {
-        var r = Math.random();
-        if (r < 0.2) return 'offline';
-        if (r < 0.4) return 'busy';
-        if (r < 0.6) return 'absent';
-        return 'online';
-    }
+    // respond to events
+    api.socket.on('presence-change', function (userId, presence) {
+        console.log('socket > presence-change', userId, presence);
+        exports.changePresence(userId, presence);
+    });
 
-    // setInterval(function () {
-    //     var array = _(users).values();
-    //     if (!array.length) return;
-    //     var presence = array[Math.random() * array.length >> 0];
-    //     console.log('setInterval/update', presence.id);
-    //     exports.updateState(presence.id, getRandomState());
-    // }, 100);
+    // add an event hub. we need this to publish presence state changes
+    _.extend(exports, Backbone.Events);
 
     return exports;
 });

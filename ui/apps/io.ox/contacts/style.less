@@ -14,9 +14,6 @@
 /* was 35, but we need 45 for proper Japanese */
 @thumbIndexWidth: 45px;
 @photo-size: 120px;
-@online: #7CB342;
-@busy: #d00;
-@absent: #ffa500;
 
 /* VGrid elements */
 
@@ -111,21 +108,6 @@
         height: 0;
         padding: 0;
         border: 0;
-    }
-
-    /* special CSS for presence border */
-    .presence .icon {
-        border: 2px solid white;
-        border-radius: 10px;
-        box-sizing: content-box;
-    }
-
-    .selected .presence .icon {
-        border-color: @selected-unfocussed-background;
-    }
-
-    .has-focus .selected .presence .icon {
-        border-color: @selected-focussed-background;
     }
 }
 
@@ -406,11 +388,12 @@
         .icon {
             position: relative;
             top: -1px;
-            margin-right: 8px;
         }
-        &.offline .icon { border: 2px solid white; }
-        &.online .state { color: #438601; }
-        &.busy .state { color: @busy; }
+        &.offline {
+            .icon { border: 2px solid white; }
+        }
+        &.online .availability { color: #438601; }
+        &.busy .availability { color: @presence-color-busy; }
     }
 
     .actions {
@@ -437,7 +420,7 @@
         i.fa.fa-phone {
             font-size: 24px;
         }
-        button:hover, button:focus {
+        button:hover:not(:disabled), button:focus {
             outline: 0;
             text-decoration: none;
             i.fa {
@@ -446,38 +429,6 @@
                 border: 0;
             }
         }
-    }
-}
-
-.presence {
-    display: inline-block;
-    .icon {
-        color: white;
-        width: 16px;
-        height: 16px;
-        border-radius: 8px;
-        font-size: 10px;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-    }
-    &.offline {
-        .icon { background-color: #aaa; }
-        /* hidden to get exact vertical position */
-        .fa { visibility: hidden; }
-        .fa:before { /* random */ content: "\f1db"; }
-    }
-    &.online {
-        .icon { background-color: @online; }
-        .fa:before { /* checkmark */ content: "\f00c"; }
-    }
-    &.busy {
-        .icon { background-color: @busy; }
-        .fa:before { /* minus */ content: "\f068"; }
-    }
-    &.absent {
-        .icon { background-color: @absent; }
-        .fa:before { /* clock-o */ content: "\f017"; }
     }
 }
 

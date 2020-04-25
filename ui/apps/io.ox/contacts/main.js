@@ -31,11 +31,10 @@ define('io.ox/contacts/main', [
     'io.ox/core/page-controller',
     'io.ox/core/folder/tree',
     'io.ox/core/folder/view',
-    'io.ox/switchboard/presence',
     'io.ox/contacts/mobile-navbar-extensions',
     'io.ox/contacts/mobile-toolbar-actions',
     'less!io.ox/contacts/style'
-], function (util, coreUtil, api, VGrid, viewDetail, ext, actionsUtil, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView, presence) {
+], function (util, coreUtil, api, VGrid, viewDetail, ext, actionsUtil, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
 
     'use strict';
 
@@ -249,9 +248,6 @@ define('io.ox/contacts/main', [
                             fields.description.text(gt('Edit to set a name.'));
                         } else {
                             fields.name.removeClass('gray');
-                        }
-                        if (data.folder_id === 6) {
-                            this.append(presence.getPresenceDot(data.email1));
                         }
                     }
                     this.attr('aria-label', name);
