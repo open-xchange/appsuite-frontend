@@ -181,3 +181,155 @@ Scenario('[C85625] My Shares default sort order', async function (I, drive, dial
     I.seeElement(locate('i.fa-check').inside(locate('.dropdown a').withText('Descending')));
     I.pressKey('Escape');
 });
+
+Scenario('[C45026] Edit shared object with multiple users and modify the permissions for a specific user', async function (I, contexts, users, drive, dialogs) {
+    const mailListView = '.list-view.visible-selection.mail-item',
+        smartDropDown = '.smart-dropdown-container.dropdown.open',
+        document = '.white-page.letter.plain-text';
+
+    await Promise.all([
+        users.create(),
+        users.create(),
+        users.create()
+    ]);
+
+    function addUser(user) {
+        I.wait(0.2); // gentle wait for auto complete
+        I.fillField('input[placeholder="Add people"]', user.userdata.primaryEmail);
+        I.waitForElement('.participant-wrapper');
+        I.pressKey('Enter');
+        I.waitForText(user.userdata.name, locate('.permission.row').withAttr({ 'aria-label': `${user.userdata.sur_name}, User, Internal user.` }));
+    }
+
+    function setRights(curRole, targetRole, user) {
+        I.waitForElement(locate('.permission.row').withAttr({ 'aria-label': `${user.userdata.sur_name}, User, Internal user.` }));
+        I.click(curRole, locate('.permission.row').withAttr({ 'aria-label': `${user.userdata.sur_name}, User, Internal user.` }));
+        I.waitForText(targetRole, smartDropDown);
+        I.click(targetRole, smartDropDown);
+    }
+
+    function openDocument() {
+        I.openApp('Mail');
+        I.waitForElement(mailListView);
+        within(mailListView, () => {
+            I.waitForText(users[0].userdata.name);
+            I.click(users[0].userdata.name, '.list-item.selectable');
+        });
+
+        I.waitForElement('.mail-detail-frame');
+        within({ frame: '.mail-detail-frame' }, () => {
+            I.waitForText('View file');
+            I.click('View file');
+        });
+    }
+
+    function editDocument(text, save = true) {
+        I.waitForText('Edit', 10, '.viewer-toolbar');
+        I.click('Edit', '.viewer-toolbar');
+        I.waitForElement('.io-ox-editor textarea.content');
+        I.waitForFocus('.io-ox-editor textarea.content');
+        I.fillField('.io-ox-editor textarea.content', text);
+
+        if (save) I.click('Save', '.io-ox-editor-window .window-footer');
+    }
+
+    session('Alice', async () => {
+        const folder = await I.grabDefaultFolder('infostore');
+        await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+
+        I.login('app=io.ox/files');
+        drive.waitForApp();
+
+        I.waitForText('document.txt');
+        I.rightClick(locate('.filename').withText('document.txt'));
+        I.waitForText('Permissions / Invite people', smartDropDown);
+        I.click('Permissions / Invite people', smartDropDown);
+
+        I.waitForElement('.modal-dialog');
+        within('.modal-dialog', () => {
+            I.waitForFocus('input[placeholder="Add people"]');
+            addUser(users[1]);
+            addUser(users[2]);
+            addUser(users[3]);
+        });
+
+        setRights('Viewer', 'Reviewer', users[2]);
+        setRights('Viewer', 'Reviewer', users[3]);
+        dialogs.clickButton('Share');
+    });
+
+    session('Charlie', () => {
+        I.login('app=io.ox/files', { user: users[2] });
+        I.dontSee('document.txt');
+
+        openDocument();
+        I.waitForElement(locate(document).withText(''), 30);
+        editDocument('here is charlie', { save: false });
+    });
+
+    session('Dave', () => {
+        I.login('app=io.ox/files', { user: users[3] });
+        I.dontSee('document.txt');
+
+        openDocument();
+        I.waitForElement(locate(document).withText(''), 30);
+        editDocument('here is dave', { save: true });
+    });
+
+    session('Charlie', () => {
+        I.click('Save', '.io-ox-editor-window .window-footer');
+        I.fillField('.io-ox-editor textarea.content', 'here is charlie again');
+    });
+
+    session('Bob as Viewer', () => {
+        I.login('app=io.ox/files', { user: users[1] });
+        I.dontSee('document.txt');
+
+        openDocument();
+        I.waitForElement(locate(document).withText('here is charlie'), 30);
+        I.dontSee('Edit', '.viewer-toolbar');
+    });
+
+    session('Alice', () => {
+        // set charlies rights to viewer rights
+        I.rightClick(locate('.filename').withText('document.txt'));
+        I.waitForText('Permissions / Invite people', smartDropDown);
+        I.click('Permissions / Invite people', smartDropDown);
+
+        setRights('Reviewer', 'Viewer', users[2]);
+        dialogs.clickButton('Share');
+    });
+
+    session('Charlie', () => {
+        I.click('Save', '.io-ox-editor-window .window-footer');
+
+        I.waitForElement('.io-ox-alert-error');
+        within('.io-ox-alert-error', () => {
+            I.waitForText('You do not have the appropriate permissions to update the document.');
+        });
+    });
+
+    session('Alice', () => {
+        I.rightClick(locate('.filename').withText('document.txt'));
+        I.waitForText('Permissions / Invite people', smartDropDown);
+        I.click('Permissions / Invite people', smartDropDown);
+
+        // revoke access of dave
+        I.waitForElement('button[title="Actions"]', locate('.permission.row').withAttr({ 'aria-label': `${users[3].userdata.sur_name}, User, Internal user.` }));
+        I.click('button[title="Actions"]', locate('.permission.row').withAttr({ 'aria-label': `${users[3].userdata.sur_name}, User, Internal user.` }));
+        I.waitForText('Revoke access', 5, '.smart-dropdown-container.dropdown.open');
+        I.click('Revoke access', '.smart-dropdown-container.dropdown.open');
+        dialogs.clickButton('Share');
+    });
+
+    session('Dave', () => {
+        openDocument();
+
+        I.waitForElement('.io-ox-alert-error');
+        within('.io-ox-alert-error', () => {
+            I.waitForText('You do not have the appropriate permissions to read the document.');
+        });
+    });
+
+    // TODO: could be also checked with google accounts etc.
+});
