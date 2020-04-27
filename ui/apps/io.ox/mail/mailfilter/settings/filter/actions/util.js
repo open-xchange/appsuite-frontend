@@ -175,13 +175,13 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
         .addClass(flagclass)
         .append(
             // box
-            $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">'),
+            $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr('aria-label', gt('Set color')),
             // drop down
             $('<ul class="dropdown-menu" role="menu">')
             .append(
                 _(colors).map(function (colorObject) {
-                    return $('<li>').append(
-                        $('<a href="#" data-action="change-color" tabindex="1">').append(
+                    return $('<li role="presentation">').append(
+                        $('<a href="#" role="menuitem" data-action="change-color">').append(
                             colorObject.value > 0 ? $('<span class="flag-example">').addClass('flag_' + colorObject.value) : $(),
                             $.txt(colorObject.text)
                         )

@@ -26,16 +26,36 @@ module.exports = {
         I.fillField('rulename', name);
     },
 
+    addCondition(condition, value) {
+        I.click('Add condition');
+        I.click(condition);
+        I.fillField('values', value);
+    },
+
     addSubjectCondition(value) {
         I.click('Add condition');
         I.click('Subject');
         I.fillField('values', value);
     },
 
+    addSimpleAction(label) {
+        I.click('Add action');
+        I.click(label);
+    },
+
     addAction(label, value) {
         I.click('Add action');
         I.click(label);
         I.fillField(this.locators.lastaction.find('input[name]'), value);
+    },
+
+    setFlag(flag) {
+        I.click('Add action');
+        I.click('Set color flag');
+        I.click('~Set color');
+
+        I.waitForVisible('.flag-dropdown');
+        I.click(flag, '.flag-dropdown');
     },
 
     save() {

@@ -15,58 +15,29 @@
 Feature('Mailfilter');
 
 Before(async function (users) {
-    await users.create();
-    await users.create();
+    await Promise.all([
+        users.create(),
+        users.create()
+    ]);
 });
 
 After(async function (users) {
     await users.removeAll();
 });
 
-function createFilterRule(I, name, action) {
-    I.login('app=io.ox/settings');
-    I.waitForVisible('.io-ox-settings-main');
-    I.selectFolder('Mail');
-    I.waitForVisible('.rightside h1');
-
-    // open mailfilter settings
-    I.selectFolder('Filter Rules');
-
-    // checks the h1 and the empty message
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mailfilter-settings h1');
-    I.see('Mail Filter Rules');
-
-    I.see('There is no rule defined');
-
-    // create a test rule and check the inintial display
-    I.click('Add new rule');
-    I.see('Create new rule');
-    I.see('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.');
-    I.see('Please define at least one action.');
-
-    I.fillField('rulename', name);
-
-    // add condition
-    I.click('Add condition');
-    I.click('Subject');
-    I.fillField('values', name);
-
-    // add action
-    I.click('Add action');
-    I.click(action);
-
-}
-
-Scenario('[C7801] Keep filtered mail', async function (I, users, mail) {
-    let [user] = users;
+Scenario('[C7801] Keep filtered mail', async function (I, users, mail, mailfilter) {
+    const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
-    createFilterRule(I, 'C7801', 'Keep');
-    // save the form
-    I.click('Save');
-    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+
+    mailfilter.waitForApp();
+    mailfilter.newRule('C7801');
+    mailfilter.addSubjectCondition('C7801');
+    mailfilter.addSimpleAction('Keep');
+    mailfilter.save();
 
     I.openApp('Mail');
 
@@ -83,16 +54,19 @@ Scenario('[C7801] Keep filtered mail', async function (I, users, mail) {
     I.waitForText('C7801', 5, '.subject');
 });
 
-Scenario('[C7802] Discard filtered mail', async function (I, users) {
-    let [user] = users;
+Scenario('[C7802] Discard filtered mail', async function (I, users, mailfilter) {
+    const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
-    createFilterRule(I, 'TestCase0387', 'Discard');
-    // save the form
-    I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+
+    mailfilter.waitForApp();
+    mailfilter.newRule('TestCase0387');
+    mailfilter.addSubjectCondition('TestCase0387');
+    mailfilter.addSimpleAction('Discard');
+    mailfilter.save();
 
     I.openApp('Mail');
 
@@ -112,17 +86,19 @@ Scenario('[C7802] Discard filtered mail', async function (I, users) {
 
 });
 
-Scenario('[C7803] Redirect filtered mail', async function (I, users) {
+Scenario('[C7803] Redirect filtered mail', async function (I, users, mailfilter) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
-    createFilterRule(I, 'TestCase0388', 'Redirect to');
-    I.fillField('to', users[1].get('primaryEmail'));
-    // save the form
-    I.click('Save');
-    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+
+    mailfilter.waitForApp();
+    mailfilter.newRule('TestCase0388');
+    mailfilter.addSubjectCondition('TestCase0388');
+    mailfilter.addAction('Redirect to', users[1].get('primaryEmail'));
+    mailfilter.save();
 
     I.openApp('Mail');
 
@@ -148,16 +124,22 @@ Scenario('[C7803] Redirect filtered mail', async function (I, users) {
 
 });
 
-Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
+Scenario('[C7804] Move to Folder filtered mail', async function (I, users, mailfilter) {
 
-    let folder = 'TestCase0389';
+    const folder = 'TestCase0389';
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
     await I.haveFolder({ title: folder, module: 'mail', parent: 'default0/INBOX' });
 
-    createFilterRule(I, 'TestCase0389', 'File into');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+
+    mailfilter.waitForApp();
+    mailfilter.newRule('TestCase0389');
+    mailfilter.addSubjectCondition('TestCase0389');
+    mailfilter.addSimpleAction('File into');
+
     I.click('Select folder');
     I.waitForVisible(locate('.folder-picker-dialog [data-id="virtual/myfolders"] .folder-arrow'));
 
@@ -168,9 +150,7 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
     I.wait(1);
     I.click('Select');
 
-    // save the form
-    I.click('Save');
-    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
+    mailfilter.save();
 
     I.openApp('Mail');
 
@@ -205,7 +185,7 @@ Scenario('[C7805] Reject with reason filtered mail', async function (I, users, m
         'io.ox/mail': { messageFormat: 'text' }
     }, { user: user2 });
 
-    createFilterRule(I, 'TestCase0390', 'Reject with reason');
+    // createFilterRule('TestCase0390', 'Reject with reason');
     I.fillField('text', 'TestCase0390');
 
     // save the form
@@ -233,17 +213,19 @@ Scenario('[C7805] Reject with reason filtered mail', async function (I, users, m
 
 });
 
-Scenario('[C7806] Mark mail as filtered mail', async function (I, users) {
+Scenario('[C7806] Mark mail as filtered mail', async function (I, users, mailfilter) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
-    createFilterRule(I, 'TestCase0391', 'Mark mail as');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
 
-    // save the form
-    I.click('Save');
-    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
+    mailfilter.waitForApp();
+    mailfilter.newRule('TestCase0391');
+    mailfilter.addSubjectCondition('TestCase0391');
+    mailfilter.addSimpleAction('Mark mail as');
+    mailfilter.save();
 
     I.openApp('Mail');
 
@@ -263,17 +245,21 @@ Scenario('[C7806] Mark mail as filtered mail', async function (I, users) {
 
 });
 
-Scenario('[C7807] Tag mail with filtered mail', async function (I, users) {
+Scenario('[C7807] Tag mail with filtered mail', async function (I, users, mailfilter) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
-    createFilterRule(I, 'TestCase0392', 'Set color flag');
+    // createFilterRule(I, 'TestCase0392', 'Set color flag');
 
-    // save the form
-    I.click('Save');
-    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+
+    mailfilter.waitForApp();
+    mailfilter.newRule('TestCase0392');
+    mailfilter.addSubjectCondition('TestCase0392');
+    mailfilter.setFlag('Red');
+    mailfilter.save();
 
     I.openApp('Mail');
 
@@ -294,20 +280,24 @@ Scenario('[C7807] Tag mail with filtered mail', async function (I, users) {
 
 });
 
-Scenario('[C7809] Mark mail as deleted filtered mail', async function (I, users) {
+Scenario('[C7809] Mark mail as deleted filtered mail', async function (I, users, mailfilter) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
-    createFilterRule(I, 'TestCase0394', 'Mark mail as');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+
+    mailfilter.waitForApp();
+    mailfilter.newRule('TestCase0394');
+    mailfilter.addSubjectCondition('TestCase0394');
+    mailfilter.addSimpleAction('Mark mail as');
+
     I.click('seen');
     I.waitForElement('.dropdown.open');
     I.click('deleted');
 
-    // save the form
-    I.click('Save');
-    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
+    mailfilter.save();
 
     I.openApp('Mail');
 
