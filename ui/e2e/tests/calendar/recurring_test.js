@@ -301,3 +301,35 @@ Scenario('[Bug 63392][OXUIB-212] Recurring appointment can\'t changed to "Never 
     // we are looking for just 'Every day.' and not 'Every day. The series ends after 3 occurrences.'
     I.waitForElement({ xpath: '//div[contains(@class, "calendar-detail")]//div[@class="recurrence"][text()="Every day."]' });
 });
+
+Scenario('[Bug 62034] Appointment series ends one day to early', async function (I, calendar, dialogs) {
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
+
+    // start tomorrow
+    var startDate = moment().startOf('day').add(1, 'day');
+
+    I.login('app=io.ox/calendar&perspective=list');
+    calendar.waitForApp();
+
+    calendar.newAppointment();
+    I.fillField('Subject', 'Until test');
+    calendar.setDate('startDate', startDate);
+    I.click('~Start time');
+    I.click('4:00 PM');
+    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click({ css: '.recurrence-view .btn.btn-link.summary' });
+    dialogs.waitForVisible();
+    I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
+    I.selectOption('Ends', 'On specific date');
+    I.fillField('.recurrence-view-dialog .datepicker-day-field', startDate.add(3, 'days').format('l'));
+    dialogs.clickButton('Apply');
+    I.waitForInvisible('.modal-dialog');
+    I.click('Create');
+
+    I.waitNumberOfVisibleElements('.list-item.selectable.appointment', 4);
+});
+
