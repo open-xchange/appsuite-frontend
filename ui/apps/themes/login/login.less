@@ -184,7 +184,6 @@ html.baseline {
         position: absolute;
         width: 100%;
         min-height: 100px;
-        z-index: 1;
         margin: 0;
     }
 
@@ -201,11 +200,10 @@ html.baseline {
         div {
             margin-left: 16px;
             margin-right: 16px;
-            z-index: 1;
         }
 
         #io-ox-language-list {
-            overflow: scroll;
+            overflow-y: scroll;
         }
 
         > * {
@@ -242,7 +240,6 @@ html.baseline {
         }
 
         #io-ox-login-box {
-            z-index: 1;
             display: flex;
             justify-content: center;
 
@@ -335,22 +332,16 @@ html.baseline {
                     }
 
                     #login-title {
-                        text-align: left;
                         font-size: 18px;
                         font-weight: bold;
                         margin: 0;
                     }
 
-                    #io-ox-login-help {
+                    #login-title,
+                    #io-ox-login-help,
+                    #io-ox-login-feedback,
+                    #io-ox-login-feedback div {
                         text-align: left;
-                    }
-
-                    #io-ox-login-feedback {
-                        text-align: left;
-
-                        div {
-                            text-align: left;
-                        }
                     }
 
                     .checkbox.custom, .radio.custom {
@@ -372,7 +363,6 @@ html.baseline {
             margin: 0 auto;
             margin-top: 8px;
             width: 420px;
-            z-index: 1;
         }
     }
 
@@ -399,10 +389,6 @@ html.baseline {
         > *:last-child {
             margin-right: 0;
         }
-
-        .composition-element {
-            //margin-top: 5px;
-        }
     }
 
     #io-ox-languages {
@@ -420,7 +406,11 @@ html.baseline {
             display: inline-block;
         }
 
-        .lang-label {
+        a.lang-label {
+            text-decoration: none;
+            color: #fff;
+            &:focus { outline: 0; }
+            &:hover { text-decoration: none; }
             font-weight: normal;
             &:after {
                 content: ':';

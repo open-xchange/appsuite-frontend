@@ -15,13 +15,12 @@ Scenario('[C7338] on form login page', function (I) {
     I.setCookie({ name: 'locale', value: 'en_US' });
     I.refreshPage();
     I.waitForFocus('#io-ox-login-username', 30);
-    I.click('Language');
-    I.waitForElement('~Languages');
+    I.click('English');
     I.click('Italiano');
     I.waitForText('Nome utente');
 });
 
-Scenario('[OXUI-700] for guest users with password', async (I, users) => {
+Scenario('[OXUI-700] for guest users with password', async (I, users, dialogs) => {
     await users.create();
     I.login('app=io.ox/files');
     const myfiles = locate('.folder-tree .folder-label').withText('My files');
@@ -29,14 +28,15 @@ Scenario('[OXUI-700] for guest users with password', async (I, users) => {
     I.selectFolder('Music');
     I.clickToolbar('Share');
     I.click('Create sharing link');
+    dialogs.waitForVisible();
     I.waitForText('Sharing link created for folder');
     I.click('Password required');
     I.seeCheckboxIsChecked('Password required');
     I.fillField('Enter Password', 'CorrectHorseBatteryStaple');
     let url = await I.grabValueFrom('.share-wizard input[type="text"]');
     url = Array.isArray(url) ? url[0] : url;
-    I.click('Close');
-    I.waitToHide('Create sharing link');
+    dialogs.clickButton('Close');
+    I.waitForDetached('.modal-dialog');
     I.logout();
     I.amOnPage(url.replace(/^https?:\/\/[^/]+\//, '../'));
     I.waitForFocus('#io-ox-login-password');

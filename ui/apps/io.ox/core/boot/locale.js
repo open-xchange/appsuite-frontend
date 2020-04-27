@@ -87,13 +87,13 @@ define('io.ox/core/boot/locale', ['gettext', 'io.ox/core/boot/util', 'io.ox/core
 
                 var changeByUser = this.changeByUser.bind(this),
                     defaultLocale = meta.getValidDefaultLocale(),
-                    toggle, list;
+                    toggle, list, label;
 
                 // Display native select box for locales if there are up to 'maxLang' locales
                 if (count < maxCount && !_.url.hash('language-select') && _.device('!smartphone')) {
 
                     node.append(
-                        $('<span class="lang-label" id="io-ox-languages-label" data-i18n="Language" data-i18n-attr="text">'),
+                        label = $('<a href="#" role="button" class="lang-label" id="io-ox-languages-label" data-i18n="Language" data-i18n-attr="text" aria-hidden="true" tabindex="-1">'),
                         $('<div class="dropdown">').append(
                             toggle = $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').append(
                                 $('<span class="sr-only" data-i18n="Language:" data-i18n-attr="text">'),
@@ -122,6 +122,8 @@ define('io.ox/core/boot/locale', ['gettext', 'io.ox/core/boot/util', 'io.ox/core
                         changeByUser(value);
                         $(e.delegateTarget).parent().find('.toggle-text').text(meta.getLocaleName(value)).attr('lang', languageToTag(value));
                     });
+
+                    label.on('click', function (e) { e.preventDefault(); toggle.focus(); });
 
                     // init dropdown
                     toggle.dropdown();
