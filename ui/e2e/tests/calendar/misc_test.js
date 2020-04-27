@@ -914,3 +914,41 @@ Scenario('[C85743] Special-Use flags', async function (I, dialogs) {
     I.dontSeeInField('#sent_fullname', 'INBOX/Sent Items');  // Default if no special use folder exists on imap (AdminUser.properties:SENT_MAILFOLDER_EN_US)
     I.dontSeeInField('#sent_fullname', 'INBOX/Sent Messages');
 });
+
+Scenario('[C274517] Download multiple attachments (as ZIP)', async function (I) {
+    I.handleDownloads('../../build/e2e');
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`,
+        startTime = moment().set('hour', 13),
+        endTime = moment().set('hour', 14),
+        subject = 'Meetup XY',
+        appointment = await I.haveAppointment({
+            folder:  folder,
+            summary: subject,
+            startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+            endDate: { value: endTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
+        });
+    let updatedAppointment = await I.haveAttachment('calendar', appointment, 'e2e/media/files/generic/testdocument.odt');
+    updatedAppointment = await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testdocument.rtf');
+    await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testspreadsheed.xlsm');
+
+    I.login('app=io.ox/calendar');
+
+    I.waitForText('Meetup XY');
+    I.click('Meetup XY');
+
+    I.waitForText('Attachments');
+    I.waitForText('testdocument.odt');
+    I.waitForText('testdocument.rtf');
+    I.waitForText('testspreadsheed.xlsm');
+    I.waitForText('All attachments');
+
+    I.click('All attachments');
+    I.waitForText('Download');
+    I.waitForText('Save to Drive');
+    I.seeNumberOfElements('.dropdown.open a[role="menuitem"]', 2);
+
+    I.click('Download', '.dropdown.open');
+
+    I.amInPath('/build/e2e/');
+    I.waitForFile('attachments.zip', 5);
+});
