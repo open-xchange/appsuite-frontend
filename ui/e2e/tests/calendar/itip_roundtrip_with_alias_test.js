@@ -52,22 +52,19 @@ Scenario('[C223834] iTIP mail alias handling', async function (I, users, mail, c
     I.fillField('Subject', 'C223834');
     await calendar.addParticipant(attendees_alias_address, false);
     I.click('Create');
-    I.wait(1);
+    I.waitForNetworkTraffic();
     // As the attendee, accept the invitation
     I.logout();
     I.login('app=io.ox/mail', { user: attendee });
     mail.waitForApp();
-    I.waitForText('New appointment: C223834');
-    I.wait(1);
-    I.click('New appointment: C223834');
+    mail.selectMail('New appointment: C223834');
     I.waitForText('Accept');
     I.click('Accept');
+    I.waitForNetworkTraffic();
     // As the organizer, check the send address of the attendee
     I.logout();
     I.login('app=io.ox/mail', { user: organizer });
     mail.waitForApp();
-    I.waitForText(attendees_alias_display_name + ' accepted the invitation: C223834');
-    I.wait(1);
-    I.click(attendees_alias_display_name + ' accepted the invitation: C223834');
+    mail.selectMail(attendees_alias_display_name + ' accepted the invitation: C223834');
     I.waitForText(attendees_alias_address);
 });
