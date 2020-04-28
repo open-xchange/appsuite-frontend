@@ -32,6 +32,39 @@ class MyHelper extends Helper {
         }
     }
 
+    // implementation based on https://github.com/puppeteer/puppeteer/issues/1376
+    async dropFileInDropzone(filePath, dropZoneSelector) {
+
+        const { page } = this.helpers['Puppeteer'];
+
+        // prepare temp file input
+        await page.evaluate(function (filePath, dropZoneSelector) {
+            document.body.appendChild(Object.assign(
+                document.createElement('input'),
+                {
+                    id: 'temp-dropzone-helper',
+                    type: 'file',
+                    onchange: e => {
+                        // use file input to create a fake drop event on the dropzone
+                        document.querySelector(dropZoneSelector).dispatchEvent(Object.assign(
+                            new Event('drop'),
+                            { dataTransfer: { files: e.target.files } }
+                        ));
+                    }
+                }
+            ));
+        }, filePath, dropZoneSelector);
+
+        // upload file
+        const fileInput = await page.$('#temp-dropzone-helper');
+        await fileInput.uploadFile(filePath);
+
+        // cleanup
+        await page.evaluate(function () {
+            document.getElementById('temp-dropzone-helper').remove();
+        });
+    }
+
     /*
      * Overwrite native puppeteer d&d, because it does not work for every case
      * Maybe this is going to be fixed in the future by puppeteer, then this can be removed.

@@ -51,3 +51,16 @@ Scenario('[C12122] Auto-size recipient fields', async function (I, mail) {
     expect(parseInt(height, 10)).to.be.most(40);
 
 });
+
+Scenario('[Bug 62794] no drag and drop of pictures while composing a new mail', async function (I, mail) {
+
+    I.login();
+    mail.newMail();
+    I.waitForElement('.editor iframe');
+
+    await I.dropFileInDropzone('e2e/media/files/generic/contact_picture.png', '.io-ox-mail-compose .editor .inplace-dropzone');
+
+    within({ frame: '.editor iframe' }, () => {
+        I.waitForElement('body img');
+    });
+});
