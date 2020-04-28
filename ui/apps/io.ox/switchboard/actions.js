@@ -14,9 +14,9 @@ define('io.ox/switchboard/actions', [
     'io.ox/switchboard/api',
     'io.ox/core/extensions',
     'io.ox/backbone/views/modal',
-    'io.ox/core/tk/sounds-util',
-    'io.ox/backbone/views/actions/util'
-], function (api, ext, Modal, Sound, actionsUtil) {
+    'io.ox/backbone/views/actions/util',
+    'io.ox/switchboard/call'
+], function (api, ext, Modal, actionsUtil, call) {
 
     'use strict';
 
@@ -31,14 +31,7 @@ define('io.ox/switchboard/actions', [
         },
         action: function (baton) {
             var recipients = getRecipients(baton);
-            // TODO: Nice dialog
-            new Modal({ title: 'Calling ...', description: 'Calling ' + recipients.join(', ') })
-                .addCancelButton()
-                .on('cancel', function () {
-                    api.cancel();
-                })
-                .open();
-            api.call(recipients);
+            call.start(recipients);
         }
     });
 

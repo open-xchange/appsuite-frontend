@@ -20,9 +20,7 @@ define.async('io.ox/switchboard/api', [
 
     'use strict';
 
-    var HOST = 'http://localhost:2337',
-        // introduce call model
-        call = new Backbone.Model();
+    var HOST = 'http://localhost:2337';
 
     var api = {
 
@@ -48,28 +46,6 @@ define.async('io.ox/switchboard/api', [
                 def.resolve(result);
             });
             return def;
-        },
-
-        call: function (user, data) {
-            if (call) return this.cancel();
-            return this.propagate('call', user, data).then(function (state) {
-                return { state: state, call: call };
-            });
-        },
-
-        cancel: function () {
-            if (!call) return $.when();
-            return this.propagate('cancel', call.user, call.data).done(function () {
-                call = null;
-            });
-        },
-
-        answer: function () {
-            // anwer an incoming call
-        },
-
-        decline: function () {
-            // decline incoming call
         }
     };
 

@@ -10,5 +10,11 @@
         "path": "io.ox/switchboard/actions",
         "requires": "switchboard",
         "device": "!smartphone"
+    },
+    {
+        "namespace": "core",
+        "path": "io.ox/switchboard/call",
+        "requires": "switchboard",
+        "device": "!smartphone"
     }
 ]
