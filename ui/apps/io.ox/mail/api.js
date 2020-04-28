@@ -1190,8 +1190,8 @@ define('io.ox/mail/api', [
                 attachment: data.id,
                 decrypt: (data.security && data.security.decrypted)
             };
-            // Guard actions.  If it was from decrypted email, must be decrypted
-            if (data.security && data.security.decrypted) params.decrypt = true;
+            // Guard actions.  If it was from decrypted email pass auth info
+            if (data.security && data.security.authentication) params.cryptoAuth = data.security.authentication;
             // If saving encrypted copy, but be re-encrypted from original email
             if (data.reEncrypt) params.encrypt = true;
             http.PUT({
