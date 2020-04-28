@@ -33,7 +33,8 @@ class MyHelper extends Helper {
     }
 
     // implementation based on https://github.com/puppeteer/puppeteer/issues/1376
-    async dropFileInDropzone(filePath, dropZoneSelector) {
+    // helper for dropzones, works with single file(string) or multiple files(array of strings)
+    async dropFiles(filePath, dropZoneSelector) {
 
         const { page } = this.helpers['Puppeteer'];
 
@@ -44,6 +45,7 @@ class MyHelper extends Helper {
                 {
                     id: 'temp-dropzone-helper',
                     type: 'file',
+                    multiple: 'multiple',
                     onchange: e => {
                         // use file input to create a fake drop event on the dropzone
                         document.querySelector(dropZoneSelector).dispatchEvent(Object.assign(
@@ -57,7 +59,8 @@ class MyHelper extends Helper {
 
         // upload file
         const fileInput = await page.$('#temp-dropzone-helper');
-        await fileInput.uploadFile(filePath);
+        // string = single file, array = multiple files
+        await typeof filePath === 'string' ? fileInput.uploadFile(filePath) : fileInput.uploadFile.apply(fileInput, filePath);
 
         // cleanup
         await page.evaluate(function () {
