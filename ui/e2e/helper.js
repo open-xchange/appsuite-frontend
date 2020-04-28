@@ -227,8 +227,54 @@ class MyHelper extends Helper {
 
         await page.mouse.move(startX, startY);
         await page.mouse.down();
+        await page.evaluate(async (ss, X, Y) => {
+            ss.dispatchEvent(new DragEvent('dragstart', {
+                bubbles: true,
+                cancelable: true,
+                screenX: X,
+                screenY: Y,
+                clientX: X,
+                clientY: Y
+            }));
+        }, src, startX, startY);
         await page.mouse.move(endX, endY);
+        await page.evaluate(async (ts, X, Y) => {
+            ts.dispatchEvent(new DragEvent('dragenter', {
+                bubbles: true,
+                cancelable: true,
+                screenX: X,
+                screenY: Y,
+                clientX: X,
+                clientY: Y
+            }));
+            ts.dispatchEvent(new DragEvent('dragover', {
+                bubbles: true,
+                cancelable: true,
+                screenX: X,
+                screenY: Y,
+                clientX: X,
+                clientY: Y
+            }));
+        }, target, endX, endY);
         await page.mouse.up();
+        await page.evaluate(async (ss, X, Y) => {
+            ss.dispatchEvent(new DragEvent('dragend', {
+                bubbles: true,
+                cancelable: true,
+                screenX: X,
+                screenY: Y,
+                clientX: X,
+                clientY: Y
+            }));
+            ss.dispatchEvent(new DragEvent('drop', {
+                bubbles: true,
+                cancelable: true,
+                screenX: X,
+                screenY: Y,
+                clientX: X,
+                clientY: Y
+            }));
+        }, src, endX, endY);
     }
 
 }
