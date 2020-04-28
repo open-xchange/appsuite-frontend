@@ -275,3 +275,39 @@ Scenario('[C241126] iTIP mails without appointment reference', async function (I
     I.click('Delete');
     I.retry(5).dontSee('Appointment canceled: #1');
 });
+
+Scenario('[Bug 63767] Error when creating appointment from email', async function (I, users, mail) {
+
+    const userMail = users[0].userdata.email1;
+
+    await I.haveMail({
+        attachments: [{
+            content: 'Blubber',
+            content_type: 'text/plain',
+            disp: 'inline'
+        }],
+        from: [['Julius Caesar', userMail]],
+        subject: 'Blub',
+        to: [['Julius Caesar', userMail]]
+    });
+
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+
+    // select mail and invite to appointment
+    mail.selectMail('Blub');
+    I.waitForVisible({ css: '.detail-view-header [aria-label="More actions"]' });
+    I.click('~More actions', '.detail-view-header');
+    I.waitForText('Invite to appointment', '.dropdown.open .dropdown-menu');
+    I.click('Invite to appointment', '.dropdown.open .dropdown-menu');
+
+    // same as in calendar helper
+    I.waitForVisible(locate({ css: '.io-ox-calendar-edit-window' }).as('Edit Dialog'));
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
+    I.fillField('Subject', 'Going to the pub');
+    I.pressKey('Pagedown');
+    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/contact_picture.png');
+    I.click('Create', '.io-ox-calendar-edit-window');
+    // there should be no backend error
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+});
