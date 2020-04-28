@@ -28,12 +28,20 @@ After(async (users) => {
 
 // TODO fix drag&drop to work with puppeteer
 // Might require a fix in the d&d code of the tokenfield
-Scenario.skip('[C8832] Re-order recipients', async function (I, users, mail) {
+Scenario('[C8832] Re-order recipients', async function (I, users, mail) {
 
     let [sender, recipient1, recipient2, recipient3, recipient4] = users;
 
     const mailSubject = 'C8832 Move recipients between between field';
+
     const tokenLabelFor = user => `${user.get('given_name')} ${user.get('sur_name')}`;
+    const dragTarget = user => `~${user.get('given_name')} ${user.get('sur_name')} ${user.get('primaryEmail')}`;
+    const dropTarget = fieldClass => {
+        return { css: `[data-extension-id="${fieldClass}"] .tokenfield` };
+    };
+    const tokenSelector = token => {
+        return { css: `[data-extension-id="${token}"] .token` };
+    };
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
 
@@ -49,28 +57,29 @@ Scenario.skip('[C8832] Re-order recipients', async function (I, users, mail) {
     I.fillField('To', recipient1.get('primaryEmail'));
     I.waitForVisible('.focus .tt-dropdown-menu');
     I.pressKey('Enter');
-    I.see(tokenLabelFor(recipient1), { css: '[data-extension-id="to"] .token' });
+    I.see(tokenLabelFor(recipient1), tokenSelector('to'));
     I.fillField('CC', recipient2.get('primaryEmail'));
     I.waitForVisible('.focus .tt-dropdown-menu');
     I.pressKey('Enter');
-    I.see(tokenLabelFor(recipient2), { css: '[data-extension-id="cc"] .token' });
+    I.see(tokenLabelFor(recipient2), tokenSelector('cc'));
     I.fillField('BCC', recipient3.get('primaryEmail'));
     I.waitForVisible('.focus .tt-dropdown-menu');
     I.pressKey('Enter');
-    I.see(tokenLabelFor(recipient3), { css: '[data-extension-id="bcc"] .token' });
+    I.see(tokenLabelFor(recipient3), tokenSelector('bcc'));
 
     // move around
     I.fillField('BCC', recipient4.get('primaryEmail'));
     I.waitForVisible('.focus .tt-dropdown-menu');
     I.pressKey('Enter');
-    I.see(tokenLabelFor(recipient4), { css: '[data-extension-id="bcc"] .token:nth-of-type(4)' });
-    I.dragAndDrop({ css: '[data-extension-id="bcc"] .token:nth-of-type(4)' }, { css: '[data-extension-id="cc"] .token-input' });
-    I.dontSeeElement({ css: '[data-extension-id="bcc"] .token:nth-of-type(4)' });
-    I.see(tokenLabelFor(recipient4), { css: '[data-extension-id="cc"] .token:nth-of-type(4)' });
-    I.dragAndDrop({ css: '[data-extension-id="cc"] .token:nth-of-type(4)' }, { css: '[data-extension-id="bcc"] .token-input' });
-    I.dontSeeElement({ css: '[data-extension-id="cc"] .token:nth-of-type(4)' });
-    I.see(tokenLabelFor(recipient4), { css: '[data-extension-id="bcc"] .token:nth-of-type(4)' });
-    I.dragAndDrop({ css: '[data-extension-id="bcc"] .token:nth-of-type(4)' }, { css: '[data-extension-id="to"] .token-input' });
+    I.see(tokenLabelFor(recipient4), tokenSelector('bcc'));
+    I.dragAndDrop(dragTarget(recipient4), dropTarget('cc'));
+    I.dontSee(tokenLabelFor(recipient4), tokenSelector('bcc'));
+    I.see(tokenLabelFor(recipient4), tokenSelector('cc'));
+    I.dragAndDrop(dragTarget(recipient4), dropTarget('bcc'));
+    I.dontSee(tokenLabelFor(recipient4), tokenSelector('cc'));
+    I.see(tokenLabelFor(recipient4), tokenSelector('bcc'));
+    I.dragAndDrop(dragTarget(recipient4), dropTarget('to'));
+    I.see(tokenLabelFor(recipient4), tokenSelector('to'));
     I.see(tokenLabelFor(recipient4), { css: '[data-extension-id="to"] .token:nth-of-type(4)' });
     I.see(tokenLabelFor(recipient1), { css: '[data-extension-id="to"] .token:nth-of-type(3)' });
 
