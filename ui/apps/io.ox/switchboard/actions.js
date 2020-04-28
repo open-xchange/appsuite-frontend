@@ -15,7 +15,7 @@ define('io.ox/switchboard/actions', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/modal',
     'io.ox/backbone/views/actions/util',
-    'io.ox/switchboard/call'
+    'io.ox/switchboard/call/api'
 ], function (api, ext, Modal, actionsUtil, call) {
 
     'use strict';
@@ -30,8 +30,7 @@ define('io.ox/switchboard/actions', [
             return isGAB(baton);
         },
         action: function (baton) {
-            var recipients = getRecipients(baton);
-            call.start(recipients);
+            call.start(getRecipients(baton));
         }
     });
 
@@ -46,7 +45,10 @@ define('io.ox/switchboard/actions', [
                 .addCancelButton()
                 .addButton({ label: 'Send', action: 'send' })
                 .build(function () {
-                    this.$body.append('<textarea class="form-control message" rows="5" placeholder="Message"></textarea>');
+                    this.$body.append('<textarea class="form-control message" rows="3" placeholder="Message"></textarea>');
+                    this.$el.on('keypress', 'textarea', function (e) {
+                        if (e.which === 13 && e.ctrlKey) this.invokeAction('send');
+                    }.bind(this));
                 })
                 .on('send', function () {
                     var message = this.$('textarea.message').val();

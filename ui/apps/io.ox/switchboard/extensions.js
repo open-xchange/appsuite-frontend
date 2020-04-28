@@ -17,7 +17,7 @@ define('io.ox/switchboard/extensions', [
     'io.ox/switchboard/api',
     'io.ox/core/api/account',
     'io.ox/backbone/views/actions/util',
-    'gettext!io.ox/core'
+    'gettext!io.ox/switchboard'
 ], function (ext, presence, api, account, actionsUtil, gt) {
 
     'use strict';
@@ -185,4 +185,7 @@ define('io.ox/switchboard/extensions', [
             this.append(presence.getPresenceIcon(id));
         }
     });
+
+    // disable calendar details (to get some room)
+    ext.point('io.ox/calendar/detail').disable('details');
 });

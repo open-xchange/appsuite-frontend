@@ -334,6 +334,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.trigger(action);
             // for general event listeners
             this.trigger('action', action);
+            // check if already disposed/closed by the action
+            if (this.disposed) return;
             // check if this.options is there, if the dialog was closed in the handling of the action this.options is empty and we run into a js error otherwise
             if ((this.options && !this.options.async) || action === 'cancel') this.close();
         },

@@ -14,9 +14,8 @@
 
 define.async('io.ox/switchboard/api', [
     'static/3rd.party/socket.io.slim.js',
-    'io.ox/core/api/user',
-    'io.ox/core/yell'
-], function (io, userAPI, yell) {
+    'io.ox/core/api/user'
+], function (io, userAPI) {
 
     'use strict';
 
@@ -46,6 +45,11 @@ define.async('io.ox/switchboard/api', [
                 def.resolve(result);
             });
             return def;
+        },
+
+        getUserName: function (id) {
+            // simple solution to get names
+            return id.replace(/^([^.]+)\.([^.]+)@.+$/, '$1 $2');
         }
     };
 
@@ -68,20 +72,6 @@ define.async('io.ox/switchboard/api', [
             .on('reconnect', function () {
                 console.log('Reconnecting to switchboard service');
             });
-        // respond to wall messages
-        api.socket.on('wall', function (from, to, payload) {
-            yell({
-                type: 'success',
-                message: $('<div>').append(
-                    $('<span>').text('New message'),
-                    $('<br>'),
-                    $('<b>').text(from),
-                    $('<br>'),
-                    $.txt(payload.message)
-                ),
-                duration: 60000
-            });
-        });
         return api;
     });
 });

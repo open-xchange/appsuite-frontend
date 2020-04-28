@@ -1,0 +1,198 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2020 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.wall {
+    position: absolute;
+    right: 48px;
+    bottom: 16px;
+    border-radius: 8px;
+    background-color: #eee;
+    box-shadow: 0 24px 48px 8px rgba(0, 0, 0, 0.5);
+    padding: 16px;
+    width: 480px;
+    max-height: 560px;
+    overflow-y: auto;
+    &:empty { display: none; }
+}
+
+.wall-message {
+    position: relative;
+    padding: 0 0 0 56px;
+    margin-bottom: 16px;
+    &:last-child { margin-bottom: 0; }
+    .contact-photo {
+        position: absolute;
+        top: 4px;
+        left: 0;
+    }
+    .presence {
+        position: absolute;
+        top: 25px;
+        left: 28px;
+        .icon {
+            border: 1px solid white;
+            box-sizing: content-box;
+        }
+    }
+    .sender {
+        font-weight: bold;
+        margin-bottom: 4px;
+        text-transform: capitalize;
+    }
+    .content {
+        background-color: white;
+        border-radius: 8px;
+        padding: 8px 16px;
+    }
+    .date {
+        color: #707070;
+        font-size: 12px;
+        position: absolute;
+        top: 3px;
+        right: 24px;
+    }
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    a.reply {
+        display: block;
+        margin-top: 8px;
+    }
+}
+
+.modal.incoming-call {
+    .modal-dialog {
+        width: 400px;
+    }
+    .modal-header, .modal-body {
+        text-align: center;
+    }
+    .modal-title {
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: bold;
+        margin: 0;
+    }
+    .photo {
+        margin: 16px auto;
+        width: 80px;
+        position: relative;
+    }
+    .contact-photo {
+        width: 80px;
+        height: 80px;
+    }
+    .presence {
+        position: absolute;
+        bottom: -2px;
+        right: -2px;
+        .icon {
+            width: 20px;
+            height: 20px;
+            border: 2px solid white;
+            box-sizing: content-box;
+            border-radius: 50%;
+            margin: 0;
+        }
+    }
+    .caller {
+        font-size: 24px;
+        line-height: 32px;
+        font-weight: normal;
+        text-transform: capitalize;
+        margin-top: 2px;
+    }
+    .modal-footer {
+        display: flex;
+        margin: 32px 0 40px 0;
+        justify-content: space-between;
+        text-align: center;
+        border: 0;
+        padding: 0;
+        .button {
+            display: flex;
+            flex-direction: column;
+        }
+        .btn {
+            font-size: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            margin-bottom: 8px;
+        }
+    }
+}
+
+.modal.outgoing-call {
+    .callee {
+        line-height: 16px;
+        padding: 0 0 0 56px;
+        position: relative;
+        margin-bottom: 16px;
+    }
+    .contact-photo {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .presence {
+        position: absolute;
+        top: 24px;
+        left: 24px;
+        .icon {
+            border: 1px solid white;
+            box-sizing: content-box;
+            border-radius: 50%;
+        }
+    }
+    .name {
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+}
+
+/* general blueprint for contact photo */
+.contact-photo {
+    /* default size */
+    width: 40px;
+    height: 40px;
+    /* photo as background image */
+    background-color: rgba(0, 0, 0, 0.05);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    /* shape is circle */
+    border-radius: 50%;
+    /* for initials */
+    color: rgba(0, 0, 0, 0.60);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* some changes */
+.calendar-detail .time .label-default {
+    color: #555;
+    background-color: #eee;
+}
+
+.calendar-detail .date-time-recurrence, .calendar-detail .location {
+    margin: 4px 0;
+}
+
+.calendar-detail .note {
+    margin: 16px 0;
+}

@@ -1,19 +1,25 @@
 [
     {
-        "path": "io.ox/switchboard/extensions",
         "namespace": "core",
+        "path": "io.ox/switchboard/extensions",
         "requires": "switchboard",
         "device": "!smartphone"
     },
     {
-        "namespace": ["io.ox/contacts/view-detail"],
+        "namespace": "core",
+        "path": "io.ox/switchboard/wall",
+        "requires": "switchboard",
+        "device": "!smartphone"
+    },
+    {
+        "namespace": "core",
         "path": "io.ox/switchboard/actions",
         "requires": "switchboard",
         "device": "!smartphone"
     },
     {
         "namespace": "core",
-        "path": "io.ox/switchboard/call",
+        "path": "io.ox/switchboard/call/api",
         "requires": "switchboard",
         "device": "!smartphone"
     }
