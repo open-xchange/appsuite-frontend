@@ -596,3 +596,34 @@ Scenario('[C8390] Folder tree', async (I, drive) => {
     I.dontSee('Videos', '.folder-tree');
     I.dontSee('Folders', '.folder-tree');
 });
+
+Scenario('[C114139] Default public folder permissions ', async (I, drive, users, dialogs) => {
+    let [user] = users;
+    const publicFolderName = 'C114139-' + new Date().getTime();
+    user.hasConfig('com.openexchange.folderstorage.defaultPermissions', '15=group_0@author');
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    I.waitForText('Public files', 5, '.folder-tree');
+    I.selectFolder('Public files');
+    I.clickToolbar('New');
+    I.clickDropdown('Add new folder');
+    dialogs.waitForVisible();
+    I.waitForText('Add new folder', 5, dialogs.locators.header);
+    I.fillField('Folder name', publicFolderName);
+    dialogs.clickButton('Add');
+    I.waitForDetached('.modal-dialog');
+    drive.waitForApp();
+    I.selectFolder(publicFolderName);
+    I.logout();
+    I.login('app=io.ox/files', users[1])
+    drive.waitForApp();
+    I.selectFolder(publicFolderName);
+    I.click('Actions for ' + publicFolderName)
+    I.clickDropdown('Permissions / Invite people')
+    dialogs.waitForVisible();
+    I.click('Details', locate('.permissions-view .row').at(2));
+    I.waitForElement(locate('[aria-checked="true"]').withText('Create objects and subfolders').inside('.dropdown.open'));
+    I.waitForElement(locate('[aria-checked="true"]').withText('Read all objects').inside('.dropdown.open'));
+    I.waitForElement(locate('[aria-checked="true"]').withText('Edit all objects').inside('.dropdown.open'));
+    I.waitForElement(locate('[aria-checked="true"]').withText('Delete all objects').inside('.dropdown.open'));
+});
