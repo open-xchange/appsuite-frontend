@@ -114,6 +114,65 @@ Scenario('[C85685] Send drive-mail to internal recipient', async (I, users, mail
     // TODO: check if a download helper is feasible
 });
 
+Scenario('[C85689] Send drive-mail with an attachment below the threshold', async (I, users, mail, drive) => {
+    const [batman, comissioner_gordon] = users;
+    await batman.hasConfig('com.openexchange.mail.compose.share.threshold', '' + (3 * 1024 * 1024)); // 3MB limit
+    await batman.hasConfig('com.openexchange.mail.compose.share.enabled', 'true');
+    // Go to Mail -> Compose
+    I.login('app=io.ox/mail', { user: batman });
+    mail.newMail();
+
+    // Add external recipient, subject and mail text
+    const subject = 'Modernize the Batsignal',
+        mailText = 'Let\'s discuss $subject!',
+        externalRecipient = comissioner_gordon.userdata.primaryEmail.replace('@', '+gordon@');
+    I.fillField('To', externalRecipient);
+    I.fillField('Subject', subject);
+    await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
+        I.fillField('body', mailText);
+        I.pressKey('Enter');
+        I.pressKey('Enter');
+    });
+
+    // Under Attachments choose "Add local file"
+    // Select a file
+    // I use a helper function here and directly feed the file into the input field
+    const batFile = '2MB.dat';
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `e2e/media/files/generic/${batFile}`);
+    // Expected Result: Attachment section opens containing a link: "Drive Mail"
+    I.waitForText('DAT', undefined, '.io-ox-mail-compose-window');
+    I.waitForElement('.progress');
+    I.waitForText('Mail size', 60, '.io-ox-mail-compose-window');
+    // Expected Result: Drive Mail will get enabled automatically and further options are shown.
+    I.dontSeeCheckboxIsChecked('.io-ox-mail-compose-window .share-attachments input[type="checkbox"]');
+
+    mail.send();
+
+    // Expected Result: Mail gets sent successfully
+    I.selectFolder('Sent');
+    I.waitForText(subject, undefined, '.list-view');
+
+    // Verify a new folder with the name of the mail's subject was NOT created in Drive
+    I.openApp('Drive');
+    drive.waitForApp();
+    I.dontSee('Drive Mail', undefined, '.file-list-view');
+
+    I.logout();
+
+    // Verify the mail as the recipient
+    I.login('app=io.ox/mail', { user: comissioner_gordon });
+    mail.selectMail(subject);
+
+    // Expected Result: Above the content an information is shown that the sender has shared some files with you plus a link to that files
+    I.dontSee(`${batman.userdata.given_name} ${batman.userdata.sur_name} has shared the following file with you:`);
+
+    I.waitForElement('.mail-detail-frame');
+    // Verify link redirects you to the files and the files are accessible.
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        I.see('Let\'s discuss $subject!');
+    });
+});
+
 Scenario('[C85690] Expire date can be forced', async function (I, users, mail) {
 
     I.login('app=io.ox/mail');
