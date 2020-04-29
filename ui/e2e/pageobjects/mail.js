@@ -27,6 +27,13 @@ module.exports = {
         I.click(item);
         I.waitForFocus('.list-view li.list-item.selected');
     },
+    selectMailByIndex(index) {
+        const item = locate('.list-view li.list-item').withAttr({ 'data-index': index.toString() });
+        I.waitForElement(item);
+        I.wait(0.5);
+        I.click(item);
+        I.waitForFocus('.list-view li.list-item.selected');
+    },
     newMail() {
         I.waitForText('Compose', 5, '.io-ox-mail-window .classic-toolbar-container');
         I.clickToolbar('Compose');
