@@ -38,3 +38,27 @@ Scenario('[C7493] Order widgets', async function (I, portal) {
     I.waitForText('Appointments', 5, '.widgets .widget:nth-child(1) h2');
     I.see('Inbox', '.widgets .widget:nth-child(2) h2');
 });
+
+Scenario('[C7473] Drag some portal-tiles', async function (I, portal) {
+
+    I.login('app=io.ox/portal');
+    portal.waitForApp();
+
+    // check position before
+    I.waitForText('Inbox', '.widgets .widget:nth-child(1) h2');
+    I.see('Appointments', '.widgets .widget:nth-child(2) h2');
+    I.see('My tasks', '.widgets .widget:nth-child(3) h2');
+    I.see('Birthdays', '.widgets .widget:nth-child(4) h2');
+    I.see('My latest files', '.widgets .widget:last-child h2');
+
+    // move first widget to last position
+    I.dragAndDrop('.widgets .widget:nth-child(1) h2', '.widgets .widget:last-child h2');
+
+    // check position after, expected: moved widget last, rest shifted left by one
+    I.waitForText('Appointments', 5, '.widgets .widget:nth-child(1) h2');
+    I.see('My tasks', '.widgets .widget:nth-child(2) h2');
+    I.see('Birthdays', '.widgets .widget:nth-child(3) h2');
+    I.see('My latest files', '.widgets .widget:nth-child(4) h2');
+    I.see('Inbox', '.widgets .widget:last-child h2');
+
+});
