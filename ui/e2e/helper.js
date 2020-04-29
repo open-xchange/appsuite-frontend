@@ -68,6 +68,64 @@ class MyHelper extends Helper {
         });
     }
 
+    async throttleNetwork(networkConfig) {
+
+        // some network speed presets
+        const presets = {
+            OFFLINE: {
+                'offline': true,
+                'downloadThroughput': 0,
+                'uploadThroughput': 0,
+                'latency': 0
+            },
+            GPRS: {
+                'offline': false,
+                'downloadThroughput': 50 * 1024 / 8,
+                'uploadThroughput': 20 * 1024 / 8,
+                'latency': 500
+            },
+            '2G': {
+                'offline': false,
+                'downloadThroughput': 250 * 1024 / 8,
+                'uploadThroughput': 50 * 1024 / 8,
+                'latency': 300
+            },
+            '3G': {
+                'offline': false,
+                'downloadThroughput': 750 * 1024 / 8,
+                'uploadThroughput': 250 * 1024 / 8,
+                'latency': 100
+            },
+            '4G': {
+                'offline': false,
+                'downloadThroughput': 4 * 1024 * 1024 / 8,
+                'uploadThroughput': 3 * 1024 * 1024 / 8,
+                'latency': 20
+            },
+            DSL: {
+                'offline': false,
+                'downloadThroughput': 2 * 1024 * 1024 / 8,
+                'uploadThroughput': 1 * 1024 * 1024 / 8,
+                'latency': 5
+            },
+            // no throttling, use this to reset the connection
+            ONLINE: {
+                'offline': false,
+                'downloadThroughput': -1,
+                'uploadThroughput': -1,
+                'latency': 0
+            }
+        };
+
+        const { page } = this.helpers['Puppeteer'];
+
+        // get Chrome DevTools session
+        const devTools = await page.target().createCDPSession();
+
+        // Set network speed, use preset if its there
+        await devTools.send('Network.emulateNetworkConditions', presets[networkConfig.toUpperCase()] || networkConfig);
+    }
+
     /*
      * Overwrite native puppeteer d&d, because it does not work for every case
      * Maybe this is going to be fixed in the future by puppeteer, then this can be removed.

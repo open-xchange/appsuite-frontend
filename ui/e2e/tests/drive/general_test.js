@@ -337,3 +337,22 @@ Scenario('[C45042] Filter files', async (I, drive) => {
     I.waitForText('document.doc', 5, '.file-list-view');
     I.waitNumberOfVisibleElements('.file-list-view .list-item', 22);
 });
+
+// Bug: File input is not selectable (display: none), which is also a pot. a11y bug
+Scenario('[Bug 63288] Cancel upload does not work in drive', async (I, drive) => {
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    I.clickToolbar('New');
+    I.waitForText('Upload files');
+    I.click('Upload files');
+    // slow down network so we can click the cancel upload button
+    await I.throttleNetwork('2G');
+    // the input field is created on demand when Upload files is clicked. This click also closes the dropdown
+    I.attachFile({ css: '[aria-label="Drive toolbar. Use cursor keys to navigate."] .dropdown input[name=file]' }, 'e2e/media/files/generic/2MB.dat');
+    I.waitForText('Cancel');
+    I.click('Cancel');
+    // reset network speed
+    await I.throttleNetwork('ONLINE');
+    I.waitForDetached('.upload-wrapper');
+    I.dontSee('2MB.dat');
+});
