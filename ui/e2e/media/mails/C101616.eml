@@ -1,0 +1,33 @@
+X-Account-Key: account2
+From: Test User <user@example.com>
+To: Another User <anotheruser@example.com>
+MIME-Version: 1.0
+Subject: HTML gradient
+Content-Type: text/html; charset=ISO-8859-15
+Content-Transfer-Encoding: 7bit
+
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-15">
+    <style type="text/css">
+        table.head-wrap{
+            width:100%;
+            text-align:center;
+            background:radial-gradient(at top, #3C73AA, #052D4B, #052D4B) repeat scroll 0% 0% transparent;
+        }
+    </style>
+  </head>
+  <body bgcolor="#FFFFFF" text="#000000">
+    <table class="head-wrap" height="300px">
+      <tbody>
+        <tr>
+          <td valign="top">There should be a 300px high td around me with a CSS gradient</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+  </body>
+</html>
+
+
