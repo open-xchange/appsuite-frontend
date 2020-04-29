@@ -19,23 +19,26 @@ const expect = require('chai').expect;
 Feature('Calendar > Edit');
 
 Before(async (users) => {
-    await users.create();
-    await users.create();
+    await Promise.all([
+        users.create(),
+        users.create()
+    ]);
+    const { I } = inject();
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
 });
 After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7449] Move appointment to folder', async function (I, calendar, dialogs) {
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    });
-    const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+Scenario('[C7449] Move appointment to folder', async (I, calendar, dialogs) => {
+    const folder = await calendar.defaultFolder();
     const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
-    await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
+    await I.haveFolder({ title: 'New calendar', module: 'event', parent: folder });
     await I.haveAppointment({
-        folder:  defaultFolderId,
+        folder,
         summary: 'Testappointment',
         startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
         endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
@@ -49,8 +52,7 @@ Scenario('[C7449] Move appointment to folder', async function (I, calendar, dial
 
     // open all views and load the appointment there
     ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
-        I.clickToolbar('View');
-        I.click(view);
+        calendar.switchView(view);
         I.waitForElement('.page.current .appointment');
         I.see('Testappointment');
     });
@@ -63,7 +65,7 @@ Scenario('[C7449] Move appointment to folder', async function (I, calendar, dial
     I.click('Move');
 
     dialogs.waitForVisible();
-    within('.modal-dialog', function () {
+    within('.modal-dialog', () => {
         I.click('.folder-arrow', '~My calendars');
         I.waitForVisible({ css: '[title="New calendar"]' });
         I.click({ css: '[title="New calendar"]' });
@@ -79,8 +81,7 @@ Scenario('[C7449] Move appointment to folder', async function (I, calendar, dial
 
     // open all views and verify that the appointment is gone
     ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
-        I.clickToolbar('View');
-        I.click(view);
+        calendar.switchView(view);
         I.waitForInvisible('.page.current .appointment');
         I.dontSee('Testappointment');
     });
@@ -91,21 +92,20 @@ Scenario('[C7449] Move appointment to folder', async function (I, calendar, dial
 
     // open all views and verify that the appointment is there again
     ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
-        I.clickToolbar('View');
-        I.click(view);
+        calendar.switchView(view);
         I.waitForElement('.page.current .appointment');
         I.see('Testappointment');
     });
 });
 
-Scenario('[C7450] Edit private appointment', async function (I, calendar) {
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+Scenario('[C7450] Edit private appointment', async (I, calendar) => {
+    const folder = await calendar.defaultFolder();
     const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder,
+        folder,
         summary: 'Testappointment',
-        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        startDate: { tzid: 'Europe/Berlin', value: time.format('YYYYMMDD[T]HHmmss') },
+        endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss') },
         class: 'CONFIDENTIAL'
     });
 
@@ -116,8 +116,7 @@ Scenario('[C7450] Edit private appointment', async function (I, calendar) {
 
     // open all views and load the appointments there
     ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
-        I.clickToolbar('View');
-        I.click(view);
+        calendar.switchView(view);
         I.waitForElement('.page.current .appointment');
         I.see('Testappointment');
         I.seeElement('.fa-lock', '~Testappointment');
@@ -133,8 +132,7 @@ Scenario('[C7450] Edit private appointment', async function (I, calendar) {
 
     // Check all views
     ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
-        I.clickToolbar('View');
-        I.click(view);
+        calendar.switchView(view);
         I.waitForElement('.page.current .appointment');
         I.see('Testappointment');
         I.waitForInvisible(locate('.fa-lock').inside('~Testappointment').inside('.page.current'));
@@ -142,14 +140,13 @@ Scenario('[C7450] Edit private appointment', async function (I, calendar) {
 
 });
 
-Scenario('[C7451] Edit yearly series via doubleclick', async function (I, calendar) {
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+Scenario('[C7451] Edit yearly series via doubleclick', async (I, calendar) => {
     const time = moment('1612', 'DDMM').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder,
+        folder: await calendar.defaultFolder(),
         summary: 'Testappointment',
-        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        startDate: { tzid: 'Europe/Berlin', value: time.format('YYYYMMDD[T]HHmmss') },
+        endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss') },
         rrule: 'FREQ=YEARLY;BYMONTH=12;BYMONTHDAY=16'
     });
 
@@ -161,9 +158,7 @@ Scenario('[C7451] Edit yearly series via doubleclick', async function (I, calend
     for (let i = 0; i < diffMonth; i++) I.click('~Go to next month', calendar.locators.mini);
     I.click({ css: `[aria-label*="${time.format('l, dddd')}, CW ${time.week()}"]` }, calendar.locators.mini);
 
-    I.clickToolbar('View');
-    I.click('Week');
-
+    calendar.switchView('Week');
     I.waitForVisible(`.page.current .day:nth-child(${time.weekday() + 2}) .appointment`);
     I.click('.appointment', '.page.current');
     I.waitForVisible('.io-ox-sidepopup .inline-toolbar-container');
@@ -188,14 +183,13 @@ Scenario('[C7451] Edit yearly series via doubleclick', async function (I, calend
     I.waitForVisible(`.page.current .day:nth-child(${time.weekday() + 2}) .appointment`);
 });
 
-Scenario('[C7464] Change appointment in shared folder as guest', async function (I, users, calendar) {
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+Scenario('[C7464] Change appointment in shared folder as guest', async (I, users, calendar) => {
     const time = moment().startOf('week').add(3, 'days').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder,
+        folder: await calendar.defaultFolder(),
         summary: 'Testappointment',
-        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        startDate: { tzid: 'Europe/Berlin', value: time.format('YYYYMMDD[T]HHmmss') },
+        endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss') },
         attendees: [{ entity: users[0].userdata.id }, { entity: users[1].userdata.id }]
     });
 
@@ -207,16 +201,11 @@ Scenario('[C7464] Change appointment in shared folder as guest', async function 
     I.dontSeeElement('.io-ox-calendar-edit-window');
 });
 
-Scenario('[C7465] Edit appointment in shared folder as author', async function (I, users, calendar) {
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    });
-    const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
+Scenario('[C7465] Edit appointment in shared folder as author', async (I, users, calendar) => {
+    const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: await calendar.defaultFolder() });
     const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder,
+        folder,
         summary: 'Testappointment',
         startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
         endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
@@ -242,10 +231,6 @@ Scenario('[C7465] Edit appointment in shared folder as author', async function (
 
     I.logout();
 
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    }, { user: users[1] });
     I.login('app=io.ox/calendar', { user: users[1] });
 
     I.waitForElement('.folder[data-id="virtual/flat/event/shared"]');
@@ -271,8 +256,7 @@ Scenario('[C7465] Edit appointment in shared folder as author', async function (
 
     // 4. Check this appointment in all views.
     ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
-        I.clickToolbar('View');
-        I.click(view);
+        calendar.switchView(view);
         I.waitForVisible(locate('.appointment').inside('.page.current'));
         I.click('.appointment', '.page.current');
         I.waitForText('Changedappointment', 5, '.calendar-detail');
@@ -281,12 +265,7 @@ Scenario('[C7465] Edit appointment in shared folder as author', async function (
     });
 });
 
-Scenario('[C234659] Split appointment series', async function (I, users, calendar, dialogs) {
-
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    });
+Scenario('[C234659] Split appointment series', async (I, users, calendar, dialogs) => {
     I.login('app=io.ox/calendar');
 
     I.clickToolbar('New appointment');
@@ -340,12 +319,7 @@ Scenario('[C234659] Split appointment series', async function (I, users, calenda
     I.see(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, '.io-ox-sidepopup');
 });
 
-Scenario('[C234679] Exceptions changes on series modification', async function (I, calendar, dialogs) {
-
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    });
+Scenario('[C234679] Exceptions changes on series modification', async (I, calendar, dialogs) => {
     I.login('app=io.ox/calendar');
 
     I.clickToolbar('New appointment');
@@ -414,17 +388,11 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
 
 });
 
-Scenario('[C7467] Delete recurring appointment in shared folder as author', async function (I, users) {
-
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    });
-    const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
+Scenario('[C7467] Delete recurring appointment in shared folder as author', async (I, users, calendar) => {
+    const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: await calendar.defaultFolder() });
     const time = moment().startOf('week').add(1, 'days').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder,
+        folder,
         summary: 'Testappointment',
         startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
         endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
@@ -450,10 +418,6 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
 
     I.logout();
 
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    }, { user: users[1] });
     I.login('app=io.ox/calendar', { user: users[1] });
 
     I.waitForElement({ css: '[data-id="virtual/flat/event/shared"]' });
@@ -477,17 +441,11 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
     I.waitForInvisible('.appointment');
 });
 
-Scenario('[C7470] Delete a recurring appointment', async function (I) {
-
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    });
-    const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
+Scenario('[C7470] Delete a recurring appointment', async (I, calendar) => {
+    const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: await calendar.defaultFolder() });
     const time = moment().startOf('week').add(1, 'days').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder,
+        folder,
         summary: 'Testappointment',
         startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
         endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
@@ -500,8 +458,7 @@ Scenario('[C7470] Delete a recurring appointment', async function (I) {
 
     // open all views and load the appointments there
     ['Week', 'Day', 'Month', 'List', 'Workweek'].forEach((view) => {
-        I.clickToolbar('View');
-        I.click(view);
+        calendar.switchView(view);
         if (view === 'Day') I.click({ css: `.date-picker td[aria-label*="${time.format('M/D/YYYY')}"]` });
         I.waitForVisible(locate('.appointment').inside('.page.current'));
     });
@@ -519,23 +476,17 @@ Scenario('[C7470] Delete a recurring appointment', async function (I) {
 
     I.waitForInvisible(locate('.appointment').inside('.page.current'));
     ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
-        I.clickToolbar('View');
-        I.click(view);
+        calendar.switchView(view);
         I.dontSee('.appointment', '.page.current');
     });
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario('[C274402] Change organizer of appointment with internal attendees', async function (I, users, calendar, dialogs) {
-
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true, 'chronos/allowChangeOfOrganizer': true }
-    });
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+Scenario('[C274402] Change organizer of appointment with internal attendees', async (I, users, calendar, dialogs) => {
+    await I.haveSetting({ 'io.ox/calendar': { 'chronos/allowChangeOfOrganizer': true } });
     const time = moment().startOf('week').add(3, 'days').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder,
+        folder: await calendar.defaultFolder(),
         summary: 'Testsubject',
         location: 'Testlocation',
         startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
@@ -572,19 +523,15 @@ Scenario('[C274402] Change organizer of appointment with internal attendees', as
     I.waitForText(`${users[1].userdata.display_name}`, 5, '.io-ox-sidepopup .details .organizer');
 });
 
-Scenario('[274409] Change organizer of series with internal attendees', async function (I, users, dialogs) {
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true, 'chronos/allowChangeOfOrganizer': true }
-    });
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+Scenario('[C274409] Change organizer of series with internal attendees', async (I, users, calendar, dialogs) => {
+    await I.haveSetting({ 'io.ox/calendar': { 'chronos/allowChangeOfOrganizer': true } });
     const time = moment().startOf('week').add(1, 'day').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder,
+        folder: await calendar.defaultFolder(),
         summary: 'Testsubject',
         location: 'Testlocation',
-        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        startDate: { tzid: 'Europe/Berlin', value: time.format('YYYYMMDD[T]HHmmss') },
+        endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss') },
         attendees: [{ entity: users[0].userdata.id }, { entity: users[1].userdata.id }],
         rrule: 'FREQ=DAILY;COUNT=5'
     });
@@ -619,6 +566,7 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
     I.waitForDetached('.io-ox-sidepopup');
 
     I.waitForEnabled(locate('.appointment').at(2));
+    I.wait(0.3);
     I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
     I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Details');
@@ -632,45 +580,44 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
 });
 
 // TODO: shaky, msg: 'Text "Do you want to delete all appointments of the series or just this appointment?" was not found on page after 5 sec'
-Scenario('[C265149] As event organizer I can add a textual reason why an event was canceled', async function (I, users, dialogs) {
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
-    });
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+Scenario('[C265149] As event organizer I can add a textual reason why an event was canceled', async (I, users, calendar, dialogs) => {
+    await I.haveSetting({ 'io.ox/calendar': { notifyNewModifiedDeleted: true } });
+    const folder = await calendar.defaultFolder();
     const time = moment().startOf('week').add(1, 'day').add(10, 'hours');
     // single appointment without additional participants
-    await I.haveAppointment({
-        folder:  folder,
-        summary: 'Appointment1',
-        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
-    });
-    // recurring appointment without additional participants
-    await I.haveAppointment({
-        folder:  folder,
-        summary: 'Appointment2',
-        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        rrule: 'FREQ=DAILY;COUNT=5'
-    });
-    // single appointment with additional participants
-    await I.haveAppointment({
-        folder:  folder,
-        summary: 'Appointment3',
-        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        attendees: [{ entity: users[0].userdata.id }, { entity: users[1].userdata.id }]
-    });
-    // recurring appointment with additional participants
-    await I.haveAppointment({
-        folder:  folder,
-        summary: 'Appointment4',
-        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        attendees: [{ entity: users[0].userdata.id }, { entity: users[1].userdata.id }],
-        rrule: 'FREQ=DAILY;COUNT=5'
-    });
+    await Promise.all([
+        I.haveAppointment({
+            folder,
+            summary: 'Appointment1',
+            startDate: { tzid: 'Europe/Berlin', value: time.format('YYYYMMDD[T]HHmmss') },
+            endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss') }
+        }),
+        // recurring appointment without additional participants
+        I.haveAppointment({
+            folder,
+            summary: 'Appointment2',
+            startDate: { tzid: 'Europe/Berlin', value: time.format('YYYYMMDD[T]HHmmss') },
+            endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss') },
+            rrule: 'FREQ=DAILY;COUNT=5'
+        }),
+        // single appointment with additional participants
+        I.haveAppointment({
+            folder,
+            summary: 'Appointment3',
+            startDate: { tzid: 'Europe/Berlin', value: time.format('YYYYMMDD[T]HHmmss') },
+            endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss') },
+            attendees: [{ entity: users[0].userdata.id }, { entity: users[1].userdata.id }]
+        }),
+        // recurring appointment with additional participants
+        I.haveAppointment({
+            folder,
+            summary: 'Appointment4',
+            startDate: { tzid: 'Europe/Berlin', value: time.format('YYYYMMDD[T]HHmmss') },
+            endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss') },
+            attendees: [{ entity: users[0].userdata.id }, { entity: users[1].userdata.id }],
+            rrule: 'FREQ=DAILY;COUNT=5'
+        })
+    ]);
 
     I.login('app=io.ox/calendar');
 
@@ -723,20 +670,15 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
 
 });
 
-Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async function (I) {
-
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
-    });
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async (I, calendar) => {
+    await I.haveSetting({ 'io.ox/calendar': { notifyNewModifiedDeleted: true } });
     const time = moment().startOf('week').add(1, 'day').add(10, 'hours');
     // recurring appointment without additional participants
     await I.haveAppointment({
-        folder:  folder,
+        folder: await calendar.defaultFolder(),
         summary: 'Testappointment',
-        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        startDate: { tzid: 'Europe/Berlin', value: time.format('YYYYMMDD[T]HHmmss') },
+        endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss') },
         rrule: 'FREQ=WEEKLY;BYDAY=MO;INTERVAL=2;COUNT=3'
     });
 
@@ -752,8 +694,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     I.waitForInvisible('.page.current .appointment.io-ox-busy');
     I.see('Testappointment', locate('.page.current .day').at(2));
 
-    I.clickToolbar('View');
-    I.click('Week');
+    calendar.switchView('Week');
 
     I.waitForVisible('.page.current .appointment');
     I.see('Testappointment', locate('.page.current .day').at(3));
@@ -767,8 +708,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     I.waitForInvisible('.page.current .appointment.io-ox-busy');
     I.see('Testappointment', locate('.page.current .day').at(4));
 
-    I.clickToolbar('View');
-    I.click('Month');
+    calendar.switchView('Month');
 
     I.waitForVisible('.page.current .appointment');
     time.add(2, 'days');
@@ -784,18 +724,14 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     I.see('Testappointment', { css: `[id="${time.format('YYYY-M-D')}"]` });
 });
 
-Scenario('[C7453] Edit appointment, set the all day checkmark', async function (I, calendar) {
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true, 'chronos/allowChangeOfOrganizer': true }
-    });
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+Scenario('[C7453] Edit appointment, set the all day checkmark', async (I, calendar) => {
+    await I.haveSetting({ 'io.ox/calendar': { 'chronos/allowChangeOfOrganizer': true } });
     const time = moment().startOf('week').add(1, 'day').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder,
+        folder: await calendar.defaultFolder(),
         summary: 'Testsubject',
-        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
+        startDate: { tzid: 'Europe/Berlin', value: time.format('YYYYMMDD[T]HHmmss') },
+        endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss') }
     });
     const appointment = locate('.page.current .appointment-container .appointment')
         .withText('Testsubject')
@@ -815,20 +751,16 @@ Scenario('[C7453] Edit appointment, set the all day checkmark', async function (
 
 });
 
-Scenario('[C7457] Edit appointment via toolbar', async function (I, calendar) {
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true, 'chronos/allowChangeOfOrganizer': true }
-    });
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+Scenario('[C7457] Edit appointment via toolbar', async (I, calendar) => {
+    await I.haveSetting({ 'io.ox/calendar': { 'chronos/allowChangeOfOrganizer': true } });
     const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder,
+        folder: await calendar.defaultFolder(),
         summary: 'Testsubject',
         location: 'Testlocation',
         description: 'Testdescription',
-        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
+        startDate: { tzid: 'Europe/Berlin', value: time.format('YYYYMMDD[T]HHmmss') },
+        endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss') }
     });
 
     I.login('app=io.ox/calendar');
@@ -840,8 +772,7 @@ Scenario('[C7457] Edit appointment via toolbar', async function (I, calendar) {
 
     // open all views and load the appointment there
     ['Day', 'Month', 'List', 'Week', 'Workweek'].forEach((view) => {
-        I.clickToolbar('View');
-        I.click(view);
+        calendar.switchView(view);
         I.waitForVisible(locate('*').withText('Testsubject').inside('.page.current'));
     });
 
@@ -859,9 +790,7 @@ Scenario('[C7457] Edit appointment via toolbar', async function (I, calendar) {
 
     // open all views and check the appointment there
     ['Day', 'Month', 'List', 'Week', 'Workweek'].forEach((view) => {
-        I.clickToolbar('View');
-        I.click(view);
-
+        calendar.switchView(view);
         I.retry(5).click('.appointment', '.page.current');
         if (view !== 'List') I.waitForVisible('.io-ox-sidepopup');
         I.retry(5).see('Newsubject', '.calendar-detail');
@@ -871,44 +800,35 @@ Scenario('[C7457] Edit appointment via toolbar', async function (I, calendar) {
     });
 });
 
-Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, users) {
-    I.haveSetting('io.ox/core//autoOpenNotification', false);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-
+Scenario('[C7454] Edit appointment, all-day to one hour', async (I, users, calendar) => {
+    const { id, given_name, sur_name, primaryEmail } = users[0].userdata;
     const momentRange = require('moment-range').extendMoment(moment);
     const testrailID = 'C7454';
     const appointmentSelector = { css: `[title="${testrailID}, ${testrailID}"]` };
-    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
     await I.haveAppointment({
-        folder: 'cal://0/' + appointmentDefaultFolder,
+        folder: await calendar.defaultFolder(),
         summary: testrailID,
         location: testrailID,
         description: testrailID,
         attendeePrivileges: 'DEFAULT',
-        endDate: {
-            tzid: 'Europe/Berlin',
-            value: momentRange().format('YYYYMMDD')
-        },
-        startDate: {
-            tzid: 'Europe/Berlin',
-            value: momentRange().format('YYYYMMDD')
-        },
+        startDate: { tzid: 'Europe/Berlin', value: momentRange().format('YYYYMMDD') },
+        endDate:   { tzid: 'Europe/Berlin', value: momentRange().format('YYYYMMDD') },
         attendees: [
             {
                 cuType: 'INDIVIDUAL',
-                cn: users[0].userdata.given_name + ' ' + users[0].userdata.sur_name,
+                cn: `${given_name} ${sur_name}`,
                 partStat: 'ACCEPTED',
-                entity: users[0].userdata.id,
-                email: users[0].userdata.primaryEmail,
-                uri: 'mailto:' + users[0].userdata.primaryEmail,
+                entity: id,
+                email: primaryEmail,
+                uri: `mailto:${primaryEmail}`,
                 contact: {
-                    display_name: users[0].userdata.given_name + ' ' + users[0].userdata.sur_name,
-                    first_name: users[0].userdata.given_name,
-                    last_name: users[0].userdata.sur_name
+                    display_name: `${given_name} ${sur_name}`,
+                    first_name: given_name,
+                    last_name: sur_name
                 }
             }
         ]
-    }, { user: users[0] });
+    });
 
     I.login('app=io.ox/calendar&perspective=week:week');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
@@ -928,34 +848,25 @@ Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, use
     I.click('Save');
     I.waitForDetached({ css: '[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit' });
     I.waitForElement(appointmentSelector, 5);
+    I.wait(0.3);
     I.click(appointmentSelector);
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
     I.waitForText('12:00 – 1:00 PM');
 });
 
-Scenario('[C7462] Remove a participant', async function (I, users) {
-    const moment = require('moment');
-    let testrailID = 'C7462';
-    I.haveSetting('io.ox/core//autoOpenNotification', false);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+Scenario('[C7462] Remove a participant', async (I, users, calendar) => {
+    const testrailID = 'C7462';
+    await I.haveSetting('io.ox/calendar//viewView', 'week:week');
 
     //Create Appointment
-    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
-    I.haveAppointment({
-        folder: 'cal://0/' + appointmentDefaultFolder,
+    await I.haveAppointment({
+        folder: await calendar.defaultFolder(),
         summary: testrailID,
         location: testrailID,
         description: testrailID,
         attendeePrivileges: 'DEFAULT',
-        endDate: {
-            tzid: 'Europe/Berlin',
-            value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
-        },
-        startDate: {
-            tzid: 'Europe/Berlin',
-            value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00')
-        },
+        startDate: { tzid: 'Europe/Berlin', value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00') },
+        endDate:   { tzid: 'Europe/Berlin', value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00') },
         attendees: [
             {
                 cuType: 'INDIVIDUAL',
@@ -983,8 +894,8 @@ Scenario('[C7462] Remove a participant', async function (I, users) {
                 }
             }
         ]
-    }, { user: users[0] });
-    I.login('app=io.ox/calendar', { user: users[0] });
+    });
+    I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
     I.waitForElement('.appointment-container [aria-label^="' + testrailID + ', ' + testrailID + '"]');
@@ -1002,41 +913,42 @@ Scenario('[C7462] Remove a participant', async function (I, users) {
     I.waitForVisible('.io-ox-calendar-main .io-ox-sidepopup');
     I.waitForElement({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
     I.waitForText('Participants');
+    I.wait(0.3);
     I.dontSeeElement('.io-ox-sidepopup-pane a[title="' + users[1].userdata.primaryEmail + '"]');
 });
 
-Scenario('[C7461] Add a participant/ressource', async function (I, users, calendar, mail) {
-    await users.create();
-    await users.create();
-    const [userA, userB, weebl, bob] = users;
-
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true, separateExternalParticipantList: true }
-    });
-
+Scenario('[C7461] Add a participant/ressource', async (I, users, calendar, mail) => {
     const timestamp = Math.round(+new Date() / 1000);
-    const resourceName = `C7461 ${timestamp}`,
-        resourceMail = `C7461@${timestamp}.de`;
-    await I.dontHaveResource(resourceName);
-    await I.haveResource({ description: 'Evil sharks equipped with lazers', display_name: resourceName, name: resourceName, mailaddress: resourceMail });
-
+    const resourceName = `C7461 ${timestamp}`;
+    const resourceMail = `C7461@${timestamp}.de`;
     const groupName = `C7461 ${timestamp} Group`;
-    await I.dontHaveGroup(groupName);
-    await I.haveGroup({ name: groupName, display_name: groupName, members: [weebl.userdata.id, bob.userdata.id] });
+
+    await Promise.all([
+        users.create(),
+        users.create(),
+        I.dontHaveResource(resourceName),
+        I.dontHaveGroup(groupName),
+        I.haveSetting({ 'io.ox/calendar': { notifyNewModifiedDeleted: true, separateExternalParticipantList: true } })
+    ]);
+
+    const [userA, userB, weebl, bob] = users;
 
     // Precondition: A simple appointment already exists
     // having the appointment at the end of the day (11:00PM-12:00AM) assures that userB will receive a notification
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar', { user: userA })}`,
-        startTime = moment().startOf('day').add(23, 'hour'),
-        endTime = moment().startOf('day').add(24, 'hour'),
-        subject = `${userA.userdata.name}s awesome appointment`;
-    await I.haveAppointment({
-        folder:  folder,
-        summary: subject,
-        startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        endDate: { value: endTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
-    }, { user: userA });
+    const startTime = moment().startOf('day').add(23, 'hour').format('YYYYMMDD[T]HHmmss');
+    const endTime = moment().startOf('day').add(24, 'hour').format('YYYYMMDD[T]HHmmss');
+    const subject = `${userA.userdata.name}s awesome appointment`;
+
+    await Promise.all([
+        I.haveResource({ description: 'Evil sharks equipped with lazers', display_name: resourceName, name: resourceName, mailaddress: resourceMail }),
+        I.haveGroup({ name: groupName, display_name: groupName, members: [weebl.userdata.id, bob.userdata.id] }),
+        I.haveAppointment({
+            folder: `cal://0/${await I.grabDefaultFolder('calendar', { user: userA })}`,
+            summary: subject,
+            startDate: { tzid: 'Europe/Berlin', value: startTime },
+            endDate:   { tzid: 'Europe/Berlin', value: endTime }
+        }, { user: userA })
+    ]);
 
     // 1. Switch to Calendar
     I.login(['app=io.ox/calendar&perspective=week:week'], { user: userA });
@@ -1123,21 +1035,12 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users, calend
     I.retry(3).waitForElement({ css: `span[title="New appointment: ${subject}"]` });
 });
 
-Scenario('[C7455] Edit appointment by changing the timeframe', async function (I, users, calendar) {
-
-    //Create Appointment
-    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+Scenario('[C7455] Edit appointment by changing the timeframe', async (I, users, calendar) => {
     await I.haveAppointment({
-        folder: 'cal://0/' + appointmentDefaultFolder,
+        folder: await calendar.defaultFolder(),
         summary: 'Dinner for one',
-        endDate: {
-            tzid: 'Europe/Berlin',
-            value: moment().startOf('day').add(13, 'hours').format('YYYYMMDD[T]HHmm00')
-        },
-        startDate: {
-            tzid: 'Europe/Berlin',
-            value: moment().startOf('day').add(12, 'hours').format('YYYYMMDD[T]HHmm00')
-        }
+        startDate: { tzid: 'Europe/Berlin', value: moment().startOf('day').add(12, 'hours').format('YYYYMMDD[T]HHmm00') },
+        endDate:   { tzid: 'Europe/Berlin', value: moment().startOf('day').add(13, 'hours').format('YYYYMMDD[T]HHmm00') }
     });
 
     I.login('app=io.ox/calendar&perspective=week:day');
@@ -1163,51 +1066,43 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
     I.retry(5).click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup');
 
-    I.clickToolbar('View');
-    I.click('Week', '.smart-dropdown-container');
-
+    calendar.switchView('Week');
     I.retry(5).click('.io-ox-pagecontroller.current .appointment');
     I.waitForText('11:00 – 2:00 PM');
 
-    I.clickToolbar('View');
-    I.click('Month', '.smart-dropdown-container');
-
+    calendar.switchView('Month');
     I.retry(5).click('.io-ox-pagecontroller.current .appointment');
     I.waitForText('11:00 – 2:00 PM');
 
-    I.clickToolbar('View');
-    I.click('List', '.smart-dropdown-container');
-
+    calendar.switchView('List');
     I.waitForText('11:00 AM');
     I.waitForText('2:00 PM');
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario('[C7460] Add attachments', async function (I, calendar) {
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
-    });
-
+Scenario('[C7460] Add attachments', async (I, calendar) => {
     // Precondition: An appointment already exists
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`,
-        startTime = moment().startOf('day').add(13, 'hour'),
-        endTime = moment().startOf('day').add(15, 'hour'),
-        subject = `Tiny Tinas ${startTime.format('h a')}s Tea Party`;
-    await I.haveAppointment({
-        folder:  folder,
-        summary: subject,
-        startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        endDate: { value: endTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
-    });
+    const startTime = moment().startOf('day').add(13, 'hour');
+    const endTime = moment().startOf('day').add(15, 'hour');
+    const summary = `Tiny Tinas ${startTime.format('h a')}s Tea Party`;
+
+    await Promise.all([
+        I.haveSetting({ 'io.ox/calendar': { notifyNewModifiedDeleted: true } }),
+        I.haveAppointment({
+            folder: await calendar.defaultFolder(),
+            summary,
+            startDate: { tzid: 'Europe/Berlin', value: startTime.format('YYYYMMDD[T]HHmmss') },
+            endDate:   { tzid: 'Europe/Berlin', value: endTime.format('YYYYMMDD[T]HHmmss') }
+        })
+    ]);
 
     // 1. Switch to Calendar
     I.login(['app=io.ox/calendar&perspective=week:week']);
     calendar.waitForApp();
-    I.waitForElement(locate('.appointment').withText(subject));
+    I.waitForElement(locate('.appointment').withText(summary));
 
     // 2. Select the existing appointment, click "Edit"
-    I.click(subject, '.appointment');
+    I.click(summary, '.appointment');
     I.waitForText('Edit', undefined, '.io-ox-sidepopup');
     I.click('Edit');
 
@@ -1232,40 +1127,29 @@ Scenario('[C7460] Add attachments', async function (I, calendar) {
     // Expected Result: The appointment now contains the added files as attachments. These attachments can be downloaded and correspond to the files that have been uploaded.
     const seeAttachments = (context) => {
         I.waitForElement(context);
-        I.see(subject, context);
+        I.see(summary, context);
         I.see('testdocument.odt', context);
         I.see('testdocument.rtf', context);
     };
     ['Week', 'Day', 'Month', 'List'].forEach((view) => {
-        I.clickToolbar('View');
-        I.click(view);
-        I.waitForText(subject, 5, '.page.current .appointment');
-        I.click(subject, '.page.current .appointment');
-        if (view === 'List') {
-            seeAttachments('.calendar-detail-pane');
-        } else {
-            seeAttachments('.io-ox-sidepopup');
-        }
+        calendar.switchView(view);
+        I.waitForText(summary, 5, '.page.current .appointment');
+        I.click(summary, '.page.current .appointment');
+        if (view === 'List') seeAttachments('.calendar-detail-pane');
+        else seeAttachments('.io-ox-sidepopup');
     });
     // TODO: check if attachments can be downloaded and compared with the original files
 });
 
-Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
+Scenario('[C7456] Edit appointment via Drag & Drop', async (I, calendar) => {
     const summary = 'Brexit';
     //Create Appointment
-    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
     await I.haveAppointment({
-        folder: 'cal://0/' + appointmentDefaultFolder,
-        summary: summary,
+        folder: await calendar.defaultFolder(),
+        summary,
         description: 'Ooordeeeer! This appointment is moved constantly.',
-        endDate: {
-            tzid: 'Europe/Berlin',
-            value: moment().startOf('day').add(13, 'hours').format('YYYYMMDD[T]HHmm00')
-        },
-        startDate: {
-            tzid: 'Europe/Berlin',
-            value: moment().startOf('day').add(12, 'hours').format('YYYYMMDD[T]HHmm00')
-        }
+        startDate: { tzid: 'Europe/Berlin', value: moment().startOf('day').add(12, 'hours').format('YYYYMMDD[T]HHmm00') },
+        endDate:   { tzid: 'Europe/Berlin', value: moment().startOf('day').add(13, 'hours').format('YYYYMMDD[T]HHmm00') }
     });
 
     I.login('app=io.ox/calendar&perspective=week:day');
@@ -1273,10 +1157,10 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
 
     I.waitForElement('.appointment');
     // have to scroll appointment into view for drag & drop to work
-    I.executeScript(function () {
-        // select first appointment element
-        $('.appointment-content')[0].scrollIntoView(true);
-    });
+
+    // select first appointment element
+    I.executeScript(() => $('.appointment-content')[0].scrollIntoView(true));
+
     I.dragAndDrop('.appointment .appointment-content', '.day .timeslot:nth-child(27)');
     I.wait(0.5);
 
@@ -1284,45 +1168,35 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
     I.waitForVisible('.io-ox-sidepopup');
     I.waitForText('1:00 – 2:00 PM');
 
-    I.clickToolbar('View');
-    I.click('Week', '.smart-dropdown-container');
-
+    calendar.switchView('Week');
     I.retry(5).click('.io-ox-pagecontroller.current .appointment');
     I.waitForText('1:00 – 2:00 PM');
 
-    I.clickToolbar('View');
-    I.click('Month', '.smart-dropdown-container');
-
+    calendar.switchView('Month');
     I.retry(5).click('.io-ox-pagecontroller.current .appointment');
     I.waitForText('1:00 – 2:00 PM');
 
-    I.clickToolbar('View');
-    I.click('List', '.smart-dropdown-container');
+    calendar.switchView('List');
     I.wait(1);
-
     I.waitForText('1:00 PM');
     I.waitForText('2:00 PM');
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario('[C7459] Remove attachments', async function (I, calendar) {
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
-    });
+Scenario('[C7459] Remove attachments', async (I, calendar) => {
+    await I.haveSetting({ 'io.ox/calendar': { notifyNewModifiedDeleted: true } });
 
     // Precondition: An appointment with file attachment exists
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`,
-        startTime = moment().startOf('day').add(1, 'hour'),
-        endTime = moment().startOf('day').add(2, 'hour'),
-        subject = `Allhands ${startTime.format('h A')} Meeting`,
-        appointment = await I.haveAppointment({
-            folder:  folder,
-            summary: subject,
-            startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-            endDate: { value: endTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
-        }),
-        updatedAppointment = await I.haveAttachment('calendar', appointment, 'e2e/media/files/generic/testdocument.odt');
+    const startTime = moment().startOf('day').add(1, 'hour');
+    const endTime = moment().startOf('day').add(2, 'hour');
+    const summary = `Allhands ${startTime.format('h A')} Meeting`;
+    const appointment = await I.haveAppointment({
+        folder: `cal://0/${await I.grabDefaultFolder('calendar')}`,
+        summary,
+        startDate: { tzid: 'Europe/Berlin', value: startTime.format('YYYYMMDD[T]HHmmss') },
+        endDate:   { tzid: 'Europe/Berlin', value: endTime.format('YYYYMMDD[T]HHmmss') }
+    });
+    const updatedAppointment = await I.haveAttachment('calendar', appointment, 'e2e/media/files/generic/testdocument.odt');
     await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testdocument.rtf');
 
     // 1. Switch to Calendar
@@ -1331,10 +1205,10 @@ Scenario('[C7459] Remove attachments', async function (I, calendar) {
     // Expected Result: The calendar app shows up, including the existing appointment
     calendar.waitForApp();
     I.waitForVisible('.appointment');
-    I.see(subject, '.appointment');
+    I.see(summary, '.appointment');
 
     // 2. Select the existing appointment, click "Edit"
-    I.click(subject, '.appointment');
+    I.click(summary, '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
     I.waitForText('Edit');
     I.click('Edit');
@@ -1362,39 +1236,31 @@ Scenario('[C7459] Remove attachments', async function (I, calendar) {
     // Expected Result: The appointment does not contain the attachment anymore
     const dontSeeAttachments = (context) => {
         I.waitForElement(context);
-        I.waitForText(subject, 5, context);
+        I.waitForText(summary, 5, context);
         I.dontSee('testdocument.odt', context);
         I.dontSee('testdocument.rtf', context);
     };
     ['Week', 'Day', 'Month', 'List'].forEach((view) => {
-        I.clickToolbar('View');
-        I.click(view);
-        I.waitForText(subject, 5, '.page.current .appointment');
-        I.click(subject, '.page.current .appointment');
-        if (view === 'List') {
-            dontSeeAttachments('.calendar-detail-pane');
-        } else {
-            dontSeeAttachments('.io-ox-sidepopup');
-        }
+        calendar.switchView(view);
+        I.waitForText(summary, 5, '.page.current .appointment');
+        I.click(summary, '.page.current .appointment');
+        if (view === 'List') dontSeeAttachments('.calendar-detail-pane');
+        else dontSeeAttachments('.io-ox-sidepopup');
     });
 });
 
-Scenario('[C7458] Edit appointment by doubleclick', async function (I, calendar) {
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
-    });
+Scenario('[C7458] Edit appointment by doubleclick', async (I, calendar) => {
+    await I.haveSetting({ 'io.ox/calendar': { notifyNewModifiedDeleted: true } });
 
     // You already had created a non all-day appointment
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`,
-        startTime = moment().startOf('day').add(1, 'hour'),
-        endTime = moment().startOf('day').add(2, 'hour'),
-        subject = `Mr. Torques ${startTime.format('h a')} explosions`;
+    const startTime = moment().startOf('day').add(1, 'hour');
+    const endTime = moment().startOf('day').add(2, 'hour');
+    const subject = `Mr. Torques ${startTime.format('h a')} explosions`;
     await I.haveAppointment({
-        folder:  folder,
+        folder: await calendar.defaultFolder(),
         summary: subject,
-        startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        endDate: { value: endTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
+        startDate: { tzid: 'Europe/Berlin', value: startTime.format('YYYYMMDD[T]HHmmss') },
+        endDate:   { tzid: 'Europe/Berlin', value: endTime.format('YYYYMMDD[T]HHmmss') }
     });
 
     // 1. Double click to an appointment
@@ -1407,9 +1273,9 @@ Scenario('[C7458] Edit appointment by doubleclick', async function (I, calendar)
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     // 2. Change Subject, Location and Description.
-    const explosions = 'EXPLOSIONS',
-        explosionSubject = `${explosions} at ${startTime.format('h a')}`,
-        description = `Lorem ${explosions} sit dolor!`;
+    const explosions = 'EXPLOSIONS';
+    const explosionSubject = `${explosions} at ${startTime.format('h a')}`;
+    const description = `Lorem ${explosions} sit dolor!`;
     I.retry(5).fillField('Subject', explosionSubject);
     I.fillField('Location', 'Pandora');
     I.fillField('Description', description);
@@ -1421,8 +1287,7 @@ Scenario('[C7458] Edit appointment by doubleclick', async function (I, calendar)
     // 4. Check this appointment in all views.
     // Expected Result: The appointment has been changed successfully.
     ['Week', 'Day', 'Month', 'List'].forEach((view) => {
-        I.clickToolbar('View');
-        I.click(view);
+        calendar.switchView(view);
         I.waitForText(explosionSubject, 5, '.page.current .appointment');
         I.click(explosionSubject, '.page.current .appointment');
         if (view === 'List') {
@@ -1437,59 +1302,46 @@ Scenario('[C7458] Edit appointment by doubleclick', async function (I, calendar)
     });
 });
 
-Scenario('[C7463] Remove a resource', async function (I, users) {
-    var timestamp = Math.round(+new Date() / 1000);
-    let testrailID = 'C7463';
-    I.haveSetting('io.ox/core//autoOpenNotification', false);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//viewView', 'week:week');
-    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
-    const resource = {
-        description: timestamp,
-        display_name: timestamp,
-        name: timestamp,
-        mailaddress: timestamp + '@bla.de'
-    };
-    const resourceID = await I.haveResource(resource, { user: users[0] });
+Scenario('[C7463] Remove a resource', async (I, calendar) => {
+    await I.haveSetting({ 'io.ox/calendar': { viewView: 'week:week' } });
+    const timestamp = Math.round(+new Date() / 1000);
+    const name = `C7463 - ${timestamp}`;
+    const mailaddress = `C7463${timestamp}@bla.de`;
+    const resourceID = await I.haveResource({ description: name, display_name: name, name, mailaddress });
     await I.haveAppointment({
-        folder: 'cal://0/' + appointmentDefaultFolder,
-        summary: testrailID,
-        location: testrailID,
-        description: testrailID,
+        folder: await calendar.defaultFolder(),
+        summary: name,
+        location: name,
+        description: name,
         attendeePrivileges: 'DEFAULT',
-        endDate: {
-            tzid: 'Europe/Berlin',
-            value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
-        },
-        startDate: {
-            tzid: 'Europe/Berlin',
-            value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00')
-        },
-        attendees: [
-            {
-                cuType: 'RESOURCE',
-                comment: resource.description,
-                cn: resourceID.display_name,
-                email: resource.mailaddress,
-                entity: resourceID
-            }
-        ]
-    }, { user: users[0] });
-    I.login('app=io.ox/calendar', { user: users[0] });
+        endDate:   { tzid: 'Europe/Berlin', value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00') },
+        startDate: { tzid: 'Europe/Berlin', value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00') },
+        attendees: [{
+            cuType: 'RESOURCE',
+            comment: timestamp,
+            cn: resourceID.display_name,
+            email: mailaddress,
+            entity: resourceID
+        }]
+    });
+    const haloResourceLink = locate('.halo-resource-link').inside('.participant-list').withText(name);
+    const participantName = locate('.participant-name').withText(name);
+    I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
     I.clickToolbar('Today');
-    I.waitForElement('.appointment-container [aria-label^="' + testrailID + ', ' + testrailID + '"]', 5);
-    I.click('.appointment-container [aria-label^="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForElement('.appointment-container [aria-label^="' + name + ', ' + name + '"]', 5);
+    I.click('.appointment-container [aria-label^="' + name + ', ' + name + '"]');
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
     I.waitForElement({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' }, 5);
-    expect(await I.grabNumberOfVisibleElements(locate('.halo-resource-link').inside('.participant-list').withText(JSON.stringify(resource.display_name)))).to.equal(1);
+    expect(await I.grabNumberOfVisibleElements(haloResourceLink)).to.equal(1);
     I.click({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
-    I.waitForElement(locate('.participant-name').withText(JSON.stringify(resource.display_name)));
-    expect(await I.grabNumberOfVisibleElements(locate('.participant-name').withText(JSON.stringify(resource.display_name)))).to.equal(1);
-    I.click(locate('.removable .remove').inside('.participant-wrapper').withText(JSON.stringify(resource.display_name)));
-    expect(await I.grabNumberOfVisibleElements(locate('.participant-name').withText(JSON.stringify(resource.display_name)))).to.equal(0);
+    I.waitForElement(participantName);
+    expect(await I.grabNumberOfVisibleElements(participantName)).to.equal(1);
+    I.click(locate('.removable .remove').inside('.participant-wrapper').withText(name));
+    expect(await I.grabNumberOfVisibleElements(participantName)).to.equal(0);
     I.click('Save');
     I.waitForDetached('.io-ox-calendar-edit.container', 5);
-    expect(await I.grabNumberOfVisibleElements(locate('.halo-resource-link').inside('.participant-list').withText(JSON.stringify(resource.display_name)))).to.equal(0);
-    await I.dontHaveResource(resource.name, { user: users[0] });
+    I.waitForDetached(haloResourceLink);
+    expect(await I.grabNumberOfVisibleElements(haloResourceLink)).to.equal(0);
+    await I.dontHaveResource(name);
 });

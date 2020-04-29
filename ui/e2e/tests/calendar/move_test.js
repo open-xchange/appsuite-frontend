@@ -24,27 +24,27 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Move appointment to different folder', async function (I) {
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true, viewView: 'week:week' }
-    });
+Scenario('Move appointment to different folder', async function (I, dialogs) {
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    const time = moment().startOf('day').add(10, 'hours');
-    const format = 'YYYYMMDD[T]HHmmss';
+    const startDate = moment().startOf('day').add(10, 'hours').format('YYYYMMDD[T]HHmmss');
+    const endDate   = moment().startOf('day').add(11, 'hours').format('YYYYMMDD[T]HHmmss');
     const folderName = 'New calendar';
-    await I.haveAppointment({
-        folder: folder,
-        summary: 'test event',
-        startDate: { value: time.format(format), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format(format), tzid: 'Europe/Berlin' },
-        attendees: []
-    });
+    await Promise.all([
+        I.haveSetting({
+            'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+            'io.ox/calendar': { showCheckboxes: true, viewView: 'week:week' }
+        }),
+        I.haveAppointment({
+            folder,
+            summary: 'test event',
+            startDate: { tzid: 'Europe/Berlin', value: startDate },
+            endDate:   { tzid: 'Europe/Berlin', value: endDate },
+            attendees: []
+        }),
+        I.haveFolder({ title: folderName, module: 'event', parent: folder })
+    ]);
 
-    await I.haveFolder({ title: folderName, module: 'event', parent: folder });
-
-    let defaultFolderNode = locate({ css: `.folder[data-id="${folder}"]` }).as('Default folder');
-    let folderPicker = locate({ css: '.folder-picker-dialog' }).as('Folder picker');
+    const defaultFolderNode = locate({ css: `.folder[data-id="${folder}"]` }).as('Default folder');
 
     I.login('app=io.ox/calendar');
     I.waitForVisible(defaultFolderNode);
@@ -60,16 +60,15 @@ Scenario('Move appointment to different folder', async function (I) {
     I.click('Move', '.smart-dropdown-container.dropdown.open');
 
     I.say('Move to new folder');
-    I.waitForElement(folderPicker);
-    I.waitForElement({ css: '[data-id="virtual/flat/event/private"] .folder-arrow' }, folderPicker);
-    I.click({ css: '[data-id="virtual/flat/event/private"] .folder-arrow' }, folderPicker);
-    I.waitForText(folderName, folderPicker);
-    I.click(folderPicker.find('.selectable[aria-label^="New calendar"]'));
-    I.waitForText(folderName, folderPicker);
-    I.waitForElement(locate({ css: '.btn-primary:not(disabled)' }).as('Enabled move button'));
-    I.wait(0.2);
-    I.click('Move');
-    I.waitForDetached(folderPicker);
+    dialogs.waitForVisible();
+    within('.modal-dialog', () => {
+        I.waitForElement({ css: '[data-id="virtual/flat/event/private"] .folder-arrow' });
+        I.click({ css: '[data-id="virtual/flat/event/private"] .folder-arrow' });
+        I.waitForText(folderName);
+        I.click(`~${folderName}`);
+    });
+    dialogs.clickButton('Move');
+    I.waitForDetached('.modal-dialog');
 
     I.say('Deselect default folder');
     I.click(defaultFolderNode.find('.color-label.selected').as('Selected checkbox'));

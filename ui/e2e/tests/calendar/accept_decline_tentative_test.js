@@ -14,11 +14,17 @@ const moment = require('moment');
 
 Feature('Calendar > Create');
 
-Before(async function (users) {
-    await users.create();
-    await users.create();
-    await users.create();
-    await users.create();
+Before(async function (I, users) {
+    await Promise.all([
+        users.create(),
+        users.create(),
+        users.create(),
+        users.create()
+    ]);
+    await Promise.all(users.map(user => I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    }, { user })));
 });
 
 After(async function (users) {
@@ -26,35 +32,17 @@ After(async function (users) {
 });
 
 Scenario('Create appointments with participants who will accept/decline/accept tentative', async function (I, users, calendar, dialogs) {
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    });
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const time = moment().startOf('day').add(10, 'hours');
     const format = 'YYYYMMDD[T]HHmmss';
-    const usersettings = {
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    };
     await I.haveAppointment({
-        folder: folder,
+        folder: await calendar.defaultFolder(),
         summary: 'test invite accept/decline/accept tentative',
-        startDate: { value: time.format(format), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format(format), tzid: 'Europe/Berlin' },
-        attendees: [{
-            entity: users[0].userdata.id
-        }, {
-            entity: users[1].userdata.id
-        }, {
-            entity: users[2].userdata.id
-        }, {
-            entity: users[3].userdata.id
-        }]
+        startDate: { tzid: 'Europe/Berlin', value: time.format(format) },
+        endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format(format) },
+        attendees: users.map(user => { return { entity: user.userdata.id }; })
     });
 
     I.say('User 1');
-    await I.haveSetting(usersettings, { user: users[1] });
     I.login('app=io.ox/calendar&perspective=list', { user: users[1] });
     calendar.waitForApp();
     I.selectFolder('Calendar');
@@ -71,7 +59,6 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.logout();
 
     I.say('User 2');
-    await I.haveSetting(usersettings, { user: users[2] });
     I.login('app=io.ox/calendar&perspective=list', { user: users[2] });
     calendar.waitForApp();
     I.selectFolder('Calendar');
@@ -88,7 +75,6 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.logout();
 
     I.say('User 3');
-    await I.haveSetting(usersettings, { user: users[3] });
     I.login('app=io.ox/calendar&perspective=list', { user: users[3] });
     calendar.waitForApp();
     I.selectFolder('Calendar');

@@ -24,18 +24,13 @@ After(async function (users) {
 });
 
 Scenario('Create appointment and check if the color is correctly applied and removed', async function (I, users, calendar) {
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    });
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const time = moment().startOf('week').add(1, 'day').add(16, 'hours');
     const format = 'YYYYMMDD[T]HHmmss';
     await I.haveAppointment({
-        folder: folder,
+        folder: await calendar.defaultFolder(),
         summary: 'test appointment one',
-        startDate: { value: time.format(format), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format(format), tzid: 'Europe/Berlin' }
+        startDate: { tzid: 'Europe/Berlin', value: time.format(format) },
+        endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format(format) }
     });
 
     I.login('app=io.ox/calendar&perspective="week:workweek"');
@@ -91,27 +86,24 @@ Scenario('Create appointment and check if the color is correctly applied and rem
 
 });
 
-// TODO reenable this, as soon as the grabCSSPropertyFrom is fixed in codecept. See https://github.com/Codeception/CodeceptJS/pull/2059
 Scenario('Changing calendar color should change appointment color that uses calendar color', async function (I, users, calendar) {
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    });
-    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    const folder = await calendar.defaultFolder();
     const time = moment().startOf('week').add(1, 'day').add(16, 'hours');
     const format = 'YYYYMMDD[T]HHmmss';
-    await I.haveAppointment({
-        folder: folder,
-        summary: 'test appointment one',
-        startDate: { value: time.format(format), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format(format), tzid: 'Europe/Berlin' }
-    });
-    await I.haveAppointment({
-        folder: folder,
-        summary: 'test appointment two',
-        startDate: { value: time.format(format), tzid: 'Europe/Berlin' },
-        endDate: { value: time.add(1, 'hour').format(format), tzid: 'Europe/Berlin' }
-    });
+    await Promise.all([
+        I.haveAppointment({
+            folder,
+            summary: 'test appointment one',
+            startDate: { tzid: 'Europe/Berlin', value: time.format(format) },
+            endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format(format) }
+        }),
+        I.haveAppointment({
+            folder,
+            summary: 'test appointment two',
+            startDate: { tzid: 'Europe/Berlin', value: time.format(format) },
+            endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format(format) }
+        })
+    ]);
 
     I.login('app=io.ox/calendar&perspective="week:workweek"');
     calendar.waitForApp();

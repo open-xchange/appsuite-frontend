@@ -139,5 +139,9 @@ module.exports = {
         I.clickToolbar('View');
         I.waitForElement('.dropdown.open');
         I.clickDropdown(view);
+    },
+
+    async defaultFolder() {
+        return `cal://0/${await I.grabDefaultFolder('calendar')}`;
     }
 };

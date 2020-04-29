@@ -27,7 +27,8 @@ After(async (users) => {
 });
 
 //helper function for creating appointments, added ability to select color
-let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) => {
+const createAppointment = ({ subject, folder, startTime, color }) => {
+    const { I } = inject();
     // select calendar
     I.clickToolbar('New appointment');
     I.waitForText('Appointments in public calendar');
@@ -42,9 +43,7 @@ let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) 
     if (color) {
         I.click('Appointment color', '.color-picker-dropdown');
         I.waitForElement('.color-picker-dropdown.open');
-        I.click(locate('a')
-            .inside('.color-picker-dropdown.open')
-                .withAttr({ title: color }));
+        I.click(locate('a').inside('.color-picker-dropdown.open').withAttr({ title: color }));
     }
 
     // save
@@ -53,16 +52,10 @@ let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) 
 };
 
 Scenario('[C264519] Create appointments with colors in public folder', async function (I, users, calendar, dialogs) {
+    const folderLocator = locate({ css: 'div.folder-node' }).withAttr({ title: 'New calendar' });
+    const selectInsideFolder = (node) => locate(node).inside(folderLocator);
 
-    let [user_a, user_b] = users;
-    let selectInsideFolder = (node) => locate(node)
-            .inside(folderLocator);
-
-    const createAppointment = uncurriedCreateAppointment(I),
-        folderLocator = locate({ css: 'div.folder-node' }).withAttr({ title: 'New calendar' });
-
-    //login user a
-    I.login('app=io.ox/calendar', { user: user_a });
+    I.login('app=io.ox/calendar');
     calendar.waitForApp();
 
     I.say('Create public calendar');
@@ -85,7 +78,7 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     I.clickDropdown('Permissions / Invite people');
     dialogs.waitForVisible();
     I.waitForElement('.form-control.tt-input', 5, dialogs.locators.header);
-    I.fillField('.form-control.tt-input', user_b.get('primaryEmail'));
+    I.fillField('.form-control.tt-input', users[1].get('primaryEmail'));
     I.pressKey('Enter');
     dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
@@ -97,7 +90,7 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
 
     I.say('Login user b');
     I.waitForVisible('#io-ox-login-screen');
-    I.login('app=io.ox/calendar', { user: user_b });
+    I.login('app=io.ox/calendar', { user: users[1] });
     calendar.waitForApp();
 
     I.waitForVisible('.folder-node .folder-arrow .fa.fa-caret-right');
