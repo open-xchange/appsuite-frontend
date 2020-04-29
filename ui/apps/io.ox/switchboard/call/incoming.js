@@ -25,12 +25,12 @@ define('io.ox/switchboard/call/incoming', [
 
     return {
         openDialog: function (model) {
-            ringtone.play();
+            ringtone.incoming.play();
             new Modal({ title: gt('Incoming call') })
                 .build(function () {
                     var caller = model.getCaller();
                     this.listenTo(model, 'hangup', function () {
-                        ringtone.stop();
+                        ringtone.incoming.stop();
                         this.close();
                     });
                     this.$el.addClass('incoming-call');
@@ -54,11 +54,11 @@ define('io.ox/switchboard/call/incoming', [
                     );
                 })
                 .on('decline', function () {
-                    ringtone.stop();
+                    ringtone.incoming.stop();
                     model.decline();
                 })
                 .on('answer', function () {
-                    ringtone.stop();
+                    ringtone.incoming.stop();
                     model.answer();
                     window.open(model.getTelcoLink());
                 })

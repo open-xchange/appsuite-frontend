@@ -16,16 +16,28 @@ define('io.ox/switchboard/call/ringtone', [], function () {
 
     'use strict';
 
-    var ringtone = new Audio(ox.base + '/apps/io.ox/switchboard/call/ringtones/incoming.mp3');
+    var incoming = new Audio(ox.base + '/apps/io.ox/switchboard/call/ringtones/incoming.mp3');
+    var outgoing = new Audio(ox.base + '/apps/io.ox/switchboard/call/ringtones/outgoing.mp3');
+    incoming.volume = 0.3;
+    outgoing.volume = 0.3;
 
     return {
-        play: function () {
-            ringtone.volume = 0.1;
-            ringtone.play();
+        incoming: {
+            play: function () {
+                incoming.play();
+            },
+            stop: function () {
+                incoming.pause();
+                incoming.currentTime = 0;
+            }
         },
-        stop: function () {
-            ringtone.pause();
-            ringtone.currentTime = 0;
+        outgoing: {
+            play: function () {
+                outgoing.play();
+            },
+            stop: function () {
+                outgoing.pause();
+            }
         }
     };
 });

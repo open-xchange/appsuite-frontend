@@ -15,13 +15,15 @@ define('io.ox/switchboard/call/outgoing', [
     'io.ox/backbone/views/modal',
     'io.ox/switchboard/presence',
     'io.ox/contacts/api',
+    'io.ox/switchboard/call/ringtone',
     'less!io.ox/switchboard/style'
-], function (Modal, presence, contactsAPI) {
+], function (Modal, presence, contactsAPI, ringtone) {
 
     'use strict';
 
     return {
         openDialog: function (model) {
+            ringtone.outgoing.play();
             new Modal({ title: 'Outgoing Call' })
                 .inject({
                     renderCallees: function () {
@@ -61,7 +63,11 @@ define('io.ox/switchboard/call/outgoing', [
                 // simple button! not primary! hang up is not a default action.
                 .addButton({ action: 'hangup', label: 'Hang up', className: 'btn-default' })
                 .on('hangup', function () {
+                    ringtone.outgoing.stop();
                     model.hangup();
+                })
+                .on('close', function () {
+                    ringtone.outgoing.stop();
                 })
                 .open();
         }

@@ -19,7 +19,7 @@ define.async('io.ox/switchboard/api', [
 
     'use strict';
 
-    var HOST = 'http://localhost:2337';
+    var HOST = 'https://switchboard.ox-frontend.de';
 
     var api = {
 

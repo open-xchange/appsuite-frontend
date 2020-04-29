@@ -29,7 +29,7 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
                 this.states[callee] = 'pending';
             }, this);
             // no telco yet?
-            if (!this.telco) this.generateTelcoLink();
+            if (!data.telco) this.generateTelcoLink();
         },
         getCaller: function () {
             return this.get('caller');
