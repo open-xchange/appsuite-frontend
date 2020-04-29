@@ -108,6 +108,9 @@ define('io.ox/calendar/edit/main', [
         perform: function (baton) {
             var options = baton.options;
             if (options.mode === 'create') {
+                // we use "categories" to sneak in some JSON
+                baton.model.set('categories', '{}');
+                baton.model.set('conference', 'none');
                 baton.model.set('attendeePrivileges', settings.get('chronos/allowAttendeeEditsByDefault', false) && !folderAPI.pool.getModel(baton.model.get('folder')).is('public') ? 'MODIFY' : 'DEFAULT');
             }
 

@@ -86,7 +86,7 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
     }
 
     // start a call with participants
-    function start(callees) {
+    function start(callees, windowOpen) {
         // should not happen UI-wise, but to be sure
         if (isCallActive()) return;
         call = new Call({ caller: api.userId, callees: callees });
@@ -96,8 +96,8 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
         require(['io.ox/switchboard/call/outgoing'], function (outgoing) {
             outgoing.openDialog(call);
         });
-        // finally
-        //window.open(call.getTelcoLink());
+        // finally. windowOpen is just for development
+        if (windowOpen !== false) window.open(call.getTelcoLink());
     }
 
     // user gets called

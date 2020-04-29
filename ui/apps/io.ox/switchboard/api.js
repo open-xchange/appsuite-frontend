@@ -14,8 +14,9 @@
 
 define.async('io.ox/switchboard/api', [
     'static/3rd.party/socket.io.slim.js',
-    'io.ox/core/api/user'
-], function (io, userAPI) {
+    'io.ox/core/api/user',
+    'io.ox/core/http'
+], function (io, userAPI, http) {
 
     'use strict';
 
@@ -62,16 +63,22 @@ define.async('io.ox/switchboard/api', [
         api.isInternal = function (id) {
             return regexp.test(id);
         };
-        api.socket = io.connect(HOST + '/?userId=' + encodeURIComponent(api.userId))
-            .once('connect', function () {
-                console.log('%cConnected to switchboard service', 'background-color: green; color: white; padding: 8px;');
-            })
-            .on('disconnect', function () {
-                console.log('Disconnected from switchboard service');
-            })
-            .on('reconnect', function () {
-                console.log('Reconnecting to switchboard service');
-            });
-        return api;
+        return http.GET({
+            module: 'token',
+            params: { action: 'acquireToken' }
+        })
+        .then(function (data) {
+            api.socket = io.connect(HOST + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token)
+                .once('connect', function () {
+                    console.log('%cConnected to switchboard service', 'background-color: green; color: white; padding: 8px;');
+                })
+                .on('disconnect', function () {
+                    console.log('Disconnected from switchboard service');
+                })
+                .on('reconnect', function () {
+                    console.log('Reconnecting to switchboard service');
+                });
+            return api;
+        });
     });
 });

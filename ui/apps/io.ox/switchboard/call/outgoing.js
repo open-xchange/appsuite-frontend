@@ -33,14 +33,14 @@ define('io.ox/switchboard/call/outgoing', [
                                 model.getCallees().map(this.renderCallee, this)
                             ),
                             $('<div class="telco-link">').append(
-                                $.txt('Please click the following link if the service does not open automatically: '),
+                                $.txt('Please click the following link if the service doesn\'t open automatically: '),
                                 $('<a target="blank" rel="noopener">').attr('href', link).text(link)
                             )
                         );
                     },
                     renderCallee: function (callee) {
                         return $('<div class="callee">').append(
-                            contactsAPI.pictureHalo($('<div class="contact-photo">'), { email: callee }, { width: 40, height: 40 }),
+                            contactsAPI.pictureHalo($('<div class="contact-photo">'), { email: callee }, { width: 48, height: 48 }),
                             presence.getPresenceIcon(callee),
                             this.getState(callee),
                             $('<div class="name">').text(model.getCalleeName(callee)),
