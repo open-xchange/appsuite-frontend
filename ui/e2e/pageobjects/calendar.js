@@ -103,7 +103,8 @@ module.exports = {
     // 'Day', 'Week', 'Workweek', 'Month', 'Year', 'List'
     withinPerspective(label, cb) {
         I.clickToolbar(this.locators.view);
-        I.click(label, this.locators.dropdown);
+        I.waitForText(label, 5, this.locators.dropdown);
+        I.retry(5).click(label, this.locators.dropdown);
         cb.call(this, this.locators[MAPPING[label]]);
     },
 
