@@ -356,3 +356,11 @@ Scenario('[Bug 63288] Cancel upload does not work in drive', async (I, drive) =>
     I.waitForDetached('.upload-wrapper');
     I.dontSee('2MB.dat');
 });
+
+Scenario('[C8367] Drag and Drop', async (I, drive) => {
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    I.waitForElement('.list-view-control .inplace-dropzone');
+    await I.dropFiles('e2e/media/files/0kb/document.txt', '.list-view-control .inplace-dropzone');
+    I.waitForElement(locate('.filename').withText('document.txt'));
+});
