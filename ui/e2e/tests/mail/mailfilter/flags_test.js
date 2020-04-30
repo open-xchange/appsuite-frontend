@@ -17,7 +17,8 @@ const expect = require('chai').expect;
 Feature('Mailfilter');
 
 Before(async function (users) {
-    await users.create();
+    const user = await users.create();
+    await user.hasConfig('com.openexchange.imap.attachmentMarker.enabled', true);
 });
 
 After(async function (users) {
