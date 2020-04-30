@@ -195,3 +195,32 @@ Scenario('Logout right before running into error storing data in JSLob', async (
     I.clickDropdown('Date');
     I.logout();
 });
+
+Scenario('[Bug 61823] Drive shows main folder content instead of content from selected folder', async (I, drive, dialogs) => {
+    const defaultFolder = await I.grabDefaultFolder('infostore');
+    const testFolder1 = await I.haveFolder({ title: 'testFolder1', module: 'infostore', parent: defaultFolder });
+    const testFolder2 = await I.haveFolder({ title: 'testFolder2', module: 'infostore', parent: defaultFolder });
+
+    await I.haveFile(defaultFolder, 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(testFolder1, 'e2e/media/files/generic/contact_picture.png');
+    await I.haveFile(testFolder2, 'e2e/media/files/generic/testpresentation.ppsm');
+
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+
+    I.waitForText('testdocument.odt');
+
+    // delete folder
+    I.click('.list-item[aria-label*="testFolder1"]');
+    I.waitForVisible('~Delete');
+    I.click('~Delete');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
+
+    // need to be faster than delete operation (according to bug)
+    // automated testing should be fast enough. Network throttling will not help here since there is no upload or download involved in a delete request
+    I.selectFolder('testFolder2');
+    I.waitForText('testpresentation.ppsm');
+    I.dontSee('testdocument.odt');
+});
