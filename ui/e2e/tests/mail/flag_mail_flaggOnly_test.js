@@ -39,6 +39,8 @@ Scenario('[C114337] Flag an E-Mail as Flagged/Starred (flaggedOnly)', async func
         I.haveSetting({ 'io.ox/mail': { messageFormat: 'text' } })
     ]);
 
+    await user.hasConfig('com.openexchange.mail.flagging.mode', 'colorOnly');
+
     I.login('app=io.ox/mail');
 
     mail.waitForApp();
@@ -48,7 +50,7 @@ Scenario('[C114337] Flag an E-Mail as Flagged/Starred (flaggedOnly)', async func
     I.waitForElement('.selected .color-flag.fa-bookmark.flag_1');
     I.logout();
 
-    user.hasConfig('com.openexchange.mail.flagging.mode', 'flaggedOnly');
+    await user.hasConfig('com.openexchange.mail.flagging.mode', 'flaggedOnly');
 
     I.login('app=io.ox/mail');
 
