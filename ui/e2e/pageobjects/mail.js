@@ -43,5 +43,10 @@ module.exports = {
         I.wait(0.5);
         I.waitToHide('.io-ox-mail-compose-window');
         I.waitToHide('.generic-toolbar.mail-progress', 45);
+    },
+    setColor(color) {
+        I.click('~Set color');
+        I.waitForText(color, { css: '.smart-dropdown-container.flag-picker.open' });
+        I.click(color, { css: '.smart-dropdown-container.flag-picker.open' });
     }
 };
