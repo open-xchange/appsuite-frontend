@@ -42,7 +42,7 @@ Scenario('External mail address', function (I, contacts) {
     I.waitForElement(`.contact-detail .participant-email [href="mailto:${mail}"]`);
 });
 
-Scenario.skip('[C7372] Existing contact', async function (I, users, contacts) {
+Scenario('[C7372] Create new distribution list', async function (I, users, contacts) {
     const display_name = util.uniqueName('C7372');
 
     await Promise.all([
