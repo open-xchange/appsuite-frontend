@@ -40,11 +40,9 @@ Scenario('[C114337] Flag an E-Mail as Flagged/Starred (flaggedOnly)', async func
     ]);
 
     I.login('app=io.ox/mail');
+
     mail.waitForApp();
-
-    I.waitForText('Testcase C114337');
-    I.click('Testcase C114337');
-
+    mail.selectMail('Testcase C114337');
     mail.setColor('Red');
 
     I.waitForElement('.selected .color-flag.fa-bookmark.flag_1');
@@ -53,13 +51,11 @@ Scenario('[C114337] Flag an E-Mail as Flagged/Starred (flaggedOnly)', async func
     user.hasConfig('com.openexchange.mail.flagging.mode', 'flaggedOnly');
 
     I.login('app=io.ox/mail');
+
     mail.waitForApp();
-    I.waitForText('Testcase C114337', '.list-view-control');
-    I.waitForElement('.list-view.complete');
-    I.see('Testcase C114337');
+    mail.selectMail('Testcase C114337');
 
     I.dontSee('~Set color');
-
     I.wait(1);
 
     within('.classic-toolbar[aria-label="Mail toolbar. Use cursor keys to navigate."]', () => {
