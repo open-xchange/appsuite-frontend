@@ -1,5 +1,54 @@
 ---
 
+run e2e tests:
+  stage: e2e
+  image: gitlab.open-xchange.com:4567/frontend/dev_env/puppeteer:latest
+  tags:
+    - e2e
+    - kubernetes
+  services:
+    - name: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+      alias: e2e-test.os.oxui.de
+  variables:
+    # e2e configuration
+    LAUNCH_URL: http://e2e-test.os.oxui.de:8337/appsuite/
+    PROVISIONING_URL: http://e2e-test.os.oxui.de:8337/
+    PROVISIONING_KEYCLOAK_URL: https://idp.k3s.os.oxui.de
+    PROVISIONING_KEYCLOAK_REALM: Appsuite
+    PROVISIONING_KEYCLOAK_USER: $KEYCLOAK_ADMIN_USER
+    PROVISIONING_KEYCLOAK_PASS: $KEYCLOAK_ADMIN_PASSWORD
+    CONTEXT_ID: $CI_JOB_ID
+    CHROME_ARGS: '--no-sandbox --kiosk-printing --disable-web-security'
+    FILTER_SUITE: ./e2e/suites/job$CI_NODE_INDEX.json
+    FILTER_REPORT: filter_report_$CI_NODE_INDEX.json
+    # services configuration
+    SERVER: http://10.50.0.57/appsuite/
+    # gitlab config
+    GIT_DEPTH: "10"
+  script:
+    - cd ui
+    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
+    - mkdir -p ./build/e2e
+    - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/filter_report.json -q -O ./build/e2e/suite.json || rm -f ./build/e2e/suite.json
+    - "[ -f ./build/e2e/suite.json ] || runOnly=true npx codeceptjs run -o '{ \"plugins\": { \"filterSuite\": { \"suite\": [], \"report\": \"suite.json\" } } }'"
+    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/partition.js')" ./build/e2e/suite.json $CI_NODE_TOTAL ./e2e/suites
+    - yarn e2e
+  parallel: 20
+  # reasonable timeout, enforce better partitioning
+  timeout: 20 minutes
+  artifacts:
+    when: always
+    paths:
+      - ui/build/e2e/
+    expire_in: 1 day
+  only:
+    changes:
+      - ui/**/*
+  except:
+    refs:
+      - /^poc\//
+      - /^e2e\//
+
 # deploy e2e environment to well-known location - can be used to develop e2e tests against
 deploy e2e dev server:
   stage: deploy
@@ -20,67 +69,6 @@ deploy e2e dev server:
   only:
     - develop
 
-deploy e2e testserver:
-  stage: deploy
-  dependencies: []
-  variables:
-    DOCKER_HOST: docker.ui.cloud.open-xchange.com
-    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-    CONTAINER_NAME: e2e_$CI_PIPELINE_ID
-    SERVER: http://10.20.28.164/appsuite/
-  script:
-    - docker pull $DOCKER_IMAGE
-    - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e $DOCKER_IMAGE e2e
-    - docker container cp ui/e2e/fixtures $CONTAINER_NAME:/app/build/e2e
-    - docker container start $CONTAINER_NAME
-  only:
-    changes:
-      - ui/**/*
-  except:
-    refs:
-      - /^poc\//
-      - /^e2e\//
-
-run e2e tests:
-  stage: e2e
-  image: gitlab.open-xchange.com:4567/frontend/dev_env/puppeteer:latest
-  dependencies: []
-  needs:
-    - deploy e2e testserver
-  variables:
-    LAUNCH_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/appsuite/
-    PROVISIONING_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/
-    CONTEXT_ID: $CI_JOB_ID
-    CHROME_ARGS: '--no-sandbox'
-    FILTER_SUITE: ./e2e/suites/job$CI_NODE_INDEX.json
-    FILTER_REPORT: filter_report_$CI_NODE_INDEX.json
-    GIT_DEPTH: "10"
-  script:
-    - cd ui
-    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
-    - mkdir -p ./build/e2e
-    - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/filter_report.json -q -O ./build/e2e/suite.json || rm -f ./build/e2e/suite.json
-    - "[ -f ./build/e2e/suite.json ] || runOnly=true npx codeceptjs run -o '{ \"plugins\": { \"filterSuite\": { \"suite\": [], \"report\": \"suite.json\" } } }'"
-    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/partition.js')" ./build/e2e/suite.json $CI_NODE_TOTAL ./e2e/suites
-    - yarn e2e
-  tags:
-    - e2e
-  parallel: 20
-  # reasonable timeout, enforce better partitioning
-  timeout: 20 minutes
-  artifacts:
-    when: always
-    paths:
-      - ui/build/e2e/
-    expire_in: 1 day
-  only:
-    changes:
-      - ui/**/*
-  except:
-    refs:
-      - /^poc\//
-      - /^e2e\//
-
 merge filter report:
   stage: report
   image: gitlab.open-xchange.com:4567/frontend/dev_env/puppeteer:latest
@@ -88,13 +76,25 @@ merge filter report:
     - run e2e tests
   needs:
     - run e2e tests
+  services:
+    - name: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+      alias: e2e-test.os.oxui.de
   variables:
-    LAUNCH_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/appsuite/
-    PROVISIONING_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/
+    # e2e configuration
+    LAUNCH_URL: http://e2e-test.os.oxui.de:8337/appsuite/
+    PROVISIONING_URL: http://e2e-test.os.oxui.de:8337/
+    PROVISIONING_KEYCLOAK_URL: https://idp.k3s.os.oxui.de
+    PROVISIONING_KEYCLOAK_REALM: Appsuite
+    PROVISIONING_KEYCLOAK_USER: $KEYCLOAK_ADMIN_USER
+    PROVISIONING_KEYCLOAK_PASS: $KEYCLOAK_ADMIN_PASSWORD
     CONTEXT_ID: $CI_JOB_ID
-    CHROME_ARGS: '--no-sandbox --kiosk-printing'
+    CHROME_ARGS: '--no-sandbox --kiosk-printing --disable-web-security'
     FILTER_SUITE: ./merged_reports.json
     FILTER_REPORT: filter_report_missing.json
+    # services configuration
+    SERVER: http://10.50.0.57/appsuite/
+    # gitlab config
+    GIT_DEPTH: "10"
   script:
     - cd ui
     - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
@@ -207,44 +207,10 @@ remove e2e report:
       - /^master-/
       - /^poc\//
 
-stop e2e testserver:
-  stage: cleanup
-  dependencies: []
-  variables:
-    GIT_STRATEGY: none
-    DOCKER_HOST: docker.ui.cloud.open-xchange.com
-    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-    CONTAINER_NAME: e2e_$CI_PIPELINE_ID
-  script:
-    - docker container stop $CONTAINER_NAME || true
-    - docker container wait $CONTAINER_NAME || true
-    - docker container rm $CONTAINER_NAME || true
-  when: always
-  only:
-    changes:
-      - ui/**/*
-  except:
-    refs:
-      - /^poc\//
-
-deploy e2e testserver new test:
-  extends: deploy e2e testserver
-  variables:
-    DOCKER_HOST: docker.ui.cloud.open-xchange.com
-    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:develop
-    CONTAINER_NAME: e2e_$CI_PIPELINE_ID
-    SERVER: http://10.20.28.164/appsuite/
-  only:
-    refs:
-      - /^e2e\//
-  except:
-    refs:
-      - /^poc\//
-
 run new e2e test:
   extends: run e2e tests
-  needs:
-    - deploy e2e testserver new test
+  # needs:
+  #   - deploy e2e testserver new test
   script:
   - cd ui
   - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
