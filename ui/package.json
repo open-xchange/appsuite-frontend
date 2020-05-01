@@ -47,6 +47,7 @@
     "karma-ox-ui": "^0.3.0",
     "karma-sinon": "^1.0.4",
     "karma-spec-reporter": "^0.0.32",
+    "keycloak-admin": "^1.13.0",
     "mocha": "^6.2.2",
     "moment-range": "^4.0.2",
     "puppeteer": "^2.0.0",
