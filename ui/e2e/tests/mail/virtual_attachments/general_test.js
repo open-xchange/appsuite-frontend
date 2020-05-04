@@ -107,3 +107,22 @@ Scenario('[C83399] View all SENT attachments', async (I, drive) => {
     });
 });
 
+Scenario('[C83402] Attachments can be viewed', async (I, drive) => {
+    await prepare();
+    I.logout();
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    I.selectFolder('My attachments');
+    I.selectFolder('In Sent');
+    within('.list-view', () => {
+        I.waitForText('testdocument.rtf');
+        I.waitForText('testdocument.odt');
+        I.waitForText('testpresentation.ppsm');
+        I.dontSee('In Sent');
+        I.dontSee('In Inbox');
+        I.click(locate('.filename').withText('testdocument.rtf'));
+        I.rightClick(locate('.filename').withText('testdocument.rtf'));
+    });
+    I.clickDropdown('View');
+    I.waitForVisible('.swiper-slide',10);
+});
