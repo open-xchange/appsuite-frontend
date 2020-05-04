@@ -243,7 +243,7 @@ Scenario('[C7830] Add User data widget', async function (I, users) {
     await I.haveSetting('io.ox/portal//widgets/user', '{}');
 
     // ensure the user has the capability to edit his password
-    await users[0].hasCapability('edit_password');
+    await users[0].hasConfig('com.openexchange.capabilities.edit_password', false);
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/portal']);
     I.waitForText('Portal settings');
