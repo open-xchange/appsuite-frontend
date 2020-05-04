@@ -54,6 +54,7 @@ run e2e tests:
     CHROME_ARGS: '--no-sandbox'
     FILTER_SUITE: ./e2e/suites/job$CI_NODE_INDEX.json
     FILTER_REPORT: filter_report_$CI_NODE_INDEX.json
+    GIT_DEPTH: "10"
   script:
     - cd ui
     - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
@@ -64,7 +65,7 @@ run e2e tests:
     - yarn e2e
   tags:
     - e2e
-  parallel: 15
+  parallel: 20
   # reasonable timeout, enforce better partitioning
   timeout: 20 minutes
   artifacts:
