@@ -531,18 +531,20 @@ define('io.ox/backbone/views/window', [
             this.$el.velocity('fadeOut', {
                 duration: 200, complete: function (el) {
                     $(el).remove();
-                    if ($(model.get('previousFocus')).is(':visible')) {
-                        // Restore previous focus if possible
-                        $(model.get('previousFocus')).focus();
-
-                    } else if (siblings.length >= 1) {
-                        // If previous focus can't be restored focus next minimized window in taskbar if present
-                        siblings.first().focus();
-                    } else if ($('.folder-tree').is(':visible')) {
-                        // Reset focus to foldertree of current App if visible
-                        $('.folder-tree:visible .folder.selected').focus();
-                    } else {
-                        a11y.focusListSelection($('.window-container:visible').first());
+                    // only refocus if in the meantime no other element was focused by the user
+                    if (document.activeElement && document.activeElement.tagName === 'BODY') {
+                        if ($(model.get('previousFocus')).is(':visible')) {
+                            // Restore previous focus if possible
+                            $(model.get('previousFocus')).focus();
+                        } else if (siblings.length >= 1) {
+                            // If previous focus can't be restored focus next minimized window in taskbar if present
+                            siblings.first().focus();
+                        } else if ($('.folder-tree').is(':visible')) {
+                            // Reset focus to foldertree of current App if visible
+                            $('.folder-tree:visible .folder.selected').focus();
+                        } else {
+                            a11y.focusListSelection($('.window-container:visible').first());
+                        }
                     }
                     // some apps have a special way of closing. Mail compose closes with a big delay for example (waits for errors on send before it fully closes etc)
                     // make sure collection and taskbar are properly cleaned up
