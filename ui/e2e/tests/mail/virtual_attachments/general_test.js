@@ -142,3 +142,41 @@ Scenario('[C83404] Attachments can be copied', async (I, drive,) => {
     });
 });
 
+Scenario('[C125297] Attachments are linked to mails', async (I, drive,) => {
+    await prepare();
+    I.logout();
+
+    // Login Drive and select Attachment Folder
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    I.selectFolder('My attachments');
+    I.selectFolder('My attachments');
+    within('.list-view', () => {
+        I.waitForText('testdocument.rtf');
+        I.waitForText('testdocument.odt');
+        I.waitForText('testpresentation.ppsm');   
+    });
+
+    // Open Dropdown and select 'view' to to open detail-view
+    within(locate('.list-item').last(), () => {
+        I.waitForText('testpresentation.ppsm');
+        I.rightClick('testpresentation.ppsm');
+    });
+    I.clickDropdown('View');
+
+    // Wait for detail-view and open attachment Email
+    I.waitForElement('.viewer-dark-theme');
+    within(locate('.viewer-dark-theme'), () => {
+        I.see('View message');
+        I.click('View message');
+    })   
+    
+    // Check Email for attachment
+    I.waitForElement('.io-ox-mail-detail-window');
+    within(locate('.io-ox-mail-detail-window'), () => {
+        I.see('3 attachments');
+        I.click('3 attachments');
+        I.waitForText('testpresentation.ppsm');
+    })
+});
+
