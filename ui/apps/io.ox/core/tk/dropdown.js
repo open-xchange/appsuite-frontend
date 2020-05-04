@@ -66,7 +66,8 @@
             // dropdowns can be manually prevented from closing. exception: direct click on the toggle button
             // used by special dropdowns, like notification area (should not close when a sidepopup is opened or the user clicks within it)
             // also used by tours
-            if (e.isDefaultPrevented() || $parent.attr('forceOpen') === 'true') return;
+            // prevent closing of currently opening dropdowns, produces weird glitches when content is loaded asynchronously (foldertree context menu)
+            if (e.isDefaultPrevented() || $parent.attr('forceOpen') === 'true' || $this.hasClass('opening')) return;
 
             // if the user clicked on a focusable inputfield we focus that instead of the dropdown root element
             var focusableElement = $(document.activeElement).filter('.editable, input[type="text"], input[type="textarea"], input[type="email"]');

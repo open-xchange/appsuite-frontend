@@ -529,6 +529,17 @@ Scenario('[C8389] Move a folder', async (I, drive) => {
     });
 });
 
+
+Scenario('Folder contextmenu opening and closing', (I, drive) => {
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    I.selectFolder('Documents');
+    I.openFolderMenu('Documents');
+    I.waitForVisible('.smart-dropdown-container');
+    I.pressKey('Escape');
+    I.waitForDetached('.smart-dropdown-container');
+});
+
 Scenario('[C8390] Folder tree', async (I, drive) => {
     // Testrail description:
     // A folder tree with some items in it
