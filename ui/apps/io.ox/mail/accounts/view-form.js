@@ -637,7 +637,7 @@ define.async('io.ox/mail/accounts/view-form', [
 
             function changeTransportAuth() {
                 var type = this.model.get('transport_auth');
-                this.$el.find('#transport_login, #transport_password').prop('disabled', type !== 'custom');
+                this.$el.find('#transport_login, #transport_password').prop('disabled', type !== 'custom').attr('data-state', 'manual');
                 if (type === 'mail') {
                     adoptCredentials.call(this);
                 } else if (this.model.previous('transport_auth') === 'mail') {
