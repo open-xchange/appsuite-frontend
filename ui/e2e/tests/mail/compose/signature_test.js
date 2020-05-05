@@ -23,19 +23,22 @@ After(async (users) => {
     await users.removeAll();
 });
 
-
-Scenario('[C8825] Add and replace signatures', async function (I, mail) {
+Scenario('Add and replace signatures in plaintext mode', async function (I, mail) {    // at leat one that had to be escaped in a regex
+    // at leat one that had to be escaped in a regex
+    const first = 'Very original? ...or clever signature?',
+        second = 'Super original and fabulous signature';
 
     await Promise.all([
+        I.haveSetting({ 'io.ox/mail': { messageFormat: 'text' } }),
         I.haveSnippet({
-            content: '<p>Very original and clever signature</p>',
+            content: `<p>${first}</p>`,
             displayname: 'My signature',
             misc: { insertion: 'above', 'content-type': 'text/html' },
             module: 'io.ox/mail',
             type: 'signature'
         }),
         I.haveSnippet({
-            content: '<p>Super original and fabulous signature</p>',
+            content: `<p>${second}</p>`,
             displayname: 'Super signature',
             misc: { insertion: 'above', 'content-type': 'text/html' },
             module: 'io.ox/mail',
@@ -45,24 +48,60 @@ Scenario('[C8825] Add and replace signatures', async function (I, mail) {
 
     I.login('app=io.ox/mail');
     mail.newMail();
-    I.click(mail.locators.compose.options);
+    I.waitForVisible({ css: 'textarea.plain-text' });
 
+    I.click(mail.locators.compose.options);
+    I.clickDropdown('My signature');
+    I.seeInField({ css: 'textarea.plain-text' }, first);
+
+    I.click(mail.locators.compose.options);
+    I.clickDropdown('Super signature');
+    I.seeInField({ css: 'textarea.plain-text' }, second);
+    I.dontSeeInField({ css: 'textarea.plain-text' }, first);
+});
+
+Scenario('[C8825] Add and replace signatures', async function (I, mail) {
+    const first = 'Very original? A clever signature?',
+        second = 'Super original and fabulous signature';
+
+    await Promise.all([
+        I.haveSetting({ 'io.ox/mail': { messageFormat: 'html' } }),
+        I.haveSnippet({
+            content: `<p>${first}</p>`,
+            displayname: 'My signature',
+            misc: { insertion: 'above', 'content-type': 'text/html' },
+            module: 'io.ox/mail',
+            type: 'signature'
+        }),
+        I.haveSnippet({
+            content: `<p>${second}</p>`,
+            displayname: 'Super signature',
+            misc: { insertion: 'above', 'content-type': 'text/html' },
+            module: 'io.ox/mail',
+            type: 'signature'
+        })
+    ]);
+
+    I.login('app=io.ox/mail');
+    mail.newMail();
+
+    I.click(mail.locators.compose.options);
     I.clickDropdown('My signature');
     within({ frame: '#mce_0_ifr' }, () => {
-        I.waitForText('Very original and clever signature');
+        I.waitForText(first);
     });
-    I.click(mail.locators.compose.options);
 
+    I.click(mail.locators.compose.options);
     I.clickDropdown('Super signature');
     within({ frame: '#mce_0_ifr' }, () => {
-        I.waitForText('Super original and fabulous signature');
-        I.dontSee('Very original and clever signature');
+        I.waitForText(second);
+        I.dontSee(first);
     });
 });
 
 Scenario('[C265555] Change the Signature', async function (I, mail, dialogs) {
 
-    const firstSignatureContent = 'Very original and clever signature',
+    const firstSignatureContent = 'Very original? A clever signature?',
         secondSignatureContent = 'Super original and fabulous signature',
         [firstSignature] = await Promise.all([
             I.haveSnippet({
@@ -78,7 +117,8 @@ Scenario('[C265555] Change the Signature', async function (I, mail, dialogs) {
                 misc: { insertion: 'above', 'content-type': 'text/html' },
                 module: 'io.ox/mail',
                 type: 'signature'
-            })
+            }),
+            I.haveSetting({ 'io.ox/mail': { messageFormat: 'html' } })
         ]);
 
     await I.haveSetting({ 'io.ox/mail': { defaultSignature: firstSignature.data } });
@@ -129,13 +169,16 @@ Scenario('[C265555] Change the Signature', async function (I, mail, dialogs) {
 });
 
 Scenario('Use image-only signature', async function (I, mail) {
-    await I.haveSnippet({
-        content: `<p><img src="${getBas64Image()}"></p>`,
-        displayname: 'My image signature',
-        misc: { insertion: 'above', 'content-type': 'text/html' },
-        module: 'io.ox/mail',
-        type: 'signature'
-    });
+    await Promise.all([
+        I.haveSetting({ 'io.ox/mail': { messageFormat: 'html' } }),
+        await I.haveSnippet({
+            content: `<p><img src="${getBas64Image()}"></p>`,
+            displayname: 'My image signature',
+            misc: { insertion: 'above', 'content-type': 'text/html' },
+            module: 'io.ox/mail',
+            type: 'signature'
+        })
+    ]);
 
     I.login('app=io.ox/mail');
     mail.newMail();

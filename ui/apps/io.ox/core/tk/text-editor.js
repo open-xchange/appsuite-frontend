@@ -199,8 +199,9 @@ define('io.ox/core/tk/text-editor', [
             var content = this.getContent(), top,
                 length = content.length,
                 strSanitized = textproc.htmltotext(str),
-                reParagraph = new RegExp('(' + str + '|' + strSanitized + ')');
-            // workaround: compose vs. edit (sanitized signature)
+                strEscaped = str.replace(/[\^$\\.*+?()[\]{}|]/g, '\\$&'),
+                // workaround: compose vs. edit (sanitized signature) vs. trimed as fallback
+                reParagraph = new RegExp('(' + strEscaped + '|' + strSanitized + '|' + strEscaped.trim() + ')');
             content = content.replace(reParagraph, (rep || ''));
             if (content.length === length) return false;
             top = this.scrollTop();
