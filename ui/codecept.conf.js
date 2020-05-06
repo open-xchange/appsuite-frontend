@@ -29,7 +29,8 @@ const helpers = {
         chrome: {
             args: [
                 `--unsafely-treat-insecure-origin-as-secure=${process.env.LAUNCH_URL}`,
-                '--kiosk-printing'
+                '--kiosk-printing',
+                '--disable-web-security'
             ].concat((process.env.CHROME_ARGS || '').split(' '))
         },
         // set HEADLESS=false in your terminal to show chrome window
@@ -63,7 +64,10 @@ const helpers = {
         smtpServer: process.env.SMTP_SERVER || 'localhost',
         imapServer: process.env.IMAP_SERVER || 'localhost'
     },
-    FileSystem: {}
+    FileSystem: {},
+    MockRequestHelper: {
+        require: '@codeceptjs/mock-request'
+    }
 };
 
 if (codeceptDriver !== 'puppeteer') delete helpers.Puppeteer;

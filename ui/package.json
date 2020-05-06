@@ -15,6 +15,7 @@
     "node": ">=10.0.0"
   },
   "devDependencies": {
+    "@codeceptjs/mock-request": "^0.3.0",
     "@open-xchange/appserver": "^0.8.0-pre1",
     "@open-xchange/codecept-helper": "^0.4.0",
     "@open-xchange/shared-grunt-config": "^0.15.0-pre5",
