@@ -1019,8 +1019,13 @@ define('io.ox/files/main', [
          */
         'requires-reload': function (app) {
             // listen to events that affect the filename, description add files, or remove files
-            api.on('rename description add:version remove:version change:version change:file', _.debounce(function () {
-                app.listView.reload();
+            api.on('rename description add:version remove:version change:version change:file', _.debounce(function (file) {
+                // if file not in current folder displayed,
+                if (file && file.folder_id && (file.folder_id !== app.folder.get())) {
+                    api.pool.resetFolder(file.folder_id);
+                } else {
+                    app.listView.reload();
+                }
             }, 100));
             // bug 53498
             api.on('reload:listview', _.debounce(function () {
