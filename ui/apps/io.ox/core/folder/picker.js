@@ -149,7 +149,7 @@ define('io.ox/core/folder/picker', [
         dialog.addButton({ action: 'ok', label: o.button ? o.button : gt('Ok') });
 
         if (o.alternativeButton) {
-            dialog.addButton({ action: 'alternative', label: o.alternativeButton });
+            dialog.addButton({ action: 'alternative', label: o.alternativeButton, placement: 'left', className: 'btn-default' });
         }
         dialog.$body.css({ height: o.height });
 
