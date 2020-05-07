@@ -277,6 +277,54 @@ class MyHelper extends Helper {
         }, src, endX, endY);
     }
 
+    async haveFocus(selector) {
+        const driver = this.helpers['Puppeteer'],
+            { page } = driver;
+
+        const el = await driver._locate(selector);
+        if (!el) return false;
+        return (await page.accessibility.snapshot({ root: el[0], interestingOnly: false })).focused;
+    }
+
+    dontHaveFocus(selector) {
+        return !this.haveFocus(selector);
+    }
+
+    async seeTabbable(selector) {
+        const driver = this.helpers['Puppeteer'],
+            { page } = driver;
+
+        const el = await driver._locate(selector);
+        if (!el) return false;
+        const [{ role }, tabindex] = await Promise.all([
+            page.accessibility.snapshot({ root: el[0], interestingOnly: false }),
+            driver.grabAttributeFrom(selector, 'tabindex')
+        ]);
+        if (tabindex < 0) return false;
+        return /^(button|searchbox|combobox|menuitem|menuitemcheckbox|textbox|link|checkbox)|$/.test(role);
+    }
+
+    dontSeeTabbable(selector) {
+        return !this.seeTabbable(selector);
+    }
+
+    async seeFocusable(selector) {
+        const driver = this.helpers['Puppeteer'],
+            { page } = driver;
+
+        const el = await driver._locate(selector);
+        if (!el) return false;
+        const [{ role }, tabindex] = await Promise.all([
+            page.accessibility.snapshot({ root: el[0], interestingOnly: false }),
+            driver.grabAttributeFrom(selector, 'tabindex')
+        ]);
+        if (tabindex) return true;
+        return /^(button|searchbox|combobox|menuitem|menuitemcheckbox|textbox|link|checkbox)|$/.test(role);
+    }
+
+    dontSeeFocusable(selector) {
+        return !this.seeFocusable(selector);
+    }
 }
 
 module.exports = MyHelper;
