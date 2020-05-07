@@ -91,6 +91,9 @@ define('io.ox/core/strings', ['io.ox/core/locale', 'gettext!io.ox/core'], functi
                 }
             }
 
+            // no decimal places for byte sized values
+            if (i === 0) decimalPlaces = 0;
+
             return (
                 //#. File size
                 //#. %1$d is the number
