@@ -1164,12 +1164,13 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 initialize: function (opt) {
                     var defaults = {
                         'guard_verify': {
-                            'id': 'guard_verify'
+                            'id': 'guard_verify',
+                            'comparison': 'is'
                         }
                     };
                     _.extend(opt.defaults.tests, defaults);
                     _.extend(opt.conditionsTranslation, {
-                        'guard_verify': gt('Signed and verified')
+                        'guard_verify': gt('PGP signature')
                     });
 
                     _.extend(opt.conditionsMapping, { 'guard_verify': ['guard_verify'] });
@@ -1178,18 +1179,17 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 },
 
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                    var inputId = _.uniqueId('signature');
-
                     this.append(
-                        util.drawCondition({
-                            conditionKey: conditionKey,
-                            inputId: inputId,
-                            title: baton.view.conditionsTranslation.guard_verify,
-                            errorView: true,
-                            addClass: addClass
-                        })
-                    );
-
+                        $('<li class="filter-settings-view row">').addClass(addClass).attr('data-test-id', conditionKey).append(
+                            $('<div class="col-sm-3 singleline">').append(
+                                $('<span class="list-title">').text(baton.view.conditionsTranslation.guard_verify)
+                            ),
+                            $('<div class="col-sm-9">').append(
+                                $('<div class="col-sm-7">').append($('<div class="row">').append(
+                                    //#. Tests for PGP Signature.  Starts with "PGP Signature", such as "PGP Signature exists and signature is valid"
+                                    new util.DropdownLinkView({ name: 'comparison', model: cmodel, values: { 'is': gt('exists and signature is valid'), 'not is': gt('is missing or invalid') } }).render().$el)
+                                )),
+                            util.drawDeleteButton('test')));
                 }
 
             });
