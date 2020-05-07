@@ -90,6 +90,7 @@ Scenario('[C7356] - Create a new public folder ', function (I, users, contacts) 
     contacts.waitForApp();
 
     I.click('Add new address book');
+    I.clickDropdown('Personal address book');
     I.waitForVisible('.modal-body');
     I.fillField('[placeholder="New address book"][type="text"]', folderName);
     I.checkOption('Add as public folder');

@@ -6,33 +6,59 @@
 *
 * http://creativecommons.org/licenses/by-nc-sa/2.5/
 *
-* © 2019 OX Software GmbH, Germany. info@open-xchange.com
+* © 2020 OX Software GmbH, Germany. info@open-xchange.com
 *
 * @author Christoph Kopp <christoph.kopp@open-xchange.com>
 */
 
-define('io.ox/calendar/actions/subscribe-shared', [
+define('io.ox/core/sub/sharedFolders', [
     'io.ox/core/extensions',
     'gettext!io.ox/calendar',
     'io.ox/core/folder/api',
     'io.ox/backbone/views/modal',
     'io.ox/backbone/mini-views',
     'io.ox/core/http',
-    'less!io.ox/calendar/actions/subscribe-shared'
+    'less!io.ox/core/sub/sharedFolders'
 ], function (ext, gt, api, ModalDialog, mini, http) {
 
     'use strict';
 
-    function open() {
+    var options = {},
+        properties;
+
+    function open(opt) {
+        options = opt;
+        properties = 'used_for_sync';
+
+        ext.point(options.point).extend({
+            id: 'sections',
+            index: 200,
+            render: function () {
+                var self = this,
+                    sections = options.sections;
+
+                _.each(this.dialogData, function (section, title) {
+                    self.$body.append(
+                        $('<div class="item-block">').append(
+                            $('<h4>').text(sections[title]),
+                            $('<ol class="list-group">').append(
+                                returnListItems(section, self, title)
+                            )
+                        )
+                    );
+                });
+            }
+        });
+
         var dialog = new ModalDialog({
             top: 60,
             width: 600,
             center: false,
             maximize: true,
-            help: 'ox.appsuite.user.sect.calendar.folder.usedforsync.html',
+            help: options.help,
             async: true,
-            point: 'io.ox/core/folder/subscribe-shared-calendar',
-            title: gt('Subscribe shared calendars'),
+            point: options.point,
+            title: options.title,
             render: false
         });
 
@@ -40,7 +66,7 @@ define('io.ox/calendar/actions/subscribe-shared', [
             .addCancelButton()
             .addButton({ label: gt('Save'), action: 'subscribe' })
             .build(function () {
-                this.$body.addClass('shared-calendars');
+                this.$body.addClass('shared-folders');
             })
             .busy(true)
             .open();
@@ -48,13 +74,12 @@ define('io.ox/calendar/actions/subscribe-shared', [
     }
 
     function loadLandingPage(data) {
-        data.dialog.calendarData = data.calendarData;
+        data.dialog.dialogData = data.dialogData;
         data.dialog.hash = data.hash;
         openDialog(data);
     }
 
     function openDialog(data) {
-
         data.dialog.on('subscribe', function () {
             data.dialog.close();
 
@@ -67,7 +92,8 @@ define('io.ox/calendar/actions/subscribe-shared', [
             http.resume();
 
         });
-        ext.point('io.ox/core/folder/subscribe-shared-calendar').invoke('render', data.dialog);
+
+        ext.point(options.point).invoke('render', data.dialog);
         data.dialog.idle();
 
         // focus first usable checkbox
@@ -89,16 +115,16 @@ define('io.ox/calendar/actions/subscribe-shared', [
                 self.opt.dialog.hash[this.get('id')].subscribed = this.get('subscribed');
 
                 if (!val) {
-                    var falseValue = _.copy(self.model.get('com.openexchange.calendar.extendedProperties'), true);
-                    falseValue.usedForSync.value = 'false';
-                    self.model.set('com.openexchange.calendar.extendedProperties', falseValue);
-                    self.model.trigger('change:com.openexchange.calendar.extendedProperties');
+                    var falseValue = _.copy(self.model.get(properties), true);
+                    falseValue.value = 'false';
+                    self.model.set(properties, falseValue);
+                    self.model.trigger(properties);
                 }
             });
 
-            this.model.on('change:com.openexchange.calendar.extendedProperties', function () {
+            this.model.on('change:' + properties, function () {
                 if (!self.opt.dialog.hash[this.get('id')]) self.opt.dialog.hash[this.get('id')] = {};
-                self.opt.dialog.hash[this.get('id')]['com.openexchange.calendar.extendedProperties'] = this.get('com.openexchange.calendar.extendedProperties');
+                self.opt.dialog.hash[this.get('id')][properties] = this.get(properties);
             });
 
         },
@@ -106,16 +132,16 @@ define('io.ox/calendar/actions/subscribe-shared', [
         render: function () {
 
             var $checkbox;
-            var preparedValueTrue =  _.copy(this.model.attributes['com.openexchange.calendar.extendedProperties'], true);
-            preparedValueTrue.usedForSync.value = 'true';
+            var preparedValueTrue =  _.copy(this.model.attributes[properties], true); //?
+            preparedValueTrue.value = 'true';
 
-            var preparedValueFalse =  _.copy(this.model.attributes['com.openexchange.calendar.extendedProperties'], true);
-            preparedValueFalse.usedForSync.value = 'false';
+            var preparedValueFalse =  _.copy(this.model.attributes[properties], true); //?
+            preparedValueFalse.value = 'false';
 
             var Switch = mini.SwitchView.extend({
                 update: function () {
                     var el = this.$el.closest('.list-group-item'),
-                        input = el.find('input[name="com.openexchange.calendar.extendedProperties"]');
+                        input = el.find('input[name="' + properties + '"]');
 
                     if (!this.model.get('subscribed')) {
                         input.prop('disabled', true).attr('data-state', 'manual');
@@ -140,7 +166,7 @@ define('io.ox/calendar/actions/subscribe-shared', [
                     $('<div>').text(this.model.attributes.display_title || this.model.attributes.title)
                 ),
                 $checkbox = new mini.CustomCheckboxView({
-                    name: 'com.openexchange.calendar.extendedProperties',
+                    name: properties,
                     model: this.model,
                     label: gt('Sync via DAV'),
                     customValues: {
@@ -150,10 +176,10 @@ define('io.ox/calendar/actions/subscribe-shared', [
                 }).render().$el.attr('title', gt('sync via DAV'))
             );
 
-            if (!this.model.get('subscribed') || preparedValueFalse.usedForSync.protected) {
+            if (!this.model.get('subscribed') || preparedValueFalse.protected === 'true') {
                 $checkbox
                     .addClass('disabled')
-                    .find('input[name="com.openexchange.calendar.extendedProperties"]').prop('disabled', true).attr('data-state', 'manual');
+                    .find('input[name="' + properties + '"]').prop('disabled', true).attr('data-state', 'manual');
 
             }
             return this;
@@ -161,11 +187,13 @@ define('io.ox/calendar/actions/subscribe-shared', [
     });
 
     function returnListItems(section, dialog, sectionTitle) {
+
         var elements = [],
             ItemModel = Backbone.Model.extend({});
 
         _.each(section, function (item) {
-            if (!item['com.openexchange.calendar.extendedProperties']) return;
+
+            if (!item[properties]) return;
 
             var newItem = new ItemView({
                 model: new ItemModel(item),
@@ -181,46 +209,24 @@ define('io.ox/calendar/actions/subscribe-shared', [
         return elements;
     }
 
-    ext.point('io.ox/core/folder/subscribe-shared-calendar').extend({
-        id: 'sections',
-        index: 200,
-        render: function () {
-            var self = this,
-                sections = {
-                    public: gt('Public calendars'),
-                    shared: gt('Shared calendars'),
-                    private: gt('Private'),
-                    hidden: gt('Hidden calendars')
-                };
-
-            _.each(this.calendarData, function (section, title) {
-                self.$body.append(
-                    $('<div class="item-block">').append(
-                        $('<h4>').text(sections[title]),
-                        $('<ol class="list-group">').append(
-                            returnListItems(section, self, title)
-                        )
-                    )
-                );
-            });
-        }
-    });
 
     function getData(dialog) {
-        return $.when(api.flat({ module: 'calendar', all: true })).then(function (pageData) {
-            var calendarData = {};
-
+        return $.when(api.flat({ module: options.module, all: true })).then(function (pageData) {
+            var dialogData = {};
             var sections = ['private', 'public', 'shared', 'hidden'];
 
             // cleanup
             _.each(sections, function (section) {
-                if (!_.isEmpty(pageData[section])) calendarData[section] = pageData[section];
+                if (!_.isEmpty(pageData[section]) && pageData[section][0][properties]) {
+                    dialogData[section] = pageData[section];
+                }
+
             });
 
             return {
                 dialog: dialog,
                 hash: {},
-                calendarData: calendarData
+                dialogData: dialogData
             };
         }, function (data) {
             dialog.idle();
@@ -237,3 +243,4 @@ define('io.ox/calendar/actions/subscribe-shared', [
     };
 
 });
+

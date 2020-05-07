@@ -34,8 +34,8 @@ define('io.ox/keychain/secretRecoveryDialog', [
                         $('<input type="password" name"recovery-password" class="form-control">').attr('id', guid)
                     );
                 })
-                .addCancelButton({ left: true })
-                .addButton({ label: gt('Ignore'), action: 'ignore', className: 'btn-default' })
+                .addCancelButton()
+                .addButton({ label: gt('Ignore'), action: 'ignore', placement: 'left', className: 'btn-default' })
                 .addButton({ label: gt('Recover'), action: 'migrate' })
                 .on('cancel', function () {
                     this.$body.find('input').val('');

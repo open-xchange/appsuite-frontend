@@ -589,6 +589,11 @@ Array of timezones like `['Europe/Berlin']`
 <config>io.ox/calendar//renderTimezones=`<bool>`</config>
 Array of timzones that specifies that timezones out of the favoriteTimeszones that should be displayed
 
+<config>io.ox/calendar//showPastReminders=`<bool>`</config>
+Determines if reminders should be shown for appointments in the past.
+This does not affect reminders that are set to trigger after an appointment ends.
+Default is `true`.
+
 ## Scheduling view
 
 <config>io.ox/calendar//scheduling/zoom=`<number>`</config>

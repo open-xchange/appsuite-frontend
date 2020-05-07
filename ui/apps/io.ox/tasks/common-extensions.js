@@ -110,8 +110,7 @@ define('io.ox/tasks/common-extensions', [
                 this.attr({
                     'aria-haspopup': 'true',
                     'data-action': 'change-due-date',
-                    'data-toggle': 'dropdown',
-                    'tabindex': '0'
+                    'data-toggle': 'dropdown'
                 });
 
                 this.append($('<i class="fa fa-caret-down" aria-hidden="true">'));

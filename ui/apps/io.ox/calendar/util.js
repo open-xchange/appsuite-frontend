@@ -1356,7 +1356,7 @@ define('io.ox/calendar/util', [
         },
 
         // get the right default alarm for an event
-        // note: the defautl alarm for the birthday calendar is not considered here. There is no use case since you cannot edit those events atm.
+        // note: the default alarm for the birthday calendar is not considered here. There is no use case since you cannot edit those events atm.
         getDefaultAlarms: function (event) {
             // no event or not fulltime (isAllday returns false for no event)
             if (!this.isAllday(event)) {

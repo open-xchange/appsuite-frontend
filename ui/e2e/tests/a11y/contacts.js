@@ -37,6 +37,7 @@ Scenario('Contacts - Modal Dialog - New address book (with exceptions)', async (
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
     I.click('Add new address book');
+    I.clickDropdown('Personal address book');
     I.waitForText('Add as public folder');
 
     expect(await I.grabAxeReport(excludes)).to.be.accessible;

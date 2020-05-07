@@ -28,8 +28,9 @@ define('io.ox/mail/compose/signatures', [
         options: function (baton) {
             if (_.device('smartphone')) return;
 
+            // TODO: limit is 'de fato' disabled for now
             var dropdown = this.data('view'),
-                LIMIT = settings.get('compose/signatureLimit', 8);
+                LIMIT = settings.get('compose/signatureLimit', 100);
 
             function draw() {
                 var collection = baton.config.get('signatures'),

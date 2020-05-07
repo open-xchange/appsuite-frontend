@@ -346,8 +346,8 @@ define.async('io.ox/mail/accounts/view-form', [
                                 self.dialog.pause();
                                 var dialog = new ModalDialog({ title: gt('Warnings') })
                                     .build(function () { this.$body.append(messages); })
-                                    .addCancelButton({ left: true })
-                                    .addButton({ label: gt('Ignore Warnings'), action: 'proceed', className: 'btn-default' })
+                                    .addCancelButton()
+                                    .addButton({ label: gt('Ignore Warnings'), action: 'proceed', placement: 'left', className: 'btn-default' })
                                     .on('action', function (action) {
                                         self.dialog.resume();
                                         if (action === 'proceed') {
@@ -637,7 +637,7 @@ define.async('io.ox/mail/accounts/view-form', [
 
             function changeTransportAuth() {
                 var type = this.model.get('transport_auth');
-                this.$el.find('#transport_login, #transport_password').prop('disabled', type !== 'custom');
+                this.$el.find('#transport_login, #transport_password').prop('disabled', type !== 'custom').attr('data-state', 'manual');
                 if (type === 'mail') {
                     adoptCredentials.call(this);
                 } else if (this.model.previous('transport_auth') === 'mail') {

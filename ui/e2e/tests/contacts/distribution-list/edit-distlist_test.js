@@ -31,13 +31,7 @@ Scenario('Add an existing distribution list', async function (I, contacts, dialo
     contacts.waitForApp();
 
     // create new address book
-    I.waitForText('Add new address book', 5);
-    I.click('Add new address book');
-    dialogs.waitForVisible();
-    I.waitForVisible('input', 5, dialogs.locators.body);
-    I.fillField('New address book', 'test address book');
-    dialogs.clickButton('Add');
-    I.waitForDetached('.modal-dialog');
+    contacts.newAddressbook('test address book');
 
     // create distribution list
     let listenerID = I.registerNodeRemovalListener('.classic-toolbar');

@@ -183,7 +183,7 @@ define('io.ox/calendar/invitations/register', [
         },
 
         getTentativeMessage: function () {
-            return gt('You tentatively accepted this invitation');
+            return gt('You tentatively accepted this appointment');
         },
 
         isOrganizer: function () {
