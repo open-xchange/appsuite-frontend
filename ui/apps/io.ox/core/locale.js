@@ -223,9 +223,9 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
     var api = {
 
         // formatting
-
-        number: function (n, d) {
-            return getNumber(n, { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 });
+        // if there is only one value for decimalPlaces use it for min and max
+        number: function (n, dMin, dMax) {
+            return getNumber(n, { minimumFractionDigits: dMin || 0, maximumFractionDigits: dMax || dMin || 0 });
         },
 
         currency: function (n, code) {

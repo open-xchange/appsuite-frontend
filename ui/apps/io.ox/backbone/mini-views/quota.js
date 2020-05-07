@@ -34,7 +34,7 @@ define('io.ox/backbone/mini-views/quota', [
                 usageField: 'use',
                 renderUnlimited: true,
                 sizeFunction: function (size) {
-                    return strings.fileSize(size, 0);
+                    return strings.fileSize(size, 'smart');
                 },
                 upsellLimit: -1
             }, options);

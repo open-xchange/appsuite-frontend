@@ -55,11 +55,22 @@ define('io.ox/core/strings', ['io.ox/core/locale', 'gettext!io.ox/core'], functi
             return string.substring(0, left) + '...' + string.substring(right, string.length);
         },
 
+        // decimalPlaces can also be the string 'smart'
+        // this causes MB, KB and B to never include decimalPlaces and From GB onward to have a maximum of 3 decimal spaces and trim '0's at the end
+        // we don't want a quota of 2.5GB to read 3GB and have people wondering
         fileSize: function (size, decimalPlaces) {
             if (!n_size) init_n_size();
-            var i = 0, $i = n_size.length;
+            var i = 0, $i = n_size.length, smartMode = false;
+
             // for security so math.pow doesn't get really high values
             if (decimalPlaces > 10) decimalPlaces = 10;
+
+            // use max 3 decimalPlaces for smart mode
+            if (decimalPlaces === 'smart') {
+                decimalPlaces = 3;
+                smartMode = true;
+            }
+
             var dp = Math.pow(10, decimalPlaces || 0);
             while (size >= 1024 && i < $i) {
                 size = size / 1024;
@@ -72,11 +83,19 @@ define('io.ox/core/strings', ['io.ox/core/locale', 'gettext!io.ox/core'], functi
                 size = size / 1024;
                 i++;
             }
+
+            if (smartMode) {
+                // no decimalPlaces below GB in smart mode
+                if (i < 3) {
+                    decimalPlaces = 0;
+                }
+            }
+
             return (
                 //#. File size
                 //#. %1$d is the number
                 //#. %2$s is the unit (B, KB, MB etc.)
-                gt('%1$d %2$s', locale.number(size, decimalPlaces), n_size[i])
+                gt('%1$d %2$s', smartMode ? locale.number(size, 0, decimalPlaces) : locale.number(size, decimalPlaces), n_size[i])
             );
         },
 
