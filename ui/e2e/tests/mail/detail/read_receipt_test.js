@@ -25,7 +25,7 @@ After(async function (users) {
 // TODO: wait for fix of MWB-288
 Scenario.skip('Read receipt block is displayed for read/unread mails', async function (I, users, mail) {
     const subject = 'read receipt';
-    await I.haveSetting({ 'io.ox/mail': { sendDispositionNotification: true } s});
+    await I.haveSetting({ 'io.ox/mail': { sendDispositionNotification: true } });
 
     I.login('app=io.ox/mail', { user: users[1] });
     mail.waitForApp();
