@@ -23,19 +23,19 @@ define('io.ox/keychain/secretRecoveryDialog', [
     return {
         show: function () {
             new ModalDialog({
-                title: gt('Recover passwords'),
-                description: gt('Please provide the old password so the account passwords can be recovered.'),
+                title: gt('Recover external account passwords'),
+                description: gt('You recently changed your password. Please provide your last password to recover passwords for external accounts.'),
                 easyOut: false, async: true, width: 500, enter: 'migrate'
             })
                 .build(function () {
                     var guid = _.uniqueId('form-control-label-');
-                    this.$body.append(
+                    this.$body.append($('<fieldset role="presentation" class="form-group row">').append($('<div class="col-md-12">').append(
                         $('<label>').attr('for', guid).text(gt('Your old password')),
                         $('<input type="password" name"recovery-password" class="form-control">').attr('id', guid)
-                    );
+                    )));
                 })
-                .addCancelButton()
-                .addButton({ label: gt('Ignore'), action: 'ignore', placement: 'left', className: 'btn-default' })
+                .addButton({ label: gt('Remove passwords'), action: 'ignore', className: 'btn-default', placement: 'left' })
+                .addButton({ label: gt('Remind me again'), className: 'btn-default', action: 'cancel' })
                 .addButton({ label: gt('Recover'), action: 'migrate' })
                 .on('cancel', function () {
                     this.$body.find('input').val('');
