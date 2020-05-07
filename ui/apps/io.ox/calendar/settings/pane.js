@@ -76,6 +76,19 @@ define('io.ox/calendar/settings/pane', [
 
     var INDEX = 0;
 
+    var birthdayFolderId;
+
+    function getFolder() {
+        if (birthdayFolderId) return folderAPI.get(birthdayFolderId);
+        return folderAPI.flat({ module: 'event', all: true }).then(function (data) {
+            data = _(data).chain().values().flatten().value();
+            var birthdayFolder = _(data).findWhere({ 'com.openexchange.calendar.provider': 'birthdays' });
+            if (!birthdayFolder) throw new Error('Cannot find birthdays folder');
+            birthdayFolderId = birthdayFolder.id;
+            return birthdayFolder;
+        });
+    }
+
     ext.point('io.ox/calendar/settings/detail/view').extend(
         //
         // Header
@@ -142,18 +155,6 @@ define('io.ox/calendar/settings/pane', [
             id: 'birthday',
             index: INDEX += 100,
             render: (function () {
-                var folderId;
-
-                function getFolder() {
-                    if (folderId) return folderAPI.get(folderId);
-                    return folderAPI.flat({ module: 'event', all: true }).then(function (data) {
-                        data = _(data).chain().values().flatten().value();
-                        var birthdayFolder = _(data).findWhere({ 'com.openexchange.calendar.provider': 'birthdays' });
-                        if (!birthdayFolder) throw new Error('Cannot find birthdays folder');
-                        folderId = birthdayFolder.id;
-                        return birthdayFolder;
-                    });
-                }
 
                 return function () {
                     if (!capabilities.has('calendar_birthdays')) return;
@@ -174,13 +175,13 @@ define('io.ox/calendar/settings/pane', [
 
                     view.listenTo(model, 'change:birthday', _.debounce(function (model) {
                         if (_.isUndefined(model.previous('birthday'))) return;
-                        folderAPI.update(folderId, { subscribed: !!model.get('birthday') });
+                        folderAPI.update(birthdayFolderId, { subscribed: !!model.get('birthday') });
                         // update selected folders
                         var app = ox.ui.apps.get('io.ox/calendar');
                         if (!app) return;
                         var folders = app.folders;
                         if (!folders) return;
-                        app.folders[!!model.get('birthday') ? 'add' : 'remove'](folderId);
+                        app.folders[!!model.get('birthday') ? 'add' : 'remove'](birthdayFolderId);
                     }, 500));
 
                     this.$el.append(
@@ -227,6 +228,7 @@ define('io.ox/calendar/settings/pane', [
             id: 'New',
             index: INDEX += 100,
             render: function () {
+                var birthdayView = new AlarmsView.linkView({ model: settings, attribute: 'birthdays/defaultAlarmDate' });
                 this.$el.append(
                     util.fieldset(
                         gt('New appointment'),
@@ -240,13 +242,26 @@ define('io.ox/calendar/settings/pane', [
                         ),
                         capabilities.has('calendar_birthdays') ? $('<div class="form-group">').append(
                             $('<label>').text(gt('Default reminder for appointments in birthday calendar')),
-                            new AlarmsView.linkView({ model: settings, attribute: 'birthdays/defaultAlarmDate' }).render().$el
+                            birthdayView.render().$el
                         ) : '',
                         // all day
                         util.checkbox('markFulltimeAppointmentsAsFree', gt('Mark all day appointments as free'), settings),
                         util.checkbox('chronos/allowAttendeeEditsByDefault', gt('Participants can edit appointments'), settings)
                     )
                 );
+
+                // update birthday folder data correctly
+                getFolder().then(function (folderData) {
+                    birthdayView.on('changed', _.debounce(function () {
+                        folderAPI.update(birthdayFolderId, {
+                            // empty object as first parameter is needed to prevent folderData Object from being changed accidentally
+                            'com.openexchange.calendar.config':  _.extend({}, folderData['com.openexchange.calendar.config'], {
+                                defaultAlarmDate: settings.get('birthdays/defaultAlarmDate'),
+                                defaultAlarmDateTime: []
+                            })
+                        });
+                    }, 500));
+                });
             }
         },
         //

@@ -373,6 +373,9 @@ define('io.ox/backbone/mini-views/alarms', [
                         self.model.trigger('userChangedAlarms');
                         // if the length of the array doesn't change the model doesn't trigger a change event,so we trigger it manually
                         self.model.set(self.attribute, alarmView.getAlarmsArray()).trigger('change:' + self.attribute);
+                        // trigger change on view
+                        // some listeners just want to listen to changes comming from this view. Useful if model is reused elsewere (settings for example)
+                        self.trigger('changed', self.model.get(self.attribute));
                     })
                     .open();
                 });
