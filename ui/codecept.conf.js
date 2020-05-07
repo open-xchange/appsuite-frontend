@@ -31,7 +31,8 @@ const helpers = {
                 `--unsafely-treat-insecure-origin-as-secure=${process.env.LAUNCH_URL}`,
                 '--kiosk-printing',
                 '--disable-web-security'
-            ].concat((process.env.CHROME_ARGS || '').split(' '))
+            ].concat((process.env.CHROME_ARGS || '').split(' ')),
+            ignoreHTTPSErrors: true
         },
         // set HEADLESS=false in your terminal to show chrome window
         show: process.env.HEADLESS ? process.env.HEADLESS === 'false' : false

@@ -9,9 +9,13 @@ run e2e tests:
   services:
     - name: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
       alias: e2e-test.os.oxui.de
+    - name: nginx
+      alias: appsuite-dev.k3s.os.oxui.de
+      command: ["nginx", "-g", "daemon off;", "-c", "/builds/frontend/core/gitlab-ci/nginx/nginx.conf"]
   variables:
     # e2e configuration
     LAUNCH_URL: http://e2e-test.os.oxui.de:8337/appsuite/
+    LAUNCH_URL_SSO: https://appsuite-dev.k3s.os.oxui.de/
     PROVISIONING_URL: http://e2e-test.os.oxui.de:8337/
     PROVISIONING_KEYCLOAK_URL: https://idp.k3s.os.oxui.de
     PROVISIONING_KEYCLOAK_REALM: Appsuite
@@ -79,9 +83,13 @@ merge filter report:
   services:
     - name: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
       alias: e2e-test.os.oxui.de
+    - name: nginx
+      alias: appsuite-dev.k3s.os.oxui.de
+      command: ["nginx", "-g", "daemon off;", "-c", "/builds/frontend/core/gitlab-ci/nginx/nginx.conf"]
   variables:
     # e2e configuration
     LAUNCH_URL: http://e2e-test.os.oxui.de:8337/appsuite/
+    LAUNCH_URL_SSO: https://appsuite-dev.k3s.os.oxui.de/
     PROVISIONING_URL: http://e2e-test.os.oxui.de:8337/
     PROVISIONING_KEYCLOAK_URL: https://idp.k3s.os.oxui.de
     PROVISIONING_KEYCLOAK_REALM: Appsuite
@@ -209,8 +217,12 @@ remove e2e report:
 
 run new e2e test:
   extends: run e2e tests
-  # needs:
-  #   - deploy e2e testserver new test
+  services:
+    - name: $CI_REGISTRY_IMAGE:develop
+      alias: e2e-test.os.oxui.de
+    - name: nginx
+      alias: appsuite-dev.k3s.os.oxui.de
+      command: ["nginx", "-g", "daemon off;", "-c", "/builds/frontend/core/gitlab-ci/nginx/nginx.conf"]
   script:
   - cd ui
   - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache

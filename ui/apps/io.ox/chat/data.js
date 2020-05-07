@@ -22,7 +22,7 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
         // yes, it contains the user_id; just a POC; no auth
         API_ROOT: 'https://' + chatHost + '/api/' + user_id,
         SOCKET: 'https://' + chatHost,
-        user_id: user_id
+        user_id: user_id || 0
     };
 
     //

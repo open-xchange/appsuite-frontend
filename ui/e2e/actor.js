@@ -1,8 +1,34 @@
 
 const actor = require('@open-xchange/codecept-helper').actor;
+const login = require('@open-xchange/codecept-helper/src/commands/login');
 const _ = require('underscore');
 
 module.exports = actor({
+
+    login(urlParams, options = {}) {
+        if (options.sso === true) {
+            // copy some code from login
+            if (urlParams && !urlParams.length) {
+                // looks like an object, not string or array
+                options = urlParams;
+                urlParams = [];
+            }
+            urlParams = [].concat(urlParams || []);
+            options = Object.assign({ prefix: '' }, options);
+            let user = options.user || require('codeceptjs').container.support('users')[0];
+            const I = this, baseURL = process.env.LAUNCH_URL_SSO,
+                prefix = options.prefix ? `${options.prefix}/` : '',
+                url = `${baseURL}/${prefix}appsuite/ui`;
+
+            if (typeof user === 'undefined') throw new Error('No user defined');
+            if (user.toJSON) user = user.toJSON();
+
+            I.amOnPage(url + '#!!' + (urlParams.length === 0 ? '' : '&' + urlParams.join('&')));
+            return;
+        }
+        return login.call(this, urlParams, options);
+    },
+
     //remove previously created appointments by appointment title
     async removeAllAppointments(title) {
         const { skipRefresh } = await this.executeAsyncScript(function (title, done) {

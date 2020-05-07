@@ -99,3 +99,15 @@ Scenario('[C163025] Screen gets blured when session times out', function (I) {
     I.clearCookie();
     I.waitForElement('.abs.unselectable.blur');
 });
+
+Scenario('SSO login with keycloak', function (I, users) {
+    const [{ userdata: { primaryEmail, password } }] = users;
+
+    I.amOnPage(process.env.LAUNCH_URL_SSO);
+    I.waitInUrl(process.env.PROVISIONING_KEYCLOAK_URL);
+    I.fillField('Username or email', primaryEmail);
+    I.fillField('Password', password);
+    I.click('Log In');
+    I.waitInUrl(process.env.LAUNCH_URL_SSO);
+    I.waitForElement('#io-ox-launcher', 20);
+});
