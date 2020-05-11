@@ -33,6 +33,51 @@ After(async (users) => {
     await users.removeAll();
 });
 
+// will probably break once MWB-290 was fixed/deployed
+Scenario('[OXUIB-199] Sanitize signature preview', async function (I) {
+    const body = locate({ xpath: '//body' });
+    await I.haveSnippet({
+        content: '<i\nmg src="foo" oner\nror="document.body.classList.add(1337)" <br>',
+        displayname: 'my-signature',
+        misc: { insertion: 'below', 'content-type': 'text/plain' },
+        module: 'io.ox/mail',
+        type: 'signature'
+    });
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
+
+    I.waitForText('Add new signature');
+    I.waitForText('my-signature');
+    I.seeElement('.signature-preview img');
+    I.wait(0.5);
+
+    let classlist = await I.grabAttributeFrom(body, 'class');
+    I.say(classlist);
+    expect(classlist).to.not.contain(1337);
+});
+
+// will probably break once MWB-290 was fixed/deployed
+Scenario('[OXUIB-200] Sanitize signature when editing existing', async function (I, dialogs) {
+    const body = locate({ xpath: '//body' });
+    await I.haveSnippet({
+        content: '<font color="<bo<script></script>dy><img alt=< src=foo onerror=document.body.classList.add(1337)></body>">',
+        displayname: 'my-signature',
+        misc: { insertion: 'below', 'content-type': 'text/plain' },
+        module: 'io.ox/mail',
+        type: 'signature'
+    });
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
+
+    I.waitForText('Add new signature');
+    I.waitForText('my-signature');
+    I.click('Edit');
+    dialogs.waitForVisible();
+    I.waitForVisible('.contenteditable-editor iframe');
+    I.wait(0.5);
+
+    let classlist = await I.grabAttributeFrom(body, 'class');
+    expect(classlist).to.not.contain(1337);
+});
+
 Scenario('Sanitize entered signature source code', async function (I) {
 
     var dialog = locate('.mce-window');
