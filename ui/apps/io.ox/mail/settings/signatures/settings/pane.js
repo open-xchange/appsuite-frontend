@@ -90,15 +90,10 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     }
                 }
             }).done(function (editor) {
+                var str = sanitize(signature.content);
                 editor.show();
-                signature.content = signature.content || '';
-                if (signature.content && !looksLikeHTML(signature.content)) {
-                    // convert to html
-                    var str = String(signature.content).replace(/[\s\xA0]+$/g, '');
-                    signature.content = $('<p>').append(editor.ln2br(str)).prop('outerHTML');
-                }
-                if (signature.content) signature.content = DOMPurify.sanitize(signature.content) + '';
-                editor.setContent(signature.content);
+                if (!looksLikeHTML(str)) str = $('<p>').append(editor.ln2br(str)).prop('outerHTML');
+                editor.setContent(str);
                 baton.view.editor = editor;
                 this.$el.addClass('ready');
             }.bind(this));
