@@ -259,7 +259,9 @@ Scenario('[C7830] Add User data widget', async function (I, users) {
     I.openApp('Portal');
     I.waitForText('User data');
     I.waitForText('My contact data');
-    I.waitForText('My password');
+
+    // TODO add again when change password is possible on a backend without sso
+    // I.waitForText('My password');
 
 });
 

@@ -15,6 +15,7 @@
     "node": ">=10.0.0"
   },
   "devDependencies": {
+    "@codeceptjs/mock-request": "^0.3.0",
     "@open-xchange/appserver": "^0.8.0-pre1",
     "@open-xchange/codecept-helper": "^0.4.0",
     "@open-xchange/shared-grunt-config": "^0.15.0-pre5",
@@ -47,6 +48,7 @@
     "karma-ox-ui": "^0.3.0",
     "karma-sinon": "^1.0.4",
     "karma-spec-reporter": "^0.0.32",
+    "keycloak-admin": "^1.13.0",
     "mocha": "^6.2.2",
     "moment-range": "^4.0.2",
     "puppeteer": "^2.0.0",

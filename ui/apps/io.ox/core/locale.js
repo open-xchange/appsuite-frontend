@@ -213,9 +213,17 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
     }
 
     function getDefaultNumberFormat(localeId) {
-        var locale = (localeId || currentLocaleId).toLowerCase().replace(/_/, '-');
-        return Number(1234.56)
-            .toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+        // we want the default format for this specific localeId (used to cache backups)
+        if (localeId) {
+            var locale = (localeId || currentLocaleId).toLowerCase().replace(/_/, '-');
+            return Number(1234.56)
+                .toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                // fr-be, for example, uses narrow nbsp
+                .replace(/\u202F/, '\u00a0');
+        }
+
+        // use getNumber to return the current default number format, respects changed custom number formats
+        return getNumber(1234.56, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
             // fr-be, for example, uses narrow nbsp
             .replace(/\u202F/, '\u00a0');
     }

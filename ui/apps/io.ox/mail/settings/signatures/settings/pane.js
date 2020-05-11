@@ -90,15 +90,10 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     }
                 }
             }).done(function (editor) {
+                var str = sanitize(signature.content);
                 editor.show();
-                signature.content = signature.content || '';
-                if (signature.content && !looksLikeHTML(signature.content)) {
-                    // convert to html
-                    var str = String(signature.content).replace(/[\s\xA0]+$/g, '');
-                    signature.content = $('<p>').append(editor.ln2br(str)).prop('outerHTML');
-                }
-                if (signature.content) signature.content = DOMPurify.sanitize(signature.content) + '';
-                editor.setContent(signature.content);
+                if (!looksLikeHTML(str)) str = $('<p>').append(editor.ln2br(str)).prop('outerHTML');
+                editor.setContent(str);
                 baton.view.editor = editor;
                 this.$el.addClass('ready');
             }.bind(this));
@@ -232,13 +227,19 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         return /(<\/?\w+(\s[^<>]*)?>)/.test(str || '');
     }
 
-    function getSignaturePreview(str) {
-        str = $.trim(str);
-        // fix very special case
-        str = str.replace(/^<pre>([\s\S]+)<\/pre>$/, '$1');
-        if (looksLikeHTML(str)) {
-            return str
-                // remove white-space first
+    function sanitize(str) {
+        str = $.trim(String(str || ''))
+            // remove trailing whitespace of every line
+            .replace(/[\s\xA0]+$/g, '')
+            // fix very special case
+            .replace(/^<pre>([\s\S]+)<\/pre>$/, '$1');
+
+        if (!looksLikeHTML(str)) {
+            // plain text
+            str = _.escape(str).replace(/\n+/g, '<br>');
+        } else {
+            str = str
+                // remove white-space first (carriage return, line feed, tab)
                 .replace(/[\r\n\t]/g, '')
                 // replace <br>, <div>, and <p> by line breaks
                 .replace(/(<br>|<br><\/div>|<\/div>|<\/p>)/gi, '\n')
@@ -247,8 +248,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 // now convert line breaks to <br>
                 .replace(/\n+/g, '<br>');
         }
-        // plain text
-        return _.escape(str).replace(/\n+/g, '<br>');
+        return DOMPurify.sanitize(str);
     }
 
     function fnImportSignatures(e) {
@@ -269,7 +269,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 $('<ul class="io-ox-signature-import">').append(
                     _(signatures).map(function (sig) {
                         // replace div and p elements to br's and remove all other tags
-                        var preview = getSignaturePreview(sig.signature_text);
+                        var preview = sanitize(sig.signature_text);
                         // if preview is empty or a single br-tag use fallback
                         if (preview === '' || preview === '<br>') preview = $('<i>').text(gt('No preview available'));
                         return $('<li>').append(
@@ -445,7 +445,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                         childOptions: {
                             titleAttribute: 'displayname',
                             customize: function (model) {
-                                var preview = getSignaturePreview(model.get('content'));
+                                var preview = sanitize(model.get('content'));
                                 this.$('.list-item-controls').append(
                                     listutils.controlsEdit(),
                                     listutils.controlsDelete()

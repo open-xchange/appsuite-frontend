@@ -308,7 +308,7 @@ Scenario('[C7477] Add appointment widget', async function (I, users) {
     I.waitForDetached('.io-ox-sidepopup', 5);
 });
 
-Scenario('[C7478] Add user data widget', async function (I, users, portal, dialogs) {
+Scenario('[C7478] Add user data widget', async function (I, users, portal) {
     await I.haveSetting('io.ox/portal//widgets/user', '{}');
     I.login('app=io.ox/portal');
     portal.waitForApp();
@@ -318,7 +318,9 @@ Scenario('[C7478] Add user data widget', async function (I, users, portal, dialo
     I.waitForText(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, undefined, { css: '.io-ox-contacts-edit-window .contact-summary' });
     I.click('Discard', { css: '.io-ox-contacts-edit-window' });
     I.waitForDetached({ css: '.io-ox-contacts-edit-window' });
-    //Dirty ... I.click('My password', { css: '.io-ox-portal [data-widget-type="userSettings"] .action' }); is not working here
+
+    // TODO when we have multiple backends with non-sso login, this can be reenabled
+    /*
     I.click('My password', '.widget');
 
     dialogs.waitForVisible();
@@ -328,6 +330,7 @@ Scenario('[C7478] Add user data widget', async function (I, users, portal, dialo
     I.see('Repeat new password');
     dialogs.clickButton('Cancel');
     I.waitForDetached('.modal-dialog');
+    */
 });
 
 Scenario('[C7480] Add recently changed files widget', async function (I, users) {
