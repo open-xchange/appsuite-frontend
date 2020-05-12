@@ -35,7 +35,7 @@ Scenario('[C7336] Successful Login', function (I, users) {
     I.fillField('User name', `${users[0].get('name')}@${users[0].context.id}`);
     I.fillField('Password', users[0].get('password'));
     I.click('Sign in');
-    I.waitForText('No message selected');
+    I.waitForText('No message selected', 30);
 });
 
 Scenario('[C7337] Unsuccessful Login', function (I, users) {
