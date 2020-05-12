@@ -23,19 +23,18 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7341] Use first run mandatory wizard', async function (I, users) {
+Scenario('[C7341] Use first run mandatory wizard', async function (I, users, contacts) {
     const [user] = users;
     const first_name = 'John';
     const last_name = 'Wayne';
     await user.hasCapability('mandatory_wizard');
 
     I.amOnPage('/');
-    I.wait(1);
     I.waitForInvisible('#background-loader.busy', 30);
+    I.waitForFocus('#io-ox-login-username');
     // make sure we have an english UI
     I.click('.dropdown');
-    I.waitForText('English (United States)');
-    I.click('English (United States)');
+    I.clickDropdown('English (United States)');
     I.fillField('User name', `${user.get('name')}@${user.context.id}`);
     I.fillField('Password', user.get('password'));
     I.click('Sign in');
@@ -50,13 +49,8 @@ Scenario('[C7341] Use first run mandatory wizard', async function (I, users) {
     let listenerID = I.registerNodeRemovalListener('.wizard-container');
     I.click('Finish');
     I.waitForNodeRemoval(listenerID);
-    I.waitForVisible('#io-ox-launcher', 5);
-    I.waitForVisible('.contact-picture');
-    I.wait(1);
-    I.click('.contact-picture');
-    I.waitForText('My contact data');
-    I.click('My contact data');
-    I.waitForText('My contact data');
+    I.waitForInvisible('#background-loader.busy', 30);
+    contacts.editMyContact();
     I.seeInField('first_name', first_name);
     I.seeInField('last_name', last_name);
 });
