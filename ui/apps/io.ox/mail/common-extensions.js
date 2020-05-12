@@ -134,9 +134,11 @@ define('io.ox/mail/common-extensions', [
             // - show picture of first recipient in "Sent items" and "Drafts"
             // - exception: always show sender in threaded messages
             var data = baton.data,
+                isThreaded = baton.app.props.get('thread'),
                 size = api.threads.size(data),
                 single = size <= 1,
-                addresses = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from,
+                useRecipientPic = isThreaded ? single : true,
+                addresses = useRecipientPic && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from,
                 node = $('<div class="contact-picture" aria-hidden="true">');
 
             this.append(
