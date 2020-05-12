@@ -203,6 +203,8 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
     }
 
     function resetLocaleData() {
+        // no unnessesary change events here change from undefined to {} for example
+        if (_.isEmpty(settings.get('localeData'))) return;
         settings.set('localeData', {}).save();
     }
 

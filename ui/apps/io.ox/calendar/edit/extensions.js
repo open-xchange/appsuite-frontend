@@ -367,7 +367,8 @@ define('io.ox/calendar/edit/extensions', [
         render: function () {
             var guid = _.uniqueId('form-control-label-'),
                 originalModel = this.model,
-                model = this.baton.parentView.fullTimeToggleModel || new Backbone.Model({ allDay: calendarUtil.isAllday(this.model) }),
+                parentView = this.baton.parentView,
+                model = parentView.fullTimeToggleModel || new Backbone.Model({ allDay: calendarUtil.isAllday(this.model) }),
                 view = new mini.CustomCheckboxView({ id: guid, name: 'allDay', label: gt('All day'), model: model });
 
             view.listenTo(model, 'change:allDay', function () {
@@ -386,7 +387,7 @@ define('io.ox/calendar/edit/extensions', [
             });
             this.$el.append(view.render().$el);
 
-            if (!this.baton.parentView.fullTimeToggleModel && this.baton.mode === 'create') {
+            if (!parentView.fullTimeToggleModel && this.baton.mode === 'create') {
                 // if we restore alarms, check if they differ from the defaults
                 var isDefault = JSON.stringify(_(originalModel.attributes.alarms).pluck('action', 'trigger')) === JSON.stringify(_(calendarUtil.getDefaultAlarms(originalModel)).pluck('action', 'trigger'));
 
@@ -396,9 +397,19 @@ define('io.ox/calendar/edit/extensions', [
                     model.on('change:allDay', applyDefaultAlarms);
                     originalModel.once('userChangedAlarms', function () { model.off('change:allDay', applyDefaultAlarms); });
                 }
+
+                // add some automatic for transparency here.
+                // we want to change transparency according to the markFulltimeAppointmentsAsFree setting
+                // if we detect a manual change of the transparency setting caused by a user we don't want to overwrite this.
+                // cannot use originalModel.changed attribute here because of multiple issues (changed only stores attributes from last set, not from last sync for example)
+                view.listenTo(model, 'change:allDay', function () {
+                    if (settings.get('markFulltimeAppointmentsAsFree', false) && !parentView.userChangedTransp) {
+                        originalModel.set('transp', this.model.get('allDay') ? 'TRANSPARENT' : 'OPAQUE');
+                    }
+                });
             }
 
-            this.baton.parentView.fullTimeToggleModel = model;
+            parentView.fullTimeToggleModel = model;
         }
     });
 
@@ -826,8 +837,17 @@ define('io.ox/calendar/edit/extensions', [
         id: 'shown_as',
         index: 100,
         render: function () {
+            var parentView = this.baton.parentView,
+                // used by all day checkbox
+                visibilityCheckbox = mini.CustomCheckboxView.extend({
+                    onChange: function () {
+                        parentView.userChangedTransp = true;
+                        this.model.set(this.name, this.getValue());
+                    }
+                });
+
             this.$el.append(
-                new mini.CustomCheckboxView({
+                new visibilityCheckbox({
                     label: gt('Show as free'),
                     name: 'transp',
                     model: this.model,

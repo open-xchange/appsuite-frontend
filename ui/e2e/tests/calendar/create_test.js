@@ -1506,3 +1506,106 @@ Scenario('[C7432] Create all-day appointment via doubleclick', async (I, calenda
         dialogs.clickButton('Delete appointment');
     }));
 });
+
+// if "Mark all day appointments as free" is set the following behavior should be present:
+// automatically mark new appointments as free when started as all day (click on a day)
+// automatically mark new appointments free when switched to all day, should work both ways
+// do not Show as free when editing
+// do not Show as free when a user manually changed the checkbox (the user wants it set to that value obviously)
+// do not Show as free when the setting is not set
+Scenario('[OXUIB-244] Mark all day appointments as free not respected for new appointments', async (I, calendar) => {
+
+    await I.haveSetting('io.ox/calendar//markFulltimeAppointmentsAsFree', true);
+
+    I.login('app=io.ox/calendar&perspective=week:week');
+    calendar.waitForApp();
+
+    // start as all day appointment
+    I.waitForElement('.io-ox-pagecontroller.current .appointment-panel');
+    I.doubleClick('.io-ox-pagecontroller.current .appointment-panel');
+    I.waitForText('Create appointment');
+
+    I.waitForElement(locate('.io-ox-calendar-edit-window'), 5);
+
+    I.seeCheckboxIsChecked('All day');
+    I.seeCheckboxIsChecked('Show as free');
+
+    I.fillField('Subject', 'test appointment');
+    I.click('Create');
+    I.waitForDetached('.window-container.io-ox-calendar-edit-window');
+    I.waitForText('test appointment');
+
+    // visibility should not be changed in edit mode
+    I.waitForText('test appointment', 5, '.io-ox-pagecontroller.current .appointment-panel');
+    I.click('.appointment', '.page.current');
+    I.waitForVisible('.io-ox-sidepopup');
+    I.waitForText('Edit', 5, '.io-ox-sidepopup');
+    I.click('Edit');
+
+    I.waitForText('All day', 5);
+
+    I.uncheckOption('All day');
+
+    I.dontSeeCheckboxIsChecked('All day');
+    I.seeCheckboxIsChecked('Show as free');
+
+    I.click('Save');
+    I.waitForDetached('.window-container.io-ox-calendar-edit-window');
+
+    // check switching all day on and off
+    calendar.newAppointment();
+
+    I.dontSeeCheckboxIsChecked('All day');
+    I.dontSeeCheckboxIsChecked('Show as free');
+
+    I.checkOption('All day');
+
+    I.seeCheckboxIsChecked('All day');
+    I.seeCheckboxIsChecked('Show as free');
+
+    I.uncheckOption('All day');
+
+    I.dontSeeCheckboxIsChecked('All day');
+    I.dontSeeCheckboxIsChecked('Show as free');
+
+    // user interaction
+    I.checkOption('Show as free');
+
+    I.checkOption('All day');
+
+    I.seeCheckboxIsChecked('All day');
+    I.seeCheckboxIsChecked('Show as free');
+
+    I.uncheckOption('All day');
+
+    I.dontSeeCheckboxIsChecked('All day');
+    // should stay the way the user manually set it to
+    I.seeCheckboxIsChecked('Show as free');
+
+    I.uncheckOption('Show as free');
+
+    I.checkOption('All day');
+
+    I.seeCheckboxIsChecked('All day');
+    // should stay the way the user manually set it to
+    I.dontSeeCheckboxIsChecked('Show as free');
+
+    I.logout();
+
+    // if setting is disabled no automatic should happen
+    await I.haveSetting('io.ox/calendar//markFulltimeAppointmentsAsFree', false);
+
+    I.login('app=io.ox/calendar&perspective=week:week');
+    calendar.waitForApp();
+
+    // check switching all day on and off
+    calendar.newAppointment();
+
+    I.dontSeeCheckboxIsChecked('All day');
+    I.dontSeeCheckboxIsChecked('Show as free');
+
+    I.checkOption('All day');
+
+    I.seeCheckboxIsChecked('All day');
+    I.dontSeeCheckboxIsChecked('Show as free');
+});

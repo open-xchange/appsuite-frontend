@@ -128,7 +128,7 @@ generate e2e report:
     GIT_STRATEGY: none
   dependencies:
     - run e2e tests
-    - run new e2e test
+    - run single test
   script:
     # fail if there are no test results, prevents history from getting lost in some cases
     - find ui/build/e2e/ -name *.xml > /dev/null
@@ -208,8 +208,9 @@ remove e2e report:
       - /^master-/
       - /^poc\//
 
-run new e2e test:
+run single test:
   extends: run e2e tests
+  needs: []
   services:
     - name: $CI_REGISTRY_IMAGE:develop
       alias: e2e-test.os.oxui.de
