@@ -11,7 +11,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 define(function () {
-    describe.only('require static files', function () {
+    describe('require static files', function () {
         var fakeServer;
 
         function mkModule(name) {
