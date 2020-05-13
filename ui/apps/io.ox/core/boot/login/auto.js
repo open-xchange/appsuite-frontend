@@ -54,9 +54,10 @@ define('io.ox/core/boot/login/auto', [
                 // external page defined in the error params
                 if (error && error.code === 'LGI-0016' && (error.error_params || []).length === 1) {
                     _.url.redirect(error.error_params[0]);
-                } else {
-                    ox.trigger('login:fail', error);
+                    //wait forever (until redirected, that means)
+                    return $.Deferred();
                 }
+                ox.trigger('login:fail', error);
             });
     }
 
