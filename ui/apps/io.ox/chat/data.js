@@ -753,7 +753,9 @@ define('io.ox/chat/data', [
         },
 
         connectSocket: function () {
-            var socket = data.socket = io.connect(data.SOCKET);
+            var socket = data.socket = io.connect(data.SOCKET, {
+                transports: ['websockets']
+            });
 
             socket.on('alive', function () {
                 console.log('Connected socket to server');
