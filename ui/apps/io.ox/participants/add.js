@@ -150,15 +150,6 @@ define('io.ox/participants/add', [
         resolve: function (e) {
             if (e && e.type === 'keydown' && e.which !== 13) return;
 
-            // sometimes focousout happens together with a click on another element that handles adding participants manually (usually save buttons, so errors can be handled correctly)
-            if (e && e.type === 'focusout') {
-                if (e.relatedTarget && $(e.relatedTarget).attr('noAutoAddParticipants')) return;
-
-                // some browsers have problems with related target, try to find the element that was clicked
-                // highly non standard, but only thing that worked on firefox on mac
-                if (e.originalEvent && e.originalEvent.explicitOriginalTarget && $(e.originalEvent.explicitOriginalTarget).closest('[noAutoAddParticipants="true"]').length === 1) return;
-            }
-
             var val = this.typeahead.$el.typeahead('val'),
                 list = coreUtil.getAddresses(val),
                 participants = [];

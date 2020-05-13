@@ -1,7 +1,7 @@
 {
   "name": "open-xchange-appsuite",
   "description": "",
-  "version": "7.10.2-22",
+  "version": "7.10.2-23",
   "repository": {
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
@@ -71,12 +71,12 @@
     "chart.js": "2.7.3",
     "clipboard": "2.0.4",
     "croppie": "2.6.3",
-    "dompurify": "^2.0.7",
+    "dompurify": "^2.0.8",
     "font-awesome": "4.7.0",
     "jquery": "3.3.1",
     "moment": "2.24.0",
     "moment-timezone": "0.5.27",
-    "pdfjs-dist": "1.9.426",
+    "pdfjs-dist": "2.3.200",
     "requirejs": "2.3.6",
     "resize-polyfill": "1.1.1",
     "socket.io-client": "2.2.0",

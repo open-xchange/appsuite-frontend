@@ -116,7 +116,7 @@ define('io.ox/core/pdf/pdfview', [
         // ---------------------------------------------------------------------
 
         function getPageViewport(pdfjsPage, pageZoom) {
-            return _.isObject(pdfjsPage) ? pdfjsPage.getViewport(PDFView.getAdjustedZoom(pageZoom)) : null;
+            return _.isObject(pdfjsPage) ? pdfjsPage.getViewport({ scale: PDFView.getAdjustedZoom(pageZoom) }) : null;
         }
 
         function intersects(aFrom, aTo, bFrom, bTo) {
@@ -664,7 +664,7 @@ define('io.ox/core/pdf/pdfview', [
                             return pdfjsPage.render({
                                 canvasContext: canvasCtx,
                                 viewport: viewport
-                            }).then(function () {
+                            }).promise.then(function () {
                                 Util.logPerformanceTimer('pdfView:renderPDFPage_pdfjsPage_render_then_handler_' + pageNumber); // after second long running process (pdfjsPage.render)
                                 if (pdfTextBuilder) {
                                     return pdfjsPage.getTextContent().then(function (pdfTextContent) {
