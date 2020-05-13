@@ -414,7 +414,7 @@ define('io.ox/mail/actions', [
         }
     });
 
-    new Action('io.ox/mail/actions/', {
+    new Action('io.ox/mail/actions/createdistlist', {
         capabilities: 'contacts',
         collection: 'some',
         action: function (baton) {

@@ -139,7 +139,7 @@ define('io.ox/core/util', [
             text = (text || '').replace(regUrl, function (url) {
                 var fix = this.fixUrlSuffix(url);
                 // soft-break long words (like long URLs)
-                var node = $('<a target="_blank" rel="noopener">').attr('href', encodeURI(decodeURI(fix.url))).append(that.breakableHTML(fix.url));
+                var node = $('<a target="_blank" rel="noopener">').attr('href', fix.url).append(that.breakableHTML(fix.url));
                 return node.prop('outerHTML') + fix.suffix;
             }.bind(this));
 

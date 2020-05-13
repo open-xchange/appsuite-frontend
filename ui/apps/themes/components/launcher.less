@@ -341,6 +341,11 @@
     }
 }
 
+// Fix for IE dropdown width calculation see OXUIB-184
+.ie11 .launcher-dropdown.dropdown-menu {
+    width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 2 !important;
+}
+
 .launcher-dropdown.dropdown-menu {
 
     padding: @launcher-outer-spacing;
