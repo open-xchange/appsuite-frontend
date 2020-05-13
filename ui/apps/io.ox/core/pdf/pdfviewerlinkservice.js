@@ -52,6 +52,7 @@ define('io.ox/core/pdf/pdfviewerlinkservice', [
             this.pdfDocument = options.pdfDocument || null;
             this.pdfHistory = options.pdfHistory || null;
             this.eventHub = options.eventHub || null;
+            this.externalLinkTarget = options.externalLinkTarget || null;
 
             this._pagesRefCache = (this.pdfDocument) ? Object.create(null) : null;
         }

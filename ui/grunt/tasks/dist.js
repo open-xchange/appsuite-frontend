@@ -74,7 +74,8 @@ module.exports = function (grunt) {
 
     var fileList = grunt.config('uglify.dist.files.0.src'),
         ignoreList = [
-            'apps/pdfjs-dist/build/pdf.combined.js',
+            'apps/pdfjs-dist/build/pdf.js',
+            'apps/pdfjs-dist/build/pdf.worker.js',
             'apps/3rd.party/tinymce/tinymce.js',
             'apps/io.ox/mail/compose/bundle.js',
             'boot.js',

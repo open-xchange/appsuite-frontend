@@ -17,12 +17,11 @@
 define('io.ox/core/pdf/pdfannotationslayerbuilder', [
     'io.ox/core/pdf/pdfpolyfill',
     'io.ox/core/pdf/pdfsimplelinkservice',
-    'pdfjs-dist/build/pdf.combined'
-], function (Polyfill, SimpleLinkService, PDFJSCombined) {
+    'pdfjs-dist/build/pdf',
+    'pdfjs-dist/build/pdf.worker'
+], function (Polyfill, SimpleLinkService, PDFJSLib) {
 
     'use strict';
-
-    var PDFJS = PDFJSCombined.PDFJS;
 
     var mozL10n = document.mozL10n || document.webL10n;
 
@@ -68,13 +67,15 @@ define('io.ox/core/pdf/pdfannotationslayerbuilder', [
                         div: self.div,
                         annotations: annotations,
                         page: self.pdfPage,
-                        linkService: self.linkService
+                        linkService: self.linkService,
+                        // Path for image resources, mainly for annotation icons. Include trailing slash.
+                        imageResourcesPath: ox.abs + ox.root + '/apps/pdfjs-dist/web/images/'
                     };
 
                     if (self.div) {
                         // If an annotationLayer already exists, refresh its children's
                         // transformation matrices.
-                        PDFJS.AnnotationLayer.update(parameters);
+                        PDFJSLib.AnnotationLayer.update(parameters);
                     } else {
                         // Create an annotation layer div and render the annotations
                         // if there is at least one annotation.
@@ -87,7 +88,7 @@ define('io.ox/core/pdf/pdfannotationslayerbuilder', [
                         self.pageDiv.appendChild(self.div);
                         parameters.div = self.div;
 
-                        PDFJS.AnnotationLayer.render(parameters);
+                        PDFJSLib.AnnotationLayer.render(parameters);
                         if (typeof mozL10n !== 'undefined') {
                             mozL10n.translate(self.div);
                         }
