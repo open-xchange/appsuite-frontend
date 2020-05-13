@@ -231,7 +231,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 open: this.onOpen.bind(this),
                 close: this.onClose.bind(this)
             });
-            this.listenTo(this.model, 'change:number_of_versions', this.render);
+            this.listenTo(this.model, 'change:number_of_versions change:versions', this.render);
             this.listenTo(this.model, 'change:versions change:current_version change:number_of_versions change:version change:com.openexchange.file.sanitizedFilename', this.renderVersions);
         },
 
