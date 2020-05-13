@@ -360,11 +360,12 @@ define('io.ox/switchboard/extensions', [
             }
         });
 
-        window.zoomOAuthCallback = function (data) {
+        api.socket.on('newToken', function (data) {
             console.log('zoomOAuthCallback!', data);
-            settings.set('switchboard/zoom/accessToken', '1234');
+            settings.set('switchboard/zoom/accessToken', data.accessToken).save();
             ox.trigger('zoom-oauth-callback');
-        };
+        });
+
     }
 
     //
