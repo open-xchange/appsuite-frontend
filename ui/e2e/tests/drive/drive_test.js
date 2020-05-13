@@ -167,7 +167,7 @@ Scenario('[C45061] Delete file versions', async function (I, drive, dialogs) {
     I.waitForDetached('.modal-dialog');
 
     I.waitForDetached(locate('.io-ox-viewer .viewer-fileversions').withText('Versions (5)'));
-    I.see('Versions (4)', '.io-ox-viewer .viewer-fileversions');
+    I.waitForText('Versions (4)', 5, '.io-ox-viewer .viewer-fileversions');
 });
 
 Scenario.skip('[C45062] Change current file version', async function (I, drive) {
@@ -228,5 +228,5 @@ Scenario('[C45063] Delete current file version', async function (I, drive, dialo
     I.waitForDetached('.modal-dialog');
 
     I.waitForDetached(locate('.io-ox-viewer .viewer-fileversions').withText('Versions (5)'));
-    I.see('Versions (4)', '.io-ox-viewer .viewer-fileversions');
+    I.waitForText('Versions (4)', 5, '.io-ox-viewer .viewer-fileversions');
 });

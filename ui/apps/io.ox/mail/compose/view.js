@@ -704,7 +704,7 @@ define('io.ox/mail/compose/view', [
             //#. %s is a relative date from now, examples: 5 seconds ago, 5 minutes ago etc
             else if (state === 'saved' && this.autoSaveState === 'saving') {
                 var lastSave = moment();
-                this.inlineYell(function () { return gt('Draft saved %s', lastSave.fromNow()); });
+                this.inlineYell(function () { return gt('Saved %s', lastSave.fromNow()); });
             }
             this.autoSaveState = state;
         },

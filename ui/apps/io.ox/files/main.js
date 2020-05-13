@@ -391,7 +391,8 @@ define('io.ox/files/main', [
                 'filter': 'all',
                 'layout': layout,
                 'folderEditMode': false,
-                'details': _.device('touch') ? false : app.settings.get('showDetails', true)
+                'details': _.device('touch') ? false : app.settings.get('showDetails', true),
+                'searchActive': false
             });
             // initial setup
             var folder = app.folder.get();
@@ -1344,10 +1345,12 @@ define('io.ox/files/main', [
                     'find:query': function () {
                         // hide sort options
                         app.listControl.$el.find('.grid-options:first').hide();
+                        app.props.set('searchActive', true);
                     },
                     'find:cancel': function () {
                         // show sort options again
                         app.listControl.$el.find('.grid-options:first').show();
+                        app.props.set('searchActive', false);
                     }
                 });
             }
