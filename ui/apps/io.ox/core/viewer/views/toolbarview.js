@@ -34,15 +34,20 @@ define('io.ox/core/viewer/views/toolbarview', [
     'use strict';
 
     // define constants
-    var TOOLBAR_ID = 'io.ox/core/viewer/toolbar',
-        TOOLBAR_LINKS_ID = TOOLBAR_ID + '/links',
-        TOOLBAR_ACTION_ID = 'io.ox/core/viewer/actions/toolbar',
-        TOOLBAR_ACTION_DROPDOWN_ID = TOOLBAR_ACTION_ID + '/dropdown',
-        FILE_VERSION_IS_UPLOADING_MSG = gt('This document cannot be viewed at the moment because a new version is being uploaded. Please wait until the upload is completed.'),
-        // define extension points for this ToolbarView
-        // toolbarPoint = Ext.point(TOOLBAR_ID),
-        // toolbar link meta object used to generate extension points later
-        toolbarLinksMeta = {
+    var TOOLBAR_ID = 'io.ox/core/viewer/toolbar';
+    var TOOLBAR_LINKS_ID = TOOLBAR_ID + '/links';
+    var TOOLBAR_ACTION_ID = 'io.ox/core/viewer/actions/toolbar';
+    var TOOLBAR_ACTION_DROPDOWN_ID = TOOLBAR_ACTION_ID + '/dropdown';
+    // update toolbar for these model change events
+    var MODEL_CHANGE_EVENTS = 'change:cid change:folder_id change:id'
+                            + ' change:filename change:title change:com.openexchange.file.sanitizedFilename '
+                            + ' change:current_version change:number_of_versions change:version '
+                            + ' change:object_permissions change:com.openexchange.share.extendedObjectPermissions change:shareable';
+
+    var FILE_VERSION_IS_UPLOADING_MSG = gt('This document cannot be viewed at the moment because a new version is being uploaded. Please wait until the upload is completed.');
+
+    // toolbar link meta object used to generate extension points later
+    var toolbarLinksMeta = {
             // high priority links
             'filename': {
                 prio: 'hi',
@@ -666,7 +671,12 @@ define('io.ox/core/viewer/views/toolbarview', [
             // the current autoplay state
             this.autoplayStarted = false;
 
-            this.toolbar = new ToolbarView({ el: this.el, align: 'right', strict: false });
+            // create a debounced version of the render function
+            this.renderDebounced = _.debounce(this.render.bind(this), 100);
+            // create a debounced version of the toolbar update function
+            this.updateToolbarDebounced = _.debounce(this.updateToolbar.bind(this), 100);
+
+            this.toolbar = new ToolbarView({ point: null, el: this.el, align: 'right', strict: false });
         },
 
         /**
@@ -768,7 +778,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             if (changedModel.changed.description && (this.model.previous('description') !== changedModel.get('description'))) {
                 return;
             }
-            this.render(changedModel);
+            this.renderDebounced(changedModel);
         },
 
         /**
@@ -779,7 +789,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onFavoritesChange: function (file) {
             if (file.id === _.cid(this.model.toJSON())) {
-                this.updateToolbar();
+                this.updateToolbarDebounced();
             }
         },
 
@@ -792,7 +802,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             if (!state) { return; }
 
             this.autoplayStarted = state.autoplayStarted;
-            this.updateToolbar();
+            this.updateToolbarDebounced();
         },
 
         /**
@@ -820,28 +830,28 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         render: function (model) {
 
+            // remove listener from previous model
+            if (this.model) { this.stopListening(this.model, MODEL_CHANGE_EVENTS, this.onModelChange); }
+
             if (!model) {
                 console.error('Core.Viewer.ToolbarView.render(): no file to render');
                 return this;
             }
 
-            // update inner toolbar
             var appName = appName = model.get('source');
-
-            // remove listener from previous model
-            if (this.model) { this.stopListening(this.model, 'change'); }
-
-            // save current data as view model
-            this.model = model;
-
-            // add listener for new model
-            this.listenTo(this.model, 'change', this.onModelChange);
 
             // add CSS device class to $el for smartphones or tablets
             Util.setDeviceClass(this.$el);
 
+            // save current data as view model
+            this.model = model;
+
+            // update inner toolbar
             this.toolbar.setPoint(TOOLBAR_LINKS_ID + '/' + appName);
             this.updateToolbar();
+
+            // add listener for new model
+            this.listenTo(this.model, MODEL_CHANGE_EVENTS, this.onModelChange);
 
             return this;
         },
@@ -849,25 +859,23 @@ define('io.ox/core/viewer/views/toolbarview', [
         /**
          * Update inner toolbar.
          */
-        updateToolbar: _.debounce(function () {
+        updateToolbar: function () {
             if (this.disposed) return;
             if (!this.model) { return; }
 
             var isDriveFile = this.model.isFile();
             var modelJson = this.model.toJSON();
 
-            this.toolbar
-                // .setPoint(TOOLBAR_LINKS_ID + '/' + appName)
-                .setSelection([modelJson], function () {
-                    return {
-                        context: this,
-                        data: isDriveFile ? modelJson : this.model.get('origData'),
-                        model: this.model,
-                        models: isDriveFile ? [this.model] : null,
-                        openedBy: this.openedBy
-                    };
-                }.bind(this));
-        }, 10),
+            this.toolbar.setSelection([modelJson], function () {
+                return {
+                    context: this,
+                    data: isDriveFile ? modelJson : this.model.get('origData'),
+                    model: this.model,
+                    models: isDriveFile ? [this.model] : null,
+                    openedBy: this.openedBy
+                };
+            }.bind(this));
+        },
 
         /**
          * Renders the document page navigation controls.
