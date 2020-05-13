@@ -1,7 +1,7 @@
 {
   "name": "open-xchange-appsuite",
   "description": "",
-  "version": "7.10.1-30",
+  "version": "7.10.1-31",
   "repository": {
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
@@ -69,14 +69,14 @@
     "chart.js": "2.6.0",
     "clipboard": "1.7.1",
     "croppie": "2.5.0",
-    "dompurify": "^2.0.7",
+    "dompurify": "^2.0.8",
     "font-awesome": "4.7.0",
     "jquery": "3.2.1",
     "jquery-touch-events": "git://github.com/benmajor/jQuery-Touch-Events.git#1.0.9",
     "marked": "0.3.6",
     "moment": "2.18.1",
     "moment-timezone": "0.5.13",
-    "pdfjs-dist": "1.9.426",
+    "pdfjs-dist": "2.3.200",
     "requirejs": "2.3.3",
     "resize-polyfill": "1.1.1",
     "socket.io-client": "2.0.3",
