@@ -399,7 +399,7 @@ Scenario('Filter mail using validated size', async function (I) {
     I.waitForElement(disabledButton);
 });
 
-Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users, mail) {
+Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }

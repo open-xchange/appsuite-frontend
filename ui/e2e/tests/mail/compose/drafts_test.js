@@ -169,7 +169,7 @@ Scenario('[C114959] Draft can be used as templates', async function (I, mail, di
     //checking some stuff in draft editing window
     I.waitForVisible('.mail-compose-fields [data-extension-id="subject"]', 10);
     //I.waitForValue('.mail-compose-fields [data-extension-id="subject"]','[Copy]');
-    I.retry(5).seeInField('Subject','[Copy]');
+    I.retry(5).seeInField('Subject', '[Copy]');
     //I.seeInField('Subject','[Copy]');
     I.click(mail.locators.compose.close);
 

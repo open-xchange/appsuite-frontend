@@ -107,7 +107,7 @@ Scenario('[C83399] View all SENT attachments', async (I, drive) => {
     });
 });
 
-Scenario('[C83404] Attachments can be copied', async (I, drive,) => {
+Scenario('[C83404] Attachments can be copied', async (I, drive) => {
     await prepare();
     I.logout();
 
@@ -119,7 +119,7 @@ Scenario('[C83404] Attachments can be copied', async (I, drive,) => {
     within('.list-view', () => {
         I.waitForText('testdocument.rtf');
         I.waitForText('testdocument.odt');
-        I.waitForText('testpresentation.ppsm');   
+        I.waitForText('testpresentation.ppsm');
     });
 
     // Open Dropdown and select 'Copy' to copy last file
@@ -130,19 +130,19 @@ Scenario('[C83404] Attachments can be copied', async (I, drive,) => {
     I.clickDropdown('Copy');
 
     // Wait for modal and copy file to default folder 'My files'
-    I.waitForElement('.modal-dialog');    
-    I.see('Copy','.modal-footer');
-    I.click('Copy','.modal-footer');
+    I.waitForElement('.modal-dialog');
+    I.see('Copy', '.modal-footer');
+    I.click('Copy', '.modal-footer');
     I.waitForText('File has been copied');
 
     // Select 'My files' folder and checkfor copied file
     I.selectFolder('My files');
     within('.list-view', () => {
-        I.waitForText('testpresentation.ppsm');    
+        I.waitForText('testpresentation.ppsm');
     });
 });
 
-Scenario('[C125297] Attachments are linked to mails', async (I, drive,) => {
+Scenario('[C125297] Attachments are linked to mails', async (I, drive) => {
     await prepare();
     I.logout();
 
@@ -154,7 +154,7 @@ Scenario('[C125297] Attachments are linked to mails', async (I, drive,) => {
     within('.list-view', () => {
         I.waitForText('testdocument.rtf');
         I.waitForText('testdocument.odt');
-        I.waitForText('testpresentation.ppsm');   
+        I.waitForText('testpresentation.ppsm');
     });
 
     // Open Dropdown and select 'view' to to open detail-view
@@ -169,14 +169,14 @@ Scenario('[C125297] Attachments are linked to mails', async (I, drive,) => {
     within(locate('.viewer-dark-theme'), () => {
         I.see('View message');
         I.click('View message');
-    })   
-    
+    });
+
     // Check Email for attachment
     I.waitForElement('.io-ox-mail-detail-window');
     within(locate('.io-ox-mail-detail-window'), () => {
         I.see('3 attachments');
         I.click('3 attachments');
         I.waitForText('testpresentation.ppsm');
-    })
+    });
 });
 

@@ -23,7 +23,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario.skip('Add and use application password', async (I, users) => {
+Scenario.skip('Add and use application password', async (I) => {
 
     // Login to settings
     I.login(['app=io.ox/settings', 'folder=virtual/settings/appPasswords']);
@@ -46,6 +46,7 @@ Scenario.skip('Add and use application password', async (I, users) => {
     let password = loginData.match(/Password: [^\s]*/i);
     assert(username.length > 0, 'assigned username');
     assert(password.length > 0, 'assigned password');
+    /*
     var newuser = {
         name: username[0].substring(username[0].indexOf(':') + 1).trim(),
         password: password[0].substring(password[0].indexOf(':') + 1).trim(),
@@ -53,6 +54,7 @@ Scenario.skip('Add and use application password', async (I, users) => {
             id: users[0].context.id
         }
     };
+    */
 
     I.click('Close');
 

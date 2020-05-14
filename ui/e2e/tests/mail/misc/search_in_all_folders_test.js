@@ -11,7 +11,7 @@
  */
 ///  <reference path="../../steps.d.ts" />
 
-Scenario('[C114373] Search in all folders', async function (I, users,mail) {
+Scenario('[C114373] Search in all folders', async function (I, users, mail) {
     let [user] = users;
     user.hasConfig('com.openexchange.find.basic.mail.allMessagesFolder', 'virtual/all');
     user.hasConfig('com.openexchange.find.basic.mail.searchmailbody', true);
