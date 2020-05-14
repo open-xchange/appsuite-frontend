@@ -124,6 +124,9 @@
   }
 
   function clearMenus(e) {
+    // only clear menus when the primary button (usually left click) is used in firefox
+    // there is a strange bug that triggers a click event on mousup for all other buttons, this causes for example context menus to close instantly
+    if (_.device('firefox') && e && e.button > 0) return;
     $(backdrop).remove()
     if (phone) {
       $('#io-ox-core').removeClass('menu-blur');
