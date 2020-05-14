@@ -60,8 +60,8 @@ define('io.ox/core/folder/api', [
                 if (!/^(contacts|calendar|tasks|event)$/.test(item.module)) return false;
                 // rename default calendar
                 if (item.id === String(calSettings.get('chronos/defaultFolderId'))) return true;
-                // any shared folder
-                return util.is('shared', item);
+                // any shared folder that has no name yet
+                return item.display_title === undefined && util.is('shared', item);
             }),
             ids = _(renameItems)
                 .chain()
@@ -621,10 +621,7 @@ define('io.ox/core/folder/api', [
                 tree: tree(id)
             }
         })
-        .pipe(
-            function (data) {
-                return renameDefaultCalendarFolders(data);
-            },
+        .fail(
             function (error) {
                 api.trigger('error error:' + error.code, error, id);
                 return error;
@@ -1652,7 +1649,8 @@ define('io.ox/core/folder/api', [
         propagate: propagate,
         altnamespace: altnamespace,
         injectIndex: injectIndex,
-        multipleLists: multipleLists
+        multipleLists: multipleLists,
+        renameDefaultCalendarFolders: renameDefaultCalendarFolders
     });
 
     return api;

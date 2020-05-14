@@ -149,15 +149,19 @@ define('io.ox/calendar/api', [
                         if (diff <= 3600000) {
                             throw err;
                         }
-                        return request(getParams(opt, start, middle), method).then(function (data1) {
-                            return request(getParams(opt, middle, end), method).then(function (data2) {
-                                if (!_.isArray(data1)) return merge(data1, data2);
-                                data1.forEach(function (d, index) {
-                                    d.events = merge(d.events, data2[index].events);
-                                });
-                                return data1;
+
+                        // use multiple to speed this up
+                        http.pause();
+                        var def = $.when(request(getParams(opt, start, middle), method), request(getParams(opt, middle, end), method)).then(function (data1, data2) {
+                            if (!_.isArray(data1)) return merge(data1, data2);
+                            data1.forEach(function (d, index) {
+                                d.events = merge(d.events, data2[index].events);
                             });
+                            return data1;
                         });
+                        http.resume();
+
+                        return def;
                     });
                 };
             }()),

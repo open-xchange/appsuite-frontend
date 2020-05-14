@@ -1657,10 +1657,14 @@ define('io.ox/calendar/week/view', [
             }
 
             this.setCollection(collection);
+
+            // no need to wait for folder data we already have the ids
+            // TODO check errorhandling if folders cannot be read etc
+            collection.folders = this.app.folders.folders;
+            collection.sync();
+
             $.when(this.app.folder.getData(), this.app.folders.getData()).done(function (folder, folders) {
                 self.model.set('folders', folders);
-                collection.folders = _(folders).pluck('id');
-                collection.sync();
             });
         },
 

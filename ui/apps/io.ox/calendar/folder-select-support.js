@@ -14,8 +14,9 @@
 define('io.ox/calendar/folder-select-support', [
     'io.ox/core/folder/api',
     'settings!io.ox/calendar',
+    'io.ox/core/http',
     'io.ox/core/capabilities'
-], function (folderAPI, settings, capabilities) {
+], function (folderAPI, settings, http, capabilities) {
 
     'use strict';
 
@@ -96,7 +97,9 @@ define('io.ox/calendar/folder-select-support', [
 
     FolderSelection.prototype.getData = function () {
         var self = this;
-        return $.when.apply($, this.folders.map(function (folder) {
+
+        http.pause();
+        var response = $.when.apply($, this.folders.map(function (folder) {
             // allow some virtual folders
             if (/^(cal:\/\/0\/allPublic)$/.test(folder)) return { id: folder };
             return folderAPI.get(folder).then(function success(folder) {
@@ -106,8 +109,12 @@ define('io.ox/calendar/folder-select-support', [
                 if (!_(removeList).contains(err.code)) return;
                 self.remove(folder);
             });
-        })).then(function () {
-            return _(arguments).chain().toArray().compact().value();
+        }));
+        http.resume();
+
+        return response.then(function () {
+            var folders = _(arguments).chain().toArray().compact().value();
+            return folderAPI.renameDefaultCalendarFolders(folders);
         });
     };
 
