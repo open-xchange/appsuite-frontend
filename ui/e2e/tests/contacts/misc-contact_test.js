@@ -56,6 +56,7 @@ Scenario('Subscribe and unsubscribe shared address book', async function (I, use
 
     const defaultFolder = await I.grabDefaultFolder('contacts');
     const sharedAddressBookName = `${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New address book`;
+    const busystate = locate('.modal modal-body.invisible');
 
     await I.haveFolder({
         title: 'New address book',
@@ -73,6 +74,9 @@ Scenario('Subscribe and unsubscribe shared address book', async function (I, use
     I.wait(0.2);
     I.click('Permissions / Invite people');
     I.waitForText('Permissions for folder "New address book"');
+    I.waitForDetached(busystate);
+    I.wait(0.5);
+
     I.fillField('.modal-dialog .tt-input', users[1].userdata.primaryEmail);
     I.waitForText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, undefined, '.tt-dropdown-menu');
     I.pressKey('ArrowDown');

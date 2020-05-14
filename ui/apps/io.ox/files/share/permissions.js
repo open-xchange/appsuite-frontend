@@ -457,30 +457,57 @@ define('io.ox/files/share/permissions', [
 
             className: 'permissions-view container-fluid',
 
-            initialize: function () {
+            initialize: function (options) {
+                this.options = options || {};
+                this.offset = this.options.offset || 0;
+                this.limit = this.options.limit || 100;
+
                 this.collection = new Permissions();
-                this.listenTo(this.collection, 'reset', this.renderAllEntities);
+                this.listenTo(this.collection, 'reset', this.renderEntities);
                 this.listenTo(this.collection, 'add', this.renderEntity);
+
+                this.$el.on('scroll', _.debounce(this.onScroll.bind(this), 50));
+            },
+
+            onScroll: function () {
+                // all drawn already
+                if (this.limit >= this.collection.length) return;
+
+                var $list = this.$el,
+                    height = $list.outerHeight(),
+                    scrollTop = $list[0].scrollTop,
+                    scrollHeight = $list[0].scrollHeight,
+                    bottom = scrollTop + height;
+                if (bottom / scrollHeight < 0.80) return;
+                var defer = window.requestAnimationFrame || window.setTimeout;
+                defer(this.renderEntities.bind(this));
+            },
+
+            onReset: function () {
+                this.offset = 0;
+                this.$el.empty();
+                this.renderEntities();
             },
 
             render: function () {
-
                 // extended permissions are mandatory now
                 if (this.model.isExtendedPermission()) {
                     this.collection.reset(this.model.getPermissions());
                 } else {
                     console.error('Extended permissions are mandatory', this);
                 }
-
                 return this;
             },
 
-            renderAllEntities: function () {
-                this.$el.empty().append(
-                    this.collection.map(function (model) {
+            renderEntities: function () {
+                this.$el.busy({ immediate: true });
+                this.$el.append(
+                    this.collection.slice(this.offset, this.offset + this.limit).map(function (model) {
                         return new PermissionEntityView({ model: model, parentModel: this.model }).render().$el;
                     }, this)
                 );
+                this.offset = this.offset + this.limit;
+                this.$el.idle();
                 return this;
             },
 
@@ -488,10 +515,12 @@ define('io.ox/files/share/permissions', [
                 var children = this.$el.children(),
                     index = this.collection.indexOf(model),
                     newEntity = new PermissionEntityView({ model: model, parentModel: this.model }).render().$el;
+
                 if (index === 0) {
-                    this.$el.prepend(newEntity);
-                } else if (children.length > 1) {
+                    return this.$el.prepend(newEntity);
+                } else if (index + 1 < children.length) {
                     this.$el.children().eq(index - 1).after(newEntity);
+                    this.offset = this.offset + 1;
                 } else {
                     this.$el.append(newEntity);
                 }
@@ -513,7 +542,7 @@ define('io.ox/files/share/permissions', [
                 if (baton.view.user) {
                     // internal users and guests
                     column.append(
-                        contactsAPI.pictureHalo(node, baton.view.user, { width: 40, height: 40 })
+                        contactsAPI.pictureHalo(node, baton.view.user, { width: 40, height: 40 }, { lazyload: true })
                     );
                 } else {
                     // groups and links
@@ -838,7 +867,6 @@ define('io.ox/files/share/permissions', [
         },
 
         show: function (objModel, options) {
-
             // folder tree: nested (whitelist) vs. flat
             var nested = folderAPI.isNested(objModel.get('module')),
                 notificationDefault = !this.isOrIsUnderPublicFolder(objModel),
@@ -894,7 +922,7 @@ define('io.ox/files/share/permissions', [
             });
 
             var dialogConfig = new DialogConfigModel(),
-                permissionsView = new PermissionsView({ model: objModel, share: options.share });
+                permissionsView = new PermissionsView({ model: objModel });
 
             function hasNewGuests() {
                 var knownGuests = [];
@@ -926,6 +954,7 @@ define('io.ox/files/share/permissions', [
                 }
 
             });
+
             if (objModel.isAdmin()) {
 
                 dialog.$footer.prepend(
@@ -947,12 +976,6 @@ define('io.ox/files/share/permissions', [
             });
 
             dialog.$el.addClass('share-permissions-dialog');
-
-            // add permissions view
-            // yep every microsoft browser needs this. edge or ie doesn't matter. No support for "resize: vertical" css attribute
-            dialog.$body.addClass(_.browser.IE ? 'IE11' : '').append(
-                permissionsView.render().$el
-            );
 
             // to change privileges you have to a folder admin
             var supportsChanges = objModel.isAdmin(),
@@ -1176,7 +1199,24 @@ define('io.ox/files/share/permissions', [
                 );
             });
 
-            dialog.open();
+            // add permissions view
+            // yep every microsoft browser needs this. edge or ie doesn't matter. No support for "resize: vertical" css attribute
+            dialog.$body.addClass(_.browser.IE ? 'IE11' : '').prepend(
+                permissionsView.$el.busy({
+                    empty: false,
+                    immediate: true
+                })
+            );
+
+            dialog.on('open', function () {
+                // wait for dialog to render and busy spinner to appear
+                _.delay(function () {
+                    permissionsView.render();
+                    dialog.idle();
+                }, 50);
+            })
+            .busy()
+            .open();
         }
     };
 

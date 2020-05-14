@@ -215,6 +215,7 @@ Scenario('[C7465] Edit appointment in shared folder as author', async (I, users,
     // TODO should be part of the haveFolder helper
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
+    const busystate = locate('.modal modal-body.invisible');
 
     I.waitForText('New calendar');
     I.rightClick({ css: '[aria-label^="New calendar"]' });
@@ -222,6 +223,8 @@ Scenario('[C7465] Edit appointment in shared folder as author', async (I, users,
     I.wait(0.2); // Just wait a little extra for all event listeners
     I.click('Permissions / Invite people');
     I.waitForText('Permissions for folder "New calendar"');
+    I.waitForDetached(busystate);
+    I.wait(0.5);
     I.fillField('.modal-dialog .tt-input', users[1].userdata.primaryEmail);
     I.waitForVisible(locate('*').withText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
@@ -391,6 +394,7 @@ Scenario('[C234679] Exceptions changes on series modification', async (I, calend
 Scenario('[C7467] Delete recurring appointment in shared folder as author', async (I, users, calendar) => {
     const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: await calendar.defaultFolder() });
     const time = moment().startOf('week').add(1, 'days').add(10, 'hours');
+    const busystate = locate('.modal modal-body.invisible');
     await I.haveAppointment({
         folder,
         summary: 'Testappointment',
@@ -409,6 +413,8 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
     I.wait(0.2); // Just wait a little extra for all event listeners
     I.click('Permissions / Invite people');
     I.waitForText('Permissions for folder "New calendar"');
+    I.waitForDetached(busystate);
+    I.wait(0.5);
     I.fillField('.modal-dialog .tt-input', users[1].userdata.primaryEmail);
     I.waitForVisible(locate('*').withText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');

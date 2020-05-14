@@ -29,6 +29,7 @@ Scenario('Subscribe shared folder and Unsubscribe shared folder', async function
 
     const defaultFolder = await I.grabDefaultFolder('tasks');
     const sharedFolderName = `${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New folder`;
+    const busystate = locate('.modal modal-body.invisible');
 
     await I.haveFolder({
         title: 'New folder',
@@ -46,6 +47,9 @@ Scenario('Subscribe shared folder and Unsubscribe shared folder', async function
     I.wait(0.2);
     I.click('Permissions / Invite people');
     I.waitForText('Permissions for folder "New folder"');
+    I.waitForDetached(busystate);
+    I.wait(0.5);
+
     I.fillField('.modal-dialog .tt-input', users[1].userdata.primaryEmail);
     I.waitForText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, undefined, '.tt-dropdown-menu');
     I.pressKey('ArrowDown');
