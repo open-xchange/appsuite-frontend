@@ -466,6 +466,7 @@ define('io.ox/contacts/main', [
 
             showContact = function (obj) {
                 // get contact
+                app.right.parent().off('scroll');
                 app.right.busy({ empty: true });
                 if (obj && obj.id !== undefined) {
                     app.currentContact = api.reduce(obj);

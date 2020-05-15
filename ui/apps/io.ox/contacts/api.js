@@ -626,7 +626,11 @@ define('io.ox/contacts/api', [
 
             if (data !== null) return data;
             if (address === '') return {};
-
+            // force multiple for large distribution lists (OXUIB-227)
+            if (!http.isPaused()) {
+                http.pause();
+                _.defer(http.resume.bind(http));
+            }
             //http://oxpedia.org/wiki/index.php?title=HTTP_API#SearchContactsAlternative
             return http.PUT({
                 module: 'contacts',
