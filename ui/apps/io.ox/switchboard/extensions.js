@@ -20,9 +20,11 @@ define('io.ox/switchboard/extensions', [
     'io.ox/backbone/views/disposable',
     'io.ox/backbone/views/actions/util',
     'io.ox/contacts/api',
+    'io.ox/switchboard/views/conference-select',
+    'io.ox/switchboard/views/zoom-meeting',
     'settings!io.ox/core',
     'gettext!io.ox/switchboard'
-], function (ext, presence, api, account, mini, DisposableView, actionsUtil, contactsAPI, settings, gt) {
+], function (ext, presence, api, account, mini, DisposableView, actionsUtil, contactsAPI, ConferenceSelectView, ZoomMeetingView, settings, gt) {
 
     'use strict';
 
@@ -232,141 +234,29 @@ define('io.ox/switchboard/extensions', [
         }
     });
 
-    var ConferenceSelectView = DisposableView.extend({
-        initialize: function (options) {
-            this.point = options.point;
-            this.listenTo(this.model, 'change:conference', this.onChange);
-        },
-        onChange: function () {
-            var value = this.model.get('conference');
-            this.point.get(value, function (extension) {
-                this.$('.conference-view').remove();
-                if (value === 'none') return;
-                if (!extension.render) return;
-                this.$el.append(
-                    new ConferenceView({ type: value, render: extension.render, appointment: this.model }).render().$el
-                );
-            }.bind(this));
-        },
-        render: function () {
-            var guid = _.uniqueId('form-control-label-');
-            this.$el.append(
-                $('<label class="control-label col-xs-12 col-md-6">').attr('for', guid).append(
-                    $.txt(gt('Conference')),
-                    new mini.SelectView({
-                        id: guid,
-                        label: gt('Conference'),
-                        // we use categories as a little hack for now
-                        name: 'conference',
-                        model: this.model,
-                        list: this.point.list().map(function (item) {
-                            return _(item).pick('value', 'label');
-                        })
-                    }).render().$el
-                )
-            );
-            return this;
-        }
-    });
-
-    var ConferenceView = DisposableView.extend({
-        className: 'col-xs-12 conference-view',
-        initialize: function (options) {
-            this.$el.addClass(options.type);
-            this.appointment = options.appointment;
-            this.model = new Backbone.Model({ type: options.type });
-            this.render = function () {
-                options.render.call(this);
-                return this;
-            };
-            this.rerender = function () {
-                this.$el.empty();
-                return this.render();
-            };
-        }
-    });
-
     var solutions = ext.point('io.ox/calendar/conference-solutions')
         .extend({ id: 'none', index: 100, value: 'none', label: gt('None') });
 
     //
     // Zoom
     //
-    var zoomOAuthUrl = settings.get('switchboard/zoom/oauthURL');
-    if (zoomOAuthUrl) {
+    (function () {
+
+        if (!settings.get('switchboard/host')) return;
+
         solutions.extend({
             id: 'zoom',
             index: 200,
             value: 'zoom',
             label: gt('Zoom Meeting'),
-            render: function () {
-
-                var token = settings.get('switchboard/zoom/accessToken');
-                var link = 'https://open-xchange.zoom.us/j/91540271455?pwd=Y3VpZ1l3aThrc3kxVTdOMVBFQzVqUT09';
-                var $details = $('<div class="conference-details">');
-
-                if (token) {
-                    // oauth token is available
-                    this.$el.append(
-                        $details.append(
-                            $('<i class="fa fa-video-camera conference-logo">'),
-                            $('<div class="ellipsis">').append(
-                                $('<b>').text('Link: '),
-                                $('<a target="_blank" rel="noopener">').attr('href', link).text(link)
-                            ),
-                            $('<div>').append(
-                                $('<a href="#" class="secondary-action">')
-                                    .text('Copy to location field')
-                                    .on('click', { appointment: this.appointment, link: link }, copyToLocation),
-                                $('<a href="#" class="secondary-action">')
-                                    .text('Copy to clipboard')
-                                    .attr('data-clipboard-text', link)
-                                    .on('click', false)
-                            )
-                        )
-                    );
-                    var el = this.$('[data-clipboard-text]').get(0);
-                    require(['static/3rd.party/clipboard.min.js'], function (Clipboard) {
-                        new Clipboard(el);
-                    });
-                } else {
-                    // still need oauth token
-                    this.$el.append(
-                        $details.append(
-                            $('<i class="fa fa-exclamation conference-logo">'),
-                            $('<p>').text(
-                                gt('You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. If you don\'t have an account yet, it is sufficient to create a free one.', ox.serverConfig.productName)
-                            ),
-                            $('<p>').append(
-                                $('<button type="button" class="btn btn-default">').text('Connect with Zoom ...')
-                                .on('click', { view: this }, startOAuthHandshake)
-                            )
-                        )
-                    );
-                }
-
-                function copyToLocation(e) {
-                    e.preventDefault();
-                    e.data.appointment.set('location', 'Zoom Meeting: ' + e.data.link);
-                }
-
-                function startOAuthHandshake(e) {
-                    var url = zoomOAuthUrl + '?state=' + encodeURIComponent(api.userId);
-                    var top = (screen.availHeight - 768) / 2 >> 0;
-                    var left = (screen.availWidth - 1024) / 2 >> 0;
-                    window.open(url, 'zoom', 'width=1024,height=768,left=' + left + ',top=' + top + ',scrollbars=yes');
-                    e.data.view.listenTo(ox, 'zoom-oauth-callback', e.data.view.rerender);
-                }
+            render: function (view) {
+                this.append(
+                    new ZoomMeetingView({ appointment: view.model }).render().$el
+                );
             }
         });
 
-        api.socket.on('newToken', function (data) {
-            console.log('zoomOAuthCallback!', data);
-            settings.set('switchboard/zoom/accessToken', data.accessToken).save();
-            ox.trigger('zoom-oauth-callback');
-        });
-
-    }
+    }());
 
     //
     // Jitsi

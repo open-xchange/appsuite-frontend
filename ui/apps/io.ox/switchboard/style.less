@@ -228,10 +228,8 @@
 }
 
 .conference-view {
-    .conference-details {
-        padding: 16px 0 16px 56px;
-        position: relative;
-    }
+    padding: 16px 0 16px 56px;
+    position: relative;
     .conference-logo {
         position: absolute;
         top: 16px;
@@ -255,6 +253,15 @@
     &.zoom .fa-exclamation.conference-logo {
         color: #a00;
         background-color: #f0f0f0;
+    }
+    .pending {
+        display: flex;
+        align-items: center;
+        height: 40px;
+        i.fa-refresh {
+            color: #aaa;
+            margin-left: 8px;
+        }
     }
 }
 
