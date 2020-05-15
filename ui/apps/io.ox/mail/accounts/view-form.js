@@ -347,7 +347,7 @@ define.async('io.ox/mail/accounts/view-form', [
                                 var dialog = new ModalDialog({ title: gt('Warnings') })
                                     .build(function () { this.$body.append(messages); })
                                     .addCancelButton()
-                                    .addButton('proceed', gt('Ignore Warnings'))
+                                    .addButton({ action: 'proceed', label: gt('Ignore Warnings') })
                                     .on('action', function (action) {
                                         self.dialog.resume();
                                         if (action === 'proceed') {
