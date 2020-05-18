@@ -79,6 +79,9 @@ define('io.ox/core/tk/tokenfield', [
 
     // needs overwrite because of bug 54034
     $.fn.tokenfield.Constructor.prototype.blur = function (e) {
+        var activeElement = $(document.activeElement).is('body') ? e.relatedTarget : document.activeElement,
+            targetOutsideField = !this.$wrapper.is($(activeElement).closest('.tokenfield'));
+
         if (mouseIsInDropdown) {
             this.$input.focus();
             return;
@@ -86,12 +89,12 @@ define('io.ox/core/tk/tokenfield', [
         this.focused = false;
         this.$wrapper.removeClass('focus');
 
-        if (!this.preventDeactivation && !this.$element.is(document.activeElement)) {
+        if ((!this.preventDeactivation && !this.$input.is(activeElement)) || targetOutsideField) {
             this.$wrapper.find('.active').removeClass('active').attr({ tabindex: -1, 'aria-selected': false });
             this.$firstActiveToken = null;
         }
 
-        if ((!this.preventCreateTokens && (this.$input.data('edit') && !this.$input.is(document.activeElement))) || this.options.createTokensOnBlur) {
+        if ((!this.preventCreateTokens && (this.$input.data('edit') && !this.$input.is(activeElement))) || this.options.createTokensOnBlur) {
             this.createTokensFromInput(e);
         }
 
@@ -679,7 +682,7 @@ define('io.ox/core/tk/tokenfield', [
         },
 
         dragAndDropSupport: (function () {
-            var sourceView, targetView, draggedItems, direction, lastX,
+            var sourceView, targetView, draggedItems, direction, lastX, currentModel,
                 events = _.extend({}, Backbone.Events),
                 targetChanged = false;
 
@@ -712,7 +715,7 @@ define('io.ox/core/tk/tokenfield', [
                             tokenfield.addClass('drophover');
                             events.trigger('dragstart');
                             // needs opacity != 1, otherwise chrome will have white background behind border radius
-                            draggedItems.css('opacity', '0.999').not(current).hide();
+                            draggedItems.css('opacity', '0.999').not(current).css('visibility', 'hidden');
                             if (draggedItems.length > 1 && !_.browser.ie && !_.browser.edge) {
                                 current.append(
                                     $('<span class="drag-counter badge">').text(draggedItems.length)
@@ -723,7 +726,9 @@ define('io.ox/core/tk/tokenfield', [
                                 if (!draggedItems) return;
                                 current.css('visibility', 'hidden');
                                 draggedItems.attr('aria-grabbed', true);
+                                draggedItems.not(current).hide();
                             });
+                            currentModel = current.data().attrs.model;
                         },
                         'dragenter': function () {
                             var target = $(this);
@@ -743,12 +748,14 @@ define('io.ox/core/tk/tokenfield', [
                         },
                         'dragend stop': function () {
                             targetView = self;
+                            var models = draggedItems.map(function () {
+                                    return $(this).data().attrs.model;
+                                }).toArray(),
+                                cids = models.map(function (model) { return model.cid; });
+
                             if (sourceView !== targetView) {
                                 console.log('drag from one to other');
                                 // move models from one tokenfield to another
-                                var models = draggedItems.map(function () {
-                                    return $(this).data().attrs.model;
-                                }).toArray();
                                 sourceView.collection.remove(models);
                                 targetView.collection.add(models);
                                 sourceView.resort();
@@ -757,6 +764,14 @@ define('io.ox/core/tk/tokenfield', [
                             targetView.$wrapper.removeClass('drophover');
                             draggedItems.css('visibility', '').attr('aria-grabbed', false).show();
                             events.trigger('dragend');
+
+                            // reapply focus and active classes
+                            targetView.$wrapper.find('> .token').each(function () {
+                                var $this = $(this),
+                                    value = $this.data('attrs').value;
+                                if (cids.indexOf(value) >= 0) $this.addClass('active');
+                                if (value === currentModel.cid) $this.focus();
+                            });
                             draggedItems = null;
                             sourceView = null;
                         }
