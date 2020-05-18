@@ -26,8 +26,6 @@ After(async (users) => {
     await users.removeAll();
 });
 
-// TODO fix drag&drop to work with puppeteer
-// Might require a fix in the d&d code of the tokenfield
 Scenario('[C8832] Re-order recipients', async function (I, users, mail) {
 
     let [sender, recipient1, recipient2, recipient3, recipient4] = users;
@@ -66,27 +64,58 @@ Scenario('[C8832] Re-order recipients', async function (I, users, mail) {
     I.waitForVisible('.focus .tt-dropdown-menu');
     I.pressKey('Enter');
     I.see(tokenLabelFor(recipient3), tokenSelector('bcc'));
-
-    // move around
     I.fillField('BCC', recipient4.get('primaryEmail'));
     I.waitForVisible('.focus .tt-dropdown-menu');
     I.pressKey('Enter');
     I.see(tokenLabelFor(recipient4), tokenSelector('bcc'));
+
+    // move around: from bcc to cc
     I.dragAndDrop(dragTarget(recipient4), dropTarget('cc'));
     I.dontSee(tokenLabelFor(recipient4), tokenSelector('bcc'));
     I.see(tokenLabelFor(recipient4), tokenSelector('cc'));
+    I.waitForFocus(dragTarget(recipient4));
+    I.seeNumberOfVisibleElements('.token.active', 1);
+
+    // move around: from cc to bcc
     I.dragAndDrop(dragTarget(recipient4), dropTarget('bcc'));
     I.dontSee(tokenLabelFor(recipient4), tokenSelector('cc'));
     I.see(tokenLabelFor(recipient4), tokenSelector('bcc'));
+    I.waitForFocus(dragTarget(recipient4));
+    I.seeNumberOfVisibleElements('.token.active', 1);
+
+    // move around: from cc to to
     I.dragAndDrop(dragTarget(recipient4), dropTarget('to'));
     I.see(tokenLabelFor(recipient4), tokenSelector('to'));
     I.see(tokenLabelFor(recipient4), { css: '[data-extension-id="to"] .token:nth-of-type(4)' });
     I.see(tokenLabelFor(recipient1), { css: '[data-extension-id="to"] .token:nth-of-type(3)' });
+    I.waitForFocus(dragTarget(recipient4));
+    I.seeNumberOfVisibleElements('.token.active', 1);
 
     // drag to first position in field
     I.dragAndDrop({ css: '[data-extension-id="to"] .token:nth-of-type(4)' }, { css: '[data-extension-id="to"] .token:nth-of-type(3)' });
     I.see(tokenLabelFor(recipient4), { css: '[data-extension-id="to"] .token:nth-of-type(3)' });
     I.see(tokenLabelFor(recipient1), { css: '[data-extension-id="to"] .token:nth-of-type(4)' });
+    I.waitForFocus(dragTarget(recipient4));
+    I.seeNumberOfVisibleElements('.token.active', 1);
+
+    // check if all tokens get deselected upon clicking same tokenfield
+    I.click('.tokenfield.to');
+    I.seeNumberOfVisibleElements('.token.active', 0);
+
+    // check if all tokens get deselected upon clicking different tokenfield
+    I.click(dragTarget(recipient1));
+    I.click('.tokenfield.cc');
+    I.seeNumberOfVisibleElements('.token.active', 0);
+
+    // check clicking tokens in different fields
+    I.click(dragTarget(recipient1));
+    I.seeNumberOfVisibleElements('.token.active', 1);
+    I.click(dragTarget(recipient2));
+    I.seeNumberOfVisibleElements('.token.active', 1);
+    I.click(dragTarget(recipient3));
+    I.seeNumberOfVisibleElements('.token.active', 1);
+    I.click(dragTarget(recipient4));
+    I.seeNumberOfVisibleElements('.token.active', 1);
 
     // send the mail
     mail.send();
