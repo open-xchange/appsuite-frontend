@@ -83,6 +83,7 @@ define('io.ox/core/folder/actions/imap-subscription', [
             title: gt('Subscribe to IMAP folders'),
             help: 'ox.appsuite.user.sect.dataorganisation.sharing.subscribe.html',
             createFolderButton: false,
+            alternativeButton: gt('Refresh folders'),
 
             always: function (dialog) {
 
@@ -144,6 +145,13 @@ define('io.ox/core/folder/actions/imap-subscription', [
 
             close: function () {
                 previous = changes = null;
+            },
+            alternative: function (dialog, tree) {
+                var node = tree.getNodeView(tree.selection.get() || tree.root);
+                node.collection.fetched = false;
+                node.isReset = false;
+                node.reset();
+                dialog.idle();
             }
         });
     };
