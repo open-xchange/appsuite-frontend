@@ -159,38 +159,42 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
             function onLaunchSuccess() {
 
                 // the spreadsheet application instance is passed as calling context
-                var docsApp = self.spreadsheetApp = this;
+                self.spreadsheetApp = this;
+
                 // hide busy spinner
                 if (!self.disposed) { self.$el.idle(); }
 
                 // wait until the Documents part (class `BaseApplication` and beyond) is added to the app
-                docsApp.onInit(function () {
+                self.spreadsheetApp.onInit(function () {
 
                     function listenToWithValidApp(source, type, callback) {
-                        docsApp.waitForImportSuccess(function () {
+                        self.spreadsheetApp.waitForImportSuccess(function () {
                             self.listenTo(source, type, self.withValidApp.bind(self, callback));
                         });
                     }
 
                     // register event handlers
-                    listenToWithValidApp(self.viewerEvents, 'viewer:resize', function () { docsApp.getView().refreshPaneLayout(); });
-                    listenToWithValidApp(self.viewerEvents, 'viewer:zoom:in', function () { docsApp.getController().executeItem('view/zoom/inc'); });
-                    listenToWithValidApp(self.viewerEvents, 'viewer:zoom:out', function () { docsApp.getController().executeItem('view/zoom/dec'); });
+                    listenToWithValidApp(self.viewerEvents, 'viewer:resize', function () {
+                        var view = self.spreadsheetApp.getView();
+                        if (view && _.isFunction(view.refreshPaneLayout)) { view.refreshPaneLayout(); }
+                    });
+                    listenToWithValidApp(self.viewerEvents, 'viewer:zoom:in', function () { self.spreadsheetApp.getController().executeItem('view/zoom/inc'); });
+                    listenToWithValidApp(self.viewerEvents, 'viewer:zoom:out', function () { self.spreadsheetApp.getController().executeItem('view/zoom/dec'); });
 
                     // ensure that the wrapped spreadsheet application window is shown along with the Preview app window
                     if (self.app) {
                         listenToWithValidApp(self.app.getWindow(), 'show', function () {
-                            docsApp.getWindow().show(null, true);
+                            self.spreadsheetApp.getWindow().show(null, true);
                         });
                     }
 
                     // ensure that the Preview app window is hidden along with the wrapped spreadsheet application window
-                    docsApp.getWindow().on('hide', function () {
+                    self.spreadsheetApp.getWindow().on('hide', function () {
                         if (self.app && !self.disposed) { self.app.getWindow().hide(); }
                     });
 
                     // show error message if importing the document fails
-                    docsApp.waitForImportFailure(function (_finished, error) {
+                    self.spreadsheetApp.waitForImportFailure(function (_finished, error) {
                         self.showLoadError(error.message);
                     });
                 });
