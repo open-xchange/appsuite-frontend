@@ -690,6 +690,7 @@ define('io.ox/core/tk/tokenfield', [
                 var self = this,
                     tokenfield = this.$wrapper
                     .on('dragover', function (e) {
+                        if (!draggedItems) return;
                         e.preventDefault();
                         if (targetView !== self) {
                             var prevView = targetView;
