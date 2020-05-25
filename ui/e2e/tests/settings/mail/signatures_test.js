@@ -37,7 +37,7 @@ After(async (users) => {
 Scenario('[OXUIB-199] Sanitize signature preview', async function (I) {
     const body = locate({ xpath: '//body' });
     await I.haveSnippet({
-        content: '<i\nmg src="foo" oner\nror="document.body.classList.add(1337)" <br>',
+        content: 'blabla<i\nmg src="foo" oner\nror="document.body.classList.add(1337)" <br>',
         displayname: 'my-signature',
         misc: { insertion: 'below', 'content-type': 'text/plain' },
         module: 'io.ox/mail',
@@ -47,7 +47,7 @@ Scenario('[OXUIB-199] Sanitize signature preview', async function (I) {
 
     I.waitForText('Add new signature');
     I.waitForText('my-signature');
-    I.seeElement('.signature-preview img');
+    I.dontSeeElement('.signature-preview img');
     I.wait(0.5);
 
     let classlist = await I.grabAttributeFrom(body, 'class');
