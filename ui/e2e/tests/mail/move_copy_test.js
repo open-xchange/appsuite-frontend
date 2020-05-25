@@ -146,8 +146,9 @@ Scenario('[C7409] Copy mail from inbox to a sub-folder', async function (I, user
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
-    A.select(I, 1);
-    A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/copy');
+    mail.selectMail('C7409');
+    I.click('~More actions', '.detail-view-header');
+    I.clickDropdown('Copy');
     A.selectFolderInDialog(I, folder);
     I.click('Copy', '.folder-picker-dialog');
     I.waitForDetached('.folder-picker-dialog');
