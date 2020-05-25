@@ -178,19 +178,21 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users, mailf
 
 });
 
-Scenario('[C7805] Reject with reason filtered mail', async function (I, users, mail) {
+Scenario('[C7805] Reject with reason filtered mail', async function (I, users, mail, mailfilter) {
     const [user1, user2] = users;
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     }, { user: user2 });
 
-    // createFilterRule('TestCase0390', 'Reject with reason');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+    mailfilter.waitForApp();
+    mailfilter.newRule('TestCase0390');
+    mailfilter.addSubjectCondition('TestCase0390');
+    mailfilter.addSimpleAction('Reject with reason');
     I.fillField('text', 'TestCase0390');
+    mailfilter.save();
 
-    // save the form
-    I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
     I.logout();
 
     I.login(['app=io.ox/mail'], { user: user2 });
