@@ -116,6 +116,11 @@ define('io.ox/core/viewer/views/sidebar/panelbaseview', [
             if (state === undefined) {
                 state = this.$('.sidebar-panel-body').hasClass('panel-collapsed');
             }
+
+            // panel is already in correct state, nothing to do
+            // please note: removing this line can cause a lot of flickering and overlapping version requests
+            if (state === !this.$('.sidebar-panel-body').hasClass('panel-collapsed')) return;
+
             // toggle state
             this.$('.sidebar-panel-body').toggleClass('panel-collapsed', !state).attr('aria-hidden', !state);
             this.$('.panel-toggle-btn').attr('aria-expanded', state);
