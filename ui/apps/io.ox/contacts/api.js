@@ -750,13 +750,12 @@ define('io.ox/contacts/api', [
                     if (opt.fallback) node.css('background-image', 'url(' + fallback + ')');
                     return node.attr('data-original', url)
                         .on('load.lazyload error.lazyload', function (e, image) {
-                            if (image.width === 1 || e.type === 'error') {
-                                url = opt.fallback ? fallback : null;
-                            } else {
-                                cachedURLs[url] = url;
-                            }
-                            if (url) {
-                                node.text('').attr('data-original', url).css('background-image', 'url(' + url + ')');
+                            var fail = image.width === 1 || e.type === 'error';
+                            // cache and set image
+                            if (!fail || opt.fallback) {
+                                var imgUrl = !fail ? url : fallback;
+                                cachedURLs[url] = imgUrl;
+                                node.text('').attr('data-original', imgUrl).css('background-image', 'url(' + imgUrl + ')');
                             }
                             node = url = opt = null;
                             $(this).off('.lazyload');
