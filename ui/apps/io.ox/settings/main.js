@@ -74,7 +74,8 @@ define('io.ox/settings/main', [
                 'virtual/settings/io.ox/core/sub': 'ox.appsuite.user.sect.contacts.folder.managesubscribed.html',
                 'virtual/settings/io.ox/core/downloads': 'ox.appsuite.user.sect.settings.clients.html',
                 'virtual/settings/administration/groups': 'ox.appsuite.user.sect.calendar.groups.html',
-                'virtual/settings/administration/resources': 'ox.appsuite.user.sect.calendar.resources.html'
+                'virtual/settings/administration/resources': 'ox.appsuite.user.sect.calendar.resources.html',
+                'virtual/settings/personaldata': 'ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html'
             });
         }
     });
