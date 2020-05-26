@@ -161,13 +161,6 @@ define('io.ox/core/boot/form', [
         function loadLoginLayout(options) {
             var lc = getLoginConfiguration(options);
 
-            if ($('.io-ox-connection-error').length !== 0) {
-                $('#io-ox-login-background').css({ background: _.device('smartphone') ? lc.backgroundColor : lc.backgroundImage });
-                $('.io-ox-connection-error').css({ color: lc.form.textColor });
-                $('.io-ox-connection-error a').css({ color: lc.form.linkColor });
-                return;
-            }
-
             // apply login screen specific classes
             if (_.device('smartphone')) {
                 $('#io-ox-login-username').attr('placeholder', gt('Username'));
@@ -263,13 +256,9 @@ define('io.ox/core/boot/form', [
         }
 
         function getLoginConfiguration(options) {
-            var localConfig = JSON.parse(localStorage.getItem('appsuite.loginPage.config'));
-            var currConfig = _.isEmpty(sc) ? localConfig : sc.loginPage;
-
-            var lc = $.extend(true, getDefaultLogin(), currConfig, options);
-
+            var lc = $.extend(true, getDefaultLogin(), sc.loginPage, options);
             lc.header.title = lc.header.title || sc.productName;
-            localStorage.setItem('appsuite.loginPage.config', JSON.stringify(lc));
+
             return lc;
         }
 
