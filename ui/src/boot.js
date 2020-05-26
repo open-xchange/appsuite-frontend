@@ -59,8 +59,11 @@ $(window).on('load', function () {
 
         'server:down': function () {
             $('body').addClass('down');
+            console.warn('Server is down.');
+            if ($('.io-ox-connection-error').length !== 0) return;
+
             $('#io-ox-login-container').empty().append(
-                $('<div class="alert alert-info">').append(
+                $('<div class="alert alert-info io-ox-connection-error">').append(
                     $('<div>').append(
                         $('<b>').text(staticGt('Connection error'))
                     ),
@@ -70,7 +73,6 @@ $(window).on('load', function () {
                 )
             );
             $('#background-loader').fadeOut(250);
-            console.warn('Server is down.');
         }
     });
 
