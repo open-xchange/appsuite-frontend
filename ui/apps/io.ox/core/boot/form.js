@@ -266,7 +266,7 @@ define('io.ox/core/boot/form', [
             var localConfig = JSON.parse(localStorage.getItem('appsuite.loginPage.config'));
             var currConfig = _.isEmpty(sc) ? localConfig : sc.loginPage;
 
-            var lc = _.extend(getDefaultLogin(), currConfig, options);
+            var lc = $.extend(true, getDefaultLogin(), currConfig, options);
 
             lc.header.title = lc.header.title || sc.productName;
             localStorage.setItem('appsuite.loginPage.config', JSON.stringify(lc));
