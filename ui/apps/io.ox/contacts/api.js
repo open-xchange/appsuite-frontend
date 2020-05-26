@@ -766,8 +766,12 @@ define('io.ox/contacts/api', [
 
                 $(new Image()).on('load error', function (e) {
                     var fail = this.width === 1 || e.type === 'error';
-                    if (!fail) cachedURLs[url] = url;
-                    if (!fail || opt.fallback) node.text('').css('background-image', 'url(' + (fail ? fallback : url) + ')');
+                    // cache and set image
+                    if (!fail || opt.fallback) {
+                        var imgUrl = !fail ? url : fallback;
+                        cachedURLs[url] = imgUrl;
+                        node.text('').css('background-image', 'url(' + (imgUrl) + ')');
+                    }
                     node = null;
                     $(this).off();
                 })
