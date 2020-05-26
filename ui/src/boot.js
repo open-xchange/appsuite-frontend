@@ -59,17 +59,14 @@ $(window).on('load', function () {
 
         'server:down': function () {
             $('body').addClass('down');
-            $('#io-ox-login-container').empty().append(
-                $('<div class="alert alert-info">').append(
-                    $('<div>').append(
-                        $('<b>').text(staticGt('Connection error'))
-                    ),
-                    staticGt('The service is not available right now.') + ' ',
-                    $('<br>'),
-                    $('<a href="#">').text(staticGt('Retry')).on('click', function (e) { e.preventDefault(); location.reload(); })
-                )
-            );
-            $('#background-loader').fadeOut(250);
+            $('#io-ox-login-container').empty();
+            $('#background-loader').show();
+            $('.throbber').hide();
+            $('#showstopper, #showstopper .down').show();
+            $('#showstopper .reload').on('click', function (e) {
+                e.preventDefault();
+                location.reload();
+            });
             console.warn('Server is down.');
         }
     });

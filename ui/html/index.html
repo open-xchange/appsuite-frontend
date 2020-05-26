@@ -45,7 +45,7 @@
                 margin: 16px;
             }
 
-            #showstopper .timeout, #showstopper .session { display: none; }
+            #showstopper .timeout, #showstopper .session, #showstopper .down { display: none; }
 
             .throbber {
                 position: absolute;
@@ -118,6 +118,7 @@
               <div class="bounce3"></div>
             </div>
             <div id="showstopper">
+                <div class="down"></div>
                 <div class="timeout"></div>
                 <div class="session"></div>
             </div>
@@ -321,6 +322,7 @@
                 };
             }());
 
+            document.querySelector('#showstopper .down').innerHTML = '<span><b>' + staticGt('Connection error') + '</b></span><br><span>' + staticGt('The service is not available right now.') + '</span><br><a href="#" class="reload">' + staticGt('Retry') + '</a>';
             document.querySelector('#showstopper .timeout').innerHTML = '<span>' + staticGt('Connection timed out. Please try reloading the page.') + '</span><br><a href="#" class="reload">' + staticGt('Reload') + '</a>';
             document.querySelector('#showstopper .session').innerHTML = '<span>' + staticGt('Something went wrong. Please close this browser tab and try again.') +'</span>';
         </script>

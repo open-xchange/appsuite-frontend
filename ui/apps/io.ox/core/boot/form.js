@@ -438,6 +438,8 @@ define('io.ox/core/boot/form', [
 
             util.debug('Fade in ...');
 
+            if ($('#showstopper').is(':visible')) return;
+
             $('#background-loader').fadeOut(util.DURATION, function () {
                 // show login dialog
                 $('#io-ox-login-blocker').on('mousedown', false);
