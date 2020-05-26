@@ -303,7 +303,8 @@ define('io.ox/find/main', [
                         // disable cache also for modules with collection loader
                         parent.listView.on('collection:load', function () {
                             if (this.loader.mode !== 'search') return;
-                            if (collectionLoader.collection.expire) collectionLoader.collection.expire();
+                            // do not use expire() here
+                            if (collectionLoader.collection) collectionLoader.collection.expired = true;
                         });
                         app.trigger('collectionLoader:created', collectionLoader);
                         var register = function () {
