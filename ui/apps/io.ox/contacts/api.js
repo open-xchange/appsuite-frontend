@@ -741,6 +741,15 @@ define('io.ox/contacts/api', [
             return _.extend(params, pictureParams(opt));
         }
 
+        function getUrl(url, opt, image, e) {
+            if (image.width === 1 || e.type === 'error') {
+                cachedURLs[url] = null;
+                return opt.fallback ? fallback : null;
+            }
+            cachedURLs[url] = url;
+            return url;
+        }
+
         function load(node, url, opt) {
             _.defer(function () {
                 // use lazyload?
@@ -750,13 +759,8 @@ define('io.ox/contacts/api', [
                     if (opt.fallback) node.css('background-image', 'url(' + fallback + ')');
                     return node.attr('data-original', url)
                         .on('load.lazyload error.lazyload', function (e, image) {
-                            var fail = image.width === 1 || e.type === 'error';
-                            // cache and set image
-                            if (!fail || opt.fallback) {
-                                var imgUrl = !fail ? url : fallback;
-                                cachedURLs[url] = imgUrl;
-                                node.text('').attr('data-original', imgUrl).css('background-image', 'url(' + imgUrl + ')');
-                            }
+                            var newUrl = getUrl(url, opt, image, e);
+                            if (newUrl) node.text('').attr('data-original', newUrl).css('background-image', 'url(' + newUrl + ')');
                             node = url = opt = null;
                             $(this).off('.lazyload');
                         })
@@ -764,13 +768,8 @@ define('io.ox/contacts/api', [
                 }
 
                 $(new Image()).on('load error', function (e) {
-                    var fail = this.width === 1 || e.type === 'error';
-                    // cache and set image
-                    if (!fail || opt.fallback) {
-                        var imgUrl = !fail ? url : fallback;
-                        cachedURLs[url] = imgUrl;
-                        node.text('').css('background-image', 'url(' + (imgUrl) + ')');
-                    }
+                    var newUrl = getUrl(url, opt, this, e);
+                    if (newUrl) node.text('').css('background-image', 'url(' + (newUrl) + ')');
                     node = null;
                     $(this).off();
                 })
@@ -822,7 +821,12 @@ define('io.ox/contacts/api', [
             url = coreUtil.getShardingRoot('/contacts/picture?action=get&' + $.param(params));
 
             // cached?
-            if (cachedURLs[url]) return opt.urlOnly ? cachedURLs[url] : node.text('').css('background-image', 'url(' + cachedURLs[url] + ')');
+            if (url in cachedURLs) {
+                // failed picture request are cached with value "null"
+                var cachedurl = cachedURLs[url] || (opt.fallback ? fallback : null);
+                if (opt.urlOnly) return cachedurl;
+                return cachedurl ? node.text('').css('background-image', 'url(' + cachedurl + ')') : node;
+            }
 
             try {
                 return opt.urlOnly ? url : load(node, url, opt);
