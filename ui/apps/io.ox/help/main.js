@@ -58,7 +58,7 @@ define('io.ox/help/main', [
             var modal = new ModalDialogView({
                 focus: _.device('smartphone') ? '' : 'iframe',
                 title: windowTitle,
-                width: '640px',
+                width: 640,
                 maximize: 650
             }).build(function () {
                 this.$el.addClass('inline-help');
