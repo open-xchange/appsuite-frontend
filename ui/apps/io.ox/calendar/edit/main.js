@@ -433,6 +433,7 @@ define('io.ox/calendar/edit/main', [
                 // needed for attachment uploads to work
                 if (this.view.options.mode === 'create') {
                     this.model.trigger('create');
+                    ox.trigger('appointment:create', this.model.get('attendeePrivileges') === 'MODIFY' ? 1 : 0);
                 } else {
                     this.model.trigger('update');
                 }
