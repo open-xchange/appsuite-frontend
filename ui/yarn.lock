@@ -1184,10 +1184,10 @@ cli-width@^2.0.0:
   resolved "https://registry.yarnpkg.com/cli-width/-/cli-width-2.2.1.tgz#b0433d0b4e9c847ef18868a4ef16fd5fc8271c48"
   integrity sha512-GRMWDxpOB6Dgk2E5Uo+3eEBvtOOlimMmpbFiKuLFnQzYDavtLFY3K5ona41jgN/WdRZtG7utuVSVTL4HbZHGkw==
 
-clipboard@2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/clipboard/-/clipboard-2.0.4.tgz#836dafd66cf0fea5d71ce5d5b0bf6e958009112d"
-  integrity sha512-Vw26VSLRpJfBofiVaFb/I8PVfdI1OxKcYShe6fm0sP/DtmiWQNCjhM/okTvdCo0G+lMMm1rMYbk4IK4x1X+kgQ==
+clipboard@2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/clipboard/-/clipboard-2.0.6.tgz#52921296eec0fdf77ead1749421b21c968647376"
+  integrity sha512-g5zbiixBRk/wyKakSwCKd7vQXDjFnAMGHoEyBogG/bw9kTD9GvdAvaoRR1ALcEzt3pVKxZR0pViekPMIS0QyGg==
   dependencies:
     good-listener "^1.2.2"
     select "^1.1.2"
@@ -1830,10 +1830,10 @@ dom7@^2.0.6:
   dependencies:
     ssr-window "^1.0.1"
 
-dompurify@^2.0.8:
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.0.8.tgz#6ef89d2d227d041af139c7b01d9f67ed59c2eb3c"
-  integrity sha512-vIOSyOXkMx81ghEalh4MLBtDHMx1bhKlaqHDMqM2yeitJ996SLOk5mGdDpI9ifJAgokred8Rmu219fX4OltqXw==
+dompurify@^2.0.11:
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.0.11.tgz#cd47935774230c5e478b183a572e726300b3891d"
+  integrity sha512-qVoGPjIW9IqxRij7klDQQ2j6nSe4UNWANBhZNLnsS7ScTtLb+3YdxkRY8brNTpkUiTtcXsCJO+jS0UCDfenLuA==
 
 dotenv@^6.2.0:
   version "6.2.0"
@@ -3113,14 +3113,14 @@ grunt-require-gettext@^0.8.1:
     lodash "^4.8.2"
     pofile "^1.0.2"
 
-grunt-retire@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/grunt-retire/-/grunt-retire-1.0.8.tgz#9048e555688389e622685707d545cb691af54315"
-  integrity sha512-8Gnul5+r+E3uwjEQ9yfC5Hu0S8Xbk5eVVDPhzqjDhudl5lX/LkKRglyKrqbF8bIyafGv5UR95oxm5ReY4ZHXcQ==
+grunt-retire@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/grunt-retire/-/grunt-retire-1.0.9.tgz#e5ee54d99fca6032970c8342cf0aaa233fa59cfb"
+  integrity sha512-j7RZypXBtSVhNLWN+fx8PGfbkV9wLek2C25Rc+po5iEVVXH2BjflYEHQAm0RmNZ+GJ9EC5uwRbfBDUOfK3ZYHg==
   dependencies:
     async "~1.5.x"
-    request "2.x.x"
-    retire "~1.6.x"
+    request "^2.88.2"
+    retire "^1.6.3"
 
 grunt@^1.0.4:
   version "1.0.4"
@@ -5379,7 +5379,7 @@ repeating@^2.0.0:
   dependencies:
     is-finite "^1.0.0"
 
-request@2.x.x, request@>=2.12.0, request@^2.72.0, request@~2.x.x:
+request@>=2.12.0, request@^2.72.0, request@~2.x.x:
   version "2.88.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
   integrity sha512-NAqBSrijGLZdM0WZNsInLJpkJokL72XYjUpnB0iwsRgxh7dB6COrHnTBNwN0E+lHDAJzu7kLAkDeY08z2/A0hg==
@@ -5405,7 +5405,7 @@ request@2.x.x, request@>=2.12.0, request@^2.72.0, request@~2.x.x:
     tunnel-agent "^0.6.0"
     uuid "^3.3.2"
 
-request@>=2.9.0, request@^2.83.0:
+request@>=2.9.0, request@^2.83.0, request@^2.88.2:
   version "2.88.2"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.2.tgz#d73c918731cb5a87da047e207234146f664d12b3"
   integrity sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==
@@ -5535,7 +5535,7 @@ ret@~0.1.10:
   resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
   integrity sha512-TTlYpa+OL+vMMNG24xSlQGEJ3B/RzEfUlLct7b5G/ytav+wPrplCpVMFuwzXbkecJrb6IYo1iFb0S9v37754mg==
 
-retire@~1.6.x:
+retire@^1.6.3:
   version "1.6.3"
   resolved "https://registry.yarnpkg.com/retire/-/retire-1.6.3.tgz#0947455a14d0d99a2e1679378a2da3c17725c411"
   integrity sha512-ZFGN1JhHN1RUh99BQiuTBUksQOpDyX8uayecLt6ahiLi+t6qqoJzFvlwCAN6G/XnUxaXXU68a9V0ECWAPPd+nQ==
