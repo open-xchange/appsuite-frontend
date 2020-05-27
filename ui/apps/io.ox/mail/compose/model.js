@@ -287,7 +287,14 @@ define('io.ox/mail/compose/model', [
             if (!this.get('id')) return;
             this.destroyed = true;
             this.get('attachments').forEach(function (model) { model.trigger('destroy'); });
-            return composeAPI.space.remove(this.get('id'));
+
+            // collect all uploading attachments and wait for them to be settled before removing the composition space
+            // that prevents any edge cases of "composition space not found"
+            return $.when(_(this.get('attachments')).pluck('done').map(function (def) {
+                return $.when(def).catch();
+            })).then(function () {
+                return composeAPI.space.remove(this.get('id'));
+            }.bind(this));
         },
 
         toJSON: function () {
