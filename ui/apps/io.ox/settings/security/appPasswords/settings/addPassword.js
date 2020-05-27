@@ -108,16 +108,17 @@ define('io.ox/settings/security/appPasswords/settings/addPassword', [
                     baton.model = new Backbone.Model();
                 }
                 var placeholder = $('<div>');
+                var spinner;
                 this.append(
-                    placeholder
+                    placeholder,
+                    (spinner = $('<div>').busy())
                 );
-                ox.busy(true);
                 getApplicationOptions().then(function (apps) {
                     var selector = util.compactSelect('scope', gt('Application'), baton.model, apps, { width: 6 });
                     placeholder.replaceWith(selector);
-                    ox.idle();
+                    spinner.remove();
                 }, function () {
-                    ox.idle();
+                    spinner.remove();
                 });
 
             }
