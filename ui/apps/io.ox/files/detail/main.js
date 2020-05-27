@@ -111,6 +111,12 @@ define('io.ox/files/detail/main', [
                 state = obj;
                 app.setState(obj);
             };
+        },
+        'handle-api-file-change': function () {
+            // listen to events that affect the filename, version and generic changes
+            api.on('rename add:version remove:version change:version change:file', _.debounce(function (file) {
+                api.get(_.cid(file), { cache: false });
+            }, 100));
         }
     });
 
