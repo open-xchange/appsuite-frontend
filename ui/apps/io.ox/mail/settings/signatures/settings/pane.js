@@ -57,13 +57,15 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         index: 300,
         render: function (baton) {
             var signature = baton.view.getSignature(),
+                editorId =  _.uniqueId('editor-'),
                 container;
             this.$body.append(
                 $('<div class="form-group">').css({
                     'min-height': '266px',
                     'height': '266px'
                 }).append(
-                    container = $('<div class="editor">').attr('data-editor-id', _.uniqueId('editor-'))
+                    container = $('<div class="editor">').attr('data-editor-id', editorId),
+                    $('<div class="tinymce-toolbar">').attr('data-editor-id', editorId)
                 )
             );
 
@@ -95,8 +97,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 if (!looksLikeHTML(str)) str = $('<p>').append(editor.ln2br(str)).prop('outerHTML');
                 editor.setContent(str);
                 baton.view.editor = editor;
-                this.$el.addClass('ready');
-            }.bind(this));
+            });
         }
     });
 

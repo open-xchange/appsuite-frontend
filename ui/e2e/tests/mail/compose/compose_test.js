@@ -147,7 +147,7 @@ Scenario('Compose mail with different attachments', async function (I, users, ma
 
     // attach inline image
     I.say('📢 add inline image', 'blue');
-    I.attachFile('.editor input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
     I.waitNumberOfVisibleElements('.attachments .inline-items > li', 2);
 
     I.fillField('To', user.get('primaryEmail'));
@@ -190,7 +190,7 @@ Scenario('Compose with inline image, which is removed again', async function (I,
     mail.newMail();
 
     // attach inline image
-    I.attachFile('.editor input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
 
     I.switchTo('.io-ox-mail-compose-window .editor iframe');
     I.waitForElement({ css: 'img' });

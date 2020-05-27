@@ -54,6 +54,8 @@ define('io.ox/mail/compose/main', [
             return require(['io.ox/mail/compose/config', 'io.ox/mail/compose/view']).then(function (MailComposeConfig, MailComposeView) {
                 self.config = new MailComposeConfig(_.extend({}, baton.config, { type: self.model.type }));
                 self.view = baton.view = new MailComposeView({ app: self, model: self.model, config: self.config });
+                if (_.device('smartphone')) return;
+                baton.win.nodes.body.append(self.view.toolbarContainer);
             });
         }
     }, {
@@ -138,7 +140,7 @@ define('io.ox/mail/compose/main', [
         index: INDEX += 100,
         perform: function (baton) {
             var win = baton.win;
-            win.nodes.main.addClass('scrollable').append(this.view.render().$el);
+            win.nodes.main.removeClass('abs').addClass('scrollable').append(this.view.render().$el);
         }
     }, {
         id: 'editor-mode',

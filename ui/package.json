@@ -9,7 +9,8 @@
   "license": "CC-BY-NC-SA-2.5",
   "scripts": {
     "e2e": "codeceptjs run",
-    "test": "grunt copy:specs karma:continuous"
+    "test": "grunt copy:specs karma:continuous",
+    "postinstall": "patch-package && uglifyjs -o node_modules/tinymce/themes/modern/theme.min.js node_modules/tinymce/themes/modern/theme.js"
   },
   "engines": {
     "node": ">=10.0.0"
@@ -79,6 +80,7 @@
     "jquery": "3.4.1",
     "moment": "2.24.0",
     "moment-timezone": "0.5.27",
+    "patch-package": "^6.2.2",
     "pdfjs-dist": "2.3.200",
     "requirejs": "2.3.6",
     "resize-polyfill": "1.1.1",

@@ -379,6 +379,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             toolbar2: '',
             toolbar3: '',
             plugins: 'autoresize autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
+            // patched version (see OXUIB-255)
             theme: 'modern',
             height: null,
             imageLoader: null // is required to upload images. should have upload(file) and getUrl(response) methods
@@ -405,9 +406,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         var originalToolbarConfig = opt.toolbar1.replace(/\s*\|\s*/g, ' ');
         opt.toolbar1 = opt.toolbar1.replace(/\*/g, '');
 
-        var fixed_toolbar = '.contenteditable-editor[data-editor-id="' + editorId + '"] > .mce-tinymce > .mce-stack-layout > .mce-top-part',
-            fixed_container = '.contenteditable-editor[data-editor-id="' + editorId + '"] > .mce-tinymce > .mce-stack-layout > .mce-container';
-
+        var fixed_toolbar = '.tinymce-toolbar[data-editor-id="' + editorId + '"] .mce-tinymce > .mce-stack-layout > .mce-top-part';
         var options = {
             script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.min.js',
 
@@ -418,6 +417,8 @@ define('io.ox/core/tk/contenteditable-editor', [
             autoresize_bottom_margin: 0,
             menubar: false,
             statusbar: false,
+
+            fixed_toolbar_container: '.tinymce-toolbar[data-editor-id="' + editorId + '"]',
 
             skin: opt.skin,
 
@@ -487,8 +488,6 @@ define('io.ox/core/tk/contenteditable-editor', [
                     if (this.oxContext && this.oxContext.signature) {
                         $(this.contentDocument.getElementsByTagName('html')[0]).addClass('signature-editor');
                     }
-                    // move toolbar to bottom
-                    $(fixed_toolbar).detach().insertAfter($(fixed_container));
                     // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
                     $(fixed_toolbar).find('span.mce-txt').attr('tabindex', -1);
                     // adjust toolbar
@@ -828,34 +827,13 @@ define('io.ox/core/tk/contenteditable-editor', [
             $(fixed_toolbar).css('display', '');
             window.toolbar = $(fixed_toolbar);
             $(window).on('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', resizeEditorDebounced);
-            if (!opt.oxContext.signature) {
-                $(window).on('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', reposition);
-            }
             $(window).trigger('resize');
         };
 
         this.hide = function () {
             $el.hide();
             $(window).off('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', resizeEditorDebounced);
-            $(window).off('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', reposition);
         };
-
-        function reposition() {
-            var anchor = opt.app.get('window').nodes.footer;
-            $(fixed_toolbar).css('top', Math.round(anchor.offset().top) - $(fixed_toolbar).outerHeight());
-        }
-
-        (function () {
-            if (_.device('smartphone')) return;
-            if (opt.oxContext.signature) return;
-
-            var scrollPane = opt.app.getWindowNode(),
-                win = opt.app.get('window'),
-                floating = win && win.floating;
-            // keep fixed toolbar in window, when window is dragged
-            floating.on('move', reposition);
-            scrollPane.on('scroll', reposition);
-        }());
 
         this.destroy = function () {
             this.hide();

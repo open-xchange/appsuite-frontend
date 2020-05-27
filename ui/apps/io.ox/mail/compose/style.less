@@ -25,13 +25,42 @@
     }
 
     // toggle tinymce toolbar
-    &.text-editor .mce-top-part,
-    &.no-toolbar .mce-top-part {
+    &.text-editor .tinymce-toolbar,
+    &.no-toolbar .tinymce-toolbar {
         display: none;
     }
-    &.html-editor {
-        @tiny-toolbar-height: 40px + 1px;
-        &:not(.no-toolbar) .window-body {  bottom: 64px + @tiny-toolbar-height; }
+
+    .tinymce-toolbar {
+        bottom: 0;
+        width: 100%;
+        border-top: 1px solid @border-color;
+
+        > * {
+            min-height: 40px;
+            z-index: 1;
+            padding-left: 8px;
+
+            .width-xs.maximized & { width: 1050px; }
+            .width-xs:not(.maximized) & { width: 630px; }
+
+            input.file-input:hover { cursor: pointer; }
+            .mce-container-body {
+                display: flex;
+                align-items: center;
+                min-height: 40px;
+            }
+            .mce-panel.mce-container:not(.mce-floatpanel):not(.mce-edit-area) { background-color: #fff; }
+            .mce-panel.mce-edit-area { border:1px solid #fff !important; }
+        }
+    }
+
+    .window-content {
+        flex: 1;
+    }
+
+    .window-body {
+        display: flex;
+        flex-direction: column;
     }
 
     .window-footer .container {
@@ -292,25 +321,6 @@
     .mce-tinymce > .mce-stack-layout {
         .mce-panel.mce-edit-area {
             border-color: transparent !important;
-        }
-        .mce-top-part {
-            position: fixed;
-            min-height: 40px;
-            z-index: 1;
-            border-top: 1px solid @border-color;
-            padding-left: 8px;
-
-            .width-xs.maximized & { width: 1050px; }
-            .width-xs:not(.maximized) & { width: 630px; }
-
-            input.file-input:hover { cursor: pointer; }
-            .mce-container-body {
-                display: flex;
-                align-items: center;
-                min-height: 40px;
-            }
-            .mce-panel.mce-container:not(.mce-floatpanel):not(.mce-edit-area) { background-color: #fff; }
-            .mce-panel.mce-edit-area { border:1px solid #fff !important; }
         }
     }
 
