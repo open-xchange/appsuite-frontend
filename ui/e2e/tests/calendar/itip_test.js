@@ -72,13 +72,7 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.waitForInvisible('.page.current .workweek');
         I.waitForVisible('.page.current .week');
         I.waitForVisible('.page.current .week .appointment .title');
-        while (await I.grabNumberOfVisibleElements('.io-ox-sidepopup') === 0) {
-            I.refreshPage();
-            calendar.waitForApp();
-            I.waitForVisible('.page.current .week .appointment .title');
-            I.click('.page.current .week .appointment .title');
-            I.wait(1);
-        }
+        I.click('.page.current .week .appointment .title');
         I.waitForElement('.io-ox-sidepopup');
         I.waitForElement(`.io-ox-sidepopup .participant a.accepted[title="${users[0].userdata.primaryEmail}"]`);
         I.waitForElement(`.io-ox-sidepopup .participant a.${current.className}[title="${users[1].userdata.primaryEmail}"]`);
@@ -107,13 +101,7 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.waitForInvisible('.page.current .workweek');
         I.waitForVisible('.page.current .week');
         I.waitForVisible('.page.current .week .appointment .title');
-        while (await I.grabNumberOfVisibleElements('.io-ox-sidepopup') === 0) {
-            I.refreshPage();
-            calendar.waitForApp();
-            I.waitForVisible('.page.current .week .appointment .title');
-            I.click('.page.current .week .appointment .title');
-            I.wait(1);
-        }
+        I.click('.page.current .week .appointment .title');
         I.waitForElement('.io-ox-sidepopup');
         I.waitForElement(`.io-ox-sidepopup .participant a.accepted[title="${users[0].userdata.primaryEmail}"]`);
         I.waitForElement(`.io-ox-sidepopup .participant a.${current.className}[title="${users[1].userdata.primaryEmail}"]`);
