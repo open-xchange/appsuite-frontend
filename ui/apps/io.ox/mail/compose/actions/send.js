@@ -62,11 +62,11 @@ define('io.ox/mail/compose/actions/send', [
                 // show dialog
                 require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                     new ModalDialog({ title: gt('Empty subject'), description: gt('This email has no subject. Do you want to send it anyway?') })
-                        .addButton({ label: gt('Add subject'), className: 'btn-default', action: 'subject' })
+                        .addButton({ label: gt('Add subject'), className: 'btn-default', action: 'cancel' })
                         //#. 'Send' as confirmation button of a modal dialog to send an email without a subject.
                         .addButton({ label: gt('Send'), action: 'send' })
                         .on('send', function () { def.resolve(); })
-                        .on('subject', function () {
+                        .on('cancel', function () {
                             baton.stopPropagation();
                             setTimeout(function () { baton.view.$el.find('input[name="subject"]').focus(); }, 200);
                             def.reject();
