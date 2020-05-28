@@ -218,7 +218,9 @@ module.exports.config = {
             suite: process.env.FILTER_SUITE || [],
             filter: process.env.runOnly === 'true' ? () => false : undefined,
             report: process.env.FILTER_REPORT || 'filter_report.json'
-        }
+        },
+        // leave this empty, we only want this plugin to be enabled on demand by a developer
+        pauseOnFail: {}
     },
     rerun: {
         minSuccess: 10,
