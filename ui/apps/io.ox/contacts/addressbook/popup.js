@@ -36,7 +36,7 @@ define('io.ox/contacts/addressbook/popup', [
     // limits
     var LIMITS = {
         departments: settings.get('picker/limits/departments', 100),
-        fetch: settings.get('picker/limits/fetch', 10000),
+        fetch: settings.get('picker/limits/fetch', 10),
         labels: settings.get('picker/limits/labels', 1000),
         more: settings.get('picker/limits/more', 100),
         render: settings.get('picker/limits/list', 100),
@@ -150,14 +150,15 @@ define('io.ox/contacts/addressbook/popup', [
 
     var getAllMailAddresses = (function () {
 
-        var informUserOnce = _.once(function (limit) {
+        var informUserOnce = _.once(function (limit, dialog) {
             yell('warning', gt('This dialog is limited to %1$d entries and your address book exceeds this limitation. Therefore, some entries are not listed.', limit));
+            if (dialog) dialog.trigger('limitReached');
         });
 
-        return function (options) {
+        return function (options, dialog) {
             options = options || {};
             return $.when(
-                fetchAddresses(options),
+                fetchAddresses(options, dialog),
                 useLabels ? fetchLabels() : $.when()
             )
             .then(function (contacts, labels) {
@@ -168,8 +169,7 @@ define('io.ox/contacts/addressbook/popup', [
             });
         };
 
-        function fetchAddresses(options) {
-
+        function fetchAddresses(options, dialog) {
             options = _.extend({
                 // keep this list really small for good performance!
                 columns: '1,20,500,501,502,505,519,524,555,556,557,592,602,606,616,617',
@@ -184,20 +184,24 @@ define('io.ox/contacts/addressbook/popup', [
 
             if (options.folder === 'all') delete options.folder;
             if (options.useGABOnly) data.folder = ['6'];
+
+            var params = {
+                action: 'search',
+                admin: settings.get('showAdmin', false),
+                columns: options.columns,
+                sort: 608,
+                order: 'desc'
+            };
+
+            if (!options.noLimit) params.right_hand_limit = options.limit;
+
             return http.PUT({
                 module: 'contacts',
-                params: {
-                    action: 'search',
-                    admin: settings.get('showAdmin', false),
-                    columns: options.columns,
-                    right_hand_limit: options.limit,
-                    sort: 608,
-                    order: 'desc'
-                },
+                params: params,
                 // emailAutoComplete doesn't work; need to clean up client-side anyway
                 data: data
             }).then(function (list) {
-                if (list && list.length === options.limit) informUserOnce(options.limit);
+                if (list && list.length === options.limit) informUserOnce(options.limit, dialog);
                 if (options.lists) return list;
                 return _.filter(list, function (item) {
                     return !item.distribution_list;
@@ -577,8 +581,23 @@ define('io.ox/contacts/addressbook/popup', [
                 this.on('open', function () {
                     _.defer(function () {
                         if (cachedResponse && !this.options.useGABOnly) return success.call(this, cachedResponse);
-                        getAllMailAddresses({ useGABOnly: this.options.useGABOnly }).then(success.bind(this), fail.bind(this));
+                        getAllMailAddresses({ useGABOnly: this.options.useGABOnly }, this).then(success.bind(this), fail.bind(this));
                     }.bind(this));
+                });
+
+                this.on('limitReached', function () {
+                    var self = this,
+                        noLimitWrapper;
+
+                    this.$header.append(
+                        noLimitWrapper = $('<div class="row">').append(
+                            $('<button class="btn btn-link no-limit-btn">').text(gt('Reload contacts without maximum limit')).on('click', function () {
+                                self.busy(true);
+                                getAllMailAddresses({ noLimit: true, useGABOnly: self.options.useGABOnly }, self).then(success.bind(self), fail.bind(self));
+                                noLimitWrapper.remove();
+                            })
+                        )
+                    );
                 });
             },
             search: function () {
