@@ -58,7 +58,7 @@ upload:
 
 upload stable:
   extends: upload
-  when: always
+  when: on_success
   variables:
     OBS_PROJECT_EXT: $CI_COMMIT_REF_NAME
   environment:
@@ -70,3 +70,4 @@ upload stable:
     - /^release-/
     - develop
     - tags
+  except: {}
