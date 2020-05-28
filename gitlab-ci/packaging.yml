@@ -50,9 +50,15 @@ upload:
   except:
     refs:
       - /^e2e\//
+      - /^master-/
+      - /^release-/
+      - develop
+      - tags
+      - schedules
 
 upload stable:
   extends: upload
+  when: always
   variables:
     OBS_PROJECT_EXT: $CI_COMMIT_REF_NAME
   environment:
@@ -62,4 +68,5 @@ upload stable:
   only:
     - /^master-/
     - /^release-/
+    - develop
     - tags
