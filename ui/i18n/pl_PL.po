@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-27 10:18+0200\n"
+"PO-Revision-Date: 2020-05-11 21:30+0200\n"
 "Last-Translator: Jolanta Kasprzak-Śliwinska <jolanta@workshop-chapina.com>\n"
 "Language-Team: Polish <pl@workshop-chapina.com>\n"
 "Language: pl_PL\n"
@@ -564,6 +564,12 @@ msgstr "Podaj prawidłową datę"
 msgid "Online help"
 msgstr "Pomoc internetowa"
 
+#. label of help icon
+#. %1$s current context (example: Inbox categories)
+#: apps/io.ox/backbone/mini-views/helplink.js module:io.ox/core
+msgid "Online help: %1$s"
+msgstr "Pomoc internetowa: %1$s"
+
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -735,7 +741,8 @@ msgstr "Pasek narzędzi %1$s. Do poruszenia się użyj klawiszy kursora."
 
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
-#: apps/io.ox/backbone/views/toolbar.js
+#: apps/io.ox/backbone/views/toolbar.js apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Actions. Use cursor keys to navigate."
 msgstr "Działania. Do poruszenia się użyj klawiszy kursora."
 
@@ -1415,10 +1422,11 @@ msgstr "Mój kalendarz Google"
 
 #: apps/io.ox/calendar/actions/subscribe-google.js module:io.ox/calendar
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/files/actions/basic-authentication-account.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account added successfully"
-msgstr "Konto zostało pomyślnie dodane"
+msgstr "Konto zostało dodane"
 
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
@@ -1445,93 +1453,24 @@ msgstr "Subskrybuj"
 
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 msgid "iCal feed has been imported successfully"
-msgstr "Kanał iCal został pomyślnie zaimportowany"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/settings/pane.js
-msgid "Subscribe shared calendars"
-msgstr "Subskrybuj udostępnione kalendarze"
-
-#. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.
-#. 'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules
-#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
-#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/settings/editLocale.js apps/io.ox/editor/main.js
-#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
-#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/edit.js
-#: apps/io.ox/mail/mailfilter/settings/filter.js
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
-#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
-#: module:io.ox/core/boot apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/plugins/administration/groups/settings/edit.js
-#: apps/plugins/administration/resources/settings/edit.js
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-#: apps/plugins/portal/mail/register.js apps/plugins/portal/rss/register.js
-#: module:io.ox/portal apps/plugins/portal/tumblr/register.js
-msgid "Save"
-msgstr "Zapisz"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules
-msgid "subscribe to calendar"
-msgstr "subskrybuj kalendarz"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-msgid "Sync via DAV"
-msgstr "Synchronizuj przez DAV"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-msgid "sync via DAV"
-msgstr "synchronizuj przez DAV"
-
-#. shown when a download of calendar data is requested (has header "Included calendars ...")
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
-msgid "Public calendars"
-msgstr "Kalendarze publiczne"
-
-#. shown when a download of calendar data is requested (has header "Included calendars ...")
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
-msgid "Shared calendars"
-msgstr "Udostępnione kalendarze"
-
-#. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/common-extensions.js
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/listview.js
-#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
-#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
-msgid "Private"
-msgstr "Prywatne"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Hidden calendars"
-msgstr "Kalendarze ukryte"
+msgstr "Kanał iCal został zaimportowany"
 
 #: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
 msgid "no color"
 msgstr "bez koloru"
+
+#. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/settings/pane.js
+#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
+msgid "Private"
+msgstr "Prywatne"
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -1635,6 +1574,36 @@ msgstr "Edytuj spotkanie"
 #: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "Utwórz spotkanie"
+
+#. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.
+#. 'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/settings/editLocale.js apps/io.ox/core/sub/sharedFolders.js
+#: module:io.ox/calendar apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
+#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/plugins/administration/groups/settings/edit.js
+#: apps/plugins/administration/resources/settings/edit.js
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#: apps/plugins/portal/mail/register.js apps/plugins/portal/rss/register.js
+#: module:io.ox/portal apps/plugins/portal/tumblr/register.js
+msgid "Save"
+msgstr "Zapisz"
 
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
@@ -1750,6 +1719,28 @@ msgstr "Nie korzystasz już z publicznego kalendarza. Dodano Cię jako organizat
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My calendars"
 msgstr "Moje kalendarze"
+
+#. shown when a download of calendar data is requested (has header "Included calendars ...")
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
+msgid "Public calendars"
+msgstr "Kalendarze publiczne"
+
+#. shown when a download of calendar data is requested (has header "Included calendars ...")
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
+msgid "Shared calendars"
+msgstr "Udostępnione kalendarze"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Hidden calendars"
+msgstr "Kalendarze ukryte"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
@@ -2426,6 +2417,11 @@ msgstr "Przypomnienia"
 msgid "Show reminders for past appointments"
 msgstr "Pokaż przypomnienia dotyczące spotkań z przeszłości"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe shared calendars"
+msgstr "Subskrybuj udostępnione kalendarze"
+
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
 msgid "Add calendar"
@@ -2442,6 +2438,12 @@ msgstr "Początek"
 #: module:io.ox/calendar/settings/schedjoules
 msgid "The integration of the subscribed calendars might take a while."
 msgstr "Integracja subskrybowanych kalendarzy może chwilę potrwać."
+
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "subscribe to calendar"
+msgstr "subskrybuj kalendarz"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
@@ -2474,6 +2476,7 @@ msgstr "Wybierz ulubioną strefę czasową"
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js
 #: module:io.ox/core apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add"
@@ -3303,15 +3306,15 @@ msgstr "Moje książki adresowe"
 
 #. shown when a download of contact data is requested (has header "Included address books ...")
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/contacts/settings/pane.js apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public address books"
 msgstr "Publiczne książki adresowe"
 
 #. shown when a download of contact data is requested (has header "Included address books ...")
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/contacts/settings/pane.js apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared address books"
 msgstr "Udostępnione książki adresowe"
 
@@ -3573,6 +3576,7 @@ msgstr "Tytuł"
 
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
 msgid "Display name"
 msgstr "Nazwa wyświetlana"
 
@@ -4174,6 +4178,15 @@ msgstr "Rozpocznij w globalnej książce adresowej"
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 msgid "Link postal addresses with map service"
 msgstr "Linkuj adres pocztowy z mapą"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Hidden address books"
+msgstr "Ukryte książki adresowe"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Subscribe shared address books"
+msgstr "Subskrybuj udostępnione książki adresowe"
 
 #. Name with title
 #. %1$s is the first name
@@ -5008,18 +5021,41 @@ msgid "My shares"
 msgstr "Moje udostępnienia"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Shared task folders"
+msgstr "Udostępnione foldery zadań"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Public tasks folders"
+msgstr "Publiczne foldery zadań"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Shared tasks folders"
+msgstr "Udostępnione foldery zadań"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Hidden tasks folders"
+msgstr "Ukryte foldery zadań"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My folders"
 msgstr "Moje foldery"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/files/actions/basic-authentication-account.js
 msgid "Add storage account"
 msgstr "Dodaj konto magazynu"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Subscribe to address book"
+msgid "Subscribe address book"
 msgstr "Subskrybuj książkę adresową"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe shared address book"
+msgstr "Subskrybuj udostępnioną książkę adresową"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "View all attachments"
@@ -5036,8 +5072,8 @@ msgid "Synchronize with your tablet or smartphone"
 msgstr "Synchronizacja z tabletem lub smartfonem"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Hidden address books"
-msgstr "Ukryte książki adresowe"
+msgid "Personal address book"
+msgstr "Osobista książka adresowa"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/plugins/portal/tasks/register.js module:plugins/portal
@@ -5055,6 +5091,14 @@ msgstr "Udostępnione zadania"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden tasks"
 msgstr "Zadania ukryte"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Personal folder"
+msgstr "Folder osobisty"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe shared folder"
+msgstr "Subskrybuj folder udostępniony"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Personal calendar"
@@ -5265,7 +5309,7 @@ msgstr "Należy wprowadzić nazwę folderu."
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Data imported successfully"
-msgstr "Dane zostały pomyślnie zaimportowane"
+msgstr "Dane zostały zaimportowane"
 
 #. Failure message if no data (e.g. appointments) could be imported
 #: apps/io.ox/core/import/import.js module:io.ox/core
@@ -6220,6 +6264,18 @@ msgstr "Publikacje"
 msgid "Subscriptions"
 msgstr "Subskrypcje"
 
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "Sync via DAV"
+msgstr "Synchronizuj przez DAV"
+
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "sync via DAV"
+msgstr "synchronizuj przez DAV"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+msgid "Subscribe to address book"
+msgstr "Subskrybuj książkę adresową"
+
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "No subscription services available for this module"
 msgstr "Wybrany moduł nie ma dostępnych usług subskrypcji"
@@ -6230,7 +6286,7 @@ msgstr "Błąd:"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Subscription successfully created."
-msgstr "Subskrypcja została pomyślnie utworzona."
+msgstr "Subskrypcja została utworzona."
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "The subscription could not be created."
@@ -7200,6 +7256,36 @@ msgstr "Nie udało się dodać konta"
 msgid "This file has been added to the portal"
 msgstr "Plik został dodany do portalu"
 
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Your user name"
+msgstr "Twoja nazwa użytkownika"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your password"
+msgstr "Twoje hasło"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Your url"
+msgstr "Twój adres URL"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr "Twoje poświadczenia będą przesyłane tylko przez bezpieczne połączenie"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Update"
+msgstr "Aktualizuj"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Account updated successfully"
+msgstr "Konto zostało zaktualizowane"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "The entered credential or authentication information does not work"
+msgstr "Wprowadzone poświadczenia lub informacje uwierzytelniające nie działają"
+
 #. 'Delete previous versions' as header of a modal dialog to confirm to delete all previous versions of a file.
 #: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 msgid "Delete previous versions"
@@ -7445,6 +7531,12 @@ msgstr "Opcje plików"
 #: apps/io.ox/files/main.js module:io.ox/files
 msgid "thumbnail"
 msgstr "miniaturka"
+
+#. Shown as a tooltip when a mail account doesn't work correctly. Click brings user to the settings page
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail
+msgid "There is a problem with this account. Click for more information"
+msgstr "Wystąpił problem z tym kontem. Kliknij, aby uzyskać więcej informacji"
 
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show icons"
@@ -8121,7 +8213,7 @@ msgstr "ładowanie"
 msgid ""
 "The unrecoverable items have been cleaned up successfully. Please refresh "
 "this page to see the changes."
-msgstr "Nieodzyskiwalne elementy zostały pomyślnie wyczyszczone. Aby zobaczyć zmiany, odśwież stronę."
+msgstr "Nieodzyskiwalne elementy zostały wyczyszczone. Aby zobaczyć zmiany, odśwież stronę."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
@@ -8187,14 +8279,6 @@ msgstr "Wybierz dostawcę konta pocztowego."
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
 msgstr "Twój adres e-mail"
-
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Your password"
-msgstr "Twoje hasło"
-
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Your credentials will be sent over a secure connection only"
-msgstr "Twoje poświadczenia będą przesyłane tylko przez bezpieczne połączenie"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -10142,11 +10226,6 @@ msgstr "Powiadomienie jest wysyłane dla wiadomości odebranych przez \"%1$s\", 
 msgid "Thread"
 msgstr "Wątek"
 
-#. Shown as a tooltip when a mail account doesn't work correctly. Click brings user to the settings page
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "There is a problem with this account. Click for more information"
-msgstr "Wystąpił problem z tym kontem. Kliknij, aby uzyskać więcej informacji"
-
 #. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -11967,7 +12046,6 @@ msgstr "Oznacz jako niewykonane"
 
 #. 'Delete task' or 'Delete tasks' as header for a modal dialog to confirm the deletion of one or more tasks.
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
-#| msgid "Delete task"
 msgid "Delete task"
 msgid_plural "Delete tasks"
 msgstr[0] "Usuń zadanie"
@@ -12283,6 +12361,14 @@ msgid ""
 "Receive notifications when a participant accepted or declined a task in "
 "which you participate"
 msgstr "Otrzymuj powiadomienie, gdy uczestnik zadania, w którym również uczestniczysz, przyjmie je lub odrzuci."
+
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Subscribe shared task folders"
+msgstr "Subskrybuj udostępnione foldery zadań"
+
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Subscribe shared tasks folders"
+msgstr "Subskrybuj udostępnione foldery zadań"
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgctxt "tooltip"
@@ -16596,9 +16682,6 @@ msgstr "Dodaj w serwisie %s"
 
 #~ msgid "Subscribe IMAP folders"
 #~ msgstr "Subskrybuj foldery IMAP"
-
-#~ msgid "Subscribe address book"
-#~ msgstr "Subskrybuj książkę adresową"
 
 #~ msgid "Subscribe calendar"
 #~ msgstr "Subskrybuj kalendarz"

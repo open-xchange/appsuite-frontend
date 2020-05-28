@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-10 15:09+0800\n"
+"PO-Revision-Date: 2020-05-08 12:09+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -564,6 +564,12 @@ msgstr "請輸入有效日期"
 msgid "Online help"
 msgstr "線上說明"
 
+#. label of help icon
+#. %1$s current context (example: Inbox categories)
+#: apps/io.ox/backbone/mini-views/helplink.js module:io.ox/core
+msgid "Online help: %1$s"
+msgstr "線上說明：%1$s"
+
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -735,7 +741,8 @@ msgstr "%1$s 工具列。使用方向鍵進行導航。"
 
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
-#: apps/io.ox/backbone/views/toolbar.js
+#: apps/io.ox/backbone/views/toolbar.js apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Actions. Use cursor keys to navigate."
 msgstr "行為。使用方向鍵切換。"
 
@@ -1422,6 +1429,7 @@ msgstr "我的 Google 行事曆"
 
 #: apps/io.ox/calendar/actions/subscribe-google.js module:io.ox/calendar
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/files/actions/basic-authentication-account.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account added successfully"
@@ -1454,91 +1462,22 @@ msgstr "訂閱"
 msgid "iCal feed has been imported successfully"
 msgstr "已成功匯入 iCal 資訊來源"
 
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/settings/pane.js
-msgid "Subscribe shared calendars"
-msgstr "訂閱共享行事曆"
-
-#. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.
-#. 'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules
-#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
-#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/settings/editLocale.js apps/io.ox/editor/main.js
-#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
-#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/edit.js
-#: apps/io.ox/mail/mailfilter/settings/filter.js
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
-#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
-#: module:io.ox/core/boot apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/plugins/administration/groups/settings/edit.js
-#: apps/plugins/administration/resources/settings/edit.js
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-#: apps/plugins/portal/mail/register.js apps/plugins/portal/rss/register.js
-#: module:io.ox/portal apps/plugins/portal/tumblr/register.js
-msgid "Save"
-msgstr "保存"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules
-msgid "subscribe to calendar"
-msgstr "訂閱行事曆"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-msgid "Sync via DAV"
-msgstr "透過 DAV 同步"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-msgid "sync via DAV"
-msgstr "透過 DAV 同步"
-
-#. shown when a download of calendar data is requested (has header "Included calendars ...")
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
-msgid "Public calendars"
-msgstr "公開行事曆"
-
-#. shown when a download of calendar data is requested (has header "Included calendars ...")
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
-msgid "Shared calendars"
-msgstr "共享的行事曆"
-
-#. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/common-extensions.js
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/listview.js
-#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
-#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
-msgid "Private"
-msgstr "私人"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Hidden calendars"
-msgstr "隱藏的行事曆"
-
 #: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
 msgid "no color"
 msgstr "無顏色"
+
+#. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/settings/pane.js
+#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
+msgid "Private"
+msgstr "私人"
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -1642,6 +1581,36 @@ msgstr "編輯約會"
 #: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "建立約會"
+
+#. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.
+#. 'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/settings/editLocale.js apps/io.ox/core/sub/sharedFolders.js
+#: module:io.ox/calendar apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
+#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/plugins/administration/groups/settings/edit.js
+#: apps/plugins/administration/resources/settings/edit.js
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#: apps/plugins/portal/mail/register.js apps/plugins/portal/rss/register.js
+#: module:io.ox/portal apps/plugins/portal/tumblr/register.js
+msgid "Save"
+msgstr "保存"
 
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
@@ -1757,6 +1726,28 @@ msgstr "您不再使用公開行事曆。已將您加入為主辦人。"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My calendars"
 msgstr "我的行事曆"
+
+#. shown when a download of calendar data is requested (has header "Included calendars ...")
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
+msgid "Public calendars"
+msgstr "公開行事曆"
+
+#. shown when a download of calendar data is requested (has header "Included calendars ...")
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
+msgid "Shared calendars"
+msgstr "共享的行事曆"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Hidden calendars"
+msgstr "隱藏的行事曆"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
@@ -2432,6 +2423,11 @@ msgstr "提醒"
 msgid "Show reminders for past appointments"
 msgstr "對已結束的約會顯示提醒"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe shared calendars"
+msgstr "訂閱共享行事曆"
+
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
 msgid "Add calendar"
@@ -2448,6 +2444,12 @@ msgstr "開始"
 #: module:io.ox/calendar/settings/schedjoules
 msgid "The integration of the subscribed calendars might take a while."
 msgstr "可能需要花點時間來整合訂閱的行事曆。"
+
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "subscribe to calendar"
+msgstr "訂閱行事曆"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
@@ -2480,6 +2482,7 @@ msgstr "選擇最愛時區"
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js
 #: module:io.ox/core apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add"
@@ -3298,15 +3301,15 @@ msgstr "我的通訊錄"
 
 #. shown when a download of contact data is requested (has header "Included address books ...")
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/contacts/settings/pane.js apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public address books"
 msgstr "公開通訊錄"
 
 #. shown when a download of contact data is requested (has header "Included address books ...")
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/contacts/settings/pane.js apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared address books"
 msgstr "共享的通訊錄"
 
@@ -3570,6 +3573,7 @@ msgstr "頭銜"
 
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
 msgid "Display name"
 msgstr "顯示名"
 
@@ -4170,6 +4174,15 @@ msgstr "於全域通訊錄開始"
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 msgid "Link postal addresses with map service"
 msgstr "使用地圖服務連結郵件地址"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Hidden address books"
+msgstr "隱藏的通訊錄"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Subscribe shared address books"
+msgstr "訂閱共享通訊錄"
 
 #. Name with title
 #. %1$s is the first name
@@ -5010,18 +5023,41 @@ msgid "My shares"
 msgstr "我的分享項目"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Shared task folders"
+msgstr "共享任務資料夾"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Public tasks folders"
+msgstr "公開任務資料夾"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Shared tasks folders"
+msgstr "共享任務資料夾"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Hidden tasks folders"
+msgstr "隱藏任務資料夾"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My folders"
 msgstr "我的資料夾"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/files/actions/basic-authentication-account.js
 msgid "Add storage account"
 msgstr "新增儲存空間帳號"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Subscribe to address book"
+msgid "Subscribe address book"
 msgstr "訂閱通訊錄"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe shared address book"
+msgstr "訂閱共享通訊錄"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "View all attachments"
@@ -5038,8 +5074,8 @@ msgid "Synchronize with your tablet or smartphone"
 msgstr "與您的平板電腦或智慧型手機同步"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Hidden address books"
-msgstr "隱藏的通訊錄"
+msgid "Personal address book"
+msgstr "個人通訊錄"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/plugins/portal/tasks/register.js module:plugins/portal
@@ -5057,6 +5093,14 @@ msgstr "共享的任務"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden tasks"
 msgstr "隱藏的任務"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Personal folder"
+msgstr "個人資料夾"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe shared folder"
+msgstr "訂閱共享資料夾"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Personal calendar"
@@ -6227,6 +6271,18 @@ msgstr "發佈"
 msgid "Subscriptions"
 msgstr "訂閱"
 
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "Sync via DAV"
+msgstr "透過 DAV 同步"
+
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "sync via DAV"
+msgstr "透過 DAV 同步"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+msgid "Subscribe to address book"
+msgstr "訂閱通訊錄"
+
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "No subscription services available for this module"
 msgstr "無此模組的訂閱服務"
@@ -7208,6 +7264,36 @@ msgstr "無法新增帳號"
 msgid "This file has been added to the portal"
 msgstr "此檔案已被加入到入口畫面"
 
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Your user name"
+msgstr "您的使用者名稱"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your password"
+msgstr "您的密碼"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Your url"
+msgstr "您的網址"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr "您的帳號密碼只會透過加密連線送出"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Update"
+msgstr "更新"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Account updated successfully"
+msgstr "已成功更新帳號"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "The entered credential or authentication information does not work"
+msgstr "無法使用輸入的登入資訊或驗證資訊"
+
 #. 'Delete previous versions' as header of a modal dialog to confirm to delete all previous versions of a file.
 #: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 msgid "Delete previous versions"
@@ -7451,6 +7537,12 @@ msgstr "檔案選項"
 #: apps/io.ox/files/main.js module:io.ox/files
 msgid "thumbnail"
 msgstr "縮圖"
+
+#. Shown as a tooltip when a mail account doesn't work correctly. Click brings user to the settings page
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail
+msgid "There is a problem with this account. Click for more information"
+msgstr "此帳號發生問題，點擊此處取得更多資訊"
 
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show icons"
@@ -8189,14 +8281,6 @@ msgstr "請選擇您的郵件帳號服務商。"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
 msgstr "您的電子郵件位址"
-
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Your password"
-msgstr "您的密碼"
-
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Your credentials will be sent over a secure connection only"
-msgstr "您的帳號密碼只會透過加密連線送出"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -10146,11 +10230,6 @@ msgstr ""
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Thread"
 msgstr "討論串"
-
-#. Shown as a tooltip when a mail account doesn't work correctly. Click brings user to the settings page
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "There is a problem with this account. Click for more information"
-msgstr "此帳號發生問題，點擊此處取得更多資訊"
 
 #. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -12289,6 +12368,14 @@ msgid ""
 "Receive notifications when a participant accepted or declined a task in "
 "which you participate"
 msgstr "當您參與的任務當中的參與者接受或拒絕時接收通知"
+
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Subscribe shared task folders"
+msgstr "訂閱共享任務資料夾"
+
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Subscribe shared tasks folders"
+msgstr "訂閱共享任務資料夾"
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgctxt "tooltip"
@@ -17919,9 +18006,6 @@ msgstr "新增至 %s"
 
 #~ msgid "Subscribe IMAP folders"
 #~ msgstr "訂閱 IMAP 文件夾"
-
-#~ msgid "Subscribe address book"
-#~ msgstr "訂閱通訊錄"
 
 #~ msgid "Subscribe calendar"
 #~ msgstr "訂閱行事曆"

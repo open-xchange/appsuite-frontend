@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-09 10:53+0200\n"
+"PO-Revision-Date: 2020-05-05 14:56+0200\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <cs@workshop-chapina.com>\n"
 "Language: cs_CZ\n"
@@ -175,43 +175,36 @@ msgstr "Poslat zprávu na konci."
 
 #. Used to display reminders for appointments%1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "Send mail %1$s before start."
 msgid "Send SMS %1$s before start."
 msgstr "Poslat zprávu %1$s před začátkem."
 
 #. Used to display reminders for appointments%1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "Send mail %1$s after start."
 msgid "Send SMS %1$s after start."
 msgstr "Poslat zprávu %1$s po začátku."
 
 #. Used to display reminders for appointments%1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "Send mail %1$s before end."
 msgid "Send SMS %1$s before end."
 msgstr "Poslat zprávu %1$s před koncem."
 
 #. Used to display reminders for appointments%1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "Send mail %1$s after end."
 msgid "Send SMS %1$s after end."
 msgstr "Poslat zprávu %1$s po konci."
 
 #. Used to display reminders for appointments%1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "Send mail at %1$s."
 msgid "Send SMS at %1$s."
 msgstr "Poslat zprávu v %1$s."
 
 #. Used to display reminders for appointments
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "Send mail at start."
 msgid "Send SMS at start."
 msgstr "Poslat zprávu na začátku."
 
 #. Used to display reminders for appointments
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "Send mail at end."
 msgid "Send SMS at end."
 msgstr "Poslat zprávu na konci."
 
@@ -544,6 +537,11 @@ msgstr "Zadejte, prosím, platné datum"
 msgid "Online help"
 msgstr "Nápověda online"
 
+#. label of help icon%1$s current context (example: Inbox categories)
+#: apps/io.ox/backbone/mini-views/helplink.js module:io.ox/core
+msgid "Online help: %1$s"
+msgstr "Nápověda online: %1$s"
+
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -713,7 +711,8 @@ msgstr "%1$s nástrojová lišta. Navigujte pomocí kurzorových kláves."
 
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
-#: apps/io.ox/backbone/views/toolbar.js
+#: apps/io.ox/backbone/views/toolbar.js apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Actions. Use cursor keys to navigate."
 msgstr "Činnosti. K navigaci použijte kurzorové klávesy."
 
@@ -791,7 +790,6 @@ msgstr "Týd."
 #. CW is calender week and %1$d is the week number
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-#| msgid "Today"
 msgid "Today,"
 msgstr "Dnes,"
 
@@ -1411,6 +1409,7 @@ msgstr "Můj Google kalendář"
 
 #: apps/io.ox/calendar/actions/subscribe-google.js module:io.ox/calendar
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/files/actions/basic-authentication-account.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account added successfully"
@@ -1443,91 +1442,22 @@ msgstr "Přihlásit k odběru"
 msgid "iCal feed has been imported successfully"
 msgstr "Zdroj iCal úspěšně importován"
 
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/settings/pane.js
-msgid "Subscribe shared calendars"
-msgstr "Přihlásit sdílené kalendáře"
-
-#. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules
-#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
-#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/settings/editLocale.js apps/io.ox/editor/main.js
-#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
-#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/edit.js
-#: apps/io.ox/mail/mailfilter/settings/filter.js
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
-#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
-#: module:io.ox/core/boot apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/plugins/administration/groups/settings/edit.js
-#: apps/plugins/administration/resources/settings/edit.js
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-#: apps/plugins/portal/mail/register.js apps/plugins/portal/rss/register.js
-#: module:io.ox/portal apps/plugins/portal/tumblr/register.js
-msgid "Save"
-msgstr "Uložit"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules
-msgid "subscribe to calendar"
-msgstr "přihlásit ke kalendáři"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-msgid "Sync via DAV"
-msgstr "Synchronizovat pomocí DAV"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-msgid "sync via DAV"
-msgstr "synchronizovat pomocí DAV"
-
-#. shown when a download of calendar data is requested (has header "Included calendars ...")
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
-msgid "Public calendars"
-msgstr "Veřejné kalendáře"
-
-#. shown when a download of calendar data is requested (has header "Included calendars ...")
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
-msgid "Shared calendars"
-msgstr "Sdílené kalendáře"
-
-#. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/common-extensions.js
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/listview.js
-#: apps/io.ox/calendar/view-grid-template.js
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
-msgid "Private"
-msgstr "Soukromé"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Hidden calendars"
-msgstr "Skryté kalendáře"
-
 #: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
 msgid "no color"
 msgstr "žádná barva"
+
+#. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/settings/pane.js
+#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/settings/pane.js
+#: module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+msgid "Private"
+msgstr "Soukromé"
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -1631,6 +1561,35 @@ msgstr "Upravit schůzku"
 #: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "Vytvořit schůzku"
+
+#. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/settings/editLocale.js apps/io.ox/core/sub/sharedFolders.js
+#: module:io.ox/calendar apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
+#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/plugins/administration/groups/settings/edit.js
+#: apps/plugins/administration/resources/settings/edit.js
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#: apps/plugins/portal/mail/register.js apps/plugins/portal/rss/register.js
+#: module:io.ox/portal apps/plugins/portal/tumblr/register.js
+msgid "Save"
+msgstr "Uložit"
 
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed'Create' as button text of a modal dialog to confirm to create a new XING-Account
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1746,6 +1705,28 @@ msgstr ""
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My calendars"
 msgstr "Moje kalendáře"
+
+#. shown when a download of calendar data is requested (has header "Included calendars ...")
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
+msgid "Public calendars"
+msgstr "Veřejné kalendáře"
+
+#. shown when a download of calendar data is requested (has header "Included calendars ...")
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
+msgid "Shared calendars"
+msgstr "Sdílené kalendáře"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Hidden calendars"
+msgstr "Skryté kalendáře"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
@@ -2164,7 +2145,6 @@ msgid "Calendar account error"
 msgstr "Chyba kalendářního účtu"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#| msgid "Edit mail account"
 msgid "Edit accounts"
 msgstr "Upravit účty"
 
@@ -2255,7 +2235,6 @@ msgstr "Příští měsíc"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#| msgid "My %1$s"
 msgid "%1$s"
 msgstr "%1$s"
 
@@ -2419,6 +2398,11 @@ msgstr "Upomínky"
 msgid "Show reminders for past appointments"
 msgstr "Zobrazit upomínky na předchozí schůzky"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe shared calendars"
+msgstr "Přihlásit sdílené kalendáře"
+
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
 msgid "Add calendar"
@@ -2436,6 +2420,12 @@ msgstr "Start"
 msgid "The integration of the subscribed calendars might take a while."
 msgstr ""
 "Integrace kalendářů, ke kterým jste se přihlásil(a), může chvíli trvat."
+
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "subscribe to calendar"
+msgstr "přihlásit ke kalendáři"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
@@ -2468,9 +2458,10 @@ msgstr "Zvolte oblíbené časové pásmo"
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js
 #: module:io.ox/core apps/io.ox/core/sub/subscriptions.js
-#: module:io.ox/core/sub apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
+#: module:io.ox/core/sub
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add"
 msgstr "Přidat"
 
@@ -3253,15 +3244,15 @@ msgstr "Mé adresáře"
 
 #. shown when a download of contact data is requested (has header "Included address books ...")
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/contacts/settings/pane.js apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public address books"
 msgstr "Veřejné adresáře"
 
 #. shown when a download of contact data is requested (has header "Included address books ...")
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/contacts/settings/pane.js apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared address books"
 msgstr "Sdílené adresáře"
 
@@ -3523,6 +3514,7 @@ msgstr "Titul"
 
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
 msgid "Display name"
 msgstr "Zobrazované jméno"
 
@@ -3553,7 +3545,7 @@ msgstr "Přípona"
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
 msgid "Birthday"
-msgstr "Narozeniny"
+msgstr "Datum narození"
 
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
@@ -4127,6 +4119,15 @@ msgstr "Začněte v globálním adresáři"
 msgid "Link postal addresses with map service"
 msgstr "Propojte poštovní adresy s mapovací službou"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Hidden address books"
+msgstr "Skryté adresáře"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Subscribe shared address books"
+msgstr "Přihlásit se ke sdíleným adresářům"
+
 #. Name with title%1$s is the first name%2$s is the last name%3$s is the title
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
 msgid "%3$s %2$s, %1$s"
@@ -4168,7 +4169,6 @@ msgstr[1] "Distribuční seznam s %1$d položkami"
 msgstr[2] "Distribuční seznam se %1$d položkami"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-#| msgid "Create contact"
 msgid "Private contact"
 msgstr "Soukromý kontakt"
 
@@ -4978,18 +4978,41 @@ msgid "My shares"
 msgstr "Co sdílím"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Shared task folders"
+msgstr "Sdílené úkolové složky"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Public tasks folders"
+msgstr "Veřejné úkolové složky"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Shared tasks folders"
+msgstr "Sdílené úkolové složky"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Hidden tasks folders"
+msgstr "Skryté úkolové složky"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My folders"
 msgstr "Moje složky"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/files/actions/basic-authentication-account.js
 msgid "Add storage account"
 msgstr "Přidat účet úložiště"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Subscribe to address book"
-msgstr "Přihlásit se k adresáři"
+msgid "Subscribe address book"
+msgstr "Přihlaste adresář"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe shared address book"
+msgstr "Přihlásit se ke sdílenému adresáři"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "View all attachments"
@@ -5006,8 +5029,8 @@ msgid "Synchronize with your tablet or smartphone"
 msgstr "Synchronizovat s tabletem nebo chytrým telefonem"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Hidden address books"
-msgstr "Skryté adresáře"
+msgid "Personal address book"
+msgstr "Osobní adresář"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/plugins/portal/tasks/register.js module:plugins/portal
@@ -5025,6 +5048,14 @@ msgstr "Sdílené úkoly"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden tasks"
 msgstr "Skryté úkoly"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Personal folder"
+msgstr "Osobní složka"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe shared folder"
+msgstr "Přihlásit se ke sdílené složce"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Personal calendar"
@@ -6212,6 +6243,18 @@ msgstr "Publikace"
 msgid "Subscriptions"
 msgstr "Odběry"
 
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "Sync via DAV"
+msgstr "Synchronizovat pomocí DAV"
+
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "sync via DAV"
+msgstr "synchronizovat pomocí DAV"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+msgid "Subscribe to address book"
+msgstr "Přihlásit se k adresáři"
+
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "No subscription services available for this module"
 msgstr "Pro tento modul nejsou k dispozici žádné odběry"
@@ -7180,6 +7223,36 @@ msgstr "Účet se nepodařilo přidat"
 msgid "This file has been added to the portal"
 msgstr "Soubor byl přidán do portálu"
 
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Your user name"
+msgstr "Vaše uživatelské jméno"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your password"
+msgstr "Vaše heslo"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Your url"
+msgstr "Vaše URL"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr "Vaše přihlašovací údaje budou odeslány pouze zabezpečeným připojením"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Update"
+msgstr "Aktualizace"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Account updated successfully"
+msgstr "Účet úspěšně aktualizován"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "The entered credential or authentication information does not work"
+msgstr "Zadané přihlašovací nebo autentizační údaje nefungují"
+
 #. 'Delete previous versions' as header of a modal dialog to confirm to delete all previous versions of a file.
 #: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 msgid "Delete previous versions"
@@ -7233,8 +7306,8 @@ msgstr[2] ""
 msgid "Delete item"
 msgid_plural "Delete items"
 msgstr[0] "Smazat položku"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "Smazat položky"
+msgstr[2] "Smazat položky"
 
 #: apps/io.ox/files/actions/download.js module:io.ox/files
 msgid "Items without a file can not be downloaded."
@@ -7430,6 +7503,12 @@ msgstr "Možnosti souborů"
 #: apps/io.ox/files/main.js module:io.ox/files
 msgid "thumbnail"
 msgstr "náhled"
+
+#. Shown as a tooltip when a mail account doesn't work correctly. Click brings user to the settings page
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail
+msgid "There is a problem with this account. Click for more information"
+msgstr "S účtem jsou potíže. Klikněte pro více informací"
 
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show icons"
@@ -8189,14 +8268,6 @@ msgid "Your mail address"
 msgstr "Vaše poštovní adresa"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Your password"
-msgstr "Vaše heslo"
-
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Your credentials will be sent over a secure connection only"
-msgstr "Vaše přihlašovací údaje budou odeslány pouze zabezpečeným připojením"
-
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
 msgstr "Pokouším se automaticky nastavit váš poštovní účet"
 
@@ -8750,7 +8821,6 @@ msgid "and %1$d others"
 msgstr "a %1$d dalších"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#| msgid "Mark as unread"
 msgid "Marked as unread"
 msgstr "Označit jako nepřečtené"
 
@@ -10130,11 +10200,6 @@ msgstr ""
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Thread"
 msgstr "Vlákno"
-
-#. Shown as a tooltip when a mail account doesn't work correctly. Click brings user to the settings page
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "There is a problem with this account. Click for more information"
-msgstr "S účtem jsou potíže. Klikněte pro více informací"
 
 #. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -11984,7 +12049,6 @@ msgstr "Označit jako nehotové"
 
 #. 'Delete task' or 'Delete tasks' as header for a modal dialog to confirm the deletion of one or more tasks.
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
-#| msgid "Delete task"
 msgid "Delete task"
 msgid_plural "Delete tasks"
 msgstr[0] "Smazat úkol"
@@ -12305,6 +12369,14 @@ msgid ""
 msgstr ""
 "Dostávat oznámení, když účastníci přijmou nebo odmítnou úkol, na kterém se "
 "podílíte"
+
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Subscribe shared task folders"
+msgstr "Přihlásit se ke sdíleným úkolovým složkám"
+
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Subscribe shared tasks folders"
+msgstr "Přihlásit se ke sdíleným úkolovým složkám"
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgctxt "tooltip"
@@ -21762,9 +21834,6 @@ msgstr "Přidat do %s"
 #~ msgid "Subscribe IMAP folders"
 #~ msgstr "Přihlásit IMAP složky"
 
-#~ msgid "Subscribe address book"
-#~ msgstr "Přihlaste adresář"
-
 #~ msgid "Subscribe calendar"
 #~ msgstr "Přihlaste kalendář"
 
@@ -23567,9 +23636,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Up"
 #~ msgstr "Nahoru"
-
-#~ msgid "Update"
-#~ msgstr "Aktualizace"
 
 #~ msgid "Update appointment"
 #~ msgstr "Aktualizovat schůzku"
