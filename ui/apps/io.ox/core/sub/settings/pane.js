@@ -174,6 +174,16 @@ define('io.ox/core/sub/settings/pane', [
         return $();
     }
 
+    function errorWarning(data) {
+        if (data.errors === 'true') {
+            return $('<div class="error-wrapper">').append(
+                $('<i class="error-icon fa fa-exclamation-triangle" aria-hidden="true">'),
+                $('<div class="error-message">').text(gt('The subscription could not be updated due to an error and must be recreated.'))
+            );
+        }
+        return $();
+    }
+
     ext.point('io.ox/core/sub/settings/list/itemview').extend({
         id: 'itemview',
         draw: function (baton) {
@@ -225,7 +235,8 @@ define('io.ox/core/sub/settings/pane', [
                                 $('<i>').text(shortUrl)
                         ),
                     createPathInformation(baton.model),
-                    refreshWarning(data)
+                    refreshWarning(data),
+                    errorWarning(data)
                 )
             );
 

@@ -774,6 +774,42 @@ define('io.ox/contacts/main', [
             app.folder.handleErrors();
         },
 
+        'account-errors': function (app) {
+            var accountError;
+            app.treeView.on('click:account-error', function (folder) {
+
+                accountError = folder.meta && folder.meta.errors ? folder.meta : false;
+
+                if (!accountError) return;
+                accountError.error = gt('The subscription could not be updated due to an error and must be recreated.');
+
+                require(['io.ox/backbone/views/modal', 'io.ox/core/notifications'], function (ModalDialog) {
+                    new ModalDialog({
+                        point: 'io.ox/contacts/account-errors',
+                        title: gt('Contacts account error')
+                    })
+                    .extend({
+                        default: function () {
+                            this.$body.append(
+                                $('<div class="info-text">')
+                                    .css('word-break', 'break-word')
+                                    .text(accountError.error)
+                            );
+                        }
+                    })
+                    .addCancelButton()
+                    .addButton({ label: gt('Edit subscription'), action: 'subscription', className: 'btn-primary' })
+                    .on('subscription', function () {
+                        var options = { id: 'io.ox/core/sub' };
+                        ox.launch('io.ox/settings/main', options).done(function () {
+                            this.setSettingsPane(options);
+                        });
+                    })
+                    .open();
+                });
+            });
+        },
+
         'api-events': function (app) {
             api.on('create update delete refresh.all', function () {
                 folderAPI.reload(app.folder.get());
