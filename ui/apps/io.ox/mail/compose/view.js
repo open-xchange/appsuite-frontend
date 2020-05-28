@@ -720,8 +720,12 @@ define('io.ox/mail/compose/view', [
             var node = this.$el.closest('.io-ox-mail-compose-window').find('.inline-yell');
 
             if (typeof text === 'function') {
+                node.text(text());
                 this.inlineYellTimer = setInterval(function () {
-                    node.text(text());
+                    var txt = text();
+                    if (node.text() !== txt) {
+                        node.text(txt);
+                    }
                 }, 10000);
             } else {
                 node.text(text);
