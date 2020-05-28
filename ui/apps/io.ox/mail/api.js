@@ -1790,12 +1790,6 @@ define('io.ox/mail/api', [
         return [obj];
     }
 
-    function renameProperty(obj) {
-        if (!obj.authenticity) return obj;
-        obj.authenticity_preview = obj.authenticity;
-        delete obj.authenticity;
-    }
-
     api.processThreadMessage = function (obj) {
 
         // get thread
@@ -1805,10 +1799,6 @@ define('io.ox/mail/api', [
         thread = _(list = thread).filter(filterDeleted);
         // don't remove all if all marked as deleted
         if (thread.length === 0) thread = list.slice(0, 1);
-
-        // workaround for bug 62881 until middleware change is available (MW-1284)
-        // authenticity -> authenticity_preview (same property name - different content for threadedAll/all and get)
-        _(thread.concat(obj)).each(renameProperty);
 
         // we use the last item to generate the cid. More robust because unlikely to change.
         var last = _(thread).last();
