@@ -70,4 +70,5 @@ upload stable:
     - /^release-/
     - develop
     - tags
-  except: {}
+  except:
+    refs: []
