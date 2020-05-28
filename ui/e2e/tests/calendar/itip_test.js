@@ -18,7 +18,7 @@ const moment = require('moment');
 const actions = new DataTable(['buttonText', 'className', 'emailTitle', 'itipStatus']);
 // itipStatus needs to be adjusted as soon as OXUIB-206 is fixed
 actions.add(['Accept', 'accepted', 'accepted', 'You have accepted this appointment']);
-actions.add(['Tentative', 'tentative', 'tentatively accepted', 'You tentatively accepted this invitation']);
+actions.add(['Tentative', 'tentative', 'tentatively accepted', 'You tentatively accepted this appointment']);
 actions.add(['Decline', 'declined', 'declined', 'You declined this appointment']);
 
 Feature('Calendar > iTIP');
