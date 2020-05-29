@@ -52,20 +52,24 @@ define('io.ox/chat/views/searchResult', [
         searchAddresses: function (query) {
             return require(['io.ox/contacts/addressbook/popup']).then(function (picker) {
                 return picker.getAllMailAddresses().then(function (res) {
-                    return picker.search(query, res.index, res.hash, true);
+                    var result = picker.search(query, res.index, res.hash, true);
+                    return result.filter(function (user) { return user.email !== data.user.email; });
                 });
             });
         },
 
         searchMessages: function (query) {
-            var url = data.API_ROOT + '/messages?' + $.param({ q: query }),
+            var url = data.API_ROOT + '/search/messages?' + $.param({ query: query }),
                 regexQuery = new RegExp('(\\b' + escape(query) + ')', 'ig');
             return $.ajax({
                 url: url,
                 xhrFields: { withCredentials: true }
-            }).then(function (result) {
-                result.forEach(function (data) {
-                    data.body = data.body.replace(regexQuery, '<b class="search-highlight">$1</b>');
+            }).then(function (data) {
+                var result  = [];
+                data.forEach(function (message) {
+                    if (message.type === 'system') return;
+                    message.content = message.content.replace(regexQuery, '<b class="search-highlight">$1</b>');
+                    result.push(message);
                 });
                 return result;
             });
