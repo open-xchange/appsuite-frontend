@@ -168,30 +168,36 @@ define('io.ox/chat/data', [
         },
 
         getSystemMessage: function () {
-            var data = JSON.parse(this.get('body'));
-            switch (data.type) {
-                case 'createRoom':
-                    return _.printf('%1$s created this conversation', getName(data.originator));
-                case 'joinMember':
-                    return _.printf('%1$s joined the conversation', getNames(data.members));
-                case 'addMember':
-                    return _.printf('%1$s added %2$s to the conversation', getName(data.originator), getNames(data.addedMembers));
-                case 'removeMember':
-                    return _.printf('%1$s removed %2$s from the conversation', getName(data.originator), getNames(data.removedMembers));
-                case 'changeGroupImage':
-                    return _.printf('%1$s changed the group image', getName(data.originator), data.fileId);
-                case 'changeTitle':
-                    return _.printf('%1$s changed the group title to "%2$s"', getName(data.originator), data.title);
+            var event = JSON.parse(this.get('content'));
+            var originator = this.get('sender'),
+                members = event.members;
+
+            if (data.chats.getCurrent() && data.chats.getCurrent().get('type') === 'channel' && event.type === 'members:added') event.type = 'channel:joined';
+            if (data.chats.getCurrent() && data.chats.getCurrent().get('type') === 'channel' && event.type === 'members:removed') event.type = 'room:left';
+
+            switch (event.type) {
+                case 'room:created':
+                    return _.printf('%1$s created this conversation', getName(originator));
+                case 'channel:joined':
+                    return _.printf('%1$s joined the conversation', getNames(members));
+                case 'members:added':
+                    return _.printf('%1$s added %2$s to the conversation', getName(originator), getNames(_.difference(members, [originator])));
+                case 'members:removed':
+                    return _.printf('%1$s removed %2$s from the conversation', getName(originator), getNames(_.difference(members, [originator])));
+                case 'image:changed':
+                    return _.printf('%1$s changed the group image', getName(originator), event.fileId);
+                case 'title:changed':
+                    return _.printf('%1$s changed the group title to "%2$s"', getName(originator), event.title);
                 case 'changeDescription':
-                    return _.printf('%1$s changed the group description to "%2$s"', getName(data.originator), data.description);
-                case 'leftRoom':
-                    return _.printf('%1$s left the conversation', getName(data.originator));
+                    return _.printf('%1$s changed the group description to "%2$s"', getName(originator), event.description);
+                case 'room:left':
+                    return _.printf('%1$s left the conversation', getName(originator));
                 case 'me':
-                    return _.printf('%1$s %2$s', getName(data.originator), data.message);
+                    return _.printf('%1$s %2$s', getName(originator), event.message);
                 case 'text':
-                    return data.message;
+                    return event.message;
                 default:
-                    return _.printf('Unknown system message %1$s', data.type);
+                    return _.printf('Unknown system message %1$s', event.type);
             }
         },
 
