@@ -202,7 +202,14 @@ define('io.ox/switchboard/extensions', [
         id: 'join',
         draw: function (baton) {
             console.log('actions', baton.data);
-            var match = String(baton.data.location).match(/(https:\/\/.*?\.zoom\.us\S+)/i);
+            // TODO: Split this for compability with pure location and real conference
+            // conference field should also be printed in the view
+            var match = [], extProp = baton.data.extendedProperties;
+            if (extProp['X-OX-CONFERENCE']) {
+                match.push(extProp['X-OX-CONFERENCE'].value);
+            } else {
+                match = String(baton.data.location).match(/(https:\/\/.*?\.zoom\.us\S+)/i);
+            }
             console.log('zoom?', match, 'location', baton.data.location);
             if (!match) return;
             this.append(

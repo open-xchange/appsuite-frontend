@@ -175,7 +175,9 @@ define('io.ox/switchboard/views/zoom-meeting', [
             .then(
                 function success(result) {
                     console.log('Yay', result);
-                    this.appointment.set('categories', [result.join_url]);
+                    var extProps = this.appointment.get('extendedProperties') || {};
+                    _(extProps).extend({ 'X-OX-CONFERENCE': { value: result.join_url, label: 'zoom' } });
+                    this.appointment.set('extendedProperties', extProps);
                     this.model.set('meeting', result);
                     this.model.set('state', 'meeting');
                 }.bind(this),
@@ -197,7 +199,7 @@ define('io.ox/switchboard/views/zoom-meeting', [
             if (!refreshToken) return $.Deferred().reject();
             // use refresh token to get a new access token
             return $.post({
-                url: host + '/zoom/reauthorize?user=hurz',
+                url: host + '/zoom/reauthorize',
                 contentType: 'application/json',
                 processData: false,
                 data: JSON.stringify({ refresh_token: refreshToken })
