@@ -251,13 +251,13 @@ define('io.ox/chat/main', [
         },
 
         showFile: function (cmd) {
-            var selectedFile = data.files.at(cmd.index).get('id');
+            var selectedFile = data.files.at(cmd.index).get('fileId');
             this.openPictureViewer(data.files, selectedFile);
         },
 
         showMessageFile: function (cmd) {
             // TODO: consider pagination for nonprototype implementation
-            var files = new data.RoomFilesCollection([], { roomId: cmd.id });
+            var files = new data.RoomFilesCollection([], { roomId: data.chats.currentChatId });
             files.fetch();
 
             files.initialized.then(function () {
@@ -266,6 +266,8 @@ define('io.ox/chat/main', [
         },
 
         openPictureViewer: function (fileList, selectedFile) {
+            fileList.each(function (file) { file.set('id', file.get('fileId')); });
+
             var options = {
                 files: fileList.map(function (file) {
                     return _.extend({

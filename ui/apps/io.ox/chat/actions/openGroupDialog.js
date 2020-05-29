@@ -39,7 +39,7 @@ define('io.ox/chat/actions/openGroupDialog', [
 
         getImageUrl: function () {
             var fileId = this.model.get('fileId');
-            return fileId ? data.API_ROOT + '/files/' + fileId + '/thumbnail' : undefined;
+            return fileId ? data.API_ROOT + '/files/' + fileId + '/thumbnail' : '';
         }
 
     });

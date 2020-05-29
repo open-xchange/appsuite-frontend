@@ -213,7 +213,7 @@ define('io.ox/chat/data', [
                 placeholder.replaceWith($img);
                 $img.trigger('changeheight', { prev: oldHeight, value: $img.height() });
             }).attr('src', url)
-            .attr({ 'data-cmd': 'show-message-file', 'data-id': this.get('roomId'), 'data-file-id': this.get('fileId') });
+            .attr({ 'data-cmd': 'show-message-file', 'data-file-id': this.get('fileId') });
             return placeholder;
         },
 
@@ -232,11 +232,12 @@ define('io.ox/chat/data', [
                 url: data.API_ROOT + '/files/' + this.get('fileId'),
                 xhrFields: { withCredentials: true }
             }).then(function (file) {
+                file = file[0];
                 $elem.replaceWith(
                     opt.icon ? $('<i class="fa icon">').addClass(util.getClassFromMimetype(file.mimeType)) : '',
                     opt.text ? $.txt(file.name) : '',
                     opt.download ? $('<a class="download">').attr({
-                        href: data.API_ROOT + '/files/' + file.id + '/download/' + file.name,
+                        href: data.API_ROOT + '/files/' + file.fileId + '/download/' + file.name,
                         download: file.name
                     }).append(
                         $('<i class="fa fa-download">')
@@ -703,11 +704,11 @@ define('io.ox/chat/data', [
     var FileModel = Backbone.Model.extend({
 
         getThumbnailUrl: function () {
-            return data.API_ROOT + '/files/' + this.get('id') + '/thumbnail';
+            return data.API_ROOT + '/files/' + this.get('fileId') + '/thumbnail';
         },
 
         getPreviewUrl: function () {
-            return data.API_ROOT + '/files/' + this.get('id') + '/preview';
+            return data.API_ROOT + '/files/' + this.get('fileId'); // + '/preview';
         },
 
         isImage: function () {
@@ -741,7 +742,7 @@ define('io.ox/chat/data', [
         },
 
         url: function () {
-            return data.API_ROOT + '/files/room/' + this.roomId;
+            return data.API_ROOT + '/rooms/' + this.roomId + '/files';
         }
 
     });

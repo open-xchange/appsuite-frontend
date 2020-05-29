@@ -38,8 +38,8 @@ function (DisposableView, data) {
         update: function () {
             this.$el.css('background-image', '').empty();
 
-            if (this.model.has('fileId')) {
-                this.$el.css('background-image', 'url(' + data.API_ROOT + '/files/' + this.model.get('fileId') + '/thumbnail)');
+            if (this.model.has('file') && this.model.get('file').id) {
+                this.$el.css('background-image', 'url(' + data.API_ROOT + '/files/' + this.model.get('file').id);
             } else {
                 this.$el.append(this.$icon);
             }
