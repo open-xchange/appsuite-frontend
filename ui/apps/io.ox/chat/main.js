@@ -170,9 +170,10 @@ define('io.ox/chat/main', [
                 this.resubscribeChat(chat.id);
             }
 
-            data.chats.addAsync({ type: 'private', members: [cmd.email] }).done(function (result) {
-                this.showChat(result.id);
-            }.bind(this));
+            var view = new ChatView({ type: 'private', members: [data.user, { email: cmd.email }] });
+            this.showApp();
+            this.$rightside.empty().append(view.render().$el);
+            this.$body.addClass('open');
         },
 
         leaveGroup: function (groupId) {

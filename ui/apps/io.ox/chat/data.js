@@ -535,6 +535,21 @@ define('io.ox/chat/data', [
             this.set('open', true);
         },
 
+        postFirstMessage: function (attr, file) {
+            var members = [];
+            this.get('members').forEach(function (member) { members.push(member.email); });
+
+            this.members = members;
+            this.message = attr && attr.content;
+            this.type = this.get('type');
+
+            if (file) this.file = file;
+
+            data.chats.addAsync(this).done(function (result) {
+                events.trigger('cmd', { cmd: 'show-chat', id: result.id });
+            });
+        },
+
         addMembers: function (emails) {
             var members = emails.map(function (email) { return { email: email }; });
             this.set('members', [].concat(this.get('members').concat(members)));
@@ -573,13 +588,17 @@ define('io.ox/chat/data', [
             this.once('sync', this.initialized.resolve);
         },
 
+        getNew: function (attr) {
+            return new ChatModel(attr);
+        },
+
         addAsync: function (attr) {
             var url = attr.id ? this.url() + '/' + attr.id : this.url();
 
             var collection = this,
                 data = _.extend({
                     open: true, type: 'group'
-                }, _(attr).pick('title', 'type', 'members', 'description', 'file', 'reference')),
+                }, _(attr).pick('title', 'type', 'members', 'description', 'file', 'reference', 'message')),
                 formData = new FormData();
 
             _.each(data, function (value, key) {

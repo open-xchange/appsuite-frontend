@@ -140,12 +140,13 @@ define('io.ox/chat/views/chat', [
         },
 
         initialize: function (options) {
+            if (!options) return;
             var self = this;
 
             this.room = options.room;
             this.messageId = options.messageId;
             this.reference = options.reference;
-            this.model = data.chats.get(this.room);
+            this.model = data.chats.get(this.room) || data.chats.getNew(options);
             this.messagesView = new MessagesView({ collection: this.model.messages });
 
             this.listenTo(this.model, {
@@ -410,7 +411,8 @@ define('io.ox/chat/views/chat', [
             for (i = 0; i < $input[0].files.length; i++) {
                 file = $input[0].files[i];
                 type = /(jpg|jpeg|gif|bmp|png)/i.test(file.type) ? 'image' : 'file';
-                this.model.postMessage({ content: '', type: type }, file);
+                if (!this.model.get('id')) this.model.postFirstMessage(undefined, file);
+                else this.model.postMessage({ content: '', type: type }, file);
             }
             $input.val('');
         },
@@ -433,7 +435,8 @@ define('io.ox/chat/views/chat', [
 
             var data = { content: content };
             if (this.reference) data.reference = this.reference;
-            this.model.postMessage(data);
+            if (!this.model.get('id')) this.model.postFirstMessage(data);
+            else this.model.postMessage(data);
 
             // remove reference preview
             this.onRemoveReference();
