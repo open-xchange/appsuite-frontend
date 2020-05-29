@@ -217,7 +217,7 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
     function getDefaultNumberFormat(localeId) {
         // we want the default format for this specific localeId (used to cache backups)
         if (localeId) {
-            var locale = (localeId || currentLocaleId).toLowerCase().replace(/_/, '-');
+            var locale = localeId.toLowerCase().replace(/_/, '-');
             return Number(1234.56)
                 .toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
                 // fr-be, for example, uses narrow nbsp
