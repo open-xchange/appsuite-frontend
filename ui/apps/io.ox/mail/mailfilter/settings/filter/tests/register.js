@@ -1185,9 +1185,9 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                                 $('<span class="list-title">').text(baton.view.conditionsTranslation.guard_verify)
                             ),
                             $('<div class="col-sm-9">').append(
-                                $('<div class="col-sm-7">').append($('<div class="row">').append(
-                                    //#. Tests for PGP Signature.  Starts with "PGP Signature", such as "PGP Signature exists and signature is valid"
-                                    new util.DropdownLinkView({ name: 'comparison', model: cmodel, values: { 'is': gt('exists and signature is valid'), 'not is': gt('is missing or invalid') } }).render().$el)
+                                $('<div class="col-sm-9">').append($('<div class="row">').append(
+                                    //#. Tests for PGP Signature.
+                                    new util.DropdownLinkView({ name: 'comparison', model: cmodel, values: { 'is': gt('The signature exists and is valid'), 'not is': gt('The signature is missing or is not valid') } }).render().$el)
                                 )),
                             util.drawDeleteButton('test')));
                 }

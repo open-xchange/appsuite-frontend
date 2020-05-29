@@ -80,7 +80,7 @@ define('io.ox/settings/security/appPasswords/settings/addPassword', [
             def.resolve(values);
         }, function (error) {
             require(['io.ox/core/notifications'], function (notifications) {
-                notifications.yell('error', gt('There was a problem getting the list available applications from the server.'));
+                notifications.yell('error', gt('There was a problem getting the list of available applications from the server.'));
                 console.error(error);
             });
             def.reject();
