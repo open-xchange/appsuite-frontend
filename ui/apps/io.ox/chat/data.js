@@ -532,6 +532,7 @@ define('io.ox/chat/data', [
             });
             model.set('sent', moment().toISOString());
             this.set('modified', +moment());
+            this.set('open', true);
         },
 
         addMembers: function (emails) {
@@ -609,8 +610,8 @@ define('io.ox/chat/data', [
         toggleRecent: function (roomId) {
             var room = this.get(roomId);
             return $.ajax({
-                type: 'POST',
-                url: this.url() + '/state/' + roomId,
+                type: 'PUT',
+                url: this.url() + '/' + roomId + '/state',
                 processData: false,
                 contentType: false,
                 xhrFields: { withCredentials: true }
@@ -678,7 +679,21 @@ define('io.ox/chat/data', [
 
         leaveChannel: function (roomId) {
             var room = this.get(roomId);
-            room.destroy();
+            var url = this.url() + '/' + roomId + '/members';
+            return $.ajax({
+                type: 'DELETE',
+                url: url,
+                processData: false,
+                contentType: false,
+                xhrFields: { withCredentials: true }
+            }).then(function () {
+                var members = room.get('members').filter(function (member) { return member.email !== data.user.email; });
+                room.set('members', members);
+                room.set('open', false);
+                room.set('joined', false);
+            }).fail(function (err) {
+                console.log(err);
+            });
         },
 
         parse: function (array) {

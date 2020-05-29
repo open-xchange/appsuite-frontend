@@ -72,7 +72,7 @@ define('io.ox/chat/views/history', [
             });
 
             // get fresh data
-            this.collection.fetch({ remove: false, data: { type: 'channel' } });
+            this.collection.fetch({ remove: false, data: { open: false } });
         },
 
         render: function () {

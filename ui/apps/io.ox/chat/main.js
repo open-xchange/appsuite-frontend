@@ -165,7 +165,10 @@ define('io.ox/chat/main', [
                     return a.email;
                 }).indexOf(cmd.email) >= 0;
             });
-            if (chat) return this.showChat(chat.id);
+            if (chat) {
+                if (chat.get('open')) return this.showChat(chat.id);
+                this.resubscribeChat(chat.id);
+            }
 
             data.chats.addAsync({ type: 'private', members: [cmd.email] }).done(function (result) {
                 this.showChat(result.id);

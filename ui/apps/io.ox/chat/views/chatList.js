@@ -37,7 +37,7 @@ define('io.ox/chat/views/chatList', [
 
         render: function () {
             // rendering happens via onAdd
-            this.collection.fetch();
+            this.collection.fetch({ remove: false, data: { open: true } });
             return this;
         },
 
