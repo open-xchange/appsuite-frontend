@@ -99,11 +99,9 @@ define('io.ox/multifactor/settings/views/editMultifactorView', [
     );
 
     function doEdit(model, newName) {
-        if (!newName) {
-            def.reject();
-            return;
-        }
         var def = $.Deferred();
+        if (!newName) return def.reject();
+
         api.editDevice(model.get('provider'), model.get('id'), newName).then(def.resolve, function (data) {
             yell('error', gt('Unable to edit name.') + (data && data.error ? (' ' + data.error) : ''));
             def.reject();
