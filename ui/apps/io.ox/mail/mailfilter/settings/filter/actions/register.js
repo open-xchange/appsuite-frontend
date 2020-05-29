@@ -330,7 +330,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                         'guard_encrypt': gt('Encrypt the email')
                     });
 
-                    _.extend(opt.actionCapabilities, { 'guard_enrypt': 'guard_encrypt' });
+                    _.extend(opt.actionCapabilities, { 'guard_encrypt': 'guard_encrypt' });
 
                     opt.actionsOrder.push('guard_encrypt');
                 },
