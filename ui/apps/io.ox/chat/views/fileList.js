@@ -68,6 +68,7 @@ define('io.ox/chat/views/fileList', [
                 'add': this.onAdd
             });
 
+            this.collection.reset();
             this.collection.fetch();
         },
 
@@ -96,7 +97,7 @@ define('io.ox/chat/views/fileList', [
                 button.css('backgroundImage', 'url(' + model.getThumbnailUrl() + ')');
             } else {
                 button.append(
-                    $('<i class="fa icon">').addClass(util.getClassFromMimetype(model.get('mimetype'))),
+                    $('<i class="fa icon">').addClass(util.getClassFromMimetype(model.get('mimeType'))),
                     $('<div class="filename">').text(model.get('name'))
                 );
             }

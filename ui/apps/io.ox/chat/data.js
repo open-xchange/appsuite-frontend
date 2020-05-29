@@ -153,18 +153,18 @@ define('io.ox/chat/data', [
     var MessageModel = Backbone.Model.extend({
 
         defaults: function () {
-            return { body: '', senderId: data.user_id, sent: +moment(), type: 'text', state: undefined };
+            return { content: '', senderId: data.user_id, sent: +moment(), type: 'text', state: undefined };
         },
 
         getBody: function () {
             if (this.isSystem()) return this.getSystemMessage();
-            if (this.isImage()) return this.getImage();
-            if (this.isFile()) return this.getFile();
+            else if (this.isImage()) return this.getImage();
+            else if (this.isFile()) return this.getFile();
             return this.getFormattedBody();
         },
 
         getFormattedBody: function () {
-            return _.escape(this.get('body')).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
+            return _.escape(this.get('content')).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
         },
 
         getSystemMessage: function () {
@@ -233,7 +233,7 @@ define('io.ox/chat/data', [
                 xhrFields: { withCredentials: true }
             }).then(function (file) {
                 $elem.replaceWith(
-                    opt.icon ? $('<i class="fa icon">').addClass(util.getClassFromMimetype(file.mimetype)) : '',
+                    opt.icon ? $('<i class="fa icon">').addClass(util.getClassFromMimetype(file.mimeType)) : '',
                     opt.text ? $.txt(file.name) : '',
                     opt.download ? $('<a class="download">').attr({
                         href: data.API_ROOT + '/files/' + file.id + '/download/' + file.name,
@@ -253,7 +253,7 @@ define('io.ox/chat/data', [
         getTextBody: function () {
             if (this.isSystem()) return this.getSystemMessage();
             if (this.isImage() || this.isFile()) return this.getFile();
-            return sanitizer.simpleSanitize(this.get('body'));
+            return sanitizer.simpleSanitize(this.get('content'));
         },
 
         isSystem: function () {

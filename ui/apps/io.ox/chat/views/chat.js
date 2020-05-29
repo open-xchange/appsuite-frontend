@@ -410,7 +410,7 @@ define('io.ox/chat/views/chat', [
             for (i = 0; i < $input[0].files.length; i++) {
                 file = $input[0].files[i];
                 type = /(jpg|jpeg|gif|bmp|png)/i.test(file.type) ? 'image' : 'file';
-                this.model.postMessage({ body: '', type: type }, file);
+                this.model.postMessage({ content: '', type: type }, file);
             }
             $input.val('');
         },
@@ -424,14 +424,14 @@ define('io.ox/chat/views/chat', [
             }
         },
 
-        onPostMessage: function (body) {
+        onPostMessage: function (content) {
             // reset and fetch messages when in search and collection is not complete
             if (!this.model.messages.nextComplete) {
                 this.model.messages.reset();
                 this.model.messages.fetch();
             }
 
-            var data = { body: body };
+            var data = { content: content };
             if (this.reference) data.reference = this.reference;
             this.model.postMessage(data);
 
