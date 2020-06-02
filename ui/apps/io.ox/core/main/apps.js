@@ -53,11 +53,6 @@ define('io.ox/core/main/apps', [
         requires: 'calendar',
         refreshable: true
     });
-    ui.createApp({
-        name: 'io.ox/calendar/edit',
-        requires: 'calendar',
-        refreshable: true
-    });
 
     // Contacts
     ui.createApp({
@@ -69,11 +64,6 @@ define('io.ox/core/main/apps', [
         searchable: true,
         settings: true,
         icon: icons['io.ox/contacts']
-    });
-    ui.createApp({
-        name: 'io.ox/contacts/edit',
-        requires: 'contacts',
-        refreshable: true
     });
     ui.createApp({
         name: 'io.ox/contacts/detail',
@@ -119,11 +109,6 @@ define('io.ox/core/main/apps', [
         searchable: true,
         settings: capabilities.has('delegate_tasks'),
         icon: icons['io.ox/tasks']
-    });
-    ui.createApp({
-        name: 'io.ox/tasks/edit',
-        requires: 'tasks',
-        refreshable: true
     });
     ui.createApp({
         name: 'io.ox/tasks/detail',
