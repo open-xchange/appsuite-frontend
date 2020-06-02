@@ -64,8 +64,7 @@ Scenario('[C114338] Flag an E-Mail with a color flag (flaggedAndColor)', async (
     I.waitForElement(colorFlag);
     me.clickToolbarAction('flag');
     I.waitForElement(flagged);
-    me.clickToolbarAction('flag');
-    me.waitAndClick('.smart-dropdown-container.flag-picker [data-action="color-none"]');
+    me.removeAllFlags(1);
     I.waitForDetached(colorFlag);
     I.waitForDetached(flagged);
 });
