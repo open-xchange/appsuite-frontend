@@ -180,6 +180,7 @@ define.async('io.ox/core/boot/main', [
                 if (!util.checkTabHandlingSupport()) return;
 
                 require(['io.ox/core/api/tab'], function (tabAPI) {
+                    tabAPI.resetWindowList();
                     tabAPI.propagate('propagateLogin', {
                         session: ox.session,
                         language: ox.language,

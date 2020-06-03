@@ -54,7 +54,8 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
 
         TabSession.events.listenTo(TabSession.events, 'propagateLogin', function (parameters) {
             if (!ox.signin && !parameters.relogin) return;
-            require(['io.ox/core/boot/login/tabSession'], function (tabSessionLogin) {
+            require(['io.ox/core/boot/login/tabSession', 'io.ox/core/api/tab'], function (tabSessionLogin, tabAPI) {
+                tabAPI.disableWindowListCleanUp();
                 tabSessionLogin(parameters);
             });
         });

@@ -41,7 +41,9 @@ define('io.ox/core/tab/handling', ['io.ox/core/boot/util'], function (util) {
          * all opened windows in localStorage
          * @type {Array.<windowNameObject>}
          */
-        currentWindows = [];
+        currentWindows = [],
+
+        windowListCleanUpDisabled = false;
 
     /**
      * fetch localStorage and initialize current window
@@ -85,7 +87,6 @@ define('io.ox/core/tab/handling', ['io.ox/core/boot/util'], function (util) {
             localStorage.setItem(storageKey, data);
         }
     }
-
 
     /**
      * add a new window to localStorage
@@ -269,6 +270,27 @@ define('io.ox/core/tab/handling', ['io.ox/core/boot/util'], function (util) {
         getWindowList: function () {
             fetch();
             return currentWindows;
+        },
+
+        resetWindowList: function () {
+            if (windowListCleanUpDisabled) return;
+
+            var windowObject = _.pick(this, 'windowName', 'windowType', 'parentName'),
+                newWindowList = _.filter(currentWindows, function (elem) { return elem.windowName === windowObject.windowName; }),
+                data;
+
+            try {
+                data = JSON.stringify(newWindowList);
+            } catch (e) {
+                data = JSON.stringify([]);
+                if (ox.debug) console.warn('TabHandling.store', e);
+            } finally {
+                localStorage.setItem(storageKey, data);
+            }
+        },
+
+        disableWindowListCleanUp: function () {
+            windowListCleanUpDisabled = true;
         },
 
         /**

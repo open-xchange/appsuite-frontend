@@ -190,6 +190,14 @@ define('io.ox/core/api/tab', [
             return tabHandling.getWindowList();
         },
 
+        resetWindowList: function () {
+            return tabHandling.resetWindowList();
+        },
+
+        disableWindowListCleanUp: function () {
+            return tabHandling.disableWindowListCleanUp();
+        },
+
         // tabCommunication --------------------------------------------------
 
         // Backbone events
