@@ -43,7 +43,7 @@ define('io.ox/core/capabilities', function () {
                 condition = str.replace(/[a-z0-9_:\-./]+/ig, function (match) {
                     return api.isDisabled(match) ? false : (match in capabilities);
                 });
-
+            if (!str || arguments[0] === false) return true;
             try {
                 /*eslint no-new-func: 0*/
                 return new Function('return !!(' + condition + ')')();
