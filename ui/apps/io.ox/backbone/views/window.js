@@ -352,6 +352,8 @@ define('io.ox/backbone/views/window', [
                 this.$el.css('left', elOrigLeft - percentage * growingDiff);
             }
 
+            this.$('.token-input.tt-input').trigger('updateWidth');
+
             // save value as new preferrence for this app
             if (_.device('desktop') && settings.get('features/floatingWindows/preferredMode/enabled', true) && this.model.get('name')) {
                 var preferences = settings.get('features/floatingWindows/preferredMode/apps', {});
