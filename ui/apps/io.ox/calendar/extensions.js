@@ -65,7 +65,7 @@ define('io.ox/calendar/extensions', [
                     folderId = model.get('folder');
 
                 // cleanup classes to redraw correctly
-                this.removeClass('modify private disabled needs-action accepted declined tentative');
+                this.removeClass('free modify private disabled needs-action accepted declined tentative');
 
                 // Call this before addColor is invoked
                 this.attr('aria-label', getTitle(model));
