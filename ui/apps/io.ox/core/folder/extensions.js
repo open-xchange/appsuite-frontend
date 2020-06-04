@@ -415,7 +415,7 @@ define('io.ox/core/folder/extensions', [
 
             require(['io.ox/core/sub/subscriptions'], function (sub) {
                 // if there is nothing configured we do not show the "subscribe" button
-                if (!baton.module === 'contacts' && !sub.availableServices.contacts) {
+                if (baton.module !== 'contacts' && !sub.availableServices.contacts) {
                     self.$el.find('[data-name=subscribeShared]').closest('li').remove();
                 }
             });
