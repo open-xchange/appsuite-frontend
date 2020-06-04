@@ -47,6 +47,8 @@ define('io.ox/calendar/model', [
                 if (this.options.resolveGroups) {
                     this.oldAdd = this.add;
                     this.add = this.addAsync;
+                    // array to track unresolved calls to the add function, usefull if you need to wait for requests requests to finish before saving etc
+                    this.toBeResolved = [];
                 }
             },
 
@@ -78,6 +80,8 @@ define('io.ox/calendar/model', [
                     // as this is an async add, we need to make sure the reset event is triggered after adding
                     isReset = options && options.previousModels !== undefined,
                     def = $.Deferred();
+
+                this.toBeResolved.push(def);
 
                 models = [].concat(models);
                 _(models).each(function (model) {
@@ -129,7 +133,10 @@ define('io.ox/calendar/model', [
                             // no merge here or we would overwrite the confirm status
                             def.resolve(self.oldAdd(modelsToAdd, options));
                             if (isReset) self.trigger('reset');
-                        }).fail(def.reject);
+                        }).fail(def.reject)
+                        .always(function () {
+                            self.toBeResolved = _(self.toBeResolved).without(def);
+                        });
                     });
                 });
 

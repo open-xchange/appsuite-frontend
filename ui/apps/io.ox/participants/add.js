@@ -250,13 +250,18 @@ define('io.ox/participants/add', [
                 this.addresspicker = new AddressPickerView({
                     process: function (e, member) {
                         if (self.options.convertToAttendee) {
-                            // fix type 5 that are actually type 1
-                            member.magic();
+                            if (!self.options.processRaw) {
+                                // fix type 5 that are actually type 1
+                                member.magic();
+                            } else if (!member.folder_id || !member.user_id || member.field !== 'email1') {
+                                member.type = 5;
+                            }
                             self.options.collection.add(calendarUtil.createAttendee(member));
                             return;
                         }
                         self.options.collection.add(member);
-                    }
+                    },
+                    processRaw: self.options.processRaw
                 });
                 this.$el.append(
                     this.addresspicker.render().$el

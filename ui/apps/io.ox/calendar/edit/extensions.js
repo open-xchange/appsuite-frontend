@@ -154,20 +154,25 @@ define('io.ox/calendar/edit/extensions', [
                     baton.app.getWindow().busy();
                     // needed, so the formdata can be attached when selecting ignore conflicts in the conflict dialog
                     baton.app.attachmentsFormData = attachments;
-                    if (baton.mode === 'edit') {
-                        var options = _.extend(calendarUtil.getCurrentRangeOptions(), {
-                                recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
-                                attachments: attachments,
-                                checkConflicts: true,
-                                usedGroups: baton.model._attendees.usedGroups,
-                                showRecurrenceInfo: true
-                            }),
-                            delta = baton.app.getDelta();
-                        api.update(delta, options).then(save, fail);
-                        return;
-                    }
 
-                    api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { usedGroups: baton.model._attendees.usedGroups, attachments: attachments, checkConflicts: true })).then(save, fail);
+                    // in case some attendees are still resolved we wait fot that. We don't want missing attendees
+                    $.when(baton.model._attendees.toBeResolved).always(function () {
+                        if (baton.mode === 'edit') {
+                            var options = _.extend(calendarUtil.getCurrentRangeOptions(), {
+                                    recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
+                                    attachments: attachments,
+                                    checkConflicts: true,
+                                    usedGroups: baton.model._attendees.usedGroups,
+                                    showRecurrenceInfo: true
+                                }),
+                                delta = baton.app.getDelta();
+                            api.update(delta, options).then(save, fail);
+                            return;
+                        }
+
+                        api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { usedGroups: baton.model._attendees.usedGroups, attachments: attachments, checkConflicts: true })).then(save, fail);
+
+                    });
                 })
             );
 
@@ -684,7 +689,10 @@ define('io.ox/calendar/edit/extensions', [
                 convertToAttendee: true,
                 collection: baton.model.getAttendees(),
                 blacklist: settings.get('participantBlacklist') || false,
-                scrollIntoView: true
+                scrollIntoView: true,
+                // to prevent addresspicker from processing data asynchronously.
+                // Not needed and may cause issues with slow network (hitting save before requests return).
+                processRaw: true
             });
 
             this.append(baton.parentView.addParticipantsView.$el);
