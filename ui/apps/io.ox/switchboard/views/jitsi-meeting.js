@@ -11,14 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/switchboard/views/zoom-meeting', [
-    'io.ox/switchboard/zoom',
-    'gettext!io.ox/switchboard'
-], function (zoom, gt) {
+define('io.ox/switchboard/views/jitsi-meeting', [
+    'io.ox/backbone/views/disposable'
+], function (DisposableView) {
 
     'use strict';
 
-    var ZoomMeetingView = zoom.View.extend({
+    var MeetingView = DisposableView.extend({
 
         className: 'conference-view zoom',
 
@@ -27,15 +26,26 @@ define('io.ox/switchboard/views/zoom-meeting', [
         },
 
         initialize: function (options) {
+            this.model = new Backbone.Model({ type: 'jitsi', state: 'done', joinLink: '' });
             this.appointment = options.appointment;
             var props = this.getExtendedProps(),
                 conference = props['X-OX-CONFERENCE'];
-            this.model.set('joinLink', conference && conference.label === 'zoom' ? conference.value : '');
-            window.zoomMeeting = this;
+            this.model.set('joinLink', conference && conference.label === 'jitsi' ? conference.value : '');
+            window.jitsiMeeting = this;
         },
 
         getExtendedProps: function () {
             return this.appointment.get('extendedProperties') || {};
+        },
+
+        getJoinLink: function () {
+            return this.model && this.model.get('joinLink');
+        },
+
+        render: function () {
+            this.createMeeting();
+            this.renderDone();
+            return this;
         },
 
         renderDone: function () {
@@ -64,30 +74,22 @@ define('io.ox/switchboard/views/zoom-meeting', [
 
         copyToLocation: function (e) {
             e.preventDefault();
-            this.appointment.set('location', 'Zoom Meeting: ' + this.getJoinLink());
+            this.appointment.set('location', 'Jitsi Meeting: ' + this.getJoinLink());
         },
 
         createMeeting: function () {
-            var data = this.appointment.toJSON();
-            return zoom.createMeeting({
-                agenda: data.note,
-                topic: data.summary || gt('New meeting'),
-                start_time: data.startDate.value,
-                timezone: data.startDate.timezone
-            })
-            .then(
-                function success(result) {
-                    if (ox.debug) console.debug('createMeeting', result);
-                    var joinLink = result.join_url;
-                    var props = this.getExtendedProps();
-                    props = _.extend({}, props, { 'X-OX-CONFERENCE': { value: joinLink, label: 'zoom' } });
-                    this.appointment.set('extendedProperties', props);
-                    this.model.set({ joinLink: joinLink, zoomMeeting: result, state: 'done' });
-                }.bind(this),
-                this.createMeetingFailed.bind(this)
-            );
+            // get a UUID (5 times s4 means a quadrillion combinations; good enough ... probably)
+            var joinLink = 'https://jitsi.ox-frontend.de/' + ['ox', s4(), s4(), s4(), s4(), s4()].join('-');
+            var props = this.getExtendedProps();
+            props = _.extend({}, props, { 'X-OX-CONFERENCE': { value: joinLink, label: 'jitsi' } });
+            this.appointment.set('extendedProperties', props);
+            this.model.set({ joinLink: joinLink, state: 'done' });
         }
     });
 
-    return ZoomMeetingView;
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substr(1);
+    }
+
+    return MeetingView;
 });

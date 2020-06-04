@@ -16,58 +16,103 @@ define('io.ox/switchboard/call/outgoing', [
     'io.ox/switchboard/presence',
     'io.ox/contacts/api',
     'io.ox/switchboard/call/ringtone',
+    'io.ox/switchboard/views/zoom-call',
+    'gettext!io.ox/switchboard',
     'less!io.ox/switchboard/style'
-], function (Modal, presence, contactsAPI, ringtone) {
+], function (Modal, presence, contactsAPI, ringtone, ZoomCall, gt) {
 
     'use strict';
 
     return {
         openDialog: function (model) {
-            ringtone.outgoing.play();
-            new Modal({ title: 'Outgoing Call' })
+            new Modal({ title: gt('Call'), autoClose: false })
                 .inject({
                     renderCallees: function () {
-                        var link = model.getTelcoLink();
+                        var callees = model.getCallees(), callee = callees[0];
                         this.$body.empty().append(
-                            $('<div class="callees">').append(
-                                model.getCallees().map(this.renderCallee, this)
+                            $('<div class="photo">').append(
+                                contactsAPI.pictureHalo($('<div class="contact-photo">'), { email: callee }, { width: 80, height: 80 }),
+                                presence.getPresenceIcon(callee)
                             ),
-                            $('<div class="telco-link">').append(
-                                $.txt('Please click the following link if the service doesn\'t open automatically: '),
-                                $('<a target="blank" rel="noopener">').attr('href', link).text(link)
-                            )
-                        );
-                    },
-                    renderCallee: function (callee) {
-                        return $('<div class="callee">').append(
-                            contactsAPI.pictureHalo($('<div class="contact-photo">'), { email: callee }, { width: 48, height: 48 }),
-                            presence.getPresenceIcon(callee),
-                            this.getState(callee),
                             $('<div class="name">').text(model.getCalleeName(callee)),
                             $('<div class="email">').text(callee)
                         );
                     },
-                    getState: function (callee) {
-                        var state = model.getCalleeState(callee);
-                        if (state === 'declined') return $('<span style="color: #a00"><i class="fa fa-close"></i> Declined</span>');
-                        if (state === 'answered') return $('<span style="color: #0a0"><i class="fa fa-check"></i> Answered</span>');
-                        return $('<span>Calling ...</span>');
+                    renderService: function () {
+                        // this must be made flexible, i.e. support for Zoom, Jitsi, etc.
+                        this.conference = new ZoomCall();
+                        this.$body.append(this.conference.render().$el);
+                    },
+                    renderButtons: function () {
+                        var state = this.conference.model.get('state');
+                        this.$footer.empty();
+                        switch (state) {
+                            case 'unauthorized':
+                                this.renderConnectButtons();
+                                break;
+                            case 'authorized':
+                            case 'done':
+                                this.renderCallButtons();
+                            // no default
+                        }
+                    },
+                    renderConnectButtons: function () {
+                        this.$footer.append(
+                            this.createButton('default', 'cancel', 'times', gt('Cancel')),
+                            this.createButton('primary', 'connect', 'plug', gt('Connect'))
+                        );
+                    },
+                    renderCallButtons: function () {
+                        this.$footer.append(
+                            this.createButton('default', 'cancel', 'times', gt('Cancel')),
+                            this.createButton('success', 'call', 'phone', gt('Call'))
+                        );
+                        this.toggleCallButton();
+                    },
+                    createButton: function (type, action, icon, title) {
+                        return $('<div class="button">').append(
+                            $('<button class="btn btn-' + type + '" data-action="' + action + '"><i class="fa fa-' + icon + '"></i></button'),
+                            $.txt(title)
+                        );
+                    },
+                    toggleCallButton: function () {
+                        var link = this.conference.model.get('joinLink');
+                        console.log('renderService > change:joinLink', link);
+                        this.getButton('call').prop('disabled', !link);
+                    },
+                    getButton: function (action) {
+                        return this.$('button[data-action="' + action + '"]');
                     }
                 })
                 .build(function () {
-                    this.$el.addClass('outgoing-call');
-                    this.listenTo(model, 'hangup', this.close);
-                    this.listenTo(model, 'change:state', this.renderCallees);
+                    this.$el.addClass('call-dialog');
                     this.renderCallees();
+                    this.renderService();
+                    this.renderButtons();
+                    this.listenTo(this.conference.model, 'change:state', this.renderButtons);
+                    this.listenTo(this.conference.model, 'change:joinLink', this.toggleCallButton);
                 })
-                // simple button! not primary! hang up is not a default action.
-                .addButton({ action: 'hangup', label: 'Hang up', className: 'btn-default' })
+                .on('connect', function () {
+                    this.conference.startOAuthHandshake();
+                })
+                .on('call', function () {
+                    var link = this.conference.model.get('joinLink');
+                    console.log('call', link);
+                    if (!link) return;
+                    window.open(link, 'call');
+                    model.set('telco', link).propagate();
+                    ringtone.outgoing.play();
+                    this.getButton('cancel').parent().remove();
+                    this.getButton('call').parent().replaceWith(
+                        this.createButton('danger', 'hangup', 'phone', gt('Hang up'))
+                    );
+                })
                 .on('hangup', function () {
-                    ringtone.outgoing.stop();
-                    model.hangup();
+                    this.close();
                 })
                 .on('close', function () {
                     ringtone.outgoing.stop();
+                    model.hangup();
                 })
                 .open();
         }

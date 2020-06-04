@@ -15,14 +15,15 @@
 define.async('io.ox/switchboard/api', [
     'static/3rd.party/socket.io.slim.js',
     'io.ox/core/api/user',
-    'io.ox/core/http'
-], function (io, userAPI, http) {
+    'io.ox/core/http',
+    'settings!io.ox/core'
+], function (io, userAPI, http, settings) {
 
     'use strict';
 
-    var HOST = 'https://switchboard.ox-frontend.de';
-
     var api = {
+
+        host: settings.get('switchboard/host'),
 
         // will both be set below
         socket: undefined,
@@ -68,7 +69,7 @@ define.async('io.ox/switchboard/api', [
             params: { action: 'acquireToken' }
         })
         .then(function (data) {
-            api.socket = io.connect(HOST + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token)
+            api.socket = io.connect(api.host + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token)
                 .once('connect', function () {
                     console.log('%cConnected to switchboard service', 'background-color: green; color: white; padding: 8px;');
                 })

@@ -22,9 +22,10 @@ define('io.ox/switchboard/extensions', [
     'io.ox/contacts/api',
     'io.ox/switchboard/views/conference-select',
     'io.ox/switchboard/views/zoom-meeting',
+    'io.ox/switchboard/views/jitsi-meeting',
     'settings!io.ox/core',
     'gettext!io.ox/switchboard'
-], function (ext, presence, api, account, mini, DisposableView, actionsUtil, contactsAPI, ConferenceSelectView, ZoomMeetingView, settings, gt) {
+], function (ext, presence, api, account, mini, DisposableView, actionsUtil, contactsAPI, ConferenceSelectView, ZoomMeetingView, JitsiMeetingView, settings, gt) {
 
     'use strict';
 
@@ -79,7 +80,9 @@ define('io.ox/switchboard/extensions', [
                 },
                 set: function (data, fields) {
                     fields.presence.toggle(data.folder_id === 6);
-                    fields.presence.replaceWith(presence.getPresenceIcon(data.email1));
+                    var icon = presence.getPresenceIcon(data.email1);
+                    fields.presence.replaceWith(icon);
+                    fields.presence = icon;
                 }
             });
         }
@@ -204,9 +207,9 @@ define('io.ox/switchboard/extensions', [
             console.log('actions', baton.data);
             // TODO: Split this for compability with pure location and real conference
             // conference field should also be printed in the view
-            var match = [], extProp = baton.data.extendedProperties;
-            if (extProp['X-OX-CONFERENCE']) {
-                match.push(extProp['X-OX-CONFERENCE'].value);
+            var match = [], props = baton.data.extendedProperties || {};
+            if (props['X-OX-CONFERENCE']) {
+                match.push(props['X-OX-CONFERENCE'].value);
             } else {
                 match = String(baton.data.location).match(/(https:\/\/.*?\.zoom\.us\S+)/i);
             }
@@ -273,8 +276,10 @@ define('io.ox/switchboard/extensions', [
         index: 300,
         value: 'jitsi',
         label: gt('Jitsi Meeting'),
-        render: function () {
-
+        render: function (view) {
+            this.append(
+                new JitsiMeetingView({ appointment: view.model }).render().$el
+            );
         }
     });
 
@@ -327,5 +332,13 @@ define('io.ox/switchboard/extensions', [
                 })
             );
         }
+    });
+
+    // Settings
+    ext.point('io.ox/settings/pane/tools').extend({
+        id: 'zoom',
+        title: gt('Zoom Integration'),
+        ref: 'io.ox/switchboard',
+        index: 10
     });
 });

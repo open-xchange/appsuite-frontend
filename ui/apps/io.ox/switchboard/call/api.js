@@ -28,8 +28,6 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
             this.getCallees().forEach(function (callee) {
                 this.states[callee] = 'pending';
             }, this);
-            // no telco yet?
-            if (!data.telco) this.generateTelcoLink();
         },
         getCaller: function () {
             return this.get('caller');
@@ -59,6 +57,9 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
         isActive: function () {
             return !this.hungup && _(this.states).some(function (value) { return value === 'pending'; });
         },
+        propagate: function () {
+            api.propagate('call', this.get('callees'), { telco: this.getTelcoLink() });
+        },
         hangup: function () {
             this.hungup = true;
             this.trigger('hangup');
@@ -86,18 +87,14 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
     }
 
     // start a call with participants
-    function start(callees, windowOpen) {
+    function start(callees) {
         // should not happen UI-wise, but to be sure
         if (isCallActive()) return;
         call = new Call({ caller: api.userId, callees: callees });
-        // it's just here for better debugging, i.e. we get the incoming dialog first
-        api.propagate('call', call.get('callees'), { telco: call.getTelcoLink() });
         // load on demand / otherwise circular deps
         require(['io.ox/switchboard/call/outgoing'], function (outgoing) {
             outgoing.openDialog(call);
         });
-        // finally. windowOpen is just for development
-        if (windowOpen !== false) window.open(call.getTelcoLink());
     }
 
     // user gets called

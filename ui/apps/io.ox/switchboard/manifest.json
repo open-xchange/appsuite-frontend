@@ -3,7 +3,8 @@
         "namespace": "core",
         "path": "io.ox/switchboard/extensions",
         "requires": "switchboard",
-        "device": "!smartphone"
+        "device": "!smartphone",
+        "settings": "true"
     },
     {
         "namespace": "core",

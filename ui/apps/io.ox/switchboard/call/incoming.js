@@ -25,7 +25,6 @@ define('io.ox/switchboard/call/incoming', [
 
     return {
         openDialog: function (model) {
-            ringtone.incoming.play();
             new Modal({ title: gt('Incoming call') })
                 .build(function () {
                     var caller = model.getCaller();
@@ -33,13 +32,13 @@ define('io.ox/switchboard/call/incoming', [
                         ringtone.incoming.stop();
                         this.close();
                     });
-                    this.$el.addClass('incoming-call');
+                    this.$el.addClass('call-dialog');
                     this.$body.append(
                         $('<div class="photo">').append(
                             contactsAPI.pictureHalo($('<div class="contact-photo">'), { email: caller }, { width: 80, height: 80 }),
                             presence.getPresenceIcon(caller)
                         ),
-                        $('<div class="caller">').text(model.getCallerName()),
+                        $('<div class="name">').text(model.getCallerName()),
                         $('<div class="email">').text(caller)
                     );
                     this.$footer.append(
@@ -52,6 +51,14 @@ define('io.ox/switchboard/call/incoming', [
                             $.txt(gt('Answer'))
                         )
                     );
+                })
+                .on('open', function () {
+                    if (window.Notification) {
+                        new Notification('Incoming call', {
+                            body: gt('%1$s is calling', model.getCaller())
+                        });
+                    }
+                    ringtone.incoming.play();
                 })
                 .on('decline', function () {
                     ringtone.incoming.stop();
