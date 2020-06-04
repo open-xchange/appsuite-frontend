@@ -22,7 +22,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7799] Filter mail on mailing list', async (I, users, mail) => {
+Scenario('[C7799] Filter mail on mailing list', async (I, users, mail, mailfilter) => {
 
     const user = users[0];
 
@@ -31,44 +31,13 @@ Scenario('[C7799] Filter mail on mailing list', async (I, users, mail) => {
         path: 'e2e/media/mails/c7799.eml'
     }, { user });
 
-    function createFilterRule(I, name, condition, value, flag) {
-        I.login('app=io.ox/settings');
-        I.waitForVisible('.io-ox-settings-main');
-        I.waitForElement({ css: 'li .folder[data-id="virtual/settings/io.ox/mail"]>.folder-node' });
-        I.selectFolder('Mail');
-        I.waitForVisible('.rightside h1');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
 
-        // open mailfilter settings
-        I.selectFolder('Filter Rules');
+    mailfilter.waitForApp();
+    mailfilter.newRule('TestCase0383');
+    mailfilter.addCondition('Mailing list', 'open-xchange');
+    mailfilter.setFlag('Red');
 
-        // checks the h1 and the empty message
-        I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mailfilter-settings h1');
-        I.see('Mail Filter Rules');
-
-        I.see('There is no rule defined');
-
-        // create a test rule and check the inintial display
-        I.click('Add new rule');
-        I.waitForText('Create new rule');
-        I.see('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.');
-        I.see('Please define at least one action.');
-
-        I.fillField('rulename', name);
-
-        // add condition
-        I.click('Add condition');
-        I.click(condition);
-        I.fillField('values', value);
-
-        // add action
-        I.click('Add action');
-        I.click('Set color flag');
-        I.click('.actions .dropdown-toggle');
-        I.waitForVisible('.flag-dropdown');
-        I.click(flag, '.flag-dropdown');
-    }
-
-    createFilterRule(I, 'TestCase0383', 'Mailing list', 'open-xchange', 'Red');
     // save the form
     I.click('Save and apply');
 
