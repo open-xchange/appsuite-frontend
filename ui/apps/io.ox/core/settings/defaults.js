@@ -35,7 +35,7 @@ define('io.ox/core/settings/defaults', function () {
         design: 'primary',
         autoStart: 'io.ox/mail/main',
         coloredIcons: false,
-        autoOpenNotification: 'noEmail',
+        autoOpenNotification: true,
         autoLogout: 0,
         showDesktopNotifications: true,
         settings: {
