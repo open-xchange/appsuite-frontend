@@ -43,13 +43,12 @@ run e2e tests:
     paths:
       - ui/build/e2e/
     expire_in: 1 day
-  only:
-    changes:
-      - ui/**/*
-  except:
-    refs:
-      - /^poc\//
-      - /^e2e\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^(poc|e2e)\//'
+      when: never
+    - changes:
+        - ui/**/*
+      when: on_success
 
 # deploy e2e environment to well-known location - can be used to develop e2e tests against
 deploy e2e dev server:
@@ -67,8 +66,9 @@ deploy e2e dev server:
     - docker pull $DOCKER_IMAGE
     - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e $DOCKER_IMAGE e2e
     - docker container start $CONTAINER_NAME
-  only:
-    - develop
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "develop"'
+      when: always
 
 merge filter report:
   stage: report
@@ -105,21 +105,19 @@ merge filter report:
     - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./build/e2e/$FILTER_REPORT $FILTER_SUITE > ./build/e2e/filter_report.json
   tags:
     - e2e
-  allow_failure: true
-  when: always
   artifacts:
     when: always
     paths:
       - ui/build/e2e/filter_report.json
       - ui/merged_reports.json
     expire_in: 1 day
-  only:
-    changes:
-      - ui/**/*
-  except:
-    refs:
-      - /^poc\//
-      - /^e2e\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^(poc|e2e)\//'
+      when: never
+    - changes:
+        - ui/**/*
+      when: always
+      allow_failure: true
 
 generate e2e report:
   stage: report
@@ -139,23 +137,16 @@ generate e2e report:
     - cp -r ui/build/allure-report/$CI_PIPELINE_ID/history ui/build/allure-report/
     - tar cf ui/build/allure-report/history.tar ui/build/allure-report/history &>/dev/null || echo "No history found"
     - rm -rf ui/build/allure-report/history/
-  when: always
   artifacts:
     when: always
     paths:
       - ui/build/allure-report
     expire_in: 1 day
-  only:
-    refs:
-      - develop
-      - master
-      - /^master-/
-      - /^release-/
-      - /^feature\//
-      - /^bug\//
-      - /^e2e\//
-    changes:
-      - ui/**/*
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
+      changes:
+        - ui/**/*
+      when: always
 
 publish e2e report:
   stage: cleanup
@@ -176,18 +167,11 @@ publish e2e report:
     name: reports/$CI_COMMIT_REF_SLUG
     url: http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/
     on_stop: remove e2e report
-  when: always
-  only:
-    refs:
-      - develop
-      - master
-      - /^master-/
-      - /^release-/
-      - /^feature\//
-      - /^bug\//
-      - /^e2e\//
-    changes:
-      - ui/**/*
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
+      changes:
+        - ui/**/*
+      when: always
 
 remove e2e report:
   stage: cleanup
@@ -200,13 +184,13 @@ remove e2e report:
   environment:
     name: reports/$CI_COMMIT_REF_SLUG
     action: stop
-  when: manual
-  except:
-    refs:
-      - develop
-      - master
-      - /^master-/
-      - /^poc\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^(release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
+      changes:
+        - ui/**/*
+      when: manual
+    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|poc\/.*)$/'
+      when: never
 
 run single test:
   extends: run e2e tests
@@ -221,9 +205,6 @@ run single test:
   - npx codeceptjs run-rerun --grep "${CI_COMMIT_REF_NAME//e2e\//}"
   parallel: 5
   timeout: 60 minutes
-  only:
-    refs:
-      - /^e2e\//
-  except:
-    refs:
-      - /^poc\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^e2e\//'
+      when: always

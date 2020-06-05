@@ -41,7 +41,7 @@ Scenario('[C104271] Export and re-import vCard', async function (I, users, conta
     contacts.addContactsField('personal', 'Title', 'Mister');
     contacts.addContactsField('personal', 'Middle name', 'Freudiger');
     contacts.addContactsField('personal', 'Suffix', 'Pro');
-    contacts.addContactsField('personal', 'Birthday');
+    contacts.addContactsField('personal', 'Date of birth');
     I.selectOption('month', 'May');
     I.selectOption('date', '4');
     I.selectOption('year', '1957');

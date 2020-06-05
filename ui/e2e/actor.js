@@ -109,7 +109,7 @@ module.exports = actor({
 
     clickDropdown(text) {
         this.waitForText(text, 10, '.dropdown.open .dropdown-menu');
-        this.click(text, '.dropdown.open .dropdown-menu');
+        this.retry(5).click(text, '.dropdown.open .dropdown-menu');
     },
 
     openFolderMenu(folderName) {

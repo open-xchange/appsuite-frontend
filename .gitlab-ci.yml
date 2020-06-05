@@ -1,5 +1,11 @@
 image: docker:latest
 
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_IID
+      when: never
+    - when: always
+
 include:
   - local: "/gitlab-ci/docker.yml"
   - local: "/gitlab-ci/preview_apps.yml"
@@ -64,42 +70,44 @@ build ui:
     - echo "Building version $VERSION"
   tags:
     - openstack
-  only:
-    changes:
-      - ui/**/*
-      - update-themes/**/*
-      - open-xchange-appsuite/**/*
-      - open-xchange-appsuite-l10n/**/*
-      - open-xchange-appsuite-manifest/**/*
-      - gitlab-ci/*
-      - .gitlab-ci.yml
-  except:
-    refs:
-      - /^e2e\//
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_REF_NAME =~ /^master/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
+      changes:
+        - ui/**/*
+        - update-themes/**/*
+        - open-xchange-appsuite/**/*
+        - open-xchange-appsuite-l10n/**/*
+        - open-xchange-appsuite-manifest/**/*
+        - gitlab-ci/*
+        - .gitlab-ci.yml
+      when: always
 
 build update-themes:
   extends: .build ui plugin
   variables:
     PROJECT_PATH: update-themes
     PACKAGE_NAME: open-xchange-appsuite-manifest
-  except:
-    refs:
-      - /^e2e\//
-
   before_script:
     - cd ${PROJECT_PATH}
     # add production dependencies to different modules folder, so those can be picked up by grunt copy tasks
     - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache --production --modules-folder=deps
     - cd ..
-  only:
-    changes:
-      - ui/**/*
-      - update-themes/**/*
-      - open-xchange-appsuite/**/*
-      - open-xchange-appsuite-l10n/**/*
-      - open-xchange-appsuite-manifest/**/*
-      - gitlab-ci/*
-      - .gitlab-ci.yml
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^master/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
+      changes:
+        - ui/**/*
+        - update-themes/**/*
+        - open-xchange-appsuite/**/*
+        - open-xchange-appsuite-l10n/**/*
+        - open-xchange-appsuite-manifest/**/*
+        - gitlab-ci/*
+        - .gitlab-ci.yml
+      when: always
 
 test ui:
   image: gitlab.open-xchange.com:4567/frontend/dev_env/browser:latest
@@ -116,12 +124,13 @@ test ui:
   artifacts:
     reports:
       junit: ui/build/reports/unit/*/result.xml
-  only:
-    changes:
-      - ui/**/*
-  except:
-    refs:
-      - /^e2e\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^master/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
+      changes:
+        - ui/**/*
+      when: always
 
 
 run e2e tests:
@@ -135,53 +144,57 @@ build help:
   variables:
     PROJECT_PATH: help
     PACKAGE_NAME: open-xchange-appsuite-help
-  only:
-    changes:
-      - help/**/*
-      - open-xchange-appsuite-help/**/*
-      - gitlab-ci/*
-      - .gitlab-ci.yml
-  except:
-    refs:
-      - /^e2e\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^master/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
+      changes:
+        - help/**/*
+        - open-xchange-appsuite-help/**/*
+        - gitlab-ci/*
+        - .gitlab-ci.yml
+      when: always
 
 build guidedtours:
   extends: .build ui plugin
   variables:
     PROJECT_PATH: guidedtours
     PACKAGE_NAME: open-xchange-guidedtours
-  only:
-    changes:
-      - guidedtours/**/*
-      - open-xchange-guidedtours/**/*
-      - gitlab-ci/*
-      - .gitlab-ci.yml
-  except:
-    refs:
-      - /^e2e\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^master/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
+      changes:
+        - guidedtours/**/*
+        - open-xchange-guidedtours/**/*
+        - gitlab-ci/*
+        - .gitlab-ci.yml
+      when: always
 
 build spamexperts:
   extends: .build ui plugin
   variables:
     PROJECT_PATH: open-xchange-appsuite-spamexperts
-  only:
-    changes:
-      - open-xchange-appsuite-spamexperts/**/*
-      - gitlab-ci/*
-      - .gitlab-ci.yml
-  except:
-    refs:
-      - /^e2e\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^master/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
+      changes:
+        - open-xchange-appsuite-spamexperts/**/*
+        - gitlab-ci/*
+        - .gitlab-ci.yml
+      when: always
 
 build dynamic-theme:
   extends: .build ui plugin
   variables:
     PROJECT_PATH: open-xchange-dynamic-theme
-  only:
-    changes:
-      - open-xchange-dynamic-theme/**/*
-      - gitlab-ci/*
-      - .gitlab-ci.yml
-  except:
-    refs:
-      - /^e2e\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^master/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
+      changes:
+        - open-xchange-dynamic-theme/**/*
+        - gitlab-ci/*
+        - .gitlab-ci.yml
+      when: always

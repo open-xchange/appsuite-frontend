@@ -21,25 +21,25 @@ After(async function (users) {
 });
 
 // skip for now until pipeline can handle the tour plugin
-Scenario.skip('Getting started tour', async function (I) {
+Scenario('Getting started tour', async function (I) {
 
     I.login();
     I.waitForVisible('#io-ox-topbar-dropdown-icon');
     I.click('#io-ox-topbar-dropdown-icon');
-    I.waitForText('Getting Started');
-    I.click('Getting Started', '#topbar-settings-dropdown');
+    I.waitForText('Getting started');
+    I.click('Getting started', '#topbar-settings-dropdown');
 
     // test cancel mechanism
     I.waitForElement('.wizard-container .wizard-content');
     I.click('.wizard-close');
 
-    I.waitForText('You can restart this tour at any time by clicking on the account icon and choose "Getting Started"');
+    I.waitForText('You can restart this tour at any time by clicking on the account icon and choose "Getting started"');
     I.click({ css: '[data-action="done"]' });
 
     // test tour
     I.click('#io-ox-topbar-dropdown-icon');
-    I.waitForText('Getting Started');
-    I.click('Getting Started', '#topbar-settings-dropdown');
+    I.waitForText('Getting started');
+    I.click('Getting started', '#topbar-settings-dropdown');
 
     I.waitForElement('.wizard-container .wizard-content');
 
@@ -52,12 +52,12 @@ Scenario.skip('Getting started tour', async function (I) {
     I.waitForText('3/5');
     I.click({ css: '[data-action="next"]' });
 
-    I.waitForText('41/5');
+    I.waitForText('4/5');
     I.click({ css: '[data-action="next"]' });
 
     I.waitForText('5/5');
     I.click({ css: '[data-action="done"]' });
 
     I.dontSeeElement('.wizard-container .wizard-content');
-    I.dontSee('You can restart this tour at any time by clicking on the account icon and choose "Getting Started"');
+    I.dontSee('You can restart this tour at any time by clicking on the account icon and choose "Getting started"');
 });

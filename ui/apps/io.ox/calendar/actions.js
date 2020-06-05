@@ -168,7 +168,7 @@ define('io.ox/calendar/actions', [
             // folder must support alarms
             var folder = folderAPI.pool.getModel(data.folder).toJSON();
             if (folder.supported_capabilities.indexOf('alarms') === -1) return false;
-            // In public folders we must be organizer or attende, not on behalf
+            // In public folders we must be organizer or attendee, not on behalf
             if (folderAPI.is('public', folder) && !(f.attendee || f.organizer)) return false;
             return true;
         },
@@ -548,9 +548,9 @@ define('io.ox/calendar/actions', [
             ref: 'io.ox/calendar/detail/actions/changestatus'
         },
         {
-            // 155 because it's either changestatus or changereminder, never both
+            // 155 because itwas separated from changestatus. avoid conflicts
             index: 155,
-            prio: 'hi',
+            prio: 'lo',
             mobile: 'lo',
             id: 'changereminder',
             title: gt('Change reminders'),

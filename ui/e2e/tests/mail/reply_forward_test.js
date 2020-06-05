@@ -96,21 +96,21 @@ Scenario('[C7402] Mark one single mail as read or unread', async (I, users) => {
     I.waitForElement(locate('li.list-item').withText('Hail Eris'));
     I.click(locate('li.list-item').withText('Hail Eris'));
     // -> Mail is displayed as read.
-    I.dontSeeElement('.mail-detail-pane article.mail-item.unread'); // Detail View
-    I.dontSeeElement(locate('.seen-unseen-indicator').inside(
+    I.waitForDetached('.mail-detail-pane article.mail-item.unread'); // Detail View
+    I.waitForDetached(locate('.seen-unseen-indicator').inside(
         locate('.list-item').withText('Hail Eris')
     )); // List
     // Click on "Mark Unread"
-    I.click('.mail-detail-pane a.unread-toggle', '.mail-detail-pane article.mail-item');
+    I.retry(5).click('.mail-detail-pane a.unread-toggle', '.mail-detail-pane article.mail-item');
     // -> Mail is displayed as unread.
-    I.seeElement('.mail-detail-pane article.mail-item.unread'); // Detail View
-    I.seeElement(locate('.seen-unseen-indicator')
+    I.waitForElement('.mail-detail-pane article.mail-item.unread'); // Detail View
+    I.waitForElement(locate('.seen-unseen-indicator')
         .inside(locate('.list-item').withText('Hail Eris')));  // List
     // Click on "Mark read"
     I.click('.mail-detail-pane a.unread-toggle', '.mail-detail-pane article.mail-item');
     // -> Mail is displayed as read.
-    I.dontSeeElement('.mail-detail-pane article.mail-item.unread'); // Detail View
-    I.dontSeeElement(locate('.seen-unseen-indicator').inside(
+    I.waitForDetached('.mail-detail-pane article.mail-item.unread'); // Detail View
+    I.waitForDetached(locate('.seen-unseen-indicator').inside(
         locate('.list-item').withText('Hail Eris'))); // List
 });
 

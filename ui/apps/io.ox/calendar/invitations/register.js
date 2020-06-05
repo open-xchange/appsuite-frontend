@@ -835,7 +835,7 @@ define('io.ox/calendar/invitations/register', [
             var headers = this.model.get('headers') || {},
                 reminder = headers['X-OX-Reminder'],
                 module = headers['X-Open-Xchange-Module'],
-                sequence = ['X-Open-Xchange-Sequence'];
+                sequence = headers['X-Open-Xchange-Sequence'];
             if (!reminder || !module) return;
             reminder = reminder.split(/,\s*/);
             return sequence ? { module: module, folder_id: reminder[1], id: reminder[0], sequence: sequence } : { module: module, folder_id: reminder[1], id: reminder[0] };

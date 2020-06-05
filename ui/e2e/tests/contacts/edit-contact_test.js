@@ -90,7 +90,7 @@ Scenario('[C7362] Edit full data of a contact', async function (I, contacts) {
     contacts.addContactsField('personal', 'Title', 'Sir');
     contacts.addContactsField('personal', 'Middle name', 'Holger');
     contacts.addContactsField('personal', 'Suffix', 'Pro');
-    contacts.addContactsField('personal', 'Birthday');
+    contacts.addContactsField('personal', 'Date of birth');
     I.selectOption('month', 'May');
     I.selectOption('date', '4');
     I.selectOption('year', '1957');

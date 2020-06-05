@@ -755,7 +755,6 @@ define('io.ox/core/tk/tokenfield', [
                                 cids = models.map(function (model) { return model.cid; });
 
                             if (sourceView !== targetView) {
-                                console.log('drag from one to other');
                                 // move models from one tokenfield to another
                                 sourceView.collection.remove(models);
                                 targetView.collection.add(models);

@@ -656,7 +656,7 @@ define('io.ox/contacts/edit/view', [
         last_name: gt('Last name'),
         second_name: gt('Middle name'),
         suffix: gt('Suffix'),
-        birthday: gt('Birthday'),
+        birthday: gt('Date of birth'),
         marital_status: gt('Marital status'),
         number_of_children: gt('Children'),
         nickname: gt('Nickname'),

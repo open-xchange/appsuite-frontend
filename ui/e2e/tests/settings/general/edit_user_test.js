@@ -56,7 +56,7 @@ Scenario('[C208269] Edit users contact information', async (I, dialogs) => {
     I.fillField('Last name', lastname);
     addContactsField('personal', 'Title', 'Sir');
     addContactsField('personal', 'Suffix', 'Pro');
-    addContactsField('personal', 'Birthday');
+    addContactsField('personal', 'Date of birth');
     I.selectOption('month', 'May');
     I.selectOption('date', '4');
     I.selectOption('year', '1957');
