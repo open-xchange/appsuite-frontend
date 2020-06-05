@@ -29,7 +29,7 @@ Scenario('[C7341] Use first run mandatory wizard', async function (I, users, con
     const last_name = 'Wayne';
     await user.hasCapability('mandatory_wizard');
 
-    I.amOnPage('/');
+    I.amOnPage('ui');
     I.waitForInvisible('#background-loader.busy', 30);
     I.waitForFocus('#io-ox-login-username');
     // make sure we have an english UI

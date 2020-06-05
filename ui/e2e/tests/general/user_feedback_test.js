@@ -116,7 +116,7 @@ Scenario('[C125003] Disable user feedback dialog', async function (I) {
     I.waitForText('Feedback');
     I.logout();
 
-    I.amOnPage('/');
+    I.amOnPage('ui');
     // dirty hack until dontHaveCapability works
     I.executeScript(function () { document.cookie = 'cap=-feedback; path=/'; });
     I.login('app=io.ox/mail');

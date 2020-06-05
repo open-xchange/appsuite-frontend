@@ -18,7 +18,7 @@ const { expect } = require('chai');
 const excludes = { exclude: [['#io-ox-login-username'], ['#io-ox-login-password']] };
 
 Scenario('Login page (with exceptions)', async (I) => {
-    I.amOnPage('/');
+    I.amOnPage('ui');
     I.waitForInvisible('#background-loader');
 
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
