@@ -163,8 +163,8 @@ define('io.ox/core/boot/form', [
 
             // apply login screen specific classes
             if (_.device('smartphone')) {
-                $('#io-ox-login-username').attr('placeholder', gt('Username'));
-                $('#io-ox-login-password').attr('placeholder', gt('Password'));
+                $('#io-ox-login-username').attr({ 'data-i18n-attr': 'placeholder', 'placeholder': gt('Username') });
+                $('#io-ox-login-password').attr({ 'data-i18n-attr': 'placeholder', 'placeholder': gt('Password') });
             }
             $('#io-ox-login-screen').addClass(lc.addClass);
 
