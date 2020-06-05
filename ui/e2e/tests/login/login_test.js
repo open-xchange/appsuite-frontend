@@ -27,7 +27,7 @@ After(async (users) => {
 
 
 Scenario('[C7336] Successful Login', function (I, users) {
-    I.amOnPage('/');
+    I.amOnPage('ui');
     I.setCookie({ name: 'locale', value: 'en_US' });
     I.refreshPage();
 
@@ -39,7 +39,7 @@ Scenario('[C7336] Successful Login', function (I, users) {
 });
 
 Scenario('[C7337] Unsuccessful Login', function (I, users) {
-    I.amOnPage('/');
+    I.amOnPage('ui');
     I.setCookie({ name: 'locale', value: 'en_US' });
     I.refreshPage();
     I.waitForFocus('#io-ox-login-username', 30);
@@ -50,7 +50,7 @@ Scenario('[C7337] Unsuccessful Login', function (I, users) {
 });
 
 Scenario('[C7339] Stay signed in checkbox', async function (I, users) {
-    I.amOnPage('/');
+    I.amOnPage('ui');
     I.setCookie({ name: 'locale', value: 'en_US' });
     I.refreshPage();
     I.waitForFocus('#io-ox-login-username', 30);
