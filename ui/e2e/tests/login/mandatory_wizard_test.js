@@ -29,8 +29,7 @@ Scenario('[C7341] Use first run mandatory wizard', async function (I, users) {
     const last_name = 'Wayne';
     await user.hasCapability('mandatory_wizard');
 
-    I.amOnPage('/');
-    I.wait(1);
+    I.amOnPage('ui');
     I.waitForInvisible('#background-loader.busy', 30);
     // make sure we have an english UI
     I.click('.toggle-text');

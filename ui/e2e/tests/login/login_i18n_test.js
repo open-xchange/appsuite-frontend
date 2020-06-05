@@ -11,7 +11,7 @@ After(async (users) => {
 });
 
 Scenario('[C7338] on form login page', function (I) {
-    I.amOnPage('/');
+    I.amOnPage('ui');
     I.setCookie({ name: 'locale', value: 'en_US' });
     I.refreshPage();
     I.waitForFocus('#io-ox-login-username', 30);
