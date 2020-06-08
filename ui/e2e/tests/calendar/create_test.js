@@ -1426,8 +1426,8 @@ Scenario('[C234658] Create appointments and show this in cumulatively view', asy
         summary: testrailID,
         location: testrailID,
         description: testrailID,
-        startDate: { tzid: 'Europe/Berlin', value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00') },
-        endDate: { tzid: 'Europe/Berlin', value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00') }
+        startDate: { tzid: 'Europe/Berlin', value: moment().startOf('day').add(2, 'hours').format('YYYYMMDD[T]HHmm00') },
+        endDate: { tzid: 'Europe/Berlin', value: moment().startOf('day').add(4, 'hours').format('YYYYMMDD[T]HHmm00') }
     })));
 
     I.login('app=io.ox/calendar&perspective=week:week');
