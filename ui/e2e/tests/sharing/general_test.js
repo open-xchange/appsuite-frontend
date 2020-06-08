@@ -59,7 +59,7 @@ Scenario('[C252159] Generate link for sharing including subfolders', async funct
     I.waitForVisible('.dropdown.open .dropdown-menu');
     I.clickDropdown('Add new folder');
     dialogs.waitForVisible();
-    I.waitForText('Add new folder', dialogs.locators.header);
+    I.waitForText('Add new folder', 5, dialogs.locators.header);
     I.fillField('Folder name', 'A subfolder');
     dialogs.clickButton('Add');
     I.waitForDetached('.modal-dialog');
@@ -198,13 +198,13 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
         I.fillField('input[placeholder="Add people"]', user.userdata.primaryEmail);
         I.waitForElement('.participant-wrapper');
         I.pressKey('Enter');
-        I.waitForText(user.userdata.name, locate('.permission.row').withAttr({ 'aria-label': `${user.userdata.sur_name}, User, Internal user.` }));
+        I.waitForText(user.userdata.name, 5, locate('.permission.row').withAttr({ 'aria-label': `${user.userdata.sur_name}, User, Internal user.` }));
     }
 
     function setRights(curRole, targetRole, user) {
         I.waitForElement(locate('.permission.row').withAttr({ 'aria-label': `${user.userdata.sur_name}, User, Internal user.` }));
         I.click(curRole, locate('.permission.row').withAttr({ 'aria-label': `${user.userdata.sur_name}, User, Internal user.` }));
-        I.waitForText(targetRole, smartDropDown);
+        I.waitForText(targetRole, 5, smartDropDown);
         I.click(targetRole, smartDropDown);
     }
 
@@ -242,7 +242,7 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
 
         I.waitForText('document.txt');
         I.rightClick(locate('.filename').withText('document.txt'));
-        I.waitForText('Permissions / Invite people', smartDropDown);
+        I.waitForText('Permissions / Invite people', 5, smartDropDown);
         I.click('Permissions / Invite people', smartDropDown);
 
         I.waitForElement('.modal-dialog');
@@ -293,7 +293,7 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
     session('Alice', () => {
         // set charlies rights to viewer rights
         I.rightClick(locate('.filename').withText('document.txt'));
-        I.waitForText('Permissions / Invite people', smartDropDown);
+        I.waitForText('Permissions / Invite people', 5, smartDropDown);
         I.click('Permissions / Invite people', smartDropDown);
 
         setRights('Reviewer', 'Viewer', users[2]);
@@ -311,7 +311,7 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
 
     session('Alice', () => {
         I.rightClick(locate('.filename').withText('document.txt'));
-        I.waitForText('Permissions / Invite people', smartDropDown);
+        I.waitForText('Permissions / Invite people', 5, smartDropDown);
         I.click('Permissions / Invite people', smartDropDown);
 
         // revoke access of dave
