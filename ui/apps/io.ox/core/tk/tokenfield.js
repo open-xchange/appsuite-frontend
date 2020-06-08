@@ -712,7 +712,9 @@ define('io.ox/core/tk/tokenfield', [
                         'dragstart': function () {
                             var current = $(this);
                             sourceView = targetView = self;
-                            draggedItems = tokenfield.find('.active');
+                            // allows multi d&d, but is disabled until currently buggy tokenfields are overworked
+                            // draggedItems = tokenfield.find('.active');
+                            draggedItems = current;
                             tokenfield.addClass('drophover');
                             events.trigger('dragstart');
                             // needs opacity != 1, otherwise chrome will have white background behind border radius
