@@ -246,10 +246,6 @@ define('io.ox/core/a11y', [], function () {
                 if (group.index(document.activeElement) > -1 || group.filter(':checked').length) return false;
                 return (skip[name] = true);
             })
-            .filter(function () {
-                // skip tabbable elements of contenteditables
-                return !$(this).closest('[contenteditable="true"]').length;
-            })
             .filter(':visible');
         return $($.map(filteredItems, function (item) {
             // if tabbable element is actually an iframe we need to expand it to its tabbable contents
