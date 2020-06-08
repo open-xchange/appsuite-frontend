@@ -34,7 +34,10 @@ const A = {
         });
     },
     clickMoreAction: function (I, toolbar, action) {
-        I.waitForVisible('~More actions', 5, toolbar);
+        I.waitForVisible(toolbar);
+        within(toolbar, () => {
+            I.waitForVisible('~More actions', 5);
+        });
         I.click('~More actions', toolbar);
         I.waitForElement('.dropdown.open');
         I.click(`.dropdown.open .dropdown-menu [data-action="${action}"]`);
@@ -211,8 +214,11 @@ Scenario('[C114349] Create folder within copy dialog', async function (I, users,
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
+    await I.throttleNetwork('3G');
+
     A.select(I, 1);
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/copy');
+    await I.throttleNetwork('ONLINE');
     A.createFolderInDialog(I, subject);
     I.click('Copy', '.folder-picker-dialog');
     I.waitForDetached('.folder-picker-dialog');
