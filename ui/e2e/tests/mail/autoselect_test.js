@@ -64,7 +64,7 @@ Scenario('check auto select behavior in list view', async (I, users) => {
 
     I.waitForText('First mail!');
     I.waitForElement('.list-item.selectable.unread [title="First mail!"]');
-    I.retry().click('.list-item.selectable.unread [title="First mail!"]');
+    I.retry(5).click('.list-item.selectable.unread [title="First mail!"]');
     I.waitForElement('.list-item.selected');
 
     I.logout();
@@ -88,7 +88,7 @@ Scenario('check auto select behavior in list view', async (I, users) => {
     I.dontSeeElement('.list-item.selected');
 
     I.clickToolbar('View');
-    I.click('Vertical');
+    I.clickDropdown('Vertical');
 
     I.waitForText('First mail!');
     I.waitForElement('.list-item.selected');
@@ -103,10 +103,10 @@ Scenario('check auto select behavior in list view', async (I, users) => {
     I.seeNumberOfElements('.list-item.selectable.unread', 2);
     I.dontSeeElement('.list-item.selected');
     I.waitForElement('.list-item.selectable.unread [title="Second mail!"]');
-    I.click('.list-item.selectable.unread [title="Second mail!"]');
+    I.retry(5).click('.list-item.selectable.unread [title="Second mail!"]');
 
     I.clickToolbar('View');
-    I.click('Vertical');
+    I.clickDropdown('Vertical');
     I.waitForText('Second mail!');
     I.waitForElement('.list-item.selected [title="Second mail!"]');
 });
