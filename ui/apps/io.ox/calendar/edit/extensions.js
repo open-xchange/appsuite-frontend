@@ -156,7 +156,7 @@ define('io.ox/calendar/edit/extensions', [
                     baton.app.attachmentsFormData = attachments;
 
                     // in case some attendees are still resolved we wait fot that. We don't want missing attendees
-                    $.when().always(function () {
+                    $.when(baton.model._attendees.toBeResolved).always(function () {
                         if (baton.mode === 'edit') {
                             var options = _.extend(calendarUtil.getCurrentRangeOptions(), {
                                     recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
