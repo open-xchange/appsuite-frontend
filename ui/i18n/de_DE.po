@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-05-07 10:44+0200\n"
+"PO-Revision-Date: 2020-06-09 14:00+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -598,8 +598,10 @@ msgstr "Online-Hilfe: %1$s"
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js
+#: apps/io.ox/settings/apps/settings/pane.js
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/actions/delete.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/pane.js
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -892,6 +894,7 @@ msgstr "Foto entfernen"
 #: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js
 #: apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
 #: apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
@@ -2032,7 +2035,6 @@ msgid "Reject changes"
 msgstr "Änderungen ablehnen"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Ignore"
 msgstr "Ignorieren"
 
@@ -2085,8 +2087,8 @@ msgid "You declined this appointment"
 msgstr "Sie haben diesen Termin abgelehnt"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You tentatively accepted this invitation"
-msgstr "Sie haben diese Einladung vorläufig bestätigt"
+msgid "You tentatively accepted this appointment"
+msgstr "Sie haben diesen Termin vorläufig bestätigt"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid ""
@@ -3636,6 +3638,11 @@ msgstr "Postanschrift hinzufügen"
 msgid "Add additional info"
 msgstr "Zusätzliche Informationen hinzufügen"
 
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add user fields"
+msgstr "Benutzerfelder hinzufügen"
+
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
 msgctxt "salutation"
@@ -4085,6 +4092,23 @@ msgstr "A-Z Index"
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Couldn't load contact data."
 msgstr "Kontaktdaten konnten nicht geladen werden."
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid ""
+"The subscription could not be updated due to an error and must be recreated."
+msgstr ""
+"Das Abonnement konnte aufgrund eines Fehlers nicht aktualisiert werden und "
+"muss neu erstellt werden."
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contacts account error"
+msgstr ""
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Edit subscription"
+msgstr "Abonnement bearbeiten"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Contacts"
@@ -4882,6 +4906,10 @@ msgstr "Ordner leeren"
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe to IMAP folders"
 msgstr "IMAP-Ordner abonnieren"
+
+#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+msgid "Refresh folders"
+msgstr "Ordner aktualisieren"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
@@ -6557,7 +6585,8 @@ msgid "Yellow"
 msgstr "Gelb"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
+#: module:io.ox/mailfilter apps/io.ox/mail/toolbar.js
 msgid "Set color"
 msgstr "Farbe zuweisen"
 
@@ -6574,6 +6603,7 @@ msgstr[0] "1 Objekt"
 msgstr[1] "%1$d Objekte"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Remind me again"
 msgstr "Erneut erinnern"
 
@@ -7469,8 +7499,9 @@ msgstr ""
 "Ihre Zugangsdaten werden ausschließlich über eine sichere Verbindung gesendet"
 
 #: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+#, fuzzy
 msgid "Update"
-msgstr ""
+msgstr "Aktualisieren"
 
 #: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
 msgid "Account updated successfully"
@@ -8440,20 +8471,24 @@ msgstr ""
 "aktualisieren Sie die Seite, um die Änderungen zu sehen."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "Passwörter wiederherstellen"
+msgid "Recover external account passwords"
+msgstr "Passwörter für externe Konten wiederherstellen"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
-"Please provide the old password so the account passwords can be recovered."
+"You recently changed your password. Please provide your last password to "
+"recover passwords for external accounts."
 msgstr ""
-"Bitte geben Sie das alte Passwort an, sodass die Konto-Passwörter "
-"wiederhergestellt werden können."
+"Sie haben vor Kurzem Ihr Passwort geändert. Geben Sie Ihr letztes Passwort "
+"an, um Passwörter für externe Konten wiederherzustellen."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Your old password"
 msgstr "Ihr altes Passwort"
+
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
+msgid "Remove passwords"
+msgstr "Passwörter entfernen"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -9632,8 +9667,8 @@ msgid "Saving..."
 msgstr "Speichern ..."
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Draft saved %s"
-msgstr "Entwurf gespeichert %s"
+msgid "Saved %s"
+msgstr "Gespeichert %s"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -10114,8 +10149,20 @@ msgstr "Quelle"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Signed and verified"
-msgstr "Signiert und verifiziert"
+msgid "PGP signature"
+msgstr "PGP-Signatur"
+
+#. Tests for PGP Signature.
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "The signature exists and is valid"
+msgstr "Die Signatur ist vorhanden und gültig"
+
+#. Tests for PGP Signature.
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "The signature is missing or is not valid"
+msgstr "Die Signatur fehlt oder ist ungültig"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -11900,7 +11947,13 @@ msgstr ""
 "können Sie Ihr altes Passwort zum Wiederherstellen aller Konto-Passwörter "
 "verwenden."
 
+#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+msgid "Recover passwords"
+msgstr "Passwörter wiederherstellen"
+
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
 msgid "Delete %1$s"
 msgstr "%1$s löschen"
 
@@ -11953,6 +12006,10 @@ msgstr "Sicherheit"
 #: apps/io.ox/settings/main.js module:io.ox/core
 msgid "Active clients"
 msgstr "Aktive Clients"
+
+#: apps/io.ox/settings/main.js module:io.ox/core
+msgid "Application Passwords"
+msgstr "Applikationspasswörter"
 
 #: apps/io.ox/settings/main.js module:io.ox/core
 #: apps/io.ox/settings/security/certificates/settings/pane.js
@@ -12130,6 +12187,162 @@ msgstr "%1$s herunterladen."
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Download personal data"
 msgstr "Persönliche Daten herunterladen"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "There was a problem adding the password."
+msgstr "Beim Hinzufügen des Passworts ist ein Problem aufgetreten."
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"There was a problem getting the list of available applications from the "
+"server."
+msgstr ""
+"Beim Abrufen der Liste der verfügbaren Anwendungen vom Server ist ein "
+"Problem aufgetreten."
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"To add a password, select an application to use with a new password, as well "
+"as a new descriptive name for the password."
+msgstr ""
+"Um ein Passwort hinzuzufügen, wählen Sie eine Applikation zur Verwendung mit "
+"einem neuen Passwort aus und wählen Sie einen neuen beschreibenden Namen für "
+"das Passwort."
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Application"
+msgstr "Applikation"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password name"
+msgstr "Passwortname"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "My Phone"
+msgstr "Mein Telefon"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Add new password"
+msgstr "Neues Passwort hinzufügen"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password Created"
+msgstr "Passwort erstellt"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"A password was created successfully.  Please use the following settings in "
+"the application:"
+msgstr ""
+"Ein Passwort wurde erfolgreich erstellt.  Bitte verwenden Sie die folgenden "
+"Einstellungen in der Applikation:"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Username: %s"
+msgstr "Benutzername: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password: %s"
+msgstr "Passwort: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgctxt "app"
+msgid "Application Passwords"
+msgstr "Applikationspasswörter"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Manage additional passwords for use with other devices."
+msgstr ""
+"Verwalten Sie zusätzliche Passwörter für die Verwendung mit anderen Geräten."
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Existing passwords"
+msgstr "Vorhandene Passwörter"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Add passwords"
+msgstr "Passwörter hinzufügen"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "There was a problem getting the list of passwords from the server."
+msgstr ""
+"Beim Abrufen der Liste der Passwörter vom Server ist ein Problem aufgetreten."
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Never used"
+msgstr "Nie verwendet"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Exchange Active Sync (EAS)"
+msgstr "Exchange Active Sync (EAS)"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Drive Client"
+msgstr "Drive-Client"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Mobile Mail"
+msgstr "Mobile Mail"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Last Login: %s"
+msgstr "Letzte Anmeldung: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Device: %s"
+msgstr "Gerät: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "IP: %s"
+msgstr "IP: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Location: %s"
+msgstr "Ort: %1$s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Device %s logged in %s"
+msgstr ""
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Delete password"
+msgstr "Passwort löschen"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Do you really want to delete this password?"
+msgstr "Möchten Sie dieses Passwort wirklich löschen?"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "There was a problem removing the password."
+msgstr "Beim Entfernen des Passworts ist ein Problem aufgetreten."
 
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
 #: module:io.ox/settings/certificates
@@ -14117,6 +14330,37 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#, fuzzy
+#~ msgid "exists and signature is valid"
+#~ msgstr "ist vorhanden und die Signatur ist gültig"
+
+#, fuzzy
+#~ msgid "is missing or invalid"
+#~ msgstr "fehlt oder ist ungültig"
+
+#, fuzzy
+#~ msgid ""
+#~ "There was a problem getting the list available applications from the "
+#~ "server."
+#~ msgstr ""
+#~ "Es ist ein Problem beim Abrufen der Liste der verfügbaren Applikationen "
+#~ "vom Server aufgetreten."
+
+#~ msgid "You tentatively accepted this invitation"
+#~ msgstr "Sie haben diese Einladung vorläufig bestätigt"
+
+#~ msgid ""
+#~ "Please provide the old password so the account passwords can be recovered."
+#~ msgstr ""
+#~ "Bitte geben Sie das alte Passwort an, sodass die Konto-Passwörter "
+#~ "wiederhergestellt werden können."
+
+#~ msgid "Draft saved %s"
+#~ msgstr "Entwurf gespeichert %s"
+
+#~ msgid "Signed and verified"
+#~ msgstr "Signiert und verifiziert"
 
 #, fuzzy
 #~ msgid "Saved"
@@ -16799,9 +17043,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Drawing position"
 #~ msgstr "Zeichnungsausrichtung"
 
-#~ msgid "Drive Client"
-#~ msgstr "Drive-Client"
-
 #~ msgctxt "help"
 #~ msgid "Drive Settings"
 #~ msgstr "Drive-Einstellungen"
@@ -17557,9 +17798,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "IP Address: %1$s"
 #~ msgstr "IP-Adresse: %1$s"
-
-#~ msgid "IP: %s"
-#~ msgstr "IP: %s"
 
 #~ msgid "Iceland"
 #~ msgstr "Island"
