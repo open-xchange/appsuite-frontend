@@ -808,7 +808,13 @@ define('io.ox/contacts/view-detail', [
     // only applies to resource because they have a "description" field.
     // contacts just have a "note"
 
-    var regPhone = /(\+?[\d\x20/()]{4,})/g,
+    // this matches phone numbers in 4 cases:
+    // string has phone number with empty space in front of it and after it
+    // string has starts with phone number and has an empty space after it
+    // string ends with phone number and has an empty space in front of it
+    // string starts and ends with phone number
+    // what we don't want is match numbers inside links for example: http://some.service.com/begin?123456?pwd=7890
+    var regPhone = /\s(\+?[\d\x20/()]{4,})\s|^(\+?[\d\x20/()]{4,})\s|\s(\+?[\d\x20/()]{4,})$|^(\+?[\d\x20/()]{4,})$/g,
         regClean = /[^+0-9]/g;
 
     ext.point('io.ox/contacts/detail/content').extend({
