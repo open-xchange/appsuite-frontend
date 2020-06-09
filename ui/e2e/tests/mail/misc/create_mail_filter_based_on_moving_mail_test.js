@@ -49,7 +49,11 @@ Scenario('[C83387] Create mail filter based on moving mail', async (I, users, ma
     I.retry(5).click('.list-item[aria-label*="Subject#1"]');
 
     // 5. Open context menu either in detailed view or in top bar
-    I.waitForVisible('~More actions');
+    // TODO: Maybe swap out with uncertain future actor methods in move_copy_test.js
+    I.waitForVisible('.detail-view-header');
+    within('.detail-view-header', () => {
+        I.waitForVisible('~More actions', 5);
+    });
     I.click('~More actions');
 
     // 6. Click "Move"
