@@ -214,11 +214,8 @@ Scenario('[C114349] Create folder within copy dialog', async function (I, users,
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
-    await I.throttleNetwork('3G');
-
     A.select(I, 1);
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/copy');
-    await I.throttleNetwork('ONLINE');
     A.createFolderInDialog(I, subject);
     I.click('Copy', '.folder-picker-dialog');
     I.waitForDetached('.folder-picker-dialog');

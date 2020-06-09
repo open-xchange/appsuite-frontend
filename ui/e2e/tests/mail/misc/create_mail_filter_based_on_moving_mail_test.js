@@ -54,7 +54,7 @@ Scenario('[C83387] Create mail filter based on moving mail', async (I, users, ma
     within('.detail-view-header', () => {
         I.waitForVisible('~More actions', 5);
     });
-    I.click('~More actions');
+    I.click('~More actions', '.detail-view-header');
 
     // 6. Click "Move"
     I.clickDropdown('Move');
