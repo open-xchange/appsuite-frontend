@@ -18,7 +18,7 @@ define([
 
     'use strict';
 
-    describe.only('Contact detail view', function () {
+    describe('Contact detail view', function () {
 
         it('detect phone numbers in resource descriptions', function () {
             // no phone number
