@@ -34,7 +34,10 @@ const A = {
         });
     },
     clickMoreAction: function (I, toolbar, action) {
-        I.waitForVisible('~More actions', 5, toolbar);
+        I.waitForVisible(toolbar);
+        within(toolbar, () => {
+            I.waitForVisible('~More actions', 5);
+        });
         I.click('~More actions', toolbar);
         I.waitForElement('.dropdown.open');
         I.click(`.dropdown.open .dropdown-menu [data-action="${action}"]`);

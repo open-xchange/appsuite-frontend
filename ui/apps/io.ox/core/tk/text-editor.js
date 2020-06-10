@@ -220,6 +220,9 @@ define('io.ox/core/tk/text-editor', [
 
             if (windowContainer.length !== 1 && fields.length !== 1 && windowFooter.length !== 1) return;
 
+            // calculations on hidden nodes would result in wrong height
+            if (windowContainer.is(':hidden')) return;
+
             // 12px is the bottom margin, keep in sync with css
             // there is a strange 6px height difference between the text area and the container, couldn't find the cause yet
             textarea.css('minHeight', Math.max(300, windowContainer.outerHeight() - fields.outerHeight() - windowFooter.outerHeight() - 12 - 6));
@@ -227,6 +230,8 @@ define('io.ox/core/tk/text-editor', [
 
         this.show = function () {
             textarea.prop('disabled', false).show();
+            // to prevent having multiple listeners
+            $(window).off('resize.text-editor', resizeEditor);
             $(window).on('resize.text-editor', resizeEditor);
             resizeEditor();
         };

@@ -133,7 +133,8 @@ Scenario('[C8832] Re-order recipients', async function (I, users, mail) {
 });
 
 // also see [OXUIB-226]
-Scenario('Re-order multiple recipients', async function (I, users, mail) {
+// TODO: re-enable after multi d&d on tokenfields works properly
+Scenario.skip('Re-order multiple recipients', async function (I, users, mail) {
 
     let [sender, recipient1, recipient2, recipient3, recipient4] = users;
 
