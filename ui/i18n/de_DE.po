@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-06-09 14:00+0200\n"
+"PO-Revision-Date: 2020-06-10 13:25+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -4103,8 +4103,9 @@ msgstr ""
 "muss neu erstellt werden."
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
 msgid "Contacts account error"
-msgstr ""
+msgstr "Kontaktkontofehler"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Edit subscription"
@@ -7499,7 +7500,6 @@ msgstr ""
 "Ihre Zugangsdaten werden ausschließlich über eine sichere Verbindung gesendet"
 
 #: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
-#, fuzzy
 msgid "Update"
 msgstr "Aktualisieren"
 
@@ -7508,7 +7508,6 @@ msgid "Account updated successfully"
 msgstr "Konto erfolgreich aktualisiert"
 
 #: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
-#, fuzzy
 msgid "The entered credential or authentication information does not work"
 msgstr ""
 "Die eingegebenen Zugangsdaten oder Authentifizierungsinformationen "
@@ -12326,8 +12325,9 @@ msgstr "Ort: %1$s"
 
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
 #: module:io.ox/settings
+#, fuzzy
 msgid "Device %s logged in %s"
-msgstr ""
+msgstr "Gerät %s angemeldet bei %s"
 
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
 #: module:io.ox/settings
