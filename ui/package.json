@@ -81,7 +81,7 @@
     "moment": "2.24.0",
     "moment-timezone": "0.5.27",
     "patch-package": "^6.2.2",
-    "pdfjs-dist": "2.3.200",
+    "pdfjs-dist": "2.5.207",
     "requirejs": "2.3.6",
     "resize-polyfill": "1.1.1",
     "socket.io-client": "2.2.0",

@@ -81,6 +81,9 @@ define('io.ox/core/pdf/pdfdocument', [
             cMapPacked: true
         };
 
+        // detecting the worker automatically nor longer works, specify the workerSrc property manually
+        PDFJSLib.GlobalWorkerOptions.workerSrc = ox.abs + ox.root + '/apps/pdfjs-dist/build/pdf.worker.js';
+
         // ---------------------------------------------------------------------
 
         function initializePageSize(pageNumber) {
