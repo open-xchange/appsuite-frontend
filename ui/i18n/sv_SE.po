@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-05-31 04:39+0200\n"
+"PO-Revision-Date: 2020-06-10 13:15+0200\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <sv@workshop-chapina.com>\n"
 "Language: sv_SE\n"
@@ -12152,7 +12152,7 @@ msgstr "Drive-klient"
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
 #: module:io.ox/settings
 msgid "Mobile Mail"
-msgstr "Mobil e-post"
+msgstr "Mobile Mail"
 
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
 #: module:io.ox/settings
