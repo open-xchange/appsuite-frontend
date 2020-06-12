@@ -794,9 +794,7 @@ define('io.ox/chat/data', [
         },
 
         connectSocket: function () {
-            var socket = data.socket = io.connect(data.SOCKET, {
-                transports: ['websockets']
-            });
+            var socket = data.socket = io.connect(data.SOCKET, { transports: ['websocket'] });
 
             socket.on('alive', function () {
                 console.log('Connected socket to server');
@@ -829,7 +827,8 @@ define('io.ox/chat/data', [
 
             });
 
-            socket.on('message:new', function (roomId, message) {
+            socket.on('message:new', function (message) {
+                var roomId = message.roomId;
                 // stop typing
                 events.trigger('typing:' + roomId, message.sender, false);
                 // fetch room unless it's already known
@@ -865,8 +864,8 @@ define('io.ox/chat/data', [
                 if (model) model.set('state', state);
             });
 
-            socket.on('typing', function (roomId, userId, state) {
-                events.trigger('typing:' + roomId, userId, state);
+            socket.on('typing', function (event) {
+                events.trigger('typing:' + event.roomId, event.email, event.state);
             });
 
             // send heartbeat every minute

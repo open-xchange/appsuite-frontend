@@ -433,10 +433,12 @@ define('io.ox/chat/views/chat', [
                 this.model.messages.fetch();
             }
 
-            var data = { content: content };
-            if (this.reference) data.reference = this.reference;
-            if (!this.model.get('id')) this.model.postFirstMessage(data);
-            else this.model.postMessage(data);
+            data.socket.emit('typing', { roomId: this.model.id, state: false });
+
+            var body = { content: content };
+            if (this.reference) body.reference = this.reference;
+            if (!this.model.get('id')) this.model.postFirstMessage(body);
+            else this.model.postMessage(body);
 
             // remove reference preview
             this.onRemoveReference();
