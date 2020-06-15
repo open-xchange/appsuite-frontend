@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-05-08 12:40+0300\n"
+"PO-Revision-Date: 2020-06-04 12:37+0300\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.3.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -591,8 +591,10 @@ msgstr "Online -ohje: %1$s"
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js
+#: apps/io.ox/settings/apps/settings/pane.js
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/actions/delete.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/pane.js
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -883,6 +885,7 @@ msgstr "Poista valokuva"
 #: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js
 #: apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
 #: apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
@@ -2014,7 +2017,6 @@ msgid "Reject changes"
 msgstr "Hylkää muutokset"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Ignore"
 msgstr "Älä huomioi"
 
@@ -2067,8 +2069,8 @@ msgid "You declined this appointment"
 msgstr "Kieltäydyit tästä tapaamisesta"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You tentatively accepted this invitation"
-msgstr "Alustavasti hyväksyit tämän kutsun"
+msgid "You tentatively accepted this appointment"
+msgstr "Olet alustavasti hyväksynyt tämän tapaamisen"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid ""
@@ -2297,7 +2299,7 @@ msgstr "Valittuna ajankohtana on liian monta tapahtumaa."
 
 #: apps/io.ox/calendar/perspective.js module:io.ox/calendar
 msgid "Appointment was changed in the meantime and was updated accordingly."
-msgstr "Tapaamista muutettiin tällä välin ja päivitettiin vastaavasti. "
+msgstr "Tapaamista muutettiin tällä välin ja päivitettiin vastaavasti."
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
@@ -3598,6 +3600,11 @@ msgstr "Lisää postiosoite"
 msgid "Add additional info"
 msgstr "Lisää lisätietoja"
 
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add user fields"
+msgstr "Käyttäjäkenttien lisääminen"
+
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
 msgctxt "salutation"
@@ -4047,6 +4054,22 @@ msgstr "Alkukirjainhaku"
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Couldn't load contact data."
 msgstr "Yhteystietoja ei voitu ladata."
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid ""
+"The subscription could not be updated due to an error and must be recreated."
+msgstr ""
+"Tilausta ei voitu päivittää virheen vuoksi, ja se on luotava uudelleen."
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contacts account error"
+msgstr "Yhteystiedon tilin virhe"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Edit subscription"
+msgstr "Muokkaa tilausta"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Contacts"
@@ -4835,6 +4858,10 @@ msgstr "Tyhjennä kansio"
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe to IMAP folders"
 msgstr "Tilaa IMAP-kansioita"
+
+#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+msgid "Refresh folders"
+msgstr "Päivitä kansiot"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
@@ -6483,7 +6510,8 @@ msgid "Yellow"
 msgstr "Keltainen"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
+#: module:io.ox/mailfilter apps/io.ox/mail/toolbar.js
 msgid "Set color"
 msgstr "Aseta väri"
 
@@ -6500,6 +6528,7 @@ msgstr[0] "1 kohta"
 msgstr[1] "%1$d kohtaa"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Remind me again"
 msgstr "Muistuta minua uudestaan"
 
@@ -8343,18 +8372,24 @@ msgstr ""
 "nähdäksesi muutokset."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "Palauta salasanoja"
+msgid "Recover external account passwords"
+msgstr "Palauta ulkoisen tilin salasanat"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
-"Please provide the old password so the account passwords can be recovered."
-msgstr "Syötä vanha salasana, jotta tilin salasanat voidaan palauttaa."
+"You recently changed your password. Please provide your last password to "
+"recover passwords for external accounts."
+msgstr ""
+"Olet hiljattain vaihtanut salasanasi. Anna viimeinen salasanasi ulkoisten "
+"tilien salasanojen palauttamiseksi."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Your old password"
 msgstr "Vanha salasanasi"
+
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
+msgid "Remove passwords"
+msgstr "Salasanojen poistaminen"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -9503,8 +9538,8 @@ msgid "Saving..."
 msgstr "Tallennetaan..."
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Draft saved %s"
-msgstr "Luonnos tallennettu %1$s"
+msgid "Saved %s"
+msgstr "Tallennettu %s"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -9985,8 +10020,20 @@ msgstr "Lähde"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Signed and verified"
-msgstr "Allekirjoitettu ja vahvistettu"
+msgid "PGP signature"
+msgstr "PGP-allekirjoitus"
+
+#. Tests for PGP Signature.
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "The signature exists and is valid"
+msgstr "Allekirjoitus on olemassa ja se kelpaa"
+
+#. Tests for PGP Signature.
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "The signature is missing or is not valid"
+msgstr "Allekirjoitus puuttuu tai se ei kelpaa"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -11737,7 +11784,13 @@ msgstr ""
 "saattavat lopettaa toimimisen. Tässä tapauksessa voit käyttää vanhaa "
 "salasanaasi palauttaaksesi kaikkien tilien salasanat."
 
+#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+msgid "Recover passwords"
+msgstr "Palauta salasanoja"
+
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
 msgid "Delete %1$s"
 msgstr "Poista %1$s"
 
@@ -11788,6 +11841,10 @@ msgstr "Suojaus"
 #: apps/io.ox/settings/main.js module:io.ox/core
 msgid "Active clients"
 msgstr "Aktiiviset asiakkaat"
+
+#: apps/io.ox/settings/main.js module:io.ox/core
+msgid "Application Passwords"
+msgstr "Sovelluksen salasanat"
 
 #: apps/io.ox/settings/main.js module:io.ox/core
 #: apps/io.ox/settings/security/certificates/settings/pane.js
@@ -11962,6 +12019,157 @@ msgstr "Lataa %1$s."
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Download personal data"
 msgstr "Lataa henkilötiedot"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "There was a problem adding the password."
+msgstr "Ongelma salasanan lisäämisessä."
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"There was a problem getting the list of available applications from the "
+"server."
+msgstr ""
+"Ongelma käytettävissä olevien sovellusten listan saamisessa palvelimelta."
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"To add a password, select an application to use with a new password, as well "
+"as a new descriptive name for the password."
+msgstr ""
+"Lisää salasana valitsemalla sovellus, jossa uutta salasanaa käytetään, ja "
+"uusi salasanaa kuvaava sana."
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Application"
+msgstr "Sovellus"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password name"
+msgstr "Salasana"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "My Phone"
+msgstr "Oma puhelin"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Add new password"
+msgstr "Lisää uusi salasana"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password Created"
+msgstr "Salasana luotu"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"A password was created successfully.  Please use the following settings in "
+"the application:"
+msgstr ""
+"Uuden salasanan luominen onnistui. Käytä sovelluksessa seuraavia asetuksia:"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Username: %s"
+msgstr "Käyttäjätunnus: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password: %s"
+msgstr "Salasana: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgctxt "app"
+msgid "Application Passwords"
+msgstr "Sovelluksen salasanat"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Manage additional passwords for use with other devices."
+msgstr "Muilla laitteilla käytettävien muiden salasanojen hallinta."
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Existing passwords"
+msgstr "Olemassaolevat salasanat"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Add passwords"
+msgstr "Lisää salasanoja"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "There was a problem getting the list of passwords from the server."
+msgstr "Ongelma salasanalistan saamisessa palvelimelta."
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Never used"
+msgstr "Ei koskaan käytetty"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Exchange Active Sync (EAS)"
+msgstr "Exchange Active Sync (EAS)"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Drive Client"
+msgstr "Drive-asiakassovellus"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Mobile Mail"
+msgstr "Mobiili posti"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Last Login: %s"
+msgstr "Edellinen sisäänkirjautuminen: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Device: %s"
+msgstr "Laite: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "IP: %s"
+msgstr "IP: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Location: %s"
+msgstr "Sijainti: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Device %s logged in %s"
+msgstr "Laite %s sisäänkirjautuneena %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Delete password"
+msgstr "Poista salasana"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Do you really want to delete this password?"
+msgstr "Haluatko varmasti poistaa tämän salasanan?"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "There was a problem removing the password."
+msgstr "Ongelma salasanan poistamisessa."
 
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
 #: module:io.ox/settings/certificates
@@ -13934,6 +14142,19 @@ msgstr "Kutsu %s:in"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s lisää"
+
+#~ msgid "You tentatively accepted this invitation"
+#~ msgstr "Alustavasti hyväksyit tämän kutsun"
+
+#~ msgid ""
+#~ "Please provide the old password so the account passwords can be recovered."
+#~ msgstr "Syötä vanha salasana, jotta tilin salasanat voidaan palauttaa."
+
+#~ msgid "Draft saved %s"
+#~ msgstr "Luonnos tallennettu %1$s"
+
+#~ msgid "Signed and verified"
+#~ msgstr "Allekirjoitettu ja vahvistettu"
 
 #~ msgid "%1$s. Press backspace to delete."
 #~ msgstr "%1$s. Paina askelpalautinnäppäintä poistaaksesi."

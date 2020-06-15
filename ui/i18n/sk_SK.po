@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-05-09 01:27+0200\n"
+"PO-Revision-Date: 2020-05-30 20:54+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -596,8 +596,10 @@ msgstr "Online pomocník: %1$s"
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js
+#: apps/io.ox/settings/apps/settings/pane.js
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/actions/delete.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/pane.js
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -890,6 +892,7 @@ msgstr "Odstrániť fotku"
 #: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js
 #: apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
 #: apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
@@ -2023,7 +2026,6 @@ msgid "Reject changes"
 msgstr "Odmietnuť zmeny"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Ignore"
 msgstr "Ignorovať"
 
@@ -2076,8 +2078,8 @@ msgid "You declined this appointment"
 msgstr "Odmietli ste túto schôdzku"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You tentatively accepted this invitation"
-msgstr "Toto pozvanie ste nezáväzne prijali"
+msgid "You tentatively accepted this appointment"
+msgstr "Túto schôdzku ste nezáväzne prijali"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid ""
@@ -3625,6 +3627,11 @@ msgstr "Pridať poštovú adresu"
 msgid "Add additional info"
 msgstr "Pridať ďalšie informácie"
 
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add user fields"
+msgstr "Pridať používateľské polia"
+
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
 msgctxt "salutation"
@@ -4074,6 +4081,22 @@ msgstr "Register počiatočných písmen"
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Couldn't load contact data."
 msgstr "Nepodarilo sa načítať dáta kontaktu."
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid ""
+"The subscription could not be updated due to an error and must be recreated."
+msgstr ""
+"Odber nebolo možné aktualizovať kvôli chybe a je potrebné ho znova vytvoriť."
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contacts account error"
+msgstr "Chyba účtu kontaktov"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Edit subscription"
+msgstr "Upraviť odber"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Contacts"
@@ -4869,6 +4892,10 @@ msgstr "Prázdny priečinok"
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe to IMAP folders"
 msgstr "Odberať priečinky IMAP"
+
+#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+msgid "Refresh folders"
+msgstr "Obnoviť priečinky"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
@@ -6532,7 +6559,8 @@ msgid "Yellow"
 msgstr "Žltá"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
+#: module:io.ox/mailfilter apps/io.ox/mail/toolbar.js
 msgid "Set color"
 msgstr "Nastaviť farbu"
 
@@ -6550,6 +6578,7 @@ msgstr[1] "%1$d položky"
 msgstr[2] "%1$d položiek"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Remind me again"
 msgstr "Znova pripomenúť"
 
@@ -8415,18 +8444,24 @@ msgstr ""
 "obnovení tejto stránky."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "Obnovenie hesiel"
+msgid "Recover external account passwords"
+msgstr "Obnoviť heslá externých účtov"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
-"Please provide the old password so the account passwords can be recovered."
-msgstr "Prosím, zadajte vaše staré heslo, aby bolo možné obnoviť heslá k účtu."
+"You recently changed your password. Please provide your last password to "
+"recover passwords for external accounts."
+msgstr ""
+"Nedávno ste si zmenili heslo. Zadajte vaše posledné heslo, aby ste obnovili "
+"heslá externých účtov."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Your old password"
 msgstr "Vaše staré heslo"
+
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
+msgid "Remove passwords"
+msgstr "Odstrániť heslá"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -9589,8 +9624,8 @@ msgid "Saving..."
 msgstr "Ukladá sa..."
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Draft saved %s"
-msgstr "Rozpísaná správa uložená %s"
+msgid "Saved %s"
+msgstr "Uložené %s"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -10071,8 +10106,20 @@ msgstr "Zdroj"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Signed and verified"
-msgstr "Podpísaný a overený"
+msgid "PGP signature"
+msgstr "Podpis PGP"
+
+#. Tests for PGP Signature.
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "The signature exists and is valid"
+msgstr "Podpis existuje a je platný"
+
+#. Tests for PGP Signature.
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "The signature is missing or is not valid"
+msgstr "Podpis chýba alebo je neplatný"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -11844,7 +11891,13 @@ msgstr ""
 "môžu prestať fungovať. V takom prípade môžete použitím starého hesla obnoviť "
 "všetky heslá účtov:"
 
+#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+msgid "Recover passwords"
+msgstr "Obnovenie hesiel"
+
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
 msgid "Delete %1$s"
 msgstr "Zmazať %1$s"
 
@@ -11895,6 +11948,10 @@ msgstr "Bezpečnosť"
 #: apps/io.ox/settings/main.js module:io.ox/core
 msgid "Active clients"
 msgstr "Aktívni klienti"
+
+#: apps/io.ox/settings/main.js module:io.ox/core
+msgid "Application Passwords"
+msgstr "Heslá aplikácií"
 
 #: apps/io.ox/settings/main.js module:io.ox/core
 #: apps/io.ox/settings/security/certificates/settings/pane.js
@@ -12071,6 +12128,156 @@ msgstr "Stiahnuť %1$s."
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Download personal data"
 msgstr "Stiahnuť osobné údaje"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "There was a problem adding the password."
+msgstr "Nastal problém s pridaním hesla."
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"There was a problem getting the list of available applications from the "
+"server."
+msgstr "Nastal problém so získaním zoznamu dostupných aplikácií zo servera."
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"To add a password, select an application to use with a new password, as well "
+"as a new descriptive name for the password."
+msgstr ""
+"Ak chcete pridať heslo, vyberte aplikáciu, pre ktorú chcete nastaviť nové "
+"heslo a tiež nový popisný názov hesla."
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Application"
+msgstr "Aplikácia"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password name"
+msgstr "Názov hesla"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "My Phone"
+msgstr "Môj telefón"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Add new password"
+msgstr "Pridať nové heslo"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password Created"
+msgstr "Heslo bolo vytvorené"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"A password was created successfully.  Please use the following settings in "
+"the application:"
+msgstr ""
+"Heslo bolo úspešne vytvorené. V aplikácii použite nasledujúce nastavenia:"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Username: %s"
+msgstr "Používateľské meno: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password: %s"
+msgstr "Heslo: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgctxt "app"
+msgid "Application Passwords"
+msgstr "Heslá aplikácií"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Manage additional passwords for use with other devices."
+msgstr "Spravovať ďalšie heslá na použitie s inými zariadeniami."
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Existing passwords"
+msgstr "Existujúce heslá"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Add passwords"
+msgstr "Pridať heslá"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "There was a problem getting the list of passwords from the server."
+msgstr "Nastal problém so získaním zoznamu hesiel zo servera."
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Never used"
+msgstr "Nikdy nepoužité"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Exchange Active Sync (EAS)"
+msgstr "Exchange Active Sync (EAS)"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Drive Client"
+msgstr "Klient Drive"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Mobile Mail"
+msgstr "Mobile Mail"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Last Login: %s"
+msgstr "Posledné prihlásenie: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Device: %s"
+msgstr "Zariadenie: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "IP: %s"
+msgstr "IP: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Location: %s"
+msgstr "Umiestnenie: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Device %s logged in %s"
+msgstr "Zariadenie %s prihlásilo %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Delete password"
+msgstr "Zmazať heslo"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Do you really want to delete this password?"
+msgstr "Ste si istý, že chcete toto heslo zmazať?"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "There was a problem removing the password."
+msgstr "Nastal problém s odstránením hesla."
 
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
 #: module:io.ox/settings/certificates
@@ -14057,6 +14264,20 @@ msgstr "Pozvať na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pridať na %s"
+
+#~ msgid "You tentatively accepted this invitation"
+#~ msgstr "Toto pozvanie ste nezáväzne prijali"
+
+#~ msgid ""
+#~ "Please provide the old password so the account passwords can be recovered."
+#~ msgstr ""
+#~ "Prosím, zadajte vaše staré heslo, aby bolo možné obnoviť heslá k účtu."
+
+#~ msgid "Draft saved %s"
+#~ msgstr "Rozpísaná správa uložená %s"
+
+#~ msgid "Signed and verified"
+#~ msgstr "Podpísaný a overený"
 
 #~ msgid "%1$s. Press backspace to delete."
 #~ msgstr "%1$s. Stlačením klávesu backspace zmažete."

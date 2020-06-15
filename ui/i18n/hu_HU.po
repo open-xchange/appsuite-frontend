@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-05-09 19:50+0200\n"
+"PO-Revision-Date: 2020-05-31 18:13+0200\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -189,47 +189,40 @@ msgstr "Levél küldése befejezéskor."
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "Send mail %1$s before start."
 msgid "Send SMS %1$s before start."
 msgstr "%1$s SMS küldése kezdés előtt."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "Send mail %1$s after start."
 msgid "Send SMS %1$s after start."
 msgstr "%1$s SMS küldése kezdés után."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "Send mail %1$s before end."
 msgid "Send SMS %1$s before end."
 msgstr "%1$s SMS küldése befejezés előtt."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "Send mail %1$s after end."
 msgid "Send SMS %1$s after end."
 msgstr "%1$s SMS küldése befejezés után."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "Send mail at %1$s."
 msgid "Send SMS at %1$s."
 msgstr "SMS küldése ekkor: %1$s."
 
 #. Used to display reminders for appointments
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "Send mail at start."
 msgid "Send SMS at start."
 msgstr "SMS küldése kezdéskor."
 
 #. Used to display reminders for appointments
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "Send mail at end."
 msgid "Send SMS at end."
 msgstr "SMS küldése befejezéskor."
 
@@ -598,8 +591,10 @@ msgstr "Online súgó: %1$s"
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js
+#: apps/io.ox/settings/apps/settings/pane.js
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/actions/delete.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/pane.js
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -826,7 +821,6 @@ msgstr "NH"
 #. CW is calender week and %1$d is the week number
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-#| msgid "Today"
 msgid "Today,"
 msgstr "Ma,"
 
@@ -889,6 +883,7 @@ msgstr "Fénykép eltávolítása"
 #: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js
 #: apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
 #: apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
@@ -1997,7 +1992,6 @@ msgid "Reject changes"
 msgstr "Változások elvetése"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Ignore"
 msgstr "Mellőzés"
 
@@ -2050,8 +2044,8 @@ msgid "You declined this appointment"
 msgstr "Elutasította ezt a találkozót"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You tentatively accepted this invitation"
-msgstr "Ezt a meghívást feltételesen elfogadta"
+msgid "You tentatively accepted this appointment"
+msgstr "Ideiglenesen elfogadta ezt a találozót"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid ""
@@ -2176,7 +2170,6 @@ msgid "Calendar account error"
 msgstr "Naptár-fiók hiba"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#| msgid "Edit mail account"
 msgid "Edit accounts"
 msgstr "Fiókok szerkesztése"
 
@@ -2266,7 +2259,6 @@ msgstr "Következő hónap"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#| msgid "My %1$s"
 msgid "%1$s"
 msgstr "%1$s"
 
@@ -3562,6 +3554,11 @@ msgstr "Postai cím hozzáadása"
 msgid "Add additional info"
 msgstr "További információ hozzáadása"
 
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add user fields"
+msgstr "Felhasználói mezők hozzáadása"
+
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
 msgctxt "salutation"
@@ -4013,6 +4010,21 @@ msgid "Couldn't load contact data."
 msgstr "A névjegy adatai nem tölthetők be."
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid ""
+"The subscription could not be updated due to an error and must be recreated."
+msgstr "A feliratkozás hiba miatt nem frissíthető, ezért újra létre kell hozni."
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contacts account error"
+msgstr "Néjvegy-fiók hiba"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Edit subscription"
+msgstr "Feliratkozás szerkesztése"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Contacts"
 msgstr "Névjegyek"
 
@@ -4225,7 +4237,6 @@ msgstr[0] "Terjesztési lista 1 bejegyzéssel"
 msgstr[1] "Terjesztési lista %1$d bejegyzéssel"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-#| msgid "Create contact"
 msgid "Private contact"
 msgstr "Személyes kapcsolat"
 
@@ -4772,6 +4783,10 @@ msgstr "Üres mappa"
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe to IMAP folders"
 msgstr "Feliratkozás az IMAP mappákra"
+
+#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+msgid "Refresh folders"
+msgstr "Mappák frissítése"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
@@ -6380,7 +6395,8 @@ msgid "Yellow"
 msgstr "Sárga"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
+#: module:io.ox/mailfilter apps/io.ox/mail/toolbar.js
 msgid "Set color"
 msgstr "Szín beállítása"
 
@@ -6397,6 +6413,7 @@ msgstr[0] "1 elem"
 msgstr[1] "%1$d elem"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Remind me again"
 msgstr "Emlékeztessen újra"
 
@@ -8183,18 +8200,22 @@ msgid ""
 msgstr "A nem visszaállítható elemek sikeresen törölve lettek. Frissítse az oldalt a változások megtekintéséhez."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "Jelszavak visszaállítása"
+msgid "Recover external account passwords"
+msgstr "Külső fiók jelszavának helyreállítása"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
-"Please provide the old password so the account passwords can be recovered."
-msgstr "Adja meg a régi jelszót, hogy a fiók jelszavai visszaállíthatók legyenek."
+"You recently changed your password. Please provide your last password to "
+"recover passwords for external accounts."
+msgstr "Nemrég megváltoztatta a jelszavát. Kérjük, adja meg az utoljára használt jelszót a külső fiókokhoz tartozó jelszavak helyreállításához."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Your old password"
 msgstr "Régi jelszava"
+
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
+msgid "Remove passwords"
+msgstr "Jelszó eltávolítása"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -8775,7 +8796,6 @@ msgid "and %1$d others"
 msgstr "és %1$d további"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#| msgid "Mark as unread"
 msgid "Marked as unread"
 msgstr "Olvasatlanként megjelölt"
 
@@ -9302,8 +9322,8 @@ msgid "Saving..."
 msgstr "Mentés..."
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Draft saved %s"
-msgstr "Vázlat mentve %s"
+msgid "Saved %s"
+msgstr "%s mentve"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -9782,8 +9802,20 @@ msgstr "Forrás"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Signed and verified"
-msgstr "Aláírva és ellenőrizve"
+msgid "PGP signature"
+msgstr "PGP aláírás"
+
+#. Tests for PGP Signature.
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "The signature exists and is valid"
+msgstr "Az aláírás létezik és érvényes"
+
+#. Tests for PGP Signature.
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "The signature is missing or is not valid"
+msgstr "Az aláírás hiányzik vagy érvénytelen"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -11493,7 +11525,13 @@ msgid ""
 "recover all account passwords."
 msgstr "Biztonsági okokból az összes hitelesítési adat titkosítva van az elsődleges felhasználói fiók jelszavával. Amennyiben megváltoztatja az elsődleges jelszót, akkor előfordulhat, hogy a külső felhasználói fiókok nem fognak működni. Ebben az esetben a régi jelszót használhatja a felhasználói fiókok jelszavainak visszaállítására."
 
+#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+msgid "Recover passwords"
+msgstr "Jelszavak visszaállítása"
+
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
 msgid "Delete %1$s"
 msgstr "%1$s törlése"
 
@@ -11543,6 +11581,10 @@ msgstr "Biztonság"
 #: apps/io.ox/settings/main.js module:io.ox/core
 msgid "Active clients"
 msgstr "Aktív kliensek"
+
+#: apps/io.ox/settings/main.js module:io.ox/core
+msgid "Application Passwords"
+msgstr "Alkalmazás-jelszavak"
 
 #: apps/io.ox/settings/main.js module:io.ox/core
 #: apps/io.ox/settings/security/certificates/settings/pane.js
@@ -11707,6 +11749,153 @@ msgstr "%1$s letöltése."
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Download personal data"
 msgstr "Személyes adatok letöltése"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "There was a problem adding the password."
+msgstr "Hiba történt a jelszó hozzáadásakor."
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"There was a problem getting the list of available applications from the "
+"server."
+msgstr "Hiba történt az elérhető alkalmazások listájának a kiszolgálóról történő beolvasása során."
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"To add a password, select an application to use with a new password, as well "
+"as a new descriptive name for the password."
+msgstr "Jelszó hozzáadásához válassza ki az új jelszóval használni kívánt alkalmazást, valamint egy leíró nevet."
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Application"
+msgstr "Alkalmazás"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password name"
+msgstr "Jelszónév"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "My Phone"
+msgstr "Telefon"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Add new password"
+msgstr "Új jelszó hozzáadása"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password Created"
+msgstr "Jelszó létrehozva"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"A password was created successfully.  Please use the following settings in "
+"the application:"
+msgstr "A jelszó sikeresen létrejött. Használja az alábbi beállításokat az alkalmazásban:"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Username: %s"
+msgstr "Felhasználónév: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password: %s"
+msgstr "Jelszó: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgctxt "app"
+msgid "Application Passwords"
+msgstr "Alkalmazás-jelszavak"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Manage additional passwords for use with other devices."
+msgstr "Kezeljen további jelszavakat más eszközökkel történő használathoz."
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Existing passwords"
+msgstr "Meglévő jelszavak"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Add passwords"
+msgstr "Jelszavak hozzáadása"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "There was a problem getting the list of passwords from the server."
+msgstr "Hiba történt a jelszavak listájának a kiszolgálóról történő beolvasása során."
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Never used"
+msgstr "Sosem használt"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Exchange Active Sync (EAS)"
+msgstr "Exchange Active Sync (EAS)"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Drive Client"
+msgstr "Drive kliens"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Mobile Mail"
+msgstr "Mobile Mail"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Last Login: %s"
+msgstr "Utolsó bejelentkezés: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Device: %s"
+msgstr "Eszköz: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "IP: %s"
+msgstr "IP: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Location: %s"
+msgstr "Hely: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Device %s logged in %s"
+msgstr "A(z) %s eszköz bejelentkezett ide: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Delete password"
+msgstr "Jelszó törlése"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Do you really want to delete this password?"
+msgstr "Biztos, hogy törölni szeretné a jelszót?"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "There was a problem removing the password."
+msgstr "Hiba történt a jelszó eltávolításakor."
 
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
 #: module:io.ox/settings/certificates
@@ -12003,7 +12192,6 @@ msgstr "Megjelölés elvégzetlenként"
 
 #. 'Delete task' or 'Delete tasks' as header for a modal dialog to confirm the deletion of one or more tasks.
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
-#| msgid "Delete task"
 msgid "Delete task"
 msgid_plural "Delete tasks"
 msgstr[0] "Feladat törlése"
@@ -13633,6 +13821,20 @@ msgstr "Meghívás ide: %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Hozzáadás itt: %s"
+
+#~ msgid "You tentatively accepted this invitation"
+#~ msgstr "Ezt a meghívást feltételesen elfogadta"
+
+#~ msgid ""
+#~ "Please provide the old password so the account passwords can be recovered."
+#~ msgstr ""
+#~ "Adja meg a régi jelszót, hogy a fiók jelszavai visszaállíthatók legyenek."
+
+#~ msgid "Draft saved %s"
+#~ msgstr "Vázlat mentve %s"
+
+#~ msgid "Signed and verified"
+#~ msgstr "Aláírva és ellenőrizve"
 
 #~ msgid "%1$s. Press backspace to delete."
 #~ msgstr "%1$s. Törléshez nyomja meg a backspace-t."

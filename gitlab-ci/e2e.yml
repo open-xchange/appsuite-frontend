@@ -189,6 +189,7 @@ remove e2e report:
       changes:
         - ui/**/*
       when: manual
+      allow_failure: true
     - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|poc\/.*)$/'
       when: never
 

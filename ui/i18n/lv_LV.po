@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-05-15 13:27+0300\n"
+"PO-Revision-Date: 2020-06-01 14:07+0300\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.3.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -593,8 +593,10 @@ msgstr "Tiešsaistes palīgs: %1$s"
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js
+#: apps/io.ox/settings/apps/settings/pane.js
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/actions/delete.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/pane.js
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -884,6 +886,7 @@ msgstr "Noņemt attēlu"
 #: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js
 #: apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
 #: apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
@@ -2018,7 +2021,6 @@ msgid "Reject changes"
 msgstr "Atteikt izmaiņas"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Ignore"
 msgstr "Ignorēt"
 
@@ -2071,8 +2073,8 @@ msgid "You declined this appointment"
 msgstr "Jūs esat atteicis šo mītiņu"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You tentatively accepted this invitation"
-msgstr "Jūs esat veicis pagaidu apstiprināšanu"
+msgid "You tentatively accepted this appointment"
+msgstr "Jūs esat pagaidu apstiprinājis mītiņu"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid ""
@@ -3622,6 +3624,11 @@ msgstr "Pievienot pasta adresi"
 msgid "Add additional info"
 msgstr "Pievienot papildus informāciju"
 
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add user fields"
+msgstr "Pievienot papildus laukus"
+
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
 msgctxt "salutation"
@@ -4071,6 +4078,21 @@ msgstr "Sākuma burta indekss"
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Couldn't load contact data."
 msgstr "Nevar ielādēt kontaktpersonas datus."
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid ""
+"The subscription could not be updated due to an error and must be recreated."
+msgstr "Abonements nevar tikt jaunināts kļūdu dēļ un ir jāizveido no jauna."
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contacts account error"
+msgstr "Kontaktu konta kļūda"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Edit subscription"
+msgstr "Rediģēt abonementu"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Contacts"
@@ -4867,6 +4889,10 @@ msgstr "Tukšot mapi"
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe to IMAP folders"
 msgstr "IMAP mapju abonēšana"
+
+#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+msgid "Refresh folders"
+msgstr "Jaunināt mapes"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
@@ -6527,7 +6553,8 @@ msgid "Yellow"
 msgstr "Dzeltens"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
+#: module:io.ox/mailfilter apps/io.ox/mail/toolbar.js
 msgid "Set color"
 msgstr "Iestatīt krāsu"
 
@@ -6545,6 +6572,7 @@ msgstr[1] "%1$d vienības"
 msgstr[2] "%1$d vienības"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Remind me again"
 msgstr "Atgādināt atkal"
 
@@ -8416,18 +8444,24 @@ msgstr ""
 "apskatītu izmaiņas."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "Paroļu atgūšana"
+msgid "Recover external account passwords"
+msgstr "Atgūt ārējo kontu paroles"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
-"Please provide the old password so the account passwords can be recovered."
-msgstr "Lūdzu ievadiet veco paroli, lai varētu atkopt konta paroles."
+"You recently changed your password. Please provide your last password to "
+"recover passwords for external accounts."
+msgstr ""
+"Jūs nesen izmainījāt paroli. Lai atgūtu ārējo kontu paroles, lūdzu norādiet "
+"savu pašreizējo paroli."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Your old password"
 msgstr "Jūsu vecā parole"
+
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
+msgid "Remove passwords"
+msgstr "Noņemt paroles"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -9597,8 +9631,8 @@ msgid "Saving..."
 msgstr "Saglabā..."
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Draft saved %s"
-msgstr "Melnraksts saglabāts %s"
+msgid "Saved %s"
+msgstr "Saglabāts %s"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -10079,8 +10113,20 @@ msgstr "Avots"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Signed and verified"
-msgstr "Parakstīts un pārbaudīts"
+msgid "PGP signature"
+msgstr "PGP paraskts"
+
+#. Tests for PGP Signature.
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "The signature exists and is valid"
+msgstr "Paraksts eksistē un ir derīgs"
+
+#. Tests for PGP Signature.
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "The signature is missing or is not valid"
+msgstr "Paraksts nav derīgs vai ir iztrūkstošs"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -11837,7 +11883,13 @@ msgstr ""
 "pārstāt strādāt. Šādā gadījumā jūs varat izmantot savu veco paroli visu "
 "kontu paroļu atgūšanai."
 
+#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+msgid "Recover passwords"
+msgstr "Paroļu atgūšana"
+
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
 msgid "Delete %1$s"
 msgstr "Dzēst %1$s"
 
@@ -11887,6 +11939,10 @@ msgstr "Piekļuve"
 #: apps/io.ox/settings/main.js module:io.ox/core
 msgid "Active clients"
 msgstr "Aktīvie klienti"
+
+#: apps/io.ox/settings/main.js module:io.ox/core
+msgid "Application Passwords"
+msgstr "Lietotņu paoles"
 
 #: apps/io.ox/settings/main.js module:io.ox/core
 #: apps/io.ox/settings/security/certificates/settings/pane.js
@@ -12060,6 +12116,157 @@ msgstr "Lejupielādēt %1$s."
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Download personal data"
 msgstr "Lejupielādēt personīgos datus"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "There was a problem adding the password."
+msgstr "Problēmas paroles pievienošanā."
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"There was a problem getting the list of available applications from the "
+"server."
+msgstr "Problēmas pie servera pieejamo lietotņu saraksta iegūšanas."
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"To add a password, select an application to use with a new password, as well "
+"as a new descriptive name for the password."
+msgstr ""
+"Lai pievienotu paroli, izvēlieties lietotni, kuru izmantosit ar jauno "
+"paroli, kā arī norādiet šīs paroles aprakstošu vārdu."
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Application"
+msgstr "Lietotne"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password name"
+msgstr "Paroles vārds"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "My Phone"
+msgstr "Mans telefons"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Add new password"
+msgstr "Pievienot jaunu paroli"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password Created"
+msgstr "Parole ir izveidota"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"A password was created successfully.  Please use the following settings in "
+"the application:"
+msgstr ""
+"Parole ir veiksmīgi izveidota. Lūdzu lietotnē piemērojiet sekojošus "
+"iestatījumus:"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Username: %s"
+msgstr "Lietotājs: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password: %s"
+msgstr "Parole: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgctxt "app"
+msgid "Application Passwords"
+msgstr "Lietotņu paoles"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Manage additional passwords for use with other devices."
+msgstr "Pārvaldiet papildus paroles lietošanai citās ierīcēs."
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Existing passwords"
+msgstr "Esošās paroles"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Add passwords"
+msgstr "Pievienot paroles"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "There was a problem getting the list of passwords from the server."
+msgstr "Problēmas pie paroļu saraksta saraksta iegūšanas no servera."
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Never used"
+msgstr "Nav izmantots"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Exchange Active Sync (EAS)"
+msgstr "Exchange Active Sync (EAS)"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Drive Client"
+msgstr "Krātuves klients"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Mobile Mail"
+msgstr "Mobilais pasts"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Last Login: %s"
+msgstr "Pēdējais pieslēgums: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Device: %s"
+msgstr "Ierīce: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "IP: %s"
+msgstr "IP: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Location: %s"
+msgstr "Vieta: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Device %s logged in %s"
+msgstr "Ierīce %s pieslēgta %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Delete password"
+msgstr "Dzēst paroli"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Do you really want to delete this password?"
+msgstr "Vai tiešām vēlaties dzēst šo paroli?"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "There was a problem removing the password."
+msgstr "Problēmas pie paroles noņemšanas."
 
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
 #: module:io.ox/settings/certificates
@@ -14042,6 +14249,19 @@ msgstr "Uzaicināt %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pievienot %s"
+
+#~ msgid "You tentatively accepted this invitation"
+#~ msgstr "Jūs esat veicis pagaidu apstiprināšanu"
+
+#~ msgid ""
+#~ "Please provide the old password so the account passwords can be recovered."
+#~ msgstr "Lūdzu ievadiet veco paroli, lai varētu atkopt konta paroles."
+
+#~ msgid "Draft saved %s"
+#~ msgstr "Melnraksts saglabāts %s"
+
+#~ msgid "Signed and verified"
+#~ msgstr "Parakstīts un pārbaudīts"
 
 #~ msgid "%1$s. Press backspace to delete."
 #~ msgstr "%1$s. Lai dzēstu, piespiediet atpakaļatkāpes taustiņu."

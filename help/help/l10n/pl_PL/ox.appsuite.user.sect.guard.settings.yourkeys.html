@@ -1,13 +1,13 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>12.6.2. Zarządzanie własnymi kluczami</title>
+<title>12.7.2. Zarządzanie własnymi kluczami</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="podręcznik użytkownika">
-<link rel="up" href="ox.appsuite.user.sect.guard.settings.html" title="12.6. Ustawienia aplikacji Strażnik">
-<link rel="prev" href="ox.appsuite.user.sect.guard.settings.password.html" title="12.6.1. Zarządzanie hasłem">
-<link rel="next" href="ox.appsuite.user.sect.guard.settings.publickeys.html" title="12.6.3. Zarządzanie kluczami publicznymi">
+<link rel="up" href="ox.appsuite.user.sect.guard.settings.html" title="12.7. Ustawienia aplikacji Strażnik">
+<link rel="prev" href="ox.appsuite.user.sect.guard.settings.password.html" title="12.7.1. Zarządzanie hasłem">
+<link rel="next" href="ox.appsuite.user.sect.guard.settings.publickeys.html" title="12.7.3. Zarządzanie kluczami publicznymi">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Informacja Prawna">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -34,14 +34,14 @@
 <h2 class="sr-only">Ustawienia aplikacji <span class="phrase">Strażnik</span>
 </h2>
 <div class="sect2" id="ox.appsuite.user.sect.guard.settings.yourkeys">
-<div class="titlepage"><div><div><h3 class="title">12.6.2. Zarządzanie własnymi kluczami</h3></div></div></div>
-<a class="indexterm" name="id-1.13.11.13.2"></a><p id="ox.appsuite.user.concept.guard.settings.yourkeys">Dostępne są następujące możliwości:</p>
+<div class="titlepage"><div><div><h3 class="title">12.7.2. Zarządzanie własnymi kluczami</h3></div></div></div>
+<a class="indexterm" name="id-1.13.12.13.2"></a><p id="ox.appsuite.user.concept.guard.settings.yourkeys">Na stronie <span class="phrase"><span class="guilabel"><strong>Ustawienia zabezpieczeń aplikacji Strażnik</strong></span></span> są dostępna następujące możliwości:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Wyświetlanie własnych kluczy, wyświetlanie szczegółowych informacji</p></li>
 <li class="listitem">
-<p role="presentation">Wyświetlanie własnych kluczy, wyświetlanie szczegółowych informacji</p>
-<p role="presentation">Ustaw jakiś klucz jako bieżący. Inne osoby będą mogły używać tego klucza do szyfrowania danych.</p>
+<p role="presentation">Dodawanie nowych kluczy</p>
+<p role="presentation">Jeśli masz kilka kluczy, możesz zdefiniować, który z nich powinien być kluczem bieżącym. Klucz bieżący jest używany do szyfrowania danych.</p>
 </li>
-<li class="listitem"><p role="presentation">Dodawanie nowych kluczy</p></li>
 <li class="listitem">
 <p role="presentation">Dodawanie identyfikatorów użytkowników</p>
 <p role="presentation">Przy dodawaniu kolejnych identyfikatorów użytkownika do klucza możesz go wprowadzić do wielu kont e-mail.</p>
@@ -55,7 +55,7 @@
 <p class="title">Jak wyświetlić własne klucze lub ustawić klucz jako bieżący:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p role="presentation">Zaznacz pole wyboru <span class="guibutton"><strong>Pokaż ustawienia zaawansowane</strong></span> poniżej opcji <span class="guilabel"><strong>Zaawansowane</strong></span>.</p>
+<p role="presentation">Zaznacz pole wyboru <span class="guibutton"><strong>Pokaż ustawienia zaawansowane</strong></span> poniżej opcji <span class="guibutton"><strong>Zaawansowane</strong></span>.</p>
 <p role="presentation">Kliknij polecenie <span class="guibutton"><strong>Twoje klucze</strong></span> poniżej opcji <span class="guilabel"><strong>Klucze</strong></span>. Pojawi się okno <span class="guilabel"><strong>Twoje klucze</strong></span>.</p>
 <p role="presentation">
               <ul class="itemizedlist" style="list-style-type: disc; ">
@@ -68,14 +68,14 @@
 </ul>
             </p>
 </li>
-<li class="step"><p role="presentation">Jeśli lista kluczy ma zawierać więcej niż jeden klucz główny i zależny, możesz zdefiniować bieżący klucz. Aby to zrobić, kliknij przycisk <span class="guibutton"><strong>Bieżące</strong></span> obok klucza. Od teraz szyfrowanie będzie realizowane za pomocą klucza bieżącego.</p></li>
-<li class="step"><p role="presentation">Aby wyświetlić szczegóły klucza, kliknij ikonę <span class="guibutton"><strong>Szczegóły</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.detail"><img src="../../images/guard_user_icon_detail.png"></span> obok klucza. Otworzy się okno <span class="guilabel"><strong>Szczegóły klucza</strong></span>. Aby wyświetlić podpisy danego klucza, kliknij pozycję <span class="guibutton"><strong>Podpisy</strong></span>.</p></li>
+<li class="step"><p role="presentation">Jeśli lista kluczy ma zawierać więcej niż jeden klucz główny i zależny, możesz zdefiniować bieżący klucz. Aby to zrobić, kliknij przycisk <span class="guibutton"><strong>Bieżące</strong></span> obok głównego klucza. Od teraz szyfrowanie będzie realizowane za pomocą klucza bieżącego.</p></li>
+<li class="step"><p role="presentation">Aby wyświetlić szczegóły klucza, kliknij widoczną obok niego ikonę <span class="guibutton"><strong>Szczegóły</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.detail"><img src="../../images/guard_user_icon_detail.png"></span>. Pojawi się okno <span class="guilabel"><strong>Szczegóły klucza</strong></span>. Aby wyświetlić podpisy danego klucza, kliknij <span class="guibutton"><strong>Podpisy</strong></span>.</p></li>
 </ol></div>
 </div>
 <div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addkey">
 <p class="title">Jak dodać nowe klucze do okna <span class="guilabel"><strong>Twoje klucze</strong></span>:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Kliknij ikonę <span class="guibutton"><strong>Dodaj</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addkey.add"><img src="../../images/guard_user_icon_add.png"></span>. Pojawi się okno <span class="guilabel"><strong>Dodawanie kluczy</strong></span>.</p></li>
+<li class="step"><p role="presentation">Kliknij ikonę <span class="guibutton"><strong>Dodaj</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addkey.add"><img src="../../images/guard_user_icon_add.png"></span> obok opcji <span class="guilabel"><strong>Klucze na serwerze</strong></span>. Pojawi się okno <span class="guilabel"><strong>Dodawanie kluczy</strong></span>.</p></li>
 <li class="step">
 <p role="presentation">Dostępne są następujące możliwości:<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
@@ -97,7 +97,7 @@
 <div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addaccount">
 <p class="title">Jak dodać kolejny identyfikator użytkownika w oknie <span class="guilabel"><strong>Twoje klucze</strong></span>:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Kliknij ikonę <span class="guibutton"><strong>Edytuj</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addaccount.edit"><img src="../../images/guard_user_icon_edit.png"></span> obok klucza. Otworzy się okno <span class="guilabel"><strong>Dodaj ID użytkownika</strong></span>.</p></li>
+<li class="step"><p role="presentation">Kliknij ikonę <span class="guibutton"><strong>Edytuj</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addaccount.edit"><img src="../../images/guard_user_icon_edit.png"></span> obok klucza. Pojawi się okno <span class="guilabel"><strong>Dodaj ID użytkownika</strong></span>.</p></li>
 <li class="step">
 <p role="presentation">Wpisz nazwę identyfikatora użytkownika i adres e-mail, którego chcesz użyć w tym kluczu.</p>
 <p role="presentation">Wpisz hasło do danego klucza.</p>
@@ -140,7 +140,7 @@
 </div>
 <p id="ox.appsuite.user.related.guard.settings.yourkeys">
         </p>
-<p class="title">Podobne działania:</p>
+<p class="title">Powiązane tematy:</p>
 <ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Zarządzanie kluczami publicznymi</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.password.html">Zarządzanie hasłem</a></p>

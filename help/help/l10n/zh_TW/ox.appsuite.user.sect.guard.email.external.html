@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="使用者指南&gt;">
 <link rel="up" href="ox.appsuite.user.sect.guard.email.html" title="12.2. 加密郵件通訊">
 <link rel="prev" href="ox.appsuite.user.sect.guard.email.send.html" title="12.2.2. 傳送加密郵件">
-<link rel="next" href="ox.appsuite.user.sect.guard.drive.html" title="12.3. 加密或解密檔案">
+<link rel="next" href="ox.appsuite.user.sect.guard.autocrypt.html" title="12.3. 使用 Autocrypt 加密郵件通訊">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律聲明">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,15 +25,15 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.email.send.html">前一頁</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">起始頁</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目錄</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.drive.html">下一頁</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.autocrypt.html">下一頁</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <h1 class="sr-only">使用 <span class="phrase">Guard</span> 加密資料</h1>
+  <h1 class="sr-only">使用 <span class="phrase">Guard</span> 加密資料。</h1>
 <h2 class="sr-only">加密郵件通訊</h2>
 <div class="sect2" id="ox.appsuite.user.sect.guard.email.external">
 <div class="titlepage"><div><div><h3 class="title">12.2.3. 要如何讓外部收件者讀取加密郵件？</h3></div></div></div>
-<p id="ox.appsuite.user.concept.guard.email.external">您也可以傳送加密郵件給不是組件使用者的外部收件者。新增外部收件者時，Guard 將檢查是否已有此地址的公鑰。視結果而定，Guard 將使用不同方式傳送加密郵件：</p>
+<p id="ox.appsuite.user.concept.guard.email.external">您也可以傳送加密郵件給不是 Groupware 使用者的外部收件者。新增外部收件者時，Guard 將檢查是否已有此地址的公鑰。視結果而定，Guard 將使用不同方式傳送加密郵件：</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">若已有該收件者的公鑰:</p>
@@ -48,7 +48,6 @@
 <li class="listitem">
 <p role="presentation">若沒有訪客帳號，將建立一組訪客帳號。外部參與者將會收到包含訪客頁面連結的郵件，以及自動產生的密碼。使用者登入該訪客頁面。然後即可修改密碼。</p>
 <p role="presentation">視設定而定，自動產生的密碼與訪客頁面的連結可能分別以不同郵件寄送。</p>
-<p role="presentation">視設定而定，可使用四位數 PIN 保護第一封寄給外步收件者的郵件。</p>
 </li>
 <li class="listitem"><p role="presentation">視設定而定，訪客帳號的郵件將在指定天數後刪除。</p></li>
 </ul>
