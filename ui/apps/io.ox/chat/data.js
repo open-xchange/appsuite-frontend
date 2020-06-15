@@ -61,7 +61,7 @@ define('io.ox/chat/data', [
         setState: function (state) {
             $.ajax({
                 method: 'POST',
-                url: data.API_ROOT + '/users/' + state,
+                url: data.API_ROOT + '/users/state/' + state,
                 xhrFields: { withCredentials: true }
             }).then(function () {
                 this.set('state', state);
@@ -858,10 +858,10 @@ define('io.ox/chat/data', [
                 });
             });
 
-            socket.on('user:change:state', function (email, state) {
+            socket.on('user.state:changed', function (event) {
                 if (!data.users.length) return;
-                var model = data.users.getByMail(email);
-                if (model) model.set('state', state);
+                var model = data.users.getByMail(event.user);
+                if (model) model.set('state', event.state);
             });
 
             socket.on('typing', function (event) {
