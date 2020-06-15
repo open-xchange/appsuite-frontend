@@ -24,6 +24,7 @@ delete project on obs:
       when: never
     - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
       when: manual
+      allow_failure: true
 
 upload:
   image: gradle:5.6.2-jre8
