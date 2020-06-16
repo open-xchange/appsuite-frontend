@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-06-10 13:25+0200\n"
+"PO-Revision-Date: 2020-06-16 13:19+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -4103,7 +4103,6 @@ msgstr ""
 "muss neu erstellt werden."
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#, fuzzy
 msgid "Contacts account error"
 msgstr "Kontaktkontofehler"
 
@@ -12325,7 +12324,6 @@ msgstr "Ort: %1$s"
 
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
 #: module:io.ox/settings
-#, fuzzy
 msgid "Device %s logged in %s"
 msgstr "Gerät %s angemeldet bei %s"
 
