@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-06-09 12:20+0900\n"
+"PO-Revision-Date: 2020-06-13 11:58+0900\n"
 "Last-Translator: Adi David <adi@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -12273,7 +12273,7 @@ msgstr "Client Drive"
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
 #: module:io.ox/settings
 msgid "Mobile Mail"
-msgstr "E-mail pe mobil"
+msgstr "Mobile Mail"
 
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
 #: module:io.ox/settings
