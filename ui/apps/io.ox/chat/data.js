@@ -266,7 +266,7 @@ define('io.ox/chat/data', [
         },
 
         isImage: function () {
-            return this.get('type') === 'image';
+            return /(jpg|jpeg|gif|bmp|png)/i.test(this.get('mimeType'));
         },
 
         isFile: function () {
@@ -746,7 +746,7 @@ define('io.ox/chat/data', [
         },
 
         isImage: function () {
-            return /(jpg|jpeg|gif|bmp|png)/i.test(this.get('mimetype'));
+            return /(jpg|jpeg|gif|bmp|png)/i.test(this.get('mimeType'));
         }
     });
 
