@@ -720,7 +720,7 @@ define('io.ox/calendar/util', [
                     lastOccurence = moment(data.until);
                 } else {
                     var tzid = data.endDate.tzid || 'UTC';
-                    // this code part expects, that the date of the last occurence is equal to the until date in the rrule.
+                    // this code part expects, that the date of the last occurrence is equal to the until date in the rrule.
                     // whereas this is not required by the RFC, all checked clients stick to that
                     // the until date is either directly on the end of the appointment or refers to the end of the same day
                     var diffToStartOfDay = that.getMoment(data.endDate).diff(that.getMoment(data.endDate).startOf('day'), 'ms');

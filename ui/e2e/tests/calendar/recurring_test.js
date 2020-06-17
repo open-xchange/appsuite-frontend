@@ -126,7 +126,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     dialogs.clickButton('Cancel');
     I.waitForDetached('.modal-dialog');
 
-    // TODO: Needs a fix. "All future appointments" is wrong since apppointment has flag "first_occurence"
+    // TODO: Needs a fix. "All future appointments" is wrong since apppointment has flag "first_occurrence"
     I.click({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
     dialogs.waitForVisible();
     dialogs.clickButton('Edit all future appointments');
@@ -272,7 +272,7 @@ Scenario('[Bug 63392][OXUIB-212] Recurring appointment can\'t changed to "Never 
         }
     });
 
-    // startDate of master is recurrenceId for the first occurence
+    // startDate of master is recurrenceId for the first occurrence
     var cid = appointment.folder + '.' + appointment.id + '.' + appointment.startDate.value;
 
     I.login('app=io.ox/calendar&perspective=list');

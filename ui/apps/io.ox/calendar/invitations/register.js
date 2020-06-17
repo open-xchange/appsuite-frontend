@@ -862,7 +862,7 @@ define('io.ox/calendar/invitations/register', [
 
                     if (self.getType() === 'Deleted') {
                         // make sure, that event_cancelled flag is added if it has been deleted
-                        // this is necessary, when the resolve requests returns a recurrence master whereas just a single occurence has been deleted
+                        // this is necessary, when the resolve requests returns a recurrence master whereas just a single occurrence has been deleted
                         model = model.clone();
                         model.set('flags', ['event_cancelled'].concat(model.get('flags')));
                     }

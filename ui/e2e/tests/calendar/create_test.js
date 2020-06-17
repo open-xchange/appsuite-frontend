@@ -192,7 +192,7 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
     I.click('Create');
     I.waitForDetached('.io-ox-calendar-edit-window');
 
-    I.say('Check next occurence');
+    I.say('Check next occurrence');
     const diffMonth = date.diff(moment().startOf('month'), 'months');
     for (let i = 0; i < diffMonth; i++) I.click('~Go to next month', calendar.locators.mini);
     I.click({ css: `[aria-label*="${date.format('l, dddd')}, CW ${date.week()}"]` }, calendar.locators.mini);
@@ -201,7 +201,7 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
         I.see('Testappointment');
     }));
 
-    I.say('Check occurence after next');
+    I.say('Check occurrence after next');
     for (let i = 0; i < 12; i++) I.click('~Go to next month', calendar.locators.mini);
     I.click(`~${date.add(1, 'year').format('l, dddd')}, CW ${date.week()}`, calendar.locators.mini);
     ['Workweek', 'Week', 'Day', 'Month'].forEach(perspective => calendar.withinPerspective(perspective, (locator) => {
@@ -240,7 +240,7 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window');
 
-    I.say('Check next occurence');
+    I.say('Check next occurrence');
     const diffMonth = date.diff(moment().startOf('month'), 'months');
     for (let i = 0; i < diffMonth; i++) I.click('~Go to next month', calendar.locators.mini);
     // and select the correct date
@@ -251,7 +251,7 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
         I.see('Testappointment');
     }));
 
-    I.say('Check occurence after next');
+    I.say('Check occurrence after next');
     for (let i = 0; i < 12; i++) I.click('~Go to next month', calendar.locators.mini);
     date.add(1, 'year').startOf('month').weekday(0);
     if (date.month() === 10) date.add(1, 'week'); // special cases
@@ -295,13 +295,13 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
-    I.say('Check next occurence');
+    I.say('Check next occurrence');
     ['Week', 'Day', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, (locator) => {
         I.waitForVisible(locate('.appointment').inside(locator));
         I.see('Testappointment');
     }));
 
-    I.say('Check occurence after next');
+    I.say('Check occurrence after next');
     I.click('~Go to next month', calendar.locators.mini);
     date.add(1, 'month');
     I.click(`~${date.format('l, dddd')}, CW ${date.week()}`, calendar.locators.mini);
@@ -344,13 +344,13 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
     I.waitForInvisible('.io-ox-calendar-edit-window', 5);
 
     // open all views and load the appointments there
-    I.say('Check next occurence');
+    I.say('Check next occurrence');
     ['Week', 'Day', 'Month'].forEach(perspective => calendar.withinPerspective(perspective, (locator) => {
         I.waitForVisible(locate('.appointment').inside(locator));
         I.see('Testappointment');
     }));
 
-    I.say('Check occurence after next');
+    I.say('Check occurrence after next');
     I.click('~Go to next month', calendar.locators.mini);
     date.add(1, 'month').startOf('month').weekday(1);
     if (date.month() === moment().month()) date.add(1, 'week'); // special cases
@@ -396,7 +396,7 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
-    I.say('Check next occurence');
+    I.say('Check next occurrence');
     ['Week', 'Day', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, (locator) => {
         I.waitForVisible(locate('.appointment').inside(locator));
         I.see('Testappointment');
