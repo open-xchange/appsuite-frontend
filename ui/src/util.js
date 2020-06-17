@@ -1038,7 +1038,7 @@
      *  the passed format string.
      */
     _.noI18n.assemble = function (pattern, argFn, textFn) {
-        return _.aprintf(_.noI18n.fix(pattern), argFn, textFn || _.noI18n);
+        return _.aprintf(_.noI18n.fix(pattern), argFn, textFn ? _.compose(textFn, _.noI18n) : _.noI18n);
     };
 
     _.noI18n.text = function () {

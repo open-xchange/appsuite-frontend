@@ -48,11 +48,11 @@ define('io.ox/core/commons', [
             var pattern = gt.ngettext('%1$s item selected', '%1$s items selected', length);
 
             // create a <span> element with the number of items for the placeholder
-            var parts = _.noI18n.assemble(pattern, function () { return $('<span class="number">').text(_.noI18n(length)); });
+            var nodes = _.noI18n.assemble(pattern, function () { return $('<span class="number">').text(_.noI18n(length)); }, $.txt);
 
             node.idle().empty().append(
                 $('<div class="io-ox-center multi-selection-message">').append(
-                    $('<div class="message" id="' + grid.multiselectId + '">').append(parts)
+                    $('<div class="message" id="' + grid.multiselectId + '">').append(nodes)
                 )
             );
         },

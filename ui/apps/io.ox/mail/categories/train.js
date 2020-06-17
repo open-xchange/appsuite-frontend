@@ -60,7 +60,7 @@ define('io.ox/mail/categories/train', [
             //#. %1$s represents a single email address (non-essential information: can be left out)
             gt('Do you want to move all messages from %1$s to that category?') :
             gt('Do you want to move all messages from selected senders to that category?');
-        return _.noI18n.assemble(pattern, function () { return $('<b>').text(uniquelist); });
+        return _.noI18n.assemble(pattern, function () { return $('<b>').text(uniquelist); }, $.txt);
     }
 
     function getSenderList(addresses) {
