@@ -52,14 +52,20 @@ define('io.ox/calendar/week/extensions', [
         draw: function (baton) {
             var model = baton.model;
             if (util.isAllday(model)) return;
-            var contentContainer = $(this).find('.appointment-content'),
-                contentHeight = contentContainer.height(),
-                titleHeight = $(this).find('.title').height(),
-                noWrap = $(this).hasClass('no-wrap'),
-                locationHeight = $(this).find('.location').length < 1 || noWrap ? 0 : $(this).find('.location').height(),
-                flags = util.returnIconsByType(model).property,
-                flagsHeight = 12;
+
+            // no need to create nodes if all day so separate the checks
+            var flags = util.returnIconsByType(model).property;
             if (flags.length === 0) return;
+
+            var contentContainer = $(this).find('.appointment-content'),
+                contentHeight =  $(this).attr('contentHeight'),
+                // keep in sync with css, lineheight
+                titleHeight = 16,
+                noWrap = $(this).hasClass('no-wrap'),
+                // keep in sync with css, lineheight
+                locationHeight = noWrap || !model.get('location') ? 0 : 16,
+                flagsHeight = 12;
+
             if (titleHeight + locationHeight < contentHeight - flagsHeight) {
                 contentContainer.append($('<div class="flags bottom-right">').append(flags));
             }

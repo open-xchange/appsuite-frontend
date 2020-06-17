@@ -98,8 +98,8 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     I.selectFolder('New calendar');
     I.retry(3).click(selectInsideFolder({ css: 'div.color-label' }));
     //check if public appointments are there
-    I.see('testing is fun', '.workweek .appointment .title-container');
-    I.see('testing is awesome', '.workweek .appointment .title-container');
+    I.see('testing is fun', '.workweek .appointment');
+    I.see('testing is awesome', '.workweek .appointment');
     //see if appointment colors still drawn with customized color (See Bug 65410)
     const appointmentColors = (await I.grabCssPropertyFrom('.workweek .appointment', 'backgroundColor'))
         // webdriver resolves with rgba, puppeteer with rgb for some reason

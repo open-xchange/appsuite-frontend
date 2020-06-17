@@ -1053,7 +1053,8 @@ define('io.ox/calendar/week/view', [
                 start = moment(startLocal).startOf('day'),
                 end = moment(endLocal).startOf('day'),
                 startOfNextWeek = moment(this.model.get('startDate')).startOf('day').add(this.model.get('numColumns'), 'days'),
-                maxCount = 0;
+                maxCount = 0,
+                dayNodes = this.$('.day');
 
             // draw across multiple days
             while (maxCount <= this.model.get('numColumns')) {
@@ -1079,22 +1080,26 @@ define('io.ox/calendar/week/view', [
                 node = node.get(maxCount) ? $(node.get(maxCount)) : $(node).first().clone();
 
                 // daylight saving time change?
-                var offset = start._offset - model.getMoment('startDate').tz(start.tz())._offset;
+                var offset = start._offset - model.getMoment('startDate').tz(start.tz())._offset,
+                    height = endLocal.diff(startLocal, 'minutes') / 24 / 60,
+                    index = startLocal.day() - this.model.get('startDate').day();
+                if (index < 0) index += 7;
 
                 node
                     .addClass(endLocal.diff(startLocal, 'minutes') < 120 / this.model.get('gridSize') ? 'no-wrap' : '')
                     .css({
                         top: (Math.max(0, startLocal.diff(moment(start), 'minutes') - offset)) / 24 / 60 * 100 + '%',
-                        height: 'calc( ' + endLocal.diff(startLocal, 'minutes') / 24 / 60 * 100 + '% - 2px)',
+                        height: 'calc( ' + height * 100 + '% - 2px)',
                         lineHeight: this.opt.minCellHeight + 'px'
                     });
-
-                var index = startLocal.day() - this.model.get('startDate').day();
-                if (index < 0) index += 7;
+                // needed for flags to draw correctly
+                node.attr('contentHeight', height * dayNodes.eq(index).height() - 2);
                 if (this.model.get('mergeView')) index = this.opt.app.folders.list().indexOf(model.get('folder'));
-                // append at the right place
-                this.$('.day').eq(index).append(node);
+
                 ext.point('io.ox/calendar/week/view/appointment').invoke('draw', node, ext.Baton({ model: model, date: start, view: this }));
+
+                // append at the right place
+                dayNodes.eq(index).append(node);
 
                 // do incrementation
                 if (!start.isSame(end, 'day')) {
@@ -1732,14 +1737,24 @@ define('io.ox/calendar/week/view', [
         },
 
         onResetAppointments: function () {
-            this.fulltimeView.trigger('collection:before:reset');
-            this.appointmentView.trigger('collection:before:reset');
-            this.collection.forEach(function (model) {
-                if (util.isAllday(model) && this.options.showFulltime) this.fulltimeView.trigger('collection:add', model);
-                else this.appointmentView.trigger('collection:add', model);
+            var defer = window.requestAnimationFrame || window.setTimeout;
+            defer(function () {
+                this.fulltimeView.trigger('collection:before:reset');
+                this.appointmentView.trigger('collection:before:reset');
+                // detaching and adding views improves render performance, it is faster to append evertything in bulk instead of adding one node at a time
+                this.fulltimeView.$el.detach();
+                var scrolltop = this.appointmentView.$el.children('.scrollpane').scrollTop();
+                this.appointmentView.$el.detach();
+                this.collection.forEach(function (model) {
+                    if (util.isAllday(model) && this.options.showFulltime) this.fulltimeView.trigger('collection:add', model);
+                    else this.appointmentView.trigger('collection:add', model);
+                }.bind(this));
+                //attach views again
+                this.$el.append(this.fulltimeView.$el, this.appointmentView.$el);
+                if (scrolltop) this.appointmentView.$el.children('.scrollpane').scrollTop(scrolltop);
+                this.fulltimeView.trigger('collection:after:reset');
+                this.appointmentView.trigger('collection:after:reset');
             }.bind(this));
-            this.fulltimeView.trigger('collection:after:reset');
-            this.appointmentView.trigger('collection:after:reset');
         },
 
         getName: function () {
