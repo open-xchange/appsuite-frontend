@@ -288,7 +288,7 @@ Scenario('[Bug 63392][OXUIB-212] Recurring appointment can\'t changed to "Never 
     I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
 
     // change recurrence to never ending
-    I.click('Every day. The series ends after 3 occurences.');
+    I.click('Every day. The series ends after 3 occurrences.');
     dialogs.waitForVisible();
     I.selectOption('Ends', 'Never');
     dialogs.clickButton('Apply');
@@ -298,6 +298,6 @@ Scenario('[Bug 63392][OXUIB-212] Recurring appointment can\'t changed to "Never 
     // no backend error should happen here
     I.waitForDetached('.io-ox-tasks-edit-window');
     // must use xpath here since waitForText does not check if the elements text fully matches the string
-    // we are looking for just 'Every day.' and not 'Every day. The series ends after 3 occurences.'
+    // we are looking for just 'Every day.' and not 'Every day. The series ends after 3 occurrences.'
     I.waitForElement({ xpath: '//div[contains(@class, "calendar-detail")]//div[@class="recurrence"][text()="Every day."]' });
 });

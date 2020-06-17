@@ -402,7 +402,7 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
         I.see('Testappointment');
     }));
 
-    I.say('Check next two future occurences');
+    I.say('Check next two future occurrences');
     for (let i = 0; i < 2; i++) {
         if (!date.isSame(moment(date).add(2, 'week'), 'month')) I.click('~Go to next month', calendar.locators.mini);
         date.add(2, 'weeks');
@@ -451,7 +451,7 @@ Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thu
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
-    I.say('Check next two future occurences');
+    I.say('Check next two future occurrences');
     ['Week', 'Day', 'Month'].forEach(perspective => calendar.withinPerspective(perspective, (locator) => {
         I.waitForVisible(locate('.appointment').inside(locator));
         I.see('Testappointment');
@@ -492,7 +492,7 @@ Scenario('[C7423] Create daily recurring appointment every day ends after 5', as
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
     // open all views and load the appointments there
-    I.say('Check next occurences');
+    I.say('Check next occurrences');
     ['Month', 'Week'].forEach(perspective => calendar.withinPerspective(perspective, (locator) => {
         I.waitForVisible(locate('.appointment').inside(locator));
         I.see('Testappointment');
@@ -543,7 +543,7 @@ Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12',
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
-    I.say('Check next occurences');
+    I.say('Check next occurrences');
     ['Month', 'Week'].forEach(perspective => calendar.withinPerspective(perspective, (locator) => {
         I.waitForVisible(locate('.appointment').inside(locator));
         I.see('Testappointment');

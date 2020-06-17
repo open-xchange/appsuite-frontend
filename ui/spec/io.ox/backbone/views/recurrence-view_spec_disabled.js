@@ -40,7 +40,7 @@ define([
 
         it('resets all model values on checkbox unset', function () {
             var checkbox = view.$('input[type="checkbox"]').prop('checked', true);
-            // does not really make sense to have occurences and until, but we need to check here, if all fields get emptied
+            // does not really make sense to have occurrences and until, but we need to check here, if all fields get emptied
             model.set({
                 recurrence_type: 4,
                 days: 16,
