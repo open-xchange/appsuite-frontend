@@ -188,9 +188,7 @@ define('io.ox/contacts/addressbook/popup', [
             var params = {
                 action: 'search',
                 admin: settings.get('showAdmin', false),
-                columns: options.columns,
-                sort: 608,
-                order: 'desc'
+                columns: options.columns
             };
 
             if (!options.noLimit) params.right_hand_limit = options.limit;
