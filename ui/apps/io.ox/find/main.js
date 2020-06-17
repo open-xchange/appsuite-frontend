@@ -471,7 +471,7 @@ define('io.ox/find/main', [
             //         empty = gt('No items were found. Please adjust currently used facets.'),
             //         //#. result count for screenreaders
             //         //#. %1$s number of items found by search feature
-            //         some = gt.format(gt.ngettext('One item was found.', '%1$s items were found.', n), n);
+            //         some = gt.ngettext('%1$d item was found.', '%1$s items were found.', n, n);
             //     notifications.yell('screenreader', n ? some : empty);
             // });
         }

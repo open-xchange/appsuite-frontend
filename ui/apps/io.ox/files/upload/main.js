@@ -25,35 +25,35 @@ define('io.ox/files/upload/main', [
             limit: 1000,
             message: function (t) {
                 //#. estimated upload duration
-                return gt.format(gt.ngettext('%1$d second', '%1$d seconds', t), t);
+                return gt.ngettext('%1$d second', '%1$d seconds', t, t);
             }
         },
         {
             limit: 60,
             message: function (t) {
                 //#. estimated upload duration
-                return gt.format(gt.ngettext('%1$d minute', '%1$d minutes', t), t);
+                return gt.ngettext('%1$d minute', '%1$d minutes', t, t);
             }
         },
         {
             limit: 60,
             message: function (t) {
                 //#. estimated upload duration
-                return gt.format(gt.ngettext('%1$d hour', '%1$d hours', t), t);
+                return gt.ngettext('%1$d hour', '%1$d hours', t, t);
             }
         },
         {
             limit: 24,
             message: function (t) {
                 //#. estimated upload duration
-                return gt.format(gt.ngettext('%1$d day', '%1$d days', t), t);
+                return gt.ngettext('%1$d day', '%1$d days', t, t);
             }
         },
         {
             limit: 7,
             message: function (t) {
                 //#. estimated upload duration
-                return gt.format(gt.ngettext('%1$d week', '%1$d weeks', t), t);
+                return gt.ngettext('%1$d week', '%1$d weeks', t, t);
             }
         }
         ],

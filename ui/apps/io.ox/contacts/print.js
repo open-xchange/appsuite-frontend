@@ -108,11 +108,11 @@ define('io.ox/contacts/print', [
                     cellphone: gt('Cell phone'),
                     email: gt('Email'),
                     filtered: function (n) {
-                        return gt.format(gt.ngettext(
-                            'Note: One contact is not shown due to missing phone numbers',
+                        return gt.ngettext(
+                            'Note: %1$d contact is not shown due to missing phone numbers',
                             'Note: %1$d contacts are not shown due to missing phone numbers',
-                            n
-                        ), n);
+                            n, n
+                        );
                     },
                     notPrinted: gt('This note will not be printed')
                 },

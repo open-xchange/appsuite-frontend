@@ -32,7 +32,7 @@ define('io.ox/contacts/util', [
                     !!baton.data.department
                 ) {
                     this.append(
-                        $('<span class="department">').text(gt.format(' (%1$s) ', baton.data.department))
+                        $('<span class="department">').text(_.noI18n.format(' (%1$s) ', baton.data.department))
                     );
                 }
             }
@@ -180,7 +180,7 @@ define('io.ox/contacts/util', [
 
         getFullName: function (obj, htmlOutput) {
             var fmt = getFullNameFormatHelper(obj, false, htmlOutput);
-            return gt.format(fmt.format, fmt.params);
+            return _.noI18n.format(fmt.format, fmt.params);
         },
 
         // this gets overridden in case of ja_JP
@@ -251,7 +251,7 @@ define('io.ox/contacts/util', [
 
         getMailFullName: function (obj, htmlOutput) {
             var fmt = getFullNameFormatHelper(obj, true, htmlOutput);
-            return gt.format(fmt.format, fmt.params);
+            return _.noI18n.format(fmt.format, fmt.params);
         },
 
         /**

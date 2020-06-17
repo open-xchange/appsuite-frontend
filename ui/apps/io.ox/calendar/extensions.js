@@ -90,9 +90,9 @@ define('io.ox/calendar/extensions', [
                         $('<div class="appointment-content" aria-hidden="true">').attr('title', getTitle(model)).append(
                             $('<div class="title-container">').append(
                                 util.returnIconsByType(model).type,
-                                model.get('summary') ? $('<div class="title">').text(gt.format('%1$s', model.get('summary') || '\u00A0')) : ''
+                                model.get('summary') ? $('<div class="title">').text(_.noI18n(model.get('summary'))) : ''
                             ),
-                            model.get('location') ? $('<div class="location">').text(model.get('location') || '\u00A0') : ''
+                            model.get('location') ? $('<div class="location">').text(_.noI18n(model.get('location'))) : ''
                         )
                     )
                     .attr({

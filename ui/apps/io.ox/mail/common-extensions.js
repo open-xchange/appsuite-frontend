@@ -87,7 +87,10 @@ define('io.ox/mail/common-extensions', [
             //#. %1$s - color name, used to describe a mail that has a color flag
             if (baton.data.color_label && settings.get('features/flag/color')) parts.push(gt('Color %1$s', flagPicker.colorName(baton.data.color_label)));
             parts.push(util.getDisplayName(fromlist[0]), data.subject, util.getTime(data.date));
-            if (size > 1) parts.push(gt.format('Thread contains %1$d messages', size));
+            if (size > 1) {
+                // although "size" is greater than 1, "gt.ngettext" must be used to produce correct plural forms for some languages!
+                parts.push(gt.ngettext('Thread contains %1$d message', 'Thread contains %1$d messages', size, size));
+            }
             if (data.attachment) parts.push(gt('has attachments'));
 
             a11yLabel = parts.join(', ') + '.';

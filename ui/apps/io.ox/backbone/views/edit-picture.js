@@ -163,7 +163,7 @@ define('io.ox/backbone/views/edit-picture', [
                             current = $body.croppie('get').zoom,
                             zoom = ((current - min) * 100 / (max - min)),
                             //#. image zoom, %1$d is the zoomlevel of the previewpicture in percent
-                            text = zoom ? gt.format('Zoom: %1$d%', zoom.toFixed(0)) :
+                            text = zoom ? gt('Zoom: %1$d%', zoom.toFixed(0)) :
                                 //#. noun. label for the zoomslider in case the zoom is undefined or 0
                                 gt('Zoom');
                         // remove 'blind spot' at range end (last step would exceed max)

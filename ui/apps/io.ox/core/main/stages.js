@@ -439,10 +439,24 @@ define('io.ox/core/main/stages', [
     var exports = {
         // temporary code to get translations for bug 58204
         restore: function (n) {
-            //#. %1$s is placeholder for the product name like "App Suite"
-            return gt.ngettext('The below item was open last time you exited %1$s.', 'The below items were open last time you exited %1$s.', n, ox.serverConfig.productName) + ' ' +
-                gt('Please click "Continue" if you\'d like to continue editing.') + ' ' +
-                gt.ngettext('If you do not wish to keep the item, please click on the trash icon.', 'If you do not wish to keep an item, please click on the trash icon.', n);
+
+            // do not use "gt.ngettext" for plural without count
+            var sentence1 = (n === 1) ?
+                //#. %1$s is placeholder for the product name like "App Suite"
+                gt('The below item was open last time you exited %1$s.', ox.serverConfig.productName) :
+                //#. %1$s is placeholder for the product name like "App Suite"
+                gt('The below items were open last time you exited %1$s.', ox.serverConfig.productName);
+
+            var sentence2 = gt('Please click "Continue" if you\'d like to continue editing.');
+
+            // do not use "gt.ngettext" for plural without count
+            var sentence3 = (n === 1) ?
+                //#. sentence is meant for a single item
+                gt('If you do not wish to keep the item, please click on the trash icon.') :
+                //#. sentence is meant for multiple items (n>1)
+                gt('If you do not wish to keep an item, please click on the trash icon.');
+
+            return sentence1 + ' ' + sentence2 + ' ' + sentence3;
         }
     };
 

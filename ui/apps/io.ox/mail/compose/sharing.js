@@ -32,28 +32,28 @@ define('io.ox/mail/compose/sharing', [
 
         switch (unit) {
             case 'm':
-                text = gt.format(gt.ngettext('%1$d minute', '%1$d minutes', count), count);
+                text = gt.ngettext('%1$d minute', '%1$d minutes', count, count);
                 value = count * 60000;
                 break;
             case 'h':
-                text = gt.format(gt.ngettext('%1$d hour', '%1$d hours', count), count);
+                text = gt.ngettext('%1$d hour', '%1$d hours', count, count);
                 value = count * 3600000;
                 break;
             case 'd':
-                text = gt.format(gt.ngettext('%1$d day', '%1$d days', count), count);
+                text = gt.ngettext('%1$d day', '%1$d days', count, count);
                 value = count * 86400000;
                 break;
             case 'w':
-                text = gt.format(gt.ngettext('%1$d week', '%1$d weeks', count), count);
+                text = gt.ngettext('%1$d week', '%1$d weeks', count, count);
                 value = count * 604800000;
                 break;
             case 'M':
-                text = gt.format(gt.ngettext('%1$d month', '%1$d months', count), count);
+                text = gt.ngettext('%1$d month', '%1$d months', count, count);
                 // we just assume 30 days here
                 value = count * 2592000000;
                 break;
             case 'y':
-                text = gt.format(gt.ngettext('%1$d year', '%1$d years', count), count);
+                text = gt.ngettext('%1$d year', '%1$d years', count, count);
                 // 365 days
                 value = count * 31536000000;
                 break;

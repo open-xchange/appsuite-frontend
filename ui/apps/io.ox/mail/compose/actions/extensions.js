@@ -147,7 +147,7 @@ define('io.ox/mail/compose/actions/extensions', [
                 this.$body.append(
                     $('<div>').append(
                         $('<p>').text(gt('It appears as if you forgot to attach a file.')),
-                        $('<p>').text(gt.format(gt('You mentioned "%s" in your email, but there are no files attached.'), detectedString[1]))
+                        $('<p>').text(gt('You mentioned "%s" in your email, but there are no files attached.', detectedString[1]))
                     )
                 );
             })

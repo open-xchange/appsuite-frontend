@@ -139,7 +139,7 @@ define('io.ox/core/boot/support', [
                         .add($.txt('\xa0'))
                         .add(
                             $('<div data-error="outdated-browser">').text(
-                                gt.format(gt('Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d.'),
+                                gt('Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d.',
                                     _.browserSupport.Chrome, _.browserSupport.Firefox, _.browserSupport.IE, _.browserSupport.Safari
                                 )
                             )

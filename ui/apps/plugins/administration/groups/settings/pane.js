@@ -142,7 +142,7 @@ define('plugins/administration/groups/settings/pane', [
                 // number of members
                 $('<div class="gray">').text(
                     //#. %1$d is the number of members
-                    gt.format(gt.ngettext('%1$d member', '%1$d members', length), length)
+                    gt.ngettext('%1$d member', '%1$d members', length, length)
                 )
             );
         }

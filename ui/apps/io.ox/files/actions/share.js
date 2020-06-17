@@ -37,22 +37,23 @@ define('io.ox/files/actions/share', [
         }
 
         // build header
-        if (first.isFile()) {
-            header = gt.format(
-                //#. informs user about the consequences when creating a rule for selected mails ()
-                //#. %1$s single file name or empty string (non-essential information: can be left out)
-                //#. %2$d number of items (files or folders)
-                //#, c-format
-                gt.ngettext('Sharing link created for file "%1$s"', 'Sharing link created for %2$d items', count), filler, count
-            );
+        if (count > 1) {
+            //#. informs user about the consequences when creating a rule for selected mail
+            //#. %1$d number of items (files or folders)
+            //#, c-format
+            header = gt.ngettext('Sharing link created for %1$d item', 'Sharing link created for %1$d items', count, count);
+        } else if (first.isFile()) {
+            // special text with file name for single file
+            //#. informs user about the consequences when creating a rule for selected mail
+            //#. %1$s file name
+            //#, c-format
+            header = gt('Sharing link created for file "%1$s"', filler);
         } else if (first.isFolder()) {
-            header = gt.format(
-                //#. informs user about the consequences when creating a rule for selected mails ()
-                //#. %1$s single folder name or empty string (non-essential information: can be left out)
-                //#. %2$d number of items (files or folders)
-                //#, c-format
-                gt.ngettext('Sharing link created for folder "%1$s"', 'Sharing link created for %2$d items', count), filler, count
-            );
+            // special text with file name for single folder
+            //#. informs user about the consequences when creating a rule for selected mails ()
+            //#. %1$s folder name
+            //#, c-format
+            header = gt('Sharing link created for folder "%1$s"', filler);
         }
 
         // create dialog

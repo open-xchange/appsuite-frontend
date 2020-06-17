@@ -567,9 +567,11 @@ define('io.ox/files/filepicker', [
                                 dialog.idle();
                             });
                         } else {
-                            notifications.yell('error', gt.ngettext(
-                                'The uploaded file does not match the requested file type.',
-                                'None of the uploaded files matches the requested file type.', list.length));
+                            // do not use "gt.ngettext" for plural without count
+                            notifications.yell('error', (list.length === 1) ?
+                                gt('The uploaded file does not match the requested file type.') :
+                                gt('None of the uploaded files matches the requested file type.')
+                            );
                             dialog.idle();
                         }
                     }, notifications.yell);

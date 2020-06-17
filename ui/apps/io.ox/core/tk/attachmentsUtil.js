@@ -191,7 +191,7 @@ define('io.ox/core/tk/attachmentsUtil', [
                 $node;
 
             //prepare data
-            size = size !== 0 ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
+            size = (size !== 0) ? _.noI18n(strings.fileSize(size) + '\u00A0 ') : '';
 
             if (obj.group !== 'vcard') {
                 //default

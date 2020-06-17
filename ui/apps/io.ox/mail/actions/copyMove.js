@@ -78,13 +78,12 @@ define('io.ox/mail/actions/copyMove', [
                 .uniq()
                 .value();
 
-                var infoText =
+                // do not use "gt.ngettext" for plural without count
+                var infoText = (senderList.length === 1) ?
                     //#. informs user about the consequences when creating a rule for selected mails
-                    gt.ngettext(
-                        'All future messages from the sender will be moved to the selected folder.',
-                        'All future messages from the senders of the selected mails will be moved to the selected folder.',
-                        senderList.length
-                    );
+                    gt('All future messages from the sender will be moved to the selected folder.') :
+                    //#. informs user about the consequences when creating a rule for selected mails
+                    gt('All future messages from the senders of the selected mails will be moved to the selected folder.');
 
                 move.item({
                     all: o.list,

@@ -24,11 +24,10 @@ define('io.ox/mail/actions/delete', [
     'use strict';
 
     function getQuestion(list) {
-        return gt.ngettext(
-            'Do you want to permanently delete this mail?',
-            'Do you want to permanently delete these mails?',
-            list.length
-        );
+        // do not use "gt.ngettext" for plural without count
+        return (list.length === 1) ?
+            gt('Do you want to permanently delete this mail?') :
+            gt('Do you want to permanently delete these mails?');
     }
 
     api.on('delete:fail:quota', function (e, error, list) {

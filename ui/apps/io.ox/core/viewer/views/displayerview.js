@@ -713,6 +713,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     //#. this will only be shown for more than one item
                     //#. %1$d - position of current item
                     //#. %2$d - total amount of items
+                    //#, c-format
                     gt.ngettext(
                         '%1$d of %2$d item',
                         '%1$d of %2$d items',

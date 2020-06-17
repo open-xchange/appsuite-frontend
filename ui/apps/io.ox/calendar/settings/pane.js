@@ -59,7 +59,7 @@ define('io.ox/calendar/settings/pane', [
                         return _(new Array(7)).map(function (num, index) {
                             return {
                                 value: index + 1,
-                                label: gt.format(gt.ngettext('%1$d day', '%1$d days', index + 1), index + 1)
+                                label: gt.ngettext('%1$d day', '%1$d days', index + 1, index + 1)
                             };
                         });
                     }

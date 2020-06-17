@@ -40,7 +40,7 @@ define('io.ox/help/main', [
                 href: 'index.html',
                 modal: false
             }, options),
-            // .# This is a concatenated string to build a window title like "OX Appsuite help"
+            //#. This is a concatenated string to build a window title like "OX Appsuite help"
             windowTitle = gt('%1$s Help', ox.serverConfig.productName || 'OX App Suite');
 
         var app = ox.ui.createApp({

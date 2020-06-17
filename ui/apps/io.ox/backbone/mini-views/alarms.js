@@ -338,8 +338,8 @@ define('io.ox/backbone/mini-views/alarms', [
                     key = 'ABS';
                 }
                 options.push(alarm.action);
-                options.unshift(predefinedSentences[alarm.action + key] || predefinedSentences['GENERIC' + key]);
-                node.append($('<li>').append($('<button type="button" class="alarm-link btn btn-link">').text(gt.format.apply(undefined, options))));
+                var pattern = predefinedSentences[alarm.action + key] || predefinedSentences['GENERIC' + key];
+                node.append($('<li>').append($('<button type="button" class="alarm-link btn btn-link">').text(_.noI18n.format(pattern, options))));
             });
             return node;
         },

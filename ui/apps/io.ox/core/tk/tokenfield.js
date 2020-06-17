@@ -286,12 +286,9 @@ define('io.ox/core/tk/tokenfield', [
 
                 if (numberOfResults === 0) message = gt('No autocomplete entries found');
                 if (!message) {
-                    message = gt.format(
-                        //#. %1$d is the number of search results in the autocomplete field
-                        //#, c-format
-                        gt.ngettext('One autocomplete entry found', '%1$d autocomplete entries found', numberOfResults),
-                        numberOfResults
-                    );
+                    //#. %1$d is the number of search results in the autocomplete field
+                    //#, c-format
+                    message = gt.ngettext('%1$d autocomplete entry found', '%1$d autocomplete entries found', numberOfResults, numberOfResults);
                 }
 
                 self.$el.trigger('aria-live-update', message);

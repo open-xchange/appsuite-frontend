@@ -1073,12 +1073,17 @@ define('io.ox/mail/main', [
                             $('<div>').append(
                                 // although we are in showMultiple, we could just have one message if selection mode is alternative
                                 //#. %1$d is the number of selected messages
-                                gt.format(gt.ngettext('%1$d message selected', '%1$d messages selected', count, count))
+                                gt.ngettext('%1$d message selected', '%1$d messages selected', count, count)
                             ),
                             // inline actions
                             id && total > list.length && !search ?
                                 $('<div class="inline-actions selection-message">').append(
-                                    gt('There are %1$d messages in this folder; not all messages are displayed in the list currently.', total)
+                                    // although "total" is always greater than 1, "gt.ngettext" must be used to produce correct plural forms for some languages!
+                                    gt.ngettext(
+                                        'There is %1$d message in this folder; not all messages are displayed in the list currently.',
+                                        'There are %1$d messages in this folder; not all messages are displayed in the list currently.',
+                                        total, total
+                                    )
                                 ).hide()
                                 : $()
                         );
@@ -1865,7 +1870,7 @@ define('io.ox/mail/main', [
                         var n = data.count,
                             pct = Math.round(data.pct * 100),
                             //#. %1$d is number of messages; %2$d is progress in percent
-                            caption = gt.ngettext('Sending 1 message ... %2$d%', 'Sending %1$d messages ... %2$d%', n, n, pct);
+                            caption = gt.ngettext('Sending %1$d message ... %2$d%', 'Sending %1$d messages ... %2$d%', n, n, pct);
                         $el.find('.progress-bar').css('width', pct + '%');
                         $el.find('.caption span').text(caption);
                         $el.find('[data-action="close"]').off().on('click', function (e) {

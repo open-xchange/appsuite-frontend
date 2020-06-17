@@ -35,7 +35,7 @@ define('io.ox/tours/intro', [
         })
             .step({ noAutoAlign: true })
                 //#. %s is the product name, e.g. OX App Suite
-                .title(gt.format(gt('Welcome to %s'), ox.serverConfig.productName))
+                .title(gt('Welcome to %s', ox.serverConfig.productName))
                 .content(gt('This tour will give you a quick introduction to the product in five steps.'))
                 .end()
             .step({ back: false, noAutoAlign: true })
@@ -74,8 +74,8 @@ define('io.ox/tours/intro', [
                     new Tour()
                         .step()
                             .title(gt('Cancel tour'))
-                            //#. %s is the getting started tour button label
-                            .content(gt.format(gt('You can restart this tour at any time by clicking on the account icon and choose "%s"'),
+                            //#. %s is the "getting started" tour button label
+                            .content(gt('You can restart this tour at any time by clicking on the account icon and choose "%s"',
                                 //#. Tour name; general introduction
                                 gt('Getting started')))
                             .end()
