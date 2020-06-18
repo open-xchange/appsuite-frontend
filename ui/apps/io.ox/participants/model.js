@@ -274,6 +274,8 @@ define('io.ox/participants/model', [
                 return userAPI.getList(data.members);
             })
             .then(function (users) {
+                // set correct type or magic function gets confused
+                _(users).each(function (user) { user.type = TYPE.USER; });
                 return _.sortBy(users, 'last_name');
             });
     }
