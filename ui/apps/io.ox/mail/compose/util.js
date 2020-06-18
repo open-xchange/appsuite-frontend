@@ -60,9 +60,18 @@ define('io.ox/mail/compose/util', [
                         yell(error);
                     });
                     attachment.destroy();
-                }).always(process);
+                }).always(function () {
+                    delete attachment.done;
+                    process();
+                });
             }
 
+            // is handled either when user removes the attachment or composition space is discarded
+            attachment.on('destroy', function () {
+                data = undefined;
+                if (def && def.state() === 'pending') def.abort();
+            });
+            attachment.done = def;
 
             if (data.file && contentDisposition === 'attachment') {
                 attachment.set({
@@ -72,11 +81,6 @@ define('io.ox/mail/compose/util', [
                 var isResizableImage = resize.matches('type', data.file) &&
                     resize.matches('size', data.file) &&
                     instantAttachmentUpload !== false;
-
-                attachment.on('destroy', function () {
-                    data = undefined;
-                    if (def && def.state() === 'pending') def.abort();
-                });
 
                 if (isResizableImage) {
                     attachment.set('uploaded', 0);

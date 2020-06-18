@@ -556,6 +556,19 @@ define('io.ox/contacts/edit/view', [
                     'note',
                     'private_flag'
                 ]
+            },
+            userfields: {
+                //#. Contact edit dialog.
+                add: gt('Add user fields'),
+                fields: [
+                    'userfield01', 'userfield02', 'userfield03',
+                    'userfield04', 'userfield05', 'userfield06',
+                    'userfield07', 'userfield08', 'userfield09',
+                    'userfield10', 'userfield11', 'userfield12',
+                    'userfield13', 'userfield14', 'userfield15',
+                    'userfield16', 'userfield17', 'userfield18',
+                    'userfield19', 'userfield20'
+                ]
             }
         },
 
@@ -588,6 +601,15 @@ define('io.ox/contacts/edit/view', [
             other: [
                 'note',
                 'private_flag'
+            ],
+            userfields: [
+                'userfield01', 'userfield02', 'userfield03',
+                'userfield04', 'userfield05', 'userfield06',
+                'userfield07', 'userfield08', 'userfield09',
+                'userfield10', 'userfield11', 'userfield12',
+                'userfield13', 'userfield14', 'userfield15',
+                'userfield16', 'userfield17', 'userfield18',
+                'userfield19', 'userfield20'
             ]
         },
 

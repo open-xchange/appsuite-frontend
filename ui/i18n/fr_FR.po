@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-02-27 10:32+0100\n"
+"PO-Revision-Date: 2020-06-03 11:26+0200\n"
 "Last-Translator: Sandrine Burriel <sandrine@workshop-chapina.com>\n"
 "Language-Team: French <fr@workshop-chapina.com>\n"
 "Language: fr_FR\n"
@@ -3478,7 +3478,7 @@ msgstr "Ajouter des informations professionnelles"
 #. Short for: Add email address, phone number, fax number.
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Add email, phone, fax"
-msgstr "Ajouter une adresse électronique, un téléphone, un fax"
+msgstr "Ajouter une adresse électronique, un téléphone, une télécopie"
 
 #. Contact edit dialog.
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
