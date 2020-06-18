@@ -114,7 +114,7 @@ define('io.ox/settings/accounts/views', [
             onDelete: function (e) {
 
                 e.preventDefault();
-                var account = this.model.pick('id', 'accountType', 'folder', 'rootFolder'),
+                var account = this.model.pick('id', 'accountType', 'folder', 'rootFolder', 'filestorageService'),
                     self = this;
                 if (account.accountType === 'fileAccount') {
                     account.folder = account.rootFolder;
@@ -131,13 +131,21 @@ define('io.ox/settings/accounts/views', [
                     .addButton({ action: 'delete', label: gt('Delete account') })
                     .on('delete', function () {
                         var popup = this,
+                            req, opt;
+
+                        if (account.accountType === 'fileAccount') {
+                            req = 'io.ox/core/api/filestorage';
+                            opt = { id: account.id, filestorageService: account.filestorageService };
+                        } else {
                             // use correct api, folder API if there's a folder and account is not a mail account,
                             // keychain API otherwise
-                            useFolderAPI = typeof account.folder !== 'undefined' && account.accountType !== 'mail',
+                            var useFolderAPI = typeof account.folder !== 'undefined' && account.accountType !== 'mail';
                             req = useFolderAPI ? 'io.ox/core/folder/api' : 'io.ox/keychain/api';
+                            opt = useFolderAPI ? account.folder : account;
+                        }
                         settingsUtil.yellOnReject(
                             require([req]).then(function (api) {
-                                return api.remove(useFolderAPI ? account.folder : account);
+                                return api.remove(opt);
                             }).then(
                                 function success() {
                                     if (self.disposed) {
