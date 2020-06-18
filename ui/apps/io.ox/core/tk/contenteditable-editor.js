@@ -842,6 +842,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         this.destroy = function () {
             this.hide();
+            ed.setContent('');
             clearKeepalive();
             // have to unset active editor manually. may be removed for future versions of tinyMCE
             delete tinyMCE.EditorManager.activeEditor;
