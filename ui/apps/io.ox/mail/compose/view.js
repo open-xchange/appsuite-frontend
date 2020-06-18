@@ -426,6 +426,9 @@ define('io.ox/mail/compose/view', [
         id: 'options',
         index: 100,
         perform: function (baton) {
+            // stop cascade flow on app quit
+            this.on('quit', baton.stopPropagation.bind(baton));
+
             baton.options = {
                 useFixedWithFont: settings.get('useFixedWithFont'),
                 app: this,
@@ -485,6 +488,7 @@ define('io.ox/mail/compose/view', [
         }
     });
 
+    // via ext.cascade
     ext.point(POINT + '/editor/use').extend({
         id: 'register',
         index: 100,
@@ -493,6 +497,8 @@ define('io.ox/mail/compose/view', [
             if (view.editor) view.stopListening(view.editor);
             view.listenTo(baton.editor, 'change', view.syncMail);
             view.listenTo(baton.config, 'change:signature', view.syncMail);
+            // stop cascade flow on app quit
+            this.on('quit', baton.stopPropagation.bind(baton));
         }
     }, {
         id: 'content',
