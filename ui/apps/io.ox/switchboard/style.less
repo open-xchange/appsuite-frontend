@@ -48,7 +48,7 @@
         button {
             display: flex;
             align-items: center;
-            i.fa { margin-right: 8px; }
+            i.fa { margin-right: 8px; }
         }
     }
 }
@@ -303,6 +303,114 @@
 
 .conference-account-view {
     margin-bottom: 24px;
+}
+
+.call-history {
+    #io-ox-appcontrol & svg.indicator {
+        left: 22px;
+        top: 20px;
+        animation: call-history-blink 2s linear 0s infinite;
+    }
+    & > ul {
+        width: 360px;
+        max-height: ~"calc(70vh - 64px)";
+        overflow-y: auto;
+        .header {
+            padding: 15px 16px 4px 16px;
+        }
+        .header-caption {
+            color: #333;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 24px;
+        }
+        .header-controls {
+            text-align: center;
+        }
+    }
+}
+
+@-webkit-keyframes call-history-blink {
+    0%   { opacity: 0; }
+    50%  { opacity: 0; }
+    51%  { opacity: 1; }
+    100% { opacity: 1; }
+}
+
+.call-history-item {
+    border-bottom: 1px solid #ddd;
+    height: 56px;
+    &:last-child { border: 0; }
+    .call-icon {
+        position: absolute;
+        top: 14px;
+        left: 18px;
+        color: #707070;
+        .fa { position: absolute; }
+        .fa-phone {
+            top: 0;
+            left: 0;
+        }
+        .fa-angle-double-right {
+            top: -6px;
+            left: 6px;
+            transform: rotate(-45deg);
+        }
+        .fa-exclamation {
+            top: -1px;
+            left: 4px;
+        }
+    }
+    .contact-photo {
+        position: absolute;
+        top: 10px;
+        right: 16px;
+        width: 32px;
+        height: 32px;
+    }
+    .presence {
+        position: absolute;
+        top: 30px;
+        right: 6px;
+        &.offline { display: none; }
+        .icon {
+            border: 1px solid white;
+            box-sizing: content-box;
+        }
+    }
+    .date {
+        font-size: 13px;
+        color: #707070;
+        float: right;
+        display: inline-block;
+        margin-left: 8px;
+    }
+    .name {
+        font-weight: bold;
+    }
+    &.missed {
+        .name {
+            color: #a00;
+        }
+        .call-icon {
+            color: #a00;
+        }
+    }
+    .caption {
+        color: #707070;
+        font-size: 13px;
+    }
+}
+
+.dropdown-menu > li.call-history-item > a {
+    padding: 11px 64px 12px 40px;
+    position: relative;
+    line-height: 16px;
+    &:focus {
+        .name, .call-icon, .date, .caption {
+            color: white;
+        }
+    }
 }
 
 /* some changes */

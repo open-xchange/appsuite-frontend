@@ -23,14 +23,14 @@ define('io.ox/switchboard/actions', [
     var Action = actionsUtil.Action;
 
     new Action('io.ox/switchboard/call-user', {
-        collection: 'some',
+        collection: 'one',
         matches: function (baton) {
             // you cannot call yourself
             if (justMyself(baton)) return false;
             return isGAB(baton);
         },
         action: function (baton) {
-            call.start(getRecipients(baton));
+            call.start('zoom', getRecipients(baton));
         }
     });
 

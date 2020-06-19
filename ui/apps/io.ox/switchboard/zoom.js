@@ -177,15 +177,15 @@ define('io.ox/switchboard/zoom', [
         // - <int> duration (in minutes)
         // - <string> [agenda]
         createMeeting: function (data) {
-            var tz = data.timezone || 'Europe/Berlin';
+            //var tz = data.timezone || 'Europe/Berlin';
             return createMeeting({
                 agenda: data.agenda || '',
-                duration: data.duration || 60,
+                //duration: data.duration || 60,
                 password: getPassword(),
-                start_time: moment.tz(data.startTime, tz).format('YYYY-MM-DDTHH:mm:ss'),
-                timezone: tz,
+                //start_time: moment.tz(data.startTime, tz).format('YYYY-MM-DDTHH:mm:ss'),
+                //timezone: tz,
                 topic: data.topic || '',
-                type: 2
+                type: 3
             });
         },
 

@@ -29,6 +29,9 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
                 this.states[callee] = 'pending';
             }, this);
         },
+        getType: function () {
+            return this.get('type');
+        },
         getCaller: function () {
             return this.get('caller');
         },
@@ -51,6 +54,12 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
             this.set('telco', TELCO + s4() + s4());
             function s4() { return Math.floor((1 + Math.random()) * 0x10000).toString(16).substr(1); }
         },
+        isIncoming: function () {
+            return !!this.get('incoming');
+        },
+        isMissed: function () {
+            return !!this.get('missed');
+        },
         isCalling: function () {
             return this.get('caller') === api.userId;
         },
@@ -58,7 +67,7 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
             return !this.hungup && _(this.states).some(function (value) { return value === 'pending'; });
         },
         propagate: function () {
-            api.propagate('call', this.get('callees'), { telco: this.getTelcoLink() });
+            api.propagate('call', this.get('callees'), { telco: this.getTelcoLink(), type: this.getType() });
         },
         hangup: function () {
             this.hungup = true;
@@ -77,6 +86,13 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
             if (!this.states[userId]) return;
             this.states[userId] = state;
             this.trigger('change:state');
+        },
+        addToHistory: function () {
+            require(['io.ox/switchboard/views/call-history'], function (callHistory) {
+                var incoming = this.isIncoming(),
+                    email = incoming ? this.getCaller() : this.getCallees()[0];
+                callHistory.add({ date: _.now(), email: email, incoming: incoming, missed: this.isMissed(), type: this.getType() });
+            }.bind(this));
         }
     });
 
@@ -87,10 +103,10 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
     }
 
     // start a call with participants
-    function start(callees) {
+    function start(type, callees) {
         // should not happen UI-wise, but to be sure
         if (isCallActive()) return;
-        call = new Call({ caller: api.userId, callees: callees });
+        call = new Call({ caller: api.userId, callees: [].concat(callees), type: type, incoming: false });
         // load on demand / otherwise circular deps
         require(['io.ox/switchboard/call/outgoing'], function (outgoing) {
             outgoing.openDialog(call);
@@ -106,7 +122,7 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
             }, 2000);
             return;
         }
-        call = new Call({ caller: caller, callees: callees, telco: payload.telco });
+        call = new Call({ caller: caller, callees: callees, telco: payload.telco, type: payload.type, incoming: true });
         // load on demand / otherwise circular deps
         require(['io.ox/switchboard/call/incoming'], function (incoming) {
             incoming.openDialog(call);
@@ -117,25 +133,29 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
     api.socket.on('answer', function (caller) {
         if (!isCallActive()) return;
         call.changeState(caller, 'answered');
+        call.addToHistory();
     });
 
     // CALLEE declines the call
     api.socket.on('decline', function (caller) {
         if (!isCallActive()) return;
         call.changeState(caller, 'declined');
+        call.addToHistory();
     });
 
     // CALLER cancels the call
     api.socket.on('cancel', function () {
         if (!isCallActive()) return;
+        call.set('missed', true);
+        call.addToHistory();
         call.hangup();
     });
 
     // TEST
     // Outgoing:
-    // api = require('io.ox/switchboard/call/api'); void api.start(['matthias.biggeleben@open-xchange.com', 'alexander.quast@open-xchange.com']);
+    // api = require('io.ox/switchboard/call/api'); void api.start('zoom', ['matthias.biggeleben@open-xchange.com', 'alexander.quast@open-xchange.com']);
     // Incoming:
-    // api = require('io.ox/switchboard/api'); void api.propagate('call', 'matthias.biggeleben@open-xchange.com', {});
+    // api = require('io.ox/switchboard/api'); void api.propagate('call', 'matthias.biggeleben@open-xchange.com', { type: 'zoom' });
 
     return {
         get: function () { return call; },

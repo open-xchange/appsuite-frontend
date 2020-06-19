@@ -24,17 +24,17 @@ define('io.ox/switchboard/call/outgoing', [
     'use strict';
 
     return {
-        openDialog: function (model) {
+        openDialog: function (call) {
             new Modal({ title: gt('Call'), autoClose: false })
                 .inject({
                     renderCallees: function () {
-                        var callees = model.getCallees(), callee = callees[0];
+                        var callees = call.getCallees(), callee = callees[0];
                         this.$body.empty().append(
                             $('<div class="photo">').append(
                                 contactsAPI.pictureHalo($('<div class="contact-photo">'), { email: callee }, { width: 80, height: 80 }),
                                 presence.getPresenceIcon(callee)
                             ),
-                            $('<div class="name">').text(model.getCalleeName(callee)),
+                            $('<div class="name">').text(call.getCalleeName(callee)),
                             $('<div class="email">').text(callee)
                         );
                     },
@@ -77,7 +77,6 @@ define('io.ox/switchboard/call/outgoing', [
                     },
                     toggleCallButton: function () {
                         var link = this.conference.model.get('joinLink');
-                        console.log('renderService > change:joinLink', link);
                         this.getButton('call').prop('disabled', !link);
                     },
                     getButton: function (action) {
@@ -100,19 +99,20 @@ define('io.ox/switchboard/call/outgoing', [
                     console.log('call', link);
                     if (!link) return;
                     window.open(link, 'call');
-                    model.set('telco', link).propagate();
+                    call.set('telco', link).propagate();
                     ringtone.outgoing.play();
                     this.getButton('cancel').parent().remove();
                     this.getButton('call').parent().replaceWith(
                         this.createButton('danger', 'hangup', 'phone', gt('Hang up'))
                     );
+                    call.addToHistory();
                 })
                 .on('hangup', function () {
                     this.close();
                 })
                 .on('close', function () {
                     ringtone.outgoing.stop();
-                    model.hangup();
+                    call.hangup();
                 })
                 .open();
         }

@@ -23,9 +23,10 @@ define('io.ox/switchboard/extensions', [
     'io.ox/switchboard/views/conference-select',
     'io.ox/switchboard/views/zoom-meeting',
     'io.ox/switchboard/views/jitsi-meeting',
+    'io.ox/switchboard/views/call-history',
     'settings!io.ox/core',
     'gettext!io.ox/switchboard'
-], function (ext, presence, api, account, mini, DisposableView, actionsUtil, contactsAPI, ConferenceSelectView, ZoomMeetingView, JitsiMeetingView, settings, gt) {
+], function (ext, presence, api, account, mini, DisposableView, actionsUtil, contactsAPI, ConferenceSelectView, ZoomMeetingView, JitsiMeetingView, callHistory, settings, gt) {
 
     'use strict';
 
@@ -331,6 +332,17 @@ define('io.ox/switchboard/extensions', [
                     }
                 })
             );
+        }
+    });
+
+    // add call history
+    ext.point('io.ox/core/appcontrol/right').extend({
+        id: 'call-history',
+        // 100 is notifications, 120 is app launcher
+        index: 110,
+        draw: function () {
+            if (!settings.get('switchboard/callHistory/enabled', true)) return;
+            this.append(callHistory.view.$el);
         }
     });
 
