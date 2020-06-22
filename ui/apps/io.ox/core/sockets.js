@@ -50,7 +50,6 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
     }
 
     function connectSocket() {
-        if (true) return;
         ox.socketConnectionId = connectionId;
         var def = $.Deferred();
         // connect Websocket

@@ -69,7 +69,8 @@ define.async('io.ox/switchboard/api', [
             params: { action: 'acquireToken' }
         })
         .then(function (data) {
-            api.socket = io.connect(api.host + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token)
+
+            api.socket = io(api.host + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token, { transports: ['websocket'] }) //io.connect(api.host + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token, { transports: ['websocket'] })
                 .once('connect', function () {
                     console.log('%cConnected to switchboard service', 'background-color: green; color: white; padding: 8px;');
                 })
