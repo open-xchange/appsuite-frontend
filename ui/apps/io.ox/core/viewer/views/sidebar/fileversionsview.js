@@ -96,7 +96,17 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
     });
 
     // View a specific version
-    Ext.point('io.ox/files/versions/links/inline').extend({
+    Ext.point('io.ox/files/versions/links/inline/current').extend({
+        id: 'display-version',
+        index: 100,
+        prio: 'lo',
+        mobile: 'lo',
+        title: gt('View this version'),
+        section: 'view',
+        ref: 'io.ox/files/actions/viewer/display-version'
+    });
+
+    Ext.point('io.ox/files/versions/links/inline/older').extend({
         id: 'display-version',
         index: 100,
         prio: 'lo',
@@ -127,12 +137,16 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         id: 'filename',
         draw: function (baton) {
 
-            var dropdown = new ActionDropdownView({ point: 'io.ox/files/versions/links/inline' });
+            var externalStorageSupportsVersions = !(/^(owncloud|webdav|nextcloud)$/.test(baton.data.folder_id.split(':')[0]));
+            var isCurrentVersion = !!(baton.data.current_version || (baton.last_modified && !externalStorageSupportsVersions));
+            var versionPoint = isCurrentVersion ? 'io.ox/files/versions/links/inline/current' : 'io.ox/files/versions/links/inline/older';
+
+            var dropdown = new ActionDropdownView({ point: versionPoint });
 
             dropdown.once('rendered', function () {
-                var $toggle = this.$('> .dropdown-toggle'),
-                    versionCounterSupport = !(/^(owncloud|webdav|nextcloud)$/.test(baton.data.folder_id.split(':')[0]));
-                if (baton.data.current_version || (baton.last_modified && !versionCounterSupport)) $toggle.addClass('current');
+                var $toggle = this.$('> .dropdown-toggle');
+
+                if (isCurrentVersion) { $toggle.addClass('current'); }
 
                 Util.setClippedLabel($toggle, baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename);
             });
@@ -267,7 +281,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
          * Render the version list
          */
         renderVersions: function () {
-            if (!this.model) return this;
+            if (!this.model || !open[this.model.cid]) return this;
             var expectedVersionOrder = _(getSortedVersions(this.model.get('versions') || [])).pluck('version'),
                 actualVersionOrder = this.$el.find('.version').map(function (index, node) { return node.getAttribute('data-version-number'); }).get();
 

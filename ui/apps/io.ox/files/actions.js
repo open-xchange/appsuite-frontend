@@ -1380,7 +1380,8 @@ define('io.ox/files/actions', [
 
     // version links
 
-    ext.point('io.ox/files/versions/links/inline').extend(
+    // current version
+    ext.point('io.ox/files/versions/links/inline/current').extend(
         {
             id: 'view',
             index: 100,
@@ -1399,6 +1400,47 @@ define('io.ox/files/actions', [
             title: gt('Edit'),
             ref: 'io.ox/files/actions/editor',
             section: 'edit'
+        },
+        {
+            id: 'download',
+            index: 200,
+            prio: 'lo',
+            mobile: 'lo',
+            title: gt('Download'),
+            ref: 'io.ox/files/actions/downloadversion',
+            section: 'edit'
+        },
+        {
+            id: 'delete',
+            index: 300,
+            prio: 'lo',
+            mobile: 'lo',
+            title: gt('Delete version'),
+            ref: 'io.ox/files/versions/actions/delete',
+            section: 'delete'
+        },
+        {
+            id: 'deletePreviousVersions',
+            index: 310,
+            prio: 'lo',
+            mobile: 'lo',
+            title: gt('Delete all previous versions'),
+            ref: 'io.ox/files/versions/actions/deletePreviousVersions',
+            section: 'delete'
+        }
+    );
+
+    // older versions
+    ext.point('io.ox/files/versions/links/inline/older').extend(
+        {
+            id: 'view',
+            index: 100,
+            prio: 'lo',
+            mobile: 'lo',
+            //#. used as a verb here. label of a button to view files
+            title: gt('View'),
+            ref: 'io.ox/files/actions/viewer',
+            section: 'view'
         },
         {
             id: 'download',
