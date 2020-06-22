@@ -364,6 +364,8 @@ define('io.ox/mail/compose/extensions', [
                         ariaLabel: tokenfieldTranslations['aria' + attr]
                     });
 
+                if (attr === 'reply_to') tokenfieldView.options.limit = 1;
+
                 var node = $('<div class="mail-input">').append(tokenfieldView.$el),
                     actions = $('<div class="recipient-actions">');
 
@@ -421,6 +423,9 @@ define('io.ox/mail/compose/extensions', [
                 // bind mail-model to collection
                 tokenfieldView.listenTo(baton.model, 'change:' + attr, function (mailModel, recipients) {
                     if (redrawLock) return;
+                    if (recipients && recipients.length && !_.isArray(recipients[0])) {
+                        recipients = [recipients];
+                    }
                     var recArray = _(recipients).map(function (recipient) {
                         var display_name = util.removeQuotes(recipient[0]),
                             email = recipient[1],
@@ -447,7 +452,7 @@ define('io.ox/mail/compose/extensions', [
                         return [display_name, email];
                     });
                     redrawLock = true;
-                    baton.model.set(attr, recipients);
+                    baton.model.set(attr, attr === 'reply_to' ? recipients[0] : recipients);
                     redrawLock = false;
                 }.bind(tokenfieldView.collection)), 20);
 

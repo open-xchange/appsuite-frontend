@@ -540,7 +540,8 @@ define('io.ox/core/tk/tokenfield', [
                     html: this.options.html || false,
                     inputType: this.options.inputtype || 'email',
                     isMail: o.isMail,
-                    minWidth: 0
+                    minWidth: 0,
+                    limit: o.limit
                 });
 
             this.$wrapper = this.$el.closest('div.tokenfield').prepend(
