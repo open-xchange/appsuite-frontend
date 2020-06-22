@@ -602,8 +602,9 @@ define('io.ox/core/tk/contenteditable-editor', [
                 // remove tinyMCE resizeHandles
                 $(ed.getBody()).find('.mce-resizehandle').remove();
 
-                // get raw content
-                var content = ed.getContent({ format: 'raw' });
+                // get content, do not use { format: 'raw' } here or we get tons of <br data-mce-bogus=\"1\"> elements in firefox and create unwanted newlines
+                var content = ed.getContent();
+
                 // strip data attributes (incl. bogus attribute)
                 content = stripDataAttributes(content);
                 // clean up
