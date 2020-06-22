@@ -32,7 +32,10 @@ define('io.ox/mail/compose/main', [
     POINT.extend({
         id: 'bundle',
         index: INDEX += 100,
-        perform: function () {
+        perform: function (baton) {
+            // stop cascade flow on app quit
+            this.on('quit', baton.stopPropagation.bind(baton));
+
             return require(['io.ox/mail/compose/bundle']);
         }
     }, {

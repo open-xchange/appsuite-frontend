@@ -11921,7 +11921,7 @@ msgstr "Klient Drive"
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
 #: module:io.ox/settings
 msgid "Mobile Mail"
-msgstr "Mobilní pošta"
+msgstr "Mobile Mail"
 
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
 #: module:io.ox/settings

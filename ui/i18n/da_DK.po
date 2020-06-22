@@ -12146,7 +12146,7 @@ msgstr "Klient til Drive"
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
 #: module:io.ox/settings
 msgid "Mobile Mail"
-msgstr "Mobilt e-mail"
+msgstr "Mobile Mail"
 
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
 #: module:io.ox/settings

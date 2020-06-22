@@ -54,7 +54,6 @@ define('io.ox/core/sub/sharedFolders', [
             top: 60,
             width: 600,
             center: false,
-            maximize: true,
             help: options.help,
             async: true,
             point: options.point,

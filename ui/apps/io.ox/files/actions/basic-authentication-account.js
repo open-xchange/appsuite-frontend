@@ -169,6 +169,9 @@ define('io.ox/files/actions/basic-authentication-account', [
                     def.resolve();
                     baton.popup.close();
                     yell('success', gt('Account added successfully'));
+                }, function (error) {
+                    yell('error', error.error);
+                    baton.popup.idle();
                 });
 
         })
