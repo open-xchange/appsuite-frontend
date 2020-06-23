@@ -27,7 +27,7 @@
     "moment": "2.13.0",
     "moment-timezone": "0.5.4",
     "open-sans-fontface": "1.2.1",
-    "pdfjs-dist": "1.4.20",
+    "pdfjs-dist": "2.3.200",
     "requirejs": "2.1.22",
     "swiper": "3.0.6",
     "textarea-helper": "https://github.com/Codecademy/textarea-helper.git#0.3.1",
