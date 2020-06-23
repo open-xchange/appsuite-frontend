@@ -186,10 +186,7 @@ define('io.ox/core/boot/form', [
                 };
 
             // header and toolbar
-            $('#io-ox-login-background').css({ background: _.device('smartphone') ? lc.backgroundColor : lc.backgroundImage });
-            $('#io-ox-login-header').css({ background: 'linear-gradient(rgba(0,0,0,' + lc.topVignette.transparency + '),rgba(0,0,0,0)' });
             createElementComposition(lc.header.sorting, toolbarElements, toolbar);
-            $('#io-ox-login-toolbar *').css({ color: lc.header.textColor });
             if (_.device('smartphone')) toolbar.append($('<div id="login-title-mobile">').text(lc.header.title));
 
             // teaser and boxposition
@@ -198,39 +195,64 @@ define('io.ox/core/boot/form', [
                 content.append($teaser);
             } else if (lc.loginBox === 'right' && !_.device('smartphone')) {
                 content.prepend($teaser);
-            } else if (lc.loginBox) {
-                $('#io-ox-login-content').css({ 'justify-content': 'center' });
             }
 
             // form
-            $('#box-form-header')
-                .text(lc.header.title)
-                .css({ color: lc.form.header.textColor,
-                    background: lc.form.header.background });
-            $('#box-form-body *').css({ color: lc.form.textColor });
+            $('#box-form-header').text(lc.header.title);
             if (lc.altTitle) $('#login-title').attr({ 'data-i18n': lc.altTitle }).text(lc.altTitle);
             else if (!lc.hideTitle) $('#login-title').attr({ 'data-i18n': 'Sign in' }).text(gt('Sign in'));
             else $('#login-title').remove();
-            $('#io-ox-login-box a').css({ color: lc.form.linkColor });
-            $('#io-ox-login-button').css({ color: lc.form.button.textColor,
-                'background-color': lc.form.button.color,
-                'border-color': lc.form.button.color
-            }).attr({ 'data-i18n': 'Sign in' }).text(gt('Sign in'));
+            $('#io-ox-login-button').attr({ 'data-i18n': 'Sign in' }).text(gt('Sign in'));
             if (lc.newPassword) $('#io-ox-login-password').val('');
             $('#io-ox-information-message').html(lc.informationMessage);
 
             // footer
-            footer.css({ background: lc.footer.color });
             createElementComposition(lc.footer.sorting, footerElemts, footer);
-            $('#io-ox-login-footer *').css({ color: lc.footer.textColor });
-            $('#io-ox-login-footer > * a').css({ color: lc.footer.linkColor });
             if (_.device('smartphone')) {
                 toolbar.find('#io-ox-languages').remove();
                 footer.prepend($language);
             }
 
+            var configCss = '';
+
+            if (_.device('smartphone') && lc.backgroundColor) configCss += '#io-ox-login-background.wallpaper { background: ' + lc.backgroundColor + ' } ';
+            else if (_.device('smartphone') && lc.backgroundImage) configCss += '#io-ox-login-background.wallpaper { background: ' + lc.backgroundImage + ' } ';
+            else if (!_.device('smartphone') && lc.backgroundImage) configCss += '#io-ox-login-background { background: ' + lc.backgroundImage + ' } ';
+            else if (!_.device('smartphone') && lc.backgroundColor) configCss += '#io-ox-login-background { background: ' + lc.backgroundColor + ' } ';
+
+            if (lc.topVignette && lc.topVignette.transparency) configCss += '#io-ox-login-header { background: linear-gradient(rgba(0,0,0,' + lc.topVignette.transparency + '),rgba(0,0,0,0)) } ';
+
+            var h = lc.header;
+            if (h) {
+                if (h.textColor) configCss += '#io-ox-languages :not([role=menuitem]) { color: ' + h.textColor + '} ';
+                if (h.linkColor) configCss += '#io-ox-languages a:not([role="menuitem"]),#language-select,.toggle-text,.caret { color: ' + h.linkColor + '} ';
+            }
+
+            var form = lc.form;
+            if (form) {
+                if (form.header && form.header.textColor) configCss += '#box-form-header { color: ' + form.header.textColor + ' } ';
+                if (form.header && form.header.bgColor) configCss += '#box-form-header { background: ' + form.header.bgColor + ' } ';
+                if (form.textColor) configCss += '#box-form *:not(button) { color: ' + form.textColor + ' } ';
+                if (form.linkColor) configCss += '#box-form a { color: ' + form.linkColor + ' } ';
+                if (form.button && form.button.bgColor) configCss += '#io-ox-login-button { background-color: ' + form.button.bgColor + '; border-color: ' + form.button.bgColor + ' } ';
+                if (form.button && form.button.borderColor) configCss += '#io-ox-login-button { border-color: ' + form.button.borderColor + ' } ';
+                if (form.button && form.button.textColor) configCss += '#io-ox-login-button { color: ' + form.button.textColor + ' } ';
+            }
+
+            var f = lc.footer;
+            if (f) {
+                if (f.bgColor) configCss += '#io-ox-login-footer { background: ' + f.bgColor + ' } ';
+                if (f.textColor) configCss += '#io-ox-login-footer * { color: ' + f.textColor + ' } ';
+                if (f.linkColor) configCss += '#io-ox-login-footer > * a { color: ' + f.linkColor + ' } ';
+            }
+
+            if (!lc.loginBox || lc.loginBox === 'center') configCss += '#io-ox-login-content { justify-content: center }';
+
+            //apply styles from server configuration (login page)
+            $('head').append($('<style data-src="login-page-configuration" type="text/css">').text(util.scopeCustomCss(configCss, '#io-ox-login-screen')));
+
             // apply custom css
-            $('head').append($('<style type="text/css">').text(util.scopeCustomCss(lc.customCss, '#io-ox-login-screen')));
+            $('head').append($('<style data-src="login-page-configuration-custom" type="text/css">').text(util.scopeCustomCss(lc.customCss, '#io-ox-login-screen')));
         }
 
         function createElementComposition(sorting, elements, target) {
@@ -256,51 +278,23 @@ define('io.ox/core/boot/form', [
         }
 
         function getLoginConfiguration(options) {
-            var lc = $.extend(true, getDefaultLogin(), sc.loginPage, options);
-            lc.header.title = lc.header.title || sc.productName;
-
+            var lc = $.extend(true, getDefaultConfiguration(), sc.loginPage, options);
+            lc.header.title = lc.form && lc.form.title || sc.productName;
+            lc.logo = lc.logo || getDefaultLogo();
             return lc;
         }
 
-        function getDefaultLogin() {
+        function getDefaultConfiguration() {
             return {
-                'backgroundImage': 'radial-gradient(at 33% 50%, #3b6aad, #1f3f6b)',
-                'backgroundColor': 'radial-gradient(at 33% 50%, #3b6aad, #1f3f6b)',
-                // 'teaser': '<div style="height: 100%; display: flex; justify-content: center; flex-direction: column"><h1 style="text-transform: uppercase; font-family: monospace; text-align: center">lorem ipsum sit dolor',
-                'logo': getDefaultLogo(),
-                'topVignette': {
-                    'transparency': '0.1'
-                },
                 'header': {
-                    'title': 'App Suite',
-                    'textColor': '#fffff',
-                    'linkColor': '#94c1ec',
                     'sorting': '$logo,$language,$spacer'
                 },
-                'loginBox': 'center',
-                'form': {
-                    'textColor': '#333333',
-                    'linkColor': '#94c1ec',
-                    'header': {
-                        'background': '#f5f5f5',
-                        'textColor': '#333333'
-                    },
-                    'button': {
-                        'color': '#3662a0',
-                        'textColor': '#ffffff'
-                    }
-                },
-                // 'informationMessage': '<div style="text-align: center;">Watch out for phishing mails. For more details see: <a style="color: #ffc800;" href="https://en.wikipedia.org/wiki/Phishing">Wikipedia Phishing</a></div>',
                 'footer': {
                     'sorting': '$spacer,$copyright,Version: $version,$privacy,$imprint,$spacer',
                     'privacy': 'https://www.open-xchange.com/privacy/',
                     'imprint': 'https://www.open-xchange.com/legal/',
-                    'copyright': '(c) $year OX Software GmbH',
-                    'color': 'rgba(0, 0, 0, 0.15)',
-                    'textColor': '#ffffff',
-                    'linkColor': '#94c1ec'
+                    'copyright': '(c) $year OX Software GmbH'
                 }
-                // 'customCss': '#login-title { text-transform: uppercase; }'
             };
         }
 
@@ -378,8 +372,6 @@ define('io.ox/core/boot/form', [
 
         // set language select to link color defined by the given configuration
         var lc = getLoginConfiguration();
-        $('#io-ox-languages *:not([role="menuitem"])').css('color', lc.header.textColor);
-        $('#io-ox-languages * > a:not([role="menuitem"]),#language-select,.toggle-text,.caret').css('color', lc.header.linkColor);
 
         // update header
         $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '\u00A0') + ' ').removeAttr('aria-hidden');
