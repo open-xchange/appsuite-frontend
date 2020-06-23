@@ -48,8 +48,7 @@ define('io.ox/core/boot/form', [
 
         function displayMessageContinue() {
             loadLoginLayout({ hideTitle: true, addClass: 'login-type-message' });
-            // remove all form elements except buttons
-            hideFormElements('.username, .password, .options');
+            hideFormElements();
         }
 
         function displayContinue(data) {
@@ -71,7 +70,7 @@ define('io.ox/core/boot/form', [
         }
 
         function resetPassword() {
-            loadLoginLayout({ altTitle: gt('Reset password'), newPassword: true });
+            loadLoginLayout({ altTitle: gt('Reset password'), newPassword: true, showAlert: true });
 
             $('#io-ox-login-form').attr({
                 action: '/appsuite/api/share/reset/password',
@@ -115,7 +114,7 @@ define('io.ox/core/boot/form', [
         }
 
         function guestLogin() {
-            loadLoginLayout();
+            loadLoginLayout({ showAlert: true });
 
             var loginName = _.url.hash('login_name');
             $('.row.username').hide();
@@ -137,14 +136,14 @@ define('io.ox/core/boot/form', [
         }
 
         function anonymousLogin() {
-            loadLoginLayout();
+            loadLoginLayout({ showAlert: true });
 
             $('.row.username').hide();
             $('#io-ox-forgot-password').remove();
         }
 
         function defaultLogin() {
-            loadLoginLayout();
+            loadLoginLayout({ showAlert: true });
 
             // remove form for sharing
             $('#io-ox-password-forget-form').remove();
@@ -205,6 +204,9 @@ define('io.ox/core/boot/form', [
             $('#io-ox-login-button').attr({ 'data-i18n': 'Sign in' }).text(gt('Sign in'));
             if (lc.newPassword) $('#io-ox-login-password').val('');
             $('#io-ox-information-message').html(lc.informationMessage);
+
+            // alert info
+            if (options.showAlert) $('#io-ox-login-feedback').addClass('alert-highlight');
 
             // footer
             createElementComposition(lc.footer.sorting, footerElemts, footer);
@@ -340,8 +342,6 @@ define('io.ox/core/boot/form', [
                 break;
         }
 
-
-        $('#io-ox-login-feedback');
 
         var redeem = function (lang) {
             http.GET({

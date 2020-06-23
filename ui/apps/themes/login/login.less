@@ -200,6 +200,7 @@ html.baseline {
 }
 
 #io-ox-login-header {
+    z-index: 1;
     position: absolute;
     width: 100%;
     min-height: 100px;
@@ -261,6 +262,7 @@ html.baseline {
 }
 
 #io-ox-login-footer {
+    z-index: 1;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -413,7 +415,7 @@ html.baseline {
         }
 
         .row.feedback {
-            margin-bottom: 6px;
+            margin-bottom: 14px;
             min-height: 32px;
         }
 
@@ -457,12 +459,18 @@ html.baseline {
     margin: 0;
 }
 
-#login-title,
 #io-ox-login-help,
 #io-ox-login-feedback,
 #io-ox-login-feedback div {
     text-align: left;
     font-size: 13px;
+}
+
+#io-ox-login-feedback.alert-highlight > .alert-info {
+    background: #eee;
+    border-radius: 4px;
+    padding: 8px 8px;
+    font-weight: bold;
 }
 
 .row.password-retype {
