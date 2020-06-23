@@ -224,9 +224,11 @@ define('io.ox/core/main/appcontrol', [
         },
         onContextmenu: function (e) {
             e.preventDefault();
-            require(['io.ox/core/settings/dialogs/quickLauncherDialog'], function (quickLauncherDialog) {
-                quickLauncherDialog.openDialog();
-            });
+            if (settings.isConfigurable('apps/quickLaunch') && api.getQuickLauncherCount() !== 0 && !_.device('smartphone')) {
+                require(['io.ox/core/settings/dialogs/quickLauncherDialog'], function (quickLauncherDialog) {
+                    quickLauncherDialog.openDialog();
+                });
+            }
         },
         render: function () {
             this.$el.empty().append(
