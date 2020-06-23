@@ -1239,8 +1239,6 @@ define('io.ox/core/folder/extensions', [
 
                 if (baton.data.module === 'contacts' && baton.data.meta && baton.data.meta.errors) {
                     baton.view.showStatusIcon(gt('The subscription could not be updated due to an error and must be recreated.'), 'click:account-error', baton.data);
-                } else {
-                    baton.view.hideStatusIcon();
                 }
 
                 if (!/^calendar$/.test(baton.data.module)) return;
