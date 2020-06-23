@@ -94,7 +94,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             }).done(function (editor) {
                 var str = sanitize(signature.content);
                 editor.show();
-                if (!looksLikeHTML(str)) str = $('<p>').append(editor.ln2br(str)).prop('outerHTML');
+                if (signature.content && !looksLikeHTML(str)) str = $('<p>').append(editor.ln2br(str)).prop('outerHTML');
                 editor.setContent(str);
                 baton.view.editor = editor;
             });
