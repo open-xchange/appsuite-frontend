@@ -169,50 +169,66 @@ define('io.ox/core/boot/form', [
 
             var toolbar = $('#io-ox-login-toolbar'),
                 content = $('#io-ox-login-content'),
-                footer = $('#io-ox-login-footer'),
-                $language = $('<span id="io-ox-languages">'),
-                toolbarElements = {
-                    $logo: $('<img class="login-logo" alt="Logo">').attr('src', lc.logo),
-                    $language: $language
-                },
-                footerElemts = {
-                    $privacy: $('<span class="login-privacy-police">').append(
-                        $('<a>').attr('href', lc.footer.privacy).attr({ 'data-i18n': 'Privacy Policy' }).text(gt('Privacy Policy'))),
-                    $imprint: $('<span class="login-imprint">').append(
-                        $('<a>').attr('href', lc.footer.imprint).attr({ 'data-i18n': 'Imprint' }).text(gt('Imprint'))),
-                    $copyright: $('<span class="login-copyright">').text((lc.footer.copyright || sc.copyright).replace(/\(c\)/i, '\u00A9').replace(/\$year/, moment().year())),
-                    $version: $('<span class="login-version">').text(sc.version)
-                };
+                footer = $('#io-ox-login-footer');
+
+            var standardNodes = {
+                $logo: $('<img class="login-logo" alt="Logo">').attr('src', lc.logo),
+                $language: $('<span id="io-ox-languages">'),
+                $spacer: $('<div class="composition-element login-spacer">'),
+                $privacy: $('<span>').append(
+                    $('<a>').attr({ 'href': lc.footer.privacy, 'data-i18n': 'Privacy Policy' }).data('href-translations', getTranslations(lc.footer.$privacy)).text(gt('Privacy Policy'))),
+                $imprint: $('<span>').append(
+                    $('<a>').attr({ 'href': lc.footer.imprint, 'data-i18n': 'Imprint' }).data('href-translations', getTranslations(lc.footer.$imprint)).text(gt('Imprint'))),
+                $copyright: $('<span>').text((lc.footer.copyright || sc.copyright).replace(/\(c\)/g, '\u00A9').replace(/\$year/g, moment().year())),
+                $version: $('<span>').text(sc.version)
+            };
+
+            function getNodes(bucket) {
+                return bucket.sorting.split(',').map(function (str) {
+                    if (standardNodes[str]) return standardNodes[str].clone(true, true);
+                    return $('<div class="composition-element">').append(
+                        str.match(/(\$[a-zA-Z]+|[^$]+)/g).map(function (match) {
+                            if (standardNodes[match]) return standardNodes[match].clone(true, true);
+                            if (bucket[match]) return $('<span data-i18n>').data('translations', getTranslations(bucket[match]));
+                            return $('<span>').text(match);
+                        })
+                    );
+                });
+            }
+
+            function getTranslations(o) {
+                return _.isObject(o) ? o : { en_US: o };
+            }
 
             // header and toolbar
-            createElementComposition(lc.header.sorting, toolbarElements, toolbar);
+            toolbar.append(getNodes(lc.header));
             if (_.device('smartphone')) toolbar.append($('<div id="login-title-mobile">').text(lc.header.title));
 
             // teaser and boxposition
-            var $teaser = $('<div id="io-ox-login-teaser" class="col-sm-6">').html(lc.teaser);
+            var teaser = $('<div id="io-ox-login-teaser" class="col-sm-6" data-i18n-attr="html" data-i18n>').data('translations', getTranslations(lc.teaser));
             if (lc.loginBox === 'left' && !_.device('smartphone')) {
-                content.append($teaser);
+                content.append(teaser);
             } else if (lc.loginBox === 'right' && !_.device('smartphone')) {
-                content.prepend($teaser);
+                content.prepend(teaser);
             }
 
             // form
-            $('#box-form-header').text(lc.header.title);
+            $('#box-form-header').text(lc.header.title).attr({ 'data-i18n': '', 'data-i18n-attr': 'text' }).data('translations', getTranslations(lc.header.title));
             if (lc.altTitle) $('#login-title').attr({ 'data-i18n': lc.altTitle }).text(lc.altTitle);
             else if (!lc.hideTitle) $('#login-title').attr({ 'data-i18n': 'Sign in' }).text(gt('Sign in'));
             else $('#login-title').remove();
             $('#io-ox-login-button').attr({ 'data-i18n': 'Sign in' }).text(gt('Sign in'));
             if (lc.newPassword) $('#io-ox-login-password').val('');
-            $('#io-ox-information-message').html(lc.informationMessage);
+            if (lc.informationMessage) $('#io-ox-information-message').attr({ 'data-i18n': '', 'data-i18n-attr': 'html' }).data('translations', getTranslations(lc.informationMessage));
 
             // alert info
             if (options.showAlert) $('#io-ox-login-feedback').addClass('alert-highlight');
 
             // footer
-            createElementComposition(lc.footer.sorting, footerElemts, footer);
+            footer.append(getNodes(lc.footer));
             if (_.device('smartphone')) {
                 toolbar.find('#io-ox-languages').remove();
-                footer.prepend($language);
+                footer.prepend(standardNodes.$language);
             }
 
             var configCss = '';
@@ -234,7 +250,7 @@ define('io.ox/core/boot/form', [
             if (form) {
                 if (form.header && form.header.textColor) configCss += '#box-form-header { color: ' + form.header.textColor + ' } ';
                 if (form.header && form.header.bgColor) configCss += '#box-form-header { background: ' + form.header.bgColor + ' } ';
-                if (form.textColor) configCss += '#box-form *:not(button) { color: ' + form.textColor + ' } ';
+                if (form.textColor) configCss += '#box-form-body *:not(button) { color: ' + form.textColor + ' } ';
                 if (form.linkColor) configCss += '#box-form a { color: ' + form.linkColor + ' } ';
                 if (form.button && form.button.bgColor) configCss += '#io-ox-login-button { background-color: ' + form.button.bgColor + '; border-color: ' + form.button.bgColor + ' } ';
                 if (form.button && form.button.borderColor) configCss += '#io-ox-login-button { border-color: ' + form.button.borderColor + ' } ';
@@ -257,31 +273,9 @@ define('io.ox/core/boot/form', [
             $('head').append($('<style data-src="login-page-configuration-custom" type="text/css">').text(util.scopeCustomCss(lc.customCss, '#io-ox-login-screen')));
         }
 
-        function createElementComposition(sorting, elements, target) {
-            var $simpleText = $('<div class="io-ox-login-text">'),
-                rule = new RegExp('\\$\\w*');
-
-            sorting.split(',').map(function (el) {
-                if (el.length === 0) return;
-
-                var $newComposition = $('<div class="composition-element">'),
-                    textParts = el.split(rule),
-                    match = el.match(rule) ? el.match(rule)[0] : undefined;
-
-                if (match === '$spacer') $newComposition.addClass('login-spacer');
-                else {
-                    if (textParts[0] !== '') $newComposition.append($simpleText.clone().text(textParts[0]));
-                    if (elements[match]) $newComposition.append(elements[match].clone());
-                    if (textParts[1] !== '') $newComposition.append($simpleText.clone().text(textParts[1]));
-                }
-
-                target.append($newComposition);
-            });
-        }
-
         function getLoginConfiguration(options) {
             var lc = $.extend(true, getDefaultConfiguration(), sc.loginPage, options);
-            lc.header.title = lc.form && lc.form.title || sc.productName;
+            lc.header.title = lc.form && lc.form.header.title || sc.productName;
             lc.logo = lc.logo || getDefaultLogo();
             return lc;
         }
@@ -292,9 +286,9 @@ define('io.ox/core/boot/form', [
                     'sorting': '$logo,$language,$spacer'
                 },
                 'footer': {
-                    'sorting': '$spacer,$copyright,Version: $version,$privacy,$imprint,$spacer',
-                    'privacy': 'https://www.open-xchange.com/privacy/',
-                    'imprint': 'https://www.open-xchange.com/legal/',
+                    'sorting': '$spacer,$copyright,Version $version,$privacy,$imprint,$spacer',
+                    '$privacy': 'https://www.open-xchange.com/privacy/',
+                    '$imprint': 'https://www.open-xchange.com/legal/',
                     'copyright': '(c) $year OX Software GmbH'
                 }
             };
