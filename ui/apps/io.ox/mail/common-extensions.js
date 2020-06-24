@@ -919,13 +919,12 @@ define('io.ox/mail/common-extensions', [
             }
 
             function draw(model) {
-
                 this.find('.disposition-notification').remove();
 
                 // skip? (cancaled or already returned)
                 if (skip[model.cid]) return;
                 // has proper attribute? (only available if message was unseen on fetch)
-                if (!model.get('disp_notification_to')) return;
+                if (!util.hasUnsendReadReceipt(model.toJSON())) return;
                 // user does not ignore this feature?
                 if (!settings.get('sendDispositionNotification', false)) return;
                 // is not in drafts folder?
