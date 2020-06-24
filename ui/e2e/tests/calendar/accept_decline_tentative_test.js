@@ -60,7 +60,7 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.selectFolder('Calendar');
 
     I.say('Accept');
-    I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
+    I.waitForText('test invite accept/decline/accept tentative', 10, '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
     I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
@@ -77,7 +77,7 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.selectFolder('Calendar');
 
     I.say('Decline');
-    I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
+    I.waitForText('test invite accept/decline/accept tentative', 10, '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
     I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
@@ -94,7 +94,7 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.selectFolder('Calendar');
 
     I.say('Tentative');
-    I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
+    I.waitForText('test invite accept/decline/accept tentative', 10, '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
     I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
@@ -111,7 +111,7 @@ Scenario('Create appointments with participants who will accept/decline/accept t
 
     // check in list view
     I.say('Check list view');
-    I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
+    I.waitForText('test invite accept/decline/accept tentative', 10, '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
     // owner
     I.waitForElement('.rightside .participant a.accepted[title="' + users[0].userdata.primaryEmail + '"]');

@@ -1488,6 +1488,7 @@ Scenario('[C7463] Remove a resource', async function (I, users) {
     expect(await I.grabNumberOfVisibleElements(locate('.participant-name').withText(JSON.stringify(resource.display_name)))).to.equal(0);
     I.click('Save');
     I.waitForDetached('.io-ox-calendar-edit.container', 5);
+    I.wait(0.2);
     expect(await I.grabNumberOfVisibleElements(locate('.halo-resource-link').inside('.participant-list').withText(JSON.stringify(resource.display_name)))).to.equal(0);
     await I.dontHaveResource(resource.name, { user: users[0] });
 });

@@ -66,6 +66,8 @@ Scenario('[C125311] Change confimation status as participant', async function (I
     I.waitForText('You have accepted this task');
     I.click('Show task details');
     I.waitForVisible('.io-ox-sidepopup');
+    I.waitForVisible('~More actions');
+    I.wait(0.2);
 
     let actions = [{ text: 'Tentative', class: 'tentative' }, { text: 'Decline', class: 'declined' }, { text: 'Accept', class: 'accepted' }];
 

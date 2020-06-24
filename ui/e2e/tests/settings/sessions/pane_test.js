@@ -23,7 +23,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('lists all sessions', function (I) {
+Scenario.skip('lists all sessions', function (I) {
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/sessions']);
     I.waitForVisible('.io-ox-session-settings');
