@@ -103,7 +103,7 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
                 icon = 'fa-microchip';
                 break;
             case constants.U2F:
-                if (!window.u2f) return;
+                if (!window.u2f || location.protocol !== 'https:') return;
                 text = gt('Yubikey, Google Security Keys, or compatible FIDO device');
                 icon = constants.U2F_ICON;
                 break;
