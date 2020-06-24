@@ -78,7 +78,12 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
             }
             $(document).on({
                 'mousemove.resize': function (e) {
-                    width = Math.max(min, Math.min(e.pageX - base, max));
+                    // if moved inside of an iframe we need to add the iframe's offset to get the correct coordinates. May happen for mail detail view for example
+                    if ($(e.target).is('iframe')) {
+                        width = Math.max(min, Math.min($(e.target).offset().left + e.pageX - base, max));
+                    } else {
+                        width = Math.max(min, Math.min(e.pageX - base, max));
+                    }
                     left.css('width', width);
                     right.css('left', width);
                 },
