@@ -41,15 +41,11 @@ define('io.ox/tours/main', [
 
             if (!disableTour && startOnFirstLogin && tourVersionSeen === -1) {
                 tourSettings.set('user/alreadySeenVersion', 1).save();
-                // don't show first start wizard and what's new tour at the same time
-                // tourSettings.set('whatsNew/autoShow', 0).save();
 
                 baton.data.popups.push({ name: 'tour:io.ox/intro' });
                 return require(['io.ox/core/tk/wizard', 'io.ox/tours/intro']).then(function (Tour) {
                     return Tour.registry.run('default/io.ox/intro');
                 });
-            /*} else if (!tourSettings.get('whatsNew/neverShowAgain', false) && tourSettings.get('whatsNew/autoShow', 1) > 0) {
-                whatsNewTour.run();*/
             } else if (!disableTour && !tourSettings.get('multifactor/shownTour', false)) {
                 baton.data.popups.push({ name: 'tour:io.ox/multifactor' });
                 return require(['io.ox/tours/multifactor']).then(function (tour) {
