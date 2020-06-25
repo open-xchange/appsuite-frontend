@@ -117,8 +117,8 @@ Scenario('Changing calendar color should change appointment color that uses cale
     calendar.waitForApp();
 
     I.say('Check colors');
-    I.see('test appointment one', '.workweek .appointment .title');
-    I.see('test appointment two', '.workweek .appointment .title');
+    I.waitForText('test appointment one', 5, '.workweek');
+    I.waitForText('test appointment two', 5, '.workweek');
     I.seeNumberOfElements('.workweek .appointment .title', 2);
 
     I.say('Change color of first appointment');

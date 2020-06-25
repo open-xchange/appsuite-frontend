@@ -60,11 +60,7 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.selectFolder('Calendar');
 
     I.say('Accept');
-<<<<<<< HEAD
     I.waitForText('test invite accept/decline/accept tentative', 10, '.list-view .appointment .title');
-=======
-    I.waitForText('test invite accept/decline/accept tentative', 5, '.list-view .appointment .title');
->>>>>>> 50b238e2e2... [e2e] make some tests more robust
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
     I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/changestatus"]' });
     I.click('Change status');
