@@ -139,7 +139,7 @@ define('io.ox/multifactor/views/u2fProvider', [
                         case 4:
                             //#. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
                             error = gt('This device is not eligible for this request. Wrong hardware key?');
-                            recoverable = true;
+                            recoverable = false;
                             break;
                         case 5:
                             error = gt('Timeout');
@@ -157,8 +157,10 @@ define('io.ox/multifactor/views/u2fProvider', [
                             doAuthentication(provider, device, data);
                         } else {
                             window.setTimeout(function () {
-                                dialog.close();
-                                def.reject();
+                                if (dialog) {  // might be closed with user selecting lost
+                                    dialog.close();
+                                    def.reject();
+                                }
                             }, 5000);
                         }
                     }
