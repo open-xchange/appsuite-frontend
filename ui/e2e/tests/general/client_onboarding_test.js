@@ -108,7 +108,7 @@ Scenario('[C73769] Application Availability', function (I) {
     I.see('Laptop + PC');
 });
 
-Scenario('[C73776] Mail Configuration', async function (I, users) {
+Scenario.skip('[C73776] Mail Configuration', async function (I, users) {
 
     I.login();
     I.waitForVisible('#io-ox-topbar-dropdown-icon');

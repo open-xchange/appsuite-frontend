@@ -22,8 +22,8 @@ After(async function (users) {
     await users.removeAll();
 });
 
-
-Scenario('add and removes Mail Filter Rules', async function (I, dialogs) {
+// Skipped for now, needs backport for Bug 68533
+Scenario.skip('add and removes Mail Filter Rules', async function (I, dialogs) {
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
     I.waitForVisible('.io-ox-settings-main');
 
