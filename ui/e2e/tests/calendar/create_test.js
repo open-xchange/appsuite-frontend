@@ -1019,7 +1019,7 @@ Scenario('[C256455] Create all-day appointment via date label', async function (
         I.click('Create');
 
         I.waitForVisible('.appointment');
-        I.see('Grillen', '.io-ox-pagecontroller.current .appointment-panel');
+        I.waitForText('Grillen', 10, '.io-ox-pagecontroller.current .appointment-panel');
         I.seeCssPropertiesOnElements('.io-ox-pagecontroller.current .appointment-panel .appointment', { 'left': '0px' });
         await I.removeAllAppointments();
     };
