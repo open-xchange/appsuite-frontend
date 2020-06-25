@@ -437,7 +437,7 @@ define('io.ox/core/main/appcontrol', [
         draw: function () {
             var search = $('<div id="io-ox-topsearch">');
             this.append(search);
-            //ext.point('io.ox/core/appcontrol/search').invoke('draw', search);
+            ext.point('io.ox/core/appcontrol/search').invoke('draw', search);
         }
     });
 
@@ -459,119 +459,119 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    // ext.point('io.ox/core/appcontrol/search').extend({
-    //     id: 'default',
-    //     index: 100,
-    //     draw: function () {
-    //         // on mobile via ext 'io.ox/core/appcontrol/right'
-    //         if (!capabilities.has('search') || _.device('smartphone')) return;
+    ext.point('io.ox/core/appcontrol/search').extend({
+        id: 'default',
+        index: 100,
+        draw: function () {
+            // on mobile via ext 'io.ox/core/appcontrol/right'
+            if (!capabilities.has('search') || _.device('smartphone')) return;
 
-    //         // append hidden node to container node
-    //         ox.ui.apps.on('launch', function append(app) {
-    //             if (!app.isFindSupported()) return;
+            // append hidden node to container node
+            ox.ui.apps.on('launch', function append(app) {
+                if (!app.isFindSupported()) return;
 
-    //             var label = gt('Search'),
-    //                 id = _.uniqueId('search-field'),
-    //                 guid = _.uniqueId('form-control-description-');
+                var label = gt('Search'),
+                    id = _.uniqueId('search-field'),
+                    guid = _.uniqueId('form-control-description-');
 
-    //             this.append(
-    //                 $('<div class="io-ox-find initial" role="search" style="display:none">').attr('data-app', app.id).append(
-    //                     $('<div class="sr-only arialive" role="status" aria-live="polite">'),
-    //                     // box
-    //                     $('<form class="search-box">').append(
-    //                         // group
-    //                         $('<div class="form-group">').append(
-    //                             $('<input type="text" class="form-control search-field tokenfield-placeholder f6-target">').attr({
-    //                                 'id': id,
-    //                                 'placeholder': label + '...',
-    //                                 'aria-describedby': guid
-    //                             }),
-    //                             // search
-    //                             $('<button type="button" class="dropdown-toggle btn btn-link form-control-feedback action action-options" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
-    //                                 .attr({
-    //                                     'data-original-title': gt('Options'),
-    //                                     'aria-label': gt('Options')
-    //                                 }).append($('<i class="fa fa-caret-down" aria-hidden="true">'))
-    //                                 .tooltip(),
-    //                             $('<form class="dropdown" autocomplete="off">'),
-    //                             // cancel/reset
-    //                             $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
-    //                                 .attr({
-    //                                     'data-original-title': gt('Cancel search'),
-    //                                     'aria-label': gt('Cancel search')
-    //                                 }).append($('<i class="fa fa-times" aria-hidden="true">'))
-    //                                 .tooltip(),
-    //                             // sr label
-    //                             $('<label class="sr-only">')
-    //                                 .attr('for', id)
-    //                                 .text(label),
-    //                             // sr description
-    //                             $('<p class="sr-only sr-description">').attr({ id: guid })
-    //                                 //#. search feature help text for screenreaders
-    //                                 .text(gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones'))
-    //                         )
-    //                     )
-    //                 )
-    //             );
-    //             app.initFind();
-    //         }.bind(this));
-    //     }
-    // });
+                this.append(
+                    $('<div class="io-ox-find initial" role="search" style="display:none">').attr('data-app', app.id).append(
+                        $('<div class="sr-only arialive" role="status" aria-live="polite">'),
+                        // box
+                        $('<form class="search-box">').append(
+                            // group
+                            $('<div class="form-group">').append(
+                                $('<input type="text" class="form-control search-field tokenfield-placeholder f6-target">').attr({
+                                    'id': id,
+                                    'placeholder': label + '...',
+                                    'aria-describedby': guid
+                                }),
+                                // search
+                                $('<button type="button" class="dropdown-toggle btn btn-link form-control-feedback action action-options" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
+                                    .attr({
+                                        'data-original-title': gt('Options'),
+                                        'aria-label': gt('Options')
+                                    }).append($('<i class="fa fa-caret-down" aria-hidden="true">'))
+                                    .tooltip(),
+                                $('<form class="dropdown" autocomplete="off">'),
+                                // cancel/reset
+                                $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
+                                    .attr({
+                                        'data-original-title': gt('Cancel search'),
+                                        'aria-label': gt('Cancel search')
+                                    }).append($('<i class="fa fa-times" aria-hidden="true">'))
+                                    .tooltip(),
+                                // sr label
+                                $('<label class="sr-only">')
+                                    .attr('for', id)
+                                    .text(label),
+                                // sr description
+                                $('<p class="sr-only sr-description">').attr({ id: guid })
+                                    //#. search feature help text for screenreaders
+                                    .text(gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones'))
+                            )
+                        )
+                    )
+                );
+                app.initFind();
+            }.bind(this));
+        }
+    });
 
-    // ext.point('io.ox/core/appcontrol/search').extend({
-    //     id: 'resize',
-    //     index: 10000,
-    //     draw: function () {
-    //         // on mobile via ext 'io.ox/core/appcontrol/right'
-    //         if (!capabilities.has('search') || _.device('smartphone')) return;
-    //         var container = this,
-    //             MINWIDTH = 350,
-    //             MAXWIDTH = _.device('desktop') ? 750 : 550;
+    ext.point('io.ox/core/appcontrol/search').extend({
+        id: 'resize',
+        index: 10000,
+        draw: function () {
+            // on mobile via ext 'io.ox/core/appcontrol/right'
+            if (!capabilities.has('search') || _.device('smartphone')) return;
+            var container = this,
+                MINWIDTH = 350,
+                MAXWIDTH = _.device('desktop') ? 750 : 550;
 
-    //         // hide inactive
-    //         function hidePaused() {
-    //             var app = ox.ui.App.getCurrentApp();
-    //             if (!app || !app.id) return;
-    //             container.children().not('[data-app="' + app.id + '"]').css('display', 'none');
-    //         }
+            // hide inactive
+            function hidePaused() {
+                var app = ox.ui.App.getCurrentApp();
+                if (!app || !app.id) return;
+                container.children().not('[data-app="' + app.id + '"]').css('display', 'none');
+            }
 
-    //         function setVisibility() {
-    //             var app = ox.ui.App.getCurrentApp();
-    //             if (!app || !app.id) return;
-    //             // show field for current app
-    //             hidePaused();
-    //             container.find('[data-app="' + app.id + '"]').css('display', 'block');
-    //         }
+            function setVisibility() {
+                var app = ox.ui.App.getCurrentApp();
+                if (!app || !app.id) return;
+                // show field for current app
+                hidePaused();
+                container.find('[data-app="' + app.id + '"]').css('display', 'block');
+            }
 
-    //         var delay = 0;
-    //         ox.ui.windowManager.on('window.open', function () { delay = 100; });
-    //         ox.ui.windowManager.on('window.show', function () {
-    //             hidePaused();
-    //             if (!delay) return setVisibility();
-    //             // delay on first start
-    //             _.delay(function () {
-    //                 delay = 0;
-    //                 setVisibility();
-    //             }, delay);
-    //         });
+            var delay = 0;
+            ox.ui.windowManager.on('window.open', function () { delay = 100; });
+            ox.ui.windowManager.on('window.show', function () {
+                hidePaused();
+                if (!delay) return setVisibility();
+                // delay on first start
+                _.delay(function () {
+                    delay = 0;
+                    setVisibility();
+                }, delay);
+            });
 
-    //         // search is active (at least one token)
-    //         ox.ui.apps.on('change:search', function (name, app) {
-    //             if (!/^(running|paused)$/.test(name)) return;
-    //             var node = app.view.$el,
-    //                 isReset = name === 'paused';
+            // search is active (at least one token)
+            ox.ui.apps.on('change:search', function (name, app) {
+                if (!/^(running|paused)$/.test(name)) return;
+                var node = app.view.$el,
+                    isReset = name === 'paused';
 
-    //             node.toggleClass('has-tokens', !isReset)
-    //                 .css({
-    //                     // limit height to prevent jumping
-    //                     'height': isReset ? 'initial' : '32px',
-    //                     // expand field or restore min-width value
-    //                     'max-width': isReset ? MINWIDTH + 'px' : MAXWIDTH + 'px'
-    //                 });
+                node.toggleClass('has-tokens', !isReset)
+                    .css({
+                        // limit height to prevent jumping
+                        'height': isReset ? 'initial' : '32px',
+                        // expand field or restore min-width value
+                        'max-width': isReset ? MINWIDTH + 'px' : MAXWIDTH + 'px'
+                    });
 
-    //         });
-    //     }
-    // });
+            });
+        }
+    });
 
     function initRefreshAnimation() {
 

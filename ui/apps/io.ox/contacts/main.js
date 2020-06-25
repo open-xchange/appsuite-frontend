@@ -837,12 +837,6 @@ define('io.ox/contacts/main', [
             });
         },
 
-        'inplace-find': function (app) {
-            if (_.device('smartphone') || !capabilities.has('search')) return;
-            if (!app.isFindSupported()) return;
-            app.initFind();
-        },
-
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
                 return 'ox.appsuite.user.sect.contacts.gui.html';

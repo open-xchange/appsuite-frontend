@@ -1708,109 +1708,103 @@ define('io.ox/core/desktop', [
                 console.warn('io.ox/search is deprecated with 7.8.0. Please use io.ox/find instead');
             }
 
-            if (opt.find && supportsFind(opt.name)) {
+            // if (opt.find && supportsFind(opt.name)) {
 
-                ext.point('io.ox/find/view').extend({
-                    id: 'view',
-                    index: 100,
-                    draw: function (baton) {
-                        baton.$.viewnode = $('<div class="generic-toolbar top io-ox-find" role="search">');
+            //     ext.point('io.ox/find/view').extend({
+            //         id: 'view',
+            //         index: 100,
+            //         draw: function (baton) {
+            //             baton.$.viewnode = $('<div class="generic-toolbar top io-ox-find" role="search">');
 
-                        // add nodes
-                        this.nodes.sidepanel
-                            .append(baton.$.viewnode)
-                            .addClass('top-toolbar');
-                    }
-                });
+            //             // add nodes
+            //             this.nodes.sidepanel
+            //                 .append(baton.$.viewnode)
+            //                 .addClass('top-toolbar');
+            //         }
+            //     });
 
-                ext.point('io.ox/find/view').extend({
-                    id: 'subviews',
-                    index: 200,
-                    draw: function (baton) {
-                        baton.$.viewnode.append(
-                            $('<div class="sr-only arialive" role="status" aria-live="polite">'),
-                            baton.$.box = $('<form class="search-box">'),
-                            baton.$.boxfilter = $('<div class="search-box-filter">')
-                        );
-                    }
-                });
+            //     ext.point('io.ox/find/view').extend({
+            //         id: 'subviews',
+            //         index: 200,
+            //         draw: function (baton) {
+            //             baton.$.viewnode.append(
+            //                 $('<div class="sr-only arialive" role="status" aria-live="polite">'),
+            //                 baton.$.box = $('<form class="search-box">'),
+            //                 baton.$.boxfilter = $('<div class="search-box-filter">')
+            //             );
+            //         }
+            //     });
 
-                ext.point('io.ox/find/view').extend({
-                    id: 'form',
-                    index: 300,
-                    draw: function (baton) {
-                        // share data
-                        _.extend(baton.data, {
-                            label: gt('Search'),
-                            id: _.uniqueId('search')
-                            // guid:  _.uniqueId('form-control-description-')
-                        });
-                        // search box form
-                        baton.$.group = $('<div class="form-group has-feedback">').append(
-                            $('<input type="text" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
-                                'aria-labelledby': baton.data.id,
-                                placeholder: baton.data.label + '...'
-                            })
-                        );
-                        // add to searchbox area
-                        baton.$.box.append(
-                            baton.$.group
-                        );
-                    }
-                });
+            //     ext.point('io.ox/find/view').extend({
+            //         id: 'form',
+            //         index: 300,
+            //         draw: function (baton) {
+            //             // share data
+            //             _.extend(baton.data, {
+            //                 label: gt('Search'),
+            //                 id:  _.uniqueId(win.name + '-search-field'),
+            //                 guid:  _.uniqueId('form-control-description-')
+            //             });
+            //             // search box form
+            //             baton.$.group = $('<div class="form-group has-feedback">').append(
+            //                 $('<input type="text" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
+            //                     id: baton.data.id,
+            //                     placeholder: baton.data.label + '...',
+            //                     'aria-describedby': baton.data.guid
+            //                 })
+            //             );
+            //             // add to searchbox area
+            //             baton.$.box.append(
+            //                 baton.$.group
+            //             );
+            //         }
+            //     });
 
-                ext.point('io.ox/find/view').extend({
-                    id: 'buttons',
-                    index: 400,
-                    draw: function (baton) {
-                        baton.$.group.append(
-                            // search
-                            $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
-                                .attr({
-                                    'data-original-title': gt('Start search'),
-                                    'aria-label': gt('Start search'),
-                                    'id': baton.data.id
-                                }).append($('<i class="fa fa-search" aria-hidden="true">'))
-                                .tooltip(),
-                            // cancel/reset
-                            $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
-                                .attr({
-                                    'data-original-title': gt('Cancel search'),
-                                    'aria-label': gt('Cancel search')
-                                }).append($('<i class="fa fa-times-circle" aria-hidden="true">'))
-                                .tooltip()
-                        );
-                    }
-                });
+            //     ext.point('io.ox/find/view').extend({
+            //         id: 'buttons',
+            //         index: 400,
+            //         draw: function (baton) {
+            //             baton.$.group.append(
+            //                 // search
+            //                 $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
+            //                     .attr({
+            //                         'data-original-title': gt('Start search'),
+            //                         'aria-label': gt('Start search')
+            //                     }).append($('<i class="fa fa-search" aria-hidden="true">'))
+            //                     .tooltip(),
+            //                 // cancel/reset
+            //                 $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
+            //                     .attr({
+            //                         'data-original-title': gt('Cancel search'),
+            //                         'aria-label': gt('Cancel search')
+            //                     }).append($('<i class="fa fa-times-circle" aria-hidden="true">'))
+            //                     .tooltip()
+            //             );
+            //         }
+            //     });
 
-                /*
+            //     ext.point('io.ox/find/view').extend({
+            //         id: 'screenreader',
+            //         index: 500,
+            //         draw: function (baton) {
+            //             baton.$.group.append(
+            //                 // sr label
+            //                 $('<label class="sr-only">')
+            //                     .attr('for', baton.data.id)
+            //                     .text(baton.data.label),
+            //                 // sr description
+            //                 $('<p class="sr-only sr-description">').attr({ id: baton.data.guid })
+            //                     .text(
+            //                         //#. search feature help text for screenreaders
+            //                         gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
+            //                     )
+            //             );
+            //         }
+            //     });
 
-                A11y NOTE: This does not work like this. Instructions indicating a position on screen has no meaning to blind users.
-                Also the label serves no purpose here, the best workaround in the moment is to attach a title to the input field.
-
-                ext.point('io.ox/find/view').extend({
-                    id: 'screenreader',
-                    index: 500,
-                    draw: function (baton) {
-                        baton.$.group.append(
-                            // sr label
-                            $('<label class="sr-only">')
-                                .attr('for', baton.data.id)
-                                .text(baton.data.label),
-                            // sr description
-                            $('<p class="sr-only sr-description">').attr({ id: baton.data.guid })
-                                .text(
-                                    //#. search feature help text for screenreaders
-                                    gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
-                                )
-                        );
-                    }
-                });
-                */
-
-                // draw searchfield and attach lazy load listener
-                ext.point('io.ox/find/view').invoke('draw', win, ext.Baton.ensure({}));
-            }
+            //     // draw searchfield and attach lazy load listener
+            //     ext.point('io.ox/find/view').invoke('draw', win, ext.Baton.ensure({}));
+            // }
 
             // fix height/position/appearance
             if (opt.chromeless) win.setChromeless(true);

@@ -11,103 +11,117 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-.window-container {
 
-    /**
-     *  io-ox-find (generic-toolbar)
-     *     search-box
-     *         form-group has-feedback
-     *             tokenfield-placeholder OR tokenfield (search-field)
-     *                 token
-     *                 actions (form-control-feedback)
-     *
-     *     search-box-filter
-     *         ul (classic-toolbar)
-     *             lif (dropdown)
-     */
+.io-ox-find {
+    @placeholder-padding: @default-padding - 8 - 1;
+    @action-color: #767676;
+
+    .search-box {
+
+        // remove IE's clear button
+        ::-ms-clear {
+            display: none;
+            width : 0;
+            height: 0;
+        }
+
+        & > .form-group {
+            position: relative;
+        }
+        .action {
+            pointer-events: auto;
+            color: @action-color;
+            display: none;
+            justify-content: center;
+            height: 32px;
+            &:hover {
+                text-decoration: none;
+                color: @link-color;
+            }
+            &:focus {
+                outline: 0;
+                background: @selected-background;
+                color: @selected-color;
+                text-decoration: none;
+            }
+        }
+        .action-options { margin-right: 30px; }
+
+        .token {
+            .token-type,
+            .token-detail,
+            .fa-caret-down { color: rgba(0, 0, 0, 0.7); }
+
+            .close {
+                opacity: 0.5;
+                &:hover { opacity: 0.7 };
+            }
+
+            .token-name {
+                color: rgb(85, 85, 85);
+                font-weight: 500;
+            }
+
+            .dropdown {
+                [data-toggle="dropdown"] { outline: 0; }
+
+                .fa-caret-down {
+                    margin-left: 4px;
+                    margin-right: 8px;
+                }
+                // left is set by js
+                .dropdown-menu {
+                    position: fixed;
+                }
+            }
+        }
+
+        .tokenfield {
+            padding-left: @default-padding - 5;
+            .twitter-typeahead .tt-dropdown-menu {
+                padding: 0;
+                width: auto;
+                min-width: initial;
+                .tt-suggestions {
+                    padding: 0;
+                    .tt-suggestion {
+                        padding: 4px 8px;
+                        .autocomplete-item {
+                            padding: 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        // .action.io-ox-busy {
+        //     position: absolute;
+        //     line-height: 22px;
+
+        //     &:before { font-size: 16px; }
+        // }
+
+    }
+}
+
+.io-ox-find.active {
+    .action { display: flex; }
+}
+
+// not applied
+.window-container {
 
     /**
      *  GENERAL
      */
     .io-ox-find {
 
-        // adjust tokenfield (8 = outer padding, 1 = border)
-        @placeholder-padding: @default-padding - 8 - 1;
-        @action-color: #767676;
-
-        padding: 4px 8px;
-        line-height: 20px;
-        z-index: 10;
-
         .search-box {
-
-            ::-ms-clear {
-                display: none;
-                width : 0;
-                height: 0;
-            }
-
             .action.io-ox-busy {
                 position: absolute;
                 line-height: 22px;
 
                 &:before { font-size: 16px; }
-            }
-
-            .tokenfield-placeholder {
-                padding-left: @placeholder-padding;
-            }
-
-            .tokenfield {
-                // adjust tokenfield (3 = placeholder padding)
-                padding-left: @placeholder-padding - 3;
-                padding-right: 9px;
-
-                .token {
-
-                    .token-type,
-                    .token-detail,
-                    .fa-caret-down { color: rgba(0, 0, 0, 0.75); }
-
-                    .close {
-                        color: rgba(0, 0, 0, 0.55);
-                        &:hover {
-                            color: rgba(0, 0, 0, 0.75);
-                        }
-                    }
-
-                    .token-name {
-                        color: rgb(85, 85, 85);
-                        font-weight: 500;
-                    }
-
-                    .dropdown {
-                        [data-toggle="dropdown"] { outline: 0; }
-
-                        .fa-caret-down {
-                            margin-left: 4px;
-                            margin-right: 8px;
-                        }
-                        // left is set by js
-                        .dropdown-menu {
-                            position: fixed;
-                        }
-                    }
-                }
-            }
-
-            .action {
-                pointer-events: auto;
-                color: @action-color;
-                padding-right: 23px;
-
-                &:hover { color: @link-color; }
-                &:focus {
-                    outline: 0;
-                    background: @selected-background;
-                    color: @selected-color;
-                    border-radius: 0 3px 3px 0;
-                }
             }
         }
 
@@ -115,13 +129,6 @@
             float: left;
             padding-left: 8px;
 
-            & > .classic-toolbar {
-                // disable
-                .dropdown .conflicting, .dropdown.conflicting a {
-                    color: #a4a4a4;
-                    pointer-events: none;
-                }
-            }
         }
     }
 
@@ -142,13 +149,6 @@
      *  MODE: ACTIVE
      */
     &.io-ox-find-active {
-
-        //top: managed by backbone view
-        &:not(.mail-categories-visible) .window-body { transition: top .2s; }
-
-        .folder-tree {
-            margin-top: 40px;
-        }
 
         .breadcrumb-ellipsis {
             display: none;
@@ -174,10 +174,6 @@
 
             .search-box-filter {
                 display: block;
-                .classic-toolbar {
-                    // max-width (.search-box) + padding (.io-ox-find)
-                    width: calc(~"100% - 566px");
-                }
             }
         }
     }

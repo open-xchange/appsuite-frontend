@@ -127,8 +127,6 @@ define('io.ox/find/main', [
                 if (!app.get('inplace')) return;
                 // reset on folder click
                 app.listenTo(app.get('parent'), 'folder:change folder-virtual:change', app.cancel);
-                // reset on sidepanel close (lazy)
-                app.listenTo(app.get('parent').props, 'change:folderview', app.cancel);
             },
 
             'enable-disable-toggle': function (app) {

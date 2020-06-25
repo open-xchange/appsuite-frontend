@@ -25,7 +25,7 @@ define('io.ox/find/view-searchbox', [
             // app, win, model references
             _.extend(this, props);
             // field stub already rendered
-            this.setElement(this.win.nodes.sidepanel.find('.search-box'));
+            this.setElement(this.parent.$el.find('.search-box'));
 
             // shortcuts
             this.ui = {
@@ -33,15 +33,12 @@ define('io.ox/find/view-searchbox', [
             };
 
             // register
-            this.register();
             return this;
         },
 
         render: function () {
             // render subview
             this.ui.tokenfield.render();
-            // default height
-            this._height.initial = this._height.current = this.$el.outerHeight();
             return this;
         },
 
@@ -55,22 +52,6 @@ define('io.ox/find/view-searchbox', [
             this.ui.tokenfield.reset();
             this.ui.tokenfield.hiddenapi.dropdown.empty();
             this.ui.tokenfield.hiddenapi.dropdown.close();
-        },
-
-        // show input placeholder only on empty tokenfield
-        _onResize: function () {
-            var self = this;
-            _.defer(function () {
-                var current = _.max([self._height.initial, self.$el.height()]),
-                    delta = current - self._height.current;
-                if (!delta) return;
-                self._height.current = current;
-                self.trigger('resize', delta);
-            });
-        },
-
-        register: function () {
-            this.ui.tokenfield.on('tokenfield:createdtoken tokenfield:removedtoken', _.bind(this._onResize, this));
         },
 
         isEmpty: function () {

@@ -26,14 +26,13 @@ define('io.ox/find/view-placeholder', [
         },
 
         initialize: function (options) {
-            var win = options.app.getWindow();
             // field stub already rendered by desktop.js
-            this.setElement(win.nodes.sidepanel.find('.io-ox-find'));
+            this.setElement($('.io-ox-find[data-app="' + options.app.get('parent').id + '"]'));
 
             // shortcuts
             this.ui = {
-                field: this.$el.find('.search-field'),
-                action: this.$el.find('.action-show')
+                field: this.$el.find('.search-field')
+                //action: this.$el.find('.action-show')
             };
 
             // reuse
@@ -44,18 +43,18 @@ define('io.ox/find/view-placeholder', [
         },
 
         hideSpinner: function () {
-            this.ui.action.idle();
+            //this.ui.action.removeClass('io-ox-busy');
         },
 
         showSpinner: function () {
-            this.ui.action.busy({ immediate: true });
+            //this.ui.action.addClass('io-ox-busy');
         },
 
         disable: function () {
             // only real change. We want to avoid screenreader talking with every folderchange
             if (this.ui.field.prop('disabled') === true) return;
             this.ui.field.prop('disabled', true);
-            this.ui.action.prop('disabled', true);
+            //this.ui.action.prop('disabled', true);
             this.ui.field.find('input.token-input.tt-input').removeAttr('tabindex');
             this.$el.find('.arialive').text(gt('Search function not supported in this folder'));
         },
@@ -64,7 +63,7 @@ define('io.ox/find/view-placeholder', [
             // only real change. We want to avoid screenreader talking with every folderchange
             if (this.ui.field.prop('disabled') === false) return;
             this.ui.field.prop('disabled', false);
-            this.ui.action.prop('disabled', false);
+            //this.ui.action.prop('disabled', false);
             this.ui.field.find('input.token-input.tt-input').attr('tabindex', 0);
             this.$el.find('.arialive').text('');
         },

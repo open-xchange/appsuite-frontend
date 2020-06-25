@@ -1335,29 +1335,6 @@ define('io.ox/files/main', [
             app.toggleFolders = toggle;
         },
 
-        'inplace-find': function (app) {
-            if (_.device('smartphone') || !capabilities.has('search')) return;
-            if (!app.isFindSupported()) return;
-            app.initFind();
-
-            function registerHandler(model, find) {
-                find.on({
-                    'find:query': function () {
-                        // hide sort options
-                        app.listControl.$el.find('.grid-options:first').hide();
-                        app.props.set('searchActive', true);
-                    },
-                    'find:cancel': function () {
-                        // show sort options again
-                        app.listControl.$el.find('.grid-options:first').show();
-                        app.props.set('searchActive', false);
-                    }
-                });
-            }
-
-            return app.get('find') ? registerHandler(app, app.get('find')) : app.once('change:find', registerHandler);
-        },
-
         // respond to search results
         'find': function (app) {
             if (_.device('smartphone') || !app.get('find')) return;

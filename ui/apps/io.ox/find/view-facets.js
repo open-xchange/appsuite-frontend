@@ -12,12 +12,13 @@
  */
 
 define('io.ox/find/view-facets', [
+    'io.ox/backbone/views/extensible',
     'io.ox/find/extensions-facets',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'io.ox/core/api/account',
     'gettext!io.ox/core'
-], function (extensions, api, ext, accountAPI, gt) {
+], function (ExtensibleView, extensions, api, ext, accountAPI, gt) {
 
     'use strict';
 
@@ -33,19 +34,19 @@ define('io.ox/find/view-facets', [
         draw: extensions.list
     });
 
-    ext.point(POINT + '/dropdown/default').extend({
+    ext.point(POINT + '/select/options').extend({
         index: 100,
-        draw: extensions.dropdownDefault
+        draw: extensions.options
     });
 
-    ext.point(POINT + '/dropdown/default/item').extend({
+    ext.point(POINT + '/select/options/item').extend({
         index: 100,
         draw: extensions.item
     });
 
     ext.point(POINT + '/dropdown/folder').extend({
         index: 100,
-        draw: extensions.dropdownFolder
+        draw: extensions.folder
     });
 
     ext.point(POINT + '/dropdown/account').extend({
@@ -53,56 +54,59 @@ define('io.ox/find/view-facets', [
         draw: $.noop
     });
 
-    ext.point(POINT + '/help').extend({
-        index: 100,
-        draw: extensions.help
-    });
-
     /**
      * BACKBONE
      */
 
     // container view
-    var FacetsView = Backbone.View.extend({
+    var FacetsView = ExtensibleView.extend({
+
+        className: 'search-box-filter',
 
         attributes: {
             'aria-label': gt('Search facets'),
             'role': 'navigation'
         },
 
-        initialize: function (props) {
+        constructor: function (props) {
             _.extend(this, props);
-
-            this.setElement(this.parent.$el.find('.search-box-filter'));
-
             this.register();
+            ExtensibleView.prototype.constructor.apply(this, arguments);
         },
 
         register: function () {
-            this.listenTo(this.app.model.manager, 'active', $.proxy(this.redraw, this));
-            this.listenTo(this.app, 'find:config-updated', $.proxy(this.render, this));
-        },
-
-        redraw: function () {
-            this.render();
+            this.listenTo(this.app.model.manager, 'active', this.hide);
+            this.listenTo(this.app, 'find:config-updated', this.render);
         },
 
         render: function () {
             this.reset();
-            // container node
-            ext.point('io.ox/find/facets/toolbar').invoke('draw', this.$el, this.baton);
-            // adjust height by parents height (maybe tokenfield has morge than on line visible)
-            this.$el.find('ul.classic-toolbar').outerHeight(this.$el.parent().outerHeight());
-            this.$el.find('ul.classic-toolbar > li > a:not(:first)').attr('tabindex', -1);
+            this.$el.append(
+                this.$dropdown = $('<form class="dropdown" autocomplete="off">')
+            );
+            ext.point(POINT + '/toolbar').invoke('draw', this.$dropdown, this.baton);
             return this;
         },
 
+        toggle: function (state) {
+            this.app.trigger('facets:toggle');
+            if (state === undefined) state = !this.isOpen();
+            this.$el.css('width', this.$el.closest('.search-box').outerWidth())
+                    .toggleClass('open', state);
+            //this.$dropdownToggle.attr('aria-expanded', state);
+            this.trigger(state ? 'open' : 'close');
+        },
+
+        isOpen: function () {
+            return this.$el.hasClass('open');
+        },
+
         show: function () {
-            this.$el.show();
+            this.toggle(true);
         },
 
         hide: function () {
-            this.$el.hide();
+            this.toggle(false);
         },
 
         reset: function () {
@@ -167,7 +171,7 @@ define('io.ox/find/view-facets', [
                     flat: api.isFlat(module),
                     //#. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
                     button: gt('Select'),
-                    done: function (target, dialog) {
+                    done: function (target) {
                         //get folder data
                         api.get(target)
                             .always(function (data) {
@@ -178,7 +182,7 @@ define('io.ox/find/view-facets', [
                                     id: target,
                                     name: label
                                 });
-                                dialog.close();
+                                self.render();
                             });
                     },
                     disable: function (data) {

@@ -106,10 +106,10 @@ define('io.ox/find/view-tokenfield', [
             var app = this.app,
                 baton = this.baton,
                 fieldstub = baton.app.view.$el.find('.search-field'),
-                buttonstub = baton.app.view.$el.find('.action-show'),
+                //buttonstub = baton.app.view.$el.find('.action-show'),
                 guid = _.uniqueId('form-control-label-'),
                 model = baton.model,
-                hasFocus = fieldstub.is(':focus') || buttonstub.is(':focus'),
+                hasFocus = fieldstub.is(':focus'), // || buttonstub.is(':focus'),
                 self = this, query;
 
             // extend basic tokenfieldview
@@ -217,6 +217,10 @@ define('io.ox/find/view-tokenfield', [
             this.register();
             // render
             this.ui.view.render();
+            // adjust style
+            this.ui.view.hiddenapi.dropdown.$menu.css('left', '-12px');
+            this.ui.view.hiddenapi.dropdown.$menu.css('right', '-5px');
+            this.ui.view.hiddenapi.dropdown.$menu.css('top', '23px');
             //http://sliptree.github.io/bootstrap-tokenfield/#methods
             this.instance = this.ui.field.data('bs.tokenfield');
             // some shortcuts (available after render)
@@ -265,12 +269,20 @@ define('io.ox/find/view-tokenfield', [
             this.api('enable');
         },
 
+        close: function () {
+            // TODO: investigate why typenheads api 'close' doesn't work
+            this.hiddenapi.dropdown.empty();
+            this.hiddenapi.dropdown.close();
+        },
+
         // register additional handlers
         register: function () {
             var self = this;
             function preventOnCancel(e) {
                 if ($(document.activeElement).is('body')) e.preventDefault();
             }
+            this.listenTo(this.app, 'facets:toggle', this.close);
+
             //retrigger events on view
             this.ui.field.on([
                 'tokenfield:initialize',
@@ -285,6 +297,7 @@ define('io.ox/find/view-tokenfield', [
             this.on({
                 // stop creation when cancel button is clicked while dropdown is open
                 'tokenfield:createtoken': preventOnCancel,
+                'tokenfield:createtoken tokenfield:removedtoken': _.bind(this.onTokenChange, this),
                 // show placeholder only when search box is empty
                 'tokenfield:createdtoken tokenfield:removedtoken': _.bind(this.setPlaceholder, this),
                 // try to contract each time a token is removed
@@ -380,6 +393,13 @@ define('io.ox/find/view-tokenfield', [
 
         setFocus: function () {
             this.ui.tokeninput.focus();
+        },
+
+        onTokenChange: function (e) {
+            var length = this.api('getTokens').length;
+            // launched before token get's created
+            if (e.type === 'tokenfield:createtoken') length += 1;
+            this.app.trigger('change:search', length > 0 ? 'running' : 'paused', this.app);
         },
 
         // show input placeholder only on empty tokenfield
