@@ -38,7 +38,7 @@ define('io.ox/switchboard/call/incoming', [
                             contactsAPI.pictureHalo($('<div class="contact-photo">'), { email: caller }, { width: 80, height: 80 }),
                             presence.getPresenceIcon(caller)
                         ),
-                        $('<div class="name">').text(model.getCallerName()),
+                        $('<div class="name">').append(model.getCallerName()),
                         $('<div class="email">').text(caller)
                     );
                     this.$footer.append(

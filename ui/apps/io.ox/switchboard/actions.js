@@ -23,10 +23,10 @@ define('io.ox/switchboard/actions', [
     var Action = actionsUtil.Action;
 
     new Action('io.ox/switchboard/call-user', {
-        collection: 'one',
+        collection: 'some',
         matches: function (baton) {
             // you cannot call yourself
-            if (justMyself(baton)) return false;
+            if (false && justMyself(baton)) return false;
             return isGAB(baton);
         },
         action: function (baton) {

@@ -100,7 +100,7 @@ define('io.ox/switchboard/extensions', [
                 $('<div class="switchboard-actions">').append(
                     // Call
                     $('<button class="btn btn-link" data-action="call">')
-                        .prop('disabled', api.isMyself(baton.data.email1))
+                        // .prop('disabled', api.isMyself(baton.data.email1))
                         .append(
                             $('<i class="fa fa-phone" aria-hidden="true">'),
                             $.txt('Call')

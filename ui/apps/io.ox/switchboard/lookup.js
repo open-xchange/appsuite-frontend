@@ -11,7 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/switchboard/lookup', ['io.ox/core/http', 'settings!io.ox/core'], function (http, settings) {
+define('io.ox/switchboard/lookup', [
+    'io.ox/core/http',
+    'io.ox/contacts/util',
+    'settings!io.ox/core'
+], function (http, util, settings) {
 
     'use strict';
 
@@ -26,8 +30,9 @@ define('io.ox/switchboard/lookup', ['io.ox/core/http', 'settings!io.ox/core'], f
         ready: $.Deferred(),
 
         initialize: function () {
+            this.initialize = _.noop;
             var filter = getFilter(exports.numberFields, '<>', '');
-            return search(filter).done(function (result) {
+            search(filter).done(function (result) {
                 processSearchResult(result);
                 exports.ready.resolve();
             });
@@ -55,6 +60,15 @@ define('io.ox/switchboard/lookup', ['io.ox/core/http', 'settings!io.ox/core'], f
                 processSearchResult(result);
                 return result[0];
             });
+        },
+
+        getUserNameNode: function (userId) {
+            var preliminary = String(userId).replace(/\.|(@[^@]+$)/g, ' ').trim();
+            var node = document.createTextNode(preliminary);
+            this.findByEmail(userId).done(function (data) {
+                if (data) node.nodeValue = util.getFullName(data);
+            });
+            return node;
         }
     };
 

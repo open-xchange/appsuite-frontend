@@ -89,7 +89,8 @@ define('io.ox/switchboard/presence', ['io.ox/switchboard/api'], function (api) {
 
         changeOwnAvailability: function (availability) {
             this.changePresence(api.userId, { availability: availability });
-            api.socket.emit('presence-change', availability);
+            // share might (soon) be: all, context, domain, (white) list
+            api.socket.emit('presence-change', { availability: availability, visibility: 'all' });
             exports.trigger('change-own-availability', availability);
         },
 

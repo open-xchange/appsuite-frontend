@@ -12,7 +12,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
+define('io.ox/switchboard/call/api', ['io.ox/switchboard/api', 'io.ox/switchboard/lookup'], function (api, lookup) {
 
     'use strict';
 
@@ -20,7 +20,7 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
 
     var Call = Backbone.Model.extend({
         initialize: function (data) {
-            this.hungup = false;
+            this.active = true;
             // make sure callees are of type array
             if (!_.isArray(data.callees)) this.attributes.callees = [];
             // maintain states as separate hash (easier)
@@ -36,10 +36,10 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
             return this.get('caller');
         },
         getCallerName: function () {
-            return api.getUserName(this.getCaller());
+            return lookup.getUserNameNode(this.getCaller());
         },
         getCalleeName: function (callee) {
-            return api.getUserName(callee);
+            return lookup.getUserNameNode(callee);
         },
         getCallees: function () {
             return this.get('callees');
@@ -64,13 +64,13 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
             return this.get('caller') === api.userId;
         },
         isActive: function () {
-            return !this.hungup && _(this.states).some(function (value) { return value === 'pending'; });
+            return this.active;
         },
         propagate: function () {
             api.propagate('call', this.get('callees'), { telco: this.getTelcoLink(), type: this.getType() });
         },
         hangup: function () {
-            this.hungup = true;
+            this.active = false;
             this.trigger('hangup');
             if (this.isCalling()) api.propagate('cancel', this.getCallees());
         },
@@ -86,6 +86,10 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
             if (!this.states[userId]) return;
             this.states[userId] = state;
             this.trigger('change:state');
+            var isPending = _(this.states).some(function (state) { return state === 'pending'; });
+            if (isPending) return;
+            this.active = false;
+            this.trigger('done');
         },
         addToHistory: function () {
             require(['io.ox/switchboard/views/call-history'], function (callHistory) {
@@ -128,6 +132,8 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api'], function (api) {
             incoming.openDialog(call);
         });
     });
+
+    // 42["answer", "alexander.quast@open-xchange.com", ["matthias.biggeleben@open-xchange.com"], null]
 
     // CALLEE answers the call
     api.socket.on('answer', function (caller) {

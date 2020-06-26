@@ -177,30 +177,25 @@ define('io.ox/switchboard/zoom', [
         // - <int> duration (in minutes)
         // - <string> [agenda]
         createMeeting: function (data) {
-            //var tz = data.timezone || 'Europe/Berlin';
-            return createMeeting({
-                agenda: data.agenda || '',
-                //duration: data.duration || 60,
-                password: getPassword(),
-                //start_time: moment.tz(data.startTime, tz).format('YYYY-MM-DDTHH:mm:ss'),
-                //timezone: tz,
-                topic: data.topic || '',
-                type: 3
-            });
+            data = _.extend({ password: getPassword(), settings: { join_before_host: true } }, data);
+            return exports.api('POST', '/users/me/meetings', data);
         },
 
         createInstantMeeting: function () {
-            return createMeeting({ type: 1, password: getPassword() });
+            return this.createMeeting({ type: 1 });
+        },
+
+        changeMeeting: function (id, changes) {
+            return exports.api('PATCH', '/meetings/' + id, changes);
+        },
+
+        deleteMeeting: function (id) {
+            return exports.api('DELETE', '/meetings/' + id);
         }
     };
 
     function rejectWithUnexpectedError() {
         return { status: 500, internal: true, message: 'Ooops. That didn\'t work. Please try again.' };
-    }
-
-    function createMeeting(data) {
-        data = _.extend({ settings: { join_before_host: true } }, data);
-        return exports.api('POST', '/users/me/meetings', data);
     }
 
     function getPassword() {

@@ -31,6 +31,8 @@ define('io.ox/switchboard/views/zoom-meeting', [
             var props = this.getExtendedProps(),
                 conference = props['X-OX-CONFERENCE'];
             this.model.set('joinLink', conference && conference.label === 'zoom' ? conference.value : '');
+            this.listenTo(this.appointment, 'create update', this.changeMeeting);
+            this.listenTo(this.appointment, 'discard', this.discardMeeting);
             window.zoomMeeting = this;
         },
 
@@ -69,12 +71,7 @@ define('io.ox/switchboard/views/zoom-meeting', [
 
         createMeeting: function () {
             var data = this.appointment.toJSON();
-            return zoom.createMeeting({
-                agenda: data.note,
-                topic: data.summary || gt('New meeting'),
-                start_time: data.startDate.value,
-                timezone: data.startDate.timezone
-            })
+            return zoom.createMeeting(translateMeetingData(data))
             .then(
                 function success(result) {
                     if (ox.debug) console.debug('createMeeting', result);
@@ -82,12 +79,51 @@ define('io.ox/switchboard/views/zoom-meeting', [
                     var props = this.getExtendedProps();
                     props = _.extend({}, props, { 'X-OX-CONFERENCE': { value: joinLink, label: 'zoom' } });
                     this.appointment.set('extendedProperties', props);
-                    this.model.set({ joinLink: joinLink, zoomMeeting: result, state: 'done' });
+                    this.model.set({ joinLink: joinLink, meeting: result, state: 'done', created: true });
                 }.bind(this),
                 this.createMeetingFailed.bind(this)
             );
+        },
+
+        changeMeeting: function () {
+            var meeting = this.model.get('meeting');
+            if (!meeting) return;
+            var data = this.appointment.toJSON();
+            var changes = translateMeetingData(data);
+            zoom.changeMeeting(meeting.id, changes);
+        },
+
+        discardMeeting: function () {
+            if (!this.model.get('created')) return;
+            var meeting = this.model.get('meeting');
+            zoom.deleteMeeting(meeting.id);
         }
     });
+
+    function translateMeetingData(data) {
+        var isRecurring = !!data.rrule;
+        var timezone = getTimezone(data.startDate);
+        // we always set time (to be safe)
+        var start = data.startDate.value;
+        if (start.indexOf('T') === -1) start += 'T000000';
+        var end = data.endDate.value;
+        if (end.indexOf('T') === -1) end += 'T000000';
+        return {
+            agenda: data.description,
+            // get duration in minutes
+            duration: moment(end).diff(start, 'minutes'),
+            start_time: moment(start).format('YYYY-MM-DD[T]HH:mm:ss'),
+            timezone: timezone,
+            topic: data.summary || gt('New meeting'),
+            // type=2 (scheduled) if no recurrence pattern
+            // type=3 (recurring with no fixed time) otherwise
+            type: isRecurring ? 3 : 2
+        };
+    }
+
+    function getTimezone(date) {
+        return date.timezone || (moment.defaultZone && moment.defaultZone.name) || 'utc';
+    }
 
     return ZoomMeetingView;
 });

@@ -121,6 +121,9 @@
     .modal-header, .modal-body {
         text-align: center;
     }
+    .modal-body {
+        padding-top: 32px;
+    }
     .modal-title {
         font-size: 16px;
         line-height: 24px;
@@ -156,6 +159,10 @@
         text-transform: capitalize;
         margin-top: 2px;
     }
+    .email {
+        max-height: 80px;
+        overflow: auto;
+    }
     .alert {
         background-color: #f5f5f5;
         border-color: #aaa;
@@ -183,36 +190,9 @@
             margin-bottom: 8px;
             outline: 0;
         }
-    }
-}
-
-.modal.outgoing-call {
-    .callee {
-        line-height: 16px;
-        padding: 0 0 0 64px;
-        position: relative;
-        margin-bottom: 16px;
-    }
-    .contact-photo {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 48px;
-        height: 48px;
-    }
-    .presence {
-        position: absolute;
-        top: 32px;
-        left: 32px;
-        .icon {
-            border: 1px solid white;
-            box-sizing: content-box;
-            border-radius: 50%;
+        .btn-success:focus {
+            box-shadow: 0 0 0 4px fade(@btn-success-bg, 50%);
         }
-    }
-    .name {
-        font-weight: bold;
-        text-transform: capitalize;
     }
 }
 

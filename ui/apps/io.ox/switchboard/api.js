@@ -47,11 +47,6 @@ define.async('io.ox/switchboard/api', [
                 def.resolve(result);
             });
             return def;
-        },
-
-        getUserName: function (id) {
-            // simple solution to get names
-            return id.replace(/^([^.]+)\.([^.]+)@.+$/, '$1 $2');
         }
     };
 

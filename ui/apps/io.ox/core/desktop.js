@@ -594,9 +594,9 @@ define('io.ox/core/desktop', [
             });
         },
 
-        quit: function (force) {
+        quit: function (force, options) {
             // call quit function
-            var def = force ? $.when() : (this.get('quit').call(this) || $.when()), win, self = this;
+            var def = force ? $.when() : (this.get('quit').call(this, options) || $.when()), win, self = this;
             return def.done(function () {
                 // not destroyed?
                 if (force && self.destroy) {

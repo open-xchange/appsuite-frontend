@@ -28,14 +28,24 @@ define('io.ox/switchboard/call/outgoing', [
             new Modal({ title: gt('Call'), autoClose: false })
                 .inject({
                     renderCallees: function () {
-                        var callees = call.getCallees(), callee = callees[0];
+                        var callees = call.getCallees();
+                        var $photo = $('<div class="photo">');
+                        if (callees.length === 1) {
+                            $photo.append(
+                                contactsAPI.pictureHalo($('<div class="contact-photo">'), { email: callees[0] }, { width: 80, height: 80 }),
+                                presence.getPresenceIcon(callees[0])
+                            );
+                        } else {
+                            $photo.append(
+                                $('<div class="contact-photo">').append('<i class="fa fa-group fa-3x" aria-hidden="true">')
+                            );
+                        }
                         this.$body.empty().append(
-                            $('<div class="photo">').append(
-                                contactsAPI.pictureHalo($('<div class="contact-photo">'), { email: callee }, { width: 80, height: 80 }),
-                                presence.getPresenceIcon(callee)
+                            $photo,
+                            $('<div class="name">').append(
+                                callees.length === 1 ? call.getCalleeName(callees[0]) : gt('Conference call')
                             ),
-                            $('<div class="name">').text(call.getCalleeName(callee)),
-                            $('<div class="email">').text(callee)
+                            $('<div class="email">').text(callees.join(', '))
                         );
                     },
                     renderService: function () {
@@ -68,6 +78,7 @@ define('io.ox/switchboard/call/outgoing', [
                             this.createButton('success', 'call', 'phone', gt('Call'))
                         );
                         this.toggleCallButton();
+                        this.$('button[data-action="call"]').focus();
                     },
                     createButton: function (type, action, icon, title) {
                         return $('<div class="button">').append(
@@ -84,12 +95,14 @@ define('io.ox/switchboard/call/outgoing', [
                     }
                 })
                 .build(function () {
+                    this.$header.hide();
                     this.$el.addClass('call-dialog');
                     this.renderCallees();
                     this.renderService();
                     this.renderButtons();
                     this.listenTo(this.conference.model, 'change:state', this.renderButtons);
                     this.listenTo(this.conference.model, 'change:joinLink', this.toggleCallButton);
+                    this.listenTo(this.conference.model, 'done', this.close);
                 })
                 .on('connect', function () {
                     this.conference.startOAuthHandshake();

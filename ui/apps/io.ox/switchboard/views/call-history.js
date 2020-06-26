@@ -73,6 +73,7 @@ define('io.ox/switchboard/views/call-history', [
                     )
                 )
             );
+            this.updateIndicator();
             return this;
         },
         onFirstOpen: function () {
@@ -81,13 +82,13 @@ define('io.ox/switchboard/views/call-history', [
         },
         onOpen: function () {
             settings.set('switchboard/callHistory/lastSeen', _.now()).save();
-            this.renderIndicator();
+            this.updateIndicator();
         },
         onAddRemove: function () {
             if (!this.opened) return;
             this.removeItems();
             this.renderItems();
-            this.renderIndicator();
+            this.updateIndicator();
             this.onChange();
         },
         onChange: function () {
@@ -98,7 +99,7 @@ define('io.ox/switchboard/views/call-history', [
                 this.$ul.append(new CallHistoryItem({ model: model }).render().$el);
             }, this);
         },
-        renderIndicator: function () {
+        updateIndicator: function () {
             var lastSeen = settings.get('switchboard/callHistory/lastSeen', 0);
             var hasUnseen = this.collection.some(function (model) {
                 return model.get('missed') && model.get('date') > lastSeen;
@@ -145,6 +146,7 @@ define('io.ox/switchboard/views/call-history', [
         },
         render: function () {
             this.$el
+                .empty()
                 .attr('title', this.getTooltip())
                 .toggleClass('missed', this.model.get('missed'))
                 .append(
@@ -210,7 +212,6 @@ define('io.ox/switchboard/views/call-history', [
             }
         },
         onChange: function () {
-            this.$el.empty();
             this.render();
         },
         onRemove: function () {
