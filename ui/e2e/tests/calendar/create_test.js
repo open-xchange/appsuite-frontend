@@ -835,7 +835,7 @@ Scenario('[C7429] Create appointment via Contact', async (I, users, contacts, ca
 
     I.say('Contacts: invite second user');
     I.click({ css: '.search-box input' });
-    I.waitForVisible('.io-ox-contacts-window.io-ox-find-active');
+    I.waitForVisible('.io-ox-find.active[data-app="io.ox/contacts"]');
     I.fillField('.token-input.tt-input', users[1].get('sur_name'));
     I.pressKey('Enter');
     I.waitForElement('.vgrid-cell.selectable');
