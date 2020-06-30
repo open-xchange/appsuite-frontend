@@ -130,6 +130,9 @@ Default is `0`.
 
 ## Misc
 
+<config>io.ox/core//groups/limit=`<number>`</config>
+Fetch limit for groups plugin when requesting details of members. Default `1000`
+
 <config>io.ox/core//refreshInterval=`<number>`</config>
 Automatic UI refresh interval in milliseconds (default 300000 (5 minutes)).
 
