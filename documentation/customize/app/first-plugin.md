@@ -89,7 +89,7 @@ You can register for a free user account on www.ox.io.
 You can generate it with this command:
 
 ```bash
-grunt show-config:local --output grunt/local.conf.json
+grunt show-config:local --output=grunt/local.conf.json
 ```
 
 To use the remote www.ox.io OX App Suite server, open up the file grunt/local.conf.json in your editor and add `https://www.ox.io/appsuite/` to the server setting of the appserver section.
