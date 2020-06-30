@@ -396,8 +396,9 @@ define('io.ox/calendar/main', [
         },
 
         'account-errors': function (app) {
+            var accountError;
             app.treeView.on('click:account-error', function (folder) {
-                var accountError = folder['com.openexchange.calendar.accountError'];
+                accountError = folder['com.openexchange.calendar.accountError'];
                 if (!accountError) return;
 
                 require(['io.ox/backbone/views/modal', 'io.ox/core/notifications'], function (ModalDialog, notifications) {
