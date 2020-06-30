@@ -197,6 +197,10 @@ define(['io.ox/core/util'], function (util) {
             it('removes malicious code', function () {
                 expect(util.urlify('abc <script> alert(1337); </script> 123')).to.equal('abc  123');
             });
+
+            it('removes data attributes', function () {
+                expect(util.urlify('<a href="#z" data-toggle="dropdown" data-target="<img src=x onerror=alert(1337)>">XSS?</a>')).to.equal('<a href="#z" rel="noopener">XSS?</a>');
+            });
         });
 
         describe('getAddresses', function () {

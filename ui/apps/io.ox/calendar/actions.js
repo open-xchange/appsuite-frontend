@@ -302,13 +302,12 @@ define('io.ox/calendar/actions', [
                                 sameOwner = data.created_by === myId,
                                 isPublic = folderAPI.is('public', data),
                                 sourceFolderIsPublic = folderAPI.is('public', folderData),
-                                noOtherAttendees = util.hasFlag(list[0], 'scheduled'),
+                                otherAttendees = util.hasFlag(list[0], 'scheduled'),
                                 create = folderAPI.can('create', data),
                                 isOrganizer = util.hasFlag(list[0], 'organizer') || util.hasFlag(list[0], 'organizer_on_behalf');
-
                             // totally awesome check
-                            // not same folder, must be folder of same user, public folder(if organizer) or there must only be one attendee(the organizer), if the source folder is not public, must have create permission in that folder, folder must not be virtual
-                            return sameFolder || !((!sourceFolderIsPublic && noOtherAttendees) || sameOwner || (isPublic && isOrganizer)) || !create || (options && /^virtual/.test(options.folder));
+                            // not same folder, must be folder of same user, public folder(if organizer) or there must only be one attendee(the organizer) , if the source folder is not public, must have create permission in that folder, folder must not be virtual
+                            return sameFolder || !((!sourceFolderIsPublic && !otherAttendees) || sameOwner || (isPublic && isOrganizer)) || !create || (options && /^virtual/.test(options.folder));
                         }
                     });
                 });
