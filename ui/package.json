@@ -52,6 +52,7 @@
     "keycloak-admin": "^1.13.0",
     "mocha": "^6.2.2",
     "moment-range": "^4.0.2",
+    "otpauth": "^6.0.4",
     "puppeteer": "^3.0.4",
     "sinon": "^8.0.4",
     "sinon-chai": "^3.3.0",
