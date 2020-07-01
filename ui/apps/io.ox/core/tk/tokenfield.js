@@ -545,6 +545,8 @@ define('io.ox/core/tk/tokenfield', [
                 this.$live = $('<div class="sr-only" aria-live="assertive">')
             );
 
+            this.$wrapper.attr('role', 'application');  // Bug OXUIB-277, navigation with screen reader broken
+
             this.register();
 
             // save original typeahead input

@@ -387,6 +387,8 @@ define('io.ox/core/main/appcontrol', [
                 }
                 logo.wrap(
                     $('<button type="button" class="logo-btn btn btn-link">').on('click', function () {
+                        // works like a generic capability/requirement check, if this returns true then the app can be launched (similar to how quicklaunchers handle this)
+                        if (!ox.ui.apps.get(action.replace(/\/main$/, ''))) return;
                         ox.launch(action);
                     })
                 );

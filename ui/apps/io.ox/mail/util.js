@@ -590,6 +590,11 @@ define('io.ox/mail/util', [
             return data.from && data.from.length && String(data.from[0][1] || '').toLowerCase() in addresses;
         },
 
+        hasUnsendReadReceipt: function (data) {
+            var send = _.isNumber(data.flags) ? (data.flags & 512) === 512 : undefined;
+            return !send && !!data.disp_notification_to;
+        },
+
         hasOtherRecipients: function (data) {
             data = data || {};
             var list = [].concat(data.to || [], data.cc || [], data.bcc || []),

@@ -120,9 +120,15 @@ define('io.ox/help/main', [
                     lastTabbable = contents.find('.navbar-nav a:eq(2)'),
                     caps = capabilities.getFlat(),
                     navigation = contents.find('.oxhelp-navigation-top'),
+                    navbar = navigation.find('nav'),
                     helpContent = contents.find('.oxhelp-content');
 
                 navigation.before(helpContent);
+
+                // hides the top-bar and always displays navigation (without toggle), see OXUIB-325
+                navbar.removeClass('navbar-inverse');
+                navbar.find('.navbar-header').hide();
+                navbar.find('#ox-main-nav').removeClass('collapse');
 
                 _(caps.enabled).each(function (cap) {
                     classesToAdd += ' cap-' + cap;

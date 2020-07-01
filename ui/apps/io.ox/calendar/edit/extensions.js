@@ -373,20 +373,28 @@ define('io.ox/calendar/edit/extensions', [
             var guid = _.uniqueId('form-control-label-'),
                 originalModel = this.model,
                 parentView = this.baton.parentView,
-                model = parentView.fullTimeToggleModel || new Backbone.Model({ allDay: calendarUtil.isAllday(this.model) }),
+                model = parentView.fullTimeToggleModel || new Backbone.Model({
+                    allDay: calendarUtil.isAllday(this.model),
+                    nonAlldayStartTime: moment(originalModel.getMoment('startDate')),
+                    nonAlldayEndTime: moment(originalModel.getMoment('endDate'))
+                }),
                 view = new mini.CustomCheckboxView({ id: guid, name: 'allDay', label: gt('All day'), model: model });
 
             view.listenTo(model, 'change:allDay', function () {
                 if (this.model.get('allDay')) {
+                    this.model.set({
+                        nonAlldayStartTime: moment(originalModel.getMoment('startDate')),
+                        nonAlldayEndTime: moment(originalModel.getMoment('endDate'))
+                    });
                     originalModel.set({
                         startDate: { value: originalModel.getMoment('startDate').format('YYYYMMDD') },
                         endDate: { value: originalModel.getMoment('endDate').format('YYYYMMDD') }
                     });
                 } else {
-                    var tzid = moment().tz();
+                    // keep selected date but use the time saved from before the allday change
                     originalModel.set({
-                        startDate: { value: originalModel.getMoment('startDate').format('YYYYMMDD[T]HHmmss'), tzid: tzid },
-                        endDate: { value: originalModel.getMoment('endDate').format('YYYYMMDD[T]HHmmss'), tzid: tzid }
+                        startDate: { value: originalModel.getMoment('startDate').format('YYYYMMDD') + this.model.get('nonAlldayStartTime').format('[T]HHmmss'), tzid: this.model.get('nonAlldayStartTime').tz() },
+                        endDate: { value: originalModel.getMoment('endDate').format('YYYYMMDD') + this.model.get('nonAlldayEndTime').format('[T]HHmmss'), tzid: this.model.get('nonAlldayEndTime').tz() }
                     });
                 }
             });
@@ -396,7 +404,7 @@ define('io.ox/calendar/edit/extensions', [
                 // if we restore alarms, check if they differ from the defaults
                 var isDefault = JSON.stringify(_(originalModel.attributes.alarms).pluck('action', 'trigger')) === JSON.stringify(_(calendarUtil.getDefaultAlarms(originalModel)).pluck('action', 'trigger'));
 
-                // automatically change default alarm in creae mode when allDay changes and the user did not change the alarm before (we don't want data loss)
+                // automatically change default alarm in create mode when allDay changes and the user did not change the alarm before (we don't want data loss)
                 if (isDefault) {
                     var applyDefaultAlarms = function () { originalModel.set('alarms', calendarUtil.getDefaultAlarms(originalModel)); };
                     model.on('change:allDay', applyDefaultAlarms);

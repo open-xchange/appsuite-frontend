@@ -22,8 +22,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-// TODO: wait for fix of MWB-288
-Scenario.skip('Read receipt block is displayed for read/unread mails', async function (I, users, mail) {
+Scenario('Read receipt block is displayed for read/unread mails (OXUIB-319)', async function (I, users, mail) {
     const subject = 'read receipt';
     await I.haveSetting({ 'io.ox/mail': { sendDispositionNotification: true } });
 
@@ -51,4 +50,16 @@ Scenario.skip('Read receipt block is displayed for read/unread mails', async fun
     mail.waitForApp();
     mail.selectMail(subject);
     I.waitForText('Send a read receipt');
+    I.click('Send a read receipt');
+    I.waitForDetached('.disposition-notification');
+    I.logout();
+
+    I.say('Third login: mail is seen and read receipt was send');
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+    mail.selectMail(subject);
+    await within({ frame: '.mail-detail-frame' }, async function () {
+        I.seeTextEquals('This mail has no content', 'body');
+    });
+    I.dontSee('Send a read receipt');
 });
