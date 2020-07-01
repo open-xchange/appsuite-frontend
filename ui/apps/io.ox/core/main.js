@@ -91,7 +91,9 @@ define('io.ox/core/main', [
         // b) to recognize deep links
         if (location.hash === '') location.hash = '#!!';
 
-        var baton = ext.Baton();
+        var baton = ext.Baton.ensure({
+            popups: []
+        });
 
         debug('core: launch > run stages');
         Stage.run('io.ox/core/stages', baton);
