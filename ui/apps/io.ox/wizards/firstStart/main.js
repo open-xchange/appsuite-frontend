@@ -22,7 +22,7 @@ define('io.ox/wizards/firstStart/main', [
     new Stage('io.ox/core/stages', {
         id: 'firstStartWizard',
         index: 200,
-        run: function () {
+        run: function (baton) {
             if (ox.manifests.pluginsFor('io.ox/wizards/firstStart').length === 0 ||
                 settings.get('wizards/firstStart/finished', false)) {
                 return $.when();
@@ -30,6 +30,7 @@ define('io.ox/wizards/firstStart/main', [
             var def = $.Deferred(),
                 topbar = $('#io-ox-topbar');
 
+            baton.data.popups.push({ name: 'firstStartWizard' });
             topbar.hide();
             ox.idle();
             ox.manifests.loadPluginsFor('io.ox/wizards/firstStart')

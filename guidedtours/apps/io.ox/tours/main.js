@@ -27,7 +27,7 @@ define('io.ox/tours/main', [
     new Stage('io.ox/core/stages', {
         id: 'tours',
         index: 1000,
-        run: function () {
+        run: function (baton) {
 
             // no tours for guests, they are just annoying when you receive a sharing link etc
             if (_.device('smartphone') || capabilities.has('guest')) {
@@ -44,14 +44,16 @@ define('io.ox/tours/main', [
                 // don't show first start wizard and what's new tour at the same time
                 // tourSettings.set('whatsNew/autoShow', 0).save();
 
-                require(['io.ox/core/tk/wizard', 'io.ox/tours/intro'], function (Tour) {
-                    Tour.registry.run('default/io.ox/intro');
+                baton.data.popups.push({ name: 'tour:io.ox/intro' });
+                return require(['io.ox/core/tk/wizard', 'io.ox/tours/intro']).then(function (Tour) {
+                    return Tour.registry.run('default/io.ox/intro');
                 });
             /*} else if (!tourSettings.get('whatsNew/neverShowAgain', false) && tourSettings.get('whatsNew/autoShow', 1) > 0) {
                 whatsNewTour.run();*/
             } else if (!disableTour && !tourSettings.get('multifactor/shownTour', false)) {
-                require(['io.ox/tours/multifactor'], function (tour) {
-                    tour.run();
+                baton.data.popups.push({ name: 'tour:io.ox/multifactor' });
+                return require(['io.ox/tours/multifactor']).then(function (tour) {
+                    return tour.run();
                 });
             }
 
