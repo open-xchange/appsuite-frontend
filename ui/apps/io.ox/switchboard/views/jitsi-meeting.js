@@ -12,8 +12,10 @@
  */
 
 define('io.ox/switchboard/views/jitsi-meeting', [
-    'io.ox/backbone/views/disposable'
-], function (DisposableView) {
+    'io.ox/backbone/views/disposable',
+    'settings!io.ox/core',
+    'gettext!io.ox/switchboard'
+], function (DisposableView, settings, gt) {
 
     'use strict';
 
@@ -54,14 +56,15 @@ define('io.ox/switchboard/views/jitsi-meeting', [
             this.$el.append(
                 $('<i class="fa fa-video-camera conference-logo">'),
                 $('<div class="ellipsis">').append(
-                    $('<b>').text('Link: '),
-                    $('<a target="_blank" rel="noopener">').attr('href', link).text(link)
+                    $('<b>').text(gt('Link:')),
+                    $.txt(' '),
+                    $('<a target="_blank" rel="noopener">').attr('href', link).text(gt.noI18n(link))
                 ),
                 $('<div>').append(
                     $('<a href="#" class="secondary-action" data-action="copy-to-location">')
-                        .text('Copy to location field'),
+                        .text(gt('Copy to location field')),
                     $('<a href="#" class="secondary-action">')
-                        .text('Copy to clipboard')
+                        .text(gt('Copy to clipboard'))
                         .attr('data-clipboard-text', link)
                         .on('click', false)
                 )
@@ -74,12 +77,13 @@ define('io.ox/switchboard/views/jitsi-meeting', [
 
         copyToLocation: function (e) {
             e.preventDefault();
-            this.appointment.set('location', 'Jitsi Meeting: ' + this.getJoinLink());
+            //#. %1$s contains the URL to join the meeting
+            this.appointment.set('location', gt('Jitsi Meeting: %1$s', this.getJoinLink()));
         },
 
         createMeeting: function () {
             // get a UUID (5 times s4 means a quadrillion combinations; good enough ... probably)
-            var joinLink = 'https://meet.jit.si/' + ['ox', s4(), s4(), s4(), s4(), s4()].join('-');
+            var joinLink = settings.get('switchboard/jisi/host') + '/' + ['ox', s4(), s4(), s4(), s4(), s4()].join('-');
             var props = this.getExtendedProps();
             props = _.extend({}, props, { 'X-OX-CONFERENCE': { value: joinLink, label: 'jitsi' } });
             this.appointment.set('extendedProperties', props);

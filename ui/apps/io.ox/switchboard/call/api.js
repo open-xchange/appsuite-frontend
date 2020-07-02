@@ -12,11 +12,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/switchboard/call/api', ['io.ox/switchboard/api', 'io.ox/switchboard/lookup'], function (api, lookup) {
+define('io.ox/switchboard/call/api', [
+    'io.ox/switchboard/api',
+    'io.ox/switchboard/lookup'
+], function (api, lookup) {
 
     'use strict';
-
-    var TELCO = 'https://meet.jit.si/';
 
     var Call = Backbone.Model.extend({
         initialize: function (data) {
@@ -49,10 +50,6 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api', 'io.ox/switchboar
         },
         getTelcoLink: function () {
             return this.get('telco');
-        },
-        generateTelcoLink: function () {
-            this.set('telco', TELCO + s4() + s4());
-            function s4() { return Math.floor((1 + Math.random()) * 0x10000).toString(16).substr(1); }
         },
         isIncoming: function () {
             return !!this.get('incoming');

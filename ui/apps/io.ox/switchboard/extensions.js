@@ -24,9 +24,11 @@ define('io.ox/switchboard/extensions', [
     'io.ox/switchboard/views/zoom-meeting',
     'io.ox/switchboard/views/jitsi-meeting',
     'io.ox/switchboard/views/call-history',
+    'io.ox/core/capabilities',
+    'io.ox/contacts/model',
     'settings!io.ox/core',
     'gettext!io.ox/switchboard'
-], function (ext, presence, api, account, mini, DisposableView, actionsUtil, contactsAPI, ConferenceSelectView, ZoomMeetingView, JitsiMeetingView, callHistory, settings, gt) {
+], function (ext, presence, api, account, mini, DisposableView, actionsUtil, contactsAPI, ConferenceSelectView, ZoomMeetingView, JitsiMeetingView, callHistory, capabilities, contactsModel, settings, gt) {
 
     'use strict';
 
@@ -95,57 +97,126 @@ define('io.ox/switchboard/extensions', [
         id: 'actions',
         draw: function (baton) {
             if (contactsAPI.looksLikeResource(baton.data)) return;
+            var support = api.supports('zoom') || api.supports('jitsi');
+            if (!support) return;
+            var $actions = $('<div class="switchboard-actions">');
+            ext.point('io.ox/contacts/detail/actions').invoke('draw', $actions, baton.clone());
             this.append(
                 presence.getPresenceString(baton.data.email1),
-                $('<div class="switchboard-actions">').append(
-                    // Call
-                    $('<button class="btn btn-link" data-action="call">')
-                        // .prop('disabled', api.isMyself(baton.data.email1))
-                        .append(
-                            $('<i class="fa fa-phone" aria-hidden="true">'),
-                            $.txt('Call')
-                        ),
-                    // Chat
-                    $('<button class="btn btn-link" data-action="chat">')
-                        .append(
-                            $('<i class="fa fa-comment" aria-hidden="true">'),
-                            $.txt('Chat')
-                        ),
-                    // Email
-                    $('<button class="btn btn-link" data-action="send">')
-                        .append(
-                            $('<i class="fa fa-envelope" aria-hidden="true">'),
-                            $.txt('Email')
-                        ),
-                    // Invite
-                    $('<button class="btn btn-link" data-action="invite">')
-                        .append(
-                            $('<i class="fa fa-calendar-plus-o" aria-hidden="true">'),
-                            $.txt('Invite')
-                        )
-                )
-                .on('click', 'button', baton.data, function (e) {
-                    var action = $(e.currentTarget).data('action'),
-                        baton = ext.Baton({ data: [e.data] });
-                    switch (action) {
-                        case 'call':
-                            actionsUtil.invoke('io.ox/switchboard/call-user', baton);
-                            break;
-                        case 'chat':
-                            actionsUtil.invoke('io.ox/switchboard/wall-user', baton);
-                            break;
-                        case 'send':
-                            actionsUtil.invoke('io.ox/contacts/actions/send', baton);
-                            break;
-                        case 'invite':
-                            actionsUtil.invoke('io.ox/contacts/actions/invite', baton);
-                            break;
-                        // no default
-                    }
-                })
+                $actions
             );
         }
     });
+
+    ext.point('io.ox/contacts/detail/actions').extend(
+        {
+            id: 'call',
+            index: 100,
+            draw: function (baton) {
+                var $ul = $('<ul class="dropdown-menu">');
+                ext.point('io.ox/contacts/detail/actions/call').invoke('draw', $ul, baton.clone());
+                this.append(
+                    $('<div class="dropdown">').append(
+                        $('<button type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').append(
+                            $('<i class="fa fa-phone" aria-hidden="true">'),
+                            $.txt(gt('Call')),
+                            $('<i class="fa fa-caret-down" aria-hidden="true">')
+                        ),
+                        $ul
+                    )
+                );
+            }
+        },
+        {
+            id: 'email',
+            index: 200,
+            draw: function (baton) {
+                if (!capabilities.has('webmail')) return;
+                this.append(
+                    createButton('io.ox/contacts/actions/send', 'fa-envelope', gt('Email'), baton)
+                );
+            }
+        },
+        {
+            id: 'invite',
+            index: 300,
+            draw: function (baton) {
+                if (!capabilities.has('calendar')) return;
+                this.append(
+                    createButton('io.ox/contacts/actions/invite', 'fa-calendar-plus-o', gt('Invite'), baton)
+                );
+            }
+        }
+    );
+
+    function createButton(action, icon, label, baton) {
+        return $('<button type="button" class="btn btn-link">')
+            .on('click', baton.data, function (e) {
+                actionsUtil.invoke(action, ext.Baton({ data: [e.data] }));
+            })
+            .append(
+                $('<i class="fa" aria-hidden="true">').addClass(icon),
+                $.txt(label)
+            );
+    }
+
+    function createConferenceItem(type, title, baton) {
+        return $('<li role="presentation">').append(
+            $('<a href="#">').text(title)
+            .toggleClass('disabled', api.isMyself(baton.data.email1))
+            .on('click', baton.data, function (e) {
+                e.preventDefault();
+                actionsUtil.invoke('io.ox/switchboard/call-user', ext.Baton({ type: type, data: [e.data] }));
+            })
+        );
+    }
+
+    ext.point('io.ox/contacts/detail/actions/call').extend(
+        {
+            id: 'zoom',
+            index: 100,
+            draw: function (baton) {
+                if (!api.supports('zoom')) return;
+                this.append(createConferenceItem('zoom', gt('Call via Zoom'), baton));
+            }
+        },
+        {
+            id: 'jitsi',
+            index: 200,
+            draw: function (baton) {
+                if (!api.supports('jitsi')) return;
+                this.append(createConferenceItem('jitsi', gt('Call via Jitsi'), baton));
+            }
+        },
+        {
+            id: 'phone',
+            index: 300,
+            draw: function (baton) {
+                var numbers = phoneFields.map(function (field) {
+                    var number = baton.data[field];
+                    if (!number) return $();
+                    return $('<li role="presentation">').append(
+                        $('<a>').attr('href', 'callto:' + number).append(
+                            $('<small>').text(contactsModel.fields[field]),
+                            $('<br>'),
+                            $.txt(number)
+                        )
+                    );
+                });
+                if (!numbers.length) return;
+                this.append(
+                    $('<li class="divider" role="separator">'),
+                    numbers
+                );
+            }
+        }
+    );
+
+    var phoneFields = [
+        'telephone_company', 'telephone_business1', 'telephone_business2',
+        'cellular_telephone1', 'cellular_telephone2',
+        'telephone_home1', 'telephone_home2', 'telephone_other'
+    ];
 
     // extend list view in mail
     ext.point('io.ox/mail/listview/item/default').extend({
@@ -205,7 +276,6 @@ define('io.ox/switchboard/extensions', [
         after: 'location',
         id: 'join',
         draw: function (baton) {
-            console.log('actions', baton.data);
             // TODO: Split this for compability with pure location and real conference
             // conference field should also be printed in the view
             var match = [], props = baton.data.extendedProperties || {};
@@ -214,7 +284,6 @@ define('io.ox/switchboard/extensions', [
             } else {
                 match = String(baton.data.location).match(/(https:\/\/.*?\.zoom\.us\S+)/i);
             }
-            console.log('zoom?', match, 'location', baton.data.location);
             if (!match) return;
             this.append(
                 $('<div class="switchboard-actions horizontal">').append(
@@ -222,7 +291,7 @@ define('io.ox/switchboard/extensions', [
                     $('<button class="btn btn-link" data-action="join">')
                         .append(
                             $('<i class="fa fa-phone" aria-hidden="true">'),
-                            $.txt('Join')
+                            $.txt('Join Zoom meeting')
                         )
                         .on('click', function () {
                             window.open(match[0]);
@@ -241,7 +310,7 @@ define('io.ox/switchboard/extensions', [
         draw: function (baton) {
             var point = ext.point('io.ox/calendar/conference-solutions');
             if (point.list().length <= 1) return;
-            new ConferenceSelectView({ el: this, model: baton.model, point: point }).render();
+            new ConferenceSelectView({ el: this, appointment: baton.model, point: point }).render();
         }
     });
 
@@ -262,7 +331,7 @@ define('io.ox/switchboard/extensions', [
             label: gt('Zoom Meeting'),
             render: function (view) {
                 this.append(
-                    new ZoomMeetingView({ appointment: view.model }).render().$el
+                    new ZoomMeetingView({ appointment: view.appointment }).render().$el
                 );
             }
         });
@@ -279,7 +348,7 @@ define('io.ox/switchboard/extensions', [
         label: gt('Jitsi Meeting'),
         render: function (view) {
             this.append(
-                new JitsiMeetingView({ appointment: view.model }).render().$el
+                new JitsiMeetingView({ appointment: view.appointment }).render().$el
             );
         }
     });
@@ -292,7 +361,6 @@ define('io.ox/switchboard/extensions', [
         after: 'details',
         id: 'actions',
         draw: function (baton) {
-            console.log('actions', baton.data);
             this.append(
                 $('<div class="switchboard-actions">').append(
                     // Call

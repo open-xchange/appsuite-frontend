@@ -11,36 +11,39 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/switchboard/views/zoom-call', [
+define('io.ox/switchboard/views/jitsi-call', [
     'io.ox/switchboard/zoom',
+    'io.ox/backbone/views/disposable',
+    'settings!io.ox/core',
     'gettext!io.ox/switchboard'
-], function (zoom, gt) {
+], function (zoom, DisposableView, settings, gt) {
 
     'use strict';
 
-    var ZoomCallView = zoom.View.extend({
+    var JitsiCallView = DisposableView.extend({
 
-        className: 'conference-view zoom',
+        className: 'conference-view jitsi',
 
-        initialize: function () {
-            window.zoomCall = this;
+        constructor: function () {
+            this.model = new Backbone.Model({ type: 'jitsi', state: 'done', joinLink: this.createJoinLink() });
+            DisposableView.prototype.constructor.apply(this, arguments);
         },
 
-        renderAuthRequired: function () {
-            this.$el.append(
-                $('<div class="alert alert-info">').text(
-                    gt('You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. If you don\'t have an account yet, it is sufficient to create a free one.', ox.serverConfig.productName)
-                )
-            );
+        createJoinLink: function () {
+            var host = settings.get('switchboard/jitsi/host');
+            return host + '/' + s4() + s4();
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000).toString(16).substr(1);
+            }
         },
 
-        renderPending: function () {
-            this.$el.append(
-                $('<div class="pending">').append(
-                    $.txt(gt('Connecting to Zoom ...')),
-                    $('<i class="fa fa-refresh fa-spin">')
-                )
-            );
+        getJoinLink: function () {
+            return this.model.get('joinLink');
+        },
+
+        render: function () {
+            this.renderDone();
+            return this;
         },
 
         renderDone: function () {
@@ -62,20 +65,8 @@ define('io.ox/switchboard/views/zoom-call', [
             require(['static/3rd.party/clipboard.min.js'], function (Clipboard) {
                 new Clipboard(el);
             });
-        },
-
-        createMeeting: function () {
-            return zoom.createInstantMeeting().then(
-                this.createMeetingSuccess.bind(this),
-                this.createMeetingFailed.bind(this)
-            );
-        },
-
-        createMeetingSuccess: function (result) {
-            console.log('createMeetingSuccess', result.join_url, result);
-            this.model.set({ joinLink: result.join_url, state: 'done' });
         }
     });
 
-    return ZoomCallView;
+    return JitsiCallView;
 });

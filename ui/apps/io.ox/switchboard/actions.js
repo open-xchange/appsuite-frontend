@@ -26,37 +26,38 @@ define('io.ox/switchboard/actions', [
         collection: 'some',
         matches: function (baton) {
             // you cannot call yourself
-            if (false && justMyself(baton)) return false;
+            if (justMyself(baton)) return false;
+            if (!baton.type) return false;
             return isGAB(baton);
         },
         action: function (baton) {
-            call.start('zoom', getRecipients(baton));
+            call.start(baton.type, getRecipients(baton));
         }
     });
 
-    new Action('io.ox/switchboard/wall-user', {
-        collection: 'some',
-        matches: function (baton) {
-            return isGAB(baton);
-        },
-        action: function (baton) {
-            var recipients = getRecipients(baton);
-            new Modal({ title: 'Send message' })
-                .addCancelButton()
-                .addButton({ label: 'Send', action: 'send' })
-                .build(function () {
-                    this.$body.append('<textarea class="form-control message" rows="3" placeholder="Message"></textarea>');
-                    this.$el.on('keypress', 'textarea', function (e) {
-                        if (e.which === 13 && e.ctrlKey) this.invokeAction('send');
-                    }.bind(this));
-                })
-                .on('send', function () {
-                    var message = this.$('textarea.message').val();
-                    api.propagate('wall', recipients, { message: message });
-                })
-                .open();
-        }
-    });
+    // new Action('io.ox/switchboard/wall-user', {
+    //     collection: 'some',
+    //     matches: function (baton) {
+    //         return isGAB(baton);
+    //     },
+    //     action: function (baton) {
+    //         var recipients = getRecipients(baton);
+    //         new Modal({ title: 'Send message' })
+    //             .addCancelButton()
+    //             .addButton({ label: 'Send', action: 'send' })
+    //             .build(function () {
+    //                 this.$body.append('<textarea class="form-control message" rows="3" placeholder="Message"></textarea>');
+    //                 this.$el.on('keypress', 'textarea', function (e) {
+    //                     if (e.which === 13 && e.ctrlKey) this.invokeAction('send');
+    //                 }.bind(this));
+    //             })
+    //             .on('send', function () {
+    //                 var message = this.$('textarea.message').val();
+    //                 api.propagate('wall', recipients, { message: message });
+    //             })
+    //             .open();
+    //     }
+    // });
 
     function justMyself(baton) {
         return baton.array().every(function (data) { return data.email1 === api.userId; });
@@ -76,23 +77,23 @@ define('io.ox/switchboard/actions', [
         });
     }
 
-    // add links to toolbar
-    ext.point('io.ox/contacts/toolbar/links').extend(
-        {
-            id: 'call',
-            before: 'send',
-            prio: 'hi',
-            mobile: 'hi',
-            title: 'Call',
-            ref: 'io.ox/switchboard/call-user'
-        },
-        {
-            id: 'wall',
-            before: 'call',
-            prio: 'hi',
-            mobile: 'hi',
-            title: 'Chat',
-            ref: 'io.ox/switchboard/wall-user'
-        }
-    );
+    // // add links to toolbar
+    // ext.point('io.ox/contacts/toolbar/links').extend(
+    //     {
+    //         id: 'call',
+    //         before: 'send',
+    //         prio: 'hi',
+    //         mobile: 'hi',
+    //         title: 'Call',
+    //         ref: 'io.ox/switchboard/call-user'
+    //     },
+    //     {
+    //         id: 'wall',
+    //         before: 'call',
+    //         prio: 'hi',
+    //         mobile: 'hi',
+    //         title: 'Chat',
+    //         ref: 'io.ox/switchboard/wall-user'
+    //     }
+    // );
 });

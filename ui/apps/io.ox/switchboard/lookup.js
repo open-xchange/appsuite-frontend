@@ -14,8 +14,9 @@
 define('io.ox/switchboard/lookup', [
     'io.ox/core/http',
     'io.ox/contacts/util',
-    'settings!io.ox/core'
-], function (http, util, settings) {
+    'settings!io.ox/core',
+    'gettext!io.ox/switchboard'
+], function (http, util, settings, gt) {
 
     'use strict';
 
@@ -66,7 +67,7 @@ define('io.ox/switchboard/lookup', [
             var preliminary = String(userId).replace(/\.|(@[^@]+$)/g, ' ').trim();
             var node = document.createTextNode(preliminary);
             this.findByEmail(userId).done(function (data) {
-                if (data) node.nodeValue = util.getFullName(data);
+                if (data) node.nodeValue = gt.noI18n(util.getFullName(data));
             });
             return node;
         }

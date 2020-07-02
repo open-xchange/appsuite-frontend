@@ -20,7 +20,7 @@ define('io.ox/switchboard/views/call-history', [
     'io.ox/switchboard/call/api',
     'io.ox/core/extensions',
     'settings!io.ox/core',
-    'gettext!io.ox/core'
+    'gettext!io.ox/switchboard'
 ], function (DisposableView, contactsAPI, util, presence, lookup, call, ext, settings, gt) {
 
     'use strict';
@@ -65,10 +65,13 @@ define('io.ox/switchboard/views/call-history', [
                     ),
                 this.$ul = $('<ul class="dropdown-menu dropdown-menu-right" role="menu">').append(
                     this.$header = $('<li class="header" role="separator">').append(
-                        $('<div class="header-caption">').text(gt('Call History')),
+                        $('<div class="header-caption">')
+                            .text(gt('Call History')),
                         $('<div class="header-controls">').append(
-                            $('<button type="button" class="btn btn-link" data-action="all">').text('All'),
-                            $('<button type="button" class="btn btn-link" data-action="missed">').text('Missed')
+                            $('<button type="button" class="btn btn-link" data-action="all">')
+                                .text(gt.pgettext('call-history', 'All')),
+                            $('<button type="button" class="btn btn-link" data-action="missed">')
+                                .text(gt.pgettext('call-history', 'Missed'))
                         )
                     )
                 )

@@ -13,46 +13,58 @@
 
 define('io.ox/switchboard/views/conference-select', [
     'io.ox/backbone/views/disposable',
-    'io.ox/backbone/mini-views',
     'gettext!io.ox/switchboard'
-], function (DisposableView, mini, gt) {
+], function (DisposableView, gt) {
 
     'use strict';
 
     var ConferenceSelectView = DisposableView.extend({
+        events: {
+            'change select': 'onChangeType'
+        },
         initialize: function (options) {
             this.point = options.point;
-            this.listenTo(this.model, 'change:conference', this.onChange);
+            this.appointment = options.appointment;
+            var props = this.appointment.get('extendedProperties') || {},
+                conference = props['X-OX-CONFERENCE'];
+            this.type = (conference && conference.label) || 'none';
             this.$col = $('<div class="col-xs-12">');
         },
-        onChange: function () {
-            var value = this.model.get('conference');
-            this.point.get(value, function (extension) {
-                this.$col.empty();
-                if (value === 'none') return;
-                if (!extension.render) return;
-                extension.render.call(this.$col, this);
-            }.bind(this));
+        removeConference: function () {
+            var props = this.appointment.get('extendedProperties');
+            if (!props) return;
+            delete props['X-OX-CONFERENCE'];
+            this.appointment.set('extendedProperties', props);
+        },
+        onChangeType: function () {
+            this.type = this.$('select').val();
+            this.$col.empty();
+            this.removeConference();
+            if (this.type === 'none') return;
+            this.renderConferenceDetails();
         },
         render: function () {
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<label class="control-label col-xs-12 col-md-6">').attr('for', guid).append(
                     $.txt(gt('Conference')),
-                    new mini.SelectView({
-                        id: guid,
-                        label: gt('Conference'),
-                        // we use categories as a little hack for now
-                        name: 'conference',
-                        model: this.model,
-                        list: this.point.list().map(function (item) {
-                            return _(item).pick('value', 'label');
+                    $('<select class="form-control" name="conference-type">').attr('id', guid).append(
+                        this.point.list().map(function (item) {
+                            return $('<option>').val(item.value).text(item.label);
                         })
-                    }).render().$el
+                    )
+                    .val(this.type)
                 ),
                 this.$col
             );
+            this.renderConferenceDetails();
             return this;
+        },
+        renderConferenceDetails: function () {
+            this.point.get(this.type, function (extension) {
+                if (!extension.render) return;
+                extension.render.call(this.$col, this);
+            }.bind(this));
         }
     });
 

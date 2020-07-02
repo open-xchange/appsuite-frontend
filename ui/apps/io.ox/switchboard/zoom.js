@@ -63,7 +63,7 @@ define('io.ox/switchboard/zoom', [
         },
 
         onStateChange: function () {
-            this.$el.empty();
+            this.$el.empty().removeClass('error');
             switch (this.model.get('state')) {
                 case 'unauthorized':
                     this.renderAuthRequired();
@@ -91,7 +91,8 @@ define('io.ox/switchboard/zoom', [
                     gt('You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. If you don\'t have an account yet, it is sufficient to create a free one.', ox.serverConfig.productName)
                 ),
                 $('<p>').append(
-                    $('<button type="button" class="btn btn-default" data-action="start-oauth">').text('Connect with Zoom ...')
+                    $('<button type="button" class="btn btn-default" data-action="start-oauth">')
+                        .text(gt('Connect with Zoom'))
                 )
             );
         },
@@ -101,17 +102,17 @@ define('io.ox/switchboard/zoom', [
             this.$el.append(
                 $('<div class="pending">').append(
                     $('<i class="fa fa-video-camera conference-logo">'),
-                    $.txt('Connecting to Zoom ...'),
+                    $.txt(gt('Connecting to Zoom ...')),
                     $('<i class="fa fa-refresh fa-spin">')
                 )
             );
         },
 
         renderError: function () {
-            this.$el.append(
-                $('<i class="fa fa-exclamation conference-logo">'),
-                $('<div class="alert alert-danger">').text(
-                    this.model.get('error') || gt('Oops! Something went wrong')
+            this.$el.addClass('error').append(
+                $('<p class="message">').append(
+                    $('<i class="fa fa-exclamation-triangle">'),
+                    $.txt(this.model.get('error') || gt('Something went wrong. Please try again.'))
                 )
             );
         },
@@ -168,6 +169,10 @@ define('io.ox/switchboard/zoom', [
                 def.reject(response);
             });
             return def;
+        },
+
+        getMeeting: function (id) {
+            return exports.api('GET', '/meetings/' + id);
         },
 
         // data:

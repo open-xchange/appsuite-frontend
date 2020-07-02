@@ -47,6 +47,19 @@ define.async('io.ox/switchboard/api', [
                 def.resolve(result);
             });
             return def;
+        },
+
+        supports: function (type) {
+            if (!settings.get('switchboard/host')) return false;
+            switch (type) {
+                case 'zoom':
+                    return !!settings.get('switchboard/zoom/enabled');
+                case 'jitsi':
+                    if (!settings.get('switchboard/jitsi/enabled')) return false;
+                    return !!settings.get('switchboard/jitsi/host');
+                default:
+                    return false;
+            }
         }
     };
 
