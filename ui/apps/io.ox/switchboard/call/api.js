@@ -16,7 +16,7 @@ define('io.ox/switchboard/call/api', ['io.ox/switchboard/api', 'io.ox/switchboar
 
     'use strict';
 
-    var TELCO = 'https://jitsi.ox-frontend.de/';
+    var TELCO = 'https://meet.jit.si/';
 
     var Call = Backbone.Model.extend({
         initialize: function (data) {

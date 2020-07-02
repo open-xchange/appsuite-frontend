@@ -79,7 +79,7 @@ define('io.ox/switchboard/views/jitsi-meeting', [
 
         createMeeting: function () {
             // get a UUID (5 times s4 means a quadrillion combinations; good enough ... probably)
-            var joinLink = 'https://jitsi.ox-frontend.de/' + ['ox', s4(), s4(), s4(), s4(), s4()].join('-');
+            var joinLink = 'https://meet.jit.si/' + ['ox', s4(), s4(), s4(), s4(), s4()].join('-');
             var props = this.getExtendedProps();
             props = _.extend({}, props, { 'X-OX-CONFERENCE': { value: joinLink, label: 'jitsi' } });
             this.appointment.set('extendedProperties', props);
