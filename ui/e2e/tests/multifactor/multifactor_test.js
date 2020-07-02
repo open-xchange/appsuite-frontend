@@ -10,14 +10,14 @@
  * @author Greg Hill <greg.hill@open-xchange.com>
  */
 
-/// <reference path="../../../steps.d.ts" />
+/// <reference path="../../steps.d.ts" />
 
 Feature('Settings > Security > 2-Step Verification');
-let assert = require('assert');
-let OTPAuth = require('otpauth');
+const OTPAuth = require('otpauth');
+const { I } = inject();
 
 function getTotp(secret) {
-    let totp = new OTPAuth.TOTP({
+    const totp = new OTPAuth.TOTP({
         algorithm: 'SHA1',
         digits: 6,
         period: 30,
@@ -26,23 +26,26 @@ function getTotp(secret) {
     return totp.generate();
 }
 
-Before(async (users, contexts, I) => {
-    await users.create();
-    await contexts[0].hasCapability('multifactor');
-    await I.haveSetting('io.ox/tours//server/disableTours', true, users[0]);
+Before(async (users) => {
+    const user = await users.create();
+    await Promise.all([
+        user.context.hasCapability('multifactor'),
+        I.haveSetting('io.ox/tours//server/disableTours', true, { user })
+    ]);
 });
 
 After(async (users) => {
+    await users[0].context.doesntHaveCapability('multifactor');
     await users.removeAll();
 });
 
-async function enterCode(I, code) {
+async function enterCode(code) {
     I.waitForVisible('.multifactorAuthDiv .mfInput');
     I.fillField('.mfInput', code);
     I.click('Next');
 }
 
-async function addSMS(I) {
+async function addSMS() {
     I.click('#addDevice');
     I.waitForVisible('.mfIcon.fa-mobile');
     I.click('.mfIcon.fa-mobile');
@@ -53,24 +56,24 @@ async function addSMS(I) {
     I.wait(1);
     I.click('Ok');
     I.waitForVisible('.multifactorSelector .mfInput');
-    I.fillField('.multifactorSelector .mfInput', '0815')
+    I.fillField('.multifactorSelector .mfInput', '0815');
     I.click('Ok');
 }
 
-async function addTOTP(I) {
+async function addTOTP() {
     I.click('#addDevice');
     I.waitForVisible('.mfIcon.fa-google');
     I.click('.mfIcon.fa-google');
     I.waitForVisible('.totpShared');
 
-    let secret = await I.grabTextFrom('.totpShared');
-    let code = getTotp(secret);
+    const secret = await I.grabTextFrom('.totpShared');
+    const code = getTotp(secret);
     I.fillField('#verification', code);
     I.click('Ok');
     return secret;
 }
 
-async function handleBackup(I, cancel) {
+async function handleBackup({ cancel } = {}) {
     I.waitForVisible('ul.mfAddDevice');
     if (cancel) {
         I.click('Close');
@@ -79,20 +82,20 @@ async function handleBackup(I, cancel) {
     I.waitForVisible('.fa-file-text-o.mfIcon');
     I.click('.fa-file-text-o.mfIcon');
     I.waitForVisible('.multifactorRecoveryCodeDiv');
-    let recovery = await I.grabTextFrom('.multifactorRecoveryCodeDiv');
+    const recovery = await I.grabTextFrom('.multifactorRecoveryCodeDiv');
     I.click('Ok');
     return recovery;
 }
 
-Scenario.skip('Add TOTP multifactor and login using', async (I, users) => {
+Scenario('Add TOTP multifactor and login using', async (I, users) => {
 
-    var [ user ] = users;
+    const [user] = users;
     // Login to settings
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/multifactor']);
     I.waitForVisible('#addDevice');
     I.wait(1);
-    var secret = await addTOTP(I);
-    await handleBackup(I);
+    const secret = await addTOTP();
+    await handleBackup();
 
     I.waitForVisible('.multifactorStatusDiv .fa-google.mfIcon');   // Listed in active list
 
@@ -100,22 +103,23 @@ Scenario.skip('Add TOTP multifactor and login using', async (I, users) => {
     I.wait(1);
     I.login('app=io.ox/mail', user);  // Log back in
 
-    await enterCode(I, getTotp(secret));
+    await enterCode(getTotp(secret));
 
     I.waitForVisible('.io-ox-mail-window .window-body .classic-toolbar');
     I.logout();
 
 });
 
-Scenario.skip('TOTP multifactor bad entry', async (I, users) => {
+Scenario('TOTP multifactor bad entry', async (I, users) => {
 
-    var [ user ] = users;
+    const [user] = users;
+    await user.hasConfig('com.openexchange.multifactor.maxBadAttempts', 4);
     // Login to settings
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/multifactor']);
     I.waitForVisible('#addDevice');
     I.wait(1);
-    var secret = await addTOTP(I);
-    await handleBackup(I);
+    const secret = await addTOTP();
+    await handleBackup();
 
     I.waitForVisible('.multifactorStatusDiv .fa-google.mfIcon');   // Listed in active list
 
@@ -123,14 +127,14 @@ Scenario.skip('TOTP multifactor bad entry', async (I, users) => {
     I.wait(1);
     I.login('app=io.ox/mail', user);  // Log back in
 
-    var badCode = getTotp(secret);
+    let badCode = getTotp(secret);
     badCode = badCode > 100 ? badCode - 99 : badCode + 99;
-    for (var i = 0; i < 3; i++) {
-        await enterCode(I, badCode + '');
+    for (let i = 0; i < 3; i++) {
+        await enterCode(badCode + '');
         I.waitForVisible('.multifactorError');
         I.see('authentication failed');
     }
-    await enterCode(I, badCode + '');
+    await enterCode(badCode + '');
     I.waitForVisible('.io-ox-alert');
     I.see('locked', '.io-ox-alert');
     I.waitForVisible('#io-ox-login-username');
@@ -140,37 +144,37 @@ Scenario.skip('TOTP multifactor bad entry', async (I, users) => {
 
 });
 
-Scenario.skip('Add SMS multifactor and login using', async (I, users) => {
+Scenario('Add SMS multifactor and login using', async (I, users) => {
 
-    var [ user ] = users;
+    const [user] = users;
     // Login to settings
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/multifactor']);
     I.waitForVisible('#addDevice');
     I.wait(1);
-    await addSMS(I);
-    await handleBackup(I, true);
+    await addSMS();
+    await handleBackup({ cancel: true });
     I.waitForVisible('.multifactorStatusDiv .fa-mobile.mfIcon');   // Listed in active list
 
     I.logout();
     I.wait(1);
     I.login('app=io.ox/mail', user);  // Log back in
 
-    await enterCode(I, '0815');
+    await enterCode('0815');
 
     I.waitForVisible('.io-ox-mail-window .window-body .classic-toolbar');
     I.logout();
 
 });
 
-Scenario.skip('Add SMS multifactor, then lost device', async (I, users) => {
+Scenario('Add SMS multifactor, then lost device', async (I, users) => {
 
-    var [ user ] = users;
+    const [user] = users;
     // Login to settings
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/multifactor']);
     I.waitForVisible('#addDevice');
     I.wait(1);
-    await addSMS(I);
-    let recovery = await handleBackup(I);
+    await addSMS();
+    let recovery = await handleBackup();
     I.waitForVisible('.multifactorStatusDiv .fa-mobile.mfIcon');   // Listed in active list
 
     I.logout();
@@ -194,17 +198,17 @@ Scenario.skip('Add SMS multifactor, then lost device', async (I, users) => {
 
 });
 
-Scenario.skip('Add multiple multifactors, then login', async (I, users) => {
+Scenario('Add multiple multifactors, then login', async (I, users) => {
 
-    var [ user ] = users;
+    const [user] = users;
     // Login to settings
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/multifactor']);
     I.waitForVisible('#addDevice');
     I.wait(1);
-    await addSMS(I);
-    let recovery = await handleBackup(I);
+    await addSMS();
+    await handleBackup();
     I.waitForVisible('.multifactorStatusDiv .fa-mobile.mfIcon');   // Listed in active list
-    await addTOTP(I);
+    await addTOTP();
     I.wait(1);
     I.logout();
     I.wait(1);
@@ -214,7 +218,7 @@ Scenario.skip('Add multiple multifactors, then login', async (I, users) => {
     I.see('Select 2-Step Verification Method', '.modal-header');
     I.click('.fa-mobile');
 
-    await enterCode(I, '0815');
+    await enterCode('0815');
     I.waitForVisible('.io-ox-mail-window .window-body .classic-toolbar');
     I.logout();
 
