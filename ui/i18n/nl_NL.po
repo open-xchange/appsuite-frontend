@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-11-25 13:20+0100\n"
+"PO-Revision-Date: 2020-07-02 11:29+0200\n"
 "Last-Translator: Tim van Oosten <tim@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 19.08.0\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -728,6 +728,12 @@ msgid "CW"
 msgstr "Wk"
 
 #. CW is calender week and %1$d is the week number
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "Today,"
+msgstr "Vandaag,"
+
+#. CW is calender week and %1$d is the week number
 #. %1$d = Calendar week
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -1223,8 +1229,8 @@ msgid ""
 "This appointment is part of a series. Do you want to change your reminders "
 "for the whole series or just for this appointment within the series?"
 msgstr ""
-"Deze afspraak is onderdeel van een reeks. Wilt u uw herinneringen voor de"
-" hele reeks aanpassen of alleen voor deze afspraak in de reeks?"
+"Deze afspraak is onderdeel van een reeks. Wilt u uw herinneringen voor de "
+"hele reeks aanpassen of alleen voor deze afspraak in de reeks?"
 
 #. %1$s:  is the calendar's name
 #: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
@@ -1462,9 +1468,9 @@ msgstr "Gedeelde agenda's"
 #: apps/io.ox/calendar/common-extensions.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js
-#: apps/io.ox/calendar/view-grid-template.js
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
+#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Privé"
 
@@ -2113,6 +2119,10 @@ msgid "Calendar account error"
 msgstr "Agenda-account fout"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
+msgid "Edit accounts"
+msgstr "Accounts bewerken"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Try again"
 msgstr "Opnieuw"
 
@@ -2127,8 +2137,9 @@ msgid "Successfully refreshed calendar"
 msgstr "De agenda is succesvol ververst"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
-#: apps/plugins/portal/calendar/register.js module:plugins/portal
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/print.js
+#: apps/io.ox/calendar/week/view.js apps/plugins/portal/calendar/register.js
+#: module:plugins/portal
 msgid "Appointments"
 msgstr "Afspraken"
 
@@ -2165,10 +2176,10 @@ msgstr "Toon vorige maand"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
-#: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
-#: module:plugins/portal apps/plugins/portal/calendar/register.js
+#: apps/io.ox/core/tk/datepicker.js module:io.ox/core
+#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js module:io.ox/tasks
+#: apps/plugins/portal/birthdays/register.js module:plugins/portal
+#: apps/plugins/portal/calendar/register.js
 msgid "Today"
 msgstr "Vandaag"
 
@@ -2201,8 +2212,8 @@ msgstr "Volgende Maand"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-msgid "Selected - %1$s"
-msgstr "Geselecteerd - %1$s"
+msgid "%1$s"
+msgstr "%1$s"
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
@@ -3187,6 +3198,14 @@ msgid "Select print layout"
 msgstr "Selecteer een afdrukopmaak"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid ""
+"This dialog is limited to %1$d entries and your address book exceeds this "
+"limitation. Therefore, some entries are not listed."
+msgstr ""
+"Deze dialoog heeft een limiet van %1$d invoerwaardes en uw adresboek "
+"overstijgt deze limiet. Daarom worden sommige waardes niet weergegeven."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/contacts/common-extensions.js apps/io.ox/contacts/main.js
 #: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/participants/views.js module:io.ox/core
@@ -3469,6 +3488,11 @@ msgstr "Postadres toevoegen"
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Add additional info"
 msgstr "Aanvullende info toevoegen"
+
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add user fields"
+msgstr "Gebruikersvelden toevoegen"
 
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
@@ -4139,6 +4163,10 @@ msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
 msgstr[0] "Distributielijst met 1 item"
 msgstr[1] "Distributielijst met %1$d items"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Private contact"
+msgstr "Privécontact"
 
 #. %1$s is a map service, like "Google Maps"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -5374,8 +5402,8 @@ msgstr[1] ""
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 msgid "Refresh. Current interval (%1$s min) can be customized in settings."
 msgstr ""
-"Vernieuwen. Huidige interval (%1$s min) kan aangepast worden in de"
-" instellingen."
+"Vernieuwen. Huidige interval (%1$s min) kan aangepast worden in de "
+"instellingen."
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/upsell/register.js module:plugins/portal
@@ -8913,6 +8941,12 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Beantwoord naar"
 
+#. %s is a list of filenames separeted by commas
+#. it is used by screenreaders to indicate which files are currently added to the list of attachments
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Added %s to attachments."
+msgstr "%s toegevoegd aan bijlagen."
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Namen tonen"
@@ -8957,12 +8991,6 @@ msgstr "Sleep bijlagen hierheen"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Mail size: %1$s"
 msgstr "Berichtgrootte: %1$s"
-
-#. %s is a list of filenames separeted by commas
-#. it is used by screenreaders to indicate which files are currently added to the list of attachments
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Added %s to attachments."
-msgstr "%s toegevoegd aan bijlagen."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add local file"
@@ -10313,6 +10341,13 @@ msgstr "Registreer nu"
 msgid "Change IMAP subscriptions"
 msgstr "Wijzig IMAP abonnementen"
 
+#: apps/io.ox/mail/settings/signatures/register.js module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Signature"
+msgstr "Ondertekening"
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Signature name"
 msgstr "Naam ondertekening"
@@ -10356,12 +10391,6 @@ msgstr "Verwijder oude ondertekeningen na het importeren"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "No preview available"
 msgstr "Geen voorbeeld beschikbaar"
-
-#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
-#: apps/io.ox/settings/security/certificates/settings/utils.js
-#: module:io.ox/settings/certificates
-msgid "Signature"
-msgstr "Ondertekening"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add new signature"
@@ -12644,25 +12673,42 @@ msgid "It's awesome"
 msgstr "Het is geweldig"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "%1$d of 5 stars"
-msgstr "%1$d van 5 sterren"
+msgid "What is the primary reason for your score?"
+msgstr "Wat is de hoofdreden van uw waardering?"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Not likely at all"
-msgstr "In het geheel niet waarschijnlijk"
+msgid "How can we improve your experience?"
+msgstr "Hoe kunnen we uw ervaring verbeteren?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Which features do you value or use the most?"
+msgstr "Welke functionaliteiten waardeert of gebruikt u het meest?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "What is the one thing we could do to make you happier?"
+msgstr "Wat is hétgene dat wij kunnen doen om u gelukkiger te maken?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "%1$d of 5 stars"
+msgstr "%1$d van 5 sterren"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "%1$d of 10 points."
 msgstr "%1$d van 10 punten."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Extremely likely"
-msgstr "Extreem waarschijnlijk"
+msgid "Not likely at all"
+msgstr "In het geheel niet waarschijnlijk"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Very likely"
+msgstr "Zeer waarschijnlijk"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How likely is it that you would recommend %1$s to a friend?"
-msgstr "Hoe waarschijnlijk is het dat u %1$s aanbeveelt aan een vriend?"
+msgid "How likely are you to recommend %1$s to a friend or colleague?"
+msgstr ""
+"Hoe waarschijnlijk is het dat u %1$s aanbeveeld aan een vriend of collega?"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Please rate this product"
@@ -12672,10 +12718,9 @@ msgstr "Geef alstublieft feedback over dit product"
 msgid "Please rate the following application:"
 msgstr "Beoordeel alstublieft de volgende applicaties:"
 
-#. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How do you like %1$s?"
-msgstr "Hoe vindt u %1$s?"
+msgid "We appreciate your feedback"
+msgstr "Wij waarderen uw feedback"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Comments and suggestions"
@@ -13611,6 +13656,18 @@ msgstr "Uitnodigingen voor %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Toegevoegd  op %s"
+
+#~ msgid "Selected - %1$s"
+#~ msgstr "Geselecteerd - %1$s"
+
+#~ msgid "Extremely likely"
+#~ msgstr "Extreem waarschijnlijk"
+
+#~ msgid "How likely is it that you would recommend %1$s to a friend?"
+#~ msgstr "Hoe waarschijnlijk is het dat u %1$s aanbeveelt aan een vriend?"
+
+#~ msgid "How do you like %1$s?"
+#~ msgstr "Hoe vindt u %1$s?"
 
 #~ msgid "%1$s Toolbar"
 #~ msgstr "%1$s Werkbalk"
