@@ -28,12 +28,11 @@ default:
     loginPage:
         backgroundImage: "radial-gradient(at 33% 50%, #3b6aad, #1f3f6b)"
         backgroundColor: "radial-gradient(at 33% 50%, #3b6aad, #1f3f6b)"
-        #teaser: "<div>any html ... </div>"
+        # teaser: "<div>any html ... </div>"
         logo: "data:image/svg+xml,%3Csvg width='180px' height='64px' viewBox='0 0 180 64' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg id='ox_logo_white' fill='%23FFFFFF' fill-rule='nonzero'%3E%3Cpath d='M68.9893238,14.336 L68.9893238,49.664 C68.9893238,50.304 69.2455516,50.944 69.7259786,51.456 C69.2455516,50.976 68.6049822,50.72 67.9323843,50.72 L20.7544484,50.72 C20.113879,50.72 19.4733096,50.976 18.9928826,51.456 C19.4733096,50.976 19.7295374,50.304 19.7295374,49.664 L19.7295374,14.336 C19.7295374,13.696 19.4733096,13.056 18.9928826,12.544 C19.4733096,13.024 20.113879,13.28 20.7544484,13.28 L67.9323843,13.28 C68.5729537,13.28 69.2135231,13.024 69.7259786,12.544 C69.2455516,13.056 68.9893238,13.696 68.9893238,14.336 M88.6868327,45.568 L88.6868327,18.432 C88.6868327,8.256 80.4234875,0 70.2384342,0 L18.4483986,0 C8.2633452,0 0,8.256 0,18.432 L0,45.568 C0,55.744 8.2633452,64 18.4483986,64 L70.2384342,64 C80.4234875,64 88.6868327,55.744 88.6868327,45.568' id='Shape'%3E%3C/path%3E%3Cpath d='M133.046263,43.2 C133.046263,43.936 132.725979,44.608 132.245552,45.056 L114.822064,62.464 C113.893238,63.424 112.6121,64 111.170819,64 L86.1565836,64 L118.729537,31.456 C119.209964,31.008 119.818505,30.72 120.523132,30.72 C119.818505,30.72 119.177936,30.432 118.729537,29.984 L88.7188612,0 L115.846975,0 L132.245552,16.384 C132.758007,16.864 133.046263,17.504 133.046263,18.24 C133.046263,17.504 133.366548,16.832 133.846975,16.384 L150.245552,0 L177.373665,0 L147.330961,29.984 C146.850534,30.432 146.241993,30.72 145.537367,30.72 C146.241993,30.72 146.882562,31.008 147.330961,31.456 L179.935943,64 L154.921708,64 C153.480427,64 152.199288,63.392 151.270463,62.464 L133.846975,45.056 C133.33452,44.608 133.046263,43.936 133.046263,43.2' id='Path'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E"
         topVignette:
             transparency: "0.1"
         header:
-            title: "App Suite"
             textColor: "#ffffff"
             linkColor: "#94c1ec"
             sorting: "$logo,$language,$spacer"
@@ -42,21 +41,23 @@ default:
             textColor: "#333333"
             linkColor: "#94c1ec"
             header:
-                background: "#f5f5f5"
+                title: "App Suite"
+                bgColor: "#f5f5f5"
                 textColor: "#333333"
             button:
-                color: "#3662a0"
+                bgColor: "#3c61aa"
+                borderColor: "#355697"
                 textColor: "#ffffff"
         # informationMessage: "<div>any html ... </div>"
         footer:
             sorting: "$spacer,$copyright,Version: $version,$privacy,$imprint,$spacer"
-            privacy: "https://www.open-xchange.com/privacy/"
-            imprint: "https://www.open-xchange.com/legal/"
+            $privacy: "https://www.open-xchange.com/privacy/"
+            $imprint: "https://www.open-xchange.com/legal/"
             copyright: "(c) $year OX Software GmbH"
-            color: "rgba(0, 0, 0, 0.15)"
+            bgColor: "rgba(0, 0, 0, 0.15)"
             textColor: "#ffffff"
             linkColor: "#94c1ec"
-        #customCss: "#any-selector { text-transform: uppercase; }"
+        # customCss: "#any-selector { text-transform: uppercase; }"
 ```
 
 # Properties
@@ -111,9 +112,6 @@ This sets the transparency of the top vigenette between 0 and 1. Please note, th
 ### Section "header":
 This section describe elements inside the header. The header elements are those, displayed in the top bar.
 
-<config>title</config>
-The attribute 'title' will be displayed as a string on top of the login box or on mobile devices in the header.
-
 <config>textColor</config>
 The attribute 'textColor' sets the color of the text within the header. Any valid values for css 'color' can be used.
 
@@ -136,13 +134,15 @@ The attribute 'linkColor' sets the color of links within the login box. Any vali
 <config>header</config>
 The header attributes describe the header of the login box.
 
-- **background**: The attribute 'background' sets the background like the css attribute 'background' (color, gradient, image url).
+- **title**: The attribute 'title' will be displayed as a string on top of the login box or on mobile devices in the header.
+- **bgColor**: The attribute 'bgColor' sets the background like the css attribute 'background' (color, gradient, image url).
 - **textColor**: The attribute 'textColor' sets the color of the text. Any valid values for css 'color' can be used.
 
 <config>button</config>
 The attributes in the button section describe the buttons within the login box.
 
-- **color**: The attribute 'color' sets the background color and border color of the button.
+- **bgColor**: The attribute 'bgColor' sets the background color the button and overwrites its default border color if it wasn't set by the attribute 'borderColor'.
+- **borderColor**: The attribute 'borderColor' sets the border color of the button.
 - **textColor**: The attribute 'textColor' sets the text color of the button. Any valid values for css 'color' can be used.
 
 ### Section "footer":
@@ -151,23 +151,54 @@ The attributes of the footer section describe the elemeents displayed at the bot
 <config>sorting</config>
 The attribute 'sorting' describes the order of the footer elements. There can be set multiple `$spacer` elements to align the elements the same way it's described for the 'sorting' attribute of the page header.
 
-<config>privacy</config>
-The attribute 'privacy' sets the link url to the privacy policy.
+<config>$privacy</config>
+The attribute '$privacy' sets the link url to the privacy policy.
 
-<config>imprint</config>
-The attribute 'imprint' sets the link url to the legal.
+<config>$imprint</config>
+The attribute '$imprint' sets the link url to the legal.
 
 <config>copyright</config>
 The attribute 'copyright' describes the copyright text. The placeholder `$year` will be replaced by the current year, `(c)` will be replaced by the unicode copyright sign.
 
-<config>color</config>
-The attribute 'color' sets the background color of the footer like the css attribute 'background'. Transparency can be achieved with RGBA values.
+<config>bgColor</config>
+The attribute 'bgColor' sets the background color of the footer like the css attribute 'background'. Transparency can be achieved with RGBA values.
 
 <config>textColor</config>
 The attribute 'textColor' sets the text color within the footer. Any valid values for css 'color' can be used.
 
 <config>linkColor</config>
 The attribute 'linkColor' sets the color of links within within the footer. Any valid values for css 'color' can be used.
+
+# Localization and parsing
+
+The login page configuration provides a translation feature that allows to implement some localization strings into the login page. The functionality is also implemented for some standard properties. You can assign a single string or an object with multiple languages to the following properties: **$imprint**, **$privacy**, **title**, **teaser**, **informationMessage**. Therefor `en_US` is mandatory and works as a fallback if a language is not supported.
+
+```yaml
+$imprint: "www.this-will-always-be-the-same-link.com",
+$privacy: { en_US: "www.foo.bar/en", de_DE: "www.foo.bar/de" }
+```
+
+The title can also be localized as shown in the following code example.
+
+```yaml
+title: { en_US: 'App Suite - Hello', es_ES: 'App Suite - Hola', de_DE: 'App Suite - Hallo' }
+```
+
+If an html property shall be localized you have to assign two versions of the whole html code to the property.
+
+```yaml
+teaser: "<div>As a single string it stays the same.</div>",
+informationMessage: { en_US: "<div>This is an English HTML text.</div>", de_DE: "<div>Dies ist ein deutscher HTML Text.</div>" }
+```
+
+You can also add some user defined elements to the sortings of the header and footer which support translation as well. To do this you need to name an element that is prefixed with a '$' sign. Insert the variable into the sorting like described in the section [Header](#section-header) or [Footer](#section-footer). Afterwards you have to define the value of the element at the same hierarchical level like shown in the following example:
+
+```yaml
+header:
+    sorting: "$spacer,$myProp,$mySecondProp,$language,$logo",
+    $myProp: "I am a simple text that never changes.",
+    $mySecondProp: { en_US: "Welcome", de_DE: "Willkommen" }
+```
 
 # Multi tenancy
 
@@ -194,7 +225,6 @@ default:
         topVignette:
             transparency: "0.1"
         header:
-            title: "App Suite"
             textColor: "#FFFFFF"
             linkColor: "#FFFFFF"
             sorting: "$spacer,$language,$logo"
@@ -203,17 +233,18 @@ default:
             textColor: "#333333"
             linkColor: "#7A707A"
             header:
-                background: "#F5F5F5"
+                title: "App Suite"
+                bgColor: "#F5F5F5"
                 textColor: "#333333"
             button:
-                color: "#F5A623"
+                bgColor: "#F5A623"
                 textColor: "#FFFFFF"
         footer:
             sorting: "$spacer,$copyright,Version: $version,$privacy,$imprint,$spacer"
-            privacy: "https://www.open-xchange.com/privacy/"
-            imprint: "https://www.open-xchange.com/legal/"
+            $privacy: "https://www.open-xchange.com/privacy/"
+            $imprint: "https://www.open-xchange.com/legal/"
             copyright: "(c) $year OX Software GmbH"
-            color: "#FFFFFF"
+            bgColor: "#FFFFFF"
             textColor: "#333333"
             linkColor: "#4064AC"
 ```
@@ -232,7 +263,6 @@ default:
         topVignette:
             transparency: "0.5"
         header:
-            title: "App Suite"
             textColor: "#ffffff"
             linkColor: "#ffffff"
             sorting: "$logo,$language,$spacer"
@@ -241,18 +271,19 @@ default:
             textColor: "#333333"
             linkColor: "#3C61AA"
             header:
-                background: "rgba(0, 0, 0, 0.50)"
+                title: "App Suite"
+                bgColor: "rgba(0, 0, 0, 0.50)"
                 textColor: "#ffffff"
             button:
-                color: "#3C61AA"
+                bgColor: "#3C61AA"
                 textColor: "#ffffff"
         informationMessage: "<div style=\"text-align: center; color: #ffffff\">Watch out for phishing mails. For more details see: <a style=\"color: #ffffff;text-decoration: underline\" href=\"https://en.wikipedia.org/wiki/Phishing\">Wikipedia Phishing</a></div>"
         footer:
             sorting: "$spacer,$copyright,Version: $version,$privacy,$imprint,$spacer"
-            privacy: "https://www.open-xchange.com/privacy/"
-            imprint: "https://www.open-xchange.com/legal/"
+            $privacy: "https://www.open-xchange.com/privacy/"
+            $imprint: "https://www.open-xchange.com/legal/"
             copyright: "(c) $year OX Software GmbH"
-            color: "#ffffff"
+            bgColor: "#ffffff"
             textColor: "#333333"
             linkColor: "#3C61AA"
 ```

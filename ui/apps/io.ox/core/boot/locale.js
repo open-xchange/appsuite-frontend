@@ -28,8 +28,15 @@ define('io.ox/core/boot/locale', ['gettext', 'io.ox/core/boot/util', 'io.ox/core
                 // get all nodes
                 $('[data-i18n]').each(function () {
                     var node = $(this),
-                        val = util.gt(node.attr('data-i18n')),
+                        translations = node.data('translations') || {},
+                        val = translations[locale] || translations.en_US || util.gt(node.attr('data-i18n')),
+                        hrefTranslations = node.data('href-translations') || {},
+                        hrefVal = hrefTranslations[locale] || hrefTranslations.en_US || util.gt(node.attr('data-i18n-href')),
                         target = (node.attr('data-i18n-attr') || 'text').split(',');
+
+                    if (node.is('a') && hrefVal) target.push('anker');
+
+                    if (ox.debug && !val && !hrefVal) console.error('No translation found for node ', node);
                     _.each(target, function (el) {
                         switch (el) {
                             case 'value':
@@ -40,6 +47,12 @@ define('io.ox/core/boot/locale', ['gettext', 'io.ox/core/boot/util', 'io.ox/core
                                 break;
                             case 'label':
                                 node.contents().get(-1).nodeValue = val;
+                                break;
+                            case 'anker':
+                                node.attr('href', hrefVal);
+                                break;
+                            case 'html':
+                                node.empty().append(val);
                                 break;
                             default:
                                 node.attr(el, val);

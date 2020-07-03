@@ -153,10 +153,7 @@ html.baseline {
     z-index: 0;
     height: 100%;
     background-size: cover !important;
-    &.wallpaper {
-        #gradient.radial(@wallpaper-start-color, @wallpaper-end-color);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@wallpaper-start-color', endColorstr='@wallpaper-end-color', GradientType=0);
-    }
+    background: radial-gradient(at 33% 50%, lighten(@brand-primary, 20%), @brand-primary);
 }
 
 #io-ox-login-blocker {
@@ -180,45 +177,6 @@ html.baseline {
     min-height: 100%;
     padding: 0;
 
-    #io-ox-login-header {
-        position: absolute;
-        width: 100%;
-        min-height: 100px;
-        margin: 0;
-    }
-
-    #io-ox-login-toolbar {
-        height: 32px;
-        display: flex;
-        align-items: center;
-        margin: 16px;
-
-        label {
-            margin-bottom: 0px;
-        }
-
-        div {
-            margin-left: 16px;
-            margin-right: 16px;
-        }
-
-        #io-ox-language-list {
-            overflow-y: scroll;
-        }
-
-        > * {
-            margin: 0 16px;
-        }
-
-        > *:first-child {
-            margin-left: 0;
-        }
-
-        > *:last-child {
-            margin-right: 0;
-        }
-    }
-
     .login-logo {
         max-height: 32px;
         background-size: contain;
@@ -230,196 +188,6 @@ html.baseline {
         height: auto;
     }
 
-    #io-ox-login-content {
-        display: flex;
-        height: 100%;
-        width: 100%;
-
-        .align-center {
-            align-self: center;
-        }
-
-        #io-ox-login-box {
-            display: flex;
-            justify-content: center;
-
-            .flex-column {
-                display: flex;
-                flex-direction: column;
-            }
-
-            #box-form {
-                width: 420px;
-                text-align: center;
-                border-radius: 6px;
-                box-shadow: 0 15px 70px 0px rgba(0,0,0,.5);
-
-                #box-form-header {
-                    height: 64px;
-                    line-height: 60px;
-                    font-size: 24px;
-                    font-weight: bold;
-                    border-radius: 6px 6px 0 0;
-                    background-size: cover !important;
-                    background-position: 50% 50% !important;
-                }
-
-                #box-form-body {
-                    min-height: 380px;
-                    background-color: #fff;
-                    border-radius: 0 0 6px 6px;
-
-                    .form-control {
-                        height: 40px;
-                    }
-
-                    form, form > div {
-                        min-height: inherit;
-                    }
-
-                    form > div > div.row {
-                        margin: 4px 0;
-                    }
-
-                    form > div {
-                        display: flex;
-                        flex-direction: column;
-                        padding-top: 27px;
-                        padding-bottom: 32px;
-
-                        .row.username, .row.password {
-                            margin: 0;
-
-                            div {
-                                margin-top: 2px;
-                            }
-                        }
-
-                        .row.options {
-                            .checkbox.custom {
-                                margin-top: 0;
-                            }
-
-                            div {
-                                margin-top: 4px;
-                            }
-                        }
-
-                        .row.feedback {
-                            margin-bottom: 6px;
-                            min-height: 32px;
-                        }
-
-                        .row.buttons {
-                            display: flex;
-                            align-items: flex-end;
-                            margin-top: auto;
-
-                            div {
-                                margin-bottom: 0;
-                            }
-                        }
-                    }
-
-                    * > label {
-                        margin-bottom: 3px;
-                        font-size: 13px;
-                        float: left;
-                    }
-
-                    * > a {
-                        font-size: 13px;
-                    }
-
-                    #login-title {
-                        font-size: 18px;
-                        font-weight: bold;
-                        margin: 0;
-                    }
-
-                    #login-title,
-                    #io-ox-login-help,
-                    #io-ox-login-feedback,
-                    #io-ox-login-feedback div {
-                        text-align: left;
-                        font-size: 13px;
-                    }
-
-                    .checkbox.custom, .radio.custom {
-                        padding-left: 20px;
-                    }
-
-                    .checkbox.custom input:checked+i.toggle, .radio.custom input:checked+i.toggle {
-                        background-color: transparent;
-                        border: 1px solid #ccc;
-                        padding: 2px;
-                        font: normal normal normal 10px/1 FontAwesome;
-                    }
-                }
-            }
-        }
-
-        #io-ox-information-message {
-            display: flex;
-            margin: 0 auto;
-            margin-top: 8px;
-            width: 420px;
-        }
-    }
-
-    #io-ox-login-footer {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        min-height: 40px;
-        padding: 2px 4px;
-
-        > * {
-            margin: 0 8px;
-        }
-
-        > *:first-child {
-            margin-left: 0;
-        }
-
-        > *:last-child {
-            margin-right: 0;
-        }
-    }
-
-    #io-ox-languages {
-        display: flex;
-    }
-
-    #io-ox-languages {
-
-        #language-select {
-            background: transparent;
-            border:0;
-        }
-
-        .dropup, .dropdown {
-            display: inline-block;
-        }
-
-        a.lang-label {
-            text-decoration: none;
-            color: #fff;
-            &:focus { outline: 0; }
-            &:hover { text-decoration: none; }
-            font-weight: normal;
-            &:after {
-                content: ':';
-                margin-right: 5px;
-            }
-        }
-    }
-
     .composition-element {
         display: flex;
         margin: 4px 8px;
@@ -429,6 +197,280 @@ html.baseline {
             margin-right: 4px;
         }
     }
+}
+
+#io-ox-login-header {
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+    min-height: 100px;
+    margin: 0;
+    background: linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0));
+}
+
+#io-ox-login-toolbar {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    margin: 16px;
+
+    label {
+        margin-bottom: 0px;
+    }
+
+    div {
+        margin-left: 16px;
+        margin-right: 16px;
+    }
+
+    #io-ox-language-list {
+        overflow-y: scroll;
+    }
+
+    * {
+        color: #fffff;
+    }
+
+    > * {
+        margin: 0 16px;
+    }
+
+    > *:first-child {
+        margin-left: 0;
+    }
+
+    > *:last-child {
+        margin-right: 0;
+    }
+}
+
+#io-ox-login-content {
+    display: flex;
+    height: 100%;
+    width: 100%;
+
+    .align-center {
+        align-self: center;
+    }
+}
+
+#io-ox-information-message {
+    display: flex;
+    margin: 0 auto;
+    margin-top: 8px;
+    width: 420px;
+}
+
+#io-ox-login-footer {
+    z-index: 1;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 40px;
+    padding: 2px 4px;
+
+    background-color: rgba(0, 0, 0, 0.15);
+
+    * {
+        color: #ffffff;
+
+        a {
+            color: #94c1ec;
+        }
+    }
+
+    > * {
+        margin: 0 8px;
+    }
+
+    > *:first-child {
+        margin-left: 0;
+    }
+
+    > *:last-child {
+        margin-right: 0;
+    }
+}
+
+#io-ox-languages {
+    display: flex;
+
+    *:not([role="menuitem"]) {
+        color: #ffffff;
+    }
+
+    * > a:not([role="menuitem"]),#language-select,.toggle-text,.caret {
+        color: #94c1ec;
+    }
+
+    .dropup, .dropdown {
+        display: inline-block;
+    }
+
+    a.lang-label {
+        text-decoration: none;
+        // color: #fff;
+        &:focus { outline: 0; }
+        &:hover { text-decoration: none; }
+        font-weight: normal;
+        &:after {
+            content: ':';
+            margin-right: 5px;
+        }
+    }
+}
+
+#language-select {
+    background: transparent;
+    border:0;
+}
+
+#io-ox-login-box {
+    display: flex;
+    justify-content: center;
+
+    .flex-column {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+#box-form {
+    width: 420px;
+    text-align: center;
+    border-radius: 6px;
+    box-shadow: 0 15px 70px 0px rgba(0,0,0,.5);
+
+    * {
+        color: #333333;
+    }
+
+    a {
+        color: #94c1ec;
+    }
+}
+
+#box-form-header {
+    height: 64px;
+    line-height: 60px;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 6px 6px 0 0;
+    background-size: cover !important;
+    background-position: 50% 50% !important;
+    background-color: #f5f5f5;
+    color: #333333;
+}
+
+#io-ox-login-button {
+    border-color: @btn-primary-border;
+    background-color: @btn-primary-bg;
+    color: @btn-primary-color;
+}
+
+#box-form-body {
+    min-height: 380px;
+    background-color: #fff;
+    border-radius: 0 0 6px 6px;
+
+    .form-control {
+        height: 40px;
+    }
+
+    form, form > div {
+        min-height: inherit;
+    }
+
+    form > div > div.row {
+        margin: 4px 0;
+    }
+
+    form > div {
+        display: flex;
+        flex-direction: column;
+        padding-top: 27px;
+        padding-bottom: 32px;
+
+        .row.username, .row.password {
+            margin: 0;
+
+            div {
+                margin-top: 2px;
+            }
+        }
+
+        .row.options {
+            .checkbox.custom {
+                margin-top: 0;
+            }
+
+            div {
+                margin-top: 4px;
+            }
+        }
+
+        .row.feedback {
+            margin-bottom: 14px;
+            min-height: 32px;
+        }
+
+        .row.buttons {
+            display: flex;
+            align-items: flex-end;
+            margin-top: auto;
+
+            div {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    * > label {
+        margin-bottom: 3px;
+        font-size: 13px;
+        float: left;
+    }
+
+    * > a {
+        font-size: 13px;
+    }
+
+    .checkbox.custom, .radio.custom {
+        padding-left: 20px;
+    }
+
+    .checkbox.custom input:checked+i.toggle, .radio.custom input:checked+i.toggle {
+        background-color: transparent;
+        border: 1px solid #ccc;
+        padding: 2px;
+        font: normal normal normal 10px/1 FontAwesome;
+    }
+}
+
+#login-title {
+    text-align: left;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+#io-ox-login-help,
+#io-ox-login-feedback,
+#io-ox-login-feedback div {
+    text-align: left;
+    font-size: 13px;
+}
+
+#io-ox-login-feedback.alert-highlight > .alert-info {
+    background: #eee;
+    border-radius: 4px;
+    padding: 8px 8px;
+    font-weight: bold;
 }
 
 .row.password-retype {
@@ -472,6 +514,10 @@ html.baseline {
 /* mobile stuff */
 
 .smartphone #io-ox-login-screen {
+
+    #io-ox-login-background {
+        background: radial-gradient(at 33% 50%, lighten(@brand-primary, 20%), @brand-primary);
+    }
 
     #io-ox-login-container {
         height: unset;

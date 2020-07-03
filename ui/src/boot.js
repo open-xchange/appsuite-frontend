@@ -58,6 +58,8 @@ $(window).on('load', function () {
         },
 
         'server:down': function () {
+            console.warn('Server is down.');
+            if ($('#showstopper').is(':visible')) return;
             $('body').addClass('down');
             $('#io-ox-login-container').empty();
             $('#background-loader').show();
@@ -67,7 +69,6 @@ $(window).on('load', function () {
                 e.preventDefault();
                 location.reload();
             });
-            console.warn('Server is down.');
         }
     });
 
@@ -85,6 +86,7 @@ $(window).on('load', function () {
             // check if it is a timeout on the login screen, otherwise other
             // fail handlers will take over
             if (e.requireType === 'timeout' && $('#background-loader').is(':visible')) {
+                if ($('#showstopper').is(':visible')) return;
                 $('.throbber').hide();
                 $('#showstopper, #showstopper .timeout').show();
                 $('#showstopper .reload').on('click', function (e) {

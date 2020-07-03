@@ -114,7 +114,7 @@ define('io.ox/files/detail/main', [
         },
         'handle-api-file-change': function () {
             // listen to events that affect the filename, version and generic changes
-            api.on('rename add:version remove:version change:version change:file', _.debounce(function (file) {
+            api.on('rename add:version remove:version change:version', _.debounce(function (file) {
                 api.get(_.cid(file), { cache: false });
             }, 100));
         }
