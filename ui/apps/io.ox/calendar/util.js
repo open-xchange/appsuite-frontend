@@ -158,7 +158,8 @@ define('io.ox/calendar/util', [
         },
 
         getEvenSmarterDate: function (model) {
-            var m = model.getMoment('startDate').local(),
+            // use current calendar timezone
+            var m = model.getMoment('startDate').tz(moment().tz()),
                 startOfDay = moment().startOf('day');
             // past?
             if (m.isBefore(startOfDay)) {
@@ -379,7 +380,8 @@ define('io.ox/calendar/util', [
             if (that.isAllday(data)) {
                 ret.push(this.getFullTimeInterval(data, false));
             } else {
-                ret.push(moment.tz(data.startDate.value, data.startDate.tzid).format('LT'), moment.tz(data.endDate.value, data.endDate.tzid).format('LT'));
+                // make sure to convert to current calendar timezone before displaying
+                ret.push(moment.tz(data.startDate.value, data.startDate.tzid).tz(moment().tz()).format('LT'), moment.tz(data.endDate.value, data.endDate.tzid).tz(moment().tz()).format('LT'));
             }
             return ret;
         },
