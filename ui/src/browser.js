@@ -231,7 +231,7 @@
     isTouch = checkTouch();
 
     // https://mathiasbynens.github.io/rel-noopener/
-    nativeNoopener = us.browser.chrome >= 72 || us.browser.safari >= 13;
+    nativeNoopener = us.browser.chrome >= 72 || us.browser.safari >= 13 || us.browser.EdgeChromium >= 72;
 
     // do media queries here
     // TODO define sizes to match pads and phones
