@@ -329,7 +329,9 @@ define('io.ox/calendar/list/listview', [
             // only render if in listview. not in search
             if (this.collection.cid.indexOf('view=list') < 0) return;
             if (this.tail) this.tail.remove();
-            var m = moment(this.originalCollection.originalStart).add(this.originalCollection.range, 'month');
+            // increase by one month. Keep this in sync with the paginate function in the api (in case we increase the step to 2 months etc)
+            var m = moment(this.originalCollection.originalStart).add(this.originalCollection.range + 1, 'month');
+
             this.$el.append(
                 this.tail = $('<li class="tail" role="presentation">').append(
                     $('<a href="#">')
