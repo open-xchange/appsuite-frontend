@@ -1786,7 +1786,10 @@ define('io.ox/files/api', [
                     // fix for Bug 49895, drive plugin without support for versions
                     if (versions.length) {
                         currentVersion = _.some(versions, function (item) {
-                            return item.current_version && item.version === file.version;
+                            if (!item.current_version) return false;
+                            // DOCS-2454: check the state for Next-/OwnCloud
+                            if (item.number_of_versions === -1) return true;
+                            return item.version === file.version;
                         });
                     } else {
                         currentVersion = true;
