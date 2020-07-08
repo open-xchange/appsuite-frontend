@@ -56,7 +56,8 @@
         li > a, .dropdown a { text-decoration: none; }
         .dropdown > a:focus,.dropdown > a:hover { text-decoration: underline; }
 
-        max-width: 800px;
+        max-width: 100%;
+        width: 50rem;
 
         .settings-list-view {
             .settings-list-item {
@@ -65,14 +66,15 @@
                 .account-icon {
                     margin-left: 6px;
                     margin-top: 2px;
-                    background-size: 26px;
+                    background-size: 1.625rem;
                     background-repeat: no-repeat;
                     background-position: center;
-                    width: 40px;
+                    text-align: center;
+                    width: 2.5rem;
                 }
 
                 .remove-placeholder {
-                    width: 24px;
+                    width: ~"calc(1rem + 8px)";
                     margin: 13px 14px;
                 }
 
@@ -347,7 +349,10 @@
         font-weight: normal;
     }
 
-    .section { max-width: 800px; }
+    .section {
+        max-width: 100%;
+        width: 50rem;
+    }
 
     h1, h1.pane-headline {
 
@@ -493,7 +498,10 @@
     }
 
     .buttons {
-        margin-bottom: @vertical-margin;
+        margin-bottom: 32px;
+        .btn {
+            margin-bottom: 0.5rem;
+        }
         .btn-link {
             padding: 0;
             margin-right: 16px;
@@ -576,5 +584,11 @@
             }
             margin-bottom: 16px;
         }
+    }
+}
+
+.modal.flex[data-point="io.ox/settings/accounts/mail/settings/detail/dialog"] {
+    .modal-dialog {
+        max-width: 1000px;
     }
 }

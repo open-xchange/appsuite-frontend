@@ -37,8 +37,8 @@ define('io.ox/mail/accounts/settings', [
         });
 
         myView.dialog = new ModalDialog({
-            width: 700,
-            maximize: 500,
+            width: '43.75rem',
+            maximize: '31.25rem',
             async: true,
             point: 'io.ox/settings/accounts/mail/settings/detail/dialog',
             title: myModel.get('id') || myModel.get('id') === 0 ? gt('Edit mail account') : gt('Add mail account'),

@@ -30,7 +30,7 @@
 
     @spacing: 16px;
     @vert-spacing: 16px;
-    @line-height: 16px;
+    @line-height: 1rem;
     @lines: 20;
     @widget-padding: 16px;
     background-color: #eee;
@@ -84,7 +84,7 @@
         position: relative;
         display: inline-block;
         width: 300px;
-        height: @line-height * @lines + 24px + @vert-spacing;
+        height: calc(@line-height~" * "@lines~" + 24px + "@vert-spacing);
         border: 0;
         margin: 0 16px 16px 0;
         float: left;
@@ -201,7 +201,7 @@
             right: @widget-padding;
             bottom: @widget-padding + 2px;
             left: @widget-padding;
-            top: @line-height * 4 + 4px;
+            top: calc(@line-height~" * 2 + 36px");
             line-height: @line-height;
             overflow: hidden;
             z-index: 10;
@@ -619,10 +619,10 @@
 }
 
 .io-ox-portal .widget {
-    @media all and (min-width: 540px ) { width: ~"calc(50.0% - 16px)"; }
-    @media all and (min-width: 960px ) { width: ~"calc(33.3% - 16px)"; }
-    @media all and (min-width: 1280px) { width: ~"calc(25.0% - 16px)"; }
-    @media all and (min-width: 1750px) { width: ~"calc(20.0% - 16px)"; }
+    @media all and (min-width: 33.75rem ) { width: ~"calc(50.0% - 16px)"; }
+    @media all and (min-width: 60rem ) { width: ~"calc(33.3% - 16px)"; }
+    @media all and (min-width: 80rem) { width: ~"calc(25.0% - 16px)"; }
+    @media all and (min-width: 109.375rem) { width: ~"calc(20.0% - 16px)"; }
 }
 
 /* Settings */
@@ -708,7 +708,7 @@
 
         ul {
             font: 14px/20 @normal-font-family;
-            width: 200px;
+            width: ~"calc(8.5rem + 64px)";
             text-align: left;
             right: 0;
             left: auto;
@@ -718,10 +718,11 @@
             .color-example {
                 display: inline-block;
                 float: right;
-                width: 28px;
-                height: 22px;
+                width: 1.75rem;
+                height: 1.375rem;
                 border: 1px solid rgba(0, 0, 0, 0.2);
                 border-radius: @border-radius-base;
+                margin-top: 0.0625rem;
             }
 
             .color-default { background-color: @widget-color-default; }

@@ -59,6 +59,8 @@
         .chat-leftside {
             width: 100%;
             background-color: #fff;
+            // important for text zoom
+            max-width: 100%;
         }
         .chat-rightside,
         .chat-rightside .header,
@@ -164,10 +166,6 @@
             max-height: 100%;
             overflow-y: auto;
 
-            .dropdown {
-                height: 48px;
-            }
-
             .flex-grow {
                 overflow: visible;
             }
@@ -180,10 +178,16 @@
             margin: -1px 0 0 0;
             padding: 0;
         }
+
+        .dropdown {
+            height: 3rem;
+            display: flex;
+            align-items: center;
+        }
     }
 
     .chat .header.expanded .chat-avatar {
-        margin-top: 4px;
+        margin-top: 0.25rem;
     }
 
     .resizebar {
@@ -233,7 +237,7 @@
         align-items: center;
 
         .picture {
-            .picture(@pictureSize, @pictureSize);
+            .picture(@pictureSize, 3rem);
             margin-right: 8px;
             float: left;
             display: flex;
@@ -265,8 +269,8 @@
 
         .state {
             position: absolute;
-            left: 44px;
-            top: 48px;
+            left: ~"calc(2rem + 12px)";
+            top: ~"calc(2.25rem + 12px)";
         }
     }
 
@@ -578,7 +582,7 @@
     .initials {
         display: inline-block;
         background-color: #eee;
-        .picture(40px, 40px);
+        .picture(2.5rem, 2.5rem);
         color: rgba(0, 0, 0, 0.60);
         font-weight: bold;
         .flex-center();
@@ -636,8 +640,8 @@
         }
         .state {
             position: absolute;
-            top: 29px;
-            left: 28px;
+            top: ~"calc(2rem - 3px)";
+            left: ~"calc(2rem - 4px)";
         }
         .image .fa {
             color: rgba(0, 0, 0, 0.6);
@@ -1337,7 +1341,7 @@
 
         .jump-down {
             position: absolute;
-            top: -60px;
+            top: ~"calc(-1.875rem - 30px)";
             right: 8px;
             background-color: white;
             font-size: 0;
@@ -1411,7 +1415,7 @@
         text-align: center;
         width: @stateSize;
         height: @stateSize;
-        border-radius: 10px;
+        border-radius: 50%;
         padding-top: 3px;
         &.large {
             height: 16px;
@@ -1851,6 +1855,10 @@ svg.fa {
         }
 
         .twitter-typeahead pre { display: none };
+
+        .tt-input {
+            height: 1.875rem;
+        }
 
         .open-addressbook-popup {
             position: absolute;

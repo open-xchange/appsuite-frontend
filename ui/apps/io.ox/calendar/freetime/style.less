@@ -113,7 +113,7 @@
     }
 
     .zoomlevel-selector {
-        width: 150px;
+        width: ~"calc(3.375rem + 96px)";
         display: inline-block;
         margin-right: 32px;
         margin-top: -6px;
@@ -130,12 +130,12 @@
     }
     .freetime-participants-view-header {
         &.row2 {
-            min-width: 255px;
-            max-width: 255px;
+            min-width: ~"calc(16.9375rem - 16px)";
+            max-width: ~"calc(16.9375rem - 16px)";
 
             @media all and (max-width: 850px) {
-                min-width: 185px;
-                max-width: 185px;
+                min-width: ~"calc(12.5625rem - 16px)";
+                max-width: ~"calc(12.5625rem - 16px)";
             }
             .tt-dropdown-menu {
                 width: 350px;
@@ -150,7 +150,7 @@
             margin-top: 11px;
 
             .add-participant {
-                height: 32px;
+                height: 2rem;
             }
 
             // maximize content
@@ -182,21 +182,21 @@
 
     .header-row2 {
         position: relative;
-        height: 56px;
+        height: 3.5rem;
     }
 
     // use min height or flex grow produces overlap when participant list is large
-    min-height: 56px;
+    min-height: 3.5rem;
 
     .freetime-participants-view-header {
 
         &.row2 {
-            min-width: 271px;
-            max-width: 271px;
+            min-width: 16.9375rem;
+            max-width: 16.9375rem;
 
             @media all and (max-width: 850px) {
-                min-width: 201px;
-                max-width: 201px;
+                min-width: 12.5625rem;
+                max-width: 12.5625rem;
             }
         }
     }
@@ -248,7 +248,7 @@
                 .daylabel-container {
                     display: flex;
                     display: -webkit-flex;
-                    height: 28px;
+                    height: 1.75rem;
                     border-left: 1px solid #888;
                     .day-label-wrapper {
                         font-weight: bold;
@@ -284,7 +284,7 @@
                 .day-hours {
                     display: flex;
                     display: -webkit-flex;
-                    height: 27px
+                    height: 1.718rem;
                 }
             }
 
@@ -386,15 +386,15 @@
     overflow-x: hidden;
 
     .freetime-participants-view-body {
-        width: 255px;
-        min-width: 255px;
+        width:~"calc(16.9375rem - 16px)";
+        min-width: ~"calc(16.9375rem - 16px)";
         font-size: 13px;
         overflow-y: hidden;
         min-height: auto;
 
         @media all and (max-width: 850px) {
-            width: 185px;
-            min-width: 185px;
+            width: ~"calc(12.5625rem - 16px)";;
+            min-width: ~"calc(12.5625rem - 16px)";;
         }
 
         .participantsrow {
@@ -404,12 +404,12 @@
             padding-right: 1px;
 
             .participant-image {
-                margin-top: 2px;
-                width: 32px;
-                height: 32px;
+                margin-top: 0.125rem;
+                width: 2rem;
+                height: 2rem;
             }
             .participant-name {
-                padding-top: 8px;
+                padding-top: 0.75rem;
                 font-weight: normal;
                 .family-name {
                     font-weight: bold;
@@ -419,7 +419,8 @@
             .participant-wrapper {
                 padding-left: 0;
                 min-height: 38px;
-                margin: 1px 0;
+                margin: 0;
+                height: 2.5rem
             }
             .remove:not(:hover):not(:focus) {
                 background-color: #fff;
@@ -566,7 +567,7 @@
 
             .appointment-table {
                 z-index: 1;
-                height: 40px;
+                height: 2.5rem;
                 position: relative;
                 &:not(:last-child) {
                     border-bottom: #ddd solid 1px;

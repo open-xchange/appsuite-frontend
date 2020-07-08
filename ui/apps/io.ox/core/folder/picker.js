@@ -35,7 +35,7 @@ define('io.ox/core/folder/picker', [
     //     context      {string}    tree context, e.g. 'app' or 'popup'
     //     flat         {bool}      use flat tree (e.g. for contacts)
     //     folder       {string}    Current folder (for preselection)
-    //     height       {number}    dialog height in px
+    //     height       {number}    dialog height in px or rem
     //     help         {string}    contextual help reference
     //     indent       {bool}      indent first level (default is true; also needed for flat trees)
     //     last         {bool}      Prefer last folder used (needs settings and persistent)
@@ -70,7 +70,7 @@ define('io.ox/core/folder/picker', [
             button: gt('Ok'),
             context: 'popup',
             flat: false,
-            height: 250,
+            height: '15.625rem',
             indent: true,
             module: 'mail',
             persistent: false,
@@ -79,7 +79,6 @@ define('io.ox/core/folder/picker', [
             open: [],
             selection: true,
             title: gt('Select folder'),
-            width: 500,
             // callbacks
             always: $.noop,
             done: $.noop,
@@ -158,7 +157,7 @@ define('io.ox/core/folder/picker', [
         if (id === undefined && o.settings && _.isString(o.persistent)) {
             id = o.settings.get(o.persistent + '/last');
         }
-
+        dialog.$el.find('.modal-dialog').css('max-width', '800px');
         // get open nodes
         var open = o.settings && _.isString(o.persistent) ? o.settings.get(o.persistent + '/open', []) : [];
 
@@ -234,7 +233,7 @@ define('io.ox/core/folder/picker', [
                             o.settings.set(o.persistent + '/last', undefined).save();
                         }
                     )
-                    // path might fail so we use always to con
+                    // path might fail so we use always to continue
                     .always(function () {
                         dialog.idle();
                         dialog.$body.prepend(tree.render().$el);

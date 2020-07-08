@@ -11,7 +11,7 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
-@viewer-toolbar-height: 40px;
+@viewer-toolbar-height: 2.5rem;
 @viewer-toolbar-filename-width: 400px;
 @viewer-toolbar-filename-width-smartphone-portrait: 130px;
 @viewer-toolbar-filename-width-smartphone-landscape: 220px;
@@ -729,13 +729,14 @@
             background: @viewer-displayer-navigation-bgcolor;
             outline: 0;
             width: 50px;
-            height: 50px;
+            min-height: 50px;
+            height: auto;
             border-radius: 2px;
             text-align: center;
 
             i {
                 line-height: 50px;
-                font-size: 3rem;
+                font-size: 1.875rem;
             }
 
             &:hover,
@@ -771,7 +772,7 @@
             text-align: center;
             color: @viewer-toolbar-color;
 
-            i { font-size: 4rem; }
+            i { font-size: 2.5rem; }
 
             .apology { margin-top: 20px; }
         }

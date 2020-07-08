@@ -84,7 +84,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.idle = idle.bind(this);
             // when clicking next to the popup the modal dialog only hides by default. Remove it fully instead, causes some issues otherwise.
             this.$el.on('hidden.bs.modal', this.close);
-            // apply max height if maximize is given as number
+            // apply max height if maximize is given as number or string
             if (_.isNumber(options.maximize) || _.isString(options.maximize)) this.$('.modal-content').css('max-height', options.maximize);
             // add help icon?
             if (options.help) {

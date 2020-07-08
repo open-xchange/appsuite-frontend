@@ -20,11 +20,6 @@
 @a-color-trusted:    #5c7f31;
 @a-color-fail:       #c50000;
 
-// helpers
-.mail-item .from {
-    &.no-max-height { max-height: none; }
-}
-
 // preview panes
 .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
 .window-container.mail-categories-visible .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height * 2; }
@@ -53,9 +48,6 @@
         &.unread .drag-title {
             width: calc(~"100% - 19px");
         }
-        .from {
-            max-height: 16px;
-        }
     }
 }
 // fix for truncated letters on windows 10, see Bug 68163
@@ -63,11 +55,9 @@ html.windows {
     .preview-right .mail-item .list-item {
         margin-bottom: -2px;
         .from {
-            max-height: 18px;
             padding-bottom: 2px;
         }
         .subject {
-            height: 18px;
             margin-top: -2px;
             padding-bottom: 2px;
         }
@@ -234,12 +224,12 @@ html.windows {
         display: table-cell;
         vertical-align: middle;
         padding: 0;
-        @icon-width: 24px;
+        @icon-width: 1.5rem;
 
         &.column-1 { width: @icon-width; text-align: center; }
         &.column-2 { width: @icon-width; text-align: center; }
         &.column-3 { width: @icon-width; text-align: center; }
-        &.column-4 { width: 176px; padding-right: 8px; }
+        &.column-4 { width: 11rem; padding-right: 8px; }
         &.column-5 { width: @icon-width; text-align: center; }
         &.column-6 { width: 90%; padding-right: 8px; .ellipsis; }
         &.column-7 { width: 136px; text-align: right; }
@@ -532,7 +522,7 @@ html.macos .preview-right, html.ios {
         top: 40px;
         .icon {
             border: 2px solid white;
-            border-radius: 10px;
+            border-radius: 50%;
             box-sizing: content-box;
         }
     }
@@ -642,7 +632,7 @@ html.macos .preview-right, html.ios {
         &.unread .unread-toggle { opacity: 1; }
 
         .recipients {
-            max-height: 20px;
+            max-height: 1.5rem;
             .ellipsis();
             width: 100%;
         }
@@ -705,7 +695,7 @@ html.macos .preview-right, html.ios {
 
 .mail-item {
 
-    @pictureSize: 32px;
+    @pictureSize: 2rem;
 
     .contact-picture {
         position: absolute;
@@ -721,7 +711,7 @@ html.macos .preview-right, html.ios {
 
      &.show-contact-pictures .list-item:not(.small) .list-item-content {
         position: relative;
-        padding-left: @pictureSize + 16px;
+        padding-left: calc(@pictureSize~" + 16px");
     }
 
     &.show-contact-pictures.show-text-preview .list-item:not(.small) .contact-picture {
@@ -734,7 +724,6 @@ html.macos .preview-right, html.ios {
 
     .from {
         .ellipsis();
-        max-height: 20px;
     }
 
     .unread .from span.person { font-weight: bold; }
@@ -797,7 +786,6 @@ html.macos .preview-right, html.ios {
         }
 
         .subject {
-            height: 16px;
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -1251,10 +1239,10 @@ html.macos .preview-right, html.ios {
 
     &:not(.io-ox-find-active) {
         .categories-toolbar-container { display: flex; }
-        .classic-toolbar-container .classic-toolbar { top: 40px; }
+        .classic-toolbar-container .classic-toolbar { top: 2.5rem; }
 
         // layout: vertical, horizontal, list
-        .window-body.classic-toolbar-visible .abs.window-content { top: 80px; }
+        .window-body.classic-toolbar-visible .abs.window-content { top: 5rem; }
     }
 }
 
@@ -1640,7 +1628,6 @@ body.dragging .categories-toolbar-container {
 
             .from {
                 font-size: 16px;
-                max-height: initial;
             }
 
             .list-item-content {

@@ -20,7 +20,7 @@
 
     .classic-toolbar-container {
         position: absolute;
-        top: 35px;
+        top:  ~"calc(1.875rem + 5px)";
         width: 100%;
     }
 
@@ -48,7 +48,7 @@
         margin: 0 0 1em 0;
     }
 
-    .below-toolbar { top: 90px; }
+    .below-toolbar { top: ~"calc(4.375rem + 5px)"; }
 
     .list-view { border: 1px solid #ddd; }
 
@@ -91,6 +91,8 @@
         font-size: 13px;
         color: #777;
     }
+
+    .tt-input,.tt-hint{ height: 2.14285714em };
 
     .autocomplete-item {
         padding: 7px 10px;

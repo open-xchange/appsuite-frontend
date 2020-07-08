@@ -12,6 +12,14 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
+
+// set html font size to 1rem this way we are compliant with bootstrap 4 and 5.
+// setting this to 1 rem means we are using the browsers default font size which is usually 16px
+// careful though, bootstrap 3 sets this to 10px although never uses it
+html {
+    font-size: 1rem;
+}
+
 body {
     // add a bit of perfection
     -webkit-font-feature-settings: "liga", "kern";
@@ -310,12 +318,12 @@ div.hopscotch-bubble {
 #io-ox-offline {
     position: absolute;
     bottom: 0;
-    width: 240px;
+    width: 15rem;
     left: 50%;
-    margin-left: -120px;
-    height: 40px;
+    margin-left: -7.5rem;
+    height: 2.5rem;
     font-weight: bold;
-    line-height: 40px;
+    line-height: 2.5rem;
     text-align: center;
     color: #fff;
     border: 1px solid #FF7000;
@@ -444,6 +452,16 @@ html:not(.internet-explorer) {
 }
 
 .form-spacer { margin-top: 32px; }
+
+// form control inside input groups needs auto height (breaks layout otherwise)
+.input-group >.form-control {
+    height: auto;
+}
+
+.form-control {
+    // 30px with default 14px font size but scales with text zoom
+    height: 2.14285714em;
+}
 
 // ensure visibility for tooltips
 .tooltip { z-index: 100000; }

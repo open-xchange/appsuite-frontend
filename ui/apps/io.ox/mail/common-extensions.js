@@ -198,7 +198,6 @@ define('io.ox/mail/common-extensions', [
             var $el = $('<div class="from">'),
                 data = baton.data,
                 from = data.from || [],
-                length = from.length,
                 status = util.authenticity('icon', data);
 
             // from is special as we need to consider the "sender" header
@@ -210,14 +209,13 @@ define('io.ox/mail/common-extensions', [
                     name = util.getDisplayName(item),
                     $container;
                 if (!email) return;
-                $el.addClass(length > 1 || _.device('smartphone') ? 'no-max-height' : '')
-                   .append(
-                       $container = $('<a href="#" role="button" class="halo-link">')
+                $el.append(
+                    $container = $('<a href="#" role="button" class="halo-link">')
                         .data({ email: email, email1: email })
                         .append($('<span class="sr-only">').text(gt('From:')))
                         .append($('<span class="person-link person-from ellipsis">').text(name))
                         .addClass((name === email && status) ? 'authenticity-sender ' + status : '')
-                   );
+                );
 
                 // don't show email address on smartphones if status is pass or it's myself
                 var skipEmail = _.device('smartphone') && !!name && (status === 'pass' || account.is('sent', data.folder_id)),

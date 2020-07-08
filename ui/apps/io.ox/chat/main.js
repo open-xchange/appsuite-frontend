@@ -508,6 +508,7 @@ define('io.ox/chat/main', [
         },
 
         draw: function () {
+            this.$el.addClass('ox-chat-window');
 
             var user = data.users.getByMail(api.userId),
                 mode = settings.get('mode', 'sticky');

@@ -848,8 +848,8 @@ define('io.ox/mail/compose/view', [
             new ModalDialog({
                 title: gt('Save draft'),
                 description: gt('This email has not been sent. You can save the draft to work on later.'),
-                // up to 540px because of 3 buttons, french needs this for example
-                width: _.device('smartphone') ? undefined : '560px'
+                // up to 35rem (560px) because of 3 buttons, french needs this for example
+                width: _.device('smartphone') ? undefined : '35rem'
             })
             .addCancelButton()
             .addButton({ label: gt('Save draft'), action: 'savedraft' })
