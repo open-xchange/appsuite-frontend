@@ -24,7 +24,8 @@
     @normal: 400;
     @bold: 700;
     @indentation: 40px;
-    @height: 24px;
+    // 24px but scales with text zoom
+    @height:  1.714em;
 
     // width fix
     .tree-container {
@@ -40,7 +41,7 @@
     }
 
     .folder {
-        line-height: @height - 1;
+        line-height: calc(@height ~" - 1px");
         overflow: visible;
         white-space: nowrap;
         width: 100%;
@@ -169,7 +170,6 @@
         .folder-options {
 
             padding: 0 12px;
-            line-height: @height - 1;
             background-color: rgba(0, 0, 0, 0.05);
             outline: 0;
             display: none;
