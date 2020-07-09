@@ -1,0 +1,160 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2020 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Maik Schäfer <maik.schaefer@open-xchange.com>
+ */
+
+.wizard-step {
+    @border-color: #e5e5e5;
+    border-radius: 10px;
+
+    .connect-wizard{
+        position: relative;
+        min-height: 704px;
+    }
+
+    .wizard-header{
+        padding: 40px 32px 32px 32px;
+
+        .close {
+            display: none;
+        }
+
+    }
+
+    .wizard-content {
+        padding: 16px 32px;
+    }
+
+    .wizard-title {
+        font-size: 18px;
+        font-weight: bold;
+        padding: 0;
+    }
+
+    .progress-container {
+        width: 100%;
+        margin-bottom: 56px;
+
+            .progress-steps{
+                position: relative;
+                list-style: none;
+                display: flex;
+                justify-content: space-between;
+                padding: 0 16px 24px 16px;
+
+                &:after {
+                    content: "";
+                    height: 1px;
+                    width: 90%;
+                    background-color: @gray;
+                    position: absolute;
+                    top: 24px;
+                    z-index: -1;
+                }
+
+                li {
+                    background-color: @dark-silver;
+                    height: 48px;
+                    width: 48px;
+                    border-radius: 100%;
+                    color: @hc-gray;
+                    font-size: 32px;
+                    text-align: center;
+                    line-height: 48px;
+
+
+                    &.active {
+                        background: @blue;
+                        color: white;
+
+                        p {
+                            font-weight: 700;
+                        }
+                    }
+
+                    p {
+                        line-height: initial;
+                        font-size: 16px;
+                        color: #333333;
+                        margin-top: 8px;
+                    }
+                }
+            }
+    }
+    .description {
+        margin-bottom: 32px;
+
+        p {
+            margin-bottom: 8px;
+        }
+
+        .prompt {
+            font-weight: bold;
+        }
+    }
+
+    .content-list {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid darken(@border-color, 20%);
+        border-radius: 10px;
+
+        li {
+            min-height: 64px;
+            text-align: center;
+            line-height: 64px;
+            border-bottom: 2px solid @border-color;
+
+            .list-btn {
+                background-color: @white;
+                border: none;
+                font-size: 18px;
+                display: flex;
+                width: 100%;
+                align-items: center;
+                padding: 0 16px;
+
+                .icon-next {
+                    margin-left: auto;
+                }
+                .icon-btn {
+                    font-size: 32px;
+                    margin-right: 32px;
+                }
+            }
+        }
+
+        :first-child .list-btn {
+            border-radius: 15px 15px 0 0;
+        }
+
+        :last-child {
+            border: none;
+            .list-btn {
+                border-radius: 0 0 15px 15px;
+            }
+        }
+    }
+
+    .wizard-footer {
+        min-height: 64px;
+        padding: 16px 32px;
+        width: 100%;
+        border-top: 1px solid @border-color;
+
+        .btn {
+            padding: 8px 40px;
+            background-color: @white;
+        }
+    }
+}
