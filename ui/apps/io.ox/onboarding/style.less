@@ -1,0 +1,88 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2020 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Maik Schäfer <maik.schaefer@open-xchange.com>
+ */
+
+.wizard-step {
+    min-height: 600px;
+
+    .wizard-title {
+        font-size: 18px;
+        font-weight: bold;
+        padding: 24px;
+    }
+    .progress-container {
+        width: 100%;
+            .progress-steps{
+                position: relative;
+                list-style: none;
+                display: flex;
+                justify-content: space-between;
+                padding: 0 16px 24px 16px;
+
+                &:after {
+                    content: "";
+                    height: 1px;
+                    width: 90%;
+                    background-color: @gray;
+                    position: absolute;
+                    top: 24px;
+                    z-index: -1;
+                }
+
+                li {
+                    background-color: @dark-silver;
+                    height: 48px;
+                    width: 48px;
+                    border-radius: 100%;
+                    color: @hc-gray;
+                    font-size: 32px;
+                    text-align: center;
+                    line-height: 48px;
+
+
+                    &.active {
+                        background: @brand-primary;
+                        color: white;
+                    }
+
+                    p {
+                        line-height: initial;
+                        font-size: 16px;
+                        color: #333333;
+                        margin-top: 8px;
+                    }
+                }
+            }
+    }
+    .description {
+        padding: 16px;
+
+        .prompt {
+            font-weight: bold;
+        }
+    }
+
+    .content-list {
+        list-style: none;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid @gray;
+        border-radius: 15px;
+
+        li {
+            min-height: 48px;
+            text-align: center;
+            line-height: 48px;
+        }
+    }
+}
