@@ -20,7 +20,29 @@ define('io.ox/onboarding/main', [
     'use strict';
 
     var title = gt('Connect your device'),
-        platforms = ['Desktop', 'MacOs', 'Android', 'iPhone'],
+        platforms =
+        [
+            {
+                'title': 'Windows PC',
+                'icon': 'fa-windows',
+                'data': 'desktop'
+            },
+            {
+                'title': 'Android phone or tablet',
+                'icon': 'fa-android',
+                'data': 'android'
+            },
+            {
+                'title': 'MacOS',
+                'icon': 'fa-apple',
+                'data': 'macos'
+            },
+            {
+                'title': 'iPhone or iPad',
+                'icon': 'fa-apple',
+                'data': 'iphone'
+            }
+        ],
         wizard;
 
     var ConnectDeviceView = Backbone.View.extend({
@@ -37,18 +59,20 @@ define('io.ox/onboarding/main', [
 
         // draw basic scaffold and containers for the wizard
         drawScaffold: function () {
+            this.$('div[role="document"]').addClass('connect-wizard');
             this.$('.wizard-title').text(title);
             this.$('.wizard-content').append($('<div class="progress-container">'));
-            this.$('.wizard-footer').append($('<button type="button" class="btn-default close" data-action="close">'));
+            this.$('.wizard-footer').append($('<button type="button" class="btn btn-default" data-action="close">').text(gt('Close')));
         },
 
         // draw and update progress steps
         // TODO: active Step detection, text updates
-        drawProgress: function () {
+        drawProgress: function (currentStep) {
             this.$('.progress-container').empty()
                 .append($('<ul class="progress-steps">')
                     .append(
-                        $('<li class="progress-step-one">').text('1').append($('<p class="progress-description">').text(gt('Platform'))),
+                        $('<li class="progress-step-one">').text('1').append($('<p class="progress-description">').text(gt('Platform')))
+                        .addClass(currentStep === 0 ? 'active' : ''),
                         $('<li class="progress-step-two">').text('2').append($('<p class="progress-description">').text(gt('App'))),
                         $('<li class="progress-step-three">').text('3').append($('<p class="progress-description">').text(gt('Setup')))
                     ));
@@ -57,6 +81,7 @@ define('io.ox/onboarding/main', [
         render: function () {
             var connectTour = new Wizard(),
                 self = this;
+            console.log('%c connectWizard', 'background: #222; color: #bada55', { connectTour: connectTour });
 
             connectTour.step({
                 id: 'platform',
@@ -67,7 +92,7 @@ define('io.ox/onboarding/main', [
             .on('before:show', function () {
                 this.$('.wizard-content').empty();
                 self.drawScaffold.bind(this)();
-                self.drawProgress.bind(this)();
+                self.drawProgress.bind(this)(connectTour.currentStep);
 
                 this.$('.wizard-content')
                     .append(
@@ -80,9 +105,15 @@ define('io.ox/onboarding/main', [
                             function () {
                                 return platforms.map(
                                     function (plat) {
+                                        var title = plat.title;
                                         return $('<li class="platform">')
-                                            .attr('data-value', plat)
-                                            .text(plat);
+                                            .attr('data-value', plat.data).append(
+                                                $('<button class="list-btn">').addClass(plat.data).append(
+                                                    $('<i class="icon-btn fa">').addClass(plat.icon),
+                                                    $('<div class="list-description">').text(title),
+                                                    $('<i class="icon-next fa fa-chevron-right">')
+                                                )
+                                            );
                                     }
                                 );
                             }

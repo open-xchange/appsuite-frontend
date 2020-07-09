@@ -12,15 +12,37 @@
  */
 
 .wizard-step {
-    min-height: 600px;
+    @border-color: #e5e5e5;
+    border-radius: 10px;
+
+    .connect-wizard{
+        position: relative;
+        min-height: 704px;
+    }
+
+    .wizard-header{
+        padding: 40px 32px 32px 32px;
+
+        .close {
+            display: none;
+        }
+
+    }
+
+    .wizard-content {
+        padding: 16px 32px;
+    }
 
     .wizard-title {
         font-size: 18px;
         font-weight: bold;
-        padding: 24px;
+        padding: 0;
     }
+
     .progress-container {
         width: 100%;
+        margin-bottom: 56px;
+
             .progress-steps{
                 position: relative;
                 list-style: none;
@@ -50,8 +72,12 @@
 
 
                     &.active {
-                        background: @brand-primary;
+                        background: @blue;
                         color: white;
+
+                        p {
+                            font-weight: 700;
+                        }
                     }
 
                     p {
@@ -64,7 +90,11 @@
             }
     }
     .description {
-        padding: 16px;
+        margin-bottom: 32px;
+
+        p {
+            margin-bottom: 8px;
+        }
 
         .prompt {
             font-weight: bold;
@@ -73,16 +103,60 @@
 
     .content-list {
         list-style: none;
-        padding: 16px;
+        padding: 0;
         display: flex;
         flex-direction: column;
-        border: 1px solid @gray;
+        border: 1px solid darken(@border-color, 20%);
         border-radius: 15px;
 
         li {
-            min-height: 48px;
+            min-height: 64px;
             text-align: center;
-            line-height: 48px;
+            line-height: 64px;
+            border-bottom: 2px solid @border-color;
+
+            .list-btn {
+                background-color: @white;
+                border: none;
+                font-size: 18px;
+                display: flex;
+                width: 100%;
+                align-items: center;
+                padding: 0 16px;
+
+                .icon-next {
+                    margin-left: auto;
+                }
+                .icon-btn {
+                    font-size: 32px;
+                    margin-right: 32px;
+                }
+            }
+        }
+
+        :first-child .list-btn {
+            border-radius: 15px 15px 0 0;
+        }
+
+        :last-child {
+            border: none;
+            .list-btn {
+                border-radius: 0 0 15px 15px;
+            }
+        }
+    }
+
+    .wizard-footer {
+        position: absolute;
+        bottom: 0;
+        min-height: 64px;
+        padding: 16px 32px;
+        width: 100%;
+        border-top: 1px solid @border-color;
+
+        .btn {
+            padding: 8px 40px;
+            background-color: @white;
         }
     }
 }
