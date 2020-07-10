@@ -42,6 +42,7 @@ Scenario('[C85620] Global address book is the default folder - switch capability
 
     // Disable the global address book for the user
     await users[0].doesntHaveCapability('gab');
+    I.refreshPage();
 
     I.login('app=io.ox/contacts');
 
