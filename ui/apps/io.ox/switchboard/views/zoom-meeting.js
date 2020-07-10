@@ -13,9 +13,10 @@
 
 define('io.ox/switchboard/views/zoom-meeting', [
     'io.ox/switchboard/zoom',
+    'io.ox/switchboard/api',
     'settings!io.ox/switchboard',
     'gettext!io.ox/switchboard'
-], function (zoom, settings, gt) {
+], function (zoom, api, settings, gt) {
 
     'use strict';
 
@@ -34,9 +35,8 @@ define('io.ox/switchboard/views/zoom-meeting', [
 
         initialize: function (options) {
             this.appointment = options.appointment;
-            var props = this.getExtendedProps(),
-                conference = props['X-OX-CONFERENCE'];
-            this.model.set('joinLink', conference && conference.label === 'zoom' ? conference.value : '');
+            var conference = api.getConference(this.appointment.get('conferences'));
+            this.model.set('joinURL', conference && conference.type === 'zoom' ? conference.joinURL : '');
             this.listenTo(this.appointment, 'change:rrule', this.onChangeRecurrence);
             this.listenTo(this.appointment, 'create update', this.changeMeeting);
             this.listenTo(this.appointment, 'discard', this.discardMeeting);
@@ -50,13 +50,13 @@ define('io.ox/switchboard/views/zoom-meeting', [
 
         renderDone: function () {
             // show meeting
-            var link = this.getJoinLink() || 'https://...';
+            var url = this.getJoinURL() || 'https://...';
             this.$el.append(
                 $('<i class="fa fa-video-camera conference-logo" aria-hidden="true">'),
                 $('<div class="ellipsis">').append(
                     $('<b>').text(gt('Link:')),
                     $.txt(' '),
-                    $('<a target="_blank" rel="noopener">').attr('href', link).text(gt.noI18n(link))
+                    $('<a target="_blank" rel="noopener">').attr('href', url).text(gt.noI18n(url))
                 ),
                 this.createDialinNumbers(),
                 $('<div>').append(
@@ -64,7 +64,7 @@ define('io.ox/switchboard/views/zoom-meeting', [
                         .text(gt('Copy link to location')),
                     $('<a href="#" class="secondary-action">')
                         .text(gt('Copy link to clipboard'))
-                        .attr('data-clipboard-text', link)
+                        .attr('data-clipboard-text', url)
                         .on('click', false),
                     $('<a href="#" class="secondary-action" data-action="copy-to-description">')
                         .text(gt('Copy dial-in numbers to description'))
@@ -81,8 +81,8 @@ define('io.ox/switchboard/views/zoom-meeting', [
         },
 
         renderError: function () {
-            var link = this.getJoinLink();
-            if (link) {
+            var url = this.getJoinURL();
+            if (url) {
                 this.model.set('error', gt('A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has expired.'));
                 zoom.View.prototype.renderError.call(this);
                 this.$el.append(
@@ -113,7 +113,7 @@ define('io.ox/switchboard/views/zoom-meeting', [
         copyToLocation: function (e) {
             e.preventDefault();
             //#. %1$s contains the URL to join the meeting
-            this.appointment.set('location', gt('Zoom Meeting: %1$s', this.getJoinLink()));
+            this.appointment.set('location', gt('Zoom Meeting: %1$s', this.getJoinURL()));
         },
 
         copyToDescription: function (e) {
@@ -133,33 +133,39 @@ define('io.ox/switchboard/views/zoom-meeting', [
         },
 
         isDone: function () {
-            return this.getJoinLink() && this.model.get('meeting');
+            return this.getJoinURL() && this.model.get('meeting');
         },
 
         createMeeting: function () {
             // load or create meeting?
-            if (this.getJoinLink()) return this.getMeeting();
+            if (this.getJoinURL()) return this.getMeeting();
             var data = this.appointment.toJSON();
             return zoom.createMeeting(translateMeetingData(data)).then(
                 function success(result) {
                     if (ox.debug) console.debug('createMeeting', result);
-                    var joinLink = result.join_url;
-                    var props = this.getExtendedProps();
-                    props = _.extend({}, props, { 'X-OX-CONFERENCE': { value: joinLink, label: 'zoom' } });
-                    this.appointment.set('extendedProperties', props);
-                    this.model.set({ joinLink: joinLink, meeting: result, state: 'done', created: true });
+                    this.appointment.set('conferences', [{
+                        uri: result.join_url,
+                        features: ['AUDIO', 'VIDEO'],
+                        label: gt('Zoom Meeting'),
+                        extendedParameters: {
+                            'X-OX-TYPE': 'zoom',
+                            'X-OX-ID': result.id,
+                            'X-OX-OWNER': api.userId
+                        }
+                    }]);
+                    this.model.set({ joinURL: result.join_url, meeting: result, state: 'done', created: true });
                 }.bind(this),
                 this.createMeetingFailed.bind(this)
             );
         },
 
         recreateMeeting: function () {
-            this.model.set('joinLink', '');
+            this.model.set('joinURL', '');
             this.createMeeting();
         },
 
         getMeeting: function () {
-            var url = this.getJoinLink(),
+            var url = this.getJoinURL(),
                 id = String(url).replace(/^.+\/j\/(\w+).+$/, '$1');
             zoom.getMeeting(id).then(
                 function success(result) {

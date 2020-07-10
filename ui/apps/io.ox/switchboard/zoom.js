@@ -26,7 +26,7 @@ define('io.ox/switchboard/zoom', [
     var View = DisposableView.extend({
 
         constructor: function () {
-            this.model = new Backbone.Model({ type: 'zoom', state: 'authorized', joinLink: '' });
+            this.model = new Backbone.Model({ type: 'zoom', state: 'authorized', joinURL: '' });
             // the original constructor will call initialize()
             DisposableView.prototype.constructor.apply(this, arguments);
             // set initial state (now; otherwise we get into cyclic deps)
@@ -55,11 +55,11 @@ define('io.ox/switchboard/zoom', [
         },
 
         isDone: function () {
-            return !!this.getJoinLink();
+            return !!this.getJoinURL();
         },
 
-        getJoinLink: function () {
-            return this.model && this.model.get('joinLink');
+        getJoinURL: function () {
+            return this.model && this.model.get('joinURL');
         },
 
         onStateChange: function () {

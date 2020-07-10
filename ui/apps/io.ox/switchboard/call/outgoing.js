@@ -90,8 +90,8 @@ define('io.ox/switchboard/call/outgoing', [
                         );
                     },
                     toggleCallButton: function () {
-                        var link = this.conference.model.get('joinLink');
-                        this.getButton('call').prop('disabled', !link);
+                        var url = this.conference.model.get('joinURL');
+                        this.getButton('call').prop('disabled', !url);
                     },
                     getButton: function (action) {
                         return this.$('button[data-action="' + action + '"]');
@@ -104,7 +104,7 @@ define('io.ox/switchboard/call/outgoing', [
                     this.renderService().done(function () {
                         this.renderButtons();
                         this.listenTo(this.conference.model, 'change:state', this.renderButtons);
-                        this.listenTo(this.conference.model, 'change:joinLink', this.toggleCallButton);
+                        this.listenTo(this.conference.model, 'change:joinURL', this.toggleCallButton);
                         this.listenTo(this.conference.model, 'done', this.close);
                     }.bind(this));
                 })
@@ -112,10 +112,10 @@ define('io.ox/switchboard/call/outgoing', [
                     this.conference.startOAuthHandshake();
                 })
                 .on('call', function () {
-                    var link = this.conference.model.get('joinLink');
-                    if (!link) return;
-                    window.open(link, 'call');
-                    call.set('telco', link).propagate();
+                    var url = this.conference.model.get('joinURL');
+                    if (!url) return;
+                    window.open(url, 'call');
+                    call.set('joinURL', url).propagate();
                     ringtone.outgoing.play();
                     this.getButton('cancel').parent().remove();
                     this.getButton('call').parent().replaceWith(

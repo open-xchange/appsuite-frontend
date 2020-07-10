@@ -44,17 +44,17 @@ define('io.ox/switchboard/views/zoom-call', [
         },
 
         renderDone: function () {
-            var link = this.getJoinLink() || 'https://...';
+            var url = this.getJoinURL() || 'https://...';
             this.$el.addClass('compact').append(
                 $('<div>').append(
-                    $('<a target="_blank" rel="noopener">').attr('href', link).html(
-                        _.escape(link).replace(/([-/.?&=])/g, '$1<wbr>')
+                    $('<a target="_blank" rel="noopener">').attr('href', url).html(
+                        _.escape(url).replace(/([-/.?&=])/g, '$1<wbr>')
                     )
                 ),
                 $('<div>').append(
                     $('<a href="#" class="secondary-action">')
                         .text(gt('Copy to clipboard'))
-                        .attr('data-clipboard-text', link)
+                        .attr('data-clipboard-text', url)
                         .on('click', false)
                 )
             );
@@ -73,7 +73,7 @@ define('io.ox/switchboard/views/zoom-call', [
 
         createMeetingSuccess: function (result) {
             console.log('createMeetingSuccess', result.join_url, result);
-            this.model.set({ joinLink: result.join_url, state: 'done' });
+            this.model.set({ joinURL: result.join_url, state: 'done' });
         }
     });
 

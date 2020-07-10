@@ -29,11 +29,10 @@ define('io.ox/switchboard/views/jitsi-meeting', [
         },
 
         initialize: function (options) {
-            this.model = new Backbone.Model({ type: 'jitsi', state: 'done', joinLink: '' });
+            this.model = new Backbone.Model({ type: 'jitsi', state: 'done', joinURL: '' });
             this.appointment = options.appointment;
-            var props = this.getExtendedProps(),
-                conference = props['X-OX-CONFERENCE'];
-            this.model.set('joinLink', conference && conference.label === 'jitsi' ? conference.value : '');
+            var conference = api.getConference(this.appointment.get('conferences'));
+            this.model.set('joinURL', conference && conference.type === 'jitsi' ? conference.joinURL : '');
             window.jitsiMeeting = this;
         },
 
@@ -41,8 +40,8 @@ define('io.ox/switchboard/views/jitsi-meeting', [
             return this.appointment.get('extendedProperties') || {};
         },
 
-        getJoinLink: function () {
-            return this.model && this.model.get('joinLink');
+        getJoinURL: function () {
+            return this.model && this.model.get('joinURL');
         },
 
         render: function () {
@@ -53,20 +52,20 @@ define('io.ox/switchboard/views/jitsi-meeting', [
 
         renderDone: function () {
             // show meeting
-            var link = this.getJoinLink() || 'https://...';
+            var url = this.getJoinURL() || 'https://...';
             this.$el.append(
                 $('<i class="fa fa-video-camera conference-logo" aria-hidden="true">'),
                 $('<div class="ellipsis">').append(
                     $('<b>').text(gt('Link:')),
                     $.txt(' '),
-                    $('<a target="_blank" rel="noopener">').attr('href', link).text(gt.noI18n(link))
+                    $('<a target="_blank" rel="noopener">').attr('href', url).text(gt.noI18n(url))
                 ),
                 $('<div>').append(
                     $('<a href="#" class="secondary-action" data-action="copy-to-location">')
                         .text(gt('Copy to location field')),
                     $('<a href="#" class="secondary-action">')
                         .text(gt('Copy to clipboard'))
-                        .attr('data-clipboard-text', link)
+                        .attr('data-clipboard-text', url)
                         .on('click', false)
                 )
             );
@@ -79,16 +78,22 @@ define('io.ox/switchboard/views/jitsi-meeting', [
         copyToLocation: function (e) {
             e.preventDefault();
             //#. %1$s contains the URL to join the meeting
-            this.appointment.set('location', gt('Jitsi Meeting: %1$s', this.getJoinLink()));
+            this.appointment.set('location', gt('Jitsi Meeting: %1$s', this.getJoinURL()));
         },
 
         createMeeting: function () {
-            // get a UUID (5 times s4 means a quadrillion combinations; good enough ... probably)
-            var joinLink = api.createJitsiJoinLink();
-            var props = this.getExtendedProps();
-            props = _.extend({}, props, { 'X-OX-CONFERENCE': { value: joinLink, label: 'jitsi' } });
-            this.appointment.set('extendedProperties', props);
-            this.model.set({ joinLink: joinLink, state: 'done' });
+            var meeting = api.createJitsiMeeting();
+            this.appointment.set('conferences', [{
+                uri: meeting.joinURL,
+                features: ['AUDIO', 'VIDEO'],
+                label: gt('Jitsi Meeting'),
+                extendedParameters: {
+                    'X-OX-TYPE': 'jitsi',
+                    'X-OX-ID': meeting.id,
+                    'X-OX-OWNER': api.userId
+                }
+            }]);
+            this.model.set({ joinURL: meeting.joinURL, state: 'done' });
         }
     });
 

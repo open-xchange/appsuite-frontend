@@ -13,8 +13,9 @@
 
 define('io.ox/switchboard/views/conference-select', [
     'io.ox/backbone/views/disposable',
+    'io.ox/switchboard/api',
     'gettext!io.ox/switchboard'
-], function (DisposableView, gt) {
+], function (DisposableView, api, gt) {
 
     'use strict';
 
@@ -25,16 +26,12 @@ define('io.ox/switchboard/views/conference-select', [
         initialize: function (options) {
             this.point = options.point;
             this.appointment = options.appointment;
-            var props = this.appointment.get('extendedProperties') || {},
-                conference = props['X-OX-CONFERENCE'];
-            this.type = (conference && conference.label) || 'none';
+            var conference = api.getConference(this.appointment.get('conferences'));
+            this.type = (conference && conference.type) || 'none';
             this.$col = $('<div class="col-xs-12">');
         },
         removeConference: function () {
-            var props = this.appointment.get('extendedProperties');
-            if (!props) return;
-            delete props['X-OX-CONFERENCE'];
-            this.appointment.set('extendedProperties', props);
+            this.appointment.set('conferences', []);
         },
         onChangeType: function () {
             this.type = this.$('select').val();

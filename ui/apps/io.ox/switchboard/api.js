@@ -66,8 +66,24 @@ define.async('io.ox/switchboard/api', [
         },
 
         // no better place so far
-        createJitsiJoinLink: function () {
-            return settings.get('jitsi/host') + '/' + ['ox'].concat(uuids.asArray(5)).join('-');
+        createJitsiMeeting: function () {
+            var id = ['ox'].concat(uuids.asArray(5)).join('-');
+            return { id: id, joinURL: settings.get('jitsi/host') + '/' + id };
+        },
+
+        getConference: function (conferences) {
+            if (!_.isArray(conferences) || !conferences.length) return;
+            // we just consider the first one
+            var conference = conferences[0];
+            var params = conference.extendedParameters;
+            if (!params || !params['X-OX-TYPE']) return;
+            return {
+                id: params['X-OX-ID'],
+                joinURL: conference.uri,
+                owner: params['X-OX-OWNER'],
+                params: params,
+                type: params['X-OX-TYPE']
+            };
         }
     };
 

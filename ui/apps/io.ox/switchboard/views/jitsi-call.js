@@ -25,12 +25,13 @@ define('io.ox/switchboard/views/jitsi-call', [
         className: 'conference-view jitsi',
 
         constructor: function () {
-            this.model = new Backbone.Model({ type: 'jitsi', state: 'done', joinLink: api.createJitsiJoinLink() });
+            var meeting = api.createJitsiMeeting();
+            this.model = new Backbone.Model({ type: 'jitsi', state: 'done', joinURL: meeting.joinURL });
             DisposableView.prototype.constructor.apply(this, arguments);
         },
 
-        getJoinLink: function () {
-            return this.model.get('joinLink');
+        getJoinURL: function () {
+            return this.model.get('joinURL');
         },
 
         render: function () {
@@ -39,17 +40,17 @@ define('io.ox/switchboard/views/jitsi-call', [
         },
 
         renderDone: function () {
-            var link = this.getJoinLink() || 'https://...';
+            var url = this.getJoinURL() || 'https://...';
             this.$el.addClass('compact').append(
                 $('<div>').append(
-                    $('<a target="_blank" rel="noopener">').attr('href', link).html(
-                        _.escape(link).replace(/([-/.?&=])/g, '$1<wbr>')
+                    $('<a target="_blank" rel="noopener">').attr('href', url).html(
+                        _.escape(url).replace(/([-/.?&=])/g, '$1<wbr>')
                     )
                 ),
                 $('<div>').append(
                     $('<a href="#" class="secondary-action">')
                         .text(gt('Copy to clipboard'))
-                        .attr('data-clipboard-text', link)
+                        .attr('data-clipboard-text', url)
                         .on('click', false)
                 )
             );

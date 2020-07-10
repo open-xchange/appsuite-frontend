@@ -278,9 +278,9 @@ define('io.ox/switchboard/extensions', [
         draw: function (baton) {
             // TODO: Split this for compability with pure location and real conference
             // conference field should also be printed in the view
-            var match = [], props = baton.data.extendedProperties || {};
-            if (props['X-OX-CONFERENCE']) {
-                match.push(props['X-OX-CONFERENCE'].value);
+            var match = [], conference = api.getConference(baton.data.conferences);
+            if (conference) {
+                match.push(conference.joinURL);
             } else {
                 match = String(baton.data.location).match(/(https:\/\/.*?\.zoom\.us\S+)/i);
             }
@@ -291,7 +291,7 @@ define('io.ox/switchboard/extensions', [
                     $('<button type="button" class="btn btn-link" data-action="join">')
                         .append(
                             $('<i class="fa fa-phone" aria-hidden="true">'),
-                            $.txt(gt('Join Zoom meeting'))
+                            $.txt(getTitle(conference))
                         )
                         .on('click', function () {
                             window.open(match[0]);
@@ -300,6 +300,14 @@ define('io.ox/switchboard/extensions', [
             );
             // avoid actions
             baton.disable('io.ox/calendar/detail', 'actions');
+
+            function getTitle(conference) {
+                switch (conference.type) {
+                    case 'zoom': return gt('Join Zoom meeting');
+                    case 'jitsi': return gt('Join Jitsi meeting');
+                    default: return gt('Join conference call');
+                }
+            }
         }
     });
 

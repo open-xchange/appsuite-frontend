@@ -69,7 +69,7 @@ define('io.ox/switchboard/call/incoming', [
                 .on('answer', function () {
                     ringtone.incoming.stop();
                     model.answer();
-                    window.open(model.getTelcoLink());
+                    window.open(model.getJoinURL());
                 })
                 .open();
         }

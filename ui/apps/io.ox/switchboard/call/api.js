@@ -48,8 +48,8 @@ define('io.ox/switchboard/call/api', [
         getCalleeState: function (id) {
             return this.states[id];
         },
-        getTelcoLink: function () {
-            return this.get('telco');
+        getJoinURL: function () {
+            return this.get('joinURL');
         },
         isIncoming: function () {
             return !!this.get('incoming');
@@ -64,7 +64,7 @@ define('io.ox/switchboard/call/api', [
             return this.active;
         },
         propagate: function () {
-            api.propagate('call', this.get('callees'), { telco: this.getTelcoLink(), type: this.getType() });
+            api.propagate('call', this.get('callees'), { joinURL: this.getJoinURL(), type: this.getType() });
         },
         hangup: function () {
             this.active = false;
@@ -126,7 +126,7 @@ define('io.ox/switchboard/call/api', [
             }, 20000);
             return;
         }
-        call = new Call({ caller: caller, callees: callees, telco: payload.telco, type: payload.type, incoming: true });
+        call = new Call({ caller: caller, callees: callees, joinURL: payload.joinURL, type: payload.type, incoming: true });
         // load on demand / otherwise circular deps
         require(['io.ox/switchboard/call/incoming'], function (incoming) {
             incoming.openDialog(call);
