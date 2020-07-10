@@ -16,10 +16,12 @@ define('io.ox/switchboard/settings/defaults', [], function () {
     'use strict';
 
     return {
-        zoom: {
-            addMeetingPassword: true,
+        call: {
             showNativeNotifications: true,
             useRingtones: true
+        },
+        zoom: {
+            addMeetingPassword: true
         }
     };
 });

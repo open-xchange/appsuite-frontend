@@ -26,9 +26,9 @@ define('io.ox/switchboard/extensions', [
     'io.ox/switchboard/views/call-history',
     'io.ox/core/capabilities',
     'io.ox/contacts/model',
-    'settings!io.ox/core',
-    'gettext!io.ox/switchboard'
-], function (ext, presence, api, account, mini, DisposableView, actionsUtil, contactsAPI, ConferenceSelectView, ZoomMeetingView, JitsiMeetingView, callHistory, capabilities, contactsModel, settings, gt) {
+    'gettext!io.ox/switchboard',
+    'less!io.ox/switchboard/style'
+], function (ext, presence, api, account, mini, DisposableView, actionsUtil, contactsAPI, ConferenceSelectView, ZoomMeetingView, JitsiMeetingView, callHistory, capabilities, contactsModel, gt) {
 
     'use strict';
 
@@ -119,7 +119,7 @@ define('io.ox/switchboard/extensions', [
                     $('<div class="dropdown">').append(
                         $('<button type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').append(
                             $('<i class="fa fa-phone" aria-hidden="true">'),
-                            $.txt(gt('Call')),
+                            $.txt(gt.pgettext('verb', 'Call')),
                             $('<i class="fa fa-caret-down" aria-hidden="true">')
                         ),
                         $ul
@@ -248,28 +248,28 @@ define('io.ox/switchboard/extensions', [
     });
 
     // extend recipients
-    ext.point('io.ox/core/person').extend({
-        id: 'presence',
-        draw: function (baton) {
-            var id = baton.halo.email;
-            if (!api.isInternal(id)) return;
-            this.prepend(presence.getPresenceDot(id));
-        }
-    });
+    // ext.point('io.ox/core/person').extend({
+    //     id: 'presence',
+    //     draw: function (baton) {
+    //         var id = baton.halo.email;
+    //         if (!api.isInternal(id)) return;
+    //         this.prepend(presence.getPresenceDot(id));
+    //     }
+    // });
 
     // extend participants
-    ext.point('io.ox/participants/view').extend({
-        id: 'presence',
-        render: function (baton) {
-            // calendar has email, distribution lists email1, for example
-            var id = baton.model.get('email') || baton.model.get('email1');
-            if (!api.isInternal(id)) return;
-            this.append(presence.getPresenceIcon(id));
-        }
-    });
+    // ext.point('io.ox/participants/view').extend({
+    //     id: 'presence',
+    //     render: function (baton) {
+    //         // calendar has email, distribution lists email1, for example
+    //         var id = baton.model.get('email') || baton.model.get('email1');
+    //         if (!api.isInternal(id)) return;
+    //         this.append(presence.getPresenceIcon(id));
+    //     }
+    // });
 
     // disable calendar details (to get some room)
-    ext.point('io.ox/calendar/detail').disable('details');
+    // ext.point('io.ox/calendar/detail').disable('details');
 
     // add to contact detail view
     ext.point('io.ox/calendar/detail').extend({
@@ -288,10 +288,10 @@ define('io.ox/switchboard/extensions', [
             this.append(
                 $('<div class="switchboard-actions horizontal">').append(
                     // Call
-                    $('<button class="btn btn-link" data-action="join">')
+                    $('<button type="button" class="btn btn-link" data-action="join">')
                         .append(
                             $('<i class="fa fa-phone" aria-hidden="true">'),
-                            $.txt('Join Zoom meeting')
+                            $.txt(gt('Join Zoom meeting'))
                         )
                         .on('click', function () {
                             window.open(match[0]);
@@ -317,91 +317,42 @@ define('io.ox/switchboard/extensions', [
     var solutions = ext.point('io.ox/calendar/conference-solutions')
         .extend({ id: 'none', index: 100, value: 'none', label: gt('None') });
 
-    //
-    // Zoom
-    //
-    (function () {
+    var supportsZoom = api.supports('jitsi'),
+        supportsJitsi = api.supports('jitsi');
 
-        if (!settings.get('switchboard/host')) return;
+    if (supportsZoom || supportsJitsi) {
 
-        solutions.extend({
-            id: 'zoom',
-            index: 200,
-            value: 'zoom',
-            label: gt('Zoom Meeting'),
-            render: function (view) {
-                this.append(
-                    new ZoomMeetingView({ appointment: view.appointment }).render().$el
-                );
-            }
-        });
-
-    }());
-
-    //
-    // Jitsi
-    //
-    solutions.extend({
-        id: 'jitsi',
-        index: 300,
-        value: 'jitsi',
-        label: gt('Jitsi Meeting'),
-        render: function (view) {
-            this.append(
-                new JitsiMeetingView({ appointment: view.appointment }).render().$el
-            );
+        if (supportsZoom) {
+            solutions.extend({
+                id: 'zoom',
+                index: 200,
+                value: 'zoom',
+                label: gt('Zoom Meeting'),
+                render: function (view) {
+                    this.append(
+                        new ZoomMeetingView({ appointment: view.appointment }).render().$el
+                    );
+                }
+            });
         }
-    });
 
-    // move location to later position
-    ext.point('io.ox/calendar/edit/section').replace({ id: 'location', index: 750 });
-
-    // add to contact detail view
-    ext.point('io.ox/calendar/detail').extend({
-        after: 'details',
-        id: 'actions',
-        draw: function (baton) {
-            this.append(
-                $('<div class="switchboard-actions">').append(
-                    // Call
-                    $('<button class="btn btn-link" data-action="call">')
-                        .append(
-                            $('<i class="fa fa-phone" aria-hidden="true">'),
-                            $.txt('Call')
-                        ),
-                    // Chat
-                    $('<button class="btn btn-link" data-action="chat">')
-                        .append(
-                            $('<i class="fa fa-comment" aria-hidden="true">'),
-                            $.txt('Chat')
-                        ),
-                    // Email
-                    $('<button class="btn btn-link" data-action="send">')
-                        .append(
-                            $('<i class="fa fa-envelope" aria-hidden="true">'),
-                            $.txt('Email')
-                        )
-                )
-                .on('click', 'button', { baton: baton }, function (e) {
-                    var action = $(e.currentTarget).data('action'),
-                        baton = e.data.baton,
-                        data = _(baton.data.attendees).map(function (attendee) { return { email1: attendee.email, folder_id: 6 }; });
-                    switch (action) {
-                        case 'call':
-                            actionsUtil.invoke('io.ox/switchboard/call-user', ext.Baton({ data: data }));
-                            break;
-                        case 'chat':
-                            actionsUtil.invoke('io.ox/switchboard/wall-user', ext.Baton({ data: data }));
-                            break;
-                        case 'send':
-                            actionsUtil.invoke('io.ox/calendar/detail/actions/sendmail', ext.Baton({ data: [baton.data] }));
-                            break;
-                        // no default
-                    }
-                })
-            );
+        if (supportsJitsi) {
+            solutions.extend({
+                id: 'jitsi',
+                index: 300,
+                value: 'jitsi',
+                label: gt('Jitsi Meeting'),
+                render: function (view) {
+                    this.append(
+                        new JitsiMeetingView({ appointment: view.appointment }).render().$el
+                    );
+                }
+            });
         }
-    });
+
+        // move location to later position
+        ext.point('io.ox/calendar/edit/section').replace({ id: 'location', index: 750 });
+    }
 
     // add call history
     ext.point('io.ox/core/appcontrol/right').extend({
@@ -409,7 +360,7 @@ define('io.ox/switchboard/extensions', [
         // 100 is notifications, 120 is app launcher
         index: 110,
         draw: function () {
-            if (!settings.get('switchboard/callHistory/enabled', true)) return;
+            if (!api.supports('history')) return;
             this.append(callHistory.view.$el);
         }
     });

@@ -16,14 +16,15 @@ define.async('io.ox/switchboard/api', [
     'static/3rd.party/socket.io.slim.js',
     'io.ox/core/api/user',
     'io.ox/core/http',
-    'settings!io.ox/core'
-], function (io, userAPI, http, settings) {
+    'io.ox/core/uuids',
+    'settings!io.ox/switchboard'
+], function (io, userAPI, http, uuids, settings) {
 
     'use strict';
 
     var api = {
 
-        host: settings.get('switchboard/host'),
+        host: settings.get('host'),
 
         // will both be set below
         socket: undefined,
@@ -50,16 +51,23 @@ define.async('io.ox/switchboard/api', [
         },
 
         supports: function (type) {
-            if (!settings.get('switchboard/host')) return false;
+            if (!settings.get('host')) return false;
             switch (type) {
                 case 'zoom':
-                    return !!settings.get('switchboard/zoom/enabled');
+                    return !!settings.get('zoom/enabled');
                 case 'jitsi':
-                    if (!settings.get('switchboard/jitsi/enabled')) return false;
-                    return !!settings.get('switchboard/jitsi/host');
+                    if (!settings.get('jitsi/enabled')) return false;
+                    return !!settings.get('jitsi/host');
+                case 'history':
+                    return settings.get('callHistory/enabled', true);
                 default:
                     return false;
             }
+        },
+
+        // no better place so far
+        createJitsiJoinLink: function () {
+            return settings.get('jitsi/host') + '/' + ['ox'].concat(uuids.asArray(5)).join('-');
         }
     };
 
@@ -77,8 +85,7 @@ define.async('io.ox/switchboard/api', [
             params: { action: 'acquireToken' }
         })
         .then(function (data) {
-
-            api.socket = io(api.host + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token, { transports: ['websocket'] }) //io.connect(api.host + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token, { transports: ['websocket'] })
+            api.socket = io(api.host + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token, { transports: ['websocket'] })
                 .once('connect', function () {
                     console.log('%cConnected to switchboard service', 'background-color: green; color: white; padding: 8px;');
                 })

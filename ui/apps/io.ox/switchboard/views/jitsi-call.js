@@ -12,11 +12,11 @@
  */
 
 define('io.ox/switchboard/views/jitsi-call', [
-    'io.ox/switchboard/zoom',
     'io.ox/backbone/views/disposable',
-    'settings!io.ox/core',
+    'io.ox/switchboard/api',
+    'settings!io.ox/switchboard',
     'gettext!io.ox/switchboard'
-], function (zoom, DisposableView, settings, gt) {
+], function (DisposableView, api, settings, gt) {
 
     'use strict';
 
@@ -25,16 +25,8 @@ define('io.ox/switchboard/views/jitsi-call', [
         className: 'conference-view jitsi',
 
         constructor: function () {
-            this.model = new Backbone.Model({ type: 'jitsi', state: 'done', joinLink: this.createJoinLink() });
+            this.model = new Backbone.Model({ type: 'jitsi', state: 'done', joinLink: api.createJitsiJoinLink() });
             DisposableView.prototype.constructor.apply(this, arguments);
-        },
-
-        createJoinLink: function () {
-            var host = settings.get('switchboard/jitsi/host');
-            return host + '/' + s4() + s4();
-            function s4() {
-                return Math.floor((1 + Math.random()) * 0x10000).toString(16).substr(1);
-            }
         },
 
         getJoinLink: function () {

@@ -19,7 +19,7 @@ define('io.ox/switchboard/views/call-history', [
     'io.ox/switchboard/lookup',
     'io.ox/switchboard/call/api',
     'io.ox/core/extensions',
-    'settings!io.ox/core',
+    'settings!io.ox/switchboard',
     'gettext!io.ox/switchboard'
 ], function (DisposableView, contactsAPI, util, presence, lookup, call, ext, settings, gt) {
 
@@ -35,7 +35,7 @@ define('io.ox/switchboard/views/call-history', [
     // - [name] <string>: Caller/callee name (optional)
 
     var point = ext.point('io.ox/switchboard/call-history/data');
-    var historyLimit = settings.get('switchboard/callHistory/limit', 50);
+    var historyLimit = settings.get('callHistory/limit', 50);
     var CallHistoryCollection = Backbone.Collection.extend({ comparator: 'date' });
     var callHistory = new CallHistoryCollection();
 
@@ -84,7 +84,7 @@ define('io.ox/switchboard/views/call-history', [
             point.invoke('initialize', this);
         },
         onOpen: function () {
-            settings.set('switchboard/callHistory/lastSeen', _.now()).save();
+            settings.set('callHistory/lastSeen', _.now()).save();
             this.updateIndicator();
         },
         onAddRemove: function () {
@@ -103,7 +103,7 @@ define('io.ox/switchboard/views/call-history', [
             }, this);
         },
         updateIndicator: function () {
-            var lastSeen = settings.get('switchboard/callHistory/lastSeen', 0);
+            var lastSeen = settings.get('callHistory/lastSeen', 0);
             var hasUnseen = this.collection.some(function (model) {
                 return model.get('missed') && model.get('date') > lastSeen;
             });
@@ -235,14 +235,14 @@ define('io.ox/switchboard/views/call-history', [
             index: 100,
             initialize: function () {
                 lookup.initialize();
-                var entries = settings.get('switchboard/callHistory/entries') || [];
+                var entries = settings.get('callHistory/entries') || [];
                 this.collection.add(entries);
             },
             store: function () {
                 var entries = this.collection.toJSON().filter(function (data) {
                     return isZoom.test(data.type);
                 });
-                settings.set('switchboard/callHistory/entries', entries.slice(-historyLimit)).save();
+                settings.set('callHistory/entries', entries.slice(-historyLimit)).save();
             },
             fetch: function () {
                 if (!isZoom.test(this.type)) return;

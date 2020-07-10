@@ -23,6 +23,9 @@ define('io.ox/core/uuids', function () {
     return {
         randomUUID: function () {
             return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+        },
+        asArray: function (n) {
+            return _.range(n).map(s4);
         }
     };
 });

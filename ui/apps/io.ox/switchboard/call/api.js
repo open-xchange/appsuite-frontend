@@ -97,7 +97,7 @@ define('io.ox/switchboard/call/api', [
         }
     });
 
-    var call;
+    var call, autoDecline;
 
     function isCallActive() {
         return call && call.isActive();
@@ -118,9 +118,12 @@ define('io.ox/switchboard/call/api', [
     api.socket.on('call', function (caller, callees, payload) {
         // auto-decline incoming call
         if (isCallActive()) {
-            setTimeout(function () {
-                api.propagate('decline', [caller], { reason: 'busy' });
-            }, 2000);
+            if (autoDecline) clearTimeout(autoDecline);
+            autoDecline = setTimeout(function () {
+                autoDecline = null;
+                if (!isCallActive()) return;
+                api.propagate('decline', [caller], { reason: 'away' });
+            }, 20000);
             return;
         }
         call = new Call({ caller: caller, callees: callees, telco: payload.telco, type: payload.type, incoming: true });
@@ -129,8 +132,6 @@ define('io.ox/switchboard/call/api', [
             incoming.openDialog(call);
         });
     });
-
-    // 42["answer", "alexander.quast@open-xchange.com", ["matthias.biggeleben@open-xchange.com"], null]
 
     // CALLEE answers the call
     api.socket.on('answer', function (caller) {
@@ -153,12 +154,6 @@ define('io.ox/switchboard/call/api', [
         call.addToHistory();
         call.hangup();
     });
-
-    // TEST
-    // Outgoing:
-    // api = require('io.ox/switchboard/call/api'); void api.start('zoom', ['matthias.biggeleben@open-xchange.com', 'alexander.quast@open-xchange.com']);
-    // Incoming:
-    // api = require('io.ox/switchboard/api'); void api.propagate('call', 'matthias.biggeleben@open-xchange.com', { type: 'zoom' });
 
     return {
         get: function () { return call; },

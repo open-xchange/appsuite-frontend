@@ -38,7 +38,7 @@ define('io.ox/switchboard/views/zoom-call', [
             this.$el.append(
                 $('<div class="pending">').append(
                     $.txt(gt('Connecting to Zoom ...')),
-                    $('<i class="fa fa-refresh fa-spin">')
+                    $('<i class="fa fa-refresh fa-spin" aria-hidden="true">')
                 )
             );
         },

@@ -17,8 +17,9 @@ define('io.ox/switchboard/wall', [
     'io.ox/contacts/api',
     'io.ox/core/extensions',
     'io.ox/backbone/views/actions/util',
+    'gettext!io.ox/switchboard',
     'less!io.ox/switchboard/style'
-], function (presence, api, contactsAPI, ext, actionsUtil) {
+], function (presence, api, contactsAPI, ext, actionsUtil, gt) {
 
     'use strict';
 
@@ -46,10 +47,13 @@ define('io.ox/switchboard/wall', [
                     $('<div class="sender">').text(api.getUserName(from)),
                     $('<div class="content">').append(
                         $.txt(model.get('message')),
-                        $('<a href="#" class="reply">Reply</a>')
+                        $('<a href="#" class="reply">').text(gt('Reply'))
                     ),
                     $('<div class="date">').text(moment(model.get('sent')).format('LT')),
-                    $('<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>')
+                    $('<button type="button" class="close">').attr('aria-label', gt('Close')).append(
+                        $('<span aria-hidden="true">&times;</span>')
+                        .attr('title', gt('Close'))
+                    )
                 )
             );
         },
@@ -78,9 +82,4 @@ define('io.ox/switchboard/wall', [
     api.socket.on('wall', function (from, to, payload) {
         wall.collection.add({ message: payload.message, from: from, to: to, sent: _.now(), cid: cid++ });
     });
-
-    // setTimeout(function () {
-    //     wall.collection.add({ message: 'Hello World', from: 'matthias.biggeleben@open-xchange.com', to: [], sent: _.now(), cid: 1 });
-    //     wall.collection.add({ message: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.', from: 'matthias.biggeleben@open-xchange.com', to: [], sent: _.now(), cid: 2 });
-    // }, 2000);
 });

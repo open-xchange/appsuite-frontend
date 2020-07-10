@@ -8,12 +8,6 @@
     },
     {
         "namespace": "core",
-        "path": "io.ox/switchboard/wall",
-        "requires": "switchboard",
-        "device": "!smartphone"
-    },
-    {
-        "namespace": "core",
         "path": "io.ox/switchboard/actions",
         "requires": "switchboard",
         "device": "!smartphone"

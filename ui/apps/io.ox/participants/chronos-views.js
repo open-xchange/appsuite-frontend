@@ -35,7 +35,7 @@ define('io.ox/participants/chronos-views', [
 
         tagName: 'div',
 
-        className: 'participant-wrapper hurz',
+        className: 'participant-wrapper',
 
         events: {
             'click .remove': 'onRemove',

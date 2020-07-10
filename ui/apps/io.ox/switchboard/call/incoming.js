@@ -43,11 +43,13 @@ define('io.ox/switchboard/call/incoming', [
                     );
                     this.$footer.append(
                         $('<div class="button">').append(
-                            $('<button class="btn btn-danger" data-action="decline"><i class="fa fa-close"></i></button'),
+                            $('<button type="button" class="btn btn-danger" data-action="decline"><i class="fa fa-close" aria-hidden="true"></i></button')
+                                .attr('aria-label', gt('Decline')),
                             $.txt(gt('Decline'))
                         ),
                         $('<div class="button">').append(
-                            $('<button class="btn btn-success" data-action="answer"><i class="fa fa-phone"></i></button'),
+                            $('<button type="button" class="btn btn-success" data-action="answer"><i class="fa fa-phone" aria-hidden="true"></i></button')
+                                .attr('aria-label', gt('Answer')),
                             $.txt(gt('Answer'))
                         )
                     );

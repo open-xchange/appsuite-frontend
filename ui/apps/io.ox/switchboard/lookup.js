@@ -14,7 +14,7 @@
 define('io.ox/switchboard/lookup', [
     'io.ox/core/http',
     'io.ox/contacts/util',
-    'settings!io.ox/core',
+    'settings!io.ox/switchboard',
     'gettext!io.ox/switchboard'
 ], function (http, util, settings, gt) {
 
@@ -26,7 +26,7 @@ define('io.ox/switchboard/lookup', [
         emailFields: ['email1', 'email2', 'email3'],
         numberFields: ['telephone_home1', 'telephone_home2', 'cellular_telephone1', 'cellular_telephone2', 'telephone_business1', 'telephone_business2'],
         columns: '1,20,500,501,502,505,542,543,547,548,549,551,552,555,556,557',
-        limit: settings.get('switchboard/callHistory/searchLimit', 10000),
+        limit: settings.get('callHistory/searchLimit', 10000),
 
         ready: $.Deferred(),
 

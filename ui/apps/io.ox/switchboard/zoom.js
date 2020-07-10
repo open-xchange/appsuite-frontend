@@ -86,7 +86,7 @@ define('io.ox/switchboard/zoom', [
         // no OAuth token yet
         renderAuthRequired: function () {
             this.$el.append(
-                $('<i class="fa fa-exclamation conference-logo">'),
+                $('<i class="fa fa-exclamation conference-logo" aria-hidden="true">'),
                 $('<p>').text(
                     gt('You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. If you don\'t have an account yet, it is sufficient to create a free one.', ox.serverConfig.productName)
                 ),
@@ -101,9 +101,9 @@ define('io.ox/switchboard/zoom', [
         renderPending: function () {
             this.$el.append(
                 $('<div class="pending">').append(
-                    $('<i class="fa fa-video-camera conference-logo">'),
+                    $('<i class="fa fa-video-camera conference-logo" aria-hidden="true">'),
                     $.txt(gt('Connecting to Zoom ...')),
-                    $('<i class="fa fa-refresh fa-spin">')
+                    $('<i class="fa fa-refresh fa-spin" aria-hidden="true">')
                 )
             );
         },
@@ -111,7 +111,7 @@ define('io.ox/switchboard/zoom', [
         renderError: function () {
             this.$el.addClass('error').append(
                 $('<p class="message">').append(
-                    $('<i class="fa fa-exclamation-triangle">'),
+                    $('<i class="fa fa-exclamation-triangle" aria-hidden="true">'),
                     $.txt(this.model.get('error') || gt('Something went wrong. Please try again.'))
                 )
             );
@@ -200,7 +200,7 @@ define('io.ox/switchboard/zoom', [
     };
 
     function rejectWithUnexpectedError() {
-        return { status: 500, internal: true, message: 'Ooops. That didn\'t work. Please try again.' };
+        return { status: 500, internal: true, message: gt('Something went wrong. Please try again.') };
     }
 
     function getPassword() {

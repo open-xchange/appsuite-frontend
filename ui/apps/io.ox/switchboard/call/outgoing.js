@@ -75,14 +75,17 @@ define('io.ox/switchboard/call/outgoing', [
                     renderCallButtons: function () {
                         this.$footer.append(
                             this.createButton('default', 'cancel', 'times', gt('Cancel')),
-                            this.createButton('success', 'call', 'phone', gt('Call'))
+                            this.createButton('success', 'call', 'phone', gt.pgettext('verb', 'Call'))
                         );
                         this.toggleCallButton();
                         this.$('button[data-action="call"]').focus();
                     },
                     createButton: function (type, action, icon, title) {
                         return $('<div class="button">').append(
-                            $('<button class="btn btn-' + type + '" data-action="' + action + '"><i class="fa fa-' + icon + '"></i></button'),
+                            $('<button type="button" class="btn">').addClass('btn-' + type).attr('data-action', action).append(
+                                $('<i class="fa" aria-hidden="true">').addClass('fa-' + icon)
+                            )
+                            .attr('aria-label', title),
                             $.txt(gt.noI18n(title))
                         );
                     },

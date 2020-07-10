@@ -70,8 +70,8 @@ define('io.ox/switchboard/settings/pane', [
                     util.fieldset(
                         gt('Options'),
                         util.checkbox('zoom/addMeetingPassword', gt('Always add a random meeting password'), settings),
-                        util.checkbox('zoom/showNativeNotifications', gt('Use native notifications'), settings),
-                        util.checkbox('zoom/useRingtones', gt('Play ringtone on incoming call'), settings)
+                        util.checkbox('call/showNativeNotifications', gt('Use native notifications'), settings),
+                        util.checkbox('call/useRingtones', gt('Play ringtone on incoming call'), settings)
                     )
                 );
             }
@@ -132,7 +132,10 @@ define('io.ox/switchboard/settings/pane', [
                     // remove button
                     $('<button type="button" class="btn btn-link" data-action="remove">')
                         .attr('aria-label', gt('Remove account'))
-                        .append('<i class="fa fa-trash">')
+                        .append(
+                            $('<i class="fa fa-trash" aria-hidden="true">')
+                            .attr('title', gt('Remove account'))
+                        )
                 )
             );
         },

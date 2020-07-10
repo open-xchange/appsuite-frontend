@@ -13,9 +13,10 @@
 
 define('io.ox/switchboard/views/jitsi-meeting', [
     'io.ox/backbone/views/disposable',
-    'settings!io.ox/core',
+    'io.ox/switchboard/api',
+    'settings!io.ox/switchboard',
     'gettext!io.ox/switchboard'
-], function (DisposableView, settings, gt) {
+], function (DisposableView, api, settings, gt) {
 
     'use strict';
 
@@ -54,7 +55,7 @@ define('io.ox/switchboard/views/jitsi-meeting', [
             // show meeting
             var link = this.getJoinLink() || 'https://...';
             this.$el.append(
-                $('<i class="fa fa-video-camera conference-logo">'),
+                $('<i class="fa fa-video-camera conference-logo" aria-hidden="true">'),
                 $('<div class="ellipsis">').append(
                     $('<b>').text(gt('Link:')),
                     $.txt(' '),
@@ -83,17 +84,13 @@ define('io.ox/switchboard/views/jitsi-meeting', [
 
         createMeeting: function () {
             // get a UUID (5 times s4 means a quadrillion combinations; good enough ... probably)
-            var joinLink = settings.get('switchboard/jisi/host') + '/' + ['ox', s4(), s4(), s4(), s4(), s4()].join('-');
+            var joinLink = api.createJitsiJoinLink();
             var props = this.getExtendedProps();
             props = _.extend({}, props, { 'X-OX-CONFERENCE': { value: joinLink, label: 'jitsi' } });
             this.appointment.set('extendedProperties', props);
             this.model.set({ joinLink: joinLink, state: 'done' });
         }
     });
-
-    function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substr(1);
-    }
 
     return MeetingView;
 });

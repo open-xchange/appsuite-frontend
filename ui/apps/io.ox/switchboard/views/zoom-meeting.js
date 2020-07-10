@@ -13,14 +13,14 @@
 
 define('io.ox/switchboard/views/zoom-meeting', [
     'io.ox/switchboard/zoom',
-    'settings!io.ox/core',
+    'settings!io.ox/switchboard',
     'gettext!io.ox/switchboard'
 ], function (zoom, settings, gt) {
 
     'use strict';
 
-    var preferredCountry = settings.get('switchboard/zoom/dialin/preferredCountry', 'DE');
-    var filterCountry = settings.get('switchboard/zoom/dialin/filterCountry', 'DE');
+    var preferredCountry = settings.get('zoom/dialin/preferredCountry', 'DE');
+    var filterCountry = settings.get('zoom/dialin/filterCountry', 'DE');
 
     var ZoomMeetingView = zoom.View.extend({
 
@@ -52,7 +52,7 @@ define('io.ox/switchboard/views/zoom-meeting', [
             // show meeting
             var link = this.getJoinLink() || 'https://...';
             this.$el.append(
-                $('<i class="fa fa-video-camera conference-logo">'),
+                $('<i class="fa fa-video-camera conference-logo" aria-hidden="true">'),
                 $('<div class="ellipsis">').append(
                     $('<b>').text(gt('Link:')),
                     $.txt(' '),

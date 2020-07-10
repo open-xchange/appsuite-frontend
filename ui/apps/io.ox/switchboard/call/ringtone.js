@@ -12,7 +12,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/switchboard/call/ringtone', [], function () {
+define('io.ox/switchboard/call/ringtone', ['settings!io.ox/switchboard'], function (settings) {
 
     'use strict';
 
@@ -21,9 +21,14 @@ define('io.ox/switchboard/call/ringtone', [], function () {
     incoming.volume = 0.3;
     outgoing.volume = 0.3;
 
+    function useRingtones() {
+        return settings.get('call/useRingtones', true);
+    }
+
     return {
         incoming: {
             play: function () {
+                if (!useRingtones()) return;
                 incoming.play();
             },
             stop: function () {
@@ -33,6 +38,7 @@ define('io.ox/switchboard/call/ringtone', [], function () {
         },
         outgoing: {
             play: function () {
+                if (!useRingtones()) return;
                 outgoing.play();
             },
             stop: function () {

@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/switchboard/presence', ['io.ox/switchboard/api'], function (api) {
+define('io.ox/switchboard/presence', [
+    'io.ox/switchboard/api',
+    'gettext!io.ox/switchboard'
+], function (api, gt) {
 
     'use strict';
 
@@ -58,21 +61,25 @@ define('io.ox/switchboard/presence', ['io.ox/switchboard/api'], function (api) {
         getAvailabilityString: function (presence) {
             switch (presence.availability) {
                 case 'online':
-                    return 'Online now';
+                    return gt('Online now');
                 case 'busy':
-                    return 'Busy';
+                    return gt('Busy');
                 case 'absent':
-                    return 'Absent';
+                    return gt('Absent');
                 default:
-                    if (!presence.lastSeen) return 'Offline';
+                    if (!presence.lastSeen) return gt('Offline');
                     // get last seen in minutes from now
                     var duration = Math.ceil((_.now() - presence.lastSeen) / 60000);
-                    // less than 1 hour -> human readable duration
-                    if (duration < 60) return 'Last seen ' + moment.duration(-duration, 'minutes').humanize(true);
+                    // this minute
+                    if (duration <= 1) return gt('Last seen a minute ago');
+                    // less than 1 hour
+                    //#. %1$d is number of minutes
+                    if (duration < 60) return gt('Last seen %1$d minutes ago', duration);
                     // less than 24 hours -> time
-                    if (duration < 1440) return 'Last seen at ' + moment(presence.lastSeen).format('LT');
-                    // otherwise -> date
-                    return 'Last seen on ' + moment(presence.lastSeen).format('L');
+                    //#. %1$s is a time (e.g. 11:29 am)
+                    if (duration < 1440) return gt('Last seen at %1$s', moment(presence.lastSeen).format('LT'));
+                    //#. %1$s is a date (eg. 09.07.2020)
+                    return gt('Last seen on %1$s', moment(presence.lastSeen).format('L'));
             }
         },
 
@@ -101,6 +108,14 @@ define('io.ox/switchboard/presence', ['io.ox/switchboard/api'], function (api) {
         users: users
     };
 
+    // i18n
+    var names = {
+        online: gt('Online'),
+        absent: gt('Absent'),
+        busy: gt('Busy'),
+        offline: gt('Offline')
+    };
+
     // create template
     var tmpl = $('<div class="presence">')
         .append('<span class="icon" aria-hidden="true"><i class="fa"></i></span>');
@@ -110,12 +125,11 @@ define('io.ox/switchboard/presence', ['io.ox/switchboard/api'], function (api) {
     }
 
     function createPresenceIcon(availability) {
-        return tmpl.clone().addClass(availability);
+        return tmpl.clone().addClass(availability).children('.icon').attr('title', names[availability]).end();
     }
 
     // respond to events
     api.socket.on('presence-change', function (userId, presence) {
-        console.log('socket > presence-change', userId, presence);
         exports.changePresence(userId, presence);
     });
 

@@ -56,12 +56,12 @@
                 font-size: 15px;
                 line-height: 24px;
                 margin-bottom: -3px;
-                .last_name {
-                    font-weight: bold;
-                }
-                /* we use display: flex so that we an ellipsis on first and last name */
+                .last_name { font-weight: bold; }
+                // we use display: flex so that we an ellipsis on first and last name
                 display: flex;
-                > * { margin-right: 4px; }
+                // since we have "LAST, FIRST" or "FIRST LAST" margin-left works better
+                // due to the comma. however we need to skip the first element
+                > *:not(:first-child) { margin-left: 4px; }
             }
 
             .presence {
