@@ -442,6 +442,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             browser_spellcheck: true,
 
+            // touch devices: support is limited to 'lists', 'autolink', 'autosave'
             plugins: opt.plugins,
 
             // link plugin settings
