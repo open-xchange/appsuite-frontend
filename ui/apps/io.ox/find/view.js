@@ -127,6 +127,12 @@ define('io.ox/find/view', [
             this.ui.searchbox.render().$el.append(
                 this.ui.facets.render().$el
             );
+
+            // ensure tooltip get's hidden
+            this.listenTo(this.ui.facets, 'open close', function () {
+                this.$('.action-options').tooltip('hide');
+            }.bind(this));
+
             return this;
         },
 
