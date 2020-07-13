@@ -51,15 +51,17 @@ define.async('io.ox/switchboard/api', [
         },
 
         supports: function (type) {
-            if (!settings.get('host')) return false;
+            var host = settings.get('host');
             switch (type) {
                 case 'zoom':
-                    return !!settings.get('zoom/enabled');
+                    if (!host) return false;
+                    return host && !!settings.get('zoom/enabled');
                 case 'jitsi':
+                    if (!host) return false;
                     if (!settings.get('jitsi/enabled')) return false;
                     return !!settings.get('jitsi/host');
                 case 'history':
-                    return settings.get('callHistory/enabled', true);
+                    return settings.get('callHistory/enabled', !!host);
                 default:
                     return false;
             }
