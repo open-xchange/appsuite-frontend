@@ -48,7 +48,7 @@ define('io.ox/switchboard/views/call-history', [
         },
         initialize: function () {
             this.onAddRemove = _.debounce(this.onAddRemove.bind(this), 10);
-            this.listenTo(this.collection, 'add remove', this.onAddRemove);
+            this.listenTo(this.collection, 'add remove reset', this.onAddRemove);
             this.onChange = _.debounce(this.onChange.bind(this), 10);
             this.listenTo(this.collection, 'change', this.onChange);
             this.opened = false;

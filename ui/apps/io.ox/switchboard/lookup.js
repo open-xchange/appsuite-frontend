@@ -112,7 +112,7 @@ define('io.ox/switchboard/lookup', [
     }
 
     function cleanNumber(str) {
-        return String(str).trim().replace(/(^\+\d\d)?\D*/g, '$1');
+        return String(str).trim().replace(/(^\+\d)?\D*/g, '$1');
     }
 
     function cleanNumberWithPrefix(str) {
