@@ -17,9 +17,10 @@ define('io.ox/switchboard/call/incoming', [
     'io.ox/backbone/views/modal',
     'io.ox/contacts/api',
     'io.ox/switchboard/call/ringtone',
+    'settings!io.ox/switchboard',
     'gettext!io.ox/switchboard',
     'less!io.ox/switchboard/style'
-], function (presence, Modal, contactsAPI, ringtone, gt) {
+], function (presence, Modal, contactsAPI, ringtone, settings, gt) {
 
     'use strict';
 
@@ -55,7 +56,7 @@ define('io.ox/switchboard/call/incoming', [
                     );
                 })
                 .on('open', function () {
-                    if (window.Notification) {
+                    if (window.Notification && settings.get('call/showNativeNotifications', true)) {
                         new Notification('Incoming call', {
                             body: gt('%1$s is calling', model.getCaller())
                         });

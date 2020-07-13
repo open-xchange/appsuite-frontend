@@ -14,8 +14,9 @@
 define('io.ox/switchboard/zoom', [
     'io.ox/switchboard/api',
     'io.ox/backbone/views/disposable',
+    'settings!io.ox/switchboard',
     'gettext!io.ox/switchboard'
-], function (api, DisposableView, gt) {
+], function (api, DisposableView, settings, gt) {
 
     'use strict';
 
@@ -182,7 +183,8 @@ define('io.ox/switchboard/zoom', [
         // - <int> duration (in minutes)
         // - <string> [agenda]
         createMeeting: function (data) {
-            data = _.extend({ password: getPassword(), settings: { join_before_host: true } }, data);
+            data = _.extend({ settings: { join_before_host: true } }, data);
+            if (!data.password && settings.get('zoom/addMeetingPassword', true)) data.password = createPassword();
             return exports.api('POST', '/users/me/meetings', data);
         },
 
@@ -203,7 +205,7 @@ define('io.ox/switchboard/zoom', [
         return { status: 500, internal: true, message: gt('Something went wrong. Please try again.') };
     }
 
-    function getPassword() {
+    function createPassword() {
         // [API documentation]
         // Password may only contain the following characters:
         // [a-z A-Z 0-9 @ - _ *] and can have a maximum of 10 characters.
