@@ -302,7 +302,7 @@ define('io.ox/switchboard/extensions', [
             baton.disable('io.ox/calendar/detail', 'actions');
 
             function getTitle(conference) {
-                switch (conference.type) {
+                switch (conference && conference.type) {
                     case 'zoom': return gt('Join Zoom meeting');
                     case 'jitsi': return gt('Join Jitsi meeting');
                     default: return gt('Join conference call');
