@@ -574,7 +574,7 @@ define('io.ox/core/tk/tokenfield', [
                 }
             });
 
-            if (_.browser.IE || _.browser.Edge) {
+            if (_.browser.IE || _.browser.Edge < 79) {
 
                 this.input.off('blur.tt').on('blur.tt', function () {
                     if (mouseIsInDropdown) return;
