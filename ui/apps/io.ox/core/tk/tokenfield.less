@@ -27,7 +27,7 @@
     }
 
     &.form-control {
-        padding: 3px 3px 0 3px;
+        padding: 3rem 3px 0 3px;
         height: auto;
     }
 
@@ -35,6 +35,8 @@
         margin: 0 5px 3px 0;
         border-radius: @border-radius-small;
         position: relative;
+        // 22px at default 14px font-height
+        height: 1.571em;
 
         &.ui-sortable-helper { background-color: @white; }
 
@@ -75,7 +77,8 @@
 
         & > .token-input.tt-input,
         & > .token-input.tt-hint {
-            height: 22px;
+            // 22px at default 14px font-height
+            height: 1.571em;
             border: 0;
             padding: 0 5px;
             // there is a special case where this is needed: chinese UI + firefox + mailto link registration bar open

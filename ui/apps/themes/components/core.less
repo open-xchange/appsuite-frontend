@@ -16,9 +16,9 @@
 // set html font size to 1px for convenience.
 // This way we can use rem the same as px but it will scale with text zoom when this is needed (for example toolbar height, margins, etc)
 // 1rem = 1px with default zoom
+// careful though, bootstrap sets this to 10px although never uses it
 html {
-    // use important to overwrite bootstrap style
-    font-size: 1px !important;
+    font-size: 1px;
 }
 
 body {
@@ -408,6 +408,11 @@ html:not(.internet-explorer) {
 }
 
 .form-spacer { margin-top: 32px; }
+
+.form-control {
+    // 30px with default 14px font size but scales with text zoom
+    height: 2.14285714em;
+}
 
 // ensure visibility for tooltips
 .tooltip { z-index: 100000; }
