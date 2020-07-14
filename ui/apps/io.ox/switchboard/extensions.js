@@ -327,7 +327,7 @@ define('io.ox/switchboard/extensions', [
     var solutions = ext.point('io.ox/calendar/conference-solutions')
         .extend({ id: 'none', index: 100, value: 'none', label: gt('None') });
 
-    var supportsZoom = api.supports('jitsi'),
+    var supportsZoom = api.supports('zoom'),
         supportsJitsi = api.supports('jitsi');
 
     if (supportsZoom || supportsJitsi) {
