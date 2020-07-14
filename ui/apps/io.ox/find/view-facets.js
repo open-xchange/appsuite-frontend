@@ -91,8 +91,12 @@ define('io.ox/find/view-facets', [
         toggle: function (state) {
             this.app.trigger('facets:toggle');
             if (state === undefined) state = !this.isOpen();
-            this.$el.css('width', this.$el.closest('.search-box').outerWidth())
-                    .toggleClass('open', state);
+            var verticalspace = window.innerHeight - this.$el.position().top - 32;
+            this.$el.css({
+                'width': this.$el.closest('.search-box').outerWidth(),
+                'max-height': verticalspace
+            }).toggleClass('open', state);
+
             //this.$dropdownToggle.attr('aria-expanded', state);
             this.trigger(state ? 'open' : 'close');
         },
