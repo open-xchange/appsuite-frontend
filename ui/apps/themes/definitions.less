@@ -310,8 +310,9 @@
 @toolbar-background-alt:                lighten(@toolbar-background, 10%);
 
 @toolbar-focus-color:                   @brand-primary;
-@toolbar-line-height:                   24px;
-@toolbar-vertical-padding:              8px;
+// yep use rem here, rem is only based on root element font size which is 1px for us for convenience. rem has the advantage to scale with text zoom
+@toolbar-line-height:                   24rem;
+@toolbar-vertical-padding:              8rem;
 @toolbar-height:                        @toolbar-line-height + 2 * @toolbar-vertical-padding;
 
 @link-disabled-color:                   @dark-silver;
