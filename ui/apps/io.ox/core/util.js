@@ -45,7 +45,7 @@ define('io.ox/core/util', [
     //     }
     // });
 
-    var regUrl = /(((https?|ftps?):\/\/|tel:|callto:)[^\s"]+)/gim;
+    var regUrl = /(((https?|ftps?):\/\/)[^\s"]+)/gim;
 
     var that = {
 
