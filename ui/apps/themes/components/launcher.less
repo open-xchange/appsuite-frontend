@@ -169,7 +169,8 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             font-size: 18px;
             color: @appcontrol-launcher-color;
             padding: 2px 16px 2px 16px;
-            width: 48px;
+            // 48px
+            width: 2.667em;
             // svg styles
             //padding: 24px 16px;
             //width: @appcontrol-height - 16;
@@ -229,6 +230,14 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         flex-shrink: 0;
         min-width: @quicklaunch-width;
         min-height: auto;
+
+        svg.indicator {
+            position: absolute;
+            z-index: 1;
+            top: 18px;
+            left: 1.85em;
+            circle { fill: #eb4400 }
+        }
 
         .title {
             // yes visibility hidden not display none. Otherwise the upsell icon is not displayed
@@ -331,7 +340,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         .launcher-icon.fa-refresh { position: relative; }
 
         .contact-picture {
-            .picture(40px, 40px);
+            .picture(2.462em, 2.462em);
             .flex-center;
             background-color: #eee;
             color: rgba(0, 0, 0, 0.60);
@@ -339,6 +348,8 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             font-weight: bold;
             background-clip: padding-box;
             border: 1px solid rgba(0, 0, 0, 0.50);
+            max-height: 50px;
+            max-width: 50px;
         }
     }
 }
