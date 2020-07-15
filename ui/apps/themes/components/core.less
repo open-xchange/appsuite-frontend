@@ -13,12 +13,11 @@
  */
 
 
-// set html font size to 1px for convenience.
-// This way we can use rem the same as px but it will scale with text zoom when this is needed (for example toolbar height, margins, etc)
-// 1rem = 1px with default zoom
-// careful though, bootstrap sets this to 10px although never uses it
+// set html font size to 1rem this way we are compliant with bootstrap 4 and 5.
+// setting this to 1 rem means we are using the browsers default font size which is usually 16px
+// careful though, bootstrap 3 sets this to 10px although never uses it
 html {
-    font-size: 1px;
+    font-size: 1rem;
 }
 
 body {
