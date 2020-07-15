@@ -207,7 +207,7 @@
 .bottom-toolbar.bottom-toolbar-visible .window-content { bottom: @toolbar-height; }
 .chromeless-window .window-body:not(.mobile-toolbar-visible) { bottom: 0;}
 .chromeless-window .window-body.mobile-toolbar-visible { bottom: @mobile-toolbar-height; }
-.chromeless-window.header-bottom .window-body:not(.mobile-toolbar-visible) { bottom: 64px; }
+.chromeless-window.header-bottom .window-body:not(.mobile-toolbar-visible) { bottom: ~"calc(2rem + 32px)"; }
 
 .smartphone .mobile-navbar {
     height: @mobile-toolbar-height;
