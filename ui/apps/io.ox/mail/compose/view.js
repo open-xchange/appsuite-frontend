@@ -809,8 +809,8 @@ define('io.ox/mail/compose/view', [
                 def = $.Deferred();
 
                 var dialogOptions = { title: discardText, description: modalText };
-                // up to 540px because of 3 buttons, french needs this for example
-                if (!_.device('smartphone')) dialogOptions.width = '540px';
+                // up to 33.75rem (540px) because of 3 buttons, french needs this for example
+                if (!_.device('smartphone')) dialogOptions.width = '33.75rem';
 
                 new ModalDialog(dialogOptions)
                     .addCancelButton()
