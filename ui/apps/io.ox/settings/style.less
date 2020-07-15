@@ -56,7 +56,8 @@
         li > a, .dropdown a { text-decoration: none; }
         .dropdown > a:focus,.dropdown > a:hover { text-decoration: underline; }
 
-        max-width: 800px;
+        max-width: 100%;
+        width: 50rem;
 
         .settings-list-view {
             .settings-list-item {
@@ -312,7 +313,7 @@
         margin: 0 0 @vertical-margin 0;
         min-width: 0;
         position: relative;
-        padding: 32px 0 0 32px;
+        padding: 2rem 0 0 32px;
     }
 
     fieldset[role="presentation"] {
@@ -339,7 +340,10 @@
         font-weight: normal;
     }
 
-    .section { max-width: 800px; }
+    .section { 
+        max-width: 100%; 
+        width: 50rem;
+    }
 
     h1, h1.pane-headline {
 
@@ -485,7 +489,10 @@
     }
 
     .buttons {
-        margin-bottom: @vertical-margin;
+        margin-bottom: 32px;
+        .btn {
+            margin-bottom: 0.5rem;
+        }
         .btn-link {
             padding: 0;
             margin-right: 16px;

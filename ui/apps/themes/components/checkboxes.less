@@ -2,7 +2,7 @@
 .checkbox.custom, .radio.custom {
 
     margin-bottom: 8px;
-    padding-left: 32px;
+    padding-left: 2rem;
     font-size: 14px;
     line-height: 24px;
     position: relative;
@@ -22,8 +22,9 @@
     input + i.toggle {
         text-align:left;
         position: absolute;
-        width: 16px;
-        height: 16px;
+        // allows growing with Text zoom
+        min-width:  ~"calc(1em + 4px)";
+        min-height: ~"calc(1em + 4px)";
         border-radius: @checkbox-radius;
         border: 1px solid @control-border-color;
         background-color: white;
@@ -31,7 +32,7 @@
         text-rendering: auto;
         -webkit-font-smoothing: antialiased;
         left: 0;
-        top: 4px;
+        top: 0.5em;
         padding: 1px 0 0 1px;
         transition: background-color 0.2s;
     }
@@ -82,15 +83,15 @@
 .radio.custom {
 
     input + i.toggle {
-        border-radius: 8px;
-        padding: 4px;
+        border-radius: 0.5rem;
+        padding: 0.25rem;
     }
 
     input:checked + i.toggle:before {
         content: "";
-        width: 6px;
-        height: 6px;
-        border-radius: 3px;
+        width: ~"calc(0.25rem + 2px)";
+        height: ~"calc(0.25rem + 2px)";
+        border-radius: 50%;
         background-color: @control-color;
     }
 }
