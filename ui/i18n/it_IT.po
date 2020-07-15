@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-02-27 10:33+0100\n"
+"PO-Revision-Date: 2020-07-02 11:27+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <it@workshop-chapina.it>\n"
 "Language: it_IT\n"
@@ -2134,8 +2134,9 @@ msgid "Successfully refreshed calendar"
 msgstr "Calendario aggiornato correttamente"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
-#: apps/plugins/portal/calendar/register.js module:plugins/portal
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/print.js
+#: apps/io.ox/calendar/week/view.js apps/plugins/portal/calendar/register.js
+#: module:plugins/portal
 msgid "Appointments"
 msgstr "Appuntamenti"
 
@@ -3475,6 +3476,11 @@ msgstr "Aggiungi indirizzo postale"
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Add additional info"
 msgstr "Aggiungi informazioni aggiuntive"
+
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add user fields"
+msgstr "Aggiungi campi utente"
 
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js

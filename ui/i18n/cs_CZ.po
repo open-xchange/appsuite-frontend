@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-11-23 11:04+0100\n"
+"PO-Revision-Date: 2020-07-02 11:19+0200\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Lokalize 19.08.2\n"
+"X-Generator: Poedit 2.1.1\n"
 "X-Language: cs\n"
 "X-Source-Language: en\n"
 
@@ -45,7 +45,6 @@ msgid "Mail"
 msgstr "Pošta"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "RSS"
 msgid "SMS"
 msgstr "SMS"
 
@@ -725,6 +724,12 @@ msgid "CW"
 msgstr "Týd."
 
 #. CW is calender week and %1$d is the week number
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "Today,"
+msgstr "Dnes,"
+
+#. CW is calender week and %1$d is the week number
 #. %1$d = Calendar week
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -1215,8 +1220,8 @@ msgid ""
 "This appointment is part of a series. Do you want to change your reminders "
 "for the whole series or just for this appointment within the series?"
 msgstr ""
-"Tato schůzka je součástí série. Chcete změnit upomínky pro celou sérii, nebo"
-" jen tuto schůzku?"
+"Tato schůzka je součástí série. Chcete změnit upomínky pro celou sérii, nebo "
+"jen tuto schůzku?"
 
 #. %1$s:  is the calendar's name
 #: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
@@ -1452,9 +1457,9 @@ msgstr "Sdílené kalendáře"
 #: apps/io.ox/calendar/common-extensions.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js
-#: apps/io.ox/calendar/view-grid-template.js
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
+#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Soukromé"
 
@@ -2095,6 +2100,10 @@ msgid "Calendar account error"
 msgstr "Chyba kalendářního účtu"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
+msgid "Edit accounts"
+msgstr "Upravit účty"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Try again"
 msgstr "Zkusit znovu"
 
@@ -2109,8 +2118,9 @@ msgid "Successfully refreshed calendar"
 msgstr "Kalendář úspěšně obnoven"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
-#: apps/plugins/portal/calendar/register.js module:plugins/portal
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/print.js
+#: apps/io.ox/calendar/week/view.js apps/plugins/portal/calendar/register.js
+#: module:plugins/portal
 msgid "Appointments"
 msgstr "Schůzky"
 
@@ -2146,10 +2156,10 @@ msgstr "Zobrazit předchozí měsíc"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
-#: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
-#: module:plugins/portal apps/plugins/portal/calendar/register.js
+#: apps/io.ox/core/tk/datepicker.js module:io.ox/core
+#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js module:io.ox/tasks
+#: apps/plugins/portal/birthdays/register.js module:plugins/portal
+#: apps/plugins/portal/calendar/register.js
 msgid "Today"
 msgstr "Dnes"
 
@@ -2180,8 +2190,8 @@ msgstr "Příští měsíc"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-msgid "Selected - %1$s"
-msgstr "Vybráno - %1$s"
+msgid "%1$s"
+msgstr "%1$s"
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
@@ -3168,6 +3178,14 @@ msgid "Select print layout"
 msgstr "Vybrat tiskové rozvržení"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid ""
+"This dialog is limited to %1$d entries and your address book exceeds this "
+"limitation. Therefore, some entries are not listed."
+msgstr ""
+"Toto oznámení je omezené na %1$d položek a váš adresář tento limit "
+"překračuje. Některé položky proto nejsou uvedené."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/contacts/common-extensions.js apps/io.ox/contacts/main.js
 #: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/participants/views.js module:io.ox/core
@@ -3447,6 +3465,11 @@ msgstr "Přidat poštovní adresu"
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Add additional info"
 msgstr "Přidat doplňující informace"
+
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add user fields"
+msgstr "Doplnit uživatelská pole"
 
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
@@ -4116,6 +4139,10 @@ msgid_plural "Distribution list with %1$d entries"
 msgstr[0] "Distribuční seznam s jednou položkou"
 msgstr[1] "Distribuční seznam s %1$d položkami"
 msgstr[2] "Distribuční seznam se %1$d položkami"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Private contact"
+msgstr "Soukromý kontakt"
 
 #. %1$s is a map service, like "Google Maps"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -8867,6 +8894,12 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Komu odpovědět"
 
+#. %s is a list of filenames separeted by commas
+#. it is used by screenreaders to indicate which files are currently added to the list of attachments
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Added %s to attachments."
+msgstr " %s byly přidány do příloh."
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Zobrazit jména"
@@ -8911,12 +8944,6 @@ msgstr "Přetáhněte přílohy sem"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Mail size: %1$s"
 msgstr "Velikost zprávy: %1$s"
-
-#. %s is a list of filenames separeted by commas
-#. it is used by screenreaders to indicate which files are currently added to the list of attachments
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Added %s to attachments."
-msgstr " %s byly přidány do příloh."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add local file"
@@ -10259,6 +10286,13 @@ msgstr "Registrovat"
 msgid "Change IMAP subscriptions"
 msgstr "Změnit odběry IMAP"
 
+#: apps/io.ox/mail/settings/signatures/register.js module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Signature"
+msgstr "Podpis"
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Signature name"
 msgstr "Název podpisu"
@@ -10302,12 +10336,6 @@ msgstr "Po importu smazat staré podpisy"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "No preview available"
 msgstr "Žádný náhled k dispozici"
-
-#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
-#: apps/io.ox/settings/security/certificates/settings/utils.js
-#: module:io.ox/settings/certificates
-msgid "Signature"
-msgstr "Podpis"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add new signature"
@@ -12577,25 +12605,42 @@ msgid "It's awesome"
 msgstr "Úžasné"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "%1$d of 5 stars"
-msgstr "%1$d z 5 hvězd"
+msgid "What is the primary reason for your score?"
+msgstr "Jaký je hlavní důvod vašeho hodnocení?"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Not likely at all"
-msgstr "Velmi nepravděpodobné"
+msgid "How can we improve your experience?"
+msgstr "Jak bychom mohli vaši zkušenost zlepšit?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Which features do you value or use the most?"
+msgstr "Které funkce považujete za nejhodnotnější?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "What is the one thing we could do to make you happier?"
+msgstr "Jedna věc, která by zlepšila vaše hodnocení?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "%1$d of 5 stars"
+msgstr "%1$d z 5 hvězd"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "%1$d of 10 points."
 msgstr "%1$d z 10 bodů."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Extremely likely"
+msgid "Not likely at all"
+msgstr "Velmi nepravděpodobné"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Very likely"
 msgstr "Velmi pravděpodobné"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How likely is it that you would recommend %1$s to a friend?"
-msgstr "Jak pravděpodobné je, že byste doporučili %1$s svým přátelům?"
+msgid "How likely are you to recommend %1$s to a friend or colleague?"
+msgstr ""
+"Jak pravděpodobné je, že byste doporučili %1$s svým přátelům nebo kolegům?"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Please rate this product"
@@ -12605,10 +12650,9 @@ msgstr "Ohodnoťte, prosím, tento produkt"
 msgid "Please rate the following application:"
 msgstr "Ohodnoťte, prosím, následující aplikaci:"
 
-#. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How do you like %1$s?"
-msgstr "Jak se vám líbí %1$s?"
+msgid "We appreciate your feedback"
+msgstr "Děkujeme za zpětnou vazbu"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Comments and suggestions"
@@ -13540,6 +13584,18 @@ msgstr "Pozvat na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Přidat do %s"
+
+#~ msgid "Selected - %1$s"
+#~ msgstr "Vybráno - %1$s"
+
+#~ msgid "Extremely likely"
+#~ msgstr "Velmi pravděpodobné"
+
+#~ msgid "How likely is it that you would recommend %1$s to a friend?"
+#~ msgstr "Jak pravděpodobné je, že byste doporučili %1$s svým přátelům?"
+
+#~ msgid "How do you like %1$s?"
+#~ msgstr "Jak se vám líbí %1$s?"
 
 #~ msgid "Confidential"
 #~ msgstr "Důvěrný"

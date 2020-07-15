@@ -36,7 +36,8 @@ define('io.ox/contacts/distrib/create-dist-view', [
         className: 'row title-controls',
         draw: function (baton) {
             var buttonText = gt('Create list'),
-                header = gt('Create distribution list');
+                header = gt('Create distribution list'),
+                self = this;
 
             // on edit
             if (baton.model.get('id')) {
@@ -46,12 +47,14 @@ define('io.ox/contacts/distrib/create-dist-view', [
             baton.app.getWindow().setHeader(
                 $('<div class="header">').append(
                     $('<h1 class="sr-only">').text(header),
-                    // save/create button, umportant to use mousedown here, because this fires before the blur event.
+                    // save/create button, important to use mousedown here, because this fires before the blur event.
                     // if the blur event fires first we would not be able to catch errors from baton.addParticipantView.resolve(); (invalid stuff in the input field etc)
                     $('<button type="button" class="btn btn-primary" data-action="save">').text(buttonText).on('mousedown', function () {
                         // wait if there was an error so the user has a chance to react (invalid data in the input field etc)
                         var error = baton.addParticipantView.resolve();
                         if (error) return;
+                        // trigger blur so name changes are applied
+                        self.find('input[name="display_name"]').trigger('blur');
                         baton.member.resolve().always(function () {
                             baton.model.save();
                         });

@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-11-16 04:36+0100\n"
+"PO-Revision-Date: 2020-07-02 11:34+0200\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <ox@workshop-chapina.com>\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.1.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
@@ -723,6 +723,12 @@ msgstr "Gå till nästa månad"
 #: apps/io.ox/calendar/year/view.js module:io.ox/calendar
 msgid "CW"
 msgstr "KV"
+
+#. CW is calender week and %1$d is the week number
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "Today,"
+msgstr "Idag,"
 
 #. CW is calender week and %1$d is the week number
 #. %1$d = Calendar week
@@ -1455,9 +1461,9 @@ msgstr "Delade kalendrar"
 #: apps/io.ox/calendar/common-extensions.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js
-#: apps/io.ox/calendar/view-grid-template.js
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
+#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Privat"
 
@@ -2103,6 +2109,10 @@ msgid "Calendar account error"
 msgstr "Fel i kalenderkonto"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
+msgid "Edit accounts"
+msgstr "Redigera konton"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Try again"
 msgstr "Försök igen"
 
@@ -2117,8 +2127,9 @@ msgid "Successfully refreshed calendar"
 msgstr "Uppdaterade kalender"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
-#: apps/plugins/portal/calendar/register.js module:plugins/portal
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/print.js
+#: apps/io.ox/calendar/week/view.js apps/plugins/portal/calendar/register.js
+#: module:plugins/portal
 msgid "Appointments"
 msgstr "Möten"
 
@@ -2153,10 +2164,10 @@ msgstr "Visa föregående månad"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
-#: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
-#: module:plugins/portal apps/plugins/portal/calendar/register.js
+#: apps/io.ox/core/tk/datepicker.js module:io.ox/core
+#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js module:io.ox/tasks
+#: apps/plugins/portal/birthdays/register.js module:plugins/portal
+#: apps/plugins/portal/calendar/register.js
 msgid "Today"
 msgstr "Idag"
 
@@ -2189,8 +2200,8 @@ msgstr "Nästa månad"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-msgid "Selected - %1$s"
-msgstr "Markerat - %1$s"
+msgid "%1$s"
+msgstr "%1$s"
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
@@ -3165,6 +3176,14 @@ msgid "Select print layout"
 msgstr "Välj utskriftslayout"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid ""
+"This dialog is limited to %1$d entries and your address book exceeds this "
+"limitation. Therefore, some entries are not listed."
+msgstr ""
+"Den här dialogrutan begränsas till %1$d poster, och din adressbok "
+"överskrider den gränsen. Därför visas inte vissa poster."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/contacts/common-extensions.js apps/io.ox/contacts/main.js
 #: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/participants/views.js module:io.ox/core
@@ -3442,6 +3461,11 @@ msgstr "Lägg till postadress"
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Add additional info"
 msgstr "Lägg till ytterligare info"
+
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add user fields"
+msgstr "Lägg till användarfält"
 
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
@@ -4106,6 +4130,10 @@ msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
 msgstr[0] "Distributionslista med 1 post"
 msgstr[1] "Distributionslista med %1$d poster"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Private contact"
+msgstr "Privat kontakt"
 
 #. %1$s is a map service, like "Google Maps"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -8835,6 +8863,12 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Svara till"
 
+#. %s is a list of filenames separeted by commas
+#. it is used by screenreaders to indicate which files are currently added to the list of attachments
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Added %s to attachments."
+msgstr "Lade till %s som bilaga."
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Visa namn"
@@ -8879,12 +8913,6 @@ msgstr "Släpp bilagor här"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Mail size: %1$s"
 msgstr "Meddelandets storlek: %1$s"
-
-#. %s is a list of filenames separeted by commas
-#. it is used by screenreaders to indicate which files are currently added to the list of attachments
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Added %s to attachments."
-msgstr "Lade till %s som bilaga."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add local file"
@@ -10226,6 +10254,13 @@ msgstr "Registrera nu"
 msgid "Change IMAP subscriptions"
 msgstr "Ändra IMAP-prenumerationer"
 
+#: apps/io.ox/mail/settings/signatures/register.js module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Signature"
+msgstr "Signatur"
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Signature name"
 msgstr "Signaturnamn"
@@ -10269,12 +10304,6 @@ msgstr "Ta bort gamla signaturer efter import"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "No preview available"
 msgstr "Ingen förhandsgranskning tillgänglig"
-
-#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
-#: apps/io.ox/settings/security/certificates/settings/utils.js
-#: module:io.ox/settings/certificates
-msgid "Signature"
-msgstr "Signatur"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add new signature"
@@ -12535,25 +12564,42 @@ msgid "It's awesome"
 msgstr "Den är lysande"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "%1$d of 5 stars"
-msgstr "%1$d av 5 stjärnor"
+msgid "What is the primary reason for your score?"
+msgstr "Vilket är huvudanledningen för ditt omdöme?"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Not likely at all"
-msgstr "Inte alls sannolikt"
+msgid "How can we improve your experience?"
+msgstr "Hur kan vi förbättra dina intryck?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Which features do you value or use the most?"
+msgstr "Vilka funktioner värdesätter eller använder du oftast?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "What is the one thing we could do to make you happier?"
+msgstr "Vilken förändring skulle göra dig gladast?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "%1$d of 5 stars"
+msgstr "%1$d av 5 stjärnor"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "%1$d of 10 points."
 msgstr "%1$d av 10 poäng."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Extremely likely"
-msgstr "Extremt sannolikt"
+msgid "Not likely at all"
+msgstr "Inte alls sannolikt"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Very likely"
+msgstr "Mycket sannolikt"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How likely is it that you would recommend %1$s to a friend?"
-msgstr "Hur sannolikt är det att du rekommenderar %1$s till en vän?"
+msgid "How likely are you to recommend %1$s to a friend or colleague?"
+msgstr ""
+"Hur sannolikt är det att du rekommenderar %1$s till en vän eller en kollega?"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Please rate this product"
@@ -12563,10 +12609,9 @@ msgstr "Betygsätt denna produkt"
 msgid "Please rate the following application:"
 msgstr "Betygsätt följande program:"
 
-#. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How do you like %1$s?"
-msgstr "Vad tycker du om %1$s?"
+msgid "We appreciate your feedback"
+msgstr "Vi uppskattar dina synpunkter"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Comments and suggestions"
@@ -13498,6 +13543,18 @@ msgstr "Bjud in till %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Lägg till på %s"
+
+#~ msgid "Selected - %1$s"
+#~ msgstr "Markerat - %1$s"
+
+#~ msgid "Extremely likely"
+#~ msgstr "Extremt sannolikt"
+
+#~ msgid "How likely is it that you would recommend %1$s to a friend?"
+#~ msgstr "Hur sannolikt är det att du rekommenderar %1$s till en vän?"
+
+#~ msgid "How do you like %1$s?"
+#~ msgstr "Vad tycker du om %1$s?"
 
 #~ msgid "%1$s Toolbar"
 #~ msgstr "%1$s verktygsfält"

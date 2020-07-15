@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-11-19 12:03-0300\n"
+"PO-Revision-Date: 2020-07-02 11:31+0200\n"
 "Last-Translator: Luiz Fernando Ranghetti <luiz@workshop-chapina.com>\n"
 "Language-Team: Portuguese <pt@workshop-chapina.com>\n"
 "Language: pt_BR\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -724,6 +724,12 @@ msgstr "Ir para o próximo mês"
 #: apps/io.ox/calendar/year/view.js module:io.ox/calendar
 msgid "CW"
 msgstr "Sem"
+
+#. CW is calender week and %1$d is the week number
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "Today,"
+msgstr "Hoje,"
 
 #. CW is calender week and %1$d is the week number
 #. %1$d = Calendar week
@@ -1457,9 +1463,9 @@ msgstr "Calendários compartilhados"
 #: apps/io.ox/calendar/common-extensions.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js
-#: apps/io.ox/calendar/view-grid-template.js
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
+#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Privada"
 
@@ -2108,6 +2114,10 @@ msgid "Calendar account error"
 msgstr "Erro na conta do calendário"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
+msgid "Edit accounts"
+msgstr "Editar conta"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Try again"
 msgstr "Tente novamente"
 
@@ -2122,8 +2132,9 @@ msgid "Successfully refreshed calendar"
 msgstr "Calendário atualizado com sucesso"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
-#: apps/plugins/portal/calendar/register.js module:plugins/portal
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/print.js
+#: apps/io.ox/calendar/week/view.js apps/plugins/portal/calendar/register.js
+#: module:plugins/portal
 msgid "Appointments"
 msgstr "Compromissos"
 
@@ -2160,10 +2171,10 @@ msgstr "Exibir mês anterior"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
-#: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
-#: module:plugins/portal apps/plugins/portal/calendar/register.js
+#: apps/io.ox/core/tk/datepicker.js module:io.ox/core
+#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js module:io.ox/tasks
+#: apps/plugins/portal/birthdays/register.js module:plugins/portal
+#: apps/plugins/portal/calendar/register.js
 msgid "Today"
 msgstr "Hoje"
 
@@ -2196,8 +2207,8 @@ msgstr "Próximo mês"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-msgid "Selected - %1$s"
-msgstr "Selecionado - %1$s"
+msgid "%1$s"
+msgstr "%1$s"
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
@@ -3174,6 +3185,14 @@ msgid "Select print layout"
 msgstr "Selecionar layout de impressão"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid ""
+"This dialog is limited to %1$d entries and your address book exceeds this "
+"limitation. Therefore, some entries are not listed."
+msgstr ""
+"Esta caixa de dialogo é limitada a %1$d entradas e seu catálogo de endereços "
+"excede esse limite. Portanto, algumas entradas não estão listadas."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/contacts/common-extensions.js apps/io.ox/contacts/main.js
 #: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/participants/views.js module:io.ox/core
@@ -3451,6 +3470,11 @@ msgstr "Adicionar endereço postal"
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Add additional info"
 msgstr "Adicionar informações adicionais"
+
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add user fields"
+msgstr "Adicionar campos de usuário"
 
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
@@ -4119,6 +4143,10 @@ msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
 msgstr[0] "Lista de distribuição com 1 entrada"
 msgstr[1] "Lista de distribuição"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Private contact"
+msgstr "Contato privado"
 
 #. %1$s is a map service, like "Google Maps"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -8873,6 +8901,12 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Responder a"
 
+#. %s is a list of filenames separeted by commas
+#. it is used by screenreaders to indicate which files are currently added to the list of attachments
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Added %s to attachments."
+msgstr "Adicionado %s aos anexos."
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Exibir nomes"
@@ -8917,12 +8951,6 @@ msgstr "Soltar anexos aqui"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Mail size: %1$s"
 msgstr "Tamanho do e-mail: %1$s"
-
-#. %s is a list of filenames separeted by commas
-#. it is used by screenreaders to indicate which files are currently added to the list of attachments
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Added %s to attachments."
-msgstr "Adicionado %s aos anexos."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add local file"
@@ -10268,6 +10296,13 @@ msgstr "Registrar agora"
 msgid "Change IMAP subscriptions"
 msgstr "Mudar inscrições IMAP"
 
+#: apps/io.ox/mail/settings/signatures/register.js module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Signature"
+msgstr "Assinatura"
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Signature name"
 msgstr "Nome da assinatura"
@@ -10311,12 +10346,6 @@ msgstr "Excluir assinaturas antigas após importar"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "No preview available"
 msgstr "Nenhuma visualização disponível"
-
-#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
-#: apps/io.ox/settings/security/certificates/settings/utils.js
-#: module:io.ox/settings/certificates
-msgid "Signature"
-msgstr "Assinatura"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add new signature"
@@ -12596,25 +12625,41 @@ msgid "It's awesome"
 msgstr "Isto é incrível"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "%1$d of 5 stars"
-msgstr "%1$d de 5 estrelas"
+msgid "What is the primary reason for your score?"
+msgstr "Qual é o principal motivo da sua pontuação?"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Not likely at all"
-msgstr "Não é provável"
+msgid "How can we improve your experience?"
+msgstr "Como nós podemos melhorar sua experiência?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Which features do you value or use the most?"
+msgstr "Quais recursos você valoriza ou utiliza mais?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "What is the one thing we could do to make you happier?"
+msgstr "Qual é a única coisa que poderíamos fazer para deixar você mais feliz?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "%1$d of 5 stars"
+msgstr "%1$d de 5 estrelas"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "%1$d of 10 points."
 msgstr "%1$d de 10 pontos."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Extremely likely"
-msgstr "Extremamente provável"
+msgid "Not likely at all"
+msgstr "Não é provável"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Very likely"
+msgstr "Muito provável"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How likely is it that you would recommend %1$s to a friend?"
-msgstr "Qual a probabilidade de você recomendar %1$s a um amigo?"
+msgid "How likely are you to recommend %1$s to a friend or colleague?"
+msgstr "Qual a probabilidade de você recomendar %1$s a um amigo ou colega?"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Please rate this product"
@@ -12624,10 +12669,9 @@ msgstr "Avalie este produto"
 msgid "Please rate the following application:"
 msgstr "Avalie o seguinte aplicativo:"
 
-#. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How do you like %1$s?"
-msgstr "Como você avalia %1$s?"
+msgid "We appreciate your feedback"
+msgstr "Agradecemos o seu feedback"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Comments and suggestions"
@@ -13563,6 +13607,18 @@ msgstr "Convidar para %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Adicionar em %s"
+
+#~ msgid "Selected - %1$s"
+#~ msgstr "Selecionado - %1$s"
+
+#~ msgid "Extremely likely"
+#~ msgstr "Extremamente provável"
+
+#~ msgid "How likely is it that you would recommend %1$s to a friend?"
+#~ msgstr "Qual a probabilidade de você recomendar %1$s a um amigo?"
+
+#~ msgid "How do you like %1$s?"
+#~ msgstr "Como você avalia %1$s?"
 
 #~ msgid "%1$s Toolbar"
 #~ msgstr "Barra de ferramentas %1$s"

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-11-27 15:43+0200\n"
+"PO-Revision-Date: 2020-07-02 11:28+0200\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -42,7 +42,6 @@ msgid "Mail"
 msgstr "Pasts"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#| msgid "RSS"
 msgid "SMS"
 msgstr "SMS"
 
@@ -721,6 +720,12 @@ msgstr "Pāriet uz nākamo mēnesi"
 #: apps/io.ox/calendar/year/view.js module:io.ox/calendar
 msgid "CW"
 msgstr "CW"
+
+#. CW is calender week and %1$d is the week number
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "Today,"
+msgstr "Šodien,"
 
 #. CW is calender week and %1$d is the week number
 #. %1$d = Calendar week
@@ -1450,9 +1455,9 @@ msgstr "Koplietojuma kalendāri"
 #: apps/io.ox/calendar/common-extensions.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js
-#: apps/io.ox/calendar/view-grid-template.js
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
+#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Privāts"
 
@@ -2101,6 +2106,10 @@ msgid "Calendar account error"
 msgstr "Kalendāra konta kļūda"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
+msgid "Edit accounts"
+msgstr "Rediģēt kontus"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Try again"
 msgstr "Mēģināt vēlreiz"
 
@@ -2115,8 +2124,9 @@ msgid "Successfully refreshed calendar"
 msgstr "Kalendārs ir veiksmīgi jaunināts"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
-#: apps/plugins/portal/calendar/register.js module:plugins/portal
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/print.js
+#: apps/io.ox/calendar/week/view.js apps/plugins/portal/calendar/register.js
+#: module:plugins/portal
 msgid "Appointments"
 msgstr "Mītiņi"
 
@@ -2152,10 +2162,10 @@ msgstr "Rādīt iepriekšējo mēnesi"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
-#: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
-#: module:plugins/portal apps/plugins/portal/calendar/register.js
+#: apps/io.ox/core/tk/datepicker.js module:io.ox/core
+#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js module:io.ox/tasks
+#: apps/plugins/portal/birthdays/register.js module:plugins/portal
+#: apps/plugins/portal/calendar/register.js
 msgid "Today"
 msgstr "Šodien"
 
@@ -2186,8 +2196,8 @@ msgstr "Nākamais mēnesis"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-msgid "Selected - %1$s"
-msgstr "Izvēlēts - %1$s"
+msgid "%1$s"
+msgstr "%1$s"
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
@@ -3176,6 +3186,14 @@ msgid "Select print layout"
 msgstr "Izvēlieties drukas izkārtojumju"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid ""
+"This dialog is limited to %1$d entries and your address book exceeds this "
+"limitation. Therefore, some entries are not listed."
+msgstr ""
+"Ierobežojums dialogam ir %1$d ieraksti un jūsu adrešu grāmata pārsniedz šo "
+"ierobežojumu. Tāpēc daži ieraksti nav uzrādīti."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/contacts/common-extensions.js apps/io.ox/contacts/main.js
 #: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/participants/views.js module:io.ox/core
@@ -3457,6 +3475,11 @@ msgstr "Pievienot pasta adresi"
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 msgid "Add additional info"
 msgstr "Pievienot papildus informāciju"
+
+#. Contact edit dialog.
+#: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
+msgid "Add user fields"
+msgstr "Pievienot papildus laukus"
 
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
@@ -4129,6 +4152,10 @@ msgid_plural "Distribution list with %1$d entries"
 msgstr[0] "Izplatīšanas saraksts ar 1 ierakstu"
 msgstr[1] "Izplatīšanas saraksts ar %1$d ierakstiem"
 msgstr[2] "Izplatīšanas saraksts ar %1$d ierakstiem"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Private contact"
+msgstr "Privāts kontakts"
 
 #. %1$s is a map service, like "Google Maps"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -8910,6 +8937,12 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Atbildēt"
 
+#. %s is a list of filenames separeted by commas
+#. it is used by screenreaders to indicate which files are currently added to the list of attachments
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Added %s to attachments."
+msgstr "%s pievienots pielikumiem."
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Rādīt vārdus"
@@ -8954,12 +8987,6 @@ msgstr "Novietot pielikumus šeit"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Mail size: %1$s"
 msgstr "Pasta izmērs: %1$s"
-
-#. %s is a list of filenames separeted by commas
-#. it is used by screenreaders to indicate which files are currently added to the list of attachments
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Added %s to attachments."
-msgstr "%s pievienots pielikumiem."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add local file"
@@ -10306,6 +10333,13 @@ msgstr "Reģistrēties tagad"
 msgid "Change IMAP subscriptions"
 msgstr "Mainīt IMAP abonementus"
 
+#: apps/io.ox/mail/settings/signatures/register.js module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Signature"
+msgstr "Paraksts"
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Signature name"
 msgstr "Paraksta vārds"
@@ -10348,12 +10382,6 @@ msgstr "Pēc importa dzēst visus parakstus"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "No preview available"
 msgstr "Apskats nav iespējams"
-
-#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
-#: apps/io.ox/settings/security/certificates/settings/utils.js
-#: module:io.ox/settings/certificates
-msgid "Signature"
-msgstr "Paraksts"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add new signature"
@@ -12625,25 +12653,41 @@ msgid "It's awesome"
 msgstr "Izcili"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "%1$d of 5 stars"
-msgstr "%1$d no 5 zvaigznēm"
+msgid "What is the primary reason for your score?"
+msgstr "Kāds ir jūsu vērtējuma galvenais iemesls?"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Not likely at all"
-msgstr "Maz ticami"
+msgid "How can we improve your experience?"
+msgstr "Kā mēs varam uzlabot jūsu pieredzi?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Which features do you value or use the most?"
+msgstr "Kuras funkcijas jūs vērtējat visaugstāk vai lietojiet visbiežāk?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "What is the one thing we could do to make you happier?"
+msgstr "Kāda ir viena lieta, ko mēs varētu darīt, lai padarītu jūs laimīgāku?"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "%1$d of 5 stars"
+msgstr "%1$d no 5 zvaigznēm"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "%1$d of 10 points."
 msgstr "%1$d no 10 punktiem."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Extremely likely"
+msgid "Not likely at all"
+msgstr "Maz ticami"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Very likely"
 msgstr "Ļoti ticami"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How likely is it that you would recommend %1$s to a friend?"
-msgstr "Cik ticami jūs ieteiktu saviem draugiem izmantot %1$s?"
+msgid "How likely are you to recommend %1$s to a friend or colleague?"
+msgstr "Cik ticami jūs varētu ieteikt %1$s draugiem vai kolēģiem?"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Please rate this product"
@@ -12653,10 +12697,9 @@ msgstr "Lūdzu novērtējiet šo produktu"
 msgid "Please rate the following application:"
 msgstr "Lūdzu novērtējiet sekojošo aplikāciju:"
 
-#. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How do you like %1$s?"
-msgstr "Kā jums patīk %1$s?"
+msgid "We appreciate your feedback"
+msgstr "Mēs esam pateicīgi par jūsu atsauksmēm"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Comments and suggestions"
@@ -13589,6 +13632,18 @@ msgstr "Uzaicināt %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pievienot %s"
+
+#~ msgid "Selected - %1$s"
+#~ msgstr "Izvēlēts - %1$s"
+
+#~ msgid "Extremely likely"
+#~ msgstr "Ļoti ticami"
+
+#~ msgid "How likely is it that you would recommend %1$s to a friend?"
+#~ msgstr "Cik ticami jūs ieteiktu saviem draugiem izmantot %1$s?"
+
+#~ msgid "How do you like %1$s?"
+#~ msgstr "Kā jums patīk %1$s?"
 
 #~ msgid "%1$s Toolbar"
 #~ msgstr "%1$s rīkjosla"

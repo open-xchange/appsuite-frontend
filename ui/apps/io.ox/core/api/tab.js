@@ -27,7 +27,8 @@ define('io.ox/core/api/tab', [
     var initialized = false,
         api,
         _api = {},
-        _checkTabHandlingSupport;
+        _checkTabHandlingSupport,
+        keepFunctions = ['openBlank'];
 
     /**
      * Initialization of the TabAPI.
@@ -53,6 +54,8 @@ define('io.ox/core/api/tab', [
      */
     function disable() {
         for (var key in api) {
+            if (_.contains(keepFunctions, key)) return;
+
             if (Object.prototype.hasOwnProperty.call(api, key)) {
                 api[key] = $.noop;
             }
