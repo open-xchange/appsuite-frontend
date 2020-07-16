@@ -421,7 +421,7 @@ define('io.ox/calendar/week/view', [
         },
 
         options: {
-            fulltimeHeight: 20,     // height of full-time appointments in px
+            fulltimeHeight: 1.25,   // height of full-time appointments in rem
             fulltimeMax:    5       // threshold for visible full-time appointments in scrollpane header
         },
 
@@ -770,17 +770,17 @@ define('io.ox/calendar/week/view', [
                     // append it again to stick to the order of the collection
                     node.parent().append(node);
                     node.show().css({
-                        height: this.opt.fulltimeHeight,
-                        lineHeight: this.opt.fulltimeHeight + 'px',
+                        height: this.opt.fulltimeHeight + 'rem',
+                        lineHeight: this.opt.fulltimeHeight + 'rem',
                         width: (100 / numColumns) * fulltimeWidth + '%',
                         left: (100 / numColumns) * Math.max(0, fulltimePos) + '%',
-                        top: row * (this.opt.fulltimeHeight + 1)
+                        top: row * (this.opt.fulltimeHeight + 0.0625) + 'rem'
                     });
 
                     maxRow = Math.max(maxRow, row + 1);
                 }.bind(this));
 
-                var height = (maxRow <= this.opt.fulltimeMax ? maxRow : (this.opt.fulltimeMax + 0.5)) * (this.opt.fulltimeHeight + 1);
+                var height = (maxRow <= this.opt.fulltimeMax ? maxRow : (this.opt.fulltimeMax + 0.5)) * (this.opt.fulltimeHeight + 0.0625) + 'rem';
                 this.$el.css('height', height);
                 // enable/disable scrollbar
                 if (maxRow > this.opt.fulltimeMax) this.$appointmentContainer.css({ 'overflow-y': 'scroll', 'margin-right': '' });
@@ -962,7 +962,8 @@ define('io.ox/calendar/week/view', [
         },
 
         getContainerHeight: function () {
-            return this.model.get('cellHeight') * this.getNumTimeslots();
+            // px to rem conversion
+            return (this.model.get('cellHeight') * this.getNumTimeslots()) / 16 + 'rem';
         },
 
         applyTimeScale: function () {

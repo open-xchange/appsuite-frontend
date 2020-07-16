@@ -19,16 +19,14 @@
                (max-height: @smartphone-breakpoint) and (orientation: landscape) { display: none; }
 
         display: flex;
-        height: @calendar-toolbar-height;
+        height: ~"calc(2rem + 3px)";
         padding-top: 8px;
 
         .control {
-            padding: 9px;
+            padding: 0.5625rem 0.5625rem 0 0.5625rem;
             color: @black;
             background: none;
             border: none;
-            height: 35px;
-            width: 28px;
 
             &.prev {
                 margin-left: @weekview-time-width - 2 * 28;
@@ -41,7 +39,6 @@
             color: #333;
             text-decoration: none;
             line-height: 34px;
-            height: 30px;
             max-width: none;
             padding: 0;
             border: 0;
@@ -194,38 +191,43 @@
         color: #333!important;
     }
 
-    .folder-tree .folder-node .folder-label {
-        position: relative;
-
-        .color-label {
-            width: 16px;
-            height: 16px;
-            position: absolute;
-            left: -25px;
-            top: 4px;
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            background-clip: border-box;
-            border-radius: @border-radius-small;
-
-            &.selected:before {
-                display: block;
-                font-family: 'FontAwesome';
-                content: '\f00c';
-                text-align: center;
-                font-size: 13px;
-                line-height: 16px;
-            }
+    .folder-tree .folder-node {
+        .folder-arrow {
+            width: 2.5rem;
         }
-
-        .smartphone & {
-            > * {
-                margin-left: 24px;
-            }
+        .folder-label {
+            position: relative;
 
             .color-label {
-                left: 0;
-                top: 16px;
-                margin-left: 0;
+                width: 1rem;
+                height: 1rem;
+                position: absolute;
+                left: ~"calc(-2.5rem + 15px)";
+                top: 4px;
+                border: 1px solid rgba(0, 0, 0, 0.2);
+                background-clip: border-box;
+                border-radius: @border-radius-small;
+
+                &.selected:before {
+                    display: block;
+                    font-family: 'FontAwesome';
+                    content: '\f00c';
+                    text-align: center;
+                    font-size: 13px;
+                    line-height: 16px;
+                }
+            }
+
+            .smartphone & {
+                > * {
+                    margin-left: 24px;
+                }
+
+                .color-label {
+                    left: 0;
+                    top: 16px;
+                    margin-left: 0;
+                }
             }
         }
     }
