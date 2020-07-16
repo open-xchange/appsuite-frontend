@@ -30,10 +30,10 @@
 @launcher-text-size: 12px;
 @launcher-badge-color: #757575; //#c30000;
 
-@launcher-size: 96px;
+@launcher-size: 6rem;
 @launcher-vertical-amount: 3;
-@launcher-spacing: 2px;
-@launcher-outer-spacing: 8px;
+@launcher-spacing: 0.125rem;
+@launcher-outer-spacing: 0.5rem;
 
 @quicklaunch-width: @appcontrol-height;
 @quicklaunch-width-smartphone: @appcontrol-height-smartphone;
@@ -42,7 +42,7 @@
 @quicklaunch-stroke-width-retina: 3px;
 @quicklaunch-button-color: rgba(255, 255, 255, 0.80);
 
-@svg-wrap-size: 56px; // absolute value to avoid subpixel rendering
+@svg-wrap-size: 3.5rem; // absolute value to avoid subpixel rendering
 
 // adjust positions of top-bar and screens
 #io-ox-core {
@@ -356,13 +356,13 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
 
 // Fix for IE dropdown width calculation see OXUIB-184
 .ie11 .launcher-dropdown.dropdown-menu {
-    width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 2 !important;
+    width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 0.125 !important;
 }
 
 .launcher-dropdown.dropdown-menu {
 
     padding: @launcher-outer-spacing;
-    width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 2;
+    width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 0.125;
 
     .smartphone & {
         width: 100% !important;
@@ -460,7 +460,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             //top: -10px;
             //height: 100%;
             //width: 100%;
-            top: 10px;
+            padding: 0.625rem 0;
             font-size: 36px;
             color: @app-color-standard;
             overflow: visible;
