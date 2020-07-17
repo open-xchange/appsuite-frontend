@@ -165,6 +165,12 @@ module.exports = function (grunt) {
                         ],
                         cwd: 'node_modules/cldr-dates-modern/main/',
                         dest: 'build/apps/3rd.party/cldr-dates'
+                    },
+                    {
+                        expand: true,
+                        src: ['qrcode.js'],
+                        cwd: 'node_modules/qrcode/build',
+                        dest: 'build/static/3rd.party/qrcode'
                     }
                 ]
             }

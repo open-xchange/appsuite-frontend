@@ -21,7 +21,7 @@ define('io.ox/onboarding/register', ['io.ox/core/extensions', 'gettext!io.ox/cor
         extend: function () {
             this.link('connect-wizard', gt('Connect Wizard'), function () {
                 require(['io.ox/onboarding/main'], function (wizard) {
-                    wizard.run();
+                    wizard.load();
                 });
             });
         }
