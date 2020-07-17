@@ -30,7 +30,7 @@
 
         &.contact {
 
-            height: 72px;
+            height: 4.5rem;
             padding: 6px 16px 0 @paddingLeft;
             line-height: 16px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -94,8 +94,8 @@
     }
 
     &.editable .vgrid-cell.contact {
-        padding-left: @paddingLeft + @checkboxWidth;
-        .contact-photo { left: @checkboxWidth + 16; }
+        padding-left: ~"calc(1rem + 96px)";
+        .contact-photo { left: ~"calc(1rem + 32px)"; }
     }
 
     &.editable .vgrid-cell.vgrid-label  {
