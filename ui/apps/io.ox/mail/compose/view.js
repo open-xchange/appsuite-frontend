@@ -569,9 +569,6 @@ define('io.ox/mail/compose/view', [
             this.editorContainer = $('<div class="editor">').attr({
                 'data-editor-id': this.editorId
             });
-            this.toolbarContainer = $('<div class="tinymce-toolbar">').attr({
-                'data-editor-id': this.editorId
-            });
 
             this.baton = ext.Baton({
                 model: this.model,

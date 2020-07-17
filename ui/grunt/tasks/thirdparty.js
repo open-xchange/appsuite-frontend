@@ -43,7 +43,7 @@ module.exports = function (grunt) {
                         src: [
                             'tinymce/jquery.tinymce.js',
                             'tinymce/jquery.tinymce.min.js',
-                            'tinymce/{plugins,skins,themes}/**/*',
+                            'tinymce/{plugins,skins,themes,icons}/**/*',
                             'tinymce/tinymce.js'
                         ],
                         cwd: 'node_modules/',

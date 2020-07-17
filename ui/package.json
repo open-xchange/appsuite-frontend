@@ -9,8 +9,7 @@
   "license": "CC-BY-NC-SA-2.5",
   "scripts": {
     "e2e": "codeceptjs run",
-    "test": "grunt copy:specs karma:continuous",
-    "postinstall": "patch-package && uglifyjs -o node_modules/tinymce/themes/modern/theme.min.js node_modules/tinymce/themes/modern/theme.js"
+    "test": "grunt copy:specs karma:continuous"
   },
   "engines": {
     "node": ">=10.0.0"
@@ -65,7 +64,7 @@
     "@open-xchange/bootstrap-tokenfield": "0.13.2",
     "@open-xchange/hopscotch": "0.0.2",
     "@open-xchange/jquery-touch-events": "1.0.8-1f5ad59",
-    "@open-xchange/tinymce": "6.0.7",
+    "@open-xchange/tinymce": "https://gitlab.open-xchange.com/frontend/tinymce.git#feature/OXUI-695",
     "backbone": "1.4.0",
     "backbone-validation": "0.11.5",
     "bigscreen": "2.0.5",
@@ -87,7 +86,7 @@
     "resize-polyfill": "1.1.1",
     "socket.io-client": "2.3.0",
     "swiper": "4.3.3",
-    "tinymce": "4.9.10",
+    "tinymce": "5.4.1",
     "typeahead.js": "0.10.5",
     "u2f-api": "1.0.11",
     "underscore": "1.9.1",

@@ -380,8 +380,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             toolbar3: '',
             plugins: 'autoresize autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
             // patched version (see OXUIB-255)
-            theme: 'modern',
-            height: null,
+            theme: 'silver',
             imageLoader: null // is required to upload images. should have upload(file) and getUrl(response) methods
         }, opt);
 
@@ -406,7 +405,8 @@ define('io.ox/core/tk/contenteditable-editor', [
         var originalToolbarConfig = opt.toolbar1.replace(/\s*\|\s*/g, ' ');
         opt.toolbar1 = opt.toolbar1.replace(/\*/g, '');
 
-        var fixed_toolbar = '.tinymce-toolbar[data-editor-id="' + editorId + '"] .mce-tinymce > .mce-stack-layout > .mce-top-part';
+        var fixed_toolbar = '.contenteditable-editor[data-editor-id="' + editorId + '"] .tox-editor-header';
+
         var options = {
             script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.min.js',
 
@@ -418,7 +418,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             menubar: false,
             statusbar: false,
 
-            fixed_toolbar_container: '.tinymce-toolbar[data-editor-id="' + editorId + '"]',
+            toolbar_location: 'bottom',
 
             skin: opt.skin,
 
@@ -457,8 +457,8 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             theme: opt.theme,
             mobile: {
-                theme: 'modern',
-                toolbar: false
+                theme: 'silver',
+                toolbar1: false
             },
 
             init_instance_callback: function (editor) {
@@ -492,7 +492,7 @@ define('io.ox/core/tk/contenteditable-editor', [
                     // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
                     $(fixed_toolbar).find('span.mce-txt').attr('tabindex', -1);
                     // adjust toolbar
-                    var widgets = $(fixed_toolbar).find('.mce-widget');
+                    var widgets = $(fixed_toolbar).find('.tox-tbtn');
                     originalToolbarConfig.split(' ').forEach(function (id, index) {
                         widgets.eq(index).attr('data-name', id);
                         if (/^\*/.test(id)) widgets.eq(index).attr('data-hidden', 'xs');
@@ -535,7 +535,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             if (el === null) return;
 
             // This is needed for keyboard to work in small windows with buttons that are hidden
-            var buttons = el.find('.mce-btn').filter('[data-hidden="xs"]');
+            var buttons = el.find('.tox-tbtn').filter('[data-hidden="xs"]');
             buttons.filter(':hidden').attr({ role: 'presentation', 'aria-hidden': true });
             buttons.filter(':visible').removeAttr('aria-hidden').attr('role', 'button');
 
@@ -564,6 +564,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             }
 
             editor.css('min-height', availableHeight + 'px');
+            el.find('.tox.tox-tinymce.tox-tinymce--toolbar-bottom').css('min-height', availableHeight + 'px');
             iframe.css('min-height', availableHeight + 'px');
             if (opt.css) editor.css(opt.css);
         }

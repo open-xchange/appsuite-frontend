@@ -19,9 +19,8 @@
 }
 
 .contenteditable-editor {
-    position: relative;
     z-index: 3;
-    margin-bottom: 16px;
+    margin-bottom: 0px;
 }
 
 .mce-content-body {
@@ -38,133 +37,34 @@
     }
 }
 
-.mce-window {
-    // fix for tinymce link dialog
-    .mce-formitem .mce-widget {
-        width: auto!important;;
-        position: relative!important;
+.tox {
+    .tox-editor-header {
+        width: 100%;
     }
 
-    // fix for tinymce alerts
-    .mce-container-body.mce-window-body.mce-abs-layout label.mce-widget.mce-label.mce-autoscroll.mce-abs-layout-item.mce-first.mce-last {
-        white-space: pre-wrap;
-        position: relative;
+    .tox-toolbar .tox-toolbar__group {
+        padding: 0;
     }
 
-    .mce-btn {
-        display: inline-block;
-        margin-bottom: 0; // For input.btn
-        font-weight: @btn-font-weight;
-        text-align: center;
-        vertical-align: middle;
-        touch-action: manipulation;
-        cursor: pointer;
-        background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
-        border: 1px solid transparent;
-        white-space: nowrap;
-        .user-select(none);
-        min-width: 80px;
-        margin-right: 8px;
-        height: 32px;
-        .button-variant(@btn-default-color; @btn-default-bg; @btn-default-border);
+}
 
-        &:not(.mce-open) {
-            border-radius: @border-radius-base;
-            .user-select(none);
-        }
+.tox:not([dir=rtl]) .tox-toolbar .tox-toolbar__group:first-child {
+    border-right: 0;
+}
 
-        &.mce-primary { .button-variant(@btn-primary-color; @btn-primary-bg; @btn-primary-border); }
+.tox.tox-tinymce--toolbar-bottom {
+    position: static;
+
+    .tox-editor-header {
+        position: absolute;
+        bottom: 0;
     }
 }
 
-.mce-flow-layout-item { margin:0; }
-
-.mce-container-body.mce-stack-layout .mce-toolbar-grp {
-    padding-bottom:0;
-    border:0;
-
-    .mce-btn.mce-active, .mce-btn.mce-active:hover { background-color: #e6e6e6; }
+.io-ox-mail-compose-window .window-body {
+    padding-bottom: 37px;
 }
 
-.mce-toolbar .mce-btn-group, .mce-btn-group:not(:first-child) {
+.tox.tox-tinymce {
     border: 0;
-
-    .mce-btn {
-        border:0;
-        background:transparent;
-        padding-bottom:2px;
-        padding-top:1px;
-
-        &:focus { background-color: #ddd; outline: 1px solid @outline-color; }
-        &:hover { background-color: #ddd; }
-    }
 }
-
-.mce-panel {
-
-    &.mce-container:not(.mce-floatpanel):not(.mce-edit-area) { border-width:0 !important; }
-
-    &.mce-edit-area { border:1px solid #ccc !important; }
-}
-
-.mce-btn button { background:transparent; }
-
-/* Dialogue overrides */
-.mce-close { display:none; }
-
-.mce-window-head .mce-title {
-    font-size: 18px;
-    font-weight: 500;
-}
-
-.mce-floatpanel.mce-window {
-    box-shadow: 0 5px 25px -5px #000;
-    border-radius: @border-radius-base;
-}
-
-.mce-colorbutton:hover .mce-open {
-    border-left-color: transparent;
-    border-right-color: transparent;
-}
-.mce-window-head, .mce-foot { border-color: #e5e5e5; }
-
-
-// all the menu hover and active/selected states
-.mce-container *:not(.emoji, .mce-i-backcolor) { background:transparent; }
-.mce-container *:not(.emoji) {
-    .mce-menu-item {
-        &:hover, &:focus, &:active,
-        &.mce-selected {
-            .mce-text, .mce-ico { color: #333; }
-            color: #333;
-            background-color: #e6e6e6;
-        }
-    }
-    .mce-menu-item-normal {
-        &.mce-active, &.mce-active .mce-text,
-        &.mce-active .mce-text:hover {
-            color: #333;
-            background-color: #e6e6e6;
-        }
-    }
-}
-
-.mce-grid.mce-colorbutton-grid td.mce-grid-cell div { line-height: 11px; }
-
-// overflow hidden is needed so the focus outline is rendered correctly in firefox
-.mce-container [data-name="fontsizeselect"] button { width: 72px; overflow: hidden }
-
-/* do not show toolbar separators in small windows */
-.floating-window.width-xs:not(.maximized) .mce-btn-group {
-    border-left: 0;
-    padding-left: 0;
-    margin-left: 0;
-}
-
-.floating-window.width-xs:not(.maximized) .mce-btn-group-visible-xs:not(:last-of-type) {
-    border-right: 1px solid #d9d9d9;
-    padding-right: 8px;
-    margin-right: 7px;
-}
-
-.floating-window .mce-content-body { margin-bottom: 16px; }
