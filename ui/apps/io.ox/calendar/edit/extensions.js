@@ -187,7 +187,7 @@ define('io.ox/calendar/edit/extensions', [
                 .text(gt('Discard'))
                 .on('click', function (e) {
                     e.stopPropagation();
-                    baton.app.quit();
+                    baton.app.quit(false, { type: 'discard' });
                 })
             );
         }

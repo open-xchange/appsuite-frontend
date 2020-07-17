@@ -19,8 +19,9 @@ define('io.ox/participants/chronos-views', [
     'io.ox/core/folder/api',
     'gettext!io.ox/core',
     'io.ox/core/capabilities',
+    'io.ox/core/extensions',
     'less!io.ox/participants/style'
-], function (api, util, contactsUtil, calendarUtil, folderAPI, gt, capabilities) {
+], function (api, util, contactsUtil, calendarUtil, folderAPI, gt, capabilities, ext) {
 
     'use strict';
 
@@ -83,11 +84,11 @@ define('io.ox/participants/chronos-views', [
                     )
                 )
             ).attr({ 'data-cid': this.model.cid }).toggleClass('removable', this.options.closeButton);
-
             this.setCustomImage();
             this.setDisplayName();
             this.setTypeStyle();
             this.options.customize.call(this);
+            ext.point('io.ox/participants/view').invoke('render', this.$el, new ext.Baton({ view: this, model: this.model }));
             this.trigger('render');
             return this;
         },

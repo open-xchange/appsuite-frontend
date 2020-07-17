@@ -28,7 +28,6 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
             reconnectionDelay: 1000,        // delay for the first retry
             reconnectionDelayMax: 10 * 60 * 1000      // 10 min. max delay between a reconnect (reached after aprox. 10 retries)
         };
-
     ox.websocketlog = [];
 
     function getId() {
@@ -138,6 +137,7 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
     // getSocket will return a connected socket
     return {
         isConnected: isConnected,
-        getSocket: getSocket
+        getSocket: getSocket,
+        io: io
     };
 });

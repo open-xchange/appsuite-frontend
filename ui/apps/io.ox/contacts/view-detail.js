@@ -28,11 +28,12 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/tk/attachments',
     'io.ox/core/http',
     'io.ox/core/locale/postal-address',
+    'io.ox/backbone/views/actions/util',
     'io.ox/backbone/views/toolbar',
     'io.ox/backbone/views/action-dropdown',
     'static/3rd.party/purify.min.js',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, coreUtil, capabilities, gt, settings, attachments, http, postalAddress, ToolbarView, ActionDropdownView, DOMPurify) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, coreUtil, capabilities, gt, settings, attachments, http, postalAddress, actionsUtil, ToolbarView, ActionDropdownView, DOMPurify) {
 
     'use strict';
 

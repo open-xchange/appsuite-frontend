@@ -40,7 +40,7 @@
 
 @quicklaunch-stroke-width: 3px;
 @quicklaunch-stroke-width-retina: 3px;
-@quicklaunch-button-color: rgba(255, 255, 255, 0.70);
+@quicklaunch-button-color: rgba(255, 255, 255, 0.80);
 
 @svg-wrap-size: 56px; // absolute value to avoid subpixel rendering
 
@@ -213,6 +213,14 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         //svg .stroke-c1 { fill: @brand-primary; }
     }
 
+    svg.indicator {
+        position: absolute;
+        z-index: 1;
+        top: 18px;
+        left: 33px;
+        circle { fill: #eb4400 }
+    }
+
     #io-ox-quicklaunch {
 
         .smartphone & {
@@ -222,14 +230,6 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         flex-shrink: 0;
         min-width: @quicklaunch-width;
         min-height: auto;
-
-        svg.indicator {
-            position: absolute;
-            z-index: 1;
-            top: 18px;
-            left: 33px;
-            circle { fill: #eb4400 }
-        }
 
         .title {
             // yes visibility hidden not display none. Otherwise the upsell icon is not displayed
@@ -300,7 +300,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     #io-ox-toprightbar,
     #io-ox-toprightbar > ul,
     #io-ox-toprightbar > ul > li,
-    #io-ox-toprightbar > ul > li a {
+    #io-ox-toprightbar > ul > li > a {
         display: inline-flex;
         align-items: center;
         justify-content: flex-end;
@@ -332,7 +332,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         .launcher-icon.fa-refresh { position: relative; }
 
         .contact-picture {
-            .picture(32px, 32px);
+            .picture(40px, 40px);
             .flex-center;
             background-color: #eee;
             color: rgba(0, 0, 0, 0.60);

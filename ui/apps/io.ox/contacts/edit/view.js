@@ -50,7 +50,6 @@ define('io.ox/contacts/edit/view', [
             this.visible = {};
             // hash to track fields that are disabled (not supported etc)
             this.disabled = {};
-
             // enable private flag when capability is there and it's not usermode or public folders
             if (!capabilities.has('read_create_shared_folders') || this.model.isUserMode() || options.isPublic) {
                 this.disabled.private_flag = true;

@@ -509,15 +509,17 @@ define('io.ox/calendar/edit/main', [
             }
         });
 
-        app.setQuit(function () {
+        app.setQuit(function (options) {
+
             var self = this,
-                df = new $.Deferred();
+                df = new $.Deferred(),
+                isDiscard = options && options.type === 'discard';
 
             // trigger blur inputfields so the model has current data and the dirty check is correct
             $(document.activeElement).filter('input').trigger('change');
-            self.cleanUpModel();
+            this.cleanUpModel();
             //be gentle
-            if (self.getDirtyStatus()) {
+            if (this.getDirtyStatus()) {
                 require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                     if (app.getWindow().floating) {
                         app.getWindow().floating.toggle(true);
@@ -535,6 +537,7 @@ define('io.ox/calendar/edit/main', [
                         .addButton({ label: gt.pgettext('dialog', 'Discard changes'), action: 'delete' })
                         .on('action', function (action) {
                             if (action === 'delete') {
+                                if (isDiscard) self.model.trigger('discard');
                                 self.dispose();
                                 df.resolve();
                             } else {
@@ -544,8 +547,9 @@ define('io.ox/calendar/edit/main', [
                         .open();
                 });
             } else {
-                //just let it go
-                self.dispose();
+                // just let it go
+                if (isDiscard) this.model.trigger('discard');
+                this.dispose();
                 df.resolve();
             }
             if (_.device('!smartphone && !iOS')) app.getWindow().nodes.main.find('input')[0].focus();

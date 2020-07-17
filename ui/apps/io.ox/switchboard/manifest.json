@@ -1,0 +1,21 @@
+[
+    {
+        "namespace": "core",
+        "path": "io.ox/switchboard/extensions",
+        "requires": "switchboard",
+        "device": "!smartphone",
+        "settings": "true"
+    },
+    {
+        "namespace": "core",
+        "path": "io.ox/switchboard/actions",
+        "requires": "switchboard",
+        "device": "!smartphone"
+    },
+    {
+        "namespace": "core",
+        "path": "io.ox/switchboard/call/api",
+        "requires": "switchboard",
+        "device": "!smartphone"
+    }
+]

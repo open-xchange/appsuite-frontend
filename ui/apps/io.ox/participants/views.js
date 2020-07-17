@@ -15,9 +15,10 @@ define('io.ox/participants/views', [
     'io.ox/core/util',
     'io.ox/core/folder/api',
     'io.ox/core/capabilities',
+    'io.ox/core/extensions',
     'gettext!io.ox/core',
     'less!io.ox/participants/style'
-], function (api, util, folderAPI, capabilities, gt) {
+], function (api, util, folderAPI, capabilities, ext, gt) {
 
     'use strict';
 
@@ -86,11 +87,11 @@ define('io.ox/participants/views', [
                     )
                 )
             ).attr({ 'data-cid': this.model.cid }).toggleClass('removable', this.options.closeButton);
-
             this.setCustomImage();
             this.setDisplayName();
             this.setTypeStyle();
             this.options.customize.call(this);
+            ext.point('io.ox/participants/view').invoke('render', this.$el, new ext.Baton({ view: this, model: this.model }));
             this.trigger('render');
             return this;
         },

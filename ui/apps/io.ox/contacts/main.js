@@ -226,15 +226,11 @@ define('io.ox/contacts/main', [
                         fullname = $.trim(util.getFullName(data));
                         if (fullname) {
                             name = fullname;
-                            fields.name.empty().append(
-                                // use html output
-                                coreUtil.renderPersonalName({ html: util.getFullName(data, true) }, data)
-                            );
+                            // use html output
+                            coreUtil.renderPersonalName({ $el: fields.name.empty(), html: util.getFullName(data, true) }, data);
                         } else {
                             name = $.trim(util.getFullName(data) || data.yomiLastName || data.yomiFirstName || data.display_name || util.getMail(data));
-                            fields.name.empty().append(
-                                coreUtil.renderPersonalName({ name: name }, data)
-                            );
+                            coreUtil.renderPersonalName({ $el: fields.name.empty(), name: name }, data);
                         }
                         description = util.getSummaryBusiness(data);
                         fields.private_flag.get(0).style.display = data.private_flag ? '' : 'none';
