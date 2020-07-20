@@ -31,6 +31,15 @@ define('io.ox/onboarding/main', [
             });
         });
     }
+    function createQr(url) {
+        return require(['static/3rd.party/qrcode/qrcode.js']).then(function (qrcode) {
+            var qr;
+            qrcode.toDataURL(url, function (err, url) {
+                qr = url;
+            });
+            return qr;
+        });
+    }
     var platformList = new Backbone.Collection([
         {
             'title': gt('Windows PC'),
@@ -173,7 +182,7 @@ define('io.ox/onboarding/main', [
         },
         'windows/drive/url': 'https://appsuite.open-xchange.com',
         'windows/emclient/url': 'https://appsuite.open-xchange.com',
-        'android/url': 'https://apsuite.open-xchange.com',
+        'android/url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail&hl=en',
         'macos/mailsync/url': 'https://apsuite.open-xchange.com',
         'macos/drive/url': 'https://apsuite.open-xchange.com',
         'ios/mailsync/url': 'https://apsuite.open-xchange.com',
@@ -188,13 +197,16 @@ define('io.ox/onboarding/main', [
             this.url = options.url;
         },
         render: function () {
-            this.$el.append(
-                $('<p class="prompt">').text(gt('Please scan this code with your phone\'s camera:')),
-                $('<canvas class="qrcode">'),
+            var self = this;
+            createQr(this.url).then(function (qr) {
+                self.$el.append(
+                    $('<div class="description">').append($('<p class="prompt">').text(gt('Please scan this code with your phone\'s camera:'))),
+                    $('<img class="qrcode">').attr('src', qr),
+                    $('<p class="link-info">').text(gt('Link')).append($('<a class="link">').text(self.url).attr('href', self.url))
+                );
+                return self;
+            });
 
-                $('<a class="link">').text(gt('Link: ') + this.url).attr('href', this.url)
-            );
-            return this;
         }
     });
 
