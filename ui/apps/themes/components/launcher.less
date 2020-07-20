@@ -278,6 +278,22 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         }
     }
 
+    .placeholder-text-color(@color) {
+        // NOTE: Placeholders: IE 11 first and needs !important
+        &:-ms-input-placeholder { color: @color !important; }
+        .token-input:-ms-input-placeholder { color: @color !important; }
+        .tokenfield-placeholder:-ms-input-placeholder { color: @color!important; }
+
+        &::placeholder { color: @color; }
+        .token-input::placeholder { color: @color; }
+        .tokenfield-placeholder::placeholder { color: @color; }
+        .token-input, .tokenfield-placeholder {
+            &::-webkit-input-placeholder, &::-ms-input-placeholder {
+                color: @color;
+            }
+        }
+    }
+
     .io-ox-find:not(.active) {
         .search-field {
             color: white;
@@ -285,16 +301,11 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             border: 1px solid rgba(255, 255, 255, 0.30);
         }
 
-        // NOTE: Placeholders: IE 11 first and needs !important
-        .token-input:-ms-input-placeholder { color: #fff !important; }
-        .tokenfield-placeholder:-ms-input-placeholder { color: #fff !important; }
+        .placeholder-text-color(#fff);
 
-        .token-input::placeholder { color: #fff; }
-        .tokenfield-placeholder::placeholder { color: #fff; }
-        .token-input, .tokenfield-placeholder {
-            &::-webkit-input-placeholder, &::-ms-input-placeholder {
-                color: #fff;
-            }
+        .search-field.disabled {
+            cursor: not-allowed;
+            .placeholder-text-color(#ddd)
         }
     }
 
