@@ -175,7 +175,7 @@ define('io.ox/find/view-facets', [
                     flat: api.isFlat(module),
                     //#. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
                     button: gt('Select'),
-                    done: function (target) {
+                    done: function (target, dialog) {
                         //get folder data
                         api.get(target)
                             .always(function (data) {
@@ -187,6 +187,7 @@ define('io.ox/find/view-facets', [
                                     name: label
                                 });
                                 self.render();
+                                dialog.close();
                             });
                     },
                     disable: function (data) {
