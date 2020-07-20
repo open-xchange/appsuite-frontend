@@ -21,8 +21,7 @@ define('io.ox/find/view-placeholder', [
     var PlaceholderView = DisposableView.extend({
 
         events: {
-            'focusin': 'focused',
-            'keyup': 'showSpinner'
+            'focusin': 'focused'
         },
 
         initialize: function (options) {
@@ -42,19 +41,11 @@ define('io.ox/find/view-placeholder', [
             this.listenTo(options.app, 'view:enable', this.enable);
         },
 
-        hideSpinner: function () {
-            //this.ui.action.removeClass('io-ox-busy');
-        },
-
-        showSpinner: function () {
-            //this.ui.action.addClass('io-ox-busy');
-        },
-
         disable: function () {
             // only real change. We want to avoid screenreader talking with every folderchange
             if (this.ui.field.prop('disabled') === true) return;
             this.ui.field.prop('disabled', true);
-            //this.ui.action.prop('disabled', true);
+            this.ui.field.toggleClass('disabled', true);
             this.ui.field.find('input.token-input.tt-input').removeAttr('tabindex');
             this.$el.find('.arialive').text(gt('Search function not supported in this folder'));
         },
@@ -63,7 +54,7 @@ define('io.ox/find/view-placeholder', [
             // only real change. We want to avoid screenreader talking with every folderchange
             if (this.ui.field.prop('disabled') === false) return;
             this.ui.field.prop('disabled', false);
-            //this.ui.action.prop('disabled', false);
+            this.ui.field.toggleClass('disabled', false);
             this.ui.field.find('input.token-input.tt-input').attr('tabindex', 0);
             this.$el.find('.arialive').text('');
         },
@@ -75,7 +66,6 @@ define('io.ox/find/view-placeholder', [
 
         destroy: function () {
             if (this.disposed) return;
-            this.hideSpinner();
             this.trigger('destroy');
             this.dispose();
         }

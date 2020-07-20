@@ -11,11 +11,9 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-
 .io-ox-find {
     @placeholder-padding: @default-padding - 8 - 1;
     @action-color: #767676;
-
     .search-box {
 
         // remove IE's clear button
@@ -93,14 +91,6 @@
                 }
             }
         }
-
-        // .action.io-ox-busy {
-        //     position: absolute;
-        //     line-height: 22px;
-
-        //     &:before { font-size: 16px; }
-        // }
-
     }
 }
 
@@ -109,76 +99,5 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-    }
-}
-
-// not applied
-.window-container {
-
-    /**
-     *  GENERAL
-     */
-    .io-ox-find {
-
-        .search-box {
-            .action.io-ox-busy {
-                position: absolute;
-                line-height: 22px;
-
-                &:before { font-size: 16px; }
-            }
-        }
-
-        .search-box-filter {
-            float: left;
-            padding-left: 8px;
-
-        }
-    }
-
-    /**
-     *  MODE: NOT ACTIVE
-     */
-    .io-ox-find {
-
-        .search-box .action {
-            &.action-find   { display: inline-block; }
-            &.action-cancel { display: none; }
-        }
-        .search-box-filter { display: none; }
-        flex: 0 1 auto;
-    }
-
-    /**
-     *  MODE: ACTIVE
-     */
-    &.io-ox-find-active {
-
-        .breadcrumb-ellipsis {
-            display: none;
-        }
-
-        .io-ox-find {
-            //top: managed by backbone view
-            position: absolute;
-            width: 100vw;
-            height: 40px;
-
-            .search-box {
-                float: left;
-                width: 100%;
-                max-width: 550px;
-
-                // switch visibility
-                .action {
-                    &.action-show   { display: none; }
-                    &.action-cancel { display: inline-block; }
-                }
-            }
-
-            .search-box-filter {
-                display: block;
-            }
-        }
     }
 }
