@@ -40,6 +40,38 @@ define('io.ox/onboarding/main', [
             return qr;
         });
     }
+    var titles = {
+        'windows': {
+            'title': gt('Windows'),
+            'drive': gt('Drive App'),
+            'mailsync': gt('Windows Mail'),
+            'emclient': gt('EM Client')
+        },
+        'android': {
+            'title': gt('Android'),
+            'mailsync': gt('Android Mail'),
+            'mailapp': gt('OX Mail App'),
+            'addressbook': gt('Contacts'),
+            'calendar': gt('Calendar'),
+            'driveapp': gt('OX Drive App')
+        },
+        'macos': {
+            'title': gt('MacOS'),
+            'drive': gt('Drive App'),
+            'mailsync': gt('Apple Mail'),
+            'calendar': gt('Calendar'),
+            'addressbook': gt('Contacts')
+        },
+        'ios': {
+            'title': gt('iOS'),
+            'mailsync': gt('iOS Mail'),
+            'mailapp': gt('OX Mail App'),
+            'addressbook': gt('Addressbook'),
+            'calendar': gt('Calendar'),
+            'driveapp': gt('OX Drive App')
+        }
+    };
+
     var platformList = new Backbone.Collection([
         {
             'title': gt('Windows PC'),
@@ -450,29 +482,50 @@ define('io.ox/onboarding/main', [
         className: 'progress-container',
 
         initialize: function () {
-            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'change', _.device('smartphone') ? this.renderMobile : this.render);
         },
         render: function () {
             var platform = this.model.get('platform'),
-                app = this.model.get('app');
+                app = this.model.get('app'),
+                platformTitle = platform ? titles[platform].title : undefined,
+                appTitle = app ? titles[platform][app] : undefined;
 
             this.$el.empty()
                 .append($('<ul class="progress-steps">')
                 .append(
                     $('<li class="progress-step-one">')
-                    .text('1').addClass(!platform && !app ? 'active' : '')
-                    .append($('<p class="progress-description">').text(platform ? platform : gt('Platform'))),
+                        .text('1').addClass(!platform && !app ? 'active' : '')
+                        .append($('<p class="progress-description">').text(platformTitle ? platformTitle : gt('Platform'))),
                     $('<li class="progress-step-two">')
-                    .text('2').addClass(platform && !app ? 'active' : '')
-                    .append($('<p class="progress-description">').text(app ? app : gt('App'))),
+                        .text('2').addClass(platform && !app ? 'active' : '')
+                        .append($('<p class="progress-description">').text(appTitle ? appTitle : gt('App'))),
                     $('<li class="progress-step-three">')
-                    .text('3').addClass(platform && app ? 'active' : '')
-                    .append($('<p class="progress-description">').text(gt('Setup')))
+                        .text('3').addClass(platform && app ? 'active' : '')
+                        .append($('<p class="progress-description">').text(gt('Setup')))
 
                 ));
-            $('.progress-step-one').attr(!!platform ? { role: 'button', 'data-action': 'back' } : '');
-            $('.progress-step-two').attr(!!app ? { role: 'button', 'data-action': 'back' } : '');
+            $('.progress-step-one').attr(platform ? { role: 'button', 'data-action': 'back' } : '');
+            $('.progress-step-two').attr(app ? { role: 'button', 'data-action': 'back' } : '');
             return this;
+        },
+        renderMobile: function () {
+            var platform = this.model.get('platform'),
+                app = this.model.get('app'),
+                appTitle = app ? titles[platform][app] : undefined;
+
+            this.$el.empty()
+                .append($('<ul class="progress-steps">')
+                .append(
+                    $('<li class="progress-step-one">')
+                        .text('1').addClass(!app ? 'active' : '')
+                        .append($('<p class="progress-description">').text(appTitle ? appTitle : gt('App'))),
+                    $('<li class="progress-step-three">')
+                        .text('2').addClass(app ? 'active' : '')
+                        .append($('<p class="progress-description">').text(gt('Setup')))
+                ));
+            $('.progress-step-one').attr(app ? { role: 'button', 'data-action': 'back' } : '');
+            return this;
+
         }
     });
 
@@ -480,8 +533,8 @@ define('io.ox/onboarding/main', [
         this.$('div[role="document"]').addClass('connect-wizard');
         this.$('.wizard-title').text(title);
         this.$('.wizard-footer').empty().append(
-            this.parent.currentStep === 0 ? '' : $('<button type="button" class="btn btn-default" data-action="back">').text(gt('Back')),
-            $('<button type="button" class="btn btn-default" data-action="close">').text(gt('Close'))
+            $('<button type="button" class="btn btn-default col-xs-12 col-sm-3" data-action="close">').text(gt('Close')),
+            this.parent.currentStep === 0 ? '' : $('<button type="button" class="btn btn-default col-xs-12 col-sm-3" data-action="back">').text(gt('Back'))
         );
     }
 
@@ -495,13 +548,23 @@ define('io.ox/onboarding/main', [
 
             if (!Wizard.registry.get('connect-wizard')) {
                 Wizard.registry.add(options, function () {
-                    var connectTour = new Wizard();
+                    var connectTour = new Wizard(),
+                        platform;
+
+                    if (_.device('ios')) {
+                        platform.id = 'ios';
+                    } else if (_.device('android')) {
+                        platform.id = 'android';
+                    } else {
+                        platform = undefined;
+                    }
 
                     connectTour.userData = {};
-                    connectTour.model = new Backbone.Model({ app: undefined, platform: undefined, currentStep: connectTour.currentStep });
+                    connectTour.model = new Backbone.Model({ app: undefined, platform: platform, currentStep: connectTour.currentStep });
                     connectTour.platformsView = new PlatformView({ model: connectTour.model });
                     connectTour.appsView = new AppView({ model: connectTour.model });
                     connectTour.progressView = new ProgressionView({ model: connectTour.model });
+
                     // ensure that everything is reset
                     connectTour.on('stop', function () {
                         console.log('close');
@@ -514,36 +577,39 @@ define('io.ox/onboarding/main', [
                         connectTour.progressView = null;
                         connectTour = null;
                     });
-                    connectTour.progressView.render();
-                    connectTour.platformsView.render();
                     connectTour.appsView.render();
 
-                    connectTour.step({
-                        id: 'platform',
-                        back: false,
-                        next: false,
-                        minWidth: '600px'
-                    })
-                    .on('before:show', function () {
-                        // draw list of available platforms
-                        drawScaffold.call(this);
-                        this.$('.wizard-content').append(
-                            connectTour.progressView.$el,
-                            connectTour.platformsView.$el
-                        );
+                    if (!_.device('smartphone')) {
+                        connectTour.platformsView.render();
+                        connectTour.progressView.render();
 
-                        // trigger next step only once
-                        connectTour.model.once('change', function (model) {
-                            if (!model.get('platform')) return;
-                            connectTour.next();
-                        });
-                    })
-                    .end()
-                    .step({
+                        connectTour.step({
+                            id: 'platform',
+                            back: false,
+                            next: false
+                        })
+                        .on('before:show', function () {
+                            // draw list of available platforms
+                            drawScaffold.call(this);
+                            this.$('.wizard-content').append(
+                                connectTour.progressView.$el,
+                                connectTour.platformsView.$el
+                            );
+                            // trigger next step only once
+                            connectTour.model.once('change', function (model) {
+                                if (!model.get('platform')) return;
+                                connectTour.next();
+                            });
+                        })
+                        .end();
+                    } else {
+                        connectTour.progressView.renderMobile();
+                    }
+
+                    connectTour.step({
                         id: 'apps',
                         back: false,
-                        next: false,
-                        minWidth: '600px'
+                        next: false
                     })
                     .on('before:show', function () {
                         // draw list of apps for chosen platform
@@ -566,8 +632,7 @@ define('io.ox/onboarding/main', [
                     .step({
                         id: 'setup',
                         back: false,
-                        next: false,
-                        minWidth: '600px'
+                        next: false
                     })
                     .on('before:show', function () {
                         var self = this;
