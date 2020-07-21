@@ -84,18 +84,15 @@ define('io.ox/find/view', [
             });
 
             // field stub already rendered
-            this.setElement(this.win.nodes.sidepanel.find('.io-ox-find'));
+            this.setElement($('.io-ox-find[data-app="' + this.app.get('parent').id + '"]'));
 
             // shortcuts
             this.ui = {
                 searchbox: undefined,
                 facets: undefined,
                 field: this.$el.find('.search-field'),
-                action: this.$el.find('.action-show')
+                actions: this.$el.find('.action')
             };
-
-            // field stub already rendered
-            this.setElement($('.io-ox-find[data-app="' + this.app.get('parent').id + '"]'));
 
             // create empty view
             this.ui.searchbox = new AutocompleteView(_.extend(props, { parent: this }));
@@ -108,8 +105,9 @@ define('io.ox/find/view', [
         disable: function () {
             // only real change. We want to avoiud screenreader talking with every folderchange
             if (this.ui.field.prop('disabled') === true) return;
+            this.$el.toggleClass('disabled', true);
+            this.ui.actions.prop('disabled', true);
             this.ui.field.prop('disabled', true);
-            this.ui.action.prop('disabled', true);
             this.ui.field.find('input.token-input.tt-input').removeAttr('tabindex');
             this.$el.find('input.form-control.tokenfield').trigger('aria-live-update', gt('Search function not supported in this folder'));
         },
@@ -117,8 +115,9 @@ define('io.ox/find/view', [
         enable: function () {
             // only real change. We want to avoiud screenreader talking with every folderchange
             if (this.ui.field.prop('disabled') === false) return;
+            this.$el.toggleClass('disabled', false);
+            this.ui.actions.prop('disabled', false);
             this.ui.field.prop('disabled', false);
-            this.ui.action.prop('disabled', false);
             this.ui.field.find('input.token-input.tt-input').attr('tabindex', 0);
             this.$el.find('input.form-control.tokenfield').trigger('aria-live-update', '');
         },

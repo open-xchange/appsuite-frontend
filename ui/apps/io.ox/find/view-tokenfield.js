@@ -106,7 +106,6 @@ define('io.ox/find/view-tokenfield', [
             var app = this.app,
                 baton = this.baton,
                 fieldstub = baton.app.view.$el.find('.search-field'),
-                //buttonstub = baton.app.view.$el.find('.action-show'),
                 guid = _.uniqueId('form-control-label-'),
                 model = baton.model,
                 hasFocus = fieldstub.is(':focus'), // || buttonstub.is(':focus'),

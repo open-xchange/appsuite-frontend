@@ -31,7 +31,6 @@ define('io.ox/find/view-placeholder', [
             // shortcuts
             this.ui = {
                 field: this.$el.find('.search-field')
-                //action: this.$el.find('.action-show')
             };
 
             // reuse
@@ -44,9 +43,9 @@ define('io.ox/find/view-placeholder', [
         disable: function () {
             // only real change. We want to avoid screenreader talking with every folderchange
             if (this.ui.field.prop('disabled') === true) return;
+            this.$el.toggleClass('disabled', true);
             this.ui.field
                 .prop('disabled', true)
-                .toggleClass('disabled', true)
                 .find('input.token-input.tt-input').removeAttr('tabindex');
             this.$el.find('.arialive').text(gt('Search function not supported in this folder'));
         },
@@ -54,9 +53,9 @@ define('io.ox/find/view-placeholder', [
         enable: function () {
             // only real change. We want to avoid screenreader talking with every folderchange
             if (this.ui.field.prop('disabled') === false) return;
+            this.$el.toggleClass('disabled', false);
             this.ui.field
                 .prop('disabled', false)
-                .toggleClass('disabled', false)
                 .find('input.token-input.tt-input').attr('tabindex', 0);
             this.$el.find('.arialive').text('');
         },
