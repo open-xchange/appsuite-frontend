@@ -44,18 +44,20 @@ define('io.ox/find/view-placeholder', [
         disable: function () {
             // only real change. We want to avoid screenreader talking with every folderchange
             if (this.ui.field.prop('disabled') === true) return;
-            this.ui.field.prop('disabled', true);
-            this.ui.field.toggleClass('disabled', true);
-            this.ui.field.find('input.token-input.tt-input').removeAttr('tabindex');
+            this.ui.field
+                .prop('disabled', true)
+                .toggleClass('disabled', true)
+                .find('input.token-input.tt-input').removeAttr('tabindex');
             this.$el.find('.arialive').text(gt('Search function not supported in this folder'));
         },
 
         enable: function () {
             // only real change. We want to avoid screenreader talking with every folderchange
             if (this.ui.field.prop('disabled') === false) return;
-            this.ui.field.prop('disabled', false);
-            this.ui.field.toggleClass('disabled', false);
-            this.ui.field.find('input.token-input.tt-input').attr('tabindex', 0);
+            this.ui.field
+                .prop('disabled', false)
+                .toggleClass('disabled', false)
+                .find('input.token-input.tt-input').attr('tabindex', 0);
             this.$el.find('.arialive').text('');
         },
 

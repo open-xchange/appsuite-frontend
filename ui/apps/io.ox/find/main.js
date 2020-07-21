@@ -423,7 +423,9 @@ define('io.ox/find/main', [
              */
             app.listenTo(manager, {
                 'active': _.debounce(function (count) {
-                    // ignore folder facet not combined with another facet
+                    // restore focus for folder only (bypass smart cancel)
+                    if (count !== 0) this.view.setFocus();
+                    // ignore 'folder' and 'account only' not combined with another facet
                     if (app.model.manager.isFolderOnly()) count = 0;
                     if (isDrive && app.model.manager.isAccountOnly()) count = 0;
                     app.trigger(count ? 'find:query' : 'find:idle');
