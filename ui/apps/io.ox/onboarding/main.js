@@ -15,9 +15,10 @@ define('io.ox/onboarding/main', [
     'io.ox/core/extensions',
     'io.ox/core/tk/wizard',
     'io.ox/backbone/views/disposable',
+    'io.ox/core/http',
     'gettext!io.ox/core/onboarding',
     'less!io.ox/onboarding/style'
-], function (ext, Wizard, DisposableView, gt) {
+], function (ext, Wizard, DisposableView, http, gt) {
     'use strict';
 
     var wizard,
@@ -31,6 +32,7 @@ define('io.ox/onboarding/main', [
             });
         });
     }
+
     function createQr(url) {
         return require(['static/3rd.party/qrcode/qrcode.js']).then(function (qrcode) {
             var qr;
@@ -40,6 +42,19 @@ define('io.ox/onboarding/main', [
             return qr;
         });
     }
+
+    function getDownloadUrl(type) {
+        return http.GET({
+            module: 'onboarding',
+            params: {
+                action: 'link',
+                type: type
+            }
+        }).then(function (data) {
+            return data;
+        });
+    }
+
     var titles = {
         'windows': {
             'title': gt('Windows'),
@@ -200,6 +215,7 @@ define('io.ox/onboarding/main', [
         }
     ]);
 
+
     var settings = new Backbone.Model({
 
         'incoming': {
@@ -212,6 +228,39 @@ define('io.ox/onboarding/main', [
             'port': '465',
             'connection': 'SSL/TLS'
         },
+        'caldav': {
+            'url': 'https://dav-appsuite-dev.open-xchange.com',
+            'login': '123'
+        },
+        'carddav': {
+            'url': 'https://dav-appsuite-dev.open-xchange.com',
+            'login': '123'
+        },
+        'android/mailapp': {
+            'storeIcon': 'apps/themes/icons/default/googleplay/google-play-badge_EN.svg',
+            'appIconClass': 'mailapp playstore',
+            'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail&hl=en'
+        },
+        'android/driveapp': {
+            'storeIcon': 'apps/themes/icons/default/googleplay/google-play-badge_EN.svg',
+            'appIconClass': 'driveapp playstore',
+            'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail&hl=en'
+        },
+        'ios/mailapp': {
+            'storeIcon': 'apps/themes/icons/default/appstore/App_Store_Badge_EN_135x40.svg',
+            'appIconClass': 'mailapp appstore',
+            'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail&hl=en'
+        },
+        'ios/driveapp': {
+            'storeIcon': 'apps/themes/icons/default/appstore/App_Store_Badge_EN_135x40.svg',
+            'appIconClass': 'driveapp appstore',
+            'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail&hl=en'
+        },
+        'macos/driveapp': {
+            'storeIcon': 'apps/themes/icons/default/appstore/Mac_App_Store_Badge_EN_165x40.svg',
+            'appIconClass': 'driveapp macappstore',
+            'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail&hl=en'
+        },
         'windows/drive/url': 'https://appsuite.open-xchange.com',
         'windows/emclient/url': 'https://appsuite.open-xchange.com',
         'android/url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail&hl=en',
@@ -223,8 +272,10 @@ define('io.ox/onboarding/main', [
     });
 
     var DownloadQrView = DisposableView.extend({
+
         tagName: 'div',
         className: 'content-container',
+
         initialize: function (options) {
             this.url = options.url;
         },
@@ -243,35 +294,115 @@ define('io.ox/onboarding/main', [
     });
 
     var DownloadView = DisposableView.extend({
+
         tagName: 'div',
         className: 'content-container',
+
         initialize: function (options) {
-            this.url = options.url;
+            this.link = options.link;
+        },
+        events: {
+            'click .download': 'onClick'
         },
         render: function () {
             this.$el.append(
                 $('<div class="description">').append(
-                    $('<p class="prompt">').text(gt('Please download the configuration to autmatically setup your account.'))
+                    $('<p class="prompt">').text(gt('Please download the application.'))
                 ),
-                $('<button type="button" data-action="download" class="btn-primary download">').text(gt('Download')).attr('href', this.url)
+                $('<button type="button" data-action="download" class="btn-primary download">').text(gt('Download'))
             );
             return this;
+        },
+        onClick: function () {
+            window.open(this.link);
+        }
+    });
+
+    var DownloadConfigView = DisposableView.extend({
+
+        tagName: 'div',
+        className: 'content-container',
+
+        initialize: function (options) {
+            this.type = options.type;
+            this.config = options.config;
+        },
+
+        events: {
+            'click .btn': 'onClick'
+        },
+
+        render: function () {
+            var syncView =  this.type === 'mail' ? new MailSyncView({ incoming: this.config.incoming, outgoing: this.config.outgoing, userData: this.config.userData }) :
+                new SyncView({ config: this.config });
+            syncView.renderManualConfig();
+
+            this.$el.append(
+                $('<div class="description">').append(
+                    $('<p class="info">').text(gt('Please download the configuration to automatically setup your account.'))
+                ),
+                $('<button type="button" data-action="download" class="btn btn-primary download">').text(gt('Download configuration'))
+            );
+            this.$el.append(syncView.$el);
+            return this;
+        },
+
+        onClick: function () {
+            getDownloadUrl(this.type).then(function (url) {
+                require(['io.ox/core/download'], function (download) {
+                    download.url(url);
+                });
+            });
+        }
+    });
+
+    var MobileDownloadView = DisposableView.extend({
+
+        tagName: 'div',
+        className: 'content-container mobile-download',
+
+        initialize: function (app) {
+            this.appIconClass = app.appIconClass;
+            this.storeIcon = app.storeIcon;
+            this.url = app.url;
+        },
+        events: {
+            'click .applink': 'onClick'
+        },
+        render: function () {
+            this.$el.append(
+                //$('<a href="#" class="app">').append(
+                $('<img class="app-icon applink" role="button">')
+                    .addClass(this.appIconClass)
+                    .attr('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='),
+                //),
+                $('<p class="app-info">').text('OX Mail App'),
+                //$('<a href="#" class="store">').append(
+                $('<img class="store-icon applink" role="button">').attr('src', this.storeIcon)
+                //)
+            );
+        },
+        onClick: function () {
+            window.open(this.url);
         }
     });
 
     var MailSyncView = DisposableView.extend({
+
         tagName: 'div',
         className: 'content-container',
+
         initialize: function (options) {
             this.incoming = options.incoming;
             this.outgoing = options.outgoing;
             this.userData = options.userData;
+            this.type = options.title;
         },
         render: function () {
             this.$el.append(
                 $('<div class="description">')
                 .append(
-                    $('<p class="info">').html(gt('At first, please try to add your mail address ') + '<b>' + this.userData.get('email1') + '</b>' + gt(' to check whether Android Mail can automatically configure your email account.')),
+                    $('<p class="info">').html(gt('At first, please try to add your mail address ') + '<b>' + this.userData.get('email1') + '</b>' + gt(' to check whether %1$s can automatically configure your email account.', this.type)),
                     $('<p class="info">').text(gt('If an automatic configuration is not possible, please use the following information to manually setup your mail account:'))
                 )
             );
@@ -321,10 +452,13 @@ define('io.ox/onboarding/main', [
     });
 
     var SyncView = DisposableView.extend({
+
         tagName: 'div',
         className: 'content-container',
+
         initialize: function (options) {
-            this.type = options.type;
+            this.type = options.name;
+            this.config = options.config;
         },
         render: function () {
             this.$el.append(
@@ -333,36 +467,57 @@ define('io.ox/onboarding/main', [
                         $('<p class="info">').text(gt('Synchronize ') + this.type + gt(' data with your device:'))
                     )
             );
+            this.renderManualConfig();
             return this;
+        },
+        renderManualConfig: function () {
+            this.$el.append(
+                $('<div class="manual-description">').text(gt('Manual Configuration')),
+                $('<pre class="manual-config">')
+                        .append(
+                            $('<div class="title">')
+                                .append(
+                                    $('<div class="url">').text(gt('URL')),
+                                    $('<div class="login">').text(gt('Login'))
+                                ),
+                            $('<div class="values">')
+                                .append(
+                                    $('<div class="url">').text(this.config.url),
+                                    $('<div class="login">').text(this.config.login)
+                                )
+                        )
+            );
         }
     });
 
     //all available setup scenarios
     var scenarios = {
         'windows': {
-            'drive': function () { return new DownloadView({ url: settings.get('windows/drive/url') }); },
-            'mailsync': function () { return new SyncView({ type: 'Mail' }); },
-            'emclient': function () { return new DownloadView({ url: settings.get('windows/emclient/url') }); }
+            'drive': function () { return new DownloadView({ link: settings.get('windows/drive/url') }); },
+            'mailsync': function () { return new MailSyncView({ incoming: settings.get('incoming'), outgoing: settings.get('outgoing'), userData: config.userData, title: titles.windows.mailsync }); },
+            'emclient': function () { return new DownloadView({ link: settings.get('windows/emclient/url') }); }
         },
         'android': {
-            'mailsync': function () { return new MailSyncView({ incoming: settings.get('incoming'), outgoing: settings.get('outgoing'), userData: config.userData }); },
-            'mailapp': function () { return new DownloadQrView({ url: settings.get('android/url') }); },
-            'driveapp': function () { return new DownloadQrView({ url: settings.get('android/url') }); },
-            'addressbook': function () { return new SyncView({ type: 'Addressbook' }); },
-            'calendar': function () { return new SyncView({ type: 'Calendar' }); }
+            'mailsync': function () { return new MailSyncView({ incoming: settings.get('incoming'), outgoing: settings.get('outgoing'), userData: config.userData, title: titles.android.mailsync }); },
+            'mailapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('android/mailapp')) : new DownloadQrView({ url: settings.get('android/url') }); },
+            'driveapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('android/driveapp')) : new DownloadQrView({ url: settings.get('android/url') }); },
+            'addressbook': function () { return new SyncView({ name: titles.android.addressbook, config: settings.get('carddav') }); },
+            'calendar': function () { return new SyncView({ name: titles.android.calendar, config: settings.get('caldav') }); }
         },
         'macos': {
-            'mailsync': function () { return new DownloadView({ url: settings.get('macos/mailsync/url') }); },
-            'addressbook': function () { return new SyncView({ type: 'Addressbook' }); },
-            'calendar': function () { return new SyncView({ type: 'Calendar' }); },
-            'drive': function () { return new DownloadView({ url: settings.get('macos/drive/url') }); }
+            'mailsync': function () { return new DownloadConfigView({ type: 'mail', config: { incoming: settings.get('incoming'), outgoing: settings.get('outgoing'), userData: config.userData } }); },
+            //'addressbook': function () { return new SyncView({ type: titles.macos.addressbook, config: settings.get('carddav') }); },
+            'addressbook': function () { return new DownloadConfigView({ type: 'carddav', config: settings.get('carddav') }); },
+            //'calendar': function () { return new SyncView({ type: titles.macos.calendar, config: settings.get('caldav') }); },
+            'calendar': function () { return new DownloadConfigView({ type: 'caldav', config: settings.get('caldav') }); },
+            'drive': function () { return new MobileDownloadView(settings.get('macos/driveapp')); }
         },
         'ios': {
             'mailsync': function () { return new DownloadQrView({ url: settings.get('ios/mailsync/url') }); },
-            'mailapp': function () { return new DownloadQrView({ url: settings.get('ios/url') }); },
-            'driveapp': function () { return new DownloadQrView({ url: settings.get('ios/url') }); },
-            'addressbook': function () { return new SyncView({ type: 'Addressbook' }); },
-            'calendar': function () { return new SyncView({ type: 'Calendar' }); }
+            'mailapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('ios/mailapp')) : new DownloadQrView({ url: settings.get('ios/url') }); },
+            'driveapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('ios/driveapp')) : new DownloadQrView({ url: settings.get('ios/url') }); },
+            'addressbook': function () { return new SyncView({ name: titles.ios.addressbook, config: settings.get('carddav') }); },
+            'calendar': function () { return new SyncView({ name: titles.ios.calendar, config: settings.get('caldav') }); }
         }
     };
 
@@ -415,7 +570,6 @@ define('io.ox/onboarding/main', [
         className: 'content-list',
 
         initialize: function () {
-
             this.listenTo(this.model, 'change', this.render);
         },
         events: {
@@ -428,18 +582,18 @@ define('io.ox/onboarding/main', [
         },
 
         render: function () {
-
             this.$el.empty();
             this.renderListItems();
             return this;
         },
 
         renderListItems: function () {
-
             var list = this.collection,
                 self = this;
 
             self.$el.append(
+                // filter for selected items
+                // create List items from selection
                 list
                 .filter(function (model) {
                     return self.model.get('platform') === undefined || self.model.get('platform') === model.get('platform');
@@ -449,10 +603,6 @@ define('io.ox/onboarding/main', [
                     return view.render().$el;
                 })
             );
-
-        },
-        onDispose: function () {
-            console.log(this.cid);
         }
     });
 
@@ -551,21 +701,23 @@ define('io.ox/onboarding/main', [
                     var connectTour = new Wizard(),
                         platform;
 
+                    // set platform if mobile device detected
                     if (_.device('ios')) {
-                        platform.id = 'ios';
+                        platform = 'ios';
                     } else if (_.device('android')) {
-                        platform.id = 'android';
+                        platform = 'android';
                     } else {
                         platform = undefined;
                     }
 
+                    // setup model and views
                     connectTour.userData = {};
                     connectTour.model = new Backbone.Model({ app: undefined, platform: platform, currentStep: connectTour.currentStep });
                     connectTour.platformsView = new PlatformView({ model: connectTour.model });
                     connectTour.appsView = new AppView({ model: connectTour.model });
                     connectTour.progressView = new ProgressionView({ model: connectTour.model });
 
-                    // ensure that everything is reset
+                    // ensure that everything is reset on close
                     connectTour.on('stop', function () {
                         console.log('close');
                         connectTour.model = null;
@@ -579,6 +731,7 @@ define('io.ox/onboarding/main', [
                     });
                     connectTour.appsView.render();
 
+                    // dont start with platforms view on mobile
                     if (!_.device('smartphone')) {
                         connectTour.platformsView.render();
                         connectTour.progressView.render();

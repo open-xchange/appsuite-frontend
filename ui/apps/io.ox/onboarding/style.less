@@ -24,6 +24,10 @@
         #dialog-title {
             text-align: left;
         }
+
+        .progress-steps:after{
+            left: unset;
+        }
     }
     .wizard-backdrop {
         z-index: 0;
@@ -60,6 +64,7 @@
             display: flex;
             flex-direction: column;
             padding: 16px 32px;
+            overflow-y: auto;
 
             .progress-container {
                 flex: 0 1 auto;
@@ -118,13 +123,13 @@
                 display: flex;
                 flex-direction: column;
                 flex: 1 1 auto;
-                justify-content: center;
+                //justify-content: center;
 
                 .description {
                     margin: 5% 0;
 
                     p {
-                        margin-bottom: 8px;
+                        margin-bottom: 12px;
                     }
 
                     .prompt {
@@ -200,6 +205,55 @@
                 }
                 .link-info {
                     margin: auto 0 0 0;
+                }
+
+                //DownloadView
+                .download {
+                    align-self: center;
+                    width: 60%;
+                    font-size: 18px;
+                    line-height: 64px;
+                    border-radius: 10px;
+                    margin: 5% 0;
+                }
+
+                //MobileDownloadView
+                &.mobile-download {
+                    justify-content: space-evenly;
+                    text-align: center;
+
+                    .app-icon {
+                        width: 50vw;
+                        height: 50vw;
+                        max-width: 170px;
+                        max-height: 170px;
+                        background-size: cover;
+                        margin: 0 auto;
+
+                        &.mailapp.playstore {
+                            background-image: url(@onboarding-mailapp-googleplay);
+                        }
+                        &.driveapp.playstore {
+                            background-image: url(@onboarding-mailapp-appstore);
+                        }
+                        &.mailapp.appstore {
+                            background-image: url(@onboarding-mailapp-appstore);
+                        }
+                        &.driveapp.appstore {
+                            background-image: url(@onboarding-driveapp-appstore);
+                        }
+                        &.driveapp.macappstore {
+                            background-image: url(@onboarding-driveapp-appstore);
+                        }
+                    }
+                    .store-icon {
+                        max-height: 50px;
+                    }
+                    .app-info {
+                        margin: 0;
+                        font-size: 2.5rem;
+                        font-weight: 700;
+                    }
                 }
             }
         }
