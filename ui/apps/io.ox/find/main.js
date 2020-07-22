@@ -607,6 +607,7 @@ define('io.ox/find/main', [
                     app.set('state', 'launched');
                     // trigger global event
                     ox.trigger('search:load', app);
+                    app.view.$el.removeClass('initial').addClass('loaded');
                 });
                 // reset cache on contact changes
                 require(['io.ox/contacts/api'], function (contactsAPI) {
