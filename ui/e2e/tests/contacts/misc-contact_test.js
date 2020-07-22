@@ -27,6 +27,8 @@ Scenario('[C8817] - Send E-Mail to contact', function (I, users, search, contact
     I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
+
+    search.waitForWidget();
     search.doSearch(users[0].userdata.primaryEmail);
     I.waitForElement({ css: '[href="mailto:' + users[0].userdata.primaryEmail + '"]' });
     I.click({ css: '[href="mailto:' + users[0].userdata.primaryEmail + '"]' });

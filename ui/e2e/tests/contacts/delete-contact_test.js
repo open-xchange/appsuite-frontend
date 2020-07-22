@@ -37,6 +37,7 @@ Scenario('[C7366] Multiple contacts', async function (I, search, contacts, dialo
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
 
+    search.waitForWidget();
     search.doSearch(testrailID + ' ' + testrailID);
     I.click('~' + testrailID + ', ' + testrailID);
     I.waitForElement('.fa-spin-paused');

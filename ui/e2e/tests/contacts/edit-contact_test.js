@@ -309,6 +309,7 @@ Scenario('[C7358] Remove contact picture', async function (I, search, contacts, 
     I.click('Save');
     I.waitForDetached('.io-ox-contacts-edit-window');
 
+    search.waitForWidget();
     search.doSearch(testrailID + ' ' + testrailID);
     I.click('[aria-label="' + testrailID + ', ' + testrailID + '"]');
     I.waitForElement('.contact-header');

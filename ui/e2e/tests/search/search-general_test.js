@@ -43,6 +43,27 @@ Scenario('Supports delayed autoselect', async function (I, mail, search) {
     I.waitForText(query, 2, '.token-label');
 });
 
+Scenario('Disable cache for search results (OXUIB-252)', async (I, users, search, mail) => {
+
+    await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/c8402_1.eml' });
+
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+    I.waitForVisible(search.locators.box);
+
+    // when cached an event wouldn't be triggered that lists 'Select all messages' in dropdown
+    ['cold-cache', 'second-run'].forEach(function (state) {
+        I.say(state);
+        search.waitForWidget();
+        search.doSearch('test');
+        I.retry(5).clickToolbar('All');
+        I.waitForText('Select all messages');
+        I.click('Select all messages');
+        search.cancel();
+        mail.selectMail('test');
+    });
+});
+
 Scenario('[C8408] Try to run a script in search', async function (I, mail, search) {
     I.login();
     mail.waitForApp();
@@ -55,24 +76,4 @@ Scenario('[C8408] Try to run a script in search', async function (I, mail, searc
 
     I.wait(1);
     expect(await I.grabHTMLFrom({ xpath: '//body' })).to.not.equal('I am a hacker');
-});
-
-Scenario('Disable cache for search results (OXUIB-252)', async (I, users, search, mail) => {
-
-    await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/c8402_1.eml' });
-
-    I.login('app=io.ox/mail');
-    mail.waitForApp();
-    I.waitForVisible(search.locators.box);
-
-    // when cached an event wouldn't be triggered that lists 'Select all messages' in dropdown
-    ['cold-cache', 'second-run'].forEach(function (state) {
-        I.say(state);
-        search.doSearch('test');
-        I.retry(5).clickToolbar('All');
-        I.waitForText('Select all messages');
-        I.click('Select all messages');
-        search.cancel();
-        mail.selectMail('test');
-    });
 });

@@ -43,18 +43,24 @@ Scenario('[C7371] by Addresses', async function (I, search, contacts) {
 
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
+
+    search.waitForWidget();
     search.doSearch(contact.street_home);
     I.waitForText(firstname, 5, '.vgrid-cell');
     I.waitForText(lastname, 5, '.vgrid-cell');
+    search.waitForWidget();
     search.doSearch(contact.post_code_home);
     I.waitForText(firstname, 5, '.vgrid-cell');
     I.waitForText(lastname, 5, '.vgrid-cell');
+    search.waitForWidget();
     search.doSearch(contact.city_home);
     I.waitForText(firstname, 5, '.vgrid-cell');
     I.waitForText(lastname, 5, '.vgrid-cell');
+    search.waitForWidget();
     search.doSearch(contact.state_home);
     I.waitForText(firstname, 5, '.vgrid-cell');
     I.waitForText(lastname, 5, '.vgrid-cell');
+    search.waitForWidget();
     search.doSearch(contact.country_home);
     I.waitForText(firstname, 5, '.vgrid-cell');
     I.waitForText(lastname, 5, '.vgrid-cell');

@@ -37,6 +37,7 @@ Scenario('[C7370] by Phone numbers', async function (I, search, contacts) {
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
 
+    search.waitForWidget();
     search.doSearch(phone);
 
     I.waitForText(testrailID, 5, '.vgrid-cell');

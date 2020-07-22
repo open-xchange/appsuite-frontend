@@ -49,6 +49,7 @@ Scenario('[C7378] Multiple distribution lists', async function (I, search, conta
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
 
+    search.waitForWidget();
     search.doSearch(display_name);
     I.waitForText(display_name, '.vgrid-cell');
 
