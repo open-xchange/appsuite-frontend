@@ -13,7 +13,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Mail > Search');
+Feature('Search > Mail');
 
 Before(async (users) => {
     await users.create();

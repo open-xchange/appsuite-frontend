@@ -9,9 +9,9 @@
  *
  * @author Daniel Pondruff <daniel.pondruff@open-xchange.com>
  */
-/// <reference path="../../steps.d.ts" />
+/// <reference path="../../../steps.d.ts" />
 
-Feature('Contacts > Search');
+Feature('Search > Contacts');
 
 Before(async function (users) {
     await users.create();
@@ -19,45 +19,6 @@ Before(async function (users) {
 
 After(async function (users) {
     await users.removeAll();
-});
-
-
-Scenario('[C7369] by Name', async function (I, search, contacts) {
-    const testrailID = 'C7369';
-    const contact = {
-        display_name: testrailID + ', ' + testrailID,
-        folder_id: await I.grabDefaultFolder('contacts'),
-        first_name: testrailID,
-        last_name: testrailID
-    };
-    await I.haveContact(contact);
-
-    I.login('app=io.ox/contacts');
-    contacts.waitForApp();
-
-    search.doSearch(testrailID + ' ' + testrailID);
-    I.waitForText(testrailID, 5, '.vgrid-cell');
-});
-
-Scenario('[C7370] by Phone numbers', async function (I, search, contacts) {
-    const phone = '+4917113371337';
-    const testrailID = 'C7370';
-    //Create Contact
-    const contact = {
-        display_name: '' + testrailID + ', ' + testrailID + '',
-        folder_id: await I.grabDefaultFolder('contacts'),
-        first_name: testrailID,
-        last_name: testrailID,
-        cellular_telephone1: phone
-    };
-    await I.haveContact(contact);
-
-    I.login('app=io.ox/contacts');
-    contacts.waitForApp();
-
-    search.doSearch(phone);
-
-    I.waitForText(testrailID, 5, '.vgrid-cell');
 });
 
 Scenario('[C7371] by Addresses', async function (I, search, contacts) {
