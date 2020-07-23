@@ -184,8 +184,15 @@ define('io.ox/find/main', [
             },
 
             'listview-empty-message': function (app) {
-                if (!app.get('parent').listView) return;
-                var ref = app.get('parent').listView.ref;
+                var MAPPING = {
+                        'io.ox/mail': 'io.ox/mail/listview',
+                        'io.ox/calendar': 'io.ox/chronos/listview',
+                        'io.ox/files': 'io.ox/files/listview'
+                    },
+                    ref = MAPPING[app.get('parent').id];
+
+                if (!ref) return;
+
                 ext.point(ref + '/notification/empty').extend({
                     id: 'search',
                     index: 100,
@@ -195,20 +202,16 @@ define('io.ox/find/main', [
                         this.text(gt('No matching items found.'));
                     }
                 });
-            },
 
-            'listview-empty-message-action': function (app) {
                 // non-listview app OR no 'all folders' option
-                if (!app.get('parent').listView || app.isMandatory('folder')) return;
-                var ref = app.get('parent').listView.ref;
                 ext.point(ref + '/notification/empty').extend({
                     id: 'search-action',
                     index: 200,
                     draw: function (baton) {
                         // is listview currently in 'search mode'?
                         if (!baton.app.props.get('find-result')) return;
-                        var manager = baton.app.get('find').model.manager;
                         // already searched in all folders?
+                        var manager = baton.app.get('find').model.manager;
                         if (manager.get('folder') && manager.get('folder').get('values').get('custom').getOption().id === 'disabled') return;
 
                         this.append(
