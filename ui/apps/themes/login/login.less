@@ -532,6 +532,7 @@ html.baseline {
         #io-ox-login-toolbar {
             margin: 0;
             height: unset;
+            min-height: 56px;
             align-items: unset;
             padding: 0 16px;
 
@@ -563,8 +564,10 @@ html.baseline {
             .align-center {
                 align-self: unset;
 
-                .row {
+                > .row {
                     height: 100%;
+                    align-items: center;
+                    display: flex;
                 }
             }
 
