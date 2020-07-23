@@ -70,7 +70,7 @@ define('io.ox/switchboard/settings/pane', [
                     util.fieldset(
                         gt('Options'),
                         util.checkbox('zoom/addMeetingPassword', gt('Always add a random meeting password'), settings),
-                        util.checkbox('call/showNativeNotifications', gt('Use native notifications'), settings),
+                        util.checkbox('call/showNativeNotifications', gt('Show desktop notifications'), settings),
                         util.checkbox('call/useRingtones', gt('Play ringtone on incoming call'), settings)
                     )
                 );
@@ -98,11 +98,11 @@ define('io.ox/switchboard/settings/pane', [
         renderMissingAccount: function () {
             this.$el.empty().append(
                 $('<p>').text(
-                    gt('You have not linked your Zoom account. In order to use Zoom-specific features, you must have an account.')
+                    gt('You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. If you don\'t have an account yet, it is sufficient to create a free one.', ox.serverConfig.productName)
                 ),
                 // add button
                 $('<button type="button" class="btn btn-primary" data-action="add">').text(
-                    gt('Add Zoom account')
+                    gt('Connect with Zoom')
                 )
             );
         },
