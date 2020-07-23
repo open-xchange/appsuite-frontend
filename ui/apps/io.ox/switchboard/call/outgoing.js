@@ -67,27 +67,27 @@ define('io.ox/switchboard/call/outgoing', [
                         }
                     },
                     renderConnectButtons: function () {
-                        this.$footer.append(
+                        this.$footer.append($('<div class="switchboard-actions">').append(
                             this.createButton('default', 'cancel', 'times', gt('Cancel')),
                             this.createButton('primary', 'connect', 'plug', gt('Connect'))
-                        );
+                        ));
                     },
                     renderCallButtons: function () {
-                        this.$footer.append(
+                        this.$footer.append($('<div class="switchboard-actions">').append(
                             this.createButton('default', 'cancel', 'times', gt('Cancel')),
                             this.createButton('success', 'call', 'phone', gt.pgettext('verb', 'Call'))
-                        );
+                        ));
                         this.toggleCallButton();
                         this.$('button[data-action="call"]').focus();
                     },
                     createButton: function (type, action, icon, title) {
-                        return $('<div class="button">').append(
-                            $('<button type="button" class="btn">').addClass('btn-' + type).attr('data-action', action).append(
-                                $('<i class="fa" aria-hidden="true">').addClass('fa-' + icon)
-                            )
-                            .attr('aria-label', title),
-                            $.txt(gt.noI18n(title))
-                        );
+                        return $('<button type="button" class="btn btn-link">')
+                            .addClass(type && ('btn-' + type))
+                            .attr('data-action', action)
+                            .append(
+                                $('<i class="fa" aria-hidden="true">').addClass('fa-' + icon),
+                                $('<div>').text(title)
+                            );
                     },
                     toggleCallButton: function () {
                         var url = this.conference.model.get('joinURL');
@@ -119,8 +119,8 @@ define('io.ox/switchboard/call/outgoing', [
                     window.open(url, 'call');
                     call.set('joinURL', url).propagate();
                     ringtone.outgoing.play();
-                    this.getButton('cancel').parent().remove();
-                    this.getButton('call').parent().replaceWith(
+                    this.getButton('cancel').remove();
+                    this.getButton('call').replaceWith(
                         this.createButton('danger', 'hangup', 'phone', gt('Hang up'))
                     );
                     call.addToHistory();

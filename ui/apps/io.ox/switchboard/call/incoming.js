@@ -42,18 +42,22 @@ define('io.ox/switchboard/call/incoming', [
                         $('<div class="name">').append(model.getCallerName()),
                         $('<div class="email">').text(caller)
                     );
-                    this.$footer.append(
-                        $('<div class="button">').append(
-                            $('<button type="button" class="btn btn-danger" data-action="decline"><i class="fa fa-close" aria-hidden="true"></i></button')
-                                .attr('aria-label', gt('Decline')),
-                            $.txt(gt('Decline'))
-                        ),
-                        $('<div class="button">').append(
-                            $('<button type="button" class="btn btn-success" data-action="answer"><i class="fa fa-phone" aria-hidden="true"></i></button')
-                                .attr('aria-label', gt('Answer')),
-                            $.txt(gt('Answer'))
-                        )
-                    );
+                    this.$footer.append($('<div class="switchboard-actions">').append(
+                        $('<button type="button" class="btn btn-link ">')
+                            .addClass('btn-danger')
+                            .attr('data-action', 'decline')
+                            .append(
+                                $('<i class="fa" aria-hidden="true">').addClass('fa-close'),
+                                $('<div>').text(gt('Decline'))
+                            ),
+                        $('<button type="button" class="btn btn-link ">')
+                            .addClass('btn-success')
+                            .attr('data-action', 'answer')
+                            .append(
+                                $('<i class="fa" aria-hidden="true">').addClass('fa-phone'),
+                                $('<div>').text(gt('Answer'))
+                            )
+                    ));
                 })
                 .on('open', function () {
                     if (window.Notification && settings.get('call/showNativeNotifications', true)) {

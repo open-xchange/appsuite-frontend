@@ -293,7 +293,7 @@ define('io.ox/switchboard/extensions', [
                     $('<button type="button" class="btn btn-link" data-action="join">')
                         .append(
                             $('<i class="fa fa-phone" aria-hidden="true">'),
-                            $.txt(title)
+                            $('<div>').text(title)
                         )
                         .on('click', function () {
                             window.open(match[0]);
