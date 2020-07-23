@@ -25,7 +25,7 @@
     i.fa:first-child {
         width: 40px;
         height: 40px;
-        border-radius: 20px;
+        border-radius: 50%;
         border: 1px solid fade(@link-color, 40%);
         background-color: fade(@link-color, 4%);
         color: @link-color;
@@ -38,7 +38,7 @@
     i.fa.fa-phone {
         font-size: 24px;
     }
-    button:hover:not(:disabled), button:focus {
+    .btn-link:hover:not(:disabled), .btn-link:focus {
         outline: 0;
         text-decoration: none;
         i.fa:first-child {
@@ -328,7 +328,7 @@
     }
 }
 
-@-webkit-keyframes call-history-blink {
+@keyframes call-history-blink {
     0%   { opacity: 0; }
     50%  { opacity: 0; }
     51%  { opacity: 1; }
@@ -380,7 +380,6 @@
         font-size: 13px;
         color: #707070;
         float: right;
-        display: inline-block;
         margin-left: 8px;
     }
     .name {
