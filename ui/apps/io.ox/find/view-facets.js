@@ -75,11 +75,13 @@ define('io.ox/find/view-facets', [
         },
 
         register: function () {
-            this.listenTo(this.app.model.manager, 'active', this.hide);
+            // needs redraw in case option is set outside this view
+            this.listenTo(this.app.model.manager, 'active', this.render);
             this.listenTo(this.app, 'find:config-updated', this.render);
         },
 
         render: function () {
+            this.hide();
             this.reset();
             this.$el.append(
                 this.$dropdown = $('<form class="dropdown" autocomplete="off">')
