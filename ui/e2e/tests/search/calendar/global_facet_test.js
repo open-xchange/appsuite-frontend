@@ -72,7 +72,7 @@ Scenario('Search via facet "global"', async (I, calendar, search) => {
 
 });
 
-Scenario('XXX Search via appointment status', async (I, calendar, search) => {    const folder = await `cal://0/${await I.grabDefaultFolder('calendar')}`;
+Scenario('Search via appointment status', async (I, calendar, search) => {    const folder = await `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const time = moment().startOf('week').add(1, 'day').add(16, 'hours');
     const format = 'YYYYMMDD[T]HHmmss';
     I.haveAppointment({

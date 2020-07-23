@@ -432,7 +432,6 @@ define('io.ox/core/desktop', [
             if (this.get('find')) return true;
 
             var find = findFactory.getApp({ parent: this });
-            window.find = find;
             //TODO: bottleneck
             find.prepare();
             this.set('find', find);
