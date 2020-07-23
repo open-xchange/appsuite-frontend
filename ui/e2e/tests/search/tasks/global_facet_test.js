@@ -8,7 +8,7 @@
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  * © 2017 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Paczynski Paczynski <frank.paczynski@open-xchange.com>
+ * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 /// <reference path="../../../steps.d.ts" />
 
