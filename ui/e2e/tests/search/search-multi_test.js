@@ -12,8 +12,6 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-const { find } = require("underscore");
-
 Feature('Search > General');
 
 Before(async (users) => {

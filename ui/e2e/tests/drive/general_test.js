@@ -135,37 +135,6 @@ Scenario('[C8368] View change @bug', async (I, drive) => {
     I.see('document.txt');
 });
 
-const searchFor = (I, query) => {
-    I.click('.search-field');
-    I.waitForElement('.token-input');
-    I.fillField('.token-input', query);
-    I.pressKey('Enter');
-    I.waitForDetached('.busy-indicator.io-ox-busy');
-};
-
-Scenario('[C8369] Search', async (I, drive) => {
-    const folder = await I.grabDefaultFolder('infostore');
-    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
-    const testFolder = await I.haveFolder({ title: 'Testfolder', module: 'infostore', parent: folder });
-    await Promise.all([
-        I.haveFile(testFolder, 'e2e/media/files/0kb/document.txt'),
-        I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.rtf'),
-        I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.odt'),
-        I.haveFile(testFolder, 'e2e/media/files/generic/testpresentation.ppsm')
-    ]);
-    I.login('app=io.ox/files');
-    drive.waitForApp();
-    I.selectFolder('Testfolder');
-    searchFor(I, 'document.txt');
-    I.waitNumberOfVisibleElements('.file-list-view .list-item', 1);
-    I.click('~Cancel search');
-    searchFor(I, 'noneexisting');
-    I.waitForText('No matching items found.');
-    I.click('~Cancel search');
-    searchFor(I, 'd');
-    I.waitNumberOfVisibleElements('.file-list-view .list-item', 3);
-});
-
 Scenario('[C8371] Delete file', async (I, drive) => {
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');

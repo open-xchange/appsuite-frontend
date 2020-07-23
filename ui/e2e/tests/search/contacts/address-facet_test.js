@@ -21,7 +21,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7371] by Addresses', async function (I, search, contacts) {
+Scenario('[C7371] address parts via global facet', async function (I, search, contacts) {
     const testrailID = 'C7371';
     const firstname = testrailID;
     const lastname = testrailID;
@@ -48,18 +48,22 @@ Scenario('[C7371] by Addresses', async function (I, search, contacts) {
     search.doSearch(contact.street_home);
     I.waitForText(firstname, 5, '.vgrid-cell');
     I.waitForText(lastname, 5, '.vgrid-cell');
+
     search.waitForWidget();
     search.doSearch(contact.post_code_home);
     I.waitForText(firstname, 5, '.vgrid-cell');
     I.waitForText(lastname, 5, '.vgrid-cell');
+
     search.waitForWidget();
     search.doSearch(contact.city_home);
     I.waitForText(firstname, 5, '.vgrid-cell');
     I.waitForText(lastname, 5, '.vgrid-cell');
+
     search.waitForWidget();
     search.doSearch(contact.state_home);
     I.waitForText(firstname, 5, '.vgrid-cell');
     I.waitForText(lastname, 5, '.vgrid-cell');
+
     search.waitForWidget();
     search.doSearch(contact.country_home);
     I.waitForText(firstname, 5, '.vgrid-cell');
