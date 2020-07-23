@@ -23,10 +23,11 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C8404] Find mails based on from/to', async (I, users) => {
+Scenario('[C8404] Find mails based on from/to', async (I, users, mail, search) => {
 
     const USER = users[0];
     const INBOX = 'default0/INBOX';
+    let query;
 
     await I.haveMail({
         folder: INBOX,
@@ -41,21 +42,17 @@ Scenario('[C8404] Find mails based on from/to', async (I, users) => {
     // 1. Start a new search in mail
 
     I.login('app=io.ox/mail');
-    I.waitForVisible('.search-box');
 
-    // 2. Click into the input field.
+    mail.waitForApp();
+    search.waitForWidget();
 
-    I.click('.search-box');
+    // Enter "test" in the inputfield, than hit enter.
+    query = 'john@doe.com';
 
-    // 3. Start typing some user name
-
-    I.fillField('.search-box input', 'john@doe.com');
+    // search and select contact facet
+    I.retry(5).fillField(search.locators.field, query);
     I.waitForText('john@doe.com', 5, '.contacts');
     I.click('john@doe.com', '.contacts');
-
-    // 4. Select a user by clicking it or hit "Enter"
-
-    I.pressKey('Enter');
 
     I.waitForText('John Doe', 5, '.list-view');
     I.waitForText('Mail#2', 5, '.list-view');

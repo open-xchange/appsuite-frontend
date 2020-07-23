@@ -29,5 +29,13 @@ module.exports = {
     cancel() {
         I.retry(5).click(this.locators.cancel);
         I.waitToHide(this.locators.cancel);
+    },
+
+    option(label, option) {
+        I.click(this.locators.options);
+        I.waitForVisible(this.locators.dropdown);
+        I.see(label);
+        I.selectOption(label, option);
+        if (option !== 'More…') I.waitForElement('.search-field.focus');
     }
 };

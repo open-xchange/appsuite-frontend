@@ -25,17 +25,89 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('Supports delayed autoselect', async function (I, mail, search) {
+Scenario('Handles options properly', async function (I, mail, search) {
+
+    const FOLDER1 = 'Inbox';
+    const FOLDER2 = 'Trash';
 
     I.login('app=io.ox/mail');
     mail.waitForApp();
-    var query = 'my-input';
 
-    I.say('enter query');
-    I.click(search.locators.box);
-    I.waitForVisible(search.locators.field);
-    I.fillField(search.locators.field, query);
+    // inital: current folder as initial value
+    search.waitForWidget();
+    I.click(search.locators.options);
+    I.waitForVisible(search.locators.dropdown);
+    I.see(FOLDER1);
+    I.pressKey('Enter');
+    I.pressKey(['Shift', 'Tab']);
 
+    // set
+    search.waitForWidget();
+    search.option('Folder', FOLDER2);
+    I.wait(0.5);
+    I.seeElement('.search-field.focus');
+
+    // check
+    I.click(search.locators.options);
+    I.waitForVisible(search.locators.dropdown);
+    I.see(FOLDER2);
+    I.pressKey('Enter');
+    I.pressKey(['Shift', 'Tab']);
+
+    // exit (smart-cancel) and check again for initial value
+    I.click(FOLDER1, '.folder-tree');
+    I.dontSeeElement('io-ox-find.active');
+    search.waitForWidget();
+    I.click(search.locators.options);
+    I.waitForVisible(search.locators.dropdown);
+    I.see(FOLDER1);
+});
+
+Scenario('Supports smart-exit', async function (I, mail, search) {
+
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+    I.seeElement('.io-ox-find.initial');
+
+    // load
+    I.say('load');
+    search.waitForWidget();
+    I.seeElement('.io-ox-find.loaded');
+
+    // open options dropdown
+    I.say('open options dropdown');
+    I.click(search.locators.options);
+    I.waitForVisible(search.locators.dropdown);
+    I.seeElement('.io-ox-find.active');
+
+    // exit via cancel
+    I.say('exit via cancel');
+    search.cancel();
+    I.dontSeeElement('.io-ox-find.active');
+
+    // exit via 'focusout' (keyboard)
+    I.say('exit via \'focusout\' (keyboard)');
+    search.waitForWidget();
+    I.pressKey(['Shift', 'Tab']);
+    I.wait(0.5);
+    I.dontSeeElement('.io-ox-find.active');
+
+    // exit via 'focusout' (mouse)
+    I.say('exit via \'focusout\' (mouse)');
+    search.waitForWidget();
+    I.click('Inbox', '.folder-tree');
+    I.wait(0.5);
+    I.dontSeeElement('.io-ox-find.active');
+});
+
+Scenario('Supports delayed autoselect', async function (I, mail, search) {
+
+    const query = 'my-input';
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+    search.waitForWidget();
+
+    I.retry(5).fillField(search.locators.field, query);
     I.dontSeeElement('.autocomplete-item');
     I.pressKey('Enter');
 

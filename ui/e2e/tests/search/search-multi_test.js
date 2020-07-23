@@ -12,6 +12,8 @@
  */
 /// <reference path="../../steps.d.ts" />
 
+const { find } = require("underscore");
+
 Feature('Search > General');
 
 Before(async (users) => {
@@ -22,7 +24,6 @@ Before(async (users) => {
 After(async (users) => {
     await users.removeAll();
 });
-const searchField = '.search-box input[type=search]';
 
 function getTestMail(from, to, opt) {
     opt = opt || {};
@@ -41,7 +42,8 @@ function getTestMail(from, to, opt) {
     };
 }
 
-Scenario('[C8407] Perform a multi search', async function (I, users) {
+// covers "[C8407] Perform a multi search" also
+Scenario('[C8406] Delete a string from multi search', async function (I, users, mail, search) {
     const [user1, user2] = users;
 
     await I.haveMail(getTestMail(user1, user2, {
@@ -54,49 +56,19 @@ Scenario('[C8407] Perform a multi search', async function (I, users) {
     }));
 
     I.login('app=io.ox/mail', { user: user2 });
+    mail.waitForApp();
+    search.waitForWidget();
 
-    I.waitForVisible('.search-box');
-    I.click('.search-box');
-    I.waitForFocus(searchField);
-    I.fillField(searchField, 'test');
-    I.pressKey('Enter');
+    search.doSearch('test');
     I.waitForVisible('.list-view [data-index="0"]');
     I.waitForVisible('.list-view [data-index="1"]');
     I.waitForElement('.token span[title="test"] + a');
-    I.fillField(searchField, '123');
-    I.pressKey('Enter');
-    I.waitForElement('.list-view [data-index="0"]');
-    I.waitForInvisible('.list-view [data-index="1"]');
-});
 
-Scenario('[C8406] Delete a string from multi search', async function (I, users) {
-    const [user1, user2] = users;
-
-    await I.haveMail(getTestMail(user1, user2, {
-        subject: 'test 123',
-        content: ''
-    }));
-    await I.haveMail(getTestMail(user1, user2, {
-        subject: 'test',
-        content: ''
-    }));
-    //let searchField = 'input[type=search]';
-
-    I.login('app=io.ox/mail', { user: user2 });
-
-    I.waitForVisible('.search-box');
-    I.click('.search-box');
-    I.waitForFocus(searchField);
-    I.fillField(searchField, 'test');
-    I.pressKey('Enter');
-    I.waitForVisible('.list-view [data-index="0"]');
-    I.waitForVisible('.list-view [data-index="1"]');
-    I.waitForElement('.token span[title="test"] + a');
-    I.fillField(searchField, '123');
-    I.pressKey('Enter');
+    search.doSearch('123');
     I.waitForElement('.list-view [data-index="0"]');
     I.waitForInvisible('.list-view [data-index="1"]');
     I.waitForElement('.token span[title="123"] + a');
+
     I.click('.token span[title="123"] + a');
     I.waitForVisible('.list-view [data-index="0"]');
     I.waitForVisible('.list-view [data-index="1"]');

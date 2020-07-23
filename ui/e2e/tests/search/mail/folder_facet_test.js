@@ -13,6 +13,8 @@
 
 /// <reference path="../../../steps.d.ts" />
 
+const { expect } = require('chai');
+
 Feature('Search > Mail');
 
 Before(async (users) => {
@@ -23,11 +25,13 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C114373] Search in all folders', async function (I, users, mail) {
+Scenario('[C114373] Search in all folders', async function (I, users, mail, search) {
     let [user] = users;
     user.hasConfig('com.openexchange.find.basic.mail.allMessagesFolder', 'virtual/all');
     user.hasConfig('com.openexchange.find.basic.mail.searchmailbody', true);
+
     await Promise.all([
+        I.haveSetting('io.ox/core//search/mandatory/folder', '[]'),
         I.haveFolder({ title: 'Subfolder', module: 'mail', parent: 'default0/INBOX' }),
         I.haveMail({
             folder: 'default0/INBOX/Subfolder',
@@ -36,20 +40,26 @@ Scenario('[C114373] Search in all folders', async function (I, users, mail) {
     ]);
     I.login();
     mail.waitForApp();
-    I.fillField('Search...', 'Foo');
-    I.waitForText('Inbox', '.io-ox-find');
-    I.waitForVisible('.tt-dropdown-menu');
-    I.pressKey('Enter');
-    I.waitForText('Search in all folders', '.list-view');
+
+    search.waitForWidget();
+    search.doSearch('Foo');
+
+    I.waitForText('No matching items found.', 5, '.list-view');
+    I.waitForText('Search in all folders', 5, '.list-view');
     I.click('Search in all folders');
-    I.waitForText('All Folders', '.io-ox-find');
-    I.waitForText('Richtig gutes Zeug');
+    I.waitForText('Richtig gutes Zeug', 5);
+
+    // check
+    I.click(search.locators.options);
+    I.waitForVisible(search.locators.dropdown);
+    let folderoption = await I.grabValueFrom('.io-ox-find select[name=option]');
+    // "disabled" represents "All Folders"
+    expect(folderoption).to.be.equal('disabled');
 });
 
-Scenario('[C8402] Search in different folders', async (I, users) => {
+Scenario('[C8402] Search in different folders', async (I, users, mail, search) => {
 
     // Precondition: Some emails are in the inbox- and in a subfolder and have the subject "test".
-
     const INBOX = 'default0/INBOX';
     const SUBFOLDER = await I.haveFolder({ title: 'Subfolder', module: 'mail', parent: 'default0/INBOX' });
 
@@ -66,32 +76,18 @@ Scenario('[C8402] Search in different folders', async (I, users) => {
         path: 'e2e/media/mails/c8402_2.eml'
     }, { USER });
 
-    // 1. Login
-    // 2. Go to Mail and select the inbox
-
     I.login('app=io.ox/mail');
-    I.waitForVisible('.search-box');
+    mail.waitForApp();
+    search.waitForWidget();
 
-    // 3. Start a new search by clicking into the search bar.
-
-    I.click('.search-box');
-
-    // 4. Enter "test" in the inputfield, than hit enter.
-
-    I.fillField('.search-box input', 'test');
-    // UI will perform a reload if we do not wait here ...
-    I.wait(1);
-    I.pressKey('Enter');
-
+    // Enter "test" in the inputfield, than hit enter.
+    search.doSearch('test');
     I.waitForText('First', 5, '.list-view');
     I.waitForText('Inbox', 5, '.list-view');
 
-    // 5. Change the search folder to the subfolder
-
-    I.click('Inbox', '.classic-toolbar');
-    I.waitForVisible('.smart-dropdown-container');
-
-    I.click('More');
+    // Change the search folder to the subfolder
+    I.seeElement('.search-field.focus');
+    search.option('Folder', 'More…');
     I.waitForText('Select folder');
 
     I.doubleClick(
@@ -109,5 +105,4 @@ Scenario('[C8402] Search in different folders', async (I, users) => {
 
     I.waitForText('Second', 5, '.list-view');
     I.waitForText('Subfolder', 5, '.list-view');
-
 });
