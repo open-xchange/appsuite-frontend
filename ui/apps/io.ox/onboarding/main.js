@@ -239,27 +239,27 @@ define('io.ox/onboarding/main', [
         'android/mailapp': {
             'storeIcon': 'apps/themes/icons/default/googleplay/google-play-badge_EN.svg',
             'appIconClass': 'mailapp playstore',
-            'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail&hl=en'
+            'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail'
         },
         'android/driveapp': {
             'storeIcon': 'apps/themes/icons/default/googleplay/google-play-badge_EN.svg',
             'appIconClass': 'driveapp playstore',
-            'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail&hl=en'
+            'url': 'https://play.google.com/store/apps/details?id=com.openexchange.drive.vanilla'
         },
         'ios/mailapp': {
             'storeIcon': 'apps/themes/icons/default/appstore/App_Store_Badge_EN_135x40.svg',
             'appIconClass': 'mailapp appstore',
-            'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail&hl=en'
+            'url': 'https://itunes.apple.com/us/app/ox-mail-v2/id1385582725'
         },
         'ios/driveapp': {
             'storeIcon': 'apps/themes/icons/default/appstore/App_Store_Badge_EN_135x40.svg',
             'appIconClass': 'driveapp appstore',
-            'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail&hl=en'
+            'url': 'https://itunes.apple.com/de/app/ox-drive/id798570177'
         },
         'macos/driveapp': {
             'storeIcon': 'apps/themes/icons/default/appstore/Mac_App_Store_Badge_EN_165x40.svg',
             'appIconClass': 'driveapp macappstore',
-            'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail&hl=en'
+            'url': 'https://itunes.apple.com/de/app/ox-drive/id818195014'
         },
         'windows/drive/url': 'https://appsuite.open-xchange.com',
         'windows/emclient/url': 'https://appsuite.open-xchange.com',
@@ -285,7 +285,7 @@ define('io.ox/onboarding/main', [
                 self.$el.append(
                     $('<div class="description">').append($('<p class="prompt">').text(gt('Please scan this code with your phone\'s camera:'))),
                     $('<img class="qrcode">').attr('src', qr),
-                    $('<p class="link-info">').text(gt('Link')).append($('<a class="link">').text(self.url).attr('href', self.url))
+                    $('<p class="link-info">').text(gt('Link: ')).append($('<a class="link">').text(self.url).attr('href', self.url))
                 );
                 return self;
             });
@@ -329,13 +329,14 @@ define('io.ox/onboarding/main', [
         },
 
         events: {
-            'click .btn': 'onClick'
+            'click .btn.download': 'onClick',
+            'click .btn.manual-toggle': 'onToggle'
         },
 
         render: function () {
-            var syncView =  this.type === 'mail' ? new MailSyncView({ incoming: this.config.incoming, outgoing: this.config.outgoing, userData: this.config.userData }) :
+            this.syncView = this.type === 'mail' ? new MailSyncView({ incoming: this.config.incoming, outgoing: this.config.outgoing, userData: this.config.userData }) :
                 new SyncView({ config: this.config });
-            syncView.renderManualConfig();
+            this.syncView.renderManualConfig();
 
             this.$el.append(
                 $('<div class="description">').append(
@@ -343,7 +344,11 @@ define('io.ox/onboarding/main', [
                 ),
                 $('<button type="button" data-action="download" class="btn btn-primary download">').text(gt('Download configuration'))
             );
-            this.$el.append(syncView.$el);
+            this.$el.append(
+                $('<button class="btn btn-link manual-toggle" aria-expanded="false">').text(gt('Manual Configuration'))
+                .prepend($('<i class="fa fa-chevron-right" aria-hidden="true">')),
+                this.syncView.$el.hide()
+            );
             return this;
         },
 
@@ -353,6 +358,12 @@ define('io.ox/onboarding/main', [
                     download.url(url);
                 });
             });
+        },
+
+        onToggle: function (e) {
+            $(e.currentTarget).find('i.fa').toggleClass('fa-chevron-right fa-chevron-down').end()
+                .attr('aria-expanded', function (i, v) { return v === 'false'; });
+            this.syncView.$el.toggle();
         }
     });
 
@@ -472,7 +483,7 @@ define('io.ox/onboarding/main', [
         },
         renderManualConfig: function () {
             this.$el.append(
-                $('<div class="manual-description">').text(gt('Manual Configuration')),
+                //$('<button class="manual-description">').text(gt('Manual Configuration')),
                 $('<pre class="manual-config">')
                         .append(
                             $('<div class="title">')
@@ -499,8 +510,8 @@ define('io.ox/onboarding/main', [
         },
         'android': {
             'mailsync': function () { return new MailSyncView({ incoming: settings.get('incoming'), outgoing: settings.get('outgoing'), userData: config.userData, title: titles.android.mailsync }); },
-            'mailapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('android/mailapp')) : new DownloadQrView({ url: settings.get('android/url') }); },
-            'driveapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('android/driveapp')) : new DownloadQrView({ url: settings.get('android/url') }); },
+            'mailapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('android/mailapp')) : new DownloadQrView({ url: settings.get('android/mailapp').url }); },
+            'driveapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('android/driveapp')) : new DownloadQrView({ url: settings.get('android/driveapp').url }); },
             'addressbook': function () { return new SyncView({ name: titles.android.addressbook, config: settings.get('carddav') }); },
             'calendar': function () { return new SyncView({ name: titles.android.calendar, config: settings.get('caldav') }); }
         },
@@ -514,8 +525,8 @@ define('io.ox/onboarding/main', [
         },
         'ios': {
             'mailsync': function () { return new DownloadQrView({ url: settings.get('ios/mailsync/url') }); },
-            'mailapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('ios/mailapp')) : new DownloadQrView({ url: settings.get('ios/url') }); },
-            'driveapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('ios/driveapp')) : new DownloadQrView({ url: settings.get('ios/url') }); },
+            'mailapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('ios/mailapp')) : new DownloadQrView({ url: settings.get('ios/mailapp').url }); },
+            'driveapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('ios/driveapp')) : new DownloadQrView({ url: settings.get('ios/driveapp').url }); },
             'addressbook': function () { return new SyncView({ name: titles.ios.addressbook, config: settings.get('carddav') }); },
             'calendar': function () { return new SyncView({ name: titles.ios.calendar, config: settings.get('caldav') }); }
         }
@@ -644,18 +655,36 @@ define('io.ox/onboarding/main', [
                 .append($('<ul class="progress-steps">')
                 .append(
                     $('<li class="progress-step-one">')
-                        .text('1').addClass(!platform && !app ? 'active' : '')
-                        .append($('<p class="progress-description">').text(platformTitle ? platformTitle : gt('Platform'))),
+                        .append(
+                            $('<button type="button" class="btn progress-btn" data-action="back">')
+                            .prop('disabled', true)
+                            .append(
+                                $('<span>').text('1'),
+                                $('<span class="sr-only">').text(platformTitle ? platformTitle : gt('Platform'))
+                            )
+                        )
+                        .addClass(!platform && !app ? 'active' : '')
+                        .append($('<p class="progress-description aria-hidden="true">').text(platformTitle ? platformTitle : gt('Platform'))),
                     $('<li class="progress-step-two">')
-                        .text('2').addClass(platform && !app ? 'active' : '')
-                        .append($('<p class="progress-description">').text(appTitle ? appTitle : gt('App'))),
+                        .append(
+                            $('<button type="button" class="btn progress-btn" data-action="back">')
+                            .prop('disabled', true)
+                            .text('2')
+                        )
+                        .addClass(platform && !app ? 'active' : '')
+                        .append($('<p class="progress-description" aria-hidden="true">').text(appTitle ? appTitle : gt('App'))),
                     $('<li class="progress-step-three">')
-                        .text('3').addClass(platform && app ? 'active' : '')
-                        .append($('<p class="progress-description">').text(gt('Setup')))
-
+                        .append(
+                            $('<button type="button" class="btn progress-btn">')
+                            .prop('disabled', true)
+                            .text('3')
+                        )
+                        .addClass(platform && app ? 'active' : '')
+                        .append($('<p class="progress-description" aria-hidden="true">').text(gt('Setup')))
                 ));
-            $('.progress-step-one').attr(platform ? { role: 'button', 'data-action': 'back' } : '');
-            $('.progress-step-two').attr(app ? { role: 'button', 'data-action': 'back' } : '');
+
+            $('.progress-step-one .btn').prop(platform ? { 'disabled': false } : '');
+            $('.progress-step-two .btn').prop(app ? { 'disabled': false } : '');
             return this;
         },
         renderMobile: function () {
@@ -667,13 +696,24 @@ define('io.ox/onboarding/main', [
                 .append($('<ul class="progress-steps">')
                 .append(
                     $('<li class="progress-step-one">')
-                        .text('1').addClass(!app ? 'active' : '')
+                        .append(
+                            $('<button type="button" class="btn progress-btn" data-action="back">')
+                            .text('1')
+                            .prop('disabled', true)
+                        )
+                        .addClass(!app ? 'active' : '')
                         .append($('<p class="progress-description">').text(appTitle ? appTitle : gt('App'))),
                     $('<li class="progress-step-three">')
-                        .text('2').addClass(app ? 'active' : '')
+                        .append(
+                            $('<button type="button" class="btn progress-btn">')
+                            .text('2')
+                            .prop('disabled', true)
+                        )
+                        .addClass(app ? 'active' : '')
                         .append($('<p class="progress-description">').text(gt('Setup')))
                 ));
-            $('.progress-step-one').attr(app ? { role: 'button', 'data-action': 'back' } : '');
+
+            $('.progress-step-one').prop(app ? { 'disabled': false } : '');
             return this;
 
         }
@@ -688,6 +728,9 @@ define('io.ox/onboarding/main', [
         );
     }
 
+    function focus() {
+        this.$('.content-container').find('button:not(:disabled):visible:first').focus();
+    }
 
     wizard = {
         run: function () {
@@ -698,7 +741,7 @@ define('io.ox/onboarding/main', [
 
             if (!Wizard.registry.get('connect-wizard')) {
                 Wizard.registry.add(options, function () {
-                    var connectTour = new Wizard(),
+                    var connectTour = new Wizard({ disableMobileSupport: true }),
                         platform;
 
                     // set platform if mobile device detected
@@ -739,7 +782,8 @@ define('io.ox/onboarding/main', [
                         connectTour.step({
                             id: 'platform',
                             back: false,
-                            next: false
+                            next: false,
+                            disableMobileSupport: true
                         })
                         .on('before:show', function () {
                             // draw list of available platforms
@@ -754,6 +798,7 @@ define('io.ox/onboarding/main', [
                                 connectTour.next();
                             });
                         })
+                        .on('show', function () { focus.call(this); })
                         .end();
                     } else {
                         connectTour.progressView.renderMobile();
@@ -762,7 +807,8 @@ define('io.ox/onboarding/main', [
                     connectTour.step({
                         id: 'apps',
                         back: false,
-                        next: false
+                        next: false,
+                        disableMobileSupport: true
                     })
                     .on('before:show', function () {
                         // draw list of apps for chosen platform
@@ -778,6 +824,7 @@ define('io.ox/onboarding/main', [
                             connectTour.next();
                         });
                     })
+                    .on('show', function () { focus.call(this); })
                     .on('back', function () {
                         connectTour.model.set('platform', undefined);
                     })
@@ -785,7 +832,8 @@ define('io.ox/onboarding/main', [
                     .step({
                         id: 'setup',
                         back: false,
-                        next: false
+                        next: false,
+                        disableMobileSupport: true
                     })
                     .on('before:show', function () {
                         var self = this;
@@ -797,6 +845,7 @@ define('io.ox/onboarding/main', [
                             connectTour.progressView.$el,
                             view.$el);
                     })
+                    .on('show', function () { focus.call(this); })
                     .on('back', function () {
                         connectTour.model.set('app', undefined);
                     })

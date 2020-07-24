@@ -33,7 +33,7 @@ define('io.ox/core/tk/wizard', [
 
     var backdrop = $('<div class="wizard-backdrop abs">');
 
-    var container = _.device('smartphone') ?
+    /* var container = _.device('smartphone') ?
         // special node for fullscreen wizards on smartphone
         $(
             '<div class="wizard-container abs">' +
@@ -48,7 +48,7 @@ define('io.ox/core/tk/wizard', [
         ) :
         // simple container on desktop for flex layout
         $('<div class="wizard-container abs">');
-
+ */
     function getBounds(elem, padding) {
         padding = padding ? padding : 0;
         var o = elem.offset();
@@ -127,9 +127,24 @@ define('io.ox/core/tk/wizard', [
         $(document).on('click.wizard', '.wizard-overlay, .wizard-backdrop', function () {
             $('.wizard-step:visible').find('button.btn-primary:first').focus();
         });
+        this.containerScaffold = _.device('smartphone') && !this.disableMobileSupport ?
+        // special node for fullscreen wizards on smartphone
+            $(
+                '<div class="wizard-container abs">' +
+                '  <div class="wizard-navbar">' +
+                '    <div class="wizard-back"></div>' +
+                '    <div class="wizard-title"></div>' +
+                '    <div class="wizard-next"></div>' +
+                '  </div>' +
+                '  <div class="wizard-pages"></div>' +
+                '  <div class="wizard-animation"></div>' +
+                '</div>'
+            ) :
+        // simple container on desktop for flex layout
+            $('<div class="wizard-container abs">');
 
-        this.container = container.clone();
-        if (_.device('smartphone')) initalizeSmartphoneSupport.call(this);
+        this.container = this.containerScaffold.clone();
+        if (_.device('smartphone') && !this.options.disableMobileSupport) initalizeSmartphoneSupport.call(this);
     }
 
     _.extend(Wizard.prototype, {
@@ -237,7 +252,7 @@ define('io.ox/core/tk/wizard', [
         },
 
         start: function () {
-            if (_.device('smartphone')) {
+            if (_.device('smartphone') && !this.options.disableMobileSupport) {
                 this.trigger('before:start');
                 _(this.steps).invoke('show');
                 this.container.appendTo('body');
@@ -372,7 +387,7 @@ define('io.ox/core/tk/wizard', [
 
             // navbar needs an update for every change
             // only once for normal popups
-            if (!_.device('smartphone')) this.once('before:show', this.renderButtons);
+            if (!_.device('smartphone') && !this.options.disableMobileSupport) this.once('before:show', this.renderButtons);
 
             // custom attributes
             this.$el.attr(this.options.attributes);
@@ -510,7 +525,7 @@ define('io.ox/core/tk/wizard', [
 
         // enable/disable 'next' button
         toggleNext: function (state) {
-            if (_.device('smartphone')) {
+            if (_.device('smartphone') && !this.options.disableMobileSupport) {
                 return this.parent.container.find('[data-action="next"]').attr({
                     'disabled': !state,
                     'aria-disabled': !state
@@ -644,7 +659,7 @@ define('io.ox/core/tk/wizard', [
 
                 this.trigger('before:show');
 
-                if (_.device('smartphone')) return handleSmartphone.call(this);
+                if (_.device('smartphone') && !this.options.disableMobileSupport) return handleSmartphone.call(this);
 
                 this.parent.toggleBackdrop(true);
 
@@ -660,7 +675,7 @@ define('io.ox/core/tk/wizard', [
         // hide this step
         hide: function () {
             this.trigger('before:hide');
-            if (!_.device('smartphone')) {
+            if (!_.device('smartphone') || this.options.disableMobileSupport) {
                 if (this.focusWatcher) clearInterval(this.focusWatcher);
                 $(window).off('resize.wizard.spotlight resize.wizard.hotspot resize.wizard-step');
                 this.$el.detach();
