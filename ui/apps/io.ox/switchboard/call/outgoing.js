@@ -67,10 +67,18 @@ define('io.ox/switchboard/call/outgoing', [
                         }
                     },
                     renderConnectButtons: function () {
-                        this.$footer.append($('<div class="switchboard-actions">').append(
-                            this.createButton('default', 'cancel', 'times', gt('Cancel')),
-                            this.createButton('primary', 'connect', 'plug', gt('Connect'))
-                        ));
+                        var renderFn;
+                        if (_.isFunction(this.conference.createConnectButtons)) {
+                            renderFn = this.conference.createConnectButtons.bind(this);
+                        } else {
+                            renderFn = function () {
+                                return $('<div class="switchboard-actions">').append(
+                                    this.createButton('default', 'cancel', 'times', gt('Cancel')),
+                                    this.createButton('primary', 'connect', 'plug', gt('Connect'))
+                                );
+                            };
+                        }
+                        this.$footer.append(renderFn());
                     },
                     renderCallButtons: function () {
                         this.$footer.append($('<div class="switchboard-actions">').append(

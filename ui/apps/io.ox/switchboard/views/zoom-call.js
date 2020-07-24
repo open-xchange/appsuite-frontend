@@ -67,6 +67,13 @@ define('io.ox/switchboard/views/zoom-call', [
             });
         },
 
+        createConnectButtons: function () {
+            return $('<div class="switchboard-actions">').append(
+                this.createButton('default', 'cancel', 'times', gt('Cancel')),
+                this.createButton('primary', 'connect', 'plug', gt('Connect with Zoom'))
+            );
+        },
+
         createMeeting: function () {
             return zoom.createInstantMeeting().then(
                 this.createMeetingSuccess.bind(this),
