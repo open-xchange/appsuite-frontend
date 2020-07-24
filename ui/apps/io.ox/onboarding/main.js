@@ -698,7 +698,7 @@ define('io.ox/onboarding/main', [
 
             if (!Wizard.registry.get('connect-wizard')) {
                 Wizard.registry.add(options, function () {
-                    var connectTour = new Wizard(),
+                    var connectTour = new Wizard({ disableMobileSupport: true }),
                         platform;
 
                     // set platform if mobile device detected
@@ -739,7 +739,8 @@ define('io.ox/onboarding/main', [
                         connectTour.step({
                             id: 'platform',
                             back: false,
-                            next: false
+                            next: false,
+                            disableMobileSupport: true
                         })
                         .on('before:show', function () {
                             // draw list of available platforms
@@ -762,7 +763,8 @@ define('io.ox/onboarding/main', [
                     connectTour.step({
                         id: 'apps',
                         back: false,
-                        next: false
+                        next: false,
+                        disableMobileSupport: true
                     })
                     .on('before:show', function () {
                         // draw list of apps for chosen platform
@@ -785,7 +787,8 @@ define('io.ox/onboarding/main', [
                     .step({
                         id: 'setup',
                         back: false,
-                        next: false
+                        next: false,
+                        disableMobileSupport: true
                     })
                     .on('before:show', function () {
                         var self = this;
