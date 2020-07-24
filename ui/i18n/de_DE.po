@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-07-13 11:23+0200\n"
+"PO-Revision-Date: 2020-07-24 09:17+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -6304,6 +6304,7 @@ msgid "Automatic opening of notification area"
 msgstr "Infobereich automatisch öffnen"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "Show desktop notifications"
 msgstr "Desktop-Benachrichtigungen anzeigen"
 
@@ -12735,24 +12736,23 @@ msgid "Always add a random meeting password"
 msgstr "Immer ein zufälliges Meeting-Passwort hinzufügen"
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-msgid "Use native notifications"
-msgstr "Systemeigene Benachrichtigungen verwenden"
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "Play ringtone on incoming call"
 msgstr "Bei eingehendem Anruf Klingelton abspielen"
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/views/zoom-call.js apps/io.ox/switchboard/zoom.js
 msgid ""
-"You have not linked your Zoom account. In order to use Zoom-specific "
-"features, you must have an account."
+"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
+"If you don't have an account yet, it is sufficient to create a free one."
 msgstr ""
-"Sie haben Ihr Zoom-Konto nicht verknüpft. Zum Verwenden Zoom-spezifischer "
-"Funktionen benötigen Sie ein Konto."
+"Sie müssen zuerst %1$s mit Zoom verbinden. Dazu benötigen Sie ein Zoom-"
+"Konto. Wenn Sie noch kein Konto haben, ist es ausreichend, ein kostenloses "
+"Konto zu erstellen."
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-msgid "Add Zoom account"
-msgstr "Zoom-Konto hinzufügen"
+#: apps/io.ox/switchboard/zoom.js
+msgid "Connect with Zoom"
+msgstr "Mit Zoom verbinden"
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "You have linked the following Zoom account:"
@@ -12816,16 +12816,6 @@ msgstr "Jitsi-Meeting: %1$s"
 
 #: apps/io.ox/switchboard/views/zoom-call.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/zoom.js
-msgid ""
-"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
-"If you don't have an account yet, it is sufficient to create a free one."
-msgstr ""
-"Sie müssen zuerst %1$s mit Zoom verbinden. Dazu benötigen Sie ein Zoom-"
-"Konto. Wenn Sie noch kein Konto haben, ist es ausreichend, ein kostenloses "
-"Konto zu erstellen."
-
-#: apps/io.ox/switchboard/views/zoom-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/zoom.js
 msgid "Connecting to Zoom ..."
 msgstr "Verbinden mit Zoom ..."
 
@@ -12879,10 +12869,6 @@ msgstr "Einwahlnummern"
 #: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
 msgid "New meeting"
 msgstr "Neues Meeting"
-
-#: apps/io.ox/switchboard/zoom.js module:io.ox/switchboard
-msgid "Connect with Zoom"
-msgstr "Mit Zoom verbinden"
 
 #: apps/io.ox/switchboard/zoom.js module:io.ox/switchboard
 msgid "Something went wrong. Please try again."
@@ -14608,6 +14594,19 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Use native notifications"
+#~ msgstr "Systemeigene Benachrichtigungen verwenden"
+
+#~ msgid ""
+#~ "You have not linked your Zoom account. In order to use Zoom-specific "
+#~ "features, you must have an account."
+#~ msgstr ""
+#~ "Sie haben Ihr Zoom-Konto nicht verknüpft. Zum Verwenden Zoom-spezifischer "
+#~ "Funktionen benötigen Sie ein Konto."
+
+#~ msgid "Add Zoom account"
+#~ msgstr "Zoom-Konto hinzufügen"
 
 #~ msgid "Call"
 #~ msgstr "Anrufen"
