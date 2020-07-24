@@ -109,9 +109,7 @@ define('io.ox/switchboard/call/outgoing', [
                     }.bind(this));
                 })
                 .on('connect', function () {
-                    require(['io.ox/switchboard/zoom'], function (zoom) {
-                        zoom.startOAuthHandshake();
-                    });
+                    this.conference.trigger('connect');
                 })
                 .on('call', function () {
                     var url = this.conference.model.get('joinURL');

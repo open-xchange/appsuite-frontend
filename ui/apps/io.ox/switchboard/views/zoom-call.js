@@ -24,6 +24,9 @@ define('io.ox/switchboard/views/zoom-call', [
 
         initialize: function () {
             window.zoomCall = this;
+            this.listenTo(this, 'connect', function () {
+                zoom.startOAuthHandshake();
+            });
         },
 
         renderAuthRequired: function () {
