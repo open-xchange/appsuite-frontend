@@ -149,13 +149,13 @@ define('io.ox/onboarding/main', [
         },
         {
             'title': gt('Calendar'),
-            'icon': 'fa-users',
+            'icon': 'fa-calendar',
             'app': 'calendar',
             'platform': 'android'
         },
         {
             'title': gt('Drive'),
-            'icon': 'fa-users',
+            'icon': 'fa-cloud',
             'app': 'driveapp',
             'platform': 'android'
         },
@@ -185,7 +185,7 @@ define('io.ox/onboarding/main', [
         },
         {
             'title': gt('Email über iOS Mail'),
-            'icon': 'fa-cloud',
+            'icon': 'fa-envelope',
             'app': 'mailsync',
             'platform': 'ios'
         },
@@ -203,13 +203,13 @@ define('io.ox/onboarding/main', [
         },
         {
             'title': gt('Calendar'),
-            'icon': 'fa-users',
+            'icon': 'fa-calendar',
             'app': 'calendar',
             'platform': 'ios'
         },
         {
             'title': gt('Drive'),
-            'icon': 'fa-users',
+            'icon': 'fa-cloud',
             'app': 'driveapp',
             'platform': 'ios'
         }
