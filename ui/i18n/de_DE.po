@@ -2959,7 +2959,7 @@ msgstr "Täglich."
 #. recurrence string
 #. %1$d: number of days per interval
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy, c-format
+#, c-format
 msgctxt "daily"
 msgid "Every %1$d day."
 msgid_plural "Every %1$d days."
@@ -2984,7 +2984,7 @@ msgstr "An Werktagen."
 #. recurrence string
 #. %1$d: number of weeks per interval
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy, c-format
+#, c-format
 msgctxt "weekly"
 msgid "Every %1$d week on workdays."
 msgid_plural "Every %1$d weeks on workdays."
@@ -2999,7 +2999,7 @@ msgstr "Jedes Wochenende."
 #. recurrence string
 #. %1$d: number of weeks per interval
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy, c-format
+#, c-format
 msgctxt "weekly"
 msgid "Every %1$d week on weekends."
 msgid_plural "Every %1$d weeks on weekends."
@@ -3020,7 +3020,7 @@ msgstr "Jeden %1$s."
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
 #. day string will be in "superessive" form
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy, c-format
+#, c-format
 msgctxt "weekly"
 msgid "Every %1$d week on %2$s."
 msgid_plural "Every %1$d weeks on %2$s."
@@ -3031,7 +3031,7 @@ msgstr[1] "Alle %1$d Wochen am %2$s."
 #. %1$d: numeric, day in month
 #. Example: Every month on day 18.
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy, c-format
+#, c-format
 msgctxt "monthly"
 msgid "Every month on day %1$d."
 msgstr "Monatlich am %1$d."
@@ -3041,7 +3041,7 @@ msgstr "Monatlich am %1$d."
 #. %2$d: numeric, day in month
 #. Example: Every 5 months on day 18.
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy, c-format
+#, c-format
 msgctxt "monthly"
 msgid "Every %1$d month on day %2$d."
 msgid_plural "Every %1$d months on day %2$d."
@@ -3053,7 +3053,7 @@ msgstr[1] "Alle %1$d Monate am %2$d."
 #. %2$s: day string, e.g. Monday
 #. Example Every month on the second Tuesday.
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy, c-format
+#, c-format
 msgctxt "monthly"
 msgid "Every month on the %1$s %2$s."
 msgstr "Monatlich am %1$s %2$s."
@@ -3064,7 +3064,7 @@ msgstr "Monatlich am %1$s %2$s."
 #. %3$s: day string, e.g. Monday
 #. Example Every 3 months on the second Tuesday.
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy, c-format
+#, c-format
 msgctxt "monthly"
 msgid "Every %1$d month on the %2$s %3$s."
 msgid_plural "Every %1$d months on the %2$s %3$s."
