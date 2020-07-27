@@ -627,6 +627,7 @@ define('io.ox/core/tk/list', [
         },
 
         setCollection: function (collection) {
+            if (!collection) return;
             // remove listeners; make sure this.collection is an object otherwise we remove all listeners
             if (this.collection) this.stopListening(this.collection);
             this.collection = collection;
