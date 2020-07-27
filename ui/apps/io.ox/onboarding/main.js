@@ -329,13 +329,14 @@ define('io.ox/onboarding/main', [
         },
 
         events: {
-            'click .btn': 'onClick'
+            'click .btn.download': 'onClick',
+            'click .btn.manual-toggle': 'onToggle'
         },
 
         render: function () {
-            var syncView =  this.type === 'mail' ? new MailSyncView({ incoming: this.config.incoming, outgoing: this.config.outgoing, userData: this.config.userData }) :
+            this.syncView = this.type === 'mail' ? new MailSyncView({ incoming: this.config.incoming, outgoing: this.config.outgoing, userData: this.config.userData }) :
                 new SyncView({ config: this.config });
-            syncView.renderManualConfig();
+            this.syncView.renderManualConfig();
 
             this.$el.append(
                 $('<div class="description">').append(
@@ -343,7 +344,12 @@ define('io.ox/onboarding/main', [
                 ),
                 $('<button type="button" data-action="download" class="btn btn-primary download">').text(gt('Download configuration'))
             );
-            this.$el.append(syncView.$el);
+            this.$el.append(
+                $('<button class="btn manual-toggle">').text(gt('Manual Configuration'))
+                .prepend($('<i class="fa fa-chevron-right">'))
+                .prepend($('<i class="fa fa-chevron-down">').hide()),
+                this.syncView.$el.hide()
+            );
             return this;
         },
 
@@ -353,6 +359,11 @@ define('io.ox/onboarding/main', [
                     download.url(url);
                 });
             });
+        },
+
+        onToggle: function (e) {
+            _($(e.currentTarget).find('i.fa')).each(function (icon) { $(icon).toggle(); });
+            this.syncView.$el.toggle();
         }
     });
 
@@ -472,7 +483,7 @@ define('io.ox/onboarding/main', [
         },
         renderManualConfig: function () {
             this.$el.append(
-                $('<div class="manual-description">').text(gt('Manual Configuration')),
+                //$('<button class="manual-description">').text(gt('Manual Configuration')),
                 $('<pre class="manual-config">')
                         .append(
                             $('<div class="title">')
@@ -644,18 +655,33 @@ define('io.ox/onboarding/main', [
                 .append($('<ul class="progress-steps">')
                 .append(
                     $('<li class="progress-step-one">')
-                        .text('1').addClass(!platform && !app ? 'active' : '')
+                        .append(
+                            $('<button type="button" class="btn progress-btn" data-action="back">')
+                                .text('1')
+                                .prop('disabled', true)
+                        )
+                        .addClass(!platform && !app ? 'active' : '')
                         .append($('<p class="progress-description">').text(platformTitle ? platformTitle : gt('Platform'))),
                     $('<li class="progress-step-two">')
-                        .text('2').addClass(platform && !app ? 'active' : '')
+                        .append(
+                            $('<button type="button" class="btn progress-btn" data-action="back">')
+                            .text('2')
+                            .prop('disabled', true)
+                        )
+                        .addClass(platform && !app ? 'active' : '')
                         .append($('<p class="progress-description">').text(appTitle ? appTitle : gt('App'))),
                     $('<li class="progress-step-three">')
-                        .text('3').addClass(platform && app ? 'active' : '')
+                        .append(
+                            $('<button type="button" class="btn progress-btn">')
+                            .text('3')
+                            .prop('disabled', true)
+                        )
+                        .addClass(platform && app ? 'active' : '')
                         .append($('<p class="progress-description">').text(gt('Setup')))
-
                 ));
-            $('.progress-step-one').attr(platform ? { role: 'button', 'data-action': 'back' } : '');
-            $('.progress-step-two').attr(app ? { role: 'button', 'data-action': 'back' } : '');
+
+            $('.progress-step-one .btn').prop(platform ? { 'disabled': false } : '');
+            $('.progress-step-two .btn').prop(app ? { 'disabled': false } : '');
             return this;
         },
         renderMobile: function () {
@@ -667,13 +693,24 @@ define('io.ox/onboarding/main', [
                 .append($('<ul class="progress-steps">')
                 .append(
                     $('<li class="progress-step-one">')
-                        .text('1').addClass(!app ? 'active' : '')
+                        .append(
+                            $('<button type="button" class="btn progress-btn" data-action="back">')
+                            .text('1')
+                            .prop('disabled', true)
+                        )
+                        .addClass(!app ? 'active' : '')
                         .append($('<p class="progress-description">').text(appTitle ? appTitle : gt('App'))),
                     $('<li class="progress-step-three">')
-                        .text('2').addClass(app ? 'active' : '')
+                        .append(
+                            $('<button type="button" class="btn progress-btn">')
+                            .text('2')
+                            .prop('disabled', true)
+                        )
+                        .addClass(app ? 'active' : '')
                         .append($('<p class="progress-description">').text(gt('Setup')))
                 ));
-            $('.progress-step-one').attr(app ? { role: 'button', 'data-action': 'back' } : '');
+
+            $('.progress-step-one').prop(app ? { 'disabled': false } : '');
             return this;
 
         }
@@ -688,6 +725,9 @@ define('io.ox/onboarding/main', [
         );
     }
 
+    function focus() {
+        this.$('.wizard-content').find('button:not(:disabled):visible:first').focus();
+    }
 
     wizard = {
         run: function () {
@@ -755,6 +795,7 @@ define('io.ox/onboarding/main', [
                                 connectTour.next();
                             });
                         })
+                        .on('show', function () { focus.call(this); })
                         .end();
                     } else {
                         connectTour.progressView.renderMobile();
@@ -780,6 +821,7 @@ define('io.ox/onboarding/main', [
                             connectTour.next();
                         });
                     })
+                    .on('show', function () { focus.call(this); })
                     .on('back', function () {
                         connectTour.model.set('platform', undefined);
                     })
@@ -800,6 +842,7 @@ define('io.ox/onboarding/main', [
                             connectTour.progressView.$el,
                             view.$el);
                     })
+                    .on('show', function () { focus.call(this); })
                     .on('back', function () {
                         connectTour.model.set('app', undefined);
                     })
