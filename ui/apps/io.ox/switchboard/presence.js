@@ -133,6 +133,14 @@ define('io.ox/switchboard/presence', [
         exports.changePresence(userId, presence);
     });
 
+    api.socket.on('reconnect', function () {
+        for (var userId in users) {
+            delete users[userId];
+            // assume offline by default
+            exports.changePresence(userId, 'offline');
+        }
+    });
+
     // add an event hub. we need this to publish presence state changes
     _.extend(exports, Backbone.Events);
 
