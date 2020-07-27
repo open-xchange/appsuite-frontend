@@ -17,9 +17,10 @@ define('io.ox/switchboard/call/ringtone', ['settings!io.ox/switchboard'], functi
     'use strict';
 
     var incoming = new Audio(ox.base + '/apps/io.ox/switchboard/call/ringtones/incoming.mp3');
-    var outgoing = new Audio(ox.base + '/apps/io.ox/switchboard/call/ringtones/outgoing.mp3');
+    // Disabled outgoing tone as we do not have one yet. Maybe we do not need one at all
+    // var outgoing = new Audio(ox.base + '/apps/io.ox/switchboard/call/ringtones/outgoing.mp3');
     incoming.volume = 0.3;
-    outgoing.volume = 0.3;
+    // outgoing.volume = 0.3;
 
     function useRingtones() {
         return settings.get('call/useRingtones', true);
@@ -39,10 +40,10 @@ define('io.ox/switchboard/call/ringtone', ['settings!io.ox/switchboard'], functi
         outgoing: {
             play: function () {
                 if (!useRingtones()) return;
-                outgoing.play();
+                //outgoing.play();
             },
             stop: function () {
-                outgoing.pause();
+                //outgoing.pause();
             }
         }
     };
