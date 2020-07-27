@@ -15,8 +15,7 @@ define('plugins/portal/tasks/register', [
     'io.ox/core/extensions',
     'io.ox/tasks/api',
     'gettext!plugins/portal',
-    'io.ox/tasks/util',
-    'less!plugins/portal/tasks/style'
+    'io.ox/tasks/util'
 ], function (ext, taskAPI, gt, util) {
 
     'use strict';
@@ -122,7 +121,7 @@ define('plugins/portal/tasks/register', [
                 );
             });
 
-            this.addClass('taskwidget').append(content);
+            this.append(content);
         },
 
         draw: function (baton) {

@@ -15,7 +15,7 @@
     input { text-align: center; }
 
     .time-field {
-        width: 100px;
+        width: ~"calc(1.25rem + 80px)";
         border-left: none;
     }
 
@@ -36,8 +36,7 @@
 
     &.dateonly .datepicker-day-field { border-radius: @border-radius-base; }
 
-    .datepicker-day-field { width: 120px; }
-
+    .datepicker-day-field { width: ~"calc(2.5rem + 80px)"; }
     // in mobile mode only May be enabled on tablets as well, so separate from media query
     &.mobile-mode .datepicker-day-field {
         width: 100%;
