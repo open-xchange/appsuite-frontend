@@ -49,7 +49,7 @@ define('io.ox/switchboard/call/outgoing', [
                     },
                     renderService: function () {
                         return require(['io.ox/switchboard/views/' + call.getType() + '-call'], function (View) {
-                            this.conference = new View();
+                            this.conference = new View({ model: call });
                             this.$body.append(this.conference.render().$el);
                         }.bind(this));
                     },
