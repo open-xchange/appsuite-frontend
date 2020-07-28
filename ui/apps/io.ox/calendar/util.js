@@ -619,33 +619,44 @@ define('io.ox/calendar/util', [
                     // special case: weekly but all 7 days checked
                     if (days === 127) {
                         str = (interval === 1) ?
+                            //#. recurrence string
+                            //#. special case, weekly but every day is checked
                             gt.pgettext('daily', 'Every day.') :
                             //#. recurrence string
+                            //#. the case %1$d == 1 is handled separately and will not be used
                             //#. %1$d: number of weeks per interval
                             //#, c-format
                             gt.npgettext('weekly', 'Every %1$d week on all days.', 'Every %1$d weeks on all days.', interval, interval);
                     } else if (days === getWorkweekBitmask()) { // special case: weekly on workdays
                         str = (interval === 1) ?
+                            //#. recurrence string
+                            //#. special case: the weekly interval is 1 and all workdays are checked
                             gt.pgettext('weekly', 'On workdays.') :
                             //#. recurrence string
+                            //#. the case %1$d == 1 is handled separately and will not be used
                             //#. %1$d: number of weeks per interval
                             //#, c-format
                             gt.npgettext('weekly', 'Every %1$d week on workdays.', 'Every %1$d weeks on workdays.', interval, interval);
                     } else if (days === 65) {
                         str = (interval === 1) ?
+                            //#. recurrence string
+                            //#. special case: the weekly interval is 1 and Sat and Sun are checked
                             gt.pgettext('weekly', 'Every weekend.') :
                             //#. recurrence string
+                            //#. the case %1$d == 1 is handled separately and will not be used
                             //#. %1$d: number of weeks per interval
                             //#, c-format
                             gt.npgettext('weekly', 'Every %1$d week on weekends.', 'Every %1$d weeks on weekends.', interval, interval);
                     } else {
                         str = (interval === 1) ?
                             //#. recurrence string
+                            //#. special case: the weekly interval is 1
                             //#. %1$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
                             //#. day string will be in nominative form
                             //#, c-format
                             gt.pgettext('weekly', 'Every %1$s.', getDayString(days)) :
                             //#. recurrence string
+                            //#. the case %1$d == 1 is handled separately and will not be used
                             //#. %1$d: number of weeks per interval
                             //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
                             //#. day string will be in "superessive" form
@@ -660,11 +671,13 @@ define('io.ox/calendar/util', [
                     if (days === null) {
                         str = (interval === 1) ?
                             //#. recurrence string
+                            //#. special case: the monthly interval is 1
                             //#. %1$d: numeric, day in month
                             //#. Example: Every month on day 18.
                             //#, c-format
                             gt.pgettext('monthly', 'Every month on day %1$d.', day_in_month) :
                             //#. recurrence string
+                            //#. the case %1$d == 1 is handled separately and will not be used
                             //#. %1$d: numeric, interval
                             //#. %2$d: numeric, day in month
                             //#. Example: Every 5 months on day 18.
@@ -673,12 +686,14 @@ define('io.ox/calendar/util', [
                     } else {
                         str = (interval === 1) ?
                             //#. recurrence string
+                            //#. special case: the monthly interval is 1
                             //#. %1$s: count string, e.g. first, second, or last
                             //#. %2$s: day string, e.g. Monday
                             //#. Example Every month on the second Tuesday.
                             //#, c-format
                             gt.pgettext('monthly', 'Every month on the %1$s %2$s.', getCountString(day_in_month), getDayString(days)) :
                             //#. recurrence string
+                            //#. the case %1$d == 1 is handled separately and will not be used
                             //#. %1$d: numeric, interval
                             //#. %2$s: count string, e.g. first, second, or last
                             //#. %3$s: day string, e.g. Monday
