@@ -432,7 +432,8 @@ define('io.ox/contacts/addressbook/popup', [
             button: gt.pgettext('select-contacts', 'Select'),
             enter: false,
             focus: '.search-field',
-            maximize: 600,
+            //600px
+            height: '37.5rem',
             point: 'io.ox/contacts/addressbook-popup',
             help: 'ox.appsuite.user.sect.email.send.addressbook.html',
             title: gt('Select contacts'),
