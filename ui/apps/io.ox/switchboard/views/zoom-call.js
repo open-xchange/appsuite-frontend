@@ -24,6 +24,9 @@ define('io.ox/switchboard/views/zoom-call', [
 
         initialize: function () {
             window.zoomCall = this;
+            this.listenTo(this, 'connect', function () {
+                zoom.startOAuthHandshake();
+            });
         },
 
         renderAuthRequired: function () {
@@ -62,6 +65,13 @@ define('io.ox/switchboard/views/zoom-call', [
             require(['static/3rd.party/clipboard.min.js'], function (Clipboard) {
                 new Clipboard(el);
             });
+        },
+
+        createConnectButtons: function () {
+            return $('<div class="switchboard-actions">').append(
+                this.createButton('default', 'cancel', 'times', gt('Cancel')),
+                this.createButton('primary', 'connect', 'plug', gt('Connect with Zoom'))
+            );
         },
 
         createMeeting: function () {

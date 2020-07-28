@@ -49,7 +49,7 @@ define('io.ox/switchboard/call/outgoing', [
                     },
                     renderService: function () {
                         return require(['io.ox/switchboard/views/' + call.getType() + '-call'], function (View) {
-                            this.conference = new View();
+                            this.conference = new View({ model: call });
                             this.$body.append(this.conference.render().$el);
                         }.bind(this));
                     },
@@ -67,27 +67,35 @@ define('io.ox/switchboard/call/outgoing', [
                         }
                     },
                     renderConnectButtons: function () {
-                        this.$footer.append(
-                            this.createButton('default', 'cancel', 'times', gt('Cancel')),
-                            this.createButton('primary', 'connect', 'plug', gt('Connect'))
-                        );
+                        var renderFn;
+                        if (_.isFunction(this.conference.createConnectButtons)) {
+                            renderFn = this.conference.createConnectButtons.bind(this);
+                        } else {
+                            renderFn = function () {
+                                return $('<div class="switchboard-actions">').append(
+                                    this.createButton('default', 'cancel', 'times', gt('Cancel')),
+                                    this.createButton('primary', 'connect', 'plug', gt('Connect'))
+                                );
+                            };
+                        }
+                        this.$footer.append(renderFn());
                     },
                     renderCallButtons: function () {
-                        this.$footer.append(
+                        this.$footer.append($('<div class="switchboard-actions">').append(
                             this.createButton('default', 'cancel', 'times', gt('Cancel')),
                             this.createButton('success', 'call', 'phone', gt.pgettext('verb', 'Call'))
-                        );
+                        ));
                         this.toggleCallButton();
                         this.$('button[data-action="call"]').focus();
                     },
                     createButton: function (type, action, icon, title) {
-                        return $('<div class="button">').append(
-                            $('<button type="button" class="btn">').addClass('btn-' + type).attr('data-action', action).append(
-                                $('<i class="fa" aria-hidden="true">').addClass('fa-' + icon)
-                            )
-                            .attr('aria-label', title),
-                            $.txt(gt.noI18n(title))
-                        );
+                        return $('<button type="button" class="btn btn-link">')
+                            .addClass(type && ('btn-' + type))
+                            .attr('data-action', action)
+                            .append(
+                                $('<i class="fa" aria-hidden="true">').addClass('fa-' + icon),
+                                $('<div>').text(title)
+                            );
                     },
                     toggleCallButton: function () {
                         var url = this.conference.model.get('joinURL');
@@ -109,9 +117,7 @@ define('io.ox/switchboard/call/outgoing', [
                     }.bind(this));
                 })
                 .on('connect', function () {
-                    require(['io.ox/switchboard/zoom'], function (zoom) {
-                        zoom.startOAuthHandshake();
-                    });
+                    this.conference.trigger('connect');
                 })
                 .on('call', function () {
                     var url = this.conference.model.get('joinURL');
@@ -119,8 +125,8 @@ define('io.ox/switchboard/call/outgoing', [
                     window.open(url, 'call');
                     call.set('joinURL', url).propagate();
                     ringtone.outgoing.play();
-                    this.getButton('cancel').parent().remove();
-                    this.getButton('call').parent().replaceWith(
+                    this.getButton('cancel').remove();
+                    this.getButton('call').replaceWith(
                         this.createButton('danger', 'hangup', 'phone', gt('Hang up'))
                     );
                     call.addToHistory();

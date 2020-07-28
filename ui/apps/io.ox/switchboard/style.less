@@ -25,7 +25,7 @@
     i.fa:first-child {
         width: 40px;
         height: 40px;
-        border-radius: 20px;
+        border-radius: 50%;
         border: 1px solid fade(@link-color, 40%);
         background-color: fade(@link-color, 4%);
         color: @link-color;
@@ -38,7 +38,7 @@
     i.fa.fa-phone {
         font-size: 24px;
     }
-    button:hover:not(:disabled), button:focus {
+    .btn-link:hover:not(:disabled), .btn-link:focus {
         outline: 0;
         text-decoration: none;
         i.fa:first-child {
@@ -175,26 +175,89 @@
         margin-bottom: 0;
     }
     .modal-footer {
-        display: flex;
-        margin: 24px 0 40px 0;
-        justify-content: space-between;
-        text-align: center;
+        .switchboard-actions {
+            display: flex;
+            justify-content: space-evenly;
+            text-align: center;
+            .btn > div {
+                padding-top: .25rem;
+            }
+
+            .btn-link {
+                &:focus i.fa:first-child {
+                    box-shadow: 0 0 0 4px fade(@btn-primary-bg, 50%);
+                }
+                &:hover:not(:disabled) i.fa:first-child {
+                    background-color: darken(@btn-primary-bg, 10%);
+                }
+            }
+            .btn-primary {
+                i.fa:first-child {
+                    .button-variant(@btn-primary-color, @btn-primary-bg, @btn-primary-border)
+                }
+                &:focus i.fa:first-child {
+                    box-shadow: 0 0 0 4px fade(@btn-primary-bg, 50%);
+                }
+                &:hover:not(:disabled) i.fa:first-child {
+                    background-color: darken(@btn-primary-bg, 10%);
+                }
+            }
+            .btn-info {
+                i.fa:first-child {
+                    .button-variant(@btn-info-color, @btn-info-bg, @btn-info-border)
+                }
+                &:hover:not(:disabled) i.fa:first-child {
+                    background-color: darken(@btn-info-bg, 10%);
+                }
+                &:focus i.fa:first-child {
+                    box-shadow: 0 0 0 4px fade(@btn-info-bg, 50%);
+                }
+            }
+            .btn-warning {
+                i.fa:first-child {
+                    .button-variant(@btn-warning-color, @btn-warning-bg, @btn-warning-border)
+                }
+                &:hover:not(:disabled) i.fa:first-child {
+                    background-color: darken(@btn-warning-bg, 10%);
+                }
+                &:focus i.fa:first-child {
+                    box-shadow: 0 0 0 4px fade(@btn-warning-bg, 50%);
+                }
+            }
+            .btn-danger {
+                i.fa:first-child {
+                    .button-variant(@btn-danger-color, @btn-danger-bg, @btn-danger-border)
+                }
+                &:hover:not(:disabled) i.fa:first-child {
+                    background-color: darken(@btn-danger-bg, 10%);
+                }
+                &:focus i.fa:first-child {
+                    box-shadow: 0 0 0 4px fade(@btn-danger-bg, 50%);
+                }
+            }
+            .btn-success {
+                i.fa:first-child {
+                    .button-variant(@btn-success-color, @btn-success-bg, @btn-success-border)
+                }
+                &:hover:not(:disabled) i.fa:first-child {
+                    background-color: darken(@btn-success-bg, 10%);
+                }
+                &:focus i.fa:first-child {
+                    box-shadow: 0 0 0 4px fade(@btn-success-bg, 50%);
+                }
+            }
+        }
+        margin-bottom: 40px;
         border: 0;
         padding: 0;
-        .button {
-            display: flex;
-            flex-direction: column;
-        }
+
         .btn {
-            font-size: 24px;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            margin-bottom: 8px;
-            outline: 0;
-        }
-        .btn-success:focus {
-            box-shadow: 0 0 0 4px fade(@btn-success-bg, 50%);
+            margin: 0;
+            i.fa:first-child {
+                font-size: 24px;
+                width: 56px;
+                height: 56px;
+            }
         }
     }
 }
@@ -328,7 +391,7 @@
     }
 }
 
-@-webkit-keyframes call-history-blink {
+@keyframes call-history-blink {
     0%   { opacity: 0; }
     50%  { opacity: 0; }
     51%  { opacity: 1; }
@@ -380,7 +443,6 @@
         font-size: 13px;
         color: #707070;
         float: right;
-        display: inline-block;
         margin-left: 8px;
     }
     .name {
