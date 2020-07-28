@@ -95,6 +95,10 @@
                             align-items: center;
 
                             .progress-btn {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                border: 3px solid @border-color;
                                 padding: 0;
                                 background-color: @border-color;
                                 height: 48px;
@@ -102,8 +106,11 @@
                                 border-radius: 100%;
                                 color: @hc-gray;
                                 font-size: 32px;
-                                text-align: center;
-                                line-height: 48px;
+
+                                &:focus {
+                                    outline: 0;
+                                    border-color: @blue;
+                                }
 
                                 &:disabled {
                                     cursor: default;
@@ -114,6 +121,7 @@
                             &.active {
 
                                 .progress-btn {
+                                    border-color: @blue;
                                     background: @blue;
                                     color: white;
                                 }
@@ -215,9 +223,9 @@
                     background: @white;
                     border-bottom: 1px #ddd solid;
 
-                    .fa {
+                    .fa{
                         font-size: 12px;
-                        padding-right: 8px;
+                        width: 20px;
                     }
                 }
 
