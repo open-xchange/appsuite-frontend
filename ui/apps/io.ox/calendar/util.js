@@ -609,6 +609,7 @@ define('io.ox/calendar/util', [
                     str = (interval === 1) ?
                         gt.pgettext('daily', 'Every day.') :
                         //#. recurrence string
+                        //#. the case %1$d == 1 is handled separately and will not be used
                         //#. %1$d: number of days per interval
                         //#, c-format
                         gt.npgettext('daily', 'Every %1$d day.', 'Every %1$d days.', interval, interval);
