@@ -63,8 +63,7 @@ define('io.ox/files/actions/share', [
             title: header,
             point: 'io.ox/files/actions/share',
             help: 'ox.appsuite.user.sect.dataorganisation.sharing.link.html',
-            smartphoneInputFocus: true,
-            width: 600
+            smartphoneInputFocus: true
         });
 
         dialog.$el.addClass('get-link-dialog');

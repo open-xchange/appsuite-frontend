@@ -880,7 +880,6 @@ define('io.ox/files/share/permissions', [
                 help: 'ox.appsuite.user.sect.dataorganisation.sharing.invitation.html',
                 title: title,
                 smartphoneInputFocus: true,
-                width: 800,
                 nested: nested,
                 share: false }, options);
 

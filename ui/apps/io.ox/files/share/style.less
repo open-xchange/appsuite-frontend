@@ -164,6 +164,10 @@
 }
 
 .modal.get-link-dialog {
+    .modal-dialog {
+        min-width: 600px;
+    }
+
     .modal-body {
         .input-group.has-picker:focus-within {
             border-color: #66afe9;
@@ -190,6 +194,10 @@
 }
 
 .modal.share-permissions-dialog {
+
+    .modal-dialog {
+        min-width: 800px;
+    }
 
     .twitter-typeahead .tt-hint {
         color: #757575;
@@ -221,6 +229,10 @@
 
         .form-group {
             margin: 8px 0 0 0;
+        }
+
+        .twitter-typeahead input {
+            height: 1.875rem
         }
 
         .input-group.has-picker:focus-within {
@@ -322,7 +334,6 @@
         }
 
         .role, .detail-dropdown, .entity-actions {
-            height: 40px;
             line-height: 40px;
         }
 
