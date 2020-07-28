@@ -359,8 +359,7 @@ define('io.ox/backbone/mini-views/alarms', [
                     model[self.attribute] = _.deepClone(self.model.get(self.attribute));
                     alarmView = new alarmsView({ model: new Backbone.Model(model), attribute: self.attribute, phoneNumber: phoneNumber });
                     new ModalDialog({
-                        title: gt('Edit reminders'),
-                        width: 600
+                        title: gt('Edit reminders')
                     })
                     .build(function () {
                         this.$body.append(alarmView.render().$el);
