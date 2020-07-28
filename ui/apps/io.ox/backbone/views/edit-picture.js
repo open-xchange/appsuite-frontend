@@ -33,7 +33,7 @@ define('io.ox/backbone/views/edit-picture', [
             return new ModalDialog({
                 title: opt.title || gt('Change photo'),
                 point: 'io.ox/backbone/crop',
-                width: 560,
+                width: '35rem',
                 async: true,
                 model: opt.model || new Backbone.Model(),
                 focus: 'button[data-action="upload"]'
@@ -131,11 +131,11 @@ define('io.ox/backbone/views/edit-picture', [
                     // boundary is outer dark area, viewort is the visible part of the image.
                     var boundaryWidth, boundaryHeight, viewport;
                     if (_.device('small')) {
-                        boundaryWidth = 320;
+                        boundaryWidth = '100%';
                         boundaryHeight = 240;
                         viewport = 180;
                     } else {
-                        boundaryWidth = 560;
+                        boundaryWidth = '100%';
                         boundaryHeight = 360;
                         viewport = 320;
                     }

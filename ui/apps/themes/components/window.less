@@ -563,14 +563,16 @@
 
     /* width */
     &.width-xs {
-        width: 640px;
+        // 640
+        width: 40rem;
+        &:not(.maximized) { max-width: 780px; }
         // start window in the middle
         left: ~"calc(50% - 320px)";
     }
     &.width-sm {
         // 720px
         width: 45rem;
-        max-width: 900px;
+        &:not(.maximized) { max-width: 900px; }
         // start window in the middle
         left: ~"calc(50% - 360px)";
     }
