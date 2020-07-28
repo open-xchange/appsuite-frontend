@@ -28,7 +28,10 @@
 
 .io-ox-tasks-edit-main {
 
-    .progress-field { text-align: center; }
+    .progress-field { 
+        text-align: center;
+        height: auto;
+    }
 
     .note-field {
         resize: vertical;
@@ -41,7 +44,11 @@
         margin-bottom: 9px;
     }
 
-    // add temporariily higher z index to fix the focus outline (Bug 41266)
+    .input-group.has-picker input {
+        height: 1.875rem;
+    }
+
+    // add temporary higher z index to fix the focus outline (Bug 41266)
     .input-group {
         .progress-field:focus,
         button[data-action='minus']:focus,

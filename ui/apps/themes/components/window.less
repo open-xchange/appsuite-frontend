@@ -577,12 +577,15 @@
         left: ~"calc(50% - 360px)";
     }
     &.width-md {
-        width: 800px;
+        // 800px
+        width: 50rem;
+        &:not(.maximized) { max-width: 1020px; }
         // start window in the middle
         left: ~"calc(50% - 400px)";
     }
     &.width-lg {
         width: 920px;
+        
         // start window in the middle
         left: ~"calc(50% - 460px)";
     }
