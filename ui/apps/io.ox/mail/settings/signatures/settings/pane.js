@@ -139,7 +139,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             index: 100,
             perform: function (baton) {
                 var editor = baton.view.editor.tinymce();
-                baton.data.content = baton.view.editor.getContent();
+                baton.data.content = baton.view.editor.getContent({ format: 'html' });
                 if (!editor || !editor.plugins.oximage) return $.when();
                 var ids = $('img[data-pending="true"]', editor.getElement()).map(function () {
                         return $(this).attr('data-id');
@@ -147,7 +147,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     deferreds = editor.plugins.oximage.getPendingDeferreds(ids);
                 return $.when.apply($, deferreds).then(function () {
                     // maybe image references were updated
-                    baton.data.content = baton.view.editor.getContent();
+                    baton.data.content = baton.view.editor.getContent({ format: 'html' });
                 });
             }
         }, {
