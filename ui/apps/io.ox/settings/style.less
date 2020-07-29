@@ -66,14 +66,15 @@
                 .account-icon {
                     margin-left: 6px;
                     margin-top: 2px;
-                    background-size: 26px;
+                    background-size: 1.625rem;
                     background-repeat: no-repeat;
                     background-position: center;
-                    width: 40px;
+                    text-align: center;
+                    width: 2.5rem;
                 }
 
                 .remove-placeholder {
-                    width: 24px;
+                    width: ~"calc(1rem + 8px)";
                     margin: 13px 14px;
                 }
 
@@ -575,5 +576,11 @@
             }
             margin-bottom: 16px;
         }
+    }
+}
+
+.modal.flex[data-point="io.ox/settings/accounts/mail/settings/detail/dialog"] {
+    .modal-dialog {
+        max-width: 1000px;
     }
 }

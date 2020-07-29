@@ -34,7 +34,6 @@ define('io.ox/core/folder/actions/properties', [
             $('<div class="input-group link-group">').append(
                 $('<input type="text" class="form-control">')
                     .attr('id', guid)
-                    .css('height', 'auto')
                     .prop('readonly', true)
                     .val(value),
                 $('<span class="input-group-btn">').append(

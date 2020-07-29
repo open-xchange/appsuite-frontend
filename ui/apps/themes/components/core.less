@@ -408,6 +408,11 @@ html:not(.internet-explorer) {
 
 .form-spacer { margin-top: 32px; }
 
+// form control inside input groups needs auto height (breaks layout otherwise)
+.input-group >.form-control {
+    height: auto;
+}
+
 .form-control {
     // 30px with default 14px font size but scales with text zoom
     height: 2.14285714em;

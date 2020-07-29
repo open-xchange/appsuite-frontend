@@ -36,7 +36,10 @@
 
     &.dateonly .datepicker-day-field { border-radius: @border-radius-base; }
 
-    .datepicker-day-field { width: ~"calc(2.5rem + 80px)"; }
+    .datepicker-day-field { 
+        width: ~"calc(2.5rem + 80px)";
+        height: 2.14285714em;
+    }
     // in mobile mode only May be enabled on tablets as well, so separate from media query
     &.mobile-mode .datepicker-day-field {
         width: 100%;
