@@ -695,7 +695,7 @@ html.macos .preview-right, html.ios {
 
 .mail-item {
 
-    @pictureSize: 32px;
+    @pictureSize: 2rem;
 
     .contact-picture {
         position: absolute;
@@ -711,7 +711,7 @@ html.macos .preview-right, html.ios {
 
      &.show-contact-pictures .list-item:not(.small) .list-item-content {
         position: relative;
-        padding-left: @pictureSize + 16px;
+        padding-left: calc(@pictureSize~" + 16px");
     }
 
     &.show-contact-pictures.show-text-preview .list-item:not(.small) .contact-picture {
