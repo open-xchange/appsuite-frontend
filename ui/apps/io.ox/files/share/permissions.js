@@ -881,6 +881,7 @@ define('io.ox/files/share/permissions', [
                 title: title,
                 smartphoneInputFocus: true,
                 nested: nested,
+                width: '35.25rem',
                 share: false }, options);
 
             options.title = options.title || (options.share ?
