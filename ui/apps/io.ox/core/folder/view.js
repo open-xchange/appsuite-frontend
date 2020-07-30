@@ -132,7 +132,7 @@ define('io.ox/core/folder/view', [
             resize: (function () {
 
                 var maxSidePanelWidth = 0,
-                    minSidePanelWidth = 240,
+                    minSidePanelWidth = options.tree.options.minWidth || 240,
                     base, width;
 
                 function mousemove(e) {

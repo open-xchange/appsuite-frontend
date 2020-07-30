@@ -329,7 +329,8 @@ define('io.ox/calendar/main', [
         'folder-view': function (app) {
             if (_.device('smartphone')) return;
 
-            app.treeView = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'calendar', dblclick: true });
+            // 360 minwidth to support minicalendar and 200%textzoom. Not optimal solution but works for now
+            app.treeView = new TreeView({ minWidth: 360, app: app, contextmenu: true, flat: true, indent: false, module: 'calendar', dblclick: true });
             FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
             app.folderView.tree.$el.attr('aria-label', gt('Calendars'));
