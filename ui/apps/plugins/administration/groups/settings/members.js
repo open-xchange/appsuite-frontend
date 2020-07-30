@@ -16,8 +16,10 @@ define('plugins/administration/groups/settings/members', [
     'io.ox/core/api/user',
     'io.ox/core/api/group',
     'io.ox/contacts/util',
+    'io.ox/core/yell',
+    'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (DisposableView, userAPI, groupAPI, util, gt) {
+], function (DisposableView, userAPI, groupAPI, util, yell, settings, gt) {
 
     'use strict';
 
@@ -56,7 +58,7 @@ define('plugins/administration/groups/settings/members', [
         },
 
         resolveMembers: function () {
-            this.$el.busy();
+            this.$el.busy({ immediate: true });
             this.collection.resolve(this.model.get('members'))
                 .always(function () {
                     if (this.disposed) return;
@@ -125,12 +127,12 @@ define('plugins/administration/groups/settings/members', [
 
         resolve: function (members) {
             if (!members.length) return $.when();
-            // limit member to a maximum of 1000 users; edge-case;
-            // should only affect "All users" in very large enterprise contexts
-            if (members.length > 1000) members = members.slice(0, 1000);
+            var LIMIT = settings.get('groups/limit', 1000);
+
             // fetch user data
-            return userAPI.getList(members).done(function (list) {
+            return userAPI.getList(members.slice(0, LIMIT)).done(function (list) {
                 this.reset(list, { parse: true });
+                if (members.length > list.length) yell('warning', gt('This dialog is limited to %1$d entries and this group exceeds this limitation. Therefore, some entries are not listed.', LIMIT));
             }.bind(this));
         }
     });

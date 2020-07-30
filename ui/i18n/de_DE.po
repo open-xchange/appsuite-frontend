@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-07-02 11:21+0200\n"
+"PO-Revision-Date: 2020-07-17 12:11+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -12633,6 +12633,15 @@ msgstr "Neue Gruppe erstellen"
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid "Remove member"
 msgstr "Mitglied entfernen"
+
+#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
+msgid ""
+"This dialog is limited to %1$d entries and this group exceeds this "
+"limitation. Therefore, some entries are not listed."
+msgstr ""
+"Dieses Dialogfeld ist auf %1$d Einträge beschränkt. Diese Gruppe "
+"überschreitet diese Einschränkung. Daher werden einige Einträge nicht "
+"aufgeführt."
 
 #. %1$d is the number of members
 #: apps/plugins/administration/groups/settings/pane.js module:io.ox/core
