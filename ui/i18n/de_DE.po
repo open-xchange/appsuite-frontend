@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-07-29 10:55+0200\n"
+"PO-Revision-Date: 2020-07-30 15:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -7763,7 +7763,7 @@ msgstr "Der angegebene Dateiname ist zu lang."
 
 #: apps/io.ox/files/api.js module:io.ox/files
 msgid "The allowed quota is reached."
-msgstr "Das zulässige Kontingent ist erreicht."
+msgstr "Der zulässige Speicherplatz ist erreicht."
 
 #: apps/io.ox/files/api.js module:io.ox/files
 msgid "This file could not be uploaded."
@@ -7850,7 +7850,7 @@ msgstr "Fehler: Dateien konnten nicht geladen werden"
 #: module:io.ox/mail apps/plugins/portal/quota/register.js
 #: module:plugins/portal
 msgid "Quota"
-msgstr "Kontingent"
+msgstr "Speicherplatz"
 
 #. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
@@ -8978,7 +8978,7 @@ msgid ""
 "limit of %2$s"
 msgstr ""
 "Die Datei \"%1$s\" kann nicht hochgeladen werden. Sie überschreitet das "
-"Infostore-Kontingentlimit von %2$s."
+"Infostore-Speicherlimit von %2$s."
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -9036,14 +9036,15 @@ msgstr "Wollen Sie diese E-Mails unwiderruflich löschen?"
 
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid "Mail quota exceeded"
-msgstr "E-Mail-Kontingent überschritten"
+msgstr "E-Mail-Speicherplatz überschritten"
 
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
+#, fuzzy
 msgid ""
 "Emails cannot be put into trash folder while your mail quota is exceeded."
 msgstr ""
 "E-Mails können nicht in den Papierkorb verschoben werden, solange das E-Mail-"
-"Kontingent überschritten ist."
+"Speicherlimit überschritten ist."
 
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid ""
@@ -10715,7 +10716,7 @@ msgstr "Konversation"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
-msgstr "E-Mail-Kontingent"
+msgstr "E-Mail-Speicherplatz"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Messages"
