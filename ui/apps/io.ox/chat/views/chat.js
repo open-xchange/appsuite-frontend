@@ -172,8 +172,10 @@ define('io.ox/chat/views/chat', [
             // there are two cases when to reset the collection before usage
             // 1) We have a messageId but the requested messageId is not in the collection
             // 2) We don't have a messageId but the collection is not fully fetched
-            if ((this.messageId && !this.model.messages.get(this.messageId)) || (!this.messageId && !this.model.messages.nextComplete)) this.model.messages.reset();
-            _.delay(this.model.messages.fetch.bind(this.model.messages));
+            if ((this.messageId && !this.model.messages.find(function (m) { return m.get('messageId') === this.messageId; }, this)) || (!this.messageId && !this.model.messages.nextComplete)) {
+                this.model.messages.reset();
+                _.delay(this.model.messages.fetch.bind(this.model.messages));
+            }
 
             // tracking typing
             this.typing = {
@@ -297,7 +299,7 @@ define('io.ox/chat/views/chat', [
             }
 
             return $('<button type="button" class="btn btn-default btn-action join" >')
-                .attr({ 'data-cmd': 'join-channel', 'data-id': this.model.get('id') })
+                .attr({ 'data-cmd': 'join-channel', 'data-id': this.model.id })
                 .append('Join');
         },
 
@@ -411,7 +413,7 @@ define('io.ox/chat/views/chat', [
             for (i = 0; i < $input[0].files.length; i++) {
                 file = $input[0].files[i];
                 type = /(jpg|jpeg|gif|bmp|png)/i.test(file.type) ? 'image' : 'file';
-                if (!this.model.get('id')) this.model.postFirstMessage(undefined, file);
+                if (!this.model.get('roomId')) this.model.postFirstMessage(undefined, file);
                 else this.model.postMessage({ content: '', type: type }, file);
             }
             $input.val('');
@@ -437,7 +439,7 @@ define('io.ox/chat/views/chat', [
 
             var body = { content: content };
             if (this.reference) body.reference = this.reference;
-            if (!this.model.get('id')) this.model.postFirstMessage(body);
+            if (!this.model.id) this.model.postFirstMessage(body);
             else this.model.postMessage(body);
 
             // remove reference preview

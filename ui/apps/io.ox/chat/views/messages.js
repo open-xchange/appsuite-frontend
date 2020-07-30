@@ -62,7 +62,7 @@ define('io.ox/chat/views/messages', [
                 .attr('data-cid', model.cid)
                 .addClass(model.get('type'))
                 .toggleClass('myself', !model.isSystem() && model.isMyself())
-                .toggleClass('highlight', !!model.get('id') && model.get('id') === this.messageId)
+                .toggleClass('highlight', !!model.get('messageId') && model.get('messageId') === this.messageId)
                 .toggleClass('emoji', isOnlyEmoji(model.getBody()))
                 .append(
                     // sender avatar & name
@@ -77,7 +77,7 @@ define('io.ox/chat/views/messages', [
                     $('<div class="fa delivery">').addClass(model.get('state'))
                 );
 
-            if (model.get('id') === this.messageId) delete this.messageId;
+            if (model.get('messageId') === this.messageId) delete this.messageId;
 
             var date = this.renderDate(model);
             if (date) return [date, message];

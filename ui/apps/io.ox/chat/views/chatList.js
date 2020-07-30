@@ -66,7 +66,7 @@ define('io.ox/chat/views/chatList', [
         },
 
         getNode: function (model) {
-            return this.$('[data-cid="' + model.get('id') + '"]');
+            return this.$('[data-cid="' + model.get('roomId') + '"]');
         },
 
         onSort: _.debounce(function () {

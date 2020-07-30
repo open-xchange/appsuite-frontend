@@ -158,6 +158,8 @@ define('io.ox/chat/data', [
             return { content: '', senderId: data.user.userId, sent: +moment(), type: 'text', state: undefined };
         },
 
+        idAttribute: 'messageId',
+
         getBody: function () {
             if (this.isSystem()) return this.getSystemMessage();
             else if (this.isImage()) return this.getImage();
@@ -285,7 +287,7 @@ define('io.ox/chat/data', [
         },
 
         updateDelivery: function (state) {
-            var url = data.API_ROOT + '/delivery/' + this.get('id');
+            var url = data.API_ROOT + '/rooms/' + this.get('roomId') + '/delivery/' + this.get('messageId');
             $.ajax({
                 method: 'POST',
                 url: url,
@@ -300,15 +302,15 @@ define('io.ox/chat/data', [
     var MessageCollection = Backbone.Collection.extend({
         model: MessageModel,
         comparator: function (a, b) {
-            return a.get('id') - b.get('id');
+            return a.get('messageId') - b.get('messageId');
         },
         initialize: function (models, options) {
             this.roomId = options.roomId;
         },
         paginate: function (direction) {
             var id;
-            if (direction === 'prev') id = this.first().get('id');
-            else if (direction === 'next') id = this.last().get('id');
+            if (direction === 'prev') id = this.first().get('messageId');
+            else if (direction === 'next') id = this.last().get('messageId');
 
             return this.load({ id: id, direction: direction, limit: DEFAULT_LIMIT }, 'paginate');
         },
@@ -381,17 +383,19 @@ define('io.ox/chat/data', [
 
         defaults: { open: true, type: 'group', unreadCount: 0 },
 
+        idAttribute: 'roomId',
+
         initialize: function (attr) {
             var self = this;
             this.unset('messages', { silent: true });
-            this.members = new MemberCollection(attr.members, { parse: true, roomId: attr.id });
-            this.messages = new MessageCollection([], { roomId: attr.id });
+            this.members = new MemberCollection(this.mapMembers(attr.members), { parse: true, roomId: attr.roomId });
+            this.messages = new MessageCollection([], { roomId: attr.roomId });
             // forward specific events
             this.listenTo(this.members, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('member:' + name);
             });
             this.on('change:members', function () {
-                this.members.set(this.get('members'), { parse: true, merge: true });
+                this.members.set(this.mapMembers(this.get('members')), { parse: true, merge: true });
             });
             this.listenTo(this.messages, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('message:' + name);
@@ -401,15 +405,15 @@ define('io.ox/chat/data', [
                     if (!this.messages.nextComplete) return;
                     var lastMessage = this.messages.last();
                     lastMessage = _.extend({}, this.get('lastMessage'), lastMessage.toJSON());
-                    if (deliveryUpdateCache[lastMessage.id]) lastMessage.state = deliveryUpdateCache[lastMessage.id];
+                    if (deliveryUpdateCache[lastMessage.messageId]) lastMessage.state = deliveryUpdateCache[lastMessage.messageId];
                     this.set('lastMessage', lastMessage);
                 }
 
                 var lastMessage = this.messages.last();
                 if (!lastMessage) return;
 
-                if (!this.get('lastMessage') || this.get('lastMessage').id !== lastMessage.get('id') || !lastMessage.has('id')) {
-                    if (!lastMessage.has('id')) self.listenToOnce(lastMessage, 'change:id', updateLastMessage.bind(this));
+                if (!this.get('lastMessage') || this.get('lastMessage').messageId !== lastMessage.get('messageId') || !lastMessage.has('messageId')) {
+                    if (!lastMessage.has('messageId')) self.listenToOnce(lastMessage, 'change:messageId', updateLastMessage.bind(this));
                     else updateLastMessage.call(this);
                 }
             }, 10));
@@ -554,7 +558,7 @@ define('io.ox/chat/data', [
             if (file) this.file = file;
 
             data.chats.addAsync(this).done(function (result) {
-                events.trigger('cmd', { cmd: 'show-chat', id: result.id });
+                events.trigger('cmd', { cmd: 'show-chat', id: result.get('roomId') });
             });
         },
 
@@ -601,7 +605,7 @@ define('io.ox/chat/data', [
         },
 
         addAsync: function (attr) {
-            var url = attr.id ? this.url() + '/' + attr.id : this.url();
+            var url = attr.roomId ? this.url() + '/' + attr.roomId : this.url();
 
             var collection = this,
                 data = _.extend({
@@ -623,7 +627,7 @@ define('io.ox/chat/data', [
             });
 
             return $.ajax({
-                type: attr.id ? 'PATCH' : 'POST',
+                type: attr.roomId ? 'PATCH' : 'POST',
                 url: url,
                 data: formData,
                 processData: false,
@@ -655,7 +659,7 @@ define('io.ox/chat/data', [
         },
 
         setCurrent: function (current) {
-            this.currentChatId = current;
+            this.currentChatId = current ? current.toString() : undefined;
         },
 
         getCurrent: function () {
@@ -814,7 +818,7 @@ define('io.ox/chat/data', [
 
                 var lastMessage = room.get('lastMessage') || {};
                 // update state if necessary
-                if (messageId === lastMessage.id && lastMessage.state !== state) {
+                if (messageId === lastMessage.messageId && lastMessage.state !== state) {
                     lastMessage = _.extend({}, lastMessage, { state: state });
                     room.set('lastMessage', lastMessage);
                 }
@@ -827,7 +831,7 @@ define('io.ox/chat/data', [
                 if (message.get('senderId') !== data.user.userId) return;
 
                 room.messages.forEach(function (message) {
-                    if (message.id > messageId) return;
+                    if (message.messageId > messageId) return;
                     if (message.get('state') === 'seen') return;
                     if (message.get('state') === 'client' && state === 'server') return;
                     message.set('state', state);

@@ -55,7 +55,7 @@ define('io.ox/chat/actions/openGroupDialog', [
             });
         }
         var participants = (model.members || new Backbone.Collection(members)).clone();
-        var originalModel = model.has('id') ? model.clone() : new Backbone.Model();
+        var originalModel = model.has('roomId') ? model.clone() : new Backbone.Model();
 
         model.set('type', model.get('type') || obj.type || 'group');
 
@@ -68,8 +68,8 @@ define('io.ox/chat/actions/openGroupDialog', [
         })
         .extend({
             header: function () {
-                var title = this.model.get('id') ? 'Edit group chat' : 'Create group chat';
-                if (this.model.get('type') === 'channel') title = this.model.get('id') ? 'Edit channel' : 'Create new channel';
+                var title = this.model.id ? 'Edit group chat' : 'Create group chat';
+                if (this.model.get('type') === 'channel') title = this.model.id ? 'Edit channel' : 'Create new channel';
 
                 var title_id = _.uniqueId('title');
                 this.$('.modal-header').empty().append(
@@ -114,9 +114,10 @@ define('io.ox/chat/actions/openGroupDialog', [
             this.$el.addClass('ox-chat-popup ox-chat');
         })
         .addCancelButton()
-        .addButton({ action: 'save', label: model.get('id') ? 'Edit chat' : 'Create chat' })
+        .addButton({ action: 'save', label: model.id ? 'Edit chat' : 'Create chat' })
         .on('save', function () {
             var dataObj = this.model.toJSON();
+            else dataObj.members = this.collection.pluck('email1');
 
             if (this.model.get('title') === originalModel.get('title')) delete dataObj.title;
             if (this.model.get('description') === originalModel.get('description')) delete dataObj.description;
@@ -130,7 +131,7 @@ define('io.ox/chat/actions/openGroupDialog', [
             }
 
             data.chats.addAsync(dataObj).done(function (model) {
-                def.resolve(model.get('id'));
+                def.resolve(model.id);
             });
         })
         .on('discard', def.reject)

@@ -93,7 +93,7 @@ define('io.ox/chat/views/channelList', [
         renderItem: function (model) {
             var isMember = model.isMember();
             return $('<li class="channel">')
-                .attr({ 'data-cmd': 'view-channel', 'data-id': model.get('id') })
+                .attr({ 'data-cmd': 'view-channel', 'data-id': model.get('roomId') })
                 .append(
                     $('<div>').append(
                         new ChatAvatar({ model: model }).render().$el,
@@ -102,7 +102,7 @@ define('io.ox/chat/views/channelList', [
                     ),
                     $('<div class="description">').text(model.get('description')),
                     $('<button type="button" class="btn btn-default btn-action" >')
-                        .attr({ 'data-cmd': 'join-channel', 'data-id': model.get('id') })
+                        .attr({ 'data-cmd': 'join-channel', 'data-id': model.get('roomId') })
                         .prop('disabled', isMember)
                         .toggleClass('join', !isMember)
                         .toggleClass('hidden', isMember)
@@ -115,7 +115,7 @@ define('io.ox/chat/views/channelList', [
         },
 
         getNode: function (model) {
-            return this.$('[data-id="' + $.escape(model.get('id')) + '"]');
+            return this.$('[data-id="' + $.escape(model.get('roomId')) + '"]');
         },
 
         onAdd: _.debounce(function () {
