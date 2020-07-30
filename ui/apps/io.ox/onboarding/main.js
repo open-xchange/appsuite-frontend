@@ -16,9 +16,10 @@ define('io.ox/onboarding/main', [
     'io.ox/core/tk/wizard',
     'io.ox/backbone/views/disposable',
     'io.ox/core/http',
+    'settings!io.ox/onboarding',
     'gettext!io.ox/core/onboarding',
     'less!io.ox/onboarding/style'
-], function (ext, Wizard, DisposableView, http, gt) {
+], function (ext, Wizard, DisposableView, http, settings, gt) {
     'use strict';
 
     var wizard,
@@ -53,6 +54,12 @@ define('io.ox/onboarding/main', [
         }).then(function (data) {
             return data;
         });
+    }
+
+    function getStoreIcon(platform) {
+        var languagePrefix = ox.language.slice(0, 2).toUpperCase(),
+            country = _.contains(['EN', 'DE', 'ES', 'FR'], languagePrefix) ? languagePrefix : 'EN';
+        return settings.get(platform + '/storeIcon').replace('$country', country);
     }
 
     var titles = {
@@ -121,12 +128,6 @@ define('io.ox/onboarding/main', [
             'title': gt('Mail'),
             'icon': 'fa-envelope-o',
             'app': 'mailsync',
-            'platform': 'windows'
-        },
-        {
-            'title': gt('Mail + Calendar + Address Book'),
-            'icon': 'fa-users',
-            'app': 'emclient',
             'platform': 'windows'
         },
         {
@@ -216,7 +217,7 @@ define('io.ox/onboarding/main', [
     ]);
 
 
-    var settings = new Backbone.Model({
+    settings.set({
 
         'incoming': {
             'server': 'imap.open-xchange.com',
@@ -236,33 +237,37 @@ define('io.ox/onboarding/main', [
             'url': 'https://dav-appsuite-dev.open-xchange.com',
             'login': '123'
         },
-        'android/mailapp': {
-            'storeIcon': 'apps/themes/icons/default/googleplay/google-play-badge_EN.svg',
-            'appIconClass': 'mailapp playstore',
-            'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail'
+        'android': {
+            'mailapp': {
+                'title': gt('OX Mail App'),
+                'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail'
+            },
+            'driveapp': {
+                'title': gt('OX Drive App'),
+                'url': 'https://play.google.com/store/apps/details?id=com.openexchange.drive.vanilla'
+            },
+            'storeIcon': 'apps/themes/icons/default/googleplay/google-play-badge_$country.svg'
         },
-        'android/driveapp': {
-            'storeIcon': 'apps/themes/icons/default/googleplay/google-play-badge_EN.svg',
-            'appIconClass': 'driveapp playstore',
-            'url': 'https://play.google.com/store/apps/details?id=com.openexchange.drive.vanilla'
+        'ios': {
+            'mailapp': {
+                'title': gt('OX Mail App'),
+                'url': 'https://itunes.apple.com/us/app/ox-mail-v2/id1385582725'
+            },
+            'driveapp': {
+                'title': gt('OX Drive App'),
+                'url': 'https://itunes.apple.com/de/app/ox-drive/id798570177'
+            },
+            'storeIcon': 'apps/themes/icons/default/appstore/App_Store_Badge_$country_135x40.svg'
         },
-        'ios/mailapp': {
-            'storeIcon': 'apps/themes/icons/default/appstore/App_Store_Badge_EN_135x40.svg',
-            'appIconClass': 'mailapp appstore',
-            'url': 'https://itunes.apple.com/us/app/ox-mail-v2/id1385582725'
-        },
-        'ios/driveapp': {
-            'storeIcon': 'apps/themes/icons/default/appstore/App_Store_Badge_EN_135x40.svg',
-            'appIconClass': 'driveapp appstore',
-            'url': 'https://itunes.apple.com/de/app/ox-drive/id798570177'
-        },
-        'macos/driveapp': {
-            'storeIcon': 'apps/themes/icons/default/appstore/Mac_App_Store_Badge_EN_165x40.svg',
-            'appIconClass': 'driveapp macappstore',
-            'url': 'https://itunes.apple.com/de/app/ox-drive/id818195014'
+        'macos': {
+            'driveapp': {
+                'title': gt('OX Drive App'),
+                'url': 'https://itunes.apple.com/de/app/ox-drive/id818195014',
+                'icon': 'apps/themes/icons/default/apps/mailapp-googleplay.png'
+            },
+            'storeIcon': 'apps/themes/icons/default/appstore/Mac_App_Store_Badge_$country_165x40.svg'
         },
         'windows/drive/url': 'https://appsuite.open-xchange.com',
-        'windows/emclient/url': 'https://appsuite.open-xchange.com',
         'android/url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail&hl=en',
         'macos/mailsync/url': 'https://apsuite.open-xchange.com',
         'macos/drive/url': 'https://apsuite.open-xchange.com',
@@ -372,25 +377,27 @@ define('io.ox/onboarding/main', [
         tagName: 'div',
         className: 'content-container mobile-download',
 
-        initialize: function (app) {
-            this.appIconClass = app.appIconClass;
-            this.storeIcon = app.storeIcon;
-            this.url = app.url;
+        initialize: function (options) {
+            this.appIconClass = options.iconClass;
+            this.storeIcon = options.storeIcon;
+            this.url = options.app.url;
+            this.title = options.app.title;
+            if (options.app.icon) {
+                this.appIcon = options.app.icon;
+                this.appIconClass = '';
+            }
         },
         events: {
             'click .applink': 'onClick'
         },
         render: function () {
             this.$el.append(
-                //$('<a href="#" class="app">').append(
                 $('<img class="app-icon applink" role="button">')
                     .addClass(this.appIconClass)
-                    .attr('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='),
-                //),
-                $('<p class="app-info">').text('OX Mail App'),
-                //$('<a href="#" class="store">').append(
+                    .attr('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=')
+                    .css('background-image', this.appIcon ? 'url(' + this.appIcon + ')' : ''),
+                $('<p class="app-info">').text(this.title),
                 $('<img class="store-icon applink" role="button">').attr('src', this.storeIcon)
-                //)
             );
         },
         onClick: function () {
@@ -505,13 +512,12 @@ define('io.ox/onboarding/main', [
     var scenarios = {
         'windows': {
             'drive': function () { return new DownloadView({ link: settings.get('windows/drive/url') }); },
-            'mailsync': function () { return new MailSyncView({ incoming: settings.get('incoming'), outgoing: settings.get('outgoing'), userData: config.userData, title: titles.windows.mailsync }); },
-            'emclient': function () { return new DownloadView({ link: settings.get('windows/emclient/url') }); }
+            'mailsync': function () { return new MailSyncView({ incoming: settings.get('incoming'), outgoing: settings.get('outgoing'), userData: config.userData, title: titles.windows.mailsync }); }
         },
         'android': {
             'mailsync': function () { return new MailSyncView({ incoming: settings.get('incoming'), outgoing: settings.get('outgoing'), userData: config.userData, title: titles.android.mailsync }); },
-            'mailapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('android/mailapp')) : new DownloadQrView({ url: settings.get('android/mailapp').url }); },
-            'driveapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('android/driveapp')) : new DownloadQrView({ url: settings.get('android/driveapp').url }); },
+            'mailapp': function () { return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('android/mailapp'), storeIcon: getStoreIcon('android'), iconClass: 'mailapp playstore' }) : new DownloadQrView({ url: settings.get('android/mailapp/url') }); },
+            'driveapp': function () { return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('android/driveapp'), storeIcon: getStoreIcon('android'), iconClass: 'driveapp playstore' }) : new DownloadQrView({ url: settings.get('android/driveapp/url') }); },
             'addressbook': function () { return new SyncView({ name: titles.android.addressbook, config: settings.get('carddav') }); },
             'calendar': function () { return new SyncView({ name: titles.android.calendar, config: settings.get('caldav') }); }
         },
@@ -521,12 +527,12 @@ define('io.ox/onboarding/main', [
             'addressbook': function () { return new DownloadConfigView({ type: 'carddav', config: settings.get('carddav') }); },
             //'calendar': function () { return new SyncView({ type: titles.macos.calendar, config: settings.get('caldav') }); },
             'calendar': function () { return new DownloadConfigView({ type: 'caldav', config: settings.get('caldav') }); },
-            'drive': function () { return new MobileDownloadView(settings.get('macos/driveapp')); }
+            'drive': function () { return new MobileDownloadView({ app: settings.get('macos/driveapp'), storeIcon: getStoreIcon('macos'), iconClass: 'driveapp macappstore' }); }
         },
         'ios': {
             'mailsync': function () { return new DownloadQrView({ url: settings.get('ios/mailsync/url') }); },
-            'mailapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('ios/mailapp')) : new DownloadQrView({ url: settings.get('ios/mailapp').url }); },
-            'driveapp': function () { return _.device('smartphone') ? new MobileDownloadView(settings.get('ios/driveapp')) : new DownloadQrView({ url: settings.get('ios/driveapp').url }); },
+            'mailapp': function () { return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('ios/mailapp'), storeIcon: getStoreIcon('ios'), iconClass: 'mailapp appstore' }) : new DownloadQrView({ url: settings.get('ios/mailapp/url') }); },
+            'driveapp': function () { return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('ios/driveapp'), storeIcon: getStoreIcon('ios'), iconClass: 'driveapp appstore' }) : new DownloadQrView({ url: settings.get('ios/driveapp/url') }); },
             'addressbook': function () { return new SyncView({ name: titles.ios.addressbook, config: settings.get('carddav') }); },
             'calendar': function () { return new SyncView({ name: titles.ios.calendar, config: settings.get('caldav') }); }
         }
@@ -664,23 +670,29 @@ define('io.ox/onboarding/main', [
                             )
                         )
                         .addClass(!platform && !app ? 'active' : '')
-                        .append($('<p class="progress-description aria-hidden="true">').text(platformTitle ? platformTitle : gt('Platform'))),
+                        .append($('<span class="progress-description aria-hidden="true">').text(platformTitle ? platformTitle : gt('Platform'))),
                     $('<li class="progress-step-two">')
                         .append(
                             $('<button type="button" class="btn progress-btn" data-action="back">')
                             .prop('disabled', true)
-                            .text('2')
+                            .append(
+                                $('<span>').text('2'),
+                                $('<span class="sr-only">').text(appTitle ? appTitle : gt('App'))
+                            )
                         )
                         .addClass(platform && !app ? 'active' : '')
-                        .append($('<p class="progress-description" aria-hidden="true">').text(appTitle ? appTitle : gt('App'))),
+                        .append($('<span class="progress-description" aria-hidden="true">').text(appTitle ? appTitle : gt('App'))),
                     $('<li class="progress-step-three">')
                         .append(
                             $('<button type="button" class="btn progress-btn">')
                             .prop('disabled', true)
-                            .text('3')
+                            .append(
+                                $('<span>').text('3'),
+                                $('<span class="sr-only">').text(gt('Setup'))
+                            )
                         )
                         .addClass(platform && app ? 'active' : '')
-                        .append($('<p class="progress-description" aria-hidden="true">').text(gt('Setup')))
+                        .append($('<span class="progress-description" aria-hidden="true">').text(gt('Setup')))
                 ));
 
             $('.progress-step-one .btn').prop(platform ? { 'disabled': false } : '');
@@ -698,24 +710,29 @@ define('io.ox/onboarding/main', [
                     $('<li class="progress-step-one">')
                         .append(
                             $('<button type="button" class="btn progress-btn" data-action="back">')
-                            .text('1')
                             .prop('disabled', true)
+                            .append(
+                                $('<span>').text('1'),
+                                $('<span class="sr-only">').text(appTitle ? appTitle : gt('App'))
+                            )
                         )
                         .addClass(!app ? 'active' : '')
-                        .append($('<p class="progress-description">').text(appTitle ? appTitle : gt('App'))),
+                        .append($('<span class="progress-description">').text(appTitle ? appTitle : gt('App'))),
                     $('<li class="progress-step-three">')
                         .append(
                             $('<button type="button" class="btn progress-btn">')
-                            .text('2')
                             .prop('disabled', true)
+                            .append(
+                                $('<span>').text('2'),
+                                $('<span class="sr-only">').text(gt('Setup'))
+                            )
                         )
                         .addClass(app ? 'active' : '')
-                        .append($('<p class="progress-description">').text(gt('Setup')))
+                        .append($('<span class="progress-description">').text(gt('Setup')))
                 ));
 
-            $('.progress-step-one').prop(app ? { 'disabled': false } : '');
+            $('.progress-step-one .btn').prop(app ? { 'disabled': false } : '');
             return this;
-
         }
     });
 
@@ -745,9 +762,9 @@ define('io.ox/onboarding/main', [
                         platform;
 
                     // set platform if mobile device detected
-                    if (_.device('ios')) {
+                    if (_.device('ios && smartphone')) {
                         platform = 'ios';
-                    } else if (_.device('android')) {
+                    } else if (_.device('android && smartphone')) {
                         platform = 'android';
                     } else {
                         platform = undefined;

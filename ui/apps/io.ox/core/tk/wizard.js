@@ -127,7 +127,7 @@ define('io.ox/core/tk/wizard', [
         $(document).on('click.wizard', '.wizard-overlay, .wizard-backdrop', function () {
             $('.wizard-step:visible').find('button.btn-primary:first').focus();
         });
-        this.containerScaffold = _.device('smartphone') && !this.disableMobileSupport ?
+        this.containerScaffold = _.device('smartphone') && !this.options.disableMobileSupport ?
         // special node for fullscreen wizards on smartphone
             $(
                 '<div class="wizard-container abs">' +
