@@ -296,8 +296,8 @@ define('io.ox/chat/data', [
             return prev.get('senderId') === this.get('senderId');
         },
 
-        updateDelivery: function (state) {
-            var url = data.API_ROOT + '/rooms/' + this.get('roomId') + '/delivery/' + this.get('messageId');
+        updateDelivery: function (state, roomId) {
+            var url = data.API_ROOT + '/rooms/' + roomId + '/delivery/' + this.get('messageId');
             $.ajax({
                 method: 'POST',
                 url: url,
@@ -455,8 +455,8 @@ define('io.ox/chat/data', [
 
         getLastMessageDate: function () {
             var last = this.get('lastMessage');
-            if (!last || !last.sent) return '\u00a0';
-            var date = moment(last.sent);
+            if (!last || !last.date) return '\u00a0';
+            var date = moment(last.date);
             return date.calendar(null, {
                 sameDay: 'LT',
                 lastDay: '[Yesterday]',
@@ -477,7 +477,7 @@ define('io.ox/chat/data', [
         },
 
         checkForGroupUpdate: function (message, roomId) {
-            var update = JSON.parse(message.body);
+            var update = JSON.parse(message.content);
             var chat = data.chats.get(roomId);
 
             if (update.type === 'removeMember') {
@@ -865,8 +865,11 @@ define('io.ox/chat/data', [
 
             });
 
-            socket.on('message:new', function (message) {
-                var roomId = message.roomId;
+            socket.on('message:new', function (attr) {
+                var roomId = attr.roomId,
+                    message = attr.message,
+                    state;
+
                 // stop typing
                 events.trigger('typing:' + roomId, message.sender, false);
                 // fetch room unless it's already known
@@ -888,9 +891,10 @@ define('io.ox/chat/data', [
 
                     if (message.sender !== data.user.email) {
                         model.set({ modified: +moment(), unreadCount: model.get('unreadCount') + 1 });
-                    }
+                        state = 'client';
+                    } else state = 'seen';
 
-                    newMessage.updateDelivery('client');
+                    newMessage.updateDelivery(state, roomId);
 
                     if (newMessage.get('type') === 'system') model.checkForGroupUpdate(message, roomId);
                 });

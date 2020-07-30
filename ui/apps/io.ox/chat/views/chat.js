@@ -164,7 +164,7 @@ define('io.ox/chat/views/chat', [
                 'after:add': this.onAfterAdd
             });
 
-            this.on('dispoe', this.onDispose);
+            this.on('dispose', this.onDispose);
 
             this.listenTo(events, 'cmd:remove-reference', this.onRemoveReference);
 
@@ -503,7 +503,7 @@ define('io.ox/chat/views/chat', [
             if (lastIndex < 0) return;
             var message = this.model.messages.at(lastIndex);
             if (message.get('state') === 'seen') return;
-            message.updateDelivery('seen');
+            message.updateDelivery('seen', this.model.id);
         },
 
         isJumpDownVisible: function () {

@@ -73,7 +73,7 @@ define('io.ox/chat/views/chatList', [
             if (this.disposed) return;
 
             var items = this.getItems().map(this.renderItem, this);
-            this.$el.append(
+            this.$el.empty().append(
                 items
             );
         }, 1),
