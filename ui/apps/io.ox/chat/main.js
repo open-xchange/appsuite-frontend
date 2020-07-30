@@ -161,16 +161,18 @@ define('io.ox/chat/main', [
         startPrivateChat: function (cmd) {
             // try to reuse chat
             var chat = data.chats.find(function (model) {
-                return model.get('type') === 'private' && model.get('members').map(function (a) {
-                    return a.email;
-                }).indexOf(cmd.email) >= 0;
+                return model.get('type') === 'private' && _.allKeys(model.get('members')).indexOf(cmd.email) >= 0;
             });
             if (chat) {
                 if (chat.get('open')) return this.showChat(chat.id);
                 this.resubscribeChat(chat.id);
             }
 
-            var view = new ChatView({ type: 'private', members: [data.user, { email: cmd.email }] });
+            var members = {};
+            members[data.user.email] = 'admin';
+            members[cmd.email] = 'member';
+            var view = new ChatView({ type: 'private', members: members });
+
             this.showApp();
             this.$rightside.empty().append(view.render().$el);
             this.$body.addClass('open');

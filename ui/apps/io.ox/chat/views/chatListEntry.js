@@ -47,7 +47,7 @@ define('io.ox/chat/views/chatListEntry', [
             var model = this.model,
                 lastMessage = model.get('lastMessage') || {},
                 sender = lastMessage.senderId || '',
-                isCurrentUser = sender.toString() === data.user_id.toString(),
+                isCurrentUser = sender.toString() === data.user.userId.toString(),
                 isPrivate = model.get('type') === 'private',
                 isSystemMessage = lastMessage ? lastMessage.type === 'system' : false;
 
@@ -90,7 +90,7 @@ define('io.ox/chat/views/chatListEntry', [
 
         onChangeLastMessage: function () {
             var model = this.model,
-                isCurrentUser = model.get('lastMessage').senderId.toString() === data.user_id.toString(),
+                isCurrentUser = model.get('lastMessage').senderId.toString() === data.user.userId.toString(),
                 isPrivate = model.get('type') === 'private',
                 lastMessage = model.get('lastMessage') || {},
                 isSystemMessage = lastMessage ? lastMessage.type === 'system' : false;

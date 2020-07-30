@@ -131,7 +131,9 @@ define('io.ox/chat/data', [
 
         parse: function (array) {
             return _(array).map(function (item) {
-                return data.users.getByMail(item.email) || { email1: item.email };
+                var user = data.users.getByMail(item.email);
+                if (user) user = user.toJSON();
+                return _.extend({ email1: item.email }, item, user);
             });
         },
 
@@ -153,7 +155,7 @@ define('io.ox/chat/data', [
     var MessageModel = Backbone.Model.extend({
 
         defaults: function () {
-            return { content: '', senderId: data.user_id, sent: +moment(), type: 'text', state: undefined };
+            return { content: '', senderId: data.user.userId, sent: +moment(), type: 'text', state: undefined };
         },
 
         getBody: function () {
@@ -262,7 +264,7 @@ define('io.ox/chat/data', [
         },
 
         isMyself: function () {
-            return this.get('senderId') === data.user_id;
+            return this.get('senderId') === data.user.userId;
         },
 
         isImage: function () {
@@ -418,9 +420,15 @@ define('io.ox/chat/data', [
             }.bind(this), 0));
         },
 
+        mapMembers: function (members) {
+            return _(members).map(function (role, member) {
+                return { role: role, email: member };
+            });
+        },
+
         getTitle: function () {
-            var user = data.users.getByMail(data.user.email);
-            return this.get('title') || _(this.members.reject(user)).invoke('getName').sort().join('; ');
+            var members = _(this.members.reject(function (m) { return m.get('email1') === data.user.email; }));
+            return this.get('title') || members.invoke('getName').sort().join('; ');
         },
 
         getLastMessage: function () {
@@ -451,7 +459,7 @@ define('io.ox/chat/data', [
 
         isMember: function (email) {
             email = email || data.user.email;
-            return !!_(this.get('members')).findWhere({ email: email });
+            return this.get('members') ? !!this.get('members')[email] : false;
         },
 
         checkForGroupUpdate: function (message, roomId) {
@@ -508,7 +516,7 @@ define('io.ox/chat/data', [
 
         postMessage: function (attr, file) {
             // make sure, senderId is set, such that this message can be identified as own message
-            attr.senderId = data.user.id;
+            attr.senderId = data.user.userId;
 
             var formData = new FormData();
             _.each(attr, function (value, key) {
@@ -537,7 +545,7 @@ define('io.ox/chat/data', [
 
         postFirstMessage: function (attr, file) {
             var members = [];
-            this.get('members').forEach(function (member) { members.push(member.email); });
+            _(this.get('members')).allKeys().forEach(function (member) { members.push(member); });
 
             this.members = members;
             this.message = attr && attr.content;
@@ -816,7 +824,7 @@ define('io.ox/chat/data', [
                     deliveryUpdateCache[messageId] = state;
                     return;
                 }
-                if (message.get('senderId') !== data.user.id) return;
+                if (message.get('senderId') !== data.user.userId) return;
 
                 room.messages.forEach(function (message) {
                     if (message.id > messageId) return;
@@ -840,7 +848,7 @@ define('io.ox/chat/data', [
                     if (model.messages.nextComplete) {
                         // anticipate, whether this client was sending the last message and received a push notification before the message creation resolved
                         var lastIndex = model.messages.findLastIndex(function (message) {
-                                return message.get('senderId') === data.user.id;
+                                return message.get('senderId') === data.user.userId;
                             }), lastMessage;
                         if (lastIndex >= 0) lastMessage = model.messages.at(lastIndex);
 
@@ -848,7 +856,7 @@ define('io.ox/chat/data', [
 
                     } else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
 
-                    if (message.senderId.toString() !== data.user_id.toString()) {
+                    if (message.sender !== data.user.email) {
                         model.set({ modified: +moment(), unreadCount: model.get('unreadCount') + 1 });
                     }
 
