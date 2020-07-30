@@ -78,7 +78,7 @@
     "jquery": "3.4.1",
     "moment": "2.24.0",
     "moment-timezone": "0.5.27",
-    "pdfjs-dist": "1.9.426",
+    "pdfjs-dist": "2.3.200",
     "puppeteer": "2.0.0",
     "requirejs": "2.3.6",
     "resize-polyfill": "1.1.1",
