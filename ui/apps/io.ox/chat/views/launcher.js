@@ -39,7 +39,7 @@ define('io.ox/chat/views/launcher', ['io.ox/chat/data', 'less!io.ox/chat/style']
 
         updateCounter: function () {
             var count = data.chats.reduce(function (memo, model) {
-                if (!model.isOpen()) return memo;
+                if (!model.isActive()) return memo;
                 return memo + model.get('unreadCount');
             }, 0);
 

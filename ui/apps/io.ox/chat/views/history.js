@@ -67,12 +67,12 @@ define('io.ox/chat/views/history', [
             this.listenTo(this.collection, {
                 'add': this.onAdd,
                 'remove': this.onRemove,
-                'change:open': this.onChangeOpen,
+                'change:active': this.onChangeActive,
                 'change': this.onChange
             });
 
             // get fresh data
-            this.collection.fetch({ remove: false, data: { open: false } });
+            this.collection.fetch({ remove: false, data: { active: false } });
         },
 
         render: function () {
@@ -126,8 +126,7 @@ define('io.ox/chat/views/history', [
             this.getNode(model).remove();
         },
 
-        onChangeOpen: function (model, value) {
-            console.log('onChangeOpen', model, value);
+        onChangeActive: function (model, value) {
             if (value) this.onRemove(model);
         },
 

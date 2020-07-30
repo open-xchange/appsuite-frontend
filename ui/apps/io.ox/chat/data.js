@@ -381,7 +381,7 @@ define('io.ox/chat/data', [
 
     var ChatModel = Backbone.Model.extend({
 
-        defaults: { open: true, type: 'group', unreadCount: 0 },
+        defaults: { active: true, type: 'group', unreadCount: 0 },
 
         idAttribute: 'roomId',
 
@@ -502,8 +502,8 @@ define('io.ox/chat/data', [
             return member.getName();
         },
 
-        isOpen: function () {
-            return this.get('open');
+        isActive: function () {
+            return this.get('active');
         },
 
         isPrivate: function () {
@@ -544,7 +544,7 @@ define('io.ox/chat/data', [
             });
             model.set('sent', moment().toISOString());
             this.set('modified', +moment());
-            this.set('open', true);
+            this.set('active', true);
         },
 
         postFirstMessage: function (attr, file) {
@@ -575,7 +575,7 @@ define('io.ox/chat/data', [
         },
 
         toggle: function (state) {
-            this.set('open', !!state).save({ open: !!state }, { patch: true });
+            this.set('active', !!state).save({ active: !!state }, { patch: true });
         },
 
         sync: function (method, model, options) {
@@ -609,7 +609,7 @@ define('io.ox/chat/data', [
 
             var collection = this,
                 data = _.extend({
-                    open: true, type: 'group'
+                    active: true, type: 'group'
                 }, _(attr).pick('title', 'type', 'members', 'description', 'file', 'reference', 'message')),
                 formData = new FormData();
 
@@ -642,18 +642,18 @@ define('io.ox/chat/data', [
             var room = this.get(roomId);
             return $.ajax({
                 type: 'PUT',
-                url: this.url() + '/' + roomId + '/state',
+                url: this.url() + '/' + roomId + '/active/' + !room.get('active'),
                 processData: false,
                 contentType: false,
                 xhrFields: { withCredentials: true }
             }).then(function () {
-                room.set('open', !room.get('open'));
+                room.set('active', !room.get('active'));
             });
         },
 
         onChangeUnreadCount: function () {
             this.trigger('unseen', this.reduce(function (sum, model) {
-                if (!model.isOpen()) return sum;
+                if (!model.isActive()) return sum;
                 return sum + model.get('unreadCount');
             }, 0));
         },
@@ -666,13 +666,13 @@ define('io.ox/chat/data', [
             return data.chats.get(this.currentChatId);
         },
 
-        getOpen: function () {
-            return this.filter({ open: true });
+        getActive: function () {
+            return this.filter({ active: true });
         },
 
         getHistory: function () {
             var list = [];
-            this.filter({ open: false }).forEach(function (chat) {
+            this.filter({ active: false }).forEach(function (chat) {
                 if (chat.isMember() || chat.isPrivate() || chat.get('joined')) {
                     list.push(chat);
                 }
@@ -705,7 +705,7 @@ define('io.ox/chat/data', [
             var model = this.get(roomId);
             if (!model || !model.isChannel()) return;
             model.addMembers([data.user.email]);
-            model.set({ joined: true, open: true });
+            model.set({ joined: true, active: true });
         },
 
         leaveChannel: function (roomId) {
@@ -720,7 +720,7 @@ define('io.ox/chat/data', [
             }).then(function () {
                 var members = room.get('members').filter(function (member) { return member.email !== data.user.email; });
                 room.set('members', members);
-                room.set('open', false);
+                room.set('active', false);
                 room.set('joined', false);
             }).fail(function (err) {
                 console.log(err);

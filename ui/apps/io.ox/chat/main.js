@@ -164,7 +164,7 @@ define('io.ox/chat/main', [
                 return model.get('type') === 'private' && _.allKeys(model.get('members')).indexOf(cmd.email) >= 0;
             });
             if (chat) {
-                if (chat.get('open')) return this.showChat(chat.id);
+                if (chat.get('active')) return this.showChat(chat.get('roomId'));
                 this.resubscribeChat(chat.id);
             }
 

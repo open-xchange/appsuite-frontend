@@ -313,9 +313,9 @@ define('io.ox/chat/views/chat', [
                 );
             }
 
-            if (this.model.isPrivate() && this.model.get('open')) {
+            if (this.model.isPrivate() && this.model.get('active')) {
                 $ul.append(renderItem('Hide chat', { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
-            } else if (!(this.model.isChannel() && !this.model.get('joined')) && this.model.get('open')) {
+            } else if (!(this.model.isChannel() && !this.model.get('joined')) && this.model.get('active')) {
                 $ul.append(renderItem('Edit chat', { 'data-cmd': 'open-group-dialog', 'data-id': this.model.id }));
                 $ul.append(renderItem('Hide chat', { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
             } else if (this.model.isChannel() && !this.model.get('joined')) {
