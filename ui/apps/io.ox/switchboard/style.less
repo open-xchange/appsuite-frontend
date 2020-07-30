@@ -23,8 +23,8 @@
         display: inline-block;
     }
     i.fa:first-child {
-        width: 40px;
-        height: 40px;
+        width: 2.5rem;
+        height: 2.5rem;
         border-radius: 50%;
         border: 1px solid fade(@link-color, 40%);
         background-color: fade(@link-color, 4%);
@@ -369,7 +369,8 @@
         animation: call-history-blink 2s linear 0s infinite;
     }
     & > ul {
-        width: 360px;
+        width: 22.5rem;
+        max-width: 600px;
         max-height: ~"calc(70vh - 64px)";
         overflow-y: auto;
         .header {
@@ -396,7 +397,6 @@
 
 .call-history-item {
     border-bottom: 1px solid #ddd;
-    height: 56px;
     &:last-child { border: 0; }
     .call-icon {
         position: absolute;
@@ -422,12 +422,12 @@
         position: absolute;
         top: 10px;
         right: 16px;
-        width: 32px;
-        height: 32px;
+        width: 2rem;
+        height: 2rem;
     }
     .presence {
         position: absolute;
-        top: 30px;
+        top: 55%;
         right: 6px;
         &.offline { display: none; }
         .icon {
@@ -459,7 +459,7 @@
 }
 
 .dropdown-menu > li.call-history-item > a {
-    padding: 11px 64px 12px 40px;
+    padding: 11px 4rem 12px ~"calc(1rem + 24px)";
     position: relative;
     line-height: 16px;
     &:focus {
