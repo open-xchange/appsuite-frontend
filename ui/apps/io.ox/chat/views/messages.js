@@ -57,10 +57,11 @@ define('io.ox/chat/views/messages', [
         },
 
         renderMessage: function (model) {
+            var messageType = model.get('type');
             var message = $('<div class="message">')
                 // here we use cid instead of id, since the id might be unknown
                 .attr('data-cid', model.cid)
-                .addClass(model.get('type'))
+                .addClass(model.isImage() ? 'image' : messageType)
                 .toggleClass('myself', !model.isSystem() && model.isMyself())
                 .toggleClass('highlight', !!model.get('messageId') && model.get('messageId') === this.messageId)
                 .toggleClass('emoji', isOnlyEmoji(model.getBody()))

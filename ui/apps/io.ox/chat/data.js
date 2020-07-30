@@ -206,10 +206,12 @@ define('io.ox/chat/data', [
         },
 
         getImage: function () {
-            var url = data.API_ROOT + '/files/' + this.get('fileId') + '/thumbnail',
+            var fileId = this.get('files')[0].fileId,
+                // TODO: Adjust for channels
+                url = data.API_ROOT + '/files/' + fileId + '/thumbnail',
                 placeholder = $('<div class="placeholder">').busy();
 
-            if (_.isUndefined(this.get('fileId'))) return placeholder;
+            if (_.isUndefined(fileId)) return placeholder;
 
             $('<img>').on('load', function () {
                 var $img = $(this),
@@ -217,7 +219,7 @@ define('io.ox/chat/data', [
                 placeholder.replaceWith($img);
                 $img.trigger('changeheight', { prev: oldHeight, value: $img.height() });
             }).attr('src', url)
-            .attr({ 'data-cmd': 'show-message-file', 'data-file-id': this.get('fileId') });
+            .attr({ 'data-cmd': 'show-message-file', 'data-file-id': fileId });
             return placeholder;
         },
 
@@ -228,20 +230,22 @@ define('io.ox/chat/data', [
                 text: true
             }, opt);
 
-            var $elem = $('<div class="placeholder">').busy();
+            var $elem = $('<div class="placeholder">').busy(),
+                file = this.get('files')[0],
+                fileId = file.fileId;
 
-            if (_.isUndefined(this.get('fileId'))) return $elem;
+            if (_.isUndefined(fileId)) return $elem;
 
+            // TODO: Adjust for channels
             $.ajax({
-                url: data.API_ROOT + '/files/' + this.get('fileId'),
+                url: data.API_ROOT + '/files/' + fileId,
                 xhrFields: { withCredentials: true }
-            }).then(function (file) {
-                file = file[0];
+            }).then(function () {
                 $elem.replaceWith(
-                    opt.icon ? $('<i class="fa icon">').addClass(util.getClassFromMimetype(file.mimeType)) : '',
+                    opt.icon ? $('<i class="fa icon">').addClass(util.getClassFromMimetype(file.mimetype)) : '',
                     opt.text ? $.txt(file.name) : '',
                     opt.download ? $('<a class="download">').attr({
-                        href: data.API_ROOT + '/files/' + file.fileId + '/download/' + file.name,
+                        href: data.API_ROOT + '/files/' + fileId + '/thumbnail',
                         download: file.name
                     }).append(
                         $('<i class="fa fa-download">')
@@ -270,7 +274,13 @@ define('io.ox/chat/data', [
         },
 
         isImage: function () {
-            return /(jpg|jpeg|gif|bmp|png)/i.test(this.get('mimeType'));
+            if (!this.get('files')) return false;
+
+            for (var i = 0; i < this.get('files').length; i++) {
+                if (!this.get('files')[i].mimetype) this.get('files')[i].mimetype = this.get('files')[i].type;
+            }
+
+            return this.get('files') ? /(jpg|jpeg|gif|bmp|png)/i.test(this.get('files')[0].mimetype) : false;
         },
 
         isFile: function () {
@@ -518,7 +528,8 @@ define('io.ox/chat/data', [
             return this.get('type') === 'channel';
         },
 
-        postMessage: function (attr, file) {
+        postMessage: function (attr, files) {
+            var self = this;
             // make sure, senderId is set, such that this message can be identified as own message
             attr.senderId = data.user.userId;
 
@@ -527,8 +538,14 @@ define('io.ox/chat/data', [
                 formData.append(key, value);
             });
 
-            // add file
-            if (file) formData.append('file', file);
+            // add files
+            attr.files = [];
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+
+                formData.append('files', file, file.name);
+                attr.files.push(file);
+            }
 
             var model = this.messages.add(attr, { merge: true });
             model.save(attr, {
@@ -537,6 +554,17 @@ define('io.ox/chat/data', [
                 contentType: false,
                 xhrFields: { withCredentials: true },
                 success: function (model) {
+                    var fileId = model.get('files')[0].fileId,
+                        url = data.API_ROOT + '/files/' + fileId + '/thumbnail';
+                    var placeholder = $('[data-cid="' + self.messages.getLast().cid + '"]').find('.placeholder.io-ox-busy');
+                    $('<img>').on('load', function () {
+                        var $img = $(this),
+                            oldHeight = placeholder.height();
+                        placeholder.replaceWith($img);
+                        $img.trigger('changeheight', { prev: oldHeight, value: $img.height() });
+                    }).attr('src', url)
+                        .attr({ 'data-cmd': 'show-message-file', 'data-file-id': fileId });
+
                     if (!deliveryUpdateCache[model.get('id')]) return;
                     model.set('state', deliveryUpdateCache[model.get('id')]);
                     delete deliveryUpdateCache[model.get('id')];
@@ -610,7 +638,7 @@ define('io.ox/chat/data', [
             var collection = this,
                 data = _.extend({
                     active: true, type: 'group'
-                }, _(attr).pick('title', 'type', 'members', 'description', 'file', 'reference', 'message')),
+                }, _(attr).pick('title', 'type', 'members', 'description', 'icon', 'reference', 'message')),
                 formData = new FormData();
 
             _.each(data, function (value, key) {
@@ -718,8 +746,6 @@ define('io.ox/chat/data', [
                 contentType: false,
                 xhrFields: { withCredentials: true }
             }).then(function () {
-                var members = room.get('members').filter(function (member) { return member.email !== data.user.email; });
-                room.set('members', members);
                 room.set('active', false);
                 room.set('joined', false);
             }).fail(function (err) {
@@ -758,7 +784,7 @@ define('io.ox/chat/data', [
         },
 
         isImage: function () {
-            return /(jpg|jpeg|gif|bmp|png)/i.test(this.get('mimeType'));
+            return this.get('files') ? /(jpg|jpeg|gif|bmp|png)/i.test(this.get('files')[0].mimetype) : /(jpg|jpeg|gif|bmp|png)/i.test(this.get('mimetype'));
         }
     });
 

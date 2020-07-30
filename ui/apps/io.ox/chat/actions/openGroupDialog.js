@@ -123,11 +123,11 @@ define('io.ox/chat/actions/openGroupDialog', [
             if (this.model.get('description') === originalModel.get('description')) delete dataObj.description;
 
             if (dataObj.pictureFileEdited === '') {
-                dataObj.file = null;
+                dataObj.icon = null;
             } else if (this.model.get('pictureFile') === originalModel.get('pictureFile')) {
-                dataObj.file = undefined;
+                dataObj.icon = undefined;
             } else {
-                dataObj.file = dataObj.pictureFileEdited;
+                dataObj.icon = dataObj.pictureFileEdited;
             }
 
             data.chats.addAsync(dataObj).done(function (model) {

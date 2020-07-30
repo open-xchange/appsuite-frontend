@@ -409,13 +409,16 @@ define('io.ox/chat/views/chat', [
         },
 
         onFileupload: function () {
-            var $input = this.$('.file-upload-input'), file, type, i;
-            for (i = 0; i < $input[0].files.length; i++) {
-                file = $input[0].files[i];
-                type = /(jpg|jpeg|gif|bmp|png)/i.test(file.type) ? 'image' : 'file';
-                if (!this.model.get('roomId')) this.model.postFirstMessage(undefined, file);
-                else this.model.postMessage({ content: '', type: type }, file);
+            var $input = this.$('.file-upload-input'), type, i,
+                files = $input[0].files;
+
+            for (i = 0; i < files.length; i++) {
+                files.type = /(jpg|jpeg|gif|bmp|png)/i.test(files[i].type) ? 'image' : 'file';
             }
+
+            if (!this.model.get('roomId')) this.model.postFirstMessage(undefined, files);
+            else this.model.postMessage({ content: '', type: type }, files);
+
             $input.val('');
         },
 

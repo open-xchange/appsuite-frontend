@@ -97,7 +97,7 @@ define('io.ox/chat/views/fileList', [
                 button.css('backgroundImage', 'url(' + model.getThumbnailUrl() + ')');
             } else {
                 button.append(
-                    $('<i class="fa icon">').addClass(util.getClassFromMimetype(model.get('mimeType'))),
+                    $('<i class="fa icon">').addClass(util.getClassFromMimetype(model.get('mimetype'))),
                     $('<div class="filename">').text(model.get('name'))
                 );
             }
