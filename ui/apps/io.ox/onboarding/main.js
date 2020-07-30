@@ -237,26 +237,31 @@ define('io.ox/onboarding/main', [
             'login': '123'
         },
         'android/mailapp': {
+            'title': gt('OX Mail App'),
             'storeIcon': 'apps/themes/icons/default/googleplay/google-play-badge_EN.svg',
             'appIconClass': 'mailapp playstore',
             'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail'
         },
         'android/driveapp': {
+            'title': gt('OX Drive App'),
             'storeIcon': 'apps/themes/icons/default/googleplay/google-play-badge_EN.svg',
             'appIconClass': 'driveapp playstore',
             'url': 'https://play.google.com/store/apps/details?id=com.openexchange.drive.vanilla'
         },
         'ios/mailapp': {
+            'title': gt('OX Mail App'),
             'storeIcon': 'apps/themes/icons/default/appstore/App_Store_Badge_EN_135x40.svg',
             'appIconClass': 'mailapp appstore',
             'url': 'https://itunes.apple.com/us/app/ox-mail-v2/id1385582725'
         },
         'ios/driveapp': {
+            'title': gt('OX Drive App'),
             'storeIcon': 'apps/themes/icons/default/appstore/App_Store_Badge_EN_135x40.svg',
             'appIconClass': 'driveapp appstore',
             'url': 'https://itunes.apple.com/de/app/ox-drive/id798570177'
         },
         'macos/driveapp': {
+            'title': gt('OX Drive App'),
             'storeIcon': 'apps/themes/icons/default/appstore/Mac_App_Store_Badge_EN_165x40.svg',
             'appIconClass': 'driveapp macappstore',
             'url': 'https://itunes.apple.com/de/app/ox-drive/id818195014'
@@ -376,6 +381,7 @@ define('io.ox/onboarding/main', [
             this.appIconClass = app.appIconClass;
             this.storeIcon = app.storeIcon;
             this.url = app.url;
+            this.title = app.title;
         },
         events: {
             'click .applink': 'onClick'
@@ -387,7 +393,7 @@ define('io.ox/onboarding/main', [
                     .addClass(this.appIconClass)
                     .attr('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='),
                 //),
-                $('<p class="app-info">').text('OX Mail App'),
+                $('<p class="app-info">').text(this.title),
                 //$('<a href="#" class="store">').append(
                 $('<img class="store-icon applink" role="button">').attr('src', this.storeIcon)
                 //)
@@ -664,23 +670,29 @@ define('io.ox/onboarding/main', [
                             )
                         )
                         .addClass(!platform && !app ? 'active' : '')
-                        .append($('<p class="progress-description aria-hidden="true">').text(platformTitle ? platformTitle : gt('Platform'))),
+                        .append($('<span class="progress-description aria-hidden="true">').text(platformTitle ? platformTitle : gt('Platform'))),
                     $('<li class="progress-step-two">')
                         .append(
                             $('<button type="button" class="btn progress-btn" data-action="back">')
                             .prop('disabled', true)
-                            .text('2')
+                            .append(
+                                $('<span>').text('2'),
+                                $('<span class="sr-only">').text(appTitle ? appTitle : gt('App'))
+                            )
                         )
                         .addClass(platform && !app ? 'active' : '')
-                        .append($('<p class="progress-description" aria-hidden="true">').text(appTitle ? appTitle : gt('App'))),
+                        .append($('<span class="progress-description" aria-hidden="true">').text(appTitle ? appTitle : gt('App'))),
                     $('<li class="progress-step-three">')
                         .append(
                             $('<button type="button" class="btn progress-btn">')
                             .prop('disabled', true)
-                            .text('3')
+                            .append(
+                                $('<span>').text('3'),
+                                $('<span class="sr-only">').text(gt('Setup'))
+                            )
                         )
                         .addClass(platform && app ? 'active' : '')
-                        .append($('<p class="progress-description" aria-hidden="true">').text(gt('Setup')))
+                        .append($('<span class="progress-description" aria-hidden="true">').text(gt('Setup')))
                 ));
 
             $('.progress-step-one .btn').prop(platform ? { 'disabled': false } : '');
@@ -698,24 +710,29 @@ define('io.ox/onboarding/main', [
                     $('<li class="progress-step-one">')
                         .append(
                             $('<button type="button" class="btn progress-btn" data-action="back">')
-                            .text('1')
                             .prop('disabled', true)
+                            .append(
+                                $('<span>').text('1'),
+                                $('<span class="sr-only">').text(appTitle ? appTitle : gt('App'))
+                            )
                         )
                         .addClass(!app ? 'active' : '')
-                        .append($('<p class="progress-description">').text(appTitle ? appTitle : gt('App'))),
+                        .append($('<span class="progress-description">').text(appTitle ? appTitle : gt('App'))),
                     $('<li class="progress-step-three">')
                         .append(
                             $('<button type="button" class="btn progress-btn">')
-                            .text('2')
                             .prop('disabled', true)
+                            .append(
+                                $('<span>').text('2'),
+                                $('<span class="sr-only">').text(gt('Setup'))
+                            )
                         )
                         .addClass(app ? 'active' : '')
-                        .append($('<p class="progress-description">').text(gt('Setup')))
+                        .append($('<span class="progress-description">').text(gt('Setup')))
                 ));
 
-            $('.progress-step-one').prop(app ? { 'disabled': false } : '');
+            $('.progress-step-one .btn').prop(app ? { 'disabled': false } : '');
             return this;
-
         }
     });
 
@@ -745,9 +762,9 @@ define('io.ox/onboarding/main', [
                         platform;
 
                     // set platform if mobile device detected
-                    if (_.device('ios')) {
+                    if (_.device('ios && smartphone')) {
                         platform = 'ios';
-                    } else if (_.device('android')) {
+                    } else if (_.device('android && smartphone')) {
                         platform = 'android';
                     } else {
                         platform = undefined;
