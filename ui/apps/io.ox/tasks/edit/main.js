@@ -92,7 +92,7 @@ define('io.ox/tasks/edit/main', [
         app.setLauncher(function (options) {
             //close notification area when edit task is opened to prevent overlapping if started from notification area
             require(['io.ox/core/notifications'], function (notifications) {
-                notifications.hide();
+                notifications.dropdown.close();
             });
 
             // sometimes taskdata is wrapped inside an array
