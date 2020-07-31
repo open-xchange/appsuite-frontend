@@ -257,7 +257,8 @@ define('io.ox/core/notifications', [
                                 var node = popup.closest('.io-ox-sidepopup');
                                 if (!_.device('smartphone')) {
                                     node.css({
-                                        right: '585px'
+                                        // adjust to dropdown position (might vary depending on active features like switchboard etc)
+                                        right: window.outerWidth - self.dropdown.$el.position().left + self.dropdown.$ul.outerWidth() - 34 + 'px'
                                     });
                                 }
                                 node.addClass('io-ox-notifications-sidepopup first');
