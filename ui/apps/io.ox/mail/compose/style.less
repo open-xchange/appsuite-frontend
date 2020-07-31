@@ -129,7 +129,7 @@
         // baseline adjustment
         display: flex;
         align-items: center;
-        min-height: 40px;
+        min-height: 2.5rem;
         .mail-input { flex: 1; }
         // padding is applied via .recipient-actions
         &.sender, &.recipient { padding-right: 0 };
@@ -147,6 +147,8 @@
             padding-left: 0;
             outline: 0;
         }
+
+        .tokenfield { min-height: 1.875rem; }
 
         // focus line instead
         .line-focus:focus-within {
