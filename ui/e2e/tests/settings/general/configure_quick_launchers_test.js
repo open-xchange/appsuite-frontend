@@ -13,6 +13,8 @@
 
 /// <reference path="../../../steps.d.ts" />
 
+const expect = require('chai').expect;
+
 Feature('Settings > Basic');
 
 Before(async (users) => {
@@ -68,4 +70,27 @@ Scenario('[C287803] Configure quick launchers', function (I) {
     I.seeElement('~Address Book', '#io-ox-quicklaunch');
     I.seeElement('~Tasks', '#io-ox-quicklaunch');
     I.seeElement('~Portal', '#io-ox-quicklaunch');
+});
+
+Scenario('Configure quick launchers to be all None', async function (I, dialogs) {
+    await I.haveSetting('io.ox/core//apps/quickLaunchCount', 5);
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
+    I.waitForText('Configure quick launchers ...', 5, '.rightside');
+
+    I.click('Configure quick launchers ...');
+    dialogs.waitForVisible();
+    for (let i = 0; i < 5; i++) {
+        I.selectOption({ css: `[id="settings-apps/quickLaunch${i}"]` }, 'None');
+    }
+    dialogs.clickButton('Save changes');
+    I.waitForDetached('.modal-dialog');
+
+    I.click('Configure quick launchers ...');
+    dialogs.waitForVisible();
+    for (let i = 0; i < 5; i++) {
+        var selection = await I.executeScript(async function (i) {
+            return $(`#settings-apps\\/quickLaunch${i}`).val();
+        }, i);
+        expect(selection).to.equal('none');
+    }
 });
