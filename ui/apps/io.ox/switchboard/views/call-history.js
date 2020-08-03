@@ -259,10 +259,10 @@ define('io.ox/switchboard/views/call-history', [
             id: 'phone',
             index: 200,
             initialize: function () {
-                this.collection.add([
+                /*this.collection.add([
                     { type: 'phone', date: 1592414269124, incoming: true, missed: false, number: '+49 231 70016090' },
                     { type: 'phone', date: 1592557694060, incoming: false, missed: false, number: '+49 151 64967845' }
-                ]);
+                ]);*/
             },
             fetch: function () {
                 if (this.type !== 'phone') return;
