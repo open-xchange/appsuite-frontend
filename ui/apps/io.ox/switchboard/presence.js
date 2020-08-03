@@ -88,10 +88,12 @@ define('io.ox/switchboard/presence', [
             if (changes.availability === presence.availability) return;
             _.extend(presence, changes, { lastSeen: _.now() });
             // update all DOM nodes for this user
-            $('.presence[data-id="' + $.escape(presence.id) + '"]')
+            var $el = $('.presence[data-id="' + $.escape(presence.id) + '"]')
                 .removeClass('online absent busy offline')
-                .addClass(presence.availability)
-                .find('.availability').text(this.getAvailabilityString(presence));
+                .addClass(presence.availability);
+
+            $el.find('.icon').attr('title', this.getAvailabilityString(presence));
+            $el.find('.availability').text(this.getAvailabilityString(presence));
         },
 
         changeOwnAvailability: function (availability) {
