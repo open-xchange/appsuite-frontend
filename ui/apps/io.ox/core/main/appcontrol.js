@@ -183,7 +183,7 @@ define('io.ox/core/main/appcontrol', [
                     return ox.ui.apps.get(o.replace(/\/main$/, ''));
                 }).value().join(',');
             // We fill up the list with 'none' in case we have more slots than defaults
-            return (str + new Array(count).join(',none')).split(',').slice(0, count);
+            return ((str || 'none') + new Array(count).join(',none')).split(',').slice(0, count);
         }
     };
 
