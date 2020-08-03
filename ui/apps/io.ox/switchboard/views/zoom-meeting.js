@@ -180,6 +180,10 @@ define('io.ox/switchboard/views/zoom-meeting', [
             var meeting = this.model.get('meeting');
             if (!meeting) return;
             var data = this.appointment.toJSON();
+            // This appointment is an exception of a series - do not change the zoom meeting
+            if (data.seriesId && (data.seriesId !== data.id)) return;
+            // This appointment changed to an exception of a series - do not change the zoom meeting
+            if (data.seriesId && (data.seriesId === data.id) && !data.rrule) return;
             var changes = translateMeetingData(data);
             zoom.changeMeeting(meeting.id, changes);
             this.off('dispose', this.discardMeeting);
