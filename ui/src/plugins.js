@@ -399,8 +399,9 @@
 
             function load(module, modulename) {
                 var base = [ox.apiRoot, '/apps/load/', ox.version].join(''),
-                    // default to the value from apache documentation
-                    limit = ox.serverConfig.limitRequestLine || 8190,
+                    // used to be the default value from apache documentation, but turned out not to work
+                    // in all cases. See OXUIB-383 for reference.
+                    limit = ox.serverConfig.limitRequestLine || 6000,
                     requests = [], url, modules = module.split(',');
 
                 while (modules.length > 0) {
