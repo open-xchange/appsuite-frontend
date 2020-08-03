@@ -261,6 +261,12 @@ define('io.ox/calendar/list/listview', [
                 return settings.get('showDeclinedAppointments', false);
             }
 
+            function setIndex(collection) {
+                collection.forEach(function (model, i) {
+                    model.set('index', i);
+                });
+            }
+
             // use intermediate collection to filter declined appointments if necessary
             if (this.originalCollection) this.stopListening(this.originalCollection);
             this.originalCollection = collection;
@@ -285,6 +291,7 @@ define('io.ox/calendar/list/listview', [
                 'reset': function (data) {
                     if (!data) return;
                     this.collection.reset(data.filter(filter));
+                    setIndex(this.collection);
                 }.bind(this),
                 'remove': function (data) {
                     this.collection.remove(data);
@@ -292,6 +299,22 @@ define('io.ox/calendar/list/listview', [
                 'remove sort': function () {
                     // check for comparator first
                     if (this.collection.comparator) this.collection.sort();
+                    setIndex(this.collection);
+                }.bind(this),
+                'change:startDate': function (model) {
+                    var startDate = model.getMoment('startDate'),
+                        prevStartDate = util.getMoment(model.previous('startDate'));
+                    if (startDate.isSame(prevStartDate, 'day')) return;
+
+                    var end = moment(this.originalCollection.originalStart).add(this.originalCollection.range, 'month');
+                    if (startDate.isAfter(end)) return this.originalCollection.remove(model);
+
+                    this.collection.sort();
+                    setIndex(this.collection);
+
+                    _.defer(function () {
+                        this.onSort();
+                    }.bind(this));
                 }.bind(this)
             });
 
@@ -344,9 +367,7 @@ define('io.ox/calendar/list/listview', [
             if (this.tail) this.tail.remove();
             this.loader.collection = this.originalCollection;
             this.paginate();
-        },
-
-        onSort: $.noop
+        }
 
     });
 

@@ -306,7 +306,7 @@ define('io.ox/core/tk/list', [
                 // needless cause added models not drawn yet (debounced renderListItems)
                 if (this.queue.list.length) return;
 
-                var dom, sorted, i, j, length, node, reference, index, done = {};
+                var dom, sorted, i, j, length, node, reference, index, done = {}, nodeLabel;
 
                 // sort all nodes by index
                 dom = this.getItems().toArray();
@@ -319,6 +319,10 @@ define('io.ox/core/tk/list', [
                     reference = dom[j];
                     // mark as processed
                     done[i] = true;
+                    if (this.options.labels) {
+                        nodeLabel = this.getLabel(this.collection.get($(node).attr('data-cid')));
+                        $(node).attr('data-label', nodeLabel);
+                    }
                     // same element?
                     if (node === reference) {
                         // fast forward "j" if pointing at processed items
@@ -327,6 +331,34 @@ define('io.ox/core/tk/list', [
                         // change position in dom
                         this.el.insertBefore(node, reference);
                     }
+                }
+
+                if (this.options.labels) {
+                    _.defer(function () {
+                        var currentLabel,
+                            previousLabel,
+                            self = this,
+                            items = this.$el.find('.list-item').toArray();
+
+                        items.forEach(function (item) {
+                            if ($(item).hasClass('list-item-label')) {
+                                currentLabel = $(item).text();
+                                // label without appointment || label needs to be updated || label already exists
+                                if (!$(item).next().hasClass('appointment') || $(item).next().attr('data-label') !== currentLabel || previousLabel === currentLabel) {
+                                    $(item).remove();
+                                } else {
+                                    previousLabel = currentLabel;
+                                }
+                            } else {
+                                var itemLabel = $(item).attr('data-label');
+                                if (itemLabel !== previousLabel) {
+                                    currentLabel = itemLabel;
+                                    previousLabel = currentLabel;
+                                    self.el.insertBefore(self.renderListLabel(itemLabel)[0], item);
+                                }
+                            }
+                        });
+                    }.bind(this));
                 }
             };
         }()),
