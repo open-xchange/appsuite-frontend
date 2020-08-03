@@ -835,7 +835,8 @@ define('io.ox/calendar/api', [
                     api.getList(data).done(function (models) {
                         data = _(data).filter(function (alarm) {
                             var model = _(models).findWhere({ cid: alarm.appointmentCid });
-
+                            // Show only alarms with matching recurrenceId
+                            if (!model) return false;
                             // if alarm is scheduled after the appointments end we will show it
                             if (model.getMoment('endDate').valueOf() < moment(alarm.time).valueOf()) return true;
 
