@@ -281,6 +281,7 @@ define('io.ox/core/tk/textproc', [
             }
 
             function markBlockElements(item, str) {
+                console.log('is blockElement', isBlockElement(item), item.nodeName, item, str);
                 return isBlockElement(item) ? '\0' + str + '\0' : str;
             }
 
@@ -289,11 +290,13 @@ define('io.ox/core/tk/textproc', [
             }
 
             function removeMarkers(str) {
+                console.log('remove markers', str);
                 return str
                     // remove superfluous markers (head & tail)
                     .replace(/(^\0+|\0+$)/g, '')
                     // finally replace block element markers by \n
-                    .replace(/\0+/g, '\n');
+                    // not \0+ or we loose empty newlines that are actually part of the signature, see OXUIB-331 reopen
+                    .replace(/\0\0?/g, '\n');
             }
 
             function finalize(str) {
