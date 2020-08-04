@@ -281,7 +281,6 @@ define('io.ox/core/tk/textproc', [
             }
 
             function markBlockElements(item, str) {
-                console.log('is blockElement', isBlockElement(item), item.nodeName, item, str);
                 return isBlockElement(item) ? '\0' + str + '\0' : str;
             }
 
@@ -290,7 +289,6 @@ define('io.ox/core/tk/textproc', [
             }
 
             function removeMarkers(str) {
-                console.log('remove markers', str);
                 return str
                     // remove superfluous markers (head & tail)
                     .replace(/(^\0+|\0+$)/g, '')
