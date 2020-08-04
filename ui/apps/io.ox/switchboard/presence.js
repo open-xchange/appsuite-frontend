@@ -13,8 +13,9 @@
 
 define('io.ox/switchboard/presence', [
     'io.ox/switchboard/api',
-    'gettext!io.ox/switchboard'
-], function (api, gt) {
+    'gettext!io.ox/switchboard',
+    'settings!io.ox/switchboard'
+], function (api, gt, settings) {
 
     'use strict';
 
@@ -52,7 +53,6 @@ define('io.ox/switchboard/presence', [
                 users[userId] = { id: userId, lastSeen: 0, availability: 'offline' };
                 api.socket.emit('presence-get', userId, function (data) {
                     exports.changePresence(userId, data);
-                    if (api.isMyself(userId)) exports.trigger('change-own-availability', data.availability);
                 });
             }
             return users[userId];
@@ -91,20 +91,23 @@ define('io.ox/switchboard/presence', [
             var $el = $('.presence[data-id="' + $.escape(presence.id) + '"]')
                 .removeClass('online absent busy offline')
                 .addClass(presence.availability);
-
-            $el.find('.icon').attr('title', this.getAvailabilityString(presence));
-            $el.find('.availability').text(this.getAvailabilityString(presence));
+            var title = this.getAvailabilityString(presence);
+            $el.find('.icon').attr('title', title);
+            $el.find('.availability').text(title);
+            if (api.isMyself(userId)) exports.trigger('change-own-availability', presence.availability);
         },
 
         changeOwnAvailability: function (availability) {
             this.changePresence(api.userId, { availability: availability });
+            settings.set('availability', availability).save();
             // share might (soon) be: all, context, domain, (white) list
             api.socket.emit('presence-change', { availability: availability, visibility: 'all' });
+            // keep this line, even if it's double
             exports.trigger('change-own-availability', availability);
         },
 
         getMyAvailability: function () {
-            return (users[api.userId] || {}).availability || 'offline';
+            return settings.get('availability', 'online');
         },
 
         users: users
@@ -135,11 +138,16 @@ define('io.ox/switchboard/presence', [
         exports.changePresence(userId, presence);
     });
 
+    api.socket.on('connect', function () {
+        // emit own presence from user settings on connect
+        exports.changeOwnAvailability(exports.getMyAvailability());
+    });
+
     api.socket.on('reconnect', function () {
         for (var userId in users) {
             delete users[userId];
-            // assume offline by default
-            exports.changePresence(userId, 'offline');
+            // assume all others as offline by default
+            if (!api.isMyself(userId)) exports.changePresence(userId, 'offline');
         }
     });
 

@@ -164,7 +164,6 @@ define('io.ox/switchboard/zoom', [
         api: function (method, url, data) {
             var def = $.Deferred();
             api.socket.emit('zoom', { method: method, url: url, data: data || {} }, function (response) {
-                console.log('response', response);
                 if (!response) return rejectWithUnexpectedError();
                 if (/^2/.test(response.status)) return def.resolve(response.data);
                 def.reject(response);

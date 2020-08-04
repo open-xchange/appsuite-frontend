@@ -82,7 +82,7 @@ define('io.ox/switchboard/views/zoom-call', [
         },
 
         createMeetingSuccess: function (result) {
-            console.log('createMeetingSuccess', result.join_url, result);
+            //console.log('createMeetingSuccess', result.join_url, result);
             this.model.set({ joinURL: result.join_url, state: 'done' });
         }
     });
