@@ -50,7 +50,7 @@ define('io.ox/switchboard/presence', [
         getPresence: function (userId) {
             userId = api.trim(userId);
             if (!users[userId]) {
-                users[userId] = { id: userId, lastSeen: 0, availability: 'offline' };
+                this.addUser(userId, 'offline');
                 api.socket.emit('presence-get', userId, function (data) {
                     exports.changePresence(userId, data);
                 });
@@ -110,6 +110,10 @@ define('io.ox/switchboard/presence', [
             return settings.get('availability', 'online');
         },
 
+        addUser: function (userId, availability) {
+            users[userId] = { id: userId, lastSeen: _.now(), availability: availability };
+        },
+
         users: users
     };
 
@@ -145,11 +149,13 @@ define('io.ox/switchboard/presence', [
 
     api.socket.on('reconnect', function () {
         for (var userId in users) {
+            if (api.isMyself(userId)) continue;
             delete users[userId];
-            // assume all others as offline by default
-            if (!api.isMyself(userId)) exports.changePresence(userId, 'offline');
+            exports.getPresence(userId);
         }
     });
+
+    exports.addUser(api.userId, exports.getMyAvailability());
 
     // add an event hub. we need this to publish presence state changes
     _.extend(exports, Backbone.Events);
