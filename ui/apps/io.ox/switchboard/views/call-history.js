@@ -98,6 +98,7 @@ define('io.ox/switchboard/views/call-history', [
             point.invoke('store', this);
         },
         renderItems: function () {
+            this.$el.toggle(this.collection.length > 0);
             this.collection.slice(-historyLimit).reverse().forEach(function (model) {
                 this.$ul.append(new CallHistoryItem({ model: model }).render().$el);
             }, this);
