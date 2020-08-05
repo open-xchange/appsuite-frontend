@@ -69,7 +69,7 @@ define('io.ox/switchboard/call/api', [
         hangup: function () {
             this.active = false;
             this.trigger('hangup');
-            if (this.isCalling()) api.propagate('cancel', this.getCallees());
+            if (this.isCalling() && this.isPending()) api.propagate('cancel', this.getCallees());
         },
         decline: function () {
             this.states[api.userId] = 'declined';
@@ -83,10 +83,12 @@ define('io.ox/switchboard/call/api', [
             if (!this.states[userId]) return;
             this.states[userId] = state;
             this.trigger('change:state');
-            var isPending = _(this.states).some(function (state) { return state === 'pending'; });
-            if (isPending) return;
+            if (this.isPending()) return;
             this.active = false;
             this.trigger('done');
+        },
+        isPending: function () {
+            return _(this.states).some(function (state) { return state === 'pending'; });
         },
         addToHistory: function () {
             require(['io.ox/switchboard/views/call-history'], function (callHistory) {
