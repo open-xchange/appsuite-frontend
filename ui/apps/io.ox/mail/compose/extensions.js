@@ -581,7 +581,7 @@ define('io.ox/mail/compose/extensions', [
                 view.updateScrollControls();
             });
 
-            view.listenToOnce(view.collection, 'add remove reset', _.debounce(function () {
+            view.listenTo(view.collection, 'add remove reset', _.debounce(function () {
                 if (this.getValidModels().length > 0) {
                     this.$el.addClass('open');
                     if (!this.isListRendered) {
