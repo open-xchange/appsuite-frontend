@@ -499,6 +499,11 @@ define('io.ox/mail/compose/view', [
             view.listenTo(baton.config, 'change:signature', view.syncMail);
             // stop cascade flow on app quit
             this.on('quit', baton.stopPropagation.bind(baton));
+            // store tinymce's device detection
+            baton.editor.once('device:non-desktop', function () {
+                baton.config.set('desktop', false);
+                baton.config.set('toolbar', false);
+            });
         }
     }, {
         id: 'content',

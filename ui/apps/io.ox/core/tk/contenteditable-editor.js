@@ -824,6 +824,8 @@ define('io.ox/core/tk/contenteditable-editor', [
         this.tinymce = function () { return editor.tinymce ? editor.tinymce() : {}; };
 
         this.show = function () {
+            // tinymce hides toolbar on non-desktop devices (own detection)
+            if (!window.tinyMCE.Env.desktop) this.trigger('device:non-desktop');
             $el.show();
             // set display to empty string because of overide 'display' property in css
             $(fixed_toolbar).css('display', '');

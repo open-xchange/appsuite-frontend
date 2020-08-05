@@ -35,6 +35,8 @@ define('io.ox/mail/compose/config', [
                 editorMode: mode,
                 toolbar: true,
                 sendDisplayName: !!settings.get('sendDisplayName', true),
+                // store tiny device detection (tinymce hides toolbar on non-desktop devices)
+                desktop: true,
                 // signatures
                 defaultSignatureId: '',
                 // identifier for empty signature (dropdown)

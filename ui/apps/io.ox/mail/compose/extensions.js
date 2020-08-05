@@ -898,10 +898,11 @@ define('io.ox/mail/compose/extensions', [
 
             // toggle state
             status();
-            baton.config.on('change:editorMode', status);
+            baton.config.on('change:editorMode change:desktop', status);
             function status() {
-                var isTiny = baton.config.get('editorMode') !== 'text';
-                parent.toggleClass('disabled', !isTiny);
+                var isTiny = baton.config.get('editorMode') !== 'text',
+                    isDesktop = baton.config.get('desktop') === true;
+                parent.toggleClass('disabled', !isTiny || !isDesktop);
             }
 
             parent.append(node);
