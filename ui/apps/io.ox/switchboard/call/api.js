@@ -137,14 +137,14 @@ define('io.ox/switchboard/call/api', [
     api.socket.on('answer', function (caller) {
         if (!isCallActive()) return;
         call.changeState(caller, 'answered');
-        call.addToHistory();
+        //call.addToHistory();
     });
 
     // CALLEE declines the call
     api.socket.on('decline', function (caller) {
         if (!isCallActive()) return;
         call.changeState(caller, 'declined');
-        call.addToHistory();
+        //call.addToHistory();
     });
 
     // CALLER cancels the call

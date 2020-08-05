@@ -47,6 +47,8 @@ define('io.ox/switchboard/views/call-history', [
             'click [data-action="missed"]': 'showMissed'
         },
         initialize: function () {
+            var entries = settings.get('callHistory/entries') || [];
+            this.collection.add(entries);
             this.onAddRemove = _.debounce(this.onAddRemove.bind(this), 10);
             this.listenTo(this.collection, 'add remove reset', this.onAddRemove);
             this.onChange = _.debounce(this.onChange.bind(this), 10);
@@ -82,6 +84,7 @@ define('io.ox/switchboard/views/call-history', [
         onFirstOpen: function () {
             this.opened = true;
             point.invoke('initialize', this);
+            this.renderItems();
         },
         onOpen: function () {
             settings.set('callHistory/lastSeen', _.now()).save();
@@ -236,8 +239,6 @@ define('io.ox/switchboard/views/call-history', [
             index: 100,
             initialize: function () {
                 lookup.initialize();
-                var entries = settings.get('callHistory/entries') || [];
-                this.collection.add(entries);
             },
             store: function () {
                 var entries = this.collection.toJSON().filter(function (data) {
