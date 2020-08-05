@@ -156,6 +156,7 @@ define('io.ox/switchboard/presence', [
     });
 
     exports.addUser(api.userId, exports.getMyAvailability(), _.now());
+    api.socket.emit('presence-get', api.userId, $.noop);
 
     // add an event hub. we need this to publish presence state changes
     _.extend(exports, Backbone.Events);
