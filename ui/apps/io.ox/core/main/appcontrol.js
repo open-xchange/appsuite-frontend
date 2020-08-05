@@ -350,7 +350,44 @@ define('io.ox/core/main/appcontrol', [
         draw: function () {
             var logo,
                 logoFileName = settings.get('logoFileName', 'logo.png'),
-                action = settings.get('logoAction', false);
+                action = settings.get('logoAction', false),
+                updateLogo = function () {
+                    // prevent multiple button wrappings of the logo, also removes the button when there is no action anymore
+                    if (logo.parent().hasClass('logo-btn')) {
+                        logo.parent().replaceWith(logo);
+                    }
+                    if ((/^https?:/).test(action)) {
+                        logo.wrap(
+                            $('<a class="btn btn-link logo-btn">').attr({
+                                href: action,
+                                target: '_blank'
+                            })
+                        );
+                    } else if (ox.tabHandlingEnabled && (/^io\.ox\/office\/portal/).test(action)) {
+                        var tabAPI = require('io.ox/core/api/tab'),
+                            appType = action.substring(0, 'io.ox/office/portal/'.length),
+                            tabUrl =  tabAPI.createUrl({ app: action }, { exclude: 'folder', suffix: 'office?app=' + appType });
+                        logo.wrap(
+                            $('<a class="btn btn-link logo-btn">').attr({
+                                href: tabUrl,
+                                target: '_blank'
+                            })
+                        );
+                    } else if (action) {
+                        var autoStart = settings.get('autoStart');
+                        if (action === 'autoStart') {
+                            if (autoStart === 'none') return;
+                        }
+                        logo.wrap(
+                            $('<button type="button" class="logo-btn btn btn-link">').on('click', function () {
+                                // works like a generic capability/requirement check, if this returns true then the app can be launched (similar to how quicklaunchers handle this)
+                                if (!ox.ui.apps.get(autoStart.replace(/\/main$/, ''))) return;
+                                ox.launch(autoStart);
+                            })
+                        );
+                    }
+                };
+
             this.append(
                 logo = $('<div id="io-ox-top-logo">').append(
                     $('<img>').attr({
@@ -362,37 +399,9 @@ define('io.ox/core/main/appcontrol', [
 
             if (ox.openedInBrowserTab || (ox.tabHandlingEnabled && _.url.hash('app') === 'io.ox/files/detail')) return;
 
-            if ((/^https?:/).test(action)) {
-                logo.wrap(
-                    $('<a class="btn btn-link logo-btn">').attr({
-                        href: action,
-                        target: '_blank'
-                    })
-                );
-            } else if (ox.tabHandlingEnabled && (/^io\.ox\/office\/portal/).test(action)) {
-                var tabAPI = require('io.ox/core/api/tab'),
-                    appType = action.substring(0, 'io.ox/office/portal/'.length),
-                    tabUrl =  tabAPI.createUrl({ app: action }, { exclude: 'folder', suffix: 'office?app=' + appType });
-                logo.wrap(
-                    $('<a class="btn btn-link logo-btn">').attr({
-                        href: tabUrl,
-                        target: '_blank'
-                    })
-                );
-            } else if (action) {
-                var autoStart = settings.get('autoStart');
-                if (action === 'autoStart') {
-                    if (autoStart === 'none') return;
-                    action = autoStart;
-                }
-                logo.wrap(
-                    $('<button type="button" class="logo-btn btn btn-link">').on('click', function () {
-                        // works like a generic capability/requirement check, if this returns true then the app can be launched (similar to how quicklaunchers handle this)
-                        if (!ox.ui.apps.get(action.replace(/\/main$/, ''))) return;
-                        ox.launch(action);
-                    })
-                );
-            }
+            updateLogo();
+
+            settings.on('change:logoAction change:autoStart', updateLogo);
         }
     });
 
