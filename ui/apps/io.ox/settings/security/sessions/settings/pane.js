@@ -224,7 +224,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
             var isCurrent = this.model.get('sessionId') === ox.session,
                 lastActive = this.model.has('lastActive') ? moment(this.model.get('lastActive')).fromNow() : '';
             this.$el.empty().append(
-                $('<div>').append(
+                $('<div class="list-item-content">').append(
                     $('<div class="fa-stack client-icon">').addClass(this.model.get('deviceType')).addClass(this.model.get('os')).append(
                         $('<i class="fa fa-stack-1x device" aria-hidden="true">'),
                         $('<i class="fa fa-stack-1x os" aria-hidden="true">')
