@@ -532,7 +532,7 @@ define('io.ox/mail/compose/view', [
         }
     }, {
         id: 'pick',
-        index: 400,
+        index: 500,
         perform: function (baton) {
             return baton.editor;
         }
