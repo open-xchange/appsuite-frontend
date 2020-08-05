@@ -88,17 +88,16 @@ define('io.ox/switchboard/views/call-history', [
             this.updateIndicator();
         },
         onAddRemove: function () {
+            this.updateIndicator();
+            this.onChange();
             if (!this.opened) return;
             this.removeItems();
             this.renderItems();
-            this.updateIndicator();
-            this.onChange();
         },
         onChange: function () {
             point.invoke('store', this);
         },
         renderItems: function () {
-            this.$el.toggle(this.collection.length > 0);
             this.collection.slice(-historyLimit).reverse().forEach(function (model) {
                 this.$ul.append(new CallHistoryItem({ model: model }).render().$el);
             }, this);
@@ -109,6 +108,7 @@ define('io.ox/switchboard/views/call-history', [
                 return model.get('missed') && model.get('date') > lastSeen;
             });
             this.$indicator.toggleClass('hidden', !hasUnseen);
+            this.$el.toggle(this.collection.length > 0);
         },
         removeItems: function () {
             this.$ul.children().slice(1).remove();
