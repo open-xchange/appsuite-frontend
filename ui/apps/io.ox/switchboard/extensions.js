@@ -115,12 +115,16 @@ define('io.ox/switchboard/extensions', [
             draw: function (baton) {
                 var $ul = $('<ul class="dropdown-menu">');
                 ext.point('io.ox/contacts/detail/actions/call').invoke('draw', $ul, baton.clone());
+                // check only for visible items (not dividers, etc)
+                var hasOptions = $ul.children('[role="presentation"]').length > 0;
                 this.append(
                     $('<div class="dropdown">').append(
-                        $('<button type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').append(
+                        $('<button type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
+                        .prop('disabled', !hasOptions)
+                        .append(
                             $('<i class="fa fa-phone" aria-hidden="true">'),
                             $.txt(gt.pgettext('verb', 'Call')),
-                            $('<i class="fa fa-caret-down" aria-hidden="true">')
+                            hasOptions ? $('<i class="fa fa-caret-down" aria-hidden="true">') : $()
                         ),
                         $ul
                     )
@@ -150,14 +154,20 @@ define('io.ox/switchboard/extensions', [
     );
 
     function createButton(action, icon, label, baton) {
-        return $('<button type="button" class="btn btn-link">')
-            .on('click', baton.data, function (e) {
-                actionsUtil.invoke(action, ext.Baton({ data: [e.data] }));
+        baton.data = [].concat(baton.data);
+        var $button = $('<button type="button" class="btn btn-link">')
+            .prop('disabled', true)
+            .on('click', { baton: baton }, function (e) {
+                actionsUtil.invoke(action, e.baton);
             })
             .append(
                 $('<i class="fa" aria-hidden="true">').addClass(icon),
                 $.txt(label)
             );
+        actionsUtil.checkAction(action, baton).then(function () {
+            $button.prop('disabled', false);
+        });
+        return $button;
     }
 
     function createConferenceItem(type, title, baton) {
@@ -177,6 +187,7 @@ define('io.ox/switchboard/extensions', [
             index: 100,
             draw: function (baton) {
                 if (!api.supports('zoom')) return;
+                if (!api.isGAB(baton)) return;
                 this.append(createConferenceItem('zoom', gt('Call via Zoom'), baton));
             }
         },
@@ -185,6 +196,7 @@ define('io.ox/switchboard/extensions', [
             index: 200,
             draw: function (baton) {
                 if (!api.supports('jitsi')) return;
+                if (!api.isGAB(baton)) return;
                 this.append(createConferenceItem('jitsi', gt('Call via Jitsi'), baton));
             }
         },
