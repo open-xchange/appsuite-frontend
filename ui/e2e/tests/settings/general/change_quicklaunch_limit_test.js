@@ -47,3 +47,34 @@ Scenario('[C276001] Change Quicklaunch limit', async (I) =>{
         I.seeElement('[data-app-name="io.ox/portal"]');
     });
 });
+
+Scenario('[C256960] Configure quick launch icons', async (I) =>{
+    await Promise.all([
+        I.haveSetting('io.ox/core//logoAction', 'https://www.open-xchange.com/'),
+        I.haveSetting('io.ox/core//apps/quickLaunchCount', 5),
+        I.haveSetting('io.ox/core//apps/quickLaunch', 'io.ox/calendar/main,io.ox/mail/main,io.ox/files/main')
+    ]);
+    I.login();
+    // Check Quicklaunchers
+    await within('#io-ox-quicklaunch', async () => {
+        I.waitForElement('~Mail');
+        I.waitForElement('~Calendar');
+        I.waitForElement('~Drive');
+    });
+    // Check Logo Action
+    I.click('#io-ox-top-logo');
+    I.wait(5);
+    I.switchToNextTab();
+    I.seeCurrentUrlEquals('https://www.open-xchange.com/');
+});
+
+Scenario('[C256960] Logo Action points to autostart app', async (I, calendar, mail) =>{
+    await Promise.all([
+        I.haveSetting('io.ox/core//logoAction', 'autoStart') // AutoStart defaults to mail app
+    ]);
+    I.login('app=io.ox/calendar');
+    calendar.waitForApp();
+    // Check Logo Action
+    I.click('#io-ox-top-logo'); // This should take us to the mail app
+    mail.waitForApp();
+});

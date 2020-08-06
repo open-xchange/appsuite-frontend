@@ -14,14 +14,13 @@
 define('io.ox/mail/actions/attachmentSave', [
     'io.ox/mail/api',
     'io.ox/core/notifications',
-    'io.ox/core/tk/dialogs',
     'io.ox/core/folder/picker',
     'io.ox/core/folder/api',
     // yep, files not mail!
     'settings!io.ox/files',
     'settings!io.ox/core',
     'gettext!io.ox/mail'
-], function (api, notifications, dialogs, picker, folderAPI, settings, coreSettings, gt) {
+], function (api, notifications, picker, folderAPI, settings, coreSettings, gt) {
 
     'use strict';
 

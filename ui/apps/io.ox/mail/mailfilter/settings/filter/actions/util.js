@@ -34,12 +34,29 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
         });
     }
 
+    function getSetFlagsInputValue(list) {
+        list = [].concat(list || []);
+        return _.map(list, function (value) {
+            return value.trim().replace(/^\$+/, '');
+        }).join(' ');
+    }
+
+    function getSetFlagsModelValue(value) {
+        value = value.toString().replace(/\s+/g, ' ').trim().split(' ');
+        if (!value) return '';
+        return _.map([].concat(value), function (value) {
+            return '$' + value.trim().replace(/^\$+/, '');
+        });
+    }
+
     var Input = mini.InputView.extend({
         events: { 'change': 'onChange', 'keyup': 'onKeyup', 'paste': 'onPaste' },
         onChange: function () {
             if (this.name === 'flags') {
                 var value = ((/customflag_/g.test(this.id)) || (/removeflags_/g.test(this.id))) ? ['$' + this.$el.val().toString()] : [this.$el.val()];
                 this.model.set(this.name, value);
+            } else if (this.name === 'setflags') {
+                this.model.set('flags', getSetFlagsModelValue(this.$el.val()));
             } else if (this.name === 'to') {
                 this.model.set(this.name, this.$el.val().trim());
             } else {
@@ -52,6 +69,8 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
         update: function () {
             if (/customflag_/g.test(this.id) || /removeflags_/g.test(this.id)) {
                 this.$el.val(this.model.get('flags')[0].replace(/^\$+/, ''));
+            } else if (/setflags_/g.test(this.id)) {
+                this.$el.val(getSetFlagsInputValue(this.model.get('flags')));
             } else if (/move_/g.test(this.id) || /copy_/g.test(this.id)) {
                 prepareFolderForDisplay(this.model.get('into'), this.$el);
             } else {
@@ -60,6 +79,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
         },
         onKeyup: function () {
             var state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
+            if (this.name === 'setflags') state = 'valid:';
             this.model.trigger(state + this.name);
             this.$el.trigger('toggle:saveButton');
         }
@@ -112,7 +132,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
                 ),
                 drawDeleteButton('action')
             );
-        } else if (/discard_/g.test(o.inputId) || /keep_/g.test(o.inputId)) {
+        } else if (/discard_/g.test(o.inputId) || /keep_/g.test(o.inputId) || /guard_/g.test(o.inputId)) {
             return $('<li>').addClass('filter-settings-view ' + o.addClass + ' row').attr('data-action-id', o.actionKey).append(
                 $('<div>').addClass('col-sm-4 singleline').append(
                     $('<span>').addClass('list-title').text(o.title)
@@ -155,13 +175,13 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
         .addClass(flagclass)
         .append(
             // box
-            $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">'),
+            $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr('aria-label', gt('Set color')),
             // drop down
             $('<ul class="dropdown-menu" role="menu">')
             .append(
                 _(colors).map(function (colorObject) {
-                    return $('<li>').append(
-                        $('<a href="#" data-action="change-color" tabindex="1">').append(
+                    return $('<li role="presentation">').append(
+                        $('<a href="#" role="menuitem" data-action="change-color">').append(
                             colorObject.value > 0 ? $('<span class="flag-example">').addClass('flag_' + colorObject.value) : $(),
                             $.txt(colorObject.text)
                         )

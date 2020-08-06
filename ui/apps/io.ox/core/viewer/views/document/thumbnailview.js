@@ -45,7 +45,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
                 return this;
             }
 
-            this.$el.addClass('io-ox-busy');
+            this.$el.busy({ immediate: true });
             function beginConvertSuccess(convertData) {
                 self.convertData = convertData;
                 _.times(convertData.pageCount, function (pageNumber) {
@@ -59,7 +59,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
                 return $.Deferred().reject(response);
             }
             function beginConvertFinished() {
-                self.$el.removeClass('io-ox-busy');
+                self.$el.idle();
             }
             this.thumbnailLoadDef = DocConverterUtils.beginConvert(this.model)
                 .done(beginConvertSuccess)
@@ -81,7 +81,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
                 thumbnail = $('<div class="document-thumbnail">'),
                 thumbnailImage = this.createDocumentThumbnailImage('thumbnail-image'),
                 thumbnailPageNumber = $('<div class="page-number">').text(pageNumber + 1);
-            thumbnail.append(thumbnailImage).addClass('io-ox-busy');
+            thumbnail.append(thumbnailImage).busy({ immediate: true });
             this.thumbnailImages.push(thumbnailImage);
             thumbnailLink.append(thumbnail, thumbnailPageNumber).attr({
                 'role': 'button',
@@ -140,7 +140,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
                     $documentThumbnail = $image.parent(),
                     landscape = ($image.width() > $image.height());
 
-                $documentThumbnail.removeClass('io-ox-busy').toggleClass('landscape', landscape);
+                $documentThumbnail.idle().toggleClass('landscape', landscape);
             };
             image.style.width = '100%';
             image.style.height = 'auto';

@@ -82,8 +82,8 @@ define('io.ox/core/settings/editLocale', [
                 ];
             }
         })
-        .addAlternativeButton({ label: gt('Reset'), action: 'reset' })
         .addCancelButton()
+        .addButton({ label: gt('Reset'), action: 'reset', placement: 'left', className: 'btn-default' })
         .addButton({ label: gt('Save'), action: 'save' })
         .on('open', function () {
             this.initial = locale.getLocaleData();

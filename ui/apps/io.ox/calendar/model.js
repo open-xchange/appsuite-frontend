@@ -47,6 +47,8 @@ define('io.ox/calendar/model', [
                 if (this.options.resolveGroups) {
                     this.oldAdd = this.add;
                     this.add = this.addAsync;
+                    // array to track unresolved calls to the add function, usefull if you need to wait for requests requests to finish before saving etc
+                    this.toBeResolved = [];
                 }
             },
 
@@ -78,6 +80,8 @@ define('io.ox/calendar/model', [
                     // as this is an async add, we need to make sure the reset event is triggered after adding
                     isReset = options && options.previousModels !== undefined,
                     def = $.Deferred();
+
+                this.toBeResolved.push(def);
 
                 models = [].concat(models);
                 _(models).each(function (model) {
@@ -129,7 +133,10 @@ define('io.ox/calendar/model', [
                             // no merge here or we would overwrite the confirm status
                             def.resolve(self.oldAdd(modelsToAdd, options));
                             if (isReset) self.trigger('reset');
-                        }).fail(def.reject);
+                        }).fail(def.reject)
+                        .always(function () {
+                            self.toBeResolved = _(self.toBeResolved).without(def);
+                        });
                     });
                 });
 
@@ -189,7 +196,7 @@ define('io.ox/calendar/model', [
             }
             if (this.get('interval') > 1) args.push('INTERVAL=' + this.get('interval'));
             // when this is an allday appointment the util part of an rrule must not have a Time
-            if (this.get('until')) args.push(util.isAllday(this.model) ? 'UNTIL=' + moment(this.get('until')).format('YYYYMMDD') : 'UNTIL=' + moment(this.get('until')).utc().endOf('day').format(util.ZULU_FORMAT));
+            if (this.get('until')) args.push(util.isAllday(this.model) ? 'UNTIL=' + moment(this.get('until')).format('YYYYMMDD') : 'UNTIL=' + moment(this.get('until')).endOf('day').utc().format(util.ZULU_FORMAT));
             if (this.get('occurrences')) args.push('COUNT=' + this.get('occurrences'));
             if (args.length > 0) this.model.set('rrule', args.join(';'));
             else this.model.set('rrule', null);
@@ -208,12 +215,20 @@ define('io.ox/calendar/model', [
                 rrule[name] = value;
                 rrule[name.toLowerCase()] = _.isArray(value) ? attr[1].toLowerCase().split(',') : value.toLowerCase();
             });
+
+            // todo, figure out which rrules we want to support and rework this
+            if (!rrule.bysetpos && rrule.byday && !_.isArray(rrule.byday) && rrule.byday.length > 2) {
+                rrule.bysetpos = rrule.byday.substr(0, rrule.byday.length - 2);
+                rrule.byday = rrule.byday.substr(rrule.byday.length - 2);
+            }
+
             return rrule;
         },
 
         deserialize: function () {
             var changes = {};
             changes.startDate = _.clone(this.model.get('startDate'));
+            changes.endDate = _.clone(this.model.get('endDate'));
             if (!this.model.get('rrule')) return this.set(changes);
             var self = this,
                 rrule = this.splitRule(),
@@ -259,8 +274,19 @@ define('io.ox/calendar/model', [
                 default:
                     changes.recurrence_type = 0;
             }
-            if (rrule.count) changes.occurrences = parseInt(rrule.count, 10) || 1;
-            if (rrule.UNTIL) changes.until = moment(rrule.UNTIL).subtract(date.hour(), 'hours').valueOf() || 0;
+            if (rrule.count) {
+                changes.occurrences = parseInt(rrule.count, 10) || 1;
+            } else {
+                // we need to remove old and now invalid data too (might happen during series updates etc)
+                this.unset('occurrences');
+            }
+
+            if (rrule.UNTIL) {
+                changes.until = moment(rrule.UNTIL).subtract(date.hour(), 'hours').valueOf() || 0;
+            } else {
+                // we need to remove old and now invalid data too (might happen during series updates etc)
+                this.unset('until');
+            }
             changes.interval = parseInt(rrule.interval, 10) || 1;
             this.set(changes);
         }

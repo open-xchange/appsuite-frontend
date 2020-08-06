@@ -292,3 +292,25 @@ Scenario.skip('[C7731] Create a Task in a shared folder', async function (I, use
     tasks.waitForApp();
     checkTask();
 });
+
+Scenario('[Bug 62240] Creating tasks while on a different time zone with a yearly or montly repeat leads to wrong dates', async function (I, tasks, dialogs) {
+    await I.haveSetting({
+        'io.ox/core': { timezone: 'America/New_York' }
+    });
+
+    I.login('app=io.ox/tasks');
+    tasks.waitForApp();
+    tasks.newTask();
+
+    I.click('Expand form');
+    I.checkOption('All day');
+    I.fillField({ css: '[data-attribute="start_time"] .datepicker-day-field' }, '4/21/2020');
+
+    I.checkOption('Repeat');
+    I.click('Every Tuesday.');
+    dialogs.waitForVisible();
+    await within('.modal-dialog', async function () {
+        I.selectOption('Repeat', 'Monthly');
+        I.waitForText('Every month on day 21.');
+    });
+});

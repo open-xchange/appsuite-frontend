@@ -91,7 +91,7 @@ Scenario('open direct link to data export settings page', async function (I) {
 });
 
 Scenario('show only available options', async function (I, users) {
-    await I.dontHaveCapability('tasks', users[0]);
+    await users[0].hasModuleAccess({ tasks: false });
     I.login('app=io.ox/settings');
 
     I.waitForText('Download personal data', 5);

@@ -15,62 +15,29 @@
 Feature('Mailfilter');
 
 Before(async function (users) {
-    await users.create();
-    await users.create();
+    await Promise.all([
+        users.create(),
+        users.create()
+    ]);
 });
 
 After(async function (users) {
     await users.removeAll();
 });
 
-function createFilterRule(I, name, condition, value, flag) {
-    I.login('app=io.ox/settings');
-    I.waitForVisible('.io-ox-settings-main');
-    I.waitForElement({ css: 'li .folder[data-id="virtual/settings/io.ox/mail"]>.folder-node' });
-    I.selectFolder('Mail');
-    I.waitForVisible('.rightside h1');
-
-    // open mailfilter settings
-    I.selectFolder('Filter Rules');
-
-    // checks the h1 and the empty message
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mailfilter-settings h1');
-    I.see('Mail Filter Rules');
-
-    I.see('There is no rule defined');
-
-    // create a test rule and check the inintial display
-    I.click('Add new rule');
-    I.waitForText('Create new rule');
-    I.see('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.');
-    I.see('Please define at least one action.');
-
-    I.fillField('rulename', name);
-
-    // add condition
-    I.click('Add condition');
-    I.click(condition);
-    I.fillField('values', value);
-
-    // add action
-    I.click('Add action');
-    I.click('Set color flag');
-    I.click('.actions .dropdown-toggle');
-    I.waitForVisible('.flag-dropdown');
-    I.click(flag, '.flag-dropdown');
-
-}
-
-Scenario('[C7792] Filter mail on sender', async function (I, users, mail) {
-    let [user] = users;
+Scenario('[C7792] Filter mail on sender', async (I, users, mail, mailfilter) => {
+    const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
-    createFilterRule(I, 'TestCase0368', 'From', user.get('primaryEmail'), 'Blue');
-    // save the form
-    I.click('Save');
-    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+
+    mailfilter.waitForApp();
+    mailfilter.newRule('TestCase0368');
+    mailfilter.addCondition('From', user.get('primaryEmail'));
+    mailfilter.setFlag('Blue');
+    mailfilter.save();
 
     I.openApp('Mail');
     mail.waitForApp();
@@ -89,16 +56,19 @@ Scenario('[C7792] Filter mail on sender', async function (I, users, mail) {
 
 });
 
-Scenario('[C7793] Filter mail on any recipient', async function (I, users, mail) {
-    let [user] = users;
+Scenario('[C7793] Filter mail on any recipient', async function (I, users, mail, mailfilter) {
+    const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
-    createFilterRule(I, 'TestCase0369', 'Any recipient', user.get('primaryEmail'), 'Red');
-    // save the form
-    I.click('Save');
-    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+
+    mailfilter.waitForApp();
+    mailfilter.newRule('TestCase0369');
+    mailfilter.addCondition('Any recipient', user.get('primaryEmail'));
+    mailfilter.setFlag('Red');
+    mailfilter.save();
 
     I.openApp('Mail');
     mail.waitForApp();
@@ -117,16 +87,19 @@ Scenario('[C7793] Filter mail on any recipient', async function (I, users, mail)
 
 });
 
-Scenario('[C7794] Filter mail on to-field', async function (I, users, mail) {
-    let [user] = users;
+Scenario('[C7794] Filter mail on to-field', async function (I, users, mail, mailfilter) {
+    const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
-    createFilterRule(I, 'TestCase0373', 'To', user.get('primaryEmail'), 'Red');
-    // save the form
-    I.click('Save');
-    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+
+    mailfilter.waitForApp();
+    mailfilter.newRule('TestCase0373');
+    mailfilter.addCondition('To', user.get('primaryEmail'));
+    mailfilter.setFlag('Red');
+    mailfilter.save();
 
     I.openApp('Mail');
     mail.waitForApp();
@@ -145,16 +118,19 @@ Scenario('[C7794] Filter mail on to-field', async function (I, users, mail) {
 
 });
 
-Scenario('[C7795] Filter mail on subject', async function (I, users, mail) {
-    let [user] = users;
+Scenario('[C7795] Filter mail on subject', async function (I, users, mail, mailfilter) {
+    const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
-    createFilterRule(I, 'TestCase0374', 'Subject', 'TestCase0374', 'Red');
-    // save the form
-    I.click('Save');
-    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+
+    mailfilter.waitForApp();
+    mailfilter.newRule('TestCase0374');
+    mailfilter.addCondition('Subject', 'TestCase0374');
+    mailfilter.setFlag('Red');
+    mailfilter.save();
 
     I.openApp('Mail');
     mail.waitForApp();
@@ -172,16 +148,19 @@ Scenario('[C7795] Filter mail on subject', async function (I, users, mail) {
     I.waitForElement('.vsplit .flag_1', 30);
 });
 
-Scenario('[C7796] Filter mail on cc-field', async function (I, users, mail) {
-    let [user] = users;
+Scenario('[C7796] Filter mail on cc-field', async function (I, users, mail, mailfilter) {
+    const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
-    createFilterRule(I, 'TestCase0375', 'Cc', user.get('primaryEmail'), 'Red');
-    // save the form
-    I.click('Save');
-    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+
+    mailfilter.waitForApp();
+    mailfilter.newRule('TestCase0375');
+    mailfilter.addCondition('Cc', user.get('primaryEmail'));
+    mailfilter.setFlag('Red');
+    mailfilter.save();
 
     I.openApp('Mail');
     mail.waitForApp();
@@ -202,20 +181,25 @@ Scenario('[C7796] Filter mail on cc-field', async function (I, users, mail) {
     I.waitForElement('.vsplit .flag_1', 30);
 });
 
-Scenario('[C7797] Filter mail on header', async function (I, users, mail) {
-    let [user] = users;
+Scenario('[C7797] Filter mail on header', async function (I, users, mail, mailfilter) {
+    const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
-    createFilterRule(I, 'TestCase0381', 'Header', user.get('primaryEmail'), 'Red');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+
+    mailfilter.waitForApp();
+    mailfilter.newRule('TestCase0381');
+    mailfilter.addCondition('Header', user.get('primaryEmail'));
+
     I.click('Matches');
     I.waitForVisible('.open.dropdownlink');
     I.click('Contains');
     I.fillField('headers', 'Delivered-To');
-    // save the form
-    I.click('Save');
-    I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
+
+    mailfilter.setFlag('Red');
+    mailfilter.save();
 
     I.openApp('Mail');
     mail.waitForApp();
@@ -234,20 +218,24 @@ Scenario('[C7797] Filter mail on header', async function (I, users, mail) {
     I.waitForElement('.vsplit .flag_1', 30);
 });
 
-Scenario('[C7800] Filter mail on envelope', async function (I, users, mail) {
-
+Scenario('[C7800] Filter mail on envelope', async function (I, users, mail, mailfilter) {
+    const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
 
-    createFilterRule(I, 'TestCase0384', 'Envelope', users[0].get('primaryEmail'), 'Red');
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
+
+    mailfilter.waitForApp();
+    mailfilter.newRule('TestCase0384');
+    mailfilter.addCondition('Envelope', user.get('primaryEmail'));
+
     I.click('Is exactly');
     I.waitForVisible('.open.dropdownlink');
     I.click('Contains');
 
-    // save the form
-    I.click('Save');
-    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    mailfilter.setFlag('Red');
+    mailfilter.save();
 
     I.openApp('Mail');
     mail.waitForApp();

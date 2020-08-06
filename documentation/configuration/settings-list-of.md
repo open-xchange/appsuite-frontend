@@ -43,7 +43,7 @@ Enable validiation for phone numbers.
 Placement of buttons in new/edit dialogs. Default is 'bottom' (`'top', 'bottom'`)
 
 <config>io.ox/core//disabledSettingsPanes=`<string>`</config>
-Disable one or more settings panes vie extension point ids of _io.ox/settings/pane_
+Disable one or more settings panes via extension point ids of _io.ox/settings/pane_ and it's subgroup extension points (easily identifiable as "&folder=virtual/settings/<id>" in adress bar)
 
 <config>io.ox/core//pdf/enablePreconversionOnUpload=`<bool>`</config>
 Enable/disable PDF preconversion of office documents on file upload and when a new file version is added. Default is `true`.
@@ -101,32 +101,6 @@ Show rating string on mouse hover in feedback dialog.
 
 <config>io.ox/core//feedback/showModuleSelect=`<bool>`</config>
 Defines if the feedback dialog is aware of it's current App and the rating is based on this. If set to "true" every App can be rated regardless which App is currently running.
-
-<config>io.ox/core//feedback/mode`<string>`</config>
-Default value is `star-rating-v1` (`star-rating-v1|nps-v1`)
-
-<config>io.ox/core//feedback/timeLimit`<string>`</config>
-A timeframe that can specified as absolute date or a relative date. example: `3M` for 3 Months (this is case sensitive), `2020-02-26` for February 26 2020. Default values are `undefined` (star-rating) and `6M` (nps-rating)
-
-<config>io.ox/core//feedback/maxFeedbacks`<number>`</config>
-Maximum number of feedbacks that are allowed in one timeframe: Default value is `1`.
-
-to allow infinte feedback set
-`io.ox/core//feedback/timeLimit` = `false`
-`io.ox/core//feedback/maxFeedbacks` = `undefined`
-
-<config>io.ox/core//feedback/showQuestion`<bool>`</config>
-Only relevant for nps rating. If set to true, an additional question with answer field for free text will be shown. Default `false`.
-
-<config>io.ox/core//feedback/maxFeedbacks`<number>`</config>
-Only relevant for nps rating. If io.ox/core//feedback/showQuestion is set to true you can choose from the folowing questions by setting it to the index of the question you want (0-3):
-
-    index 0: „What is the primary reason for your score?“
-    index 1: „How can we improve your experience?“
-    index 2: „Which features do you value or use the most?“
-    index 3: „What is the one thing we could do to make you happier?“
-
-Default is `0`.
 
 ## Misc
 
@@ -355,6 +329,9 @@ Show requests for read receipts.
 <config>io.ox/mail//autoselectMailOnStart=`<bool>`</config>
 Automatically select first read mail on mail app start. (Default `true`)
 
+<config>io.ox/mail//features/textPreview=`<bool>`</config>
+Fetch mail teaser texts if available, only supported by Dovecot for primary accounts. Also needs MW config. (Default `true`)
+
 ## User Preferences:
 
 <config>io.ox/mail//removeDeletedPermanently=`<bool>`</config>
@@ -480,6 +457,9 @@ Value is `custom` or `none`. If `custom` is set, signature from `io.ox/mail//mob
 
 <config>io.ox/mail//mobileSignature=`<string>`</config>
 Mobile signature as plain text string.
+
+<config>io.ox/mail//compose/signatureLimit=`<number>`</config>
+Number of signatures listed in options dropdown of mail compose (default 2).
 
 ## Misc
 
@@ -611,6 +591,11 @@ Array of timezones like `['Europe/Berlin']`
 
 <config>io.ox/calendar//renderTimezones=`<bool>`</config>
 Array of timzones that specifies that timezones out of the favoriteTimeszones that should be displayed
+
+<config>io.ox/calendar//showPastReminders=`<bool>`</config>
+Determines if reminders should be shown for appointments in the past.
+This does not affect reminders that are set to trigger after an appointment ends.
+Default is `true`.
 
 ## Scheduling view
 

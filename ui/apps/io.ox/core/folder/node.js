@@ -286,6 +286,8 @@ define('io.ox/core/folder/node', [
             // share the inner timers (side-effects and evil debugging)
 
             this.onSort = _.debounce(function () {
+                if (this.disposed) return;
+
                 // check
                 if (!this.$) return;
 
@@ -305,6 +307,7 @@ define('io.ox/core/folder/node', [
             }, 10);
 
             this.repaint = _.throttle(function () {
+                if (this.disposed) return;
                 if (this.model !== null) this.render();
             }, 10);
         },
@@ -461,9 +464,12 @@ define('io.ox/core/folder/node', [
             return this.options.count !== undefined ? this.options.count : (this.model.get('unread') || 0) + subtotal;
         },
 
-        showStatusIcon: function (message, event, data) {
+        showStatusIcon: function (message, event, data, overwrite) {
 
             var self = this;
+
+            // some events are more important, so they should be able to overwrite previous ones (Oauth account error vs associated mail account error, for example)
+            if (overwrite) this.hideStatusIcon();
 
             if (this.$.accountLink) {
                 if (message) this.$.accountLink.attr('title', message);

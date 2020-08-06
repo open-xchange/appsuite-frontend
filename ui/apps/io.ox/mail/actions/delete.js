@@ -92,7 +92,8 @@ define('io.ox/mail/actions/delete', [
 
         if (showPrompt) {
             require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-                new ModalDialog({ title: getQuestion(list) })
+                //#. 'Delete mail' as modal dialog header to confirm to delete a mail.
+                new ModalDialog({ title: gt('Delete mail'), description: getQuestion(list) })
                     .addCancelButton()
                     .addButton({ label: gt('Delete'), action: 'delete' })
                     .on('delete', function () { api.remove(list, all).fail(notifications.yell); })

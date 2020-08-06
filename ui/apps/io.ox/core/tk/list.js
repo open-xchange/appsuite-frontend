@@ -156,6 +156,7 @@ define('io.ox/core/tk/list', [
 
         // called when the view model changes (not collection models)
         onModelChange: function () {
+            if (this.disposed) return;
             this.load();
         },
 
@@ -169,8 +170,8 @@ define('io.ox/core/tk/list', [
             this.$el.scrollTop(0);
         },
 
-        renderNotification: function (type) {
-            var baton = ext.Baton({ app: this.app, options: this.options, listView: this }),
+        renderNotification: function (type, error) {
+            var baton = ext.Baton({ app: this.app, options: this.options, listView: this, error: error }),
                 point = ext.point(this.ref + '/notification/' + type),
                 isEmpty = !this.collection.length,
                 $notification = this.$('.notification').attr('role', type === 'error' ? 'alert' : 'presentation').empty();
@@ -184,9 +185,9 @@ define('io.ox/core/tk/list', [
             this.renderNotification('empty');
         },
 
-        renderError: function () {
+        renderError: function (error) {
             this.idle();
-            this.renderNotification('error');
+            this.renderNotification('error', error);
         },
 
         onReset: function () {
@@ -249,6 +250,7 @@ define('io.ox/core/tk/list', [
             if (children.length > 1) {
                 // see bug #46319 : handle 'select all' -> 'move'
                 _.defer(function () {
+                    if (this.disposed) return;
                     this.$el.trigger('scroll');
                 }.bind(this));
             }
@@ -426,14 +428,17 @@ define('io.ox/core/tk/list', [
                     '-webkit-transform': 'translate3d(0,-70px,0)'
                 });
                 setTimeout(function () {
+                    if (self.disposed) return;
                     self.pullToRefreshIndicator.removeAttr('style').remove();
                 }, 100);
 
             } else {
                 // fancy remove with scale-out animation
                 setTimeout(function () {
+                    if (self.disposed) return;
                     self.pullToRefreshIndicator.addClass('scale-down');
                     setTimeout(function () {
+                        if (self.disposed) return;
                         self.pullToRefreshIndicator
                             .removeAttr('style')
                             .removeClass('scale-down');
@@ -581,6 +586,7 @@ define('io.ox/core/tk/list', [
                         }
                         if (timer) clearTimeout(timer);
                         timer = setTimeout(function () {
+                            if (self.disposed) return;
                             self.selection.isScrolling = false;
                         }, 500);
                     });
@@ -596,7 +602,10 @@ define('io.ox/core/tk/list', [
                     return this;
                 },
 
-                render: _.debounce(this.renderListItems.bind(this), 10),
+                render: _.debounce(function () {
+                    if (this.disposed) return;
+                    this.renderListItems();
+                }.bind(this), 10),
 
                 iterate: function (fn) {
                     try {
@@ -835,6 +844,8 @@ define('io.ox/core/tk/list', [
                         listLabel = this.getPreviousLabel(childAfter);
                         if (modelLabel !== listLabel) childAfter = childAfter.prev();
                     }
+                    // we need to add the new item to the list of items or we get wrong indices
+                    children.splice(index, 0, li);
                     childAfter.before(li);
                     // scroll position might have changed due to insertion
                     if (li[0].offsetTop <= this.el.scrollTop) {
@@ -842,6 +853,8 @@ define('io.ox/core/tk/list', [
                     }
                 } else {
                     this.$el.append(li);
+                    // we need to add the new item to the list of items or we get wrong indices
+                    children.push(li);
                 }
 
                 if (this.options.labels) {
@@ -888,7 +901,7 @@ define('io.ox/core/tk/list', [
         busy: function () {
             if (this.isBusy) return;
             this.$('.notification').css('display', 'none');
-            this.addBusyIndicator().addClass('io-ox-busy').find('i').remove();
+            this.addBusyIndicator().busy({ immediate: true }).find('i').remove();
             this.isBusy = true;
             return this;
         },

@@ -518,7 +518,6 @@ Scenario('[C8389] Move a folder', async (I, drive) => {
     I.click('Move', '.modal-dialog');
     I.waitForText('File has been moved');
     I.waitForInvisible('File has been moved');
-    I.wait(0.2);
     I.selectFolder('Subfolder b');
     I.waitForElement(locate('.filename').withText('SubSubFolder 1').inside('.list-view'));
     ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {
@@ -528,6 +527,17 @@ Scenario('[C8389] Move a folder', async (I, drive) => {
         I.dontSee('Move', '.dropdown.open .dropdown-menu');
         I.pressKey('Escape');
     });
+});
+
+
+Scenario('Folder contextmenu opening and closing', (I, drive) => {
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    I.selectFolder('Documents');
+    I.openFolderMenu('Documents');
+    I.waitForVisible('.smart-dropdown-container');
+    I.pressKey('Escape');
+    I.waitForDetached('.smart-dropdown-container');
 });
 
 Scenario('[C8390] Folder tree', async (I, drive) => {
@@ -596,14 +606,4 @@ Scenario('[C8390] Folder tree', async (I, drive) => {
     I.dontSee('Pictures', '.folder-tree');
     I.dontSee('Videos', '.folder-tree');
     I.dontSee('Folders', '.folder-tree');
-});
-
-Scenario('Folder contextmenu opening and closing', (I, drive) => {
-    I.login('app=io.ox/files');
-    drive.waitForApp();
-    I.selectFolder('Documents');
-    I.openFolderMenu('Documents');
-    I.waitForVisible('.smart-dropdown-container');
-    I.pressKey('Escape');
-    I.waitForDetached('.smart-dropdown-container');
 });

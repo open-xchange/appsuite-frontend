@@ -93,7 +93,7 @@ define('io.ox/calendar/view-detail', [
                 }, this);
 
                 // get recurrenceMaster for exceptions too if the exception was not moved (just a simple check if the start date is still the same), to show some additional info like rrules etc.
-                if (util.hasFlag(baton.model, 'overridden') && moment(baton.model.get('recurrenceId')).valueOf() === util.getMoment(baton.model.get('startDate')).valueOf()) {
+                if (util.hasFlag(baton.model, 'overridden') && moment(_((baton.model.get('recurrenceId') || '').split(':')).last()).valueOf() === util.getMoment(baton.model.get('startDate')).valueOf()) {
                     calAPI.get({ id: baton.model.get('seriesId'), folder: baton.model.get('folder') }).then(draw, function () { draw(); });
                     return;
                 }

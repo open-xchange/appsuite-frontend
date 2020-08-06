@@ -146,6 +146,42 @@ define('io.ox/contacts/settings/pane', [
 
     ext.point('io.ox/contacts/settings/detail/view/buttons/top').extend(
         //
+        // Shared address books
+        //
+        {
+            id: 'shared-address-books',
+            index: 50,
+            render: function (baton) {
+                function openDialog() {
+                    require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
+                        subscribe.open({
+                            module: 'contacts',
+                            help: 'ox.appsuite.user.sect.contacts.folder.displayshared.html',
+                            title: gt('Shared address books'),
+                            point: 'io.ox/core/folder/subscribe-shared-address-books',
+                            sections: {
+                                public: gt('Public address books'),
+                                shared: gt('Shared address books'),
+                                private: gt('Private'),
+                                hidden: gt('Hidden address books')
+                            }
+                        });
+                    });
+                }
+
+                baton.$el.append(
+                    $('<button type="button" class="btn btn-default" data-action="subscribe-shared-address-books">')
+                    .append(
+                        $.txt(gt('Subscribe shared address books'))
+                    )
+                    .on('click', openDialog)
+                );
+            }
+        }
+    );
+
+    ext.point('io.ox/contacts/settings/detail/view/buttons/top').extend(
+        //
         // My contact data
         //
         {

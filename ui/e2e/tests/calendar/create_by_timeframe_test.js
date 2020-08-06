@@ -56,8 +56,8 @@ Scenario('[C7433] Create appointment by marking some timeframe', async (I, calen
     I.click(apnt_subject, '.appointment');
     I.waitForVisible('.io-ox-sidepopup .date');
     await within('.io-ox-sidepopup', async () => {
-        I.waitForText(apnt_subject);
-        I.waitForText(apnt_location);
+        I.see(apnt_subject);
+        I.see(apnt_location);
         // check time / date - should be 1am to 3am, 2hrs
         const apnt_date = await I.grabTextFrom('.date'); // expected: moment().format(L)
         const apnt_time = await I.grabTextFrom('.time'); // expected: 01:00 - 03:00 AM

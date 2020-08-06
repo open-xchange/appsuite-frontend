@@ -14,13 +14,7 @@
 define('io.ox/contacts/edit/main', [
     'io.ox/contacts/edit/view',
     'gettext!io.ox/contacts',
-    'io.ox/core/tk/upload',
-    'io.ox/core/api/user',
-    'io.ox/core/extensions',
     'io.ox/contacts/util',
-    'io.ox/core/capabilities',
-    'io.ox/core/notifications',
-    'io.ox/core/util',
     'io.ox/core/a11y',
     'io.ox/core/yell',
     'io.ox/backbone/views/modal',
@@ -28,8 +22,7 @@ define('io.ox/contacts/edit/main', [
     'io.ox/core/folder/util',
     // 'settings!io.ox/core',
     'less!io.ox/contacts/edit/style'
-    // todo: check this unused dependencies (may register extension points etc)
-], function (View, gt, upload, userApi, ext, util, capabilities, notifications, coreUtil, a11y, yell, ModalDialog, folderApi, folderUtils) {
+], function (View, gt, util, a11y, yell, ModalDialog, folderApi, folderUtils) {
 
     'use strict';
 
@@ -96,7 +89,7 @@ define('io.ox/contacts/edit/main', [
                                     },
                                     function fail(e) {
                                         win.idle();
-                                        notifications.yell(e);
+                                        yell(e);
                                     }
                                 );
                             }),
@@ -175,10 +168,11 @@ define('io.ox/contacts/edit/main', [
                 this.getWindow().resume();
             }
 
-            //#. "Discard changes" appears in combination with "Cancel" (this action)
             //#. Translation must be distinguishable for the user
-            new ModalDialog({ title: gt('Do you really want to discard your changes?') })
-                .addCancelButton()
+            //#. "Discard changes" appears as a header of the modal dialog to discard changes while editing a contact
+            new ModalDialog({ title: gt('Discard changes'), description: gt('Do you really want to discard your changes?') })
+            .addCancelButton()
+                //#. "Discard changes" appears in combination with "Cancel" (this action)
                 .addButton({ label: gt.pgettext('dialog', 'Discard changes'), action: 'delete' })
                 .on('action', function (action) {
                     if (action === 'delete') def.resolve(); else def.reject();

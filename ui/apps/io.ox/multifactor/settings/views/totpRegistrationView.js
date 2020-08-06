@@ -41,6 +41,7 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
             point: POINT,
             title: gt('Authenticator Registration'),
             enter: 'OK',
+            focus: '#verification',
             model: new Backbone.Model({ device: result })
         })
         .build(function () {
@@ -57,9 +58,6 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
         })
         .on('cancel', function () {
             def.reject();
-        })
-        .on('open', function () {
-            $('#verification').focus();
         })
         .open();
     }

@@ -86,7 +86,7 @@ define('io.ox/mail/common-extensions', [
             //#. Color is used as a noun
             //#. %1$s - color name, used to describe a mail that has a color flag
             if (baton.data.color_label && settings.get('features/flag/color')) parts.push(gt('Color %1$s', flagPicker.colorName(baton.data.color_label)));
-            parts.push(util.getDisplayName(fromlist[0]), data.subject, util.getTime(data.received_date));
+            parts.push(util.getDisplayName(fromlist[0]), data.subject, util.getTime(data.date));
             if (size > 1) parts.push(gt.format('Thread contains %1$d messages', size));
             if (data.attachment) parts.push(gt('has attachments'));
 
@@ -134,9 +134,11 @@ define('io.ox/mail/common-extensions', [
             // - show picture of first recipient in "Sent items" and "Drafts"
             // - exception: always show sender in threaded messages
             var data = baton.data,
+                isThreaded = baton.app.props.get('thread'),
                 size = api.threads.size(data),
                 single = size <= 1,
-                addresses = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from,
+                useRecipientPic = isThreaded ? single : true,
+                addresses = useRecipientPic && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from,
                 node = $('<div class="contact-picture" aria-hidden="true">');
 
             this.append(
@@ -155,7 +157,7 @@ define('io.ox/mail/common-extensions', [
         },
 
         date: function (baton, options) {
-            var data = baton.data, t = data.received_date;
+            var data = baton.data, t = data.date;
             options = _.extend({
                 fulldate: baton.app && baton.app.props.get('exactDates'),
                 smart: !(baton.app && baton.app.props.get('exactDates'))
@@ -696,6 +698,23 @@ define('io.ox/mail/common-extensions', [
         flagPicker: function (baton) {
             if (!settings.get('features/flag/color')) return;
             flagPicker.draw(this, baton);
+        },
+
+        unreadIndicator: function (baton) {
+            if (util.isEmbedded(baton.data)) return;
+            var self = this;
+
+            folderAPI.get(baton.data.folder_id).done(function (data) {
+                // see if the user is allowed to modify the read/unread status
+                // always allows for unified folder
+                var showUnreadIndicator = folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data);
+                if (!showUnreadIndicator) return;
+                self.append(
+                    $('<span class="unread-toggle">')
+                    .attr('aria-label', gt('Marked as unread'))
+                    .append($('<i class="fa fa-fircle" aria-hidden="true">'))
+                );
+            });
         },
 
         unreadToggle: (function () {

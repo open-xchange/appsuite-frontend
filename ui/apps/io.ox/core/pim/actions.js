@@ -32,13 +32,17 @@ define('io.ox/core/pim/actions', [
             matches: function (baton) {
                 return baton.array().some(function (data) {
                     var model = new filesAPI.Model(data);
-                    return viewerTypes.canView(model);
+                    // no view support for encrypted pim attachments
+                    return !model.isEncrypted() && viewerTypes.canView(model);
                 });
             },
             action: function (baton) {
                 require(['io.ox/core/viewer/main'], function (Viewer) {
-                    var viewer = new Viewer();
-                    viewer.launch({ files: baton.array(), opt: { disableFolderInfo: true, disableFileDetail: true } });
+                    var viewer = new Viewer(),
+                        // no view support for encrypted pim attachments
+                        files = baton.array().filter(function (file) { return !new filesAPI.Model(file).isEncrypted(); });
+
+                    viewer.launch({ files: files, opt: { disableFolderInfo: true, disableFileDetail: true } });
                 });
             }
         },

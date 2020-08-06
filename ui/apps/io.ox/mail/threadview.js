@@ -223,7 +223,8 @@ define('io.ox/mail/threadview', [
                 if (!$(this).hasClass('placeholder')) return;
                 if ((this.offsetTop + $(this).height()) > listNode.scrollTop() && this.offsetTop < (listNode.scrollTop() + listNode.height())) {
                     var view = $(this).data('view');
-                    if (view) {
+                    // don't redraw views that are already loading. This removes the busy spinner
+                    if (view && !view.$el.find('section.body').hasClass('loading')) {
                         view.placeholder = false;
                         view.render();
                     }

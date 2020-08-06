@@ -166,6 +166,13 @@ define('io.ox/backbone/views/actions/util', [
         },
 
         renderListItem: function ($li, baton, item) {
+
+            function checkUpsell(item) {
+                if (!item.actions[0]) return false;
+                var requires = item.actions[0].capabilities;
+                return !upsell.has(requires) && upsell.enabled(requires);
+            }
+
             $li
             .attr('data-prio', item.link[_.device('smartphone') ? 'mobile' : 'prio'] || 'lo')
             .data({
@@ -180,6 +187,7 @@ define('io.ox/backbone/views/actions/util', [
                     .attr({ 'data-action': item.link.ref });
                 applyIconTitleTooltip($a, item.link, baton, item.enabled);
                 if (!item.enabled) $a.addClass('disabled').attr('aria-disabled', true);
+                if (checkUpsell(item)) $a.addClass('upsell').append($('<i class="fa fa-star">'));
                 return $a;
             });
         },
@@ -295,6 +303,7 @@ define('io.ox/backbone/views/actions/util', [
             if (!model) return false;
             var condition = String(action.folder).replace(/\w[\w:]+/ig, function (match) {
                 if (/^(undefined|null|true|false)$/.test(match)) return match;
+                if (match === 'gab') return baton.folder_id === 6;
                 return model.can(match.toLowerCase());
             });
             try {

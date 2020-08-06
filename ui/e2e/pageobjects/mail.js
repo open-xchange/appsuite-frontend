@@ -4,12 +4,10 @@ module.exports = {
 
     locators: {
         compose: {
-            close: locate({ css: '.io-ox-mail-compose-window button[aria-label="Close"]' }).as('Close'),
-            options: locate({ css: '[data-extension-id="composetoolbar-menu"] .dropdown a' })
-                    .withChild('.dropdown-label')
-                    .withText('Options').as('Options dropdown'),
-            signatures: locate({ css: '[data-extension-id="composetoolbar-menu"] .dropdown.signatures a' }),
-            attachments: locate(({ css: '.composetoolbar div[data-extension-id="add_attachments"] a' })).as('Attachments dropdown')
+            close: locate({ css: '.io-ox-mail-compose-window button[aria-label="Save and close"]' }).as('Save and Close'),
+            options: locate({ css: '[data-extension-id="composetoolbar-menu"] a[aria-label="Options"]' }).as('Options dropdown'),
+            localfile: locate({ css: '.composetoolbar a[aria-label="Add local file"]' }).as('Add local file'),
+            drivefile: locate({ css: '.composetoolbar a[aria-label="Add from Drive"]' }).as('Add from Drive')
         }
     },
 
@@ -34,6 +32,11 @@ module.exports = {
         I.clickToolbar('Compose');
         I.waitForVisible('.io-ox-mail-compose [placeholder="To"]', 30);
         I.waitForFocus('.io-ox-mail-compose [placeholder="To"]');
+    },
+    addAttachment(path) {
+        var ext = path.match(/\.(.{3,4})$/)[1];
+        I.attachFile({ css: 'input[type=file]' }, path);
+        I.waitForText(ext.toUpperCase(), 5, '.inline-items.preview');
     },
     send() {
         I.click('Send');

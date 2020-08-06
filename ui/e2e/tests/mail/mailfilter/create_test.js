@@ -346,8 +346,7 @@ Scenario('Filter mail by size Filter mail using IsBiggerThan', async function (I
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
     // Open Filepicker
-    I.click(mail.locators.compose.attachments);
-    I.clickDropdown('Add from Drive');
+    I.click(mail.locators.compose.drivefile);
 
     I.waitForText('Principia.txt');
     I.click(locate('div.name').withText('Principia.txt').inside('.io-ox-fileselection'));
@@ -400,7 +399,7 @@ Scenario('Filter mail using validated size', async function (I) {
     I.waitForElement(disabledButton);
 });
 
-Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users, mail) {
+Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -481,7 +480,7 @@ Scenario('[C83386] Create mail filter based on mail', async function (I, users, 
     I.click({ css: '[data-id="default0/INBOX/Trash"]' }, '.folder-picker-dialog');
     I.waitForElement({ css: '[data-id="default0/INBOX/Trash"].selected' }, '.folder-picker-dialog');
     I.wait(1);
-    I.click('Ok');
+    I.click('Select');
     // save the form
     dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');

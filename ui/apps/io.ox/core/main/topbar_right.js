@@ -353,6 +353,8 @@ define('io.ox/core/main/topbar_right', [
                 ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
                 a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('aria-label', title),
                 dropdown = new Dropdown({
+                    // have a simple model to track changes (e.g. availability)
+                    model: new Backbone.Model({}),
                     attributes: { role: 'presentation' },
                     tagName: 'li',
                     id: 'io-ox-topbar-dropdown-icon',

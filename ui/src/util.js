@@ -893,7 +893,9 @@
                 var tmp, r = 'recurrenceId', m, f;
                 if (typeof o === 'string') {
                     // Triples? (incl. new CalDAV ids)
-                    if ((m = o.match(/^(cal:\/\/\d+\/\d+|\d+)\.(\d+)(\.([\dTZ]+))?$/)) && m.length) {
+                    // recurrenceId has a lot of varieties: timestamp, zulu with and without Z at the end, timezone:Zulu
+                    //                 |folder               |.|id   |.|recurrenceId
+                    if ((m = o.match(/^(cal:\/\/\d+\/\d+|\d+)\.(\d+)(\.((\w+\/\w+:)?[\dTZ]+))?$/)) && m.length) {
                         tmp = { folder_id: String(m[1]), folder: String(m[1]), id: String(m[2]) };
                         if (m[4] !== undefined) tmp[r] = String(m[4]);
                         return tmp;

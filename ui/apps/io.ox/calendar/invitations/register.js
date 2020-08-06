@@ -183,7 +183,7 @@ define('io.ox/calendar/invitations/register', [
         },
 
         getTentativeMessage: function () {
-            return gt('You tentatively accepted this invitation');
+            return gt('You tentatively accepted this appointment');
         },
 
         isOrganizer: function () {
@@ -383,11 +383,11 @@ define('io.ox/calendar/invitations/register', [
                 .then(
                     function done(data) {
                         // api refresh
-                        var refresh = require(['io.ox/calendar/api']).then(
-                            function (api) {
+                        var yell = self.options.yell,
+                            refresh = require(['io.ox/calendar/api']).then(function (api) {
                                 api.updatePoolData({ updated: data });
                                 api.refresh();
-                                if (self.options.yell !== false) {
+                                if (yell !== false) {
                                     notifications.yell('success', success[action]);
                                 }
                             });
@@ -565,7 +565,7 @@ define('io.ox/calendar/invitations/register', [
                 });
             }
 
-            self.$el.busy(true);
+            self.$el.busy({ empty: true });
             performConfirm(true);
         }
 
@@ -724,7 +724,7 @@ define('io.ox/calendar/invitations/register', [
 
             this.reminder = accepted ? false : parseInt(this.$el.find('.reminder-select').val(), 10);
 
-            self.$el.busy(true);
+            self.$el.busy({ empty: true });
 
             self.api.confirm({
                 folder: this.model.get('folder_id'),
@@ -835,7 +835,7 @@ define('io.ox/calendar/invitations/register', [
             var headers = this.model.get('headers') || {},
                 reminder = headers['X-OX-Reminder'],
                 module = headers['X-Open-Xchange-Module'],
-                sequence = ['X-Open-Xchange-Sequence'];
+                sequence = headers['X-Open-Xchange-Sequence'];
             if (!reminder || !module) return;
             reminder = reminder.split(/,\s*/);
             return sequence ? { module: module, folder_id: reminder[1], id: reminder[0], sequence: sequence } : { module: module, folder_id: reminder[1], id: reminder[0] };

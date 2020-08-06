@@ -92,11 +92,11 @@ define('io.ox/mail/detail/mobileView', [
         draw: extensions.recipients
     });
 
-    /*ext.point('io.ox/mail/mobile/detail/header').extend({
-        id: 'unread-toggle',
+    ext.point('io.ox/mail/mobile/detail/header').extend({
+        id: 'unread-indicator',
         index: INDEX_header += 100,
-        draw: extensions.unreadToggle
-    });*/
+        draw: extensions.unreadIndicator
+    });
 
     ext.point('io.ox/mail/mobile/detail/header').extend({
         id: 'subject',

@@ -54,7 +54,7 @@ const signatures = [{
 }];
 
 async function selectAndAssertSignature(I, mail, name, compare) {
-    I.click(mail.locators.compose.signatures);
+    I.click(mail.locators.compose.options);
     I.click(name);
     let result = await grabValueFrom(I, '.io-ox-mail-compose textarea.plain-text');
     if (compare instanceof RegExp) expect(result).to.match(compare);
@@ -186,9 +186,7 @@ Scenario('Reply to mail with plaintext signature above correctly placed and chan
     // insert some text at the very beginning
     I.fillField('Subject', 'Reply to mail with plaintext signature');
     I.pressKey('Tab');
-    I.pressKey('Tab');
-    I.pressKey('Tab');
-    I.pressKey('Tab');
+
     I.pressKeys('some user input');
     expect(await grabValueFrom(I, '.io-ox-mail-compose textarea.plain-text')).to.match(
         new RegExp(`^some user input\\n\\n${signatures[0].plaintext}\\n\\n(>[^\\n]*(\\n)?)+$`)
@@ -238,4 +236,41 @@ Scenario('Reply to mail with signature below correctly placed initially', async 
     // discard mail
     I.click(mail.locators.compose.close);
     I.waitForVisible('.io-ox-mail-window');
+});
+
+Scenario('Add and replace signatures with special characters', async function (I, mail) {    // at leat one that had to be escaped in a regex
+    // at leat one that had to be escaped in a regex
+    const first = 'Very original? ...or clever signature?',
+        second = 'Super original and fabulous signature';
+
+    await Promise.all([
+        I.haveSetting({ 'io.ox/mail': { messageFormat: 'text' } }),
+        I.haveSnippet({
+            content: `<p>${first}</p>`,
+            displayname: 'My signature',
+            misc: { insertion: 'above', 'content-type': 'text/html' },
+            module: 'io.ox/mail',
+            type: 'signature'
+        }),
+        I.haveSnippet({
+            content: `<p>${second}</p>`,
+            displayname: 'Super signature',
+            misc: { insertion: 'above', 'content-type': 'text/html' },
+            module: 'io.ox/mail',
+            type: 'signature'
+        })
+    ]);
+
+    I.login('app=io.ox/mail');
+    mail.newMail();
+    I.waitForVisible({ css: 'textarea.plain-text' });
+
+    I.click(mail.locators.compose.options);
+    I.clickDropdown('My signature');
+    I.seeInField({ css: 'textarea.plain-text' }, first);
+
+    I.click(mail.locators.compose.options);
+    I.clickDropdown('Super signature');
+    I.seeInField({ css: 'textarea.plain-text' }, second);
+    I.dontSeeInField({ css: 'textarea.plain-text' }, first);
 });

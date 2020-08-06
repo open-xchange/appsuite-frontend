@@ -46,10 +46,12 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // ensure options
             options = _.extend({
                 async: false,
+                autoClose: true,
                 context: {},
                 keyboard: true,
                 maximize: false,
-                smartphoneInputFocus: false
+                smartphoneInputFocus: false,
+                autoFocusOnIdle: true
             }, options);
             // ensure correct width on smartphone
             if (_.device('smartphone') && options.width >= 320) {
@@ -59,6 +61,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.context = options.context;
             // the original constructor will call initialize()
             ExtensibleView.prototype.constructor.apply(this, arguments);
+            this.autoFocusOnIdle = options.autoFocusOnIdle;
             // add structure now
             var title_id = _.uniqueId('title');
             this.$el
@@ -162,13 +165,13 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.$el.modal({ backdrop: o.backdrop || 'static', keyboard: false }).modal('show');
             this.toggleAriaHidden(true);
             this.trigger('open');
-            this.setInitialFocus(o);
+            this.setFocus(o);
             // track open instances
             open.add(this);
             return this;
         },
 
-        setInitialFocus: function (o) {
+        setFocus: function (o) {
             var self = this;
             // set initial focus
             if (o.focus) {
@@ -184,6 +187,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 // 2: Primary button in footer
                 // 3: First tababble element in footer
                 _.defer(function () {
+                    if (self.disposed) return;
                     self.$el.toggleClass('compact', self.$body.is(':empty'));
                     var focusNode = a11y.getTabbable(self.$body).first();
                     if (focusNode.length === 0) focusNode = self.$footer.find('.btn-primary');
@@ -243,13 +247,14 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         // - action: Button action
         //
         addButton: function (options) {
-            var o = _.extend({ placement: 'right', className: 'btn-primary', label: gt('Close'), action: 'cancel' }, options),
+            var o = _.extend({ placement: 'right', className: 'btn-primary', label: gt('Close'), action: 'cancel', disabled: false }, options),
                 left = o.placement === 'left', fn = left ? 'prepend' : 'append';
             if (left) o.className += ' pull-left';
             this.$footer[fn](
                 $('<button type="button" class="btn">')
                     .addClass(o.className)
                     .attr('data-action', o.action)
+                    .prop('disabled', o.disabled)
                     .text(o.label)
             );
             return this;
@@ -331,8 +336,10 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.trigger(action);
             // for general event listeners
             this.trigger('action', action);
+            // check if already disposed/closed by the action
+            if (this.disposed) return;
             // check if this.options is there, if the dialog was closed in the handling of the action this.options is empty and we run into a js error otherwise
-            if ((this.options && !this.options.async) || action === 'cancel') this.close();
+            if ((this.options && !this.options.async && this.options.autoClose !== false) || action === 'cancel') this.close();
         },
 
         onKeypress: function (e) {
@@ -371,6 +378,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // use disableFormElements here, so when resuming, the correct disabled status can be set again (resume -> idle -> enableFormElements needs the correct marker classes)
             this.disableFormElements();
             this.toggleAriaHidden(false);
+            this.trigger('pause');
         },
 
         resume: function () {
@@ -384,6 +392,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             $(document.body).addClass('modal-open');
             this.toggleAriaHidden(true);
             this.idle();
+            this.trigger('resume');
         }
     });
 
@@ -421,8 +430,13 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         this.enableFormElements();
         this.$body.parent().idle();
         this.$body.removeClass('invisible').css('opacity', '');
-        //if ($.contains(this.el, this.activeElement)) $(this.activeElement).focus();
-        this.setInitialFocus(this.options);
+        if (this.autoFocusOnIdle) {
+            // try to restore focus (active element is stored in busy function)
+            if ($.contains(this.el, this.activeElement)) {
+                $(this.activeElement).focus();
+                // fallback, to keep focus in the dialog
+            } else this.setFocus(this.options);
+        }
         this.activeElement = null;
         return this;
     }

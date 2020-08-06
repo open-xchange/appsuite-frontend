@@ -560,7 +560,7 @@ define('io.ox/core/desktop', [
                         self.trigger('launch', self);
                         ox.trigger('app:start', self);
                         // add cloasable apps that don't use floating windows to the taskbar
-                        if (self.get('closable') && !self.get('floating') && !_.device('smartphone')) FloatingWindow.addNonFloatingApp(self);
+                        if (self.get('closable') && !self.get('floating') && !_.device('smartphone')) FloatingWindow.addNonFloatingApp(self, options);
                     },
                     function fail() {
                         var autoStart = require('settings!io.ox/core').get('autoStart');
@@ -594,9 +594,9 @@ define('io.ox/core/desktop', [
             });
         },
 
-        quit: function (force) {
+        quit: function (force, options) {
             // call quit function
-            var def = force ? $.when() : (this.get('quit').call(this) || $.when()), win, self = this;
+            var def = force ? $.when() : (this.get('quit').call(this, options) || $.when()), win, self = this;
             return def.done(function () {
                 // not destroyed?
                 if (force && self.destroy) {
@@ -652,6 +652,7 @@ define('io.ox/core/desktop', [
                         if (data) {
                             data.floating = self.get('floating');
                             data.id = uniqueID;
+                            data.cid = self.cid;
                             data.timestamp = _.now();
                             data.version = ox.version;
                             data.ua = navigator.userAgent;
@@ -833,11 +834,12 @@ define('io.ox/core/desktop', [
                         var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
                         return ox.load(requirements).then(function (m) {
                             var app = m.getApp(obj.passPointOnGetApp ? obj.point : undefined);
+                            if (obj.cid) app.cid = obj.cid;
                             // floating windows are restored as dummies. On click the dummy starts the complete app. This speeds up the restore process.
                             if (_.device('!smartphone') && (app.options.floating || app.options.closable)) {
                                 var model, win;
                                 if (app.options.floating) {
-                                    model = new FloatingWindow.Model({ minimized: true, id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon, name: app.options.name });
+                                    model = new FloatingWindow.Model({ cid: obj.cid, minimized: true, id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon, name: app.options.name });
                                     win = new FloatingWindow.TaskbarElement({ model: model }).render();
                                     FloatingWindow.collection.add(model);
                                 } else {
@@ -929,6 +931,15 @@ define('io.ox/core/desktop', [
         reuse: function (cid) {
             var app = ox.ui.apps.find(function (m) { return m.cid === cid; });
             if (app) {
+                // Special case: There exists a unrestored restore point for the same app.
+                // Then, there must exist a corresponding model which will react on the lazyload event
+                if (app.get('state') === 'ready') {
+                    var model = FloatingWindow.collection.findWhere({ cid: cid });
+                    if (model) {
+                        model.trigger('lazyload');
+                        return true;
+                    }
+                }
                 app.launch();
                 return true;
             }
@@ -1305,8 +1316,8 @@ define('io.ox/core/desktop', [
                     element.css('padding-right', width);
                 }
 
-                this.setHeader = function (node) {
-                    var position = _.device('!desktop') ? 'top' : coreSettings.get('features/windowHeaderPosition', 'bottom');
+                this.setHeader = function (node, position) {
+                    position = position || (_.device('!desktop') ? 'top' : coreSettings.get('features/windowHeaderPosition', 'bottom'));
                     if (position === 'top') {
                         this.nodes.header.append(node.addClass('container'));
                         this.nodes.outer.addClass('header-top');
@@ -1323,6 +1334,35 @@ define('io.ox/core/desktop', [
                 };
 
                 this.show = function (cont, resume) {
+                    // this is for apps that have a lot of rampup to do
+                    // once they are ready trigger revealApp and it shows up
+                    if (this.app && this.app.get('startHidden')) {
+                        this.app.once('revealApp', function () {
+                            self.app.set('startHidden', false);
+
+                            if (self.app.get('prefetchDom')) {
+                                self.nodes.outer
+                                    .removeAttr('aria-hidden')
+                                    .css('visibility', '');
+                            }
+
+                            // setting resume true, forces the app to become the current window.
+                            self.show(cont, true);
+                        });
+
+                        // for apps that need DOM access while loading  e.g. to calculate width
+                        if (this.app.get('prefetchDom')) {
+                            // for a11y to hide app and prevent focus loss, but enable css calculations
+                            this.nodes.outer
+                                .attr('aria-hidden', true)
+                                .css('visibility', 'hidden');
+
+                            this.nodes.outer.prependTo(pane);
+                        }
+
+                        return this;
+                    }
+
                     var appchange = false;
                     // the viewer can be a plugged application that must have a different handling that the root application
                     var appPlugged = this.app && this.app.options.plugged;

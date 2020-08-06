@@ -10,17 +10,28 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/tk/doc-converter-utils', [
-    'io.ox/core/http'
-], function (CoreHTTP) {
+    'io.ox/core/http',
+    'gettext!io.ox/core'
+], function (CoreHTTP, gt) {
 
     'use strict';
+
+    /**
+     *  Error messages for the document converter.
+     */
+    var DOC_CONVERTER_ERROR_MESSAGES = {
+        importError: gt('An error occurred while loading the document so it cannot be displayed.'),
+        filterError: gt('An error occurred while converting the document so it cannot be displayed.'),
+        passwordProtected: gt('This document is password protected and cannot be displayed.'),
+        invalidFilename: gt('The PDF could not be exported. The file name contains invalid characters:')
+    };
 
     /**
      * Provides static methods for communication with the document converter.
      */
     var Utils = {};
 
-    // constants --------------------------------------------------------------
+    // Utils constants --------------------------------------------------------
 
     /**
      * The name of the document converter server module.
@@ -43,12 +54,6 @@ define('io.ox/core/tk/doc-converter-utils', [
      *
      * @param {Object} [params]
      *  Additional parameters to be inserted into the URL (optional).
-     *
-     * @param {Object} [options]
-     *  Optional parameters:
-     *  @param {Boolean} [options.encodeUrl=false]
-     *      If set to true, special characters not allowed in URLs will be
-     *      encoded.
      *
      * @returns {String|Undefined}
      *  The final URL of the server request; or undefined,
@@ -241,6 +246,7 @@ define('io.ox/core/tk/doc-converter-utils', [
         // the Guard parameters
         var file_options = null;
         var file_options_params = null;
+        var security = null;
         var meta = null;
         // the resulting params
         var params = null;
@@ -267,9 +273,12 @@ define('io.ox/core/tk/doc-converter-utils', [
                 params.decrypt = true;
                 params.cryptoAuth = file_options_params ? file_options_params.cryptoAuth : '';
                 params.cryptoAction = file_options_params ? file_options_params.cryptoAction : '';
+
             } else { // Call for viewer, crypto info will be in originalModel
-                params.cryptoAuth = originalModel.auth ? originalModel.auth : '';
-                params.decrypt = Boolean(originalModel && originalModel.security && originalModel.security.decrypted);
+                security = originalModel && originalModel.security;
+
+                params.cryptoAuth = (security && security.authentication) || originalModel.auth || '';
+                params.decrypt = Boolean(security && security.decrypted);
             }
 
         } else if (model.isPIMAttachment()) {
@@ -296,5 +305,44 @@ define('io.ox/core/tk/doc-converter-utils', [
         return params;
     };
 
+    // Error handling ---------------------------------------------------------
+
+    Utils.isDocConverterError = function (docConverterResponse) {
+        return docConverterResponse && docConverterResponse.origin && (docConverterResponse.origin === 'DocumentConverter');
+    };
+
+    Utils.getErrorTextFromResponse = function (docConverterResponse) {
+        // return 'null' when it's not a docConverterResponse,
+        // this behavior is utilized in different parts of the code
+        if (!Utils.isDocConverterError(docConverterResponse)) { return null; }
+
+        var cause = docConverterResponse && docConverterResponse.cause;
+        var errorParams = docConverterResponse;
+        return Utils.getErrorText(cause, errorParams);
+    };
+
+    Utils.getErrorText = function (cause, errorParams) {
+
+        switch (cause) {
+            case 'importError':
+                return DOC_CONVERTER_ERROR_MESSAGES.importError;
+
+            case 'filterError':
+                return DOC_CONVERTER_ERROR_MESSAGES.filterError;
+
+            case 'passwordProtected':
+                return DOC_CONVERTER_ERROR_MESSAGES.passwordProtected;
+
+            case 'invalidFilename':
+                return DOC_CONVERTER_ERROR_MESSAGES.invalidFilename + ' "' + errorParams.invalidCharacters.join('') + '"';
+
+            default:
+                // return 'null' when no or an unknown cause is provided,
+                // this behavior is utilized in different parts of the code
+                return null;
+        }
+    };
+
     return Utils;
 });
+

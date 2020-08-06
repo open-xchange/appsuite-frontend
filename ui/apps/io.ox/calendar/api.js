@@ -19,8 +19,9 @@ define('io.ox/calendar/api', [
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'io.ox/calendar/model',
-    'io.ox/core/capabilities'
-], function (http, Pool, CollectionLoader, folderApi, util, models, capabilities) {
+    'io.ox/core/capabilities',
+    'settings!io.ox/calendar'
+], function (http, Pool, CollectionLoader, folderApi, util, models, capabilities, settings) {
 
     'use strict';
 
@@ -28,6 +29,17 @@ define('io.ox/calendar/api', [
             // do not add model to pool if it is a master model of a recurring event
             if (data.rrule && !data.recurrenceId) return true;
             return false;
+        },
+        removeFromPool = function (event) {
+            // cannot find event when it is recurrence master
+            var events = api.pool.getModel(util.cid(event));
+            if (events) events = [events];
+            else events = api.pool.findRecurrenceModels(event);
+            events.forEach(function (evt) {
+                evt.collection.remove(evt);
+                api.trigger('delete', evt.attributes);
+                api.trigger('delete:' + util.cid(evt), evt.attributes);
+            });
         },
         // updates pool based on writing operations response (create update delete etc)
         processResponse = function (response, options) {
@@ -42,17 +54,7 @@ define('io.ox/calendar/api', [
                 api.trigger('process:create:' + util.cid(event), event);
             });
 
-            _(response.deleted).each(function (event) {
-                // cannot find event when it is recurrence master
-                var events = api.pool.getModel(util.cid(event));
-                if (events) events = [events];
-                else events = api.pool.findRecurrenceModels(event);
-                events.forEach(function (evt) {
-                    evt.collection.remove(evt);
-                    api.trigger('delete', evt.attributes);
-                    api.trigger('delete:' + util.cid(evt), evt.attributes);
-                });
-            });
+            _(response.deleted).each(removeFromPool);
 
             _(response.updated).each(function (event) {
                 if (isRecurrenceMaster(event)) {
@@ -139,20 +141,27 @@ define('io.ox/calendar/api', [
                         return result;
                     }).catch(function (err) {
                         if (err.code !== 'CAL-5072') throw err;
-
                         var start = moment(opt.params.rangeStart).utc(),
                             end = moment(opt.params.rangeEnd).utc(),
-                            middle = moment(start).add(end.diff(start, 'ms') / 2, 'ms');
+                            diff = end.diff(start, 'ms'),
+                            middle = moment(start).add(diff / 2, 'ms');
+                        // stop requests when timeframe is smaller than an hour, see Bug 68641
+                        if (diff <= 3600000) {
+                            throw err;
+                        }
 
-                        return request(getParams(opt, start, middle), method).then(function (data1) {
-                            return request(getParams(opt, middle, end), method).then(function (data2) {
-                                if (!_.isArray(data1)) return merge(data1, data2);
-                                data1.forEach(function (d, index) {
-                                    d.events = merge(d.events, data2[index].events);
-                                });
-                                return data1;
+                        // use multiple to speed this up
+                        http.pause();
+                        var def = $.when(request(getParams(opt, start, middle), method), request(getParams(opt, middle, end), method)).then(function (data1, data2) {
+                            if (!_.isArray(data1)) return merge(data1, data2);
+                            data1.forEach(function (d, index) {
+                                d.events = merge(d.events, data2[index].events);
                             });
+                            return data1;
                         });
+                        http.resume();
+
+                        return def;
                     });
                 };
             }()),
@@ -180,6 +189,14 @@ define('io.ox/calendar/api', [
                         extendedEntities: true
                     }
                 }).then(function (data) {
+                    if (data.id !== obj.id) {
+                        // something's wrong, probably an exception was created by another client.
+                        // real error vs just a new exception
+                        if (data.seriesId !== obj.id) {
+                            // to help in debugging if needed
+                            console.error('calendar error: id ' + obj.id + ' was requested, but id ' + data.id + ' was returned', obj, data);
+                        }
+                    }
                     if (isRecurrenceMaster(data)) return api.pool.get('detail').add(data);
                     api.pool.propagateAdd(data);
                     return api.pool.getModel(data);
@@ -312,7 +329,8 @@ define('io.ox/calendar/api', [
                                 return api.pool.get('detail').add(obj);
                             }
                             var cid = util.cid(obj);
-                            return api.pool.getModel(cid);
+                            // in case of caching issues still return the request results. no one wants empty reminders
+                            return api.pool.getModel(cid) || obj;
                         });
                     });
                 };
@@ -322,6 +340,9 @@ define('io.ox/calendar/api', [
                 options = options || {};
 
                 obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+                obj = _(obj).pick(function (value) {
+                    return value !== '' && value !== undefined && value !== null;
+                });
 
                 var params = {
                         action: 'new',
@@ -387,6 +408,10 @@ define('io.ox/calendar/api', [
                 options = options || {};
 
                 obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+                obj = _(obj).mapObject(function (value) {
+                    if (value === '') return null;
+                    return value;
+                });
 
                 var def,
                     params = {
@@ -514,7 +539,7 @@ define('io.ox/calendar/api', [
             confirm: function (obj, options) {
                 options = options || {};
                 // no empty string comments (clutters database)
-                // if comment schould be deleted, send null. Just like in settings
+                // if comment should be deleted, send null. Just like in settings
                 if (obj.attendee.comment === '') delete obj.attendee.comment;
 
                 // make sure alarms are explicitely set to null when declining, otherwise the user is reminded of declined appointments, we don't want that
@@ -616,8 +641,8 @@ define('io.ox/calendar/api', [
                     until: moment().startOf('day').utc().add(1, 'day').format(util.ZULU_FORMAT)
                 }, options);
 
-                // entity for users ressources etc, uri for externals
-                var order = _(list).map(function (attendee) { return attendee.entity || attendee.uri; }),
+                // only use uri. entity only works for internal users/resources, which can also appear as external in some cases, causing ugly issues
+                var order = _(list).map(function (attendee) { return attendee.uri; }),
                     def = $.Deferred();
 
                 http.PUT({
@@ -631,7 +656,7 @@ define('io.ox/calendar/api', [
                 }).then(function (items) {
                     // response order might not be the same as in the request. Fix that.
                     items.sort(function (a, b) {
-                        return order.indexOf(a.attendee.entity || a.attendee.uri) - order.indexOf(b.attendee.entity || b.attendee.uri);
+                        return order.indexOf(a.attendee.uri) - order.indexOf(b.attendee.uri);
                     });
                     def.resolve(items);
                 },
@@ -752,28 +777,82 @@ define('io.ox/calendar/api', [
             },
 
             getAlarms: function () {
+                var params = {
+                    action: 'pending',
+                    rangeEnd: moment.utc().add(10, 'hours').format(util.ZULU_FORMAT),
+                    actions: 'DISPLAY,AUDIO'
+                };
+
+                if (!settings.get('showPastReminders', true)) {
+                    // longest reminder time is 4 weeks before the appointment start. So 30 days should work just fine to reduce the ammount of possible reminders
+                    params.rangeStart = moment.utc().startOf('day').subtract(30, 'days').format(util.ZULU_FORMAT);
+                }
+
                 return http.GET({
                     module: 'chronos/alarm',
-                    params: {
-                        action: 'pending',
-                        rangeEnd: moment.utc().add(10, 'hours').format(util.ZULU_FORMAT),
-                        actions: 'DISPLAY,AUDIO'
-                    }
+                    params: params
                 })
                 .then(function (data) {
+                    // only one alarm per event per type, keep the newest one
+                    data = _(data).chain().groupBy('action').map(function (alarms) {
+                        var alarmsPerEvent = _(alarms).groupBy(function (alarm) { return util.cid({ id: alarm.eventId, folder: alarm.folder, recurrenceId: alarm.recurrenceId }); });
+
+                        alarmsPerEvent = _(alarmsPerEvent).map(function (eventAlarms) {
+                            var alarmsToAcknowledge = 0;
+                            // yes length -1 is correct we want to keep at least one
+                            for (; alarmsToAcknowledge < eventAlarms.length - 1; alarmsToAcknowledge++) {
+                                // current alarm is already in the future or next alarm is in the future
+                                if (moment(eventAlarms[alarmsToAcknowledge].time).valueOf() > _.now() ||
+                                    (moment(eventAlarms[alarmsToAcknowledge].time).valueOf() < _.now() && moment(eventAlarms[alarmsToAcknowledge + 1].time).valueOf() > _.now())) {
+                                    // we want to keep the newest alarm that is ready to show if there is one
+                                    break;
+                                }
+                            }
+                            // acknowledge old alarms
+                            api.acknowledgeAlarm(eventAlarms.slice(0, alarmsToAcknowledge));
+                            // slice acknowledged alarms
+                            eventAlarms = eventAlarms.slice(alarmsToAcknowledge);
+
+                            return eventAlarms;
+                        });
+
+                        return alarmsPerEvent;
+                    }).flatten().value();
+
                     // add alarmId as id (makes it easier to use in backbone collections)
                     data = _(data).map(function (obj) {
                         obj.id = obj.alarmId;
+                        obj.appointmentCid = util.cid({ id: obj.eventId, folder: obj.folder, recurrenceId: obj.recurrenceId });
                         return obj;
                     });
 
-                    api.trigger('resetChronosAlarms', data);
+                    // no filtering active
+                    if (settings.get('showPastReminders', true)) {
+                        api.trigger('resetChronosAlarms', data);
+                        return;
+                    }
+
+                    api.getList(data).done(function (models) {
+                        data = _(data).filter(function (alarm) {
+                            var model = _(models).findWhere({ cid: alarm.appointmentCid });
+                            // Show only alarms with matching recurrenceId
+                            if (!model) return false;
+                            // if alarm is scheduled after the appointments end we will show it
+                            if (model.getMoment('endDate').valueOf() < moment(alarm.time).valueOf()) return true;
+
+                            // if the appointment is over we will not show any alarm for it
+                            return model.getMoment('endDate').valueOf() > _.now();
+                        });
+                        api.trigger('resetChronosAlarms', data);
+                    });
                 });
             },
 
             acknowledgeAlarm: function (obj) {
+
                 if (!obj) return $.Deferred().reject();
                 if (_(obj).isArray()) {
+                    if (obj.length === 0) return $.when();
                     http.pause();
                     _(obj).each(function (alarm) {
                         api.acknowledgeAlarm(alarm);
@@ -915,6 +994,9 @@ define('io.ox/calendar/api', [
             }
         };
 
+    // if the setting for past appointment reminders changes, we must get fresh ones , might be less or more alarms now
+    settings.on('change:showPastReminders', api.getAlarms);
+
     ox.on('refresh^', function () {
         api.refresh();
     });
@@ -998,6 +1080,16 @@ define('io.ox/calendar/api', [
                 collections = this.getByFolder(folder).filter(function (collection) {
                     return !!collection.get(cid);
                 });
+            // if this is a cid from a public folder we need to check the allPublic collections too
+            var folderData = folderApi.pool.getModel(folder);
+            if (folderData && folderData.is('public')) {
+                collections.push.apply(
+                    collections,
+                    this.getByFolder('cal://0/allPublic').filter(function (collection) {
+                        return !!collection.get(cid);
+                    })
+                );
+            }
             if (collections.length === 0) return [this.get('detail')];
             return collections;
         },
@@ -1009,7 +1101,7 @@ define('io.ox/calendar/api', [
                     end = params.end;
                 if (params.view === 'list') {
                     start = moment().startOf('day').valueOf();
-                    end = moment().startOf('day').add((collection.offset || 0) + 1, 'month').valueOf();
+                    end = moment().startOf('day').add(collection.range, 'month').valueOf();
                 }
                 if (this.getTimestamp('endDate') <= start) return false;
                 if (this.getTimestamp('startDate') >= end) return false;

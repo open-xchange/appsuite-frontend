@@ -69,6 +69,5 @@ Scenario('[C7737] Create Task from email', async (I, users, mail) => {
     // 5. Mark the created reminder.
     // Task is created manually. No need to mark it manually.
 
-    I.waitForVisible('~Task Details');
-    I.waitForText('Deutscher Meister 1.FC Köln', 5, '.tasks-detailview');
+    I.waitForText('Deutscher Meister 1.FC Köln', 10, '.tasks-detailview');
 });

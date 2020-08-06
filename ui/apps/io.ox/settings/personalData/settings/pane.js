@@ -160,7 +160,7 @@ define('io.ox/settings/personalData/settings/pane', [
                 .build(function () {
                     this.$body.append($('<div>').text(options.text));
                 })
-                .addCancelButton({ left: true })
+                .addCancelButton()
                 .addButton({ className: 'btn-primary', action: options.action, label: options.label })
                 .on('action', def.resolve)
                 .open();

@@ -285,9 +285,9 @@ define('io.ox/calendar/freetime/timeView', [
                 tooltipContainer = baton.view.headerNodeRow1.parent().parent().parent();
 
             _(baton.model.get('attendees').models).each(function (attendee) {
-                var attendeeTable = $('<div class="appointment-table">').attr('data-value', attendee.get('entity') || attendee.get('uri')).appendTo(table);
+                var attendeeTable = $('<div class="appointment-table">').attr('data-value', attendee.get('uri')).appendTo(table);
 
-                _(baton.model.get('timeSlots')[attendee.get('entity') || attendee.get('uri')]).each(function (timeSlot, index) {
+                _(baton.model.get('timeSlots')[attendee.get('uri')]).each(function (timeSlot, index) {
                     var event;
                     // analyze the timeslot to see if there is an event, and if so check the start dates
                     if (timeSlot.event) {
@@ -549,7 +549,7 @@ define('io.ox/calendar/freetime/timeView', [
                 self = this;
 
             _(this.model.get('attendees').toJSON()).each(function (attendee) {
-                if (!missingAppointmentInfo && !_(self.model.get('timeSlots')).has([attendee.entity || attendee.uri])) missingAppointmentInfo = true;
+                if (!missingAppointmentInfo && !_(self.model.get('timeSlots')).has([attendee.uri])) missingAppointmentInfo = true;
             });
 
             if (missingAppointmentInfo) {
@@ -562,7 +562,10 @@ define('io.ox/calendar/freetime/timeView', [
         },
 
         // use debounce because participants can change rapidly if groups or distributionlists are resolved
-        getAppointments: _.debounce(function () { this.getAppointmentsInstant(true); }, 10),
+        getAppointments: _.debounce(function () {
+            if (this.disposed) return;
+            this.getAppointmentsInstant(true);
+        }, 10),
 
         getAppointmentsInstant: function (addOnly) {
             // save scrollposition or it is lost when the busy animation is shown
@@ -572,7 +575,7 @@ define('io.ox/calendar/freetime/timeView', [
                 this.keepScrollpos = this.positionToTime(oldScrollPos / oldWidth * 100);
             }
             // render busy animation
-            this.bodyNode.busy(true);
+            this.bodyNode.busy({ empty: true });
             // get fresh appointments
             var self = this,
                 from,
@@ -586,7 +589,7 @@ define('io.ox/calendar/freetime/timeView', [
             if (addOnly === true) {
                 var keys = _(self.model.get('timeSlots')).keys();
                 attendees = _(attendees).filter(function (attendee) {
-                    return _(keys).indexOf(String(attendee.entity || attendee.uri)) === -1;
+                    return _(keys).indexOf(String(attendee.uri)) === -1;
                 });
             }
 
@@ -613,7 +616,7 @@ define('io.ox/calendar/freetime/timeView', [
 
                 for (var i = 0; i < attendees.length; i++) {
                     // only events for now
-                    timeSlots[attendees[i].entity || attendees[i].uri] = _.compact(items[i].freeBusyTime);
+                    timeSlots[attendees[i].uri] = _.compact(items[i].freeBusyTime);
                 }
                 // remove busy animation again
                 self.bodyNode.idle();
@@ -628,7 +631,7 @@ define('io.ox/calendar/freetime/timeView', [
         },
 
         removeParticipant: function (model) {
-            var node = this.bodyNode.find('.appointment-table[data-value="' + (model.get('entity') || model.get('uri')) + '"]'),
+            var node = this.bodyNode.find('.appointment-table[data-value="' + (model.get('uri')) + '"]'),
                 timeSlots = this.model.get('timeSlots');
             if (node.length) {
                 node.remove();
@@ -636,7 +639,7 @@ define('io.ox/calendar/freetime/timeView', [
                 // trigger scroll for lazyload
                 this.parentView.participantsSubview.bodyNode.trigger('scroll');
             }
-            delete timeSlots[model.get('entity') || model.get('uri')];
+            delete timeSlots[model.get('uri')];
             // silent or we would trigger a redraw
             this.model.set('timeSlots', timeSlots, { silent: true });
         },

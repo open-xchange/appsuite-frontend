@@ -24,8 +24,8 @@ After(async (users) => {
     await users.removeAll();
 });
 
-// skip due to MWB-219
-Scenario.skip('[C83383] mail folders using “Permisions” dialog', async (I, users, dialogs) => {
+Scenario('[C83383] mail folders using “Permisions” dialog', async (I, users, dialogs) => {
+    const busystate = locate('.modal modal-body.invisible');
     // Alice shares a mail folder
     I.login('app=io.ox/mail');
     I.waitForText('Spam', 5, '.folder-tree');
@@ -33,6 +33,9 @@ Scenario.skip('[C83383] mail folders using “Permisions” dialog', async (I, u
     I.openFolderMenu('Spam');
     I.clickDropdown('Permissions');
     I.waitForText('Permissions for folder');
+    I.waitForDetached(busystate);
+    I.wait(0.5);
+
     I.click('~Select contacts');
     dialogs.waitForVisible();
     I.waitForElement('.modal .list-view.address-picker li.list-item');

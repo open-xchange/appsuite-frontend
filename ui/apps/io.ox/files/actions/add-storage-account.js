@@ -72,19 +72,35 @@ define('io.ox/files/actions/add-storage-account', [
             view = new OAuth.Views.ServicesListView({
                 collection: new Backbone.Collection(availableServices)
             });
-        view.listenTo(view, 'select', function (service) {
-            createAccount(service).fail(function (e) {
-                if (e && e.code === 'EEXISTS') {
-                    //#. error message shown to the user after trying to create a duplicate account
-                    yell('error', gt('Account already exists'));
-                } else if (e) {
-                    yell(e);
-                } else {
-                    yell('error', gt('Account could not be added'));
-                }
-            }).always(function () {
-                view.trigger('done');
+
+        _.each(this.options.caps, function (cap) {
+            filestorageApi.getService(cap).done(function (data) {
+                view.collection.add([{ id: data.attributes.id, displayName: data.attributes.displayName, type: 'basicAuthentication' }]);
             });
+        });
+
+        view.listenTo(view, 'select', function (service) {
+            if (service.get('type') === 'basicAuthentication') {
+                ox.load(['io.ox/files/actions/basic-authentication-account']).done(function (add) {
+                    add('create', service).always(function () {
+                        view.trigger('done');
+                    });
+                });
+            } else {
+                createAccount(service).fail(function (e) {
+                    if (e && e.code === 'EEXISTS') {
+                        //#. error message shown to the user after trying to create a duplicate account
+                        yell('error', gt('Account already exists'));
+                    } else if (e) {
+                        yell(e);
+                    } else {
+                        yell('error', gt('Account could not be added'));
+                    }
+                }).always(function () {
+                    view.trigger('done');
+                });
+            }
+
         });
         view.listenTo(view, 'done', function () {
             view.stopListening();
@@ -107,8 +123,11 @@ define('io.ox/files/actions/add-storage-account', [
         dialog.$body.append(view.render().$el);
     }
 
-    return function () {
-        return new ModalDialog({ title: gt('Add storage account'), width: 576 })
+    return function (caps) {
+        return new ModalDialog({
+            title: gt('Add storage account'),
+            width: 576,
+            caps: caps })
             .addButton({ label: gt('Close'), action: 'close' })
             .build(drawContent)
             .open();

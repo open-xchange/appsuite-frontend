@@ -10,9 +10,8 @@
  * Copyright (C) 2016-2020 OX Software GmbH
  */
 define('io.ox/multifactor/api', [
-    'io.ox/core/http',
-    'static/3rd.party/purify.min.js'
-], function (http, DOMPurify) {
+    'io.ox/core/http'
+], function (http) {
 
     'use strict';
 
@@ -59,14 +58,16 @@ define('io.ox/multifactor/api', [
                 ));
         },
         getDevices: function (type) {
-            var devices = [];
-            return $.when(
-                http.GET({
-                    module: 'multifactor/device',
-                    params: { action: 'all' },
-                    force: true
-                }).then(function (data) {
+            return require(['static/3rd.party/purify.min.js']).then(function (DOMPurify) {
+                return $.when(
+                    http.GET({
+                        module: 'multifactor/device',
+                        params: { action: 'all' },
+                        force: true
+                    })
+                ).then(function (data) {
                     if (_.isArray(data)) {
+                        var devices = [];
                         data.forEach(function (device) {
                             // make sure name is a string (See Bug 66936)
                             device.name = DOMPurify.sanitize(device.name) + '';
@@ -93,7 +94,8 @@ define('io.ox/multifactor/api', [
                 }, function (fail) {
                     checkError(fail);
                     return $.Deferred().reject(fail);
-                }));
+                });
+            });
         },
         deleteDevice: function (provider, deviceId) {
             var def = $.Deferred();

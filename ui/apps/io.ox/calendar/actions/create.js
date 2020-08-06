@@ -62,7 +62,7 @@ define('io.ox/calendar/actions/create', [
             title: gt('Appointments in public calendars'),
             description: gt('The selected calendar "%1$s" is public. Do you really want to create an appointment in this calendar?', folderTitle),
             width: '550' })
-        .addCancelButton({ left: true })
+        .addCancelButton()
         .addButton({ label: gt('Create in public calendar'), action: 'create' })
         .on('create', function () {
             openEditDialog(params);

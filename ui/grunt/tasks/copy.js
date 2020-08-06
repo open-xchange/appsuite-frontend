@@ -20,8 +20,11 @@ module.exports = function (grunt) {
         momentLanguages.push(file.split('.').shift());
     });
 
-    var pkgVersion = process.env.VERSION || grunt.config('pkg.version'),
-        version = String(pkgVersion + '.' + grunt.template.date(new Date(), 'yyyymmdd.hhMMss'));
+    var buildDate = grunt.template.date(new Date(), 'yyyymmdd.hhMMss'),
+        pkgVersion = process.env.VERSION || grunt.config('pkg.version'),
+        version = String(pkgVersion + '.' + buildDate);
+
+    grunt.config('pkg.buildDate', buildDate);
 
     var process_options = {
         version: version,

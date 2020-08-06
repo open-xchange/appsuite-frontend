@@ -83,7 +83,12 @@ define('io.ox/core/folder/tree', [
             if (options.abs) this.$el.addClass('abs');
 
             // add contextmenu?
-            if (options.contextmenu) _.defer(this.renderContextMenu.bind(this));
+            if (options.contextmenu) {
+                _.defer(function () {
+                    if (this.disposed) return;
+                    this.renderContextMenu();
+                }.bind(this));
+            }
         },
 
         // convenience function
@@ -113,7 +118,10 @@ define('io.ox/core/folder/tree', [
             if (id === undefined) return;
             this.onAppear(id, function () {
                 // defer selection; might be too fast otherwise
-                _.defer(this.selection.set.bind(this.selection, id));
+                _.defer(function () {
+                    if (this.disposed) return;
+                    this.selection.set(id);
+                }.bind(this));
                 this.trigger('afterAppear');
             });
         },
@@ -200,7 +208,7 @@ define('io.ox/core/folder/tree', [
             if (!pos.target.is('a.contextmenu-control')) pos.target = pos.target.find('.contextmenu-control').first();
 
             _.defer(function () {
-
+                if (this.disposed) return;
                 this.$dropdownMenu.css({ top: pos.top, left: pos.left, bottom: 'auto' }).empty().busy();
                 this.dropdown.$toggle = pos.target;
                 this.$dropdownToggle.dropdown('toggle');
@@ -265,7 +273,8 @@ define('io.ox/core/folder/tree', [
                 ul = this.$dropdownMenu.empty(),
                 point = this.getContextMenuId(contextmenu),
                 view = this,
-                favorite = this.selection.get('data-favorite');
+                favorite = this.selection.get('data-favorite'),
+                dropdownToggle = this.$dropdownToggle;
             // get folder data and redraw
             api.get(id).done(function (data) {
                 var baton = new ext.Baton({ app: app, data: data, view: view, module: module, originFavorites: favorite });
@@ -297,6 +306,9 @@ define('io.ox/core/folder/tree', [
                     ul.find(view.focus).focus();
                 }
                 view.focus = false;
+            }).always(function () {
+                // remove marker class
+                dropdownToggle.removeClass('opening');
             });
         },
 
@@ -308,6 +320,8 @@ define('io.ox/core/folder/tree', [
             }
 
             function show() {
+                // add marker class to prevent keyboard handlers from closing halfway during opening (creates too small dropdown with wrong position)
+                this.$dropdownToggle.addClass('opening');
                 // desktop 'burger' vs. mobile-edit-mode
                 var contextmenu = this.dropdown.$toggle.attr('data-contextmenu') || this.selection.get('data-contextmenu');
                 // load relevant code on demand

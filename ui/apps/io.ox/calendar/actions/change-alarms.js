@@ -50,8 +50,9 @@ define('io.ox/calendar/actions/change-alarms', [
                 )
             );
         })
-        .addAlternativeButton({ action: 'cancel', label: gt('Cancel') })
-        .addButton({ action: 'ok', label: gt('Ok'), className: 'btn-primary' })
+        .addCancelButton()
+        //#. 'Change' as text for an apply button to change the reminder of an appointment alert via a modal dialog.
+        .addButton({ action: 'ok', label: gt('Change'), className: 'btn-primary' })
         .on('ok', function () {
             var params = { id: appointmentData.id, folder: appointmentData.folder, alarms: alarmsview.model.get('alarms') };
             if (options.single && appointmentData.recurrenceId) {

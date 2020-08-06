@@ -1,255 +1,32 @@
+# Andres Herrera <andres@workshop-chapina.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2018, 2019, 2020.
+# Jose Alba Perez <jose@workshop-chapina.com>, 2020.
 # Antje Faber <antje.faber@open-xchange.com>, 2009, 2010, 2012.
-# Andres Herrera <andres@workshop-chapina.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2018, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-09-27 11:36+0200\n"
-"Last-Translator: \n"
-"Language-Team: Spanish <ox7doc@workshop-chapina.com>\n"
+"PO-Revision-Date: 2020-04-26 00:02+0100\n"
+"Last-Translator: Jose Alba Perez <jose@workshop-chapina.com>\n"
+"Language-Team: Spanish <es@workshop-chapina.com>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.1.1\n"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Add another account"
-msgstr "Añadir otra cuenta"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Adding a code via text message"
-msgstr "Adición de un código mediante mensaje de texto"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Adding attachments"
-msgstr "Añadir adjuntos"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Adding further details"
-msgstr "Añadir más detalles"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Adding verification option"
-msgstr "Adición de opción de verificación"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"As an additional security feature, you can now require a second method of "
-"authentication, such as a text message, before logging into your account.  "
-"Would you like to see some information on this now?"
-msgstr ""
-"Como característica de seguridad adicional, ya puede necesitar un segundo "
-"método de autenticación, tal como un mensaje de texto, antes de iniciar "
-"sesión en su cuenta. ¿Le gustaría ver algo de información sobre esto?"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"At the top you can find the toolbar with many functions and additional "
-"options. You can easily create new folders, new files and much more."
-msgstr ""
-"En la parte superior puede encontrar la barra de herramientas con múltiples "
-"funciones y opciones adicionales. Puede crear fácilmente carpetas nuevas, "
-"archivos nuevos y mucho más."
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Authentication Requests"
-msgstr "Peticiones de autenticación"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Choose from two alternatives to share your files and folders. Use Invite "
-"people if you want to manage access rights and allow recipients to create "
-"and edit files. Or just get a link to let others view and download your "
-"files. You can use an expiration date and password protection if you like."
-msgstr ""
-"Elija entre dos alternativas para compartir sus archivos y carpetas. Utilice "
-"Invitar a personas si desea administrar los permisos de acceso y permitir a "
-"los destinatarios crear y editar archivos. O simplemente obtenga un enlace "
-"para que los demás vean y descarguen sus archivos. Puede utilizar una fecha "
-"de vencimiento y protección por contraseña si lo desea."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"Click on a letter on the left side of the navigation bar in order to display "
-"the corresponding contacts from the selected address book."
-msgstr ""
-"Haga clic en una letra a la izquierda de la barra de navegación para mostrar "
-"los contactos correspondientes de la libreta de direcciones seleccionada."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Clicking on a folder displays all the subfolders, documents, media and other "
-"files that it contains."
-msgstr ""
-"Al presionar sobre una carpeta se muestran todas las subcarpetas, "
-"documentos, archivos de medios y otros archivos que contenga."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Clicking on the view icon leads you to a preview of the selected file."
-msgstr ""
-"Al presionar en el icono de vista se muestra una previsualización del "
-"archivo seleccionado."
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Closing a square"
-msgstr "Cerrar un panel"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Collaborating"
-msgstr "Colaboración"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new email"
-msgstr "Componer una nuevo correo electrónico"
+"X-Generator: Lokalize 2.0\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "Creación de una nueva cita"
 
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Creating a new contact"
-msgstr "Creación de un nuevo contacto"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating a new task"
-msgstr "Creación de una nueva tarea"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Creating new items"
-msgstr "Creación de nuevos elementos"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create a new appointment, click on New in the toolbar."
+msgstr ""
+"Para crear una nueva cita, presione en Nuevo en la barra de herramientas."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating recurring appointments"
-msgstr "Creación de citas periódicas"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating recurring tasks"
-msgstr "Creación de tareas periódicas"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating the appointment"
-msgstr "Creación de la cita"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating the task"
-msgstr "Creación de la tarea"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Customizing the Portal"
-msgstr "Personalización del Portal"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Depending on the app, the toolbar contains various functions for creating, "
-"editing and organizing objects."
-msgstr ""
-"Dependiendo de la aplicación, la barra de herramientas contiene varias "
-"funciones para crear, editar y organizar objetos."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Detailed instructions for the single apps are located in System menu > Help."
-msgstr ""
-"Las instrucciones detalladas para las aplicaciones individuales se "
-"encuentran en el Menú del sistema > Ayuda."
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Devices can be removed once added if you so choose.  See help for additional "
-"details."
-msgstr ""
-"Los dispositivos se pueden eliminar una vez añadidos, si así lo elige. "
-"Consulte la ayuda para más detalles."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Did you know that you can edit text documents and spreadsheets online? Drive "
-"will automatically update your edited file, but thanks to versioning the "
-"original file stays available."
-msgstr ""
-"¿Sabía que puede editar documentos de texto y hojas de cálculo en línea? "
-"Drive actualizará automáticamente el archivo editado, pero gracias al "
-"control de versiones el archivo original permanece disponible."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Different views are available. Just select the one you like best."
-msgstr ""
-"Están disponibles varias vistas. Simplemente seleccione la que más le guste."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Displaying the help or the settings"
-msgstr "Visualización de la ayuda o de los ajustes"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Drag and drop"
-msgstr "Arrastrar y soltar"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Drive allows you to connect to other storage solutions if you already have a "
-"cloud storage account you use to save and sync your files. Simply click on "
-"the appropriate logo to access your existing data."
-msgstr ""
-"Drive permite conectar con otras soluciones de almacenamiento si ya dispone "
-"de otra cuenta de almacenamiento en la nube que utiliza para guardar y "
-"sincronizar sus archivos. Simplemente presione en el logotipo "
-"correspondiente para acceder a los datos existentes."
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"Edit a setting on the right side. In most of the cases, the changes are "
-"activated immediately."
-msgstr ""
-"Edite un ajuste en el lado derecho. En la mayoría de los casos, los cambios "
-"se activan inmediatamente."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Edit documents"
-msgstr "Editar documentos"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Editing multiple contacts"
-msgstr "Edición de múltiples contactos"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple emails"
-msgstr "Edición de múltiples correos electrónicos"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Editing multiple tasks"
-msgstr "Edición de múltiples tareas"
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Editing settings"
-msgstr "Edición de ajustes"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"Enter the email text into the main area. If the text format was set to HTML "
-"in the options, you can format the email text. To do so select a text part "
-"and then click an icon in the formatting bar."
-msgstr ""
-"Escriba el texto del correo en el área principal. Si el formato del texto se "
-"indicó como HTML en las opciones, puede dar formato al texto del correo. "
-"Para ello seleccione una parte del texto y presione en algún icono de la "
-"barra de formato."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"Enter the recipient's name into the recipients field. As soon as you typed "
-"the first letters, suggestions from the address books are displayed. To "
-"accept a recipient suggestion, click on it."
-msgstr ""
-"Escriba el nombre del destinatario en el campo de destinatarios. En cuanto "
-"escriba las primeras letras se mostrarán sugerencias a partir de las "
-"libretas de direcciones. Para aceptar una sugerencia, presione en ella."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Enter the subject into the subject field."
-msgstr "Escriba el asunto en el campo de asunto."
+msgid "Entering the appointment's data"
+msgstr "Introducción de los datos de la cita"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
@@ -259,273 +36,80 @@ msgstr ""
 "Introduzca el asunto, y las fechas de inicio y y fin de la cita. Los otros "
 "detalles son opcionales."
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Enter the subject, the start date, and a description."
-msgstr "Introduzca el asunto, la fecha de inicio y una descripción."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Entering billing information"
-msgstr "Introducción de información de facturación"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating recurring appointments"
+msgstr "Creación de citas periódicas"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Entering the appointment's data"
-msgstr "Introducción de los datos de la cita"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the email text"
-msgstr "Introducción del texto del correo electrónico"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the recipient's name"
-msgstr "Introducción del nombre del destinatario"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the subject"
-msgstr "Introducción del asunto"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Entering the task's data"
-msgstr "Introducción de los datos de la tarea"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "File details"
-msgstr "Detalles del archivo"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Folder content"
-msgstr "Contenido de la carpeta"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Folder tree"
-msgstr "Árbol de carpetas"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"From preview you can also select other options to help you manage and work "
-"on your files."
+"To create recurring appointments, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
 msgstr ""
-"Desde la vista previa puede también seleccionar otras opciones que le "
-"ayudarán a administrar y trabajar con sus archivos."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Further down you can add documents as attachments to the appointment."
-msgstr "Más abajo puede añadir documentos como adjuntos a la cita."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Further functions"
-msgstr "Funciones adicionales"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Further information"
-msgstr "Más información"
-
-#. Tour name; general introduction
-#: apps/io.ox/tours/main.js module:io.ox/tours
-msgid "Getting started"
-msgstr "Primeros pasos"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Halo view"
-msgstr "Vista Halo"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Here you can share files with your colleagues and external contacts. You can "
-"also collaborate on a document and set different access rights."
-msgstr ""
-"Aquí puede compartir archivos con sus colaboradores o contactos externos. "
-"Puede también colaborar en un documento y establecer diferentes permisos de "
-"acceso."
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "How the settings are organized"
-msgstr "Cómo están organizados los ajustes"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"If double-clicking on an email in the list, the email is opened in a "
-"separate window."
-msgstr ""
-"Si hace doble clic en un correo electrónico en la lista, el correo "
-"electrónico se abre en una ventana separada."
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "If you no longer want to display a square, click the delete icon."
-msgstr "Si ya no quiere ver más un panel, presione en el icono de borrar."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"In order to edit multiple emails at once, enable the checkboxes on the left "
-"side of the emails. If the checkboxes are not displayed, click on View > "
-"Checkboxes on the right side of the toolbar."
-msgstr ""
-"Para editar múltiples correos electrónicos a la vez, marque la casilla que "
-"hay a la izquierda de los correos. Si no aparecen las casillas de "
-"verificación, presione en Vista > Casillas de verificación a la derecha de "
-"la barra de herramientas."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"In this area you can find further functions, e.g. for adding attachments."
-msgstr ""
-"En este área puede encontrar más funciones, por ejemplo para añadir adjuntos."
+"Para crear citas periódicas, marque Repetir. Se muestran funciones para el "
+"establecimiento de los parámetros de repetición."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "Invitar a otros participantes"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Launching an app"
-msgstr "Lanzar una aplicación"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Navigation bar"
-msgstr "Barra de navegación"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Next"
-msgstr "Siguiente"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
-"On the left you can see the folder tree. It displays your folder structure "
-"and allows you to navigate to specific folders and subfolders. To make your "
-"life easier, we have already included folders for your Documents, Music, "
-"Pictures and Videos."
+"To invite other participants, enter their names in the field below "
+"Participants. To avoid appointment conflicts, click on Find a free time at "
+"the upper right side."
 msgstr ""
-"A la izquierda puede ver el árbol de carpetas. Se muestra la estructura de "
-"carpetas y le permite navegar a carpetas y subcarpetas concretas. Para "
-"hacerle la vida más fácil, hemos incluido carpetas para sus documentos, "
-"música, imágenes y vídeos."
+"Para invitar a otros participantes, introduzca su nombre en el campo que hay "
+"debajo de Participantes. Para evitar conflictos entre citas, presione en "
+"Buscar tiempo libre en la parte superior derecha."
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an email in a separate window"
-msgstr "Apertura de un correo electrónico en una ventana independiente"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Uso de la función de recordatorio"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Opening or closing the folder tree"
-msgstr "Abrir o cerrar el árbol de carpetas"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Para no olvidar la cita, utilice la función de recordatorio."
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the email settings"
-msgstr "Apertura de los ajustes de correo electrónico"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Adding attachments"
+msgstr "Añadir adjuntos"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Opening the help"
-msgstr "Abrir la ayuda"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Further down you can add documents as attachments to the appointment."
+msgstr "Más abajo puede añadir documentos como adjuntos a la cita."
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Opening the settings"
-msgstr "Abrir los ajustes"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating the appointment"
+msgstr "Creación de la cita"
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Preview files"
-msgstr "Vista previa de archivos"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Preview mode"
-msgstr "Modo de vista previa"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading email conversations"
-msgstr "Lectura de conversaciones recientes"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Reading the details"
-msgstr "Lectura de los detalles"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Removing"
-msgstr "Eliminación"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Searching for objects"
-msgstr "Búsqueda de objetos"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Second Factor Authentication"
-msgstr "Autenticación del segundo factor"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Select a view"
-msgstr "Seleccionar una vista"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create the appointment, click on Create at the lower left side."
+msgstr "Para crear la cita, presione en Crear en la parte inferior izquierda."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
 msgid "Selecting a view"
 msgstr "Selección de una vista"
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
-"Selecting the option for a code via text message, for example, will then ask "
-"you for a phone number."
+"To select one of the views like Day, Month or List, click on View in the "
+"toolbar. Select a menu entry from the Layout section."
 msgstr ""
-"La selección de la opción de un código mediante mensaje de texto, por "
-"ejemplo, le pedirá un número de teléfono."
+"Para seleccionar una de las vistas, tales como Día, Mes o Lista, presione en "
+"Vista en la barra de herramientas. Seleccione una entrada del menú desde la "
+"sección Disposición."
 
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an email to a contact"
-msgstr "Envío de un correo electrónico a un contacto"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "The calendar views"
+msgstr "Las vistas Calendario"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the email"
-msgstr "Envío del correo electrónico"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Share files"
-msgstr "Compartir archivos"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
-"Sharing files by inviting people does not only offer your recipients the "
-"option to create and edit files. Internal and external participants are also "
-"able to collaborate with you on text documents and spreadsheets at the same "
-"time."
+"The calendar views display a calendar sheet with the appointments for the "
+"selected time range."
 msgstr ""
-"Al compartir archivos con colaboradores no sólo ofrece a sus destinatarios "
-"la opción de crear y editar archivos. Los colaboradores internos y externos "
-"también pueden colaborar con usted en documentos de texto y hojas de cálculo "
-"al mismo tiempo."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Sharing options"
-msgstr "Opciones de compartición"
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Signing out"
-msgstr "Cierre de sesión"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Sorting tasks"
-msgstr "Ordenación de tareas"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your emails"
-msgstr "Ordenar sus correos electrónicos"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Start tour"
-msgstr "Comenzar visita guiada"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The Detail view"
-msgstr "La Vista de detalle"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The Detail view displays an object's content. Depending on the app, further "
-"functions for organizing objects can be found in the Detail view."
-msgstr ""
-"La Vista de detalle muestra el contenido de un objeto. Dependiendo de la "
-"aplicación, se pueden encontrar distintas funciones para la organización de "
-"los objetos en la Vista de detalle."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "The Drive app"
-msgstr "La aplicación Drive"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "The Drive app tour.txt"
-msgstr "El tour.txt de la aplicación Drive"
+"Las vistas de calendario muestran una hoja de calendario con las citas para "
+"el intervalo de tiempo seleccionado."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The List view"
@@ -541,107 +125,9 @@ msgstr ""
 "presiona en una cita, los datos de dicha cita y algunas funciones se "
 "muestran en la Vista de detalle."
 
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "The Portal"
-msgstr "El Portal"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid ""
-"The Portal informs you about current emails, appointments or social network "
-"news."
-msgstr ""
-"El Portal le informa sobre correos actuales, citas o noticias de las redes "
-"sociales."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "The calendar views"
-msgstr "Las vistas Calendario"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"The calendar views display a calendar sheet with the appointments for the "
-"selected time range."
-msgstr ""
-"Las vistas de calendario muestran una hoja de calendario con las citas para "
-"el intervalo de tiempo seleccionado."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"The file details side bar offers additional information about your files. "
-"Just enable the File details option from the View drop down menu and select "
-"a file to see the details."
-msgstr ""
-"La barra lateral de detalles del archivo ofrece información adicional sobre "
-"sus archivos. Tan sólo marque la opción Detalles de archivo en la lista "
-"desplegable Vista y seleccione un archivo para ver los detalles."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The folder tree"
-msgstr "El árbol de carpetas"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The list"
-msgstr "La lista"
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"The settings are organized in topics. Select the topic on the left side, e.g "
-"Basic settings or Mail."
-msgstr ""
-"La configuración se organiza por temas. Seleccione el tema en la parte "
-"izquierda, por ejemplo Configuración básica o Correo."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The toolbar"
-msgstr "La barra de herramientas"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Then the next time you log in, you will have to verify your identitity by "
-"entering the number sent to your phone."
-msgstr ""
-"Después, la siguiente vez que inicie sesión tendrá que verificar su "
-"identidad introduciendo el número enviado a su teléfono."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"This guided tour will briefly introduce you to the product. Get more "
-"detailed information in the tours for the single apps or in the online help."
-msgstr ""
-"Esta visita guiada le dará a conocer brevemente al producto. Obtenga "
-"información más detallada en las visitas guiadas de las aplicaciones "
-"individuales o en la ayuda en línea."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To add further details, click on Expand form."
-msgstr "Para añadir más detalles, presione Expandir formulario."
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid ""
-"To change the layout, drag a square's title to another position and drop it "
-"there."
-msgstr ""
-"Para cambiar la distribución, arrastre un panel desde el título a otra "
-"posición y suéltela allí."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To choose between the different views, click on View in the toolbar. Select "
-"a menu entry in the layout."
-msgstr ""
-"Para elegir entre diferentes vistas, presione en Vista en la barra de "
-"herramientas. Seleccione un elemento del menú en la presentación."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/mail.js
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr ""
-"Para redactar un nuevo correo electrónico, presione el icono Redactar nuevo "
-"correo electrónico en la barra de herramientas."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr ""
-"Para crear una nueva cita, presione en Nuevo en la barra de herramientas."
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Creating a new contact"
+msgstr "Creación de un nuevo contacto"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "To create a new contact, click on New > Add contact in the toolbar."
@@ -649,50 +135,33 @@ msgstr ""
 "Para crear un nuevo contacto, presione en Nuevo > Añadir contacto en la "
 "barra de herramientas."
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr ""
-"Para crear una nueva tarea, presione Nuevo en la barra de herramientas."
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Navigation bar"
+msgstr "Barra de navegación"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid ""
-"To create recurring appointments, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
+"Click on a letter on the left side of the navigation bar in order to display "
+"the corresponding contacts from the selected address book."
 msgstr ""
-"Para crear citas periódicas, marque Repetir. Se muestran funciones para el "
-"establecimiento de los parámetros de repetición."
+"Haga clic en una letra a la izquierda de la barra de navegación para mostrar "
+"los contactos correspondientes de la libreta de direcciones seleccionada."
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Sending an email to a contact"
+msgstr "Envío de un correo electrónico a un contacto"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid ""
-"To create recurring tasks, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
+"To send an email to the contact, click on an email address or on Send email "
+"in the toolbar."
 msgstr ""
-"Para crear tareas periódicas, marque Repetir. Se mostrarán funciones para "
-"establecer los parámetros repetición."
+"Para enviar un correo electrónico al contacto, presione en una dirección de "
+"correo electrónico o en Enviar correo en la barra de herramientas."
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create the appointment, click on Create at the lower left side."
-msgstr "Para crear la cita, presione en Crear en la parte inferior izquierda."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create the task, click on Create."
-msgstr "Para crear la tarea, presione en Crear."
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid ""
-"To display a square again or to display further information sources, click "
-"on Customize this page."
-msgstr ""
-"Para mostrar un panel de nuevo, o para mostrar otras fuentes de información, "
-"presione en Personalizar esta página."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To display the help or the settings, click the System menu icon in the menu "
-"bar."
-msgstr ""
-"Para mostrar la ayuda o los ajustes, presione el icono Menú del sistema de "
-"la barra de menús."
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Editing multiple contacts"
+msgstr "Edición de múltiples contactos"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid ""
@@ -705,53 +174,373 @@ msgstr ""
 "presione en Vista > Casillas de verificación a la derecha de la barra de "
 "herramientas."
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid ""
-"To edit multiple tasks at once, enable the checkboxes at the left side of "
-"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
-"on the right side of the toolbar."
-msgstr ""
-"Para editar múltiples tareas a la vez, marque las casillas situadas a la "
-"izquierda de las tareas. Si no se muestran las casillas de verificación, "
-"presione en Vista > Casillas de verificación a la derecha de la barra de "
-"herramientas."
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app"
+msgstr "La aplicación Drive"
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To enter billing information, click on Show details."
-msgstr ""
-"Para introducir información de facturación, presione en Mostrar detalles."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. To avoid appointment conflicts, click on Find a free time at "
-"the upper right side."
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
 msgstr ""
-"Para invitar a otros participantes, introduzca su nombre en el campo que hay "
-"debajo de Participantes. Para evitar conflictos entre citas, presione en "
-"Buscar tiempo libre en la parte superior derecha."
+"Bienvenido a su aplicación de almacenamiento en la nube. Esta visita guiada "
+"le dará a conocer su nueva solución de almacenamiento en línea - su único "
+"punto de acceso a los archivos almacenados en línea de todas sus cuentas. Es "
+"aquí donde puede subir y guardar sus archivos, compartirlos y sincronizarlos "
+"con diferentes dispositivos."
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder tree"
+msgstr "Árbol de carpetas"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. You can add documents as attachment to the task."
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
 msgstr ""
-"Para invitar a otros participantes, introduzca sus nombres en el campo que "
-"hay debajo de Participantes. Puede agregar documentos adjuntos a la tarea."
+"A la izquierda puede ver el árbol de carpetas. Se muestra la estructura de "
+"carpetas y le permite navegar a carpetas y subcarpetas concretas. Para "
+"hacerle la vida más fácil, hemos incluido carpetas para sus documentos, "
+"música, imágenes y vídeos."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder content"
+msgstr "Contenido de la carpeta"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+"Al presionar sobre una carpeta se muestran todas las subcarpetas, "
+"documentos, archivos de medios y otros archivos que contenga."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Select a view"
+msgstr "Seleccionar una vista"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr ""
+"Están disponibles varias vistas. Simplemente seleccione la que más le guste."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Toolbar"
+msgstr "Barra de herramientas"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
+msgstr ""
+"En la parte superior puede encontrar la barra de herramientas con múltiples "
+"funciones y opciones adicionales. Puede crear fácilmente carpetas nuevas, "
+"archivos nuevos y mucho más."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Upload a new file"
+msgstr "Subir un nuevo archivo"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
+msgstr ""
+"Para subir un nuevo archivo desde el dispositivo local, simplemente presione "
+"en Añadir archivo local y seleccione el archivo que desea subir. Es aún más "
+"fácil si sólo arrastra y suelta los archivos desde el dispositivo local a "
+"Drive. El archivo subido estará ahora disponible en Drive en todos sus "
+"dispositivos."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview files"
+msgstr "Vista previa de archivos"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr ""
+"Al presionar en el icono de vista se muestra una previsualización del "
+"archivo seleccionado."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview mode"
+msgstr "Modo de vista previa"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
+msgstr ""
+"Desde la vista previa puede también seleccionar otras opciones que le "
+"ayudarán a administrar y trabajar con sus archivos."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Share files"
+msgstr "Compartir archivos"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+"Aquí puede compartir archivos con sus colaboradores o contactos externos. "
+"Puede también colaborar en un documento y establecer diferentes permisos de "
+"acceso."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Sharing options"
+msgstr "Opciones de compartición"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use Invite "
+"people if you want to manage access rights and allow recipients to create "
+"and edit files. Or just get a link to let others view and download your "
+"files. You can use an expiration date and password protection if you like."
+msgstr ""
+"Elija entre dos alternativas para compartir sus archivos y carpetas. Utilice "
+"Invitar a personas si desea administrar los permisos de acceso y permitir a "
+"los destinatarios crear y editar archivos. O simplemente obtenga un enlace "
+"para que los demás vean y descarguen sus archivos. Puede utilizar una fecha "
+"de vencimiento y protección por contraseña si lo desea."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Collaborating"
+msgstr "Colaboración"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
+msgstr ""
+"Al compartir archivos con colaboradores no sólo ofrece a sus destinatarios "
+"la opción de crear y editar archivos. Los colaboradores internos y externos "
+"también pueden colaborar con usted en documentos de texto y hojas de cálculo "
+"al mismo tiempo."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Edit documents"
+msgstr "Editar documentos"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
+msgstr ""
+"¿Sabía que puede editar documentos de texto y hojas de cálculo en línea? "
+"Drive actualizará automáticamente el archivo editado, pero gracias al "
+"control de versiones el archivo original permanece disponible."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "File details"
+msgstr "Detalles del archivo"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
+msgstr ""
+"La barra lateral de detalles del archivo ofrece información adicional sobre "
+"sus archivos. Tan sólo marque la opción Detalles de archivo en la lista "
+"desplegable Vista y seleccione un archivo para ver los detalles."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Add another account"
+msgstr "Añadir otra cuenta"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
+msgstr ""
+"Drive permite conectar con otras soluciones de almacenamiento si ya dispone "
+"de otra cuenta de almacenamiento en la nube que utiliza para guardar y "
+"sincronizar sus archivos. Simplemente presione en el logotipo "
+"correspondiente para acceder a los datos existentes."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app tour.txt"
+msgstr "El tour.txt de la aplicación Drive"
+
+#. %s is the product name, e.g. OX App Suite
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Welcome to %s"
+msgstr "Bienvenido a %s"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app click on an entry inside the app launcher menu."
+msgid ""
+"This tour will give you a quick introduction to the product in five steps."
 msgstr ""
-"Para iniciar una aplicación, presione en un elemento del menú del lanzador "
-"de aplicaciones."
+"Esta visita guiada le proporcionará una introducción rápida al producto en"
+" cinco pasos."
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Para no olvidar la cita, utilice la función de recordatorio."
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Navigation"
+msgstr "Navegación"
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To not miss the task, use the reminder function."
-msgstr "Para no olvidar la tarea, utilice la función de recordatorio."
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "All apps can be found in the app menu on the top right."
+msgstr ""
+"Todas las aplicaciones pueden encontrase en el menú de la aplicación en la"
+" parte superior derecha."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Personal settings"
+msgstr "Ajustes personales"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Your personal data can be changed in the account dropdown. You can also sign "
+"out from there."
+msgstr ""
+"Sus datos personales se pueden cambiar en el desplegable de la cuenta."
+" También puede cerrar la sesión desde allí."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Settings"
+msgstr "Configuración"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Customize the product to your needs in the settings area."
+msgstr "Personalice el producto según sus necesidades en el área de ajustes."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Help"
+msgstr "Ayuda"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"If you need assistance or have further questions, you can use the help app."
+msgstr ""
+"Si necesita ayuda o tiene más preguntas, puede usar la ayuda de la aplicación."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Cancel tour"
+msgstr "Cancelar la visita guiada"
+
+#. %s is the getting started tour button label
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"You can restart this tour at any time by clicking on the account icon and "
+"choose \"%s\""
+msgstr ""
+"Puede reiniciar esta visita guiada en cualquier momento presionando en el"
+" icono de la cuenta y eligiendo \"%s\""
+
+#. Tour name; general introduction
+#: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
+msgid "Getting started"
+msgstr "Primeros pasos"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Composing a new email"
+msgstr "Componer una nuevo correo electrónico"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To compose a new email, click on Compose in the toolbar."
+msgstr ""
+"Para redactar un nuevo correo electrónico, presione el icono Redactar nuevo "
+"correo electrónico en la barra de herramientas."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the recipient's name"
+msgstr "Introducción del nombre del destinatario"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"Enter the recipient's name into the recipients field. As soon as you typed "
+"the first letters, suggestions from the address books are displayed. To "
+"accept a recipient suggestion, click on it."
+msgstr ""
+"Escriba el nombre del destinatario en el campo de destinatarios. En cuanto "
+"escriba las primeras letras se mostrarán sugerencias a partir de las "
+"libretas de direcciones. Para aceptar una sugerencia, presione en ella."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the subject"
+msgstr "Introducción del asunto"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Enter the subject into the subject field."
+msgstr "Escriba el asunto en el campo de asunto."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Further functions"
+msgstr "Funciones adicionales"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In this area you can find further functions, e.g. for adding attachments."
+msgstr ""
+"En este área puede encontrar más funciones, por ejemplo para añadir adjuntos."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the email text"
+msgstr "Introducción del texto del correo electrónico"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"Enter the email text into the main area. If the text format was set to HTML "
+"in the options, you can format the email text. To do so select a text part "
+"and then click an icon in the formatting bar."
+msgstr ""
+"Escriba el texto del correo en el área principal. Si el formato del texto se "
+"indicó como HTML en las opciones, puede dar formato al texto del correo. "
+"Para ello seleccione una parte del texto y presione en algún icono de la "
+"barra de formato."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sending the email"
+msgstr "Envío del correo electrónico"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To send the email, click on Send"
+msgstr "Para enviar el correo, presione en Enviar"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sorting your emails"
+msgstr "Ordenar sus correos electrónicos"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
+msgstr ""
+"Para ordenar correos electrónicos, presione en Ordenar por. Seleccione un "
+"criterio de ordenación."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To choose between the different views, click on View in the toolbar. Select "
+"a menu entry in the layout."
+msgstr ""
+"Para elegir entre diferentes vistas, presione en Vista en la barra de "
+"herramientas. Seleccione un elemento del menú en la presentación."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Opening an email in a separate window"
+msgstr "Apertura de un correo electrónico en una ventana independiente"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"If double-clicking on an email in the list, the email is opened in a "
+"separate window."
+msgstr ""
+"Si hace doble clic en un correo electrónico en la lista, el correo "
+"electrónico se abre en una ventana separada."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Reading email conversations"
+msgstr "Lectura de conversaciones recientes"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -761,13 +550,36 @@ msgstr ""
 "Para abrir o cerrar un correo en una conversación, presione en una zona "
 "libre del encabezado."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Halo view"
+msgstr "Vista Halo"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open or close the folder tree, click on View >  Folder view on the right "
-"side of the toolbar."
+"To receive information about the sender or other recipients, open the Halo "
+"view by clicking on a name."
 msgstr ""
-"Para abrir o cerrar el árbol de carpetas, presione en Vista > Vista de "
-"carpeta en la parte derecha de la barra de herramientas."
+"Para recibir información sobre el remitente o de otros destinatarios, abra "
+"la vista Halo presionando en un nombre."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Editing multiple emails"
+msgstr "Edición de múltiples correos electrónicos"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In order to edit multiple emails at once, enable the checkboxes on the left "
+"side of the emails. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"Para editar múltiples correos electrónicos a la vez, marque la casilla que "
+"hay a la izquierda de los correos. Si no aparecen las casillas de "
+"verificación, presione en Vista > Casillas de verificación a la derecha de "
+"la barra de herramientas."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Opening the email settings"
+msgstr "Apertura de los ajustes de correo electrónico"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -777,6 +589,174 @@ msgstr ""
 "Para abrir la configuración de Correo, presione el icono Menú del sistema en "
 "la parte superior derecha de la barra de menús. Seleccione Configuración. "
 "Presione en Correo en la parte izquierda."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "Autenticación del segundo factor"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Ahora puede añadir opciones de verificación adicionales para incrementar la "
+"seguridad de su cuenta."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Adición de opción de verificación"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr ""
+"Varias opciones para verificación adicional dependen de su instalación."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Adición de un código mediante mensaje de texto"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr ""
+"La selección de la opción de un código mediante mensaje de texto, por "
+"ejemplo, le pedirá un número de teléfono."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Peticiones de autenticación"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
+"Después, la siguiente vez que inicie sesión tendrá que verificar su "
+"identidad introduciendo el número enviado a su teléfono."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Eliminación"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
+"Los dispositivos se pueden eliminar una vez añadidos, si así lo elige. "
+"Consulte la ayuda para más detalles."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "Siguiente"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+"Como característica de seguridad adicional, ya puede necesitar un segundo "
+"método de autenticación, tal como un mensaje de texto, antes de iniciar "
+"sesión en su cuenta. ¿Le gustaría ver algo de información sobre esto?"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "Comenzar visita guiada"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "The Portal"
+msgstr "El Portal"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"The Portal informs you about current emails, appointments or social network "
+"news."
+msgstr ""
+"El Portal le informa sobre correos actuales, citas o noticias de las redes "
+"sociales."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Reading the details"
+msgstr "Lectura de los detalles"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "To read the details, click on an entry in a square."
+msgstr "Para leer los detalles, presione en un elemento de un panel."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Drag and drop"
+msgstr "Arrastrar y soltar"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To change the layout, drag a square's title to another position and drop it "
+"there."
+msgstr ""
+"Para cambiar la distribución, arrastre un panel desde el título a otra "
+"posición y suéltela allí."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Closing a square"
+msgstr "Cerrar un panel"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "Si ya no quiere ver más un panel, presione en el icono de borrar."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Customizing the Portal"
+msgstr "Personalización del Portal"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To display a square again or to display further information sources, click "
+"on Customize this page."
+msgstr ""
+"Para mostrar un panel de nuevo, o para mostrar otras fuentes de información, "
+"presione en Personalizar esta página."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the settings"
+msgstr "Abrir los ajustes"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To open the settings, click on the settings icon on the upper right side of "
+"the menu bar."
+msgstr ""
+"Para abrir los ajustes, presione en el icono de configuración de la parte"
+" superior derecha de la barra de menús."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "How the settings are organized"
+msgstr "Cómo están organizados los ajustes"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"The settings are organized in topics. Select the topic on the left side, e.g "
+"Basic settings or Mail."
+msgstr ""
+"La configuración se organiza por temas. Seleccione el tema en la parte "
+"izquierda, por ejemplo Configuración básica o Correo."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Editing settings"
+msgstr "Edición de ajustes"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"Edit a setting on the right side. In most of the cases, the changes are "
+"activated immediately."
+msgstr ""
+"Edite un ajuste en el lado derecho. En la mayoría de los casos, los cambios "
+"se activan inmediatamente."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the help"
+msgstr "Abrir la ayuda"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -791,49 +771,8 @@ msgstr ""
 "de inicio o Tabla de contenidos en la parte superior de la ventana."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"To open the settings, click the user image on the upper right side of the "
-"menu bar. Select Settings."
-msgstr ""
-"Para abrir los ajustes, presione en la imagen del usuario de la parte "
-"superior derecha de la barra de menús. Seleccione Ajustes."
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "To read the details, click on an entry in a square."
-msgstr "Para leer los detalles, presione en un elemento de un panel."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To receive information about the sender or other recipients, open the Halo "
-"view by clicking on a name."
-msgstr ""
-"Para recibir información sobre el remitente o de otros destinatarios, abra "
-"la vista Halo presionando en un nombre."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To search for objects, click the Search icon in the menu bar."
-msgstr "Para buscar objetos, haga clic en el icono Buscar de la barra de menú."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"To select one of the views like Day, Month or List, click on View in the "
-"toolbar. Select a menu entry from the Layout section."
-msgstr ""
-"Para seleccionar una de las vistas, tales como Día, Mes o Lista, presione en "
-"Vista en la barra de herramientas. Seleccione una entrada del menú desde la "
-"sección Disposición."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"To send an email to the contact, click on an email address or on Send email "
-"in the toolbar."
-msgstr ""
-"Para enviar un correo electrónico al contacto, presione en una dirección de "
-"correo electrónico o en Enviar correo en la barra de herramientas."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the email, click on Send"
-msgstr "Para enviar el correo, presione en Enviar"
+msgid "Signing out"
+msgstr "Cierre de sesión"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -850,11 +789,85 @@ msgstr ""
 "Para cerrar la sesión, presione el icono de cierre de sesión de la parte "
 "superior derecha de la barra de menús."
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating a new task"
+msgstr "Creación de una nueva tarea"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create a new task, click on New in the toolbar."
 msgstr ""
-"Para ordenar correos electrónicos, presione en Ordenar por. Seleccione un "
-"criterio de ordenación."
+"Para crear una nueva tarea, presione Nuevo en la barra de herramientas."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering the task's data"
+msgstr "Introducción de los datos de la tarea"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Enter the subject, the start date, and a description."
+msgstr "Introduzca el asunto, la fecha de inicio y una descripción."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Adding further details"
+msgstr "Añadir más detalles"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To add further details, click on Expand form."
+msgstr "Para añadir más detalles, presione Expandir formulario."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating recurring tasks"
+msgstr "Creación de tareas periódicas"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To create recurring tasks, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Para crear tareas periódicas, marque Repetir. Se mostrarán funciones para "
+"establecer los parámetros repetición."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To not miss the task, use the reminder function."
+msgstr "Para no olvidar la tarea, utilice la función de recordatorio."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Tracking the editing status"
+msgstr "Seguimiento del estado de edición"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To track the editing status, enter the current progress."
+msgstr ""
+"Para realizar el seguimiento del estado de edición, introduzca el progreso "
+"actual."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. You can add documents as attachment to the task."
+msgstr ""
+"Para invitar a otros participantes, introduzca sus nombres en el campo que "
+"hay debajo de Participantes. Puede agregar documentos adjuntos a la tarea."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering billing information"
+msgstr "Introducción de información de facturación"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To enter billing information, click on Show details."
+msgstr ""
+"Para introducir información de facturación, presione en Mostrar detalles."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating the task"
+msgstr "Creación de la tarea"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create the task, click on Create."
+msgstr "Para crear la tarea, presione en Crear."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Sorting tasks"
+msgstr "Ordenación de tareas"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
@@ -863,85 +876,123 @@ msgstr ""
 "ordenación."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To track the editing status, enter the current progress."
-msgstr ""
-"Para realizar el seguimiento del estado de edición, introduzca el progreso "
-"actual."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
-msgstr ""
-"Para subir un nuevo archivo desde el dispositivo local, simplemente presione "
-"en Añadir archivo local y seleccione el archivo que desea subir. Es aún más "
-"fácil si sólo arrastra y suelta los archivos desde el dispositivo local a "
-"Drive. El archivo subido estará ahora disponible en Drive en todos sus "
-"dispositivos."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Toolbar"
-msgstr "Barra de herramientas"
+msgid "Editing multiple tasks"
+msgstr "Edición de múltiples tareas"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Tracking the editing status"
-msgstr "Seguimiento del estado de edición"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Upload a new file"
-msgstr "Subir un nuevo archivo"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"Use the folder tree to open the folder containing the objects that you want "
-"to view in the list."
+"To edit multiple tasks at once, enable the checkboxes at the left side of "
+"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
+"on the right side of the toolbar."
 msgstr ""
-"Utilice el árbol de carpetas para abrir la carpeta que contiene los objetos "
-"que desea ver en la lista."
+"Para editar múltiples tareas a la vez, marque las casillas situadas a la "
+"izquierda de las tareas. Si no se muestran las casillas de verificación, "
+"presione en Vista > Casillas de verificación a la derecha de la barra de "
+"herramientas."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Use the list to select an object, show its contents or activate functions."
-msgstr ""
-"Utilice la lista para seleccionar un objeto, para ver sus contenidos o "
-"aplicarle determinadas funciones."
+#~ msgid "Creating new items"
+#~ msgstr "Creación de nuevos elementos"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Uso de la función de recordatorio"
+#~ msgid ""
+#~ "Depending on the app, the toolbar contains various functions for "
+#~ "creating, editing and organizing objects."
+#~ msgstr ""
+#~ "Dependiendo de la aplicación, la barra de herramientas contiene varias "
+#~ "funciones para crear, editar y organizar objetos."
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Various options for additional verification depends on your installation."
-msgstr ""
-"Varias opciones para verificación adicional dependen de su instalación."
+#~ msgid ""
+#~ "Detailed instructions for the single apps are located in System menu > "
+#~ "Help."
+#~ msgstr ""
+#~ "Las instrucciones detalladas para las aplicaciones individuales se "
+#~ "encuentran en el Menú del sistema > Ayuda."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Welcome to %s"
-msgstr "Bienvenido a %s"
+#~ msgid "Displaying the help or the settings"
+#~ msgstr "Visualización de la ayuda o de los ajustes"
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Welcome to your cloud storage app. This Guided Tour will introduce you to "
-"your new online storage solution - your one point to access online stored "
-"files from all your accounts. This is where you can upload and save your "
-"files, share them and synchronize them with different devices.  "
-msgstr ""
-"Bienvenido a su aplicación de almacenamiento en la nube. Esta visita guiada "
-"le dará a conocer su nueva solución de almacenamiento en línea - su único "
-"punto de acceso a los archivos almacenados en línea de todas sus cuentas. Es "
-"aquí donde puede subir y guardar sus archivos, compartirlos y sincronizarlos "
-"con diferentes dispositivos."
+#~ msgid "Further information"
+#~ msgstr "Más información"
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"You can now add additional verification options to enhance the security of "
-"your account."
-msgstr ""
-"Ahora puede añadir opciones de verificación adicionales para incrementar la "
-"seguridad de su cuenta."
+#~ msgid "Launching an app"
+#~ msgstr "Lanzar una aplicación"
+
+#~ msgid "Opening or closing the folder tree"
+#~ msgstr "Abrir o cerrar el árbol de carpetas"
+
+#~ msgid "Searching for objects"
+#~ msgstr "Búsqueda de objetos"
+
+#~ msgid "The Detail view"
+#~ msgstr "La Vista de detalle"
+
+#~ msgid ""
+#~ "The Detail view displays an object's content. Depending on the app, "
+#~ "further functions for organizing objects can be found in the Detail view."
+#~ msgstr ""
+#~ "La Vista de detalle muestra el contenido de un objeto. Dependiendo de la "
+#~ "aplicación, se pueden encontrar distintas funciones para la organización "
+#~ "de los objetos en la Vista de detalle."
+
+#~ msgid "The folder tree"
+#~ msgstr "El árbol de carpetas"
+
+#~ msgid "The list"
+#~ msgstr "La lista"
+
+#~ msgid "The toolbar"
+#~ msgstr "La barra de herramientas"
+
+#~ msgid ""
+#~ "This guided tour will briefly introduce you to the product. Get more "
+#~ "detailed information in the tours for the single apps or in the online "
+#~ "help."
+#~ msgstr ""
+#~ "Esta visita guiada le dará a conocer brevemente al producto. Obtenga "
+#~ "información más detallada en las visitas guiadas de las aplicaciones "
+#~ "individuales o en la ayuda en línea."
+
+#~ msgid ""
+#~ "To display the help or the settings, click the System menu icon in the "
+#~ "menu bar."
+#~ msgstr ""
+#~ "Para mostrar la ayuda o los ajustes, presione el icono Menú del sistema "
+#~ "de la barra de menús."
+
+#~ msgid "To launch an app click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "Para iniciar una aplicación, presione en un elemento del menú del "
+#~ "lanzador de aplicaciones."
+
+#~ msgid ""
+#~ "To open or close the folder tree, click on View >  Folder view on the "
+#~ "right side of the toolbar."
+#~ msgstr ""
+#~ "Para abrir o cerrar el árbol de carpetas, presione en Vista > Vista de "
+#~ "carpeta en la parte derecha de la barra de herramientas."
+
+#~ msgid ""
+#~ "To open the settings, click the user image on the upper right side of the "
+#~ "menu bar. Select Settings."
+#~ msgstr ""
+#~ "Para abrir los ajustes, presione en la imagen del usuario de la parte "
+#~ "superior derecha de la barra de menús. Seleccione Ajustes."
+
+#~ msgid "To search for objects, click the Search icon in the menu bar."
+#~ msgstr ""
+#~ "Para buscar objetos, haga clic en el icono Buscar de la barra de menú."
+
+#~ msgid ""
+#~ "Use the folder tree to open the folder containing the objects that you "
+#~ "want to view in the list."
+#~ msgstr ""
+#~ "Utilice el árbol de carpetas para abrir la carpeta que contiene los "
+#~ "objetos que desea ver en la lista."
+
+#~ msgid ""
+#~ "Use the list to select an object, show its contents or activate functions."
+#~ msgstr ""
+#~ "Utilice la lista para seleccionar un objeto, para ver sus contenidos o "
+#~ "aplicarle determinadas funciones."
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -6592,9 +6643,6 @@ msgstr ""
 #~ msgid "Hello World"
 #~ msgstr "Hola Mundo"
 
-#~ msgid "Help"
-#~ msgstr "Ayuda"
-
 #~ msgid ""
 #~ "Here you can import tasks, appointments or contacts from iCal, vCard or "
 #~ "CSV files."
@@ -10356,9 +10404,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Set color"
 #~ msgstr "Color del texto"
-
-#~ msgid "Settings"
-#~ msgstr "Configuración"
 
 #~ msgctxt "app"
 #~ msgid "Settings"

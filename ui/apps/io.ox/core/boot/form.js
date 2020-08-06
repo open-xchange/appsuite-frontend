@@ -18,7 +18,6 @@ define('io.ox/core/boot/form', [
     'io.ox/core/boot/support',
     'io.ox/core/boot/login/standard',
     'io.ox/core/manifests'
-
 ], function (http, util, locale, support, login, manifests) {
 
     'use strict';
@@ -47,24 +46,32 @@ define('io.ox/core/boot/form', [
 
         util.debug('Show form ...');
 
-        function displayMessageOnly() {
+        function displayMessageContinue() {
+            loadLoginLayout({ hideTitle: true, addClass: 'login-type-message' });
             hideFormElements();
         }
 
         function displayContinue(data) {
-            $('#io-ox-login-button').attr('data-i18n', gt('Continue')).val(gt('Continue'));
+            $('#io-ox-login-button').attr('data-i18n', 'Continue').text(gt('Continue'));
             $('#io-ox-login-restoremail, #io-ox-login-username').val(data.login_name || '').prop('readonly', true);
             $('#io-ox-login-password').val('');
         }
 
-        function hideFormElements() {
+        function displayMessageOnly() {
+            loadLoginLayout({ hideTitle: true, addClass: 'login-type-message' });
+            hideFormElements();
+        }
+
+        function hideFormElements(elements) {
             // remove all other inputs
             $('#io-ox-login-form div.row')
-                .filter('.username, .password, .options, .buttons')
+                .filter(elements || '.username, .password, .options, .buttons')
                 .remove();
         }
 
         function resetPassword() {
+            loadLoginLayout({ altTitle: gt('Reset password'), newPassword: true, showAlert: true });
+
             $('#io-ox-login-form').attr({
                 action: '/appsuite/api/share/reset/password',
                 method: 'post',
@@ -85,15 +92,19 @@ define('io.ox/core/boot/form', [
                 }
             });
             // remove unused fields
-            $('#io-ox-login-form div.row')
-                .filter('.username, .options')
-                .remove();
+            $('#io-ox-login-form div.row.username').remove();
+            $('#io-ox-login-store').remove();
+            $('#io-ox-forgot-password').remove();
             // show retype
             $('#io-ox-login-form div.row.password-retype').show();
             // i18n
             $('#io-ox-login-password').attr({
                 'data-i18n': gt('New password'),
                 placeholder: gt('New password')
+            });
+            $('#io-ox-retype-password').attr({
+                'data-i18n': gt('Confirm new password'),
+                placeholder: gt('Confirm new password')
             });
             $('#io-ox-login-button').attr({
                 'data-i18n': gt('Set password'),
@@ -103,6 +114,8 @@ define('io.ox/core/boot/form', [
         }
 
         function guestLogin() {
+            loadLoginLayout({ showAlert: true });
+
             var loginName = _.url.hash('login_name');
             $('.row.username').hide();
             if (!_.isEmpty(loginName)) {
@@ -123,11 +136,14 @@ define('io.ox/core/boot/form', [
         }
 
         function anonymousLogin() {
+            loadLoginLayout({ showAlert: true });
+
             $('.row.username').hide();
             $('#io-ox-forgot-password').remove();
         }
 
         function defaultLogin() {
+            loadLoginLayout({ showAlert: true });
 
             // remove form for sharing
             $('#io-ox-password-forget-form').remove();
@@ -141,16 +157,155 @@ define('io.ox/core/boot/form', [
             }
         }
 
+        function loadLoginLayout(options) {
+            var lc = getLoginConfiguration(options);
+
+            // apply login screen specific classes
+            if (_.device('smartphone')) {
+                $('#io-ox-login-username').attr({ 'data-i18n-attr': 'placeholder', 'placeholder': gt('Username') });
+                $('#io-ox-login-password').attr({ 'data-i18n-attr': 'placeholder', 'placeholder': gt('Password') });
+            }
+            $('#io-ox-login-screen').addClass(lc.addClass);
+
+            var toolbar = $('#io-ox-login-toolbar'),
+                content = $('#io-ox-login-content'),
+                footer = $('#io-ox-login-footer');
+
+            var standardNodes = {
+                $logo: $('<img class="login-logo" alt="Logo">').attr('src', lc.logo),
+                $language: $('<span id="io-ox-languages">'),
+                $spacer: $('<div class="composition-element login-spacer">'),
+                $privacy: $('<span>').append(
+                    $('<a>').attr({ 'href': lc.footer.privacy, 'data-i18n': 'Privacy Policy' }).data('href-translations', getTranslations(lc.footer.$privacy)).text(gt('Privacy Policy'))),
+                $imprint: $('<span>').append(
+                    $('<a>').attr({ 'href': lc.footer.imprint, 'data-i18n': 'Imprint' }).data('href-translations', getTranslations(lc.footer.$imprint)).text(gt('Imprint'))),
+                $copyright: $('<span>').text((lc.footer.copyright || sc.copyright).replace(/\(c\)/g, '\u00A9').replace(/\$year/g, moment().year())),
+                $version: $('<span>').text(sc.version)
+            };
+
+            function getNodes(bucket) {
+                return bucket.sorting.split(',').map(function (str) {
+                    if (standardNodes[str]) return standardNodes[str].clone(true, true);
+                    return $('<div class="composition-element">').append(
+                        str.match(/(\$[a-zA-Z]+|[^$]+)/g).map(function (match) {
+                            if (standardNodes[match]) return standardNodes[match].clone(true, true);
+                            if (bucket[match]) return $('<span data-i18n>').data('translations', getTranslations(bucket[match]));
+                            return $('<span>').text(match);
+                        })
+                    );
+                });
+            }
+
+            function getTranslations(o) {
+                return _.isObject(o) ? o : { en_US: o };
+            }
+
+            // header and toolbar
+            toolbar.append(getNodes(lc.header));
+            if (_.device('smartphone')) toolbar.append($('<div id="login-title-mobile">').text(lc.header.title));
+
+            // teaser and boxposition
+            var teaser = $('<div id="io-ox-login-teaser" class="col-sm-6" data-i18n-attr="html" data-i18n>').data('translations', getTranslations(lc.teaser));
+            if (lc.loginBox === 'left' && !_.device('smartphone')) {
+                content.append(teaser);
+            } else if (lc.loginBox === 'right' && !_.device('smartphone')) {
+                content.prepend(teaser);
+            }
+
+            // form
+            $('#box-form-header').text(lc.header.title).attr({ 'data-i18n': '', 'data-i18n-attr': 'text' }).data('translations', getTranslations(lc.header.title));
+            if (lc.altTitle) $('#login-title').attr({ 'data-i18n': lc.altTitle }).text(lc.altTitle);
+            else if (!lc.hideTitle) $('#login-title').attr({ 'data-i18n': 'Sign in' }).text(gt('Sign in'));
+            else $('#login-title').remove();
+            $('#io-ox-login-button').attr({ 'data-i18n': 'Sign in' }).text(gt('Sign in'));
+            if (lc.newPassword) $('#io-ox-login-password').val('');
+            if (lc.informationMessage) $('#io-ox-information-message').attr({ 'data-i18n': '', 'data-i18n-attr': 'html' }).data('translations', getTranslations(lc.informationMessage));
+
+            // alert info
+            if (options.showAlert) $('#io-ox-login-feedback').addClass('alert-highlight');
+
+            // footer
+            footer.append(getNodes(lc.footer));
+            if (_.device('smartphone')) {
+                toolbar.find('#io-ox-languages').remove();
+                footer.prepend(standardNodes.$language);
+            }
+
+            var configCss = '';
+
+            if (_.device('smartphone') && lc.backgroundColor) configCss += '#io-ox-login-background.wallpaper { background: ' + lc.backgroundColor + ' } ';
+            else if (_.device('smartphone') && lc.backgroundImage) configCss += '#io-ox-login-background.wallpaper { background: ' + lc.backgroundImage + ' } ';
+            else if (!_.device('smartphone') && lc.backgroundImage) configCss += '#io-ox-login-background { background: ' + lc.backgroundImage + ' } ';
+            else if (!_.device('smartphone') && lc.backgroundColor) configCss += '#io-ox-login-background { background: ' + lc.backgroundColor + ' } ';
+
+            if (lc.topVignette && lc.topVignette.transparency) configCss += '#io-ox-login-header { background: linear-gradient(rgba(0,0,0,' + lc.topVignette.transparency + '),rgba(0,0,0,0)) } ';
+
+            var h = lc.header;
+            if (h) {
+                if (h.textColor) configCss += '#io-ox-languages :not([role=menuitem]) { color: ' + h.textColor + '} ';
+                if (h.linkColor) configCss += '#io-ox-languages a:not([role="menuitem"]),#language-select,.toggle-text,.caret { color: ' + h.linkColor + '} ';
+            }
+
+            var form = lc.form;
+            if (form) {
+                if (form.header && form.header.textColor) configCss += '#box-form-header { color: ' + form.header.textColor + ' } ';
+                if (form.header && form.header.bgColor) configCss += '#box-form-header { background: ' + form.header.bgColor + ' } ';
+                if (form.textColor) configCss += '#box-form-body *:not(button) { color: ' + form.textColor + ' } ';
+                if (form.linkColor) configCss += '#box-form a { color: ' + form.linkColor + ' } ';
+                if (form.button && form.button.bgColor) configCss += '#io-ox-login-button { background-color: ' + form.button.bgColor + '; border-color: ' + form.button.bgColor + ' } ';
+                if (form.button && form.button.borderColor) configCss += '#io-ox-login-button { border-color: ' + form.button.borderColor + ' } ';
+                if (form.button && form.button.textColor) configCss += '#io-ox-login-button { color: ' + form.button.textColor + ' } ';
+            }
+
+            var f = lc.footer;
+            if (f) {
+                if (f.bgColor) configCss += '#io-ox-login-footer { background: ' + f.bgColor + ' } ';
+                if (f.textColor) configCss += '#io-ox-login-footer * { color: ' + f.textColor + ' } ';
+                if (f.linkColor) configCss += '#io-ox-login-footer > * a { color: ' + f.linkColor + ' } ';
+            }
+
+            if (!lc.loginBox || lc.loginBox === 'center') configCss += '#io-ox-login-content { justify-content: center }';
+
+            //apply styles from server configuration (login page)
+            $('head').append($('<style data-src="login-page-configuration" type="text/css">').text(util.scopeCustomCss(configCss, '#io-ox-login-screen')));
+
+            // apply custom css
+            $('head').append($('<style data-src="login-page-configuration-custom" type="text/css">').text(util.scopeCustomCss(lc.customCss, '#io-ox-login-screen')));
+        }
+
+        function getLoginConfiguration(options) {
+            var lc = $.extend(true, getDefaultConfiguration(), sc.loginPage, options);
+            lc.header.title = lc.form && lc.form.header.title || sc.productName;
+            lc.logo = lc.logo || getDefaultLogo();
+            return lc;
+        }
+
+        function getDefaultConfiguration() {
+            return {
+                'header': {
+                    'sorting': '$logo,$language,$spacer'
+                },
+                'footer': {
+                    'sorting': '$spacer,$copyright,Version $version,$privacy,$imprint,$spacer',
+                    '$privacy': 'https://www.open-xchange.com/privacy/',
+                    '$imprint': 'https://www.open-xchange.com/legal/',
+                    'copyright': '(c) $year OX Software GmbH'
+                }
+            };
+        }
+
+        function getDefaultLogo() {
+            return 'data:image/svg+xml,%3Csvg width=\'180px\' height=\'64px\' viewBox=\'0 0 180 64\' version=\'1.1\' xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg id=\'ox_logo_white\' fill=\'%23FFFFFF\' fill-rule=\'nonzero\'%3E%3Cpath d=\'M68.9893238,14.336 L68.9893238,49.664 C68.9893238,50.304 69.2455516,50.944 69.7259786,51.456 C69.2455516,50.976 68.6049822,50.72 67.9323843,50.72 L20.7544484,50.72 C20.113879,50.72 19.4733096,50.976 18.9928826,51.456 C19.4733096,50.976 19.7295374,50.304 19.7295374,49.664 L19.7295374,14.336 C19.7295374,13.696 19.4733096,13.056 18.9928826,12.544 C19.4733096,13.024 20.113879,13.28 20.7544484,13.28 L67.9323843,13.28 C68.5729537,13.28 69.2135231,13.024 69.7259786,12.544 C69.2455516,13.056 68.9893238,13.696 68.9893238,14.336 M88.6868327,45.568 L88.6868327,18.432 C88.6868327,8.256 80.4234875,0 70.2384342,0 L18.4483986,0 C8.2633452,0 0,8.256 0,18.432 L0,45.568 C0,55.744 8.2633452,64 18.4483986,64 L70.2384342,64 C80.4234875,64 88.6868327,55.744 88.6868327,45.568\' id=\'Shape\'%3E%3C/path%3E%3Cpath d=\'M133.046263,43.2 C133.046263,43.936 132.725979,44.608 132.245552,45.056 L114.822064,62.464 C113.893238,63.424 112.6121,64 111.170819,64 L86.1565836,64 L118.729537,31.456 C119.209964,31.008 119.818505,30.72 120.523132,30.72 C119.818505,30.72 119.177936,30.432 118.729537,29.984 L88.7188612,0 L115.846975,0 L132.245552,16.384 C132.758007,16.864 133.046263,17.504 133.046263,18.24 C133.046263,17.504 133.366548,16.832 133.846975,16.384 L150.245552,0 L177.373665,0 L147.330961,29.984 C146.850534,30.432 146.241993,30.72 145.537367,30.72 C146.241993,30.72 146.882562,31.008 147.330961,31.456 L179.935943,64 L154.921708,64 C153.480427,64 152.199288,63.392 151.270463,62.464 L133.846975,45.056 C133.33452,44.608 133.046263,43.936 133.046263,43.2\' id=\'Path\'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E';
+        }
+
         var loginType = _.url.hash('login_type'), showContinue = false;
+
 
         switch (loginType) {
 
             case 'guest':
             case 'message_continue':
-                // remove all form elements except buttons
-                $('#io-ox-login-form div.row')
-                    .filter('.username, .password, .options')
-                    .hide();
+                displayMessageContinue();
                 showContinue = true;
                 break;
 
@@ -182,8 +337,6 @@ define('io.ox/core/boot/form', [
         }
 
 
-        $('#io-ox-login-feedback');
-
         var redeem = function (lang) {
             http.GET({
                 module: 'share/redeem/token',
@@ -210,6 +363,9 @@ define('io.ox/core/boot/form', [
         }
 
         locale.render();
+
+        // set language select to link color defined by the given configuration
+        var lc = getLoginConfiguration();
 
         // update header
         $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '\u00A0') + ' ').removeAttr('aria-hidden');
@@ -242,7 +398,7 @@ define('io.ox/core/boot/form', [
         // update productname in password reset dialog
         $('#io-ox-password-forget-form .help-block').text(
             //#. %1$s is the product name, e.g. OX App Suite
-            gt('Please enter your email address associated with %1$s. You will receive an email that contains a link to reset your password.', sc.productName)
+            gt('Please enter your email address associated with %1$s. You will receive an email that contains a link to reset your password.', lc.header.title)
         );
 
         util.debug('Set default locale');
@@ -267,6 +423,8 @@ define('io.ox/core/boot/form', [
             support();
 
             util.debug('Fade in ...');
+
+            if ($('#showstopper').is(':visible')) return;
 
             $('#background-loader').fadeOut(util.DURATION, function () {
                 // show login dialog

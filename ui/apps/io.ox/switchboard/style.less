@@ -1,0 +1,499 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2020 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.switchboard-actions {
+    margin: 24px 0 0 0;
+    button {
+        font-size: 13px;
+        line-height: 24px;
+        padding: 0;
+        margin: 0 24px 0 0;
+    }
+    & > .dropdown {
+        display: inline-block;
+    }
+    i.fa:first-child {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid fade(@link-color, 40%);
+        background-color: fade(@link-color, 4%);
+        color: @link-color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+        margin: 0 auto;
+    }
+    i.fa.fa-phone {
+        font-size: 24px;
+    }
+    .btn-link:hover:not(:disabled), .btn-link:focus {
+        outline: 0;
+        text-decoration: none;
+        i.fa:first-child {
+            color: white;
+            background-color: @link-color;
+            border: 0;
+        }
+    }
+    &.horizontal {
+        button {
+            display: flex;
+            align-items: center;
+            i.fa { margin-right: 8px; }
+        }
+    }
+}
+
+.wall {
+    position: absolute;
+    right: 48px;
+    bottom: 16px;
+    border-radius: 8px;
+    background-color: #eee;
+    box-shadow: 0 24px 48px 8px rgba(0, 0, 0, 0.5);
+    padding: 16px;
+    width: 480px;
+    max-height: 560px;
+    overflow-y: auto;
+    &:empty { display: none; }
+}
+
+.wall-message {
+    position: relative;
+    padding: 0 0 0 56px;
+    margin-bottom: 16px;
+    &:last-child { margin-bottom: 0; }
+    .contact-photo {
+        position: absolute;
+        top: 4px;
+        left: 0;
+    }
+    .presence {
+        position: absolute;
+        top: 25px;
+        left: 28px;
+        .icon {
+            border: 1px solid white;
+            box-sizing: content-box;
+        }
+    }
+    .sender {
+        font-weight: bold;
+        margin-bottom: 4px;
+        text-transform: capitalize;
+    }
+    .content {
+        background-color: white;
+        border-radius: 8px;
+        padding: 8px 16px;
+    }
+    .date {
+        color: #707070;
+        font-size: 12px;
+        position: absolute;
+        top: 3px;
+        right: 24px;
+    }
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    a.reply {
+        display: block;
+        margin-top: 8px;
+    }
+}
+
+.modal.call-dialog {
+    .modal-dialog {
+        width: 400px;
+    }
+    .modal-header, .modal-body {
+        text-align: center;
+    }
+    .modal-body {
+        padding-top: 32px;
+    }
+    .modal-title {
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: bold;
+        margin: 0;
+    }
+    .photo {
+        margin: 16px auto;
+        width: 80px;
+        position: relative;
+    }
+    .contact-photo {
+        width: 80px;
+        height: 80px;
+    }
+    .presence {
+        position: absolute;
+        bottom: -2px;
+        right: -2px;
+        .icon {
+            width: 20px;
+            height: 20px;
+            border: 2px solid white;
+            box-sizing: content-box;
+            border-radius: 50%;
+            margin: 0;
+        }
+    }
+    .name {
+        font-size: 24px;
+        line-height: 32px;
+        font-weight: normal;
+        text-transform: capitalize;
+        margin-top: 2px;
+    }
+    .email {
+        max-height: 80px;
+        overflow: auto;
+    }
+    .alert {
+        background-color: #f5f5f5;
+        border-color: #aaa;
+        color: #555;
+        margin: 0 16px;
+        padding: 16px;
+        margin-bottom: 0;
+    }
+    .modal-footer {
+        .switchboard-actions {
+            display: flex;
+            justify-content: space-evenly;
+            text-align: center;
+            .btn > div {
+                padding-top: .25rem;
+            }
+
+            .btn-link {
+                &:focus i.fa:first-child {
+                    box-shadow: 0 0 0 4px fade(@btn-primary-bg, 50%);
+                }
+                &:hover:not(:disabled) i.fa:first-child {
+                    background-color: darken(@btn-primary-bg, 10%);
+                }
+            }
+            .btn-primary {
+                i.fa:first-child {
+                    .button-variant(@btn-primary-color, @btn-primary-bg, @btn-primary-border)
+                }
+                &:focus i.fa:first-child {
+                    box-shadow: 0 0 0 4px fade(@btn-primary-bg, 50%);
+                }
+                &:hover:not(:disabled) i.fa:first-child {
+                    background-color: darken(@btn-primary-bg, 10%);
+                }
+            }
+            .btn-info {
+                i.fa:first-child {
+                    .button-variant(@btn-info-color, @btn-info-bg, @btn-info-border)
+                }
+                &:hover:not(:disabled) i.fa:first-child {
+                    background-color: darken(@btn-info-bg, 10%);
+                }
+                &:focus i.fa:first-child {
+                    box-shadow: 0 0 0 4px fade(@btn-info-bg, 50%);
+                }
+            }
+            .btn-warning {
+                i.fa:first-child {
+                    .button-variant(@btn-warning-color, @btn-warning-bg, @btn-warning-border)
+                }
+                &:hover:not(:disabled) i.fa:first-child {
+                    background-color: darken(@btn-warning-bg, 10%);
+                }
+                &:focus i.fa:first-child {
+                    box-shadow: 0 0 0 4px fade(@btn-warning-bg, 50%);
+                }
+            }
+            .btn-danger {
+                i.fa:first-child {
+                    .button-variant(@btn-danger-color, @btn-danger-bg, @btn-danger-border)
+                }
+                &:hover:not(:disabled) i.fa:first-child {
+                    background-color: darken(@btn-danger-bg, 10%);
+                }
+                &:focus i.fa:first-child {
+                    box-shadow: 0 0 0 4px fade(@btn-danger-bg, 50%);
+                }
+            }
+            .btn-success {
+                i.fa:first-child {
+                    .button-variant(@btn-success-color, @btn-success-bg, @btn-success-border)
+                }
+                &:hover:not(:disabled) i.fa:first-child {
+                    background-color: darken(@btn-success-bg, 10%);
+                }
+                &:focus i.fa:first-child {
+                    box-shadow: 0 0 0 4px fade(@btn-success-bg, 50%);
+                }
+            }
+        }
+        margin-bottom: 40px;
+        border: 0;
+        padding: 0;
+
+        .btn {
+            margin: 0;
+            i.fa:first-child {
+                font-size: 24px;
+                width: 56px;
+                height: 56px;
+            }
+        }
+    }
+}
+
+/* general blueprint for contact photo */
+.contact-photo {
+    /* default size */
+    width: 40px;
+    height: 40px;
+    /* photo as background image */
+    background-color: rgba(0, 0, 0, 0.05);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    /* shape is circle */
+    border-radius: 50%;
+    /* for initials */
+    color: rgba(0, 0, 0, 0.60);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.conference-view {
+    padding: 16px 0 16px 56px;
+    position: relative;
+    .conference-logo {
+        position: absolute;
+        top: 16px;
+        left: 0;
+    }
+    .secondary-action {
+        color: #707070;
+        margin-right: 16px;
+    }
+    &.zoom .conference-logo {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        color: white;
+        background-color: #4290FF;
+        border-radius: 50%;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &.zoom .fa-exclamation.conference-logo {
+        color: #a00;
+        background-color: #f0f0f0;
+    }
+    .pending {
+        display: flex;
+        align-items: center;
+        height: 40px;
+        i.fa-refresh {
+            color: #555;
+            margin-left: 16px;
+        }
+    }
+    &.error {
+        padding: 16px 0 16px 0;
+        .message {
+            color: #a00;
+        }
+        .fa {
+            font-size: 20px;
+            margin-right: 4px;
+            position: relative;
+            top: -1px;
+        }
+    }
+    .recurrence-warning {
+        margin: 16px 0 0 0;
+    }
+}
+
+.modal .conference-view {
+    padding: 40px 0 0 0;
+    .pending {
+        justify-content: center;
+    }
+}
+
+/* settings */
+.conference-account {
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px 64px 16px 16px;
+    .name {
+        font-weight: bold;
+    }
+    [data-action="remove"] {
+        position: absolute;
+        color: #707070;
+        right: 16px;
+        top: 50%;
+        margin-top: -20px;
+        height: 40px;
+        width: 40px;
+    }
+}
+
+.conference-account-view {
+    margin-bottom: 24px;
+}
+
+.call-history {
+    #io-ox-appcontrol & svg.indicator {
+        left: 22px;
+        top: 20px;
+        animation: call-history-blink 2s linear 0s infinite;
+    }
+    & > ul {
+        width: 360px;
+        max-height: ~"calc(70vh - 64px)";
+        overflow-y: auto;
+        .header {
+            padding: 15px 16px 4px 16px;
+        }
+        .header-caption {
+            color: #333;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 24px;
+        }
+        .header-controls {
+            text-align: center;
+        }
+    }
+}
+
+@keyframes call-history-blink {
+    0%   { opacity: 0; }
+    50%  { opacity: 0; }
+    51%  { opacity: 1; }
+    100% { opacity: 1; }
+}
+
+.call-history-item {
+    border-bottom: 1px solid #ddd;
+    height: 56px;
+    &:last-child { border: 0; }
+    .call-icon {
+        position: absolute;
+        top: 14px;
+        left: 18px;
+        color: #707070;
+        .fa { position: absolute; }
+        .fa-phone {
+            top: 0;
+            left: 0;
+        }
+        .fa-angle-double-right {
+            top: -6px;
+            left: 6px;
+            transform: rotate(-45deg);
+        }
+        .fa-exclamation {
+            top: -1px;
+            left: 4px;
+        }
+    }
+    .contact-photo {
+        position: absolute;
+        top: 10px;
+        right: 16px;
+        width: 32px;
+        height: 32px;
+    }
+    .presence {
+        position: absolute;
+        top: 30px;
+        right: 6px;
+        &.offline { display: none; }
+        .icon {
+            border: 1px solid white;
+            box-sizing: content-box;
+        }
+    }
+    .date {
+        font-size: 13px;
+        color: #707070;
+        float: right;
+        margin-left: 8px;
+    }
+    .name {
+        font-weight: bold;
+    }
+    &.missed {
+        .name {
+            color: #a00;
+        }
+        .call-icon {
+            color: #a00;
+        }
+    }
+    .caption {
+        color: #707070;
+        font-size: 13px;
+    }
+}
+
+.dropdown-menu > li.call-history-item > a {
+    padding: 11px 64px 12px 40px;
+    position: relative;
+    line-height: 16px;
+    &:focus {
+        .name, .call-icon, .date, .caption {
+            color: white;
+        }
+    }
+}
+
+/* some changes */
+#io-ox-screens {
+
+    .calendar-detail .time .label-default {
+        color: #555;
+        background-color: #eee;
+    }
+
+    .calendar-detail h1.subject {
+        margin-top: 16px;
+    }
+
+    .calendar-detail .date-time-recurrence, .calendar-detail .location {
+        margin: 4px 0;
+    }
+
+    .calendar-detail .note {
+        margin: 16px 0;
+    }
+
+    .participants-view .participant-list .participant {
+        margin: 0;
+    }
+}

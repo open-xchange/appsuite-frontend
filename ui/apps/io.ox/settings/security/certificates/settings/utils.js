@@ -125,10 +125,12 @@ define('io.ox/settings/security/certificates/settings/utils', [
             myView.render().el
         );
 
-        myView.dialog.addButton({
-            label: gt('Trust certificate'),
-            action: 'trust'
-        }).addCancelButton();
+        myView.dialog
+            .addCancelButton()
+            .addButton({
+                label: gt('Trust certificate'),
+                action: 'trust'
+            });
 
         myView.dialog.on('trust', function () {
             myView.dialog.$body.find('div').first().trigger('trust');

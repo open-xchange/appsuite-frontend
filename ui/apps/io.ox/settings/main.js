@@ -74,7 +74,8 @@ define('io.ox/settings/main', [
                 'virtual/settings/io.ox/core/sub': 'ox.appsuite.user.sect.contacts.folder.managesubscribed.html',
                 'virtual/settings/io.ox/core/downloads': 'ox.appsuite.user.sect.settings.clients.html',
                 'virtual/settings/administration/groups': 'ox.appsuite.user.sect.calendar.groups.html',
-                'virtual/settings/administration/resources': 'ox.appsuite.user.sect.calendar.resources.html'
+                'virtual/settings/administration/resources': 'ox.appsuite.user.sect.calendar.resources.html',
+                'virtual/settings/personaldata': 'ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html'
             });
         }
     });
@@ -458,6 +459,15 @@ define('io.ox/settings/main', [
             ref: 'io.ox/settings/security/sessions',
             index: 100
         });
+
+        if (capabilities.has('app_passwords')) {
+            ext.point('io.ox/settings/pane/general/security').extend({
+                id: 'appPasswords',
+                title: gt('Application Passwords'),
+                ref: 'io.ox/settings/security/appPasswords',
+                index: 100
+            });
+        }
 
         if ((coreSettings.get('security/manageCertificates') && !coreSettings.get('security/acceptUntrustedCertificates')) && !capabilities.has('guest')) {
             ext.point('io.ox/settings/pane/general/security').extend({

@@ -62,7 +62,10 @@ define('io.ox/chat/views/chat', [
                     this.reset(userId);
                     var $span = this.span(userId);
                     if (!$span.length) this.add(userId, model.getName());
-                    this.timer[userId] = setTimeout(this.hide.bind(this), 5000, userId);
+                    this.timer[userId] = setTimeout(function () {
+                        if (this.disposed) return;
+                        this.hide(userId);
+                    }.bind(this), 5000);
                 },
                 span: function (userId) {
                     return this.$el.find('[data-user-id="' + userId + '"]');
@@ -202,6 +205,8 @@ define('io.ox/chat/views/chat', [
         },
 
         onAdd: _.debounce(function (model, collection, options) {
+            if (this.disposed) return;
+
             // render
             this.$messages.append(
                 options.changes.added.map(this.renderMessage.bind(this))

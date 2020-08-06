@@ -15,10 +15,9 @@ define('io.ox/backbone/views/capture-media', [
     'io.ox/backbone/views/modal',
     'io.ox/backbone/mini-views/common',
     'io.ox/core/media-devices',
-    'io.ox/core/yell',
     'gettext!io.ox/core',
     'less!io.ox/backbone/views/capture-media'
-], function (ModalDialog, MiniViews, mediaDevices, yell, gt) {
+], function (ModalDialog, MiniViews, mediaDevices, gt) {
 
     'use strict';
 
@@ -104,7 +103,7 @@ define('io.ox/backbone/views/capture-media', [
                         model.set('message', MESSAGES.unspecified);
                     }, 800);
 
-                    video.addClass('hidden').attr('url', '').parent().addClass('io-ox-busy');
+                    video.addClass('hidden').attr('url', '').parent().busy({ immediate: true });
                     mediaDevices.getStream(constraints).then(function (stream) {
                         model.set({ 'access': true, 'stream': stream, 'message': '' });
                         video[0].srcObject = stream;
@@ -173,8 +172,8 @@ define('io.ox/backbone/views/capture-media', [
                     this.listenTo(this.model, 'change:device', this.setStream);
 
                     function ready() {
+                        self.$('.stream-container').idle();
                         self.$('button.btn-primary').removeAttr('disabled').removeClass('disabled');
-                        self.$('.stream-container').removeClass('io-ox-busy');
                         // reset style to allow proper bound calculation
                         $(this).removeClass('hidden').removeAttr('style');
                         if (_.device('!desktop')) self.$('.switchcamera').show();

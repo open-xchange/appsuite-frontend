@@ -97,17 +97,27 @@ define('io.ox/core/boot/load', [
     }, {
         id: 'compositionSpaces',
         run: function () {
+            // guests don't have webmail for example
+            if (!capabilities.has('webmail')) return;
+
             ox.rampup.compositionSpaces = $.when(
-                http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject' } }),
+                http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject,meta' } }),
                 require(['gettext!io.ox/mail'])
             ).then(function (data, gt) {
                 var list = _(data).first() || [];
                 return list.map(function (compositionSpace) {
+                    var cid;
+                    if (compositionSpace.meta && compositionSpace.meta.editFor) {
+                        var editFor = compositionSpace.meta.editFor;
+                        cid = _.cid({ id: editFor.originalId, folder: editFor.originalFolderId });
+                        cid = 'io.ox/mail/compose:' + cid + ':edit';
+                    }
                     return {
                         //#. $1$s is the subject of an email
                         description: gt('Mail: %1$s', compositionSpace.subject || gt('No subject')),
                         floating: true,
                         id: compositionSpace.id + Math.random().toString(16),
+                        cid: cid,
                         keepOnRestore: false,
                         module: 'io.ox/mail/compose',
                         point: compositionSpace.id,
@@ -227,7 +237,7 @@ define('io.ox/core/boot/load', [
         if (coreSettings.get('autoStart') !== 'io.ox/mail/main') return;
 
         var folder = 'default0/INBOX',
-            sort = mailSettings.get(['viewOptions', folder, 'sort'], 610);
+            sort = mailSettings.get(['viewOptions', folder, 'sort'], 661);
 
         // edge case: no prefetch if sorting is 'from-to' (need too many settings we don't have yet)
         if (sort === 'from-to') return;

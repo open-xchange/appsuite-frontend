@@ -204,10 +204,11 @@ define('io.ox/contacts/distrib/main', [
                     } else if (_.device('smartphone')) {
                         app.getWindow().resume();
                     }
-                    //#. "Discard changes" appears in combination with "Cancel" (this action)
                     //#. Translation must be distinguishable for the user
-                    new ModalDialog({ title: gt('Do you really want to discard your changes?') })
-                        .addCancelButton()
+                    //#. 'Discard changes' as the header of the modal dialog to cancel the distribution list edit window.
+                    new ModalDialog({ title: gt('Discard changes'), description: gt('Do you really want to discard your changes?') })
+                    .addCancelButton()
+                    //#. "Discard changes" appears in combination with "Cancel" (this action)
                         .addButton({ label: gt.pgettext('dialog', 'Discard changes'), action: 'delete' })
                         .on('action', function (action) {
                             if (action === 'delete') {

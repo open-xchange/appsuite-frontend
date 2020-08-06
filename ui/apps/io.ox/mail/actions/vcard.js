@@ -16,9 +16,8 @@ define('io.ox/mail/actions/vcard', [
     'io.ox/core/notifications',
     'settings!io.ox/core',
     'gettext!io.ox/mail',
-    'io.ox/contacts/api',
-    'io.ox/core/http'
-], function (notifications, coreSettings, gt, contactAPI, http) {
+    'io.ox/contacts/api'
+], function (notifications, coreSettings, gt, contactAPI) {
 
     'use strict';
 
@@ -50,7 +49,7 @@ define('io.ox/mail/actions/vcard', [
 
                     function preloadParticipants() {
                         var dfd = $.Deferred();
-                        http.pause();
+
                         _.each(contact.distribution_list, function (obj, key) {
                             contactAPI.getByEmailaddress(obj.mail).done(
                                 function () {
@@ -58,7 +57,7 @@ define('io.ox/mail/actions/vcard', [
                                 }
                             );
                         });
-                        http.resume();
+
                         return dfd;
                     }
 

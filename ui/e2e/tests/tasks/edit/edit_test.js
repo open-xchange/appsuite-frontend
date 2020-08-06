@@ -26,6 +26,7 @@ After(async (users) => {
 });
 
 Scenario('[C7738] Edit task with all fields filled', async function (I, tasks) {
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
     const testrailID = 'C7738',
         testrailName = 'Edit task with all fields filled';
 
@@ -102,6 +103,7 @@ Scenario('[C7738] Edit task with all fields filled', async function (I, tasks) {
 });
 
 Scenario('[C7739] Change tasks due date in dropdown', async function (I, tasks) {
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
     const moment = require('moment');
 
     await I.haveTask({ title: 'C7739', folder_id: await I.grabDefaultFolder('tasks'), note: 'Change tasks due date in dropdown' });
@@ -123,6 +125,7 @@ Scenario('[C7739] Change tasks due date in dropdown', async function (I, tasks) 
 });
 
 Scenario('[C7740] Edit Task', async function (I, tasks) {
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
     const testrailID = 'C7740';
     await I.haveTask({ title: testrailID, folder_id: await I.grabDefaultFolder('tasks'), note: 'Edit Task' });
     I.login('app=io.ox/tasks');
@@ -136,6 +139,7 @@ Scenario('[C7740] Edit Task', async function (I, tasks) {
 });
 
 Scenario('[C7741] Mark Task as Done', async function (I, tasks) {
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
     await I.haveTask({ title: 'C7741', folder_id: await I.grabDefaultFolder('tasks'), note: 'Mark Task as Done' });
 
     I.login('app=io.ox/tasks');
@@ -149,6 +153,7 @@ Scenario('[C7741] Mark Task as Done', async function (I, tasks) {
 });
 
 Scenario('[C7742] Mark Task as Undone', async function (I, tasks) {
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
     await I.haveTask({
         title: 'C7742',
         folder_id: await I.grabDefaultFolder('tasks'),
@@ -167,6 +172,7 @@ Scenario('[C7742] Mark Task as Undone', async function (I, tasks) {
 });
 
 Scenario('[C7743] Move single Task', async function (I, tasks, dialogs) {
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
     const testrailID = 'C7743',
         testrailName = 'Move single Task',
         taskDefaultFolder = await I.grabDefaultFolder('tasks');
@@ -199,6 +205,7 @@ Scenario('[C7743] Move single Task', async function (I, tasks, dialogs) {
 });
 
 Scenario('[C7744] Mark several task as done at the same time', async function (I, tasks) {
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
     const testrailID = 'C7744',
         testrailName = 'Mark several task as done at the same time',
         numberOfTasks = 3,
@@ -231,6 +238,7 @@ Scenario('[C7744] Mark several task as done at the same time', async function (I
 });
 
 Scenario('[C7745] Mark several Task as Undone at the same time', async function (I, tasks) {
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
     const testrailID = 'C7745',
         testrailName = 'Mark several Task as Undone at the same time',
         taskDefaultFolder = await I.grabDefaultFolder('tasks'),
@@ -267,6 +275,7 @@ Scenario('[C7745] Mark several Task as Undone at the same time', async function 
 });
 
 Scenario('[C7746] Move several tasks to an other folder at the same time', async function (I, tasks, dialogs) {
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
     const testrailID = 'C7746',
         testrailName = 'Move several tasks to an other folder at the same time',
         numberOfTasks = 3,
@@ -315,6 +324,7 @@ Scenario('[C7746] Move several tasks to an other folder at the same time', async
 });
 
 Scenario('[C7747] Add an attachment to a Task', async function (I, tasks) {
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
     const testrailID = 'C7747',
         testrailName = 'Add an attachment to a Task';
     await I.haveTask({ title: testrailID, folder_id: await I.grabDefaultFolder('tasks'), note: testrailName });
@@ -335,6 +345,7 @@ Scenario('[C7747] Add an attachment to a Task', async function (I, tasks) {
 });
 
 Scenario('[C7748] Remove an attachment from a Task', async function (I, tasks) {
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
     const testrailID = 'C7748',
         testrailName = 'Remove an attachment from a Task',
         taskDefaultFolder = await I.grabDefaultFolder('tasks'),
@@ -359,6 +370,7 @@ Scenario('[C7748] Remove an attachment from a Task', async function (I, tasks) {
 });
 
 Scenario('[C7749] Edit existing Task as participant', async function (I, users, tasks) {
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
     const testrailID = 'C7749',
         testrailName = 'Edit existing Task as participant';
     await I.haveTask({
@@ -394,6 +406,7 @@ Scenario('[C7749] Edit existing Task as participant', async function (I, users, 
 });
 
 Scenario('[C7750] Edit existing Task in a shared folder', async function (I, users, tasks) {
+    await I.haveSetting('io.ox/core//autoOpenNotification', false);
     const testrailID = 'C7750',
         testrailName = 'Edit existing Task in a shared folder',
         folder_id = await I.haveFolder({
@@ -453,8 +466,7 @@ Scenario('[C7751] Close Task with the X', function (I, tasks) {
     I.waitForVisible('.io-ox-tasks-edit-window');
     I.see('Create');
     I.see('Discard');
-    I.seeElement('~Close');
-    I.click('~Close');
+    I.click('~Close', '.io-ox-tasks-edit-window');
     I.waitForDetached('.io-ox-tasks-edit-window');
 });
 
@@ -470,10 +482,10 @@ Scenario('[C7752] Close Task with the X after adding some information', function
     I.click('Discard');
     I.waitForText('Do you really want to discard your changes?');
     I.click('Cancel');
-    I.click('~Close');
+    I.click('~Close', '.io-ox-tasks-edit-window');
     I.waitForText('Do you really want to discard your changes?');
     I.click('Cancel');
-    I.click('~Close');
+    I.click('~Close', '.io-ox-tasks-edit-window');
     I.waitForText('Do you really want to discard your changes?');
     I.click('Discard changes');
     I.waitForDetached('.io-ox-tasks-edit-window');

@@ -15,9 +15,10 @@ define('io.ox/core/sub/model', [
     'io.ox/core/extensions',
     'io.ox/backbone/basicModel',
     'io.ox/core/api/sub',
+    'io.ox/core/folder/api',
     'io.ox/settings/util',
     'gettext!io.ox/core/sub'
-], function (ext, BasicModel, api, settingsUtil, gt) {
+], function (ext, BasicModel, api, folderAPI, settingsUtil, gt) {
 
     'use strict';
 
@@ -71,8 +72,13 @@ define('io.ox/core/sub/model', [
                 return this._refresh ? this._refresh.state() : 'ready';
             },
             performRefresh: function () {
+                var self = this;
                 if (this.refreshState() === 'ready') {
-                    api.subscriptions.refresh(this);
+                    api.subscriptions.refresh(this)
+                    .always(function (data) {
+                        self.set('errors', data.error ? 'true' : 'false');
+                        folderAPI.refresh();
+                    });
                     return (this._refresh = _.wait(5000));
                 }
                 return this._refresh;

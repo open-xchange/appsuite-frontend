@@ -14,6 +14,53 @@ define(['io.ox/calendar/api'], function (api) {
 
     'use strict';
 
+    describe('Calendar API requests', function () {
+
+        beforeEach(function () {
+            this.server.respondWith('PUT', /api\/chronos\?action=all/, function (xhr) {
+                xhr.respond(
+                    200,
+                    { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                    JSON.stringify({ timestamp: 1378223251586, data: [
+                        {
+                            folder: 'cal://0/123',
+                            error: {
+                                error: 'Too many appointments are queried. Please choose a shorter timeframe.',
+                                error_params: [],
+                                categories: 'USER_INPUT',
+                                category: 1,
+                                code: 'CAL-5072',
+                                error_id: '328960372-2086285',
+                                error_desc: 'Too many events are queried. Please choose a shorter timeframe.'
+                            }
+                        }]
+                    })
+                );
+            });
+        });
+
+        it('should stop requests for too many appointments in a chosen timeframe', function () {
+            var self = this;
+
+            return api.request({
+                module: 'chronos',
+                params: {
+                    action: 'all',
+                    rangeEnd: '20191229T003000Z',
+                    rangeStart: '20191228T230000Z',
+                    fields: api.defaultFields,
+                    order: 'asc',
+                    sort: 'startDate',
+                    expand: true
+                },
+                data: { folders: ['cal://0/123'] }
+            }, 'PUT').then(function succes() {
+            }, function fail() {
+                expect(self.server.requests.length).to.equal(2);
+            });
+        });
+    });
+
     describe('Calendar API', function () {
 
         var HOUR = 1000 * 60 * 60,

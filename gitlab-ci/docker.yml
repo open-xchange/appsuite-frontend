@@ -19,12 +19,11 @@ build ui docker image:
     - build ui
   tags:
     - docker
-  only:
-    changes:
-      - ui/**/*
-  except:
-    refs:
-      - /^e2e\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
+      changes:
+        - ui/**/*
+      when: on_success
 
 
 .tag docker image: &add_tag
@@ -43,17 +42,21 @@ build ui docker image:
 tag latest:
   # create a tag on the docker registry, :latest always means last build on develop branch
   <<: *add_tag
-  only:
-    - develop
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "develop"'
+      when: on_success
+
 
 tag stable:
   <<: *add_tag
-  only:
-    - master
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: on_success
 
 tag tags:
   <<: *add_tag
   variables:
     TAG_NAME: ${CI_COMMIT_TAG}
-  only:
-    - tags
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      when: on_success

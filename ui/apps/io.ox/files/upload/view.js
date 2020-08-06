@@ -12,13 +12,13 @@
  */
 
 define('io.ox/files/upload/view', [
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/files',
     'io.ox/files/upload/main',
     'io.ox/core/extensions',
     'io.ox/core/strings',
     'less!io.ox/files/upload/style'
-], function (dialogs, gt, fileUpload, ext, strings) {
+], function (ModalDialog, gt, fileUpload, ext, strings) {
 
     'use strict';
 
@@ -115,22 +115,25 @@ define('io.ox/files/upload/view', [
             }
         }),
         show = function () {
-            var container = $('<div class="view-upload-wrapper">'),
-                dialog = new dialogs.CreateDialog({ width: 450, center: true, async: true, container: $('.io-ox-files-window'), 'tabTrap': true });
+            var container = $('<div class="view-upload-wrapper">');
 
-            ext.point('io.ox/files/upload/files').invoke('draw', container, { collection: fileUpload.collection, dialog: dialog });
-
-            dialog.header($('<h4>').text(gt('Upload progress')));
-            dialog.getBody().append(container);
-            dialog
-                .addButton('cancel', gt('Close'), 'close')
+            var dialog = new ModalDialog({ title: gt('Upload progress') })
+                .addButton({ label: gt('Close'), action: 'close' })
+                .build(function () {
+                    this.$body.append(
+                        container
+                    );
+                })
                 .on('close', function () {
                     fileUpload.collection.each(function (model) {
                         //remove all change listeners from the models in the collection
                         model.off('change:progress');
                     });
                 })
-                .show();
+                .open();
+
+            ext.point('io.ox/files/upload/files').invoke('draw', container, { collection: fileUpload.collection, dialog: dialog });
+
         };
 
     ext.point('io.ox/files/upload/files').extend({

@@ -35,7 +35,7 @@ Scenario('[C7781] Default sender address', async (I, users, mail) => {
     I.click(`<${user.get('primaryEmail')}>`, '.mail-input');
     I.retry(5).click('Show names');
     I.see('foo@ox.io');
-    I.click('urbi@orbi.it');
+    I.clickDropdown('urbi@orbi.it');
     I.waitForVisible('.token-input.tt-input');
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', 'Richtig gutes Zeug');

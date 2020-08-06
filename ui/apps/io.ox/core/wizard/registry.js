@@ -296,7 +296,7 @@ define('io.ox/core/wizard/registry', [
             if (!!options.cssClass) {
                 this.dialog.getPopup().addClass(options.cssClass);
             }
-            this.runOptions = options || {};
+            this.runOptions = options;
             goToPage(0);
             this.wizardIsRunning = this.dialog.show();
             return this.wizardIsRunning;

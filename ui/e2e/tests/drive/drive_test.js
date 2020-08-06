@@ -92,6 +92,7 @@ Scenario('[C45046] Upload new version', async function (I, drive) {
     await fs.promises.writeFile('build/e2e/C45046.txt', timestamp2);
     I.attachFile('.io-ox-viewer input.file-input', 'build/e2e/C45046.txt');
     I.click('Upload');
+
     I.waitForText(timestamp2, 30);
     I.waitForText('Versions (2)');
     I.wait(0.2);
@@ -166,10 +167,10 @@ Scenario('[C45061] Delete file versions', async function (I, drive, dialogs) {
     I.waitForDetached('.modal-dialog');
 
     I.waitForDetached(locate('.io-ox-viewer .viewer-fileversions').withText('Versions (5)'));
-    I.see('Versions (4)', '.io-ox-viewer .viewer-fileversions');
+    I.waitForText('Versions (4)', 5, '.io-ox-viewer .viewer-fileversions');
 });
 
-Scenario.skip('[C45062] Change current file version', async function (I, drive) {
+Scenario('[C45062] Change current file version', async function (I, drive) {
     //Generate TXT file for upload
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
 
@@ -185,13 +186,16 @@ Scenario.skip('[C45062] Change current file version', async function (I, drive) 
     I.click('Versions (5)', '.io-ox-viewer .viewer-fileversions');
     I.waitForElement(locate('.io-ox-viewer table.versiontable tr.version:nth-child(4) .dropdown-toggle'));
     I.click(locate('.io-ox-viewer table.versiontable tr.version:nth-child(4) .dropdown-toggle'));
+    I.wait(1);
     I.clickDropdown('View this version');
     I.waitForText('file 4', 5, '.plain-text');
     I.click(locate('.io-ox-viewer table.versiontable tr.version:nth-child(4) .dropdown-toggle'));
     I.clickDropdown('Make this the current version');
-    // I really don't know what to wait for. Version table "flickers" during reordering. Wait for it to finish.
-    I.wait(2);
+    // wait for version 4 to be sorted to the top (current version is always at the top)
+    I.waitForElement('.io-ox-viewer table.versiontable tr.version:nth-child(3)[data-version-number="4"]');
+    I.wait(1);
     I.click('.io-ox-viewer .current.dropdown-toggle');
+    I.wait(1);
     I.clickDropdown('View this version');
     I.waitForText('file 4', 5, '.plain-text');
 });
@@ -227,5 +231,5 @@ Scenario('[C45063] Delete current file version', async function (I, drive, dialo
     I.waitForDetached('.modal-dialog');
 
     I.waitForDetached(locate('.io-ox-viewer .viewer-fileversions').withText('Versions (5)'));
-    I.see('Versions (4)', '.io-ox-viewer .viewer-fileversions');
+    I.waitForText('Versions (4)', 5, '.io-ox-viewer .viewer-fileversions');
 });

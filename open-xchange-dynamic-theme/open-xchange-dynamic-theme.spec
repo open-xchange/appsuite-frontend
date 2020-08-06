@@ -17,11 +17,7 @@ Requires:       nodejs >= 0.10
 %description
 Dynamic theme with colors read from ConfigCascade
 
-%if 0%{?rhel_version} || 0%{?fedora_version}
 %define docroot /var/www/html/
-%else
-%define docroot /srv/www/htdocs/
-%endif
 
 %prep
 %setup -q
@@ -81,6 +77,11 @@ EOF
         ox_set_property io.ox/dynamic-theme//logoWidth 60 $pfile
         fi
         ox_scr_done ${SCR}
+    fi
+
+    # OXUIB-98
+    if contains "[“”]" /opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties; then
+        sed -i 's/[“”]/"/g' /opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties
     fi
 fi
 

@@ -23,7 +23,8 @@ define('io.ox/core/tk/contenteditable-editor', [
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'gettext!io.ox/core',
-    'less!io.ox/core/tk/contenteditable-editor-content',
+    // load content styles as text file otherwise they would not only be applied to the iframe but the whole UI
+    'text!themes/default/io.ox/core/tk/contenteditable-editor-content.css',
     'less!io.ox/core/tk/contenteditable-editor'
 ], function (capabilities, ext, textproc, mailAPI, mailUtil, DOMPurify, settings, mailSettings, gt, contentCss) {
 
@@ -81,7 +82,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         id: 'retrigger-change',
         index: INDEX += 100,
         draw: function (ed) {
-            ed.on('keyup SetContent Change', _.throttle(this.trigger.bind(this, 'change'), 50));
+            ed.on('keyup input SetContent Change', _.throttle(this.trigger.bind(this, 'change'), 50));
         }
     });
 
@@ -297,13 +298,15 @@ define('io.ox/core/tk/contenteditable-editor', [
         // for empty lines we get no valid rect
         if (top === 0) {
             if (selection.modify) {
+                // copy the selection prior to changing it
+                var prevRange = selection.getRangeAt(0).cloneRange();
                 selection.modify('extend', 'backward', 'character');
                 range = selection.getRangeAt(0);
                 rect = range.getBoundingClientRect();
-                range.collapse();
                 top = rect.top + rect.height;
-                // Safari will keep the selection if we do not collapse it
-                selection.collapseToEnd();
+                // restore selection to previous state
+                selection.removeAllRanges();
+                selection.addRange(prevRange);
             } else {
                 var container = range.commonAncestorContainer;
                 top = $(container).offset().top + container.clientHeight;
@@ -372,10 +375,11 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         opt = _.extend({
             toolbar1: '*undo *redo | bold italic underline | bullist numlist outdent indent',
-            advanced: '*styleselect | *fontselect fontsizeselect | link image *emoji | forecolor backcolor',
+            advanced: '*styleselect | *fontselect fontsizeselect | removeformat | link image *emoji | forecolor backcolor',
             toolbar2: '',
             toolbar3: '',
             plugins: 'autoresize autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
+            // patched version (see OXUIB-255)
             theme: 'modern',
             height: null,
             imageLoader: null // is required to upload images. should have upload(file) and getUrl(response) methods
@@ -402,8 +406,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         var originalToolbarConfig = opt.toolbar1.replace(/\s*\|\s*/g, ' ');
         opt.toolbar1 = opt.toolbar1.replace(/\*/g, '');
 
-        var fixed_toolbar = '.contenteditable-editor[data-editor-id="' + editorId + '"] > .mce-tinymce > .mce-stack-layout > .mce-top-part';
-
+        var fixed_toolbar = '.tinymce-toolbar[data-editor-id="' + editorId + '"] .mce-tinymce > .mce-stack-layout > .mce-top-part';
         var options = {
             script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.min.js',
 
@@ -414,6 +417,8 @@ define('io.ox/core/tk/contenteditable-editor', [
             autoresize_bottom_margin: 0,
             menubar: false,
             statusbar: false,
+
+            fixed_toolbar_container: '.tinymce-toolbar[data-editor-id="' + editorId + '"]',
 
             skin: opt.skin,
 
@@ -819,7 +824,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         this.show = function () {
             $el.show();
-            // set display to empty sting because of overide 'display' property in css
+            // set display to empty string because of overide 'display' property in css
             $(fixed_toolbar).css('display', '');
             window.toolbar = $(fixed_toolbar);
             $(window).on('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', resizeEditorDebounced);
@@ -831,38 +836,13 @@ define('io.ox/core/tk/contenteditable-editor', [
             $(window).off('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', resizeEditorDebounced);
         };
 
-        (function () {
-            if (_.device('smartphone')) return;
-            var scrollPane = opt.scrollpane || opt.app && opt.app.getWindowNode(),
-                composeFields = scrollPane.find('.mail-compose-fields'),
-                fixed = false;
-
-            // keep fixed toolbar in window, when window is dragged
-            if (opt.app && opt.app.get('floating') && opt.app.get('window').floating) {
-                opt.app.get('window').floating.on('move', function () {
-                    if (fixed) {
-                        $(fixed_toolbar).css('top', opt.view.$el.parent().offset().top);
-                    }
-                });
-            }
-
-            scrollPane.on('scroll', function () {
-                var scrollTop = scrollPane.scrollTop() || 0;
-                fixed = scrollTop > (composeFields.height() + 14);
-                $(fixed_toolbar).css('top', fixed ? opt.view.$el.parent().offset().top : 0);
-                composeFields.css('margin-bottom', fixed ? 40 : 0);
-                $el.toggleClass('toolbar-fixed', fixed);
-            });
-
-        }());
-
         this.destroy = function () {
             this.hide();
             clearKeepalive();
             // have to unset active editor manually. may be removed for future versions of tinyMCE
             delete tinyMCE.EditorManager.activeEditor;
             tinyMCE.EditorManager.remove(ed);
-            ed = undefined;
+            ed = opt = undefined;
         };
 
         var intervals = [];

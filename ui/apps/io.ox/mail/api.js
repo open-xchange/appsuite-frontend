@@ -94,7 +94,7 @@ define('io.ox/mail/api', [
                 columns: '601,600,611,102',
                 extendColumns: 'io.ox/mail/api/all',
                 // received_date
-                sort: '610',
+                sort: '661',
                 order: 'desc',
                 deleted: showDeleted,
                 // allow DB cache
@@ -102,7 +102,7 @@ define('io.ox/mail/api', [
             },
             list: {
                 action: 'list',
-                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652',
+                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,661',
                 extendColumns: 'io.ox/mail/api/list'
             },
             get: {
@@ -121,7 +121,7 @@ define('io.ox/mail/api', [
                 folder: 'default0/INBOX',
                 columns: '601,600,611',
                 extendColumns: 'io.ox/mail/api/all',
-                sort: '610',
+                sort: '661',
                 order: 'desc',
                 getData: function (query, options) {
                     var map = { from: 603, to: 604, cc: 605, subject: 607, text: -1 }, composite = [];
@@ -174,7 +174,7 @@ define('io.ox/mail/api', [
         params: {
             all: function (options) {
                 if (options.sort === 'thread') {
-                    options.sort = 610;
+                    options.sort = 661;
                 }
                 return options;
             }
@@ -285,7 +285,7 @@ define('io.ox/mail/api', [
         return preferred;
     }
 
-    function sanitizeAttachments(attachments) {
+    function sanitizeAttachments(attachments, options) {
         if (!_.isArray(attachments)) {
             // make sure we always have data.attachments (see bug 58631)
             return [{ content: '', content_type: 'text/plain', disp: 'inline', id: '1', sanitized: true, size: 0, truncated: false }];
@@ -296,15 +296,15 @@ define('io.ox/mail/api', [
             if (!/^text\/(plain|html)/i.test(data.content_type)) return data;
             // only clean-up text and html; otherwise we lose data (see bug 43727)
             data.content_type = String(data.content_type).toLowerCase().split(';')[0];
-            return sanitizer.sanitize(data);
+            return sanitizer.sanitize(data, options);
         });
     }
-    function sanitizeMailData(data) {
-        data.attachments = sanitizeAttachments(data.attachments);
+    function sanitizeMailData(data, options) {
+        data.attachments = sanitizeAttachments(data.attachments, options);
 
         if (_.isArray(data.nested_msgs)) {
             data.nested_msgs = data.nested_msgs.map(function (nested_msg) {
-                nested_msg.attachments = sanitizeAttachments(nested_msg.attachments);
+                nested_msg.attachments = sanitizeAttachments(nested_msg.attachments, options);
                 return nested_msg;
             });
         }
@@ -316,7 +316,8 @@ define('io.ox/mail/api', [
             model = pool.get('detail').get(cid),
             useCache = options && (options.cache !== undefined) ? options.cache : true,
             isDefaultView = obj.view === 'noimg' || !obj.view,
-            isComplete;
+            isComplete,
+            t0 = _.now();
 
         if (model) {
             isComplete = !!model.get('attachments');
@@ -338,12 +339,17 @@ define('io.ox/mail/api', [
 
         // never use factory's internal cache, therefore always 'false' at this point
         return get.call(api, obj, false).done(function (data) {
+            // trigger loading time event
+            ox.trigger('timing:mail:load', _.now() - t0);
             // don't save raw data in our models. We only want preformated content there
             if (obj.src || obj.view === 'raw') return;
             // delete potential 'cid' attribute (see bug 40136); otherwise the mail gets lost
             delete data.cid;
 
-            data = sanitizeMailData(data);
+            var t1 = window.performance ? window.performance.now() : _.now();
+            data = sanitizeMailData(data, { noImages: obj.view === 'noimg' });
+            // trigger timing event for sanitize duration
+            ox.trigger('timing:mail:sanitize', (window.performance ? window.performance.now() : _.now()) - t1);
 
             // either update or add model
             if (model) {
@@ -619,8 +625,8 @@ define('io.ox/mail/api', [
             action: 'threadedAll',
             // +flags +color_label
             columns: options.columns || '601,600,611,102',
-            sort: options.sort || '610',
-            sortKey: 'threaded-' + (options.sort || '610'),
+            sort: options.sort || '661',
+            sortKey: 'threaded-' + (options.sort || '661'),
             konfetti: true,
             order: options.order || 'desc',
             includeSent: !accountAPI.is('sent|drafts', options.folder),
@@ -1327,12 +1333,12 @@ define('io.ox/mail/api', [
                 action: 'all',
                 folder: 'default0/INBOX',
                 //received_date, id, folder_id, flags
-                columns: '610,600,601,611',
+                columns: '610,600,601,611,661',
                 // only unseen mails are interesting here!
                 unseen: 'true',
                 // any reason to see them?
                 deleted: 'false',
-                sort: '610',
+                sort: '661',
                 order: 'desc',
                 // not really sure if limit works as expected
                 // if I only fetch 10 mails and my inbox has some unread mails but the first 10 are seen
@@ -1345,14 +1351,14 @@ define('io.ox/mail/api', [
             // check most recent mail
             var recent = _(unseen).filter(function (obj) {
                 // ignore mails 'mark as deleted'
-                return obj.received_date > lastUnseenMail && (obj.flags & 2) !== 2;
+                return obj.date > lastUnseenMail && (obj.flags & 2) !== 2;
             });
 
             // Trigger even if no new mails are added to ensure read mails are removed
             api.trigger('new-mail', recent, unseen);
 
             if (recent.length > 0) {
-                lastUnseenMail = recent[0].received_date;
+                lastUnseenMail = recent[0].date;
                 api.newMailTitle(true);
             } else {
                 // if no new mail set lastUnseenMail to now, to prevent mark as unread to trigger new mail
@@ -1697,7 +1703,7 @@ define('io.ox/mail/api', [
                 folder: api.allMessagesFolder,
                 // need original_id and original_folder_id
                 columns: '600,654,655',
-                sort: '610',
+                sort: '661',
                 order: 'desc',
                 unseen: true,
                 deleted: false,
@@ -1717,7 +1723,7 @@ define('io.ox/mail/api', [
                     folder: api.allMessagesFolder,
                     // need original_id and original_folder_id
                     columns: http.defaultColumns.mail.unseen,
-                    sort: '610',
+                    sort: '661',
                     order: 'desc',
                     unseen: true,
                     deleted: false,
@@ -1731,7 +1737,7 @@ define('io.ox/mail/api', [
                     folder: params.folder,
                     categoryid: params.category_id || params.categoryid,
                     columns: http.defaultColumns.mail.all,
-                    sort: params.sort || '610',
+                    sort: params.sort || '661',
                     order: params.order || 'desc',
                     includeSent: !accountAPI.is('sent|drafts', params.folder),
                     max: (params.offset || 0) + 300,
@@ -1744,7 +1750,7 @@ define('io.ox/mail/api', [
                 folder: params.folder,
                 categoryid: params.category_id || params.categoryid,
                 columns: http.defaultColumns.mail.all,
-                sort: params.sort || '610',
+                sort: params.sort || '661',
                 order: params.order || 'desc',
                 deleted: showDeleted,
                 timezone: 'utc'
@@ -1784,12 +1790,6 @@ define('io.ox/mail/api', [
         return [obj];
     }
 
-    function renameProperty(obj) {
-        if (!obj.authenticity) return obj;
-        obj.authenticity_preview = obj.authenticity;
-        delete obj.authenticity;
-    }
-
     api.processThreadMessage = function (obj) {
 
         // get thread
@@ -1799,10 +1799,6 @@ define('io.ox/mail/api', [
         thread = _(list = thread).filter(filterDeleted);
         // don't remove all if all marked as deleted
         if (thread.length === 0) thread = list.slice(0, 1);
-
-        // workaround for bug 62881 until middleware change is available
-        // authenticity -> authenticity_preview (same property name - different content for threadedAll/all and get)
-        _(thread.concat(obj)).each(renameProperty);
 
         // we use the last item to generate the cid. More robust because unlikely to change.
         var last = _(thread).last();

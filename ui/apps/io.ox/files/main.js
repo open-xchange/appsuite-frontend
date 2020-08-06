@@ -35,6 +35,7 @@ define('io.ox/files/main', [
     'io.ox/backbone/mini-views/quota',
     'io.ox/core/notifications',
     'io.ox/backbone/views/toolbar',
+    'io.ox/core/api/filestorage',
     // prefetch
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
@@ -45,7 +46,7 @@ define('io.ox/files/main', [
     'io.ox/files/upload/dropzone',
     'io.ox/core/folder/breadcrumb',
     'io.ox/files/contextmenu'
-], function (commons, gt, settings, coreSettings, ext, folderAPI, jobsAPI, TreeView, FolderView, FileListView, ListViewControl, Toolbar, actionsUtil, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView, notifications, ToolbarView) {
+], function (commons, gt, settings, coreSettings, ext, folderAPI, jobsAPI, TreeView, FolderView, FileListView, ListViewControl, Toolbar, actionsUtil, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView, notifications, ToolbarView, filestorageAPI) {
 
     'use strict';
 
@@ -390,7 +391,8 @@ define('io.ox/files/main', [
                 'filter': 'all',
                 'layout': layout,
                 'folderEditMode': false,
-                'details': _.device('touch') ? false : app.settings.get('showDetails', true)
+                'details': _.device('touch') ? false : app.settings.get('showDetails', true),
+                'searchActive': false
             });
             // initial setup
             var folder = app.folder.get();
@@ -1018,8 +1020,13 @@ define('io.ox/files/main', [
          */
         'requires-reload': function (app) {
             // listen to events that affect the filename, description add files, or remove files
-            api.on('rename description add:version remove:version change:version change:file', _.debounce(function () {
-                app.listView.reload();
+            api.on('rename description add:version remove:version change:version change:file', _.debounce(function (file) {
+                // if file not in current folder displayed,
+                if (file && file.folder_id && (file.folder_id !== app.folder.get())) {
+                    api.pool.resetFolder(file.folder_id);
+                } else {
+                    app.listView.reload();
+                }
             }, 100));
             // bug 53498
             api.on('reload:listview', _.debounce(function () {
@@ -1338,10 +1345,12 @@ define('io.ox/files/main', [
                     'find:query': function () {
                         // hide sort options
                         app.listControl.$el.find('.grid-options:first').hide();
+                        app.props.set('searchActive', true);
                     },
                     'find:cancel': function () {
                         // show sort options again
                         app.listControl.$el.find('.grid-options:first').show();
+                        app.props.set('searchActive', false);
                     }
                 });
             }
@@ -1583,6 +1592,55 @@ define('io.ox/files/main', [
                 if (!folder || folder !== this.folder.get()) return;
                 if (folderAPI.isBeingDeleted(folder)) return;
                 switchToDefaultFolder(error);
+            });
+        },
+
+        'account-error-handling': function (app) {
+
+            app.addAccountErrorHandler = function (folderId, callbackEvent, data, overwrite) {
+                console.log(folderId, callbackEvent, data);
+                var node = app.treeView.getNodeView(folderId + '/'),
+                    updateNode = function (node) {
+                        node.showStatusIcon(gt('There is a problem with this account. Click for more information'), callbackEvent || 'checkAccountStatus', data || node.options.model_id, overwrite);
+                    };
+                if (node) {
+                    updateNode(node);
+                } else {
+                    // wait for node to appear
+                    app.treeView.on('appear:' + folderId + '/', function () {
+                        node = app.treeView.getNodeView(folderId + '/');
+                        if (node) updateNode(node);
+                        app.treeView.off('appear:' + folderId + '/');
+                    });
+                }
+            };
+
+            function updateStatus(folderId) {
+                var node = app.treeView.getNodeView(folderId + '/');
+                if (!node) return;
+                node.hideStatusIcon();
+                node.render();
+            }
+
+            filestorageAPI.on('refresh:basicAccount', function (e, folderId) {
+                updateStatus(folderId);
+            });
+        },
+
+        'account-status-check': function () {
+
+            filestorageAPI.getAllAccounts().done(function (data) {
+                _.each(data.models, function (accountData) {
+                    if (accountData.get('hasError') === true) {
+                        app.addAccountErrorHandler(accountData.get('qualifiedId'), 'checkAccountStatus');
+                    }
+                });
+            });
+
+            app.treeView.on('checkAccountStatus', function () {
+                ox.launch('io.ox/settings/main', { folder: 'virtual/settings/io.ox/settings/accounts' }).done(function () {
+                    this.setSettingsPane({ folder: 'virtual/settings/io.ox/settings/accounts' });
+                });
             });
         }
     });

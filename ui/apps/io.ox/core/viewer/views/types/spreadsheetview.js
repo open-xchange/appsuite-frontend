@@ -12,10 +12,8 @@
 define('io.ox/core/viewer/views/types/spreadsheetview', [
     'io.ox/core/viewer/views/types/baseview',
     'io.ox/core/extensions',
-    'io.ox/files/api',
-    'settings!io.ox/files',
     'gettext!io.ox/core'
-], function (BaseView, Ext, FilesAPI, Settings, gt) {
+], function (BaseView, Ext, gt) {
 
     'use strict';
 
@@ -48,7 +46,6 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
             this.documentContainer = null;
             this.appLaunchDelayId = null;
             this.spreadsheetApp = null;
-            this.tempFileModel = null;
 
             // in popout mode the (plugged) documents app needs to be quit before the popout Viewer app
             this.listenTo(this.viewerEvents, 'viewer:beforeclose', this.onDispose);
@@ -66,89 +63,6 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
             if (!this.disposed && this.spreadsheetApp && this.spreadsheetApp.isInQuit && !this.spreadsheetApp.isInQuit()) {
                 callback.call(this, this.spreadsheetApp);
             }
-        },
-
-        /**
-         * Make sure the resulting file model is located in Drive.
-         * Mail or PIM attachments are copied to a Drive temp folder.
-         * Drive files are used as they are.
-         *
-         * @param {Object} model
-         *  A Drive file, or Mail or PIM attachment model.
-         *
-         * @returns {jQuery.Promise}
-         *  A Promise that will resolve with the resulting Drive model.
-         */
-        assureDriveFile: function (model) {
-            return model.isFile() ? $.when(model) : this.saveAttachmentToTempFolder(model);
-        },
-
-        /**
-         * Saves a Mail or PIM attachment to a Drive temp folder
-         * and returns a Promise with the model of that temp file.
-         *
-         * @param {Object} model
-         *  A Drive file, or Mail or PIM attachment model.
-         *
-         * @returns {jQuery.Promise}
-         *  A Promise that will resolve with the resulting Drive model.
-         */
-        saveAttachmentToTempFolder: function (model) {
-            // the id of the target folder in Drive
-            var targetFolderId = String(Settings.get('folder/trash'));
-            var self = this;
-            var promise = null;
-
-            if (model.isPIMAttachment()) {
-                // lazy load attachment API
-                promise = require(['io.ox/core/api/attachment']);
-
-                // save attachment to Drive temp folder
-                promise = promise.then(function (AttachmentAPI) {
-                    return (self.disposed) ? $.Deferred().reject() : AttachmentAPI.save(model.get('origData'), targetFolderId);
-                });
-
-                // get complete model data
-                promise = promise.then(function (fileId) {
-                    return FilesAPI.get({ id: fileId, folder_id: targetFolderId });
-                });
-
-            } else if (model.isMailAttachment()) {
-                // lazy load mail API
-                promise = require(['io.ox/mail/api']);
-
-                // save attachment to Drive temp folder
-                promise = promise.then(function (MailApi) {
-                    return (self.disposed) ? $.Deferred().reject() : MailApi.saveAttachments(model.get('origData'), targetFolderId);
-                });
-
-                // get complete model data
-                promise = promise.then(function (result) {
-                    var file = (result && result[0] && result[0].data) || {};
-                    return FilesAPI.get({ id: file.id, folder_id: file.folder_id });
-                });
-
-            } else {
-                promise = $.Deferred().reject(model);
-            }
-
-            // get file model instance and store it
-            promise = promise.then(function (file) {
-                self.tempFileModel = FilesAPI.pool.get('detail').get(_.cid(file)) || null;
-                return self.tempFileModel;
-            });
-
-            return promise;
-        },
-
-        /**
-         * Delete the temp file if it exists.
-         *
-         * @returns {Deferred}
-         */
-        deleteTempFile: function () {
-            if (!this.tempFileModel) { return $.when(); }
-            return FilesAPI.remove([this.tempFileModel.toJSON()], true).then(function () { this.tempFileModel = null; }.bind(this));
         },
 
         /**
@@ -230,62 +144,57 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
 
             function launchApplication(model) {
 
-                // make sure mail and PIM attachments are saved into a Drive temp folder
-                var promise = self.assureDriveFile(model);
+                // fail safety: check for early exit of the viewer
+                if (self.disposed) { return $.Deferred().reject(); }
 
-                // launch Spreadsheet application
-                promise = promise.then(function (model) {
+                // invoke the extension point to launch the embedded spreadsheet application
+                var point = Ext.point('io.ox/office/spreadsheet/viewer/load/drive');
+                var baton = new Ext.Baton({ data: model, page: self.documentContainer });
+                var result = point.invoke('launch', self, baton);
 
-                    // fail safety: check for early exit of the viewer
-                    if (self.disposed) { return $.Deferred().reject(); }
-
-                    // invoke the extension point to launch the embedded spreadsheet application
-                    var point = Ext.point('io.ox/office/spreadsheet/viewer/load/drive');
-                    var baton = new Ext.Baton({ data: model, page: self.documentContainer });
-                    var result = point.invoke('launch', self, baton);
-
-                    // `point.invoke()` returns an array of promises
-                    return (result && _.isArray(result._wrapped)) ? result._wrapped[0] : $.Deferred().reject();
-                });
-
-                return promise;
+                // `point.invoke()` returns an array of promises
+                return (result && _.isArray(result._wrapped)) ? result._wrapped[0] : $.Deferred().reject();
             }
 
             function onLaunchSuccess() {
 
                 // the spreadsheet application instance is passed as calling context
-                var docsApp = self.spreadsheetApp = this;
+                self.spreadsheetApp = this;
+
                 // hide busy spinner
                 if (!self.disposed) { self.$el.idle(); }
 
                 // wait until the Documents part (class `BaseApplication` and beyond) is added to the app
-                docsApp.onInit(function () {
+                self.spreadsheetApp.onInit(function () {
 
                     function listenToWithValidApp(source, type, callback) {
-                        docsApp.waitForImportSuccess(function () {
+                        self.spreadsheetApp.waitForImportSuccess(function () {
                             self.listenTo(source, type, self.withValidApp.bind(self, callback));
                         });
                     }
 
                     // register event handlers
-                    listenToWithValidApp(self.viewerEvents, 'viewer:resize', function () { docsApp.getView().refreshPaneLayout(); });
-                    listenToWithValidApp(self.viewerEvents, 'viewer:zoom:in', function () { docsApp.getController().executeItem('view/zoom/inc'); });
-                    listenToWithValidApp(self.viewerEvents, 'viewer:zoom:out', function () { docsApp.getController().executeItem('view/zoom/dec'); });
+                    listenToWithValidApp(self.viewerEvents, 'viewer:resize', function () {
+                        var view = self.spreadsheetApp.getView();
+                        if (view && _.isFunction(view.refreshPaneLayout)) { view.refreshPaneLayout(); }
+                    });
+                    listenToWithValidApp(self.viewerEvents, 'viewer:zoom:in', function () { self.spreadsheetApp.getController().executeItem('view/zoom/inc'); });
+                    listenToWithValidApp(self.viewerEvents, 'viewer:zoom:out', function () { self.spreadsheetApp.getController().executeItem('view/zoom/dec'); });
 
                     // ensure that the wrapped spreadsheet application window is shown along with the Preview app window
                     if (self.app) {
                         listenToWithValidApp(self.app.getWindow(), 'show', function () {
-                            docsApp.getWindow().show(null, true);
+                            self.spreadsheetApp.getWindow().show(null, true);
                         });
                     }
 
                     // ensure that the Preview app window is hidden along with the wrapped spreadsheet application window
-                    docsApp.getWindow().on('hide', function () {
+                    self.spreadsheetApp.getWindow().on('hide', function () {
                         if (self.app && !self.disposed) { self.app.getWindow().hide(); }
                     });
 
                     // show error message if importing the document fails
-                    docsApp.waitForImportFailure(function (_finished, error) {
+                    self.spreadsheetApp.waitForImportFailure(function (_finished, error) {
                         self.showLoadError(error.message);
                     });
                 });
@@ -328,9 +237,6 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
                     self.spreadsheetApp = null;
                 });
             });
-
-            // delete temp file if one has been created
-            this.deleteTempFile();
 
             this.isPrefetched = false;
 

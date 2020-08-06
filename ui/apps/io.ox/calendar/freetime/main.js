@@ -140,6 +140,7 @@ define('io.ox/calendar/freetime/main', [
 
         // use debouce since we don't want to refresh to often
         refresh: _.debounce(function () {
+            if (this.disposed) return;
             this.timeSubview.getAppointmentsInstant();
         }, 200),
 

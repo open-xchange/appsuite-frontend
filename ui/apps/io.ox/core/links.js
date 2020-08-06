@@ -41,10 +41,18 @@ define('io.ox/core/links', [
     var appHandler = function (e) {
         e.preventDefault();
         var data = $(this).data(),
+            params = _.deserialize(data.all.match(/#.*/)[0]),
+            isOffice = /^io.ox\/office\//.test(data.app),
             // special handling for text and spreadsheet
-            options = /^io.ox\/office\//.test(data.app) ?
-                { action: 'load', file: { folder_id: data.folder, id: data.id } } :
+            options = isOffice ?
+                { action: 'load', file: { folder_id: data.folder, id: data.id }, params: params } :
                 _(data).pick('folder', 'folder_id', 'id', 'cid');
+
+        if (isOffice && ox.tabHandlingEnabled) {
+            return require(['io.ox/core/api/tab'], function (tabApi) {
+                tabApi.openChildTab(data.all);
+            });
+        }
 
         ox.launch(data.app + '/main', options).done(function () {
             // special handling for settings (bad, but apparently solved differently)

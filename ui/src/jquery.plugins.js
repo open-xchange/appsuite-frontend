@@ -86,14 +86,28 @@
         return button;
     };
 
-    $.fn.busy = function (empty) {
+    $.fn.busy = function (options) {
+        if (options === true) options = { empty: true };
+        options = _.extend({
+            empty: false,
+            immediate: false
+        }, options);
+
         return this.each(function () {
             var self = $(this);
             clearTimeout(self.data('busy-timeout'));
-            self.data('busy-timeout', setTimeout(function () {
-                self.addClass('io-ox-busy');
-                if (empty) self.empty();
-            }, 300));
+
+            // in case element has .immediate and it's not wanted -> remove it
+            self.addClass('io-ox-busy').toggleClass('immediate', options.immediate);
+
+            if (!options.empty) return;
+            if (options.immediate) {
+                self.empty();
+            } else {
+                self.data('busy-timeout', setTimeout(function () {
+                    self.empty();
+                }, 300));
+            }
         });
     };
 
@@ -101,7 +115,7 @@
         return this.each(function () {
             var self = $(this);
             clearTimeout(self.data('busy-timeout'));
-            self.removeClass('io-ox-busy');
+            self.removeClass('io-ox-busy immediate');
         });
     };
 

@@ -243,7 +243,7 @@ Scenario('[C7830] Add User data widget', async function (I, users) {
     await I.haveSetting('io.ox/portal//widgets/user', '{}');
 
     // ensure the user has the capability to edit his password
-    await users[0].hasCapability('edit_password');
+    await users[0].hasConfig('com.openexchange.capabilities.edit_password', false);
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/portal']);
     I.waitForText('Portal settings');
@@ -259,7 +259,9 @@ Scenario('[C7830] Add User data widget', async function (I, users) {
     I.openApp('Portal');
     I.waitForText('User data');
     I.waitForText('My contact data');
-    I.waitForText('My password');
+
+    // TODO add again when change password is possible on a backend without sso
+    // I.waitForText('My password');
 
 });
 
@@ -342,16 +344,16 @@ Scenario('[C7832] Remove widgets', async function (I, dialogs) {
     I.waitForText('Portal settings');
 
     // Remove the first widget
-    I.click('a[title="Remove ' + widget1 + '"]');
+    I.click('~Remove ' + widget1);
     dialogs.waitForVisible();
     dialogs.clickButton('Delete');
     I.waitForDetached('.modal-dialog');
 
     // Remove the second widget
-    I.click('a[title="Remove ' + widget2 + '"]');
+    I.click('~Remove ' + widget2);
 
     // Remove the third widget
-    I.click('a[title="Remove ' + widget3 + '"]');
+    I.click('~Remove ' + widget3);
 
     // Switch to portal an check that the widgets are removed
     I.openApp('Portal');

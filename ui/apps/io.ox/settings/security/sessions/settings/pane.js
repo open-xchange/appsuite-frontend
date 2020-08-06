@@ -29,8 +29,8 @@ define('io.ox/settings/security/sessions/settings/pane', [
         var def = new $.Deferred();
         confirmText = confirmText || gt('Ok');
         require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-            new ModalDialog({ title: text, async: true })
-            .build(function () { this.$body.remove(); })
+            //#. 'Sign out from device' as header of a modal dialog to sign out of a session.
+            new ModalDialog({ title: gt('Sign out from device'), description: text, async: true })
             .addCancelButton()
             .addButton({ label: confirmText, action: 'ok' })
             .on('ok', def.resolve)

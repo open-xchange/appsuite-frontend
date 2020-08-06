@@ -441,6 +441,10 @@ define('io.ox/core/tk/wizard', [
             var dir = this.getDirections(),
                 footer = this.$('.wizard-footer').empty();
 
+            // show step numbers
+            if (this.parent.options.showStepNumbers) {
+                footer.append($('<span class="wizard-step-number">').text((this.parent.currentStep + 1) + '/' + this.parent.steps.length));
+            }
             // show "Back" button
             if (dir.back) this.addButton(footer, { action: 'back', className: 'btn-default', label: this.getLabelBack() });
             // show "Start" or Next" button
@@ -558,7 +562,10 @@ define('io.ox/core/tk/wizard', [
                 if (resolveSelector(this.options.waitFor.selector)) return cont.call(this);
                 var max = _.isNumber(this.options.waitFor.timeout) ? (this.options.waitFor.timeout * 10) : 50;
                 if (counter < max) {
-                    setTimeout(waitFor.bind(this, counter + 1), 100);
+                    setTimeout(function () {
+                        if (this.disposed) return;
+                        waitFor.call(this, counter + 1);
+                    }.bind(this), 100);
                 } else {
                     console.error('Step.show(). Stopped waiting for:', this.options.waitFor.selector);
                     this.parent.close();
@@ -590,6 +597,7 @@ define('io.ox/core/tk/wizard', [
                     this.parent.spotlight(this.options.spotlight.selector, this.options.spotlight.options);
                     // respond to window resize
                     $(window).on('resize.wizard.spotlight', _.debounce(function () {
+                        if (this.disposed) return;
                         this.parent.spotlight(this.options.spotlight.selector);
                     }.bind(this), 100));
                 } else {
@@ -614,6 +622,7 @@ define('io.ox/core/tk/wizard', [
                 // enable focus watcher?
                 if (this.options.focusWatcher) {
                     this.focusWatcher = setInterval(function () {
+                        if (this.disposed) return;
                         if (!$.contains(this.el, document.activeElement)) this.$el.find('button[tabindex!="-1"][disabled!="disabled"]:visible:last').focus();
                     }.bind(this), 100);
                 }
@@ -724,6 +733,7 @@ define('io.ox/core/tk/wizard', [
 
         // auto-align popup (used internally)
         align: function (selector) {
+            if (this.disposed) return;
 
             // fall back to selector from referTo() or spotlight()
             if (!selector && this.options) {
@@ -744,6 +754,11 @@ define('io.ox/core/tk/wizard', [
 
             var $el = this.$el;
             var bounds = getBounds(elem), popupWidth = $el.width(), popupHeight = $el.height();
+
+            if (this.options.noAutoAlign) {
+                alignCenter();
+                return;
+            }
 
             function setOffset(key, value, size, available) {
                 value = Math.min(Math.max(16, value), available - size - 16);

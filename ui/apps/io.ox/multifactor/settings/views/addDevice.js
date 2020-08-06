@@ -201,7 +201,8 @@ define('io.ox/multifactor/settings/views/addDevice', [
         var additParams = {};
         switch (provider) {
             case constants.SMS:
-                additParams.phoneNumber = model.get('code') + $('#deviceNumber').val();
+                // strip of language code (needs to be added in the selectbox to distinguish countries whith the same number)
+                additParams.phoneNumber = model.get('code').replace(/[^\d+]+/g, '') + $('#deviceNumber').val();
                 if (!validate(additParams.phoneNumber)) {
                     dialog.idle();
                     return false;

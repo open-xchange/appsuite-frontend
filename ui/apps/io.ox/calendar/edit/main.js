@@ -13,22 +13,197 @@
  */
 
 define('io.ox/calendar/edit/main', [
+    'io.ox/core/extensions',
     'io.ox/calendar/model',
     'io.ox/calendar/api',
-    'io.ox/core/extPatterns/dnd',
     'io.ox/calendar/edit/view',
     'io.ox/core/notifications',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
-    'io.ox/core/http',
     'gettext!io.ox/calendar/edit/main',
     'settings!io.ox/calendar',
     'less!io.ox/calendar/edit/style',
     // need jquery-ui for scrollParent
     'static/3rd.party/jquery-ui.min.js'
-], function (AppointmentModel, api, dnd, EditView, notifications, folderAPI, util, http, gt, settings) {
+], function (ext, AppointmentModel, api, EditView, notifications, folderAPI, util, gt, settings) {
 
     'use strict';
+
+    var INDEX = 0;
+
+    ext.point('io.ox/calendar/edit/boot').extend({
+        id: 'models-and-objects',
+        index: INDEX += 100,
+        perform: function (baton) {
+            var model = baton.data;
+            delete baton.data;
+            if (model) {
+                if (model instanceof Backbone.Model) {
+                    baton.data = model.toJSON();
+                } else if (_.isObject(model)) {
+                    baton.data = model;
+                }
+            }
+        }
+    }, {
+        id: 'load',
+        index: INDEX += 100,
+        perform: function (baton) {
+            var action = baton.options.action,
+                originalData = baton.data,
+                o = originalData && api.reduce(originalData);
+            // is not editing
+            if (!o || !o.id || !o.folder) return;
+            // use series master for this and future
+            if (action === 'series' || action === 'thisandfuture') {
+                // edit the series, discard recurrenceId and reference to seriesId if exception
+                delete o.recurrenceId;
+                o.id = originalData.seriesId || originalData.id;
+            }
+            return api.get(o, false).then(function (data) {
+                data = data.toJSON();
+                if (action === 'thisandfuture') data = util.createUpdateData(data, originalData);
+                baton.data = data;
+            }, notifications.yell);
+        }
+    }, {
+        id: 'appointment-model',
+        index: INDEX += 100,
+        perform: function (baton) {
+            var options = baton.options,
+                data = baton.data,
+                app = baton.app;
+            if (options.mode === 'edit' && data.id) {
+                // hash support
+                app.setState({ folder: data.folder, id: data.id });
+                app.model = new AppointmentModel.Model(data);
+            } else {
+                // default values from settings
+                data.alarms = data.alarms || util.getDefaultAlarms(data);
+
+                // transparency is the new shown_as property. It only has 2 values, TRANSPARENT and OPAQUE
+                data.transp = data.transp || ((util.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE');
+                app.model = new AppointmentModel.Model(data);
+                if (!data.folder || /^virtual/.test(data.folder)) {
+                    app.model.set('folder', data.folder = folderAPI.getDefaultFolder('calendar'));
+                }
+            }
+            baton.model = app.model;
+        }
+    }, {
+        id: 'load-folder',
+        index: INDEX += 100,
+        perform: function (baton) {
+            return folderAPI.get(baton.model.get('folder')).catch();
+        }
+    }, {
+        id: 'set-default-attendee',
+        index: INDEX += 100,
+        perform: function (baton) {
+            return baton.model.setDefaultAttendees({ create: baton.options.mode === 'create' });
+        }
+    }, {
+        id: 'model-setup',
+        index: INDEX += 100,
+        perform: function (baton) {
+            var options = baton.options;
+            if (options.mode === 'create') {
+                baton.model.set('attendeePrivileges', settings.get('chronos/allowAttendeeEditsByDefault', false) && !folderAPI.pool.getModel(baton.model.get('folder')).is('public') ? 'MODIFY' : 'DEFAULT');
+            }
+
+            if (options.mode === 'edit' && util.isAllday(baton.model)) {
+                // allday apointments do not include the last day. To not misslead the user we subtract a day (so one day appointments only show one date for example)
+                // this day will be added again on save
+                baton.model.set('endDate', { value: moment(baton.model.get('endDate').value).subtract('1', 'days').format('YYYYMMDD') });
+            }
+
+            baton.model.on({
+                'sync:start': function () {
+                    baton.win.busy();
+                }
+            });
+
+            if (options.mode === 'edit') {
+
+                if (options.action === 'appointment') {
+                    baton.model.set('rrule', undefined, { validate: true });
+                    baton.model.mode = 'appointment';
+                }
+
+                if (options.action === 'series') baton.model.mode = 'series';
+                if (options.action === 'thisandfuture') baton.model.mode = 'thisandfuture';
+            }
+
+            baton.model.on('change', function () {
+                baton.app.considerSaved = false;
+            });
+        }
+    }, {
+        id: 'view',
+        index: INDEX += 100,
+        perform: function (baton) {
+            var app = baton.app,
+                options = baton.options;
+            baton.view = app.view = new EditView({
+                model: baton.model,
+                mode: options.mode,
+                app: app,
+                callbacks: {
+                    extendDescription: app.extendDescription
+                },
+                // restore meta data for used groups if given
+                usedGroups: options.usedGroups || []
+            });
+        }
+    }, {
+        id: 'set-content',
+        index: INDEX += 100,
+        perform: function (baton) {
+            var options = baton.options,
+                app = baton.app,
+                model = baton.model;
+            // if initialModelData is given, we are using a restore point. Don't consider this as saved
+            app.considerSaved = !options.initialModelData;
+
+            app.setTitle(model.get('summary') || options.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
+
+            // use deepclone so we dont have accidental references
+            app.initialModelData = _.deepClone(options.initialModelData || model.toJSON());
+            $(app.getWindow().nodes.main[0]).append(app.view.render().el);
+        }
+    }, {
+        id: 'idle',
+        index: INDEX += 100,
+        perform: function (baton) {
+            var win = baton.win;
+            // Set window and toolbars visible again
+            win.nodes.header.removeClass('sr-only');
+            win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0).trigger('scroll');
+            win.idle();
+        }
+    }, {
+        id: 'done',
+        index: INDEX += 100,
+        perform: function (baton) {
+            var app = baton.app,
+                model = baton.model;
+            //set url parameters
+            app.setState({ folder: model.attributes.folder, id: model.get('id') ? model.attributes.id : null });
+            app.onShowWindow();
+            //used by guided tours so they can show the next step when everything is ready
+            $(app).trigger('finishedCreating');
+        }
+    }, {
+        id: 'dropzone',
+        index: INDEX += 100,
+        perform: function (baton) {
+            var app = baton.app;
+            if (app.dropZone) {
+                baton.win.on('hide', function () { app.dropZone.remove(); });
+                if (app.dropZone.include) app.dropZone.include();
+            }
+        }
+    });
 
     function createInstance() {
 
@@ -40,6 +215,16 @@ define('io.ox/calendar/edit/main', [
             floating: !_.device('smartphone'),
             size: 'width-sm'
         });
+
+        var win = ox.ui.createWindow({
+            name: 'io.ox/calendar/edit',
+            chromeless: true,
+            floating: !_.device('smartphone'),
+            closable: true,
+            title: gt('Edit Appointment')
+        });
+
+        app.setWindow(win);
 
         _.extend(app, {
 
@@ -70,124 +255,29 @@ define('io.ox/calendar/edit/main', [
                 notifications.yell('success', gt('Description has been copied'));
             },
 
-            edit: function (model, opt) {
+            edit: function (data, opt) {
 
-                var self = this,
-                    data = {};
-                // work with models and objects
-                if (model) {
-                    if (model instanceof Backbone.Model) {
-                        data = model.toJSON();
-                    } else if (_.isObject(model)) {
-                        data = model;
-                    }
-                }
+                var def = new $.Deferred();
+
                 opt = _.extend({
                     mode: 'edit'
                 }, opt);
 
-                app.cid = 'io.ox/calendar:' + opt.mode + '.' + util.cid(model);
+                app.cid = 'io.ox/calendar:' + opt.mode + '.' + util.cid(data);
 
-                function cont() {
-                    // create app window
-                    var win = ox.ui.createWindow({
-                        name: 'io.ox/calendar/edit',
-                        chromeless: true,
-                        floating: !_.device('smartphone'),
-                        closable: true,
-                        title: gt('Edit Appointment')
+                // Set window and toolbars invisible initially
+                win.nodes.header.addClass('sr-only');
+                win.nodes.body.addClass('sr-only');
+
+                win.busy().show(function () {
+                    ext.point('io.ox/calendar/edit/boot').cascade(app, { app: app, data: data || {}, options: opt, win: win }).then(function success() {
+                        def.resolve({ app: app });
+                    }, function fail(e) {
+                        app.quit();
+                        def.reject(e);
                     });
-
-                    self.setWindow(win);
-
-                    self.model.setDefaultAttendees({ create: opt.mode === 'create' }).done(function () {
-
-                        if (opt.mode === 'create') {
-                            self.model.set('attendeePrivileges', settings.get('chronos/allowAttendeeEditsByDefault', false) && !folderAPI.pool.getModel(self.model.get('folder')).is('public') ? 'MODIFY' : 'DEFAULT');
-                        }
-
-                        if (opt.mode === 'edit' && util.isAllday(self.model)) {
-                            // allday apointments do not include the last day. To not misslead the user we subtract a day (so one day appointments only show one date for example)
-                            // this day will be added again on save
-                            self.model.set('endDate', { value: moment(self.model.get('endDate').value).subtract('1', 'days').format('YYYYMMDD') });
-                        }
-                        app.view = self.view = new EditView({
-                            model: self.model,
-                            mode: opt.mode,
-                            app: self,
-                            callbacks: {
-                                extendDescription: app.extendDescription
-                            },
-                            // restore meta data for used groups if given
-                            usedGroups: opt.usedGroups || []
-                        });
-
-                        self.model.on({
-                            'sync:start': function () {
-                                self.getWindow().busy();
-                            }
-                        });
-                        // if initialModelData is given, we are using a restore point. Don't consider this as saved
-                        self.considerSaved = !opt.initialModelData;
-
-                        self.setTitle(self.model.get('summary') || opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
-
-                        win.on('show', function () {
-                            if (app.dropZone && app.dropZone.include) app.dropZone.include();
-                            //set url parameters
-                            self.setState({ folder: self.model.attributes.folder, id: self.model.get('id') ? self.model.attributes.id : null });
-                        });
-
-                        if (app.dropZone) win.on('hide', function () { app.dropZone.remove(); });
-
-                        if (opt.mode === 'edit') {
-
-                            if (opt.action === 'appointment') {
-                                self.model.set('rrule', undefined, { validate: true });
-                                self.model.mode = 'appointment';
-                            }
-
-                            if (opt.action === 'series') self.model.mode = 'series';
-                            if (opt.action === 'thisandfuture') self.model.mode = 'thisandfuture';
-                        }
-
-                        self.model.on('change', function () {
-                            self.considerSaved = false;
-                        });
-
-                        // restore points give their old initial model data as options. This way the dirty check stays correct
-
-                        // use deepclone so we dont have accidental references
-                        self.initialModelData = _.deepClone(opt.initialModelData || self.model.toJSON());
-                        $(self.getWindow().nodes.main[0]).append(self.view.render().el);
-                        self.getWindow().show(_.bind(self.onShowWindow, self));
-                        //used by guided tours so they can show the next step when everything is ready
-                        $(app).trigger('finishedCreating');
-                    });
-                }
-
-                function loadFolder() {
-                    folderAPI.get(self.model.get('folder')).always(cont);
-                }
-
-                // check mode
-                if (opt.mode === 'edit' && data.id) {
-                    // hash support
-                    self.setState({ folder: data.folder, id: data.id });
-                    self.model = new AppointmentModel.Model(data);
-                } else {
-                    // default values from settings
-                    data.alarms = data.alarms || util.getDefaultAlarms(data);
-
-                    // transparency is the new shown_as property. It only has 2 values, TRANSPARENT and OPAQUE
-                    data.transp = data.transp || ((util.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE');
-                    self.model = new AppointmentModel.Model(data);
-                    if (!data.folder || /^virtual/.test(data.folder)) {
-                        self.model.set('folder', data.folder = folderAPI.getDefaultFolder('calendar'));
-                    }
-                }
-
-                loadFolder();
+                });
+                return def;
             },
 
             considerSaved: false,
@@ -343,6 +433,7 @@ define('io.ox/calendar/edit/main', [
                 // needed for attachment uploads to work
                 if (this.view.options.mode === 'create') {
                     this.model.trigger('create');
+                    ox.trigger('appointment:create', this.model.get('attendeePrivileges') === 'MODIFY' ? 1 : 0);
                 } else {
                     this.model.trigger('update');
                 }
@@ -418,28 +509,35 @@ define('io.ox/calendar/edit/main', [
             }
         });
 
-        app.setQuit(function () {
+        app.setQuit(function (options) {
+
             var self = this,
-                df = new $.Deferred();
+                df = new $.Deferred(),
+                isDiscard = options && options.type === 'discard';
 
             // trigger blur inputfields so the model has current data and the dirty check is correct
             $(document.activeElement).filter('input').trigger('change');
-            self.cleanUpModel();
+            this.cleanUpModel();
             //be gentle
-            if (self.getDirtyStatus()) {
+            if (this.getDirtyStatus()) {
                 require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                     if (app.getWindow().floating) {
                         app.getWindow().floating.toggle(true);
                     } else if (_.device('smartphone')) {
                         app.getWindow().resume();
                     }
-                    new ModalDialog({ title: gt('Do you really want to discard your changes?') })
+                    new ModalDialog({
+                        //#. 'Discard changes' as header text of an appointment to confirm to discard changes via a modal dialog.
+                        title: gt('Discard changes'),
+                        description: gt('Do you really want to discard your changes?')
+                    })
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
                         //#. Translation must be distinguishable for the user
-                        .addCancelButton({ left: true })
+                        .addCancelButton()
                         .addButton({ label: gt.pgettext('dialog', 'Discard changes'), action: 'delete' })
                         .on('action', function (action) {
                             if (action === 'delete') {
+                                if (isDiscard) self.model.trigger('discard');
                                 self.dispose();
                                 df.resolve();
                             } else {
@@ -449,8 +547,9 @@ define('io.ox/calendar/edit/main', [
                         .open();
                 });
             } else {
-                //just let it go
-                self.dispose();
+                // just let it go
+                if (isDiscard) this.model.trigger('discard');
+                this.dispose();
                 df.resolve();
             }
             if (_.device('!smartphone && !iOS')) app.getWindow().nodes.main.find('input')[0].focus();

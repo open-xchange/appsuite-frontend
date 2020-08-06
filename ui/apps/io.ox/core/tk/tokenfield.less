@@ -34,6 +34,7 @@
     .token {
         margin: 0 5px 3px 0;
         border-radius: @border-radius-small;
+        position: relative;
 
         &.ui-sortable-helper { background-color: @white; }
 
@@ -52,6 +53,10 @@
             background-color: transparent;
             border: none;
         }
+
+        &.grabbed {
+            transform: rotate(2deg);
+        }
     }
 
     // background color if dropable widget is active
@@ -59,9 +64,7 @@
         background-color: #eee;
 
         .token-input {
-            // temporary override style attribute
-            width: 0 !important;
-            background-color: #eee;
+            display: none;
         }
 
     }

@@ -93,7 +93,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     return $('.modal-dialog').is(':visible');
                 }).then(function () {
                     expect($('.modal-dialog').find('button[data-action="send"]'), 'number of buttons with action send').to.have.length(1);
-                    expect($('.modal-dialog').find('button[data-action="subject"]'), 'number of buttons with action subject').to.have.length(1);
+                    expect($('.modal-dialog').find('button[data-action="cancel"]'), 'number of buttons with action cancel').to.have.length(1);
                     spy.restore();
                 });
             });

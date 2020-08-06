@@ -74,6 +74,8 @@ define('io.ox/chat/views/chatList', [
         },
 
         onAdd: _.debounce(function (model, collection, options) {
+            if (this.disposed) return;
+
             this.$el.prepend(
                 options.changes.added
                 .filter(function (model) { return model.isOpen(); })

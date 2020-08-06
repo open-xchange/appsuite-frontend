@@ -165,6 +165,8 @@ define('io.ox/find/view-facets', [
                     module: module,
                     root: type === 'files' ? '9' : '1',
                     flat: api.isFlat(module),
+                    //#. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
+                    button: gt('Select'),
                     done: function (target, dialog) {
                         //get folder data
                         api.get(target)

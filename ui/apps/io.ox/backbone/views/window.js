@@ -20,12 +20,14 @@ define('io.ox/backbone/views/window', [
 
     'use strict';
 
-    var collection = new Backbone.Collection(),
+    var collection = ox.ui.floatingWindows = new Backbone.Collection(),
         // selector for window container for convenience purpose
         container = '#io-ox-core',
         // used when dragging, prevents iframe event issues
         backdrop = $('<div id="floating-window-backdrop">'),
-        minimalPixelsInside = 100;
+        minimalPixelsInside = 100,
+        // shift for new windows in px
+        shift = 30;
 
     var TaskbarView = DisposableView.extend({
         tagName: 'ul',
@@ -47,24 +49,26 @@ define('io.ox/backbone/views/window', [
             if (!model) return;
             model.set('minimized', false);
             collection.add(model);
-            this.updateAriaAttributes();
         },
         addByCid: function (cid) {
             // minimizing a window moves it to the last position
             return this.add(this.$el.find('[data-cid="' + cid + '"]')).show();
         },
-        updateAriaAttributes: function () {
+        updateTaskbar: function () {
             var items = this.$el.find('li').filter(function () {
                 return $(this).css('display') !== 'none';
             });
             var hasItems = items.length > 0;
+            $('html').toggleClass('taskbar-visible', hasItems);
             this.$el.toggleClass('f6-target', hasItems);
             if (hasItems) this.$el.removeAttr('aria-hidden');
             else this.$el.attr('aria-hidden', true);
         },
         add: function (el) {
+            var isAddedToDom = el.parent().length === 0;
             this.$el.append(el);
-            this.updateAriaAttributes();
+            // we only need to update this for new nodes, if append was just used to change the order there is no need to update (is done via minimize attribute listener)
+            if (isAddedToDom) this.updateTaskbar();
             return el;
         },
         render: function () {
@@ -84,7 +88,8 @@ define('io.ox/backbone/views/window', [
             mode: 'normal', // normal, maximized
             title: '',
             showInTaskbar: true,
-            size: 'width-md' // -xs, -sm, -md, -lg
+            size: 'width-md', // -xs, -sm, -md, -lg,
+            wasMoved: false
         },
 
         initialize: function (options) {
@@ -156,12 +161,21 @@ define('io.ox/backbone/views/window', [
 
         onResize: function () {
             if (!this.model) return;
+
+            if (this.model.get('forceChangeMode')) {
+                this.model.set('forceChangeMode', false);
+                this.model.set('noOverflow', !this.isOverfloating(this.$el));
+                return;
+            }
+
             if (!_.isBoolean(this.model.get('noOverflow'))) this.model.set('noOverflow', true);
 
             if (this.model.get('mode') === 'maximized' && this.isOverfloating(this.$el) && this.model.get('noOverflow')) {
                 this.model.set('onResize', true);
                 this.model.set('mode', 'normal');
             }
+
+            this.model.set('noOverflow', !this.isOverfloating(this.$el));
         },
 
         isOverfloating: function (el) {
@@ -249,6 +263,11 @@ define('io.ox/backbone/views/window', [
         },
 
         drag: function (e) {
+
+            if (!this.model.get('wasMoved') && (this.$el.css('left') !== e.clientX - this.model.get('offsetX') + 'px' || this.$el.css('top') !== e.clientY - this.model.get('offsetY') + 'px')) {
+                this.model.set('wasMoved', true);
+            }
+
             // apply changes and adjust to window
             this.$el.css({
                 left: e.clientX - this.model.get('offsetX') + 'px',
@@ -306,6 +325,8 @@ define('io.ox/backbone/views/window', [
         },
 
         onChangeMode: function () {
+            this.model.set('forceChangeMode', true);
+
             // do nothing if the minimizing animation is playing
             if (this.minimizing) return;
 
@@ -331,6 +352,8 @@ define('io.ox/backbone/views/window', [
                 this.$el.css('left', elOrigLeft - percentage * growingDiff);
             }
 
+            this.$('.token-input.tt-input').trigger('updateWidth');
+
             // save value as new preferrence for this app
             if (_.device('desktop') && settings.get('features/floatingWindows/preferredMode/enabled', true) && this.model.get('name')) {
                 var preferences = settings.get('features/floatingWindows/preferredMode/apps', {});
@@ -338,13 +361,32 @@ define('io.ox/backbone/views/window', [
                 settings.set('features/floatingWindows/preferredMode/apps', preferences).save();
             }
             this.keepInWindow(this.model.get('mode') === 'maximized');
-            _.defer(function () { $(window).trigger('resize'); });
+            _.defer(function () {
+                $(window).trigger('resize');
+            });
         },
 
         toggleMode: function () {
             // do nothing if the minimizing animation is playing
             if (this.minimizing) return;
             this.model.set('mode', this.model.get('mode') === 'maximized' ? 'normal' : 'maximized');
+        },
+
+        shift: function () {
+            // no auto positioning for moved windows
+            if (this.model.get('wasMoved')) return;
+
+            // get occupied positions of unmoved windows (number of unmoved windows is not enough here because ther might be gaps due to minimized/closed windows)
+            var occupiedPositions = _(collection.filter({ minimized: false, floating: true, wasMoved: false })).chain().without(this.model).pluck('attributes').pluck('shift').value(),
+                nextValidPosition = _.difference(_.range(occupiedPositions.length), occupiedPositions)[0];
+
+            if (!nextValidPosition) nextValidPosition = occupiedPositions.length;
+            this.$el.css({
+                left: this.$el.position().left + nextValidPosition * shift + 'px',
+                top: this.$el.position().top + nextValidPosition * shift + 'px'
+            });
+
+            this.model.set('shift', nextValidPosition);
         },
 
         activate: function (e) {
@@ -358,11 +400,20 @@ define('io.ox/backbone/views/window', [
                 a11y.getTabbable(this.$body).first().focus();
             }
 
-            if (this.model.get('lazy')) return this.model.set('lazy', false);
+            if ($(container).width() < this.$el.width()) this.model.set('mode', 'normal');
+
+            // shift new windows, so they don't fully overlap each other
+            if (e && e.firstTime) {
+                this.shift();
+            }
+
             this.keepInWindow();
             if (e && e.firstTime && this.model.get('mode') === 'maximized') {
                 this.$el.css('top', Math.max(0, Math.min(32, $(container).height() - this.$el.height())));
             }
+
+            if (this.model.get('lazy')) return this.model.set('lazy', false);
+
             ox.trigger('change:document:title', this.model.get('title'));
         },
 
@@ -398,7 +449,7 @@ define('io.ox/backbone/views/window', [
             if (this.minimizing) return;
             var self = this;
             var taskBarEl = taskbar.addByCid(this.model.cid);
-            var windowWidth = this.model.get('mode') === 'normal' ? this.$el.width() : $('body').width();
+            var windowWidth = this.$el.width();
             var left = taskBarEl.offset().left + taskBarEl.width() / 2 - windowWidth / 2;
             var top = $('body').height() - this.$el.height() / 2;
 
@@ -418,6 +469,8 @@ define('io.ox/backbone/views/window', [
             this.$el.toggle(!minimized);
             if (minimized) return this.deactivate();
             this.activate();
+            // shift window if needed (no 100% overlapping)
+            this.shift();
         },
 
         render: function () {
@@ -444,7 +497,7 @@ define('io.ox/backbone/views/window', [
 
     function remove() {
         collection.remove(this.model);
-        taskbar.updateAriaAttributes();
+        taskbar.updateTaskbar();
     }
 
     var TaskbarElement = DisposableView.extend({
@@ -493,7 +546,10 @@ define('io.ox/backbone/views/window', [
                     } else {
                         a11y.focusListSelection($('.window-container:visible').first());
                     }
+                    // some apps have a special way of closing. Mail compose closes with a big delay for example (waits for errors on send before it fully closes etc)
+                    // make sure collection and taskbar are properly cleaned up
                     collection.remove(model);
+                    taskbar.updateTaskbar();
                 }
             });
         },
@@ -515,7 +571,7 @@ define('io.ox/backbone/views/window', [
             this.$el.toggle(this.model.get('minimized'));
             // don't grab the focus if this is just called from the render function (savepoints start minimized but shouldn't grab the focus when drawn for the first time)
             if (!options.isRender && this.model.get('minimized')) this.$el.find('[data-action="restore"]').focus();
-            taskbar.updateAriaAttributes();
+            taskbar.updateTaskbar();
         },
 
         render: function () {
@@ -544,6 +600,18 @@ define('io.ox/backbone/views/window', [
     var addNonFloatingApp = function (app, options) {
         if (!app) return;
 
+        // this is for apps that have a lot of rampup to do
+        // once they are ready trigger revealApp and it shows up
+        if (app.get('startHidden')) {
+            app.once('revealApp', function () {
+                app.set('startHidden', false);
+                addNonFloatingApp(app, options);
+            });
+            return;
+        }
+
+        var win = app.getWindow();
+
         // no duplicates
         if (collection.findWhere({ appId: app.id }) && collection.findWhere({ appId: app.id }).get('win')) return;
 
@@ -553,11 +621,11 @@ define('io.ox/backbone/views/window', [
 
         // in case of lazyloading a non floating app only the window is missing
         if (model) {
-            model.set('win', app.getWindow());
+            model.set('win', win);
         } else {
             model = new WindowModel({
                 floating: false,
-                win: app.getWindow(),
+                win: win,
                 title: app.getTitle() || '',
                 closable: true,
                 minimized: !!options.lazyload,
@@ -566,11 +634,19 @@ define('io.ox/backbone/views/window', [
             });
         }
 
+        var toggleNonFloating = function () {
+            model.set('minimized', !this.state.visible);
+            // minimizing a window moves it to the last position
+            if (!this.state.visible) taskbar.add(taskbarItem.$el);
+        };
+
         if (!options.lazyload) {
             app.on('change:title', function (app, title) { model.set('title', title); });
 
             model.once('quit', function () { app.quit(); });
             app.once('quit', function () { model.trigger('close'); });
+            app.on('app:deregistertaskbar', function () { win.off('hide show', toggleNonFloating); });
+            win.on('quit', function () { win.off('hide show', toggleNonFloating); });
         }
 
         if (!collection.findWhere({ appId: app.id })) collection.add(model);
@@ -580,11 +656,7 @@ define('io.ox/backbone/views/window', [
         app.taskbarItem = taskbarItem;
 
         if (!options.lazyload) {
-            app.getWindow().on('hide show', function () {
-                model.set('minimized', !this.state.visible);
-                // minimizing a window moves it to the last position
-                if (!this.state.visible) taskbar.add(taskbarItem.$el);
-            });
+            win.on('hide show', toggleNonFloating);
         }
 
         return taskbarItem;

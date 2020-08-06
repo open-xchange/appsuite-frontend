@@ -83,10 +83,6 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
                 default:
                     break;
             }
-            if (data.propagate === 'get-active-windows') return TabCommunication.getActiveWindows(data.exceptWindow);
-            if (data.propagate === 'update-ox-object') return TabCommunication.updateOxObject(data.parameters);
-
-            TabCommunication.events.trigger(data.propagate, data.parameters);
         });
     }
 
@@ -146,7 +142,7 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
             localStorage.setItem(storageKey, jsonString);
             this.clearStorage(storageKey);
 
-            if (propagateToSelfWindow) this.events.trigger(key, parameters);
+            if (propagateToSelfWindow) { this.events.trigger(key, parameters); }
         },
 
         /**
@@ -240,9 +236,7 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
                 case 'update-ox-object':
                     TabCommunication.updateOxObject(data.parameters);
                     break;
-                case 'office-settings-changed':
-                    ox.trigger('change:settings:office', data.parameters);
-                    break;
+                // use 'default' to just forward propagated events
                 default:
                     TabCommunication.events.trigger(data.propagate, data.parameters);
                     break;

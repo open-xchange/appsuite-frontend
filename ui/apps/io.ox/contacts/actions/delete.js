@@ -21,12 +21,19 @@ define('io.ox/contacts/actions/delete', [
 
     return function (baton) {
         var data = baton.data;
-        new ModalDialog({ title: getQuestion(data) })
+        new ModalDialog({ title: getTitle(data), description: getQuestion(data) })
             .addCancelButton()
             .addButton({ label: gt('Delete'), action: 'delete' })
             .on('delete', function () { api.remove(data); })
             .open();
     };
+
+    //#. ''Delete items', 'Delete distribution list' and 'Delete contact' as headers of a modal dialog to delete items, distribution lists and contacts.
+    function getTitle(data) {
+        if (data.length > 1) return gt('Delete items');
+        if (data[0].mark_as_distributionlist) return gt('Delete distribution list');
+        return gt('Delete contact');
+    }
 
     function getQuestion(data) {
         if (data.length > 1) return gt('Do you really want to delete these items?');

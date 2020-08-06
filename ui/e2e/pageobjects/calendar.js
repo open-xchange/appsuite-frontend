@@ -37,7 +37,7 @@ module.exports = {
 
     waitForApp() {
         // wait for nodes to be visible
-        I.waitForVisible(locate({ css: '.io-ox-calendar-main[data-app-name="io.ox/calendar"]' }).as('Calendar container'), 10);
+        I.waitForVisible(locate({ css: '*[data-app-name="io.ox/calendar"]' }).as('Calendar container'), 10);
         I.waitForVisible({ css: '.io-ox-calendar-main .classic-toolbar-container .classic-toolbar' }, 5);
         I.waitForVisible({ css: '.io-ox-calendar-main .tree-container' }, 5);
         I.waitForVisible({ css: '.io-ox-calendar-main .window-sidepanel .date-picker' }, 5);
@@ -103,7 +103,8 @@ module.exports = {
     // 'Day', 'Week', 'Workweek', 'Month', 'Year', 'List'
     withinPerspective(label, cb) {
         I.clickToolbar(this.locators.view);
-        I.click(label, this.locators.dropdown);
+        I.waitForText(label, 5, this.locators.dropdown);
+        I.retry(5).click(label, this.locators.dropdown);
         cb.call(this, this.locators[MAPPING[label]]);
     },
 
@@ -138,5 +139,9 @@ module.exports = {
         I.clickToolbar('View');
         I.waitForElement('.dropdown.open');
         I.clickDropdown(view);
+    },
+
+    async defaultFolder() {
+        return `cal://0/${await I.grabDefaultFolder('calendar')}`;
     }
 };

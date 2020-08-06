@@ -20,7 +20,7 @@ module.exports = {
 
     waitForVisible() {
         // wait for modal dialog to be visible and ready
-        I.waitForVisible(this.locators.body);
+        I.waitForVisible(this.locators.main);
         I.waitForInvisible({ xpath: './/*[contains(@class, "modal-dialog") and not(ancestor::*[contains(@style, "display: none;")]) and descendant-or-self::*[contains(@class, "io-ox-busy")]]' }, 30);
     }
 };

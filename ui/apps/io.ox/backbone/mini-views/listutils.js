@@ -55,15 +55,9 @@ define('io.ox/backbone/mini-views/listutils', [
             return $('<div class="list-item-controls">');
         },
         controlsDelete: function (opt) {
-            opt = _.extend({
-                href: '#',
-                role: 'button',
-                'data-action': 'delete',
-                title: gt('Delete')
-            }, opt);
-            return $('<a class="remove">')
-                .attr(opt)
-                .append($('<i class="fa fa-trash-o" aria-hidden="true">'));
+            opt = _.extend({ title: gt('Delete') }, opt);
+            return $('<a href="#" role="button" class="remove" data-action="delete">').attr('aria-label', opt.title)
+                .append($('<i class="fa fa-trash-o" aria-hidden="true">').attr('title', opt.title));
         },
         controlsEdit: function (opt) {
             opt = _.extend({

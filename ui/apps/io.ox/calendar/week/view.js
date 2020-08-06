@@ -28,51 +28,11 @@ define('io.ox/calendar/week/view', [
     'io.ox/calendar/extensions',
     'io.ox/calendar/week/extensions',
     'less!io.ox/calendar/week/style'
-], function (ext, PerspectiveView, util, coreUtil, api, folderAPI, gt, settings, coreSettings, Dropdown, capabilities, print, DisposableView) {
+], function (ext, perspective, util, coreUtil, api, folderAPI, gt, settings, coreSettings, Dropdown, capabilities, print) {
 
     'use strict';
 
-    var BasicView = DisposableView.extend({
-
-        constructor: function (opt) {
-            this.opt = _.extend({}, this.options || {}, opt);
-            Backbone.View.prototype.constructor.call(this, opt);
-        },
-
-        mouseDragHelper: function (opt) {
-            var self = this,
-                e = opt.event,
-                context = _.uniqueId('.drag-'),
-                // need this active tracker since mousemove events are throttled and may trigger the mousemove event
-                // even after the undelegate function has been called
-                active = true;
-            if (e.which !== 1) return;
-            opt.start.call(this, opt.event);
-
-            this.delegate('mousemove' + context, opt.updateContext, _.throttle(function (e) {
-                if (e.which !== 1) return;
-                if (!active) return;
-                opt.update.call(self, e);
-            }, 100));
-
-            function clear() {
-                active = false;
-                self.undelegate('mousemove' + context);
-                self.undelegate('focusout' + context);
-                $(document).off('mouseup' + context);
-                if (opt.clear) opt.clear.call(self);
-            }
-
-            if (opt.clear) this.delegate('focusout' + context, clear);
-            $(document).on('mouseup' + context, function (e) {
-                clear();
-                opt.end.call(self, e);
-            });
-        }
-
-    });
-
-    var WeekViewHeader = BasicView.extend({
+    var WeekViewHeader = perspective.DragHelper.extend({
 
         className: 'header',
 
@@ -218,7 +178,7 @@ define('io.ox/calendar/week/view', [
 
     });
 
-    var WeekViewToolbar = BasicView.extend({
+    var WeekViewToolbar = perspective.DragHelper.extend({
 
         className: 'weekview-toolbar',
 
@@ -353,7 +313,7 @@ define('io.ox/calendar/week/view', [
 
     });
 
-    var AppointmentContainer = BasicView.extend({
+    var AppointmentContainer = perspective.DragHelper.extend({
 
         initialize: function (opt) {
             var self = this;
@@ -379,8 +339,10 @@ define('io.ox/calendar/week/view', [
         renderAppointment: function (model) {
             // do not use a button here even if it's correct from a11y perspective. This breaks resize handles (you cannot make appointments longer/shorter) and hover styles on firefox.
             // it is fine in month perspective as there are no resize handles there.
-            var node = this.$('[data-cid="' + model.cid + '"]').empty();
+            var node = this.$('[data-cid="' + model.cid + '"]');
             if (node.length === 0) node = $('<div role="button" class="appointment">');
+            // keep resize handles (produces issues with multiple day appointments otherwise)
+            node.children(':not(.resizable-handle)').remove();
             node.attr({
                 'data-cid': model.cid,
                 'data-master-id': util.cid({ id: model.get('id'), folder: model.get('folder') }),
@@ -829,7 +791,8 @@ define('io.ox/calendar/week/view', [
 
         options: {
             overlap: 0.35, // visual overlap of appointments [0.0 - 1.0]
-            minCellHeight:  24
+            // keep in sync with css styles (appointment min-height)
+            minCellHeight:  27
         },
 
         events: function () {
@@ -1116,7 +1079,7 @@ define('io.ox/calendar/week/view', [
                 node = node.get(maxCount) ? $(node.get(maxCount)) : $(node).first().clone();
 
                 // daylight saving time change?
-                var offset = this.model.get('startDate')._offset - startLocal._offset;
+                var offset = start._offset - model.getMoment('startDate').tz(start.tz())._offset;
 
                 node
                     .addClass(endLocal.diff(startLocal, 'minutes') < 120 / this.model.get('gridSize') ? 'no-wrap' : '')
@@ -1138,6 +1101,9 @@ define('io.ox/calendar/week/view', [
                     start = startLocal.add(1, 'day').startOf('day').clone();
                     maxCount++;
                 } else {
+                    // Check if we have too much nodes. This happens when a multiple day appointment is edited and spans less days than before
+                    // remove those excess nodes
+                    this.$('[data-cid="' + model.cid + '"]').slice(maxCount + 1).remove();
                     break;
                 }
             }
@@ -1419,6 +1385,7 @@ define('io.ox/calendar/week/view', [
             this.mouseDragHelper({
                 event: e,
                 updateContext: '.day',
+                delay: 300,
                 start: function (e) {
                     node = target.closest('.appointment');
                     model = this.opt.view.collection.get(node.attr('data-cid'));
@@ -1517,7 +1484,7 @@ define('io.ox/calendar/week/view', [
 
     });
 
-    return PerspectiveView.extend({
+    return perspective.View.extend({
 
         className: 'weekview-container',
 
@@ -1555,7 +1522,7 @@ define('io.ox/calendar/week/view', [
             if (this.model.get('mode') === 'day') this.listenTo(settings, 'change:mergeview', this.onChangeMergeView);
             if (this.model.get('mode') === 'workweek') this.listenTo(settings, 'change:numDaysWorkweek change:workweekStart', this.getCallback('onChangeWorkweek'));
 
-            PerspectiveView.prototype.initialize.call(this, opt);
+            perspective.View.prototype.initialize.call(this, opt);
         },
 
         initializeSubviews: function () {
@@ -1690,10 +1657,14 @@ define('io.ox/calendar/week/view', [
             }
 
             this.setCollection(collection);
+
+            // no need to wait for folder data we already have the ids
+            // TODO check errorhandling if folders cannot be read etc
+            collection.folders = this.app.folders.folders;
+            collection.sync();
+
             $.when(this.app.folder.getData(), this.app.folders.getData()).done(function (folder, folders) {
                 self.model.set('folders', folders);
-                collection.folders = _(folders).pluck('id');
-                collection.sync();
             });
         },
 

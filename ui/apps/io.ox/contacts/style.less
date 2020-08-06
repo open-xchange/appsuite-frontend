@@ -11,9 +11,9 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
- // was 35, but we need 45 for proper Japanese
- @thumbIndexWidth: 45px;
- @photo-size: 120px;
+/* was 35, but we need 45 for proper Japanese */
+@thumbIndexWidth: 45px;
+@photo-size: 120px;
 
 /* VGrid elements */
 
@@ -31,7 +31,7 @@
         &.contact {
 
             height: 72px;
-            padding: 7px 16px 0 @paddingLeft;
+            padding: 6px 16px 0 @paddingLeft;
             line-height: 16px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 
@@ -56,13 +56,19 @@
                 font-size: 15px;
                 line-height: 24px;
                 margin-bottom: -3px;
-                & > span {
-                    display: flex;
-                    & > *:not(:first-child) {
-                        margin-left: 0.3em;
-                    }
-                }
                 .last_name { font-weight: bold; }
+                // we use display: flex so that we an ellipsis on first and last name
+                display: flex;
+                // since we have "LAST, FIRST" or "FIRST LAST" margin-left works better
+                // due to the comma. however we need to skip the first element
+                > *:not(:first-child) { margin-left: 4px; }
+            }
+
+            .presence {
+                position: absolute;
+                top: 42px;
+                left: 48px;
+                &.offline { display: none; }
             }
 
             .description {
@@ -76,7 +82,7 @@
             text-align: left;
             font-weight: bold;
             color: #333;
-            padding: @paddingLabel 0 16px @paddingLabel;
+            padding: (@paddingLabel - 5) 0 (16px + 4) @paddingLabel;
             background-image: none;
             background-color: #fff;
             border-top: 0 none;
@@ -188,6 +194,7 @@
     .dl-horizontal {
         margin-bottom: 32px;
         dt, dd { line-height: 24px; }
+        &.contact-header { margin-bottom: 22px } // fixes baselining between contact-header and details
     }
 
     @media (min-width: 768px) {
@@ -209,7 +216,7 @@
         overflow: visible;
     }
 
-    &.view dd, &.view address {
+    &.view dd:not(.contact-summary), &.view address {
         overflow: hidden;
         text-overflow: ellipsis;
     }
@@ -355,7 +362,7 @@
         // to stop descenders(Unterlängen) from being cut of
         line-height: 32px;
         font-weight: normal;
-        margin: 0 0 4px 0;
+        margin: -1px 0 4px 0;
         overflow: hidden;
         text-overflow: ellipsis;
         .first_name, .last_name {
@@ -375,12 +382,41 @@
         font-weight: 500;
         color: #333;
     }
+
+    .presence {
+        margin-top: 4px;
+        .icon {
+            position: relative;
+            top: -1px;
+        }
+        &.offline {
+            .icon { border: 2px solid white; }
+        }
+        &.online .availability { color: #438601; }
+        &.busy .availability { color: @presence-color-busy; }
+    }
 }
 
-.distribution-list .contact-header {
-    height: auto;
-    min-height: auto;
-    margin-bottom: 32px;
+.distribution-list {
+
+    .contact-header {
+        height: auto;
+        min-height: auto;
+        margin-bottom: 32px;
+        padding-top: 2px;
+    }
+
+    // placement of all currently available options to adjust baselining
+    article {
+        .list-count {
+            padding-top: 6px;
+        }
+
+        .member-list.list-unstyled {
+            padding-top: 4px;
+        }
+    }
+
 }
 
 // smartphone

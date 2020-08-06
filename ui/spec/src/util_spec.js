@@ -98,6 +98,47 @@ define([], function () {
             });
         });
 
+        describe('_.lfo', function () {
+
+            it('ensure scenario works', function () {
+                var resolveorder = [],
+                    resolve = done.bind(resolveorder);
+                return $.when(
+                    resolveAfter(1, 30).then(resolve),
+                    resolveAfter(2, 20).then(resolve),
+                    resolveAfter(3, 10).then(resolve)
+                ).then(function () {
+                    expect(resolveorder).to.deep.equal([3, 2, 1]);
+                });
+            });
+
+            it('ensures only last function invocation resolves', function () {
+                var resolveorder = [],
+                    resolve = done.bind(resolveorder);
+                // _.lfo Works with non-anonymous functions only
+                return $.when(
+                    resolveAfter(1, 30).then(_.lfo(resolve)),
+                    resolveAfter(2, 10).then(_.lfo(resolve)),
+                    resolveAfter(3, 20).then(_.lfo(resolve))
+                ).then(function () {
+                    expect(resolveorder).to.deep.equal([3]);
+                });
+            });
+
+            function resolveAfter(id, ms) {
+                var def = $.Deferred();
+                setTimeout(function () {
+                    def.resolve(id);
+                }, ms);
+                return def;
+            }
+
+            function done(id) {
+                this.push(id);
+            }
+
+        });
+
         describe('_.printf', function () {
             var str = 'The answer to life, the universe and everything is %1$s';
             it('should always return a string and ignore invalid args', function () {
@@ -287,6 +328,28 @@ define([], function () {
                 var result = _.cid(_.cid({ folder: '\\start...\\middle\\', id: '.\\1337\\.' }));
                 expect(result.folder_id).to.equal('\\start...\\middle\\');
                 expect(result.id).to.equal('.\\1337\\.');
+            });
+
+            it('should handle chronos ids in old and new format', function () {
+                // old recurrence id format
+                var cid = _.cid({ folder: 'cal://0/1337', id: '12345', recurrenceId: '20200219T140000' });
+                expect(cid).to.equal('cal://0/1337.12345.20200219T140000');
+
+                cid = _.cid(cid);
+                expect(cid.folder).to.equal('cal://0/1337');
+                expect(cid.folder_id).to.equal('cal://0/1337');
+                expect(cid.id).to.equal('12345');
+                expect(cid.recurrenceId).to.equal('20200219T140000');
+
+                // new recurrence id format
+                cid = _.cid({ folder: 'cal://0/1337', id: '12345', recurrenceId: 'Europe/Berlin:20200219T140000' });
+                expect(cid).to.equal('cal://0/1337.12345.Europe/Berlin:20200219T140000');
+
+                cid = _.cid(cid);
+                expect(cid.folder).to.equal('cal://0/1337');
+                expect(cid.folder_id).to.equal('cal://0/1337');
+                expect(cid.id).to.equal('12345');
+                expect(cid.recurrenceId).to.equal('Europe/Berlin:20200219T140000');
             });
 
             // manual tests since karma is broken atm

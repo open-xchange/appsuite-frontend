@@ -399,13 +399,14 @@
 
             function load(module, modulename) {
                 var base = [ox.apiRoot, '/apps/load/', ox.version].join(''),
-                    // default to the value from apache documentation
-                    limit = ox.serverConfig.limitRequestLine || 8190,
+                    // used to be the default value from apache documentation, but turned out not to work
+                    // in all cases. See OXUIB-383 for reference.
+                    limit = ox.serverConfig.limitRequestLine || 6000,
                     requests = [], url, modules = module.split(',');
 
                 while (modules.length > 0) {
                     url = base;
-                    while (modules[0] && url.length + 1 + modules[0].length < limit) {
+                    while (modules[0] && ox.abs.length + url.length + 1 + modules[0].length < limit) {
                         url += ',' + modules.shift();
                     }
                     requests.push($.ajax({ url: url, dataType: 'text' }));

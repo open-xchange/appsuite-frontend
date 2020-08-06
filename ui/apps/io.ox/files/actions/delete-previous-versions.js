@@ -20,7 +20,8 @@ define('io.ox/files/actions/delete-previous-versions', [
     'use strict';
 
     return function (data) {
-        new ModalDialog({ title: gt('Do you really want to delete all previous versions except the current version?') })
+        //#. 'Delete previous versions' as header of a modal dialog to confirm to delete all previous versions of a file.
+        new ModalDialog({ title: gt('Delete previous versions'), description: gt('Do you really want to delete all previous versions except the current version?') })
             .addCancelButton()
             .addButton({ label: gt('Delete'), action: 'deletePreviousVersions' })
             .on('deletePreviousVersions', function () { api.versions.removePreviousVersions(data); })

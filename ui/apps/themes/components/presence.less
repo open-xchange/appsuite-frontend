@@ -1,0 +1,125 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2020 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ *
+ */
+
+.presence {
+    display: inline-block;
+    .icon {
+        color: white;
+        width: 16px;
+        height: 16px;
+        border-radius: 8px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 8px;
+        i.fa {
+            font-size: 10px;
+            line-height: 14px;
+            margin: 0;
+        }
+    }
+    &.dot {
+        .icon {
+            width: 10px;
+            height: 10px;
+            i.fa { display: none; }
+        }
+    }
+    &.offline {
+        .icon { background-color: #aaa; }
+        /* hidden to get exact vertical position */
+        .fa { visibility: hidden; }
+        .fa:before { /* random */ content: "\f1db"; }
+    }
+    &.online {
+        .icon { background-color: @presence-color-online; }
+        .fa:before { /* checkmark */ content: "\f00c"; }
+    }
+    &.busy {
+        .icon { background-color: @presence-color-busy; }
+        .fa:before { /* minus */ content: "\f068"; }
+    }
+    &.absent {
+        .icon { background-color: @presence-color-absent; }
+        .fa:before { /* clock-o */ content: "\f017"; }
+    }
+}
+
+#io-ox-topbar-dropdown-icon > .presence {
+    position: absolute;
+    top: 32px;
+    right: 0;
+    .icon {
+        border: 1px solid rgba(0, 0, 0, 0.6);
+    }
+}
+
+#topbar-settings-dropdown .offline {
+     display: inline-block;
+}
+
+.list-view.show-contact-pictures, .vgrid-scrollpane {
+
+    .list-item .presence {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+    }
+    &.show-text-preview .list-item .presence {
+        top: 24px;
+        left: 24px;
+    }
+
+    .presence.offline {
+        display: none;
+    }
+
+    .presence .icon {
+        border: 1px solid white;
+        box-sizing: content-box;
+    }
+
+    .selected .presence .icon {
+        border-color: @selected-unfocussed-background;
+    }
+
+    &.has-focus .selected .presence .icon {
+        border-color: @selected-focussed-background;
+    }
+}
+
+.participant-wrapper {
+    .presence {
+        position: absolute;
+        top: 37px;
+        left: 40px;
+        .icon {
+            border: 1px solid white;
+            box-sizing: content-box;
+        }
+    }
+    .presence.offline {
+        display: none;
+    }
+}
+
+.participantsrow .participant-wrapper .presence {
+    left: 56px;
+}
+
+.freetime-view .participant-wrapper .presence {
+    top: 18px;
+    left: 23px;
+}
+

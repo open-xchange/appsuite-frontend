@@ -11,8 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/boot/util', [
-], function () {
+define('io.ox/core/boot/util', [], function () {
 
     'use strict';
 
@@ -105,6 +104,19 @@ define('io.ox/core/boot/util', [
 
         isGuestWithPassword: function () {
             return _.url.hash('login_type') === 'guest_password';
+        },
+
+
+        scopeCustomCss: function (customCss, scopeIdentifier) {
+            if (!customCss) return;
+
+            customCss = customCss.replace(/([^}{]*{)/gi, function (x) {
+                if (x.trim().indexOf('@') === 0) return x;
+                if (x.trim().indexOf(scopeIdentifier) >= 0) return x;
+                return x.match(/^\s*/)[0] + scopeIdentifier + ' ' + x.trim();
+            });
+
+            return customCss;
         },
 
         fail: function (error, focus) {

@@ -77,15 +77,17 @@
 input.error { border-color: #b94a48; }
 
 .io-ox-signature-dialog {
+
+    .contenteditable-editor {
+        margin-bottom: 0;
+    }
+
+    .mce-top-part {
+        border: 1px solid #ccc;
+        border-top: 0;
+    }
+
     .form-group {
         position: relative;
-
-        .editable-toolbar .mce-tinymce {
-            background-color: transparent;
-
-            .mce-toolbar-grp { background-color: transparent; }
-
-            .mce-edit-area { border-color: transparent!important; }
-        }
     }
 }

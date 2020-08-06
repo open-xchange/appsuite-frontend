@@ -108,7 +108,7 @@ Scenario('[C73769] Application Availability', function (I) {
     I.see('Laptop + PC');
 });
 
-Scenario.skip('[C73776] Mail Configuration', async function (I, users) {
+Scenario('[C73776] Mail Configuration', async function (I, users) {
 
     I.login();
     I.waitForVisible('#io-ox-topbar-dropdown-icon');
@@ -124,20 +124,22 @@ Scenario.skip('[C73776] Mail Configuration', async function (I, users) {
     I.click('Apple');
     I.waitForText('What type of device do you want to configure?');
     I.click('iPhone');
-    I.see('Mail');
+    I.click('Show more options');
+    I.click('Configuration Email');
+    I.seeElement('input[name=email]');
     let emailId = await I.grabValueFrom({ css: 'input[name=email]' });
     emailId = Array.isArray(emailId) ? emailId[0] : emailId;
     I.seeInField({ css: 'input[name=email]' }, users[0].get('primaryEmail'));
     I.clearField('email');
     I.fillField('email', emailId);
     I.clearField('email');
-    let emailwithOutDomain = emailId.substring(1, emailId.indexOf('@') + 1);
+    let emailwithOutDomain = emailId.substring(0, emailId.indexOf('@') + 1);
     I.fillField('email', emailwithOutDomain);
-    I.click('Send');
+    I.click('Send', '.action.expanded');
     I.waitForText('Unexpected error: Missing domain');
     I.clearField('email');
     I.seeElement(locate('//button').withText('Send').as('disabled'));
-    I.fillField('email', 'eahmed@open-xchange.com');
-    I.click('Send');
+    I.fillField('email', emailId);
+    I.click('Send', '.action.expanded');
     I.waitForElement('.fa-check.button-clicked');
 });

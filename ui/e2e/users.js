@@ -1,7 +1,6 @@
 const users = require('@open-xchange/codecept-helper').users;
 const KcAdminClient = require('keycloak-admin').default;
 
-
 class Client {
 
     async authenticate() {
@@ -15,10 +14,10 @@ class Client {
                     username: process.env.PROVISIONING_KEYCLOAK_USER,
                     password: process.env.PROVISIONING_KEYCLOAK_PASS,
                     grantType: 'password',
-                    clientId: 'admin-cli',
+                    clientId: 'admin-cli'
                 });
                 kcAdminClient.setConfig({
-                    realmName: process.env.PROVISIONING_KEYCLOAK_REALM,
+                    realmName: process.env.PROVISIONING_KEYCLOAK_REALM
                 });
                 return kcAdminClient;
             })();
@@ -42,32 +41,27 @@ class Client {
     }
 }
 
-const { createUser, deleteUser } = (() => {
-    const client = new Client();
-
-    return {
-        createUser(userdata, context) {
-            const username = `${userdata.name}@${context.id}`;
-            const data = {
-                email: userdata.email1,
-                emailVerified: true,
-                id: userdata.name,
-                username,
-                enabled: true,
-                attributes: {
-                    'user-at-context': username,
-                    username: userdata.name,
-                    automated: true
-                },
-                credentials: [{ type: 'password', value: userdata.password }],
-            };
-            return client.execute('create', data);
+const client = new Client();
+function createUser(userdata, context) {
+    const username = `${userdata.name}@${context.id}`;
+    const data = {
+        email: userdata.email1,
+        emailVerified: true,
+        id: userdata.name,
+        username,
+        enabled: true,
+        attributes: {
+            'user-at-context': username,
+            username: userdata.name,
+            automated: true
         },
-        deleteUser(id) {
-            return client.execute('del', { id });
-        }
-    }
-})();
+        credentials: [{ type: 'password', value: userdata.password }]
+    };
+    return client.execute('create', data);
+}
+function deleteUser(id) {
+    return client.execute('del', { id });
+}
 
 users.create = (function (create) {
     return async function () {

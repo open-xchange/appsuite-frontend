@@ -32,7 +32,10 @@ define('io.ox/mail/compose/main', [
     POINT.extend({
         id: 'bundle',
         index: INDEX += 100,
-        perform: function () {
+        perform: function (baton) {
+            // stop cascade flow on app quit
+            this.on('quit', baton.stopPropagation.bind(baton));
+
             return require(['io.ox/mail/compose/bundle']);
         }
     }, {
@@ -40,8 +43,6 @@ define('io.ox/mail/compose/main', [
         index: INDEX += 100,
         perform: function (baton) {
             var self = this;
-
-
             return require(['io.ox/mail/compose/model']).then(function (MailComposeModel) {
                 self.model = baton.model = new MailComposeModel(baton.data);
                 if (baton.data && baton.data.id) baton.model.restored = true;
@@ -56,6 +57,8 @@ define('io.ox/mail/compose/main', [
             return require(['io.ox/mail/compose/config', 'io.ox/mail/compose/view']).then(function (MailComposeConfig, MailComposeView) {
                 self.config = new MailComposeConfig(_.extend({}, baton.config, { type: self.model.type }));
                 self.view = baton.view = new MailComposeView({ app: self, model: self.model, config: self.config });
+                if (_.device('smartphone')) return;
+                baton.win.nodes.body.append(self.view.toolbarContainer);
             });
         }
     }, {
@@ -129,9 +132,10 @@ define('io.ox/mail/compose/main', [
                     });
                 });
             }
-            return def.then(function (list) {
-                this.config.set('signatures', list);
-                return list;
+            return def.then(function (collection) {
+                var refresh = _.debounce(this.view.onChangeSignatures.bind(this.view));
+                this.view.listenTo(collection, 'add remove reset', refresh, 200);
+                return collection;
             }.bind(this));
         }
     }, {
@@ -139,7 +143,7 @@ define('io.ox/mail/compose/main', [
         index: INDEX += 100,
         perform: function (baton) {
             var win = baton.win;
-            win.nodes.main.addClass('scrollable').append(this.view.render().$el);
+            win.nodes.main.removeClass('abs').addClass('scrollable').append(this.view.render().$el);
         }
     }, {
         id: 'editor-mode',
@@ -271,23 +275,40 @@ define('io.ox/mail/compose/main', [
             var def = $.Deferred();
             obj = _.extend({}, obj);
 
-            if (obj.type === 'edit') app.cid = 'io.ox/mail/compose:' + _.cid(obj.original) + ':' + obj.type;
+            if (obj.type === 'edit') {
+                var orig = obj.original,
+                    cid = _.cid({ id: orig.id, folder: orig.folderId });
+                app.cid = 'io.ox/mail/compose:' + cid + ':' + obj.type;
+            }
 
             // Set window and toolbars invisible initially
             win.nodes.header.addClass('sr-only');
             win.nodes.body.addClass('sr-only');
+
+            // improve title in compose context
+            if (win.floating) {
+                win.floating.$('.floating-header [data-action="close"]')
+                    .attr('aria-label', gt('Save and close'))
+                    .find('.fa').attr('title', gt('Save and close'));
+            }
 
             win.busy().show(function () {
                 POINT.cascade(app, { data: obj || {}, config: config, win: win }).then(function success() {
                     def.resolve({ app: app });
                     ox.trigger('mail:' + app.model.get('meta').type + ':ready', obj, app);
                 }, function fail(e) {
+                    console.error('Startup of mail compose failed', e);
                     if (app.view) {
                         app.view.dirty(false);
                         app.view.removeLogoutPoint();
                     }
                     app.quit();
 
+                    if (e && e.error) {
+                        require(['io.ox/core/yell'], function (yell) {
+                            yell(e);
+                        });
+                    }
                     def.reject(e);
                 });
             });
@@ -325,8 +346,8 @@ define('io.ox/mail/compose/main', [
             default:
                 break;
         }
-        require(['io.ox/core/notifications'], function (notifications) {
-            notifications.yell(error);
+        require(['io.ox/core/yell'], function (yell) {
+            yell(error);
         });
     });
 
@@ -337,7 +358,8 @@ define('io.ox/mail/compose/main', [
         reuse: function (method, data) {
             // only reuse for draft edit
             if (data && data.type === 'edit') {
-                return ox.ui.App.reuse('io.ox/mail/compose:' + _.cid(data.original) + ':edit');
+                var cid = _.cid({ id: data.original.id, folder: data.original.folderId });
+                return ox.ui.App.reuse('io.ox/mail/compose:' + cid + ':edit');
             }
             return false;
         }

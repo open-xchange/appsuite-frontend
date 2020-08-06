@@ -25,7 +25,8 @@ define('io.ox/mail/detail/view', [
     'io.ox/core/a11y',
     'io.ox/core/capabilities',
     'gettext!io.ox/mail',
-    'less!io.ox/mail/detail/content',
+    // load content styles as text file otherwise they would not only be applied to the iframe but the whole UI
+    'text!themes/default/io.ox/mail/detail/content.css',
     'less!io.ox/mail/detail/style',
     'less!io.ox/mail/style',
     'io.ox/mail/actions'
@@ -640,6 +641,7 @@ define('io.ox/mail/detail/view', [
             body.css('min-height', this.model.get('visualHeight') || null);
             // draw
             _.delay(function () {
+                if (view.disposed) return;
                 ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
                 // global event for tracking purposes
                 ox.trigger('mail:detail:body:render', view);
@@ -649,6 +651,8 @@ define('io.ox/mail/detail/view', [
         },
 
         onChangeRecipients: _.debounce(function () {
+            if (this.disposed) return;
+
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, model: this.model, view: this }),
                 node = this.$('.recipients').empty();
@@ -746,6 +750,8 @@ define('io.ox/mail/detail/view', [
                 $('<p>').text(e.error),
                 $('<a href="#" role="button" data-action="retry">').text(gt('Retry'))
             );
+            // for counting user facing error
+            ox.trigger('yell:error', e);
         },
 
         toggle: function (state) {
@@ -808,7 +814,7 @@ define('io.ox/mail/detail/view', [
 
             this.on({
                 'load': function () {
-                    this.$('section.body').empty().busy();
+                    this.$('section.body').busy({ immediate: true }).empty();
                 },
                 'load:done': function () {
                     this.$('section.body').idle();
@@ -843,7 +849,13 @@ define('io.ox/mail/detail/view', [
             this.$el.data({ view: this, model: this.model });
 
             if (!this.placeholder) {
+                // remove scaffolding if it's there(we don't want duplicates or mixups in the extension point order)
+                this.$el.children('section.body,section.attachments').remove();
                 ext.point('io.ox/mail/detail').invoke('draw', this.$el, baton);
+            } else {
+                // add some scaffolding
+                // this is needed to show the busy spinner properly
+                ext.point('io.ox/mail/detail').get('body').invoke('draw', this.$el, baton);
             }
 
             this.$el.toggleClass('placeholder', this.placeholder);

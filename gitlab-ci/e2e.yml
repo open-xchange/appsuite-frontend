@@ -6,6 +6,8 @@ run e2e tests:
   tags:
     - e2e
     - kubernetes
+  needs:
+    - build ui docker image
   services:
     - name: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
       alias: e2e-test.os.oxui.de
@@ -22,12 +24,10 @@ run e2e tests:
     FILTER_SUITE: ./e2e/suites/job$CI_NODE_INDEX.json
     FILTER_REPORT: filter_report_$CI_NODE_INDEX.json
     # services configuration
-    SERVER: https://as-7103.k3s.os.oxui.de/appsuite/
+    SERVER: https://appsuite.k3s.os.oxui.de/appsuite/
     # gitlab config
     GIT_DEPTH: "10"
   script:
-    # make PARTITIONS an array
-    - PARTITIONS=(${PARTITIONS})
     - cd ui
     - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
     - mkdir -p ./build/e2e
@@ -43,13 +43,12 @@ run e2e tests:
     paths:
       - ui/build/e2e/
     expire_in: 1 day
-  only:
-    changes:
-      - ui/**/*
-  except:
-    refs:
-      - /^poc\//
-      - /^e2e\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^(poc|e2e)\//'
+      when: never
+    - changes:
+        - ui/**/*
+      when: on_success
 
 # deploy e2e environment to well-known location - can be used to develop e2e tests against
 deploy e2e dev server:
@@ -59,17 +58,17 @@ deploy e2e dev server:
     DOCKER_HOST: docker.ui.cloud.open-xchange.com
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     CONTAINER_NAME: e2e-develop
-    SERVER: https://as-7103.k3s.os.oxui.de/appsuite/
+    SERVER: http://10.20.28.164/appsuite/
   script:
     - docker stop $CONTAINER_NAME || true
     - docker wait $CONTAINER_NAME || true
     - docker rm $CONTAINER_NAME || true
     - docker pull $DOCKER_IMAGE
     - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e $DOCKER_IMAGE e2e
-    - docker container cp ui/e2e/fixtures $CONTAINER_NAME:/app/build/e2e
     - docker container start $CONTAINER_NAME
-  only:
-    - develop
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "develop"'
+      when: always
 
 merge filter report:
   stage: report
@@ -94,7 +93,7 @@ merge filter report:
     FILTER_SUITE: ./merged_reports.json
     FILTER_REPORT: filter_report_missing.json
     # services configuration
-    SERVER: https://as-7103.k3s.os.oxui.de/appsuite/
+    SERVER: https://appsuite.k3s.os.oxui.de/appsuite/
     # gitlab config
     GIT_DEPTH: "10"
   script:
@@ -106,21 +105,19 @@ merge filter report:
     - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./build/e2e/$FILTER_REPORT $FILTER_SUITE > ./build/e2e/filter_report.json
   tags:
     - e2e
-  allow_failure: true
-  when: always
   artifacts:
     when: always
     paths:
       - ui/build/e2e/filter_report.json
       - ui/merged_reports.json
     expire_in: 1 day
-  only:
-    changes:
-      - ui/**/*
-  except:
-    refs:
-      - /^poc\//
-      - /^e2e\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^(poc|e2e)\//'
+      when: never
+    - changes:
+        - ui/**/*
+      when: always
+      allow_failure: true
 
 generate e2e report:
   stage: report
@@ -129,7 +126,7 @@ generate e2e report:
     GIT_STRATEGY: none
   dependencies:
     - run e2e tests
-    - run new e2e test
+    - run single test
   script:
     # fail if there are no test results, prevents history from getting lost in some cases
     - find ui/build/e2e/ -name *.xml > /dev/null
@@ -140,23 +137,16 @@ generate e2e report:
     - cp -r ui/build/allure-report/$CI_PIPELINE_ID/history ui/build/allure-report/
     - tar cf ui/build/allure-report/history.tar ui/build/allure-report/history &>/dev/null || echo "No history found"
     - rm -rf ui/build/allure-report/history/
-  when: always
   artifacts:
     when: always
     paths:
       - ui/build/allure-report
     expire_in: 1 day
-  only:
-    refs:
-      - develop
-      - master
-      - /^master-/
-      - /^release-/
-      - /^feature\//
-      - /^bug\//
-      - /^e2e\//
-    changes:
-      - ui/**/*
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
+      changes:
+        - ui/**/*
+      when: always
 
 publish e2e report:
   stage: cleanup
@@ -165,30 +155,23 @@ publish e2e report:
     GIT_STRATEGY: none
   dependencies:
     - generate e2e report
-  needs:
-    - generate e2e report
+    - merge filter report
   script:
     # fail if there is no history being generated. Prevents empty reports from being "published".
     - find ui/build/allure-report/ -name history.json > /dev/null
     - docker cp ui/build/allure-report/. reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG
     - docker exec reports rm -f /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
     - docker exec reports ln -sf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
+    - docker cp ui/build/e2e/filter_report.json reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG/ || true
   environment:
     name: reports/$CI_COMMIT_REF_SLUG
     url: http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/
     on_stop: remove e2e report
-  when: always
-  only:
-    refs:
-      - develop
-      - master
-      - /^master-/
-      - /^release-/
-      - /^feature\//
-      - /^bug\//
-      - /^e2e\//
-    changes:
-      - ui/**/*
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
+      changes:
+        - ui/**/*
+      when: always
 
 remove e2e report:
   stage: cleanup
@@ -201,16 +184,18 @@ remove e2e report:
   environment:
     name: reports/$CI_COMMIT_REF_SLUG
     action: stop
-  when: manual
-  except:
-    refs:
-      - develop
-      - master
-      - /^master-/
-      - /^poc\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^(release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
+      changes:
+        - ui/**/*
+      when: manual
+      allow_failure: true
+    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|poc\/.*)$/'
+      when: never
 
-run new e2e test:
+run single test:
   extends: run e2e tests
+  needs: []
   services:
     - name: $CI_REGISTRY_IMAGE:develop
       alias: e2e-test.os.oxui.de
@@ -220,9 +205,7 @@ run new e2e test:
   - echo ${CI_COMMIT_REF_NAME//e2e\//}
   - npx codeceptjs run-rerun --grep "${CI_COMMIT_REF_NAME//e2e\//}"
   parallel: 5
-  only:
-    refs:
-      - /^e2e\//
-  except:
-    refs:
-      - /^poc\//
+  timeout: 60 minutes
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^e2e\//'
+      when: always

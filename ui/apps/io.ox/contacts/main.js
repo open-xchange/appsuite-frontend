@@ -226,15 +226,11 @@ define('io.ox/contacts/main', [
                         fullname = $.trim(util.getFullName(data));
                         if (fullname) {
                             name = fullname;
-                            fields.name.empty().append(
-                                // use html output
-                                coreUtil.renderPersonalName({ html: util.getFullName(data, true) }, data)
-                            );
+                            // use html output
+                            coreUtil.renderPersonalName({ $el: fields.name.empty(), html: util.getFullName(data, true) }, data);
                         } else {
                             name = $.trim(util.getFullName(data) || data.yomiLastName || data.yomiFirstName || data.display_name || util.getMail(data));
-                            fields.name.empty().append(
-                                coreUtil.renderPersonalName({ name: name }, data)
-                            );
+                            coreUtil.renderPersonalName({ $el: fields.name.empty(), name: name }, data);
                         }
                         description = util.getSummaryBusiness(data);
                         fields.private_flag.get(0).style.display = data.private_flag ? '' : 'none';
@@ -466,7 +462,8 @@ define('io.ox/contacts/main', [
 
             showContact = function (obj) {
                 // get contact
-                app.right.busy(true);
+                app.right.parent().off('scroll');
+                app.right.busy({ empty: true });
                 if (obj && obj.id !== undefined) {
                     app.currentContact = api.reduce(obj);
                     api.get(app.currentContact)
@@ -771,6 +768,42 @@ define('io.ox/contacts/main', [
          */
         'folder-error': function (app) {
             app.folder.handleErrors();
+        },
+
+        'account-errors': function (app) {
+            var accountError;
+            app.treeView.on('click:account-error', function (folder) {
+
+                accountError = folder.meta && folder.meta.errors ? folder.meta : false;
+
+                if (!accountError) return;
+                accountError.error = gt('The subscription could not be updated due to an error and must be recreated.');
+
+                require(['io.ox/backbone/views/modal', 'io.ox/core/notifications'], function (ModalDialog) {
+                    new ModalDialog({
+                        point: 'io.ox/contacts/account-errors',
+                        title: gt('Contacts account error')
+                    })
+                    .extend({
+                        default: function () {
+                            this.$body.append(
+                                $('<div class="info-text">')
+                                    .css('word-break', 'break-word')
+                                    .text(accountError.error)
+                            );
+                        }
+                    })
+                    .addCancelButton()
+                    .addButton({ label: gt('Edit subscription'), action: 'subscription', className: 'btn-primary' })
+                    .on('subscription', function () {
+                        var options = { id: 'io.ox/core/sub' };
+                        ox.launch('io.ox/settings/main', options).done(function () {
+                            this.setSettingsPane(options);
+                        });
+                    })
+                    .open();
+                });
+            });
         },
 
         'api-events': function (app) {

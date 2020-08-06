@@ -42,8 +42,7 @@ Scenario('[C7391] Send mail with attachment from Drive', async (I, users, mail) 
     I.fillField('To', recipient.get('primaryEmail'));
     I.fillField('Subject', 'Principia Discordia');
 
-    I.click(mail.locators.compose.attachments);
-    I.clickDropdown('Add from Drive');
+    I.click(mail.locators.compose.drivefile);
 
     // Click on the file. Not really necessary since it's the only file and auto-selected
     // Still I don't think the test should fail if it isn't autoselected, so we click on it

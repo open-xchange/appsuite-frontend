@@ -19,9 +19,10 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
     'io.ox/mail/mailfilter/settings/filter/actions/util',
     'io.ox/core/folder/picker',
     'io.ox/core/api/mailfilter',
+    'io.ox/core/capabilities',
     'settings!io.ox/mail'
 
-], function (ext, gt, mini, util, picker, api, settings) {
+], function (ext, gt, mini, util, picker, api, capabilities, settings) {
 
     'use strict';
 
@@ -70,9 +71,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                     if (settings.get('features/flag/color')) translations.flag = gt('Set color flag');
 
                     _.extend(opt.defaults.actions, defaults);
-
                     _.extend(opt.actionsTranslations, translations);
-
                     _.extend(opt.actionCapabilities, { 'markmail': 'addflags', 'tag': 'addflags', 'flag': 'addflags' });
 
                     opt.actionsOrder.push('markmail', 'tag');
@@ -155,6 +154,43 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                     }
                 }
 
+            });
+        }
+
+        if (supportedActions.setflags) {
+            ext.point('io.ox/mail/mailfilter/actions').extend({
+
+                id: 'setflags',
+
+                index: 900,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'setflags': {
+                            'flags': [''],
+                            'id': 'setflags'
+                        }
+                    };
+                    _.extend(opt.defaults.actions, defaults);
+                    _.extend(opt.actionsTranslations, { 'setflags': gt('Set IMAP keywords') });
+                    _.extend(opt.actionCapabilities, { 'setflags': 'setflags' });
+
+                    opt.actionsOrder.push('setflags');
+                },
+
+                draw: function (baton, actionKey, amodel) {
+                    var inputId = _.uniqueId('setflags_');
+                    this.append(
+                        util.drawAction({
+                            actionKey: actionKey,
+                            inputId: inputId,
+                            title: baton.view.actionsTranslations.setflags,
+                            inputLabel: baton.view.actionsTranslations.setflags,
+                            inputOptions: { name: 'setflags', model: amodel, className: 'form-control', id: inputId },
+                            errorView: true
+                        })
+                    );
+                }
             });
         }
 
@@ -276,6 +312,43 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
             });
         }
 
+        if (supportedActions.guard_encrypt && capabilities.has('guard-mail')) {
+            ext.point('io.ox/mail/mailfilter/actions').extend({
+
+                id: 'guard_encrypt',
+
+                index: 700,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'guard_encrypt': {
+                            'id': 'guard_encrypt'
+                        }
+                    };
+                    _.extend(opt.defaults.actions, defaults);
+                    _.extend(opt.actionsTranslations, {
+                        'guard_encrypt': gt('Encrypt the email')
+                    });
+
+                    _.extend(opt.actionCapabilities, { 'guard_encrypt': 'guard_encrypt' });
+
+                    opt.actionsOrder.push('guard_encrypt');
+                },
+
+                draw: function (baton, actionKey, amodel, filterValues, action) {
+                    var inputId = _.uniqueId('guard_');
+                    this.append(
+                        util.drawAction({
+                            actionKey: actionKey,
+                            inputId: inputId,
+                            title: baton.view.actionsTranslations[action.id]
+                        })
+                    );
+                }
+
+            });
+        }
+
         if (supportedActions.move) {
             ext.point('io.ox/mail/mailfilter/actions').extend({
 
@@ -321,7 +394,9 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                             module: 'mail',
                             root: '1',
                             settings: settings,
-                            persistent: 'folderpopup'
+                            persistent: 'folderpopup',
+                            //#. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
+                            button: gt('Select')
                         });
                     }
 
@@ -388,7 +463,9 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                             module: 'mail',
                             root: '1',
                             settings: settings,
-                            persistent: 'folderpopup'
+                            persistent: 'folderpopup',
+                            //#. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
+                            button: gt('Select')
                         });
                     }
 

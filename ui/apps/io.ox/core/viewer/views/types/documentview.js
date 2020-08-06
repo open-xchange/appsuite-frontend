@@ -25,11 +25,6 @@ define('io.ox/core/viewer/views/types/documentview', [
 
     'use strict';
 
-    var PDF_ERROR_NOTIFICATIONS = {
-        general: gt('An error occurred converting the document so it cannot be displayed.'),
-        passwordProtected: gt('This document is password protected and cannot be displayed.')
-    };
-
     // defines how many pages are loaded before and after the visible pages
     var NON_VISIBLE_PAGES_TO_LOAD_BESIDE = 1;
 
@@ -578,7 +573,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         startPdfDocumentWaitMessage: function () {
             this.PdfDocumentWaitTimer = window.setTimeout(function () {
-                this.displayDownloadNotification(gt('Your preview is being generated.'), 'io-ox-busy', gt('\n Alternatively you can download the file.'));
+                this.displayDownloadNotification(gt('Your preview is being generated.'), 'io-ox-busy immediate', gt('\n Alternatively you can download the file.'));
             }.bind(this), 5000);
         },
 
@@ -684,7 +679,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 this.viewerEvents.trigger('viewer:document:selectthumbnail', this.currentDominantPageIndex)
                     .trigger('viewer:document:loaded')
                     .trigger('viewer:document:pagechange', this.currentDominantPageIndex, pageCount);
-                this.$el.removeClass('io-ox-busy');
+                this.$el.idle();
                 // resolve the document load Deferred: thsi document view is fully loaded.
                 this.documentLoad.resolve();
             }
@@ -694,7 +689,8 @@ define('io.ox/core/viewer/views/types/documentview', [
              */
             function pdfDocumentLoadError(response) {
                 console.warn('Core.Viewer.DocumentView.show(): failed loading PDF document. Cause: ', response.cause);
-                var notificationText = PDF_ERROR_NOTIFICATIONS[response.cause] || PDF_ERROR_NOTIFICATIONS.general;
+                //var notificationText = PDF_ERROR_NOTIFICATIONS[response.cause] || PDF_ERROR_NOTIFICATIONS.general;
+                var notificationText = DocConverterUtils.getErrorTextFromResponse(response) || DocConverterUtils.getErrorText('importError');
                 var notificationIconClass = (response.cause === 'passwordProtected') ? 'fa-lock' : null;
 
                 // display error message
@@ -711,7 +707,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             }
 
             if (isPasswordProtected(this.model)) {
-                this.displayDownloadNotification(PDF_ERROR_NOTIFICATIONS.passwordProtected, 'fa-lock');
+                this.displayDownloadNotification(DocConverterUtils.getErrorText('passwordProtected'), 'fa-lock');
                 this.documentLoad.reject();
                 return this;
             }
@@ -730,7 +726,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.startPdfDocumentWaitMessage();
 
             // display loading animation
-            this.$el.addClass('io-ox-busy');
+            this.$el.busy({ immediate: true });
 
             // wait for PDF document to finish loading
             var pdfLoadPromise = $.when(this.pdfDocument.getLoadPromise());

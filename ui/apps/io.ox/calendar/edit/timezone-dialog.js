@@ -68,7 +68,7 @@ define('io.ox/calendar/edit/timezone-dialog', [
         });
 
         new ModalDialog({ title: gt('Change timezone') })
-            .addCancelButton({ left: true })
+            .addCancelButton()
             .addButton({ label: gt('Change'), action: 'changeTZ' })
             .build(function () {
                 ext.point('io.ox/calendar/edit/timezone-dialog').invoke('draw', this.$body, { model: model });

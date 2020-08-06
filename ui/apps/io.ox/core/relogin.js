@@ -40,7 +40,8 @@ define('io.ox/core/relogin', [
         index: 100,
         render: function (baton) {
             if (!settings.get('features/reloginPopup', !ox.serverConfig.oidcLogin && !ox.serverConfig.samlLogin)) return;
-            if (capabilities.has('guest && anonymous')) return;
+            // no pwd for guests via link or guests that actually have not set a password
+            if (capabilities.has('guest && anonymous') || (capabilities.has('guest') && settings.get('password/emptyCurrent'))) return;
 
             var guid = _.uniqueId('form-control-label-');
             this.$header.append(
@@ -51,7 +52,7 @@ define('io.ox/core/relogin', [
                 $('<input type="password" name="relogin-password" class="form-control">').attr('id', guid)
             );
             this
-            .addButton({ className: 'btn-default', label: gt('Cancel'), placement: 'left', action: 'cancel' })
+            .addButton({ className: 'btn-default', label: gt('Cancel'), action: 'cancel' })
             .addButton({ action: 'relogin', label: gt('Sign in') })
             .on('cancel', function () {
                 ox.trigger('relogin:cancel');

@@ -78,6 +78,7 @@ define('io.ox/multifactor/settings/views/u2fRegistrationView', [
                                     notify.yell('error', gt('Device is already registered'));
                                 } else {
                                     notify.yell('error', gt('Problem registering device'));
+                                    console.error(data);
                                 }
                             });
                             dialog.close();

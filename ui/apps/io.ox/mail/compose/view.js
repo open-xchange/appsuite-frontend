@@ -21,15 +21,16 @@ define('io.ox/mail/compose/view', [
     'io.ox/core/notifications',
     'gettext!io.ox/mail',
     'io.ox/core/attachments/backbone',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/mail/compose/signatures',
     'io.ox/mail/sanitizer',
     'io.ox/mail/compose/util',
+    'io.ox/backbone/mini-views/common',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send',
     'io.ox/mail/compose/actions/save'
-], function (extensions, ext, composeAPI, mailAPI, mailUtil, settings, notifications, gt, Attachments, dialogs, signatureUtil, sanitizer, composeUtil) {
+], function (extensions, ext, composeAPI, mailAPI, mailUtil, settings, notifications, gt, Attachments, ModalDialog, signatureUtil, sanitizer, composeUtil, mini) {
 
     'use strict';
 
@@ -46,6 +47,25 @@ define('io.ox/mail/compose/view', [
             index: 300,
             id: 'discard',
             draw: extensions.buttons.discard
+        },
+        {
+            index: 400,
+            id: 'composetoolbar',
+            draw: function (baton) {
+                if (_.device('smartphone')) return;
+                var node = $('<ul data-extension-id="composetoolbar" class="composetoolbar list-unstyled list-inline">')
+                    .attr({
+                        'aria-label': gt('Actions. Use cursor keys to navigate.'),
+                        'role': 'toolbar'
+                    });
+                ext.point(POINT + '/composetoolbar').invoke('draw', node, baton);
+                this.append(node);
+            },
+            redraw: function (baton) {
+                if (_.device('smartphone')) return;
+                var node = baton.app.getWindow().nodes.footer.find('.composetoolbar').empty();
+                ext.point(POINT + '/composetoolbar').invoke('draw', node, baton);
+            }
         }
     );
 
@@ -117,25 +137,35 @@ define('io.ox/mail/compose/view', [
             draw: extensions.subject
         },
         {
-            id: 'composetoolbar',
+            id: 'composetoolbar-mobile',
             index: INDEX += 100,
             draw: function (baton) {
-                var node = $('<div data-extension-id="composetoolbar" class="row composetoolbar">');
-                ext.point(POINT + '/composetoolbar').invoke('draw', node, baton);
+                if (_.device('!smartphone')) return;
+                var node = $('<div data-extension-id="composetoolbar-mobile" class="composetoolbar-mobile">');
+                ext.point(POINT + '/composetoolbar-mobile').invoke('draw', node, baton);
                 this.append(node);
             },
             redraw: function (baton) {
+                if (_.device('!smartphone')) return;
                 var node = this.find('.row.composetoolbar');
-                ext.point(POINT + '/composetoolbar').invoke('redraw', node, baton);
+                ext.point(POINT + '/composetoolbar-mobile').invoke('redraw', node, baton);
             }
         },
         {
             id: 'attachments',
             index: INDEX += 100,
             draw: function (baton) {
-                var node = $('<div data-extension-id="attachments" class="row attachments">');
+                var node = $('<div data-extension-id="attachments" class="attachments">');
                 ext.point(POINT + '/attachments').invoke('draw', node, baton);
                 this.append(node);
+
+                // toggle visibility of row
+                var collection = baton.model.get('attachments');
+                collection.on('add remove reset', toggle);
+                toggle();
+                function toggle() {
+                    node.toggleClass('empty', !collection.fileAttachments().length);
+                }
             }
         },
         {
@@ -147,6 +177,12 @@ define('io.ox/mail/compose/view', [
             }
         }
     );
+
+    ext.point(POINT + '/recipientActions').extend({
+        id: 'recipientActions',
+        index: 100,
+        draw: extensions.recipientActions
+    });
 
     ext.point(POINT + '/recipientActionLink').extend(
         {
@@ -161,19 +197,19 @@ define('io.ox/mail/compose/view', [
         }
     );
 
+    ext.point(POINT + '/recipientActionsMobile').extend({
+        id: 'recipientActionsMobile',
+        index: 100,
+        draw: extensions.recipientActionsMobile
+    });
+
     ext.point(POINT + '/recipientActionLinkMobile').extend({
         id: 'mobile',
         index: 100,
         draw: extensions.recipientActionLinkMobile
     });
 
-    ext.point(POINT + '/recipientActions').extend({
-        id: 'recipientActions',
-        index: 100,
-        draw: extensions.recipientActions
-    });
-
-    ext.point(POINT + '/menu').extend(
+    ext.point(POINT + '/menu-mobile').extend(
         {
             id: 'security',
             index: 100,
@@ -187,7 +223,7 @@ define('io.ox/mail/compose/view', [
         {
             id: 'options',
             index: 300,
-            draw: extensions.optionsmenu
+            draw: extensions.optionsmenumobile
         }
     );
 
@@ -206,24 +242,16 @@ define('io.ox/mail/compose/view', [
 
     ext.point(POINT + '/menuoptions').extend(
         {
-            id: 'editor',
+            id: 'signatures',
             index: 100,
-            draw: function () {
-                if (_.device('smartphone')) return;
-                var menu = this.data('view')
-                    .header(gt('Editor'));
-
-                ext.point(POINT + '/editors').each(function (point) {
-                    if (!point.mode && !point.label) return;
-                    menu.option('editorMode', point.mode, point.label, { prefix: gt('Editor'), radio: true });
-                });
-            }
+            draw: signatureUtil.extensions.options
         },
         {
             id: 'priority',
             index: 200,
             draw: function () {
                 this.data('view')
+                    .divider()
                     .header(gt.pgettext('E-Mail', 'Priority'))
                     //#. E-Mail priority
                     .option('priority', 'high', gt.pgettext('E-Mail priority', 'High'), { prefix: gt.pgettext('E-Mail', 'Priority'), radio: true })
@@ -238,23 +266,80 @@ define('io.ox/mail/compose/view', [
             index: 300,
             draw: function () {
                 this.data('view')
+                    .divider()
                     .header(gt('Options'))
                     .option('vcard', 1, gt('Attach Vcard'), { prefix: gt('Options'), toggleValue: 0 })
                     .option('requestReadReceipt', true, gt('Request read receipt'), { prefix: gt('Options') });
             }
+        },
+        // guard: index 400
+        {
+            id: 'editor',
+            index: 500,
+            draw: function () {
+                if (_.device('smartphone')) return;
+                var menu = this.data('view')
+                    .divider()
+                    .header(gt('Editor'));
+
+                ext.point(POINT + '/editors').each(function (point) {
+                    if (!point.mode && !point.label) return;
+                    menu.option('editorMode', point.mode, point.label, { prefix: gt('Editor'), radio: true });
+                });
+            }
+        },
+        {
+            id: 'saveAndClose',
+            index: 600,
+            draw: function (baton) {
+                var saveAndClose = function () {
+                    baton.view.saveDraft().then(function () {
+                        // to prevent "do you want to save" dialog on quit. We just saved the data so that would be pointless
+                        baton.config.set('autoDismiss', true);
+                        baton.app.quit();
+                    });
+                };
+
+                this.data('view').divider().link('settings', gt('Save draft and close'), function () {
+
+                    // 2 settings:
+                    // saveOnCloseDontShowAgain, user setting, determines if user wants to be reminded again
+                    // saveOnCloseShow, server setting, determines if the dialog should show up at all
+                    if (!settings.get('didYouKnow/saveOnCloseDontShowAgain', false) && settings.get('didYouKnow/saveOnCloseShow', true)) {
+                        new ModalDialog({ title: gt('Did you know?'), description: gt('Your changes are automatically saved while you compose your email until you finally send it.') })
+                            .build(function () {
+                                this.$el.find('.modal-footer').prepend(new mini.CustomCheckboxView(
+                                    {
+                                        model: settings,
+                                        label: gt('Do not show again.'),
+                                        defaultVal: false,
+                                        name: 'didYouKnow/saveOnCloseDontShowAgain'
+                                    }
+                                ).render().$el.addClass('pull-left'));
+
+                                settings.once('changed:didYouKnow/saveOnCloseDontShowAgain', function () {
+                                    settings.save();
+                                });
+                            })
+                            .addButton({ label: gt('OK'), action: 'ok' })
+                            .on('ok', saveAndClose)
+                            .open();
+                        return;
+                    }
+
+                    saveAndClose();
+                });
+            }
         }
     );
 
-    ext.point(POINT + '/composetoolbar').extend(
+    ext.point(POINT + '/composetoolbar-mobile').extend(
         {
             id: 'add_attachments',
             index: 100,
             draw: function (baton) {
                 var node = $('<div data-extension-id="add_attachments" class="mail-input">');
-                // dont use col-xs and col-sm here, breaks style in landscape mode
-                node.addClass(_.device('smartphone') ? 'col-xs-5' : 'col-xs-offset-2 col-xs-3');
-
-                extensions.attachment.call(node, baton);
+                extensions.attachmentmobile.call(node, baton);
                 this.append(node);
             }
         },
@@ -264,12 +349,57 @@ define('io.ox/mail/compose/view', [
             draw: function (baton) {
                 var node = $('<div class="pull-right text-right">');
 
-                ext.point(POINT + '/menu').invoke('draw', node, baton);
-
+                ext.point(POINT + '/menu-mobile').invoke('draw', node, baton);
                 this.append(
-                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-7">').append(node)
+                    $('<div data-extension-id="composetoolbar-menu">').append(node)
                 );
             }
+        }
+    );
+
+    ext.point(POINT + '/composetoolbar').extend(
+        {
+            id: 'toggle-toolbar',
+            index: 50,
+            draw: function (baton) {
+                var node = $('<li role="presentation" data-extension-id="toggle-toolbar" class="toggle">');
+                extensions.toggleToolbar.call(node, baton);
+                this.append(node);
+            }
+        },
+        {
+            id: 'add_attachments',
+            index: 100,
+            draw: function (baton) {
+                var node = $('<li role="presentation" data-extension-id="add_attachments">');
+                // dont use col-xs and col-sm here, breaks style in landscape mode
+                node.addClass(_.device('smartphone') ? 'col-xs-5' : '');
+
+                extensions.attachment.call(node, baton);
+                this.append(node);
+            }
+        },
+        {
+            id: 'add_attachments_drive',
+            index: 300,
+            draw: function (baton) {
+                var node = $('<li role="presentation" data-extension-id="add_attachments_drive">');
+                // dont use col-xs and col-sm here, breaks style in landscape mode
+                node.addClass(_.device('smartphone') ? 'col-xs-5' : '');
+
+                extensions.attachmentdrive.call(node, baton);
+                this.append(node);
+            }
+        },
+        {
+            id: 'security',
+            index: 100,
+            draw: extensions.security
+        },
+        {
+            id: 'menus',
+            index: 1000,
+            draw: extensions.optionsmenu
         }
     );
 
@@ -277,11 +407,13 @@ define('io.ox/mail/compose/view', [
         id: 'attachmentPreview',
         index: 100,
         draw: function (baton) {
-            var node = $('<div data-extension-id="attachmentPreview" class="col-xs-12">');
+            var node = $('<div data-extension-id="attachmentPreview">');
+
             extensions.attachmentPreviewList.call(node, baton);
             extensions.attachmentSharing.call(node, baton);
             extensions.mailSize.call(node, baton);
             extensions.imageResizeOption.call(node, baton);
+
             node.appendTo(this);
         }
     });
@@ -294,6 +426,9 @@ define('io.ox/mail/compose/view', [
         id: 'options',
         index: 100,
         perform: function (baton) {
+            // stop cascade flow on app quit
+            this.on('quit', baton.stopPropagation.bind(baton));
+
             baton.options = {
                 useFixedWithFont: settings.get('useFixedWithFont'),
                 app: this,
@@ -353,6 +488,7 @@ define('io.ox/mail/compose/view', [
         }
     });
 
+    // via ext.cascade
     ext.point(POINT + '/editor/use').extend({
         id: 'register',
         index: 100,
@@ -361,6 +497,8 @@ define('io.ox/mail/compose/view', [
             if (view.editor) view.stopListening(view.editor);
             view.listenTo(baton.editor, 'change', view.syncMail);
             view.listenTo(baton.config, 'change:signature', view.syncMail);
+            // stop cascade flow on app quit
+            this.on('quit', baton.stopPropagation.bind(baton));
         }
     }, {
         id: 'content',
@@ -402,7 +540,8 @@ define('io.ox/mail/compose/view', [
 
     var MailComposeView = Backbone.View.extend({
 
-        className: 'io-ox-mail-compose container f6-target',
+        //className: 'io-ox-mail-compose container f6-target',
+        className: 'io-ox-mail-compose f6-target',
 
         events: {
             'click [data-action="add"]': 'toggleTokenfield',
@@ -423,6 +562,9 @@ define('io.ox/mail/compose/view', [
             this.composeMode = 'compose';
             this.editorId = _.uniqueId('editor-');
             this.editorContainer = $('<div class="editor">').attr({
+                'data-editor-id': this.editorId
+            });
+            this.toolbarContainer = $('<div class="tinymce-toolbar">').attr({
                 'data-editor-id': this.editorId
             });
 
@@ -565,19 +707,38 @@ define('io.ox/mail/compose/view', [
 
         // has three states, dirty, saving, saved
         onChangeSaved: function (state) {
-            if (this.autoSaveState === state) return;
-            if (state === 'dirty') this.inlineYell('');
-            else if (state === 'saving') this.inlineYell('Saving...');
-            else if (state === 'saved' && this.autoSaveState === 'saving') this.inlineYell('Saved');
+            // just return when dirty and keep showing last saved date
+            if (this.autoSaveState === state || state === 'dirty') return;
+            else if (state === 'saving') this.inlineYell(gt('Saving...'));
+            //#. %s is a relative date from now, examples: 5 seconds ago, 5 minutes ago etc
+            else if (state === 'saved' && this.autoSaveState === 'saving') {
+                var lastSave = moment();
+                this.inlineYell(function () { return gt('Saved %s', lastSave.fromNow()); });
+            }
             this.autoSaveState = state;
         },
 
         inlineYell: function (text) {
+            // clear timer if it's there
+            clearInterval(this.inlineYellTimer);
             if (!this.$el.is(':visible')) return;
             if (_.device('smartphone')) return;
+            var node = this.$el.closest('.io-ox-mail-compose-window').find('.inline-yell');
 
+            if (typeof text === 'function') {
+                node.text(text());
+                this.inlineYellTimer = setInterval(function () {
+                    var txt = text();
+                    if (node.text() !== txt) {
+                        node.text(txt);
+                    }
+                }, 10000);
+            } else {
+                node.text(text);
+            }
             // only fade in once, then leave it there
-            this.$el.closest('.io-ox-mail-compose-window').find('.inline-yell').text(text).fadeIn();
+            if (node.is(':visible')) return;
+            node.fadeIn();
         },
 
         dirty: function (state) {
@@ -595,6 +756,7 @@ define('io.ox/mail/compose/view', [
         clean: function () {
             // mark as not dirty
             this.dirty(false);
+            clearInterval(this.inlineYellTimer);
             // clean up editors
             for (var id in this.editorHash) {
                 this.editorHash[id].then(function (editor) {
@@ -640,28 +802,27 @@ define('io.ox/mail/compose/view', [
                 // add some extra space
                 // TODO maybe we could use a more dynamical approach
                 def = $.Deferred();
-                new dialogs.ModalDialog({ width: 550, container: _.device('smartphone') ? self.$el.closest('.window-container-center') : $('#io-ox-core') })
-                    .text(modalText)
-                    //#. "Discard message" appears in combination with "Cancel" (this action)
-                    //#. Translation should be distinguishable for the user
-                    .addPrimaryButton('delete', discardText, 'delete')
-                    .addAlternativeButton('savedraft', saveText, 'savedraft')
-                    .addButton('cancel', gt('Cancel'), 'cancel')
-                    .show()
-                    .then(function (action) {
-                        if (action === 'delete') {
-                            var isAutoDiscard = self.config.get('autoDiscard'),
-                                editFor = self.model.get('meta').editFor;
-                            def.resolve();
-                            if (!isDraft || !isAutoDiscard || !editFor) return;
-                            // only delete autosaved drafts that are not saved manually and have a msgref
-                            mailAPI.remove([{ id: editFor.originalId, folder_id: editFor.originalFolderId }]);
-                        } else if (action === 'savedraft') {
-                            self.saveDraft().then(def.resolve, def.reject);
-                        } else {
-                            def.reject();
-                        }
-                    });
+
+                var dialogOptions = { title: discardText, description: modalText };
+                // up to 540px because of 3 buttons, french needs this for example
+                if (!_.device('smartphone')) dialogOptions.width = '540px';
+
+                new ModalDialog(dialogOptions)
+                    .addCancelButton()
+                    .addButton({ label: saveText, action: 'savedraft', placement: 'left', className: 'btn-default' })
+                    .addButton({ label: discardText, action: 'delete' })
+                    .on('savedraft', function () {
+                        self.saveDraft().then(def.resolve, def.reject);
+                    })
+                    .on('delete', function () {
+                        var isAutoDiscard = self.config.get('autoDiscard'),
+                            editFor = self.model.get('meta').editFor;
+                        def.resolve();
+                        if (!isDraft || !isAutoDiscard || !editFor) return;
+                        // only delete autosaved drafts that are not saved manually and have a msgref
+                        mailAPI.remove([{ id: editFor.originalId, folder_id: editFor.originalFolderId }]);
+                    })
+                    .open();
             }
 
             return def.then(function () {
@@ -794,6 +955,13 @@ define('io.ox/mail/compose/view', [
             return $.when(content).then(function (content) {
                 return self.loadEditor(content);
             }).then(function () {
+                // TOOO-784: streamline
+                if (this.app.get('window') && this.app.get('window').floating) {
+                    this.app.get('window').floating.$el.toggleClass('text-editor', this.config.get('editorMode') === 'text');
+                    this.app.get('window').floating.$el.toggleClass('html-editor', this.config.get('editorMode') !== 'text');
+                    this.app.getWindowNode().trigger('scroll');
+                }
+
                 this.editorContainer.idle();
                 // reset tinyMCE's undo stack
                 if (!_.isFunction(this.editor.tinymce)) return;
@@ -900,6 +1068,11 @@ define('io.ox/mail/compose/view', [
                 e.preventDefault();
                 this.$el.parents().find('button[data-action="send"]').focus();
             }
+        },
+
+        onChangeSignatures: function () {
+            // redraw composetoolbar
+            ext.point(POINT + '/buttons').invoke('redraw', undefined, this.baton);
         },
 
         render: function () {

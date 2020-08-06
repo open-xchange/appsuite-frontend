@@ -369,7 +369,8 @@ define('io.ox/editor/main', [
                     } else if (_.device('smartphone')) {
                         app.getWindow().resume();
                     }
-                    new ModalDialog({ title: gt('Do you really want to discard your changes?') })
+                    //#. 'Discard changes' as modal dialog header to confirm to discard changes of a note.
+                    new ModalDialog({ title: gt('Discard changes'), description: gt('Do you really want to discard your changes?') })
                         .addCancelButton()
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user

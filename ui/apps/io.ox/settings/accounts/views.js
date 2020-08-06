@@ -85,7 +85,7 @@ define('io.ox/settings/accounts/views', [
             render: function () {
                 var self = this,
                     title = self.getTitle(),
-                    canEdit = ext.point('io.ox/settings/accounts/' + self.model.get('accountType') + '/settings/detail').pluck('draw').length > 0,
+                    canEdit = self.model.get('accountType') === 'fileAccount' ? true : ext.point('io.ox/settings/accounts/' + self.model.get('accountType') + '/settings/detail').pluck('draw').length > 0,
                     canDelete = self.model.get('id') !== 0;
                 self.$el.attr({
                     'data-id': self.model.get('id'),
@@ -114,10 +114,11 @@ define('io.ox/settings/accounts/views', [
             onDelete: function (e) {
 
                 e.preventDefault();
-
-                var account = this.model.pick('id', 'accountType', 'folder'),
+                var account = this.model.pick('id', 'accountType', 'folder', 'rootFolder', 'filestorageService'),
                     self = this;
-
+                if (account.accountType === 'fileAccount') {
+                    account.folder = account.rootFolder;
+                }
                 require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                     new ModalDialog({
                         async: true,
@@ -130,13 +131,21 @@ define('io.ox/settings/accounts/views', [
                     .addButton({ action: 'delete', label: gt('Delete account') })
                     .on('delete', function () {
                         var popup = this,
+                            req, opt;
+
+                        if (account.accountType === 'fileAccount') {
+                            req = 'io.ox/core/api/filestorage';
+                            opt = { id: account.id, filestorageService: account.filestorageService };
+                        } else {
                             // use correct api, folder API if there's a folder and account is not a mail account,
                             // keychain API otherwise
-                            useFolderAPI = typeof account.folder !== 'undefined' && account.accountType !== 'mail',
+                            var useFolderAPI = typeof account.folder !== 'undefined' && account.accountType !== 'mail';
                             req = useFolderAPI ? 'io.ox/core/folder/api' : 'io.ox/keychain/api';
+                            opt = useFolderAPI ? account.folder : account;
+                        }
                         settingsUtil.yellOnReject(
                             require([req]).then(function (api) {
-                                return api.remove(useFolderAPI ? account.folder : account);
+                                return api.remove(opt);
                             }).then(
                                 function success() {
                                     if (self.disposed) {
@@ -156,6 +165,7 @@ define('io.ox/settings/accounts/views', [
                                 // update folder tree
                                 require(['io.ox/core/api/account', 'io.ox/core/folder/api'], function (accountAPI, folderAPI) {
                                     accountAPI.getUnifiedInbox().done(function (unifiedInbox) {
+                                        accountAPI.trigger('refresh.list');
                                         if (!unifiedInbox) return folderAPI.refresh();
                                         var prefix = unifiedInbox.split('/')[0];
                                         folderAPI.pool.unfetch(prefix);
@@ -177,7 +187,12 @@ define('io.ox/settings/accounts/views', [
                     model: this.model,
                     node: this.el
                 };
-                createExtpointForSelectedAccount(e);
+                if (this.model.get('accountType') === 'fileAccount') {
+                    ox.load(['io.ox/files/actions/basic-authentication-account']).done(function (update) {
+                        update('update', e.data.model);
+                    });
+
+                } else { createExtpointForSelectedAccount(e); }
             }
         });
 

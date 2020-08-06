@@ -15,6 +15,12 @@ html:not(.smartphone):not(.signature-editor) {
     overflow: hidden;
 }
 
+// use class here or we change the font in the entire appsuite
+body.mce-content-body {
+    // reset tiny font located in default theme
+    font-family: Helvetica, Arial, sans-serif;
+}
+
 .ox-mce {
     // For large mails e.g. newsletters
     overflow-x: auto;

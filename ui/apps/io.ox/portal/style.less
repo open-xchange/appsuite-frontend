@@ -257,7 +257,6 @@
         line-height: 32px;
         height: 56px;
         z-index: 2;
-        cursor: move;
         .transition(color 0.3s linear);
         white-space: nowrap;
 
@@ -286,6 +285,10 @@
 
             &:hover { text-decoration: underline; }
         }
+    }
+
+    .draggable h2 {
+        cursor: move;
     }
 
     .widget > h2 {
@@ -520,6 +523,11 @@
 /* RESPONSIVE */
 
 @media all and (max-width: 560px) {
+
+    .simple-window {
+        height: 100%;
+        overflow-y: auto;
+    }
 
     .simple-window .io-ox-sidepopup { .user-select(text); }
 

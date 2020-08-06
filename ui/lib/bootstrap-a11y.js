@@ -70,21 +70,27 @@
 
     // TOOLTIP Extension
     // ===============================
-    var showTooltip = $.fn.tooltip.Constructor.prototype.show,
-        hideTooltip = $.fn.tooltip.Constructor.prototype.hide;
+    var showTooltip =       $.fn.tooltip.Constructor.prototype.show,
+        hideTooltip =       $.fn.tooltip.Constructor.prototype.hide,
+        tooltipHasContent = $.fn.tooltip.Constructor.prototype.hasContent;
 
     $.fn.tooltip.Constructor.prototype.show = function () {
         showTooltip.apply(this, arguments);
         var $tip = this.tip(),
             tooltipID = $tip.attr('id') || _.uniqueId('ui-tooltip');
         $tip.attr({ role: 'tooltip', id: tooltipID });
-        this.$element.attr({ 'aria-describedby': tooltipID });
+        if (this.$element) this.$element.attr({ 'aria-describedby': tooltipID });
     };
 
     $.fn.tooltip.Constructor.prototype.hide = function () {
         hideTooltip.apply(this, arguments);
         if (this.$element) removeMultiValAttributes(this.$element, 'aria-describedby', this.tip().attr('id'));
         return this;
+    };
+
+    $.fn.tooltip.Constructor.prototype.hasContent = function () {
+        if (!this.$element) return false;
+        return tooltipHasContent.apply(this, arguments);
     };
 
 })(jQuery);

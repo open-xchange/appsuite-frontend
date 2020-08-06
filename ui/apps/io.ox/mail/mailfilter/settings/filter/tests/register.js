@@ -18,8 +18,9 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
     'io.ox/backbone/mini-views',
     'io.ox/mail/mailfilter/settings/filter/tests/util',
     'io.ox/backbone/mini-views/datepicker',
+    'io.ox/core/capabilities',
     'io.ox/core/api/mailfilter'
-], function (ext, gt, mini, util, DatePicker, api) {
+], function (ext, gt, mini, util, DatePicker, capabilities, api) {
 
     'use strict';
 
@@ -954,21 +955,16 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         'G': 'GB'
                     };
 
-                    var splits = cmodel.get('size').split(''),
-                        number = '',
-                        unit = '',
-                        stop = false;
-
-                    _.each(splits, function (val) {
-                        if (/^[0-9]+$/.test(val) && !stop) {
-                            number = number + val;
-                        } else {
-                            stop = true;
-                            unit = unit + val;
-                        }
-                    });
-
                     var sizeValueView = new util.Input({ name: 'sizeValue', model: cmodel, className: 'form-control', id: inputId });
+
+                    var size = cmodel.get('size'),
+                        unit = size.charAt(size.length - 1),
+                        number = size.substring(0, size.length - 1);
+
+                    if (!unitValues[unit]) {
+                        unit = null;
+                        number = cmodel.get('size');
+                    }
 
                     // initial states
                     cmodel.set('unit', unit || 'B', { silent: true });
@@ -1154,6 +1150,48 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     //     defaults: baton.view.defaults.tests[baton.view.defaults.conditionsMapping[condition.id]]
                     // });
                 }
+            });
+        }
+
+
+        if (supportedConditions.guard_verify && capabilities.has('guard-mail')) {
+            ext.point('io.ox/mail/mailfilter/tests').extend({
+
+                id: 'guard_verify',
+
+                index: 500,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'guard_verify': {
+                            'id': 'guard_verify',
+                            'comparison': 'is'
+                        }
+                    };
+                    _.extend(opt.defaults.tests, defaults);
+                    _.extend(opt.conditionsTranslation, {
+                        'guard_verify': gt('PGP signature')
+                    });
+
+                    _.extend(opt.conditionsMapping, { 'guard_verify': ['guard_verify'] });
+
+                    opt.conditionsOrder.push('guard_verify');
+                },
+
+                draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
+                    this.append(
+                        $('<li class="filter-settings-view row">').addClass(addClass).attr('data-test-id', conditionKey).append(
+                            $('<div class="col-sm-3 singleline">').append(
+                                $('<span class="list-title">').text(baton.view.conditionsTranslation.guard_verify)
+                            ),
+                            $('<div class="col-sm-9">').append(
+                                $('<div class="col-sm-9">').append($('<div class="row">').append(
+                                    //#. Tests for PGP Signature.
+                                    new util.DropdownLinkView({ name: 'comparison', model: cmodel, values: { 'is': gt('The signature exists and is valid'), 'not is': gt('The signature is missing or is not valid') } }).render().$el)
+                                )),
+                            util.drawDeleteButton('test')));
+                }
+
             });
         }
 

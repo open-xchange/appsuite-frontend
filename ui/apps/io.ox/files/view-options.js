@@ -147,7 +147,7 @@ define('io.ox/files/view-options', [
              */
             function toggleFilter() {
                 baton.app.folder.getData().done(function (folder) {
-                    if (FileStorage.isExternal(folder) || FolderUtil.is('attachmentView', folder)) {
+                    if (baton.app.props.get('searchActive') || FileStorage.isExternal(folder) || FolderUtil.is('attachmentView', folder)) {
                         self.data('view').$ul.children().slice(4).hide();
                     } else {
                         self.data('view').$ul.children().slice(4).show();
@@ -162,6 +162,8 @@ define('io.ox/files/view-options', [
             baton.app.on('folder:change', function () {
                 toggleFilter();
             });
+
+            baton.app.props.on('change:searchActive', toggleFilter);
         }
     });
 

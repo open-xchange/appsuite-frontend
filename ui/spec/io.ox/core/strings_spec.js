@@ -39,6 +39,11 @@ define(['io.ox/core/strings'
                 expect(util.fileSize(3.5 * 1024 * 1024 * 1024, 'smart')).to.equal('3,5 GB');
                 expect(util.fileSize(3 * 1024 * 1024 * 1024, 'smart')).to.equal('3 GB');
             });
+
+            it('should not show decimal places for byte sized values', function () {
+                expect(util.fileSize(3, 5)).to.equal('3 B');
+                expect(util.fileSize(3.446, 3)).to.equal('3 B');
+            });
         });
     });
 });

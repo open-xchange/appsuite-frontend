@@ -125,7 +125,7 @@ define('io.ox/mail/compose/extensions', [
 
     var SenderView = Backbone.DisposableView.extend({
 
-        className: 'row sender',
+        className: 'sender',
 
         attributes: { 'data-extension-id': 'sender' },
 
@@ -143,49 +143,32 @@ define('io.ox/mail/compose/extensions', [
                 caret: true
             });
 
-            this.listenTo(ox, 'account:create account:delete', this.onAccountUpdate.bind(this));
-            this.listenTo(ox, 'change:customDisplayNames', this.onSenderUpdate.bind(this));
-            this.listenTo(this.model, 'change:from', this.onSenderUpdate);
+            this.addresses = sender.getAddressesCollection();
+            this.addresses.update();
+            this.listenTo(ox, 'account:create account:delete', this.updateSenderList);
+            this.listenTo(ox, 'change:customDisplayNames', this.updateSenderList);
+            this.listenTo(this.addresses, 'reset', this.renderDropdown);
+            this.listenTo(this.model, 'change:from', this.updateSenderList);
             this.listenTo(this.config, 'change:sendDisplayName', function (model, value) {
                 settings.set('sendDisplayName', value);
             });
         },
 
-        onAccountUpdate: function () {
-            // sometimes updated state isn't available via middleware instantly
-            _.delay(function () {
-                this.updateSenderList({ useCache: false }).then(this.renderDropdown.bind(this));
-            }.bind(this), 1000);
-        },
-
-        onSenderUpdate: function () {
-            this.renderDropdown();
-        },
-
         updateSenderList: function (options) {
             var opt = _.extend({ useCache: false }, options);
-            return sender.getAddressesOptions(opt).then(function (list) {
-                this.list = list;
-                // ensure display name is set
-                this.list.sortedAddresses.forEach(function (item) {
-                    var address = item.option,
-                        defaultname = settings.get(['customDisplayNames', address[1], 'defaultName']);
-                    if (!defaultname) settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
-                });
-            }.bind(this));
+            this.addresses.update(opt);
         },
 
         render: function (/*options*/) {
             // label
             this.$el.empty().append(
-                $('<label class="maillabel col-xs-2">').text(gt('From')),
-                $('<div class="mail-input col-xs-10">').append(
+                $('<label class="maillabel">').text(gt('From')),
+                $('<div class="mail-input">').append(
                     // label gets rendered by dropdown view, dropdown.$el is empty now
                     this.dropdown.render().$el.attr({ 'data-dropdown': 'from' })
                 )
             );
-            // update sender list and draw dropdown
-            this.updateSenderList().then(this.renderDropdown.bind(this));
+            this.renderDropdown();
             return this;
         },
 
@@ -204,38 +187,19 @@ define('io.ox/mail/compose/extensions', [
 
         setDropdownOptions: function () {
             var self = this;
-            if (!this.list || !this.list.sortedAddresses.length) return;
+            this.addresses.forEach(function (address, index) {
+                var defaultname = settings.get(['customDisplayNames', address.get('email'), 'defaultName']);
+                if (!defaultname) settings.set(['customDisplayNames', address.get('email'), 'defaultName'], address.get('name'));
 
-            var defaultAddress = settings.get('defaultSendAddress', '').trim();
+                if (index === 1) self.dropdown.divider();
 
-            // prepare list
-            var sortedAddresses = _(this.list.sortedAddresses)
-                .chain()
-                .map(function (address) {
-                    var array = mailUtil.getSender(address.option, self.config.get('sendDisplayName'));
-                    return { key: _(array).compact().join(' ').toLowerCase(), array: array };
-                })
-                .sortBy('key')
-                .pluck('array')
-                .value();
-
-            // draw default address first
-            sortedAddresses = _(sortedAddresses).filter(function (item) {
-                if (item[1] !== defaultAddress) return true;
-                self.dropdown.option('from', item, function () {
-                    return self.getItemNode(item);
-                });
-                if (sortedAddresses.length > 1) self.dropdown.divider();
-                return false;
-            });
-
-            _(sortedAddresses).each(function (item) {
+                var item = mailUtil.getSender(address.toArray(), self.config.get('sendDisplayName'));
                 self.dropdown.option('from', item, function () {
                     return self.getItemNode(item);
                 });
             });
 
-            if (_.device('smartphone')) return;
+            if (_.device('smartphone') || this.addresses.length === 0) return;
 
             // append options to toggle and edit names
             this.dropdown
@@ -269,7 +233,7 @@ define('io.ox/mail/compose/extensions', [
             var header = $('<div data-extension-id="header">');
             baton.$header = header;
             ext.point(POINT + '/header').invoke('draw', header, baton);
-            baton.view.app.getWindow().setHeader(header);
+            baton.view.app.getWindow().setHeader(header, 'bottom');
         },
 
         title: function () {
@@ -280,6 +244,7 @@ define('io.ox/mail/compose/extensions', [
 
         buttons: {
             discard: function (baton) {
+                if (_.device('!smartphone') && !baton.model.keepDraftOnClose()) return;
                 return (
                     $('<button type="button" class="btn btn-default" data-action="discard">')
                         .on('click', function () { baton.view.app.quit(); })
@@ -305,6 +270,7 @@ define('io.ox/mail/compose/extensions', [
         sender: function (baton) {
             var view = new SenderView({ model: baton.model, config: baton.config });
             this.append(view.render().$el);
+            ext.point(POINT + '/recipientActions').invoke('draw', view.$el);
         },
 
         senderRealName: function (baton) {
@@ -319,9 +285,10 @@ define('io.ox/mail/compose/extensions', [
             toggleVisibility();
 
             this.append(
-                $('<div class="row sender-realname" data-extension-id="sender-realname">').append(
-                    $('<div class="mail-input col-xs-10 col-xs-offset-2">')
-                        .text(gt('This email just contains your email address as sender. Your real name is not used.'))
+                $('<div class="sender-realname" data-extension-id="sender-realname">').append(
+                    $('<div class="mail-input">').text(
+                        gt('This email just contains your email address as sender. Your real name is not used.')
+                    )
                 )
             );
         },
@@ -338,19 +305,22 @@ define('io.ox/mail/compose/extensions', [
             };
         },
 
-        recipientActionLinkMobile: function () {
-            var node = $('<a href="#" data-action="add" role="checkbox" aria-checked="false">').append($('<span class="fa fa-angle-right" aria-hidden="true">'));
+        recipientActions: function () {
+            if (_.device('smartphone')) return;
+            var node = $('<div class="recipient-actions">');
+            ext.point(POINT + '/recipientActionLink').invoke('draw', node);
             this.append(node);
         },
 
-        recipientActions: function () {
-            var node = $('<div class="recipient-actions">');
-            if (_.device('!smartphone')) {
-                ext.point(POINT + '/recipientActionLink').invoke('draw', node);
-            } else {
-                ext.point(POINT + '/recipientActionLinkMobile').invoke('draw', node);
-            }
+        recipientActionsMobile: function () {
+            if (_.device('!smartphone')) return;
+            ext.point(POINT + '/recipientActionLinkMobile').invoke('draw', this);
+        },
 
+        recipientActionLinkMobile: function () {
+            var node = $('<a href="#" data-action="add" role="checkbox" aria-checked="false">').append(
+                $('<span class="fa fa-fw fa-angle-right" aria-hidden="true">')
+            );
             this.append(node);
         },
 
@@ -374,7 +344,7 @@ define('io.ox/mail/compose/extensions', [
                     guid = _.uniqueId('form-control-label-'),
                     value = baton.model.get(attr) || [],
                     // hide tokeninputfields if necessary (empty cc/bcc)
-                    cls = 'row' + (/cc$/.test(attr) && !value.length ? ' hidden' : ''),
+                    cls = (/cc$/.test(attr) && !value.length ? ' hidden' : ''),
                     redrawLock = false,
                     tokenfieldView = new Tokenfield({
                         id: guid,
@@ -394,31 +364,23 @@ define('io.ox/mail/compose/extensions', [
                         ariaLabel: tokenfieldTranslations['aria' + attr]
                     });
 
-                var node = $('<div class="mail-input col-xs-10">').append(tokenfieldView.$el);
+                var node = $('<div class="mail-input">').append(tokenfieldView.$el),
+                    actions = $('<div class="recipient-actions">');
 
-                if (attr === 'to') {
-                    ext.point(POINT + '/recipientActions').invoke('draw', node);
+                if (attr === 'to' && _.device('smartphone')) {
+                    ext.point(POINT + '/recipientActionsMobile').invoke('draw', actions);
                 }
 
                 var usePicker = !_.device('smartphone') && capabilities.has('contacts') && settingsContacts.get('picker/enabled', true);
 
-                if (usePicker) {
-                    node.addClass('has-picker').append(
-                        $('<a href="#" role="button" class="open-addressbook-popup">').append(
-                            $('<i class="fa fa-address-book" aria-hidden="true">').attr('title', tokenfieldTranslations['picker' + attr])
-                        ).attr('aria-label', tokenfieldTranslations['picker' + attr])
-                        .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
-                    );
-                }
-
                 var title = gt('Select contacts');
 
                 this.append(
-                    extNode = $('<div data-extension-id="' + attr + '">').addClass(cls)
+                    extNode = $('<div data-extension-id="' + attr + '">').addClass(cls).addClass('recipient line-focus')
                     .append(
                         usePicker ?
                             // with picker
-                            $('<div class="maillabel col-xs-2">').append(
+                            $('<div class="maillabel">').append(
                                 $('<a href="#" role="button">')
                                 .text(tokenfieldTranslations[attr])
                                 .attr({
@@ -430,10 +392,21 @@ define('io.ox/mail/compose/extensions', [
                                 .tooltip({ animation: false, delay: 0, placement: 'right', trigger: 'hover' })
                             ) :
                             // without picker
-                            $('<label class="maillabel col-xs-2">').text(tokenfieldTranslations[attr]).attr({ 'for': guid })
+                            $('<label class="maillabel">').text(tokenfieldTranslations[attr]).attr({ 'for': guid })
                     )
                     .append(node)
+                    .append(actions)
                 );
+
+                if (usePicker) {
+                    actions.append(
+                        $('<a href="#" role="button" class="open-addressbook-popup">').append(
+                            $('<i class="fa fa-address-book" aria-hidden="true">').attr('title', tokenfieldTranslations['picker' + attr])
+                        )
+                        .attr('aria-label', tokenfieldTranslations['picker' + attr])
+                        .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
+                    );
+                }
 
                 tokenfieldView.render().$el.on('tokenfield:createdtoken', function (e) {
                     // extension point for validation etc.
@@ -515,17 +488,17 @@ define('io.ox/mail/compose/extensions', [
         subject: function (baton) {
             var guid = _.uniqueId('form-control-label-');
             this.append(
-                $('<div data-extension-id="subject" class="row subject">').append(
+                $('<div data-extension-id="subject" class="subject line-focus">').append(
                     // dont use col-xs and col-sm here, breaks style in landscape mode
-                    $('<label class="maillabel" >').addClass(_.device('smartphone') ? 'hidden-md hidden-sm hidden-xs' : 'col-xs-2').text(gt('Subject')).attr('for', guid),
-                    $('<div class="mail-input" >').addClass(_.device('smartphone') ? 'col-xs-12' : 'col-xs-10').append(
+                    $('<label class="maillabel" >').addClass(_.device('smartphone') ? 'hidden-md hidden-sm hidden-xs' : '').text(gt('Subject')).attr('for', guid),
+                    $('<div class="mail-input" >').append(
                         new mini.InputView({ model: baton.model, id: guid, name: 'subject', autocomplete: false }).render().$el.attr('placeholder', gt('Subject'))
                     )
                 )
             );
         },
 
-        optionsmenu: (function () {
+        optionsmenumobile: (function () {
             return function (baton) {
                 var dropdown = new Dropdown({ model: new IntermediateModel({
                     model: baton.model,
@@ -539,6 +512,34 @@ define('io.ox/mail/compose/extensions', [
                 dropdown.$ul.addClass('pull-right');
 
                 this.append(dropdown.render().$el.addClass('text-left'));
+            };
+        }()),
+
+        optionsmenu: (function () {
+            return function (baton) {
+                var a = $('<a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">').attr('aria-label', gt('Options')).append(
+                    $('<i class="fa fa-bars" aria-hidden="true">').attr('title', gt('Options'))
+                );
+                var dropdown = new Dropdown({
+                    tagName: 'li',
+                    attributes: {
+                        'role': 'presentation',
+                        'data-extension-id': 'composetoolbar-menu'
+                    },
+                    dropup: true,
+                    model: new IntermediateModel({
+                        model: baton.model,
+                        config: baton.config,
+                        configFields: ['editorMode', 'vcard', 'signatureId'],
+                        modelFields: ['priority', 'requestReadReceipt']
+                    }),
+                    label: gt('Options'),
+                    caret: true,
+                    $toggle: a
+                });
+
+                ext.point(POINT + '/menuoptions').invoke('draw', dropdown.$el, baton);
+                this.append(dropdown.render().$el);
             };
         }()),
 
@@ -560,7 +561,7 @@ define('io.ox/mail/compose/extensions', [
 
             zone.on({
                 'show': function () {
-                    $el.css('minHeight', '100px');
+                    $el.css('minHeight', '132px');
                     $(window).trigger('resize');
                 },
                 'hide': function () {
@@ -655,14 +656,15 @@ define('io.ox/mail/compose/extensions', [
             if (!capabilities.has('infostore')) return;
             if (_.device('smartphone')) return;
 
+            this.addClass('sharing');
+
             require(['io.ox/mail/compose/sharing'], function (SharingView) {
                 var view = baton.sharingView = new SharingView({
                     model: baton.model
                 });
-                baton.attachmentsView.$header.find('.links').before(view.render().$el);
+                baton.attachmentsView.$footer.prepend(view.render().$el);
             });
         },
-
 
         mailSize: function (baton) {
             var attachmentView = baton.attachmentsView,
@@ -671,6 +673,7 @@ define('io.ox/mail/compose/extensions', [
             attachmentView.$footer.append(node);
 
             var update = _.debounce(function () {
+                    if (attachmentView.disposed) return;
                     var hasUploadedAttachments = baton.model.get('attachments').some(function (model) {
                             return model.get('group') === 'mail';
                         }),
@@ -723,9 +726,11 @@ define('io.ox/mail/compose/extensions', [
                     resizeView.$el.toggle(show);
                 });
             }
+
+            attachmentView.$header.find('.toggle-mode').appendTo(attachmentView.$footer);
         },
 
-        attachment: (function () {
+        attachmentmobile: (function () {
 
             function openFilePicker(model) {
                 var self = this;
@@ -794,8 +799,116 @@ define('io.ox/mail/compose/extensions', [
             };
         }()),
 
-        body: function () {
+        attachment: (function () {
 
+            return function (baton) {
+                var fileInput = $('<input type="file" name="file">').css('display', 'none')
+                        .on('change', attachmentUploadHelper.bind(this, baton.model))
+                        // multiple is off on smartphones in favor of camera roll/capture selection
+                        .prop('multiple', _.device('!smartphone'));
+
+                this.append(
+                    // file input
+                    fileInput,
+                    // local file
+                    $('<a href="#" role="button" data-toggle="dropdown" tabindex="-1">')
+                        .attr('aria-label', gt('Add local file'))
+                        .append(
+                            $('<i class="fa fa-paperclip" aria-hidden="true">')
+                                .attr('title', gt('Add local file')))
+                        .on('click', function () {
+                            //WORKAROUND "bug" in Chromium (no change event triggered when selecting the same file again,
+                            //in file picker dialog - other browsers still seem to work)
+                            fileInput[0].value = '';
+                            fileInput.trigger('click');
+                        })
+                );
+            };
+        }()),
+
+        attachmentdrive: (function () {
+            function openFilePicker(model) {
+                var self = this;
+                require(['io.ox/files/filepicker'], function (Picker) {
+                    new Picker({
+                        primaryButtonText: gt('Add'),
+                        cancelButtonText: gt('Cancel'),
+                        header: gt('Add attachments'),
+                        multiselect: true,
+                        createFolderButton: false,
+                        extension: 'io.ox/mail/mobile/navbar',
+                        uploadButton: true
+                    })
+                    .done(function (files) {
+                        self.trigger('aria-live-update', gt('Added %s to attachments.', _(files).map(function (file) { return file.filename; }).join(', ')));
+                        var models = files.map(function (file) {
+                            var attachment = new Attachments.Model({ filename: file.filename });
+                            composeUtil.uploadAttachment({
+                                model: model,
+                                filename: file.filename,
+                                origin: { origin: 'drive', id: file.id, folderId: file.folder_id },
+                                attachment: attachment
+                            });
+                            return attachment;
+                        });
+                        model.attachFiles(models);
+                    });
+                });
+            }
+
+            return function (baton) {
+                if (!capabilities.has('infostore')) return;
+
+                this.append(
+                    $('<a href="#" role="button" tabindex="-1">')
+                        .attr('aria-label', gt('Add from Drive'))
+                        .append(
+                            $('<i class="fa fa-cloud" aria-hidden="true">')
+                            .attr('title', gt('Add from Drive'))
+                        )
+                        .on('click', openFilePicker.bind(this, baton.model))
+                );
+            };
+        }()),
+
+        // TOOO-784: streamline
+        toggleToolbar: function (baton) {
+            if (_.device('smartphone')) return;
+
+            var parent = this,
+                floatingView = baton.app.get('window').floating,
+                node = $('<a href="#" role="button" tabindex="0">')
+                    .append($('<i class="fa fa-font" aria-hidden="true">'))
+                    .on('click', function () {
+                        if (parent.hasClass('disabled')) return;
+                        baton.config.set('toolbar', !baton.config.get('toolbar'));
+                    });
+
+            // toggle toolbar
+            update();
+            baton.config.on('change:toolbar', update);
+            function update() {
+                var value = baton.config.get('toolbar');
+                floatingView.$el.toggleClass('no-toolbar', !value);
+                node.attr('aria-label', value ? gt('Hide toolbar') : gt('Show toolbar'));
+                node.find('i').attr('title', value ? gt('Hide toolbar') : gt('Show toolbar'));
+                parent.toggleClass('checked', value);
+                floatingView.onResize();
+            }
+
+            // toggle state
+            status();
+            baton.config.on('change:editorMode', status);
+            function status() {
+                var isTiny = baton.config.get('editorMode') !== 'text';
+                parent.toggleClass('disabled', !isTiny);
+            }
+
+            parent.append(node);
+        },
+
+        body: function () {
+            // TODO: unused?
             var self = this,
                 editorId = _.uniqueId('tmce-'),
                 editorToolbarId = _.uniqueId('tmcetoolbar-');

@@ -11,7 +11,7 @@ deploy preview app:
     GIT_STRATEGY: none
     DOCKER_HOST: docker.ui.cloud.open-xchange.com
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-    SERVER: https://as-7103.k3s.os.oxui.de/appsuite/
+    SERVER: http://10.20.28.164/appsuite/
   script:
     - docker pull $DOCKER_IMAGE
     - docker stop $CI_COMMIT_REF_SLUG || echo "Nothing to stop"
@@ -20,10 +20,11 @@ deploy preview app:
     name: review/$CI_COMMIT_REF_NAME
     url: http://$CI_COMMIT_REF_SLUG.ui.cloud.open-xchange.com/appsuite/
     on_stop: stop_review
-  only:
-    - /^feature\//
-    - /^bug\//
-    - /^poc\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^(feature|bug|poc)\//'
+      changes:
+        - ui/**/*
+      when: on_success
 
 stop_review:
   stage: cleanup
@@ -35,11 +36,12 @@ stop_review:
     DOCKER_HOST: docker.ui.cloud.open-xchange.com
   script:
     - docker stop $CI_COMMIT_REF_SLUG
-  when: manual
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
-  only:
-    - /^feature\//
-    - /^bug\//
-    - /^poc\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^(feature|bug|poc)\//'
+      changes:
+        - ui/**/*
+      when: manual
+      allow_failure: true

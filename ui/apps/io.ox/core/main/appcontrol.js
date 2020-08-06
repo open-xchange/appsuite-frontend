@@ -110,6 +110,10 @@ define('io.ox/core/main/appcontrol', [
             // check for compose apps
             if (this.model.get('closable') && _.device('smartphone')) {
                 icon = ox.ui.appIcons[this.model.options.name];
+                // some apps have icons for the taskbar, better than using the fallback
+                if (!icon && this.model.options.userContentIcon) {
+                    icon = '<i class="' + this.model.options.userContentIcon + '">';
+                }
             }
 
             this.$icon = icon ? $(icon) : $(icons.fallback).find('text > tspan').text(firstLetter).end();
@@ -220,9 +224,11 @@ define('io.ox/core/main/appcontrol', [
         },
         onContextmenu: function (e) {
             e.preventDefault();
-            require(['io.ox/core/settings/dialogs/quickLauncherDialog'], function (quickLauncherDialog) {
-                quickLauncherDialog.openDialog();
-            });
+            if (settings.isConfigurable('apps/quickLaunch') && api.getQuickLauncherCount() !== 0 && !_.device('smartphone')) {
+                require(['io.ox/core/settings/dialogs/quickLauncherDialog'], function (quickLauncherDialog) {
+                    quickLauncherDialog.openDialog();
+                });
+            }
         },
         render: function () {
             this.$el.empty().append(
@@ -353,6 +359,9 @@ define('io.ox/core/main/appcontrol', [
                     })
                 )
             );
+
+            if (ox.openedInBrowserTab || (ox.tabHandlingEnabled && _.url.hash('app') === 'io.ox/files/detail')) return;
+
             if ((/^https?:/).test(action)) {
                 logo.wrap(
                     $('<a class="btn btn-link logo-btn">').attr({
@@ -360,8 +369,17 @@ define('io.ox/core/main/appcontrol', [
                         target: '_blank'
                     })
                 );
-            } else if (action && !ox.openedInBrowserTab) {
-                // ox.openedInBrowserTab is only true, when ox.tabHandlingEnabled is true and the window is no a core tab
+            } else if (ox.tabHandlingEnabled && (/^io\.ox\/office\/portal/).test(action)) {
+                var tabAPI = require('io.ox/core/api/tab'),
+                    appType = action.substring(0, 'io.ox/office/portal/'.length),
+                    tabUrl =  tabAPI.createUrl({ app: action }, { exclude: 'folder', suffix: 'office?app=' + appType });
+                logo.wrap(
+                    $('<a class="btn btn-link logo-btn">').attr({
+                        href: tabUrl,
+                        target: '_blank'
+                    })
+                );
+            } else if (action) {
                 var autoStart = settings.get('autoStart');
                 if (action === 'autoStart') {
                     if (autoStart === 'none') return;
@@ -369,6 +387,8 @@ define('io.ox/core/main/appcontrol', [
                 }
                 logo.wrap(
                     $('<button type="button" class="logo-btn btn btn-link">').on('click', function () {
+                        // works like a generic capability/requirement check, if this returns true then the app can be launched (similar to how quicklaunchers handle this)
+                        if (!ox.ui.apps.get(action.replace(/\/main$/, ''))) return;
                         ox.launch(action);
                     })
                 );

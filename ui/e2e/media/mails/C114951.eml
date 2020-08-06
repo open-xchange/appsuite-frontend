@@ -1,0 +1,1456 @@
+Delivered-To: matthesdr@gmail.com
+Received: by 2002:ac0:e107:0:0:0:0:0 with SMTP id v7csp1966465imm;
+        Thu, 21 Nov 2019 01:17:39 -0800 (PST)
+X-Google-Smtp-Source: APXvYqxxWjbA4zaepffJ2rI5sMW5hluRyL+BgCEK6BOEvnCRnPCwI5jxXIdFQFcB6m3iD84uQ0X5
+X-Received: by 2002:a1c:9d89:: with SMTP id g131mr8879107wme.81.1574327859560;
+        Thu, 21 Nov 2019 01:17:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1574327859; cv=none;
+        d=google.com; s=arc-20160816;
+        b=GPnGmjvftVsJgEZrvF8b0sf0v/RTlj4izYzaAV4F7CiSUT4gx/igbO6hZVf2AV2jOu
+         mtO5aH+a1jBJygkYXiCv5pALJeQRkp6C+PvqOqSAG1StsTARdEClDKEq5SpWPEd/I06P
+         9LdDfmvk2rWzOyUMTJdIa9pd0uo51sSHV6GDvWmGjhBqH6fkGCi901QacDPZqLOlUh+u
+         6+nitkOVJ3Mccur37ntDfLK5J5Xl0ySyup1tak1Q7dYEhenSP/Tt6OSGrT5CQpmvF7fy
+         T7mbYBh1yYXQ8uQK0z/e/VaEsK7hyoB+Lqd6VMdbizRVj3XTNjiRIcioeiJf6kazE9Fv
+         +Kaw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=content-transfer-encoding:precedence:list-unsubscribe:message-id
+         :mime-version:reply-to:to:subject:date:from;
+        bh=mxvp41HC0NUpZPMhvHLZDCVGHd2k/bWeLTmnYYH4X3o=;
+        b=ao5V2F3sn08NoOByKJe9mYVio7oH9L/VYrvAJtoPOxSWzoz6RFa8eViSf0ThbTlMro
+         Y/70zhwn0F5UGv8vCqasmCkxycl9kDNtKCjgOinRtxh0FqLYLv2ZCLwbFxUYL/M24GOC
+         qY9Kbajz85xbLMwQMpeWWZITUD5Hd9QUcHItBJ5/iEkG1BK7/3pCo3gfiJNMbkFpyyUK
+         TOspAfdip/Zrfo6TXf9s4obuXLmzyYBlmGEHrEsRUdcSsNs8/PsbM+fimXDtt6jyWh9r
+         ogkbk5llV8rggEFq2yaem4MTnrffXZj3gZau+x6sIfKqeTF2WWvnFGaN5zFTo2krptEr
+         Pp5Q==
+ARC-Authentication-Results: i=1; mx.google.com;
+       spf=pass (google.com: domain of hetm-mid@email.hm.com designates 172.82.232.133 as permitted sender) smtp.mailfrom=hetm-mid@email.hm.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=hm.com
+Return-Path: <hetm-mid@email.hm.com>
+Received: from r133.email.hm.com (r133.email.hm.com. [172.82.232.133])
+        by mx.google.com with ESMTPS id d129si2675933wmc.201.2019.11.21.01.17.39
+        for <matthesdr@gmail.com>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 Nov 2019 01:17:39 -0800 (PST)
+Received-SPF: pass (google.com: domain of hetm-mid@email.hm.com designates 172.82.232.133 as permitted sender) client-ip=172.82.232.133;
+Authentication-Results: mx.google.com;
+       spf=pass (google.com: domain of hetm-mid@email.hm.com designates 172.82.232.133 as permitted sender) smtp.mailfrom=hetm-mid@email.hm.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=hm.com
+From: "H&M Fashion News" <newsletter@email.hm.com>
+Date: Thu, 21 Nov 2019 09:17:38 GMT
+Subject: =?utf-8?B?UnVkb2xmIHJvY2t0IGRpZSBLaW5kZXJrb2xsZWt0aW9uIQ==?=
+To: <matthesdr@gmail.com>
+Reply-To: "H&M Fashion News" <no-reply@hm.com>
+MIME-Version: 1.0
+X-mailer: nlserver, Build 6.7.0
+Message-ID: <NM638D98EB9014EA017hetm_mid_prod3@email.hm.com>
+List-Unsubscribe: <mailto: hetm-mid@email.hm.com?subject=unsubscribe%3CNM638D98EB9014EA017hetm_mid_prod3@email.hm.com%3E>
+Precedence: Bulk
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-OX-Marker: b2b520ea-aafd-4206-9e7d-0c9145bccc9d
+
+<!DOCTYPE html>
+<html style=3D"border:0;margin:0;outline:0;padding:0">
+<head>
+    <meta http-equiv=3D"content-type" content=3D"text/html; charset=3DUTF-8=
+"/>
+    <meta name=3D"viewport" content=3D"width=3Ddevice-width"/>
+    <meta name=3D"x-apple-disable-message-reformatting"/>
+    <meta content=3D"telephone=3Dno" name=3D"format-detection"/>
+
+    
+
+        
+
+        
+
+        
+
+        
+
+        
+
+    
+
+    
+        
+            <style>@import url(https://s1-cdn.hm.com/global/hm-fonts/3.0.14=
+/oces.css);a{text-decoration:none}.prevent-auto-links a{color:inherit!impor=
+tant;text-decoration:none!important}.prevent-auto-links a.allowed-link{text=
+-decoration:underline!important}.prevent-paragraph-margins p{margin:0!impor=
+tant}.prevent-top-paragraph-margins{margin-top:0!important}.prevent-bottom-=
+paragraph-margins{margin-bottom:0!important}img.image+div{display:none!impo=
+rtant}#MessageViewBody .hide-webkit{display:block!important}#MessageViewBod=
+y .show-webkit-table{display:none!important}@media screen yahoo{
+=2Eshow-webkit-table{display:none}
+}
+</style>
+            
+        
+        
+    
+
+    <style id=3D"optimize-css">
+@media (max-width:699px){
+=2Eis-hidden-mobile{max-height:0!important;line-height:0!important;display:=
+none!important;mso-hide:all!important;overflow:hidden!important}.is-hidden-=
+desktop{max-height:initial!important;line-height:auto!important;display:inl=
+ine!important;mso-hide:none!important;overflow:auto!important}.image-mobile=
+{width:100%!important;height:auto!important}.text-block-vignette-text{line-=
+height:14px!important;font-size:11px!important;letter-spacing:3px!important=
+;padding-top:11px!important}.text-block-headline{width:300px!important;padd=
+ing:7px 0 0 0!important}.text-block-headline-size-spacing{width:auto!import=
+ant}.text-block-headline-text{font-size:30px!important;line-height:36px!imp=
+ortant;letter-spacing:1px!important}.text-block-headline-text.text-large{fo=
+nt-size:40px!important;line-height:46px!important}.text-block-headline-text=
+.text-small{font-size:28px!important;line-height:34px!important}.text-block=
+-preamble-text{font-size:12px!important;line-height:16px!important}.text-bl=
+ock-preamble-padding{padding-top:6px!important;padding-bottom:7px!important=
+}.text-block-preamble{width:300px!important}.text-block-preamble-side-space=
+r,.text-block-vignette-side-spacer{width:auto!important}.text-block-vignett=
+e{width:300px!important}.cta-bottom-margin{height:30px!important}.cta-link{=
+display:inline-block!important;border-style:solid!important;border-width:2p=
+x!important;font-size:11px!important;line-height:14px!important;padding:11p=
+x 0!important;letter-spacing:0!important;text-align:center!important}.cta-l=
+ink-large{width:206px!important}.cta-link-spacer-side{width:0!important}.cu=
+stomer-ribbon{width:310px!important}.customer-ribbon-text{font-size:11px!im=
+portant;letter-spacing:0!important}.customer-ribbon-side-margin{width:32px!=
+important}.customer-ribbon-height{height:29px!important}.departments-wrappe=
+r-new{padding:40px 0 1px!important}.department-link-new{font-size:11px!impo=
+rtant}.department-link-container-new{padding-top:4px!important}.department-=
+item-of-5 img{width:72px!important;height:72px!important}.department-last-i=
+tem-of-5 img{width:71px!important;height:72px!important}.departments{paddin=
+g-bottom:8px!important}.department{width:62px!important}.department-link-co=
+ntainer{padding-top:2px!important}.department-link{font-size:9px!important;=
+letter-spacing:0!important}.footer-table{width:375px!important}.footer-soci=
+al-media-spacer-new{width:20px!important}.footer-toc-wrapper-new{padding:20=
+px 25px!important}.footer-button-new{padding:7px 0 4px!important}.footer-he=
+adline-new{padding-top:19px!important;padding-bottom:15px!important}.footer=
+-hm-vignette-wrapper-new{padding-top:36px!important;padding-bottom:20px!imp=
+ortant}.footer-new{padding:20px 0!important}.footer-social-media-icons-wrap=
+per-new{padding:15px 0!important}.footer-unsubscribe-wrapper-new{padding:0 =
+0 20px!important}.footer{padding:29px 0 32px!important}.footer-unsubscribe{=
+padding-top:10px!important}.header-menu{padding:0!important}.header-member-=
+bar-new,.header-plus-member-bar-new{padding:8px 9px!important}.header-text-=
+size-large-new{line-height:16px!important;padding-left:28px!important}.head=
+er-menu-container-new{padding-right:10px!important}.header-logo-new{padding=
+-left:10px!important}.header-show-desktop-only-new{display:none!important}.=
+header-show-mobile-only-new{display:table-cell!important}.header-pre-header=
+{padding-top:10px!important;padding-bottom:10px!important}.header-logo{padd=
+ing-left:12px!important}.header-text-size-large .header-menu-link{font-size=
+:14px!important}.header-show-desktop-only{display:none!important}.header-sh=
+ow-mobile-only{display:table-cell!important}.header-member-bar,.header-plus=
+-member-bar{padding:8px 12px!important}.headline-text{padding:0 24px 24px!i=
+mportant}.container{width:100%!important;max-width:100%!important}.static-m=
+argin{height:24px!important}.margin-medium{padding-top:24px!important}.pric=
+e-module-image-product-info{padding:10px 5px 36px!important;font-size:11px!=
+important;line-height:15px!important}.cta-link{display:inline-block!importa=
+nt;border-style:solid!important;border-width:1px!important;font-size:11px!i=
+mportant;line-height:14px!important;padding:11px 0!important;letter-spacing=
+:0!important;text-align:center!important}.cta-link-large{width:180px!import=
+ant}.text-block-wrapper{padding-top:30px!important;padding-bottom:25px!impo=
+rtant}.text-block-wrapper{padding-top:30px!important;padding-bottom:25px!im=
+portant}.secondary-story-image{padding:0 25px!important}.text-block-wrapper=
+{padding:19px 0 18px!important}.email-layout{width:375px!important;min-widt=
+h:375px!important}
+}
+@media (min-width:0){
+body{margin:0;padding:0;-webkit-text-size-adjust:100%}.is-hidden{display:no=
+ne}.is-hidden-desktop{display:none}.cta-link{-webkit-font-smoothing:antiali=
+ased}a{text-decoration:none}
+}
+@media (-webkit-min-device-pixel-ratio:0){
+label{cursor:pointer}
+}
+@media (max-width:374px){
+=2Etext-block-headline{width:90%!important}.text-block-preamble{width:90%!i=
+mportant}.text-block-vignette{width:90%!important}.header-menu-link{font-si=
+ze:11px!important}.header-text-size-large .header-menu-link{font-size:14px!=
+important}.email-layout{width:320px!important;min-width:320px!important}
+}
+</style>
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:AllowPNG/>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+    </xml>
+    <![endif]-->
+    <!--[if mso]>
+    <style>
+        .cta-link,
+        .long-cta-link,
+        .triggered-cta {
+          text-decoration: underline !important;
+        }
+        
+    </style>
+    <![endif]-->
+</head>
+
+<body style=3D"background:#fff;background-color:#FAF9F8;border:0;color:#000=
+;line-height:1;margin:0;outline:0;padding:0">
+
+    
+    <table bgcolor=3D"#FAF9F8" width=3D"100%" style=3D"border:0;border-coll=
+apse:separate;border-spacing:0;margin:0;outline:0;padding:0" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0">
+        <tr style=3D"border:0;margin:0;outline:0;padding:0">
+            <td width=3D"100%" align=3D"center" style=3D"border:0;margin:0;=
+outline:0;padding:0">
+                <table width=3D"700" border=3D"0" align=3D"center" class=3D=
+"email-layout" style=3D"border:0;border-collapse:separate;border-spacing:0;=
+margin:0;min-width:700px;outline:0;padding:0" cellpadding=3D"0" cellspacing=
+=3D"0">
+                    <tr style=3D"border:0;margin:0;outline:0;padding:0">
+                        <th class=3D"header-pre-header" style=3D"border:0;m=
+argin:0;outline:0;padding:0;padding-bottom:13px;padding-top:11px">
+                            
+                            <p class=3D"is-hidden" style=3D"border:0;displa=
+y:none;font-weight:400;line-height:0px;margin:0;max-height:0;mso-hide:all;o=
+utline:0;overflow:hidden;padding:0">
+                                
+                                    Entdecke fr=C3=B6hliche, festliche Styl=
+es mit unserem absoluten Lieblingsrentier.
+                                
+                            </p>
+                            <p class=3D"is-hidden" style=3D"border:0;displa=
+y:none;font-weight:400;line-height:0px;margin:0;max-height:0;mso-hide:all;o=
+utline:0;overflow:hidden;padding:0">
+                                &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&=
+zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwn=
+j;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&=
+nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
+&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nb=
+sp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;=
+&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zw=
+nj;&nbsp;&zwnj;
+&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nb=
+sp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;=
+&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zw=
+nj;&nbsp;&zwnj;
+&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nb=
+sp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;=
+&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zw=
+nj;&nbsp;&zwnj;
+&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nb=
+sp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;=
+&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zw=
+nj;&nbsp;&zwnj;
+&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nb=
+sp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;=
+&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zw=
+nj;&nbsp;&zwnj;
+&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nb=
+sp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;=
+&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zw=
+nj;&nbsp;&zwnj;
+&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nb=
+sp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;=
+&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zw=
+nj;&nbsp;&zwnj;
+&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nb=
+sp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;=
+&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zw=
+nj;&nbsp;&zwnj;
+&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nb=
+sp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;=
+&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zw=
+nj;&nbsp;&zwnj;
+
+                            </p>
+                            <p class=3D"view-in-browser" style=3D"border:0;=
+color:#b2b2b2;font-size:11px;font-weight:400;line-height:14px;margin:0;outl=
+ine:0;padding:0;text-decoration:underline">
+                                <span class=3D"is-hidden" style=3D"border:0=
+;display:none;line-height:0px;margin:0;max-height:0;mso-hide:all;outline:0;=
+overflow:hidden;padding:0"></span>
+                                <a href=3D"http://t.email.hm.com/r/=3Fid=3D=
+h6a9d46cb,8eb3bf18,8f2b4d14
+&did=3D-1900822760&rid=3D102151545
+&p1=3D%40Hqp%2FLKPJFwVHKAbnKxSrJAymeaAuM0WJTC%2FT6DqBb6A%3D" x-cq-linkcheck=
+er=3D"skip" class=3D"view-in-browser-link text-normal" style=3D"-webkit-fon=
+t-smoothing:antialiased;border:0;color:#b2b2b2;font-family:HMAmpersand,Aria=
+l,sans-serif;font-size:11px;font-weight:400;line-height:14px;margin:0;outli=
+ne:0;padding:0;text-decoration:underline">Im Browser anzeigen</a>
+                                <span class=3D"is-hidden" style=3D"border:0=
+;display:none;line-height:0px;margin:0;max-height:0;mso-hide:all;outline:0;=
+overflow:hidden;padding:0"></span>
+                            </p>
+                        </th>
+                    </tr>
+                    <tr style=3D"border:0;margin:0;outline:0;padding:0">
+                        <td width=3D"700" align=3D"center" class=3D"email-l=
+ayout" style=3D"border:0;margin:0;min-width:700px;outline:0;padding:0">
+                            
+    
+    
+
+
+
+
+    
+    
+    <div class=3D"merchRibbonContainer container parbase"></div>
+
+
+    
+    
+    <div class=3D"headerContainer container parbase"><table style=3D"border=
+:0;border-collapse:separate;border-spacing:0;margin:0;outline:0;padding:0" =
+border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=
+=3D"border:0;margin:0;outline:0;padding:0"><th class=3D"header-menu" style=
+=3D"border:0;border-top:1px solid #f3f3f3;margin:0;outline:0;padding:0"><ta=
+ble style=3D"border:0;border-collapse:separate;border-spacing:0;margin:0;ou=
+tline:0;padding:0" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=
+=3D"100%"><tr style=3D"border:0;margin:0;outline:0;padding:0"><th class=3D"=
+header-logo-new" align=3D"left" style=3D"border:0;margin:0;outline:0;paddin=
+g:0;padding-left:14px"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb=
+,8eb3bf18,8f2b4d15
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" _label=3D"HM LOGO" style=3D"border:0;font-weight:400;margin:0;outline:=
+0;padding:0"><img src=3D"https://s1-cdn.hm.com/global/assets/1.0.123/images=
+/logo/header-hm-logo-light-red.png" class=3D"header-logo-image" height=3D"2=
+7" style=3D"border:none;margin:0;max-width:700px;outline:0;padding:0"/></a>=
+</th><th class=3D"spacer" style=3D"border:0;font-size:0;line-height:1px;mar=
+gin:0;outline:0;padding:0"><img src=3D"https://s1-cdn.hm.com/global/assets/=
+1.0.123/images/spacer.gif" width=3D"1" height=3D"43" style=3D"border:0;marg=
+in:0;max-width:700px;outline:0;padding:0"/></th><th class=3D"header-menu-co=
+ntainer-new" style=3D"border:0;margin:0;outline:0;padding:0;padding-right:1=
+4px"><table class=3D"width-auto" align=3D"right" style=3D"border:0;border-c=
+ollapse:separate;border-spacing:0;margin:0;outline:0;padding:0" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" width=3D"auto"><tr style=3D"border:0;=
+margin:0;outline:0;padding:0"><th class=3D"spacer" style=3D"border:0;font-s=
+ize:0;line-height:1px;margin:0;outline:0;padding:0"><img src=3D"https://s1-=
+cdn.hm.com/global/assets/1.0.123/images/spacer.gif" width=3D"1" height=3D"4=
+3" style=3D"border:0;margin:0;max-width:700px;outline:0;padding:0"/></th><!=
+--[if !mso]><!--><th class=3D"header-text-size-large-new header-show-mobile=
+-only-new" style=3D"border:0;display:none;line-height:20px;margin:0;outline=
+:0;padding:0;padding-left:20px"><a class=3D"header-menu-link-new text-regul=
+ar" href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b4d16
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" style=3D"border:0;color:#222;font-family:HMAmpersand,Arial,sans-serif;=
+font-size:12px;font-weight:400;margin:0;outline:0;padding:0;text-decoration=
+:none;white-space:nowrap">Jetzt&nbsp;kaufen</a></th><!--<![endif]--><!--[if=
+ !mso]><!--><th class=3D"header-text-size-large-new header-show-mobile-only=
+-new" style=3D"border:0;display:none;line-height:20px;margin:0;outline:0;pa=
+dding:0;padding-left:20px"><a class=3D"header-menu-link-new text-regular" h=
+ref=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b4d17
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" style=3D"border:0;color:#222;font-family:HMAmpersand,Arial,sans-serif;=
+font-size:12px;font-weight:400;margin:0;outline:0;padding:0;text-decoration=
+:none;white-space:nowrap">Sale</a></th><!--<![endif]--><th class=3D"header-=
+text-size-large-new header-show-desktop-only-new" style=3D"border:0;line-he=
+ight:20px;margin:0;outline:0;padding:0;padding-left:20px"><a class=3D"heade=
+r-menu-link-new text-regular" href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d=
+46cb,8eb3bf18,8f2b4d18
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" style=3D"border:0;color:#222;font-family:HMAmpersand,Arial,sans-serif;=
+font-size:12px;font-weight:400;margin:0;outline:0;padding:0;text-decoration=
+:none;white-space:nowrap">Jetzt&nbsp;kaufen</a></th><th class=3D"header-tex=
+t-size-large-new header-show-desktop-only-new" style=3D"border:0;line-heigh=
+t:20px;margin:0;outline:0;padding:0;padding-left:20px"><a class=3D"header-m=
+enu-link-new text-regular" href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46c=
+b,8eb3bf18,8f2b4d19
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" style=3D"border:0;color:#222;font-family:HMAmpersand,Arial,sans-serif;=
+font-size:12px;font-weight:400;margin:0;outline:0;padding:0;text-decoration=
+:none;white-space:nowrap">Neuheiten</a></th><th class=3D"header-text-size-l=
+arge-new header-show-desktop-only-new" style=3D"border:0;line-height:20px;m=
+argin:0;outline:0;padding:0;padding-left:20px"><a class=3D"header-menu-link=
+-new text-regular" href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf=
+18,8f2b4d1a
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" style=3D"border:0;color:#222;font-family:HMAmpersand,Arial,sans-serif;=
+font-size:12px;font-weight:400;margin:0;outline:0;padding:0;text-decoration=
+:none;white-space:nowrap">Sale</a></th><th class=3D"header-text-size-large-=
+new header-show-desktop-only-new" style=3D"border:0;line-height:20px;margin=
+:0;outline:0;padding:0;padding-left:20px"><a class=3D"header-menu-link-new =
+text-regular" href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f=
+2b4d1b
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" style=3D"border:0;color:#222;font-family:HMAmpersand,Arial,sans-serif;=
+font-size:12px;font-weight:400;margin:0;outline:0;padding:0;text-decoration=
+:none;white-space:nowrap">Store&nbsp;finder</a></th><th class=3D"header-tex=
+t-size-large-new header-show-desktop-only-new" style=3D"border:0;line-heigh=
+t:20px;margin:0;outline:0;padding:0;padding-left:20px"><a class=3D"header-m=
+enu-link-new text-regular" href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46c=
+b,8eb3bf18,8f2b4d1c
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" style=3D"border:0;color:#222;font-family:HMAmpersand,Arial,sans-serif;=
+font-size:12px;font-weight:400;margin:0;outline:0;padding:0;text-decoration=
+:none;white-space:nowrap">Member&#8209;seiten</a></th></tr></table></th></t=
+r></table></th></tr><tr style=3D"border:0;margin:0;outline:0;padding:0"><td=
+ style=3D"border:0;margin:0;outline:0;padding:0"><table style=3D"border:0;b=
+order-collapse:separate;border-spacing:0;margin:0;outline:0;padding:0" bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D"bo=
+rder:0;margin:0;outline:0;padding:0"><td align=3D"left" class=3D"header-mem=
+ber-bar-new" style=3D"border:0;font-size:11px;line-height:14px;margin:0;out=
+line:0;padding:8px 14px" bgcolor=3D"#f5e6e0"><a href=3D"http://t.email.hm.c=
+om/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b4d1d
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" class=3D"header-membe=
+r-bar-text-new text-regular text-no-decoration" style=3D"border:0;color:#22=
+2;font-family:HMAmpersand,Arial,sans-serif;font-weight:400;margin:0;outline=
+:0;padding:0;text-decoration:none;white-space:nowrap">Member</a></td><td al=
+ign=3D"right" class=3D"header-member-bar-new" style=3D"border:0;font-size:1=
+1px;line-height:14px;margin:0;outline:0;padding:8px 14px" bgcolor=3D"#f5e6e=
+0"> <a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b4d1e
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" class=3D"header-membe=
+r-bar-text-new text-regular text-no-decoration" style=3D"border:0;color:#22=
+2;font-family:HMAmpersand,Arial,sans-serif;font-weight:400;margin:0;outline=
+:0;padding:0;text-decoration:none;white-space:nowrap">152Punkte</a></td></t=
+r></table></td></tr></table></div>
+
+
+    
+    
+    <div class=3D"topStoryContainer container parbase"><table class=3D"cont=
+ainer" bgcolor=3D"#FAF9F8" style=3D"border:0;border-collapse:separate;borde=
+r-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;outline:0;pad=
+ding:0"><td style=3D"border:0;margin:0;outline:0;padding:0">
+
+
+
+
+    
+    
+    <div class=3D"campaignTopStory"><table bgcolor=3D"#FAF9F8" style=3D"bor=
+der:0;border-collapse:separate;border-spacing:0;margin:0;outline:0;padding:=
+0" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr styl=
+e=3D"border:0;margin:0;outline:0;padding:0"><th style=3D"border:0;margin:0;=
+outline:0;padding:0"><table style=3D"border:0;border-collapse:separate;bord=
+er-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;outline:0;pa=
+dding:0"><td class=3D"image-wrapper" style=3D"border:0;font-size:0;margin:0=
+;outline:0;padding:0" align=3D"center"><div class=3D"is-hidden-mobile" styl=
+e=3D"border:0;margin:0;outline:0;padding:0"><a href=3D"http://t.email.hm.co=
+m/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b64fd
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"DESKTOP IMA=
+GE" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img sr=
+c=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DnewDesign%5B=
+true%5D&set=3DimageUrl%5Bhttps://aemcomm.hm.com/content/dam/hm/Kids_S00/Oct=
+ober2019/6140N1/6140N1-3x2-reindeer-kids-holiday-styles.jpg/_jcr_content/re=
+nditions/cq5dam.web.1400.1400.jpeg%5D&set=3Dwidth%5B1400%5D&set=3DtextLengt=
+h%5B400%5D&set=3DpositionX%5B59.86%5D&set=3DpositionY%5B39.83%5D&set=3Dprod=
+uctName%5BPullover%20in%20Jacquardstrick%5D&set=3Dprice%5B9U002C99%20U20AC%=
+5D&set=3DredPrice%5B%5D&set=3DtextColor%5B%23FFFFFF%5D&call=3Durl%5Bhttps:/=
+/s1-cdn.hm.com/global/image-chains/1.1.334/price-module-image-v2/desktop.ch=
+ain%5D&auth=3Dhash%5Bbebf00d9%5D" class=3D"image" width=3D"700" style=3D"bo=
+rder:none;margin:0;max-width:700px;outline:0;padding:0"/></a></div><!--[if =
+!mso]><!--><div class=3D"is-hidden-desktop" style=3D"border:0;display:none;=
+margin:0;max-height:0;mso-hide:all;outline:0;overflow:hidden;padding:0"><a =
+href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b64fe
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"MOBILE IMAG=
+E" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img src=
+=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DnewDesign%5Bt=
+rue%5D&set=3DimageUrl%5Bhttps://aemcomm.hm.com/content/dam/hm/Kids_S00/Octo=
+ber2019/6140N1/6140N1-CPM-TOP-reindeer-kids-holiday-styles.jpg/_jcr_content=
+/renditions/cq5dam.web.750.750.jpeg%5D&set=3Dwidth%5B750%5D&set=3DtextLengt=
+h%5B228%5D&set=3DpositionX%5B62.29%5D&set=3DpositionY%5B36.52%5D&set=3Dprod=
+uctName%5BPullover%20in%20Jacquardstrick%5D&set=3Dprice%5B9U002C99%20U20AC%=
+5D&set=3DredPrice%5B%5D&set=3DtextColor%5B%23FFFFFF%5D&call=3Durl%5Bhttps:/=
+/s1-cdn.hm.com/global/image-chains/1.1.334/price-module-image-v2/mobile.cha=
+in%5D&auth=3Dhash%5B77464adc%5D" class=3D"image image-mobile" style=3D"bord=
+er:none;display:block;height:auto;margin:0;max-width:700px;outline:0;paddin=
+g:0"/></a></div><!--<![endif]--></td></tr></table></th></tr><tr style=3D"bo=
+rder:0;margin:0;outline:0;padding:0"><th class=3D"text-block-wrapper" style=
+=3D"border:0;margin:0;outline:0;padding:26px 0 29px"><table style=3D"border=
+:0;border-collapse:separate;border-spacing:0;margin:0;outline:0;padding:0" =
+border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=
+=3D"border:0;margin:0;outline:0;padding:0"><th style=3D"border:0;margin:0;o=
+utline:0;padding:0"><table style=3D"border:0;border-collapse:separate;borde=
+r-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;outline:0;pad=
+ding:0"><td width=3D"150" class=3D"text-block-vignette-side-spacer" style=
+=3D"border:0;font-size:10px;line-height:10px;margin:0;outline:0;padding:0">=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td width=3D"400" align=3D"center" class=
+=3D"text-block-vignette text-block-vignette-text text-demi-bold prevent-aut=
+o-links" style=3D"-webkit-font-smoothing:antialiased;border:0;color:#2B2B2B=
+;font-family:HMAmpersandDemiBold,Arial,sans-serif;font-size:12px;font-weigh=
+t:500;letter-spacing:2.4px;line-height:16px;margin:0;outline:0;padding:0;pa=
+dding-top:17px">Festliche Momente</td><td width=3D"150" class=3D"text-block=
+-vignette-side-spacer" style=3D"border:0;font-size:10px;line-height:10px;ma=
+rgin:0;outline:0;padding:0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table=
+></th></tr><tr style=3D"border:0;margin:0;outline:0;padding:0"><td style=3D=
+"border:0;margin:0;outline:0;padding:0"><table style=3D"border:0;border-col=
+lapse:separate;border-spacing:0;margin:0;outline:0;padding:0" border=3D"0" =
+cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D"border:0;ma=
+rgin:0;outline:0;padding:0"><td width=3D"100" class=3D"text-block-headline-=
+size-spacing" style=3D"border:0;margin:0;outline:0;padding:0">&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;</td><td width=3D"500" align=3D"center" class=3D"text-bloc=
+k-headline prevent-auto-links" style=3D"border:0;margin:0;outline:0;padding=
+:11px 0 0 0"><p class=3D"text-block-headline-text text-bold" style=3D"-webk=
+it-font-smoothing:antialiased;border:0;color:#2B2B2B;font-family:HMAmpersan=
+d,Arial,sans-serif;font-size:52px;font-weight:700;line-height:58px;margin:0=
+;outline:0;padding:0">So s=C3=BC=C3=9F wie Rudolf!</p></td><td width=3D"100=
+" class=3D"text-block-headline-size-spacing" style=3D"border:0;margin:0;out=
+line:0;padding:0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table></td></tr=
+><tr style=3D"border:0;margin:0;outline:0;padding:0"><td style=3D"border:0;=
+margin:0;outline:0;padding:0"><table style=3D"border:0;border-collapse:sepa=
+rate;border-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;out=
+line:0;padding:0"><td width=3D"100" class=3D"text-block-preamble-side-space=
+r" style=3D"border:0;font-size:10px;line-height:10px;margin:0;outline:0;pad=
+ding:0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td width=3D"500" align=3D"cente=
+r" class=3D"text-block-preamble text-block-preamble-text text-block-preambl=
+e-padding text-normal prevent-auto-links" style=3D"-webkit-font-smoothing:a=
+ntialiased;border:0;color:#2B2B2B;font-family:HMAmpersand,Arial,sans-serif;=
+font-size:13px;font-weight:400;line-height:18px;margin:0;outline:0;padding:=
+0;padding-bottom:8px;padding-top:12px">Ein gewisses Rentier mit roter Nase =
+war Inspiration f=C3=BCr unsere festliche, fr=C3=B6hliche Kinderkollektion.=
+ Hier findest du die verspielten Essentials!</td><td width=3D"100" class=3D=
+"text-block-preamble-side-spacer" style=3D"border:0;font-size:10px;line-hei=
+ght:10px;margin:0;outline:0;padding:0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><=
+/tr></table></td></tr></table></th></tr><tr style=3D"border:0;margin:0;outl=
+ine:0;padding:0"><th style=3D"border:0;margin:0;outline:0;padding:0"><p cla=
+ss=3D"cta-links-container" style=3D"border:0;font-size:0;font-weight:400;ma=
+rgin:0;outline:0;padding:0;text-align:center"><img src=3D"https://s1-cdn.hm=
+.com/global/assets/1.0.123/images/spacer.gif" width=3D"0" height=3D"1" clas=
+s=3D"cta-link-spacer-side" style=3D"border:0;margin:0;max-width:700px;outli=
+ne:0;padding:0"/><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3b=
+f18,8f2b64ff
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" class=3D"cta-link tex=
+t-bold cta-link-large" x-cq-linkchecker=3D"skip" style=3D"-webkit-font-smoo=
+thing:antialiased;border:0;border-bottom:1px solid #2B2B2B;border-color:#2B=
+2B2B;color:#2B2B2B;font-family:HMAmpersand,Arial,sans-serif;font-size:12px;=
+font-weight:700;letter-spacing:1px;line-height:16px;margin:0;outline:0;padd=
+ing:0;text-align:left;text-decoration:none">JETZT&nbsp;KAUFEN</a><img src=
+=3D"https://s1-cdn.hm.com/global/assets/1.0.123/images/spacer.gif" width=3D=
+"0" height=3D"1" class=3D"cta-link-spacer-side" style=3D"border:0;margin:0;=
+max-width:700px;outline:0;padding:0"/></p><div class=3D"image-wrapper" styl=
+e=3D"border:0;font-size:0;margin:0;outline:0;padding:0;text-align:center"><=
+img src=3D"https://s1-cdn.hm.com/global/assets/1.0.123/images/spacer.gif" w=
+idth=3D"1" height=3D"40" class=3D"cta-bottom-margin" style=3D"border:0;marg=
+in:0;max-width:700px;outline:0;padding:0"/></div></th></tr></table></div>
+
+
+    
+    
+    <div class=3D"singleImage"><table style=3D"border:0;border-collapse:sep=
+arate;border-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;ou=
+tline:0;padding:0"><td style=3D"border:0;margin:0;outline:0;padding:0"><tab=
+le style=3D"border:0;border-collapse:separate;border-spacing:0;margin:0;out=
+line:0;padding:0" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%"><tr style=3D"border:0;margin:0;outline:0;padding:0"><td class=3D"ima=
+ge-wrapper" style=3D"border:0;font-size:0;margin:0;outline:0;padding:0" ali=
+gn=3D"center"><div class=3D"is-hidden-mobile" style=3D"border:0;margin:0;ou=
+tline:0;padding:0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb=
+3bf18,8f2b6500
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"DESKTOP IMA=
+GE" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img sr=
+c=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DnewDesign%5B=
+true%5D&set=3DimageUrl%5Bhttps://aemcomm.hm.com/content/dam/hm/Kids_S00/Oct=
+ober2019/6140N1/6140N1-CPD-1-reindeer-kids-holiday-styles-v2.jpg/_jcr_conte=
+nt/renditions/cq5dam.web.1400.1400.jpeg%5D&set=3Dwidth%5B1400%5D&call=3Durl=
+%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/price-module-image-v2/=
+desktop.chain%5D&auth=3Dhash%5Bd704ea31%5D" class=3D"image" width=3D"700" s=
+tyle=3D"border:none;margin:0;max-width:700px;outline:0;padding:0"/></a></di=
+v><!--[if !mso]><!--><div class=3D"is-hidden-desktop" style=3D"border:0;dis=
+play:none;margin:0;max-height:0;mso-hide:all;outline:0;overflow:hidden;padd=
+ing:0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b65=
+01
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"MOBILE IMAG=
+E" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img src=
+=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DnewDesign%5Bt=
+rue%5D&set=3DimageUrl%5Bhttps://aemcomm.hm.com/content/dam/hm/Kids_S00/Octo=
+ber2019/6140N1/6140N1-CPD-1-reindeer-kids-holiday-styles-v2.jpg/_jcr_conten=
+t/renditions/cq5dam.web.750.750.jpeg%5D&set=3Dwidth%5B750%5D&call=3Durl%5Bh=
+ttps://s1-cdn.hm.com/global/image-chains/1.1.334/price-module-image-v2/mobi=
+le.chain%5D&auth=3Dhash%5B3e0adb0d%5D" class=3D"image image-mobile" style=
+=3D"border:none;display:block;height:auto;margin:0;max-width:700px;outline:=
+0;padding:0"/></a></div><!--<![endif]--></td></tr></table><table style=3D"b=
+order:0;border-collapse:separate;border-spacing:0;margin:0;outline:0;paddin=
+g:0" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr st=
+yle=3D"border:0;margin:0;outline:0;padding:0"><td class=3D"price-module-ima=
+ge-product-info text-normal" style=3D"-webkit-font-smoothing:antialiased;bo=
+rder:0;font-family:HMAmpersand,Arial,sans-serif;font-size:13px;font-weight:=
+400;line-height:18px;margin:0;outline:0;padding:12px 10px 35px" align=3D"ce=
+nter"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b650=
+2
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" class=3D"price-module=
+-image-link" style=3D"border:0;color:#2b2b2b;font-weight:400;margin:0;outli=
+ne:0;padding:0;text-decoration:none">Glitzerndes T=C3=BCllkleid<br/>14,99 =
+=E2=82=AC</a></td></tr></table></td></tr></table></div>
+
+
+    
+    
+    <div class=3D"singleImage"><table style=3D"border:0;border-collapse:sep=
+arate;border-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;ou=
+tline:0;padding:0"><td style=3D"border:0;margin:0;outline:0;padding:0"><tab=
+le style=3D"border:0;border-collapse:separate;border-spacing:0;margin:0;out=
+line:0;padding:0" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%"><tr style=3D"border:0;margin:0;outline:0;padding:0"><td class=3D"ima=
+ge-wrapper" style=3D"border:0;font-size:0;margin:0;outline:0;padding:0" ali=
+gn=3D"center"><div class=3D"is-hidden-mobile" style=3D"border:0;margin:0;ou=
+tline:0;padding:0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb=
+3bf18,8f2b6503
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"DESKTOP IMA=
+GE" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img sr=
+c=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DnewDesign%5B=
+true%5D&set=3DimageUrl%5Bhttps://aemcomm.hm.com/content/dam/hm/Kids_S00/Oct=
+ober2019/6140N1/6140N1-FN-2-reindeer-kids-holiday-styles.jpg/_jcr_content/r=
+enditions/cq5dam.web.1400.1400.jpeg%5D&set=3Dwidth%5B1400%5D&call=3Durl%5Bh=
+ttps://s1-cdn.hm.com/global/image-chains/1.1.334/price-module-image-v2/desk=
+top.chain%5D&auth=3Dhash%5Bf605217c%5D" class=3D"image" width=3D"700" style=
+=3D"border:none;margin:0;max-width:700px;outline:0;padding:0"/></a></div><!=
+--[if !mso]><!--><div class=3D"is-hidden-desktop" style=3D"border:0;display=
+:none;margin:0;max-height:0;mso-hide:all;outline:0;overflow:hidden;padding:=
+0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6504
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"MOBILE IMAG=
+E" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img src=
+=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DnewDesign%5Bt=
+rue%5D&set=3DimageUrl%5Bhttps://aemcomm.hm.com/content/dam/hm/Kids_S00/Octo=
+ber2019/6140N1/6140N1-FN-2-reindeer-kids-holiday-styles.jpg/_jcr_content/re=
+nditions/cq5dam.web.750.750.jpeg%5D&set=3Dwidth%5B750%5D&call=3Durl%5Bhttps=
+://s1-cdn.hm.com/global/image-chains/1.1.334/price-module-image-v2/mobile.c=
+hain%5D&auth=3Dhash%5B9f4772d1%5D" class=3D"image image-mobile" style=3D"bo=
+rder:none;display:block;height:auto;margin:0;max-width:700px;outline:0;padd=
+ing:0"/></a></div><!--<![endif]--></td></tr></table><table style=3D"border:=
+0;border-collapse:separate;border-spacing:0;margin:0;outline:0;padding:0" b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D=
+"border:0;margin:0;outline:0;padding:0"><td class=3D"price-module-image-pro=
+duct-info text-normal" style=3D"-webkit-font-smoothing:antialiased;border:0=
+;font-family:HMAmpersand,Arial,sans-serif;font-size:13px;font-weight:400;li=
+ne-height:18px;margin:0;outline:0;padding:12px 10px 35px" align=3D"center">=
+<a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6505
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" class=3D"price-module=
+-image-link" style=3D"border:0;color:#2b2b2b;font-weight:400;margin:0;outli=
+ne:0;padding:0;text-decoration:none">M=C3=BCtze mit Applikationen<br/>7,99 =
+=E2=82=AC</a></td></tr></table></td></tr></table></div>
+
+
+    
+    
+    <div class=3D"singleImage"><table style=3D"border:0;border-collapse:sep=
+arate;border-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;ou=
+tline:0;padding:0"><td style=3D"border:0;margin:0;outline:0;padding:0"><tab=
+le style=3D"border:0;border-collapse:separate;border-spacing:0;margin:0;out=
+line:0;padding:0" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%"><tr style=3D"border:0;margin:0;outline:0;padding:0"><td class=3D"ima=
+ge-wrapper" style=3D"border:0;font-size:0;margin:0;outline:0;padding:0" ali=
+gn=3D"center"><div class=3D"is-hidden-mobile" style=3D"border:0;margin:0;ou=
+tline:0;padding:0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb=
+3bf18,8f2b6506
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"DESKTOP IMA=
+GE" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img sr=
+c=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DnewDesign%5B=
+true%5D&set=3DimageUrl%5Bhttps://aemcomm.hm.com/content/dam/hm/Kids_S00/Oct=
+ober2019/6140N1/6140N1-FN-3-CPD-reindeer-kids-holiday-styles.jpg/_jcr_conte=
+nt/renditions/cq5dam.web.1400.1400.jpeg%5D&set=3Dwidth%5B1400%5D&call=3Durl=
+%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/price-module-image-v2/=
+desktop.chain%5D&auth=3Dhash%5B9bf1b57a%5D" class=3D"image" width=3D"700" s=
+tyle=3D"border:none;margin:0;max-width:700px;outline:0;padding:0"/></a></di=
+v><!--[if !mso]><!--><div class=3D"is-hidden-desktop" style=3D"border:0;dis=
+play:none;margin:0;max-height:0;mso-hide:all;outline:0;overflow:hidden;padd=
+ing:0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b65=
+07
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"MOBILE IMAG=
+E" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img src=
+=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DnewDesign%5Bt=
+rue%5D&set=3DimageUrl%5Bhttps://aemcomm.hm.com/content/dam/hm/Kids_S00/Octo=
+ber2019/6140N1/6140N1-FN-3-CPM-reindeer-kids-holiday-styles.jpg/_jcr_conten=
+t/renditions/cq5dam.web.750.750.jpeg%5D&set=3Dwidth%5B750%5D&call=3Durl%5Bh=
+ttps://s1-cdn.hm.com/global/image-chains/1.1.334/price-module-image-v2/mobi=
+le.chain%5D&auth=3Dhash%5B26d04427%5D" class=3D"image image-mobile" style=
+=3D"border:none;display:block;height:auto;margin:0;max-width:700px;outline:=
+0;padding:0"/></a></div><!--<![endif]--></td></tr></table><table style=3D"b=
+order:0;border-collapse:separate;border-spacing:0;margin:0;outline:0;paddin=
+g:0" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr st=
+yle=3D"border:0;margin:0;outline:0;padding:0"><td class=3D"price-module-ima=
+ge-product-info text-normal" style=3D"-webkit-font-smoothing:antialiased;bo=
+rder:0;font-family:HMAmpersand,Arial,sans-serif;font-size:13px;font-weight:=
+400;line-height:18px;margin:0;outline:0;padding:12px 10px 35px" align=3D"ce=
+nter"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b650=
+8
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" class=3D"price-module=
+-image-link" style=3D"border:0;color:#2b2b2b;font-weight:400;margin:0;outli=
+ne:0;padding:0;text-decoration:none">Feinstrickpullover<br/>9,99 =E2=82=AC<=
+/a></td></tr></table></td></tr></table></div>
+
+
+    
+    
+    <div class=3D"singleImage"><table style=3D"border:0;border-collapse:sep=
+arate;border-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;ou=
+tline:0;padding:0"><td style=3D"border:0;margin:0;outline:0;padding:0"><tab=
+le style=3D"border:0;border-collapse:separate;border-spacing:0;margin:0;out=
+line:0;padding:0" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%"><tr style=3D"border:0;margin:0;outline:0;padding:0"><td class=3D"ima=
+ge-wrapper" style=3D"border:0;font-size:0;margin:0;outline:0;padding:0" ali=
+gn=3D"center"><div class=3D"is-hidden-mobile" style=3D"border:0;margin:0;ou=
+tline:0;padding:0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb=
+3bf18,8f2b6509
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"DESKTOP IMA=
+GE" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img sr=
+c=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DnewDesign%5B=
+true%5D&set=3DimageUrl%5Bhttps://aemcomm.hm.com/content/dam/hm/Kids_S00/Oct=
+ober2019/6140N1/6140N1-FN-4-reindeer-kids-holiday-styles.jpg/_jcr_content/r=
+enditions/cq5dam.web.1400.1400.jpeg%5D&set=3Dwidth%5B1400%5D&call=3Durl%5Bh=
+ttps://s1-cdn.hm.com/global/image-chains/1.1.334/price-module-image-v2/desk=
+top.chain%5D&auth=3Dhash%5B216cbbee%5D" class=3D"image" width=3D"700" style=
+=3D"border:none;margin:0;max-width:700px;outline:0;padding:0"/></a></div><!=
+--[if !mso]><!--><div class=3D"is-hidden-desktop" style=3D"border:0;display=
+:none;margin:0;max-height:0;mso-hide:all;outline:0;overflow:hidden;padding:=
+0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b650a
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"MOBILE IMAG=
+E" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img src=
+=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DnewDesign%5Bt=
+rue%5D&set=3DimageUrl%5Bhttps://aemcomm.hm.com/content/dam/hm/Kids_S00/Octo=
+ber2019/6140N1/6140N1-FN-4-reindeer-kids-holiday-styles.jpg/_jcr_content/re=
+nditions/cq5dam.web.750.750.jpeg%5D&set=3Dwidth%5B750%5D&call=3Durl%5Bhttps=
+://s1-cdn.hm.com/global/image-chains/1.1.334/price-module-image-v2/mobile.c=
+hain%5D&auth=3Dhash%5Bb44132fc%5D" class=3D"image image-mobile" style=3D"bo=
+rder:none;display:block;height:auto;margin:0;max-width:700px;outline:0;padd=
+ing:0"/></a></div><!--<![endif]--></td></tr></table><table style=3D"border:=
+0;border-collapse:separate;border-spacing:0;margin:0;outline:0;padding:0" b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D=
+"border:0;margin:0;outline:0;padding:0"><td class=3D"price-module-image-pro=
+duct-info text-normal" style=3D"-webkit-font-smoothing:antialiased;border:0=
+;font-family:HMAmpersand,Arial,sans-serif;font-size:13px;font-weight:400;li=
+ne-height:18px;margin:0;outline:0;padding:12px 10px 35px" align=3D"center">=
+<a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b650b
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" class=3D"price-module=
+-image-link" style=3D"border:0;color:#2b2b2b;font-weight:400;margin:0;outli=
+ne:0;padding:0;text-decoration:none">Hoodie mit Motiv<br/>14,99 =E2=82=AC</=
+a></td></tr></table></td></tr></table></div>
+
+
+    
+    
+    <div class=3D"singleImage"><table style=3D"border:0;border-collapse:sep=
+arate;border-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;ou=
+tline:0;padding:0"><td style=3D"border:0;margin:0;outline:0;padding:0"><tab=
+le style=3D"border:0;border-collapse:separate;border-spacing:0;margin:0;out=
+line:0;padding:0" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%"><tr style=3D"border:0;margin:0;outline:0;padding:0"><td class=3D"ima=
+ge-wrapper" style=3D"border:0;font-size:0;margin:0;outline:0;padding:0" ali=
+gn=3D"center"><div class=3D"is-hidden-mobile" style=3D"border:0;margin:0;ou=
+tline:0;padding:0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb=
+3bf18,8f2b650c
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"DESKTOP IMA=
+GE" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img sr=
+c=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DnewDesign%5B=
+true%5D&set=3DimageUrl%5Bhttps://aemcomm.hm.com/content/dam/hm/Kids_S00/Oct=
+ober2019/6140N1/6140N1-FN-5-reindeer-kids-holiday-styles.jpg/_jcr_content/r=
+enditions/cq5dam.web.1400.1400.jpeg%5D&set=3Dwidth%5B1400%5D&call=3Durl%5Bh=
+ttps://s1-cdn.hm.com/global/image-chains/1.1.334/price-module-image-v2/desk=
+top.chain%5D&auth=3Dhash%5B5482ba69%5D" class=3D"image" width=3D"700" style=
+=3D"border:none;margin:0;max-width:700px;outline:0;padding:0"/></a></div><!=
+--[if !mso]><!--><div class=3D"is-hidden-desktop" style=3D"border:0;display=
+:none;margin:0;max-height:0;mso-hide:all;outline:0;overflow:hidden;padding:=
+0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b650d
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"MOBILE IMAG=
+E" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img src=
+=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DnewDesign%5Bt=
+rue%5D&set=3DimageUrl%5Bhttps://aemcomm.hm.com/content/dam/hm/Kids_S00/Octo=
+ber2019/6140N1/6140N1-FN-5-reindeer-kids-holiday-styles.jpg/_jcr_content/re=
+nditions/cq5dam.web.750.750.jpeg%5D&set=3Dwidth%5B750%5D&call=3Durl%5Bhttps=
+://s1-cdn.hm.com/global/image-chains/1.1.334/price-module-image-v2/mobile.c=
+hain%5D&auth=3Dhash%5B46e387fc%5D" class=3D"image image-mobile" style=3D"bo=
+rder:none;display:block;height:auto;margin:0;max-width:700px;outline:0;padd=
+ing:0"/></a></div><!--<![endif]--></td></tr></table><table style=3D"border:=
+0;border-collapse:separate;border-spacing:0;margin:0;outline:0;padding:0" b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D=
+"border:0;margin:0;outline:0;padding:0"><td class=3D"price-module-image-pro=
+duct-info text-normal" style=3D"-webkit-font-smoothing:antialiased;border:0=
+;font-family:HMAmpersand,Arial,sans-serif;font-size:13px;font-weight:400;li=
+ne-height:18px;margin:0;outline:0;padding:12px 10px 35px" align=3D"center">=
+<a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b650e
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" class=3D"price-module=
+-image-link" style=3D"border:0;color:#2b2b2b;font-weight:400;margin:0;outli=
+ne:0;padding:0;text-decoration:none">Baumwollhemd<br/>12,99 =E2=82=AC</a></=
+td></tr></table></td></tr></table></div>
+
+
+    
+    
+    <div class=3D"margin"><table style=3D"border:0;border-collapse:separate=
+;border-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;outline=
+:0;padding:0"><th class=3D"margin-medium spacer" style=3D"border:0;font-siz=
+e:0;line-height:1px;margin:0;outline:0;padding:0;padding-top:39px">&nbsp;</=
+th></tr></table></div>
+
+
+</td></tr></table></div>
+
+
+    
+    
+    <div class=3D"customerRibbonContainer container parbase"><table class=
+=3D"container" bgcolor=3D"#F5E6E0" style=3D"border:0;border-collapse:separa=
+te;border-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;outl=
+ine:0;padding:0"><td width=3D"50" class=3D"customer-ribbon-side-margin spac=
+er" style=3D"border:0;font-size:0;line-height:1px;margin:0;outline:0;paddin=
+g:0"><img src=3D"https://s1-cdn.hm.com/global/assets/1.0.123/images/spacer.=
+gif" width=3D"1" height=3D"39" class=3D"customer-ribbon-height" style=3D"bo=
+rder:0;margin:0;max-width:700px;outline:0;padding:0"/></td><td width=3D"600=
+" align=3D"center" class=3D"customer-ribbon text-normal" style=3D"-webkit-f=
+ont-smoothing:antialiased;border:0;color:#2B2B2B;font-family:HMAmpersand,Ar=
+ial,sans-serif;font-weight:400;margin:0;outline:0;padding:0"><div class=3D"=
+is-hidden-mobile" style=3D"border:0;margin:0;outline:0;padding:0"><p class=
+=3D"customer-ribbon-text prevent-auto-links" style=3D"border:0;font-size:10=
+px;font-weight:400;letter-spacing:1px;line-height:14px;margin:0;outline:0;p=
+adding:6px 0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18=
+,8f2b650f
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" class=3D"customer-rib=
+bon-link" style=3D"border:0;color:#2B2B2B;font-weight:400;margin:0;outline:=
+0;padding:0;text-decoration:none">Hello Member - Melde dich an &amp; nutze =
+deine Member-Angebote! Noch kein Member=3F Jetzt anmelden.</a></p></div><!-=
+-[if !mso]><!--><div class=3D"is-hidden-desktop" style=3D"border:0;display:=
+none;margin:0;max-height:0;mso-hide:all;outline:0;overflow:hidden;padding:0=
+"><p class=3D"customer-ribbon-text prevent-auto-links" style=3D"border:0;fo=
+nt-size:10px;font-weight:400;letter-spacing:1px;line-height:14px;margin:0;o=
+utline:0;padding:6px 0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46c=
+b,8eb3bf18,8f2b6510
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" class=3D"customer-rib=
+bon-link" style=3D"border:0;color:#2B2B2B;font-weight:400;margin:0;outline:=
+0;padding:0;text-decoration:none">Hello Member - Melde dich an &amp; nutze =
+deine Member-Angebote! Noch kein Member=3F Jetzt anmelden.</a></p></div><!-=
+-<![endif]--></td><td width=3D"50" class=3D"customer-ribbon-side-margin spa=
+cer" style=3D"border:0;font-size:0;line-height:1px;margin:0;outline:0;paddi=
+ng:0"><img src=3D"https://s1-cdn.hm.com/global/assets/1.0.123/images/spacer=
+.gif" width=3D"1" height=3D"39" class=3D"customer-ribbon-height" style=3D"b=
+order:0;margin:0;max-width:700px;outline:0;padding:0"/></td></tr></table><d=
+iv class=3D"image-wrapper" style=3D"border:0;font-size:0;margin:0;outline:0=
+;padding:0;text-align:center"><img src=3D"https://s1-cdn.hm.com/global/asse=
+ts/1.0.123/images/spacer.gif" class=3D"static-margin" height=3D"32" width=
+=3D"1" style=3D"border:0;margin:0;max-width:700px;outline:0;padding:0"/></d=
+iv></div>
+
+
+    
+    
+    <div class=3D"secondaryContainer container parbase"><table bgcolor=3D"#=
+FAF9F8" style=3D"border:0;border-collapse:separate;border-spacing:0;margin:=
+0;outline:0;padding:0" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wid=
+th=3D"100%"><tr style=3D"border:0;margin:0;outline:0;padding:0"><th class=
+=3D"secondary-story-image" style=3D"border:0;margin:0;outline:0;padding:0 4=
+0px"><table style=3D"border:0;border-collapse:separate;border-spacing:0;mar=
+gin:0;outline:0;padding:0" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ width=3D"100%"><tr style=3D"border:0;margin:0;outline:0;padding:0"><td cla=
+ss=3D"image-wrapper" style=3D"border:0;font-size:0;margin:0;outline:0;paddi=
+ng:0" align=3D"center"><div class=3D"is-hidden-mobile" style=3D"border:0;ma=
+rgin:0;outline:0;padding:0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9=
+d46cb,8eb3bf18,8f2b6511
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"DESKTOP IMA=
+GE" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img sr=
+c=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DnewDesign%5B=
+true%5D&set=3DimageUrl%5Bhttps://aemcomm.hm.com/content/dam/hm/Kids_S00/Oct=
+ober2019/4080G/4080G-3x2-baby-and-kids-exclusive.jpg/_jcr_content/rendition=
+s/cq5dam.web.1400.1400.jpeg%5D&set=3Dwidth%5B1240%5D&set=3DtextLength%5B218=
+%5D&set=3DpositionX%5B3.29%5D&set=3DpositionY%5B31.23%5D&set=3DproductName%=
+5B2er-Pack%20Baumwoll-Henleyshirts%5D&set=3Dprice%5B17U002C99%20U20AC%5D&se=
+t=3DredPrice%5B%5D&set=3DtextColor%5B%23FFFFFF%5D&call=3Durl%5Bhttps://s1-c=
+dn.hm.com/global/image-chains/1.1.334/price-module-image-v2/desktop.chain%5=
+D&auth=3Dhash%5Bd89a36d5%5D" class=3D"image" width=3D"620" style=3D"border:=
+none;margin:0;max-width:700px;outline:0;padding:0"/></a></div><!--[if !mso]=
+><!--><div class=3D"is-hidden-desktop" style=3D"border:0;display:none;margi=
+n:0;max-height:0;mso-hide:all;outline:0;overflow:hidden;padding:0"><a href=
+=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6512
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"MOBILE IMAG=
+E" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img src=
+=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DnewDesign%5Bt=
+rue%5D&set=3DimageUrl%5Bhttps://aemcomm.hm.com/content/dam/hm/Kids_S00/Octo=
+ber2019/4080G/4080G-CPM-TOP-baby-and-kids-exclusive.jpg/_jcr_content/rendit=
+ions/cq5dam.web.750.750.jpeg%5D&set=3Dwidth%5B650%5D&set=3DtextLength%5B156=
+%5D&set=3DpositionX%5B4.29%5D&set=3DpositionY%5B38.52%5D&set=3DproductName%=
+5B2er-Pack%20Baumwoll-Henleyshirts%5D&set=3Dprice%5B17U002C99%20U20AC%5D&se=
+t=3DredPrice%5B%5D&set=3DtextColor%5B%23FFFFFF%5D&call=3Durl%5Bhttps://s1-c=
+dn.hm.com/global/image-chains/1.1.334/price-module-image-v2/mobile.chain%5D=
+&auth=3Dhash%5B5e5bd2c3%5D" class=3D"image image-mobile" style=3D"border:no=
+ne;display:block;height:auto;margin:0;max-width:700px;outline:0;padding:0"/=
+></a></div><!--<![endif]--></td></tr></table></th></tr><tr style=3D"border:=
+0;margin:0;outline:0;padding:0"><th class=3D"text-block-wrapper" style=3D"b=
+order:0;margin:0;outline:0;padding:26px 0 29px"><table style=3D"border:0;bo=
+rder-collapse:separate;border-spacing:0;margin:0;outline:0;padding:0" borde=
+r=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D"bor=
+der:0;margin:0;outline:0;padding:0"><th style=3D"border:0;margin:0;outline:=
+0;padding:0"><table style=3D"border:0;border-collapse:separate;border-spaci=
+ng:0;margin:0;outline:0;padding:0" border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;outline:0;padding:0"=
+><td width=3D"150" class=3D"text-block-vignette-side-spacer" style=3D"borde=
+r:0;font-size:10px;line-height:10px;margin:0;outline:0;padding:0">&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;</td><td width=3D"400" align=3D"center" class=3D"text-=
+block-vignette text-block-vignette-text text-demi-bold prevent-auto-links" =
+style=3D"-webkit-font-smoothing:antialiased;border:0;color:#2B2B2B;font-fam=
+ily:HMAmpersandDemiBold,Arial,sans-serif;font-size:12px;font-weight:500;let=
+ter-spacing:2.4px;line-height:16px;margin:0;outline:0;padding:0;padding-top=
+:17px">Baby Exclusive w=C3=A4chst</td><td width=3D"150" class=3D"text-block=
+-vignette-side-spacer" style=3D"border:0;font-size:10px;line-height:10px;ma=
+rgin:0;outline:0;padding:0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table=
+></th></tr><tr style=3D"border:0;margin:0;outline:0;padding:0"><td style=3D=
+"border:0;margin:0;outline:0;padding:0"><table style=3D"border:0;border-col=
+lapse:separate;border-spacing:0;margin:0;outline:0;padding:0" border=3D"0" =
+cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D"border:0;ma=
+rgin:0;outline:0;padding:0"><td width=3D"100" class=3D"text-block-headline-=
+size-spacing" style=3D"border:0;margin:0;outline:0;padding:0">&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;</td><td width=3D"500" align=3D"center" class=3D"text-bloc=
+k-headline prevent-auto-links" style=3D"border:0;margin:0;outline:0;padding=
+:11px 0 0 0"><p class=3D"text-block-headline-text text-secondary text-bold"=
+ style=3D"-webkit-font-smoothing:antialiased;border:0;color:#2B2B2B;font-fa=
+mily:HMAmpersand,Arial,sans-serif;font-size:36px;font-weight:700;line-heigh=
+t:40px;margin:0;outline:0;padding:0">Sag Hallo zu Kids Exclusive!</p></td><=
+td width=3D"100" class=3D"text-block-headline-size-spacing" style=3D"border=
+:0;margin:0;outline:0;padding:0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></=
+table></td></tr></table></th></tr><tr style=3D"border:0;margin:0;outline:0;=
+padding:0"><th style=3D"border:0;margin:0;outline:0;padding:0"><p class=3D"=
+cta-links-container" style=3D"border:0;font-size:0;font-weight:400;margin:0=
+;outline:0;padding:0;text-align:center"><img src=3D"https://s1-cdn.hm.com/g=
+lobal/assets/1.0.123/images/spacer.gif" width=3D"0" height=3D"1" class=3D"c=
+ta-link-spacer-side" style=3D"border:0;margin:0;max-width:700px;outline:0;p=
+adding:0"/><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f=
+2b6513
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" class=3D"cta-link tex=
+t-bold cta-link-large" x-cq-linkchecker=3D"skip" style=3D"-webkit-font-smoo=
+thing:antialiased;border:0;border-bottom:1px solid #2B2B2B;border-color:#2B=
+2B2B;color:#2B2B2B;font-family:HMAmpersand,Arial,sans-serif;font-size:12px;=
+font-weight:700;letter-spacing:1px;line-height:16px;margin:0;outline:0;padd=
+ing:0;text-align:left;text-decoration:none">JETZT&nbsp;KAUFEN</a><img src=
+=3D"https://s1-cdn.hm.com/global/assets/1.0.123/images/spacer.gif" width=3D=
+"0" height=3D"1" class=3D"cta-link-spacer-side" style=3D"border:0;margin:0;=
+max-width:700px;outline:0;padding:0"/></p><div class=3D"image-wrapper" styl=
+e=3D"border:0;font-size:0;margin:0;outline:0;padding:0;text-align:center"><=
+img src=3D"https://s1-cdn.hm.com/global/assets/1.0.123/images/spacer.gif" w=
+idth=3D"1" height=3D"40" class=3D"cta-bottom-margin" style=3D"border:0;marg=
+in:0;max-width:700px;outline:0;padding:0"/></div></th></tr></table></div>
+
+
+    
+    
+    <div class=3D"secondaryContainer container parbase"></div>
+
+
+    
+    
+    <div class=3D"secondaryContainer container parbase"></div>
+
+
+    
+    
+    <div class=3D"bannerContainer container parbase"></div>
+
+
+
+
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr style=3D"border:0;margin:0;outline:0;padding:0">
+            <td width=3D"100%" align=3D"center" style=3D"border:0;margin:0;=
+outline:0;padding:0">
+                <table width=3D"100%" align=3D"center" style=3D"border:0;bo=
+rder-collapse:separate;border-spacing:0;margin:0;outline:0;padding:0" borde=
+r=3D"0" cellpadding=3D"0" cellspacing=3D"0">
+                    <tr style=3D"border:0;margin:0;outline:0;padding:0">
+                        <td width=3D"100%" align=3D"center" class=3D"email-=
+layout" style=3D"border:0;margin:0;min-width:700px;outline:0;padding:0">
+                            <table class=3D"footer" style=3D"background:#e4=
+e4e4;border:0;border-collapse:separate;border-spacing:0;margin:0;outline:0;=
+padding:0;text-align:center" border=3D"0" cellpadding=3D"0" cellspacing=3D"=
+0" width=3D"100%"><tr style=3D"border:0;margin:0;outline:0;padding:0"><td a=
+lign=3D"center" style=3D"border:0;margin:0;outline:0;padding:0"><table clas=
+s=3D"footer-table" style=3D"border:0;border-collapse:separate;border-spacin=
+g:0;margin:0;outline:0;padding:0" border=3D"0" cellpadding=3D"0" cellspacin=
+g=3D"0" width=3D"700px !important"><tr style=3D"border:0;margin:0;outline:0=
+;padding:0"><td align=3D"center" style=3D"border:0;margin:0;outline:0;paddi=
+ng:0"><div style=3D"border:0;margin:0;outline:0;padding:0"><table style=3D"=
+border:0;border-collapse:separate;border-spacing:0;margin:0;outline:0;paddi=
+ng:0" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr s=
+tyle=3D"border:0;margin:0;outline:0;padding:0"><td class=3D"departments-wra=
+pper-new" style=3D"background-color:#e4e4e4;border:0;margin:0;outline:0;pad=
+ding:60px 0 10px"><table style=3D"border:0;border-collapse:separate;border-=
+spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpadding=3D"0" cell=
+spacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;outline:0;paddi=
+ng:0"><td valign=3D"top" style=3D"border:0;margin:0;outline:0;padding:0"><t=
+able style=3D"border:0;border-collapse:separate;border-spacing:0;margin:0;o=
+utline:0;padding:0" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=
+=3D"100%"><tr style=3D"border:0;margin:0;outline:0;padding:0"><td class=3D"=
+spacer department-item-of-5" align=3D"center" style=3D"border:0;font-size:0=
+;line-height:1px;margin:0;outline:0;padding:0"><div class=3D"is-hidden-mobi=
+le" style=3D"border:0;margin:0;outline:0;padding:0"><a href=3D"http://t.ema=
+il.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6514
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"DESKTOP IMA=
+GE" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img sr=
+c=3D"https://lpe.hm.com/hmoces=3Fset=3DimageUrl%5Bhttps://aemcomm.hm.com/co=
+ntent/dam/hm/Seasonal%20Images%20Email/6140-1.00-Fashion-News-Choose-Deptar=
+tment-1400x1400-.jpg/_jcr_content/renditions/cq5dam.web.250.250.jpeg%5D&cal=
+l=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/common/image.ch=
+ain%5D&auth=3Dhash%5B7b39eb32%5D" class=3D"image-with-height" width=3D"137"=
+ height=3D"137" style=3D"border:none;margin:0;max-width:700px;outline:0;pad=
+ding:0"/></a></div><!--[if !mso]><!--><div class=3D"is-hidden-desktop" styl=
+e=3D"border:0;display:none;margin:0;max-height:0;mso-hide:all;outline:0;ove=
+rflow:hidden;padding:0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46c=
+b,8eb3bf18,8f2b6515
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"MOBILE IMAG=
+E" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img src=
+=3D"https://lpe.hm.com/hmoces=3Fset=3DimageUrl%5Bhttps://aemcomm.hm.com/con=
+tent/dam/hm/Seasonal%20Images%20Email/6140-1.00-Fashion-News-Choose-Deptart=
+ment-1400x1400-.jpg/_jcr_content/renditions/cq5dam.web.250.250.jpeg%5D&call=
+=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/common/image.cha=
+in%5D&auth=3Dhash%5B7b39eb32%5D" class=3D"image image-mobile" style=3D"bord=
+er:none;display:block;height:auto;margin:0;max-width:700px;outline:0;paddin=
+g:0"/></a></div><!--<![endif]--></td></tr><tr style=3D"border:0;margin:0;ou=
+tline:0;padding:0"><td class=3D"department-link-container-new" align=3D"cen=
+ter" style=3D"border:0;margin:0;outline:0;padding:0;padding-top:8px"><a hre=
+f=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6516
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" class=3D"department-link-new text-normal" style=3D"-webkit-font-smooth=
+ing:antialiased;border:0;color:#222;font-family:HMAmpersand,Arial,sans-seri=
+f;font-size:13px;font-weight:400;line-height:20px;margin:0;outline:0;paddin=
+g:0;text-decoration:none">Damen</a></td></tr></table></td><td width=3D"4" c=
+lass=3D"spacer" style=3D"border:0;font-size:0;line-height:1px;margin:0;outl=
+ine:0;padding:0">&nbsp;</td><td valign=3D"top" style=3D"border:0;margin:0;o=
+utline:0;padding:0"><table style=3D"border:0;border-collapse:separate;borde=
+r-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;outline:0;pad=
+ding:0"><td class=3D"spacer department-item-of-5" align=3D"center" style=3D=
+"border:0;font-size:0;line-height:1px;margin:0;outline:0;padding:0"><div cl=
+ass=3D"is-hidden-mobile" style=3D"border:0;margin:0;outline:0;padding:0"><a=
+ href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6517
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"DESKTOP IMA=
+GE" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img sr=
+c=3D"https://lpe.hm.com/hmoces=3Fset=3DimageUrl%5Bhttps://aemcomm.hm.com/co=
+ntent/dam/hm/Seasonal%20Images%20Email/6140-1.00-Fashion-News-Choose-Deptar=
+tment-1400x1400-2.jpg/_jcr_content/renditions/cq5dam.web.250.250.jpeg%5D&ca=
+ll=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/common/image.c=
+hain%5D&auth=3Dhash%5B2218c536%5D" class=3D"image-with-height" width=3D"137=
+" height=3D"137" style=3D"border:none;margin:0;max-width:700px;outline:0;pa=
+dding:0"/></a></div><!--[if !mso]><!--><div class=3D"is-hidden-desktop" sty=
+le=3D"border:0;display:none;margin:0;max-height:0;mso-hide:all;outline:0;ov=
+erflow:hidden;padding:0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46=
+cb,8eb3bf18,8f2b6518
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"MOBILE IMAG=
+E" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img src=
+=3D"https://lpe.hm.com/hmoces=3Fset=3DimageUrl%5Bhttps://aemcomm.hm.com/con=
+tent/dam/hm/Seasonal%20Images%20Email/6140-1.00-Fashion-News-Choose-Deptart=
+ment-1400x1400-2.jpg/_jcr_content/renditions/cq5dam.web.250.250.jpeg%5D&cal=
+l=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/common/image.ch=
+ain%5D&auth=3Dhash%5B2218c536%5D" class=3D"image image-mobile" style=3D"bor=
+der:none;display:block;height:auto;margin:0;max-width:700px;outline:0;paddi=
+ng:0"/></a></div><!--<![endif]--></td></tr><tr style=3D"border:0;margin:0;o=
+utline:0;padding:0"><td class=3D"department-link-container-new" align=3D"ce=
+nter" style=3D"border:0;margin:0;outline:0;padding:0;padding-top:8px"><a hr=
+ef=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6519
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" class=3D"department-link-new text-normal" style=3D"-webkit-font-smooth=
+ing:antialiased;border:0;color:#222;font-family:HMAmpersand,Arial,sans-seri=
+f;font-size:13px;font-weight:400;line-height:20px;margin:0;outline:0;paddin=
+g:0;text-decoration:none">Herren</a></td></tr></table></td><td width=3D"4" =
+class=3D"spacer" style=3D"border:0;font-size:0;line-height:1px;margin:0;out=
+line:0;padding:0">&nbsp;</td><td valign=3D"top" style=3D"border:0;margin:0;=
+outline:0;padding:0"><table style=3D"border:0;border-collapse:separate;bord=
+er-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;outline:0;pa=
+dding:0"><td class=3D"spacer department-item-of-5" align=3D"center" style=
+=3D"border:0;font-size:0;line-height:1px;margin:0;outline:0;padding:0"><div=
+ class=3D"is-hidden-mobile" style=3D"border:0;margin:0;outline:0;padding:0"=
+><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b651a
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"DESKTOP IMA=
+GE" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img sr=
+c=3D"https://lpe.hm.com/hmoces=3Fset=3DimageUrl%5Bhttps://aemcomm.hm.com/co=
+ntent/dam/hm/Seasonal%20Images%20Email/6140-1.00-Fashion-News-Choose-Deptar=
+tment-1400x1400-3.jpg/_jcr_content/renditions/cq5dam.web.250.250.jpeg%5D&ca=
+ll=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/common/image.c=
+hain%5D&auth=3Dhash%5B633b37f4%5D" class=3D"image-with-height" width=3D"137=
+" height=3D"137" style=3D"border:none;margin:0;max-width:700px;outline:0;pa=
+dding:0"/></a></div><!--[if !mso]><!--><div class=3D"is-hidden-desktop" sty=
+le=3D"border:0;display:none;margin:0;max-height:0;mso-hide:all;outline:0;ov=
+erflow:hidden;padding:0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46=
+cb,8eb3bf18,8f2b651b
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"MOBILE IMAG=
+E" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img src=
+=3D"https://lpe.hm.com/hmoces=3Fset=3DimageUrl%5Bhttps://aemcomm.hm.com/con=
+tent/dam/hm/Seasonal%20Images%20Email/6140-1.00-Fashion-News-Choose-Deptart=
+ment-1400x1400-3.jpg/_jcr_content/renditions/cq5dam.web.250.250.jpeg%5D&cal=
+l=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/common/image.ch=
+ain%5D&auth=3Dhash%5B633b37f4%5D" class=3D"image image-mobile" style=3D"bor=
+der:none;display:block;height:auto;margin:0;max-width:700px;outline:0;paddi=
+ng:0"/></a></div><!--<![endif]--></td></tr><tr style=3D"border:0;margin:0;o=
+utline:0;padding:0"><td class=3D"department-link-container-new" align=3D"ce=
+nter" style=3D"border:0;margin:0;outline:0;padding:0;padding-top:8px"><a hr=
+ef=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b651c
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" class=3D"department-link-new text-normal" style=3D"-webkit-font-smooth=
+ing:antialiased;border:0;color:#222;font-family:HMAmpersand,Arial,sans-seri=
+f;font-size:13px;font-weight:400;line-height:20px;margin:0;outline:0;paddin=
+g:0;text-decoration:none">Divided</a></td></tr></table></td><td width=3D"4"=
+ class=3D"spacer" style=3D"border:0;font-size:0;line-height:1px;margin:0;ou=
+tline:0;padding:0">&nbsp;</td><td valign=3D"top" style=3D"border:0;margin:0=
+;outline:0;padding:0"><table style=3D"border:0;border-collapse:separate;bor=
+der-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpadding=3D"0" =
+cellspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;outline:0;p=
+adding:0"><td class=3D"spacer department-item-of-5" align=3D"center" style=
+=3D"border:0;font-size:0;line-height:1px;margin:0;outline:0;padding:0"><div=
+ class=3D"is-hidden-mobile" style=3D"border:0;margin:0;outline:0;padding:0"=
+><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b651d
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"DESKTOP IMA=
+GE" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img sr=
+c=3D"https://lpe.hm.com/hmoces=3Fset=3DimageUrl%5Bhttps://aemcomm.hm.com/co=
+ntent/dam/hm/Seasonal%20Images%20Email/6140-1.00-Fashion-News-Choose-Deptar=
+tment-1400x1400-4.jpg/_jcr_content/renditions/cq5dam.web.250.250.jpeg%5D&ca=
+ll=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/common/image.c=
+hain%5D&auth=3Dhash%5Bedbae090%5D" class=3D"image-with-height" width=3D"137=
+" height=3D"137" style=3D"border:none;margin:0;max-width:700px;outline:0;pa=
+dding:0"/></a></div><!--[if !mso]><!--><div class=3D"is-hidden-desktop" sty=
+le=3D"border:0;display:none;margin:0;max-height:0;mso-hide:all;outline:0;ov=
+erflow:hidden;padding:0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46=
+cb,8eb3bf18,8f2b651e
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"MOBILE IMAG=
+E" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img src=
+=3D"https://lpe.hm.com/hmoces=3Fset=3DimageUrl%5Bhttps://aemcomm.hm.com/con=
+tent/dam/hm/Seasonal%20Images%20Email/6140-1.00-Fashion-News-Choose-Deptart=
+ment-1400x1400-4.jpg/_jcr_content/renditions/cq5dam.web.250.250.jpeg%5D&cal=
+l=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/common/image.ch=
+ain%5D&auth=3Dhash%5Bedbae090%5D" class=3D"image image-mobile" style=3D"bor=
+der:none;display:block;height:auto;margin:0;max-width:700px;outline:0;paddi=
+ng:0"/></a></div><!--<![endif]--></td></tr><tr style=3D"border:0;margin:0;o=
+utline:0;padding:0"><td class=3D"department-link-container-new" align=3D"ce=
+nter" style=3D"border:0;margin:0;outline:0;padding:0;padding-top:8px"><a hr=
+ef=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b651f
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" class=3D"department-link-new text-normal" style=3D"-webkit-font-smooth=
+ing:antialiased;border:0;color:#222;font-family:HMAmpersand,Arial,sans-seri=
+f;font-size:13px;font-weight:400;line-height:20px;margin:0;outline:0;paddin=
+g:0;text-decoration:none">Kinder</a></td></tr></table></td><td width=3D"4" =
+class=3D"spacer" style=3D"border:0;font-size:0;line-height:1px;margin:0;out=
+line:0;padding:0">&nbsp;</td><td valign=3D"top" style=3D"border:0;margin:0;=
+outline:0;padding:0"><table style=3D"border:0;border-collapse:separate;bord=
+er-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;outline:0;pa=
+dding:0"><td class=3D"spacer department-last-item-of-5" align=3D"center" st=
+yle=3D"border:0;font-size:0;line-height:1px;margin:0;outline:0;padding:0"><=
+div class=3D"is-hidden-mobile" style=3D"border:0;margin:0;outline:0;padding=
+:0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6520
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"DESKTOP IMA=
+GE" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img sr=
+c=3D"https://lpe.hm.com/hmoces=3Fset=3DimageUrl%5Bhttps://aemcomm.hm.com/co=
+ntent/dam/hm/Home_S00/October2019/7070D/7070-1.00-Fashion-News-Choose-Depta=
+rtment-1400x1400.jpg/_jcr_content/renditions/cq5dam.web.250.250.jpeg%5D&cal=
+l=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/common/image.ch=
+ain%5D&auth=3Dhash%5B9f7d34e1%5D" class=3D"image-with-height" width=3D"136"=
+ height=3D"137" style=3D"border:none;margin:0;max-width:700px;outline:0;pad=
+ding:0"/></a></div><!--[if !mso]><!--><div class=3D"is-hidden-desktop" styl=
+e=3D"border:0;display:none;margin:0;max-height:0;mso-hide:all;outline:0;ove=
+rflow:hidden;padding:0"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46c=
+b,8eb3bf18,8f2b6521
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" _label=3D"MOBILE IMAG=
+E" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img src=
+=3D"https://lpe.hm.com/hmoces=3Fset=3DimageUrl%5Bhttps://aemcomm.hm.com/con=
+tent/dam/hm/Home_S00/October2019/7070D/7070-1.00-Fashion-News-Choose-Deptar=
+tment-1400x1400.jpg/_jcr_content/renditions/cq5dam.web.250.250.jpeg%5D&call=
+=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/common/image.cha=
+in%5D&auth=3Dhash%5B9f7d34e1%5D" class=3D"image image-mobile" style=3D"bord=
+er:none;display:block;height:auto;margin:0;max-width:700px;outline:0;paddin=
+g:0"/></a></div><!--<![endif]--></td></tr><tr style=3D"border:0;margin:0;ou=
+tline:0;padding:0"><td class=3D"department-link-container-new" align=3D"cen=
+ter" style=3D"border:0;margin:0;outline:0;padding:0;padding-top:8px"><a hre=
+f=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6522
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" class=3D"department-link-new text-normal" style=3D"-webkit-font-smooth=
+ing:antialiased;border:0;color:#222;font-family:HMAmpersand,Arial,sans-seri=
+f;font-size:13px;font-weight:400;line-height:20px;margin:0;outline:0;paddin=
+g:0;text-decoration:none">H&amp;M Home</a></td></tr></table></td></tr></tab=
+le></td></tr></table></div><table align=3D"center" width=3D"100%" style=3D"=
+border:0;border-collapse:separate;border-spacing:0;margin:0;outline:0;paddi=
+ng:0" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr style=3D"border:=
+0;margin:0;outline:0;padding:0"><td align=3D"center" class=3D"footer-new" w=
+idth=3D"700" style=3D"background:#e4e4e4;border:0;color:#222;margin:0;outli=
+ne:0;padding:40px 0"><table style=3D"border:0;border-collapse:separate;bord=
+er-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" width=3D"100%"><tr class=3D"is-hidden-mobile" style=3D"bor=
+der:0;margin:0;outline:0;padding:0"><td class=3D"footer-buttons-wrapper-new=
+" style=3D"border:0;margin:0;outline:0;padding:0 70px"><table style=3D"bord=
+er:0;border-collapse:separate;border-spacing:0;margin:0;outline:0;padding:0=
+" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=
+=3D"border:0;margin:0;outline:0;padding:0"><td width=3D"210" class=3D"foote=
+r-headline-new text-demi-bold" align=3D"center" style=3D"-webkit-font-smoot=
+hing:antialiased;border:0;color:#222;font-family:HMAmpersandDemiBold,Arial,=
+sans-serif;font-size:16px;font-weight:500;line-height:20px;margin:0;outline=
+:0;padding:0;padding-bottom:15px">App herunterladen</td><td width=3D"210" c=
+lass=3D"footer-headline-new text-demi-bold" align=3D"center" style=3D"-webk=
+it-font-smoothing:antialiased;border:0;color:#222;font-family:HMAmpersandDe=
+miBold,Arial,sans-serif;font-size:16px;font-weight:500;line-height:20px;mar=
+gin:0;outline:0;padding:0;padding-bottom:15px">Gesch=C3=A4fte &amp; Service=
+</td></tr></table></td></tr><tr class=3D"is-hidden-mobile" style=3D"border:=
+0;margin:0;outline:0;padding:0"><td class=3D"footer-buttons-wrapper-new" st=
+yle=3D"border:0;margin:0;outline:0;padding:0 70px"><table style=3D"border:0=
+;border-collapse:separate;border-spacing:0;margin:0;outline:0;padding:0" bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D"=
+border:0;margin:0;outline:0;padding:0"><td width=3D"210" align=3D"center" c=
+lass=3D"footer-button-new text-normal" style=3D"-webkit-font-smoothing:anti=
+aliased;border:0;font-family:HMAmpersand,Arial,sans-serif;font-size:13px;fo=
+nt-weight:400;margin:0;outline:0;padding:7px 0"><a href=3D"http://t.email.h=
+m.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6523
+" x-cq-linkchecker=3D"skip" style=3D"border:0;font-weight:400;margin:0;outl=
+ine:0;padding:0"><img src=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_=
+de%5D&set=3DbuttonText%5BAndroid%5D&set=3Dheight%5B24%5D&set=3DtextColor%5B=
+%23222222%5D&call=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334=
+/footer/button.chain%5D&auth=3Dhash%5Bdca00a0a%5D" height=3D"24" style=3D"b=
+order:none;margin:0;max-width:700px;outline:0;padding:0"/></a></td><td widt=
+h=3D"210" align=3D"center" class=3D"footer-button-new text-normal" style=3D=
+"-webkit-font-smoothing:antialiased;border:0;font-family:HMAmpersand,Arial,=
+sans-serif;font-size:13px;font-weight:400;margin:0;outline:0;padding:7px 0"=
+><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6524
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img s=
+rc=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DbuttonText%=
+5BGeschU00E4ft%20suchen%5D&set=3Dheight%5B24%5D&set=3DtextColor%5B%23222222=
+%5D&call=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/footer/b=
+utton.chain%5D&auth=3Dhash%5Ba24cc458%5D" height=3D"24" style=3D"border:non=
+e;margin:0;max-width:700px;outline:0;padding:0"/></a></td></tr><tr style=3D=
+"border:0;margin:0;outline:0;padding:0"><td width=3D"210" align=3D"center" =
+class=3D"footer-button-new text-normal" style=3D"-webkit-font-smoothing:ant=
+ialiased;border:0;font-family:HMAmpersand,Arial,sans-serif;font-size:13px;f=
+ont-weight:400;margin:0;outline:0;padding:7px 0"><a href=3D"http://t.email.=
+hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6525
+" x-cq-linkchecker=3D"skip" style=3D"border:0;font-weight:400;margin:0;outl=
+ine:0;padding:0"><img src=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_=
+de%5D&set=3DbuttonText%5BiOS%5D&set=3Dheight%5B24%5D&set=3DtextColor%5B%232=
+22222%5D&call=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/foo=
+ter/button.chain%5D&auth=3Dhash%5Bd244a0e3%5D" height=3D"24" style=3D"borde=
+r:none;margin:0;max-width:700px;outline:0;padding:0"/></a></td><td width=3D=
+"210" align=3D"center" class=3D"footer-button-new text-normal" style=3D"-we=
+bkit-font-smoothing:antialiased;border:0;font-family:HMAmpersand,Arial,sans=
+-serif;font-size:13px;font-weight:400;margin:0;outline:0;padding:7px 0"><a =
+href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6526
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img s=
+rc=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DbuttonText%=
+5BKontakt%5D&set=3Dheight%5B24%5D&set=3DtextColor%5B%23222222%5D&call=3Durl=
+%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/footer/button.chain%5D=
+&auth=3Dhash%5B5900569f%5D" height=3D"24" style=3D"border:none;margin:0;max=
+-width:700px;outline:0;padding:0"/></a></td></tr></table></td></tr><!--[if =
+!mso]><!--><tr style=3D"border:0;margin:0;outline:0;padding:0"><td align=3D=
+"center" style=3D"border:0;margin:0;outline:0;padding:0"><div class=3D"is-h=
+idden-desktop" style=3D"border:0;display:none;margin:0;max-height:0;mso-hid=
+e:all;outline:0;overflow:hidden;padding:0"><table style=3D"border:0;border-=
+collapse:separate;border-spacing:0;margin:0;outline:0;padding:0" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr style=3D"border:0=
+;margin:0;outline:0;padding:0"><td align=3D"center" style=3D"border:0;margi=
+n:0;outline:0;padding:0"><table style=3D"border:0;border-collapse:separate;=
+border-spacing:0;margin:0;outline:0;padding:0" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;outline:=
+0;padding:0"><td class=3D"footer-headline-new text-demi-bold" align=3D"cent=
+er" style=3D"-webkit-font-smoothing:antialiased;border:0;color:#222;font-fa=
+mily:HMAmpersandDemiBold,Arial,sans-serif;font-size:16px;font-weight:500;li=
+ne-height:20px;margin:0;outline:0;padding:0;padding-bottom:15px">App herunt=
+erladen</td></tr><tr style=3D"border:0;margin:0;outline:0;padding:0"><td al=
+ign=3D"center" class=3D"footer-button-new text-normal" style=3D"-webkit-fon=
+t-smoothing:antialiased;border:0;font-family:HMAmpersand,Arial,sans-serif;f=
+ont-size:13px;font-weight:400;margin:0;outline:0;padding:7px 0"><a href=3D"=
+http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6527
+" x-cq-linkchecker=3D"skip" style=3D"border:0;font-weight:400;margin:0;outl=
+ine:0;padding:0"><img src=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_=
+de%5D&set=3DbuttonText%5BAndroid%5D&set=3Dheight%5B24%5D&set=3DtextColor%5B=
+%23222222%5D&call=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334=
+/footer/button.chain%5D&auth=3Dhash%5Bdca00a0a%5D" height=3D"24" style=3D"b=
+order:none;margin:0;max-width:700px;outline:0;padding:0"/></a></td></tr><tr=
+ style=3D"border:0;margin:0;outline:0;padding:0"><td align=3D"center" class=
+=3D"footer-button-new text-normal" style=3D"-webkit-font-smoothing:antialia=
+sed;border:0;font-family:HMAmpersand,Arial,sans-serif;font-size:13px;font-w=
+eight:400;margin:0;outline:0;padding:7px 0"><a href=3D"http://t.email.hm.co=
+m/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6528
+" x-cq-linkchecker=3D"skip" style=3D"border:0;font-weight:400;margin:0;outl=
+ine:0;padding:0"><img src=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_=
+de%5D&set=3DbuttonText%5BiOS%5D&set=3Dheight%5B24%5D&set=3DtextColor%5B%232=
+22222%5D&call=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/foo=
+ter/button.chain%5D&auth=3Dhash%5Bd244a0e3%5D" height=3D"24" style=3D"borde=
+r:none;margin:0;max-width:700px;outline:0;padding:0"/></a></td></tr></table=
+></td></tr><tr style=3D"border:0;margin:0;outline:0;padding:0"><td align=3D=
+"center" style=3D"border:0;margin:0;outline:0;padding:0"><table style=3D"bo=
+rder:0;border-collapse:separate;border-spacing:0;margin:0;outline:0;padding=
+:0" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr sty=
+le=3D"border:0;margin:0;outline:0;padding:0"><td class=3D"footer-headline-n=
+ew text-demi-bold" align=3D"center" style=3D"-webkit-font-smoothing:antiali=
+ased;border:0;color:#222;font-family:HMAmpersandDemiBold,Arial,sans-serif;f=
+ont-size:16px;font-weight:500;line-height:20px;margin:0;outline:0;padding:0=
+;padding-bottom:15px">Gesch=C3=A4fte &amp; Service</td></tr><tr style=3D"bo=
+rder:0;margin:0;outline:0;padding:0"><td align=3D"center" class=3D"footer-b=
+utton-new text-normal" style=3D"-webkit-font-smoothing:antialiased;border:0=
+;font-family:HMAmpersand,Arial,sans-serif;font-size:13px;font-weight:400;ma=
+rgin:0;outline:0;padding:7px 0"><a href=3D"http://t.email.hm.com/r/=3Fid=3D=
+h6a9d46cb,8eb3bf18,8f2b6529
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img s=
+rc=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DbuttonText%=
+5BGeschU00E4ft%20suchen%5D&set=3Dheight%5B24%5D&set=3DtextColor%5B%23222222=
+%5D&call=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/footer/b=
+utton.chain%5D&auth=3Dhash%5Ba24cc458%5D" height=3D"24" style=3D"border:non=
+e;margin:0;max-width:700px;outline:0;padding:0"/></a></td></tr><tr style=3D=
+"border:0;margin:0;outline:0;padding:0"><td align=3D"center" class=3D"foote=
+r-button-new text-normal" style=3D"-webkit-font-smoothing:antialiased;borde=
+r:0;font-family:HMAmpersand,Arial,sans-serif;font-size:13px;font-weight:400=
+;margin:0;outline:0;padding:7px 0"><a href=3D"http://t.email.hm.com/r/=3Fid=
+=3Dh6a9d46cb,8eb3bf18,8f2b652a
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121" x-cq-linkchecker=3D"s=
+kip" style=3D"border:0;font-weight:400;margin:0;outline:0;padding:0"><img s=
+rc=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=3DbuttonText%=
+5BKontakt%5D&set=3Dheight%5B24%5D&set=3DtextColor%5B%23222222%5D&call=3Durl=
+%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/footer/button.chain%5D=
+&auth=3Dhash%5B5900569f%5D" height=3D"24" style=3D"border:none;margin:0;max=
+-width:700px;outline:0;padding:0"/></a></td></tr></table></td></tr></table>=
+</div></td></tr><!--<![endif]--><tr style=3D"border:0;margin:0;outline:0;pa=
+dding:0"><td class=3D"footer-hm-vignette-wrapper-new" align=3D"center" styl=
+e=3D"border:0;margin:0;outline:0;padding:0;padding-bottom:30px;padding-top:=
+39px"><img src=3D"https://lpe.hm.com/hmoces=3Fset=3Dlocale%5Bde_de%5D&set=
+=3DtextOne%5BHENNES%5D&set=3DtextTwo%5BMAURITZ%5D&set=3Dcolor%5B%23222222%5=
+D&call=3Durl%5Bhttps://s1-cdn.hm.com/global/image-chains/1.1.334/member/mem=
+ber-vignette.chain%5D&auth=3Dhash%5Bbed9b314%5D" height=3D"30" style=3D"bor=
+der:0;margin:0;max-width:700px;outline:0;padding:0"/></td></tr><tr style=3D=
+"border:0;margin:0;outline:0;padding:0"><td class=3D"footer-social-media-ic=
+ons-wrapper-new" align=3D"center" style=3D"border:0;margin:0;outline:0;padd=
+ing:0;padding-bottom:29px"><a href=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d=
+46cb,8eb3bf18,8f2b652b
+" x-cq-linkchecker=3D"skip" _label=3D"SOCIAL MEDIA" style=3D"border:0;font-=
+weight:400;margin:0;outline:0;padding:0"><img class=3D"footer-icon" src=3D"=
+https://s1-cdn.hm.com/global/assets/1.0.123/images/social/facebook-box.png"=
+ height=3D"18" style=3D"border:none;margin:0;max-width:700px;outline:0;padd=
+ing:0"/> </a><img src=3D"https://s1-cdn.hm.com/global/assets/1.0.123/images=
+/spacer.gif" width=3D"55" height=3D"1" class=3D"footer-social-media-spacer-=
+new" style=3D"border:0;margin:0;max-width:700px;outline:0;padding:0"/><a hr=
+ef=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b652c
+" x-cq-linkchecker=3D"skip" _label=3D"SOCIAL MEDIA" style=3D"border:0;font-=
+weight:400;margin:0;outline:0;padding:0"><img class=3D"footer-icon" src=3D"=
+https://s1-cdn.hm.com/global/assets/1.0.123/images/social/twitter-box.png" =
+height=3D"18" style=3D"border:none;margin:0;max-width:700px;outline:0;paddi=
+ng:0"/> </a><img src=3D"https://s1-cdn.hm.com/global/assets/1.0.123/images/=
+spacer.gif" width=3D"55" height=3D"1" class=3D"footer-social-media-spacer-n=
+ew" style=3D"border:0;margin:0;max-width:700px;outline:0;padding:0"/><a hre=
+f=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b652d
+" x-cq-linkchecker=3D"skip" _label=3D"SOCIAL MEDIA" style=3D"border:0;font-=
+weight:400;margin:0;outline:0;padding:0"><img class=3D"footer-icon" src=3D"=
+https://s1-cdn.hm.com/global/assets/1.0.123/images/social/instagram-box.png=
+" height=3D"18" style=3D"border:none;margin:0;max-width:700px;outline:0;pad=
+ding:0"/> </a><img src=3D"https://s1-cdn.hm.com/global/assets/1.0.123/image=
+s/spacer.gif" width=3D"55" height=3D"1" class=3D"footer-social-media-spacer=
+-new" style=3D"border:0;margin:0;max-width:700px;outline:0;padding:0"/><a h=
+ref=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b652e
+" x-cq-linkchecker=3D"skip" _label=3D"SOCIAL MEDIA" style=3D"border:0;font-=
+weight:400;margin:0;outline:0;padding:0"><img class=3D"footer-icon" src=3D"=
+https://s1-cdn.hm.com/global/assets/1.0.123/images/social/youtube-box.png" =
+height=3D"18" style=3D"border:none;margin:0;max-width:700px;outline:0;paddi=
+ng:0"/> </a><img src=3D"https://s1-cdn.hm.com/global/assets/1.0.123/images/=
+spacer.gif" width=3D"55" height=3D"1" class=3D"footer-social-media-spacer-n=
+ew" style=3D"border:0;margin:0;max-width:700px;outline:0;padding:0"/><a hre=
+f=3D"http://t.email.hm.com/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b652f
+" x-cq-linkchecker=3D"skip" _label=3D"SOCIAL MEDIA" style=3D"border:0;font-=
+weight:400;margin:0;outline:0;padding:0"><img class=3D"footer-icon" src=3D"=
+https://s1-cdn.hm.com/global/assets/1.0.123/images/social/pinterest-box.png=
+" height=3D"18" style=3D"border:none;margin:0;max-width:700px;outline:0;pad=
+ding:0"/> </a></td></tr><tr style=3D"border:0;margin:0;outline:0;padding:0"=
+><td class=3D"footer-member-id-wrapper-new footer-member-id-text-new preven=
+t-auto-links" align=3D"center" style=3D"border:0;font-size:13px;margin:0;ou=
+tline:0;padding:0;padding-bottom:27px;padding-top:2px"><span class=3D"text-=
+demi-bold" style=3D"-webkit-font-smoothing:antialiased;border:0;font-family=
+:HMAmpersandDemiBold,Arial,sans-serif;font-weight:500;margin:0;outline:0;pa=
+dding:0">Member-ID:&nbsp;</span>  <span class=3D"text-normal" style=3D"-web=
+kit-font-smoothing:antialiased;border:0;font-family:HMAmpersand,Arial,sans-=
+serif;font-weight:400;margin:0;outline:0;padding:0">100410048140911</span><=
+/td></tr><tr style=3D"border:0;margin:0;outline:0;padding:0"><td class=3D"f=
+ooter-toc-wrapper-new" style=3D"border:0;margin:0;outline:0;padding:0 80px =
+20px 80px"><table style=3D"border:0;border-collapse:separate;border-spacing=
+:0;margin:0;outline:0;padding:0" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%"><tr style=3D"border:0;margin:0;outline:0;padding:0"><=
+td align=3D"center" class=3D"footer-toc-text-new text-normal prevent-auto-l=
+inks prevent-paragraph-margins" style=3D"-webkit-font-smoothing:antialiased=
+;border:0;color:#707070;font-family:HMAmpersand,Arial,sans-serif;font-size:=
+11px;font-weight:400;line-height:16px;margin:0;outline:0;padding:0;padding-=
+bottom:16px"><p>Vorbehaltlich Druckfehlern, =C3=84nderungen, Preis=C3=A4nde=
+rungen, Lieferverz=C3=B6gerungen und begrenzter Verf=C3=BCgbarkeit.<br> </b=
+r></p></td></tr><tr style=3D"border:0;margin:0;outline:0;padding:0"><td ali=
+gn=3D"center" class=3D"footer-toc-text-new text-normal prevent-auto-links p=
+revent-paragraph-margins" style=3D"-webkit-font-smoothing:antialiased;borde=
+r:0;color:#707070;font-family:HMAmpersand,Arial,sans-serif;font-size:11px;f=
+ont-weight:400;line-height:16px;margin:0;outline:0;padding:0;padding-bottom=
+:16px"><p>Sie erhalten diese E-Mail, weil Sie sich f=C3=BCr den Erhalt von =
+H&amp;M-Werbeinformationen angemeldet haben. Diese Nachricht wurde gesendet=
+ von H &amp; M Hennes &amp; Mauritz GBC AB, M=C3=A4ster Samuelsgatan 46, 10=
+6 38 Stockholm, Schweden.</p></td></tr></table></td></tr><tr style=3D"borde=
+r:0;margin:0;outline:0;padding:0"><td align=3D"center" class=3D"footer-unsu=
+bscribe-wrapper-new footer-unsubscribe-text-new text-demi-bold" style=3D"-w=
+ebkit-font-smoothing:antialiased;border:0;font-family:HMAmpersandDemiBold,A=
+rial,sans-serif;font-size:13px;font-weight:500;margin:0;outline:0;padding:0=
+"><a class=3D"footer-unsubscribe-link-text-new" href=3D"http://t.email.hm.c=
+om/r/=3Fid=3Dh6a9d46cb,8eb3bf18,8f2b6530
+&did=3D-1900822760&rid=3D102151545
+&p1=3D3036c3d04ed342127c1f2d7818b935e3&p2=3D20191121&p3=3D102151545&p4=3D6e=
+6c167a7aba94002bbfc8a65fa22c88" x-cq-linkchecker=3D"skip" _type=3D"optout" =
+style=3D"border:0;color:#222;font-weight:400;margin:0;outline:0;padding:0;p=
+adding-bottom:1px;text-decoration:underline">Abmelden</a></td></tr></table>=
+</td></tr></table></td></tr></table></td></tr></table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+<img height=3D'0' width=3D'0' alt=3D'' src=3D'http://t.email.hm.com/r/=3Fid=
+=3Dh6a9d46cb,8eb3bf18,1'/></body>
+</html>
+

@@ -28,11 +28,12 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/tk/attachments',
     'io.ox/core/http',
     'io.ox/core/locale/postal-address',
+    'io.ox/backbone/views/actions/util',
     'io.ox/backbone/views/toolbar',
     'io.ox/backbone/views/action-dropdown',
     'static/3rd.party/purify.min.js',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, coreUtil, capabilities, gt, settings, attachments, http, postalAddress, ToolbarView, ActionDropdownView, DOMPurify) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, coreUtil, capabilities, gt, settings, attachments, http, postalAddress, actionsUtil, ToolbarView, ActionDropdownView, DOMPurify) {
 
     'use strict';
 
@@ -316,28 +317,55 @@ define('io.ox/contacts/view-detail', [
 
             var list = _.copy(baton.data.distribution_list || [], true),
                 count = list.length,
-                hash = {}, $list;
-
+                hash = {}, $list,
+                offset = 0,
+                limit = baton.options.limit || 100;
             this.append(
                 count === 0 ? $('<div class="list-count">').text(gt('This list has no members yet')) : $(),
                 $list = $('<ul class="member-list list-unstyled">')
             );
 
-            // if there are no members in the list
             if (!count) return;
 
             // remove duplicates to fix backend bug
-            http.pause();
-            _(list)
-                .chain()
-                .filter(function (member) {
-                    if (hash[member.display_name + '_' + member.mail]) return false;
-                    return (hash[member.display_name + '_' + member.mail] = true);
-                })
-                .each(function (member) {
+            var filteredList = _(list)
+            .chain()
+            .filter(function (member) {
+                if (hash[member.display_name + '_' + member.mail]) return false;
+                return (hash[member.display_name + '_' + member.mail] = true);
+            });
+
+            // need the rightside div, to register the scroll handler correctly
+            var $right = baton.app.right.parent();
+
+            var onScroll = _.debounce(function (e) {
+                // ignore lazy load scroll event triggered by contact images
+                if (typeof e.originalEvent === 'undefined') return;
+                var height = $right.outerHeight(),
+                    scrollTop = $right[0].scrollTop,
+                    scrollHeight = $right[0].scrollHeight,
+                    bottom = scrollTop + height;
+
+                if (bottom / scrollHeight < 0.80) return;
+                var defer = window.requestAnimationFrame || window.setTimeout;
+                defer(function renderMoreItems() {
+                    offset = offset + limit;
+                    render();
+                });
+            }, 50);
+
+            function render() {
+                if (count < offset) $right.off('scroll', onScroll);
+                // force contacts?ation=search into multiple
+                var list = filteredList.slice(offset, offset + limit);
+
+                list.forEach(function (member) {
                     ext.point('io.ox/contacts/detail/member').invoke('draw', $list, member);
-                }, this);
-            http.resume();
+                });
+            }
+
+            render();
+            $right.on('scroll', onScroll);
         }
     });
 

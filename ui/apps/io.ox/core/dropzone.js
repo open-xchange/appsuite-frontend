@@ -165,7 +165,8 @@ define('io.ox/core/dropzone', [], function () {
                 files = _(dataTransfer.files).toArray();
 
             // special handling for newer chrome, firefox or edge
-            if ((_.browser.Chrome && _.browser.Chrome > 21) || (_.browser.firefox && _.browser.firefox >= 50) || _.browser.edge) {
+            // check if items element is there (also needed for the e2e dropzone helper to work)
+            if (dataTransfer.items && ((_.browser.Chrome && _.browser.Chrome > 21) || (_.browser.firefox && _.browser.firefox >= 50) || _.browser.edge)) {
                 var items = dataTransfer.items;
 
                 def.resolve(_(files).filter(function (file, index) {

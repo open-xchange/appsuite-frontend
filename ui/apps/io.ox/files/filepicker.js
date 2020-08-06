@@ -15,7 +15,6 @@ define('io.ox/files/filepicker', [
     'io.ox/core/cache',
     'io.ox/core/extensions',
     'io.ox/core/tk/selection',
-    'io.ox/core/tk/dialogs',
     'io.ox/core/tk/upload',
     'io.ox/core/folder/api',
     'io.ox/core/folder/picker',
@@ -28,7 +27,7 @@ define('io.ox/files/filepicker', [
     'settings!io.ox/core',
     'gettext!io.ox/files',
     'io.ox/files/mobile-navbar-extensions'
-], function (cache, ext, Selection, dialogs, upload, folderAPI, picker, FileInfoView, filesAPI, filesExtensions, notifications, PageController, Bars, settings, gt) {
+], function (cache, ext, Selection, upload, folderAPI, picker, FileInfoView, filesAPI, filesExtensions, notifications, PageController, Bars, settings, gt) {
 
     'use strict';
 
@@ -552,8 +551,21 @@ define('io.ox/files/filepicker', [
                         var filtered = _(arguments).filter(options.filter);
 
                         if (filtered.length > 0) {
-                            def.resolve(filtered);
-                            dialog.close();
+                            if (!options.keepDialogOpenOnSuccess) {
+                                def.resolve(filtered);
+                                return dialog.close();
+                            }
+
+                            var file = _.first(filtered),
+                                folderId = file.folder_id;
+
+                            filesPane.empty();
+                            filesAPI.getAll(folderId, { cache: false, params: { sort: 702 } }).done(function (files) {
+                                updateFileList(folderId, files);
+                                self.selection.set(file);
+                                self.selection.focus();
+                                dialog.idle();
+                            });
                         } else {
                             notifications.yell('error', gt.ngettext(
                                 'The uploaded file does not match the requested file type.',
@@ -608,6 +620,7 @@ define('io.ox/files/filepicker', [
             folder: options.folder || undefined,
             hideTrashfolder: options.hideTrashfolder || undefined,
             createFolderButton: options.createFolderButton,
+            autoFocusOnIdle: false,
 
             disable: function (data) {
                 if (!/^virtual\//.test(data.id)) return false;

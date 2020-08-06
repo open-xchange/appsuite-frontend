@@ -89,7 +89,7 @@ Scenario('[C7492] Birthday', async (I) => {
         I.waitForVisible('.picture', 10, detail);
         I.see(contact.last_name, detail);
         I.see(contact.first_name, detail);
-        I.see('Birthday', detail);
+        I.see('Date of birth', detail);
         I.seeElement('.close', detail);
         var topSidepopup = locate('.window-container-center .io-ox-sidepopup').at(2);
         I.waitForText('Saved in', topSidepopup);

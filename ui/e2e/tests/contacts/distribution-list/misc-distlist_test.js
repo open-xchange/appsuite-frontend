@@ -55,7 +55,7 @@ Scenario('Add external participant as contact', async function (I, contacts, dia
     I.say('Confirm dirtycheck is working properly');
     I.click('Discard', '.io-ox-contacts-edit-window');
     dialogs.waitForVisible();
-    I.waitForText('Do you really want to discard your changes?', 5, dialogs.locators.header);
+    I.waitForText('Do you really want to discard your changes?', 5, dialogs.locators.body);
     dialogs.clickButton('Cancel');
     I.waitForDetached('.modal-dialog');
 

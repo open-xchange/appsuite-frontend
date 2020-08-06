@@ -46,6 +46,8 @@ define('io.ox/files/actions/delete', [
                     list.length
                 ) + '\n' + e.error);
             }
+
+            api.trigger('reload:listview');
         });
 
         // delete folders
@@ -75,7 +77,8 @@ define('io.ox/files/actions/delete', [
             if (result !== -1) return true;
         }
 
-        new ModalDialog({ title: deleteNotice, description: isShared() ? shareNotice : false })
+        //#. 'Delete item' and 'Delete items' as a header of a modal dialog to confirm to delete files from drive.
+        new ModalDialog({ title: gt.ngettext('Delete item', 'Delete items', list.length), description: isShared() ? shareNotice : deleteNotice })
             .addCancelButton()
             .addButton({ label: gt('Delete'), action: 'delete' })
             .on('delete', function () {

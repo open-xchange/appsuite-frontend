@@ -37,14 +37,14 @@ define('io.ox/backbone/views/recurrence-view', [
             if (model.has('startDate')) return util.getMoment(model.get('startDate'));
             // tasks model
             var timezone = model.get('timezone') || moment().tz();
-            return moment.tz(model.get('start_time') || model.get('start_date'), timezone);
+            return moment.tz(model.get('start_time') || model.get('start_date'), timezone).utc();
         },
         previousStart: function (model) {
             // calendar model
             if (model.has('startDate')) return util.getMoment(model.previous('startDate'));
             // tasks model
             var timezone = model.get('timezone') || moment().tz();
-            return moment.tz(model.previous('start_time') || model.previous('start_date'), timezone);
+            return moment.tz(model.previous('start_time') || model.previous('start_date'), timezone).utc();
         }
     };
 
@@ -713,7 +713,7 @@ define('io.ox/backbone/views/recurrence-view', [
                 this.$el.addClass('recurrence-view-dialog');
                 this.$body.addClass('form-horizontal');
             })
-            .addCancelButton({ left: true })
+            .addCancelButton()
             .addButton({ label: gt('Apply'), action: 'apply' })
             .on('apply', function () {
                 if (!this.model.checkValidation()) {

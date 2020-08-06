@@ -239,6 +239,7 @@ define('io.ox/core/folder/contextmenu', [
 
             return function (baton) {
 
+                if ((/^(owncloud|webdav|nextcloud)$/.test(baton.data.id.split(':')[0])) && baton.data.folder_id === '1') return;
                 if (!api.can('remove:folder', baton.data)) return;
                 var folderId = baton.data.id || baton.app.folder.get(),
                     model = api.pool.getModel(folderId);
@@ -562,8 +563,7 @@ define('io.ox/core/folder/contextmenu', [
 
                 // do not show properties if provider is chronos and sync is disabled, because then we don't have any properties
                 var provider = baton.data['com.openexchange.calendar.provider'],
-                    extendedProperties = baton.data['com.openexchange.calendar.extendedProperties'] || {},
-                    usedForSync = extendedProperties.usedForSync || {};
+                    usedForSync = baton.data.used_for_sync || {};
                 if (provider === 'chronos' && (!usedForSync || usedForSync.value !== 'true')) return;
 
                 contextUtils.addLink(this, {

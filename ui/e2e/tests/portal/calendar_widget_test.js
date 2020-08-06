@@ -48,7 +48,7 @@ Scenario('Create new appointment and check display in portal widget', async func
     // make sure portal widget is empty
     I.openApp('Portal');
     portal.waitForApp();
-    I.waitForText('You don\'t have any appointments in the near future.', 5, { css: '[data-widget-id="calendar_0"] li.line' });
+    I.waitForText('You don\'t have any appointments in the near future.', 10, { css: '[data-widget-id="calendar_0"] li.line' });
 
     I.openApp('Calendar');
     calendar.waitForApp();
@@ -82,7 +82,7 @@ Scenario('Create new appointment and check display in portal widget', async func
     I.openApp('Portal');
     portal.waitForApp();
     I.waitForVisible('.io-ox-portal [data-widget-id="calendar_0"] li.item div');
-    I.waitForText('test portal widget', 5, { css: '[data-widget-id="calendar_0"] li.item div' });
+    I.see('test portal widget', { css: '[data-widget-id="calendar_0"] li.item div' });
 
     // create a second appointment
     I.openApp('Calendar');

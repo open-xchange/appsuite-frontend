@@ -52,26 +52,26 @@ define('io.ox/backbone/views/toolbar', [
             if (this.options.data) this.setData(this.options.data);
         },
 
-        render: function (baton) {
-            if (!baton) return this;
-            // if (ox.debug) console.debug('toolbar.render()', this.point.id, baton);
-            if (!this.point) {
-                console.error('Missing extension point definition');
-                return this;
-            }
-            var items = this.point.list()
-                .map(util.processItem.bind(null, baton))
-                .map(util.createItem.bind(null, baton));
-            var $toolbar = this.createToolbar().append(_(items).pluck('$li'));
-            util.waitForMatches(items, function () {
+        render: (function () {
+
+            function finalizeRender($toolbar) {
                 if (this.disposed) return;
                 this.injectMoreDropdown($toolbar);
                 this.replaceToolbar($toolbar);
                 this.initButtons($toolbar);
                 this.ready();
-            }.bind(this));
-            return this;
-        },
+            }
+
+            return function (baton) {
+                if (!baton) return this;
+                var items = this.point.list()
+                    .map(util.processItem.bind(null, baton))
+                    .map(util.createItem.bind(null, baton));
+                var $toolbar = this.createToolbar().append(_(items).pluck('$li'));
+                util.waitForMatches(items, _.lfo(true, this, finalizeRender, $toolbar));
+                return this;
+            };
+        })(),
 
         createToolbar: function () {
             var title = this.options.title ? gt('%1$s toolbar. Use cursor keys to navigate.', this.options.title) : gt('Actions. Use cursor keys to navigate.');

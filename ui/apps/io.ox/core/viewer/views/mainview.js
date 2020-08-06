@@ -174,6 +174,7 @@ define('io.ox/core/viewer/views/mainview', [
             function handleLeftRightArrowKey(direction) {
                 // need to use defer here in order to let the toolbar navigation select the action link first
                 _.defer(function () {
+                    if (self.disposed) return;
                     var toolbarFocused = $.contains(self.toolbarView.el, document.activeElement);
                     // if the focus is inside the toolbar cursor left/right switches between toolbar links, otherwise between slides
                     if (!toolbarFocused) {
@@ -192,7 +193,7 @@ define('io.ox/core/viewer/views/mainview', [
                         isDropdownMenuItem = escTarget.parents('.dropdown-menu').length > 0,
                         isDropdownToggler = escTarget.attr('data-toggle') === 'dropdown' && escTarget.attr('aria-expanded') === 'true';
                     // close the viewer only if user is not on a dropdown menu, or a dropdown menu item
-                    if (!isDropdownMenuItem && !isDropdownToggler) {
+                    if (!isDropdownMenuItem && !isDropdownToggler && !(ox.tabHandlingEnabled && this.standalone)) {
                         this.viewerCloseHandler();
                     }
                     break;

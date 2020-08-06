@@ -55,6 +55,10 @@ define('io.ox/files/actions', [
         return baton.openedBy === 'io.ox/mail/compose';
     }
 
+    function noVersionDeleteSupport(data) {
+        return /^(owncloud|webdav|nextcloud)$/.test(data.folder_id.split(':')[0]);
+    }
+
     function isEmpty(baton) {
         return _.isEmpty(baton.data);
     }
@@ -974,6 +978,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/versions/actions/deletePreviousVersions', {
         collection: 'one && items && modify',
         matches: function (baton) {
+            if (noVersionDeleteSupport(baton.data)) return false;
             if (baton.latestVersion) return false;
             if (fromMailCompose(baton)) return false;
             return true;
@@ -990,6 +995,7 @@ define('io.ox/files/actions', [
         collection: 'one && items && delete',
         matches: function (baton) {
             if (fromMailCompose(baton)) return false;
+            if (noVersionDeleteSupport(baton.data)) return false;
             return true;
         },
         action: function (baton) {

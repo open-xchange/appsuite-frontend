@@ -682,7 +682,20 @@ define('io.ox/calendar/util', [
         getRecurrenceEnd: function (data) {
             var str;
             if (data.until) {
-                str = gt('The series ends on %1$s.', data.startDate.tzid ? moment(data.until).utc().format('l') : moment(data.until).format('l'));
+                var lastOccurence;
+
+                if (that.isAllday(data)) {
+                    lastOccurence = moment(data.until);
+                } else {
+                    var tzid = data.endDate.tzid || 'UTC';
+                    // this code part expects, that the date of the last occurence is equal to the until date in the rrule.
+                    // whereas this is not required by the RFC, all checked clients stick to that
+                    // the until date is either directly on the end of the appointment or refers to the end of the same day
+                    var diffToStartOfDay = that.getMoment(data.endDate).diff(that.getMoment(data.endDate).startOf('day'), 'ms');
+                    lastOccurence = moment.tz(data.until, tzid).startOf('day').add(diffToStartOfDay, 'ms').tz(moment().tz());
+                }
+
+                str = gt('The series ends on %1$s.', lastOccurence.format('l'));
             } else if (data.occurrences) {
                 var n = data.occurrences;
                 str = gt.format(gt.ngettext('The series ends after one occurrence.', 'The series ends after %1$d occurences.', n), n);
@@ -1230,7 +1243,7 @@ define('io.ox/calendar/util', [
                     break;
                 case 'list':
                     rangeStart = moment().startOf('day').utc();
-                    rangeEnd = moment().startOf('day').add((app.listView.collection.offset || 0) + 1, 'month').utc();
+                    rangeEnd = moment().startOf('day').add((app.listView.loader.collection.range || 1), 'month').utc();
                     break;
                 default:
             }
@@ -1291,7 +1304,7 @@ define('io.ox/calendar/util', [
             if (attendee.cuType !== 'RESOURCE') {
                 // guests have a user id but are still considered external, so dont add an entity here (normal users have guest_created_by === 0)
                 if (!user.guest_created_by && (user.user_id !== undefined || user.contact_id) && user.type !== 5) attendee.entity = user.user_id || user.id;
-                attendee.email = user.field && user[user.field] ? user[user.field] : (user.email1 || user.mail);
+                attendee.email = user.field && user[user.field] ? user[user.field] : (user.email1 || user.mail || user.email);
                 if (!attendee.cn) attendee.cn = attendee.email;
                 attendee.uri = 'mailto:' + attendee.email;
             } else {
@@ -1299,7 +1312,10 @@ define('io.ox/calendar/util', [
                 if (user.description) attendee.comment = user.description;
                 attendee.entity = user.id;
                 attendee.resource = user;
-                if (user.mailaddress) attendee.email = user.mailaddress;
+                if (user.mailaddress) {
+                    attendee.email = user.mailaddress;
+                    attendee.uri = 'mailto:' + user.mailaddress;
+                }
             }
 
             if (attendee.cuType === 'GROUP') {
@@ -1342,7 +1358,7 @@ define('io.ox/calendar/util', [
         },
 
         // get the right default alarm for an event
-        // note: the defautl alarm for the birthday calendar is not considered here. There is no use case since you cannot edit those events atm.
+        // note: the default alarm for the birthday calendar is not considered here. There is no use case since you cannot edit those events atm.
         getDefaultAlarms: function (event) {
             // no event or not fulltime (isAllday returns false for no event)
             if (!this.isAllday(event)) {
@@ -1390,15 +1406,17 @@ define('io.ox/calendar/util', [
             exception = exception instanceof Backbone.Model ? exception.attributes : exception;
 
             // deep copy
-            var result = JSON.parse(JSON.stringify(master));
+            var result = JSON.parse(JSON.stringify(master)),
+                // we have 4 possible formats for the recurrence id : Zulu, Date, dateTime, Timezone:localtime, see https://jira.open-xchange.com/browse/SCR-584
+                recurrenceId = _(exception.recurrenceId.split(':')).last();
 
             result.recurrenceId = exception.recurrenceId;
 
             // recreate dates
-            result.startDate.value = this.isAllday(master) ? moment(exception.recurrenceId).format('YYYYMMDD') : moment(exception.recurrenceId).tz(master.startDate.tzid).format('YYYYMMDD[T]HHmmss');
+            result.startDate.value = this.isAllday(master) ? moment(exception.recurrenceId).format('YYYYMMDD') : moment(recurrenceId).tz(master.startDate.tzid || moment().tz()).format('YYYYMMDD[T]HHmmss');
             // calculate duration and add it to startDate, then format
             result.endDate.value = this.isAllday(master) ? moment(moment(result.startDate.value).valueOf() + moment(master.endDate.value).valueOf() - moment(master.startDate.value).valueOf()).format('YYYYMMDD') :
-                moment.tz(moment(result.startDate.value).valueOf() + moment(master.endDate.value).valueOf() - moment(master.startDate.value).valueOf(), result.startDate.tzid).format('YYYYMMDD[T]HHmmss');
+                moment.tz(moment(result.startDate.value).valueOf() + moment(master.endDate.value).valueOf() - moment(master.startDate.value).valueOf(), result.startDate.tzid || moment().tz()).format('YYYYMMDD[T]HHmmss');
 
             return result;
         },

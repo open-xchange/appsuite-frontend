@@ -99,6 +99,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.waitForText('Change confirmation status', 5, dialogs.locators.header);
     dialogs.clickButton('Accept');
     I.waitForDetached('.modal-dialog');
+
     I.waitForElement('.rightside .participant a.accepted[title="' + users[1].userdata.primaryEmail + '"]');
 
     I.logout();
@@ -243,4 +244,60 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.waitForVisible('.list-view .appointment');
     I.seeNumberOfElements('.list-view .appointment .tentative', 1);
     I.seeNumberOfElements('.list-view .appointment .declined', 2);
+});
+
+
+Scenario('[Bug 63392][OXUIB-212] Recurring appointment can\'t changed to "Never ends"', async function (I, calendar, dialogs) {
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
+
+    //Create Appointment
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar');
+    // start tomorrow
+    var startDate = moment().startOf('day').add(1, 'day');
+
+    var appointment = await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Install more rgb to improve fps',
+        attendeePrivileges: 'DEFAULT',
+        rrule: 'FREQ=DAILY;COUNT=3',
+        startDate: {
+            value: startDate.format('YYYYMMDD')
+        },
+        endDate: {
+            value: startDate.add(1, 'day').format('YYYYMMDD')
+        }
+    });
+
+    // startDate of master is recurrenceId for the first occurence
+    var cid = appointment.folder + '.' + appointment.id + '.' + appointment.startDate.value;
+
+    I.login('app=io.ox/calendar&perspective=list');
+    calendar.waitForApp();
+    I.waitForVisible('li.list-item.selectable.appointment[data-cid="' + cid + '"]');
+    I.click({ css: 'li.list-item.selectable.appointment[data-cid="' + cid + '"]' });
+
+    // same as new appointment helper, make sure toolbar switched to new selection
+    I.wait(1);
+    I.click('Edit');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Edit series');
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
+
+    // change recurrence to never ending
+    I.click('Every day. The series ends after 3 occurences.');
+    dialogs.waitForVisible();
+    I.selectOption('Ends', 'Never');
+    dialogs.clickButton('Apply');
+
+    I.waitForInvisible('.modal-dialog');
+    I.click('Save');
+    // no backend error should happen here
+    I.waitForDetached('.io-ox-tasks-edit-window');
+    // must use xpath here since waitForText does not check if the elements text fully matches the string
+    // we are looking for just 'Every day.' and not 'Every day. The series ends after 3 occurences.'
+    I.waitForElement({ xpath: '//div[contains(@class, "calendar-detail")]//div[@class="recurrence"][text()="Every day."]' });
 });

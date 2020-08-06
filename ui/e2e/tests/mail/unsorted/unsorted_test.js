@@ -275,9 +275,8 @@ Scenario('[C7388] Send mail with different priorities', async function (I, users
     priorities.forEach(function (priority) {
         mail.newMail();
         I.click(mail.locators.compose.options);
-        I.waitForVisible('.dropdown.open .dropdown-menu', 5);
         I.clickDropdown(priority);
-        I.waitForDetached('.dropdown.open .dropdown-menu', 5);
+        I.waitForDetached('.dropup.open .dropdown-menu', 5);
         I.fillField('To', users[1].userdata.primaryEmail);
         I.pressKey('Enter');
         I.fillField('Subject', testrailID + ' - ' + timestamp + ' Priority: ' + priority + '');
@@ -306,8 +305,7 @@ Scenario('[C7389] Send mail with attached vCard', async function (I, users, mail
     mail.waitForApp();
     mail.newMail();
     I.click(mail.locators.compose.options);
-    I.waitForElement('.dropdown.open .dropdown-menu', 5);
-    I.click('Attach Vcard');
+    I.clickDropdown('Attach Vcard');
     I.fillField('To', users[1].userdata.primaryEmail);
     I.fillField('Subject', subject);
     I.fillField({ css: 'textarea.plain-text' }, subject);
@@ -325,7 +323,7 @@ Scenario('[C7389] Send mail with attached vCard', async function (I, users, mail
     //confirm dirtycheck is working properly
     I.click('~Close', '.floating-header');
     dialogs.waitForVisible();
-    I.waitForText('Do you really want to discard your changes?', 5, dialogs.locators.header);
+    I.waitForText('Do you really want to discard your changes?', 5, dialogs.locators.body);
     dialogs.clickButton('Cancel');
     I.waitForDetached('.modal-dialog');
 
@@ -552,7 +550,7 @@ Scenario('[C12118] Remove recipients', async function (I, users, mail) {
         I.waitForText('super01@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="' + field + '"]');
         I.waitForText('super02@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="' + field + '"]');
         I.waitForText('super03@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="' + field + '"]');
-        I.click({ css: '.io-ox-mail-compose [aria-label^="super02@ox.com"] .close' });
+        I.click({ css: '.io-ox-mail-compose [aria-label="super02@ox.com"] .close' });
         I.seeNumberOfElements('.io-ox-mail-compose div[data-extension-id="' + field + '"] div.token', 2);
         I.waitForText('super01@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="' + field + '"]');
         I.waitForText('super03@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="' + field + '"]');
@@ -571,7 +569,6 @@ Scenario('[C12119] Edit recipients', async function (I, users, mail) {
     I.waitForElement({ css: '.io-ox-mail-compose .bcc .tt-input' });
     const fields = ['to', 'cc', 'bcc'];
     fields.forEach(function (field) {
-        I.say(field);
         I.click({ css: '.io-ox-mail-compose div[data-extension-id="' + field + '"] input.tt-input' });
         I.fillField('.io-ox-mail-compose div[data-extension-id="' + field + '"] input.tt-input', 'foo@bar.de, lol@ox.io, bla@trash.com,');
         I.pressKey('Enter');
@@ -580,7 +577,8 @@ Scenario('[C12119] Edit recipients', async function (I, users, mail) {
         I.waitForText('foo@bar.de', 5, '.io-ox-mail-compose [data-extension-id="' + field + '"]');
         I.waitForText('lol@ox.io', 5, '.io-ox-mail-compose [data-extension-id="' + field + '"]');
         I.waitForText('bla@trash.com', 5, '.io-ox-mail-compose [data-extension-id="' + field + '"]');
-        I.doubleClick({ css: `.io-ox-mail-compose [data-extension-id="${field}"] [aria-label^="bla@trash.com"]` });
+        // nth-of-type index 5, as there are two divs (aria-description and live region) in front
+        I.doubleClick({ css: '.io-ox-mail-compose div:nth-of-type(5)' });
         I.fillField('.io-ox-mail-compose div[data-extension-id="' + field + '"] input.tt-input', 'super@ox.com,');
         I.pressKey('Enter');
         I.dontSee('bla@trash.com', '.io-ox-mail-compose [data-extension-id="' + field + '"]');
@@ -589,7 +587,7 @@ Scenario('[C12119] Edit recipients', async function (I, users, mail) {
         I.waitForText('super@ox.com', 5, '.io-ox-mail-compose [data-extension-id="' + field + '"]');
         const recipients = ['foo@bar.de', 'lol@ox.io', 'super@ox.com'];
         recipients.forEach(function (recipients) {
-            I.click({ css: '.io-ox-mail-compose [aria-label^="' + recipients + '"] .close' });
+            I.click({ css: '.io-ox-mail-compose [aria-label="' + recipients + '"] .close' });
         });
         I.seeNumberOfElements('.io-ox-mail-compose div.token', 0);
     });
@@ -641,18 +639,34 @@ Scenario('[C12121] Display and hide recipient fields', async function (I, mail) 
     I.waitForInvisible({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
 });
 
-Scenario.skip('[C83384] Automatically bcc all messages', async function (I, mail) {
+Scenario('[C83384] Automatically bcc all messages', async function (I, mail, users) {
     await Promise.all([
         I.haveSetting('io.ox/mail//messageFormat', 'text'),
-        I.haveSetting('io.ox/mail//autobcc', 'super01@ox.com')
+        users.create()
     ]);
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mail/settings/compose');
     I.waitForText('Always add the following recipient to blind carbon copy (BCC)', 5, '.settings-detail-pane');
-    I.seeInField('Always add the following recipient to blind carbon copy (BCC)', 'super01@ox.com');
+    I.fillField('Always add the following recipient to blind carbon copy (BCC)', users[1].get('primaryEmail'));
     I.openApp('Mail');
     mail.newMail();
-    I.see('super01@ox.com', '.io-ox-mail-compose div[data-extension-id="bcc"] div.token');
-    //TODO: After consultation with Markus a mail should also be sent and verified here
+    I.see(`${users[1].get('given_name')} ${users[1].get('sur_name')}`, '.io-ox-mail-compose div[data-extension-id="bcc"] div.token');
+    I.fillField('To', users[0].get('primaryEmail'));
+    I.fillField('Subject', 'Forever alone');
+    I.fillField({ css: 'textarea.plain-text' }, 'Sending this (not only) to myself');
+    mail.send();
+    I.waitForText('Forever alone', 30);
+    mail.selectMail('Forever alone');
+    within({ frame: '.mail-detail-pane .mail-detail-frame' }, () => {
+        I.waitForText('Sending this (not only) to myself');
+    });
+    I.dontSee(users[1].get('primaryEmail'));
+    I.logout();
+    I.login({ user: users[1] });
+    I.selectFolder('Inbox');
+    mail.selectMail('Forever alone');
+    within({ frame: '.mail-detail-pane .mail-detail-frame' }, () => {
+        I.waitForText('Sending this (not only) to myself');
+    });
 });
 
 Scenario('[C101615] Emojis', async function (I, users, mail) {
@@ -705,7 +719,7 @@ Scenario('[C163026] Change from display name when sending a mail', async functio
     I.waitForVisible('.modal-dialog input[title="Use custom name"]', 5); // check for checkbox to be visible
     I.click('input[title="Use custom name"]', dialogs.locators.body);
     I.fillField('.modal-body input[title="Custom name"]', timestamp);
-    dialogs.clickButton('Save');
+    dialogs.clickButton('Edit');
     I.waitForDetached('.modal-dialog');
 
     I.waitForText(timestamp, 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .name');

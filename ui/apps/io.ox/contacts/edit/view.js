@@ -50,7 +50,6 @@ define('io.ox/contacts/edit/view', [
             this.visible = {};
             // hash to track fields that are disabled (not supported etc)
             this.disabled = {};
-
             // enable private flag when capability is there and it's not usermode or public folders
             if (!capabilities.has('read_create_shared_folders') || this.model.isUserMode() || options.isPublic) {
                 this.disabled.private_flag = true;
@@ -656,7 +655,7 @@ define('io.ox/contacts/edit/view', [
         last_name: gt('Last name'),
         second_name: gt('Middle name'),
         suffix: gt('Suffix'),
-        birthday: gt('Birthday'),
+        birthday: gt('Date of birth'),
         marital_status: gt('Marital status'),
         number_of_children: gt('Children'),
         nickname: gt('Nickname'),

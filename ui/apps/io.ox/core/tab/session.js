@@ -98,11 +98,25 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          * @returns {Deferred}
          */
         login: function () {
-            this.propagateGetSession();
             var def     = $.Deferred(),
-                timeout = setTimeout(function () {
-                    def.reject();
-                }, 50);
+                timeout;
+
+            if (ox.session && ox.secretCookie && ox.language && ox.theme && ox.user && ox.user_id) {
+                return def.resolve({
+                    session: ox.session,
+                    secretCookie: ox.secretCookie,
+                    user: ox.user,
+                    user_id: ox.user_id,
+                    language: ox.language,
+                    theme: ox.theme
+                });
+            }
+
+            timeout = setTimeout(function () {
+                def.reject();
+            }, 50);
+
+            this.propagateGetSession();
 
             this.events.listenTo(TabSession.events, 'propagateSession', function (loginData) {
                 if (_.url.hash('session') && loginData.session !== _.url.hash('session')) {

@@ -34,6 +34,25 @@ Scenario('[C237267] Check if specific apps open as floating windows @contentRevi
     });
 });
 
+Scenario('[C237268] Open floating apps and verify the taskbar', function (I, mail, contacts, tasks) {
+    I.login(['app=io.ox/mail']);
+    mail.waitForApp();
+
+    mail.newMail();
+    I.dontSeeElement('#io-ox-taskbar-container');
+    I.openApp('Address Book');
+    I.clickToolbar('Edit');
+    I.waitForVisible('.io-ox-contacts-edit-window');
+    I.seeElement('.io-ox-mail-compose-window');
+    I.openApp('Tasks');
+    tasks.newTask();
+    I.seeElement('.io-ox-mail-compose');
+    I.seeElement('.io-ox-contacts-edit-window');
+    I.click('~Minimize', '.io-ox-mail-compose-window');
+    I.waitForVisible('#io-ox-taskbar-container');
+    I.waitForVisible('#io-ox-taskbar-container button[aria-label="Compose"]');
+});
+
 Scenario('[C237269] Toggle display styles of floating windows @contentReview', function (I) {
     I.login(['app=io.ox/tasks']);
     I.waitForVisible('.io-ox-tasks-window');

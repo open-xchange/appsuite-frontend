@@ -54,7 +54,7 @@ define('io.ox/mail/statistics', [
         }
     });
 
-    var COLUMNS = '603,604,610',
+    var COLUMNS = '603,604,610,661',
         WIDTH = _.device('smartphone') ? 280 : 500,
         HEIGHT = _.device('smartphone') ? 150 : 200;
 
@@ -174,7 +174,7 @@ define('io.ox/mail/statistics', [
                     weekdays = weekdays.slice(dow, weekdays.length).concat(weekdays.slice(0, dow));
 
                     _(data).each(function (obj) {
-                        var day = moment(obj.received_date).day();
+                        var day = moment(obj.date).day();
                         days[day]++;
                     });
 
@@ -208,7 +208,7 @@ define('io.ox/mail/statistics', [
                     var hours = _.times(24, function () { return 0; });
 
                     _(data).each(function (obj) {
-                        var h = moment(obj.received_date).hours();
+                        var h = moment(obj.date).hours();
                         hours[h]++;
                     });
 

@@ -48,6 +48,11 @@
         color: #333333;
         white-space: nowrap;
     }
+    & > li a.upsell i.fa.fa-star {
+        margin-left: 4px;
+        color: #ffc107;
+        font-size: 14px;
+    }
 }
 
 
@@ -87,8 +92,14 @@
 .dropdown {
     // fixes dropdown in breadcrumb
     li {
-        display: block; text-shadow: none;
-        .fa { width: 2em; text-align: left; } // icons in dropdowns
+        display: block;
+        text-shadow: none;
+
+        // icons in dropdowns
+        a > .fa {
+            width: 2em;
+            text-align: left;
+        }
 
         a:not(.folder-default-color){
             .checkbox-color:not(.color-label){

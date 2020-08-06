@@ -27,11 +27,11 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
         I.waitForElement(`.listitem.cap-${capability}`);
         const displayProperties = await I.grabCssPropertyFrom(locate(`.listitem.cap-${capability}`), 'display');
         const result = displayProperties.every(displayProperty => displayProperty === 'none');
-        expect(result).to.be.true;
+        expect(result, `expected ${capability} section to be hidden`).to.be.true;
     };
 
     // Disable calendar
-    await users[0].doesntHaveCapability('calendar');
+    await users[0].hasModuleAccess({ calendar: false });
 
     I.login('app=io.ox/contacts', { user: users[0] });
 
@@ -54,8 +54,8 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
         await checkIfDisplayNone('calendar');
     });
 
-    // Disable tasks
-    await users[0].doesntHaveCapability('tasks');
+    // additionally disable tasks
+    await users[0].hasModuleAccess({ tasks: false });
     I.refreshPage();
     contacts.waitForApp();
 
@@ -78,8 +78,8 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
         await checkIfDisplayNone('tasks');
     });
 
-    // Disable Drive
-    await users[0].doesntHaveCapability('infostore');
+    // additionally disable drive
+    await users[0].hasModuleAccess({ infostore: false });
 
     //close help
     I.refreshPage();

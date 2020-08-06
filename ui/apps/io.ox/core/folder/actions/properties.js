@@ -109,8 +109,7 @@ define('io.ox/core/folder/actions/properties', [
         render: function () {
             // make sure this works for tasks and calendar
             if (this.model.get('module') === 'calendar') {
-                var extendedProperties = this.model.get('com.openexchange.calendar.extendedProperties') || {},
-                    usedForSync = extendedProperties.usedForSync || {};
+                var usedForSync = this.model.get('used_for_sync') || {};
                 if (!usedForSync || usedForSync.value !== 'true') return;
                 // for tasks also check if the capability is enabled and the folder is private
             } else if (!(this.model.get('module') === 'tasks' && capabilities.has('caldav') && this.model.is('private'))) return;

@@ -229,7 +229,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                     _.each(actions, function (val) {
                         if (val.to === '' || val.text === '') result = false;
-                        if (val.flags && val.flags[0] === '$') result = false;
+                        if (val.flags && val.flags[0] === '$' && val.id !== 'setflags') result = false;
                     });
 
                     return result;
@@ -268,10 +268,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     if (testsPart.id === 'size') {
                         if (testsPart.size.toString().trim() === '') {
                             this.model.set('test', { id: 'true' });
-                        } else {
-                            // clean up size model
-                            delete testsPart.sizeValue;
-                            delete testsPart.unit;
                         }
                     }
 
@@ -294,14 +290,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                 if (nestedTest.zone === 'original' && nestedTest.id === 'currentdate') self.model.attributes.test.tests[key].tests[nestedKey].zone = returnTzOffset(nestedTest.datevalue[0]);
                             });
                         }
-
-                        // clean up size model
-                        if (test.id === 'size') {
-                            delete test.sizeValue;
-                            delete test.unit;
-                        }
                     });
-
                 }
 
                 // if there is a stop action it should always be the last
@@ -616,7 +605,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             }
 
                             if (_.has(attrs, 'flags')) {
-                                if ($.trim(attrs.flags[0]) === '$') {
+                                if ($.trim(attrs.flags[0]) === '$' && attrs.id !== 'setflags') {
                                     this.trigger('invalid:flags');
                                     return 'error';
                                 }
@@ -760,7 +749,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         )
                     );
                 },
-                target = baton.view.dialog.$el.find('.modal-footer'),
+                modalBody = baton.view.dialog.$el.find('.modal-body'),
                 arrayOfActions = baton.model.get('actioncmds');
 
             function checkForStopAction(array) {
@@ -784,7 +773,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
             toggleWarning();
 
-            if (!target.find('[type="checkbox"]').length) {
+            var target = baton.view.$el.find('.sectiontitle.conditions');
+
+            if (!modalBody.find('[type="checkbox"]').length) {
                 _.defer(function () {
                     target.prepend(drawcheckbox(checkForStopAction(arrayOfActions)).on('change', checkStopAction));
                     baton.view.$el.trigger('toggle:saveButton');

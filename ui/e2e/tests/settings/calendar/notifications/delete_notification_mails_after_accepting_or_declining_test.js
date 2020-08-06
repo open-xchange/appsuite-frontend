@@ -13,8 +13,6 @@
 /// <reference path="../../../../steps.d.ts" />
 const moment = require('moment');
 const crypto = require('crypto');
-const util = require('util');
-const fs = require('fs');
 
 Feature('Settings > Calendar');
 
@@ -28,15 +26,13 @@ After(async function (users) {
 
 Scenario('[C7873] Configure incoming invitation mails to be deleted after accepting or declining', async function (I, users) {
 
-    // Helper to generate invitation mails
-    var eventGenerator = {
-        // Creates the .eml source for an invitation mail
-        // Options are:
-        // * recipient: List of [display_name, email_address]
-        // * day: Moment object of the day the appointment should occur
-        // * title: Title of the appointment
-        createICalEML(options) {
-            return `From: "Fake McOrganiser" <organiser@eris.invalid>
+    // Creates the .eml source for an invitation mail
+    // Options are:
+    // * recipient: List of [display_name, email_address]
+    // * day: Moment object of the day the appointment should occur
+    // * title: Title of the appointment
+    function createICalEML(options) {
+        return `From: "Fake McOrganiser" <organiser@eris.invalid>
 To: "${options.recipient[0]}" <${options.recipient[1]}>
 Subject: ${options.title}
 MIME-Version: 1.0
@@ -93,31 +89,24 @@ Test
 
 ------=_Part_129_1662523581.1554810431933--
             `;
-        },
-        // Creates a .eml file. Options same as #createICalEML plus:
-        // * filename - Where to save the file
-        async generateInvitationEMLFile(options) {
-            const fs_writeFile = util.promisify(fs.writeFile);
-            return fs_writeFile(options.filename, this.createICalEML(options));
-        }
-    };
+    }
 
     let [user] = users;
     // We need two calendar invitation mails
     // We'll just add them with the helper, so we don't have to wait for the pooling
     const recipient = [user.get('display_name'), user.get('primaryEmail')];
 
-    // Generate first invitation mail
-    const eml1 = '/tmp/' + crypto.randomBytes(16).toString('hex') + '.eml';
-    await eventGenerator.generateInvitationEMLFile({ filename: eml1, title: 'Erisian Dialectic Bath Supplies n Grill', day: moment().add(5, 'days'), recipient:  recipient });
-
-    // Generate second invitation mail
-    const eml2 = '/tmp/' + crypto.randomBytes(16).toString('hex') + '.eml';
-    await eventGenerator.generateInvitationEMLFile({ filename: eml2, title: 'Grand Cabal of the Golden Bananabread Beaking Day', day: moment().add(23, 'days'), recipient:  recipient });
-
     // Import both mails
-    await I.haveMail({ folder: 'default0/INBOX', path: eml1 });
-    await I.haveMail({ folder: 'default0/INBOX', path: eml2 });
+    await I.haveMail({ folder: 'default0/INBOX', source: createICalEML({
+        title: 'Erisian Dialectic Bath Supplies n Grill',
+        day: moment().add(5, 'days'),
+        recipient
+    }) });
+    await I.haveMail({ folder: 'default0/INBOX', source: createICalEML({
+        title: 'Grand Cabal of the Golden Bananabread Beaking Day',
+        day: moment().add(23, 'days'),
+        recipient
+    }) });
 
     await I.haveSetting('io.ox/calendar//deleteInvitationMailAfterAction', true);
     // Accept the appointment

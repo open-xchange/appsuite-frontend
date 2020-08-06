@@ -626,7 +626,11 @@ define('io.ox/contacts/api', [
 
             if (data !== null) return data;
             if (address === '') return {};
-
+            // force multiple for large distribution lists (OXUIB-227)
+            if (!http.isPaused()) {
+                http.pause();
+                _.defer(http.resume.bind(http));
+            }
             //http://oxpedia.org/wiki/index.php?title=HTTP_API#SearchContactsAlternative
             return http.PUT({
                 module: 'contacts',
@@ -737,6 +741,15 @@ define('io.ox/contacts/api', [
             return _.extend(params, pictureParams(opt));
         }
 
+        function getUrl(url, opt, image, e) {
+            if (image.width === 1 || e.type === 'error') {
+                cachedURLs[url] = null;
+                return opt.fallback ? fallback : null;
+            }
+            cachedURLs[url] = url;
+            return url;
+        }
+
         function load(node, url, opt) {
             _.defer(function () {
                 // use lazyload?
@@ -746,14 +759,8 @@ define('io.ox/contacts/api', [
                     if (opt.fallback) node.css('background-image', 'url(' + fallback + ')');
                     return node.attr('data-original', url)
                         .on('load.lazyload error.lazyload', function (e, image) {
-                            if (image.width === 1 || e.type === 'error') {
-                                url = opt.fallback ? fallback : null;
-                            } else {
-                                cachedURLs[url] = url;
-                            }
-                            if (url) {
-                                node.text('').attr('data-original', url).css('background-image', 'url(' + url + ')');
-                            }
+                            var newUrl = getUrl(url, opt, image, e);
+                            if (newUrl) node.text('').attr('data-original', newUrl).css('background-image', 'url(' + newUrl + ')');
                             node = url = opt = null;
                             $(this).off('.lazyload');
                         })
@@ -761,9 +768,8 @@ define('io.ox/contacts/api', [
                 }
 
                 $(new Image()).on('load error', function (e) {
-                    var fail = this.width === 1 || e.type === 'error';
-                    if (!fail) cachedURLs[url] = url;
-                    if (!fail || opt.fallback) node.text('').css('background-image', 'url(' + (fail ? fallback : url) + ')');
+                    var newUrl = getUrl(url, opt, this, e);
+                    if (newUrl) node.text('').css('background-image', 'url(' + (newUrl) + ')');
                     node = null;
                     $(this).off();
                 })
@@ -815,7 +821,12 @@ define('io.ox/contacts/api', [
             url = coreUtil.getShardingRoot('/contacts/picture?action=get&' + $.param(params));
 
             // cached?
-            if (cachedURLs[url]) return opt.urlOnly ? cachedURLs[url] : node.text('').css('background-image', 'url(' + cachedURLs[url] + ')');
+            if (url in cachedURLs) {
+                // failed picture request are cached with value "null"
+                var cachedurl = cachedURLs[url] || (opt.fallback ? fallback : null);
+                if (opt.urlOnly) return cachedurl;
+                return cachedurl ? node.text('').css('background-image', 'url(' + cachedurl + ')') : node;
+            }
 
             try {
                 return opt.urlOnly ? url : load(node, url, opt);

@@ -100,7 +100,7 @@ define('io.ox/calendar/actions/change-organizer', [
                         $('<label>').text(gt('Select new organizer')).attr({ for: guid = _.uniqueId('label-') }),
                         typeahead.$el.attr({ id: guid }),
                         $('<label>').text(gt('Add a message to the notification email for the other participants.')).attr({ for: guid = _.uniqueId('label-') }),
-                        new mini.InputView({ name: 'comment', model: this.model, placeholder: gt('Password'), autocomplete: false }).render().$el.attr('id', guid)
+                        new mini.InputView({ name: 'comment', model: this.model, placeholder: '', autocomplete: false }).render().$el.attr('id', guid)
                     );
                     typeahead.render();
 
@@ -108,8 +108,9 @@ define('io.ox/calendar/actions/change-organizer', [
                     // typeahead.$el.data('ttTypeahead').dropdown.close = $.noop;
                     // typeahead.$el.data('ttTypeahead').dropdown.empty = $.noop;
                 })
-                .addAlternativeButton({ action: 'cancel', label: gt('Cancel') })
-                .addButton({ action: 'ok', label: gt('Ok'), className: 'btn-primary' })
+                .addCancelButton()
+                //#. 'Change' as text for a button to apply the change of the organizer of an appointment.
+                .addButton({ action: 'ok', label: gt('Change'), className: 'btn-primary' })
                 .on('ok', function () {
                     var params = {
                         id: appointmentData.seriesId || appointmentData.id,

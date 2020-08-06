@@ -1,0 +1,55 @@
+diff --git a/node_modules/tinymce/themes/modern/theme.js b/node_modules/tinymce/themes/modern/theme.js
+index 51c215c..a7f56eb 100644
+--- a/node_modules/tinymce/themes/modern/theme.js
++++ b/node_modules/tinymce/themes/modern/theme.js
+@@ -1076,20 +1076,47 @@ var modern = (function (domGlobals) {
+         items: [
+           {
+             type: 'container',
+-            classes: 'top-part',
++            classes: 'top-part-deprecated',
+             items: [
+               hasMenubar(editor) === false ? null : {
+                 type: 'menubar',
+                 border: '0 0 1 0',
+                 items: Menubar.createMenuButtons(editor)
+-              },
+-              Toolbar.createToolbars(editor, getToolbarSize(editor))
++              }
+             ]
+           },
+           Sidebar.hasSidebar(editor) ? editAreaContainer(editor) : editArea('1 0 0 0')
+         ]
+       });
+       UiContainer.setUiContainer(editor, panel);
++
++      // ox: add toolbar to any specified container node
++      var fixedToolbarContainer = getFixedToolbarContainer(editor);
++      if (fixedToolbarContainer) {
++        var tbar = global$4.create({
++          type: 'panel',
++          role: 'application',
++          classes: 'tinymce',
++          style: 'visibility: hidden',
++          layout: 'stack',
++          border: 1,
++          items: [
++            {
++              type: 'container',
++              classes: 'top-part',
++              items: [
++                Toolbar.createToolbars(editor, getToolbarSize(editor))
++              ]
++            }
++          ]
++        });
++        UiContainer.setUiContainer(editor, tbar);
++        var inlineToolbarContainer = DOM.select(fixedToolbarContainer)[0];
++        tbar.renderTo(inlineToolbarContainer).reflow();
++      } else {
++        domGlobals.console.error('This custom theme requires a valid `fixed_toolbar_container`', html);
++      }
++
+       if (getResize(editor) !== 'none') {
+         resizeHandleCtrl = {
+           type: 'resizehandle',

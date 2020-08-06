@@ -18,26 +18,30 @@ define('io.ox/mail/sanitizer', [
 
     var whitelist = mailSettings.get('whitelist', {}),
         specialAttributes = ['desktop', 'mobile', 'tablet', 'id', 'class', 'style'],
+        // used to find url("...") patterns in css to block external images when option is given
+        urlDetectionRule = /url\(("|')?http.*?\)/gi,
         defaultOptions = {
             SAFE_FOR_JQUERY: true,
             FORCE_BODY: true,
             // keep HTML and style tags to display mails correctly in iframes
             WHOLE_DOCUMENT: true
         },
-        processRule = function (rule) {
+        processRule = function (rule, config) {
             // see https://developer.mozilla.org/en-US/docs/Web/API/CSSRule#Type_constants for a full list (note most rule types are experimental or deprecated, only a few have actual use)
             switch (rule.type) {
                 // standard css rules
                 case 1:
                     //avoid double prefix if someone decides to sanitize this twice
-                    var prefix = rule.cssText.indexOf('.mail-detail-content ') > -1 ? '' : '.mail-detail-content ';
-                    return prefix + rule.cssText;
+                    var prefix = rule.cssText.indexOf('.mail-detail-content ') > -1 ? '' : '.mail-detail-content ',
+                        // clear url paths from css when image loading is disabled
+                        text = config.noImages ? rule.cssText.replace(urlDetectionRule, '') : rule.cssText;
+                    return prefix + text;
                 // media rules
                 case 4:
                     var innerRules = '';
                     // recursion: process the inner rules inside a media rule
                     _(rule.cssRules).each(function (innerRule) {
-                        innerRules = innerRules + processRule(innerRule) + ' ';
+                        innerRules = innerRules + processRule(innerRule, config) + ' ';
                     });
                     return '@media ' + rule.media.mediaText + '{ ' + innerRules + '}';
                 default:
@@ -59,7 +63,7 @@ define('io.ox/mail/sanitizer', [
     }
 
     // add hook before sanitizing, to catch some issues
-    DOMPurify.addHook('beforeSanitizeElements', function (currentNode) {
+    DOMPurify.addHook('beforeSanitizeElements', function (currentNode, hookEvent, config) {
         // dompurify removes the title tag but keeps the text in it, creating strange artefacts
         if (currentNode.tagName === 'TITLE') currentNode.innerHTML = '';
         // add a class namespace to style nodes so that they overrule our stylesheets without !important
@@ -67,9 +71,12 @@ define('io.ox/mail/sanitizer', [
         if (currentNode.tagName === 'STYLE' && currentNode.sheet && currentNode.sheet.cssRules) {
             var rules = '';
             _(currentNode.sheet.cssRules).each(function (rule) {
-                rules = rules + processRule(rule) + ' ';
+                rules = rules + processRule(rule, config) + ' ';
             });
             currentNode.innerHTML = rules;
+        } else if (config.noImages && currentNode.hasAttribute && currentNode.hasAttribute('style')) {
+            // clear url paths from inline css when image loading is disabled
+            currentNode.setAttribute('style', currentNode.getAttribute('style').replace(urlDetectionRule, ''));
         }
         return currentNode;
     });

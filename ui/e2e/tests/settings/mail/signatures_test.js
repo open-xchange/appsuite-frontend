@@ -33,6 +33,51 @@ After(async (users) => {
     await users.removeAll();
 });
 
+// will probably break once MWB-290 was fixed/deployed
+Scenario('[OXUIB-199] Sanitize signature preview', async function (I) {
+    const body = locate({ xpath: '//body' });
+    await I.haveSnippet({
+        content: 'blabla<i\nmg src="foo" oner\nror="document.body.classList.add(1337)" <br>',
+        displayname: 'my-signature',
+        misc: { insertion: 'below', 'content-type': 'text/plain' },
+        module: 'io.ox/mail',
+        type: 'signature'
+    });
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
+
+    I.waitForText('Add new signature');
+    I.waitForText('my-signature');
+    I.dontSeeElement('.signature-preview img');
+    I.wait(0.5);
+
+    let classlist = await I.grabAttributeFrom(body, 'class');
+    I.say(classlist);
+    expect(classlist).to.not.contain(1337);
+});
+
+// will probably break once MWB-290 was fixed/deployed
+Scenario('[OXUIB-200] Sanitize signature when editing existing', async function (I, dialogs) {
+    const body = locate({ xpath: '//body' });
+    await I.haveSnippet({
+        content: '<font color="<bo<script></script>dy><img alt=< src=foo onerror=document.body.classList.add(1337)></body>">',
+        displayname: 'my-signature',
+        misc: { insertion: 'below', 'content-type': 'text/plain' },
+        module: 'io.ox/mail',
+        type: 'signature'
+    });
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
+
+    I.waitForText('Add new signature');
+    I.waitForText('my-signature');
+    I.click('Edit');
+    dialogs.waitForVisible();
+    I.waitForVisible('.contenteditable-editor iframe');
+    I.wait(0.5);
+
+    let classlist = await I.grabAttributeFrom(body, 'class');
+    expect(classlist).to.not.contain(1337);
+});
+
 Scenario('Sanitize entered signature source code', async function (I) {
 
     var dialog = locate('.mce-window');
@@ -72,16 +117,26 @@ Scenario('Sanitize entered signature source code', async function (I) {
 
 Scenario('[C7766] Create new signature', function (I, mail, dialogs) {
 
-    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
+    // init compose instance
+    I.login(['app=io.ox/mail']);
+    mail.waitForApp();
+    mail.newMail();
 
+    // predcondition: check signature menu refresh
+    I.click(mail.locators.compose.options);
+    I.waitForText('Signatures', 10, '.dropdown.open .dropdown-menu');
+    I.pressKey('Escape');
+    I.click({ css: '[data-action=minimize]' });
+
+    I.openApp('Settings', { folder: 'virtual/settings/io.ox/mail/settings/signatures' });
     I.waitForText('Add new signature');
     I.click('Add new signature');
     dialogs.waitForVisible();
 
-    I.waitForVisible('.contenteditable-editor iframe');
+    I.waitForVisible('.io-ox-signature-dialog .contenteditable-editor iframe');
     I.fillField('Signature name', 'Testsignaturename');
 
-    within({ frame: '.contenteditable-editor iframe' }, () => {
+    within({ frame: '.io-ox-signature-dialog .contenteditable-editor iframe' }, () => {
         I.appendField('body', 'Testsignaturecontent');
     });
 
@@ -96,12 +151,12 @@ Scenario('[C7766] Create new signature', function (I, mail, dialogs) {
     I.selectOption('Default signature for new messages', 'No signature');
     I.selectOption('Default signature for replies or forwards', 'No signature');
 
-    I.openApp('Mail');
-    mail.waitForApp();
+    // use compose instance to check signature menu refresh
+    I.waitForVisible('#io-ox-taskbar-container button');
+    I.click('#io-ox-taskbar-container button');
+    I.waitForElement(mail.locators.compose.options);
+    I.click(mail.locators.compose.options);
 
-    mail.newMail();
-
-    I.click(mail.locators.compose.signatures);
     I.clickDropdown('Testsignaturename');
 
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
@@ -168,7 +223,7 @@ Scenario('[C7767] Define signature position', async function (I, users, mail, di
     });
     I.wait(0.5); // there still might be a focus event somewhere
 
-    I.click(mail.locators.compose.signatures);
+    I.click(mail.locators.compose.options);
     I.clickDropdown('Testsignaturename');
 
     await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
@@ -212,7 +267,7 @@ Scenario('[C7768] Edit signature', async function (I, mail, dialogs) {
 
     mail.newMail();
 
-    I.click(mail.locators.compose.signatures);
+    I.click(mail.locators.compose.options);
     I.clickDropdown('Newsignaturename');
 
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
@@ -234,7 +289,7 @@ Scenario('[C7769] Delete signature', async function (I) {
     I.waitForText('Testsignaturename');
     I.see('Testsignaturecontent');
 
-    I.click('a[title="Delete"]');
+    I.click('~Delete');
     I.waitForDetached('.settings-list-item');
 
     I.dontSee('Testsignaturename');

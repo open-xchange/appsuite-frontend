@@ -28,8 +28,15 @@ define('io.ox/core/boot/locale', ['gettext', 'io.ox/core/boot/util', 'io.ox/core
                 // get all nodes
                 $('[data-i18n]').each(function () {
                     var node = $(this),
-                        val = util.gt(node.attr('data-i18n')),
+                        translations = node.data('translations') || {},
+                        val = translations[locale] || translations.en_US || util.gt(node.attr('data-i18n')),
+                        hrefTranslations = node.data('href-translations') || {},
+                        hrefVal = hrefTranslations[locale] || hrefTranslations.en_US || util.gt(node.attr('data-i18n-href')),
                         target = (node.attr('data-i18n-attr') || 'text').split(',');
+
+                    if (node.is('a') && hrefVal) target.push('anker');
+
+                    if (ox.debug && !val && !hrefVal) console.error('No translation found for node ', node);
                     _.each(target, function (el) {
                         switch (el) {
                             case 'value':
@@ -40,6 +47,12 @@ define('io.ox/core/boot/locale', ['gettext', 'io.ox/core/boot/util', 'io.ox/core
                                 break;
                             case 'label':
                                 node.contents().get(-1).nodeValue = val;
+                                break;
+                            case 'anker':
+                                node.attr('href', hrefVal);
+                                break;
+                            case 'html':
+                                node.empty().append(val);
                                 break;
                             default:
                                 node.attr(el, val);
@@ -87,14 +100,14 @@ define('io.ox/core/boot/locale', ['gettext', 'io.ox/core/boot/util', 'io.ox/core
 
                 var changeByUser = this.changeByUser.bind(this),
                     defaultLocale = meta.getValidDefaultLocale(),
-                    toggle, list;
+                    toggle, list, label;
 
                 // Display native select box for locales if there are up to 'maxLang' locales
                 if (count < maxCount && !_.url.hash('language-select') && _.device('!smartphone')) {
 
                     node.append(
-                        $('<span class="lang-label" id="io-ox-languages-label" data-i18n="Language" data-i18n-attr="text">'),
-                        $('<div class="dropup">').append(
+                        label = $('<a href="#" role="button" class="lang-label" id="io-ox-languages-label" data-i18n="Language" data-i18n-attr="text" aria-hidden="true" tabindex="-1">'),
+                        $('<div class="dropdown">').append(
                             toggle = $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').append(
                                 $('<span class="sr-only" data-i18n="Language:" data-i18n-attr="text">'),
                                 $('<span class="toggle-text">').attr('lang', languageToTag(defaultLocale)).text(meta.getLocaleName(defaultLocale)),
@@ -123,26 +136,42 @@ define('io.ox/core/boot/locale', ['gettext', 'io.ox/core/boot/util', 'io.ox/core
                         $(e.delegateTarget).parent().find('.toggle-text').text(meta.getLocaleName(value)).attr('lang', languageToTag(value));
                     });
 
+                    label.on('click', function (e) { e.preventDefault(); toggle.focus(); });
+
                     // init dropdown
                     toggle.dropdown();
                 } else {
+                    var updateWidth = function () {
+                        $('#language-spacer').text($('#language-select')[0].selectedOptions[0].text);
+                        var width = ($('#language-spacer').width() + 24) + 'px';
+                        $('#language-select').css('width', width);
+                    };
+
                     node.append(
                         $('<label for="language-select" class="lang-label" data-i18n="Languages" data-i18n-attr="text">'),
-                        $('<select id="language-select">')
-                            .on('change', function () {
-                                exports.changeByUser($(this).val());
-                            })
-                            .append(
-                                _(locales).map(function (locale) {
-                                    return $('<option>').attr({
-                                        'lang': languageToTag(locale.id),
-                                        'data-value': locale.id,
-                                        'value': locale.id
-                                    }).text(locale.name);
+                        $('<div style="display: inline-block; position: relative;">').append(
+                            $('<select id="language-select">')
+                                .on('change', function () {
+                                    exports.changeByUser($(this).val());
+                                    updateWidth();
                                 })
+                                .append(
+                                    _(locales).map(function (locale) {
+                                        return $('<option>').attr({
+                                            'lang': languageToTag(locale.id),
+                                            'data-value': locale.id,
+                                            'value': locale.id
+                                        }).text(locale.name);
+                                    })
+                                )
+                                .val(defaultLocale),
+                            $('<div style="position: absolute; top: 0; left: 0; pointer-events: none;">').append(
+                                $('<span id="language-spacer" style="visibility: hidden; white-space: nowrap;">'),
+                                $('<span class="caret" style="margin-left: 8px">')
                             )
-                            .val(defaultLocale)
+                        )
                     );
+                    updateWidth();
                 }
             } else {
                 node.remove();

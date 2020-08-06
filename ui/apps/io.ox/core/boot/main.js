@@ -202,6 +202,7 @@ define.async('io.ox/core/boot/main', [
 
         'login:fail:session-based': function (baton) {
             baton.stopPropagation();
+            if ($('#showstopper').is(':visible')) return;
             $('.throbber').hide();
             $('#showstopper, #showstopper .session').show();
         }

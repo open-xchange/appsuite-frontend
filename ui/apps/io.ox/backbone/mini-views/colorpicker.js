@@ -72,7 +72,7 @@ define('io.ox/backbone/mini-views/colorpicker', [
                 // use defer or dropdown toggle focusses the togglebutton again. This results in the closing of the dropdown.
                 _.defer(function () {
                     var list = this.$ul.find('td .colorpicker-item'),
-                        selected = this.model ? list.filter('[data-value="' + this.model.get(this.name) + '"]') : undefined;
+                        selected = this.model ? list.filter('[data-value="' + this.model.get(this.name) + '"]') : list;
                     return $(selected.length ? selected : list).first().focus();
                 }.bind(this));
             },

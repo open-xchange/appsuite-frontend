@@ -35,7 +35,7 @@ Scenario('[C7336] Successful Login', function (I, users) {
     I.fillField('User name', `${users[0].get('name')}@${users[0].context.id}`);
     I.fillField('Password', users[0].get('password'));
     I.click('Sign in');
-    I.waitForText('No message selected');
+    I.waitForText('No message selected', 30);
 });
 
 Scenario('[C7337] Unsuccessful Login', function (I, users) {
@@ -98,4 +98,26 @@ Scenario('[C163025] Screen gets blured when session times out', function (I) {
     I.login();
     I.clearCookie();
     I.waitForElement('.abs.unselectable.blur');
+});
+
+Scenario('[OXUIB-74] Redirect during autologin using LGI-0016 error', async function (I) {
+    I.amOnPage('ui');
+    I.mockRequest('GET', `${process.env.LAUNCH_URL}/api/login?action=autologin`, {
+        error: 'http://www.open-xchange.com/',
+        error_params: ['http://www.open-xchange.com/'],
+        code: 'LGI-0016'
+    });
+    I.refreshPage();
+    await I.executeScript(function () {
+        return require(['io.ox/core/extensions']).then(function (ext) {
+            ext.point('io.ox/core/boot/login').extend({
+                id: 'break redirect',
+                after: 'autologin',
+                login: function () {
+                    _.url.redirect('http://example.com/');
+                }
+            });
+        });
+    });
+    I.waitInUrl('open-xchange.com', 5);
 });

@@ -322,6 +322,9 @@ html.macos .preview-right, html.ios {
 
 .mail-detail {
 
+    .content { display: none; }
+    &.expanded .content { display: block };
+
     color: @black;
     background-color: #fff;
     position: relative;
@@ -523,6 +526,25 @@ html.macos .preview-right, html.ios {
         .picture(@picture-width, @picture-width);
     }
 
+    .detail-view-header > .presence {
+        position: absolute;
+        right: 0;
+        top: 40px;
+        .icon {
+            border: 2px solid white;
+            border-radius: 10px;
+            box-sizing: content-box;
+        }
+    }
+
+    // used in portal sidepopup
+    &.no-padding .detail-view-header > .presence {
+        right: -8px;
+        .icon {
+            margin-right: 0;
+        }
+    }
+
     &.no-padding .contact-picture { right: 0; }
 
     .io-ox-label {
@@ -533,6 +555,11 @@ html.macos .preview-right, html.ios {
     .recipients .person-link {
         color: #333;
         @media(max-width: 900px) { white-space: normal; }
+        .presence .icon {
+            width: 8px;
+            height: 8px;
+            margin-right: 4px;
+        }
     }
 
     .detail-view-header {
@@ -1305,7 +1332,7 @@ body.dragging .categories-toolbar-container {
         }
 
         button {
-            padding: 0 16px;
+            padding: 0 16px 2px;
             display: flex;
             align-items: center;
             width: 100%;
@@ -1350,7 +1377,7 @@ body.dragging .categories-toolbar-container {
     &.fail, &.suspicious {
         color: @a-color-fail;
     }
-    &.trusted, &.pass {
+    &.trusted {
         color: @a-color-trusted;
     }
 }
@@ -1367,7 +1394,7 @@ body.dragging .categories-toolbar-container {
     .neutral { background-color: @a-color-neutral; }
     .suspicious,
     .fail { background-color: @a-color-fail; }
-    .trusted, .pass { background-color: @a-color-trusted; }
+    .trusted { background-color: @a-color-trusted; }
 }
 
 .touch {
@@ -1420,20 +1447,28 @@ body.dragging .categories-toolbar-container {
 
     // single mail: in a detail view or as list item (.thread-view-list)
     .mail-detail {
+        @padding-h: 15px;
+        @padding-v: 10px;
 
         list-style-type: none;
         border-bottom: 0;
 
         .contact-picture { display: none; }
 
+        &.unread .unread-toggle {
+            visibility: visible;
+        }
+
         .unread-toggle {
-            display: inline-block;
+            visibility: hidden;
             position: relative;
             top: 0;
             left: auto;
             float: right;
             bottom: auto;
             margin: 0;
+            padding-top: (@padding-v + 7);
+            padding-right: (@padding-h);
         }
 
         .attachments .io-ox-inline-links {
@@ -1447,9 +1482,6 @@ body.dragging .categories-toolbar-container {
         }
 
         .detail-view-header {
-
-            @padding-h: 15px;
-            @padding-v: 10px;
 
             padding: (@padding-v + 4) 0 (@padding-v + 5) 0;
             font-size: @phone-font-size;

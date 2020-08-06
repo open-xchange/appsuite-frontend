@@ -21,6 +21,7 @@ module.exports = {
     },
     newAddressbook(name) {
         I.click('Add new address book');
+        I.clickDropdown('Personal address book');
         dialogs.waitForVisible();
         I.fillField('[placeholder="New address book"][type="text"]', name);
         dialogs.clickButton('Add');

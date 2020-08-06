@@ -19,10 +19,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigasyonu aç/kapat</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.email.read.html">Önceki</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.email.read.html">Geri</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Başlangıç</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">İçindekiler</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.email.external.html">Sonraki</a></li>
@@ -46,26 +46,20 @@
 <p class="title">Şifrelenmiş bir e-posta gönderme:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p role="presentation"><span class="phrase">E-posta</span> uygulamasında normal şekilde e-postanızı yazın.</p>
-<p role="presentation"><span class="guilabel"><strong>Oluşturma</strong></span> sayfasında, sağ üst köşedeki <span class="guibutton"><strong>Şifrele</strong></span> simgesine <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.send"><img src="../../images/guard_user_icon_encrypt.png"></span> tıklayın.</p>
-<p role="presentation">Ayrıca konu altındaki <span class="guibutton"><strong>Güvenlik</strong></span>'e de tıklayabilirsiniz. <span class="phrase">Guard</span> güvenlik ayarlarının yapılandırmasına bağlı olarak farklı menü öğeleri görünebilir:<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Gelişmiş ayarları göster</strong></span> devre dışıysa <span class="guibutton"><strong>Güvenli</strong></span>'ye tıklayın.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Gelişmiş ayarları göster</strong></span> devre dışıysa <span class="guibutton"><strong>Güvenli</strong></span>'ye tıklayın.</p></li>
-</ul>
-            </p>
+<p role="presentation">E-posta düzenleme penceresinde <span class="guibutton"><strong>Şifrelemeyi etkinleştir</strong></span> simgesine <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.email.send.encrypt"><img src="../../images/guard_user_icon_encrypt.png"></span> tıklayın. E-posta metninin üzerinde bir işlev çubuğu görüntülenecektir.</p>
 <p role="presentation">Alıcıların yanındaki simgeler, bu alıcı için mesajı şifreleyip şifreleyemeyeceğinizi gösterir. Bir simgenin üzerine gelirseniz bir açıklama görüntülenir.</p>
 </li>
-<li class="step"><p role="presentation">Ayrıca e-postayı imzalamak için <span class="guibutton"><strong>Güvenlik</strong></span>'e tıklayın. <span class="guibutton"><strong>İmzala</strong></span>'yı etkinleştirin.</p></li>
-<li class="step"><p role="presentation"><span class="phrase">Guard</span> güvenlik ayarlarındaki <span class="guibutton"><strong>Gelişmiş ayarları göster</strong></span> etkinse diğer seçenekleri de kullanabilirsiniz. Bunun için <span class="guibutton"><strong>Güvenlik</strong></span>'e tıklayın. Aşağıdaki seçenekleri etkinleştirebilirsiniz:<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="step"><p role="presentation">Ayrıca e-posta imzalamak isterseniz e-posta işlev çubuğundaki <span class="guibutton"><strong>Seçenekler</strong></span>'e <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.email.send.sign"><img src="../../images/appsuite_user_icon_actions.png"></span> tıklayın. <span class="guibutton"><strong>İmzala</strong></span>'yı etkinleştirin.</p></li>
+<li class="step"><p role="presentation"><span class="phrase">Guard</span> ayarlarında <span class="guibutton"><strong>Gelişmiş ayarları göster</strong></span> etkinse diğer seçenekleri de kullanabilirsiniz. Bunu yapmak için işlev çubuğundaki <span class="guibutton"><strong>Seçenekler</strong></span>'e tıklayın. Aşağıdaki seçenekleri etkinleştirebilirsiniz:<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">Varsayılan olarak, şifrelenmiş e-postalar <span class="guibutton"><strong>PGP Mime</strong></span> biçiminde gönderilir. Bazı eski istemciler yalnızca PGP Inline'ı destekler. Alıcı böyle bir istemci kullanıyorsa <span class="guibutton"><strong>PGP Inline</strong></span>'ı etkinleştirin.</p>
-<p role="presentation"><span class="guibutton"><strong>PGP Inline</strong></span>'ı kullanırken HTML biçiminde e-posta gönderemezsiniz.</p>
+<p role="presentation">Not: <span class="guibutton"><strong>PGP Inline</strong></span>'ı kullanırken HTML biçiminde e-posta gönderemezsiniz.</p>
 </li>
 <li class="listitem"><p role="presentation">E-posta alıcısının şifrelenmiş bir yanıt gönderebilmesi için alıcının ortak anahtarınıza sahip olması gerekir. Ortak anahtarınızı e-posta eki olarak gönderebilirsiniz. Bunun için <span class="guibutton"><strong>Anahtarımı ekle</strong></span>'yi işaretleyin.</p></li>
 </ul>
             </p></li>
 <li class="step">
-<p role="presentation"><span class="guibutton"><strong>Şifrelenmiş halini gönder</strong></span>'e tıklayın.</p>
+<p role="presentation"><span class="guibutton"><strong>Gönder</strong></span>'e tıklayın.</p>
 <p role="presentation">Yeni alıcılara e-posta gönderirken, alıcıların şifrelenmiş e-postayı açmasını kolaylaştıran notlar yazabileceğiniz bir pencere görüntülenir.</p>
 </li>
 </ol></div>
@@ -76,15 +70,14 @@
 <ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation" class="cap-webmail"><a class="xref" href="ox.appsuite.user.sect.email.gui.create.html">E-posta düzenleme penceresi</a></p></li></ul>
 <p>
         </p>
-<p class="title">Benzer eylemler:</p>
-<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.email.read.html">Şifrelenmiş e-postaları okuma</a></p></li></ul>
-<p>
-        </p>
 <p class="title">İlgili konular:</p>
-<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.email.read.html">Şifrelenmiş e-postaları okuma</a></p></li>
+<li class="listitem" style="list-style-type: none">
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.html"><span class="phrase">Guard</span> Ayarları</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.email.external.html">Harici alıcılar şifrelenmiş bir e-postayı nasıl okuyabilir?</a></p>
-</li></ul>
+</li>
+</ul>
 <p>
       </p>
 <p id="ox.appsuite.user.parent.guard.email.send">Ana başlık:<a class="xref" href="ox.appsuite.user.sect.guard.email.html">E-posta Yazışmalarını Şifreleme</a></p>

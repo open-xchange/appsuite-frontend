@@ -22,8 +22,8 @@ After(async function (users) {
     await users.removeAll();
 });
 
-// Skipped for now, needs backport for Bug 68533
-Scenario.skip('add and removes Mail Filter Rules', async function (I, dialogs) {
+
+Scenario('add and removes Mail Filter Rules', async function (I, dialogs) {
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
     I.waitForVisible('.io-ox-settings-main');
 
@@ -245,6 +245,7 @@ Scenario.skip('add and removes Mail Filter Rules', async function (I, dialogs) {
     I.seeElement('.modal button[data-action="save"][disabled]');
 
     I.fillField('.io-ox-mailfilter-edit [data-test-id="2"] input[name="sizeValue"]', '22');
+
     // check size validation
     I.dontSeeElement('.io-ox-mailfilter-edit li[data-test-id="2"] .row.has-error');
     I.dontSeeElement('.modal button[data-action="save"][disabled]');

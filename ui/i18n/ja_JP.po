@@ -1,9 +1,8 @@
 # translation of ox.ja_JP.po to deutsch
 msgid ""
-msgstr ""
-"Project-Id-Version: ox.ja_JP\n"
+msgstr "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-07-02 11:28+0200\n"
+"PO-Revision-Date: 2020-05-29 15:42+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -44,7 +43,7 @@ msgstr "メール"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "SMS"
-msgstr "RSS"
+msgstr "ショートメール"
 
 #. Used in a selectbox when the reminder for an appointment is before the start time
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
@@ -187,42 +186,82 @@ msgid "Send mail at end."
 msgstr "終了時にメールを送信"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Send SMS %1$s before start."
+msgstr "開始前に%1$sのショートメールを送信"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Send SMS %1$s after start."
+msgstr "開始後に%1$sのショートメールを送信"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Send SMS %1$s before end."
+msgstr "終了前に%1$sのショートメールを送信"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Send SMS %1$s after end."
+msgstr "終了後に%1$sのショートメールを送信"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Send SMS at %1$s."
+msgstr "%1$sにショートメールを送信"
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Send SMS at start."
+msgstr "開始時にショートメールを送信"
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Send SMS at end."
+msgstr "終了時にショートメールを送信"
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS, email etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s before start."
 msgstr "開始前に%1$s%2$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s after start."
 msgstr "開始後に%1$s%2$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s before end."
 msgstr "終了前に%1$s%2$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s after end."
 msgstr "終了後に%1$s%2$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at %2$s."
 msgstr "%1$s に %2$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS etc
+#. %1$s: the reminder type, SMS, email etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at start."
 msgstr "開始時に%1$s"
@@ -271,6 +310,7 @@ msgstr "アラームなし"
 msgid "Edit reminders"
 msgstr "アラームを編集"
 
+#. 'Apply' as button text to confirm the chosen email folder where a new filter rule shall be applied to via a picker dialog.
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
@@ -503,10 +543,7 @@ msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
 "change year or shift-key to change month. Close date-picker by pressing ESC "
 "key."
-msgstr ""
-"カーソルキーで日付を変更できます。カーソルキーと Ctrl キーを同時に押すと年"
-"を、カーソルキーと Shift キーを同時に押すと月を変更できます。Esc キーを押すと"
-"日付の選択を閉じます。"
+msgstr "カーソルキーで日付を変更できます。カーソルキーと Ctrl キーを同時に押すと年を、カーソルキーと Shift キーを同時に押すと月を変更できます。Esc キーを押すと日付の選択を閉じます。"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 msgid "Time"
@@ -520,9 +557,16 @@ msgid "Please enter a valid date"
 msgstr "有効な日付を入力してください"
 
 #: apps/io.ox/backbone/mini-views/helplink.js module:io.ox/core
-#: apps/io.ox/help/main.js module:io.ox/help
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/help/main.js
+#: module:io.ox/help
 msgid "Online help"
 msgstr "オンライン  ヘルプ"
+
+#. label of help icon
+#. %1$s current context (example: Inbox categories)
+#: apps/io.ox/backbone/mini-views/helplink.js module:io.ox/core
+msgid "Online help: %1$s"
+msgstr "オンライン  ヘルプ：%1$s"
 
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
@@ -546,8 +590,10 @@ msgstr "オンライン  ヘルプ"
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js
+#: apps/io.ox/settings/apps/settings/pane.js
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/actions/delete.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/pane.js
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -559,6 +605,7 @@ msgid "Delete"
 msgstr "削除"
 
 #. Used as a button label to enter the "edit mode"
+#. 'Edit' as button text of a modal dialog to confirm to edit your shown name.
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -568,11 +615,12 @@ msgstr "削除"
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
-#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
-#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/main.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/compose/names.js
+#: apps/io.ox/mail/main.js apps/io.ox/multifactor/factorRenderer.js
+#: module:io.ox/core/boot apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal apps/io.ox/settings/accounts/views.js
+#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js
+#: module:io.ox/tasks apps/io.ox/tasks/main.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/pane.js
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -624,19 +672,66 @@ msgstr "%1$s は %3$s アイテム中の %2$s 番目へ移動しました"
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-msgid "Standard timezone"
-msgstr "標準のタイムゾーン"
-
-#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js apps/io.ox/files/favorites.js
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Favorites"
 msgstr "お気に入り"
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
-msgid "All timezones"
-msgstr "すべてのタイムゾーン"
+msgid "Local system timezone"
+msgstr "ローカルシステムのタイムゾーン"
+
+#. Timezon region
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "America"
+msgstr "アメリカ"
+
+#. Timezon region / Atlantic Ocean
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Atlantic"
+msgstr "大西洋"
+
+#. Timezon region
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Europe"
+msgstr "ヨーロッパ"
+
+#. Timezon region
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Africa"
+msgstr "アフリカ"
+
+#. Timezon region / Indian Ocean
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Indian Ocean"
+msgstr "インド洋"
+
+#. Timezon region
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Asia"
+msgstr "アジア"
+
+#. Timezon region
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Australia"
+msgstr "オーストラリア"
+
+#. Timezon region / Pacific Ocean
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Pacific"
+msgstr "太平洋"
+
+#. Timezon region
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "Antarctica"
+msgstr "南極大陸"
+
+#. Timezon region
+#. vcard (electronic business card) field
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+msgid "Other"
+msgstr "その他"
 
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
@@ -646,7 +741,8 @@ msgstr "%1$s ツールバー。移動にはカーソルキーを使用できま�
 
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
-#: apps/io.ox/backbone/views/toolbar.js
+#: apps/io.ox/backbone/views/toolbar.js apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Actions. Use cursor keys to navigate."
 msgstr "カーソルキーで移動できます。"
 
@@ -786,6 +882,7 @@ msgstr "写真を削除"
 #: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js
 #: apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
 #: apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
@@ -804,21 +901,15 @@ msgstr "ダウンロード"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/change-alarms.js
-#: apps/io.ox/calendar/actions/change-folder-alarms.js
-#: apps/io.ox/calendar/actions/change-organizer.js apps/io.ox/calendar/main.js
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/core/desktop.js
-#: apps/io.ox/core/download.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/calendar/main.js apps/io.ox/contacts/main.js
+#: module:io.ox/contacts apps/io.ox/core/desktop.js apps/io.ox/core/download.js
+#: apps/io.ox/core/main/logout.js apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
-#: module:io.ox/core/sub
-#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
-#: module:io.ox/core/viewer apps/io.ox/files/main.js module:io.ox/files
+#: module:io.ox/core/sub apps/io.ox/files/main.js module:io.ox/files
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
-#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
-#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 #: apps/io.ox/mail/compose/actions/extensions.js
-#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/compose/view.js
-#: apps/io.ox/mail/main.js
+#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/main.js
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: module:io.ox/core/boot apps/io.ox/multifactor/views/constants.js
 #: apps/io.ox/tasks/main.js module:io.ox/tasks
@@ -996,12 +1087,14 @@ msgstr "コンパクト"
 msgid "Detailed"
 msgstr "詳細"
 
+#. 'Move' as button text to confirm the destination where a mail folder shall be moved to via a picker dialog.
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js apps/io.ox/core/folder/contextmenu.js
-#: module:io.ox/core apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/contacts/toolbar.js apps/io.ox/core/folder/actions/move.js
+#: module:io.ox/core apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
@@ -1020,17 +1113,13 @@ msgstr "予定のステータスの変更"
 msgid ""
 "This appointment is part of a series. Do you want to confirm the whole "
 "series or just one appointment within the series?"
-msgstr ""
-"この予定は予定の系列の一つであります。 繰り返しの予定全体を編集しますか? また"
-"はこの予定のみを編集しますか?"
+msgstr "この予定は予定の系列の一つであります。 繰り返しの予定全体を編集しますか? またはこの予定のみを編集しますか?"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid ""
 "This appointment is part of a series. Do you want to decline the whole "
 "series or just one appointment within the series?"
-msgstr ""
-"この予定は予定の系列の一つであります。繰り返しを辞退しますか、それともこの予"
-"定のみを辞退しますか？"
+msgstr "この予定は予定の系列の一つであります。繰り返しを辞退しますか、それともこの予定のみを辞退しますか？"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Accept appointment"
@@ -1053,7 +1142,6 @@ msgstr "予定の系列を辞退します。"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Accept"
 msgstr "承諾"
 
@@ -1170,9 +1258,7 @@ msgid ""
 "This appointment is part of a series. Do you want to change your "
 "confirmation for the whole series or just for this appointment within the "
 "series?"
-msgstr ""
-"この予定は予定の系列の一つであります。 予定の系列全体の参加可否を編集します"
-"か? またはこの予定のみを編集しますか?"
+msgstr "この予定は予定の系列の一つであります。 予定の系列全体の参加可否を編集しますか? またはこの予定のみを編集しますか?"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-alarms.js
@@ -1193,18 +1279,15 @@ msgstr "予定の系列を変更"
 msgid "Reminder"
 msgstr "アラーム"
 
+#. 'Change' as text for an apply button to change the reminder of an appointment alert via a modal dialog.
+#. 'Change' as text for an apply button to set a reminder of an appointment alert.
+#. 'Change' as text for a button to apply the change of the organizer of an appointment.
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-folder-alarms.js
 #: apps/io.ox/calendar/actions/change-organizer.js
-#: apps/io.ox/core/folder/picker.js module:io.ox/core
-#: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-#: apps/io.ox/settings/security/sessions/settings/pane.js
-msgid "Ok"
-msgstr "OK"
+#: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
+msgid "Change"
+msgstr "変更"
 
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 msgid "Change appointment reminders"
@@ -1214,9 +1297,7 @@ msgstr "予定のアラームを変更"
 msgid ""
 "This appointment is part of a series. Do you want to change your reminders "
 "for the whole series or just for this appointment within the series?"
-msgstr ""
-"この予定は予定の系列の一つです。 予定の系列全体のアラームを変更しますか? また"
-"はこの予定のみを変更しますか?"
+msgstr "この予定は予定の系列の一つです。 予定の系列全体のアラームを変更しますか? またはこの予定のみを変更しますか?"
 
 #. %1$s:  is the calendar's name
 #: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
@@ -1252,16 +1333,6 @@ msgid "Add a message to the notification email for the other participants."
 msgstr "他の参加者のためにメッセージを通知メールに追加する"
 
 #: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/delete.js
-#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/core/boot/i18n.js
-#: module:io.ox/core/boot apps/io.ox/core/relogin.js module:io.ox/core
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "Password"
-msgstr "パスワード"
-
-#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
 msgid "Organizer changed"
 msgstr "開催者の変更"
 
@@ -1273,18 +1344,14 @@ msgstr "共有カレンダーの予定"
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
 "will generally be created on behalf of the owner."
-msgstr ""
-"選択したカレンダーは%1$sで共有されています。共有カレンダーの予定は、所有者の"
-"代理で通常作成されます。"
+msgstr "選択したカレンダーは%1$sで共有されています。共有カレンダーの予定は、所有者の代理で通常作成されます。"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "Do you really want to create an appointment <b>on behalf of the folder "
 "owner</b> or do you want to create an appointment <b>with the folder owner</"
 "b> in your own calendar?"
-msgstr ""
-"<b>共有カレンダーの所有者の代理</b>として予定を作成しますか? または自分のカレ"
-"ンダーに\"予定を作成し<b>所有者を招待</b>しますか?"
+msgstr "<b>共有カレンダーの所有者の代理</b>として予定を作成しますか? または自分のカレンダーに\"予定を作成し<b>所有者を招待</b>しますか?"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Invite owner"
@@ -1302,29 +1369,32 @@ msgstr "パブリックカレンダーの予定"
 msgid ""
 "The selected calendar \"%1$s\" is public. Do you really want to create an "
 "appointment in this calendar?"
-msgstr ""
-"選択されたカレンダー\"%1$s\"はパブリックカレンダーです。このカレンダーに予定"
-"を作成しますか？"
+msgstr "選択されたカレンダー\"%1$s\"はパブリックカレンダーです。このカレンダーに予定を作成しますか？"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Create in public calendar"
 msgstr "パブリックカレンダーに作成"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/relogin.js module:io.ox/core
+#: apps/io.ox/files/share/wizard.js module:io.ox/files
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+msgid "Password"
+msgstr "パスワード"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid ""
 "This appointment is part of a series. Do you want to delete all appointments "
 "of the series or just this appointment?"
-msgstr ""
-"この予定は予定の系列の一つです。 予定の系列全体を削除しますか? またはこの予定"
-"のみを削除しますか?"
+msgstr "この予定は予定の系列の一つです。 予定の系列全体を削除しますか? またはこの予定のみを削除しますか?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid ""
 "This appointment is part of a series. Do you want to delete this and all "
 "future appointments of the series or just this appointment?"
-msgstr ""
-"この予定は予定の系列の一つです。この予定およびこれからの予定系列全体を削除し"
-"ますか? またはこの予定のみを削除しますか?"
+msgstr "この予定は予定の系列の一つです。この予定およびこれからの予定系列全体を削除しますか? またはこの予定のみを削除しますか?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid "Do you really want to delete this appointment?"
@@ -1353,6 +1423,7 @@ msgstr "Google カレンダー"
 
 #: apps/io.ox/calendar/actions/subscribe-google.js module:io.ox/calendar
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/files/actions/basic-authentication-account.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account added successfully"
@@ -1385,89 +1456,22 @@ msgstr "登録"
 msgid "iCal feed has been imported successfully"
 msgstr "iCalフィードは正しくインポートされました。"
 
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/settings/pane.js
-msgid "Subscribe shared calendars"
-msgstr "共有カレンダーを登録"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules
-#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
-#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/settings/editLocale.js apps/io.ox/editor/main.js
-#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
-#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/mailfilter/settings/filter.js
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
-#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
-#: module:io.ox/core/boot apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/plugins/administration/groups/settings/edit.js
-#: apps/plugins/administration/resources/settings/edit.js
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-#: apps/plugins/portal/mail/register.js apps/plugins/portal/rss/register.js
-#: module:io.ox/portal apps/plugins/portal/tumblr/register.js
-msgid "Save"
-msgstr "保存"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules
-msgid "subscribe to calendar"
-msgstr "カレンダーに登録"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-msgid "Sync via DAV"
-msgstr "DAVで同期"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-msgid "sync via DAV"
-msgstr "DAVで同期"
-
-#. shown when a download of calendar data is requested (has header "Included calendars ...")
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
-msgid "Public calendars"
-msgstr "パブリックカレンダー"
-
-#. shown when a download of calendar data is requested (has header "Included calendars ...")
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
-msgid "Shared calendars"
-msgstr "共有カレンダー"
-
-#. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/common-extensions.js
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/listview.js
-#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
-#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
-msgid "Private"
-msgstr "プライベート"
-
-#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Hidden calendars"
-msgstr "非表示のカレンダー"
-
 #: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
 msgid "no color"
 msgstr "色なし"
+
+#. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/settings/pane.js
+#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
+msgid "Private"
+msgstr "プライベート"
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -1546,6 +1550,7 @@ msgstr "リソースの競合があります"
 
 #: apps/io.ox/calendar/conflicts/conflictList.js
 #: module:io.ox/calendar/conflicts/conflicts
+#: apps/io.ox/core/tk/filestorageUtil.js module:io.ox/core
 msgid "Ignore conflicts"
 msgstr "競合を無視"
 
@@ -1571,11 +1576,47 @@ msgstr "予定を編集"
 msgid "Create appointment"
 msgstr "予定を作成"
 
+#. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.
+#. 'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/settings/editLocale.js apps/io.ox/core/sub/sharedFolders.js
+#: module:io.ox/calendar apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
+#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/plugins/administration/groups/settings/edit.js
+#: apps/plugins/administration/resources/settings/edit.js
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#: apps/plugins/portal/mail/register.js apps/plugins/portal/rss/register.js
+#: module:io.ox/portal apps/plugins/portal/tumblr/register.js
+msgid "Save"
+msgstr "保存"
+
+#. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.
+#. 'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
+#. 'Create' as button text of a modal dialog to confirm to create a new XING-Account
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
 #: apps/plugins/administration/resources/settings/edit.js
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#: apps/plugins/portal/tumblr/register.js module:io.ox/portal
+#: apps/plugins/portal/xing/register.js
 msgid "Create"
 msgstr "作成"
 
@@ -1615,6 +1656,11 @@ msgstr "開始日時"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Start time"
 msgstr "開始時刻"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/timezone-dialog.js
+msgid "Change timezone"
+msgstr "タイムゾーンを変更"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "End time"
@@ -1660,9 +1706,7 @@ msgstr "ユーザー設定カラー"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid ""
 "You are using a shared calendar. The calendar owner was added as organizer."
-msgstr ""
-"共有カレンダーを使用しています。カレンダーの所有者が開催者として追加されまし"
-"た。"
+msgstr "共有カレンダーを使用しています。カレンダーの所有者が開催者として追加されました。"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "You are no longer using a shared calendar. You were added as organizer."
@@ -1676,6 +1720,28 @@ msgstr "パブリックカレンダーを使用していません。開催者と
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My calendars"
 msgstr "カレンダー"
+
+#. shown when a download of calendar data is requested (has header "Included calendars ...")
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
+msgid "Public calendars"
+msgstr "パブリックカレンダー"
+
+#. shown when a download of calendar data is requested (has header "Included calendars ...")
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
+msgid "Shared calendars"
+msgstr "共有カレンダー"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Hidden calendars"
+msgstr "非表示のカレンダー"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
@@ -1739,8 +1805,7 @@ msgstr "添付ファイル"
 #: apps/io.ox/contacts/edit/view.js apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
-msgstr ""
-"<b class=\"dndignore\">添付するファイル</b> をここにドロップしてアップロード"
+msgstr "<b class=\"dndignore\">添付するファイル</b> をここにドロップしてアップロード"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1769,8 +1834,24 @@ msgstr "説明をコピーしました"
 msgid "Appointment"
 msgstr "予定"
 
-#. "Discard changes" appears in combination with "Cancel" (this action)
+#. 'Discard changes' as header text of an appointment to confirm to discard changes via a modal dialog.
 #. Translation must be distinguishable for the user
+#. 'Discard changes' as the header of the modal dialog to cancel the distribution list edit window.
+#. "Discard changes" appears as a header of the modal dialog to discard changes while editing a contact
+#. 'Discard changes' as modal dialog header to confirm to discard changes of a note.
+#. 'Discard changes' as header of a modal dialog to confirm to discard changes of a new or edited task.
+#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/tasks/edit/main.js module:io.ox/tasks
+msgid "Discard changes"
+msgstr "変更を破棄"
+
+#. Translation must be distinguishable for the user
+#. 'Discard changes' as the header of the modal dialog to cancel the distribution list edit window.
+#. "Discard changes" appears as a header of the modal dialog to discard changes while editing a contact
+#. 'Discard changes' as modal dialog header to confirm to discard changes of a note.
+#. 'Discard changes' as header of a modal dialog to confirm to discard changes of a new or edited task.
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/editor/main.js
@@ -1795,14 +1876,6 @@ msgstr "開始日のタイムゾーン"
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "End date timezone"
 msgstr "終了日のタイムゾーン"
-
-#: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
-msgid "Change timezone"
-msgstr "タイムゾーンを変更"
-
-#: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
-msgid "Change"
-msgstr "変更"
 
 #. Will be used as aria lable for the screen reader to tell the user which color/category the appointment within the calendar has.
 #: apps/io.ox/calendar/extensions.js module:io.ox/calendar
@@ -1918,7 +1991,6 @@ msgid "Reject changes"
 msgstr "変更を拒否"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Ignore"
 msgstr "無視"
 
@@ -1971,15 +2043,14 @@ msgid "You declined this appointment"
 msgstr "この予定を辞退しました。"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You tentatively accepted this invitation"
-msgstr "この招待を仮承諾しました"
+msgid "You tentatively accepted this appointment"
+msgstr "この予定を仮承諾しました。"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the appointment has been "
 "deleted."
-msgstr ""
-"確認ステータスの更新に失敗しました。予定が削除されている可能性があります。"
+msgstr "確認ステータスの更新に失敗しました。予定が削除されている可能性があります。"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains a task"
@@ -2005,8 +2076,7 @@ msgstr "このタスクを仮承諾しました"
 msgid ""
 "Failed to update confirmation status; most probably the task has been "
 "deleted."
-msgstr ""
-"確認ステータスの更新に失敗しました。タスクが削除されている可能性があります。"
+msgstr "確認ステータスの更新に失敗しました。タスクが削除されている可能性があります。"
 
 #. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
 #. This fragment appears within a long string for screen readers
@@ -2138,9 +2208,7 @@ msgstr "アイテムが見つかりません。"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/mail/main.js
 #: module:io.ox/mail apps/io.ox/settings/main.js module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
-msgstr ""
-"この問題が解決されない場合、アプリケーションは正常に動作しない可能性がありま"
-"す。"
+msgstr "この問題が解決されない場合、アプリケーションは正常に動作しない可能性があります。"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -2178,8 +2246,7 @@ msgstr "上限サイズ %1$s を超えるためファイルをアップロード
 #. error text is displayed when an appointment is marked as secret but blocking a ressource (e.g. a conference room)
 #: apps/io.ox/calendar/model.js module:io.ox/calendar
 msgid "You cannot mark the appointment as secret, when blocking a ressource."
-msgstr ""
-"リソースをブロ臆している場合は、予定に秘密の印をつけることができません。"
+msgstr "リソースをブロ臆している場合は、予定に秘密の印をつけることができません。"
 
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Previous Month"
@@ -2193,6 +2260,17 @@ msgstr "翌月"
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "%1$s"
 msgstr "%1$s"
+
+#. Error message shown to user if there are too many selected appointments in a timeframe
+#: apps/io.ox/calendar/perspective.js module:io.ox/calendar
+msgid ""
+"Your current selection contains too many appointments for the chosen "
+"timeframe."
+msgstr "現在の選択は、選択されたタイムフレームに対して予定が多すぎます。"
+
+#: apps/io.ox/calendar/perspective.js module:io.ox/calendar
+msgid "Appointment was changed in the meantime and was updated accordingly."
+msgstr "予定は既に変更され、更新されました。"
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
@@ -2329,6 +2407,20 @@ msgid ""
 "accepted or declined"
 msgstr "予定が承諾または辞退された場合に自動的に招待メールを削除する"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Reminders"
+msgstr "アラーム"
+
+#. label for a checkbox that determines if we show reminders for appointments that are already over
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Show reminders for past appointments"
+msgstr "過去の予定のアラームを表示"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe shared calendars"
+msgstr "共有カレンダーを登録"
+
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
 msgid "Add calendar"
@@ -2345,6 +2437,12 @@ msgstr "開始"
 #: module:io.ox/calendar/settings/schedjoules
 msgid "The integration of the subscribed calendars might take a while."
 msgstr "登録カレンダーの統合には多少時間がかかることがあります。"
+
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "subscribe to calendar"
+msgstr "カレンダーに登録"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
@@ -2377,6 +2475,7 @@ msgstr "お気に入りのタイムゾーンを選択する"
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js
 #: module:io.ox/core apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add"
@@ -2919,9 +3018,7 @@ msgstr "系列を編集"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
 "Do you want to edit this and all future appointments or the whole series?"
-msgstr ""
-"この予定とこれからの予定すべてを編集しますか、それともシリーズ全体を編集しま"
-"すか？"
+msgstr "この予定とこれからの予定すべてを編集しますか、それともシリーズ全体を編集しますか？"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Series"
@@ -2935,9 +3032,7 @@ msgstr "これからのすべての予定を編集"
 msgid ""
 "Do you want to edit this and all future appointments or just this "
 "appointment within the series?"
-msgstr ""
-"この予定とこれからの予定すべてを編集しますか、それとも全体の中のこの予定のみ"
-"を編集しますか？"
+msgstr "この予定とこれからの予定すべてを編集しますか、それとも全体の中のこの予定のみを編集しますか？"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Appointment is private"
@@ -3037,6 +3132,10 @@ msgid "Create all-day appointment"
 msgstr "終日の予定を作成"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "Standard timezone"
+msgstr "標準のタイムゾーン"
+
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
 msgstr "お気に入りを管理"
 
@@ -3131,6 +3230,19 @@ msgid "This distribution list has been added to the portal"
 msgstr "この連絡先グループをポータルに追加しました"
 
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
+msgid "Delete items"
+msgstr "項目を削除"
+
+#: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
+msgid "Delete distribution list"
+msgstr "連絡先グループを削除"
+
+#: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
+#: apps/io.ox/contacts/toolbar.js
+msgid "Delete contact"
+msgstr "連絡先を削除"
+
+#: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 msgid "Do you really want to delete these items?"
 msgstr "これらのアイテムを削除しますか?"
 
@@ -3165,9 +3277,7 @@ msgstr "印刷レイアウトの選択"
 msgid ""
 "This dialog is limited to %1$d entries and your address book exceeds this "
 "limitation. Therefore, some entries are not listed."
-msgstr ""
-"このダイアログのエントリーは%1$dに制限されています。お使いのアドレス帳はこの"
-"制限を超えているので、記載されないエントリーがあります。"
+msgstr "このダイアログのエントリーは%1$dに制限されています。お使いのアドレス帳はこの制限を超えているので、記載されないエントリーがあります。"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/contacts/common-extensions.js apps/io.ox/contacts/main.js
@@ -3183,15 +3293,15 @@ msgstr "アドレス帳"
 
 #. shown when a download of contact data is requested (has header "Included address books ...")
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/contacts/settings/pane.js apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core apps/io.ox/settings/personalData/settings/pane.js
 msgid "Public address books"
 msgstr "パブリックアドレス帳"
 
 #. shown when a download of contact data is requested (has header "Included address books ...")
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/settings/personalData/settings/pane.js
+#: apps/io.ox/contacts/settings/pane.js apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core apps/io.ox/settings/personalData/settings/pane.js
 msgid "Shared address books"
 msgstr "共有アドレス帳"
 
@@ -3230,7 +3340,8 @@ msgid "Empty"
 msgstr "(空)"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
 #: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
@@ -3314,9 +3425,7 @@ msgstr "連絡先を追加"
 msgid ""
 "To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
-msgstr ""
-"連絡先の手動による追加には、有効なメールアドレスを入力してください (例:john."
-"doe@example.com または \"John Doe\" <jd@example.com>)"
+msgstr "連絡先の手動による追加には、有効なメールアドレスを入力してください (例:john.doe@example.com または \"John Doe\" <jd@example.com>)"
 
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution List"
@@ -3407,8 +3516,7 @@ msgid ""
 "%2$s %3$s\n"
 "%4$s\n"
 "%5$s"
-msgstr ""
-"%1$s\n"
+msgstr "%1$s\n"
 "%2$s %3$s\n"
 "%4$s\n"
 "%5$s"
@@ -3461,6 +3569,7 @@ msgstr "タイトル"
 
 #: apps/io.ox/contacts/edit/view.js module:io.ox/contacts
 #: apps/io.ox/contacts/model.js
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
 msgid "Display name"
 msgstr "表示名"
 
@@ -3903,6 +4012,21 @@ msgid "Couldn't load contact data."
 msgstr "連絡先のデータを読み込めませんでした。"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid ""
+"The subscription could not be updated due to an error and must be recreated."
+msgstr "登録はエラーのために更新できなかったので、再作成してください。"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contacts account error"
+msgstr "連絡先アカウントエラー"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Edit subscription"
+msgstr "登録を編集"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Contacts"
 msgstr "連絡先"
 
@@ -3990,11 +4114,6 @@ msgstr "自宅"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-msgid "Other"
-msgstr "その他"
-
-#. vcard (electronic business card) field
-#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "メッセンジャー"
@@ -4008,10 +4127,8 @@ msgstr "生年月日"
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
-msgstr[0] ""
-"注: 電話番号が登録されていないため、表示されない連絡先が一つあります"
-msgstr[1] ""
-"注: 電話番号が登録されていないため、表示されない連絡先が%1$dつあります"
+msgstr[0] "注: 電話番号が登録されていないため、表示されない連絡先が一つあります"
+msgstr[1] "注: 電話番号が登録されていないため、表示されない連絡先が%1$dつあります"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
@@ -4069,9 +4186,14 @@ msgstr "グローバルアドレス帳を表示"
 msgid "Link postal addresses with map service"
 msgstr "住所とマップサービスのリンク"
 
-#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-msgid "Delete contact"
-msgstr "連絡先を削除"
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Hidden address books"
+msgstr "非表示のアドレス帳"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Subscribe shared address books"
+msgstr "共有アドレス帳を登録"
 
 #. Name with title
 #. %1$s is the first name
@@ -4104,15 +4226,11 @@ msgstr "年齢：%1$d"
 #. '%1$s contact's display name
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
 msgid "%1$s could not be added as the contact has no valid email field."
-msgstr ""
-"連絡先が有効なメールフィールドではないため、%1$sを追加することができませんで"
-"した。"
+msgstr "連絡先が有効なメールフィールドではないため、%1$sを追加することができませんでした。"
 
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
 msgid "Some contacts could not be added as they have no valid email field."
-msgstr ""
-"複数の連絡先が有効なメールフィールドではないため、追加することができませんで"
-"した。"
+msgstr "複数の連絡先が有効なメールフィールドではないため、追加することができませんでした。"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Distribution list with 1 entry"
@@ -4161,9 +4279,7 @@ msgstr "写真が許容ファイルサイズ%1$sを超過しています。"
 msgid ""
 "The file type \"%1$s\" cannot be used as a contact photo. Supported file "
 "types are JPEG, GIF, BMP, and PNG."
-msgstr ""
-"ファイルタイプ\"%1$s\" は連絡先写真として使用できません。サポートされている"
-"ファイルタイプはJPG、GIF、BMP、PNGです。"
+msgstr "ファイルタイプ\"%1$s\" は連絡先写真として使用できません。サポートされているファイルタイプはJPG、GIF、BMP、PNGです。"
 
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid "Click to add photo"
@@ -4245,9 +4361,7 @@ msgstr "言語："
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
 "No connection to server. Please check your internet connection and retry."
-msgstr ""
-"サーバーへの接続がありません。インターネット接続をチェックして、もう一度やり"
-"直してください。"
+msgstr "サーバーへの接続がありません。インターネット接続をチェックして、もう一度やり直してください。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please enter your credentials."
@@ -4291,14 +4405,12 @@ msgstr "このプラットフォームは現在サポートされていません
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
 "Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
-msgstr ""
-"サポートをChrome %1$d、Firefox %2$d、IE %3$d、Safari %4$d で開始します。"
+msgstr "サポートをChrome %1$d、Firefox %2$d、IE %3$d、Safari %4$d で開始します。"
 
 #. 'Google Chrome' is a brand and should not be translated
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "For best results we recommend using Google Chrome for Android."
-msgstr ""
-"最良の結果を得るには、Android用Google Chromeを使用することをお勧めします。"
+msgstr "最良の結果を得るには、Android用Google Chromeを使用することをお勧めします。"
 
 #. The missing word at the end of the sentence ('Play Store') will be injected later by script
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -4330,8 +4442,7 @@ msgstr "自動的にログアウトしました"
 msgid ""
 "Unsupported Preview - Certain functions disabled and stability not assured "
 "until general release later this year"
-msgstr ""
-"プレビュー版 - いくつかの機能は無効となり、また安定性を保証していません"
+msgstr "プレビュー版 - いくつかの機能は無効となり、また安定性を保証していません"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Offline mode"
@@ -4339,8 +4450,7 @@ msgstr "オフラインモード"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
-msgstr ""
-"ご利用のブラウザの Cookie 機能が無効になっています。有効にしてください。"
+msgstr "ご利用のブラウザの Cookie 機能が無効になっています。有効にしてください。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
@@ -4348,8 +4458,7 @@ msgstr "接続がタイムアウトです。ページをもう一度読み込ん
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Something went wrong. Please close this browser tab and try again."
-msgstr ""
-"エラーが発生しました。このブラウザタブを閉じて、もう一度やり直してください。"
+msgstr "エラーが発生しました。このブラウザタブを閉じて、もう一度やり直してください。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection error"
@@ -4372,10 +4481,7 @@ msgid ""
 "This is a browser feature for developers. If you were asked to copy and "
 "paste anything here, somebody might want to take over your account. Do not "
 "enter any script code without knowing what it does."
-msgstr ""
-"これは開発者用のブラウザ機能です。ここにデータを貼り付ける場合、何者かにより"
-"アカウントを乗っ取られる可能性があります。何を行うかあなたが理解していない"
-"データを入力しないでください。"
+msgstr "これは開発者用のブラウザ機能です。ここにデータを貼り付ける場合、何者かによりアカウントを乗っ取られる可能性があります。何を行うかあなたが理解していないデータを入力しないでください。"
 
 #. number of selected item
 #. %1$s is the number surrounded by a tag
@@ -4424,9 +4530,7 @@ msgstr "購入!"
 msgid ""
 "Failed to automatically save current stage of work. Please save your work to "
 "avoid data loss in case the browser closes unexpectedly."
-msgstr ""
-"現在のファイルの自動保存に失敗しました。ブラウザが予期せずに終了してもデータ"
-"を失わないよう、ファイルを保存してください。"
+msgstr "現在のファイルの自動保存に失敗しました。ブラウザが予期せずに終了してもデータを失わないよう、ファイルを保存してください。"
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Could not get a default folder for this application."
@@ -4448,9 +4552,7 @@ msgstr "検索をキャンセル"
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
-msgstr ""
-"アプリケーションの起動に失敗しました。接続に問題がある可能性があります。もう"
-"一度やり直してください。"
+msgstr "アプリケーションの起動に失敗しました。接続に問題がある可能性があります。もう一度やり直してください。"
 
 #: apps/io.ox/core/download.js module:io.ox/core
 msgid "Download infected file"
@@ -4616,10 +4718,7 @@ msgid ""
 "A public folder is used for content that is of common interest for all "
 "users. To allow other users to read or edit the contents, you have to set "
 "the respective permissions for the public folder."
-msgstr ""
-"パブリックフォルダーはすべてのユーザーに関連するコンテンツに使用されます。他"
-"のユーザーからのコンテンツの表示または編集を可能にするには、必要な権限をパブ"
-"リックフォルダーに設定する必要があります。"
+msgstr "パブリックフォルダーはすべてのユーザーに関連するコンテンツに使用されます。他のユーザーからのコンテンツの表示または編集を可能にするには、必要な権限をパブリックフォルダーに設定する必要があります。"
 
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "Archive messages"
@@ -4666,6 +4765,13 @@ msgstr "すべてのファイルを削除しました"
 msgid "The folder has been emptied"
 msgstr "フォルダーを空にしました"
 
+#. 'Delete all messages' as header et´´text to confirm to empty a selected folder and delete all messages via a modal dialog.
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js
+msgid "Delete all messages"
+msgstr "すべてのメッセージを削除する"
+
+#. 'Delete all messages' as header et´´text to confirm to empty a selected folder and delete all messages via a modal dialog.
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Do you really want to empty folder \"%s\"?"
 msgstr "フォルダー \"%s\" の中身を削除しますか？"
@@ -4679,6 +4785,10 @@ msgstr "フォルダーが空です。"
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe to IMAP folders"
 msgstr "IMAP フォルダーに登録"
+
+#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+msgid "Refresh folders"
+msgstr "フォルダーを最新の状態に更新"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
@@ -4747,9 +4857,15 @@ msgstr "プロパティ"
 msgid ""
 "Could not delete folder. This can be due to insufficient permissions in your "
 "trash folder or this might be a special folder that cannot be deleted."
-msgstr ""
-"フォルダーを削除できませんでした。ごみ箱フォルダーの権限が不十分か、削除がで"
-"きない特別なフォルダーの可能性があります。"
+msgstr "フォルダーを削除できませんでした。ごみ箱フォルダーの権限が不十分か、削除ができない特別なフォルダーの可能性があります。"
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+msgid "Delete calendar"
+msgstr "カレンダーを削除"
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+msgid "Delete folder"
+msgstr "フォルダーを削除"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete calendar \"%s\"?"
@@ -4762,16 +4878,12 @@ msgstr "フォルダー \"%s\" を削除しますか？"
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid ""
 "This calendar is shared with others. It won't be available for them any more."
-msgstr ""
-"このカレンダーは他のユーザーと共有されています。共有ユーザーにとって利用不可"
-"能になります。"
+msgstr "このカレンダーは他のユーザーと共有されています。共有ユーザーにとって利用不可能になります。"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid ""
 "This folder is shared with others. It won't be available for them any more."
-msgstr ""
-"このフォルダーは他のユーザーと共有しています。共有ユーザーから利用不可能とな"
-"ります。"
+msgstr "このフォルダーは他のユーザーと共有しています。共有ユーザーから利用不可能となります。"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
@@ -4839,10 +4951,6 @@ msgstr "古いメッセージをアーカイブ"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Empty trash"
 msgstr "ゴミ箱を空にする"
-
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-msgid "Delete all messages"
-msgstr "すべてのメッセージを削除する"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js module:io.ox/files
@@ -4921,18 +5029,41 @@ msgid "My shares"
 msgstr "自分の共有ファイル"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Shared task folders"
+msgstr "共有のタスクフォルダー"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Public tasks folders"
+msgstr "パブリックタスクフォルダー"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Shared tasks folders"
+msgstr "共有のタスクフォルダー"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Hidden tasks folders"
+msgstr "非表示のタスクフォルダー"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My folders"
 msgstr "マイフォルダー"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/files/actions/basic-authentication-account.js
 msgid "Add storage account"
 msgstr "ストレージアカウントを追加"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Subscribe to address book"
-msgstr "アドレス帳に登録"
+msgid "Subscribe address book"
+msgstr "アドレス帳を登録"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe shared address book"
+msgstr "共有アドレス帳を登録"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "View all attachments"
@@ -4949,8 +5080,8 @@ msgid "Synchronize with your tablet or smartphone"
 msgstr "タブレットまたはスマートフォンに同期"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Hidden address books"
-msgstr "非表示のアドレス帳"
+msgid "Personal address book"
+msgstr "個人用アドレス帳"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/plugins/portal/tasks/register.js module:plugins/portal
@@ -4968,6 +5099,14 @@ msgstr "共有のタスク"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden tasks"
 msgstr "非表示のタスク"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Personal folder"
+msgstr "個人用フォルダ"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe shared folder"
+msgstr "共有フォルダーを登録"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Personal calendar"
@@ -5063,6 +5202,16 @@ msgid "Actions for %1$s"
 msgstr "%1$s に対するアクション"
 
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
+#: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
+msgid "Ok"
+msgstr "OK"
+
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
 #: module:io.ox/mailfilter
 msgid "Select folder"
@@ -5119,9 +5268,7 @@ msgstr "CSVファイルについての注意："
 msgid ""
 "The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
-msgstr ""
-"CSV ファイルの最初の行にはカラム名が指定されている必要があります。サポートさ"
-"れている区切り文字はコンマまたはセミコロンです。"
+msgstr "CSV ファイルの最初の行にはカラム名が指定されている必要があります。サポートされている区切り文字はコンマまたはセミコロンです。"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Learn more"
@@ -5131,9 +5278,7 @@ msgstr "詳細はこちら"
 msgid ""
 "Ignoring existing appointments is helpful to import public holiday "
 "calendars, for example."
-msgstr ""
-"既存の予定を無視するのは、例えば、祝日付きのカレンダーをインポートする際に役"
-"に立ちます。"
+msgstr "既存の予定を無視するのは、例えば、祝日付きのカレンダーをインポートする際に役に立ちます。"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
@@ -5287,6 +5432,7 @@ msgstr "強制ログアウト"
 msgid "Logout failed."
 msgstr "ログアウトに失敗しました。"
 
+#. 'Sign out' and 'Cancel' as button texts of a modal dialog to confirm to sign out.
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 #: apps/io.ox/core/main/topbar_right.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
@@ -5297,22 +5443,10 @@ msgstr "ログアウト"
 msgid "Are you sure you want to sign out from all related browser tabs?"
 msgstr "すべての関連ブラウザタブからログアウトしますか？"
 
+#. 'Sign out' and 'Cancel' as button texts of a modal dialog to confirm to sign out.
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "保存されていない編集中のアイテムは失われます。ログアウトしますか?"
-
-#. folder permissions - Is Admin? NO
-#: apps/io.ox/core/main/logout.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js
-msgid "No"
-msgstr "いいえ"
-
-#. folder permissions - Is Admin? YES
-#: apps/io.ox/core/main/logout.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
-#: module:io.ox/files
-msgid "Yes"
-msgstr "はい"
 
 #: apps/io.ox/core/main/offline.js module:io.ox/core
 msgid "Offline"
@@ -5392,9 +5526,7 @@ msgstr "サポート"
 msgid ""
 "You forgot to sign out last time. Always use the sign-out button when you "
 "finished your work."
-msgstr ""
-"前回ログアウトしませんでした。作業終了時にはログアウト ボタンを使ってくださ"
-"い。"
+msgstr "前回ログアウトしませんでした。作業終了時にはログアウト ボタンを使ってください。"
 
 #. %1$s is the product name
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
@@ -5402,18 +5534,14 @@ msgstr ""
 msgid ""
 "Did you know that you can take %1$s with you? Just click this icon and "
 "choose 'Connect your device' from the menu."
-msgstr ""
-"%1$sを使えることを知っていますか？アイコンをクリックして、メニューから'デバイ"
-"スの接続'を選択してください。"
+msgstr "%1$sを使えることを知っていますか？アイコンをクリックして、メニューから'デバイスの接続'を選択してください。"
 
 #. %1$s is the filename
 #: apps/io.ox/core/main/warning.js module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
-msgstr ""
-"フォルダー \"%1$s\" は非表示となります。 このフォルダーにアクセスするには、設"
-"定の \"非表示のフォルダーとファイルを表示\" を有効にします。"
+msgstr "フォルダー \"%1$s\" は非表示となります。 このフォルダーにアクセスするには、設定の \"非表示のフォルダーとファイルを表示\" を有効にします。"
 
 #: apps/io.ox/core/media-devices.js module:io.ox/core
 msgid ""
@@ -5424,9 +5552,7 @@ msgstr "現在お使いのデバイスに利用できる対応メディアデバ
 msgid ""
 "Access to your media devices has been denied. Please refer to your browser "
 "help pages for how to reset authorization."
-msgstr ""
-"ご利用のメディアデバイスへのアクセスが拒否されました。ブラウザのヘルプページ"
-"を参照して、認証をリセットしてください。"
+msgstr "ご利用のメディアデバイスへのアクセスが拒否されました。ブラウザのヘルプページを参照して、認証をリセットしてください。"
 
 #: apps/io.ox/core/media-devices.js module:io.ox/core
 msgid "This feature isn't available for non-secure connections."
@@ -5451,8 +5577,7 @@ msgstr "不明 %1$s"
 #: apps/io.ox/core/media-devices.js module:io.ox/core
 msgid ""
 "Unfortunately your browser doesn't support listing available media devices."
-msgstr ""
-"ご利用のブラウザはご利用可能なメディアデバイス一覧をサポートしていません。"
+msgstr "ご利用のブラウザはご利用可能なメディアデバイス一覧をサポートしていません。"
 
 #. %1$d number of notifications in notification area
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -5590,6 +5715,17 @@ msgstr "自分のオブジェクトのみを削除"
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete all objects"
 msgstr "すべてのオブジェクトを削除"
+
+#. folder permissions - Is Admin? NO
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "No"
+msgstr "いいえ"
+
+#. folder permissions - Is Admin? YES
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/util.js module:io.ox/files
+msgid "Yes"
+msgstr "はい"
 
 #. Role: Owner (same as admin)
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -5841,9 +5977,7 @@ msgstr "統計を再読み込み"
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
 "gray graph shows a trivial network ping to recognize slow connections."
-msgstr ""
-"青色の線はリクエストにかかった時間の分布をパーセントで表しています。灰色の線"
-"は低速な接続を検出する Ping 応答を表しています。"
+msgstr "青色の線はリクエストにかかった時間の分布をパーセントで表しています。灰色の線は低速な接続を検出する Ping 応答を表しています。"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Errors"
@@ -5873,9 +6007,7 @@ msgstr "失われたリクエストはありません"
 msgid ""
 "Some settings (e.g. language and timezone) require a page reload or relogin "
 "to take effect."
-msgstr ""
-"設定（言語やタイムゾーンなど）によっては、設定変更を有効にするために、ページ"
-"のリロードまたは再ログインが必要です。"
+msgstr "設定（言語やタイムゾーンなど）によっては、設定変更を有効にするために、ページのリロードまたは再ログインが必要です。"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Customized"
@@ -5987,9 +6119,7 @@ msgstr "今ブラウザ権限を管理する"
 msgid ""
 "Please check your browser settings and enable desktop notifications for this "
 "domain"
-msgstr ""
-"ブラウザの設定を確認して、このドメインに対するデスクトップ通知を有効にしてく"
-"ださい"
+msgstr "ブラウザの設定を確認して、このドメインに対するデスクトップ通知を有効にしてください"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Automatic opening of notification area"
@@ -6078,9 +6208,7 @@ msgid ""
 "Note: Refreshing this subscription will replace the calendar content with "
 "the external content. Changes you have made inside appsuite will be "
 "overwritten"
-msgstr ""
-"注: この登録を更新すると、カレンダーの内容が外部のカレンダーの内容に入れ替わ"
-"ります。OX App Suite で変更した内容は上書きされます"
+msgstr "注: この登録を更新すると、カレンダーの内容が外部のカレンダーの内容に入れ替わります。OX App Suite で変更した内容は上書きされます"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
@@ -6102,9 +6230,7 @@ msgstr "登録を最新の状態に更新"
 msgid ""
 "A refresh takes some time, so please be patient, while the refresh runs in "
 "the background. Only one refresh per subscription and per session is allowed."
-msgstr ""
-"更新には時間がかかります。バックグラウンドで更新を実行している間、しばらくお"
-"待ちください。更新は、登録およびセッションごとに １回しかできません。"
+msgstr "更新には時間がかかります。バックグラウンドで更新を実行している間、しばらくお待ちください。更新は、登録およびセッションごとに １回しかできません。"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid ""
@@ -6140,6 +6266,18 @@ msgstr "公開"
 #: apps/io.ox/core/sub/settings/register.js
 msgid "Subscriptions"
 msgstr "登録"
+
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "Sync via DAV"
+msgstr "DAVで同期"
+
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "sync via DAV"
+msgstr "DAVで同期"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+msgid "Subscribe to address book"
+msgstr "アドレス帳に登録"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "No subscription services available for this module"
@@ -6197,9 +6335,7 @@ msgstr "インライン挿入する画像をここにドロップ"
 msgid ""
 "Please only drop images here. If you want to send other files, you can send "
 "them as attachments."
-msgstr ""
-"ここには画像ファイルしかドロップできません。他の種類のファイルは添付ファイル"
-"として送信できます。"
+msgstr "ここには画像ファイルしかドロップできません。他の種類のファイルは添付ファイルとして送信できます。"
 
 #: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
 msgid "Rich Text Area. Press ALT-F10 for toolbar"
@@ -6209,13 +6345,27 @@ msgstr "リッチテキストエリア: ツールバーの表示には ALT-F10 �
 msgid "Clear"
 msgstr "クリア"
 
+#: apps/io.ox/core/tk/doc-converter-utils.js module:io.ox/core
+msgid "An error occurred while loading the document so it cannot be displayed."
+msgstr "ドキュメントの読み込み中にエラーが発生したため、表示できません。"
+
+#: apps/io.ox/core/tk/doc-converter-utils.js module:io.ox/core
+msgid ""
+"An error occurred while converting the document so it cannot be displayed."
+msgstr "ドキュメントの変換中にエラーが発生したため、表示できません。"
+
+#: apps/io.ox/core/tk/doc-converter-utils.js module:io.ox/core
+msgid "This document is password protected and cannot be displayed."
+msgstr "本ドキュメントはパスワードで保護されており、表示できません。"
+
+#: apps/io.ox/core/tk/doc-converter-utils.js module:io.ox/core
+msgid ""
+"The PDF could not be exported. The file name contains invalid characters:"
+msgstr "PDFをエクスポートできません。ファイル名に無効な文字が含まれています"
+
 #: apps/io.ox/core/tk/filestorageUtil.js module:io.ox/core
 msgid "Conflicts"
 msgstr "競合"
-
-#: apps/io.ox/core/tk/filestorageUtil.js module:io.ox/core
-msgid "Ignore warnings"
-msgstr "警告を無視"
 
 #: apps/io.ox/core/tk/filestorageUtil.js module:io.ox/core
 msgid "Warnings:"
@@ -6247,7 +6397,8 @@ msgid "Yellow"
 msgstr "黄"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
+#: module:io.ox/mailfilter apps/io.ox/mail/toolbar.js
 msgid "Set color"
 msgstr "色を設定"
 
@@ -6264,6 +6415,7 @@ msgstr[0] "１個のアイテム"
 msgstr[1] "%1$d 個のアイテム"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Remind me again"
 msgstr "再通知"
 
@@ -6272,6 +6424,7 @@ msgid "Don't remind me again"
 msgstr "再通知しないでください。"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "OK"
 msgstr "OK"
 
@@ -6348,11 +6501,6 @@ msgstr "%1$s ( %2$s ) を追加しました。"
 msgid "Added %1$s."
 msgstr "%1$sを追加しました。"
 
-#. Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-msgid "%1$s. Press backspace to delete."
-msgstr "%1$s Backspace キーで削除。"
-
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
 #. %1$s is the removed search query
@@ -6366,6 +6514,28 @@ msgstr "%1$s ( %2$s ) を削除しました。"
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s."
 msgstr "%1$s を削除しました。"
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "Press spacebar to grab and re-order. Press backspace to delete."
+msgstr "順序を変更するにはspacebarを押します。削除するにはbackspaceを押します。"
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid ""
+"%1$s, grabbed. Current position in list: %2$s of %3$s. Press up and down "
+"arrow to change position, Spacebar to drop, Escape to cancel."
+msgstr "%1$sがグラブされました。リスト中の現在の位置は%3$s中の%2$sです。位置の変更は上下矢印、ドロップするにはSpacebar、キャンセルはEscapeを押してください。"
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "%1$s. New position in list: %2$s of %3$s"
+msgstr "%1$s。リスト中の新しい位置は %3$s 中の %2$s"
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "%1$s, dropped. Final position in list: %2$s of %3$s"
+msgstr "%1$s はドロップされました。リスト中の最終位置は %3$s 中の  %2$s"
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "%1$s, dropped. Re-order cancelled."
+msgstr "%1$s はドロップされました。ソートは中止になりました。"
 
 #: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
 msgid "Unable to upload file"
@@ -6386,8 +6556,7 @@ msgstr "フォルダーのアップロードはサポートされていません
 #: apps/io.ox/core/tk/upload.js module:io.ox/core apps/io.ox/mail/import.js
 #: module:io.ox/mail
 msgid "Mail was not imported. Only .eml files are supported."
-msgstr ""
-"メールはインポートされませんでした。.eml ファイルのみがサポートされます。"
+msgstr "メールはインポートされませんでした。.eml ファイルのみがサポートされます。"
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Multiselect"
@@ -6443,9 +6612,7 @@ msgstr "アップグレードが必要です"
 msgid ""
 "This feature is not available. In order to use it, you need to upgrade your "
 "account now."
-msgstr ""
-"この機能は使用できません。使用するには、ご利用のアカウントをアップグレードす"
-"る必要があります。"
+msgstr "この機能は使用できません。使用するには、ご利用のアカウントをアップグレードする必要があります。"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
@@ -6461,8 +6628,7 @@ msgstr "利用できるプレビューがありません。"
 
 #: apps/io.ox/core/viewer/main.js module:io.ox/core
 msgid "To print this file, please use \"Print as PDF\" in the viewer."
-msgstr ""
-"このファイルを印刷するには、ビューアで”PDFとして印刷”を使用してください。"
+msgstr "このファイルを印刷するには、ビューアで”PDFとして印刷”を使用してください。"
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -6594,7 +6760,7 @@ msgstr "差出人"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer
 msgid "Sent"
-msgstr "送信日時"
+msgstr "送信済み"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer
@@ -6685,9 +6851,7 @@ msgstr "新しいバージョンのファイルを１つだけドロップして
 msgid ""
 "This document cannot be viewed at the moment because a new version is being "
 "uploaded. Please wait until the upload is completed."
-msgstr ""
-"このドキュメントは、新しいバージョンがアップロードされているので現在表示でき"
-"ません。アップロードの終了までお待ちください。"
+msgstr "このドキュメントは、新しいバージョンがアップロードされているので現在表示できません。アップロードの終了までお待ちください。"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
@@ -6776,15 +6940,13 @@ msgstr "クリックで再生開始"
 
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
-msgstr ""
-"ご利用のブラウザでは、このファイルのオーディオ形式がサポートされていません。"
+msgstr "ご利用のブラウザでは、このファイルのオーディオ形式がサポートされていません。"
 
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
 "\n"
 " Please download the file using the button below."
-msgstr ""
-"\n"
+msgstr "\n"
 " 下のボタンを使ってファイルをダウンロードしてください。"
 
 #. %1$s is the file size "Download 2mb" for example
@@ -6800,16 +6962,6 @@ msgstr "ダウンロード"
 #: apps/io.ox/core/viewer/views/types/defaultview.js module:io.ox/core
 msgid "There is no preview for this file type."
 msgstr "このファイルタイプはプレビューできません"
-
-#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
-#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
-msgid "An error occurred converting the document so it cannot be displayed."
-msgstr "ドキュメントの変換中にエラーが発生したため、表示できません。"
-
-#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
-#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
-msgid "This document is password protected and cannot be displayed."
-msgstr "本ドキュメントはパスワードで保護されており、表示できません。"
 
 #. text of a viewer document page caption
 #. Example result: "Page 5 of 10"
@@ -6831,8 +6983,7 @@ msgstr "プレビューが作成中です。"
 msgid ""
 "\n"
 " Alternatively you can download the file."
-msgstr ""
-"\n"
+msgstr "\n"
 " 代わりにファイルをダウンロードできます。"
 
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
@@ -6840,7 +6991,6 @@ msgid "Sorry, there is no preview available for this image."
 msgstr "この画像に利用できるプレビューがありません。"
 
 #: apps/io.ox/core/viewer/views/types/spreadsheetview.js module:io.ox/core
-#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 msgid "An error occurred loading the document so it cannot be displayed."
 msgstr "ドキュメントの読み込み中にエラーが発生したため、表示できません。"
 
@@ -6856,9 +7006,7 @@ msgstr "ご利用のブラウザは、このファイルのビデオ形式をサ
 msgid ""
 "Error while playing the video. Either your browser does not support the "
 "format or you have connection problems."
-msgstr ""
-"ビデオの再生中にエラーが発生しました。あなたのブラウザがフォーマットをサポー"
-"トしていないか、接続の問題があります。"
+msgstr "ビデオの再生中にエラーが発生しました。あなたのブラウザがフォーマットをサポートしていないか、接続の問題があります。"
 
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid "Start video"
@@ -6909,8 +7057,7 @@ msgstr "Ctrl キー + Enter キーで、変更をすぐに保存できます。"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "This file will be written in your default folder to allow editing"
-msgstr ""
-"このファイルは既定のフォルダーに保存されるため、このファイルを編集できます"
+msgstr "このファイルは既定のフォルダーに保存されるため、このファイルを編集できます"
 
 #. Emoji collection. Unified/standard icons. "Standard" might work for other languages.
 #: apps/io.ox/emoji/categories.js module:io.ox/mail
@@ -7043,18 +7190,14 @@ msgstr "メモを追加"
 msgid ""
 "Every recipient gets an individual link. Guests can also create and change "
 "files."
-msgstr ""
-"すべての宛先は個別のリンクを所得します。ゲストは、ファイルの作成および変更が"
-"できます。"
+msgstr "すべての宛先は個別のリンクを所得します。ゲストは、ファイルの作成および変更ができます。"
 
 #. sharing: a link will be created
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid ""
 "Everybody gets the same link. The link just allows to view the file or "
 "folder."
-msgstr ""
-"すべての人が同じリンクを取得します。リンクはファイルまたはフォルダーの表示の"
-"みを許可します。"
+msgstr "すべての人が同じリンクを取得します。リンクはファイルまたはフォルダーの表示のみを許可します。"
 
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Lock"
@@ -7068,6 +7211,7 @@ msgstr "ロックを解除"
 msgid "Make this the current version"
 msgstr "このファイルを最新のバージョンにする"
 
+#. 'Delete version' as header text to confirm to delete a version of a file via a modal dialog.
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
@@ -7079,20 +7223,16 @@ msgstr "すべての前のバージョンを削除"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
-msgstr ""
-"<b class=\"dndignore\">新規ファイル</b> をここにをドロップしてアップロード"
+msgstr "<b class=\"dndignore\">新規ファイル</b> をここにをドロップしてアップロード"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
-msgstr ""
-"\"%1$s\" の <b class=\"dndignore\">新しいバージョン</b>をここにドロップして"
-"\"アップロード"
+msgstr "\"%1$s\" の <b class=\"dndignore\">新しいバージョン</b>をここにドロップして\"アップロード"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
-msgstr ""
-"<b class=\"dndignore\">新しいバージョン</b>をここにドロップしてアップロード"
+msgstr "<b class=\"dndignore\">新しいバージョン</b>をここにドロップしてアップロード"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Share your folders"
@@ -7118,6 +7258,42 @@ msgstr "アカウントを追加できませんでした"
 msgid "This file has been added to the portal"
 msgstr "ファイルをポータルに追加しました"
 
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Your user name"
+msgstr "ユーザー名"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your password"
+msgstr "ご利用のパスワード"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Your url"
+msgstr "URL"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr "認証情報はセキュリティで保護された接続でのみ送信されます"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Update"
+msgstr "更新"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "Account updated successfully"
+msgstr "アカウントは正常に更新されました"
+
+#: apps/io.ox/files/actions/basic-authentication-account.js module:io.ox/files
+msgid "The entered credential or authentication information does not work"
+msgstr "入力した認証情報が有効ではありません。"
+
+#. 'Delete previous versions' as header of a modal dialog to confirm to delete all previous versions of a file.
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
+msgid "Delete previous versions"
+msgstr "前のバージョンを削除"
+
+#. 'Delete previous versions' as header of a modal dialog to confirm to delete all previous versions of a file.
 #: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 msgid ""
 "Do you really want to delete all previous versions except the current "
@@ -7150,12 +7326,15 @@ msgid ""
 msgid_plural ""
 "Some files/folder are shared with others. They won't be available for them "
 "any more."
-msgstr[0] ""
-"このフォルダー（フォルダー）は他のユーザーと共有しています。それらのユーザー"
-"からアクセスできなくなります。"
-msgstr[1] ""
-"このフォルダー（フォルダー）は他のユーザーと共有しています。それらのユーザー"
-"からアクセスできなくなります。"
+msgstr[0] "このフォルダー（フォルダー）は他のユーザーと共有しています。それらのユーザーからアクセスできなくなります。"
+msgstr[1] "このフォルダー（フォルダー）は他のユーザーと共有しています。それらのユーザーからアクセスできなくなります。"
+
+#. 'Delete item' and 'Delete items' as a header of a modal dialog to confirm to delete files from drive.
+#: apps/io.ox/files/actions/delete.js module:io.ox/files
+msgid "Delete item"
+msgid_plural "Delete items"
+msgstr[0] "項目を削除"
+msgstr[1] "項目を削除"
 
 #: apps/io.ox/files/actions/download.js module:io.ox/files
 msgid "Items without a file can not be downloaded."
@@ -7166,8 +7345,7 @@ msgid ""
 "Restored into multiple folders:\n"
 "\n"
 "%s"
-msgstr ""
-"複数のフォルダーに復元:\n"
+msgstr "複数のフォルダーに復元:\n"
 "\n"
 "%s"
 
@@ -7176,8 +7354,7 @@ msgid ""
 "Restored into folder:\n"
 "\n"
 "%s"
-msgstr ""
-"フォルダーに復元:\n"
+msgstr "フォルダーに復元:\n"
 "\n"
 "%s"
 
@@ -7227,6 +7404,7 @@ msgstr "ファイルを選択"
 msgid "You have to select a file to upload."
 msgstr "アップロードするファイルを選択してください。"
 
+#. 'Delete version' as header text to confirm to delete a version of a file via a modal dialog.
 #: apps/io.ox/files/actions/versions-delete.js module:io.ox/files
 msgctxt "One file only"
 msgid "Do you really want to delete this version?"
@@ -7260,9 +7438,10 @@ msgstr "ロックされています"
 msgid "Edit Share"
 msgstr "共有ファイルを編集する"
 
+#. 'Revoke access' as header of a modal dialog to confirm to revoke access of an application.
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/share/toolbar.js
-#: module:io.ox/files
+#: module:io.ox/files apps/io.ox/settings/apps/settings/pane.js
 msgid "Revoke access"
 msgstr "アクセスを取り消し"
 
@@ -7307,10 +7486,8 @@ msgstr "ファイル"
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "The uploaded file does not match the requested file type."
 msgid_plural "None of the uploaded files matches the requested file type."
-msgstr[0] ""
-"アップロードされたファイルの種類は要求されたファイルタイプと一致しません"
-msgstr[1] ""
-"アップロードされたファイルの種類は要求されたファイルタイプと一致しません"
+msgstr[0] "アップロードされたファイルの種類は要求されたファイルタイプと一致しません"
+msgstr[1] "アップロードされたファイルの種類は要求されたファイルタイプと一致しません"
 
 #: apps/io.ox/files/listview.js module:io.ox/files
 msgid "Error: Failed to load files"
@@ -7352,6 +7529,12 @@ msgstr "ファイルオプション"
 #: apps/io.ox/files/main.js module:io.ox/files
 msgid "thumbnail"
 msgstr "サムネイル"
+
+#. Shown as a tooltip when a mail account doesn't work correctly. Click brings user to the settings page
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail
+msgid "There is a problem with this account. Click for more information"
+msgstr "このアカウントに問題があります。詳細はこちらをクリックしてください。"
 
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show icons"
@@ -7542,10 +7725,8 @@ msgstr "すべてのファイルバージョンが保持されます"
 msgid "All file versions older than 1 day will be deleted after next login"
 msgid_plural ""
 "All file versions older than %1$d days will be deleted after next login"
-msgstr[0] ""
-"1日以上たったすべてのファイルバージョンが次回のログイン後に削除されます。"
-msgstr[1] ""
-"%1$d日以上たったすべてのファイルバージョンが次回のログイン後に削除されます。"
+msgstr[0] "1日以上たったすべてのファイルバージョンが次回のログイン後に削除されます。"
+msgstr[1] "%1$d日以上たったすべてのファイルバージョンが次回のログイン後に削除されます。"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid ""
@@ -7554,12 +7735,8 @@ msgid ""
 msgid_plural ""
 "When a file has more than %1$d additional versions, older versions will be "
 "deleted when a new version is created"
-msgstr[0] ""
-"ファイルに１個以上の追加バージョンがある場合、新しいバージョンが作成されると"
-"古いバージョンが削除されます。"
-msgstr[1] ""
-"ファイルに%1$d個以上の追加バージョンがある場合、新しいバージョンが作成される"
-"と古いバージョンが削除されます。"
+msgstr[0] "ファイルに１個以上の追加バージョンがある場合、新しいバージョンが作成されると古いバージョンが削除されます。"
+msgstr[1] "ファイルに%1$d個以上の追加バージョンがある場合、新しいバージョンが作成されると古いバージョンが削除されます。"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Keep saved versions"
@@ -7754,10 +7931,7 @@ msgstr "共有ファイルを編集する"
 msgid ""
 "You can copy and paste this link in an email, instant messenger or social "
 "network. Please note that anyone with this link can access the share."
-msgstr ""
-"メールやインスタントメッセンジャー、ソーシャルネットワークにこのリンクをコ"
-"ピー&ペーストできます。このリンクを持っている人はだれでも共有にアクセスできま"
-"す。"
+msgstr "メールやインスタントメッセンジャー、ソーシャルネットワークにこのリンクをコピー&ペーストできます。このリンクを持っている人はだれでも共有にアクセスできます。"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Add recipients ..."
@@ -7870,9 +8044,7 @@ msgstr "アップロードの進捗状況"
 msgid ""
 "Please note, changing or removing the file extension will cause problems "
 "when viewing or editing."
-msgstr ""
-"ファイル拡張子を変更すると、ファイルの表示や編集ができなくなる場合がありま"
-"す。"
+msgstr "ファイル拡張子を変更すると、ファイルの表示や編集ができなくなる場合があります。"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
@@ -7893,8 +8065,12 @@ msgstr "確認"
 msgid "Adjust"
 msgstr "調整"
 
+#. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
 #: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/find/view-facets.js module:io.ox/core
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Select"
 msgstr "選択"
 
@@ -8029,24 +8205,25 @@ msgstr "読み込み中"
 msgid ""
 "The unrecoverable items have been cleaned up successfully. Please refresh "
 "this page to see the changes."
-msgstr ""
-"回復不能なアイテムが正常にクリーンアップされました。このページを最新の状態に"
-"更新し、変更を確認してください。"
+msgstr "回復不能なアイテムが正常にクリーンアップされました。このページを最新の状態に更新し、変更を確認してください。"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "パスワードを復元"
+msgid "Recover external account passwords"
+msgstr "外部アカウントのパスワードを復元"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
-"Please provide the old password so the account passwords can be recovered."
-msgstr ""
-"アカウントパスワードを復元するため、変更前のパスワードを入力してください。"
+"You recently changed your password. Please provide your last password to "
+"recover passwords for external accounts."
+msgstr "最近ご利用のパスワードを変更しました。最後のパスワードを入力して、外部アカウントのパスワードを復元してください。"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Your old password"
 msgstr "変更前のパスワード"
+
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
+msgid "Remove passwords"
+msgstr "パスワードを削除"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -8080,9 +8257,7 @@ msgstr "メールアカウントの編集"
 msgid ""
 "Account settings could not be saved. Please take a look at the annotations "
 "in the form. "
-msgstr ""
-"アカウント設定を保存できませんでした。フォームに表示されている注記をご確認く"
-"ださい。 "
+msgstr "アカウント設定を保存できませんでした。フォームに表示されている注記をご確認ください。 "
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -8102,21 +8277,12 @@ msgid "Your mail address"
 msgstr "ご利用のメールアドレス"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Your password"
-msgstr "ご利用のパスワード"
-
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Your credentials will be sent over a secure connection only"
-msgstr "認証情報はセキュリティで保護された接続でのみ送信されます"
-
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
 msgstr "メールアカウントの自動設定を試みています"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "There was no suitable server found for this mail/password combination"
-msgstr ""
-"このメールとパスワードの組み合わせが保存されているサーバーが見つかりません"
+msgstr "このメールとパスワードの組み合わせが保存されているサーバーが見つかりません"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Failed to connect."
@@ -8372,47 +8538,45 @@ msgstr "件名なし"
 msgid "This email has been added to the portal"
 msgstr "このメールはポータルに追加されました"
 
+#. 'Empty file attachment' as header of a modal dialog to confirm or cancel sending an email with an empty attachment.
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
-msgid ""
-"You attached an empty file. It could be, that this file has been deleted on "
-"your hard drive. Send it anyway?"
-msgstr "空のファイルを添付しています。送信しますか?"
+msgid "Empty file attachment"
+msgstr "空の添付ファイル"
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
-msgid "Yes, with empty attachment"
+msgid ""
+"The attached file is empty. Maybe this file was deleted on your local hard "
+"drive. Do you want to send it anyway?"
+msgstr "空のファイルを添付しています。ハードディスクから削除されたかもしれません。それでも送信しますか?"
+
+#. 'Send with empty attachment' as button text of a modal dialog to confirm to send the mail also without a subject.
+#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
+msgid "Send with empty attachment"
 msgstr "空の添付ファイルで送信"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the total attachment "
 "size limit of %2$s"
-msgstr ""
-"ファイル \"%1$s\" は添付ファイルの容量制限 %2$s を超えるためアップロードでき"
-"ません"
+msgstr "ファイル \"%1$s\" は添付ファイルの容量制限 %2$s を超えるためアップロードできません"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
-msgstr ""
-"ファイル \"%1$s\" はアップロードの最大サイズ %2$s を超えるためアップロードで"
-"きません"
+msgstr "ファイル \"%1$s\" はアップロードの最大サイズ %2$s を超えるためアップロードできません"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
 "publication maximum file size of %2$s"
-msgstr ""
-"ファイル \"%1$s\" はインフォストアの最大アップロードサイズ %2$s を超えるため"
-"アップロードできません"
+msgstr "ファイル \"%1$s\" はインフォストアの最大アップロードサイズ %2$s を超えるためアップロードできません"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
-msgstr ""
-"ファイル \"%1$s\" はインフォストアの容量制限 %2$s を超めるためアップロードで"
-"きません"
+msgstr "ファイル \"%1$s\" はインフォストアの容量制限 %2$s を超めるためアップロードできません"
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -8442,14 +8606,11 @@ msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
 msgstr[0] "差出人からのすべてのメッセージは選択したフォルダーに移動します。"
-msgstr[1] ""
-"選択したメールの差出人からのこれからのメッセージは選択したフォルダーへ移動し"
-"ます。"
+msgstr[1] "選択したメールの差出人からのこれからのメッセージは選択したフォルダーへ移動します。"
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
-msgstr ""
-"メールアドレスの解決中にエラーが発生しました。もう一度やり直してください。"
+msgstr "メールアドレスの解決中にエラーが発生しました。もう一度やり直してください。"
 
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid "Do you want to permanently delete this mail?"
@@ -8470,9 +8631,12 @@ msgstr "メールボックス容量を超えたため、メールをごみ箱に
 msgid ""
 "Currently edited drafts with attachments can not be deleted until you close "
 "the correspondig mail compose window."
-msgstr ""
-"現在編集された添付ファイル付きの下書きは、対応するメール作成ウィンドウを閉じ"
-"るまで削除できません。"
+msgstr "現在編集された添付ファイル付きの下書きは、対応するメール作成ウィンドウを閉じるまで削除できません。"
+
+#. 'Delete mail' as modal dialog header to confirm to delete a mail.
+#: apps/io.ox/mail/actions/delete.js module:io.ox/mail
+msgid "Delete mail"
+msgstr "メールを削除"
 
 #: apps/io.ox/mail/actions/ical.js module:io.ox/mail
 msgid "The appointment has been added to your calendar"
@@ -8508,8 +8672,7 @@ msgstr "認証の詳細"
 
 #: apps/io.ox/mail/actions/vcard.js module:io.ox/mail
 msgid "Failed to add. Maybe the vCard attachment is invalid."
-msgstr ""
-"追加できませんでした。添付されている vCard が無効である可能性があります。"
+msgstr "追加できませんでした。添付されている vCard が無効である可能性があります。"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
 msgid "Saved mail attachment"
@@ -8525,9 +8688,7 @@ msgid ""
 "Unable to connect to mail server. Possible reasons: The mail server is "
 "(temporarily) down or there are network connection problems. Please try "
 "again in a few minutes."
-msgstr ""
-"メールサーバーに接続できません。メールサーバーが一時的にダウンしているか、ま"
-"たはネットワーク接続に問題があります。後ほどやり直してください。"
+msgstr "メールサーバーに接続できません。メールサーバーが一時的にダウンしているか、またはネットワーク接続に問題があります。後ほどやり直してください。"
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "Category name"
@@ -8545,9 +8706,7 @@ msgstr "カテゴリは右側のビュー ドロップダウンから再度有�
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
 "rename or disable them."
-msgstr ""
-"既定のカテゴリもあり、名前を変更したり、または無効にすることができない可能性"
-"もあります。"
+msgstr "既定のカテゴリもあり、名前を変更したり、または無効にすることができない可能性もあります。"
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "Disable categories"
@@ -8594,10 +8753,8 @@ msgstr[1] "メッセージをカテゴリ\"%1$s\"に移動しました。"
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
 "Do you want to move all messages from selected senders to that category?"
-msgstr[0] ""
-"差出人 %1$s からのすべてのメッセージを指定するカテゴリに移動しますか?"
-msgstr[1] ""
-"選択した差出人からのすべてのメッセージを指定するカテゴリに移動しますか?"
+msgstr[0] "差出人 %1$s からのすべてのメッセージを指定するカテゴリに移動しますか?"
+msgstr[1] "選択した差出人からのすべてのメッセージを指定するカテゴリに移動しますか?"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Flagged"
@@ -8645,6 +8802,10 @@ msgstr "ブラインドコピー"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "and %1$d others"
 msgstr "他 %1$d名の受信者"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Marked as unread"
+msgstr "未読にされた"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
@@ -8699,9 +8860,7 @@ msgstr "メールの開封通知を差出人が求めています"
 msgid ""
 "Attachment file size too large. You have to use %1$s or reduce the "
 "attachment file size."
-msgstr ""
-"添付ファイルサイズが大きすぎます。%1$sを使用するか、添付ファイルサイズを縮小"
-"してください。"
+msgstr "添付ファイルサイズが大きすぎます。%1$sを使用するか、添付ファイルサイズを縮小してください。"
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
@@ -8713,11 +8872,7 @@ msgid ""
 "attaching|I am attaching|I've attached|I have attached|I attach|I attached|"
 "find attached|find the attached|find included|find the included|attached "
 "file|see the attached|see attachments|attached files|see the attachment"
-msgstr ""
-"添付を参照|添付を参照|添付を参照|添付し|添付す|添付さ|添付|このメールに添付|"
-"このメッセージに添付|添付す|添付し|添付し|添付し|添付す|添付し|添付ファイルを"
-"ご覧|添付ファイルを見て|添付ファイルをみて|添付ファイルを|添付ファイル|添付"
-"データ|添付データを参照|添付データをご覧|添付データをみて"
+msgstr "添付を参照|添付を参照|添付を参照|添付し|添付す|添付さ|添付|このメールに添付|このメッセージに添付|添付す|添付し|添付し|添付し|添付す|添付し|添付ファイルをご覧|添付ファイルを見て|添付ファイルをみて|添付ファイルを|添付ファイル|添付データ|添付データを参照|添付データをご覧|添付データをみて"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Forgot attachment?"
@@ -8748,12 +8903,16 @@ msgid "This email has no subject. Do you want to send it anyway?"
 msgstr "このメールには件名がありません。送信しますか？"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
-msgid "Send without subject"
-msgstr "件名なしで送信"
-
-#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Add subject"
 msgstr "件名を追加"
+
+#. 'Send' as confirmation button of a modal dialog to send an email without a subject.
+#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Send"
+msgstr "送信"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "error"
@@ -8796,9 +8955,7 @@ msgstr "差出人に返信"
 msgid ""
 "%1$s autocomplete token field. Use left and right Arrowkeys to navigate "
 "between the tokens"
-msgstr ""
-"%1$s を自動補完。トークンを移動するには左方向キーと右方向キーを使用してくださ"
-"い。"
+msgstr "%1$s を自動補完。トークンを移動するには左方向キーと右方向キーを使用してください。"
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -8844,18 +9001,10 @@ msgid "Compose new email"
 msgstr "新規メールを作成"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send"
-msgstr "送信"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
 "This email just contains your email address as sender. Your real name is not "
 "used."
-msgstr ""
-"このメールには差出人としてメールアドレスのみが含まれます。本当の名前は使用さ"
-"れていません。"
+msgstr "このメールには差出人としてメールアドレスのみが含まれます。本当の名前は使用されていません。"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js
@@ -8878,6 +9027,14 @@ msgstr "メールサイズ：%1$s"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add local file"
 msgstr "ローカルファイルを追加"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Hide toolbar"
+msgstr "ツールバーを非表示"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Show toolbar"
+msgstr "ツールバーを表示"
 
 #. broken image inside a mail
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
@@ -8914,12 +9071,14 @@ msgid "Compose"
 msgstr "作成"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Save and close"
+msgstr "保存して閉じる"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
 "The mail draft could not be found on the server. It was sent or deleted in "
 "the meantime."
-msgstr ""
-"メールの下書きがサーバーに見つかりませんでした。送信されたか、削除されまし"
-"た。"
+msgstr "メールの下書きがサーバーに見つかりませんでした。送信されたか、削除されました。"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -8975,10 +9134,7 @@ msgid ""
 "Select a checkbox to define a custom name for that address; otherwise the "
 "mail account's default name will be used. If you want to use an address "
 "anonymously, select the checkbox and leave the field empty."
-msgstr ""
-"チェックボックスを選択して、そのアドレスの名前を入力してください。入力しない"
-"場合はメールアカウントの既定の名前が使用されます。名前を指定しない場合は"
-"チェックボックスを選択し、フィールドを空のままにしておきます。"
+msgstr "チェックボックスを選択して、そのアドレスの名前を入力してください。入力しない場合はメールアカウントの既定の名前が使用されます。名前を指定しない場合はチェックボックスを選択し、フィールドを空のままにしておきます。"
 
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Edit real names"
@@ -9093,6 +9249,15 @@ msgstr "署名"
 msgid "No signature"
 msgstr "署名なし"
 
+#. %1$s: number of additional signatures in context of a signatures dropdown
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+msgid "%1$s more..."
+msgstr "%1$s以上..."
+
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+msgid "Edit signatures..."
+msgstr "署名を編集..."
+
 #: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
 msgid "Manage signatures"
 msgstr "署名を管理"
@@ -9139,8 +9304,34 @@ msgid "Request read receipt"
 msgstr "開封確認メッセージを要求"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Save draft and close"
+msgstr "下書きを保存して閉じる"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Did you know?"
+msgstr "知っていましたか？"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid ""
+"Your changes are automatically saved while you compose your email until you "
+"finally send it."
+msgstr "変更は、メールの作成中、メールを最終的に送信するまでに自動で保存されます。"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Do not show again."
+msgstr "再表示しない"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Couldn't load editor"
 msgstr "エディタをロードできません"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Saving..."
+msgstr "保存中..."
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Saved %s"
+msgstr "%sに保存"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -9347,6 +9538,12 @@ msgstr "ドラッグしてフィルタールールの順番を変更"
 msgid "Select the folder to apply the rule to"
 msgstr "フォルダーを選択してルールを適用"
 
+#. 'Delete filter rule' as a header of a modal dialog to confirm to delete a mail filter rule.
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+msgid "Delete filter rule"
+msgstr "フィルタールールを削除"
+
+#. 'Delete filter rule' as a header of a modal dialog to confirm to delete a mail filter rule.
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Do you really want to delete this filter rule?"
 msgstr "このフィルタールールを削除しますか?"
@@ -9395,6 +9592,11 @@ msgstr "フラグ"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
+msgid "Set IMAP keywords"
+msgstr "IMAPキーワードを設定"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Remove IMAP keyword"
 msgstr "IMAPキーワードを削除"
 
@@ -9402,6 +9604,11 @@ msgstr "IMAPキーワードを削除"
 #: module:io.ox/mailfilter
 msgid "Keep"
 msgstr "保持"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Encrypt the email"
+msgstr "メールを暗号化"
 
 #. File a message into a folder
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
@@ -9601,6 +9808,23 @@ msgstr "文字列"
 msgid "Source"
 msgstr "ソース"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "PGP signature"
+msgstr "PGP署名"
+
+#. Tests for PGP Signature.
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "The signature exists and is valid"
+msgstr "署名が存在し、有効です。"
+
+#. Tests for PGP Signature.
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "The signature is missing or is not valid"
+msgstr "署名が存在しないか、無効です。"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Part"
@@ -9703,9 +9927,7 @@ msgstr "マッチしない（DOSワイルドカードを使用可能）"
 msgid ""
 "This rule applies to all messages. Please add a condition to restrict this "
 "rule to specific messages."
-msgstr ""
-"このルールはすべてのメッセージに対して適用されます。特定のメッセージに適用す"
-"るには、条件を追加してください。"
+msgstr "このルールはすべてのメッセージに対して適用されます。特定のメッセージに適用するには、条件を追加してください。"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -9998,9 +10220,7 @@ msgstr "送信元アドレス"
 msgid ""
 "The Notice is sent out for messages received by %1$s. You may choose to send "
 "it out for other recipient addresses too:"
-msgstr ""
-"宛先が %1$s のメッセージに対して通知が送信されます。他の宛先のメッセージにも"
-"送信するよう選択できます:"
+msgstr "宛先が %1$s のメッセージに対して通知が送信されます。他の宛先のメッセージにも送信するよう選択できます:"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Thread"
@@ -10036,9 +10256,7 @@ msgstr[1] "%1$d 件のメッセージが選択されています"
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
 "the list currently."
-msgstr ""
-"このフォルダーにメッセージが %1$d 通あります；現在メッセージがすべてリストに"
-"表示されるわけではありません。"
+msgstr "このフォルダーにメッセージが %1$d 通あります；現在メッセージがすべてリストに表示されるわけではありません。"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -10404,9 +10622,7 @@ msgstr "既定のアカウント"
 
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "Be careful with this message. It might be spam or a phishing mail."
-msgstr ""
-"このメッセージに注意してください。迷惑メールまたは詐欺メールの可能性がありま"
-"す。"
+msgstr "このメッセージに注意してください。迷惑メールまたは詐欺メールの可能性があります。"
 
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "This is a dangerous email containing spam or malware."
@@ -10490,9 +10706,7 @@ msgstr "復元コード"
 msgid ""
 "There are no backup devices available for this account. Please notify "
 "support for help."
-msgstr ""
-"このアカウントに利用できるバックアップ用デバイスがありません。サポートに連絡"
-"してください。"
+msgstr "このアカウントに利用できるバックアップ用デバイスがありません。サポートに連絡してください。"
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid "Authentication failure. Please try reloading the page."
@@ -10566,9 +10780,7 @@ msgid ""
 "In the event you lose or are unable to use your authentication device, your "
 "account will be locked out unless you set up a recovery method. We strongly "
 "recommend that you do so now."
-msgstr ""
-"お使いの認証デバイスを失くした、または使用できない場合、復元方法を設定しなけ"
-"ればアカウントがロックされたままになるので、復元方法の設定をお勧めします。"
+msgstr "お使いの認証デバイスを失くした、または使用できない場合、復元方法を設定しなければアカウントがロックされたままになるので、復元方法の設定をお勧めします。"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
@@ -10621,9 +10833,7 @@ msgstr "復元コード"
 msgid ""
 "This is your recovery code. Please write it down, print it, or save the "
 "file. Be sure to save this in a secure location."
-msgstr ""
-"復元コードです。復元コードを書き留める、印刷、またはファイルに保存してくださ"
-"い。必ずセキュリティ保護された場所に保存してください。"
+msgstr "復元コードです。復元コードを書き留める、印刷、またはファイルに保存してください。必ずセキュリティ保護された場所に保存してください。"
 
 #. this is a file name that stores the a long recovery code
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
@@ -10716,8 +10926,7 @@ msgstr "スキャニングができなければ、次の設定コードを入力
 msgid ""
 "Once complete, please enter an authentication code to verify everything is "
 "configured properly."
-msgstr ""
-"完了すれば、認証コードを入力して、すべてが適切であることを確認してください。"
+msgstr "完了すれば、認証コードを入力して、すべてが適切であることを確認してください。"
 
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
@@ -10778,49 +10987,38 @@ msgstr "新しいコードが送信されました。"
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
 msgid "A new code was sent to your SMS device. Please enter the code."
-msgstr ""
-"新しいコードがお使いのSMSデバイスに送信されました。コードを入力してください。"
+msgstr "新しいコードがお使いのSMSデバイスに送信されました。コードを入力してください。"
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
-msgstr ""
-"お使いのアカウントが２ステップ検証でセキュリティ保護されました。電話番号*****"
-"%sに送信された検証コードを入力してください。"
+msgstr "お使いのアカウントが２ステップ検証でセキュリティ保護されました。電話番号*****%sに送信された検証コードを入力してください。"
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
-msgstr ""
-"お使いのアカウントが２ステップ検証でセキュリティ保護されました。認証アプリか"
-"ら検証コードを入力してください。"
+msgstr "お使いのアカウントが２ステップ検証でセキュリティ保護されました。認証アプリから検証コードを入力してください。"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please use your "
 "authentication token to complete verification."
-msgstr ""
-"お使いのアカウントが２ステップ検証でセキュリティ保護されました。認証トークン"
-"を使用して検証を完了してください。"
+msgstr "お使いのアカウントが２ステップ検証でセキュリティ保護されました。認証トークンを使用して検証を完了してください。"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
 "This browser is not compatible with your configured authentication device. "
 "Please use Chrome browser, or Firefox with U2F enabled."
-msgstr ""
-"このブラウザはお使いの構成認証デバイスに対応していません。Chrome、またはU2Fを"
-"有効にしてFirefoxをお使いください。"
+msgstr "このブラウザはお使いの構成認証デバイスに対応していません。Chrome、またはU2Fを有効にしてFirefoxをお使いください。"
 
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
 "Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
-msgstr ""
-"このキーでの認証には無効のパラメータです。このキーのURLドメインが間違っている"
-"可能性があります。"
+msgstr "このキーでの認証には無効のパラメータです。このキーのURLドメインが間違っている可能性があります。"
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10830,9 +11028,7 @@ msgstr "構成がサポートされていません。"
 #. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "This device is not eligible for this request. Wrong hardware key?"
-msgstr ""
-"このデバイスはこのリクエストを受け付けられません。ハードウェアキーが間違って"
-"いませんか？"
+msgstr "このデバイスはこのリクエストを受け付けられません。ハードウェアキーが間違っていませんか？"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "Timeout"
@@ -10928,8 +11124,7 @@ msgstr "メールでデバイスの構成を行いましょう"
 msgid ""
 "iOS devices can be automatically configured by installing the configuration "
 "profile."
-msgstr ""
-"iOSデバイスは、構成プロファイルをインストールすると自動で構成できます。"
+msgstr "iOSデバイスは、構成プロファイルをインストールすると自動で構成できます。"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV"
@@ -10991,9 +11186,7 @@ msgstr "自動構成（SMS経由）"
 msgid ""
 "Please enter your mobile phone number, and we´ll send you a link to "
 "automatically configure your iOS device! It´s that simple!"
-msgstr ""
-"携帯電話番号を入力してください。iOSデバイスを自動的に構成するリンクを送信しま"
-"す。"
+msgstr "携帯電話番号を入力してください。iOSデバイスを自動的に構成するリンクを送信します。"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Please confirm"
@@ -11230,9 +11423,7 @@ msgstr "再試行"
 msgid ""
 "The widget \"%s\" was disabled as the account might have been removed or is "
 "no longer available."
-msgstr ""
-"アカウントが削除されたか、もはや利用可能ではないため、ウィジェット\"%s\"が無"
-"効になりました。"
+msgstr "アカウントが削除されたか、もはや利用可能ではないため、ウィジェット\"%s\"が無効になりました。"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "An error occurred."
@@ -11296,8 +11487,7 @@ msgstr "設定を保存できませんでした。"
 
 #: apps/io.ox/preview/main.js module:io.ox/core
 msgid "Open file. Drag to your desktop to download."
-msgstr ""
-"ファイルを開きます。ダウンロードするには、デスクトップにドラッグします。"
+msgstr "ファイルを開きます。ダウンロードするには、デスクトップにドラッグします。"
 
 #: apps/io.ox/preview/main.js module:io.ox/core
 msgid "Open file"
@@ -11311,9 +11501,7 @@ msgstr "アイテムが見つかりません"
 msgid ""
 "The selected folder is virtual and can not be searched. Please select "
 "another folder."
-msgstr ""
-"選択したフォルダーは仮想フォルダーです。検索できません。別のフォルダーを選択"
-"してください。"
+msgstr "選択したフォルダーは仮想フォルダーです。検索できません。別のフォルダーを選択してください。"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
@@ -11343,13 +11531,15 @@ msgid ""
 "account password. If you change your primary password, your external "
 "accounts might stop working. In this case, you can use your old password to "
 "recover all account passwords."
-msgstr ""
-"セキュリティのため、すべての認証情報は既定のアカウントのパスワードで暗号化さ"
-"れています。既定のアカウントのパスワードを変更された場合、外部アカウントへ接"
-"続できなくなる場合があります。この場合は、変更前のパスワードですべての外部ア"
-"カウントのパスワードを復元してください。"
+msgstr "セキュリティのため、すべての認証情報は既定のアカウントのパスワードで暗号化されています。既定のアカウントのパスワードを変更された場合、外部アカウントへ接続できなくなる場合があります。この場合は、変更前のパスワードですべての外部アカウントのパスワードを復元してください。"
+
+#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+msgid "Recover passwords"
+msgstr "パスワードを復元"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
 msgid "Delete %1$s"
 msgstr "%1$s を削除します"
 
@@ -11365,6 +11555,7 @@ msgstr "このアカウントを削除しますか？"
 msgid "External Apps"
 msgstr "外部アプリケーション"
 
+#. 'Revoke access' as header of a modal dialog to confirm to revoke access of an application.
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "Do you want to revoke the access of this application?"
 msgstr "このアプリケーションのアクセスを無効にしますか?"
@@ -11398,6 +11589,10 @@ msgstr "セキュリティ"
 #: apps/io.ox/settings/main.js module:io.ox/core
 msgid "Active clients"
 msgstr "アクティブクライアント"
+
+#: apps/io.ox/settings/main.js module:io.ox/core
+msgid "Application Passwords"
+msgstr "アプリケーションパスワード"
 
 #: apps/io.ox/settings/main.js module:io.ox/core
 #: apps/io.ox/settings/security/certificates/settings/pane.js
@@ -11497,9 +11692,7 @@ msgstr "個人データをダウンロード"
 msgid ""
 "You can download a copy of your personal data from your account, if you want "
 "to save it or transfer it to another provider."
-msgstr ""
-"個人データを保存したり、別のプロバイダに送ったりしたい場合、そのコピーをアカ"
-"ウントからダウンロードできます。"
+msgstr "個人データを保存したり、別のプロバイダに送ったりしたい場合、そのコピーをアカウントからダウンロードできます。"
 
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Maximum file size"
@@ -11526,9 +11719,7 @@ msgstr "新しいダウンロードを要求"
 msgid ""
 "There is currently an archive download available. By requesting a new "
 "download the current archive will be deleted and is no longer available."
-msgstr ""
-"アーカイブのダウンロードが現在可能です。新しいダウンロードを要求すると、現在"
-"のアーカイブが削除され、利用できなくなります。"
+msgstr "アーカイブのダウンロードが現在可能です。新しいダウンロードを要求すると、現在のアーカイブが削除され、利用できなくなります。"
 
 #. header for zip archive download list
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
@@ -11540,10 +11731,7 @@ msgid ""
 "Your requested archive is currently being created. Depending on the size of "
 "the requested data this may take hours or days. You will be informed via "
 "email when your download is ready."
-msgstr ""
-"要求されたアーカイブが現在作成されています。要求されたデータのサイズによって"
-"は、数時間または数日間かかる可能性があります。ダウンロードの準備ができると、"
-"メールで通知されます。"
+msgstr "要求されたアーカイブが現在作成されています。要求されたデータのサイズによっては、数時間または数日間かかる可能性があります。ダウンロードの準備ができると、メールで通知されます。"
 
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Cancel download request"
@@ -11559,9 +11747,7 @@ msgstr "現在のダウンロードの要求をキャンセルしますか？"
 msgid ""
 "Your data archive from %2$s is ready for download. The download is available "
 "until %1$s."
-msgstr ""
-"%2$sからのデータアーカイブはダウンロードできます。ダウンロードは%1$sまで可能"
-"です。"
+msgstr "%2$sからのデータアーカイブはダウンロードできます。ダウンロードは%1$sまで可能です。"
 
 #. %1$s: filename
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
@@ -11571,6 +11757,153 @@ msgstr "%1$s をダウンロード"
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Download personal data"
 msgstr "個人データをダウンロード個人データをダウンロード"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "There was a problem adding the password."
+msgstr "パスワードの追加に問題がありました。"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"There was a problem getting the list of available applications from the "
+"server."
+msgstr "サーバーからの利用可能なアプリケーションリストの取得に問題がありました。"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"To add a password, select an application to use with a new password, as well "
+"as a new descriptive name for the password."
+msgstr "パスワードを追加するには、新規パスワードで使用するアプリケーションを選択し、パスワードのわかりやすい新しい名前をつけてください。"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Application"
+msgstr "アプリケーション"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password name"
+msgstr "パスワード名"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "My Phone"
+msgstr "電話"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Add new password"
+msgstr "新規パスワードを追加"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password Created"
+msgstr "パスワードが作成されました"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid ""
+"A password was created successfully.  Please use the following settings in "
+"the application:"
+msgstr "パスワードが作成されました。アプリケーションの次の設定を使用してください。"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Username: %s"
+msgstr "ユーザー名: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/addPassword.js
+#: module:io.ox/core
+msgid "Password: %s"
+msgstr "パスワード: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgctxt "app"
+msgid "Application Passwords"
+msgstr "アプリケーションパスワード"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Manage additional passwords for use with other devices."
+msgstr "他のデバイスで使用するために、追加パスワードを管理する"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Existing passwords"
+msgstr "既存のパスワード"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "Add passwords"
+msgstr "パスワードを追加"
+
+#: apps/io.ox/settings/security/appPasswords/settings/pane.js
+#: module:io.ox/core/boot
+msgid "There was a problem getting the list of passwords from the server."
+msgstr "サーバーからのパスワードリストの取得に問題がありました。"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Never used"
+msgstr "未使用"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Exchange Active Sync (EAS)"
+msgstr "Exchange Active Sync (EAS)"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Drive Client"
+msgstr "ドライブクライアント"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Mobile Mail"
+msgstr "モバイルメール"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Last Login: %s"
+msgstr "最終ログイン: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Device: %s"
+msgstr "デバイス: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "IP: %s"
+msgstr "IP: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Location: %s"
+msgstr "場所: %s"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Device %s logged in %s"
+msgstr "デバイス %s を %sでログイン"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Delete password"
+msgstr "パスワードを削除"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "Do you really want to delete this password?"
+msgstr "このパスワードを削除しますか?"
+
+#: apps/io.ox/settings/security/appPasswords/settings/views.js
+#: module:io.ox/settings
+msgid "There was a problem removing the password."
+msgstr "パスワードの削除に問題がありました。"
 
 #: apps/io.ox/settings/security/certificates/settings/certificate-view.js
 #: module:io.ox/settings/certificates
@@ -11667,6 +12000,11 @@ msgstr "証明書の詳細"
 #: module:io.ox/settings/certificates
 msgid "Trust certificate"
 msgstr "証明書を信頼"
+
+#. 'Sign out from device' as header of a modal dialog to sign out of a session.
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Sign out from device"
+msgstr "デバイスからサインアウト"
 
 #. Context: Session Management. Active session on platform/os.
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
@@ -11859,6 +12197,13 @@ msgstr "未完了"
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 msgid "Mark as undone"
 msgstr "未完了にする"
+
+#. 'Delete task' or 'Delete tasks' as header for a modal dialog to confirm the deletion of one or more tasks.
+#: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
+msgid "Delete task"
+msgid_plural "Delete tasks"
+msgstr[0] "タスクを削除"
+msgstr[1] "タスクを削除"
 
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
 msgid "Do you really want to delete this task?"
@@ -12165,7 +12510,16 @@ msgid ""
 "which you participate"
 msgstr "招待されたタスクの他の招待者が承諾または辞退した場合に通知を受け取る"
 
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Subscribe shared task folders"
+msgstr "共有のタスクフォルダーを登録"
+
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgid "Subscribe shared tasks folders"
+msgstr "共有のタスクフォルダーを登録"
+
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+msgctxt "tooltip"
 msgid "Delete task"
 msgstr "タスクを削除"
 
@@ -12311,9 +12665,7 @@ msgstr "アプリケーションランチャー"
 msgid ""
 "To navigate between the %1$s applications, just click on the new App "
 "Launcher icon."
-msgstr ""
-"新しいアプリケーションランチャーアイコンをクリックするだけで、%1$sつのアプリ"
-"ケーション間を移動できます。"
+msgstr "新しいアプリケーションランチャーアイコンをクリックするだけで、%1$sつのアプリケーション間を移動できます。"
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Click on the application that you would like to use."
@@ -12327,17 +12679,13 @@ msgstr "新規ウィンドウ"
 msgid ""
 "E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
-msgstr ""
-"メールが新規ウィンドウに表示されます。このウィンドウは最大化したり、最小化し"
-"たり、閉じたりすることができます。"
+msgstr "メールが新規ウィンドウに表示されます。このウィンドウは最大化したり、最小化したり、閉じたりすることができます。"
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
 "Windows you have minimized will appear in all applications for easy access. "
 "You can maximize a window again by clicking on it."
-msgstr ""
-"最小化したウィンドウは、簡単にアクセスできるように、すべてのアプリケーション"
-"で表示されます。再度最大化するには、ウィンドウをクリックしてください。"
+msgstr "最小化したウィンドウは、簡単にアクセスできるように、すべてのアプリケーションで表示されます。再度最大化するには、ウィンドウをクリックしてください。"
 
 #. Title of tour step, demonstrating options available for 2-step verification
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
@@ -12348,8 +12696,7 @@ msgstr "２段階検証オプション"
 msgid ""
 "You can now add additional verification options to enhance the security of "
 "your account."
-msgstr ""
-"検証オプションを追加して、お使いのアカウントのセキュリティを強化できます。"
+msgstr "検証オプションを追加して、お使いのアカウントのセキュリティを強化できます。"
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
@@ -12358,9 +12705,7 @@ msgstr "最新情報"
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "To learn more about the new and improved features you can visit "
-msgstr ""
-"次をご覧いただくと、新しい機能や改善された機能についてさらに知ることができま"
-"す。 "
+msgstr "次をご覧いただくと、新しい機能や改善された機能についてさらに知ることができます。 "
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
@@ -12368,10 +12713,8 @@ msgid ""
 "Welcome to %1$s.\n"
 "We've made some exciting changes to %1$s. This quick tour will guide you "
 "through some of the new and improved features."
-msgstr ""
-"%1$sへようこそ。\n"
-"%1$sが大きく変わりました。この短いツアーの中で、新しい機能や改善された機能に"
-"ついてご説明します。"
+msgstr "%1$sへようこそ。\n"
+"%1$sが大きく変わりました。この短いツアーの中で、新しい機能や改善された機能についてご説明します。"
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Never show again"
@@ -12442,17 +12785,19 @@ msgid_plural "%1$d members"
 msgstr[0] "メンバー %1$d 名"
 msgstr[1] "メンバー %1$d 名"
 
+#. 'Delete group' as header of a modal dialog to confirm to delete a group.
+#. %1$s is the group name
+#: apps/plugins/administration/groups/settings/toolbar.js module:io.ox/core
+msgid "Delete group"
+msgstr "グループを削除"
+
+#. 'Delete group' as header of a modal dialog to confirm to delete a group.
 #. %1$s is the group name
 #: apps/plugins/administration/groups/settings/toolbar.js module:io.ox/core
 msgid ""
 "Do you really want to delete the group \"%1$s\"? This action cannot be "
 "undone!"
-msgstr ""
-"グループ \"%1$s\" を本当に削除しますか? このアクションは元に戻せません。"
-
-#: apps/plugins/administration/groups/settings/toolbar.js module:io.ox/core
-msgid "Delete group"
-msgstr "グループを削除"
+msgstr "グループ \"%1$s\" を本当に削除しますか? このアクションは元に戻せません。"
 
 #: apps/plugins/administration/resources/settings/edit.js module:io.ox/core
 msgid "Resource name (mandatory)"
@@ -12471,17 +12816,19 @@ msgstr "リソースを編集"
 msgid "Create new resource"
 msgstr "リソースを作成"
 
+#. 'Delete resource' as heade of a modal dialog to confirm to delete a resource
+#. %1$s is the resource name
+#: apps/plugins/administration/resources/settings/toolbar.js module:io.ox/core
+msgid "Delete resource"
+msgstr "リソースを削除"
+
+#. 'Delete resource' as heade of a modal dialog to confirm to delete a resource
 #. %1$s is the resource name
 #: apps/plugins/administration/resources/settings/toolbar.js module:io.ox/core
 msgid ""
 "Do you really want to delete the resource \"%1$s\"? This action cannot be "
 "undone!"
-msgstr ""
-"リソース \"%1$s\" を本当に削除しますか? このアクションは元に戻せません。"
-
-#: apps/plugins/administration/resources/settings/toolbar.js module:io.ox/core
-msgid "Delete resource"
-msgstr "リソースを削除"
+msgstr "リソース \"%1$s\" を本当に削除しますか? このアクションは元に戻せません。"
 
 #. 1 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
@@ -12570,9 +12917,7 @@ msgstr "コメントとアドバイス"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
 "If you have questions or problems please contact our support directly."
-msgstr ""
-"サポートのご依頼はこのフィードバックでは送れません。ご質問や問題についてはサ"
-"ポートへのコンタクトをお願いします。"
+msgstr "サポートのご依頼はこのフィードバックでは送れません。ご質問や問題についてはサポートへのコンタクトをお願いします。"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Please select a rating."
@@ -12886,8 +13231,7 @@ msgstr "%1$d 週先まで誕生日はありません"
 
 #: apps/plugins/portal/birthdays/register.js module:plugins/portal
 msgid "Press [enter] to jump to complete list of Birthdays."
-msgstr ""
-"すべての誕生日のリストにアクセスするには、[enter] キーを押してください。"
+msgstr "すべての誕生日のリストにアクセスするには、[enter] キーを押してください。"
 
 #: apps/plugins/portal/birthdays/register.js module:plugins/portal
 msgid "External link"
@@ -12924,16 +13268,22 @@ msgid "Cannot find user with given name."
 msgstr "指定した名前のユーザーが見つかりません。"
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "Edit Flickr photo stream"
-msgstr "Flickr フォトストリームを編集"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Search photos"
 msgstr "写真を検索"
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Public photos by user"
 msgstr "ユーザーごとの公開写真"
+
+#. 'Create Flickr photo stream' and 'Edit Flickr photo stream' as headers of a modal dialog to create or edit a Flickr photo stream.
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+msgid "Create Flickr photo stream"
+msgstr "Flickr フォトストリームを作成"
+
+#. 'Create Flickr photo stream' and 'Edit Flickr photo stream' as headers of a modal dialog to create or edit a Flickr photo stream.
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+msgid "Edit Flickr photo stream"
+msgstr "Flickr フォトストリームを編集"
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Please enter a search query"
@@ -12977,9 +13327,7 @@ msgstr "%s をダウンロード"
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Please use the \"Connect your device\" wizard to download %s"
-msgstr ""
-"「お使いのデバイスを接続」ウィザードを使用して、%sをダウンロードしてくださ"
-"い。"
+msgstr "「お使いのデバイスを接続」ウィザードを使用して、%sをダウンロードしてください。"
 
 #. Product name will be inserted to advertise the product. I.e. "Get OX Drive" but meant in terms of gettings a piece of software from a online store
 #. Product name will be inserted to adevertise the product. I.e. "Get OX Drive" but meant in terms of gettings a piece of software from a online store
@@ -12996,10 +13344,7 @@ msgid ""
 "The %s client lets you store and share your photos, files, documents and "
 "videos, anytime, anywhere. Access any file you save to %s from all your "
 "computers, iPhone, iPad or from within %s itself."
-msgstr ""
-"%s クライアントで、いつでもどこからでも写真、ファイル、ドキュメント、動画を保"
-"存して共有できます。 %s に保存したすべてのファイルに、お使いのコンピュータ、"
-"iPhone、iPad、そして %s からアクセスできます。"
+msgstr "%s クライアントで、いつでもどこからでも写真、ファイル、ドキュメント、動画を保存して共有できます。 %s に保存したすべてのファイルに、お使いのコンピュータ、iPhone、iPad、そして %s からアクセスできます。"
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "%s is also available for other platforms:"
@@ -13090,6 +13435,12 @@ msgstr "tumblr.com の記事を読む"
 msgid "Open external link"
 msgstr "外部リンクを開く"
 
+#. 'Create Tumblr feed' and 'Edit Tumblr feed' as headers of a modal dialog to create or edit a Tumblr feed.
+#: apps/plugins/portal/tumblr/register.js module:io.ox/portal
+msgid "Create Tumblr feed"
+msgstr "Tumblr フィードを作成"
+
+#. 'Create Tumblr feed' and 'Edit Tumblr feed' as headers of a modal dialog to create or edit a Tumblr feed.
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Edit Tumblr feed"
 msgstr "Tumblr フィードを編集"
@@ -13117,9 +13468,7 @@ msgstr "Tumblr"
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid ""
 "This widget is currently offline because the twitter rate limit exceeded."
-msgstr ""
-"ツイッターの回数制限を越えたため、このウィジェットは現在オフラインになってい"
-"ます。"
+msgstr "ツイッターの回数制限を越えたため、このウィジェットは現在オフラインになっています。"
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 #: apps/plugins/portal/twitter/util.js
@@ -13251,8 +13600,7 @@ msgstr "パスワードの強度: 理想的"
 msgid ""
 "Your password is more secure if it also contains capital letters, numbers, "
 "and special characters like %1$s"
-msgstr ""
-"パスワードに大文字、数字、%1$s などの特殊文字を含めるとより安全になります"
+msgstr "パスワードに大文字、数字、%1$s などの特殊文字を含めるとより安全になります"
 
 #. %1$s is the minimum password length
 #. %2$s is the maximum password length
@@ -13283,9 +13631,7 @@ msgstr "新しいパスワード (再入力)"
 msgid ""
 "If you change the password, you will be signed out. Please ensure that "
 "everything is closed and saved."
-msgstr ""
-"パスワードを変更するとログアウトします。保存していないアイテムを保存してくだ"
-"さい。"
+msgstr "パスワードを変更するとログアウトします。保存していないアイテムを保存してください。"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your new password may not be empty."
@@ -13392,6 +13738,11 @@ msgstr "%s アカウントが再認証されました"
 msgid "There was a problem with %s. The error message was: \"%s\""
 msgstr "%s に問題があります。エラーメッセージ: \"%s\""
 
+#. 'Create a XING Account' as a header of a modal dialog to create a XING account.
+#: apps/plugins/portal/xing/register.js module:plugins/portal
+msgid "Create a XING Account"
+msgstr "XING アカウントを作成"
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please select which of the following data we may use to create your %s "
@@ -13408,8 +13759,7 @@ msgid ""
 "\n"
 "Follow the instructions in the email and then return to the widget to "
 "complete account setup."
-msgstr ""
-"受信トレイで確認メールを確認してください。\n"
+msgstr "受信トレイで確認メールを確認してください。\n"
 "\n"
 "メールの指示に従い、ウィジットを返信してアカウント設定を終了します。"
 
@@ -13420,8 +13770,7 @@ msgstr "ステータス アップデートを投稿"
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
-msgstr ""
-"ステータス アップデートを %s に投稿できませんでした。エラーメッセージ: \"%s\""
+msgstr "ステータス アップデートを %s に投稿できませんでした。エラーメッセージ: \"%s\""
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
@@ -13435,9 +13784,7 @@ msgstr "あなたの Xing ネットワークの最近のアクティビティは
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
 "about new business opportunities."
-msgstr ""
-"XINGネットワークからあなた宛てにニュースが配信されます。新たなビジネスチャン"
-"スに注目してください。"
+msgstr "XINGネットワークからあなた宛てにニュースが配信されます。新たなビジネスチャンスに注目してください。"
 
 #. %1$s is social media name, e.g. Facebook
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -13446,9 +13793,7 @@ msgstr "次の新規アカウントを作成: %1$s"
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
-msgstr ""
-"アクティビティを閲覧するには、こちらをクリックし Xing アカウントへ接続し直し"
-"てください。"
+msgstr "アクティビティを閲覧するには、こちらをクリックし Xing アカウントへ接続し直してください。"
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Your %s newsfeed"
@@ -13462,9 +13807,7 @@ msgstr "%s へようこそ"
 msgid ""
 "Before you can continue using the product, you have to enter some basic "
 "information. It will take less than a minute."
-msgstr ""
-"製品を引き続きご利用いただく前に、基本的情報をいくつか入力する必要がありま"
-"す。入力には１分もかかりません。"
+msgstr "製品を引き続きご利用いただく前に、基本的情報をいくつか入力する必要があります。入力には１分もかかりません。"
 
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid "Back to sign in"
@@ -13490,135 +13833,51 @@ msgstr "%s に招待"
 msgid "Add on %s"
 msgstr "%s に追加"
 
-#~ msgid "Selected - %1$s"
-#~ msgstr "%1$s を選択します。"
+#~ msgid "You tentatively accepted this invitation"
+#~ msgstr "この招待を仮承諾しました"
+
+#~ msgid ""
+#~ "Please provide the old password so the account passwords can be recovered."
+#~ msgstr ""
+#~ "アカウントパスワードを復元するため、変更前のパスワードを入力してください。"
+
+#~ msgid "Draft saved %s"
+#~ msgstr "ドラフトを保存%s"
+
+#~ msgid "Signed and verified"
+#~ msgstr "署名され検証済み"
+
+#~ msgid "%1$s. Press backspace to delete."
+#~ msgstr "%1$s Backspace キーで削除。"
+
+#~ msgid "All timezones"
+#~ msgstr "すべてのタイムゾーン"
+
+#~ msgid "An error occurred converting the document so it cannot be displayed."
+#~ msgstr "ドキュメントの変換中にエラーが発生したため、表示できません。"
 
 #~ msgid "Extremely likely"
 #~ msgstr "非常に良い"
 
-#~ msgid "How likely is it that you would recommend %1$s to a friend?"
-#~ msgstr "友達への%1$sのオススメ度はどれくらいですか？"
-
 #~ msgid "How do you like %1$s?"
 #~ msgstr "%1$sはどうですか？"
 
-#~ msgid "%1$s Toolbar"
-#~ msgstr "%1$s ツールバー"
+#~ msgid "How likely is it that you would recommend %1$s to a friend?"
+#~ msgstr "友達への%1$sのオススメ度はどれくらいですか？"
 
-#~ msgid "Change reminder"
-#~ msgstr "アラームを変更"
+#~ msgid "Ignore warnings"
+#~ msgstr "警告を無視"
 
-#~ msgid "Confidential"
-#~ msgstr "機密"
+#~ msgid "Send without subject"
+#~ msgstr "件名なしで送信"
 
-#~ msgid "Recurrence"
-#~ msgstr "繰り返し"
-
-#~ msgid ""
-#~ "One or more attached files exceed the size limit per email. Therefore, "
-#~ "the files are not sent as attachments but kept on the server. The email "
-#~ "you have sent just contains links to download these files."
-#~ msgstr ""
-#~ "１つ以上の添付ファイルがメールのサイズ制限を越えています。そのため、添付"
-#~ "ファイルとして送信されませんでした。ファイルはサーバーに保存されました。送"
-#~ "信されたメールはそのファイルをダウンロードするためのリンクが記載されていま"
-#~ "す。"
-
-#~ msgid "Edit image"
-#~ msgstr "画像を編集"
-
-#~ msgid "Upload image"
-#~ msgstr "画像をアップロード"
-
-#~ msgid "Take photo"
-#~ msgstr "写真をとる"
-
-#~ msgid "Rotate image"
-#~ msgstr "画像を回転"
-
-#~ msgid "Visibility Help"
-#~ msgstr "表示ヘルプ"
-
-#~ msgid "The appointment is visible for all users in shared calendars."
-#~ msgstr "共有カレンダーのすべてのユーザーが予定を見ることができます。"
+#~ msgid "Yes, with empty attachment"
+#~ msgstr "空の添付ファイルで送信"
 
 #~ msgid ""
-#~ "In shared calendars, the appointment is displayed as a simple time slot "
-#~ "for non-attending users."
-#~ msgstr ""
-#~ "共有カレンダーでは、参加しないユーザーには予定が単純なタイムスロットとして"
-#~ "表示されます。"
-
-#~ msgid ""
-#~ "The appointment is not visible to non-attending users in shared calendars "
-#~ "at all. The appointment is not considered for conflicts and does not "
-#~ "appear in the scheduling view. This option cannot be used, if the "
-#~ "appointment blocks resources."
-#~ msgstr ""
-#~ "共有ｋ共有のカレンダーのすべてのユーザーが予定を全くみることができません。"
-#~ "予定は競合とはみなされず、スケジューリング表示に表示されません。このオプ"
-#~ "ションは、予定がリソースをブロックしている場合は使用できません。"
-
-#~ msgid "Listview"
-#~ msgstr "リストビュー"
-
-#~ msgid "Create contact"
-#~ msgstr "連絡先を作成"
-
-#~ msgid "Some fields contain invalid data"
-#~ msgstr "無効なデータ入力されているフィールドがあります"
-
-#~ msgid "Show all fields"
-#~ msgstr "すべてのフィールドを表示"
-
-#~ msgid "Personal"
-#~ msgstr "個人用"
-
-#~ msgid "Job"
-#~ msgstr "職業"
-
-#~ msgid "Mail and Messaging"
-#~ msgstr "メールとメッセージング"
-
-#~ msgid "Phone numbers"
-#~ msgstr "電話番号"
-
-#~ msgid "Miscellaneous"
-#~ msgstr "その他"
-
-#~ msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-#~ msgstr ""
-#~ "選択された画像ファイルはアップロード可能な最大ファイルサイズ %1$s を超過し"
-#~ "ています"
-
-#~ msgid ""
-#~ "This filetype is not supported as contact picture. Only image types (JPG, "
-#~ "GIF, BMP or PNG) are supported."
-#~ msgstr ""
-#~ "このファイルタイプは連絡先の画像としてサポートしていません。画像ファイルタ"
-#~ "イプ (JPG、GIF、BMP、PNG) のみをサポートします。"
-
-#~ msgid "Upload local image"
-#~ msgstr "ローカル画像をアップロード"
-
-#~ msgid "Localpart"
-#~ msgstr "ローカル部"
-
-#~ msgid ""
-#~ "Let´s automatically configure your device, by clicking the button below."
-#~ msgstr "デバイスの自動構成するには下のボタンをクリックしてください。"
-
-#~ msgid "Show or hide actions for advanced users."
-#~ msgstr "上級ユーザー向けのアクションを表示または非表示にする。"
-
-#~ msgid "Expert user?"
-#~ msgstr "エキスパートユーザー?"
-
-#~ msgid "Hide options for expert users."
-#~ msgstr "エキスパートユーザー用のオプションを非表示にする"
-
-#~ msgid "Configure now"
-#~ msgstr "今構成する"
+#~ "You attached an empty file. It could be, that this file has been deleted "
+#~ "on your hard drive. Send it anyway?"
+#~ msgstr "空のファイルを添付しています。送信しますか?"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -13722,6 +13981,9 @@ msgstr "%s に追加"
 
 #~ msgid "%1$s Options"
 #~ msgstr "%1$s オプション"
+
+#~ msgid "%1$s Toolbar"
+#~ msgstr "%1$s ツールバー"
 
 #~| msgid "%1$s of %2$s"
 #~ msgid "%1$s for %2$s"
@@ -14651,9 +14913,6 @@ msgstr "%s に追加"
 #~ msgid "Answered"
 #~ msgstr "回答済み"
 
-#~ msgid "Antarctica"
-#~ msgstr "南極大陸"
-
 #~ msgid "Antarctica/Casey"
 #~ msgstr "南極/ケーシー"
 
@@ -15069,9 +15328,6 @@ msgstr "%s に追加"
 #~ msgid "August"
 #~ msgstr "８月"
 
-#~ msgid "Australia"
-#~ msgstr "オーストラリア"
-
 #~ msgid "Australia/Adelaide"
 #~ msgstr "オーストラリア/アデレード"
 
@@ -15462,6 +15718,9 @@ msgstr "%s に追加"
 #~ msgid "Change folder"
 #~ msgstr "フォルダーを変更"
 
+#~ msgid "Change reminder"
+#~ msgstr "アラームを変更"
+
 #~ msgid "Change state"
 #~ msgstr "ステータスを変更"
 
@@ -15689,11 +15948,17 @@ msgstr "%s に追加"
 #~ msgid "Composing a new E-Mail"
 #~ msgstr "新規メールの作成"
 
+#~ msgid "Confidential"
+#~ msgstr "機密"
+
 #~ msgid "Configuration damaged, please inform the administrator."
 #~ msgstr "構成が破損しています。管理者に連絡してください。"
 
 #~ msgid "Configure %1$s"
 #~ msgstr "%1$sを構成"
+
+#~ msgid "Configure now"
+#~ msgstr "今構成する"
 
 #~ msgid "Configure your inbox tabs"
 #~ msgstr "受信トレイのタブを構成する"
@@ -16491,6 +16756,9 @@ msgstr "%s に追加"
 #~ msgid "Edit feed"
 #~ msgstr "フィードを編集"
 
+#~ msgid "Edit image"
+#~ msgstr "画像を編集"
+
 #~ msgid "Editing multiple E-Mails"
 #~ msgstr "複数のメールの編集"
 
@@ -16918,6 +17186,9 @@ msgstr "%s に追加"
 
 #~ msgid "Expand timeframe by one month"
 #~ msgstr "１か月期間を拡大する"
+
+#~ msgid "Expert user?"
+#~ msgstr "エキスパートユーザー?"
 
 #~ msgid "Expiration: %1$d"
 #~ msgstr "期限: %1$d"
@@ -17360,6 +17631,9 @@ msgstr "%s に追加"
 #~ msgid "Hide non-working time in teamview"
 #~ msgstr "チーム表示では稼働時間以外を非表示"
 
+#~ msgid "Hide options for expert users."
+#~ msgstr "エキスパートユーザー用のオプションを非表示にする"
+
 #~ msgid "Hide side panel"
 #~ msgstr "サイド パネルを非表示"
 
@@ -17573,6 +17847,13 @@ msgstr "%s に追加"
 #~ "複数のメールを一度に編集するには、メールの左側にあるチェックボックスを有効"
 #~ "にします。チェックボックスが表示されていない場合は、左下にあるアイコンをク"
 #~ "リックします。"
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "共有カレンダーでは、参加しないユーザーには予定が単純なタイムスロットとして"
+#~ "表示されます。"
 
 #~ msgid ""
 #~ "In shared folders, the appointment is displayed as a simple time slot for "
@@ -17851,6 +18132,9 @@ msgstr "%s に追加"
 #~ msgid "Jersey"
 #~ msgstr "ジャージー"
 
+#~ msgid "Job"
+#~ msgstr "職業"
+
 #~ msgid "Join"
 #~ msgstr "参加"
 
@@ -17976,6 +18260,10 @@ msgstr "%s に追加"
 #~ msgid "Lesotho"
 #~ msgstr "レソト"
 
+#~ msgid ""
+#~ "Let´s automatically configure your device, by clicking the button below."
+#~ msgstr "デバイスの自動構成するには下のボタンをクリックしてください。"
+
 #~ msgid "Liberia"
 #~ msgstr "リベリア"
 
@@ -18033,6 +18321,9 @@ msgstr "%s に追加"
 #~ msgid "List workweek view"
 #~ msgstr "リスト稼働日ビュー"
 
+#~ msgid "Listview"
+#~ msgstr "リストビュー"
+
 #~ msgid "Lithuania"
 #~ msgstr "リトアニア"
 
@@ -18054,6 +18345,9 @@ msgstr "%s に追加"
 
 #~ msgid "Loading the full mail might lead to performance problems."
 #~ msgstr "メールをすべて読み込むと性能上の問題が起きる可能性ががあります。"
+
+#~ msgid "Localpart"
+#~ msgstr "ローカル部"
 
 #~ msgid "Location:"
 #~ msgstr "場所:"
@@ -18124,6 +18418,9 @@ msgstr "%s に追加"
 
 #~ msgid "Mail Thread Details"
 #~ msgstr "メール スレッドの詳細"
+
+#~ msgid "Mail and Messaging"
+#~ msgstr "メールとメッセージング"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "メール アカウントとソーシャル アカウント"
@@ -18263,6 +18560,9 @@ msgstr "%s に追加"
 
 #~ msgid "Minutes"
 #~ msgstr "分"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "その他"
 
 #~ msgid "Mobile"
 #~ msgstr "携帯電話"
@@ -18739,6 +19039,16 @@ msgstr "%s に追加"
 #~ msgid_plural "%1$s items were found."
 #~ msgstr[0] "アイテムが一つ見つかりました。"
 
+#~ msgid ""
+#~ "One or more attached files exceed the size limit per email. Therefore, "
+#~ "the files are not sent as attachments but kept on the server. The email "
+#~ "you have sent just contains links to download these files."
+#~ msgstr ""
+#~ "１つ以上の添付ファイルがメールのサイズ制限を越えています。そのため、添付"
+#~ "ファイルとして送信されませんでした。ファイルはサーバーに保存されました。送"
+#~ "信されたメールはそのファイルをダウンロードするためのリンクが記載されていま"
+#~ "す。"
+
 #~ msgid "OneDrive"
 #~ msgstr "OneDrive"
 
@@ -19044,6 +19354,9 @@ msgstr "%s に追加"
 #~ msgid "Permissions: %1$s"
 #~ msgstr "権限"
 
+#~ msgid "Personal"
+#~ msgstr "個人用"
+
 #~ msgid "Peru"
 #~ msgstr "ペルー"
 
@@ -19085,6 +19398,9 @@ msgstr "%s に追加"
 
 #~ msgid "Phone alt"
 #~ msgstr "電話 (予備)"
+
+#~ msgid "Phone numbers"
+#~ msgstr "電話番号"
 
 #~ msgid "Phone:"
 #~ msgstr "電話:"
@@ -19521,6 +19837,9 @@ msgstr "%s に追加"
 #~ msgid "Recipients can edit"
 #~ msgstr "宛先は編集できます。"
 
+#~ msgid "Recurrence"
+#~ msgstr "繰り返し"
+
 #~ msgid "Recurrence Pattern"
 #~ msgstr "繰り返しパターン"
 
@@ -19634,6 +19953,9 @@ msgstr "%s に追加"
 
 #~ msgid "Room number:"
 #~ msgstr "部屋番号:"
+
+#~ msgid "Rotate image"
+#~ msgstr "画像を回転"
 
 #~ msgid "Route Planning"
 #~ msgstr "ルート プランニング"
@@ -19882,6 +20204,9 @@ msgstr "%s に追加"
 #~ msgid "Select the number of items to be displayed in the module panes."
 #~ msgstr "モジュール ペインに表示するアイテム数を選択してください。"
 
+#~ msgid "Selected - %1$s"
+#~ msgstr "%1$s を選択します。"
+
 #~ msgid "Selected message was moved successfully."
 #~ msgid_plural "Selected messages has been moved successfully."
 #~ msgstr[0] "選択したメッセージの移動ができました。"
@@ -20071,6 +20396,9 @@ msgstr "%s に追加"
 #~ msgid "Show Tabs for inbox"
 #~ msgstr "受信トレイのタブを表示"
 
+#~ msgid "Show all fields"
+#~ msgstr "すべてのフィールドを表示"
+
 #~ msgid "Show all images for"
 #~ msgstr "すべての画像を表示"
 
@@ -20127,6 +20455,9 @@ msgstr "%s に追加"
 
 #~ msgid "Show next day"
 #~ msgstr "次の日を表示"
+
+#~ msgid "Show or hide actions for advanced users."
+#~ msgstr "上級ユーザー向けのアクションを表示または非表示にする。"
 
 #~ msgid "Show original publication"
 #~ msgstr "元の公開を表示"
@@ -20233,6 +20564,9 @@ msgstr "%s に追加"
 
 #~ msgid "Somalia"
 #~ msgstr "ソマリア"
+
+#~ msgid "Some fields contain invalid data"
+#~ msgstr "無効なデータ入力されているフィールドがあります"
 
 #~ msgid ""
 #~ "Some files cannot be uploaded because they exceed the maximum file size "
@@ -20650,6 +20984,9 @@ msgstr "%s に追加"
 #~ msgid "Tajikistan"
 #~ msgstr "タジキスタン"
 
+#~ msgid "Take photo"
+#~ msgstr "写真をとる"
+
 #~ msgid "Tanzania"
 #~ msgstr "タンザニア"
 
@@ -20807,6 +21144,16 @@ msgstr "%s に追加"
 #~ "す。"
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "共有ｋ共有のカレンダーのすべてのユーザーが予定を全くみることができません。"
+#~ "予定は競合とはみなされず、スケジューリング表示に表示されません。このオプ"
+#~ "ションは、予定がリソースをブロックしている場合は使用できません。"
+
+#~ msgid ""
 #~ "The appointment is not visible to non-attending users in shared folders "
 #~ "at all. The appointment is not considered for conflicts and does not "
 #~ "appear in the scheduling view."
@@ -20886,6 +21233,9 @@ msgstr "%s に追加"
 #~ "a>の<a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">第２"
 #~ "</a><a href=\"#\" data-widget=\"options\" data-attribute=\"day\">水曜日</"
 #~ "a>に繰り返されます。"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "共有カレンダーのすべてのユーザーが予定を見ることができます。"
 
 #~ msgid "The appointment is visible for all users in shared folders."
 #~ msgstr "共有フォルダーのすべてのユーザーが予定を見ることができます。"
@@ -21284,6 +21634,13 @@ msgstr "%s に追加"
 
 #~ msgid "This file is locked by you"
 #~ msgstr "このファイルは、あなたによってロックされています。"
+
+#~ msgid ""
+#~ "This filetype is not supported as contact picture. Only image types (JPG, "
+#~ "GIF, BMP or PNG) are supported."
+#~ msgstr ""
+#~ "このファイルタイプは連絡先の画像としてサポートしていません。画像ファイルタ"
+#~ "イプ (JPG、GIF、BMP、PNG) のみをサポートします。"
 
 #~ msgid "This folder has publications and/or subscriptions"
 #~ msgstr "このフォルダーは公開または登録されています。"
@@ -21814,9 +22171,6 @@ msgstr "%s に追加"
 #~ msgid "Up"
 #~ msgstr "上へ"
 
-#~ msgid "Update"
-#~ msgstr "更新"
-
 #~ msgid "Update appointment"
 #~ msgstr "アポイントを更新"
 
@@ -21846,6 +22200,12 @@ msgstr "%s に追加"
 #~| msgid "Upload local file"
 #~ msgid "Upload handling"
 #~ msgstr "ローカルファイルをアップロード"
+
+#~ msgid "Upload image"
+#~ msgstr "画像をアップロード"
+
+#~ msgid "Upload local image"
+#~ msgstr "ローカル画像をアップロード"
 
 #~ msgid "Upload new file"
 #~ msgstr "新規ファイルをアップロード"
@@ -22044,6 +22404,9 @@ msgstr "%s に追加"
 
 #~ msgid "Virgin Islands, British"
 #~ msgstr "ヴァージン諸島 (英国)"
+
+#~ msgid "Visibility Help"
+#~ msgstr "表示ヘルプ"
 
 #~ msgid "Visual effects"
 #~ msgstr "視覚効果"
@@ -22496,6 +22859,11 @@ msgstr "%s に追加"
 #~ msgstr ""
 #~ "次の予定されたアポイントが、それ以前に予定された 1 つ以上のアポイントと競"
 #~ "合しています。"
+
+#~ msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+#~ msgstr ""
+#~ "選択された画像ファイルはアップロード可能な最大ファイルサイズ %1$s を超過し"
+#~ "ています"
 
 #~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"
 #~ msgstr ""

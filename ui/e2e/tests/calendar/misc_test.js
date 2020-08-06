@@ -20,20 +20,23 @@ const expect = require('chai').expect,
 
 Feature('Calendar');
 
-Before(async (users) => {
-    await users.create();
-    await users.create();
+Before(async (I, users) => {
+    await Promise.all([
+        users.create(),
+        users.create()
+    ]);
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
 });
 After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C274425] Month label in Calendar week view', async function (I, users) {
-    I.haveSetting('io.ox/core//autoOpenNotification', false);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//viewView', 'week:week');
-    I.login('app=io.ox/calendar', { user: users[0] });
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+Scenario('[C274425] Month label in Calendar week view', async function (I, calendar) {
+    I.login('app=io.ox/calendar&perspective=week:week');
+    calendar.waitForApp();
     I.retry(5).executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2019-05-01"))');
     expect(await I.grabTextFrom('.weekview-container .header .info')).to.equal('April - May 2019 CW 18');
     I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-01-01"))');
@@ -41,16 +44,8 @@ Scenario('[C274425] Month label in Calendar week view', async function (I, users
 });
 
 Scenario('[C207509] Year view', async (I, calendar) => {
-    // 1. Go to Calendar
-    I.login(['app=io.ox/calendar']);
+    I.login(['app=io.ox/calendar&perspective=year']);
     calendar.waitForApp();
-
-    // 2. Switch to year view (View -> Year)
-    calendar.switchView('Year');
-
-    // Expected Result: Year view opens.
-    I.waitForElement('.year-view');
-
     // Expected Result: The year view displays each day of the year separated in month.
     I.seeNumberOfElements('.year-view .month-container', 12);
     let calenderWeeks = await I.grabTextFrom('.year-view tbody td.cw');
@@ -74,7 +69,6 @@ Scenario('[C207509] Year view', async (I, calendar) => {
         I.resizeWindow(width, 1000);
         I.seeNumberOfVisibleElements(`.year-view .month-container[style*="${style}"]`, 12);
     };
-
 
     // Expected Result: Layout switches between a one-, two-, four or six-columned view
     // TODO: actually there is also a three columned layout, need to verify this is correct
@@ -176,9 +170,8 @@ Scenario('[C236795] Visibility Flags', (I, calendar) => {
         // PRIVATE => Private
         // CONFIDENTIAL => Secret
         let labelAndIcon;
-        if (visibility === 'PRIVATE') {
-            labelAndIcon = ['Appointment is private', '.fa-user-circle'];
-        } else if (visibility === 'CONFIDENTIAL') labelAndIcon = ['Appointment is confidential', '.fa-lock'];
+        if (visibility === 'PRIVATE') labelAndIcon = ['Appointment is private', '.fa-user-circle'];
+        else if (visibility === 'CONFIDENTIAL') labelAndIcon = ['Appointment is confidential', '.fa-lock'];
         // Expected Result: You created 3 appointsments with visivilities of Public, Private, Secret
         // Each visibility is displayed as in the example
         I.waitForVisible(getAppointmentLocator(subject, labelAndIcon));
@@ -201,9 +194,9 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
 
     // Expected Result: The current month switches as you click the "previous" or "next" month button
     I.say('2. Switch month by using the arrows of the mini calendar on the left');
-    const currentMonth = moment().format('MMMM YYYY'),
-        nextMonth = moment().add(1, 'month').format('MMMM YYYY'),
-        previousMonth = moment().subtract(1, 'month').format('MMMM YYYY');
+    const currentMonth = moment().format('MMMM YYYY');
+    const nextMonth = moment().add(1, 'month').format('MMMM YYYY');
+    const previousMonth = moment().subtract(1, 'month').format('MMMM YYYY');
 
     I.see(currentMonth, '.window-sidepanel .date-picker');
     I.click('~Go to next month');
@@ -222,9 +215,9 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
     months.forEach(month => I.see(`${month.slice(0, 3)}`, '.window-sidepanel .date-picker .grid'));
 
     I.say('4. Click the number of the current year');
-    const minYear = Math.floor(year / 10) * 10,
-        maxYear = minYear + 12,
-        years = _.range(minYear, maxYear);
+    const minYear = Math.floor(year / 10) * 10;
+    const maxYear = minYear + 12;
+    const years = _.range(minYear, maxYear);
     I.click(year, '.window-sidepanel .date-picker');
     I.seeElement(locate('span').withText(`${minYear} - ${maxYear}`).inside('.window-sidepanel .date-picker'));
 
@@ -244,8 +237,8 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
     I.seeElement(locate('span').withText(`July ${minYear + 8}`).inside('.window-sidepanel .date-picker'));
 
     // Expected Result: The whole month is displayed
-    const daysLocator = locate('td').after('.cw').inside('.window-sidepanel .date-picker .grid'),
-        days = new Set(await I.grabTextFrom(daysLocator));
+    const daysLocator = locate('td').after('.cw').inside('.window-sidepanel .date-picker .grid');
+    const days = new Set(await I.grabTextFrom(daysLocator));
 
     expect(days.size).to.equal(31);
     _.range(1, 32).forEach(day => expect(days.has(`${day}`)).to.be.true);
@@ -261,14 +254,9 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
 });
 
 Scenario('[C244785] Open event from invite notification in calendar', async (I, users, calendar) => {
-    const [userA, userB] = users,
-        startTime = moment().add(10, 'minutes'),
-        endTime = moment().add(70, 'minutes');
-
-    // check if start and end time is transitioning between am/pm
-    /*         isTransitionTime = function () {
-            return startTime.format('A') !== endTime.format('A');
-        }; */
+    const [userA, userB] = users;
+    const startTime = moment().add(10, 'minutes');
+    const endTime = moment().add(70, 'minutes');
 
     await I.haveSetting({ 'io.ox/core': { autoOpenNotification: false } }, { user: userB });
 
@@ -324,7 +312,7 @@ Scenario('[C252158] All my public appointments', (I, users, calendar, dialogs) =
     const [userA, userB] = users;
 
     // 1. User#A: Login and go to Calendar
-    I.login(['app=io.ox/calendar&perspective=week:week'], { user: userA });
+    I.login('app=io.ox/calendar&perspective=week:week');
     calendar.waitForApp();
 
     // 2. User#A: Create a public calendar (Cal#A)
@@ -417,7 +405,7 @@ Scenario('[C265147] Appointment organizer should be marked in attendee list', as
 
     // 1. Login as User#A
     // 2. Go to Calendar
-    I.login(['app=io.ox/calendar&perspective=week:week'], { user: userA });
+    I.login('app=io.ox/calendar&perspective=week:week');
     calendar.waitForApp();
 
     // 3. Create new appointment
@@ -464,16 +452,8 @@ Scenario('[C265147] Appointment organizer should be marked in attendee list', as
 });
 
 Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared Calendar', async function (I, users, calendar, dialogs) {
-
     const sharedCalendarName = `${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New calendar`;
-
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    });
-
-    const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
+    await I.haveFolder({ title: 'New calendar', module: 'event', parent: await calendar.defaultFolder() });
 
     // share folder for preconditions
     // TODO should be part of the haveFolder helper
@@ -496,10 +476,6 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
 
     I.logout();
 
-    await I.haveSetting({
-        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
-    }, { user: users[1] });
     I.login('app=io.ox/calendar', { user: users[1] });
 
     I.retry(5).doubleClick('~Shared calendars');
@@ -512,11 +488,11 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
     I.waitForText('Subscribe shared calendars');
 
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="subscribed"]' }));
-    I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="com.openexchange.calendar.extendedProperties"]' }));
+    I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="used_for_sync"]' }));
 
     I.click(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('.checkbox'));
     I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="subscribed"]' }));
-    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="com.openexchange.calendar.extendedProperties"]' }));
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="used_for_sync"]' }));
 
     dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
@@ -530,11 +506,11 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
     I.waitForText('Subscribe shared calendars');
 
     I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="subscribed"]' }));
-    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="com.openexchange.calendar.extendedProperties"]' }));
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="used_for_sync"]' }));
 
     I.click(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('.checkbox'));
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="subscribed"]' }));
-    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="com.openexchange.calendar.extendedProperties"]' }));
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="used_for_sync"]' }));
 
     I.click(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'label' }).withText('Sync via DAV'));
 
@@ -544,89 +520,54 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
     I.waitForText(sharedCalendarName);
 });
 
-Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Monday, change to daylight saving', async function (I, users, calendar) {
+Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Sunday, change to daylight saving', async function (I, calendar) {
     // see: OXUIB-146 Fix daylight saving issues
-    I.haveSetting('io.ox/core//localeData/firstDayOfWeek', 'monday');
+    const folder = await calendar.defaultFolder();
 
-    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar');
+    await Promise.all([
+        I.haveAppointment({
+            folder,
+            summary: 'Sunday 12-13 date with daylight saving change',
+            startDate: { tzid: 'Europe/Berlin', value: '20200329T120000' },
+            endDate:   { tzid: 'Europe/Berlin', value: '20200329T130000' }
+        }),
+        I.haveAppointment({
+            folder,
+            summary: 'Sunday 12-13 date with daylight saving change',
+            startDate: { tzid: 'America/New_York', value: '20200329T060000' },
+            endDate:   { tzid: 'America/New_York', value: '20200329T070000' }
+        }),
+        I.haveAppointment({
+            folder,
+            summary: 'Monday 12-13 date without daylight saving change',
+            startDate: { tzid: 'Europe/Berlin', value: '20200330T120000' },
+            endDate:   { tzid: 'Europe/Berlin', value: '20200330T130000' }
+        }),
+        I.haveAppointment({
+            folder,
+            summary: 'Monday 12-13 date without daylight saving change',
+            startDate: { tzid: 'America/New_York', value: '20200330T060000' },
+            endDate:   { tzid: 'America/New_York', value: '20200330T070000' }
+        })
+    ]);
 
-    await I.haveAppointment({
-        folder: 'cal://0/' + appointmentDefaultFolder,
-        summary: 'Saturday 12-13 date without daylight saving change',
-        startDate: {
-            tzid: 'Europe/Berlin',
-            value: '20200328T120000'
-        },
-        endDate: {
-            tzid: 'Europe/Berlin',
-            value: '20200328T130000'
-        }
-    });
-
-    await I.haveAppointment({
-        folder: 'cal://0/' + appointmentDefaultFolder,
-        summary: 'Saturday 12-13 date without daylight saving change',
-        startDate: {
-            tzid: 'America/New_York',
-            value: '20200328T070000'
-        },
-        endDate: {
-            tzid: 'America/New_York',
-            value: '20200328T080000'
-        }
-    });
-
-    await I.haveAppointment({
-        folder: 'cal://0/' + appointmentDefaultFolder,
-        summary: 'Sunday 12-13 date with daylight saving change',
-        startDate: {
-            tzid: 'Europe/Berlin',
-            value: '20200329T120000'
-        },
-        endDate: {
-            tzid: 'Europe/Berlin',
-            value: '20200329T130000'
-        }
-    });
-
-    await I.haveAppointment({
-        folder: 'cal://0/' + appointmentDefaultFolder,
-        summary: 'Sunday 12-13 date with daylight saving change',
-        startDate: {
-            tzid: 'America/New_York',
-            value: '20200329T060000'
-        },
-        endDate: {
-            tzid: 'America/New_York',
-            value: '20200329T070000'
-        }
-    });
-
-    I.login('app=io.ox/calendar&perspective=week:week', { user: users[0] });
+    I.login('app=io.ox/calendar&perspective=week:week');
     calendar.waitForApp();
     // jump to daylight saving change
-    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-03-23"))');
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-03-29"))');
 
     // grab css
-    I.waitForElement('.day:nth-child(7) .appointment');
-    const topOfAppointment1 = await I.executeScript(function (el) {
-        return $(el).get(0).style.top;
-    }, '.day:nth-child(7) .appointment');
+    I.waitForElement('.day:nth-child(2) .appointment');
+    const topOfAppointment1 = await I.executeScript(el => $(el).get(0).style.top, '.day:nth-child(2) .appointment');
 
-    I.waitForElement('.day:nth-child(7) .appointment');
-    const topOfAppointment2 = await I.executeScript(function (el) {
-        return $(el).get(1).style.top;
-    }, '.day:nth-child(7) .appointment');
+    I.waitForElement('.day:nth-child(2) .appointment');
+    const topOfAppointment2 = await I.executeScript(el => $(el).get(1).style.top, '.day:nth-child(2) .appointment');
 
-    I.waitForElement('.day:nth-child(8) .appointment');
-    const topOfAppointment3 = await I.executeScript(function (el) {
-        return $(el).get(0).style.top;
-    }, '.day:nth-child(8) .appointment');
+    I.waitForElement('.day:nth-child(3) .appointment');
+    const topOfAppointment3 = await I.executeScript(el => $(el).get(0).style.top, '.day:nth-child(3) .appointment');
 
-    I.waitForElement('.day:nth-child(8) .appointment');
-    const topOfAppointment4 = await I.executeScript(function (el) {
-        return $(el).get(1).style.top;
-    }, '.day:nth-child(8) .appointment');
+    I.waitForElement('.day:nth-child(3) .appointment');
+    const topOfAppointment4 = await I.executeScript(el => $(el).get(1).style.top, '.day:nth-child(3) .appointment');
 
     // must be 50% because we set the appointments to 12 o clock
     expect(topOfAppointment1).to.equal('50%');
@@ -635,93 +576,221 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart M
     expect(topOfAppointment4).to.equal('50%');
 });
 
-Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Monday, change from daylight saving', async function (I, users, calendar) {
+Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Sunday, change from daylight saving', async function (I, calendar) {
     // see: OXUIB-146 Fix daylight saving issues
-    I.haveSetting('io.ox/core//localeData/firstDayOfWeek', 'monday');
+    const folder = await calendar.defaultFolder();
 
-    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar');
+    await Promise.all([
+        I.haveAppointment({
+            folder,
+            summary: 'Sunday 12-13 date with daylight saving change',
+            startDate: { tzid: 'Europe/Berlin', value: '20201025T120000' },
+            endDate:   { tzid: 'Europe/Berlin', value: '20201025T130000' }
+        }),
+        I.haveAppointment({
+            folder,
+            summary: 'Sunday 12-13 date with daylight saving change',
+            startDate: { tzid: 'America/New_York', value: '20201025T070000' },
+            endDate:   { tzid: 'America/New_York', value: '20201025T080000' }
+        }),
+        I.haveAppointment({
+            folder,
+            summary: 'Monday 12-13 date without daylight saving change',
+            startDate: { tzid: 'Europe/Berlin', value: '20201026T120000' },
+            endDate:   { tzid: 'Europe/Berlin', value: '20201026T130000' }
+        }),
+        I.haveAppointment({
+            folder,
+            summary: 'Monday 12-13 date without daylight saving change',
+            startDate: { tzid: 'America/New_York', value: '20201026T070000' },
+            endDate:   { tzid: 'America/New_York', value: '20201026T080000' }
+        })
+    ]);
 
-    await I.haveAppointment({
-        folder: 'cal://0/' + appointmentDefaultFolder,
-        summary: 'Saturday 12-13 date without daylight saving change',
-        startDate: {
-            tzid: 'Europe/Berlin',
-            value: '20201024T120000'
-        },
-        endDate: {
-            tzid: 'Europe/Berlin',
-            value: '20201024T130000'
-        }
-    });
-
-    await I.haveAppointment({
-        folder: 'cal://0/' + appointmentDefaultFolder,
-        summary: 'Saturday 12-13 date without daylight saving change',
-        startDate: {
-            tzid: 'America/New_York',
-            value: '20201024T060000'
-        },
-        endDate: {
-            tzid: 'America/New_York',
-            value: '20201024T070000'
-        }
-    });
-
-    await I.haveAppointment({
-        folder: 'cal://0/' + appointmentDefaultFolder,
-        summary: 'Sunday 12-13 date with daylight saving change',
-        startDate: {
-            tzid: 'Europe/Berlin',
-            value: '20201025T120000'
-        },
-        endDate: {
-            tzid: 'Europe/Berlin',
-            value: '20201025T130000'
-        }
-    });
-
-    await I.haveAppointment({
-        folder: 'cal://0/' + appointmentDefaultFolder,
-        summary: 'Sunday 12-13 date with daylight saving change',
-        startDate: {
-            tzid: 'America/New_York',
-            value: '20201025T070000'
-        },
-        endDate: {
-            tzid: 'America/New_York',
-            value: '20201025T080000'
-        }
-    });
-
-    I.login('app=io.ox/calendar&perspective=week:week', { user: users[0] });
+    I.login('app=io.ox/calendar&perspective=week:week');
     calendar.waitForApp();
     // jump to daylight saving change
-    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-10-19"))');
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-10-25"))');
 
     // grab css
-    I.waitForElement('.day:nth-child(7) .appointment');
-    const topOfAppointment1 = await I.executeScript(function (el) {
-        return $(el).get(0).style.top;
-    }, '.day:nth-child(7) .appointment');
+    I.waitForElement('.day:nth-child(2) .appointment');
+    const topOfAppointment1 = await I.executeScript(el => $(el).get(0).style.top, '.day:nth-child(2) .appointment');
 
-    I.waitForElement('.day:nth-child(7) .appointment');
-    const topOfAppointment2 = await I.executeScript(function (el) {
-        return $(el).get(1).style.top;
-    }, '.day:nth-child(7) .appointment');
+    I.waitForElement('.day:nth-child(2) .appointment');
+    const topOfAppointment2 = await I.executeScript(el => $(el).get(1).style.top, '.day:nth-child(2) .appointment');
 
-    I.waitForElement('.day:nth-child(8) .appointment');
-    const topOfAppointment3 = await I.executeScript(function (el) {
-        return $(el).get(0).style.top;
-    }, '.day:nth-child(8) .appointment');
+    I.waitForElement('.day:nth-child(3) .appointment');
+    const topOfAppointment3 = await I.executeScript(el => $(el).get(0).style.top, '.day:nth-child(3) .appointment');
 
-    I.waitForElement('.day:nth-child(8) .appointment');
-    const topOfAppointment4 = await I.executeScript(function (el) {
-        return $(el).get(1).style.top;
-    }, '.day:nth-child(8) .appointment');
+    I.waitForElement('.day:nth-child(3) .appointment');
+    const topOfAppointment4 = await I.executeScript(el => $(el).get(1).style.top, '.day:nth-child(3) .appointment');
 
     // must be 50% because we set the appointments to 12 o clock
     expect(topOfAppointment1).to.equal('50%');
     expect(topOfAppointment2).to.equal('50%');
     expect(topOfAppointment3).to.equal('50%');
     expect(topOfAppointment4).to.equal('50%');
+});
+
+Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Monday, change to daylight saving', async function (I, calendar) {
+    // see: OXUIB-146 Fix daylight saving issues
+    I.haveSetting('io.ox/core//localeData/firstDayOfWeek', 'monday');
+
+    const folder = await calendar.defaultFolder();
+
+    await Promise.all([
+        I.haveAppointment({
+            folder,
+            summary: 'Saturday 12-13 date without daylight saving change',
+            startDate: { tzid: 'Europe/Berlin', value: '20200328T120000' },
+            endDate:   { tzid: 'Europe/Berlin', value: '20200328T130000' }
+        }),
+        I.haveAppointment({
+            folder,
+            summary: 'Saturday 12-13 date without daylight saving change',
+            startDate: { tzid: 'America/New_York', value: '20200328T070000' },
+            endDate:   { tzid: 'America/New_York', value: '20200328T080000' }
+        }),
+        I.haveAppointment({
+            folder,
+            summary: 'Sunday 12-13 date with daylight saving change',
+            startDate: { tzid: 'Europe/Berlin', value: '20200329T120000' },
+            endDate:   { tzid: 'Europe/Berlin', value: '20200329T130000' }
+        }),
+        I.haveAppointment({
+            folder,
+            summary: 'Sunday 12-13 date with daylight saving change',
+            startDate: { tzid: 'America/New_York', value: '20200329T060000' },
+            endDate:   { tzid: 'America/New_York', value: '20200329T070000' }
+        })
+    ]);
+
+    I.login('app=io.ox/calendar&perspective=week:week');
+    calendar.waitForApp();
+    // jump to daylight saving change
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-03-23"))');
+
+    // grab css
+    I.waitForElement('.day:nth-child(7) .appointment');
+    const topOfAppointment1 = await I.executeScript(el => $(el).get(0).style.top, '.day:nth-child(7) .appointment');
+
+    I.waitForElement('.day:nth-child(7) .appointment');
+    const topOfAppointment2 = await I.executeScript(el => $(el).get(1).style.top, '.day:nth-child(7) .appointment');
+
+    I.waitForElement('.day:nth-child(8) .appointment');
+    const topOfAppointment3 = await I.executeScript(el => $(el).get(0).style.top, '.day:nth-child(8) .appointment');
+
+    I.waitForElement('.day:nth-child(8) .appointment');
+    const topOfAppointment4 = await I.executeScript(el => $(el).get(1).style.top, '.day:nth-child(8) .appointment');
+
+    // must be 50% because we set the appointments to 12 o clock
+    expect(topOfAppointment1).to.equal('50%');
+    expect(topOfAppointment2).to.equal('50%');
+    expect(topOfAppointment3).to.equal('50%');
+    expect(topOfAppointment4).to.equal('50%');
+});
+
+Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Monday, change from daylight saving', async function (I, calendar) {
+    // see: OXUIB-146 Fix daylight saving issues
+    I.haveSetting('io.ox/core//localeData/firstDayOfWeek', 'monday');
+
+    const folder = await calendar.defaultFolder();
+
+    await Promise.all([
+        I.haveAppointment({
+            folder,
+            summary: 'Saturday 12-13 date without daylight saving change',
+            startDate: { tzid: 'Europe/Berlin', value: '20201024T120000' },
+            endDate:   { tzid: 'Europe/Berlin', value: '20201024T130000' }
+        }),
+        I.haveAppointment({
+            folder,
+            summary: 'Saturday 12-13 date without daylight saving change',
+            startDate: { tzid: 'America/New_York', value: '20201024T060000' },
+            endDate:   { tzid: 'America/New_York', value: '20201024T070000' }
+        }),
+        I.haveAppointment({
+            folder,
+            summary: 'Sunday 12-13 date with daylight saving change',
+            startDate: { tzid: 'Europe/Berlin', value: '20201025T120000' },
+            endDate:   { tzid: 'Europe/Berlin', value: '20201025T130000' }
+        }),
+        I.haveAppointment({
+            folder,
+            summary: 'Sunday 12-13 date with daylight saving change',
+            startDate: { tzid: 'America/New_York', value: '20201025T070000' },
+            endDate:   { tzid: 'America/New_York', value: '20201025T080000' }
+        })
+    ]);
+
+    I.login('app=io.ox/calendar&perspective=week:week');
+    calendar.waitForApp();
+    // jump to daylight saving change
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-10-19"))');
+
+    // grab css
+    I.waitForElement('.day:nth-child(7) .appointment');
+    const topOfAppointment1 = await I.executeScript(el => $(el).get(0).style.top, '.day:nth-child(7) .appointment');
+
+    I.waitForElement('.day:nth-child(7) .appointment');
+    const topOfAppointment2 = await I.executeScript(el => $(el).get(1).style.top, '.day:nth-child(7) .appointment');
+
+    I.waitForElement('.day:nth-child(8) .appointment');
+    const topOfAppointment3 = await I.executeScript(el => $(el).get(0).style.top, '.day:nth-child(8) .appointment');
+
+    I.waitForElement('.day:nth-child(8) .appointment');
+    const topOfAppointment4 = await I.executeScript(el => $(el).get(1).style.top, '.day:nth-child(8) .appointment');
+
+    // must be 50% because we set the appointments to 12 o clock
+    expect(topOfAppointment1).to.equal('50%');
+    expect(topOfAppointment2).to.equal('50%');
+    expect(topOfAppointment3).to.equal('50%');
+    expect(topOfAppointment4).to.equal('50%');
+});
+
+Scenario('[C85743] Special-Use flags', async function (I, dialogs) {
+    I.login('app=io.ox/settings&folder=virtual/settings/io.ox/settings/accounts');
+    I.waitForText('Edit');
+    I.retry(10).click('Edit');
+    dialogs.waitForVisible();
+    I.scrollTo('#sent_fullname');
+    I.seeInField('#sent_fullname', 'INBOX/Sent');
+    I.dontSeeInField('#sent_fullname', 'INBOX/Sent Items');  // Default if no special use folder exists on imap (AdminUser.properties:SENT_MAILFOLDER_EN_US)
+    I.dontSeeInField('#sent_fullname', 'INBOX/Sent Messages');
+});
+
+Scenario('[C274517] Download multiple attachments (as ZIP)', async function (I, calendar) {
+    I.handleDownloads('../../build/e2e');
+    const folder = await calendar.defaultFolder();
+    const subject = 'Meetup XY';
+    const appointment = await I.haveAppointment({
+        folder,
+        summary: subject,
+        startDate: { tzid: 'Europe/Berlin', value: moment().set('hour', 13).format('YYYYMMDD[T]HHmmss') },
+        endDate:   { tzid: 'Europe/Berlin', value: moment().set('hour', 14).format('YYYYMMDD[T]HHmmss') }
+    });
+    let updatedAppointment = await I.haveAttachment('calendar', appointment, 'e2e/media/files/generic/testdocument.odt');
+    updatedAppointment = await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testdocument.rtf');
+    await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testspreadsheed.xlsm');
+
+    I.login('app=io.ox/calendar');
+
+    I.waitForText(subject);
+    I.click(subject);
+
+    I.waitForText('Attachments');
+    I.waitForText('testdocument.odt');
+    I.waitForText('testdocument.rtf');
+    I.waitForText('testspreadsheed.xlsm');
+    I.waitForText('All attachments');
+
+    I.click('All attachments');
+    I.waitForText('Download');
+    I.waitForText('Save to Drive');
+    I.seeNumberOfElements('.dropdown.open a[role="menuitem"]', 2);
+
+    I.click('Download', '.dropdown.open');
+
+    I.amInPath('/build/e2e/');
+    I.waitForFile('attachments.zip', 5);
 });

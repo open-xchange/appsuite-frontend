@@ -15,11 +15,10 @@ define('io.ox/core/folder/picker', [
     'io.ox/core/folder/tree',
     'io.ox/mail/api',
     'io.ox/core/folder/api',
-    'io.ox/core/tk/dialogs',
     'io.ox/backbone/views/modal',
     'gettext!io.ox/core',
     'io.ox/core/capabilities'
-], function (TreeView, mailAPI, api, dialogs, ModalDialog, gt, capabilities) {
+], function (TreeView, mailAPI, api, ModalDialog, gt, capabilities) {
 
     'use strict';
 
@@ -129,25 +128,28 @@ define('io.ox/core/folder/picker', [
             }
             return id;
         }
-        var dialog = new ModalDialog({
+        var params = {
             async: o.async,
             width: o.width,
             title: o.title,
             point: 'io.ox/core/folder/picker',
             help: o.help
-        })
+        };
+        if (_.isBoolean(o.autoFocusOnIdle)) _.extend(params, { autoFocusOnIdle: o.autoFocusOnIdle });
+        var dialog = new ModalDialog(params)
             .build(function () {
                 this.$el.addClass('folder-picker-dialog ' + o.addClass);
             })
-            .addCancelButton()
-            .addButton({ action: 'ok', label: o.button ? o.button : gt('Ok') });
+            .addCancelButton();
 
         if (!(capabilities.has('guest') && o.flat) && o.createFolderButton) {
-            dialog.addAlternativeButton({ action: 'create', label: o.createFolderText || gt('Create folder') });
+            dialog.addButton({ action: 'create', label: o.createFolderText || gt('Create folder'), placement: 'left', className: 'btn-default' });
         }
 
+        dialog.addButton({ action: 'ok', label: o.button ? o.button : gt('Ok') });
+
         if (o.alternativeButton) {
-            dialog.addAlternativeButton({ action: 'alternative', label: o.alternativeButton });
+            dialog.addButton({ action: 'alternative', label: o.alternativeButton, placement: 'left', className: 'btn-default' });
         }
         dialog.$body.css({ height: o.height });
 
@@ -192,6 +194,7 @@ define('io.ox/core/folder/picker', [
             });
             tree.on('afterAppear', function () {
                 _.defer(function () {
+                    if (tree.disposed) return;
                     tree.$('.tree-container .selectable.selected').focus().trigger('click');
                 });
             });

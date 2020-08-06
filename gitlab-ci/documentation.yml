@@ -23,13 +23,12 @@ build documentation:
     paths:
       - doku/
     expire_in: 2 hours
-  only:
-    changes:
-      - documentation/**/*
-      - ui/package.json
-  except:
-    refs:
-      - /^e2e\//
+  rules:
+    - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
+      changes:
+        - documentation/**/*
+        - ui/package.json
+      when: always
 
 deploy documentation:
   stage: deploy
@@ -55,12 +54,9 @@ deploy documentation:
     - shell
     - documentation
   allow_failure: true
-  only:
-    refs:
-      - develop
-      - master
-      - /^master-.*$/
-      - /^release-.*$/
-    changes:
-      - documentation/**/*
-      - ui/package.json
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master|master-.*|release-.*)$/'
+      changes:
+        - documentation/**/*
+        - ui/package.json
+      when: on_success

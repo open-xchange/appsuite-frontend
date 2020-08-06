@@ -21,11 +21,11 @@ define('io.ox/calendar/list/view', [
     'io.ox/calendar/util',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/list/style'
-], function (ext, actionsUtil, api, folderAPI, PerspectiveView, viewDetail, util, gt) {
+], function (ext, actionsUtil, api, folderAPI, perspective, viewDetail, util, gt) {
 
     'use strict';
 
-    return PerspectiveView.extend({
+    return perspective.View.extend({
 
         events: {},
 
@@ -99,7 +99,7 @@ define('io.ox/calendar/list/view', [
 
             app.listView.load();
 
-            PerspectiveView.prototype.initialize.call(this, opt);
+            perspective.View.prototype.initialize.call(this, opt);
         },
 
         onUpdateFolders: function (folders) {
@@ -136,7 +136,7 @@ define('io.ox/calendar/list/view', [
             if (_.device('smartphone') && this.app.props.get('checkboxes') === true) return;
             if (obj instanceof Backbone.Model) obj = obj.attributes;
             // be busy
-            this.app.right.busy(true);
+            this.app.right.busy({ empty: true });
             var self = this,
                 lfoShow = _.lfo(function (appointmentModel) {
                     // we need to check folder api first when list perspective is used for search results. Those can contain appointments where the user has no right to see the folder
@@ -144,7 +144,14 @@ define('io.ox/calendar/list/view', [
                     // if the appointment data itself can tell the UI if it's a shared folder or not we can drop this check. tbd
                     var def = self.app.props.get('find-result') ? folderAPI.get(appointmentModel.get('folder')) : $.when();
                     def.always(function (result) {
-                        self.drawAppointment(appointmentModel, { noFolderCheck: result && result.error });
+                        // we use lfo here and wait for a folder api call. This might cause some ugly race conditions. The appointmentModel might be updated by a list or refresh call in the meantime, just make sure it's a fully featured model
+                        if (appointmentModel.get('attendees')) {
+                            self.drawAppointment(appointmentModel, { noFolderCheck: result && result.error });
+                            return;
+                        }
+                        api.get(obj).then(function (fullModel) {
+                            self.drawAppointment(fullModel, { noFolderCheck: result && result.error });
+                        });
                     });
                 });
 

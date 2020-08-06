@@ -154,20 +154,25 @@ define('io.ox/calendar/edit/extensions', [
                     baton.app.getWindow().busy();
                     // needed, so the formdata can be attached when selecting ignore conflicts in the conflict dialog
                     baton.app.attachmentsFormData = attachments;
-                    if (baton.mode === 'edit') {
-                        var options = _.extend(calendarUtil.getCurrentRangeOptions(), {
-                                recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
-                                attachments: attachments,
-                                checkConflicts: true,
-                                usedGroups: baton.model._attendees.usedGroups,
-                                showRecurrenceInfo: true
-                            }),
-                            delta = baton.app.getDelta();
-                        api.update(delta, options).then(save, fail);
-                        return;
-                    }
 
-                    api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { usedGroups: baton.model._attendees.usedGroups, attachments: attachments, checkConflicts: true })).then(save, fail);
+                    // in case some attendees are still resolved we wait fot that. We don't want missing attendees
+                    $.when(baton.model._attendees.toBeResolved).always(function () {
+                        if (baton.mode === 'edit') {
+                            var options = _.extend(calendarUtil.getCurrentRangeOptions(), {
+                                    recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
+                                    attachments: attachments,
+                                    checkConflicts: true,
+                                    usedGroups: baton.model._attendees.usedGroups,
+                                    showRecurrenceInfo: true
+                                }),
+                                delta = baton.app.getDelta();
+                            api.update(delta, options).then(save, fail);
+                            return;
+                        }
+
+                        api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { usedGroups: baton.model._attendees.usedGroups, attachments: attachments, checkConflicts: true })).then(save, fail);
+
+                    });
                 })
             );
 
@@ -182,7 +187,7 @@ define('io.ox/calendar/edit/extensions', [
                 .text(gt('Discard'))
                 .on('click', function (e) {
                     e.stopPropagation();
-                    baton.app.quit();
+                    baton.app.quit(false, { type: 'discard' });
                 })
             );
         }
@@ -257,7 +262,7 @@ define('io.ox/calendar/edit/extensions', [
         id: 'start-date',
         index: 400,
         draw: function (baton) {
-            baton.parentView.startDatePicker = new DatePicker({
+            var datepicker = baton.parentView.startDatePicker = new DatePicker({
                 model: baton.model,
                 className: 'col-sm-6 col-xs-12',
                 display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
@@ -281,7 +286,10 @@ define('io.ox/calendar/edit/extensions', [
                     }
 
                 });
-            this.append(baton.parentView.startDatePicker.render().$el);
+            this.append(datepicker.render().$el);
+            if (datepicker.nodes.timezoneField) {
+                datepicker.nodes.timezoneField.attr('title', gt('Change timezone'));
+            }
         }
     });
 
@@ -291,7 +299,7 @@ define('io.ox/calendar/edit/extensions', [
         index: 500,
         nextTo: 'start-date',
         draw: function (baton) {
-            baton.parentView.endDatePicker = new DatePicker({
+            var datepicker = baton.parentView.endDatePicker = new DatePicker({
                 model: baton.model,
                 className: 'col-sm-6 col-xs-12',
                 display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
@@ -315,7 +323,10 @@ define('io.ox/calendar/edit/extensions', [
                     }
 
                 });
-            this.append(baton.parentView.endDatePicker.render().$el);
+            this.append(datepicker.render().$el);
+            if (datepicker.nodes.timezoneField) {
+                datepicker.nodes.timezoneField.attr('title', gt('Change timezone'));
+            }
         }
     });
 
@@ -361,38 +372,57 @@ define('io.ox/calendar/edit/extensions', [
         render: function () {
             var guid = _.uniqueId('form-control-label-'),
                 originalModel = this.model,
-                model = this.baton.parentView.fullTimeToggleModel || new Backbone.Model({ allDay: calendarUtil.isAllday(this.model) }),
+                parentView = this.baton.parentView,
+                model = parentView.fullTimeToggleModel || new Backbone.Model({
+                    allDay: calendarUtil.isAllday(this.model),
+                    nonAlldayStartTime: moment(originalModel.getMoment('startDate')),
+                    nonAlldayEndTime: moment(originalModel.getMoment('endDate'))
+                }),
                 view = new mini.CustomCheckboxView({ id: guid, name: 'allDay', label: gt('All day'), model: model });
 
             view.listenTo(model, 'change:allDay', function () {
                 if (this.model.get('allDay')) {
+                    this.model.set({
+                        nonAlldayStartTime: moment(originalModel.getMoment('startDate')),
+                        nonAlldayEndTime: moment(originalModel.getMoment('endDate'))
+                    });
                     originalModel.set({
                         startDate: { value: originalModel.getMoment('startDate').format('YYYYMMDD') },
                         endDate: { value: originalModel.getMoment('endDate').format('YYYYMMDD') }
                     });
                 } else {
-                    var tzid = moment().tz();
+                    // keep selected date but use the time saved from before the allday change
                     originalModel.set({
-                        startDate: { value: originalModel.getMoment('startDate').format('YYYYMMDD[T]HHmmss'), tzid: tzid },
-                        endDate: { value: originalModel.getMoment('endDate').format('YYYYMMDD[T]HHmmss'), tzid: tzid }
+                        startDate: { value: originalModel.getMoment('startDate').format('YYYYMMDD') + this.model.get('nonAlldayStartTime').format('[T]HHmmss'), tzid: this.model.get('nonAlldayStartTime').tz() },
+                        endDate: { value: originalModel.getMoment('endDate').format('YYYYMMDD') + this.model.get('nonAlldayEndTime').format('[T]HHmmss'), tzid: this.model.get('nonAlldayEndTime').tz() }
                     });
                 }
             });
             this.$el.append(view.render().$el);
 
-            if (!this.baton.parentView.fullTimeToggleModel && this.baton.mode === 'create') {
+            if (!parentView.fullTimeToggleModel && this.baton.mode === 'create') {
                 // if we restore alarms, check if they differ from the defaults
                 var isDefault = JSON.stringify(_(originalModel.attributes.alarms).pluck('action', 'trigger')) === JSON.stringify(_(calendarUtil.getDefaultAlarms(originalModel)).pluck('action', 'trigger'));
 
-                // automatically change default alarm in creae mode when allDay changes and the user did not change the alarm before (we don't want data loss)
+                // automatically change default alarm in create mode when allDay changes and the user did not change the alarm before (we don't want data loss)
                 if (isDefault) {
                     var applyDefaultAlarms = function () { originalModel.set('alarms', calendarUtil.getDefaultAlarms(originalModel)); };
                     model.on('change:allDay', applyDefaultAlarms);
                     originalModel.once('userChangedAlarms', function () { model.off('change:allDay', applyDefaultAlarms); });
                 }
+
+                // add some automatic for transparency here.
+                // we want to change transparency according to the markFulltimeAppointmentsAsFree setting
+                // if we detect a manual change of the transparency setting caused by a user we don't want to overwrite this.
+                // cannot use originalModel.changed attribute here because of multiple issues (changed only stores attributes from last set, not from last sync for example)
+                view.listenTo(model, 'change:allDay', function () {
+                    if (settings.get('markFulltimeAppointmentsAsFree', false) && !parentView.userChangedTransp) {
+                        originalModel.set('transp', this.model.get('allDay') ? 'TRANSPARENT' : 'OPAQUE');
+                    }
+                });
             }
 
-            this.baton.parentView.fullTimeToggleModel = model;
+            parentView.fullTimeToggleModel = model;
         }
     });
 
@@ -667,7 +697,10 @@ define('io.ox/calendar/edit/extensions', [
                 convertToAttendee: true,
                 collection: baton.model.getAttendees(),
                 blacklist: settings.get('participantBlacklist') || false,
-                scrollIntoView: true
+                scrollIntoView: true,
+                // to prevent addresspicker from processing data asynchronously.
+                // Not needed and may cause issues with slow network (hitting save before requests return).
+                processRaw: true
             });
 
             this.append(baton.parentView.addParticipantsView.$el);
@@ -820,8 +853,17 @@ define('io.ox/calendar/edit/extensions', [
         id: 'shown_as',
         index: 100,
         render: function () {
+            var parentView = this.baton.parentView,
+                // used by all day checkbox
+                visibilityCheckbox = mini.CustomCheckboxView.extend({
+                    onChange: function () {
+                        parentView.userChangedTransp = true;
+                        this.model.set(this.name, this.getValue());
+                    }
+                });
+
             this.$el.append(
-                new mini.CustomCheckboxView({
+                new visibilityCheckbox({
                     label: gt('Show as free'),
                     name: 'transp',
                     model: this.model,
