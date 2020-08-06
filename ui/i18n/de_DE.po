@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-07-30 15:18+0200\n"
+"PO-Revision-Date: 2020-08-06 11:19+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -663,11 +663,6 @@ msgstr "unbekannt"
 #, c-format
 msgid "%1$s of %2$s"
 msgstr "%1$s von %2$s"
-
-#. Quota maxed out; 100%
-#: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
-msgid "100%"
-msgstr "100%"
 
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
 msgid "Drag to reorder items"
@@ -4167,7 +4162,6 @@ msgid "Empty name and description found."
 msgstr "Leeres Namens- und Beschreibungsfeld"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#, fuzzy
 msgid "Edit to set a name."
 msgstr "Bearbeiten, um einen Namen hinzuzufügen."
 
@@ -4662,6 +4656,18 @@ msgstr "Der Dienst ist derzeit nicht verfügbar."
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Reload"
 msgstr "Neu laden"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Privacy Policy"
+msgstr "Datenschutzrichtlinie"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Imprint"
+msgstr "Impressum"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Confirm new Password"
+msgstr "Neues Passwort bestätigen"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -9039,7 +9045,6 @@ msgid "Mail quota exceeded"
 msgstr "E-Mail-Speicherplatz überschritten"
 
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
-#, fuzzy
 msgid ""
 "Emails cannot be put into trash folder while your mail quota is exceeded."
 msgstr ""
@@ -14154,7 +14159,6 @@ msgid "You don't have any appointments in the near future."
 msgstr "Sie haben keine Termine in naher Zukunft."
 
 #: apps/plugins/portal/files/register.js module:plugins/portal
-#, fuzzy
 msgid "Press [enter] to jump to %1$s"
 msgstr "Durch Drücken der Eingabetaste öffnen Sie %1$s"
 
@@ -14771,6 +14775,9 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "100%"
+#~ msgstr "100%"
 
 #~ msgid "Use native notifications"
 #~ msgstr "Systemeigene Benachrichtigungen verwenden"
