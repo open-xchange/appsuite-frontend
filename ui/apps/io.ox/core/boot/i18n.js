@@ -65,6 +65,9 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
         gt('The service is not available right now.');
         gt('Retry');
         gt('Reload');
+        gt('Privacy Policy');
+        gt('Imprint');
+        gt('Confirm new Password');
 
 
     }
