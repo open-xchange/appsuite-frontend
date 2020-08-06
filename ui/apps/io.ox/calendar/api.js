@@ -61,6 +61,8 @@ define('io.ox/calendar/api', [
                     var events = api.pool.findRecurrenceModels(event),
                         updates = _(event).pick('attendees', 'alarms', 'flags', 'timestamp');
                     events.forEach(function (evt) {
+                        // exclude exceptions here, would result in wrong cache data (declined appointments suddenly looking accepted etc)
+                        if (evt.hasFlag('overridden')) return;
                         evt.set(updates);
                         api.trigger('update', evt.attributes);
                         api.trigger('update:' + util.cid(evt), evt.attributes, { updateData: { showRecurrenceInfo: options && options.showRecurrenceInfo } });
