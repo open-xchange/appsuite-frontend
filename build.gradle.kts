@@ -38,6 +38,8 @@ configure<com.openexchange.build.licensing.LicensingExtension> {
     }
 }
 
+val backendBranch = "master-7.10.3"
+
 configure<com.openexchange.obs.gradle.plugin.BuildserviceExtension> {
     url = "https://buildapi.open-xchange.com"
     login  = System.getenv("OBS_USERNAME")
@@ -63,15 +65,15 @@ configure<com.openexchange.obs.gradle.plugin.BuildserviceExtension> {
             }
             create("RHEL6") {
                 // TODO go down to the base RHEL 6 repository
-                depends("backend-master", "RHEL6")
+                depends("backend-${backendBranch}", "RHEL6")
             }
             create("RHEL7") {
                 // TODO go down to the base RHEL 7 repository
-                depends("backend-master", "RHEL7")
+                depends("backend-${backendBranch}", "RHEL7")
             }
             create("SLE_12") {
                 // TODO go to SP4
-                depends("backend-master", "SLE_12")
+                depends("backend-${backendBranch}", "SLE_12")
             }
         }
     }
