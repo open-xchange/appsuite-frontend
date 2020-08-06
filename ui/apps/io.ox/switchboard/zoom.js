@@ -196,7 +196,7 @@ define('io.ox/switchboard/zoom', [
         },
 
         deleteMeeting: function (id) {
-            return exports.api('DELETE', '/meetings/' + id);
+            return exports.api('DELETE', '/meetings/' + id + '?schedule_for_reminder=false');
         }
     };
 
