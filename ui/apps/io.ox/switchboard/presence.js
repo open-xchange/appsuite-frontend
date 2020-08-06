@@ -13,8 +13,9 @@
 
 define('io.ox/switchboard/presence', [
     'io.ox/switchboard/api',
-    'gettext!io.ox/switchboard'
-], function (api, gt) {
+    'gettext!io.ox/switchboard',
+    'settings!io.ox/switchboard'
+], function (api, gt, settings) {
 
     'use strict';
 
@@ -49,10 +50,9 @@ define('io.ox/switchboard/presence', [
         getPresence: function (userId) {
             userId = api.trim(userId);
             if (!users[userId]) {
-                users[userId] = { id: userId, lastSeen: 0, availability: 'offline' };
+                this.addUser(userId, 'offline');
                 api.socket.emit('presence-get', userId, function (data) {
                     exports.changePresence(userId, data);
-                    if (api.isMyself(userId)) exports.trigger('change-own-availability', data.availability);
                 });
             }
             return users[userId];
@@ -86,25 +86,32 @@ define('io.ox/switchboard/presence', [
         changePresence: function (userId, changes) {
             var presence = this.getPresence(userId);
             if (changes.availability === presence.availability) return;
-            _.extend(presence, changes, { lastSeen: _.now() });
+            _.extend(presence, changes);
             // update all DOM nodes for this user
             var $el = $('.presence[data-id="' + $.escape(presence.id) + '"]')
                 .removeClass('online absent busy offline')
                 .addClass(presence.availability);
-
-            $el.find('.icon').attr('title', this.getAvailabilityString(presence));
-            $el.find('.availability').text(this.getAvailabilityString(presence));
+            var title = this.getAvailabilityString(presence);
+            $el.find('.icon').attr('title', title);
+            $el.find('.availability').text(title);
+            if (api.isMyself(userId)) exports.trigger('change-own-availability', presence.availability);
         },
 
         changeOwnAvailability: function (availability) {
             this.changePresence(api.userId, { availability: availability });
+            settings.set('availability', availability).save();
             // share might (soon) be: all, context, domain, (white) list
             api.socket.emit('presence-change', { availability: availability, visibility: 'all' });
+            // keep this line, even if it's double
             exports.trigger('change-own-availability', availability);
         },
 
         getMyAvailability: function () {
-            return (users[api.userId] || {}).availability || 'offline';
+            return settings.get('availability', 'online');
+        },
+
+        addUser: function (userId, availability, lastSeen) {
+            users[userId] = { id: userId, lastSeen: lastSeen || 0, availability: availability };
         },
 
         users: users
@@ -135,13 +142,21 @@ define('io.ox/switchboard/presence', [
         exports.changePresence(userId, presence);
     });
 
+    api.socket.on('connect', function () {
+        // emit own presence from user settings on connect
+        exports.changeOwnAvailability(exports.getMyAvailability());
+    });
+
     api.socket.on('reconnect', function () {
         for (var userId in users) {
+            if (api.isMyself(userId)) continue;
             delete users[userId];
-            // assume offline by default
-            exports.changePresence(userId, 'offline');
+            exports.getPresence(userId);
         }
     });
+
+    exports.addUser(api.userId, exports.getMyAvailability(), _.now());
+    api.socket.emit('presence-get', api.userId, $.noop);
 
     // add an event hub. we need this to publish presence state changes
     _.extend(exports, Backbone.Events);

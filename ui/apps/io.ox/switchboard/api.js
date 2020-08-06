@@ -40,6 +40,14 @@ define.async('io.ox/switchboard/api', [
             return this.trim(id) === this.userId;
         },
 
+        isGAB: function (baton) {
+            // call/chat only works for users, so
+            // make sure we are in global address book
+            return baton.array().every(function (data) {
+                return data.folder_id === 6 && data.email1;
+            });
+        },
+
         isInternal: _.constant(false),
 
         propagate: function (type, to, payload) {
@@ -103,6 +111,8 @@ define.async('io.ox/switchboard/api', [
             params: { action: 'acquireToken' }
         })
         .then(function (data) {
+            // TODO
+            // * enable long polling, configure retries, and reconnects
             api.socket = io(api.host + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token, { transports: ['websocket'] })
                 .once('connect', function () {
                     console.log('%cConnected to switchboard service', 'background-color: green; color: white; padding: 8px;');

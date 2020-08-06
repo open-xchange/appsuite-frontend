@@ -25,11 +25,11 @@ define('io.ox/switchboard/call/incoming', [
     'use strict';
 
     return {
-        openDialog: function (model) {
+        openDialog: function (call) {
             new Modal({ title: gt('Incoming call') })
                 .build(function () {
-                    var caller = model.getCaller();
-                    this.listenTo(model, 'hangup', function () {
+                    var caller = call.getCaller();
+                    this.listenTo(call, 'hangup', function () {
                         ringtone.incoming.stop();
                         this.close();
                     });
@@ -39,7 +39,7 @@ define('io.ox/switchboard/call/incoming', [
                             contactsAPI.pictureHalo($('<div class="contact-photo">'), { email: caller }, { width: 80, height: 80 }),
                             presence.getPresenceIcon(caller)
                         ),
-                        $('<div class="name">').append(model.getCallerName()),
+                        $('<div class="name">').append(call.getCallerName()),
                         $('<div class="email">').text(caller)
                     );
                     this.$footer.append($('<div class="switchboard-actions">').append(
@@ -62,19 +62,20 @@ define('io.ox/switchboard/call/incoming', [
                 .on('open', function () {
                     if (window.Notification && settings.get('call/showNativeNotifications', true)) {
                         new Notification('Incoming call', {
-                            body: gt('%1$s is calling', model.getCaller())
+                            body: gt('%1$s is calling', call.getCaller())
                         });
                     }
                     ringtone.incoming.play();
                 })
                 .on('decline', function () {
                     ringtone.incoming.stop();
-                    model.decline();
+                    call.decline();
                 })
                 .on('answer', function () {
                     ringtone.incoming.stop();
-                    model.answer();
-                    window.open(model.getJoinURL());
+                    call.answer();
+                    call.addToHistory();
+                    window.open(call.getJoinURL());
                 })
                 .open();
         }

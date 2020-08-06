@@ -28,7 +28,7 @@ define('io.ox/switchboard/actions', [
             // you cannot call yourself
             if (justMyself(baton)) return false;
             if (!baton.type) return false;
-            return isGAB(baton);
+            return api.isGAB(baton);
         },
         action: function (baton) {
             call.start(baton.type, getRecipients(baton));
@@ -38,7 +38,7 @@ define('io.ox/switchboard/actions', [
     // new Action('io.ox/switchboard/wall-user', {
     //     collection: 'some',
     //     matches: function (baton) {
-    //         return isGAB(baton);
+    //         return api.isGAB(baton);
     //     },
     //     action: function (baton) {
     //         var recipients = getRecipients(baton);
@@ -61,14 +61,6 @@ define('io.ox/switchboard/actions', [
 
     function justMyself(baton) {
         return baton.array().every(function (data) { return data.email1 === api.userId; });
-    }
-
-    function isGAB(baton) {
-        // call/chat only works for users, so
-        // make sure we are in global address book
-        return baton.array().every(function (data) {
-            return data.folder_id === 6 && data.email1;
-        });
     }
 
     function getRecipients(baton) {
