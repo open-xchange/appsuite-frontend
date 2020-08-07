@@ -271,11 +271,11 @@ define('io.ox/core/main/stages', [
             disableItems(rightSectionPoint, ['launcher', 'refresh', 'notifications', 'settings']);
 
             // hide top-level entries in the extension point
-            var dropDownPoint = ext.point('io.ox/core/appcontrol/right/dropdown');
+            var dropDownPoint = ext.point('io.ox/core/appcontrol/right/account');
             filterItems(dropDownPoint, ['about', 'logout']);
 
             // hide all logout items (e.g. Guard) but the global logout
-            var signOutsPoint = ext.point('io.ox/core/appcontrol/right/dropdown/signouts');
+            var signOutsPoint = ext.point('io.ox/core/appcontrol/right/account/signouts');
             filterItems(signOutsPoint, ['logout']);
         }
     }, {

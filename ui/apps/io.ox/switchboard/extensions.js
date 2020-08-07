@@ -37,7 +37,7 @@ define('io.ox/switchboard/extensions', [
     if (capabilities.has('guest') && settings.get('user/internalUserEdit', true) === false) return;
 
     // extend account dropdown
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'availability',
         index: 10,
         extend: function () {
