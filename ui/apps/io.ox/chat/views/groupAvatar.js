@@ -24,8 +24,6 @@ function (DisposableView, data) {
         className: 'group avatar image',
 
         initialize: function () {
-            this.listenTo(this.model, 'change:fileId', this.update);
-
             if (this.model.isChannel()) this.$icon = $('<i class="fa fa-hashtag">');
             else if (this.model.isGroup()) this.$icon = $('<i class="fa fa-group">');
         },
@@ -39,7 +37,8 @@ function (DisposableView, data) {
             this.$el.css('background-image', '').empty();
 
             if (this.model.get('icon')) {
-                this.$el.css('background-image', 'url(' + data.API_ROOT + '/rooms/' + this.model.get('roomId') + '/icon');
+                var endpoint = this.model.get('type') !== 'channel' ? '/rooms/' : '/channels/';
+                this.$el.css('background-image', 'url("' + data.API_ROOT + endpoint + this.model.get('roomId') + '/icon")');
             } else {
                 this.$el.append(this.$icon);
             }

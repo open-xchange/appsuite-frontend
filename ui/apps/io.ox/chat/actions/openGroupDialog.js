@@ -38,8 +38,12 @@ define('io.ox/chat/actions/openGroupDialog', [
         },
 
         getImageUrl: function () {
-            var fileId = this.model.get('fileId');
-            return fileId ? data.API_ROOT + '/files/' + fileId + '/thumbnail' : '';
+            if (!this.model.get('icon')) return;
+
+            var roomId = this.model.get('roomId'),
+                endpoint = this.model.get('type') === 'channel' ? '/channels/' : '/rooms/';
+
+            return roomId ? data.API_ROOT + endpoint + roomId + '/icon' : '';
         }
 
     });
@@ -117,6 +121,7 @@ define('io.ox/chat/actions/openGroupDialog', [
         .addButton({ action: 'save', label: model.id ? 'Edit chat' : 'Create chat' })
         .on('save', function () {
             var dataObj = this.model.toJSON();
+            if (dataObj.type === 'channel') delete dataObj.members;
             else dataObj.members = this.collection.pluck('email1');
 
             if (this.model.get('title') === originalModel.get('title')) delete dataObj.title;

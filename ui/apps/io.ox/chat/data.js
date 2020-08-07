@@ -322,7 +322,7 @@ define('io.ox/chat/data', [
             if (direction === 'prev') id = this.first().get('messageId');
             else if (direction === 'next') id = this.last().get('messageId');
 
-            return this.load({ id: id, direction: direction, limit: DEFAULT_LIMIT }, 'paginate');
+            return this.load({ messageId: id, direction: direction, limit: DEFAULT_LIMIT }, 'paginate');
         },
         load: function (params, type) {
             type = type || 'load';
@@ -330,18 +330,19 @@ define('io.ox/chat/data', [
 
             // special handling for search
             if (type === 'load' && this.messageId) {
-                params = { direction: 'siblings', id: this.messageId, limit: DEFAULT_LIMIT };
+                params = { direction: 'siblings', messageId: this.messageId, limit: DEFAULT_LIMIT };
                 delete this.messageId;
             }
 
-            if (!params.id) {
+            if (!params.messageId) {
                 if (!this.nextComplete) params.limit = DEFAULT_LIMIT;
                 this.nextComplete = true;
                 this.trigger('complete:next');
             }
 
+            var endpoint = data.chats.getCurrent() && data.chats.getCurrent().isChannel() ? '/channels/' : '/rooms/';
             return $.ajax({
-                url: this.url() + '?' + $.param(params),
+                url: data.API_ROOT + endpoint + this.roomId + '/messages' + '?' + $.param(params),
                 xhrFields: { withCredentials: true }
             })
             .then(function (list) {
@@ -349,7 +350,7 @@ define('io.ox/chat/data', [
                 this.add(list);
                 params.direction = params.direction || 'prev';
                 if (params.direction === 'siblings') {
-                    var index = _(list).findIndex({ id: params.id });
+                    var index = _(list).findIndex({ id: params.messageId });
                     if (index < params.limit / 2 - 1) {
                         this.prevComplete = true;
                         this.trigger('complete:prev');
@@ -391,7 +392,7 @@ define('io.ox/chat/data', [
 
     var ChatModel = Backbone.Model.extend({
 
-        defaults: { active: true, type: 'group', unreadCount: 0 },
+        defaults: { active: false, type: 'group', unreadCount: 0 },
 
         idAttribute: 'roomId',
 
@@ -884,8 +885,7 @@ define('io.ox/chat/data', [
                                 return message.get('senderId') === data.user.userId;
                             }), lastMessage;
                         if (lastIndex >= 0) lastMessage = model.messages.at(lastIndex);
-
-                        if (!lastMessage || newMessage.get('senderId') !== data.user.id || lastMessage.get('id')) model.messages.add(message, { merge: true });
+                        if (!lastMessage || lastMessage.get('messageId') && newMessage.get('messageId') !== lastMessage.get('messageId')) model.messages.add(message, { merge: true }); // TODO: discuss!
 
                     } else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
 
@@ -894,7 +894,7 @@ define('io.ox/chat/data', [
                         state = 'client';
                     } else state = 'seen';
 
-                    newMessage.updateDelivery(state, roomId);
+                    if (model.get('type') !== 'channel') newMessage.updateDelivery(state, roomId);
 
                     if (newMessage.get('type') === 'system') model.checkForGroupUpdate(message, roomId);
                 });

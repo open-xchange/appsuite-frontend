@@ -172,7 +172,7 @@ define('io.ox/chat/views/chat', [
             // there are two cases when to reset the collection before usage
             // 1) We have a messageId but the requested messageId is not in the collection
             // 2) We don't have a messageId but the collection is not fully fetched
-            if ((this.messageId && !this.model.messages.find(function (m) { return m.get('messageId') === this.messageId; }, this)) || (!this.messageId && !this.model.messages.nextComplete)) {
+            if (this.model.get('roomId') && ((this.messageId && !this.model.messages.find(function (m) { return m.get('messageId') === this.messageId; }, this)) || (!this.messageId && !this.model.messages.nextComplete))) { // TODO Discuss
                 this.model.messages.reset();
                 _.delay(this.model.messages.fetch.bind(this.model.messages));
             }

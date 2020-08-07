@@ -190,7 +190,9 @@ define('io.ox/chat/main', [
             .addCancelButton({ left: true })
             .addButton({ action: 'continue', label: 'Yes' })
             .on('continue', function () {
-                data.chats.get(groupId).destroy();
+                var chat = data.chats.get(groupId),
+                    url = chat.url() + '/members';
+                chat.destroy({ url: url });
                 self.closeChat();
                 data.chats.setCurrent(undefined);
             })
@@ -239,6 +241,16 @@ define('io.ox/chat/main', [
             );
             this.$body.removeClass('open');
             data.chats.setCurrent(undefined);
+            this.reloadAvatars();
+        },
+
+        reloadAvatars: function () {
+            var avatars = this.$body.find('.avatar.image');
+            avatars.each(function (index) {
+                var url = $(avatars[index]).css('background-image');
+                // force background image reload
+                if (url) $(avatars[index]).css('background-image', url.slice(0, url.length - 2) + '?v' + new Date().getTime() + '")');
+            });
         },
 
         showRecentConversations: function () {
