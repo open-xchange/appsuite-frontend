@@ -40,7 +40,8 @@ define('io.ox/core/viewer/views/sidebarview', [
                 model: baton.model,
                 fixed: true,
                 closable: baton.options.closable,
-                disableFolderInfo: !!(baton.options.opt && baton.options.opt.disableFolderInfo)
+                disableFolderInfo: !!(baton.options.opt && baton.options.opt.disableFolderInfo),
+                viewerEvents: baton.context.viewerEvents
             };
 
             this.append(new FileInfoView(fileInfoOpt).render().el);
@@ -53,7 +54,7 @@ define('io.ox/core/viewer/views/sidebarview', [
         draw: function (baton) {
             //check if supported
             if (!(baton.model.isFile() && folderApi.pool.models[baton.data.folder_id] && folderApi.pool.models[baton.data.folder_id].supports('extended_metadata'))) return;
-            this.append(new FileDescriptionView({ model: baton.model }).render().el);
+            this.append(new FileDescriptionView({ model: baton.model, viewerEvents: baton.context.viewerEvents }).render().el);
         }
     });
 
@@ -63,7 +64,7 @@ define('io.ox/core/viewer/views/sidebarview', [
         draw: function (baton) {
             //check if supported
             if (!(baton.model.isFile() && folderApi.pool.models[baton.data.folder_id] && folderApi.pool.models[baton.data.folder_id].can('add:version'))) return;
-            this.append(new FileVersionsView({ model: baton.model, viewerEvents: baton.context.viewerEvents, isViewer: baton.context.isViewer }).render().el);
+            this.append(new FileVersionsView({ model: baton.model, viewerEvents: baton.context.viewerEvents, isViewer: baton.context.isViewer, standalone: baton.context.standalone }).render().el);
         }
     });
 
@@ -117,6 +118,7 @@ define('io.ox/core/viewer/views/sidebarview', [
 
             this.model = null;
             this.zone = null;
+            this.thumbnailView = null;
             this.app = options.app;
 
             // listen to slide change and set fresh model
@@ -187,9 +189,12 @@ define('io.ox/core/viewer/views/sidebarview', [
          * Activates a sidebar tab and render its contents.
          *
          * @param {String} tabId
-         * tab id string to be activated. Supported: 'thumbnail' and 'detail'.
+         *  The tab id string to be activated. Supported: 'thumbnail' and 'detail'.
+         *
+         * @param {Boolean} [forceRender = false]
+         *  If set to 'true' renders (again) even if content is already present.
          */
-        activateTab: function (tabId) {
+        activateTab: function (tabId, forceRender) {
             var tabs = this.$('.tablink');
             var panes = this.$('.viewer-sidebar-pane');
             var activatedTab = tabs.filter('[data-tab-id="' + tabId + '"]');
@@ -203,16 +208,13 @@ define('io.ox/core/viewer/views/sidebarview', [
             // render the tab contents
             switch (tabId) {
                 case 'detail':
-                    this.renderSections();
+                    if (forceRender || this.$('.sidebar-panel').length === 0) {
+                        this.renderSections();
+                    }
                     break;
                 case 'thumbnail':
-                    if (this.$('.document-thumbnail').length === 0) {
-                        var thumbnailView = new ThumbnailView({
-                            el: this.$('.thumbnail-pane'),
-                            model: this.model,
-                            viewerEvents: this.viewerEvents
-                        });
-                        thumbnailView.render();
+                    if (this.thumbnailView && (forceRender || this.$('.document-thumbnail').length === 0)) {
+                        this.thumbnailView.render();
                     }
                     break;
                 default: break;
@@ -237,7 +239,10 @@ define('io.ox/core/viewer/views/sidebarview', [
             this.open = _.isUndefined(state) ? !this.open : Boolean(state);
             this.$el.toggleClass('open', this.open);
             this.viewerEvents.trigger('viewer:sidebar:change:state', this.open);
-            this.renderSections();
+
+            if (this.open && this.$('.sidebar-panel').length === 0) {
+                this.renderSections();
+            }
         },
 
         /**
@@ -260,7 +265,8 @@ define('io.ox/core/viewer/views/sidebarview', [
             // render sections only if side bar is open
             if (!this.model || !this.open) return;
 
-            var detailPane = this.$('.detail-pane'), folder = folderApi.pool.models[this.model.get('folder_id')];
+            var detailPane = this.$('.detail-pane');
+            var folder = folderApi.pool.models[this.model.get('folder_id')];
             // remove previous sections
             detailPane.empty();
             // remove dropzone handler
@@ -290,9 +296,9 @@ define('io.ox/core/viewer/views/sidebarview', [
                 });
                 detailPane.parent().append(this.zone.render().$el.addClass('abs'));
             }
+
             ext.point('io.ox/core/viewer/views/sidebarview/detail').invoke('draw', detailPane, ext.Baton({
                 options: this.options,
-                isViewer: this.isViewer,
                 context: this,
                 app: this.app,
                 $el: detailPane,
@@ -319,13 +325,22 @@ define('io.ox/core/viewer/views/sidebarview', [
             // initially set model
             this.model = model;
 
+            // init thumbnail view, but for popout viewer on desktop and tablets
+            if (!this.thumbnailView && this.standalone && !_.device('smartphone')) {
+                this.thumbnailView = new ThumbnailView({
+                    el: this.$('.thumbnail-pane'),
+                    model: this.model,
+                    viewerEvents: this.viewerEvents
+                });
+            }
+
             // show tab navigation in office standalone mode
             if (this.standalone && !_.device('smartphone') && TypesUtil.isDocumentType(model)) {
                 this.$('.viewer-sidebar-tabs').removeClass('hidden');
-                var lastActivatedThumbnail = ViewerSettings.getSidebarActiveTab();
-                this.activateTab(lastActivatedThumbnail);
+                var lastActivatedTab = ViewerSettings.getSidebarActiveTab();
+                this.activateTab(lastActivatedTab, true);
             } else {
-                this.activateTab('detail');
+                this.activateTab('detail', true);
             }
             return this;
         },
@@ -347,6 +362,7 @@ define('io.ox/core/viewer/views/sidebarview', [
                     // in order to distinguish between 'the file details have been loaded but the file has no description'
                     // and 'the file details have not been loaded yet so we don't know if it has a description'.
                     if (!this.model) return;
+                    if (_.isString(this.model.get('description'))) return;
                     var description = (file && _.isString(file.description)) ? file.description : '';
                     this.model.set('description', description);
                 }.bind(this));
@@ -412,6 +428,7 @@ define('io.ox/core/viewer/views/sidebarview', [
                 this.zone = null;
             }
             this.model = null;
+            this.thumbnailView = null;
         }
     });
 

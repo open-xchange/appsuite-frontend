@@ -63,12 +63,33 @@ define('io.ox/core/viewer/views/toolbarview', [
                             this.$el.addClass('viewer-toolbar-filename');
                         },
                         render: function () {
-                            this.$el.empty().append(
-                                // icon
-                                !this.standalone ? $('<i class="fa" aria-hidden="true">').addClass(Util.getIconClass(this.model)) : null,
-                                // filename
-                                $('<span class="filename-label">').text(this.model.getDisplayName())
-                            );
+                            var last_modified = this.model.get('last_modified');
+                            var isToday = moment().isSame(moment(last_modified), 'day');
+                            var dateString = (last_modified) ? moment(last_modified).format(isToday ? 'LT' : 'l LT') : '-';
+
+                            if (this.model.get('current_version') !== false) {
+                                // current version
+                                this.$el.empty().append(
+                                    // icon
+                                    $('<i class="fa" aria-hidden="true">').addClass(Util.getIconClass(this.model)),
+                                    // filename
+                                    $('<span class="filename-label">').text(this.model.getDisplayName())
+                                );
+
+                            } else {
+                                // older version
+                                this.$el.empty().append(
+                                    // icon
+                                    $('<i class="fa fa-code-fork" aria-hidden="true">'),
+                                    // version
+                                    $('<span class="version-label">').text(dateString),
+                                    // separator
+                                    $('<span class="separator-label">').text(' - '),
+                                    // filename
+                                    $('<span class="filename-label">').text(this.model.getDisplayName())
+                                );
+                            }
+
                             return this;
                         }
                     });
@@ -76,7 +97,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     return function (baton) {
 
                         new RenameView({ el: this, model: baton.model, standalone: baton.standalone }).render();
-                        this.parent().addClass('align-left');
+                        this.parent().addClass('align-left viewer-toolbar-filename-parent');
 
                         // check if action is available
                         if (!baton.model.isFile()) return;
@@ -490,7 +511,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         matches: function (baton) {
             var model = baton.model;
             // no support for mail attachments and no popout for already popped out viewer
-            return model.get('group') !== 'localFile' && !baton.context.standalone;
+            return model.get('group') !== 'localFile' && !baton.standalone;
         },
         action: function (baton) {
             if (!FileUtils.isFileVersionUploading(baton.data.id, FILE_VERSION_IS_UPLOADING_MSG)) {
@@ -504,8 +525,11 @@ define('io.ox/core/viewer/views/toolbarview', [
                             _.extend(urlAttrs, {
                                 id: baton.model.get('id'),
                                 folder: baton.model.get('folder_id')
-                                // version: baton.model.get('verions')    todo: version handling - DOCS-1618
                             });
+
+                            if (baton.model.get('current_version') === false) {
+                                urlAttrs.version = baton.model.get('version');
+                            }
 
                         } else if (baton.model.isMailAttachment()) {
                             _.extend(urlAttrs, {
@@ -551,7 +575,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         capabilities: 'infostore',
         device: '!smartphone',
         matches: function (baton) {
-            return !baton.context.standalone;
+            return !baton.standalone;
         },
         // handled by HelpView
         action: $.noop
@@ -559,7 +583,7 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     new Action(TOOLBAR_ACTION_ID + '/close', {
         matches: function (baton) {
-            return !baton.context.standalone || !ox.tabHandlingEnabled || (_.url.hash('office:disable-openInTabs') === 'true');
+            return !baton.standalone || !ox.tabHandlingEnabled || (_.url.hash('office:disable-openInTabs') === 'true');
         },
         action: function (baton) {
             return baton.context.onClose(baton.e);
@@ -592,7 +616,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/zoomfitwidth', {
         matches: function (baton) {
             var model = baton.model;
-            return (model.isOffice() || model.isPDF() || model.isText()) && baton.context.standalone;
+            return (model.isOffice() || model.isPDF() || model.isText()) && baton.standalone;
         },
         action: function (baton) {
             baton.context.viewerEvents.trigger('viewer:zoom:fitwidth');
@@ -603,7 +627,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/zoomfitheight', {
         matches: function (baton) {
             var model = baton.model;
-            return (model.isOffice() || model.isPDF() || model.isText()) && baton.context.standalone;
+            return (model.isOffice() || model.isPDF() || model.isText()) && baton.standalone;
         },
         action: function (baton) {
             baton.context.viewerEvents.trigger('viewer:zoom:fitheight');
@@ -631,7 +655,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     function supportsAutoPlay(baton, started) {
-        if (baton.context.standalone) return false;
+        if (baton.standalone) return false;
         if (baton.context.autoplayStarted !== started) return false;
         if (!baton.model.isImage()) return false;
         return imageCount(baton.model) >= 2;
@@ -664,6 +688,8 @@ define('io.ox/core/viewer/views/toolbarview', [
             this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
             // listen to autoplay events
             this.listenTo(this.viewerEvents, 'viewer:autoplay:state:changed', this.onAutoplayRunningStateChanged);
+            // listen to version display events
+            this.listenTo(this.viewerEvents, 'viewer:display:version', this.onDisplayTempVersion.bind(this));
             // listen to added/removed favorites
             this.listenTo(FilesAPI, 'favorite:add favorite:remove', this.onFavoritesChange);
             // give toolbar a standalone class if its in one
@@ -742,7 +768,8 @@ define('io.ox/core/viewer/views/toolbarview', [
             if (!(e.which === 32 || e.which === 13 || e.type === 'click')) return;
             e.preventDefault();
             if (!this.model.isFile()) return;
-            actionsUtil.invoke('io.ox/files/actions/rename', this.model.toJSON());
+
+            actionsUtil.invoke('io.ox/files/actions/rename', Ext.Baton({ data: this.model.toJSON(), isViewer: true }));
         },
 
         /**
@@ -791,6 +818,19 @@ define('io.ox/core/viewer/views/toolbarview', [
             if (file.id === _.cid(this.model.toJSON())) {
                 this.updateToolbarDebounced();
             }
+        },
+
+        /**
+         * Handles display temporary file version events.
+         *
+         * @param {Object} versionData
+         *   The JSON representation of the version.
+         */
+        onDisplayTempVersion: function (versionData) {
+            if (!versionData) { return; }
+
+            this.model = new FilesAPI.Model(versionData);
+            this.updateToolbar();
         },
 
         /**
@@ -872,7 +912,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                     data: isDriveFile ? modelJson : this.model.get('origData'),
                     model: this.model,
                     models: isDriveFile ? [this.model] : null,
-                    openedBy: this.openedBy
+                    openedBy: this.openedBy,
+                    standalone: this.standalone,
+                    isViewer: true
                 };
             }.bind(this));
         },

@@ -59,6 +59,19 @@ define('io.ox/files/actions', [
         return /^(owncloud|webdav|nextcloud)$/.test(data.folder_id.split(':')[0]);
     }
 
+    function isCurrentVersion(baton) {
+        // folder tree folder, always current version
+        if (!baton.collection.has('some')) return true;
+        // drive folder, always current version
+        if (baton.collection.has('folders')) return true;
+        // single selection
+        if (baton.collection.has('one') && baton.first().current_version !== false) return true;
+        // multi selection
+        if (baton.collection.has('multiple') && baton.array().every(function (file) { return file.current_version !== false; })) return true;
+        // default
+        return false;
+    }
+
     function isEmpty(baton) {
         return _.isEmpty(baton.data);
     }
@@ -316,6 +329,7 @@ define('io.ox/files/actions', [
             if (isEmpty(baton)) return false;
             if (fromMailCompose(baton)) return false;
             if (isTrash(baton)) return false;
+            if (baton.isViewer && !isCurrentVersion(baton)) return false;
             return baton.array().reduce(function (memo, obj) {
                 return memo || obj.file_size > 0;
             }, false);
@@ -337,6 +351,7 @@ define('io.ox/files/actions', [
             if (fromMailCompose(baton)) return false;
             if (baton.standalone) return false;
             if (hasStatus('lockedByOthers', baton)) return false;
+            if (baton.isViewer && !isCurrentVersion(baton)) return false;
             return true;
         },
         action: function (baton) {
@@ -437,6 +452,7 @@ define('io.ox/files/actions', [
             if (isEmpty(baton)) return false;
             if (isTrash(baton)) return false;
             if (isContact(baton)) return false;
+            if (baton.isViewer && !isCurrentVersion(baton)) return false;
             return true;
         },
         action: function (baton) {
@@ -469,6 +485,7 @@ define('io.ox/files/actions', [
             if (isTrash(baton)) return false;
             if (hasStatus('lockedByOthers', baton)) return false;
             if (fromMailCompose(baton)) return false;
+            if (baton.isViewer && !isCurrentVersion(baton)) return false;
             // shortcuts
             if (baton.collection.has('folders')) return baton.collection.has('rename:folder');
             if (baton.collection.has('modify')) return true;
@@ -518,6 +535,7 @@ define('io.ox/files/actions', [
             if (fromMailCompose(baton)) return false;
             if (hasStatus('lockedByOthers', baton)) return false;
             if (!folderAPI.pool.getModel(baton.first().folder_id).supports('extended_metadata')) return false;
+            if (baton.isViewer && !isCurrentVersion(baton)) return false;
             if (baton.collection.has('modify')) return true;
             return hasObjectWritePermissions(baton.first());
         },
@@ -741,6 +759,7 @@ define('io.ox/files/actions', [
         // not possible for multi-selection
         if (baton.collection.has('multiple')) return false;
         if (isContact(baton)) return false;
+        if (baton.isViewer && !isCurrentVersion(baton)) return false;
         // get folder id
         if (baton.collection.has('one')) {
             var data = baton.first();
@@ -1102,6 +1121,7 @@ define('io.ox/files/actions', [
 
             if (isTrash(baton)) return false;
             if (baton.originFavorites) return false;
+            if (baton.isViewer && !isCurrentVersion(baton)) return false;
 
             var favoritesFolder = coreSettings.get('favorites/infostore', []),
                 favoriteFiles = coreSettings.get('favoriteFiles/infostore', []),
@@ -1145,6 +1165,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/favorites/remove', {
         capabilities: '!guest && !anonymous',
         matches: function (baton) {
+            if (baton.isViewer && !isCurrentVersion(baton)) return false;
 
             var favoritesFolder = coreSettings.get('favorites/infostore', []),
                 favoriteFiles = coreSettings.get('favoriteFiles/infostore', []),

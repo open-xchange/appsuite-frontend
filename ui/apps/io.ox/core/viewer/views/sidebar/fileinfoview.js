@@ -13,6 +13,7 @@
 define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/viewer/views/sidebar/panelbaseview',
     'io.ox/core/extensions',
+    'io.ox/files/api',
     'io.ox/core/folder/api',
     'io.ox/core/api/user',
     'io.ox/core/util',
@@ -21,7 +22,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/viewer/util',
     'settings!io.ox/core',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, folderAPI, UserAPI, util, mailUtil, capabilities, ViewerUtil, settings, gt) {
+], function (PanelBaseView, Ext, FilesAPI, folderAPI, UserAPI, util, mailUtil, capabilities, ViewerUtil, settings, gt) {
 
     'use strict';
 
@@ -279,6 +280,8 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             this.setPanelHeader(gt('Details'));
             // attach event handlers
             this.listenTo(this.model, 'change:media change:cid change:filename change:title change:com.openexchange.file.sanitizedFilename change:file_size change:last_modified change:folder_id change:object_permissions change:permissions', this.render);
+            // listen to version display events
+            this.listenTo(this.viewerEvents, 'viewer:display:version', this.onDisplayTempVersion.bind(this));
         },
 
         render: function () {
@@ -297,6 +300,19 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             }
 
             return this;
+        },
+
+        /**
+         * Handles display temporary file version events.
+         *
+         * @param {Object} versionData
+         *   The JSON representation of the version.
+         */
+        onDisplayTempVersion: function (versionData) {
+            if (!versionData) { return; }
+
+            this.model = new FilesAPI.Model(versionData);
+            this.render();
         },
 
         /**

@@ -14,8 +14,9 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
     'io.ox/core/viewer/views/sidebar/panelbaseview',
     'io.ox/core/extensions',
     'io.ox/backbone/views/actions/util',
+    'io.ox/files/api',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, actionsUtil, gt) {
+], function (PanelBaseView, Ext, actionsUtil, FilesAPI, gt) {
 
     'use strict';
 
@@ -34,15 +35,17 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
             if (!_.isString(description)) return;
 
-            if (description.length > 0) {
-                panelBody.append(
-                    $('<div class="description">', { title: gt('Description text') }).text(description)
-                );
-            }
+            panelBody.append(
+                $('<div class="description">', { title: gt('Description text') }).text((description.length > 0) ? description : '-')
+            );
+
             baton.view.hasWritePermissions().then(function () {
+                if (!baton.view.isCurrentVersion()) { return; }
+
                 panelBody.append(
                     $('<button type="button" class="btn btn-link description-button">').text(description.length > 0 ? gt('Edit description') : gt('Add a description'))
                 );
+
             }).fail(function () {
                 panelBody.parent().hide();
             });
@@ -80,6 +83,9 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
                 this.togglePanel(true);
                 // attach event handlers
                 this.listenTo(this.model, 'change:description', this.render);
+                // listen to version display events
+                this.listenTo(this.viewerEvents, 'viewer:display:version', this.onDisplayTempVersion.bind(this));
+
             } else {
                 this.$el.hide();
             }
@@ -105,6 +111,23 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         hasWritePermissions: function () {
             if (!this.model) return $.Deferred().reject();
             return actionsUtil.checkAction('io.ox/files/actions/edit-description', this.model.toJSON());
+        },
+
+        isCurrentVersion: function () {
+            return (this.model && this.model.get('current_version') !== false);
+        },
+
+        /**
+         * Handles display temporary file version events.
+         *
+         * @param {Object} versionData
+         *   The JSON representation of the version.
+         */
+        onDisplayTempVersion: function (versionData) {
+            if (!versionData) { return; }
+
+            this.model = new FilesAPI.Model(versionData);
+            this.render();
         },
 
         /**

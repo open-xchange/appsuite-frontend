@@ -14,11 +14,12 @@
 
 define('io.ox/files/detail/main', [
     'io.ox/files/api',
+    'io.ox/core/folder/api',
     'gettext!io.ox/files',
     'io.ox/core/notifications',
     'io.ox/core/api/tab',
     'io.ox/files/actions'
-], function (api, gt, notifications, tabAPI) {
+], function (api, folderAPI, gt, notifications, tabAPI) {
 
     'use strict';
 
@@ -41,14 +42,23 @@ define('io.ox/files/detail/main', [
             }
 
             function showModel(data) {
-                var label = gt('File Details'),
-                    title = data['com.openexchange.file.sanitizedFilename'] || data.filename || data.title;
+                var label = gt('File Details');
+                var title = data['com.openexchange.file.sanitizedFilename'] || data.filename || data.title;
 
                 app.getWindowNode().addClass('detail-view-app').append(
                     $('<div class="f6-target detail-view-container" tabindex="-1" role="complementary">').attr('aria-label', label)
                 );
 
                 fileModel = api.pool.get('detail').get(_.cid(data)) || null;
+
+                // alternate file version
+                if (fileModel && data.override_file_version) {
+                    var versionData = _.find(fileModel.get('versions'), function (item) {
+                        return item.version === data.override_file_version;
+                    });
+
+                    fileModel = (versionData) ? new api.Model(versionData) : fileModel;
+                }
 
                 require(['io.ox/core/viewer/main'], function (Viewer) {
                     var launchParams = {
@@ -89,11 +99,19 @@ define('io.ox/files/detail/main', [
             app.showFile = function (file) {
                 if (file.file) return showModel(file.file);
 
-                api.get(file).then(showModel, function fail(error) {
-                    notifications.yell(error);
-                    app.quit();
-                });
+                // load file and folder data, e.g. needed if popout viewer is launched in a new browser tab
+                folderAPI.get(file.folder_id || file.folder).then(function () {
+                    return api.get(file);
 
+                }).then(function (modelData) {
+                    // current model
+                    if (!file.version) { return modelData; }
+
+                    // alternate model
+                    modelData.override_file_version = file.version;
+                    return api.versions.load(modelData, { cache: false }).then(function () { return modelData; });
+
+                }).then(showModel, app.showErrorAndCloseApp);
             };
         },
         'manage-url': function (app) {
@@ -117,6 +135,12 @@ define('io.ox/files/detail/main', [
             api.on('rename add:version remove:version change:version', _.debounce(function (file) {
                 api.get(_.cid(file), { cache: false });
             }, 100));
+        },
+        'error-handler': function (app) {
+            app.showErrorAndCloseApp = function (error) {
+                notifications.yell(error);
+                app.close();
+            };
         }
     });
 
@@ -146,11 +170,6 @@ define('io.ox/files/detail/main', [
             app.mediate();
             win.show();
 
-            function showErrorAndCloseApp(error) {
-                notifications.yell(error);
-                app.close();
-            }
-
             // handle mail attachments
             if (options.file) {
                 var mail = options.file.mail;
@@ -163,15 +182,6 @@ define('io.ox/files/detail/main', [
                 }
                 return app.showFile(options);
             }
-
-            // var cid = options.cid, obj;
-            // if (cid !== undefined) {
-            //     // called from files app
-            //     obj = _.cid(cid);
-            //     app.setUrlParameter({ folder: obj.folder_id, id: obj.id });
-            //     app.showFile(obj);
-            //     return;
-            // }
 
             // deep-link and 'open in new browser tab'
             var obj = _.clone(app.getState());
@@ -189,7 +199,7 @@ define('io.ox/files/detail/main', [
 
                     return app.showFile({ file: attachment });
 
-                }, showErrorAndCloseApp);
+                }, app.showErrorAndCloseApp);
 
             } else if (obj.module && obj.id && obj.folder && obj.attachment) {
                 // pim attachment
@@ -208,7 +218,7 @@ define('io.ox/files/detail/main', [
 
                         app.showFile({ file: attachment });
 
-                    }, showErrorAndCloseApp);
+                    }, app.showErrorAndCloseApp);
                 });
 
             } else if (obj.id && obj.folder && obj.attachment) {
@@ -237,7 +247,7 @@ define('io.ox/files/detail/main', [
                         }
                         app.showFile({ file: attachment });
 
-                    }, showErrorAndCloseApp);
+                    }, app.showErrorAndCloseApp);
                 });
 
             } else if (obj.id && obj.folder) {
