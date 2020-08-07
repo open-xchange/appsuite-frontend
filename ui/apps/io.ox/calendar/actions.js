@@ -150,7 +150,7 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/detail/actions/create', {
-        device: '!guest',
+        capabilities: '!guest',
         action: _.debounce(function (baton, obj) {
             ox.load(['io.ox/calendar/actions/create']).done(function (action) {
                 action(baton, obj);
