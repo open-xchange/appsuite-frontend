@@ -28,6 +28,16 @@ define('io.ox/core/main/appcontrol', [
         $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle(force);
     }
 
+    var extensions = {
+        launcher: function () {
+            var launchers = window.launchers = new LaunchersView({
+                collection: ox.ui.apps,
+                dontProcessOnMobile: true
+            });
+            this.append(launchers.render().$el);
+        }
+    };
+
     var LauncherView = Backbone.View.extend({
         tagName: 'a',
         className: 'btn btn-link lcell',
@@ -246,6 +256,7 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
+    // hint: shared node references so multiple view instances won't work
     var LaunchersView = Dropdown.extend({
         attributes: { role: 'presentation', dontprocessonmobile: 'true' },
         tagName: 'li',
@@ -329,21 +340,6 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    // ext.point('io.ox/core/appcontrol').extend({
-    //     id: 'launcher',
-    //     index: 200,
-    //     draw: function () {
-    //         // possible setting here
-    //         var apps = ox.ui.apps.where({ hasLauncher: true });
-    //         // reverted for 7.10
-    //         //if (apps.length <= 1) return;
-    //         var launchers = window.launchers = new LaunchersView({
-    //             collection: apps
-    //         });
-    //         this.append(launchers.render().$el);
-    //     }
-    // });
-
     ext.point('io.ox/core/appcontrol').extend({
         id: 'logo',
         index: 300,
@@ -405,6 +401,17 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
+    ext.point('io.ox/core/appcontrol').extend({
+        id: 'left',
+        index: 350,
+        draw: function () {
+            if (_.device('smartphone')) return;
+            var taskbar = $('<ul class="taskbar list-unstyled" role="toolbar">');
+            this.append($('<div id="io-ox-topleftbar">').append(taskbar));
+            ext.point('io.ox/core/appcontrol/left').invoke('draw', taskbar);
+        }
+    });
+
     // reverted for 7.10
     ext.point('io.ox/core/appcontrol').extend({
         id: 'quicklauncher',
@@ -416,17 +423,12 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    // for 7.10
-    // move launcher to the right
     ext.point('io.ox/core/appcontrol/right').extend({
         id: 'launcher',
         index: 120,
         draw: function () {
-            var launchers = window.launchers = new LaunchersView({
-                collection: ox.ui.apps,
-                dontProcessOnMobile: true
-            });
-            this.append(launchers.render().$el);
+            if (!_.device('smartphone')) return;
+            extensions.launcher.call(this);
         }
     });
 
@@ -457,6 +459,15 @@ define('io.ox/core/main/appcontrol', [
         index: 10000,
         draw: function () {
             this.attr('role', 'banner').show();
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/left').extend({
+        id: 'launcher',
+        index: 100,
+        draw: function () {
+            if (_.device('smartphone')) return;
+            extensions.launcher.call(this);
         }
     });
 

@@ -297,6 +297,10 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         }
     }
 
+    #io-ox-topleftbar,
+    #io-ox-topleftbar > ul,
+    #io-ox-topleftbar > ul > li,
+    #io-ox-topleftbar > ul > li > a,
     #io-ox-toprightbar,
     #io-ox-toprightbar > ul,
     #io-ox-toprightbar > ul > li,
@@ -310,6 +314,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         margin: 0;
     }
 
+    #io-ox-topleftbar,
     #io-ox-toprightbar {
         padding-right: 12px; // break alignment on purpose
         // more space needed on smartphones
@@ -565,6 +570,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     // reduce spacings to fit topbar on really small devices
     .smartphone #io-ox-appcontrol {
         #io-ox-topsearch { margin-right: 0; }
+        #io-ox-topleftbar .launcher > a { padding: 16px 9px; }
         #io-ox-toprightbar .launcher > a { padding: 16px 9px; }
         #io-ox-launcher > button.launcher-btn { width: 44px; }
     }
