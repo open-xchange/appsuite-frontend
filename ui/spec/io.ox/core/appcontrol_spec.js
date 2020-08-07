@@ -65,7 +65,7 @@ define([
             });
 
             describe('Drowpdown menu drawing', function () {
-                const point = ext.point('io.ox/core/appcontrol/right/dropdown');
+                const point = ext.point('io.ox/core/appcontrol/right/account');
 
                 beforeEach(function () {
                     // store state

@@ -102,7 +102,7 @@ define('io.ox/tours/get-started', [
 
     //no tours on smartphone
     if (!_.device('smartphone')) {
-        ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+        ext.point('io.ox/core/appcontrol/right/account').extend({
             id: 'get-started',
             index: 250,
             extend: function () {

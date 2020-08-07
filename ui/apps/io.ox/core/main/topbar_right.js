@@ -160,7 +160,7 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'upsell',
         index: 50,
         extend: function () {
@@ -183,7 +183,7 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'refreshMobile',
         index: 80,
         extend: function () {
@@ -196,7 +196,7 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'settingsMobile',
         index: 90,
         extend: function () {
@@ -208,7 +208,7 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'onboarding',
         index: 120,
         extend: function () {
@@ -245,7 +245,7 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'change-user-data',
         index: 150,
         extend: function () {
@@ -262,7 +262,7 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'change-user-password',
         index: 175,
         extend: function () {
@@ -280,7 +280,7 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'app-specific-help',
         index: 200,
         extend: function () {
@@ -300,7 +300,7 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'divider-before-about',
         index: 290,
         extend: function () {
@@ -308,7 +308,7 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'about',
         index: 400,
         extend: function () {
@@ -321,17 +321,17 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'logout',
         index: 1000,
         extend: function () {
             this.divider();
             // Group available signout calls here, including appsuite, Guard, etc
-            ext.point('io.ox/core/appcontrol/right/dropdown/signouts').invoke('extend', this);
+            ext.point('io.ox/core/appcontrol/right/account/signouts').invoke('extend', this);
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown/signouts').extend({
+    ext.point('io.ox/core/appcontrol/right/account/signouts').extend({
         id: 'logout',
         index: 100,
         extend: function () {
@@ -364,7 +364,7 @@ define('io.ox/core/main/topbar_right', [
                 });
 
             updatePicture();
-            ext.point('io.ox/core/appcontrol/right/dropdown').invoke('extend', dropdown);
+            ext.point('io.ox/core/appcontrol/right/account').invoke('extend', dropdown);
             this.append(dropdown.render().$el.find('a').attr('tabindex', -1).end());
 
             // via global address book

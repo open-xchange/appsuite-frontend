@@ -504,7 +504,7 @@ define('plugins/core/feedback/register', [
         }
     };
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'feedback',
         index: 240,
         extend: function () {
