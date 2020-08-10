@@ -47,6 +47,8 @@ define.async('plugins/wizards/mandatory/main', [
                         } else {
                             user.save();
                             settings.save();
+                            // normally this could cause problems but at this early stage no app is loaded, so it should work
+                            moment.tz.setDefault(settings.get('timezone'));
                             def.resolve();
                         }
                     });
