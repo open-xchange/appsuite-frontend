@@ -40,6 +40,40 @@ define('io.ox/core/main/topbar_right', [
         }, currentApp && currentApp.get('help'));
     }
 
+    var extensions = {
+
+        onboarding: function () {
+            var device, $link, self = this;
+            if (_.device('android')) device = _.device('smartphone') ? 'android.phone' : 'android.tablet';
+            if (_.device('ios')) device = _.device('smartphone') ? 'apple.iphone' : 'apple.ipad';
+
+            self.append(
+                $link = $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem" tabindex="-1">')
+                    //#. starts the client onboarding wizard that helps users
+                    //#. to configure their devices to access/sync appsuites
+                    //#. data (f.e. install ox mail app)
+                    .text(_.device('desktop') ? gt('Connect your Device') : gt('Connect this Device'))
+            );
+
+            require(['io.ox/onboarding/clients/api'], function (onboardingAPI) {
+
+                onboardingAPI.enabledDevices(device).then(function (config) {
+                    var enabled = _.device('desktop') ? true : (config[device] || false);
+
+                    $link.toggleClass('disabled ui-disabled', !enabled)
+                        .attr('aria-disabled', !enabled)
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            if (!enabled) return e.stopPropagation();
+                            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
+                                wizard.run();
+                            });
+                        });
+                });
+            });
+        }
+    };
+
     ext.point('io.ox/core/appcontrol/right').extend({
         id: 'upsell',
         index: 50,
@@ -240,6 +274,15 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
+    ext.point('io.ox/core/appcontrol/right/settings').extend({
+        id: 'onboarding',
+        index: 200,
+        extend: function () {
+            if (_.device('smartphone')) return;
+            extensions.onboarding.apply(this, arguments);
+        }
+    });
+
     ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'upsell',
         index: 50,
@@ -289,39 +332,12 @@ define('io.ox/core/main/topbar_right', [
     });
 
     ext.point('io.ox/core/appcontrol/right/account').extend({
-        id: 'onboarding',
+        id: 'onboarding-mobile',
         index: 120,
+        enable: capabilities.has('client-onboarding'),
         extend: function () {
-            if (capabilities.has('!client-onboarding')) return;
-
-            var device, $link, self = this;
-            if (_.device('android')) device = _.device('smartphone') ? 'android.phone' : 'android.tablet';
-            if (_.device('ios')) device = _.device('smartphone') ? 'apple.iphone' : 'apple.ipad';
-
-            self.append(
-                $link = $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem" tabindex="-1">')
-                    //#. starts the client onboarding wizard that helps users
-                    //#. to configure their devices to access/sync appsuites
-                    //#. data (f.e. install ox mail app)
-                    .text(_.device('desktop') ? gt('Connect your Device') : gt('Connect this Device'))
-            );
-
-            require(['io.ox/onboarding/clients/api'], function (onboardingAPI) {
-
-                onboardingAPI.enabledDevices(device).then(function (config) {
-                    var enabled = _.device('desktop') ? true : (config[device] || false);
-
-                    $link.toggleClass('disabled ui-disabled', !enabled)
-                        .attr('aria-disabled', !enabled)
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            if (!enabled) return e.stopPropagation();
-                            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
-                                wizard.run();
-                            });
-                        });
-                });
-            });
+            if (!_.device('smartphone')) return;
+            extensions.onboarding.apply(this, arguments);
         }
     });
 
