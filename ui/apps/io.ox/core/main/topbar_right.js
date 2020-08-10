@@ -87,21 +87,21 @@ define('io.ox/core/main/topbar_right', [
         id: 'search-mobile',
         index: 150,
         draw: function () {
-            if (capabilities.has('search') && _.device('smartphone')) {
-                this.append(
-                    addLauncher('right', $('<i class="fa fa-search launcher-icon" aria-hidden="true">'), function () {
-                        require(['io.ox/search/main'], function (searchapp) {
-                            searchapp.run({ reset: true });
-                        });
-                    }, gt('Search'))
-                    .attr('id', 'io-ox-search-topbar-icon')
-                );
-            }
+            if (!_.device('smartphone') || !capabilities.has('search')) return;
+
+            this.append(
+                addLauncher('right', $('<i class="fa fa-search launcher-icon" aria-hidden="true">'), function () {
+                    require(['io.ox/search/main'], function (searchapp) {
+                        searchapp.run({ reset: true });
+                    });
+                }, gt('Search'))
+                .attr('id', 'io-ox-search-topbar-icon')
+            );
         }
     });
 
     ext.point('io.ox/core/appcontrol/right').extend({
-        id: 'refresh',
+        id: 'refresh-mobile',
         index: 200,
         draw: function () {
             if (_.device('smartphone')) return;
