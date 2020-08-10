@@ -16,45 +16,37 @@
 Feature('Switchboard > Presence');
 
 Before(async (users) => {
-    const { I } = inject();
 
     await Promise.all([
         await users.create(),
         await users.create()
     ]);
-    await I.haveCapability('switchboard', users[0]);
-    await I.haveCapability('switchboard', users[1]);
 });
 
 After(async (users) => {
     await users.removeAll();
 });
 
-const loginAndReload = (options) => {
-    const { I } = inject();
-    I.login(options);
-    I.refreshPage();
-    I.waitForVisible('#io-ox-launcher', 20);
-};
+
+const presenceStates = [
+    { status: 'Absent', class: 'absent' },
+    { status: 'Busy', class: 'busy' },
+    { status: 'Offline', class: 'offline' }
+];
 
 Scenario('Presence state is shown and can be changed', async function (I) {
-    const presenceStates = [
-            { status: 'Absent', class: 'absent' },
-            { status: 'Busy', class: 'busy' },
-            { status: 'Offline', class: 'offline' }
-        ],
-        checkStatus = (statusToClick, classToCheck) => {
-            I.say(`Check: ${statusToClick}`);
-            I.clickDropdown(statusToClick);
-            I.waitForDetached('.dropdown.open');
-            // Check if state is updated in the topbar
-            I.waitForVisible(`.taskbar .presence.${classToCheck}`);
-            I.click('~Support');
-            // Verify that the right status is marked as checked
-            I.waitForVisible(`.dropdown.open a[data-value="${classToCheck}"] .fa-check`);
-        };
+    const checkStatus = (statusToClick, classToCheck) => {
+        I.say(`Check: ${statusToClick}`);
+        I.clickDropdown(statusToClick);
+        I.waitForDetached('.dropdown.open');
+        // Check if state is updated in the topbar
+        I.waitForVisible(`.taskbar .presence.${classToCheck}`);
+        I.click('~Support');
+        // Verify that the right status is marked as checked
+        I.waitForVisible(`.dropdown.open a[data-value="${classToCheck}"] .fa-check`);
+    };
 
-    loginAndReload();
+    I.login();
 
     // Check default online state
     I.waitForVisible('.presence.online', 20);
@@ -67,7 +59,18 @@ Scenario('Presence state is shown and can be changed', async function (I) {
 });
 
 Scenario('Presence state is shown in mails', async function (I, users, mail) {
-    const [user1] = users;
+    const [user1] = users,
+        checkStatus = (statusToClick, classToCheck) => {
+            I.say(`Check: ${statusToClick}`);
+            I.click('~Support');
+            I.clickDropdown(statusToClick);
+            I.waitForDetached('.dropdown.open');
+            I.waitForVisible(`.mail-detail .presence.${classToCheck}`);
+            if (statusToClick === 'Offline') {
+                I.waitForElement(`.list-view-control .presence.${classToCheck}`);
+                I.dontSeeElement(`.list-view-control .presence.${classToCheck}`);
+            } else I.waitForVisible(`.list-view-control .presence.${classToCheck}`);
+        };
 
     await I.haveMail({
         from: [[user1.get('display_name'), user1.get('primaryEmail')]],
@@ -77,7 +80,7 @@ Scenario('Presence state is shown in mails', async function (I, users, mail) {
     });
     await I.haveSetting('io.ox/mail//showContactPictures', true);
 
-    loginAndReload('app=io.ox/mail');
+    I.login('app=io.ox/mail');
 
     mail.waitForApp();
     // Check presence in list view
@@ -86,4 +89,27 @@ Scenario('Presence state is shown in mails', async function (I, users, mail) {
     // Check presence in mail detail
     I.waitForVisible('.mail-detail .presence.online');
 
+    presenceStates.forEach((state) => {
+        checkStatus(state.status, state.class);
+    });
+
+});
+
+Scenario('Presence state is shwon in call history', async function (I, users) {
+    const [user1] = users;
+    const { primaryEmail, display_name } = user1.userdata;
+
+    await I.haveSetting('io.ox/switchboard//zoom/enabled', true);
+
+    I.login('app=io.ox/mail', { user: user1 });
+    I.executeScript((mail, name) => {
+        require(['io.ox/switchboard/views/call-history']).then(function (ch) {
+            console.log(ch);
+            ch.add({ email: mail, incoming: true, missed: false, name: name, type: 'zoom' });
+            console.log(ch);
+        });
+    }, primaryEmail, display_name);
+    I.waitForVisible('~Call history');
+    I.click('~Call history');
+    I.waitForVisible('.call-history .dropdown-menu .presence.online');
 });
