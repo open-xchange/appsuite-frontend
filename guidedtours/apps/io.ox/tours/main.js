@@ -62,7 +62,7 @@ define('io.ox/tours/main', [
     });
 
     /* Link: Intro tour in settings toolbar */
-    ext.point('io.ox/core/appcontrol/right/account').extend({
+    ext.point('io.ox/core/appcontrol/right/help').extend({
         id: 'intro-tour',
         index: 210, /* close to the help link */
         extend: function () {
@@ -89,7 +89,7 @@ define('io.ox/tours/main', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/account').sort();
+    ext.point('io.ox/core/appcontrol/right/help').sort();
 
     return {
         //DEPRECATED: legacy method. Don't use it in new code. Use the WTF instead.
