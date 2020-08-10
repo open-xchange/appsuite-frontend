@@ -131,32 +131,112 @@ define('io.ox/core/main/topbar_right', [
     });
 
     ext.point('io.ox/core/appcontrol/right').extend({
-        id: 'help',
+        id: 'help-dropdown',
         index: 300,
         draw: function () {
             if (_.device('smartphone')) return;
+
+            // single item (no dropdown)
+            if (ext.point('io.ox/core/appcontrol/right/help').list().length <= 1) {
+                var helpView = new HelpLinkView({
+                    iconClass: 'fa-question launcher-icon',
+                    href: getHelp
+                });
+                if (helpView.$el.hasClass('hidden')) return;
+                return this.append(
+                    addLauncher('right', helpView.render().$el.attr('tabindex', -1)).attr('id', 'io-ox-context-help-icon')
+                );
+            }
+
+            // multiple items
+            var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
+                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">')
+                    .attr('aria-label', gt('Help'))
+                    .append('<i class="fa fa-question launcher-icon" aria-hidden="true">'),
+                dropdown = new Dropdown({
+                    // have a simple model to track changes (e.g. availability)
+                    model: new Backbone.Model({}),
+                    attributes: { role: 'presentation' },
+                    tagName: 'li',
+                    id: 'io-ox-topbar-dropdown-icon',
+                    className: 'launcher dropdown',
+                    $ul: ul,
+                    $toggle: a
+                });
+
+            ext.point('io.ox/core/appcontrol/right/help').invoke('extend', dropdown);
+            this.append(dropdown.render().$el.find('a').attr('tabindex', -1).end());
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right/help').extend({
+        id: 'help',
+        index: 100,
+        extend: function () {
             var helpView = new HelpLinkView({
-                iconClass: 'fa-question launcher-icon',
+                attributes: {
+                    role: 'menuitem',
+                    tabindex: -1
+                },
+                //TODO-617: Label (actually context help)
+                content: gt('Help'),
                 href: getHelp
             });
+
+            // in case of disabled 'showHelpLinks' feature
             if (helpView.$el.hasClass('hidden')) return;
-            this.append(
-                addLauncher('right', helpView.render().$el.attr('tabindex', -1)).attr('id', 'io-ox-context-help-icon')
-            );
+
+            this.append(helpView.render().$el);
         }
     });
 
     ext.point('io.ox/core/appcontrol/right').extend({
-        id: 'settings',
+        id: 'settings-dropdown',
         index: 400,
         draw: function () {
             if (_.device('smartphone')) return;
-            this.append(
-                addLauncher('right', $('<i class="fa fa-cog launcher-icon" aria-hidden="true">').attr('title', gt('Settings')), function () {
-                    ox.launch('io.ox/settings/main');
-                }, gt('Settings'))
-                .attr('id', 'io-ox-settings-topbar-icon')
-            );
+
+            // single item (no dropdown)
+            if (ext.point('io.ox/core/appcontrol/right/settings').list().length <= 1) {
+                return this.append(
+                    addLauncher('right', $('<i class="fa fa-cog launcher-icon" aria-hidden="true">').attr('title', gt('Settings')), function () {
+                        ox.launch('io.ox/settings/main');
+                    }, gt('Settings'))
+                    .attr('id', 'io-ox-settings-topbar-icon')
+                );
+            }
+
+            // multiple items
+            var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
+                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">')
+                    .attr('aria-label', gt('Settings'))
+                    .append('<i class="fa fa-cog launcher-icon" aria-hidden="true">'),
+                dropdown = new Dropdown({
+                    // have a simple model to track changes (e.g. availability)
+                    model: new Backbone.Model({}),
+                    attributes: { role: 'presentation' },
+                    tagName: 'li',
+                    id: 'io-ox-topbar-dropdown-icon',
+                    className: 'launcher dropdown',
+                    $ul: ul,
+                    $toggle: a
+                });
+
+            ext.point('io.ox/core/appcontrol/right/settings').invoke('extend', dropdown);
+            this.append(dropdown.render().$el.find('a').attr('tabindex', -1).end());
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right/settings').extend({
+        id: 'settings',
+        index: 100,
+        extend: function () {
+            if (_.device('smartphone')) return;
+
+            this.link('settings-app', gt('Settings'), function (e) {
+                e.preventDefault();
+                return ox.launch('io.ox/settings/main');
+            });
         }
     });
 
@@ -284,6 +364,7 @@ define('io.ox/core/main/topbar_right', [
         id: 'app-specific-help',
         index: 200,
         extend: function () {
+            if (!_.device('smartphone')) return;
             //replaced by module
             var helpView = new HelpLinkView({
                 attributes: {
