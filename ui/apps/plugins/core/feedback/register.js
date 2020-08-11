@@ -504,21 +504,33 @@ define('plugins/core/feedback/register', [
         }
     };
 
+    function addDropdownEntry() {
+        var currentSetting = settings.get('feedback/show', 'both');
+        if (currentSetting === 'both' || currentSetting === 'topbar') {
+            this.append(
+                $('<a href="#" data-action="feedback" role="menuitem" tabindex="-1">').text(gt('Give feedback'))
+                .on('click', function (e) {
+                    e.preventDefault();
+                    feedback.show();
+                })
+            );
+            this.$ul.find('[data-action="feedback"]').parent().toggle(allowedToGiveFeedback());
+        }
+    }
+    ext.point('io.ox/core/appcontrol/right/help').extend({
+        id: 'feedback',
+        index: 240,
+        extend: function () {
+            if (_.device('smartphone')) return;
+            addDropdownEntry.apply(this, arguments);
+        }
+    });
     ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'feedback',
         index: 240,
         extend: function () {
-            var currentSetting = settings.get('feedback/show', 'both');
-            if (currentSetting === 'both' || currentSetting === 'topbar') {
-                this.append(
-                    $('<a href="#" data-action="feedback" role="menuitem" tabindex="-1">').text(gt('Give feedback'))
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        feedback.show();
-                    })
-                );
-                this.$ul.find('[data-action="feedback"]').parent().toggle(allowedToGiveFeedback());
-            }
+            if (!_.device('smartphone')) return;
+            addDropdownEntry.apply(this, arguments);
         }
     });
 
