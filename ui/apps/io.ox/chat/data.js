@@ -162,8 +162,8 @@ define('io.ox/chat/data', [
 
         getBody: function () {
             if (this.isSystem()) return this.getSystemMessage();
-            else if (this.isImage()) return this.getImage();
-            else if (this.isFile()) return this.getFile();
+            else if (this.isImage()) return this.getFilesPreview();
+            else if (this.isFile()) return this.getFileText();
             return this.getFormattedBody();
         },
 
@@ -205,7 +205,7 @@ define('io.ox/chat/data', [
             }
         },
 
-        getImage: function () {
+        getFilesPreview: function () {
             var fileId = this.get('files')[0].fileId,
                 // TODO: Adjust for channels
                 url = data.API_ROOT + '/files/' + fileId + '/thumbnail',
@@ -223,7 +223,7 @@ define('io.ox/chat/data', [
             return placeholder;
         },
 
-        getFile: function (opt) {
+        getFileText: function (opt) {
             opt = _.extend({
                 icon: true,
                 download: true,
@@ -261,7 +261,7 @@ define('io.ox/chat/data', [
 
         getTextBody: function () {
             if (this.isSystem()) return this.getSystemMessage();
-            if (this.isImage() || this.isFile()) return this.getFile();
+            if (this.isImage() || this.isFile()) return this.getFileText();
             return sanitizer.simpleSanitize(this.get('content'));
         },
 
@@ -450,7 +450,7 @@ define('io.ox/chat/data', [
             var last = this.get('lastMessage');
             if (!last) return '\u00a0';
             var message = new MessageModel(last);
-            if (message.isFile() || message.isImage()) return message.getFile({ download: false });
+            if (message.isImage() || message.isFile()) return message.getFileText({ download: false });
             return message.getTextBody();
         },
 
