@@ -18,9 +18,10 @@ Feature('Switchboard > Zoom');
 Before(async (users) => {
 
     await Promise.all([
-        await users.create(),
-        await users.create()
+        users.create(),
+        users.create()
     ]);
+    await users[0].context.hasCapability('switchboard');
 });
 
 After(async (users) => {
