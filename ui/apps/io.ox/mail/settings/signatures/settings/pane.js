@@ -142,7 +142,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 var editor = baton.view.editor.tinymce();
                 baton.data.content = baton.view.editor.getContent({ format: 'html' });
                 if (!editor || !editor.plugins.oximage) return $.when();
-                var ids = $('img[data-pending="true"]', editor.getElement()).map(function () {
+                var ids = $('img[data-pending="true"]', editor.getContent()).map(function () {
                         return $(this).attr('data-id');
                     }),
                     deferreds = editor.plugins.oximage.getPendingDeferreds(ids);
