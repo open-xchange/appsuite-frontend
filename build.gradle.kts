@@ -13,8 +13,7 @@ buildscript {
         classpath("com.openexchange.build", "install", "[3.0,4.0[")
         classpath("com.openexchange.build", "licensing")
         classpath("com.openexchange.build", "packaging", "[5.0,6.0[")
-        classpath("com.openexchange.build", "opensuse-build-service-client", "[1.5.0,2.0[")
-
+        classpath("com.openexchange.build", "opensuse-build-service-client", "[1.6,2.0[")
     }
 }
 
@@ -70,6 +69,7 @@ configure<com.openexchange.obs.gradle.plugin.BuildserviceExtension> {
                 depends("backend-${backendBranch}", "RHEL7")
             }
         }
+        prjconf.set("OX-Sign-ID: release-team@open-xchange.com")
     }
 }
 
