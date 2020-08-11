@@ -42,6 +42,15 @@ define('io.ox/core/main/topbar_right', [
 
     var extensions = {
 
+        about: function () {
+            this.link('about', gt('About'), function (e) {
+                e.preventDefault();
+                require(['io.ox/core/about/about'], function (about) {
+                    about.show();
+                });
+            });
+        },
+
         onboarding: function () {
             var device, $link, self = this;
             if (_.device('android')) device = _.device('smartphone') ? 'android.phone' : 'android.tablet';
@@ -221,6 +230,26 @@ define('io.ox/core/main/topbar_right', [
             if (helpView.$el.hasClass('hidden')) return;
 
             this.append(helpView.render().$el);
+        }
+    });
+
+    // tours: index 210, 250
+    // feedback: 240
+
+    ext.point('io.ox/core/appcontrol/right/help').extend({
+        id: 'divider-before-about',
+        index: 290,
+        extend: function () {
+            this.divider();
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right/help').extend({
+        id: 'about',
+        index: 400,
+        extend: function () {
+            if (_.device('smartphone')) return;
+            extensions.about.apply(this, arguments);
         }
     });
 
@@ -406,15 +435,11 @@ define('io.ox/core/main/topbar_right', [
     });
 
     ext.point('io.ox/core/appcontrol/right/account').extend({
-        id: 'about',
+        id: 'about-mobile',
         index: 400,
         extend: function () {
-            this.link('about', gt('About'), function (e) {
-                e.preventDefault();
-                require(['io.ox/core/about/about'], function (about) {
-                    about.show();
-                });
-            });
+            if (!_.device('smartphone')) return;
+            extensions.about.apply(this, arguments);
         }
     });
 
