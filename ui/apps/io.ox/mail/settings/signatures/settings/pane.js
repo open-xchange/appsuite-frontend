@@ -448,9 +448,9 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                         childOptions: {
                             titleAttribute: 'displayname',
                             customize: function (model) {
-                                var preview = sanitize(model.get('content'));
+                                var preview = sanitize(model.get('content') || model.get('error'));
                                 this.$('.list-item-controls').append(
-                                    listutils.controlsEdit(),
+                                    model.has('error') ? [] : listutils.controlsEdit(),
                                     listutils.controlsDelete()
                                 );
                                 this.$el.append(
@@ -500,6 +500,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     });
 
                 function makeOption(model) {
+                    if (model.has('error')) return;
                     return $('<option>').attr({ 'value': model.get('id') }).text(model.get('displayname'));
                 }
 
