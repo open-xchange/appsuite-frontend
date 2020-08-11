@@ -100,7 +100,7 @@ define('io.ox/tours/get-started', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/account').extend({
+    ext.point('io.ox/core/appcontrol/right/help').extend({
         id: 'get-started',
         index: 250,
         extend: function () {
