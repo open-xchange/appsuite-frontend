@@ -44,7 +44,6 @@ Scenario('Create call and check call history from addressbook', async (I, users,
     });
 
     session('userA', () => {
-        console.log(user1);
         I.login('app=io.ox/contacts', { user1: user1 });
         I.waitForElement('.io-ox-contacts-window');
         I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
@@ -114,5 +113,58 @@ Scenario('Create call and check call history from addressbook', async (I, users,
             .withAttr({ title: `You called ${user2.get('sur_name')}, ${user2.get('given_name')}` })
         );
         I.seeNumberOfElements('.dropdown.open .call-history-item', 2);
+    });
+});
+
+Scenario('Create call from call history and check call history after hang up', (I, users, dialogs) => {
+    const [user1, user2] = users;
+    const { primaryEmail, display_name } = user2.userdata;
+
+
+    session('userB', () => {
+        I.login({ user: user2 });
+    });
+
+    session('userA', () => {
+        I.login({ user: user1 });
+        I.executeScript((mail, name) => {
+            require(['io.ox/switchboard/views/call-history']).then(function (ch) {
+                ch.add({ email: mail, incoming: true, missed: false, name: name, type: 'zoom' });
+            });
+        }, primaryEmail, display_name);
+        I.waitForVisible('~Call history');
+        I.click('~Call history');
+        I.waitForVisible('.dropdown.open .call-history-item');
+        I.click('.dropdown.open .call-history-item a');
+        dialogs.waitForVisible();
+        I.waitForText('You first need to connect OX App Suite with Zoom.', 5, dialogs.locators.body);
+        I.click('Connect with Zoom', dialogs.locators.footer);
+        I.waitForText('Call', 5, dialogs.locators.footer);
+        dialogs.clickButton('Call');
+        I.waitForText('Hang up', 5, dialogs.locators.footer);
+    });
+
+    session('userB', () => {
+        dialogs.waitForVisible();
+    });
+
+    session('userA', () => {
+        dialogs.clickButton('Hang up');
+        I.waitForDetached('.modal');
+        I.click('~Call history');
+        I.waitForVisible(
+            locate('.call-history-item')
+            .inside('.dropdown.open')
+            .withAttr({ title: `You called ${user2.get('sur_name')}, ${user2.get('given_name')}` })
+        );
+    });
+
+    session('userB', () => {
+        I.click('~Call history');
+        I.waitForVisible(
+            locate('.call-history-item')
+            .inside('.dropdown.open')
+            .withAttr({ title: `Missed call from ${user1.get('sur_name')}, ${user1.get('given_name')}` })
+        );
     });
 });

@@ -105,12 +105,46 @@ Scenario('Presence state is shwon in call history', async function (I, users) {
     I.login('app=io.ox/mail', { user: user1 });
     I.executeScript((mail, name) => {
         require(['io.ox/switchboard/views/call-history']).then(function (ch) {
-            console.log(ch);
             ch.add({ email: mail, incoming: true, missed: false, name: name, type: 'zoom' });
-            console.log(ch);
         });
     }, primaryEmail, display_name);
     I.waitForVisible('~Call history');
     I.click('~Call history');
     I.waitForVisible('.call-history .dropdown-menu .presence.online');
+});
+
+Scenario('Check presence state of new user', (I, users) => {
+    const [user1, user2] = users;
+
+    session('userA', () => {
+        I.login('app=io.ox/contacts', { user: user1 });
+
+        I.waitForElement('.io-ox-contacts-window');
+        I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
+        I.waitForVisible('.io-ox-contacts-window .tree-container');
+        I.waitForElement(`.vgrid [aria-label="${user2.get('sur_name')}, ${user2.get('given_name')}"]`);
+    });
+
+    session('userB', () => {
+        I.login('app=io.ox/contacts', { user: user2 });
+        I.waitForElement('.io-ox-contacts-window');
+        I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
+        I.waitForVisible('.io-ox-contacts-window .tree-container');
+        I.waitForVisible(`.vgrid [aria-label="${user1.get('sur_name')}, ${user1.get('given_name')}"] .presence.online`);
+        I.click('~Support');
+        I.clickDropdown('Busy');
+        I.waitForVisible(`.vgrid [aria-label="${user2.get('sur_name')}, ${user2.get('given_name')}"] .presence.busy`);
+    });
+
+    session('userA', () => {
+        //this step fails, since userB presence is not updated currently
+        I.waitForVisible(`.vgrid [aria-label="${user2.get('sur_name')}, ${user2.get('given_name')}"] .presence.busy`);
+        I.click('~Support');
+        I.clickDropdown('Absent');
+        I.waitForVisible(`.vgrid [aria-label="${user1.get('sur_name')}, ${user1.get('given_name')}"] .presence.absent`);
+    });
+
+    session('userB', () => {
+        I.waitForVisible(`.vgrid [aria-label="${user1.get('sur_name')}, ${user1.get('given_name')}"] .presence.absent`);
+    });
 });
