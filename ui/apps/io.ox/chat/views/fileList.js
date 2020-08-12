@@ -68,7 +68,6 @@ define('io.ox/chat/views/fileList', [
                 'add': this.onAdd
             });
 
-            this.collection.reset();
             this.collection.fetch();
         },
 

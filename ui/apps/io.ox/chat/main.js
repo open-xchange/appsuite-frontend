@@ -161,7 +161,7 @@ define('io.ox/chat/main', [
         startPrivateChat: function (cmd) {
             // try to reuse chat
             var chat = data.chats.find(function (model) {
-                return model.get('type') === 'private' && _.allKeys(model.get('members')).indexOf(cmd.email) >= 0;
+                return model.get('type') === 'private' && Object.keys(model.get('members')).indexOf(cmd.email) >= 0;
             });
             if (chat) {
                 if (chat.get('active')) return this.showChat(chat.get('roomId'));
@@ -171,7 +171,8 @@ define('io.ox/chat/main', [
             var members = {};
             members[data.user.email] = 'admin';
             members[cmd.email] = 'member';
-            var view = new ChatView({ type: 'private', members: members });
+            var room = new data.ChatModel({ type: 'private', members: members }),
+                view = new ChatView({ room: room });
 
             this.showApp();
             this.$rightside.empty().append(view.render().$el);
@@ -179,8 +180,6 @@ define('io.ox/chat/main', [
         },
 
         leaveGroup: function (groupId) {
-            var self = this;
-
             new ModalDialog({
                 point: 'io.ox/chat/actions/confirmLeavingGroup',
                 backdrop: true,
@@ -190,11 +189,7 @@ define('io.ox/chat/main', [
             .addCancelButton({ left: true })
             .addButton({ action: 'continue', label: 'Yes' })
             .on('continue', function () {
-                var chat = data.chats.get(groupId),
-                    url = chat.url() + '/members';
-                chat.destroy({ url: url });
-                self.closeChat();
-                data.chats.setCurrent(undefined);
+                data.chats.leaveGroup(groupId);
             })
             .open();
         },
@@ -227,7 +222,7 @@ define('io.ox/chat/main', [
         showChat: function (id, opt) {
             data.chats.setCurrent(id);
             if (data.chats.getCurrent().isChannel()) this.checkJoinedState();
-            var view = new ChatView(_.extend({ room: id }, _(opt).pick('messageId', 'reference')));
+            var view = new ChatView(_.extend({ roomId: id }, _(opt).pick('messageId', 'reference')));
             this.showApp();
             this.$rightside.empty().append(view.render().$el);
             this.$body.addClass('open');
@@ -241,16 +236,6 @@ define('io.ox/chat/main', [
             );
             this.$body.removeClass('open');
             data.chats.setCurrent(undefined);
-            this.reloadAvatars();
-        },
-
-        reloadAvatars: function () {
-            var avatars = this.$body.find('.avatar.image');
-            avatars.each(function (index) {
-                var url = $(avatars[index]).css('background-image');
-                // force background image reload
-                if (url) $(avatars[index]).css('background-image', url.slice(0, url.length - 2) + '?v' + new Date().getTime() + '")');
-            });
         },
 
         showRecentConversations: function () {
@@ -275,7 +260,7 @@ define('io.ox/chat/main', [
 
         showMessageFile: function (cmd) {
             // TODO: consider pagination for nonprototype implementation
-            var files = new data.RoomFilesCollection([], { roomId: data.chats.currentChatId });
+            var files = new data.RoomFilesCollection([], { roomId: cmd.roomId, fileId: cmd.fileId });
             files.fetch();
 
             files.initialized.then(function () {

@@ -20,7 +20,7 @@ define('io.ox/chat/views/chatListEntry', [
 
         tagName: 'li',
         attributes: function () {
-            if (!this.model.id) {
+            if (!this.model.get('roomId')) {
                 var member = this.model.getFirstMember();
                 return {
                     'data-cmd': 'start-private-chat',
@@ -30,7 +30,7 @@ define('io.ox/chat/views/chatListEntry', [
 
             return {
                 'data-cmd': 'show-chat',
-                'data-cid': this.model.id || this.model.cid,
+                'data-cid': this.model.get('roomId') || this.model.cid,
                 'data-message-id': this.model.get('searchResult') ? this.model.get('lastMessage').messageId : undefined
             };
         },

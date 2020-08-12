@@ -140,13 +140,13 @@ define('io.ox/chat/views/chat', [
         },
 
         initialize: function (options) {
-            if (!options) return;
             var self = this;
 
+            this.roomId = options.roomId;
             this.room = options.room;
             this.messageId = options.messageId;
             this.reference = options.reference;
-            this.model = data.chats.get(this.room) || data.chats.getNew(options);
+            this.model = data.chats.get(this.roomId) || this.room;
             this.messagesView = new MessagesView({ collection: this.model.messages });
 
             this.listenTo(this.model, {
@@ -172,10 +172,8 @@ define('io.ox/chat/views/chat', [
             // there are two cases when to reset the collection before usage
             // 1) We have a messageId but the requested messageId is not in the collection
             // 2) We don't have a messageId but the collection is not fully fetched
-            if (this.model.get('roomId') && ((this.messageId && !this.model.messages.find(function (m) { return m.get('messageId') === this.messageId; }, this)) || (!this.messageId && !this.model.messages.nextComplete))) { // TODO Discuss
-                this.model.messages.reset();
-                _.delay(this.model.messages.fetch.bind(this.model.messages));
-            }
+            if ((this.messageId && !this.model.messages.get(this.messageId)) || (!this.messageId && !this.model.messages.nextComplete)) this.model.messages.reset();
+            _.delay(this.model.messages.fetch.bind(this.model.messages));
 
             // tracking typing
             this.typing = {
@@ -299,7 +297,7 @@ define('io.ox/chat/views/chat', [
             }
 
             return $('<button type="button" class="btn btn-default btn-action join" >')
-                .attr({ 'data-cmd': 'join-channel', 'data-id': this.model.id })
+                .attr({ 'data-cmd': 'join-channel', 'data-id': this.model.get('roomId') })
                 .append('Join');
         },
 
@@ -503,7 +501,7 @@ define('io.ox/chat/views/chat', [
             if (lastIndex < 0) return;
             var message = this.model.messages.at(lastIndex);
             if (message.get('state') === 'seen') return;
-            message.updateDelivery('seen', this.model.id);
+            message.updateDelivery('seen');
         },
 
         isJumpDownVisible: function () {

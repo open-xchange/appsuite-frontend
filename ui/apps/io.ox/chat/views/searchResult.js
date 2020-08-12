@@ -58,6 +58,7 @@ define('io.ox/chat/views/searchResult', [
             });
         },
 
+        // TODO: message searching is currently not enabled
         searchMessages: function (query) {
             var url = data.API_ROOT + '/search/messages?' + $.param({ query: query }),
                 regexQuery = new RegExp('(\\b' + escape(query) + ')', 'ig');

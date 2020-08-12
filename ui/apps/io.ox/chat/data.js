@@ -162,7 +162,7 @@ define('io.ox/chat/data', [
 
         getBody: function () {
             if (this.isSystem()) return this.getSystemMessage();
-            else if (this.isImage()) return this.getFilesPreview();
+            else if (this.hasPreview()) return this.getFilesPreview();
             else if (this.isFile()) return this.getFileText();
             return this.getFormattedBody();
         },
@@ -219,7 +219,7 @@ define('io.ox/chat/data', [
                 placeholder.replaceWith($img);
                 $img.trigger('changeheight', { prev: oldHeight, value: $img.height() });
             }).attr('src', url)
-            .attr({ 'data-cmd': 'show-message-file', 'data-file-id': fileId });
+            .attr({ 'data-cmd': 'show-message-file', 'data-room-id': this.collection.roomId, 'data-file-id': fileId, 'data-message-id': this.get('messageId') });
             return placeholder;
         },
 
@@ -261,7 +261,7 @@ define('io.ox/chat/data', [
 
         getTextBody: function () {
             if (this.isSystem()) return this.getSystemMessage();
-            if (this.isImage() || this.isFile()) return this.getFileText();
+            if (this.isFile()) return this.getFileText();
             return sanitizer.simpleSanitize(this.get('content'));
         },
 
@@ -273,14 +273,16 @@ define('io.ox/chat/data', [
             return this.get('senderId') === data.user.userId;
         },
 
-        isImage: function () {
-            if (!this.get('files')) return false;
+        getType: function () {
+            if (this.get('files') && this.get('files')[0].preview) return 'preview';
+            if (this.get('files')) return 'file';
+            if (this.get('type') === 'system') return 'system';
+            return 'text';
+        },
 
-            for (var i = 0; i < this.get('files').length; i++) {
-                if (!this.get('files')[i].mimetype) this.get('files')[i].mimetype = this.get('files')[i].type;
-            }
-
-            return this.get('files') ? /(jpg|jpeg|gif|bmp|png)/i.test(this.get('files')[0].mimetype) : false;
+        hasPreview: function () {
+            if (this.get('files') && this.get('files')[0].preview) return true;
+            return false;
         },
 
         isFile: function () {
@@ -296,8 +298,8 @@ define('io.ox/chat/data', [
             return prev.get('senderId') === this.get('senderId');
         },
 
-        updateDelivery: function (state, roomId) {
-            var url = data.API_ROOT + '/rooms/' + roomId + '/delivery/' + this.get('messageId');
+        updateDelivery: function (state) {
+            var url = data.API_ROOT + '/rooms/' + this.get('roomId') + '/delivery/' + this.get('messageId');
             $.ajax({
                 method: 'POST',
                 url: url,
@@ -347,7 +349,7 @@ define('io.ox/chat/data', [
             })
             .then(function (list) {
                 this.trigger(type);
-                this.add(list);
+                this.add(list, { parse: true });
                 params.direction = params.direction || 'prev';
                 if (params.direction === 'siblings') {
                     var index = _(list).findIndex({ id: params.messageId });
@@ -379,6 +381,10 @@ define('io.ox/chat/data', [
         },
         url: function () {
             return data.API_ROOT + '/rooms/' + this.roomId + '/messages';
+        },
+        parse: function (obj) {
+            obj.roomId = this.roomId;
+            return obj;
         }
     });
 
@@ -450,7 +456,7 @@ define('io.ox/chat/data', [
             var last = this.get('lastMessage');
             if (!last) return '\u00a0';
             var message = new MessageModel(last);
-            if (message.isImage() || message.isFile()) return message.getFileText({ download: false });
+            if (message.isFile()) return message.getFileText({ download: false });
             return message.getTextBody();
         },
 
@@ -477,31 +483,28 @@ define('io.ox/chat/data', [
             return this.get('members') ? !!this.get('members')[email] : false;
         },
 
-        checkForGroupUpdate: function (message, roomId) {
-            var update = JSON.parse(message.content);
-            var chat = data.chats.get(roomId);
+        parseSystemMessage: function (message, roomId) {
+            var update = JSON.parse(message.content),
+                chat = data.chats.get(roomId),
+                members;
 
-            if (update.type === 'removeMember') {
-                var updatedMembers = chat.get('members').filter(function (member) {
-                    if (!_.contains(update.removedMembers, member.email)) return member;
+            if (update.type === 'members:removed') {
+                members = _.clone(chat.get('members')) || {};
+                update.members.forEach(function (member) {
+                    delete members[member];
                 });
-                chat.set('members', updatedMembers);
+                chat.set('members', members);
             }
-            if (update.type === 'addMember') {
-                var membersToAdd = update.addedMembers.map(function (email) { return { email: email }; });
-                chat.set('members', [].concat(chat.get('members').concat(membersToAdd)));
-            }
-            if (update.type === 'joinMember') {
-                var members = update.members.map(function (email) { return { email: email }; });
-                chat.set('members', [].concat(chat.get('members').concat(members)));
-            }
-            if (update.type === 'leftRoom') {
-                chat.set('members', _.reject(chat.get('members'), function (member) { return member.email === update.originator; }));
+            if (update.type === 'members:added') {
+                members = _.clone(chat.get('members')) || {};
+                update.members.forEach(function (member) {
+                    members[member] = 'member';
+                });
+                chat.set('members', members);
             }
 
-            if (update.type === 'changeTitle') chat.set('title', update.title);
-            if (update.type === 'changeDescription') chat.set('description', update.description);
-            if (update.type === 'changeGroupImage') chat.set('fileId', update.fileId);
+            if (update.type === 'title:changed') chat.set('title', update.title);
+            if (update.type === 'image:changed') chat.trigger('change:icon');
         },
 
         getLastSenderName: function () {
@@ -540,12 +543,14 @@ define('io.ox/chat/data', [
             });
 
             // add files
-            attr.files = [];
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
+            if (files) {
+                attr.files = [];
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
 
-                formData.append('files', file, file.name);
-                attr.files.push(file);
+                    formData.append('files', file, file.name);
+                    attr.files.push(file);
+                }
             }
 
             var model = this.messages.add(attr, { merge: true });
@@ -564,7 +569,7 @@ define('io.ox/chat/data', [
                         placeholder.replaceWith($img);
                         $img.trigger('changeheight', { prev: oldHeight, value: $img.height() });
                     }).attr('src', url)
-                        .attr({ 'data-cmd': 'show-message-file', 'data-file-id': fileId });
+                    .attr({ 'data-cmd': 'show-message-file', 'data-room-id': model.collection.roomId, 'data-file-id': fileId, 'data-message-id': model.get('messageId') });
 
                     if (!deliveryUpdateCache[model.get('id')]) return;
                     model.set('state', deliveryUpdateCache[model.get('id')]);
@@ -576,7 +581,7 @@ define('io.ox/chat/data', [
             this.set('active', true);
         },
 
-        postFirstMessage: function (attr, file) {
+        postFirstMessage: function (attr, files) {
             var members = [];
             _(this.get('members')).allKeys().forEach(function (member) { members.push(member); });
 
@@ -584,22 +589,10 @@ define('io.ox/chat/data', [
             this.message = attr && attr.content;
             this.type = this.get('type');
 
-            if (file) this.file = file;
+            if (files) this.files = files;
 
             data.chats.addAsync(this).done(function (result) {
                 events.trigger('cmd', { cmd: 'show-chat', id: result.get('roomId') });
-            });
-        },
-
-        addMembers: function (emails) {
-            var members = emails.map(function (email) { return { email: email }; });
-            this.set('members', [].concat(this.get('members').concat(members)));
-
-            return $.ajax({
-                method: 'POST',
-                url: this.members.url(),
-                data: { members: emails },
-                xhrFields: { withCredentials: true }
             });
         },
 
@@ -612,6 +605,8 @@ define('io.ox/chat/data', [
             return Backbone.Model.prototype.sync.call(this, method, model, options);
         }
     });
+
+    data.ChatModel = ChatModel;
 
     var ChatCollection = Backbone.Collection.extend({
 
@@ -627,10 +622,6 @@ define('io.ox/chat/data', [
             this.on('change:unreadCount', this.onChangeUnreadCount);
             this.initialized = new $.Deferred();
             this.once('sync', this.initialized.resolve);
-        },
-
-        getNew: function (attr) {
-            return new ChatModel(attr);
         },
 
         addAsync: function (attr) {
@@ -733,8 +724,17 @@ define('io.ox/chat/data', [
         joinChannel: function (roomId) {
             var model = this.get(roomId);
             if (!model || !model.isChannel()) return;
-            model.addMembers([data.user.email]);
-            model.set({ joined: true, active: true });
+
+            var url = this.url() + '/' + roomId + '/members';
+            var members = _.clone(model.get('members')) || {};
+            members[data.user.email] = 'member';
+            model.set({ joined: true, active: true, members: members });
+
+            return $.ajax({
+                method: 'POST',
+                url: url,
+                xhrFields: { withCredentials: true }
+            });
         },
 
         leaveChannel: function (roomId) {
@@ -752,6 +752,11 @@ define('io.ox/chat/data', [
             }).fail(function (err) {
                 console.log(err);
             });
+        },
+
+        leaveGroup: function (roomId) {
+            var url = this.url() + '/' + roomId + '/members';
+            this.get(roomId).destroy({ url: url });
         },
 
         parse: function (array) {
@@ -776,12 +781,14 @@ define('io.ox/chat/data', [
 
     var FileModel = Backbone.Model.extend({
 
+        idAttribute: 'fileId',
+
         getThumbnailUrl: function () {
             return data.API_ROOT + '/files/' + this.get('fileId') + '/thumbnail';
         },
 
         getPreviewUrl: function () {
-            return data.API_ROOT + '/files/' + this.get('fileId'); // + '/preview';
+            return data.API_ROOT + '/files/' + this.get('fileId');
         },
 
         isImage: function () {
@@ -894,9 +901,9 @@ define('io.ox/chat/data', [
                         state = 'client';
                     } else state = 'seen';
 
-                    if (model.get('type') !== 'channel') newMessage.updateDelivery(state, roomId);
+                    if (model.get('type') !== 'channel') newMessage.updateDelivery(state);
 
-                    if (newMessage.get('type') === 'system') model.checkForGroupUpdate(message, roomId);
+                    if (newMessage.get('type') === 'system') model.parseSystemMessage(message, roomId);
                 });
             });
 

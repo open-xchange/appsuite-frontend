@@ -98,7 +98,7 @@ define('io.ox/chat/views/channelList', [
                     $('<div>').append(
                         new ChatAvatar({ model: model }).render().$el,
                         $('<span class="title">').text(model.getTitle()),
-                        $('<span class="members">').text((model.get('members') || []).length + ' member(s)')
+                        $('<span class="members">').text((model.get('members') && Object.keys(model.get('members')) || []).length + ' member(s)')
                     ),
                     $('<div class="description">').text(model.get('description')),
                     $('<button type="button" class="btn btn-default btn-action" >')

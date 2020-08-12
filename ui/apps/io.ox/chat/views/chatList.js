@@ -37,7 +37,7 @@ define('io.ox/chat/views/chatList', [
 
         render: function () {
             // rendering happens via onAdd
-            this.collection.fetch({ remove: false, data: { active: true } });
+            this.collection.fetch();
             return this;
         },
 
@@ -73,7 +73,7 @@ define('io.ox/chat/views/chatList', [
             if (this.disposed) return;
 
             var items = this.getItems().map(this.renderItem, this);
-            this.$el.empty().append(
+            this.$el.append(
                 items
             );
         }, 1),

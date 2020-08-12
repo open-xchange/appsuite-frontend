@@ -24,7 +24,7 @@ define('io.ox/chat/views/state', ['io.ox/backbone/views/disposable'], function (
 
         initialize: function () {
             this.listenTo(this.model, 'change:state', this.onChangeState);
-            this.model.fetchState();
+            if (!this.model.isMyself()) this.model.fetchState();
         },
 
         render: function () {

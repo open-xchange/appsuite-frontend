@@ -24,6 +24,8 @@ function (DisposableView, data) {
         className: 'group avatar image',
 
         initialize: function () {
+            this.listenTo(this.model, 'change:icon', this.update);
+
             if (this.model.isChannel()) this.$icon = $('<i class="fa fa-hashtag">');
             else if (this.model.isGroup()) this.$icon = $('<i class="fa fa-group">');
         },
