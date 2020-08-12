@@ -252,3 +252,60 @@ Scenario('Check call history filtering', (I, users) => {
     I.seeNumberOfVisibleElements('.call-history-item', 2);
 
 });
+
+Scenario('Call history is not visible when empty', (I, users) => {
+
+    const [user1, user2] = users;
+    const { primaryEmail, display_name } = user2.userdata;
+
+    I.login({ user: user1 });
+    I.waitForVisible('.taskbar');
+    pause();
+    I.dontSeeElement('~Call history');
+
+    I.executeScript((mail, name) => {
+        require(['io.ox/switchboard/views/call-history']).then(function (ch) {
+            ch.add({ email: mail, incoming: true, missed: true, name: name, type: 'zoom' });
+        });
+    }, primaryEmail, display_name);
+
+    I.waitForVisible('~Call history');
+    I.click('~Call history');
+    I.waitForVisible('.dropdown.open .call-history-item');
+});
+
+Scenario('[OXUIB-397] Appointment with zoom conference can be changed into a series', (I, calendar) => {
+
+    // Create normal appointment with zoom conference
+    I.login('app=io.ox/calendar');
+    calendar.waitForApp();
+    calendar.newAppointment();
+    I.fillField('Subject', 'OXUIB-397');
+    I.selectOption('conference-type', 'Zoom Meeting');
+    I.waitForText('Connect with Zoom');
+    I.click('Connect with Zoom');
+    I.waitForVisible('.fa.fa-video-camera');
+    I.waitForText('Link', 5, '.conference-view.zoom');
+    I.click('Create');
+
+    // Change appointment into a series
+    I.waitForDetached(calendar.locators.edit);
+    I.waitForVisible('.appointment');
+    I.click('.appointment');
+    I.waitForVisible('.io-ox-sidepopup a[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.waitForClickable('.io-ox-sidepopup a[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.click('Edit');
+    I.waitForVisible(calendar.locators.edit);
+    I.waitForText('Repeat', 5, calendar.locators.edit);
+    calendar.recurAppointment();
+    within(calendar.locators.recurrenceview, () => {
+        I.selectOption('.modal-dialog [name="until"]', 'After a number of occurrences');
+        I.waitForVisible('.modal-dialog [name="occurrences"]');
+        I.fillField('.modal-dialog [name="occurrences"]', '5');
+        I.click('Apply', '.modal-footer');
+    });
+    I.waitForDetached(calendar.locators.recurrenceview);
+    I.click('Save', calendar.locators.edit);
+    I.waitForDetached(calendar.locators.edit);
+    I.waitForVisible('.appointment .recurrence-flag');
+});
