@@ -112,7 +112,7 @@ define.async('io.ox/switchboard/api', [
         })
         .then(function (data) {
             // Only send redirect uri if not default "/appsuite/api"
-            var redirectUri = ox.apiRoot === '/appsuite/api' ? '' : '&redirectUri=' + encodeURIComponent(ox.apiRoot);
+            var redirectUri = ox.apiRoot === '/appsuite/api' ? '' : '&appsuiteApiPath=' + encodeURIComponent(ox.apiRoot);
             // TODO
             // * enable long polling, configure retries, and reconnects
             api.socket = io(api.host + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token + redirectUri, { transports: ['websocket'] })
