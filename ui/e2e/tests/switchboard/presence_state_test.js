@@ -93,7 +93,6 @@ Scenario('Presence state is shown in mails', async function (I, users, mail) {
     presenceStates.forEach((state) => {
         checkStatus(state.status, state.class);
     });
-
 });
 
 Scenario('Presence state is shwon in call history', async function (I, users) {
