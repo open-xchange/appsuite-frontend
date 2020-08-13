@@ -116,42 +116,6 @@ Scenario('Create call and check call history from addressbook', async (I, users,
     });
 });
 
-Scenario('Create appointment with zoom conference', async (I, users, calendar) => {
-
-    const [user1, user2] = users;
-
-    session('userA', async () => {
-        I.login('app=io.ox/calendar', { user: user1 });
-        calendar.newAppointment();
-        I.fillField('Subject', 'Appointment with Zoom conference');
-        I.selectOption('conference-type', 'Zoom Meeting');
-        I.waitForText('Connect with Zoom');
-        I.click('Connect with Zoom');
-        I.waitForVisible('.fa.fa-video-camera');
-        I.waitForText('Link', 5, '.conference-view.zoom');
-        await calendar.addParticipant(user2.get('name'));
-        I.click('Create');
-    });
-
-    session('userB', () => {
-        I.login('app=io.ox/calendar', { user: user2 });
-        calendar.waitForApp();
-        I.waitForVisible('.appointment');
-        I.click('.appointment');
-        I.waitForVisible('.io-ox-sidepopup');
-        I.waitForVisible('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
-        I.click('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
-    });
-
-    session('userA', () => {
-        I.waitForVisible('.appointment');
-        I.click('.appointment');
-        I.waitForVisible('.io-ox-sidepopup');
-        I.waitForVisible('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
-        I.click('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
-    });
-});
-
 Scenario('Create call from call history and check call history after hang up', (I, users, dialogs) => {
     const [user1, user2] = users;
     const { primaryEmail, display_name } = user2.userdata;
@@ -205,26 +169,6 @@ Scenario('Create call from call history and check call history after hang up', (
     });
 });
 
-Scenario('Creating never ending recurring appointment with zoom conference', (I, calendar) => {
-
-    I.login('app=io.ox/calendar');
-    calendar.waitForApp();
-    calendar.newAppointment();
-    I.fillField('Subject', 'Recurring Zoom Appointment');
-    calendar.recurAppointment();
-    I.waitForText('Apply', 5, calendar.locators.recurrenceview);
-    I.click('Apply', calendar.locators.recurrenceview);
-    I.selectOption('conference-type', 'Zoom Meeting');
-    I.waitForText('Connect with Zoom');
-    I.click('Connect with Zoom');
-    I.waitForVisible('.fa.fa-video-camera');
-    I.waitForText('Link', 5, '.conference-view.zoom');
-    I.waitForVisible('.alert-info.recurrence-warning');
-    I.waitForText('Zoom meetings expire after 365 days.');
-    I.click('Create');
-    I.waitForVisible('.io-ox-alert');
-});
-
 Scenario('Check call history filtering', (I, users) => {
 
     const [user1, user2] = users;
@@ -246,7 +190,7 @@ Scenario('Check call history filtering', (I, users) => {
 
     I.waitForVisible('~Call history');
     I.click('~Call history');
-    I.seeNumberOVisiblefElements('.call-history-item', 4);
+    I.seeNumberOfVisibleElements('.call-history-item', 4);
     I.clickDropdown('Missed');
     I.seeNumberOfElements('.call-history-item.missed', 2);
     I.seeNumberOfVisibleElements('.call-history-item', 2);
@@ -260,7 +204,6 @@ Scenario('Call history is not visible when empty', (I, users) => {
 
     I.login({ user: user1 });
     I.waitForVisible('.taskbar');
-    pause();
     I.dontSeeElement('~Call history');
 
     I.executeScript((mail, name) => {
@@ -272,40 +215,4 @@ Scenario('Call history is not visible when empty', (I, users) => {
     I.waitForVisible('~Call history');
     I.click('~Call history');
     I.waitForVisible('.dropdown.open .call-history-item');
-});
-
-Scenario('[OXUIB-397] Appointment with zoom conference can be changed into a series', (I, calendar) => {
-
-    // Create normal appointment with zoom conference
-    I.login('app=io.ox/calendar');
-    calendar.waitForApp();
-    calendar.newAppointment();
-    I.fillField('Subject', 'OXUIB-397');
-    I.selectOption('conference-type', 'Zoom Meeting');
-    I.waitForText('Connect with Zoom');
-    I.click('Connect with Zoom');
-    I.waitForVisible('.fa.fa-video-camera');
-    I.waitForText('Link', 5, '.conference-view.zoom');
-    I.click('Create');
-
-    // Change appointment into a series
-    I.waitForDetached(calendar.locators.edit);
-    I.waitForVisible('.appointment');
-    I.click('.appointment');
-    I.waitForVisible('.io-ox-sidepopup a[data-action="io.ox/calendar/detail/actions/edit"]');
-    I.waitForClickable('.io-ox-sidepopup a[data-action="io.ox/calendar/detail/actions/edit"]');
-    I.click('Edit');
-    I.waitForVisible(calendar.locators.edit);
-    I.waitForText('Repeat', 5, calendar.locators.edit);
-    calendar.recurAppointment();
-    within(calendar.locators.recurrenceview, () => {
-        I.selectOption('.modal-dialog [name="until"]', 'After a number of occurrences');
-        I.waitForVisible('.modal-dialog [name="occurrences"]');
-        I.fillField('.modal-dialog [name="occurrences"]', '5');
-        I.click('Apply', '.modal-footer');
-    });
-    I.waitForDetached(calendar.locators.recurrenceview);
-    I.click('Save', calendar.locators.edit);
-    I.waitForDetached(calendar.locators.edit);
-    I.waitForVisible('.appointment .recurrence-flag');
 });
