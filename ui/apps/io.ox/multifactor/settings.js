@@ -16,6 +16,10 @@ define('io.ox/multifactor/settings', [
 ], function (ext, capabilities, gt) {
     'use strict';
 
+    if (capabilities.get('anonymous')) {
+        return;
+    }
+
     if (capabilities.get('multifactor') && capabilities.get('multifactor_service')) {
         ext.point('io.ox/settings/pane/general/security').extend({
             id: 'io.ox/multifactor',
