@@ -111,11 +111,13 @@ define.async('io.ox/switchboard/api', [
             params: { action: 'acquireToken' }
         })
         .then(function (data) {
+            var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
+            appsuiteApiBaseUrl = !appsuiteApiBaseUrl ? '' : '&appsuiteApiBaseUrl=' + appsuiteApiBaseUrl;
             // Only send redirect uri if not default "/appsuite/api"
-            var redirectUri = ox.apiRoot === '/appsuite/api' ? '' : '&appsuiteApiPath=' + encodeURIComponent(ox.apiRoot);
+            var appsuiteApiPath = ox.apiRoot === '/appsuite/api' ? '' : '&appsuiteApiPath=' + encodeURIComponent(ox.apiRoot);
             // TODO
             // * enable long polling, configure retries, and reconnects
-            api.socket = io(api.host + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token + redirectUri, { transports: ['websocket'] })
+            api.socket = io(api.host + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token + appsuiteApiPath + appsuiteApiBaseUrl, { transports: ['websocket'] })
                 .once('connect', function () {
                     console.log('%cConnected to switchboard service', 'background-color: green; color: white; padding: 8px;');
                 })
