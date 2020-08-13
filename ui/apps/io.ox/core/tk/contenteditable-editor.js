@@ -379,7 +379,6 @@ define('io.ox/core/tk/contenteditable-editor', [
             toolbar2: '',
             toolbar3: '',
             plugins: 'autoresize autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
-            // patched version (see OXUIB-255)
             theme: 'silver',
             imageLoader: null // is required to upload images. should have upload(file) and getUrl(response) methods
         }, opt);
@@ -489,17 +488,12 @@ define('io.ox/core/tk/contenteditable-editor', [
                     if (this.oxContext && this.oxContext.signature) {
                         $(this.contentDocument.getElementsByTagName('html')[0]).addClass('signature-editor');
                     }
-                    // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
-                    $(fixed_toolbar).find('span.mce-txt').attr('tabindex', -1);
+
                     // adjust toolbar
                     var widgets = $(fixed_toolbar).find('.tox-tbtn');
                     originalToolbarConfig.split(' ').forEach(function (id, index) {
                         widgets.eq(index).attr('data-name', id);
                         if (/^\*/.test(id)) widgets.eq(index).attr('data-hidden', 'xs');
-                    });
-                    // find empty groups
-                    $(fixed_toolbar).find('.mce-btn-group').each(function () {
-                        $(this).toggleClass('mce-btn-group-visible-xs', $(this).has('.mce-widget:not([data-hidden])').length > 0);
                     });
 
                     ed.on('SetContent', function (o) {
