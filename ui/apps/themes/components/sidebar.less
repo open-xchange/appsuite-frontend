@@ -59,25 +59,27 @@
 
 .primary-action {
 
-    padding: 16px 16px 15px 16px;
-    border-bottom: 1px solid #ddd;
+    padding: 0 16px 16px 16px;
 
     .btn.btn-primary {
 
         width: 100%;
         border: 0;
         border-radius: 0;
-        line-height: 40px;
+        line-height: 36px;
         padding: 0 8px;
         background-color: @brand-primary;
+        border-radius: @default-border-radius;
         transition: background-color 5s linear;
 
+        /*
         html.design-night & { background-color: @brand-primary; }
         html.design-twilight & { background-color: #4d7155; }
         html.design-dawn & { background-color: #2c6e7f; }
         html.design-day & { background-color: @brand-primary; }
         html.design-dusk & { background-color: #753e93; }
         html.design-late & { background-color: @brand-primary; }
+        */
     }
 }
 

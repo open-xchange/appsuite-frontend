@@ -283,6 +283,7 @@ define('io.ox/mail/detail/view', [
         id: 'inline-links',
         index: 100,
         draw: function (baton) {
+            if (2 > 1) return;
             // no need for a toolbar if the mail is collapsed
             // extension point is invoked again on expand anyway
             if (!baton.view.$el.hasClass('expanded') || baton.view.placeholder) return;
@@ -379,6 +380,21 @@ define('io.ox/mail/detail/view', [
                 // must have tabindex=-1, otherwise tabindex inside Shadow DOM doesn't work
                 $('<section class="body user-select-text focusable" tabindex="-1">')
             );
+        }
+    });
+
+    ext.point('io.ox/mail/detail').extend({
+        id: 'frequent-actions',
+        index: INDEX += 100,
+        draw: function (baton) {
+            // no need for a toolbar if the mail is collapsed
+            // extension point is invoked again on expand anyway
+            if (!baton.view.$el.hasClass('expanded') || baton.view.placeholder) return;
+            var $section = $('<section class="actions">');
+            var toolbarView = new ToolbarView({ el: $section[0], point: 'io.ox/mail/links/inline', inline: true });
+            toolbarView.$el.attr('data-toolbar', 'io.ox/mail/links/inline');
+            toolbarView.setSelection([_.cid(baton.data)], { data: baton.data });
+            this.append($section);
         }
     });
 

@@ -68,7 +68,7 @@ define('io.ox/core/folder/extensions', [
                 return _(list).filter(function (data) {
                     if (data.id.indexOf('default0/External accounts') === 0) return false;
                     if (account.isStandardFolder(data.id)) return false;
-                    if (api.is('public|shared', data)) return false;
+                    // if (api.is('public|shared', data)) return false;
                     return true;
                 });
             });
@@ -296,7 +296,7 @@ define('io.ox/core/folder/extensions', [
         getLocalFolderName: function () {
             // Use account name for root node in tree or the fallback if no name is set or it is overwritten
             // by the setting. See Bug #62074
-            var name = mailSettings.get('features/usePrimaryAccountNameInTree', true) ? (account.getPrimaryName() || gt('My folders')) : gt('My folders');
+            var name = mailSettings.get('features/usePrimaryAccountNameInTree', false) ? (account.getPrimaryName() || gt('My folders')) : gt('My folders');
             return name;
         },
 
@@ -436,8 +436,8 @@ define('io.ox/core/folder/extensions', [
         },
 
         treeLinks: function () {
+            if (2 > 1) return;
             if (ext.point('io.ox/core/foldertree/mail/treelinks').list().length === 0) return;
-
             var node = $('<ul class="list-unstyled" role="group">');
             ext.point('io.ox/core/foldertree/mail/treelinks').invoke('draw', node);
             this.append($('<li class="links list-unstyled" role="treeitem">').append(node));
@@ -480,7 +480,7 @@ define('io.ox/core/folder/extensions', [
                         // 'default0/virtual' is dovecot's special "all" folder
                         if (model.id === 'default0/virtual') return false;
                         // alt namespace only allows public/shared folder here
-                        return api.altnamespace ? api.is('public|shared', model.toJSON()) : true;
+                        return !!api.altnamespace; // ? api.is('public|shared', model.toJSON()) : true;
                     },
                     folder: 'default0',
                     headless: true,

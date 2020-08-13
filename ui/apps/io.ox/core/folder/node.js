@@ -550,7 +550,7 @@ define('io.ox/core/folder/node', [
                         //#. %1$s is the name of the folder
                         gt('Actions for %1$s', title)
                 })
-                .append($('<i class="fa fa-bars" aria-hidden="true">'))
+                .append($('<i class="fa fa-ellipsis-h" aria-hidden="true">'))
             );
         },
 

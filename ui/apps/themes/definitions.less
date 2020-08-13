@@ -31,7 +31,7 @@
  * 1.1 Base colors
  */
 
-@brand-primary:                         #283f73;    /* was #3c73aa;*/    /* Bootstrap overwrite */
+@brand-primary:                         #3F51B5;    /* was #3c73aa;*/    /* Bootstrap overwrite */
 @brand-success:                         #008500;    /* Bootstrap overwrite */
 // e.g. used for window-content
 @background:                            @white;
@@ -57,7 +57,8 @@
 @dark-silver:                           #aaa;
 @silver:                                #bbb;
 @light-silver:                          #ccc;
-
+@bright-warm-gray:                      #efedec;
+@light-warm-gray:                       #F1F0EE;
 /*
  * 1.2.1 Application colors
  */
@@ -108,6 +109,7 @@
 @base-padding:                          4px;
 @default-padding:                       @base-padding * 4;
 @list-view-padding:                     @default-padding;
+@default-border-radius:                 6px;
 
 /*
  * 1.6 Links
@@ -222,8 +224,8 @@
  * 2.5 Selection
  */
 
-@selected-color:                        #f0faff;
-@selected-unfocussed-background:        #ddd;
+@selected-color:                        #E8EAF6;
+@selected-unfocussed-background:        #E8EAF6;
 @selected-focussed-background:          @brand-primary;
 @selected-background:                   @brand-primary;
 
@@ -252,12 +254,12 @@
  * 3.2 Topbar
  */
 
-@topbar-background:                     @brand-primary; //obsolete
-@topbar-icon-color:                     @white;
-@topbar-launcher-color:                 @white; //rgba(255, 255, 255, 0.95);
+@topbar-background:                     @white; //obsolete
+@topbar-icon-color:                     #555;
+@topbar-launcher-color:                 @black; //rgba(255, 255, 255, 0.95);
 @topbar-launcher-color-hover:           rgba(0,0,0,.4);//@white;
-@topbar-launcher-color-active:          @white;
-@topbar-launcher-background-hover:      rgba(0, 0, 0, 0.15);
+@topbar-launcher-color-active:          @black;
+@topbar-launcher-background-hover:      rgba(0, 0, 0, 0.10);
 @topbar-launcher-background-active:     rgba(0, 0, 0, 0.25);
 
 /*
@@ -284,7 +286,7 @@
 @foldertree-active-label-color:                 #333;
 @foldertree-passive-label-color:                @hc-gray;
 
-@foldertree-selected-background:                rgba(0, 0, 0, 0.10);
+@foldertree-selected-background:                @selected-unfocussed-background;
 @foldertree-selected-focus-background:          @selected-background;
 @foldertree-selected-focus-counter-color:       rgba(255, 255, 255, 0.95);
 @foldertree-selected-focus-options-background:  rgba(0, 0, 0, 0.20);

@@ -14,9 +14,8 @@
 
 .folder-tree {
 
-    padding: 8px 0;
+    padding: 8px 16px;
     overflow: auto;
-    background-color: @foldertree-sidepanel-background;
     .user-select(none);
 
     // font weights
@@ -24,7 +23,7 @@
     @normal: 400;
     @bold: 700;
     @indentation: 40px;
-    @height: 24px;
+    @height: 32px;
 
     // width fix
     .tree-container {
@@ -48,9 +47,11 @@
         cursor: pointer;
         outline: 0;
 
+        /* if 2 > 1
         &.selected > .folder-node .folder-options {
             display: inline-block;
         }
+        */
 
         &.empty {
             display: none;
@@ -124,6 +125,7 @@
     .folder-node {
 
         height: @height;
+        border-radius: @default-border-radius;
 
         a.account-link {
             padding: 0 8px;
@@ -185,6 +187,8 @@
         .folder-icon {
 
             display: none;
+            color: @brand-primary;
+            font-size: 16px;
 
             &.visible {
                 display: inline-block;

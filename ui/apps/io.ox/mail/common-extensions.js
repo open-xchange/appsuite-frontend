@@ -53,7 +53,8 @@ define('io.ox/mail/common-extensions', [
 
         // add initials
         var initials = getInitials(baton.data.from);
-        node.text(initials);
+        var color = contactsUtil.getInitialsColor(initials);
+        node.text(initials).addClass('initials ' + color);
 
         var address = _.isArray(data) ? data && data[0] && data[0][1] : data;
 
