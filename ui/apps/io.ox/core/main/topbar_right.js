@@ -144,7 +144,7 @@ define('io.ox/core/main/topbar_right', [
                         return $.when();
                     },
                     gt('Refresh')
-                ).attr('id', 'io-ox-refresh-icon')
+                ).attr('id', 'io-ox-refresh-icon').addClass('hidden')
             );
 
             function setLabel() {

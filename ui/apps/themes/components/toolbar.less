@@ -220,7 +220,6 @@
     width: 100%;
     height: @toolbar-height;
     background-color: #fff;
-    border-bottom: 1px solid #ddd;
     margin: 0;
     padding: 0;
     .user-select(none);
@@ -233,7 +232,7 @@
         float: left; // to support pull-right while keeping items in-order (a11y)
         height: 100%;
 
-        & >a.upsell i.fa.fa-star {
+        & > a.upsell i.fa.fa-star {
             margin-left: 4px;
             color: #ffc107;
             font-size: 14px;
@@ -248,6 +247,7 @@
             text-decoration: none;
             float: left;
             outline: 0;
+            color: #333;
 
             i { text-decoration: none; }
             &:focus { background-color: #eee; text-decoration: none; }
@@ -382,7 +382,6 @@
     height: @height-default;
     padding: 0;
     background-color: #fff;
-    border: 0 solid mix(@text-color, @background, 200%/15);
 
     font-size: 14px;
     line-height: @height-default - 1;

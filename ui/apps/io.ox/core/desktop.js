@@ -1710,7 +1710,7 @@ define('io.ox/core/desktop', [
                 console.warn('io.ox/search is deprecated with 7.8.0. Please use io.ox/find instead');
             }
 
-            if (opt.find && supportsFind(opt.name)) {
+            if (opt.find && supportsFind(opt.name) && 2 < 1) {
 
                 ext.point('io.ox/find/view').extend({
                     id: 'view',

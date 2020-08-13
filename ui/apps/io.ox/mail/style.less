@@ -89,24 +89,41 @@ html.windows {
     }
 }
 
-.io-ox-mail-window .vsplit .leftside .alert {
-    position: relative;
-    border-radius: 0;
-    padding: 8px 30px 8px 16px;
-    line-height: 24px;
-    border: 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
-    height: 40px;
-    a {
-        color: @alert-info-text;
+.io-ox-mail-window {
+
+    .list-view-control .listview {
+        padding: 0 8px;
     }
-    .fa-warning {
-        margin-right: 16px;
+
+    .generic-toolbar .folder-name {
+        padding-left: 16px;
+        font-size: 18px;
+        font-weight: bold;
     }
-    .btn-close {
-        position:absolute;
-        right: 2px;
-        top: 5px;
+
+    .classic-toolbar-container {
+        padding-left: 16px;
+    }
+
+    .vsplit .leftside .alert {
+        position: relative;
+        border-radius: 0;
+        padding: 8px 30px 8px 16px;
+        line-height: 24px;
+        border: 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+        height: 40px;
+        a {
+            color: @alert-info-text;
+        }
+        .fa-warning {
+            margin-right: 16px;
+        }
+        .btn-close {
+            position:absolute;
+            right: 2px;
+            top: 5px;
+        }
     }
 }
 
@@ -220,8 +237,19 @@ html.windows {
 .mail-item {
 
     .list-item {
+
         padding-top: 11px;
-        padding-bottom: 12px;
+        padding-bottom: 13px;
+        border-bottom: 0;
+
+        &.selected {
+            border-radius: @default-border-radius;
+        }
+
+        &.selected + .selected {
+            padding-top: 19px;
+            margin-top: -8px;
+        }
 
         .smartphone & {
             padding-top: 16px;
@@ -340,7 +368,13 @@ html.macos .preview-right, html.ios {
         display: none;
         width: 100%;
         cursor: default;
+        border-radius: @default-border-radius;
         &.loading { min-height: 80px; }
+    }
+
+    section.actions {
+        padding: 4px 40px;
+        border-top: 1px solid #ddd;
     }
 
     .ios.smartphone & {
@@ -566,7 +600,7 @@ html.macos .preview-right, html.ios {
 
         position: relative;
         line-height: 16px;
-        padding: (@default-padding + 3) (@picture-padding + @default-padding) 13px 40px;
+        padding: (@default-padding + 3) (@picture-padding + @default-padding) 21px 40px;
 
         min-height: 64px;
 
@@ -714,7 +748,6 @@ html.macos .preview-right, html.ios {
         margin: 0 @default-padding 0 0;
         .picture(@pictureSize, @pictureSize);
         .flex-center;
-        color: rgba(0, 0, 0, 0.70);
         background-color: #eee;
         font-weight: bold;
     }
@@ -765,6 +798,10 @@ html.macos .preview-right, html.ios {
     &.show-text-preview .text-preview.multiline {
         display: block; /* Fallback for non-webkit */
         display: -webkit-box;
+    }
+
+    .inline-toolbar a {
+        color: #555;
     }
 
     .text-preview.inline { display: none }
@@ -1007,8 +1044,8 @@ html.macos .preview-right, html.ios {
 
 .thread-view-list {
 
-    padding: @default-padding;
-    background-color: #eee;
+    padding: 24px 32px;
+    background-color: transparent;
 
     &.scrollable { overflow: auto; }
 
@@ -1087,8 +1124,8 @@ html.macos .preview-right, html.ios {
 }
 
 .thread-view-control {
+
     @height: 45px;
-    background-color: #eee;
 
     .back-navigation {
         display: none;
@@ -1158,14 +1195,17 @@ html.macos .preview-right, html.ios {
     padding: 0;
     overflow: visible;
     height: auto;
+    border-radius: @default-border-radius;
 
     .list-item {
         cursor: default;
         background-color: white;
         clear: both;
         padding: 0;
-        margin-bottom: (@default-padding / 2);
+        margin-bottom: 24px;
         border-bottom: 1px solid transparent;
+        border-radius: @default-border-radius;
+        box-shadow: 0 8px 16px -2px rgba(0, 0, 0, 0.12);
 
         &.placeholder {
             min-height: 65px;
@@ -1183,8 +1223,10 @@ html.macos .preview-right, html.ios {
 // Detail view
 
 .rightside.mail-detail-pane {
+
     z-index:1;
-    background-color: #eee;
+    background-color: transparent;
+    background-image: linear-gradient(0deg, @bright-warm-gray, white);
 
     .thread-view-control,
     &.selection-one .multi-selection-message { display: none; }
@@ -1612,6 +1654,7 @@ body.dragging .categories-toolbar-container {
     .list-view.mail-item {
 
         @checkboxShift: 40px;
+        padding: 0 8px;
 
         .list-item {
 

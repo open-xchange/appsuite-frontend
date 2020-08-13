@@ -14,9 +14,10 @@
 define('io.ox/core/folder/view', [
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
+    'io.ox/core/extPatterns/actions',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (ext, api, settings, gt) {
+], function (ext, api, actions, settings, gt) {
 
     'use strict';
 
@@ -179,47 +180,46 @@ define('io.ox/core/folder/view', [
             return visible;
         };
 
-        // reverted for 7.10
-        // app.addPrimaryAction = function (options) {
+        app.addPrimaryAction = function (options) {
 
-        //     var baton = ext.Baton({ app: this });
+            var baton = ext.Baton({ app: this });
 
-        //     var $button = $('<button class="btn btn-primary">')
-        //         .prop('disabled', true)
-        //         .text(options.label)
-        //         .on('click', { baton: baton }, onClick);
+            var $button = $('<button class="btn btn-primary">')
+                .prop('disabled', true)
+                .text(options.label)
+                .on('click', { baton: baton }, onClick);
 
-        //     ext.point(options.point).extend({
-        //         id: 'primary-action',
-        //         index: 10,
-        //         draw: function () {
+            ext.point(options.point).extend({
+                id: 'primary-action',
+                index: 10,
+                draw: function () {
 
-        //             this.append(
-        //                 $('<div class="primary-action">').append($button)
-        //             );
+                    this.append(
+                        $('<div class="primary-action">').append($button)
+                    );
 
-        //             updateState();
-        //         }
-        //     });
+                    updateState();
+                }
+            });
 
-        //     function onClick(e) {
-        //         actions.invoke(options.action, null, e.data.baton);
-        //     }
+            function onClick(e) {
+                actions.invoke(options.action, null, e.data.baton);
+            }
 
-        //     function updateState() {
-        //         actions.check(options.action, baton).always(function (bool) {
-        //             $button.prop('disabled', !bool);
-        //         });
-        //     }
+            function updateState() {
+                actions.check(options.action, baton).always(function (bool) {
+                    $button.prop('disabled', !bool);
+                });
+            }
 
-        //     this.on('folder:change', updateState);
+            this.on('folder:change', updateState);
 
-        //     this.listenTo(this.props, 'change:folderview', function (model, value) {
-        //         // bad style; look for toolbar via selector
-        //         // better: solve this in tolbar locally; however, it's no view yet; no listenTo
-        //         this.getWindow().nodes.outer.find('.classic-toolbar-container .io-ox-action-link[data-action="' + options.toolbar + '"]').parent().toggle(!value);
-        //     });
-        // };
+            this.listenTo(this.props, 'change:folderview', function (model, value) {
+                // bad style; look for toolbar via selector
+                // better: solve this in tolbar locally; however, it's no view yet; no listenTo
+                this.getWindow().nodes.outer.find('.classic-toolbar-container .io-ox-action-link[data-action="' + options.toolbar + '"]').parent().toggle(!value);
+            });
+        };
 
         //
         // Respond to window resize

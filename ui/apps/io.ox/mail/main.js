@@ -572,7 +572,7 @@ define('io.ox/mail/main', [
             var left = app.pages.getPage('listView'),
                 right = app.pages.getPage('detailView');
 
-            app.left = left.toggleClass('border-right', _.device('!smartphone'));
+            app.left = left; //.toggleClass('border-right', _.device('!smartphone'));
             app.right = right.addClass('mail-detail-pane');
         },
 
@@ -1285,7 +1285,7 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
             app.applyLayout = function () {
 
-                var layout = app.props.get('layout'), nodes = app.getWindow().nodes, toolbar, categoriesToolbar, className,
+                var layout = 'compact' || app.props.get('layout'), nodes = app.getWindow().nodes, toolbar, categoriesToolbar, className,
                     savedWidth = app.settings.get('listview/width/' + _.display()),
                     savedHeight = app.settings.get('listview/height/' + _.display());
 
@@ -1937,16 +1937,25 @@ define('io.ox/mail/main', [
             });
         },
 
-        // reverted for 7.10
-        // 'primary-action': function (app) {
+        'primary-action': function (app) {
 
-        //     app.addPrimaryAction({
-        //         point: 'io.ox/mail/sidepanel',
-        //         label: gt('Compose'),
-        //         action: 'io.ox/mail/actions/compose',
-        //         toolbar: 'compose'
-        //     });
-        // },
+            app.addPrimaryAction({
+                point: 'io.ox/mail/sidepanel',
+                label: gt('Compose'),
+                action: 'io.ox/mail/actions/compose',
+                toolbar: 'compose'
+            });
+        },
+
+        'top-search': function () {
+
+            $('#io-ox-topsearch').append(
+                $('<div class="search-container">').append(
+                    $('<input type="search" class="form-control" placeholder="Search mail">'),
+                    $('<i class="fa fa-search">')
+                )
+            );
+        },
 
         'sidepanel': function (app) {
             if (_.device('smartphone')) return;
@@ -1954,8 +1963,8 @@ define('io.ox/mail/main', [
                 id: 'tree',
                 index: 100,
                 draw: function (baton) {
-                    // add border & render tree and add to DOM
-                    this.addClass('border-right').append(baton.app.treeView.$el);
+                    // render tree and add to DOM
+                    this.append(baton.app.treeView.$el);
                 }
             });
 

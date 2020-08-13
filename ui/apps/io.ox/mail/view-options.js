@@ -289,6 +289,12 @@ define('io.ox/mail/view-options', [
         index: 200,
         draw: function (baton) {
 
+            this.append(
+                $('<span class="folder-name">').text(gt('Inbox'))
+            );
+
+            if (2 > 1) return;
+
             var app = baton.app, model = app.props;
 
             var dropdown = new Dropdown({

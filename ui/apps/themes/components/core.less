@@ -444,6 +444,21 @@ html:not(.internet-explorer) {
     filter: blur(@bluriness);
 }
 
+.contact-picture {
+    &.initials {
+        color: white;
+        &.gray { background-color: #777; }
+        &.red { background-color: #e53935; }
+        &.orange { background-color: #ff7043; }
+        &.yellow { background-color: #ffc107; color: #333; }
+        &.green { background-color: #558b2f; }
+        &.cyan { background-color: #26a69a; }
+        &.blue { background-color: #3F51B5; }
+        &.purple { background-color: #9C27B0; }
+        &.pink { background-color: #E91E63; }
+    }
+}
+
 h1.unstyled,
 h2.unstyled,
 h3.unstyled,

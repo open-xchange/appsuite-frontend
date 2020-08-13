@@ -418,7 +418,7 @@ define('io.ox/core/extPatterns/links', [
                     .append(
                         isSmartphone && !extension.compactDropdown ?
                             $().add($.txt(gt('Actions'))).add($('<i class="fa fa-caret-down" aria-hidden="true">')) :
-                            $('<span class="sr-only">').text(gt('Actions')).add($('<i class="fa fa-bars" aria-hidden="true">'))
+                            $('<span class="sr-only">').text(gt('Actions')).add($('<i class="fa fa-ellipsis-h" aria-hidden="true">'))
                     ),
                     node = $('<ul class="dropdown-menu pull-right" role="menu">')
                         .attr('aria-label', isSmartphone ? gt('Actions') : gt('More'))

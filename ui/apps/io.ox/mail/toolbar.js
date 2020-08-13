@@ -38,14 +38,14 @@ define.async('io.ox/mail/toolbar', [
         //
         // --- HI ----
         //
-        'compose': {
-            prio: 'hi',
-            mobile: 'hi',
-            title: gt('Compose'),
-            tooltip: gt('Compose new email'),
-            drawDisabled: true,
-            ref: 'io.ox/mail/actions/compose'
-        },
+        // 'compose': {
+        //     prio: 'hi',
+        //     mobile: 'hi',
+        //     title: gt('Compose'),
+        //     tooltip: gt('Compose new email'),
+        //     drawDisabled: true,
+        //     ref: 'io.ox/mail/actions/compose'
+        // },
         'edit': {
             prio: 'hi',
             mobile: 'lo',
@@ -254,6 +254,7 @@ define.async('io.ox/mail/toolbar', [
         custom: true,
         draw: function (baton) {
 
+            if (2 > 1) return;
             if (_.device('smartphone')) return;
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View

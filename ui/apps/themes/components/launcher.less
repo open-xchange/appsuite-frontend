@@ -11,13 +11,13 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-@appcontrol-height:                     64px;
+@appcontrol-height:                     72px;
 @appcontrol-height-smartphone:          50px;
 @appcontrol-launcher-height-smartphone: 50px;
 
 @appcontrol-border-color:               rgba(0, 0, 0, 0.90);
-@appcontrol-launcher-color:             @white;
-@appcontrol-launcher-color-highlight:   @white;
+@appcontrol-launcher-color:             @topbar-icon-color;
+@appcontrol-launcher-color-highlight:   @topbar-icon-color;
 
 @launcher-fg:       #666;
 @launcher-bg:       #fff;
@@ -40,7 +40,7 @@
 
 @quicklaunch-stroke-width: 3px;
 @quicklaunch-stroke-width-retina: 3px;
-@quicklaunch-button-color: rgba(255, 255, 255, 0.80);
+@quicklaunch-button-color: @topbar-icon-color;
 
 @svg-wrap-size: 56px; // absolute value to avoid subpixel rendering
 
@@ -48,7 +48,7 @@
 #io-ox-core {
     #io-ox-topbar { display: none; }
     #io-ox-screens {
-        top: @appcontrol-height;
+        top: @appcontrol-height + 8px;
         .smartphone & {
             top: @appcontrol-height-smartphone;
         }
@@ -100,6 +100,7 @@
         width: 60px;
         max-height: 100%;
         margin-top: -1px;
+        filter: invert(1);
     }
 }
 
@@ -124,7 +125,6 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     z-index: 12;
     color: #fff;
     height: @appcontrol-height;
-    border-bottom: 1px solid @appcontrol-border-color;
     padding: 0;
     display: flex;
     align-content: center;
@@ -216,8 +216,8 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     svg.indicator {
         position: absolute;
         z-index: 1;
-        top: 18px;
-        left: 33px;
+        top: 22px;
+        left: 32px;
         circle { fill: #eb4400 }
     }
 
@@ -249,7 +249,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     }
 
     #io-ox-topsearch {
-        margin-top: 15px;
+
         flex-grow: 1;
 
         .search-box > .form-group { margin-bottom: 0; }
@@ -275,6 +275,34 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             flex: 1;
             max-width: 350px;
             margin-left: auto;
+        }
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .search-container {
+            color: #333;
+            width: 600px;
+            position: relative;
+            input {
+                font-size: 14px;
+                background-color: @light-warm-gray;
+                border-color: transparent;
+                height: 40px;
+                padding-left: 40px;
+                box-shadow: none;
+                border-radius: @default-border-radius;
+            }
+            input::placeholder {
+                color: #555;
+            }
+            .fa-search {
+                font-size: 16px;
+                position: absolute;
+                top: 12px;
+                left: 16px;
+            }
         }
     }
 
@@ -346,7 +374,6 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             font-size: 13px;
             font-weight: bold;
             background-clip: padding-box;
-            border: 1px solid rgba(0, 0, 0, 0.50);
         }
     }
 }
