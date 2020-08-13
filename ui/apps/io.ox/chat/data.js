@@ -16,8 +16,9 @@ define('io.ox/chat/data', [
     'io.ox/contacts/api',
     'static/3rd.party/socket.io.slim.js',
     'io.ox/mail/sanitizer',
-    'io.ox/chat/util'
-], function (events, api, io, sanitizer, util) {
+    'io.ox/chat/util',
+    'io.ox/core/http'
+], function (events, api, io, sanitizer, util, http) {
 
     'use strict';
 
@@ -1000,9 +1001,37 @@ define('io.ox/chat/data', [
             return this.authenticate();
         },
 
+        getConfig: function () {
+            if (this.config) return this.config;
+            return $.ajax({
+                url: data.SOCKET + '/auth/config'
+            }).then(function (config) {
+                this.config = config;
+                return config;
+            });
+        },
+
+        authenticateAppsuite: function () {
+            return http.GET({ module: 'token', params: { action: 'acquireToken' } }).then(function (res) {
+                if (!res.token) throw new Error('Missing token in response');
+                return $.ajax({
+                    method: 'post',
+                    url: data.SOCKET + '/auth/login',
+                    data: { token: res.token },
+                    xhrFields: { withCredentials: true }
+                });
+            }).then(function () {
+                return this.getUserId();
+            }.bind(this));
+        },
+
         autologin: function () {
             return this.getUserId().catch(function () {
-                return this.authenticateSilent();
+                return this.getConfig().then(function (config) {
+                    if (config.appsuite) return this.authenticateAppsuite();
+                    if (config.oidc) return this.authenticateSilent();
+                    throw new Error('No suitable authentication method');
+                }.bind(this));
             }.bind(this)).then(function (user) {
                 this.set('userId', user.id);
                 return user.id;
