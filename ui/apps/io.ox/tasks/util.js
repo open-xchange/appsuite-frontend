@@ -13,8 +13,9 @@
 define('io.ox/tasks/util', [
     'gettext!io.ox/tasks',
     'settings!io.ox/core',
-    'io.ox/core/capabilities'
-], function (gt, coreSettings, capabilities) {
+    'io.ox/core/capabilities',
+    'io.ox/mail/sanitizer'
+], function (gt, coreSettings, capabilities, sanitizer) {
 
     'use strict';
 
@@ -210,7 +211,9 @@ define('io.ox/tasks/util', [
                     //remove signature style divider "--" used by tasks created by mail reminder function (if it's at the start remove it entirely)
                     note = note.replace(/(<br>)+-+(<br>)*/, '<br>').replace(/^-+(<br>)*/, '');
                 }
-                return note;
+
+                // prevent malicious code here
+                return sanitizer.simpleSanitize(note);
             },
 
             //change status number to status text. format enddate to presentable string
