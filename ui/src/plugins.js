@@ -452,8 +452,8 @@
                             });
                         } else {
                             runCode([ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''),
-                                'define("' + modulename + '", function () { console.error("Could not load module ' +
-                                    modulename + '. Defining dummy module.");})'
+                                'define("' + encodeURIComponent(modulename) + '", function () { console.error("Could not load module ' +
+                                encodeURIComponent(modulename) + '. Defining dummy module.");})'
                             );
                             context.completeLoad(modulename);
                         }
