@@ -156,7 +156,7 @@ define('io.ox/chat/data', [
     var MessageModel = Backbone.Model.extend({
 
         defaults: function () {
-            return { content: '', senderId: data.user.userId, sent: +moment(), type: 'text', state: undefined };
+            return { content: '', sender: data.user.email, date: +moment(), type: 'text' };
         },
 
         idAttribute: 'messageId',
@@ -271,7 +271,7 @@ define('io.ox/chat/data', [
         },
 
         isMyself: function () {
-            return this.get('senderId') === data.user.userId;
+            return this.get('sender') === data.user.email;
         },
 
         getType: function () {
@@ -296,7 +296,7 @@ define('io.ox/chat/data', [
             if (index <= limit) return false;
             var prev = this.collection.at(index - 1);
             if (prev.isSystem()) return false;
-            return prev.get('senderId') === this.get('senderId');
+            return prev.get('sender') === this.get('sender');
         },
 
         updateDelivery: function (state) {
@@ -343,7 +343,7 @@ define('io.ox/chat/data', [
                 this.trigger('complete:next');
             }
 
-            var endpoint = data.chats.getCurrent() && data.chats.getCurrent().isChannel() ? '/channels/' : '/rooms/';
+            var endpoint = data.chats.get(this.roomId).isChannel() ? '/channels/' : '/rooms/';
             return $.ajax({
                 url: data.API_ROOT + endpoint + this.roomId + '/messages' + '?' + $.param(params),
                 xhrFields: { withCredentials: true }
@@ -360,7 +360,7 @@ define('io.ox/chat/data', [
                     }
                     if (index < list.length - params.limit / 2 - 1) {
                         this.nextComplete = true;
-                        this.tigger('complete:next');
+                        this.trigger('complete:next');
                     }
                 } else {
                     this[params.direction + 'Complete'] = list.length < params.limit;
@@ -383,9 +383,11 @@ define('io.ox/chat/data', [
         url: function () {
             return data.API_ROOT + '/rooms/' + this.roomId + '/messages';
         },
-        parse: function (obj) {
-            obj.roomId = this.roomId;
-            return obj;
+        parse: function (array) {
+            [].concat(array).forEach(function (item) {
+                item.roomId = this.roomId;
+            }.bind(this));
+            return array;
         }
     });
 
@@ -534,27 +536,17 @@ define('io.ox/chat/data', [
         },
 
         postMessage: function (attr, files) {
-            var self = this;
-            // make sure, senderId is set, such that this message can be identified as own message
-            attr.senderId = data.user.userId;
-
             var formData = new FormData();
             _.each(attr, function (value, key) {
                 formData.append(key, value);
             });
 
-            // add files
-            if (files) {
-                attr.files = [];
-                for (var i = 0; i < files.length; i++) {
-                    var file = files[i];
+            _.toArray(files).map(function (file) {
+                formData.append('files', file, file.name);
+                return file;
+            });
 
-                    formData.append('files', file, file.name);
-                    attr.files.push(file);
-                }
-            }
-
-            var model = this.messages.add(attr, { merge: true });
+            var model = this.messages.add(attr, { merge: true, parse: true });
             model.save(attr, {
                 data: formData,
                 processData: false,
@@ -577,8 +569,6 @@ define('io.ox/chat/data', [
                     delete deliveryUpdateCache[model.get('id')];
                 }
             });
-            model.set('sent', moment().toISOString());
-            this.set('modified', +moment());
             this.set('active', true);
         },
 
@@ -758,14 +748,6 @@ define('io.ox/chat/data', [
         leaveGroup: function (roomId) {
             var url = this.url() + '/' + roomId + '/members';
             this.get(roomId).destroy({ url: url });
-        },
-
-        parse: function (array) {
-            array = [].concat(array);
-            array.forEach(function (data) {
-                data.modified = +moment(data.modified);
-            });
-            return array;
         },
 
         sync: function (method, model, options) {

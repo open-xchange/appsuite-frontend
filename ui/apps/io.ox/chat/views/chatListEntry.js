@@ -46,9 +46,9 @@ define('io.ox/chat/views/chatListEntry', [
         render: function () {
             var model = this.model,
                 lastMessage = model.get('lastMessage') || {},
-                sender = lastMessage.senderId || '',
-                isCurrentUser = sender.toString() === data.user.userId.toString(),
                 isPrivate = model.get('type') === 'private',
+                sender = lastMessage.sender || '',
+                isCurrentUser = sender === data.user.email,
                 isSystemMessage = lastMessage ? lastMessage.type === 'system' : false;
 
             this.$el
@@ -90,8 +90,8 @@ define('io.ox/chat/views/chatListEntry', [
 
         onChangeLastMessage: function () {
             var model = this.model,
-                isCurrentUser = model.get('lastMessage').sender.toString() === data.user.userId.toString(),
                 isPrivate = model.get('type') === 'private',
+                isCurrentUser = model.get('lastMessage').sender === data.user.email,
                 lastMessage = model.get('lastMessage') || {},
                 isSystemMessage = lastMessage ? lastMessage.type === 'system' : false;
 

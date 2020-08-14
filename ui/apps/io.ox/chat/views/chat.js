@@ -351,7 +351,7 @@ define('io.ox/chat/views/chat', [
                 prevTop = this.scrollInfo.prevTop,
                 isScrolledDown = this.scrollInfo.isScrolledDown,
                 multipleMessages = added.length > 1,
-                isCurrentUser = added[0].get('senderId').toString() === data.user.userId.toString();
+                isCurrentUser = added[0].get('sender') === data.user.email;
 
             if (multipleMessages || isCurrentUser || isScrolledDown) {
                 if (this.autoScroll) this.scrollToBottom();
@@ -496,7 +496,7 @@ define('io.ox/chat/views/chat', [
             if (this.hidden) return;
             if (!this.isScrolledToBottom()) return;
             var lastIndex = this.model.messages.findLastIndex(function (message) {
-                return message.get('senderId') !== data.user.userId;
+                return message.get('sender') !== data.user.email;
             });
             if (lastIndex < 0) return;
             var message = this.model.messages.at(lastIndex);
