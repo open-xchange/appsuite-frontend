@@ -232,29 +232,19 @@ define('io.ox/chat/data', [
                 text: true
             }, opt);
 
-            var $elem = $('<div class="placeholder">').busy(),
-                file = this.get('files')[0],
-                fileId = file.fileId;
+            var file = _(this.get('files')).last();
+            if (!file) return;
 
-            if (_.isUndefined(fileId)) return $elem;
-
-            // TODO: Adjust for channels
-            $.ajax({
-                url: data.API_ROOT + '/files/' + fileId,
-                xhrFields: { withCredentials: true }
-            }).then(function () {
-                $elem.replaceWith(
-                    opt.icon ? $('<i class="fa icon">').addClass(util.getClassFromMimetype(file.mimetype)) : '',
-                    opt.text ? $.txt(file.name) : '',
-                    opt.download ? $('<a class="download">').attr({
-                        href: data.API_ROOT + '/files/' + fileId + '/thumbnail',
-                        download: file.name
-                    }).append(
-                        $('<i class="fa fa-download">')
-                    ) : ''
-                );
-            });
-            return $elem;
+            return [
+                opt.icon ? $('<i class="fa icon">').addClass(util.getClassFromMimetype(file.mimetype)) : '',
+                opt.text ? $.txt(file.name) : '',
+                opt.download ? $('<a class="download">').attr({
+                    href: data.API_ROOT + '/files/' + file.fileId + '/thumbnail',
+                    download: file.name
+                }).append(
+                    $('<i class="fa fa-download">')
+                ) : ''
+            ];
         },
 
         getTime: function () {
