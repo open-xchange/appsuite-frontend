@@ -369,7 +369,9 @@
     overflow: hidden;
     display: none;
     background-image: linear-gradient(0deg, @bright-warm-gray, white);
-
+    #io-ox-core.background & {
+        background: transparent;
+    }
     &.visible {
         display: flex;
         flex-direction: column;
@@ -459,7 +461,7 @@
 .window-content {
     top: 0;
     z-index: 2;
-    background-color: @background;
+    background-color: transparent;
     overflow: hidden;
     outline: 0;
 

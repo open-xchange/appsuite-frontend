@@ -259,7 +259,18 @@ div.hopscotch-bubble {
     }
 
     transition: filter 1s linear, opacity 1s linear;
-
+    &.background {
+        background-size: cover;
+        &.img1 {
+            background-image: url(@bg-image-1);
+        }
+        &.img2 {
+            background-image: url(@bg-image-2);
+        }
+        &.img3 {
+            background-image: url(@bg-image-3);
+        }
+    }
 }
 
 #io-ox-offline {

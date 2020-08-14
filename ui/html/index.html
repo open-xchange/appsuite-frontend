@@ -79,18 +79,18 @@
             }
 
             @-webkit-keyframes bouncedelay {
-              0%, 80%, 100% { -webkit-transform: scale(0.0) }
-              40% { -webkit-transform: scale(1.0) }
+                0%, 80%, 100% { -webkit-transform: scale(0.0) }
+                40% { -webkit-transform: scale(1.0) }
             }
 
             @keyframes bouncedelay {
-              0%, 80%, 100% {
-                transform: scale(0.0);
-                -webkit-transform: scale(0.0);
-              } 40% {
-                transform: scale(1.0);
-                -webkit-transform: scale(1.0);
-              }
+                0%, 80%, 100% {
+                    transform: scale(0.0);
+                    -webkit-transform: scale(0.0);
+                } 40% {
+                    transform: scale(1.0);
+                    -webkit-transform: scale(1.0);
+                }
             }
         </style>
         <meta id="bootstrap">
@@ -99,23 +99,22 @@
         <meta id="custom">
         <meta id="code">
         <script>
-          /* signin page */
-          window.ox = { signin: true };
-          /* fix broken URL */
-          var path = location.pathname;
-          if (/^\/\//.test(path)) {
-            location.href = location.href.replace(path, path.replace(/^[/]*/, '/'));
-          }
-
+            /* signin page */
+            window.ox = { signin: true };
+            /* fix broken URL */
+            var path = location.pathname;
+            if (/^\/\//.test(path)) {
+                location.href = location.href.replace(path, path.replace(/^[/]*/, '/'));
+            }
         </script>
     </head>
     <body class="unselectable">
         <!-- Visual overlays -->
         <div id="background-loader" class="busy" aria-hidden="true">
             <div class="throbber">
-              <div class="bounce1"></div>
-              <div class="bounce2"></div>
-              <div class="bounce3"></div>
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
             </div>
             <div id="showstopper">
                 <div class="down"></div>
@@ -124,7 +123,7 @@
             </div>
         </div>
         <!-- Core Panel -->
-        <div id="io-ox-core" class="abs unselectable" style="display: none">
+        <div id="io-ox-core" class="abs unselectable background img1" style="display: none">
             <div id="io-ox-appcontrol" style="display: none"></div>
             <!-- screens -->
             <div id="io-ox-screens" class="abs">
