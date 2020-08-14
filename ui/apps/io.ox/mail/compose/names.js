@@ -65,6 +65,7 @@ define('io.ox/mail/compose/names', [
         renderCheckbox: function () {
             return new mini.CheckboxView({ name: 'overwrite', model: this.model }).render().$el
                 .attr('title', gt('Use custom name'))
+                .addClass('name-overwrite-checkbox')
                 .prop('checked', this.model.get('overwrite'));
         },
 
