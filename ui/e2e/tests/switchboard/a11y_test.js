@@ -130,3 +130,30 @@ Scenario('Switchboard - Calendar', async (I, calendar) => {
     I.waitForText('Join Zoom meeting', 5, '.io-ox-sidepopup .switchboard-actions');
     expect(await I.grabAxeReport()).to.be.accessible;
 });
+
+Scenario('Switchboard - Call history keyboard navigation', async (I, mail) => {
+
+    const primaryEmail = 'someone@testsomething.com';
+    const display_name = 'someone';
+
+    I.login('app=io.ox/mail');
+    I.waitForText('Empty', 5, '.list-view');
+    await I.executeScript((mail, name) => {
+        return require(['io.ox/switchboard/views/call-history']).then(function (ch) {
+            ch.add(
+                [
+                    { email: mail, incoming: true, missed: false, name: name, type: 'zoom' },
+                    { email: mail, incoming: true, missed: true, name: name, type: 'zoom' },
+                    { email: mail, incoming: true, missed: false, name: name, type: 'zoom' },
+                    { email: mail, incoming: true, missed: true, name: name, type: 'zoom' }
+                ]
+            );
+        });
+    }, primaryEmail, display_name);
+    mail.waitForApp();
+    I.pressKey(['Shift', 'Tab']);
+    I.pressKey(['Shift', 'Tab']);
+    I.pressKey(['Shift', 'Tab']);
+
+    expect(await I.grabFocusFrom('~Call history')).to.be.true;
+});
