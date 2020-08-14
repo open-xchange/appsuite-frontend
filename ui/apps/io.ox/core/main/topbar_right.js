@@ -105,6 +105,56 @@ define('io.ox/core/main/topbar_right', [
     });
 
     ext.point('io.ox/core/appcontrol/right').extend({
+        id: 'theme',
+        index: 90,
+        draw: function () {
+            if (_.device('smartphone')) return;
+            var ul = $('<ul id="topbar-background-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
+                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">')
+                    .attr('aria-label', gt('Select background'))
+                    .append('<i class="fa fa-picture-o launcher-icon" aria-hidden="true">'),
+                dropdown = new Dropdown({
+                    // have a simple model to track changes (e.g. availability)
+                    model: new Backbone.Model({}),
+                    attributes: { role: 'presentation' },
+                    tagName: 'li',
+                    id: 'io-ox-topbar-dropdown-icon',
+                    className: 'launcher dropdown',
+                    $ul: ul,
+                    $toggle: a
+                });
+
+            ext.point('io.ox/core/appcontrol/right/backgrounds').invoke('extend', dropdown);
+            this.append(dropdown.render().$el.find('a').attr('tabindex', -1).end());
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right/backgrounds').extend({
+        id: 'list',
+        index: 100,
+        extend: function () {
+            if (_.device('smartphone')) return;
+
+            this.link('background1', gt('Background 1'), function (e) {
+                e.preventDefault();
+                $('#io-ox-core').removeClass('img2 img3').addClass('background img1');
+            });
+            this.link('background2', gt('Background 2'), function (e) {
+                e.preventDefault();
+                $('#io-ox-core').removeClass('img1 img3').addClass('background img2');
+            });
+            this.link('background2', gt('Background 3'), function (e) {
+                e.preventDefault();
+                $('#io-ox-core').removeClass('img1 img2').addClass('background img3');
+            });
+            this.link('background2', gt('No background image'), function (e) {
+                e.preventDefault();
+                $('#io-ox-core').removeClass('img1 img2 img3 background');
+            });
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right').extend({
         id: 'notifications',
         index: 100,
         draw: function () {
