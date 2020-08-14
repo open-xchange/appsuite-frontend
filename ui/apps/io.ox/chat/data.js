@@ -312,8 +312,34 @@ define('io.ox/chat/data', [
         }
     });
 
+    var messageCache = (function () {
+        var cache = {};
+        return {
+            get: function (attrs, options) {
+                var messageId = attrs.messageId, message = cache[messageId];
+                if (!message) {
+                    message = new MessageModel(attrs, options);
+                    if (messageId) cache[messageId] = message;
+                    else {
+                        message.once('change:messageId', function () {
+                            cache[message.get('messageId')] = message;
+                        });
+                    }
+                }
+                return message;
+            },
+            has: function (messageId) {
+                return !!cache[messageId];
+            }
+        };
+    })();
+
     var MessageCollection = Backbone.Collection.extend({
-        model: MessageModel,
+        model: function (attrs, options) {
+            var model = messageCache.get(attrs, options);
+            model.collection = options.collection;
+            return model;
+        },
         comparator: function (a, b) {
             return a.get('messageId') - b.get('messageId');
         },
@@ -410,6 +436,8 @@ define('io.ox/chat/data', [
             this.unset('messages', { silent: true });
             this.members = new MemberCollection(this.mapMembers(attr.members), { parse: true, roomId: attr.roomId });
             this.messages = new MessageCollection([], { roomId: attr.roomId });
+            this.onChangeLastMessage();
+
             // forward specific events
             this.listenTo(this.members, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('member:' + name);
@@ -417,6 +445,7 @@ define('io.ox/chat/data', [
             this.on('change:members', function () {
                 this.members.set(this.mapMembers(this.get('members')), { parse: true, merge: true });
             });
+            this.on('change:lastMessage', this.onChangeLastMessage);
             this.listenTo(this.messages, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('message:' + name);
             });
@@ -424,9 +453,7 @@ define('io.ox/chat/data', [
                 function updateLastMessage() {
                     if (!this.messages.nextComplete) return;
                     var lastMessage = this.messages.last();
-                    lastMessage = _.extend({}, this.get('lastMessage'), lastMessage.toJSON());
-                    if (deliveryUpdateCache[lastMessage.messageId]) lastMessage.state = deliveryUpdateCache[lastMessage.messageId];
-                    this.set('lastMessage', lastMessage);
+                    this.set('lastMessage', lastMessage.toJSON());
                 }
 
                 var lastMessage = this.messages.last();
@@ -453,6 +480,15 @@ define('io.ox/chat/data', [
         getTitle: function () {
             var members = _(this.members.reject(function (m) { return m.get('email1') === data.user.email; }));
             return this.get('title') || members.invoke('getName').sort().join('; ');
+        },
+
+        onChangeLastMessage: function () {
+            if (this.lastMessage && this.lastMessage.get('messageId') === this.get('lastMessage').messageId) return;
+            if (this.lastMessage) this.stopListening(this.lastMessage);
+            this.lastMessage = messageCache.get(this.get('lastMessage'));
+            this.listenTo(this.lastMessage, 'change', function () {
+                this.set('lastMessage', this.lastMessage.toJSON());
+            });
         },
 
         getLastMessage: function () {
