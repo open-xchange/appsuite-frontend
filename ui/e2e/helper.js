@@ -325,6 +325,26 @@ class MyHelper extends Helper {
     dontSeeFocusable(selector) {
         return !this.seeFocusable(selector);
     }
+
+    // When we need to click slower than puppeteer
+    // Click on target with mouse down and release after delay
+    async slowClick(targetSelector, delay = 100) {
+        const helper = this.helpers['Puppeteer'];
+        const { page } = helper;
+
+        const [target] = await helper._locate(targetSelector);
+        const targetBB = await target.boundingBox();
+
+        const targetX = targetBB.x + targetBB.width / 2;
+        const targetY = targetBB.y + targetBB.height / 2;
+
+        await page.mouse.move(targetX, targetY);
+        await page.mouse.down();
+        await page.waitFor(delay);
+        await page.mouse.up();
+
+    }
+
 }
 
 module.exports = MyHelper;
