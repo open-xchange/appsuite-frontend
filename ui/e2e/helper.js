@@ -277,14 +277,24 @@ class MyHelper extends Helper {
         }, src, endX, endY);
     }
 
+    async grabFocusFrom(selector) {
+        const driver = this.helpers['Puppeteer'],
+            { page } = driver;
+
+        const el = await driver._locate(selector);
+        if (!el) return false;
+        return !!(await page.accessibility.snapshot({ root: el[0], interestingOnly: false })).focused;
+    }
+
     async haveFocus(selector) {
         const driver = this.helpers['Puppeteer'],
             { page } = driver;
 
         const el = await driver._locate(selector);
         if (!el) return false;
-        return (await page.accessibility.snapshot({ root: el[0], interestingOnly: false })).focused;
+        return !!(await page.accessibility.snapshot({ root: el[0], interestingOnly: false })).focused;
     }
+
 
     dontHaveFocus(selector) {
         return !this.haveFocus(selector);
