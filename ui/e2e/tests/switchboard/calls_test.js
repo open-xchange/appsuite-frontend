@@ -193,6 +193,7 @@ Scenario('Check call history filtering', (I, users) => {
     I.seeNumberOfVisibleElements('.call-history-item', 4);
     I.clickDropdown('Missed');
     I.seeNumberOfElements('.call-history-item.missed', 2);
+    I.waitForInvisible('.call-history-item:not(.missed)');
     I.seeNumberOfVisibleElements('.call-history-item', 2);
 
 });
