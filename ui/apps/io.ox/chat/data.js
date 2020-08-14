@@ -341,7 +341,9 @@ define('io.ox/chat/data', [
             return model;
         },
         comparator: function (a, b) {
-            return a.get('messageId') - b.get('messageId');
+            if (!a.get('messageId')) return 1;
+            if (!b.get('messageId')) return -1;
+            return util.strings.compare(a.get('messageId'), b.get('messageId'));
         },
         initialize: function (models, options) {
             this.roomId = options.roomId;
@@ -638,7 +640,9 @@ define('io.ox/chat/data', [
     var ChatCollection = Backbone.Collection.extend({
 
         model: ChatModel,
-        comparator: function (model) { return -model.get('modified'); },
+        comparator: function (a, b) {
+            return -util.strings.compare(a.get('lastMessage').messageId, b.get('lastMessage').messageId);
+        },
         currentChatId: undefined,
 
         url: function () {

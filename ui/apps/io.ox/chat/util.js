@@ -45,10 +45,25 @@ define('io.ox/chat/util', [
         'application/vnd.ms-powerpoint': 'ppt'
     };
 
-    return {
+    var util = {
         getClassFromMimetype: function (mimetype) {
             return classNames[mimetype];
+        },
+
+        strings: {
+            compare: function (a, b) {
+                if (a.length < b.length) return -1;
+                if (a.length > b.length) return 1;
+                if (a < b) return -1;
+                if (a > b) return 1;
+                return 0;
+            },
+            greaterThan: function (a, b) {
+                return util.strings.compare(a, b) > 1;
+            }
         }
     };
+
+    return util;
 
 });
