@@ -102,9 +102,9 @@ define('io.ox/chat/views/messages', [
                 prev = index === 0 ? undefined : model.collection.at(index - 1),
                 start = this.options.limit ? Math.max(0, model.collection.length - this.options.limit) : 0;
 
-            if (index !== start && moment(prev.get('sent')).startOf('day').isSameOrAfter(moment(model.get('sent')).startOf('day'))) return;
+            if (index !== start && moment(prev.get('date')).startOf('day').isSameOrAfter(moment(model.get('date')).startOf('day'))) return;
 
-            var date = moment(model.get('sent'));
+            var date = moment(model.get('date'));
 
             var formattedDate = date.calendar(null, {
                 sameDay: '[Today]',
@@ -122,7 +122,7 @@ define('io.ox/chat/views/messages', [
 
             var lastAdded = added[added.length - 1];
             var firstPrev = collection.at(collection.indexOf(lastAdded) + 1);
-            if (firstPrev && moment(lastAdded.get('sent')).startOf('day').isSame(moment(firstPrev.get('sent')).startOf('day'))) {
+            if (firstPrev && moment(lastAdded.get('date')).startOf('day').isSame(moment(firstPrev.get('date')).startOf('day'))) {
                 var $firstPrev = $('.messages').find('[data-cid=' + firstPrev.cid + ']'),
                     $daylabel = $firstPrev.prev();
                 if ($daylabel.hasClass('date')) {

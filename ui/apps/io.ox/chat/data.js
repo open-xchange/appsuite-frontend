@@ -258,7 +258,7 @@ define('io.ox/chat/data', [
         },
 
         getTime: function () {
-            return moment(this.get('sent')).format('LT');
+            return moment(this.get('date')).format('LT');
         },
 
         getTextBody: function () {
