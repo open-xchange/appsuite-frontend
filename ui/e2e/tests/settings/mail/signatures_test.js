@@ -33,6 +33,47 @@ After(async (users) => {
     await users.removeAll();
 });
 
+Scenario('[OXUIB-384] Image signature', async function (I, dialogs) {
+    await I.haveSnippet({
+        content: '<div></div>',
+        displayname: 'my-image-signature',
+        misc: { insertion: 'below', 'content-type': 'text/plain' },
+        module: 'io.ox/mail',
+        type: 'signature'
+    });
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
+
+    // edit
+    I.waitForText('Add new signature');
+    I.waitForText('my-image-signature');
+    I.click('Edit');
+    dialogs.waitForVisible();
+    I.waitForVisible('.contenteditable-editor iframe');
+    I.wait(0.5);
+
+    I.attachFile('[data-name="image"] input[type="file"][name="file"]', 'e2e/media/images/ox_logo.png');
+    I.wait(0.5);
+    await within({ frame: '.io-ox-signature-dialog iframe' }, async () => {
+        // insert some text
+        var postHTML = await I.grabHTMLFrom('body');
+        expect(postHTML).to.contain('<img src="/appsuite/api/file?action=get');
+    });
+
+    // save
+    dialogs.clickButton('Save');
+    I.waitForDetached('.modal-dialog');
+
+    // edit (once again)
+    I.click('Edit');
+    dialogs.waitForVisible();
+    I.waitForVisible('.contenteditable-editor iframe');
+    await within({ frame: '.io-ox-signature-dialog iframe' }, async () => {
+        // insert some text
+        var postHTML = await I.grabHTMLFrom('body');
+        expect(postHTML).to.contain('src="/ajax/image/snippet/image?');
+    });
+});
+
 // will probably break once MWB-290 was fixed/deployed
 Scenario('[OXUIB-199] Sanitize signature preview', async function (I) {
     const body = locate({ xpath: '//body' });
