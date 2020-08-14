@@ -13,8 +13,9 @@
 
 define('io.ox/chat/views/chatListEntry', [
     'io.ox/chat/views/chatAvatar',
-    'io.ox/chat/data'
-], function (ChatAvatar, data) {
+    'io.ox/chat/data',
+    'io.ox/chat/util'
+], function (ChatAvatar, data, util) {
 
     var ChatListEntryView = Backbone.View.extend({
 
@@ -68,7 +69,7 @@ define('io.ox/chat/views/chatListEntry', [
                             $('<div class="text-preview">').append(model.getLastMessage()),
                             $('<div class="fa delivery">')
                                 .toggleClass('hidden', !isCurrentUser || isSystemMessage)
-                                .addClass(lastMessage.state || ''),
+                                .addClass(isCurrentUser ? util.getDeliveryStateClass(model.get('lastMessage').deliveryState) : ''),
                             $('<div class="label-container">').append(
                                 $('<span class="label label-info">').text(model.get('unreadCount'))
                             )
@@ -99,8 +100,8 @@ define('io.ox/chat/views/chatListEntry', [
             this.$('.text-preview').empty().append(model.getLastMessage());
             this.$('.delivery')
                 .toggleClass('hidden', !isCurrentUser)
-                .removeClass('server client seen')
-                .addClass(model.get('lastMessage').state);
+                .removeClass('server received seen')
+                .addClass(isCurrentUser ? util.getDeliveryStateClass(model.get('lastMessage').deliveryState) : '');
             this.$('.sender')
                 .toggleClass('hidden', isCurrentUser || isPrivate || isSystemMessage)
                 .text(model.getLastSenderName() + ':');

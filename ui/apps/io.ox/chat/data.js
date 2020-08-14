@@ -207,6 +207,7 @@ define('io.ox/chat/data', [
         },
 
         getFilesPreview: function () {
+            // TODO no placeholder needed anymore. Width and height come from the preview
             var fileId = this.get('files')[0].fileId,
                 // TODO: Adjust for channels
                 url = data.API_ROOT + '/files/' + fileId + '/thumbnail',
@@ -299,16 +300,46 @@ define('io.ox/chat/data', [
             return prev.get('sender') === this.get('sender');
         },
 
+        getDeliveryState: function () {
+            if (this.isMyself()) return util.getDeliveryStateClass(this.get('deliveryState'));
+            return this.get('deliveryState') || '';
+        },
+
         updateDelivery: function (state) {
             var url = data.API_ROOT + '/rooms/' + this.get('roomId') + '/delivery/' + this.get('messageId');
+            this.set('deliveryState', state);
             $.ajax({
                 method: 'POST',
                 url: url,
                 data: { state: state },
                 xhrFields: { withCredentials: true }
-            }).done(function () {
-                this.set('state', state);
+            }).catch(function () {
+                this.set('deliveryState', this.previous('deliveryState'));
             }.bind(this));
+        },
+
+        setInitialDeliveryState: function () {
+            var room = data.chats.get(this.get('roomId'));
+            if (!room) return;
+            if (this.get('sender') !== data.user.email) return;
+            if (this.get('deliveryState')) return;
+
+            if (room.get('type') === 'private') {
+                this.set('deliveryState', {
+                    state: 'server',
+                    modified: +moment()
+                });
+            } else if (room.get('type') === 'group') {
+                var deliveryState = {};
+                room.members.forEach(function (member) {
+                    if (member.get('email') === data.user.email) return;
+                    deliveryState[member.get('email')] = {
+                        state: 'server',
+                        modified: +moment()
+                    };
+                });
+                this.set('deliveryState', deliveryState);
+            }
         }
     });
 
@@ -356,6 +387,8 @@ define('io.ox/chat/data', [
             return this.load({ messageId: id, direction: direction, limit: DEFAULT_LIMIT }, 'paginate');
         },
         load: function (params, type) {
+            if (!this.roomId) return;
+
             type = type || 'load';
             this.trigger('before:' + type);
 
@@ -423,10 +456,6 @@ define('io.ox/chat/data', [
     // Chat
     //
 
-    // sockets and https-requests can cause strange race conditions when some messages are pushed faster via the socket than the http-request resolves
-    // therefore, we need to cache delivery updates for own messages which are not yet received
-    var deliveryUpdateCache = {};
-
     var ChatModel = Backbone.Model.extend({
 
         defaults: { active: false, type: 'group', unreadCount: 0 },
@@ -466,10 +495,10 @@ define('io.ox/chat/data', [
                     else updateLastMessage.call(this);
                 }
             }, 10));
-            this.listenTo(this.messages, 'change:state', _.debounce(function () {
+            this.listenTo(this.messages, 'change:deliveryState', _.debounce(function () {
                 var message = this.messages.last();
                 if (!message) return;
-                if (message.get('state') === 'seen') this.set('unreadCount', 0);
+                if (message.getDeliveryState() === 'seen') this.set('unreadCount', 0);
             }.bind(this), 0));
         },
 
@@ -591,20 +620,7 @@ define('io.ox/chat/data', [
                 contentType: false,
                 xhrFields: { withCredentials: true },
                 success: function (model) {
-                    var fileId = model.get('files')[0].fileId,
-                        url = data.API_ROOT + '/files/' + fileId + '/thumbnail';
-                    var placeholder = $('[data-cid="' + self.messages.getLast().cid + '"]').find('.placeholder.io-ox-busy');
-                    $('<img>').on('load', function () {
-                        var $img = $(this),
-                            oldHeight = placeholder.height();
-                        placeholder.replaceWith($img);
-                        $img.trigger('changeheight', { prev: oldHeight, value: $img.height() });
-                    }).attr('src', url)
-                    .attr({ 'data-cmd': 'show-message-file', 'data-room-id': model.collection.roomId, 'data-file-id': fileId, 'data-message-id': model.get('messageId') });
-
-                    if (!deliveryUpdateCache[model.get('id')]) return;
-                    model.set('state', deliveryUpdateCache[model.get('id')]);
-                    delete deliveryUpdateCache[model.get('id')];
+                    model.setInitialDeliveryState();
                 }
             });
             this.set('active', true);
@@ -748,7 +764,7 @@ define('io.ox/chat/data', [
                 url: this.url() + '/' + roomId,
                 xhrFields: { withCredentials: true }
             }).then(function (data) {
-                this.add([data], { parse: true });
+                this.add([data]);
             }.bind(this));
         },
 
@@ -869,62 +885,70 @@ define('io.ox/chat/data', [
                 console.log('Connected socket to server');
             });
 
-            socket.on('message:change', function (roomId, messageId, state) {
-                var room = data.chats.get(roomId);
-                if (!room) return;
+            socket.on('delivery:update', function (obj) {
+                var roomId = obj.roomId,
+                    messageId = obj.messageId,
+                    email = obj.email,
+                    modified = obj.modified,
+                    state = obj.state,
+                    room = data.chats.get(roomId);
 
-                var lastMessage = room.get('lastMessage') || {};
-                // update state if necessary
-                if (messageId === lastMessage.messageId && lastMessage.state !== state) {
-                    lastMessage = _.extend({}, lastMessage, { state: state });
-                    room.set('lastMessage', lastMessage);
+                function process(message) {
+                    if (util.strings.greaterThan(message.get('messageId'), messageId)) return;
+                    if (message.isMyself() !== (email !== data.user.email)) return;
+
+                    var deliveryState = message.get('deliveryState') || {},
+                        prevState = (deliveryState[email] || {}).state || deliveryState.state || message.get('deliveryState');
+
+                    if (prevState === 'seen') return;
+                    if (prevState === 'received' && state === 'server') return;
+                    if (prevState === state) return;
+
+                    var changes;
+                    if (!message.isMyself()) changes = state;
+                    else if (room.get('type') === 'private') changes = { state: state, modified: modified };
+                    else {
+                        changes = _.clone(deliveryState);
+                        changes[email] = { state: state, modified: modified };
+                    }
+                    message.set('deliveryState', changes);
                 }
 
-                var message = room.messages.get(messageId);
-                if (!message) {
-                    deliveryUpdateCache[messageId] = state;
-                    return;
-                }
-                if (message.get('senderId') !== data.user.userId) return;
-
-                room.messages.forEach(function (message) {
-                    if (message.messageId > messageId) return;
-                    if (message.get('state') === 'seen') return;
-                    if (message.get('state') === 'client' && state === 'server') return;
-                    message.set('state', state);
-                });
-
+                // update specific message, usually the lastMessage in a room
+                if (messageCache.has(messageId)) process(messageCache.get({ messageId: messageId }));
+                if (room) room.messages.forEach(process);
             });
 
             socket.on('message:new', function (attr) {
                 var roomId = attr.roomId,
-                    message = attr.message,
-                    state;
+                    message = attr.message;
 
                 // stop typing
                 events.trigger('typing:' + roomId, message.sender, false);
                 // fetch room unless it's already known
                 data.chats.fetchUnlessExists(roomId).done(function (model) {
                     // add new message to room
-                    var newMessage = new model.messages.model(message);
+                    message.roomId = roomId;
+                    var newMessage = messageCache.get(message);
 
                     // either add message to chatroom or update last message manually
                     if (model.messages.nextComplete) {
                         // anticipate, whether this client was sending the last message and received a push notification before the message creation resolved
                         var lastIndex = model.messages.findLastIndex(function (message) {
-                                return message.get('senderId') === data.user.userId;
+                                return message.get('sender') === data.user.email;
                             }), lastMessage;
                         if (lastIndex >= 0) lastMessage = model.messages.at(lastIndex);
-                        if (!lastMessage || lastMessage.get('messageId') && newMessage.get('messageId') !== lastMessage.get('messageId')) model.messages.add(message, { merge: true }); // TODO: discuss!
-
+                        if (!lastMessage || lastMessage.get('messageId') && newMessage.get('messageId') !== lastMessage.get('messageId')) {
+                            model.messages
+                                .add(message, { merge: true, parse: true })
+                                .setInitialDeliveryState();
+                        }
                     } else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
 
-                    if (message.sender !== data.user.email) {
-                        model.set({ modified: +moment(), unreadCount: model.get('unreadCount') + 1 });
-                        state = 'client';
-                    } else state = 'seen';
-
-                    if (model.get('type') !== 'channel') newMessage.updateDelivery(state);
+                    if (model.get('type') !== 'channel' && message.sender !== data.user.email) {
+                        model.set({ unreadCount: model.get('unreadCount') + 1 });
+                        newMessage.updateDelivery('received');
+                    }
 
                     if (newMessage.get('type') === 'system') model.parseSystemMessage(message, roomId);
                 });

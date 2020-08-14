@@ -39,7 +39,7 @@ define('io.ox/chat/views/messages', [
                 'change:body': this.onChangeBody,
                 'change:fileId': this.onChangeBody,
                 'change:time': this.onChangeTime,
-                'change:state': this.onChangeDelivery
+                'change:deliveryState': this.onChangeDelivery
             });
         },
 
@@ -74,7 +74,7 @@ define('io.ox/chat/views/messages', [
                             .append(this.renderFoot(model))
                     ),
                     //delivery state
-                    $('<div class="fa delivery">').addClass(model.get('state'))
+                    $('<div class="fa delivery">').addClass(model.getDeliveryState())
                 );
 
             if (model.get('messageId') === this.messageId) delete this.messageId;
@@ -183,7 +183,7 @@ define('io.ox/chat/views/messages', [
         },
 
         onChangeDelivery: function (model) {
-            this.getMessageNode(model, '.delivery').attr('class', 'fa delivery ' + model.get('state'));
+            this.getMessageNode(model, '.delivery').attr('class', 'fa delivery ' + model.getDeliveryState());
         }
 
     });

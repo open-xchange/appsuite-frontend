@@ -46,6 +46,19 @@ define('io.ox/chat/util', [
     };
 
     var util = {
+        getDeliveryStateClass: function (deliveryState) {
+            if (!deliveryState) return '';
+            if (deliveryState.state) return deliveryState.state;
+            var members = Object.keys(deliveryState);
+            return members.reduce(function (memo, email) {
+                var state = deliveryState[email].state;
+                if (!state) return '';
+                if (state === 'server' && memo !== '') return 'server';
+                if (state === 'received' && memo === 'seen') return 'received';
+                return memo;
+            }, 'seen');
+        },
+
         getClassFromMimetype: function (mimetype) {
             return classNames[mimetype];
         },

@@ -500,7 +500,7 @@ define('io.ox/chat/views/chat', [
             });
             if (lastIndex < 0) return;
             var message = this.model.messages.at(lastIndex);
-            if (message.get('state') === 'seen') return;
+            if (message.get('deliveryState') === 'seen') return;
             message.updateDelivery('seen');
         },
 

@@ -30,7 +30,7 @@ define('io.ox/chat/views/chatList', [
                 'add': this.onAdd,
                 'remove': this.onRemove,
                 'change:active': this.onChangeActive,
-                'change:modified': this.onChangeModified,
+                'change:lastMessage': this.onChangeLastMessage,
                 'sort': this.onSort
             });
         },
@@ -105,7 +105,7 @@ define('io.ox/chat/views/chatList', [
             }
         },
 
-        onChangeModified: function (model) {
+        onChangeLastMessage: function (model) {
             var node = this.getNode(model),
                 hasFocus = node[0] === document.activeElement;
             this.$el.prepend(node);
