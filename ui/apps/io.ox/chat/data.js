@@ -348,7 +348,9 @@ define('io.ox/chat/data', [
         return {
             get: function (attrs, options) {
                 var messageId = attrs.messageId, message = cache[messageId];
-                if (!message) {
+                if (message) {
+                    message.set(attrs);
+                } else {
                     message = new MessageModel(attrs, options);
                     if (messageId) cache[messageId] = message;
                     else {
