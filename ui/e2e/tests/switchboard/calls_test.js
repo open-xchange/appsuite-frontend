@@ -217,3 +217,38 @@ Scenario('Call history is not visible when empty', (I, users) => {
     I.click('~Call history');
     I.waitForVisible('.dropdown.open .call-history-item');
 });
+
+Scenario('Call history closes on second click', (I, users) => {
+
+    const [user1, user2] = users;
+    const { primaryEmail, display_name } = user2.userdata;
+
+    I.login({ user: user1 });
+    I.executeScript((mail, name) => {
+        require(['io.ox/switchboard/views/call-history']).then(function (ch) {
+            ch.add(
+                [
+                    { email: mail, incoming: true, missed: false, name: name, type: 'zoom' },
+                    { email: mail, incoming: true, missed: true, name: name, type: 'zoom' },
+                    { email: mail, incoming: true, missed: false, name: name, type: 'zoom' },
+                    { email: mail, incoming: true, missed: true, name: name, type: 'zoom' }
+                ]
+            );
+        });
+    }, primaryEmail, display_name);
+
+    I.waitForVisible('~Call history');
+    I.click('~Call history');
+    I.seeNumberOfVisibleElements('.call-history-item', 4);
+    I.click('~Call history');
+    I.waitForDetached('.dropdown.open');
+    I.dontSee('Call History', '.dropdown.call-history');
+
+    I.slowClick('~Call history');
+    I.clickDropdown('Missed');
+    I.waitForInvisible('.call-history-item:not(.missed)');
+    I.slowClick('~Call history');
+    I.waitForDetached('.dropdown.open');
+    I.dontSee('Call History', '.dropdown.call-history');
+
+});
