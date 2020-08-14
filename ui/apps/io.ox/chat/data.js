@@ -367,12 +367,15 @@ define('io.ox/chat/data', [
         };
     })();
 
+    function getMessageModel(attrs, options) {
+        var model = messageCache.get(attrs, options);
+        model.collection = options.collection;
+        return model;
+    }
+    getMessageModel.prototype.idAttribute = 'messageId';
+
     var MessageCollection = Backbone.Collection.extend({
-        model: function (attrs, options) {
-            var model = messageCache.get(attrs, options);
-            model.collection = options.collection;
-            return model;
-        },
+        model: getMessageModel,
         comparator: function (a, b) {
             if (!a.get('messageId')) return 1;
             if (!b.get('messageId')) return -1;
