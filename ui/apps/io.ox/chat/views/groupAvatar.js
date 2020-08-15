@@ -12,10 +12,9 @@
  */
 
 define('io.ox/chat/views/groupAvatar', [
-    'io.ox/backbone/views/disposable',
-    'io.ox/chat/data'
+    'io.ox/backbone/views/disposable'
 ],
-function (DisposableView, data) {
+function (DisposableView) {
 
     'use strict';
 
@@ -39,8 +38,7 @@ function (DisposableView, data) {
             this.$el.css('background-image', '').empty();
 
             if (this.model.get('icon')) {
-                var endpoint = this.model.get('type') !== 'channel' ? '/rooms/' : '/channels/';
-                this.$el.css('background-image', 'url("' + data.API_ROOT + endpoint + this.model.get('roomId') + '/icon")');
+                this.$el.css('background-image', 'url("' + this.model.getIconUrl() + '")');
             } else {
                 this.$el.append(this.$icon);
             }

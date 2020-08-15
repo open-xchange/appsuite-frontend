@@ -177,6 +177,8 @@ define('io.ox/contacts/widgets/pictureUpload', [
             this.$thumbnail.busy();
             $('<img>').attr('src', url).one('load', function () {
                 this.$thumbnail.idle().css('background-image', 'url(' + url + ')');
+            }.bind(this)).one('error', function () {
+                this.$thumbnail.idle().addClass('empty');
             }.bind(this));
         },
 

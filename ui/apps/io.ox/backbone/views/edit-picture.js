@@ -41,8 +41,11 @@ define('io.ox/backbone/views/edit-picture', [
             .inject({
                 load: function () {
                     return $.when().then(function () {
-                        var file = this.model.get('pictureFile'),
-                            imageurl = this.model.get('image1_url');
+                        var file = this.model.get('pictureFile');
+                        if (_.isFunction(file)) file = file();
+                        return file;
+                    }.bind(this)).then(function (file) {
+                        var imageurl = this.model.get('image1_url');
                         // add unique identifier to prevent caching bugs
                         if (imageurl) imageurl = imageurl + '&' + $.param({ uniq: _.now() });
                         // a) dataUrl (webcam photo)

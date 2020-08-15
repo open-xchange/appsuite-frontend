@@ -581,6 +581,12 @@ define('io.ox/chat/data', [
             return member.getName();
         },
 
+        getIconUrl: function () {
+            if (!this.get('icon')) return;
+            var endpoint = this.get('type') !== 'channel' ? '/rooms/' : '/channels/';
+            return data.API_ROOT + endpoint + this.get('roomId') + '/icon';
+        },
+
         isActive: function () {
             return this.get('active');
         },
@@ -670,9 +676,7 @@ define('io.ox/chat/data', [
             var url = attr.roomId ? this.url() + '/' + attr.roomId : this.url();
 
             var collection = this,
-                data = _.extend({
-                    active: true, type: 'group'
-                }, _(attr).pick('title', 'type', 'members', 'description', 'icon', 'reference', 'message')),
+                data = _(attr).pick('title', 'type', 'members', 'description', 'icon', 'reference', 'message'),
                 formData = new FormData();
 
             _.each(data, function (value, key) {
@@ -696,7 +700,8 @@ define('io.ox/chat/data', [
                 contentType: false,
                 xhrFields: { withCredentials: true }
             }).then(function (data) {
-                return collection.add(data, { merge: true, parse: true })[0];
+                var result = collection.add(data, { merge: true, parse: true });
+                return _.isArray(result) ? result[0] : result;
             });
         },
 

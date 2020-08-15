@@ -37,13 +37,12 @@ define('io.ox/chat/actions/openGroupDialog', [
             return result;
         },
 
-        getImageUrl: function () {
-            if (!this.model.get('icon')) return;
-
-            var roomId = this.model.get('roomId'),
-                endpoint = this.model.get('type') === 'channel' ? '/channels/' : '/rooms/';
-
-            return roomId ? data.API_ROOT + endpoint + roomId + '/icon' : '';
+        openEditDialog: function () {
+            this.model.set('pictureFile', this.model.get('pictureFile') || this.model.get('file'));
+            ImageUploadView.prototype.openEditDialog.apply(this, arguments);
+            this.editPictureDialog.on('reset', function () {
+                this.model.set('image1_data_url', '');
+            }.bind(this));
         }
 
     });
@@ -72,13 +71,32 @@ define('io.ox/chat/actions/openGroupDialog', [
         })
         .extend({
             header: function () {
-                var title = this.model.id ? 'Edit group chat' : 'Create group chat';
+                var title = this.model.id ? 'Edit group chat' : 'Create group chat',
+                    url = this.model.getIconUrl ? this.model.getIconUrl() : '';
                 if (this.model.get('type') === 'channel') title = this.model.id ? 'Edit channel' : 'Create new channel';
 
-                var title_id = _.uniqueId('title');
+                var title_id = _.uniqueId('title'),
+                    pictureModel = this.pictureModel || (this.pictureModel = new Backbone.Model({
+                        image1_data_url: url,
+                        image1_url: url,
+                        file: function () {
+                            if (!url) return;
+                            var def = $.ajax({
+                                url: url,
+                                xhrFields: { withCredentials: true, responseType: 'blob' }
+                            }).then(function (data) {
+                                return new Blob([data]);
+                            }, function () {
+                                return '';
+                            });
+                            def.lastModified = true;
+                            return def;
+                        }
+                    }));
+
                 this.$('.modal-header').empty().append(
                     $('<h1 class="modal-title">').attr('id', title_id).text(title),
-                    new PictureUpload({ model: this.model }).render().$el
+                    new PictureUpload({ model: pictureModel }).render().$el
                 );
             },
             details: function () {
@@ -120,23 +138,23 @@ define('io.ox/chat/actions/openGroupDialog', [
         .addCancelButton()
         .addButton({ action: 'save', label: model.id ? 'Edit chat' : 'Create chat' })
         .on('save', function () {
-            var dataObj = this.model.toJSON();
-            if (dataObj.type === 'channel') delete dataObj.members;
-            else dataObj.members = this.collection.pluck('email1');
+            var updates = this.model.has('roomId') ? { roomId: this.model.get('roomId') } : this.model.toJSON();
 
-            if (this.model.get('title') === originalModel.get('title')) delete dataObj.title;
-            if (this.model.get('description') === originalModel.get('description')) delete dataObj.description;
-
-            if (dataObj.pictureFileEdited === '') {
-                dataObj.icon = null;
-            } else if (this.model.get('pictureFile') === originalModel.get('pictureFile')) {
-                dataObj.icon = undefined;
-            } else {
-                dataObj.icon = dataObj.pictureFileEdited;
+            if (this.model.get('title') !== originalModel.get('title')) updates.title = this.model.get('title');
+            if (this.model.get('description') !== originalModel.get('description')) updates.description = this.model.get('description');
+            if (this.model.get('type') !== 'channel' && !_.isEqual(this.collection.pluck('email1'), Object.keys(this.model.get('members') || {}))) {
+                updates.members = this.collection.pluck('email1');
             }
 
-            data.chats.addAsync(dataObj).done(function (model) {
-                def.resolve(model.id);
+            if (this.pictureModel.get('pictureFileEdited') === '') {
+                updates.icon = null;
+            } else if (this.pictureModel.get('pictureFileEdited')) {
+                updates.icon = this.pictureModel.get('pictureFileEdited');
+            }
+
+            if (Object.keys(updates).length <= 1) return def.resolve(this.model.get('roomId'));
+            data.chats.addAsync(updates).done(function (model) {
+                def.resolve(model.get('roomId'));
             });
         })
         .on('discard', def.reject)
