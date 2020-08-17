@@ -179,10 +179,11 @@ define('io.ox/chat/data', [
         getSystemMessage: function () {
             var event = JSON.parse(this.get('content'));
             var originator = this.get('sender'),
-                members = event.members;
+                members = event.members || [],
+                room = data.chats.get(this.get('roomId'));
 
-            if (data.chats.getCurrent() && data.chats.getCurrent().get('type') === 'channel' && event.type === 'members:added') event.type = 'channel:joined';
-            if (data.chats.getCurrent() && members.join('') === data.user.email && event.type === 'members:removed') event.type = 'room:left';
+            if (room.get('type') === 'channel' && event.type === 'members:added') event.type = 'channel:joined';
+            if (members.join('') === data.user.email && event.type === 'members:removed') event.type = 'room:left';
 
             switch (event.type) {
                 case 'room:created':
