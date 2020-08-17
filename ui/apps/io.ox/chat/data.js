@@ -1017,7 +1017,7 @@ define('io.ox/chat/data', [
             return def;
         },
 
-        authenticateSilent: function () {
+        authenticateOIDCSilent: function () {
             return this.getAuthURL().then(function (url) {
                 return this.checkIdPSession(url);
             }.bind(this)).then(function (status) {
@@ -1035,7 +1035,7 @@ define('io.ox/chat/data', [
             return def;
         },
 
-        authenticate: function () {
+        authenticateOIDC: function () {
             return this.getAuthURL().then(function (url) {
                 return this.getIdPSession(url);
             }.bind(this)).then(function () {
@@ -1044,7 +1044,16 @@ define('io.ox/chat/data', [
         },
 
         login: function () {
-            return this.authenticate();
+            return this.getUserId().catch(function () {
+                return this.getConfig().then(function (config) {
+                    if (config.appsuite) return this.authenticateAppsuite();
+                    if (config.oidc) return this.authenticateOIDC();
+                    throw new Error('No suitable authentication method');
+                }.bind(this));
+            }.bind(this)).then(function (user) {
+                this.set('userId', user.id);
+                return user.id;
+            }.bind(this));
         },
 
         getConfig: function () {
@@ -1075,7 +1084,7 @@ define('io.ox/chat/data', [
             return this.getUserId().catch(function () {
                 return this.getConfig().then(function (config) {
                     if (config.appsuite) return this.authenticateAppsuite();
-                    if (config.oidc) return this.authenticateSilent();
+                    if (config.oidc) return this.authenticateOIDCSilent();
                     throw new Error('No suitable authentication method');
                 }.bind(this));
             }.bind(this)).then(function (user) {
