@@ -161,6 +161,10 @@ define('io.ox/chat/data', [
 
         idAttribute: 'messageId',
 
+        urlRoot: function () {
+            return data.API_ROOT + '/rooms/' + this.get('roomId') + '/messages';
+        },
+
         getBody: function () {
             if (this.isSystem()) return this.getSystemMessage();
             else if (this.hasPreview()) return this.getFilesPreview();
@@ -612,10 +616,12 @@ define('io.ox/chat/data', [
 
         postMessage: function (attr, files) {
             if (this.isNew()) return this.postFirstMessage(attr, files);
+            files = _.toArray(files);
+            attr.roomId = this.get('roomId');
 
-            var formData = util.makeFormData(_.extend({}, attr, { files: _.toArray(files)[0] }));
+            var formData = util.makeFormData(_.extend({}, attr, { files: files[0] })),
+                model = files.length > 0 ? messageCache.get(attr) : this.messages.add(attr, { merge: true, parse: true });
 
-            var model = this.messages.add(attr, { merge: true, parse: true });
             model.save(attr, {
                 data: formData,
                 processData: false,
@@ -623,7 +629,8 @@ define('io.ox/chat/data', [
                 xhrFields: { withCredentials: true },
                 success: function (model) {
                     model.setInitialDeliveryState();
-                }
+                    if (files.length > 0) this.messages.add(model, { merge: true });
+                }.bind(this)
             });
             this.set('active', true);
         },
