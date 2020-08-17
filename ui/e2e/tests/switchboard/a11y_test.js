@@ -156,4 +156,11 @@ Scenario('Switchboard - Call history keyboard navigation', async (I, mail) => {
     I.pressKey(['Shift', 'Tab']);
 
     expect(await I.grabFocusFrom('~Call history')).to.be.true;
+    I.pressKey('Space');
+    I.waitForVisible('.dropdown.open.call-history');
+    expect(await I.grabFocusFrom('.dropdown.open [data-action="all"]')).to.be.true;
+    I.pressKey('Tab');
+    I.pressKey('Tab');
+
+    expect(await I.grabFocusFrom(locate('.call-history-item a').inside('.dropdown.open.call-history').at(1))).to.be.true;
 });
