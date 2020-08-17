@@ -18,8 +18,8 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0;
-    right: -1px;
+    left: 8px;
+    right: 8px;
     .user-select(none);
 
     .vgrid-scrollpane {
@@ -95,11 +95,15 @@
 
         .grid-info {
             flex: 1;
-            text-align: center;
+            text-align: left;
             line-height: 38px;
             margin-right: 16px;
+            padding-left: 8px;
             .ellipsis();
-
+            .folder-name {
+                font-size: 18px;
+                font-weight: bold;
+            }
             .folder-count {
                 font-size: 13px;
                 color: #767676;
@@ -173,6 +177,7 @@
     padding: 10px 18px 14px 18px;
     color: @text-color;
     background-color: @background; /* resolves hw accel anti-aliasing */
+    border-radius: 6px;
     * {
         .ellipsis();
         -webkit-font-smoothing: antialiased;
@@ -186,7 +191,6 @@
         line-height: 1em;
         padding: 5px 16px 4px 16px;
         background-color: mix(@text-color, @background, 100%/15);
-        border-bottom: 1px solid mix(@text-color, @background, 300%/15);
         cursor: pointer;
         .vertical-gradient(@background, mix(@text-color, @background, 1500%/255));
 

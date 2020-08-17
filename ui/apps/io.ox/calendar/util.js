@@ -1162,10 +1162,15 @@ define('io.ox/calendar/util', [
             return foreground;
         }, hashFunction),
 
+        getHighContrastForeground: _.memoize(function (color) {
+            var l1 = that.getRelativeLuminance(that.colorToRGB(color));
+            return l1 < 0.18333 ? 'white' : 'black';
+        }),
+
         getBackgroundColor: _.memoize(function (foreground) {
             var hsl = that.colorToHSL(foreground),
                 hue = hsl[0], sat = hsl[1];
-            return 'hsl(' + hue + ', ' + sat + '%, 91%)';
+            return 'hsl(' + hue + ', ' + Math.max(0, sat - 10) + '%, 91%)';
         }),
 
         getBorderColor: _.memoize(function (foreground) {

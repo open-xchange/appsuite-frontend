@@ -285,9 +285,9 @@ define('io.ox/core/tk/vgrid', [
                 fnToggleCheckbox(node.find('.select-all i.fa'), check);
             },
 
-            topbar = $('<div class="vgrid-toolbar generic-toolbar">').addClass(options.toolbarPlacement === 'top' ? 'bottom border-top' : 'top border-bottom')
+            topbar = $('<div class="vgrid-toolbar generic-toolbar">').addClass(options.toolbarPlacement === 'top' ? 'bottom' : 'top')
                 .appendTo(node),
-            toolbar = $('<div role="toolbar" class="vgrid-toolbar generic-toolbar">').addClass(options.toolbarPlacement === 'top' ? 'top border-bottom' : 'bottom border-top')
+            toolbar = $('<div role="toolbar" class="vgrid-toolbar generic-toolbar">').addClass(options.toolbarPlacement === 'top' ? 'top' : 'bottom')
                 .attr(
                     //#. toolbar with 'select all' and 'sort by'
                     'aria-label', gt('Item list options')
