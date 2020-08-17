@@ -95,10 +95,10 @@ define('io.ox/chat/main', [
 
         onCommand: function (data) {
             switch (data.cmd) {
-                case 'start-chat': this.startChat(data); break;
-                case 'open-group-dialog': this.openGroupDialog(data); break;
-                case 'leave-group': this.leaveGroup(data.id); break;
                 case 'start-private-chat': this.startPrivateChat(data); break;
+                case 'edit-group-chat': this.editGroupChat(data); break;
+                case 'leave-group': this.leaveGroup(data.id); break;
+                case 'open-private-chat': this.openPrivateChat(data); break;
                 case 'view-channel': this.viewChannel(data); break;
                 case 'join-channel': this.joinChannel(data); break;
                 case 'leave-channel': this.leaveChannel(data.id, false); break;
@@ -118,14 +118,14 @@ define('io.ox/chat/main', [
             }
         },
 
-        startChat: function () {
+        startPrivateChat: function () {
             var self = this;
 
             require(['io.ox/contacts/addressbook/popup'], function (picker) {
                 picker.open(
                     function callback(items) {
                         var members = _(items).pluck('email');
-                        return self.startPrivateChat({ email: members[0] });
+                        return self.openPrivateChat({ email: members[0] });
                     },
                     {
                         help: false,
@@ -148,7 +148,7 @@ define('io.ox/chat/main', [
             });
         },
 
-        openGroupDialog: function (data) {
+        editGroupChat: function (data) {
             var self = this;
 
             require(['io.ox/chat/actions/openGroupDialog'], function (openGroupDialog) {
@@ -158,7 +158,7 @@ define('io.ox/chat/main', [
             });
         },
 
-        startPrivateChat: function (cmd) {
+        openPrivateChat: function (cmd) {
             // try to reuse chat
             var chat = data.chats.find(function (model) {
                 return model.get('type') === 'private' && Object.keys(model.get('members')).indexOf(cmd.email) >= 0;
@@ -436,17 +436,17 @@ define('io.ox/chat/main', [
                                 $('<li class="dropdown-header" role="separator">').append('<span aria-hidden="true">').text('New'),
                                 $('<li>').append(
                                     $('<a href="#" role="button">')
-                                    .attr({ 'data-cmd': 'start-chat', 'data-id': this.model.id })
+                                    .attr({ 'data-cmd': 'start-private-chat', 'data-id': this.model.id })
                                         .text('Private chat')
                                 ),
                                 $('<li>').append(
                                     $('<a href="#" role="button">')
-                                        .attr({ 'data-cmd': 'open-group-dialog', 'data-id': this.model.id })
+                                        .attr({ 'data-cmd': 'edit-group-chat', 'data-id': this.model.id })
                                         .text('Group chat')
                                 ),
                                 $('<li>').append(
                                     $('<a href="#" role="button">')
-                                        .attr({ 'data-cmd': 'open-group-dialog', 'data-id': this.model.id, 'data-type': 'channel' })
+                                        .attr({ 'data-cmd': 'edit-group-chat', 'data-id': this.model.id, 'data-type': 'channel' })
                                         .text('Public channel')
                                 )
                             )
@@ -553,7 +553,7 @@ define('io.ox/chat/main', [
         custom: true,
         draw: function () {
             this.append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="start-chat" data-action="null">').text('Private chat')
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="start-private-chat" data-action="null">').text('Private chat')
             );
         }
     });
@@ -564,7 +564,7 @@ define('io.ox/chat/main', [
         custom: true,
         draw: function () {
             this.append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="open-group-dialog" data-action="null">').text('Group chat')
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat" data-action="null">').text('Group chat')
             );
         }
     });
@@ -575,7 +575,7 @@ define('io.ox/chat/main', [
         custom: true,
         draw: function () {
             this.append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="open-group-dialog" data-type="channel" data-action="none">').text('Public channel')
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat" data-type="channel" data-action="none">').text('Public channel')
             );
         }
     });
