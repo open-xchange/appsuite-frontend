@@ -772,7 +772,7 @@ define('io.ox/calendar/week/view', [
                     node.show().css({
                         height: this.opt.fulltimeHeight,
                         lineHeight: this.opt.fulltimeHeight + 'px',
-                        width: (100 / numColumns) * fulltimeWidth + '%',
+                        width: 'calc(' + (100 / numColumns) * fulltimeWidth + '% - 4px)',
                         left: (100 / numColumns) * Math.max(0, fulltimePos) + '%',
                         top: row * (this.opt.fulltimeHeight + 1)
                     });
@@ -1090,11 +1090,13 @@ define('io.ox/calendar/week/view', [
                     index = startLocal.day() - this.model.get('startDate').day();
                 if (index < 0) index += 7;
 
+                var top = (Math.max(0, startLocal.diff(moment(start), 'minutes') - offset)) / 24 / 60 * 100;
+
                 node
                     .addClass(endLocal.diff(startLocal, 'minutes') < 120 / this.model.get('gridSize') ? 'no-wrap' : '')
                     .css({
-                        top: (Math.max(0, startLocal.diff(moment(start), 'minutes') - offset)) / 24 / 60 * 100 + '%',
-                        height: 'calc( ' + height * 100 + '% - 2px)',
+                        top: 'calc(' + top + '% - 1px)',
+                        height: 'calc( ' + height * 100 + '% - 1px)',
                         lineHeight: this.opt.minCellHeight + 'px'
                     });
                 // needed for flags to draw correctly
@@ -1137,7 +1139,7 @@ define('io.ox/calendar/week/view', [
                     left = total > 1 ? ((100 - width) / (total - 1)) * node.viewIndex : 0;
                 node.css({
                     left: 'calc(' + left + '% - 1px)',
-                    width: 'calc(' + width + '% - 10px)'
+                    width: 'calc(' + width + '% - 4px)'
                 });
             }
             function insertIntoSlot(node, slots) {

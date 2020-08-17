@@ -1948,7 +1948,7 @@ define('io.ox/mail/main', [
         },
 
         'top-search': function () {
-
+            if (!$('#io-ox-topsearch').is(':empty')) return;
             $('#io-ox-topsearch').append(
                 $('<div class="search-container">').append(
                     $('<input type="search" class="form-control" placeholder="Search mail">'),

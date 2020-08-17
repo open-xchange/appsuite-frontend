@@ -83,6 +83,17 @@ define('io.ox/calendar/util', [
         },
 
         colors: [
+            { label: gt('Red'), value: '#ff2968' },
+            { label: gt('Orange'), value: '#ff9500' },
+            { label: gt('Yellow'), value: '#ffcc00' },
+            { label: gt('Green'), value: '#63da38' },
+            { label: gt('Blue'), value: '#16adf8' },
+            { label: gt('Purple'), value: '#cc73e1' },
+            { label: gt('Brown'), value: '#a2845e' },
+            { label: gt('Gray'), value: '#707070' }
+        ],
+
+        oldColors: [
             // light
             { label: gt('light red'), value: '#FFE2E2' },
             { label: gt('light orange'), value: '#FDE2B9' },
@@ -127,7 +138,7 @@ define('io.ox/calendar/util', [
             { label: gt('dark gray'), value: '#6B6B6B' }
         ],
 
-        PRIVATE_EVENT_COLOR: '#616161',
+        PRIVATE_EVENT_COLOR: '#505050',
 
         ZULU_FORMAT: 'YYYYMMDD[T]HHmmss[Z]',
 
@@ -1019,14 +1030,23 @@ define('io.ox/calendar/util', [
                 eventColor = eventModel.get('color'),
                 defaultStatus = folderAPI.is('public', folder) || folderAPI.is('private', folder) ? 'ACCEPTED' : 'NEEDS-ACTION',
                 conf = that.getConfirmationStatus(eventModel, defaultStatus);
+            // isPrivate = that.isPrivate(eventModel);
 
             if (_.isNumber(eventColor)) eventColor = that.colors[eventColor - 1].value;
+
+            // random override
+            // if (isPrivate) return that.PRIVATE_EVENT_COLOR;
+            // blue, purple, red, orange, yellow, green
+            // ['#0b5cd5', '#6f42c1', '#b92d3a', '#ac560e', '#ffe9a6', '#1b722f', '#106e7d']
+            // var colors = ['#16adf8', '#cc73e1', '#ff2968', '#ff9500', '#ffcc00', '#63da38'];
+            // eventColor = colors[Math.random() * 6 >> 0];
+            // if (1 > 2) return eventColor;
 
             // shared appointments which are needs-action or declined don't receive color classes
             if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return '';
 
             // private appointments are colored with gray instead of folder color
-            if (that.isPrivate(eventModel)) folderColor = that.PRIVATE_EVENT_COLOR;
+            // if (isPrivate) folderColor = that.PRIVATE_EVENT_COLOR;
 
             // if (folderAPI.is('public', folder) && ox.user_id !== appointment.created_by) {
             //     // public appointments which are not from you are always colored in the calendar color
@@ -1036,7 +1056,7 @@ define('io.ox/calendar/util', [
             if (!eventModel.hasFlag('organizer') && !eventModel.hasFlag('organizer_on_behalf')) return folderColor;
 
             // set color of appointment. if color is 0, then use color of folder
-            return !eventColor ? folderColor : eventColor;
+            return eventColor || folderColor;
         },
 
         lightenDarkenColor: _.memoize(function (col, amt) {
@@ -1114,7 +1134,7 @@ define('io.ox/calendar/util', [
 
         // returns color ensuring a color contrast higher than 1:4.5
         // based on algorithm as defined by https://www.w3.org/TR/WCAG20-TECHS/G18.html#G18-tests
-        getForegroundColor: _.memoize(function (color) {
+        getForegroundColor: _.memoize(function (color, contrast, saturation) {
 
             function colorContrast(foreground) {
                 var l2 = that.getRelativeLuminance(that.colorToRGB(foreground));
@@ -1124,22 +1144,64 @@ define('io.ox/calendar/util', [
             var l1 = that.getRelativeLuminance(that.colorToRGB(color)),
                 hsl = that.colorToHSL(color),
                 hue = hsl[0],
-                sat = hsl[1] > 0 ? 30 : 0,
-                lum = 50,
+                sat = hsl[1] > 0 ? (saturation || 30) : 0,
+                lum = 100,
                 foreground;
 
-            if (l1 < 0.18333) return 'white';
+            //if (l1 < 0.18333) return 'white';
+            if (!contrast) contrast = 4.5;
 
             // start with 50% luminance; then go down until color contrast exceeds 5 (little higher than 4.5)
             // whoever finds a simple way to calculate this programmatically
             // (and which is still correct in all cases) gets a beer or two
             do {
                 foreground = 'hsl(' + hue + ', ' + sat + '%, ' + lum + '%)';
-                lum -= 5;
-            } while (lum >= 0 && colorContrast(foreground) < 5);
+                lum -= 2;
+            } while (lum >= 0 && colorContrast(foreground) < contrast);
 
             return foreground;
+        }, hashFunction),
+
+        getBackgroundColor: _.memoize(function (foreground) {
+            var hsl = that.colorToHSL(foreground),
+                hue = hsl[0], sat = hsl[1];
+            return 'hsl(' + hue + ', ' + sat + '%, 91%)';
         }),
+
+        getBorderColor: _.memoize(function (foreground) {
+            return foreground;
+            // var hsl = that.colorToHSL(foreground),
+            //     hue = hsl[0], sat = hsl[1], lum = hsl[2];
+            // return 'hsl(' + hue + ', ' + sat + '%, ' + Math.max(lum - 5, 0) + '%)';
+        }),
+
+        getBackgroundColor2: _.memoize(function (foreground, contrast, saturation) {
+
+            function colorContrast(background) {
+                var l1 = that.getRelativeLuminance(that.colorToRGB(background));
+                return (l1 + 0.05) / (l2 + 0.05);
+            }
+
+            var l2 = that.getRelativeLuminance(that.colorToRGB(foreground)),
+                hsl = that.colorToHSL(foreground),
+                hue = hsl[0],
+                sat = hsl[1] > 0 ? (saturation || 30) : 0,
+                lum = 0,
+                background;
+
+            // if (l2 < 0.18333) return 'white';
+            if (!contrast) contrast = 5;
+
+            // start with 50% luminance; then go down until color contrast exceeds 5 (little higher than 4.5)
+            // whoever finds a simple way to calculate this programmatically
+            // (and which is still correct in all cases) gets a beer or two
+            do {
+                background = 'hsl(' + hue + ', ' + sat + '%, ' + lum + '%)';
+                lum += 5;
+            } while (lum < 100 && colorContrast(background) < contrast);
+
+            return background;
+        }, hashFunction),
 
         canAppointmentChangeColor: function (folder, eventModel) {
             var eventColor = eventModel.get('color'),
@@ -1270,7 +1332,7 @@ define('io.ox/calendar/util', [
 
             if (that.hasFlag(obj, 'tentative')) icons.type.push($('<span class="tentative-flag">').attr('aria-label', gt('Tentative')).append($('<i class="fa fa-question-circle" aria-hidden="true">').attr('title', gt('Tentative'))));
             if (that.hasFlag(obj, 'private')) icons.type.push($('<span class="private-flag">').attr('aria-label', gt('Appointment is private')).append($('<i class="fa fa-user-circle" aria-hidden="true">').attr('title', gt('Appointment is private'))));
-            if (that.hasFlag(obj, 'confidential')) icons.type.push($('<span class="confidential-flag">').attr('aria-label', gt('Appointment is confidential')).append($('<i class="fa fa-lock" aria-hidden="true">').attr('title', gt('Appointment is confidential'))));
+            if (that.hasFlag(obj, 'confidential')) icons.type.push($('<span class="confidential-flag">').attr('aria-label', gt('Appointment is confidential')).append($('<i class="fa fa-eye-slash" aria-hidden="true">').attr('title', gt('Appointment is confidential'))));
             if (this.hasFlag(obj, 'series') || this.hasFlag(obj, 'overridden')) icons.property.push($('<span class="recurrence-flag">').attr('aria-label', gt('Appointment is part of a series')).append($('<i class="fa fa-repeat" aria-hidden="true">').attr('title', gt('Appointment is part of a series'))));
             if (this.hasFlag(obj, 'scheduled')) icons.property.push($('<span class="participants-flag">').attr('aria-label', gt('Appointment has participants')).append($('<i class="fa fa-user-o" aria-hidden="true">').attr('title', gt('Appointment has participants'))));
             if (this.hasFlag(obj, 'attachments')) icons.property.push($('<span class="attachments-flag">').attr('aria-label', gt('Appointment has attachments')).append($('<i class="fa fa-paperclip" aria-hidden="true">').attr('title', gt('Appointment has attachments'))));
@@ -1488,6 +1550,10 @@ define('io.ox/calendar/util', [
             });
         }
     };
+
+    function hashFunction() {
+        return _.toArray(arguments).join(',');
+    }
 
     return that;
 });

@@ -185,21 +185,17 @@
                     flex: 1;
                     position: relative;
                     margin-left: 1em;
-                    border-bottom: 1px solid @weekview-border;
                     color: #757575;
 
-                    &.working-time-border { border-bottom: 1px solid @weekview-working-time-border; }
-
                     &.in {
-                        font-weight: bold;
                         color: #333;
                     }
 
                     .number {
                         font-size: 12px;
                         position: absolute;
-                        top: 4px;
-                        right: 10px;
+                        top: -8px;
+                        right: 16px;
                     }
 
                     &:last-child { border-color: transparent; }
@@ -325,6 +321,7 @@
         .backface-visibility(hidden);
         // see Bug 32753 - Not possible to reduce an appointment to 30 minutes using drag&drop
         box-sizing: content-box;
+        border-radius: 4px;
 
         &.resizing {
             opacity: 0.7;
@@ -346,10 +343,12 @@
         &.modify { cursor: pointer; }
 
         &.border {
+            /*
             @border: 1px solid rgba(0, 0, 0, 0.2);
             border-top: @border;
             border-right: @border;
             border-bottom: @border;
+            */
         }
 
         &.current, &.hover {
@@ -367,9 +366,10 @@
             height: 100%;
             font-size: 12px;
             line-height: 16px;
-            padding: 4px;
-            border-left: 2px solid;
+            padding: 4px 6px;
+            border-left: 4px solid;
             border-color: inherit;
+            border-radius: 4px;
             .ellipsis();
 
             * { .ellipsis(); }
