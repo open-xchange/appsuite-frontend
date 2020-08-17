@@ -67,7 +67,7 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function (baton) {
             var model = baton.model;
-            if (model.isPrivate() || (model.isChannel() && !model.get('joined'))) return;
+            if (!model.isMember() || model.isPrivate() || (model.isChannel() && !model.get('active'))) return;
             this.attr('data-prio', 'lo').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat">').attr('data-id', model.id).text('Edit chat').on('click', events.forward)
             );
@@ -80,7 +80,7 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function (baton) {
             var model = baton.model;
-            if (model.isChannel() && !model.get('joined')) return;
+            if (model.isChannel() && !model.get('active')) return;
             this.attr('data-prio', 'lo').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="unsubscribe-chat">').attr('data-id', model.id).text('Hide chat').on('click', events.forward)
             );
@@ -106,7 +106,7 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function (baton) {
             var model = baton.model;
-            if (!model.isChannel() || (model.isChannel() && !model.get('joined'))) return;
+            if (!model.isChannel() || (model.isChannel() && !model.get('active'))) return;
             this.attr('data-prio', 'lo').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="leave-channel">').attr('data-id', model.id).text('Leave chat').on('click', events.forward)
             );
@@ -119,7 +119,7 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function (baton) {
             var model = baton.model;
-            if (!(model.isChannel() && !model.get('joined'))) return;
+            if (!(model.isChannel() && !model.get('active'))) return;
             this.attr('data-prio', 'lo').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="join-channel">').attr('data-id', model.id).text('Join chat').on('click', events.forward)
             );
@@ -314,13 +314,13 @@ define('io.ox/chat/views/chat', [
             if (this.model.isPrivate() && this.model.get('active')) {
                 $ul.append(renderItem('Hide chat', { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
             } else if (!(this.model.isChannel() && !this.model.get('joined')) && this.model.get('active')) {
-                $ul.append(renderItem('Edit chat', { 'data-cmd': 'edit-group-chat', 'data-id': this.model.id }));
+                if (this.model.isMember()) $ul.append(renderItem('Edit chat', { 'data-cmd': 'edit-group-chat', 'data-id': this.model.id }));
                 $ul.append(renderItem('Hide chat', { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
-            } else if (this.model.isChannel() && !this.model.get('joined')) {
+            } else if (this.model.isChannel() && !this.model.get('active')) {
                 $ul.append(renderItem('Join chat', { 'data-cmd': 'join-channel', 'data-id': this.model.id }));
             }
 
-            if (!this.model.isPrivate() && !(this.model.isChannel() && !this.model.get('joined'))) {
+            if (!this.model.isPrivate() && !(this.model.isChannel() && !this.model.get('active'))) {
                 $ul.append(renderItem('Leave chat', { 'data-cmd': 'leave-group', 'data-id': this.model.id }));
             }
 

@@ -200,16 +200,6 @@ define('io.ox/chat/main', [
             this.showChat(cmd.id);
         },
 
-        checkJoinedState: function () {
-            var channel = data.chats.getCurrent();
-
-            if (channel.get('joined')) return;
-
-            channel.members.models.forEach(function (member) {
-                if (member.get('email1') === data.user.email) channel.set('joined', true);
-            });
-        },
-
         joinChannel: function (cmd) {
             data.chats.joinChannel(cmd.id);
             this.showChat(cmd.id);
@@ -222,7 +212,6 @@ define('io.ox/chat/main', [
 
         showChat: function (id, opt) {
             data.chats.setCurrent(id);
-            if (data.chats.getCurrent().isChannel()) this.checkJoinedState();
             var view = new ChatView(_.extend({ roomId: id }, _(opt).pick('messageId', 'reference')));
             this.showApp();
             this.$rightside.empty().append(view.render().$el);

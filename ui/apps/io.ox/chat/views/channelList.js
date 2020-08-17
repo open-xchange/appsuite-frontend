@@ -67,7 +67,6 @@ define('io.ox/chat/views/channelList', [
             this.listenTo(this.collection, {
                 'add': this.onAdd,
                 'remove': this.onRemove,
-                'change:joined': this.onChangeJoined,
                 'change:title': this.onChangeTitle
             });
 

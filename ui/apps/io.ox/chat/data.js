@@ -714,7 +714,7 @@ define('io.ox/chat/data', [
         getHistory: function () {
             var list = [];
             this.filter({ active: false }).forEach(function (chat) {
-                if (chat.isMember() || chat.isPrivate() || chat.get('joined')) {
+                if (chat.isMember() || chat.isPrivate()) {
                     list.push(chat);
                 }
             });
@@ -724,10 +724,6 @@ define('io.ox/chat/data', [
 
         getChannels: function () {
             return this.filter({ type: 'channel' });
-        },
-
-        getChannelsUnjoined: function () {
-            return this.filter({ type: 'channel', joined: false });
         },
 
         fetchUnlessExists: function (roomId) {
@@ -749,7 +745,7 @@ define('io.ox/chat/data', [
             var url = this.url() + '/' + roomId + '/members';
             var members = _.clone(model.get('members')) || {};
             members[data.user.email] = 'member';
-            model.set({ joined: true, active: true, members: members });
+            model.set({ active: true, members: members });
 
             return $.ajax({
                 method: 'POST',
@@ -769,7 +765,6 @@ define('io.ox/chat/data', [
                 xhrFields: { withCredentials: true }
             }).then(function () {
                 room.set('active', false);
-                room.set('joined', false);
             }).fail(function (err) {
                 console.log(err);
             });
