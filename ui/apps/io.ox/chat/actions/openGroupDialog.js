@@ -81,16 +81,16 @@ define('io.ox/chat/actions/openGroupDialog', [
                         image1_url: url,
                         file: function () {
                             if (!url) return;
-                            var def = $.ajax({
+                            return $.ajax({
                                 url: url,
                                 xhrFields: { withCredentials: true, responseType: 'blob' }
                             }).then(function (data) {
-                                return new Blob([data]);
+                                var blob = new Blob([data]);
+                                blob.lastModified = true;
+                                return blob;
                             }, function () {
                                 return '';
                             });
-                            def.lastModified = true;
-                            return def;
                         }
                     }));
 
