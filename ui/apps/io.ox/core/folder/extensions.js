@@ -1214,6 +1214,7 @@ define('io.ox/core/folder/extensions', [
 
                 require(['io.ox/calendar/util'], function (util) {
                     var folderColor = util.getFolderColor(baton.data),
+                        foregroundColor = util.getHighContrastForeground(folderColor),
                         target = folderLabel.find('.color-label'),
                         colorName = util.getColorName(folderColor);
 
@@ -1221,12 +1222,11 @@ define('io.ox/core/folder/extensions', [
                     if (colorName) baton.view.addA11yDescription(gt('Category') + ': ' + colorName);
 
                     if (target.length === 0) target = $('<div class="color-label" aria-hidden="true">');
-                    target.toggleClass('selected', app.folders.isSelected(baton.data.id));
-                    target.css({
-                        'background-color': folderColor,
-                        'color': util.getForegroundColor(folderColor)
-                    });
-                    target.off('click', toggleFolder).on('click', { folder: baton.data, app: app, target: target }, toggleFolder);
+                    target
+                        .toggleClass('selected', app.folders.isSelected(baton.data.id))
+                        .css({ backgroundColor: folderColor, color: foregroundColor })
+                        .off('click', toggleFolder)
+                        .on('click', { folder: baton.data, app: app, target: target }, toggleFolder);
                     self.off('keydown', toggleFolder).on('keydown', { folder: baton.data, app: app, target: target }, toggleFolder);
                     folderLabel.prepend(target);
                 });

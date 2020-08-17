@@ -12,7 +12,7 @@
  */
 
 /* was 35, but we need 45 for proper Japanese */
-@thumbIndexWidth: 45px;
+@thumbIndexWidth: 56px;
 @photo-size: 120px;
 
 /* VGrid elements */
@@ -33,7 +33,6 @@
             height: 72px;
             padding: 6px 16px 0 @paddingLeft;
             line-height: 16px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 
             .contact-photo {
                 position: absolute;
@@ -86,7 +85,6 @@
             background-image: none;
             background-color: #fff;
             border-top: 0 none;
-            border-bottom: 1px solid #aaa;
             /* overflow and nowrap for longer labels (e.g. Japanese) */
             white-space: nowrap;
             overflow: visible;
@@ -162,7 +160,23 @@
     }
 }
 
+.io-ox-contacts-window .rightside {
+    padding: 0;
+    overflow: none;
+    background-image: linear-gradient(0deg, #f3f2f1, white 70%);
+    .scrollable-pane {
+        position: absolute;
+        top: 40px;
+        bottom: 0;
+        width: 100%;
+        overflow: auto;
+        padding: 24px;
+    }
+}
+
 .contact-detail {
+
+
 
     width: 100%;
 

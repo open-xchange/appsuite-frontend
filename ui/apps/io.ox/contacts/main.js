@@ -131,7 +131,7 @@ define('io.ox/contacts/main', [
             app.pages.addPage({
                 name: 'listView',
                 container: app.getWindow().nodes.main,
-                classes: 'leftside border-right'
+                classes: 'leftside'
             });
             app.pages.addPage({
                 name: 'detailView',
@@ -849,16 +849,24 @@ define('io.ox/contacts/main', [
             };
         },
 
-        // reverted for 7.10
-        // 'primary-action': function (app) {
+        'primary-action': function (app) {
+            app.addPrimaryAction({
+                point: 'io.ox/contacts/sidepanel',
+                label: gt('New contact'),
+                action: 'io.ox/contacts/actions/create',
+                toolbar: 'create'
+            });
+        },
 
-        //     app.addPrimaryAction({
-        //         point: 'io.ox/contacts/sidepanel',
-        //         label: gt('New contact'),
-        //         action: 'io.ox/contacts/actions/create',
-        //         toolbar: 'create'
-        //     });
-        // },
+        'top-search': function () {
+            if (!$('#io-ox-topsearch').is(':empty')) return;
+            $('#io-ox-topsearch').append(
+                $('<div class="search-container">').append(
+                    $('<input type="search" class="form-control" placeholder="Search contacts">'),
+                    $('<i class="fa fa-search">')
+                )
+            );
+        },
 
         'sidepanel': function (app) {
 
@@ -866,8 +874,8 @@ define('io.ox/contacts/main', [
                 id: 'tree',
                 index: 100,
                 draw: function (baton) {
-                    // add border & render tree and add to DOM
-                    this.addClass('border-right').append(baton.app.treeView.$el);
+                    // render tree and add to DOM
+                    this.append(baton.app.treeView.$el);
                 }
             });
 
@@ -986,7 +994,7 @@ define('io.ox/contacts/main', [
         app.setWindow(win);
         app.settings = settings;
 
-        app.gridContainer = $('<div class="abs border-left border-right contact-grid-container">')
+        app.gridContainer = $('<div class="abs contact-grid-container">')
             .attr({
                 role: 'navigation',
                 'aria-label': gt('Contacts')
@@ -997,7 +1005,8 @@ define('io.ox/contacts/main', [
             hideTopbar: _.device('smartphone'),
             hideToolbar: _.device('smartphone'),
             containerLabel: gt('Contact list. Select a contact to view details.'),
-            dividerThreshold: settings.get('dividerThreshold', 30)
+            dividerThreshold: settings.get('dividerThreshold', 30),
+            showCheckbox: false
             //swipeRightHandler: swipeRightHandler,
         });
 

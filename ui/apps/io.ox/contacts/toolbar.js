@@ -33,13 +33,13 @@ define('io.ox/contacts/toolbar', [
         //
         // --- HI ----
         //
-        'create': {
-            prio: 'hi',
-            mobile: 'hi',
-            title: gt('New contact'),
-            dropdown: 'io.ox/contacts/toolbar/new',
-            drawDisabled: true
-        },
+        // 'create': {
+        //     prio: 'hi',
+        //     mobile: 'hi',
+        //     title: gt('New contact'),
+        //     dropdown: 'io.ox/contacts/toolbar/new',
+        //     drawDisabled: true
+        // },
         'edit': {
             prio: 'hi',
             mobile: 'hi',
@@ -137,6 +137,8 @@ define('io.ox/contacts/toolbar', [
         custom: true,
         draw: function (baton) {
 
+            if (2 > 1) return;
+
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ el: this, caret: true, model: baton.app.props, label: gt('View') })
                 .group(gt('Options'))
@@ -157,7 +159,7 @@ define('io.ox/contacts/toolbar', [
             var toolbarView = new ToolbarView({ point: 'io.ox/contacts/toolbar/links', title: app.getTitle(), strict: false }),
                 limit = settings.get('toolbar/limits/fetch', 100);
 
-            app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
+            app.getWindow().nodes.body.find('.rightside').addClass('classic-toolbar-visible').prepend(
                 toolbarView.$el
             );
 
