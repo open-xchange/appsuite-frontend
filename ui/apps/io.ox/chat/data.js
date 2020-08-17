@@ -772,7 +772,16 @@ define('io.ox/chat/data', [
 
         leaveGroup: function (roomId) {
             var url = this.url() + '/' + roomId + '/members';
-            this.get(roomId).destroy({ url: url });
+
+            return $.ajax({
+                type: 'DELETE',
+                url: url,
+                processData: false,
+                contentType: false,
+                xhrFields: { withCredentials: true }
+            }).fail(function (err) {
+                console.log(err);
+            });
         },
 
         sync: function (method, model, options) {

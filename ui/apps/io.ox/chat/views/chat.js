@@ -151,7 +151,8 @@ define('io.ox/chat/views/chat', [
 
             this.listenTo(this.model, {
                 'change:title': this.onChangeTitle,
-                'change:unreadCount': this.onChangeUnreadCount
+                'change:unreadCount': this.onChangeUnreadCount,
+                'change:members': this.onChangeMembers
             });
 
             this.listenTo(this.model.messages, {
@@ -296,9 +297,11 @@ define('io.ox/chat/views/chat', [
                     $('<input type="file" class="file-upload-input hidden">')];
             }
 
-            return $('<button type="button" class="btn btn-default btn-action join" >')
+            if (this.model.get('type') === 'channel') {
+                return $('<button type="button" class="btn btn-default btn-action join" >')
                 .attr({ 'data-cmd': 'join-channel', 'data-id': this.model.get('roomId') })
                 .append('Join');
+            }
         },
 
         renderDropdown: function () {
@@ -320,8 +323,8 @@ define('io.ox/chat/views/chat', [
                 $ul.append(renderItem('Join chat', { 'data-cmd': 'join-channel', 'data-id': this.model.id }));
             }
 
-            if (!this.model.isPrivate() && !(this.model.isChannel() && !this.model.get('active'))) {
-                $ul.append(renderItem('Leave chat', { 'data-cmd': 'leave-group', 'data-id': this.model.id }));
+            if (!this.model.isPrivate() && this.model.isMember()) {
+                $ul.append(renderItem('Leave chat', { 'data-cmd': this.model.isChannel() ? 'leave-channel' : 'leave-group', 'data-id': this.model.id }));
             }
 
             return $ul;
@@ -457,6 +460,12 @@ define('io.ox/chat/views/chat', [
 
         onChangeUnreadCount: function () {
             this.$unreadCounter.text(this.model.get('unreadCount') || '');
+        },
+
+        onChangeMembers: function () {
+            var controls = this.$el.find('.controls');
+            if (!this.isMember() && controls.find('textarea').length > 0) controls.find('.file-upload-btn, .file-upload-input, textarea').remove();
+            else if (this.isMember() && controls.find('textarea').length === 0) controls.append(this.renderEditor());
         },
 
         onScroll: _.throttle(function () {
