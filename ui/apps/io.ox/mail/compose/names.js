@@ -29,7 +29,7 @@ define('io.ox/mail/compose/names', [
 
     var NameView = Backbone.View.extend({
 
-        className: 'form-group',
+        className: 'form-group name-overwrite-view',
 
         initialize: function () {
 
@@ -54,19 +54,12 @@ define('io.ox/mail/compose/names', [
                 $('<h5>').text(this.model.id),
                 $('<div class="input-group">').append(
                     $('<span class="input-group-addon">').append(
-                        this.renderCheckbox()
+                        new mini.CustomCheckboxView({ name: 'overwrite', label: gt('Use custom name'), model: this.model }).render().$el
                     ),
                     this.renderField()
                 )
             );
             return this;
-        },
-
-        renderCheckbox: function () {
-            return new mini.CheckboxView({ name: 'overwrite', model: this.model }).render().$el
-                .attr('title', gt('Use custom name'))
-                .addClass('name-overwrite-checkbox')
-                .prop('checked', this.model.get('overwrite'));
         },
 
         renderField: function () {
