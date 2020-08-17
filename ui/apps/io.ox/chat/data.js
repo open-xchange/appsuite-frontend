@@ -604,7 +604,10 @@ define('io.ox/chat/data', [
             }
 
             if (update.type === 'title:changed') chat.set('title', update.title);
-            if (update.type === 'image:changed') chat.trigger('change:icon');
+            if (update.type === 'image:changed') {
+                this.set('icon', update.icon).silent();
+                chat.trigger('change:icon');
+            }
         },
 
         getLastSenderName: function () {
