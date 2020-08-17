@@ -209,8 +209,7 @@ define('io.ox/chat/data', [
         getFilesPreview: function () {
             // TODO no placeholder needed anymore. Width and height come from the preview
             var fileId = this.get('files')[0].fileId,
-                // TODO: Adjust for channels
-                url = data.API_ROOT + '/files/' + fileId + '/thumbnail',
+                url = data.API_ROOT + '/rooms/' + data.chats.getCurrent().get('roomId') + '/message/' + this.get('messageId') + '/file/' + fileId + '/thumbnail',
                 placeholder = $('<div class="placeholder">').busy();
 
             if (_.isUndefined(fileId)) return placeholder;
