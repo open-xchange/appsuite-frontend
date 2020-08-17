@@ -210,22 +210,46 @@ define('io.ox/chat/data', [
             }
         },
 
+        getFileUrl: function (file) {
+            if (data.chats.get(this.get('roomId')).isChannel()) {
+                return data.API_ROOT + '/rooms/' + this.get('roomId') + '/message/' + this.get('messageId') + '/file/' + file.fileId;
+            }
+            return data.API_ROOT + '/files/' + file.fileId;
+        },
+
         getFilesPreview: function () {
-            // TODO no placeholder needed anymore. Width and height come from the preview
-            var fileId = this.get('files')[0].fileId,
-                url = data.API_ROOT + '/rooms/' + data.chats.getCurrent().get('roomId') + '/message/' + this.get('messageId') + '/file/' + fileId + '/thumbnail',
-                placeholder = $('<div class="placeholder">').busy();
+            var attachment = this.get('files')[0],
+                fileId = attachment.fileId,
+                url = this.getFileUrl(attachment) + '/thumbnail';
 
-            if (_.isUndefined(fileId)) return placeholder;
+            if (!fileId) return;
+            if (!attachment.preview) return;
 
-            $('<img>').on('load', function () {
-                var $img = $(this),
-                    oldHeight = placeholder.height();
-                placeholder.replaceWith($img);
-                $img.trigger('changeheight', { prev: oldHeight, value: $img.height() });
-            }).attr('src', url)
-            .attr({ 'data-cmd': 'show-message-file', 'data-room-id': this.collection.roomId, 'data-file-id': fileId, 'data-message-id': this.get('messageId') });
-            return placeholder;
+            var width = attachment.preview.width,
+                height = attachment.preview.height;
+
+            if (height > 400) {
+                var ratio = 400 / height;
+                height *= ratio;
+                width *= ratio;
+            }
+
+            return $('<div class="preview-wrapper">').append(
+                $('<div>')
+                    .attr({
+                        src: url,
+                        'data-cmd': 'show-message-file',
+                        'data-room-id': this.collection.roomId,
+                        'data-file-id': fileId,
+                        'data-message-id': this.get('messageId')
+                    })
+                    .css({
+                        'background-image': 'url("' + url + '")'
+                    })
+            ).css({
+                width: width + 'px',
+                'padding-top': (height / width * 100) + '%'
+            });
         },
 
         getFileText: function (opt) {
@@ -242,7 +266,7 @@ define('io.ox/chat/data', [
                 opt.icon ? $('<i class="fa icon">').addClass(util.getClassFromMimetype(file.mimetype)) : '',
                 opt.text ? $.txt(file.name) : '',
                 opt.download ? $('<a class="download">').attr({
-                    href: data.API_ROOT + '/files/' + file.fileId + '/thumbnail',
+                    href: this.getFileUrl(file),
                     download: file.name
                 }).append(
                     $('<i class="fa fa-download">')
@@ -646,7 +670,6 @@ define('io.ox/chat/data', [
         },
 
         sync: function (method, model, options) {
-            // attach files
             if (method === 'create' || method === 'update') {
                 var data = _(method === 'create' ? model.attributes : model.changed).pick('title', 'type', 'members', 'description', 'reference');
                 options.data = util.makeFormData(_.extend(data, options.hiddenAttr));

@@ -635,7 +635,6 @@
             img {
                 border: 0;
                 max-width: 100%;
-                max-height: 400px;
                 border-radius: 8px;
                 cursor: pointer;
             }
@@ -652,11 +651,21 @@
             .body {
                 position: relative;
                 display: inline-block;
-                .placeholder {
-                    min-height: 100px;
-                    min-width: 140px;
-                    background-color: #f0f0f0;
+            }
+
+            .preview-wrapper {
+                max-width: 100%;
+                max-height: 400px;
+
+                > div {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-size: cover;
                     border-radius: 8px;
+                    cursor: pointer;
                 }
             }
 
@@ -687,12 +696,6 @@
 
             &.myself .download {
                 color: #fff;
-            }
-
-            .body .placeholder {
-                min-width: 50px;
-                min-height: 14px;
-                display: inline-block;
             }
         }
         &.system {
