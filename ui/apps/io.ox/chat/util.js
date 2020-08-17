@@ -74,6 +74,25 @@ define('io.ox/chat/util', [
             greaterThan: function (a, b) {
                 return util.strings.compare(a, b) > 1;
             }
+        },
+
+        makeFormData: function (attr) {
+            var formData = new FormData();
+
+            _.each(attr, function (value, key) {
+                if (_.isUndefined(value)) return;
+
+                if (_.isArray(value)) {
+                    value.forEach(function (val, index) {
+                        formData.append(key + '[' + index + ']', val);
+                    });
+                    return;
+                }
+
+                formData.append(key, value);
+            });
+
+            return formData;
         }
     };
 

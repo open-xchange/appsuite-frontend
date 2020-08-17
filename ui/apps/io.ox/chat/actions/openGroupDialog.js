@@ -58,7 +58,7 @@ define('io.ox/chat/actions/openGroupDialog', [
             });
         }
         var participants = (model.members || new Backbone.Collection(members)).clone();
-        var originalModel = model.has('roomId') ? model.clone() : new Backbone.Model();
+        var originalModel = model.has('roomId') ? model.clone() : new data.ChatModel();
 
         model.set('type', model.get('type') || obj.type || 'group');
 
@@ -138,23 +138,24 @@ define('io.ox/chat/actions/openGroupDialog', [
         .addCancelButton()
         .addButton({ action: 'save', label: model.id ? 'Edit chat' : 'Create chat' })
         .on('save', function () {
-            var updates = this.model.has('roomId') ? { roomId: this.model.get('roomId') } : this.model.toJSON();
+            var updates = this.model.has('roomId') ? { roomId: this.model.get('roomId') } : this.model.toJSON(), hiddenAttr = {};
 
             if (this.model.get('title') !== originalModel.get('title')) updates.title = this.model.get('title');
             if (this.model.get('description') !== originalModel.get('description')) updates.description = this.model.get('description');
             if (this.model.get('type') !== 'channel' && !_.isEqual(this.collection.pluck('email1'), Object.keys(this.model.get('members') || {}))) {
-                updates.members = this.collection.pluck('email1');
+                hiddenAttr.members = this.collection.pluck('email1');
             }
 
             if (this.pictureModel.get('pictureFileEdited') === '') {
-                updates.icon = null;
+                hiddenAttr.icon = null;
             } else if (this.pictureModel.get('pictureFileEdited')) {
-                updates.icon = this.pictureModel.get('pictureFileEdited');
+                hiddenAttr.icon = this.pictureModel.get('pictureFileEdited');
             }
 
-            if (Object.keys(updates).length <= 1) return def.resolve(this.model.get('roomId'));
-            data.chats.addAsync(updates).done(function (model) {
-                def.resolve(model.get('roomId'));
+            if (Object.keys(updates).length <= 1 && Object.keys(hiddenAttr).length <= 0) return def.resolve(this.model.get('roomId'));
+            originalModel.save(updates, { hiddenAttr: hiddenAttr }).then(function () {
+                data.chats.add(originalModel);
+                def.resolve(originalModel.get('roomId'));
             });
         })
         .on('discard', def.reject)

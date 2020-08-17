@@ -164,19 +164,20 @@ define('io.ox/chat/main', [
                 return model.get('type') === 'private' && Object.keys(model.get('members')).indexOf(cmd.email) >= 0;
             });
             if (chat) {
-                if (chat.get('active')) return this.showChat(chat.get('roomId'));
-                this.resubscribeChat(chat.id);
+                if (!chat.get('active')) this.resubscribeChat(chat.get('roomId'));
+                return this.showChat(chat.get('roomId') || chat.cid);
             }
 
             var members = {};
             members[data.user.email] = 'admin';
             members[cmd.email] = 'member';
-            var room = new data.ChatModel({ type: 'private', members: members }),
+            var room = data.chats.add({ type: 'private', members: members, active: true }, { at: 0 }),
                 view = new ChatView({ room: room });
 
             this.showApp();
             this.$rightside.empty().append(view.render().$el);
             this.$body.addClass('open');
+            view.scrollToBottom();
         },
 
         leaveGroup: function (groupId) {

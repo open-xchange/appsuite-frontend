@@ -24,8 +24,9 @@ define('io.ox/chat/views/chatListEntry', [
             if (!this.model.get('roomId')) {
                 var member = this.model.getFirstMember();
                 return {
-                    'data-cmd': 'start-private-chat',
-                    'data-email': member.get('email1') || member.get('email2') || member.get('email3')
+                    'data-cmd': 'open-private-chat',
+                    'data-email': member.get('email1') || member.get('email2') || member.get('email3'),
+                    'data-cid': this.model.cid
                 };
             }
 

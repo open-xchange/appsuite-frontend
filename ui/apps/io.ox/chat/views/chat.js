@@ -414,8 +414,7 @@ define('io.ox/chat/views/chat', [
                 files.type = /(jpg|jpeg|gif|bmp|png)/i.test(files[i].type) ? 'image' : 'file';
             }
 
-            if (!this.model.get('roomId')) this.model.postFirstMessage(undefined, files);
-            else this.model.postMessage({ content: '', type: type }, files);
+            this.model.postMessage({ content: '', type: type }, files);
 
             $input.val('');
         },
@@ -440,8 +439,7 @@ define('io.ox/chat/views/chat', [
 
             var body = { content: content };
             if (this.reference) body.reference = this.reference;
-            if (!this.model.id) this.model.postFirstMessage(body);
-            else this.model.postMessage(body);
+            this.model.postMessage(body);
 
             // remove reference preview
             this.onRemoveReference();

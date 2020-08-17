@@ -457,8 +457,13 @@ define('io.ox/chat/data', [
 
         idAttribute: 'roomId',
 
+        urlRoot: function () {
+            return data.API_ROOT + '/rooms';
+        },
+
         initialize: function (attr) {
             var self = this;
+            attr = attr || {};
             this.unset('messages', { silent: true });
             this.members = new MemberCollection(this.mapMembers(attr.members), { parse: true, roomId: attr.roomId });
             this.messages = new MessageCollection([], { roomId: attr.roomId });
@@ -509,7 +514,9 @@ define('io.ox/chat/data', [
         },
 
         onChangeLastMessage: function () {
+            if (!this.get('lastMessage')) return;
             if (this.lastMessage && this.lastMessage.get('messageId') === this.get('lastMessage').messageId) return;
+
             if (this.lastMessage) this.stopListening(this.lastMessage);
             this.lastMessage = messageCache.get(this.get('lastMessage'));
             this.listenTo(this.lastMessage, 'change', function () {
@@ -539,8 +546,9 @@ define('io.ox/chat/data', [
 
         getFirstMember: function () {
             // return first member that is not current user
-            var user = data.users.getByMail(data.user.email);
-            return this.members.reject(user)[0];
+            return this.members.find(function (member) {
+                return member.get('email') !== data.user.email;
+            });
         },
 
         isMember: function (email) {
@@ -604,15 +612,9 @@ define('io.ox/chat/data', [
         },
 
         postMessage: function (attr, files) {
-            var formData = new FormData();
-            _.each(attr, function (value, key) {
-                formData.append(key, value);
-            });
+            if (this.isNew()) return this.postFirstMessage(attr, files);
 
-            _.toArray(files).map(function (file) {
-                formData.append('files', file, file.name);
-                return file;
-            });
+            var formData = util.makeFormData(_.extend({}, attr, { files: _.toArray(files)[0] }));
 
             var model = this.messages.add(attr, { merge: true, parse: true });
             model.save(attr, {
@@ -628,27 +630,31 @@ define('io.ox/chat/data', [
         },
 
         postFirstMessage: function (attr, files) {
-            var members = [];
-            _(this.get('members')).allKeys().forEach(function (member) { members.push(member); });
+            var hiddenAttr = { message: attr.content, files: files, members: Object.keys(this.get('members')) };
+            delete attr.content;
+            delete attr.members;
 
-            this.members = members;
-            this.message = attr && attr.content;
-            this.type = this.get('type');
-
-            if (files) this.files = files;
-
-            data.chats.addAsync(this).done(function (result) {
-                events.trigger('cmd', { cmd: 'show-chat', id: result.get('roomId') });
-            });
-        },
-
-        toggle: function (state) {
-            this.set('active', !!state).save({ active: !!state }, { patch: true });
+            this.save(attr, { hiddenAttr: hiddenAttr }).then(function () {
+                events.trigger('cmd', { cmd: 'show-chat', id: this.get('roomId') });
+            }.bind(this));
         },
 
         sync: function (method, model, options) {
+            // attach files
+            if (method === 'create' || method === 'update') {
+                var data = _(method === 'create' ? model.attributes : model.changed).pick('title', 'type', 'members', 'description', 'reference');
+                options.data = util.makeFormData(_.extend(data, options.hiddenAttr));
+                options.processData = false;
+                options.contentType = false;
+                options.method = method === 'create' ? 'POST' : 'PATCH';
+            }
+
             options.xhrFields = _.extend({}, options.xhrFields, { withCredentials: true });
-            return Backbone.Model.prototype.sync.call(this, method, model, options);
+            return Backbone.Model.prototype.sync.call(this, method, model, options).then(function (data) {
+                if (method === 'create') this.messages.roomId = this.get('roomId');
+                if (data.lastMessage) messageCache.get(data.lastMessage.messageId).setInitialDeliveryState();
+                return data;
+            }.bind(this));
         }
     });
 
@@ -658,6 +664,8 @@ define('io.ox/chat/data', [
 
         model: ChatModel,
         comparator: function (a, b) {
+            if (!a.get('lastMessage')) return 0;
+            if (!b.get('lastMessage')) return 0;
             return -util.strings.compare(a.get('lastMessage').messageId, b.get('lastMessage').messageId);
         },
         currentChatId: undefined,
@@ -670,39 +678,6 @@ define('io.ox/chat/data', [
             this.on('change:unreadCount', this.onChangeUnreadCount);
             this.initialized = new $.Deferred();
             this.once('sync', this.initialized.resolve);
-        },
-
-        addAsync: function (attr) {
-            var url = attr.roomId ? this.url() + '/' + attr.roomId : this.url();
-
-            var collection = this,
-                data = _(attr).pick('title', 'type', 'members', 'description', 'icon', 'reference', 'message'),
-                formData = new FormData();
-
-            _.each(data, function (value, key) {
-                if (_.isUndefined(value)) return;
-
-                if (_.isArray(value)) {
-                    value.forEach(function (val, index) {
-                        formData.append(key + '[' + index + ']', val);
-                    });
-                    return;
-                }
-
-                formData.append(key, value);
-            });
-
-            return $.ajax({
-                type: attr.roomId ? 'PATCH' : 'POST',
-                url: url,
-                data: formData,
-                processData: false,
-                contentType: false,
-                xhrFields: { withCredentials: true }
-            }).then(function (data) {
-                var result = collection.add(data, { merge: true, parse: true });
-                return _.isArray(result) ? result[0] : result;
-            });
         },
 
         toggleRecent: function (roomId) {
@@ -764,7 +739,7 @@ define('io.ox/chat/data', [
                 url: this.url() + '/' + roomId,
                 xhrFields: { withCredentials: true }
             }).then(function (data) {
-                this.add([data]);
+                return this.add(data);
             }.bind(this));
         },
 
