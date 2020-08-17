@@ -789,16 +789,25 @@ define('io.ox/calendar/main', [
             };
         },
 
-        // reverted for 7.10
-        // 'primary-action': function (app) {
+        'primary-action': function (app) {
 
-        //     app.addPrimaryAction({
-        //         point: 'io.ox/calendar/sidepanel',
-        //         label: gt('New appointment'),
-        //         action: 'io.ox/calendar/detail/actions/create',
-        //         toolbar: 'create'
-        //     });
-        // },
+            app.addPrimaryAction({
+                point: 'io.ox/calendar/sidepanel',
+                label: gt('New appointment'),
+                action: 'io.ox/calendar/detail/actions/create',
+                toolbar: 'create'
+            });
+        },
+
+        'top-search': function () {
+            if (!$('#io-ox-topsearch').is(':empty')) return;
+            $('#io-ox-topsearch').append(
+                $('<div class="search-container">').append(
+                    $('<input type="search" class="form-control" placeholder="Search calendar">'),
+                    $('<i class="fa fa-search">')
+                )
+            );
+        },
 
         'sidepanel': function (app) {
 
@@ -807,8 +816,8 @@ define('io.ox/calendar/main', [
                 index: 100,
                 draw: function (baton) {
                     if (_.device('smartphone')) return;
-                    // add border & render tree and add to DOM
-                    this.addClass('border-right').append(baton.app.treeView.$el);
+                    // render tree and add to DOM
+                    this.append(baton.app.treeView.$el);
                 }
             });
 

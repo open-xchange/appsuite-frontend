@@ -27,7 +27,9 @@ define('io.ox/calendar/extensions', [
             function addColors(node, model) {
                 var folder = folderAPI.pool.getModel(model.get('folder')).toJSON(),
                     color = util.getAppointmentColor(folder, model),
-                    foregroundColor = util.getForegroundColor(color),
+                    backgroundColor = util.getBackgroundColor(color),
+                    foregroundColor = util.getForegroundColor(backgroundColor),
+                    borderColor = util.getBorderColor(color),
                     colorName = util.getColorName(color);
 
                 if (!color) {
@@ -40,12 +42,14 @@ define('io.ox/calendar/extensions', [
                     node.removeClass('white black');
                     return;
                 }
-                node.css({
-                    'background-color': color,
-                    'color': foregroundColor,
-                    'border-left-color': foregroundColor === 'white' ? '' : foregroundColor
-                }).data('background-color', color);
-                node.addClass(foregroundColor === 'white' ? 'white' : 'black');
+                node
+                    .css({
+                        'background-color': backgroundColor,
+                        'color': foregroundColor,
+                        'border-left-color': borderColor
+                    })
+                    .data('background-color', backgroundColor)
+                    .addClass(backgroundColor === 'white' ? 'white' : 'black');
                 if (util.canAppointmentChangeColor(folder, model)) {
                     node.attr('data-folder', folder.id);
                 }

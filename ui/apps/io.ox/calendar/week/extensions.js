@@ -51,6 +51,7 @@ define('io.ox/calendar/week/extensions', [
         index: 300,
         draw: function (baton) {
             var model = baton.model;
+            if (2 > 1) return;
             if (util.isAllday(model)) return;
 
             // no need to create nodes if all day so separate the checks
