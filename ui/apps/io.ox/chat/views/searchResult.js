@@ -58,24 +58,6 @@ define('io.ox/chat/views/searchResult', [
             });
         },
 
-        // TODO: message searching is currently not enabled
-        searchMessages: function (query) {
-            var url = data.API_ROOT + '/search/messages?' + $.param({ query: query }),
-                regexQuery = new RegExp('(\\b' + escape(query) + ')', 'ig');
-            return $.ajax({
-                url: url,
-                xhrFields: { withCredentials: true }
-            }).then(function (data) {
-                var result  = [];
-                data.forEach(function (message) {
-                    if (message.type === 'system') return;
-                    message.content = message.content.replace(regexQuery, '<b class="search-highlight">$1</b>');
-                    result.push(message);
-                });
-                return result;
-            });
-        },
-
         searchTitles: function (query) {
             var regexQuery = new RegExp('(\\b' + escape(query) + ')', 'ig');
             return data.chats.filter(function (model) {
@@ -90,22 +72,10 @@ define('io.ox/chat/views/searchResult', [
             if (!query) return this.collection.reset();
 
             $.when(
-                this.searchMessages(query),
                 this.searchAddresses(query),
                 this.searchTitles(query)
-            ).then(function (messages, addresses, rooms) {
+            ).then(function (addresses, rooms) {
                 var ids = {},
-                    chatsByMessage = messages.map(function (message) {
-                        // find according room
-                        var room = data.chats.get(message.roomId);
-                        if (!room) return;
-                        room = room.clone();
-                        room.set('lastMessage', message);
-                        room.set('searchResult', true);
-                        ids[room.get('id')] = true;
-
-                        return room;
-                    }),
                     chatsByAddress = addresses.map(function (address) {
                         // find according room
                         var room = data.chats.find(function (model) {
@@ -113,9 +83,12 @@ define('io.ox/chat/views/searchResult', [
                             return _(model.get('members')).findWhere({ email: address.email });
                         });
                         if (room) return room;
-                        return new data.chats.model({
-                            lastMessage: { id: 1.337, roomId: 13, senderId: 37, body: 'Create new chat', type: 'text' },
-                            members: [{ email: data.user.email }, { email: address.email }],
+                        var members = {};
+                        members[data.user.email] = 'admin';
+                        members[address.email] = 'member';
+                        return new data.ChatModel({
+                            lastMessage: { id: '1337', sender: '', content: 'Create new chat', type: 'text' },
+                            members: members,
                             type: 'private',
                             unreadCount: 0
                         });
@@ -123,7 +96,7 @@ define('io.ox/chat/views/searchResult', [
                         return !ids[room.get('id')];
                     });
 
-                var models = [].concat(chatsByMessage).concat(chatsByAddress).concat(rooms);
+                var models = [].concat(chatsByAddress).concat(rooms);
                 models = _(models).compact();
                 this.collection.reset(models);
             }.bind(this));
