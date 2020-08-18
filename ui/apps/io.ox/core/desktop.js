@@ -27,8 +27,9 @@ define('io.ox/core/desktop', [
     'io.ox/find/main',
     'io.ox/core/main/icons',
     'settings!io.ox/core',
-    'gettext!io.ox/core'
-], function (Events, FloatingWindow, ext, cache, notifications, upsell, adaptiveLoader, folderAPI, apps, findFactory, icons, coreSettings, gt) {
+    'gettext!io.ox/core',
+    'io.ox/core/capabilities'
+], function (Events, FloatingWindow, ext, cache, notifications, upsell, adaptiveLoader, folderAPI, apps, findFactory, icons, coreSettings, gt, capabilities) {
 
     'use strict';
 
@@ -564,7 +565,8 @@ define('io.ox/core/desktop', [
                     },
                     function fail() {
                         var autoStart = require('settings!io.ox/core').get('autoStart');
-                        if (autoStart !== 'none') ox.launch(autoStart);
+                        // don't autostart mail for guests just because any other app failed. Usually doesn't work and doesn't have permission for it.
+                        if (autoStart !== 'none' && !capabilities.has('guest')) ox.launch(autoStart);
                         throw arguments;
                     }
                 );
