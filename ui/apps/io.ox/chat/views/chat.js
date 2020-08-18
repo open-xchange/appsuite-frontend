@@ -477,7 +477,7 @@ define('io.ox/chat/views/chat', [
                     if ($paginatePrev.hasClass('io-ox-busy')) return;
                     if ($paginatePrev.position().top < -$paginatePrev.height() * 2) return;
                     $paginatePrev.busy();
-                    view.model.messages.paginate('prev').then(function () {
+                    view.model.messages.paginate('older').then(function () {
                         $paginatePrev.idle();
                     });
                 }
@@ -489,7 +489,7 @@ define('io.ox/chat/views/chat', [
                     if ($paginateNext.hasClass('io-ox-busy')) return;
                     if ($paginateNext.position().top - $paginateNext.height() > $paginateNext.parent().height()) return;
                     $paginateNext.busy();
-                    view.model.messages.paginate('next').then(function () {
+                    view.model.messages.paginate('newer').then(function () {
                         $paginateNext.idle();
                     });
                 }

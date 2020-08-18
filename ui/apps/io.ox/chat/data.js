@@ -402,22 +402,28 @@ define('io.ox/chat/data', [
         initialize: function (models, options) {
             this.roomId = options.roomId;
         },
-        paginate: function (direction) {
+        paginate: function (readDirection) {
             var id;
-            if (direction === 'prev') id = this.first().get('messageId');
-            else if (direction === 'next') id = this.last().get('messageId');
+            if (readDirection === 'older') id = this.first().get('messageId');
+            else if (readDirection === 'newer') id = this.last().get('messageId');
 
-            return this.load({ messageId: id, direction: direction, limit: DEFAULT_LIMIT }, 'paginate');
+            return this.load({ messageId: id, readDirection: readDirection, limit: DEFAULT_LIMIT }, 'paginate');
         },
-        load: function (params, type) {
+        load: function (params, type, cache) {
             if (!this.roomId) return;
 
             type = type || 'load';
+
+            if (cache !== false && type === 'load' && this.length > 0) {
+                if (params.readDirection === 'newer' && this.nextComplete) return $.when();
+                if (!params.readDirection || params.readDirection === 'older' && this.prevComplete) return $.when();
+            }
+
             this.trigger('before:' + type);
 
             // special handling for search
             if (type === 'load' && this.messageId) {
-                params = { direction: 'siblings', messageId: this.messageId, limit: DEFAULT_LIMIT };
+                params = { readDirection: 'both', messageId: this.messageId, limit: DEFAULT_LIMIT };
                 delete this.messageId;
             }
 
@@ -435,8 +441,8 @@ define('io.ox/chat/data', [
             .then(function (list) {
                 this.trigger(type);
                 this.add(list, { parse: true });
-                params.direction = params.direction || 'prev';
-                if (params.direction === 'siblings') {
+                params.readDirection = params.readDirection || 'older';
+                if (params.readDirection === 'both') {
                     var index = _(list).findIndex({ id: params.messageId });
                     if (index < params.limit / 2 - 1) {
                         this.prevComplete = true;
@@ -447,8 +453,9 @@ define('io.ox/chat/data', [
                         this.trigger('complete:next');
                     }
                 } else {
-                    this[params.direction + 'Complete'] = list.length < params.limit;
-                    if (this[params.direction + 'Complete']) this.trigger('complete:' + params.direction);
+                    var dir = params.readDirection === 'older' ? 'prev' : 'next';
+                    this[dir + 'Complete'] = list.length < params.limit;
+                    if (this[dir + 'Complete']) this.trigger('complete:' + dir);
                 }
                 this.trigger('after:all after:' + type);
             }.bind(this));
@@ -457,9 +464,10 @@ define('io.ox/chat/data', [
             return this.models[this.models.length - 1];
         },
         sync: function (method, collection, options) {
+            console.log(options);
             if (method === 'read') {
                 var limit = Math.max(collection.length, DEFAULT_LIMIT);
-                return this.load({ limit: limit });
+                return this.load({ limit: limit }, 'load');
             }
             options.xhrFields = _.extend({}, options.xhrFields, { withCredentials: true });
             return Backbone.Collection.prototype.sync.call(this, method, collection, options);
