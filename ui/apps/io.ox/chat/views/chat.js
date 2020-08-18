@@ -409,14 +409,10 @@ define('io.ox/chat/views/chat', [
         },
 
         onFileupload: function () {
-            var $input = this.$('.file-upload-input'), type, i,
-                files = $input[0].files;
+            var $input = this.$('.file-upload-input'),
+                files = _.toArray($input[0].files);
 
-            for (i = 0; i < files.length; i++) {
-                files.type = /(jpg|jpeg|gif|bmp|png)/i.test(files[i].type) ? 'image' : 'file';
-            }
-
-            this.model.postMessage({ content: '', type: type }, files);
+            this.model.postMessage({ content: '' }, files.length === 1 ? files[0] : files);
 
             $input.val('');
         },
