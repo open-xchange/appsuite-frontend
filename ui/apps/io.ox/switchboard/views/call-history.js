@@ -54,6 +54,7 @@ define('io.ox/switchboard/views/call-history', [
             this.onChange = _.debounce(this.onChange.bind(this), 10);
             this.listenTo(this.collection, 'change', this.onChange);
             this.opened = false;
+            point.invoke('load', this);
         },
         render: function () {
             this.$el.attr('role', 'presentation').append(
