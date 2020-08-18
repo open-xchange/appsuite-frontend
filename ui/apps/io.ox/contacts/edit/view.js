@@ -859,7 +859,8 @@ define('io.ox/contacts/edit/view', [
         },
 
         isUserMode: function () {
-            return String(this.get('folder_id')) === '6' && String(this.get('id')) === String(ox.user_id);
+            // 6 is gab 16 is guest user
+            return (String(this.get('folder_id')) === '6' || String(this.get('folder_id')) === '16') && String(this.get('id')) === String(ox.user_id);
         },
 
         getApi: function () {

@@ -60,8 +60,8 @@ define('io.ox/contacts/edit/main', [
 
             folderApi.get(data.folder_id).always(function (folderData) {
                 var isNewContact = !data.id,
-                    // check whether we edit some contact or the current user
-                    isUser = String(data.folder_id) === '6' && String(data.id) === String(ox.user_id),
+                    // check whether we edit some contact or the current user. 6 is gab 16 is guest user
+                    isUser = (String(data.folder_id) === '6' || String(data.folder_id) === '16') && String(data.id) === String(ox.user_id),
                     isPublic = folderData && !folderData.error && folderUtils.is('public', folderData),
                     view = app.view = new View({ data: data, isUser: isUser, isPublic: isPublic });
 
