@@ -626,14 +626,19 @@ define('io.ox/chat/data', [
             if (update.type === 'members:added') {
                 members = _.clone(chat.get('members')) || {};
                 update.members.forEach(function (member) {
+                    if (members[member]) return;
                     members[member] = 'member';
+
+                    if (member !== data.user.email) return;
+                    chat.fetch();
+                    chat.trigger('change:icon', { silent: true });
                 });
                 chat.set('members', members);
             }
 
             if (update.type === 'title:changed') chat.set('title', update.title);
             if (update.type === 'image:changed') {
-                this.set('icon', update.icon).silent();
+                this.set({ icon: update.icon }, { silent: true });
                 chat.trigger('change:icon');
             }
         },
