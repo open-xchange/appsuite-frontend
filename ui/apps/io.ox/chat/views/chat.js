@@ -439,9 +439,9 @@ define('io.ox/chat/views/chat', [
 
             data.socket.emit('typing', { roomId: this.model.id, state: false });
 
-            var body = { content: content };
-            if (this.reference) body.reference = this.reference;
-            this.model.postMessage(body);
+            var message = { content: content, sender: data.user.email };
+            if (this.reference) message.reference = this.reference;
+            this.model.postMessage(message);
 
             // remove reference preview
             this.onRemoveReference();

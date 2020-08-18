@@ -362,17 +362,25 @@ define('io.ox/chat/data', [
     });
 
     var messageCache = (function () {
-        var cache = {};
+        var cache = {},
+            idlessCache = {};
         return {
             get: function (attrs, options) {
                 var messageId = attrs.messageId, message = cache[messageId];
+                // try to reuse the messages without ids
+                if (!message) message = idlessCache[attrs.sender + '' + attrs.content];
+
                 if (message) {
                     message.set(attrs);
                 } else {
                     message = new MessageModel(attrs, options);
-                    if (messageId) cache[messageId] = message;
-                    else {
+                    if (messageId) {
+                        cache[messageId] = message;
+                    } else {
+                        var identifier = attrs.sender && attrs.content && attrs.sender + '' + attrs.content;
+                        if (identifier) idlessCache[identifier] = message;
                         message.once('change:messageId', function () {
+                            if (identifier) delete idlessCache[identifier];
                             cache[message.get('messageId')] = message;
                         });
                     }
@@ -464,7 +472,6 @@ define('io.ox/chat/data', [
             return this.models[this.models.length - 1];
         },
         sync: function (method, collection, options) {
-            console.log(options);
             if (method === 'read') {
                 var limit = Math.max(collection.length, DEFAULT_LIMIT);
                 return this.load({ limit: limit }, 'load');
@@ -952,18 +959,8 @@ define('io.ox/chat/data', [
                     message.roomId = roomId;
                     var newMessage = messageCache.get(message);
 
-                    // either add message to chatroom or update last message manually
                     if (model.messages.nextComplete) {
-                        // anticipate, whether this client was sending the last message and received a push notification before the message creation resolved
-                        var lastIndex = model.messages.findLastIndex(function (message) {
-                                return message.get('sender') === data.user.email;
-                            }), lastMessage;
-                        if (lastIndex >= 0) lastMessage = model.messages.at(lastIndex);
-                        if (!lastMessage || lastMessage.get('messageId') && newMessage.get('messageId') !== lastMessage.get('messageId')) {
-                            model.messages
-                                .add(message, { merge: true, parse: true })
-                                .setInitialDeliveryState();
-                        }
+                        if (!model.messages.get(newMessage)) model.messages.add(newMessage);
                     } else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
 
                     if (model.get('type') !== 'channel' && message.sender !== data.user.email) {
