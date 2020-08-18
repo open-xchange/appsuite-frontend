@@ -242,6 +242,8 @@ define('io.ox/chat/views/chat', [
         },
 
         render: function () {
+            this.$toolbar = new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: gt('Chat actions') });
+
             this.$el.append(
                 $('<div class="header">').append(
                     new ChatAvatar({ model: this.model }).render().$el,
@@ -254,13 +256,13 @@ define('io.ox/chat/views/chat', [
                             new ChatMember({ collection: this.model.members }).render().$el
                         ),
                     // burger menu (pull-right just to have the popup right aligned)
-                    $('<div class="dropdown pull-right">').append(
+                    this.$dropdown = $('<div class="dropdown pull-right">').append(
                         $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
                         .append('<i class="fa fa-bars" aria-hidden="true">'),
                         this.renderDropdown()
                     )
                 ),
-                new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: gt('Chat actions') }).render(new ext.Baton({ model: this.model })).$el,
+                this.$toolbar.render(new ext.Baton({ model: this.model })).$el,
                 this.$scrollpane = $('<div class="scrollpane">').on('scroll', $.proxy(this.onScroll, this)).append(
                     this.$paginatePrev = $('<div class="paginate prev">').hide(),
                     $('<div class="conversation">').append(
@@ -305,6 +307,11 @@ define('io.ox/chat/views/chat', [
             }
         },
 
+        updateEditor: function () {
+            var $controls = this.$el.find('.controls');
+            $controls.empty().append(this.renderEditor());
+        },
+
         renderDropdown: function () {
 
             var $ul = $('<ul class="dropdown-menu">');
@@ -316,10 +323,10 @@ define('io.ox/chat/views/chat', [
             }
 
             if ((this.model.isPrivate() || this.model.isGroup() || (this.model.isChannel() && this.model.isMember())) && this.model.get('active')) {
-                $ul.append(renderItem('Hide chat', { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
+                $ul.append(renderItem(gt('Hide chat'), { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
             }
             if ((this.model.isGroup() || this.model.isChannel()) && this.model.isMember()) {
-                $ul.append(renderItem('Edit chat', { 'data-cmd': 'edit-group-chat', 'data-id': this.model.id }));
+                $ul.append(renderItem(gt('Edit chat'), { 'data-cmd': 'edit-group-chat', 'data-id': this.model.id }));
             }
 
             if (!this.model.isPrivate() && this.model.isMember()) {
@@ -329,6 +336,11 @@ define('io.ox/chat/views/chat', [
             }
 
             return $ul;
+        },
+
+        updateDropdown: function () {
+            this.$dropdown.find('.dropdown-menu').replaceWith(this.renderDropdown());
+            this.$toolbar.render(new ext.Baton({ model: this.model }));
         },
 
         renderTitle: function () {
@@ -460,9 +472,10 @@ define('io.ox/chat/views/chat', [
         },
 
         onChangeMembers: function () {
-            var controls = this.$el.find('.controls');
-            if (!this.isMember() && controls.find('textarea').length > 0) controls.find('.file-upload-btn, .file-upload-input, textarea').remove();
-            else if (this.isMember() && controls.find('textarea').length === 0) controls.append(this.renderEditor());
+            var event = JSON.parse(this.model.get('lastMessage').content);
+            if (event.members.filter(function (m) { return m === data.user.email; }).length === 0) return;
+            this.updateEditor();
+            this.updateDropdown();
         },
 
         onScroll: _.throttle(function () {
