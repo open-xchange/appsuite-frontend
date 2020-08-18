@@ -340,18 +340,18 @@ define('io.ox/chat/data', [
             var room = data.chats.get(this.get('roomId'));
             if (!room) return;
             if (this.get('sender') !== data.user.email) return;
-            if (this.get('deliveryState')) return;
 
             if (room.get('type') === 'private') {
+                if (this.get('deliveryState')) return;
                 this.set('deliveryState', {
                     state: 'server',
                     modified: +moment()
                 });
             } else if (room.get('type') === 'group') {
-                var deliveryState = {};
+                var deliveryState = _.clone(this.get('deliveryState')) || {};
                 room.members.forEach(function (member) {
                     if (member.get('email') === data.user.email) return;
-                    deliveryState[member.get('email')] = {
+                    deliveryState[member.get('email')] = deliveryState[member.get('email')] || {
                         state: 'server',
                         modified: +moment()
                     };
