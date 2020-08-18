@@ -97,8 +97,8 @@
     async "^2.4.1"
 
 "@open-xchange/tinymce@https://gitlab.open-xchange.com/frontend/tinymce.git#feature/OXUI-695":
-  version "6.0.2"
-  resolved "https://gitlab.open-xchange.com/frontend/tinymce.git#fed1ee4b019cdcada6a6a926029c647d570b4d2b"
+  version "6.0.7"
+  resolved "https://gitlab.open-xchange.com/frontend/tinymce.git#bba83cdf7d492217e5f11da98e30974bfebe2c1f"
   dependencies:
     tinymce "^4.8.0"
 
@@ -5486,8 +5486,8 @@ tinymce@5.4.1:
   resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.4.1.tgz#4c101e78cbd22c148d6013f7c66eb0cb480723db"
 
 tinymce@^4.8.0:
-  version "4.9.6"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.9.6.tgz#ffba4fc56e3196f66873b60571b9aa164b2da931"
+  version "4.9.11"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.9.11.tgz#e3dae099722294c5b8d84ba7ef18dd126de6b582"
 
 tmp@0.0.33, tmp@0.0.x, tmp@^0.0.33:
   version "0.0.33"
