@@ -178,11 +178,11 @@ define('io.ox/chat/data', [
             return _.escape(this.get('content')).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
         },
 
-        getSystemMessage: function () {
+        getSystemMessage: function (room) {
             var event = JSON.parse(this.get('content'));
             var originator = this.get('sender'),
-                members = event.members || [],
-                room = data.chats.get(this.get('roomId'));
+                members = event.members || [];
+            if (!room) room = data.chats.get(this.get('roomId'));
 
             if (room.get('type') === 'channel' && event.type === 'members:added') event.type = 'channel:joined';
             if (members.join('') === data.user.email && event.type === 'members:removed') event.type = 'room:left';
@@ -295,8 +295,8 @@ define('io.ox/chat/data', [
             return moment(this.get('date')).format('LT');
         },
 
-        getTextBody: function () {
-            if (this.isSystem()) return this.getSystemMessage();
+        getTextBody: function (room) {
+            if (this.isSystem()) return this.getSystemMessage(room);
             if (this.isFile()) return this.getFileText();
             return sanitizer.simpleSanitize(this.get('content'));
         },
@@ -600,7 +600,7 @@ define('io.ox/chat/data', [
             if (!last) return '\u00a0';
             var message = new MessageModel(last);
             if (message.isFile()) return message.getFileText({ download: false });
-            return message.getTextBody();
+            return message.getTextBody(this);
         },
 
         getLastMessageDate: function () {
