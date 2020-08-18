@@ -128,10 +128,10 @@
         &.free {
 
             @angle: -45deg;
-            @width1: 8px;
+            @width1: 15px;
             @width2: 16px;
-            @color-white: rgba(0, 0, 0, 0.15);
-            @color-black: rgba(255, 255, 255, 0.30);
+            @color-white: rgba(0, 0, 0, 0.50);
+            @color-black: rgba(255, 255, 255, 0.80);
 
             &.white {
                 background-image: -webkit-repeating-linear-gradient(@angle, transparent, transparent @width1, @color-white @width1, @color-white @width2);
@@ -147,7 +147,7 @@
                 background-image: repeating-linear-gradient(@angle, transparent, transparent @width1, @color-black @width1, @color-black @width2);
             }
 
-            border-left-color: rgba(0, 0, 0, 0.15);
+            border-left-color: transparent !important;
         }
     }
 
