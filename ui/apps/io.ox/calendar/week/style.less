@@ -35,18 +35,17 @@
     }
 
     .weekview-toolbar {
-        height: 50px;
-        padding-top: 10px;
+        height: 66px;
+        padding-top: 18px;
         margin-left: @weekview-time-width;
         display: flex;
-        align-items: center;
 
         .weekday {
             flex: 1;
 
             color: #767676;
             text-align: left;
-            height: 26px;
+            height: 40px;
             line-height: 24px;
             text-decoration: none;
             padding: 1px 3px;
@@ -76,9 +75,15 @@
                 font-weight: bold;
                 color: @calendar-today;
                 background-color: transparent;
-
                 .number {
-                    color: @calendar-today;
+                    color: white;
+                    background-color: @calendar-today;
+                    border-radius: @default-border-radius;
+                    display: inline-block;
+                    padding: 4px 8px;
+                    min-width: 32px;
+                    text-align: center;
+                    margin-left: 4px;
                 }
             }
         }
@@ -230,9 +235,6 @@
 
                 &.working-time-border { border-bottom: 1px solid @weekview-working-time-border; }
             }
-
-            &.today .timeslot { background-color: @calendar-today-background; }
-
         }
 
         &.time-scale-1 {
@@ -282,7 +284,7 @@
             height: 0;
             left: 0;
             right: 0;
-            border-bottom: 2px solid @calendar-today;
+            border-bottom: 3px solid @calendar-today;
             z-index: 10;
             .user-select(none);
             pointer-events: none;

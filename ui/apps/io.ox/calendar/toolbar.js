@@ -200,6 +200,8 @@ define('io.ox/calendar/toolbar', [
         index: 10000,
         setup: function (app) {
 
+            app.updateToolbar = _.noop;
+            app.forceUpdateToolbar = _.noop;
             if (2 > 1) return;
 
             var toolbarView = new ToolbarView({ point: 'io.ox/calendar/toolbar/links', title: app.getTitle() });
