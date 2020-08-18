@@ -543,6 +543,7 @@ define('io.ox/chat/data', [
 
         onChangeLastMessage: function () {
             if (!this.get('lastMessage')) return;
+            this.get('lastMessage').roomId = this.get('roomId');
             if (this.lastMessage && this.lastMessage.get('messageId') === this.get('lastMessage').messageId) return;
 
             if (this.lastMessage) this.stopListening(this.lastMessage);
