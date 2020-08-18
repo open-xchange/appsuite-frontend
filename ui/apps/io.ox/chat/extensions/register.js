@@ -368,15 +368,9 @@ define('io.ox/chat/extensions/register', [
         }
     });
 
-    function startPrivateChat(user, reference) {
-        var room = data.chats.find(function (model) {
-            if (model.get('type') !== 'private') return false;
-            return !!_(model.get('members')).findWhere({ email: user });
-        });
-        $.when(room || data.chats.addAsync({ type: 'private', members: [user] })).then(function (chat) {
-            require(['io.ox/chat/events'], function (events) {
-                events.trigger('cmd', { cmd: 'show-chat', id: chat.get('id'), reference: reference });
-            });
+    function startPrivateChat(email) {
+        require(['io.ox/chat/events'], function (events) {
+            events.trigger('cmd', { cmd: 'open-private-chat', email: email });
         });
     }
 
@@ -385,7 +379,7 @@ define('io.ox/chat/extensions/register', [
             var room = data.chats.findWhere({ reference: opt.reference });
             if (!room) throw new Error('No room');
             return require(['io.ox/chat/events']).then(function (events) {
-                events.trigger('cmd', { cmd: 'show-chat', id: room.get('id') });
+                events.trigger('cmd', { cmd: 'show-chat', id: room.get('roomId') });
             });
         }).catch(function () {
             return require(['io.ox/chat/actions/openGroupDialog', 'io.ox/chat/events']).then(function (openGroupDialog, events) {
