@@ -56,6 +56,9 @@ define('plugins/portal/oxdriveclients/register', [
             langs = settings.get('l10nImages'),
             imagePath = ox.abs + ox.root + '/apps/plugins/portal/oxdriveclients/img/',
             platform = _platform.toLowerCase();
+
+        // convenience: support string of comma separated values
+        langs = _.isString(langs) ? langs.split(',') : langs;
         // fallback
         if (_.indexOf(langs, lang) === -1) lang = 'en';
 

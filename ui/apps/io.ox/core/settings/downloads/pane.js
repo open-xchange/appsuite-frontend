@@ -50,6 +50,8 @@ define('io.ox/core/settings/downloads/pane', [
                 langs = driveClientsSettings.get('l10nImages'),
                 imagePath = ox.abs + ox.root + '/apps/plugins/portal/oxdriveclients/img/';
 
+            // convenience: support string of comma separated values
+            langs = _.isString(langs) ? langs.split(',') : langs;
             platform = platform.toLowerCase();
 
             // fallback
