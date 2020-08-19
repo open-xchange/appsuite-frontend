@@ -72,7 +72,7 @@ define('io.ox/chat/util', [
                 return 0;
             },
             greaterThan: function (a, b) {
-                return util.strings.compare(a, b) > 1;
+                return util.strings.compare(a, b) > 0;
             }
         },
 

@@ -403,12 +403,14 @@ define('io.ox/chat/data', [
     var MessageCollection = Backbone.Collection.extend({
         model: getMessageModel,
         comparator: function (a, b) {
-            if (!a.get('messageId')) return 1;
-            if (!b.get('messageId')) return -1;
+            if (!a.get('messageId')) return 0;
+            if (!b.get('messageId')) return 0;
             return util.strings.compare(a.get('messageId'), b.get('messageId'));
         },
         initialize: function (models, options) {
             this.roomId = options.roomId;
+
+            this.on('change:messageId', this.onChangeMessageId);
         },
         paginate: function (readDirection) {
             var id;
@@ -470,6 +472,15 @@ define('io.ox/chat/data', [
         },
         getLast: function () {
             return this.models[this.models.length - 1];
+        },
+        onChangeMessageId: function (model) {
+            var index = this.indexOf(model),
+                next = this.at(index + 1);
+
+            if (next && util.strings.greaterThan(model.get('messageId'), next.get('messageId'))) {
+                this.remove(model);
+                this.add(model);
+            }
         },
         sync: function (method, collection, options) {
             if (method === 'read') {

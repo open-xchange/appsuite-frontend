@@ -36,8 +36,8 @@ define('io.ox/chat/views/messages', [
                 'update': this.onAdd,
                 'reset': this.onReset,
                 'remove': this.onRemove,
-                'change:body': this.onChangeBody,
-                'change:fileId': this.onChangeBody,
+                'change:content': this.onChangeBody,
+                'change:files': this.onChangeBody,
                 'change:time': this.onChangeTime,
                 'change:deliveryState': this.onChangeDelivery
             });
@@ -171,8 +171,9 @@ define('io.ox/chat/views/messages', [
             var $message = this.getMessageNode(model);
             var $body = $message.find('.body');
             $message
-                .removeClass('system text image file audio')
-                .addClass(model.isSystem() ? 'system' : model.get('type'));
+                .removeClass('system text preview')
+                .addClass(model.getType())
+                .toggleClass('emoji', isOnlyEmoji(model.getBody()));
             $body
                 .html(model.getBody())
                 .append(this.renderFoot(model));
