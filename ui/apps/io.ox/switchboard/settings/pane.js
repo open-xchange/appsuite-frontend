@@ -130,12 +130,7 @@ define('io.ox/switchboard/settings/pane', [
                         .text(data.pmi)
                     ),
                     // remove button
-                    $('<button type="button" class="btn btn-link" data-action="remove">')
-                        .attr('aria-label', gt('Remove account'))
-                        .append(
-                            $('<i class="fa fa-trash" aria-hidden="true">')
-                            .attr('title', gt('Remove account'))
-                        )
+                    $('<button type="button" class="btn btn-default" data-action="remove">').text(gt('Remove account'))
                 )
             );
         },
