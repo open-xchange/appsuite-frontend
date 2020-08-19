@@ -203,7 +203,7 @@ Scenario('Reply to mail with signature above correctly placed and changed', asyn
         // insert some text
         I.appendField('body', 'some user input');
         expect(await I.grabHTMLFrom('body')).to.match(
-            /^<div>some user input<\/div><div class="io-ox-signature">.*<\/div><blockquote type="cite">.*<\/blockquote>$/
+            /^<div( class="default-style")?>some user input<\/div><div class="io-ox-signature">.*<\/div><blockquote type="cite">.*<\/blockquote>$/
         );
     });
     await selectAndAssertSignature(I, mail, 'Second signature above', new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[1].content}</div><blockquote type="cite">.*</blockquote>$`));

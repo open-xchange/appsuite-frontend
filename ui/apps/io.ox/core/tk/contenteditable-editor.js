@@ -611,7 +611,7 @@ define('io.ox/core/tk/contenteditable-editor', [
                 // clean up
                 content = content
                     .replace(/<(\w+)[ ]?\/>/g, '<$1>')
-                    .replace(/(<div>(<br>)?<\/div>)+$/, '');
+                    .replace(/(<div (([^>]*))?>(<br>)?<\/div>)+$/, '');
 
                 // remove trailing white-space, line-breaks, and empty paragraphs
                 content = content.replace(
