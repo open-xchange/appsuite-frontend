@@ -674,7 +674,7 @@ Receive notifications when a task in which you participate is created, modified 
 <config>plugins/portal//oxdriveclients/appIconAsBase64=`<string>`</config>
 App icon encoded as base64 string.
 
-<config>plugins/portal//oxdriveclients/l10nImages=`<string>`</config>
+<config>plugins/portal//oxdriveclients/l10nImages=`<array>`</config>
 Array of language strings like 'en,de,es'. This will indicate which localized app store images are present. Default `['de', 'en', 'es', 'fr', 'it', 'nl']`
 
 <config>plugins/portal//oxdriveclients/linkTo/[windows|android|ios|macos]=`<string>`</config>
