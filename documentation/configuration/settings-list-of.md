@@ -13,8 +13,8 @@ For example `io.ox/core//someSetting` or `io.ox/mail//anotherMailSetting`.
 
 In this case we have two different namespaces, `io.ox/core` and `io.ox/mail`. The setting `someSetting` only exists in the core namespace, `anotherMailSetting` only in mail accordingly.
 
-# Date types
-Ensure to always use the expected data type for a setting. The table lists some examples when they are set in a 'settings property file' (sometimes referenced as 'ui property file').
+# Data types
+Ensure to always use the expected data type for a setting. This table lists some examples when they are set in a 'settings property file' (sometimes referenced as 'ui property file').
 
 | Data type  | Example                                         |
 |------------|-------------------------------------------------|
