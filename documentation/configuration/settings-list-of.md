@@ -657,6 +657,9 @@ Allow comments when uploaded a new version of a file. Default `true`
 
 # Tasks
 
+<config>io.ox/tasks//currencies=`<array>`</config>
+Availabe currencies in create/edit dialog. Default `['CAD', 'CHF', 'DKK', 'EUR', 'GBP', 'JPY', 'PLN', 'RMB', 'RUB', 'SEK', 'USD']`
+
 <config>io.ox/tasks//notifyAcceptedDeclinedAsCreator=`<bool>`</config>
 Receive notifications when a participant accepted or declined a task created by you. Default `false`
 
