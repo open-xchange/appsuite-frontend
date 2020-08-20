@@ -89,7 +89,7 @@ define('io.ox/calendar/listview', [
         index: 100,
         draw: function (baton) {
             this.append(
-                $('<span class="location">').append(baton.data.location)
+                $('<span class="location">').text(baton.data.location)
             );
         }
     });
