@@ -412,6 +412,8 @@ define('io.ox/core/tk/contenteditable-editor', [
             extended_valid_elements: 'blockquote[type]',
             invalid_elements: 'object,iframe,script,embed',
 
+            contextmenu: false,
+
             height: opt.height,
             autoresize_bottom_margin: 0,
             menubar: false,

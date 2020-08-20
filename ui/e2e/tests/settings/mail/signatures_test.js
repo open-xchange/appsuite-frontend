@@ -121,7 +121,7 @@ Scenario('[OXUIB-200] Sanitize signature when editing existing', async function 
 
 Scenario('Sanitize entered signature source code', async function (I) {
 
-    var dialog = locate('.mce-window');
+    var dialog = locate('.tox-dialog');
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
 
@@ -135,11 +135,11 @@ Scenario('Sanitize entered signature source code', async function (I) {
 
     async function set(text, clean) {
         I.say('Add: source code');
-        I.click('~Source code', '.mce-top-part');
+        I.click('~Source code', '.tox-editor-header');
         I.waitForElement(dialog);
         within(dialog, () => {
             I.appendField('textarea', text);
-            I.click('Ok');
+            I.click('Save');
         });
 
         I.say('Check: body.innerHTML unchanged');
@@ -148,7 +148,7 @@ Scenario('Sanitize entered signature source code', async function (I) {
 
         I.say('Check: value');
         I.waitForDetached(dialog);
-        I.click('~Source code', '.mce-top-part');
+        I.click('~Source code', '.tox-editor-header');
         I.waitForElement(dialog);
         within(dialog, () => {
             I.seeInField('textarea', clean);
