@@ -55,3 +55,18 @@ Scenario('check actions', async function (I, tasks, dialogs) {
     I.waitForVisible('.summary.empty');
     I.waitForDetached('.modal-dialog');
 });
+
+Scenario('[XSS] [OXUIB-401] No malicious code execution in mail reminders', async function (I, tasks) {
+    I.login('app=io.ox/tasks');
+    tasks.waitForApp();
+    tasks.newTask();
+    I.fillField('Subject', 'Test Task');
+    I.fillField('Description', 'mail://hello"onmouseover=document.title=1337;"@example.com');
+    tasks.create();
+
+    I.waitForVisible('.tasks-detailview');
+    // allows alerts, would be closed directly otherwise
+    I.amAcceptingPopups();
+    I.moveCursorTo('.ox-internal-mail-link');
+    I.dontSeeInTitle('1337');
+});
