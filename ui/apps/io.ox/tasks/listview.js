@@ -68,7 +68,7 @@ define('io.ox/tasks/listview', [
         index: 200,
         draw: function (baton) {
             this.append(
-                $('<div class="title">').append(
+                $('<div class="title">').text(
                     baton.data.title
                 )
             );
