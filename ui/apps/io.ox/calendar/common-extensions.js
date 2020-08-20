@@ -36,38 +36,12 @@ define('io.ox/calendar/common-extensions', [
 
     var extensions = {
 
-        title: function (baton) {
-            this.append($('<div class="title">').text(getTitle(baton)));
-        },
-
         h1: function (baton) {
             this.append($('<h1 class="subject clear-title">').append(getTitle(baton, { parse: true })));
         },
 
         h2: function (baton) {
             this.append($('<h2 class="subject">').text(getTitle(baton)));
-        },
-
-        interval: function (baton) {
-            var tmp = $('<div>');
-            ext.point('io.ox/calendar/detail/date').invoke('draw', tmp, baton);
-            this.append(
-                $('<span class="interval">').append(tmp.find('.interval').html())
-            );
-        },
-
-        day: function (baton) {
-            var tmp = $('<div>');
-            ext.point('io.ox/calendar/detail/date').invoke('draw', tmp, baton);
-            this.append(
-                $('<span class="day">').append(tmp.find('.day').html())
-            );
-        },
-
-        location: function (baton) {
-            this.append(
-                $('<span class="location">').append(baton.data.location)
-            );
         },
 
         locationDetail: function (baton) {

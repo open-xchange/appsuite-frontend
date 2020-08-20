@@ -12,12 +12,15 @@
  */
 
 define('io.ox/contacts/listview', [
-    'io.ox/contacts/common-extensions',
     'io.ox/core/extensions',
+    'io.ox/contacts/util',
+    'gettext!io.ox/contacts',
     'less!io.ox/contacts/style'
-], function (extensions, ext) {
+], function (ext, util, gt) {
 
     'use strict';
+
+    // used for "old" mobile search result only
 
     ext.point('io.ox/contacts/listview/item').extend({
         id: 'default',
@@ -42,7 +45,21 @@ define('io.ox/contacts/listview', [
     ext.point('io.ox/contacts/listview/item/default/row1').extend({
         id: 'fullname',
         index: 200,
-        draw: extensions.fullname
+        draw: function (baton) {
+            var data = baton.data,
+                fullname = $.trim(util.getFullName(data)),
+                name;
+            if (fullname) {
+                name = fullname;
+                // use html output
+                fullname = util.getFullName(data, true);
+            } else {
+                name = $.trim(util.getFullName(data) || data.yomiLastName || data.yomiFirstName || data.display_name || util.getMail(data));
+            }
+            this.append(
+                $('<div class="fullname">').append(name)
+            );
+        }
     });
 
     ext.point('io.ox/contacts/listview/item/default').extend({
@@ -58,7 +75,12 @@ define('io.ox/contacts/listview', [
     ext.point('io.ox/contacts/listview/item/default/row2').extend({
         id: 'bright',
         index: 200,
-        draw: extensions.bright
+        draw: function (baton) {
+            var text =  baton.data.mark_as_distributionlist ? gt('Distribution list') : $.trim(util.getJob(baton.data));
+            this.append(
+                $('<span class="bright">').append(text)
+            );
+        }
     });
 
 });
