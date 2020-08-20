@@ -171,12 +171,13 @@ define('io.ox/switchboard/extensions', [
     }
 
     function createConferenceItem(type, title, baton) {
+        var disabled = api.isMyself(baton.data.email1) || (!api.isOnline() && type === 'zoom');
         return $('<li role="presentation">').append(
             $('<a href="#">').text(title)
-            .toggleClass('disabled', api.isMyself(baton.data.email1))
+                .toggleClass('disabled', disabled)
             .on('click', baton.data, function (e) {
                 e.preventDefault();
-                actionsUtil.invoke('io.ox/switchboard/call-user', ext.Baton({ type: type, data: [e.data] }));
+                if (!disabled) actionsUtil.invoke('io.ox/switchboard/call-user', ext.Baton({ type: type, data: [e.data] }));
             })
         );
     }

@@ -57,6 +57,9 @@ define('io.ox/switchboard/call/outgoing', [
                         var state = this.conference.model.get('state');
                         this.$footer.empty();
                         switch (state) {
+                            case 'offline':
+                                this.renderCancelButton();
+                                break;
                             case 'unauthorized':
                                 this.renderConnectButtons();
                                 break;
@@ -87,6 +90,12 @@ define('io.ox/switchboard/call/outgoing', [
                         ));
                         this.toggleCallButton();
                         this.$('button[data-action="call"]').focus();
+                    },
+                    renderCancelButton: function () {
+                        this.$footer.append($('<div class="switchboard-actions">').append(
+                            this.createButton('default', 'cancel', 'times', gt('Cancel'))
+                        ));
+                        this.$('button[data-action="cancel"]').focus();
                     },
                     createButton: function (type, action, icon, title) {
                         return $('<button type="button" class="btn btn-link">')
