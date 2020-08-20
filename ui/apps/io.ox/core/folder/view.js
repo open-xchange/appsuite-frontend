@@ -71,8 +71,9 @@ define('io.ox/core/folder/view', [
         }
 
         function applyWidth(x) {
+            var left = x === undefined ? '' : (x + 8) + 'px';
             var width = x === undefined ? '' : x + 'px';
-            nodes.body.css('left', width);
+            nodes.body.css('left', left);
             nodes.sidepanel.css('width', width);
         }
 

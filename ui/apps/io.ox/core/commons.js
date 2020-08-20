@@ -243,6 +243,8 @@ define('io.ox/core/commons', [
 
                 folderAPI.get(folder_id).done(function success(data) {
 
+                    if (data.id === '6') data.title = 'All users';
+
                     var total = countGridData ? grid.getIds().length : data.total,
                         node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
                     grid.meta = {
