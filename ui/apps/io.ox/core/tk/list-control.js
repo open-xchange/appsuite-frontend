@@ -57,7 +57,7 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
             if ((isVertical && left.height() === size) || (!isVertical && left.width() === size)) return;
 
             left.css(isVertical ? 'height' : 'width', size);
-            right.css(isVertical ? 'top' : 'left', size);
+            right.css(isVertical ? { top: size } : { left: size + 8 });
 
             storeSize(this.listView.app, size, isVertical ? 'height' : 'width');
         },
@@ -85,7 +85,7 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
                         width = Math.max(min, Math.min(e.pageX - base, max));
                     }
                     left.css('width', width);
-                    right.css('left', width);
+                    right.css('left', width + 8);
                 },
                 'mouseup.resize': function () {
                     $(this)

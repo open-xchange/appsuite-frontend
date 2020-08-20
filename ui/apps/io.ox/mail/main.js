@@ -1291,8 +1291,9 @@ define('io.ox/mail/main', [
 
                 function applyWidth(x) {
                     var width = x === undefined ? '' : x + 'px';
-                    app.right.css('left', width);
+                    var left = x === undefined ? '' : (x + 8) + 'px';
                     app.left.css('width', width);
+                    app.right.css('left', left);
                 }
 
                 function applyHeight(x) {

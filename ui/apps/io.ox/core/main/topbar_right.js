@@ -112,7 +112,7 @@ define('io.ox/core/main/topbar_right', [
             var ul = $('<ul id="topbar-background-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
                 a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">')
                     .attr('aria-label', gt('Select background'))
-                    .append('<i class="fa fa-picture-o launcher-icon" aria-hidden="true">'),
+                    .append('<i class="fa fa-paint-brush launcher-icon" aria-hidden="true">'),
                 dropdown = new Dropdown({
                     // have a simple model to track changes (e.g. availability)
                     model: new Backbone.Model({}),
@@ -123,7 +123,6 @@ define('io.ox/core/main/topbar_right', [
                     $ul: ul,
                     $toggle: a
                 });
-
             ext.point('io.ox/core/appcontrol/right/backgrounds').invoke('extend', dropdown);
             this.append(dropdown.render().$el.find('a').attr('tabindex', -1).end());
         }
@@ -133,24 +132,28 @@ define('io.ox/core/main/topbar_right', [
         id: 'list',
         index: 100,
         extend: function () {
-            if (_.device('smartphone')) return;
 
-            this.link('background1', gt('Background 1'), function (e) {
+            this.link('background2', 'No background image', handler.bind(null, 0))
+                .divider()
+                .link('background1', 'Sunset', handler.bind(null, 1))
+                .link('background2', 'Mountains', handler.bind(null, 2))
+                .link('background3', 'Ocean', handler.bind(null, 3))
+                .link('background4', 'Gradient', handler.bind(null, 4))
+                .link('background5', 'Green', handler.bind(null, 5))
+                .link('background6', 'City', handler.bind(null, 6));
+
+            function handler(n, e) {
                 e.preventDefault();
-                $('#io-ox-core').removeClass('img2 img3').addClass('background img1');
-            });
-            this.link('background2', gt('Background 2'), function (e) {
-                e.preventDefault();
-                $('#io-ox-core').removeClass('img1 img3').addClass('background img2');
-            });
-            this.link('background2', gt('Background 3'), function (e) {
-                e.preventDefault();
-                $('#io-ox-core').removeClass('img1 img2').addClass('background img3');
-            });
-            this.link('background2', gt('No background image'), function (e) {
-                e.preventDefault();
-                $('#io-ox-core').removeClass('img1 img2 img3 background');
-            });
+                select(n);
+            }
+
+            function select(n) {
+                $('#io-ox-core').removeClass('img0 img1 img2 img3 img4 img5 img6 background');
+                $('#io-ox-core').addClass('background img' + (n || 0));
+                _.setCookie('background', n);
+            }
+
+            select(_.getCookie('background'));
         }
     });
 

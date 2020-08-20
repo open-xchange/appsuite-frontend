@@ -56,6 +56,10 @@ define('io.ox/core/folder/api', [
     function renameDefaultCalendarFolders(items) {
 
         var renameItems = [].concat(items).filter(function (item) {
+                // rename GAB
+                if (item.id === '6' || item.id === 6) {
+                    item.display_title = item.title = 'All users';
+                }
                 // only for calendar
                 if (!/^(contacts|calendar|tasks|event)$/.test(item.module)) return false;
                 // rename default calendar
@@ -426,6 +430,10 @@ define('io.ox/core/folder/api', [
         list = sort.apply(id, list);
         // 3. inject index
         _(list).each(injectIndex.bind(null, id));
+        // 4. rename
+        _(list).each(function (data) {
+            if (data.id === '6' || data.id === 6) data.title = data.display_title = 'All users';
+        });
         // done
         return list;
     }
@@ -628,6 +636,8 @@ define('io.ox/core/folder/api', [
             }
         )
         .pipe(function (data) {
+            // rename gab
+            if (id === '6') data.title = data.display_title = 'All users';
             // update/add model
             var model = pool.addModel(data);
             if (_(model.changed).size()) {

@@ -62,7 +62,6 @@
         left: 0;
         height: @toolbar-height;
         line-height: @toolbar-height - 1;
-        background-color: #fff;
         z-index: 2;
 
         a {
@@ -155,7 +154,7 @@
     &.top-toolbar .vgrid-toolbar.top,
     &.bottom-toolbar .vgrid-toolbar.bottom { display: flex; }
 
-    &.top-toolbar .vgrid-scrollpane { top: @toolbar-height; }
+    &.top-toolbar .vgrid-scrollpane { top: @toolbar-height + 24px; }
 
     &.bottom-toolbar .vgrid-scrollpane { bottom: @toolbar-height; }
 
@@ -171,12 +170,13 @@
     outline: 0;
     overflow: hidden;
     position: absolute;
-    right: 0;
-    left: 0;
+    right: 8px;
+    left: 8px;
     font-size: @vgrid-font-size;
     padding: 10px 18px 14px 18px;
     color: @text-color;
-    background-color: @background; /* resolves hw accel anti-aliasing */
+    /* resolves hw accel anti-aliasing */
+    /* background-color: @background; */
     border-radius: 6px;
     * {
         .ellipsis();
@@ -190,10 +190,7 @@
         text-align: center;
         line-height: 1em;
         padding: 5px 16px 4px 16px;
-        background-color: mix(@text-color, @background, 100%/15);
         cursor: pointer;
-        .vertical-gradient(@background, mix(@text-color, @background, 1500%/255));
-
         &.left { text-align: left; }
     }
 

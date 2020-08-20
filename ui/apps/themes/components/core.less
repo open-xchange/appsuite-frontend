@@ -247,6 +247,10 @@ div.hopscotch-bubble {
     }
 }
 
+.el-gradiente() {
+    background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.50), #ffffff 40%);
+}
+
 #io-ox-core {
     // use explicit z-index (e.g. so that side-popups appear above)
     z-index: 0;
@@ -259,16 +263,117 @@ div.hopscotch-bubble {
     }
 
     transition: filter 1s linear, opacity 1s linear;
+
     &.background {
         background-size: cover;
+        &.img0 {
+            background-image: linear-gradient(0deg, #efedec, #ffffff);
+            #io-ox-topsearch .form-control {
+                background-color: #f1f0ee;
+            }
+        }
         &.img1 {
-            background-image: url(@bg-image-1);
+            background-image: url('apps/themes/default/backgrounds/sunset.jpg');
         }
         &.img2 {
-            background-image: url(@bg-image-2);
+            background-image: url('apps/themes/default/backgrounds/mountains.jpg');
         }
         &.img3 {
-            background-image: url(@bg-image-3);
+            background-image: url('apps/themes/default/backgrounds/ocean.jpg');
+        }
+        &.img4 {
+            background-image: url('apps/themes/default/backgrounds/gradient.jpg');
+            background-size: initial;
+            background-position: bottom;
+        }
+        &.img5 {
+            background-image: url('apps/themes/default/backgrounds/green.jpg');
+        }
+        &.img6 {
+            background-image: url('apps/themes/default/backgrounds/city.jpg');
+            background-position: top;
+        }
+
+        #io-ox-appcontrol {
+            background: #ffffff20;
+        }
+
+        #io-ox-topsearch .form-control {
+            background-color: white;
+        }
+
+        #io-ox-screens {
+            top: 80px;
+        }
+
+        .window-sidepanel {
+            border-radius: 0px 6px 0px 0px;
+            background-color: #ffffffc0;
+            background-image: none;
+        }
+
+        .folder-tree {
+            padding: 0 16px;
+        }
+
+        .io-ox-mail-window .rightside, .io-ox-contacts-window .rightside {
+            background-color: transparent;
+            border-radius: 6px 0 0 0;
+        }
+
+        .io-ox-mail-window .rightside {
+            background-image: linear-gradient(0deg, transparent, rgba(255, 255, 255, 0.5));
+        }
+
+        .io-ox-contacts-window .rightside {
+            .el-gradiente();
+        }
+
+        .list-view-control {
+            padding-top: 16px;
+            border-radius: 6px 6px 0 0;
+            .el-gradiente();
+            .generic-toolbar.top {
+                top: 14px;
+            }
+            .list-view {
+                top: 64px;
+            }
+        }
+
+        .thread-view-control {
+            top: 64px;
+        }
+
+        .thread-view-list {
+            padding: 0 32px 24px 32px;
+        }
+
+        .rightside .classic-toolbar-container {
+            position: absolute;
+            top: 16px;
+            left: 0;
+            right: 0;
+            padding-left: 16px;
+        }
+
+        .contact-grid-index {
+            top: 0;
+            bottom: 0;
+            background-color: #ffffff80;
+            padding-top: 16px;
+            margin-bottom: 0;
+            border-radius: 6px 0 0 0;
+        }
+
+        .contact-grid-container {
+            .el-gradiente();
+            border-radius: 0 6px 0 0;
+        }
+
+        .vgrid-toolbar {
+            padding: 16px 0 0 16px;
+            height: 56px;
         }
     }
 }

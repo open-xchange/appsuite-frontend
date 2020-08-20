@@ -48,7 +48,7 @@
 #io-ox-core {
     #io-ox-topbar { display: none; }
     #io-ox-screens {
-        top: @appcontrol-height + 8px;
+        top: @appcontrol-height + 16px;
         .smartphone & {
             top: @appcontrol-height-smartphone;
         }
@@ -355,9 +355,10 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
                 font-size: 18px;
                 text-decoration: none;
                 color: @appcontrol-launcher-color;
+                border-radius: @default-border-radius;
 
                 &:hover, &:focus {
-                    background: rgba(0, 0, 0, .3);
+                    background: rgba(0, 0, 0, 0.1);
                     outline: 0;
                     color: @appcontrol-launcher-color-highlight;
                 }
