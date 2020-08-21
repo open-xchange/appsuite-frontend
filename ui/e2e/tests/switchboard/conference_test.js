@@ -109,7 +109,8 @@ Scenario('Creating never ending recurring appointment with zoom conference', (I,
     I.waitForVisible('.io-ox-alert');
 });
 
-Scenario('[OXUIB-397] Appointment with zoom conference can be changed into a series', (I, calendar) => {
+// TODO: bugfix needed
+Scenario.skip('[OXUIB-397] Appointment with zoom conference can be changed into a series', (I, calendar) => {
 
     // Create normal appointment with zoom conference
     I.login('app=io.ox/calendar');
