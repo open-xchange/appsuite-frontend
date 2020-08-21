@@ -112,7 +112,7 @@ define('io.ox/switchboard/views/call-history', [
                 return model.get('missed') && model.get('date') > lastSeen;
             });
             this.$indicator.toggleClass('hidden', !hasUnseen);
-            this.$el.toggle(this.collection.length > 0);
+            this.$el.find('.dropdown-toggle').toggle(this.collection.length > 0);
         },
         removeItems: function () {
             this.$ul.children().slice(1).remove();
@@ -172,8 +172,9 @@ define('io.ox/switchboard/views/call-history', [
             return this;
         },
         createLink: function () {
-            var $a = $('<a href="#" role="menuitem" tabindex="-1" draggable="false">');
+            var $a = $('<a href="#" role="menuitem" draggable="false">');
             if (this.type === 'phone') $a.attr('href', 'callto:' + this.model.get('number'));
+            $a.attr('tabindex', this.model === _(this.model.collection.models).last() ? 0 : -1);
             return $a;
         },
         createIcon: function () {
