@@ -25,35 +25,34 @@ Ensure to always use the expected data type for a setting. This table lists some
 
 # Feature toggles
 
-App Suite UI offers different feature toggles. These toggles control the
- appearance (or flavor) of different features in the UI.
+App Suite UI offers different feature toggles. These toggles control the appearance (or flavor) of different features in the UI.
 
 <config>io.ox/core//features/dedicatedLogoutButton=`<bool>`</config>
-Show a logout button at the topbar.
+Show a logout button at the topbar. Default is `false`.
 
 <config>io.ox/core//features/folderIcons=`<bool>`</config>
-Show icons in the folder tree next to folder labels.
+Show icons in the folder tree next to folder labels. Default is `false`.
 
 <config>io.ox/core//features/logoutButtonHint=`<bool>`</config>
-Shows a reminder tooltip if the user has not logged during the last page visit.
+Shows a reminder tooltip if the user has not logged during the last page visit. Default is `false`.
 
 <config>io.ox/core//features/reloginPopup=`<bool>`</config>
-Show a modal dialog to enable an inline relogin without showing the login page.
+Show a modal dialog to enable an inline relogin without showing the login page. Default is `true` (for non-oidc and non-saml environments)
 
 <config>io.ox/core//features/storeSavePoints=`<bool>`</config>
-Enable/disable restorepoints for edit dialogs.
+Enable/disable restorepoints for edit dialogs. Default is `true`.
 
 <config>io.ox/core//features/validateMailAddresses=`<bool>`</config>
-Enable validiation for email addresses in mail compose dialog.
+Enable validiation for email addresses in mail compose dialog. Default is `true`.
 
 <config>io.ox/core//features/validatePhoneNumbers=`<bool>`</config>
-Enable validiation for phone numbers.
+Enable validiation for phone numbers. Default is `false`.
 
 <config>io.ox/core//features/windowHeaderPosition=`<string>`</config>
 Placement of buttons in new/edit dialogs. Default is 'bottom' (`'top', 'bottom'`)
 
 <config>io.ox/core//disabledSettingsPanes=`<string>`</config>
-Disable one or more settings panes via extension point ids of _io.ox/settings/pane_ and it's subgroup extension points (easily identifiable as "&folder=virtual/settings/<id>" in adress bar)
+Comma-separated list of extension point ids of _io.ox/settings/pane_. Disable one or more settings panes and it's subgroup extension points (easily identifiable as "&folder=virtual/settings/<id>" in adress bar). Default is unset;
 
 <config>io.ox/core//pdf/enablePreconversionOnUpload=`<bool>`</config>
 Enable/disable PDF preconversion of office documents on file upload and when a new file version is added. Default is `true`.
@@ -62,16 +61,16 @@ Enable/disable PDF preconversion of office documents on file upload and when a n
 Enable/disable PDF preconversion of office documents for mail attachments. Default is `true`.
 
 <config>io.ox/core//pdf/enableRangeRequests=`<bool>`</config>
-Enable/disable range requests support to fetch PDF rendering data in chunks. Default is 'true'.
+Enable/disable range requests support to fetch PDF rendering data in chunks. Default is `true`.
 
 ## Topbar / Apps
-
-<config>io.ox/core//apps/quickLaunchCount=`<number>`</config>
-How many quick launch icons should appear in the Topbar by default (default: `3`)
 
 <config>io.ox/core//apps/quickLaunch=`<string>`</config>
 Default Apps for quick launcher. Comma-separated string of App IDs
 Default: `'io.ox/mail/main,io.ox/calendar/main,io.ox/files/main'`
+
+<config>io.ox/core//apps/quickLaunchCount=`<number>`</config>
+How many quick launch icons should appear in the Topbar by default (default: `3`)
 
 <config>io.ox/core//logoFileName=`<string>`</config>
 Change the default file name for the logo in the topbar. Default (`logo.png`)
@@ -82,35 +81,35 @@ or an App ID. I.e. `https://sample.com` or `io.ox/mail/main`. Default is unset.
 
 ## Notifications
 
-<config>io.ox/core//autoOpenNotificationarea=`<bool>`</config>
-Open notification area automatically on new notification.
+<config>io.ox/core//autoOpenNotification=`<bool>`</config>
+Open notification area automatically on new notification. Default is `true`.
 
 <config>io.ox/core//notificationsHidingTimer=`<number>`</config>
-Hide notifications for n milliseconds after the user clicks on 'Notify me again later' (default is 1800000 (30 minutes)).
+Hide notifications for n milliseconds after the user clicks on 'Notify me again later' (default is `1800000` (30 minutes)).
 
 <config>io.ox/core//showDesktopNotifications=`<bool>`</config>
 Show native desktop notifications. Default `true`.
 Important: Depends also on browser settings.
 
 <config>io.ox/core//properties/contactImageMaxWidth=`<number>`</config>
-Maximum target image width when croping contact/user images in pixels (default: 500).
+Maximum target image width when croping contact/user images in pixels (default: `500`).
 
 ## Feedback dialog
 
-<config>io.ox/core//feedback/show=`<bool>`</config>
-Show one or more feedback buttons. Default value is 'both' which shows a dropdown entry in the settings menu and a button in the main content window. (topbar/side/both).
+<config>io.ox/core//feedback/show=`<string>`</config>
+Show one or more feedback buttons. Default value is `both` which shows a dropdown entry in the settings menu and a button in the main content window (topbar/side/both).
 
 <config>io.ox/core//feedback/supportlink`<string>`</config>
-Hyperlink to a support site referenced in the feedback dialog.
+Hyperlink to a support site referenced in the feedback dialog. Default is unset.
 
 <config>io.ox/core//feedback/position`<string>`</config>
 Set position of the feedback button. Default value is `right`. (`left|right`).
 
 <config>io.ox/core//feedback/showHover=`<bool>`</config>
-Show rating string on mouse hover in feedback dialog.
+Show rating string on mouse hover in feedback dialog. Default `true`.
 
 <config>io.ox/core//feedback/showModuleSelect=`<bool>`</config>
-Defines if the feedback dialog is aware of it's current App and the rating is based on this. If set to "true" every App can be rated regardless which App is currently running.
+Defines if the feedback dialog is aware of it's current App and the rating is based on this. If set to "true" every App can be rated regardless which App is currently running. Default `true`.
 
 ## Misc
 
@@ -118,19 +117,19 @@ Defines if the feedback dialog is aware of it's current App and the rating is ba
 Fetch limit for groups plugin when requesting details of members. Default `1000`
 
 <config>io.ox/core//refreshInterval=`<number>`</config>
-Automatic UI refresh interval in milliseconds (default 300000 (5 minutes)).
+Automatic UI refresh interval in milliseconds. Default is `300000` (5 minutes).
 
 <config>io.ox/core//settings/downloadsDisabled=`<bool>`</config>
-Enables/disables download pane for additional software components in settings.
+Enables/disables download pane for additional software components in settings. Default `false`.
 
 <config>io.ox/core//theme=`<string>`</config>
-Current user theme. Default `default`
+Current user theme. Default is `default`
 
 
 ## Mail compose: tinyMCE text editor
 
-<config>io.ox/core//maxUploadIdleTimeout</config>
-Timeout for contenteditable-editor in milliseconds when adding inline images
+<config>io.ox/core//maxUploadIdleTimeout=`<number>`</config> 200000
+Timeout in miliseconds for contenteditable-editor in milliseconds when adding inline images. Default is `200000`.
 
 <config>io.ox/core//tinyMCE/theme_advanced_buttons1=`<string>`</config>
 List of tinyMCE toolbar actions separated by space - targets toolbar1<br>
@@ -422,7 +421,7 @@ Max size of returned characters for mail reply/forward in bytes (API parameter) 
 Max size of returned characters for mail viewing in bytes. Default: `102400` (100 kB)
 
 <config>io.ox/mail//features/instantAttachmentUpload=`<bool>`</config>
-Feature toggle to enable/disable instant attachment upload. Default is 'true'
+Feature toggle to enable/disable instant attachment upload. Default is `true`
 
 ### Mail compose: Image resize
 
