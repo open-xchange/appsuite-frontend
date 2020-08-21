@@ -753,7 +753,7 @@ define('io.ox/contacts/api', [
         function load(node, url, opt) {
             _.defer(function () {
                 // use lazyload?
-                var enableLazyload = opt.lazyload || opt.container || _.first(node.closest('.scrollpane, .scrollable, .scrollpane-lazyload'));
+                var enableLazyload = opt.lazyload || opt.container || _.first(node.closest('.scrollpane, .scrollable:not(.swiper-slide), .scrollpane-lazyload'));
 
                 if (enableLazyload) {
                     if (opt.fallback) node.css('background-image', 'url(' + fallback + ')');
