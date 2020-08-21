@@ -285,7 +285,7 @@ define('io.ox/calendar/month/view', [
             switch (e.type) {
                 case 'mouseenter':
                     el.addClass('hover');
-                    if (bg) el.css('background-color', util.lightenDarkenColor(bg, 0.9));
+                    if (bg) el.css('background-color', util.lightenDarkenColor(bg, 0.93));
                     break;
                 case 'mouseleave':
                     el.removeClass('hover');
