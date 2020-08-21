@@ -11,7 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/search', ['io.ox/backbone/views/disposable', 'io.ox/chat/events'], function (DisposableView, events) {
+define('io.ox/chat/views/search', [
+    'io.ox/backbone/views/disposable',
+    'io.ox/chat/events',
+    'gettext!io.ox/chat'
+], function (DisposableView, events, gt) {
 
     'use strict';
 
@@ -32,7 +36,7 @@ define('io.ox/chat/views/search', ['io.ox/backbone/views/disposable', 'io.ox/cha
 
         render: function () {
             this.$el.append(
-                $('<input type="text" spellcheck="false" autocomplete="false" placeholder="Search or start new chat">'),
+                $('<input type="text" spellcheck="false" autocomplete="false" placeholder="' + gt('Search or start new chat') + '">'),
                 $('<button type="button" class="btn btn-link">').append($('<i class="fa fa-times-circle" aria-hidden="true">'))
             );
             return this;

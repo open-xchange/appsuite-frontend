@@ -21,8 +21,9 @@ define('io.ox/chat/views/chat', [
     'io.ox/chat/views/reference-preview',
     'io.ox/chat/events',
     'io.ox/chat/data',
-    'io.ox/backbone/views/toolbar'
-], function (ext, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, ToolbarView) {
+    'io.ox/backbone/views/toolbar',
+    'gettext!io.ox/chat'
+], function (ext, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, ToolbarView, gt) {
 
     'use strict';
 
@@ -33,7 +34,7 @@ define('io.ox/chat/views/chat', [
         draw: function () {
             this.attr('data-prio', 'hi').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="close-chat">').append(
-                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), 'Chats'
+                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), gt('Chats')
                 )
             );
         }
@@ -69,7 +70,7 @@ define('io.ox/chat/views/chat', [
             var model = baton.model;
             if (!model.isMember() || model.isPrivate() || (model.isChannel() && !model.get('active'))) return;
             this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat">').attr('data-id', model.id).text('Edit chat').on('click', events.forward)
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat">').attr('data-id', model.id).text(gt('Edit chat')).on('click', events.forward)
             );
         }
     });
@@ -82,7 +83,7 @@ define('io.ox/chat/views/chat', [
             var model = baton.model;
             if (model.isChannel() && !model.get('active')) return;
             this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="unsubscribe-chat">').attr('data-id', model.id).text('Hide chat').on('click', events.forward)
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="unsubscribe-chat">').attr('data-id', model.id).text(gt('Hide chat')).on('click', events.forward)
             );
         }
     });
@@ -95,7 +96,7 @@ define('io.ox/chat/views/chat', [
             var model = baton.model;
             if (!model.isGroup()) return;
             this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="leave-group">').attr('data-id', model.id).text('Leave chat').on('click', events.forward)
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="leave-group">').attr('data-id', model.id).text(gt('Leave chat')).on('click', events.forward)
             );
         }
     });
@@ -108,7 +109,7 @@ define('io.ox/chat/views/chat', [
             var model = baton.model;
             if (!model.isChannel() || (model.isChannel() && !model.get('active'))) return;
             this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="leave-channel">').attr('data-id', model.id).text('Leave chat').on('click', events.forward)
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="leave-channel">').attr('data-id', model.id).text(gt('Leave chat')).on('click', events.forward)
             );
         }
     });
@@ -121,7 +122,7 @@ define('io.ox/chat/views/chat', [
             var model = baton.model;
             if (!(model.isChannel() && !model.get('active'))) return;
             this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="join-channel">').attr('data-id', model.id).text('Join chat').on('click', events.forward)
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="join-channel">').attr('data-id', model.id).text(gt('Join chat')).on('click', events.forward)
             );
         }
     });
@@ -201,7 +202,8 @@ define('io.ox/chat/views/chat', [
                     delete this.timer[email];
                 },
                 add: function (email, name) {
-                    this.$el.append($('<div class="name">').attr('data-user-id', email).text(name + ' is typing'));
+                    //#. %1$s: name of the chat member that is currently typing
+                    this.$el.append($('<div class="name">').attr('data-user-id', email).text(gt('%1$s is typing'), name));
                 },
                 hide: function (email) {
                     this.reset(email);
@@ -258,7 +260,7 @@ define('io.ox/chat/views/chat', [
                         this.renderDropdown()
                     )
                 ),
-                new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: 'Chat actions' }).render(new ext.Baton({ model: this.model })).$el,
+                new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: gt('Chat actions') }).render(new ext.Baton({ model: this.model })).$el,
                 this.$scrollpane = $('<div class="scrollpane">').on('scroll', $.proxy(this.onScroll, this)).append(
                     this.$paginatePrev = $('<div class="paginate prev">').hide(),
                     $('<div class="conversation">').append(
@@ -289,7 +291,7 @@ define('io.ox/chat/views/chat', [
 
         renderEditor: function () {
             if (this.isMember()) {
-                this.$editor = $('<textarea class="form-control" placeholder="Enter message here">');
+                this.$editor = $('<textarea class="form-control" placeholder="' + gt('Enter message here') + '">');
                 return [this.$editor,
                     $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">')
                         .append('<i class="fa fa-paperclip" aria-hidden="true">'),
@@ -299,7 +301,7 @@ define('io.ox/chat/views/chat', [
             if (this.model.get('type') === 'channel') {
                 return $('<button type="button" class="btn btn-default btn-action join" >')
                 .attr({ 'data-cmd': 'join-channel', 'data-id': this.model.get('roomId') })
-                .append('Join');
+                .append(gt('Join'));
             }
         },
 
@@ -314,16 +316,16 @@ define('io.ox/chat/views/chat', [
             }
 
             if (this.model.isPrivate() && this.model.get('active')) {
-                $ul.append(renderItem('Hide chat', { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
+                $ul.append(renderItem(gt('Hide chat'), { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
             } else if (!(this.model.isChannel() && !this.model.get('joined')) && this.model.get('active')) {
-                if (this.model.isMember()) $ul.append(renderItem('Edit chat', { 'data-cmd': 'edit-group-chat', 'data-id': this.model.id }));
-                $ul.append(renderItem('Hide chat', { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
+                if (this.model.isMember()) $ul.append(renderItem(gt('Edit chat'), { 'data-cmd': 'edit-group-chat', 'data-id': this.model.id }));
+                $ul.append(renderItem(gt('Hide chat'), { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
             } else if (this.model.isChannel() && !this.model.get('active')) {
-                $ul.append(renderItem('Join chat', { 'data-cmd': 'join-channel', 'data-id': this.model.id }));
+                $ul.append(renderItem(gt('Join chat'), { 'data-cmd': 'join-channel', 'data-id': this.model.id }));
             }
 
             if (!this.model.isPrivate() && this.model.isMember()) {
-                $ul.append(renderItem('Leave chat', { 'data-cmd': this.model.isChannel() ? 'leave-channel' : 'leave-group', 'data-id': this.model.id }));
+                $ul.append(renderItem(gt('Leave chat'), { 'data-cmd': this.model.isChannel() ? 'leave-channel' : 'leave-group', 'data-id': this.model.id }));
             }
 
             return $ul;

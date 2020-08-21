@@ -16,8 +16,9 @@ define('io.ox/chat/views/history', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/chatAvatar',
     'io.ox/chat/data',
-    'io.ox/backbone/views/toolbar'
-], function (ext, DisposableView, ChatAvatar, data, ToolbarView) {
+    'io.ox/backbone/views/toolbar',
+    'gettext!io.ox/chat'
+], function (ext, DisposableView, ChatAvatar, data, ToolbarView, gt) {
 
     'use strict';
 
@@ -28,7 +29,7 @@ define('io.ox/chat/views/history', [
         draw: function () {
             this.attr('data-prio', 'hi').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="close-chat">').append(
-                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), 'Chats'
+                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), gt('Chats')
                 )
             );
         }
@@ -39,7 +40,8 @@ define('io.ox/chat/views/history', [
         index: 200,
         custom: true,
         draw: function () {
-            this.addClass('toolbar-title').attr('data-prio', 'hi').text('Recent conversations');
+            //#. Used for chats this time, not for mail threads
+            this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('Recent conversations'));
         }
     });
 
@@ -78,9 +80,10 @@ define('io.ox/chat/views/history', [
         render: function () {
             this.$el.append(
                 $('<div class="header">').append(
-                    $('<h2>').append('Recent conversations')
+                    //#. Used for chats this time, not for mail threads
+                    $('<h2>').append(gt('Recent conversations'))
                 ),
-                new ToolbarView({ point: 'io.ox/chat/history/toolbar', title: 'History actions' }).render(new ext.Baton()).$el,
+                new ToolbarView({ point: 'io.ox/chat/history/toolbar', title: gt('History actions') }).render(new ext.Baton()).$el,
                 $('<div class="scrollpane">').append(
                     $('<ul>').append(
                         this.getItems().map(this.renderItem, this)
@@ -105,7 +108,8 @@ define('io.ox/chat/views/history', [
                             $('<div class="body">').append(model.getLastMessage()),
                             $('<button type="button" class="btn btn-default btn-action" >')
                                 .attr({ 'data-cmd': 'open-chat', 'data-id': model.id })
-                                .text('Open')
+                                //#. Used as a verb
+                                .text(gt('Open'))
                         )
                     )
                 );

@@ -30,8 +30,9 @@ define('io.ox/chat/main', [
     'io.ox/chat/views/avatar',
     'io.ox/chat/views/state',
     'settings!io.ox/core',
+    'gettext!io.ox/chat',
     'less!io.ox/chat/style'
-], function (ext, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, AvatarView, StateView, settings) {
+], function (ext, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, AvatarView, StateView, settings, gt) {
 
     'use strict';
 
@@ -140,8 +141,8 @@ define('io.ox/chat/main', [
                             });
                         },
                         useGABOnly: true,
-                        title: 'Start new conversation',
-                        button: 'Start conversation',
+                        title: gt('Start new conversation'),
+                        button: gt('Start conversation'),
                         point: 'io.ox/contacts/addressbook-popup-single'
                     }
                 );
@@ -184,8 +185,8 @@ define('io.ox/chat/main', [
             new ModalDialog({
                 point: 'io.ox/chat/actions/confirmLeavingGroup',
                 backdrop: true,
-                title: 'Leave chat',
-                description: 'Do you really want to leave the chat?'
+                title: gt('Leave chat'),
+                description: gt('Do you really want to leave the chat?')
             })
             .addCancelButton({ left: true })
             .addButton({ action: 'continue', label: 'Yes' })
@@ -423,21 +424,22 @@ define('io.ox/chat/main', [
                             $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
                                 .append($('<i class="fa fa-plus" aria-hidden="true">')),
                             $('<ul class="dropdown-menu">').append(
-                                $('<li class="dropdown-header" role="separator">').append('<span aria-hidden="true">').text('New'),
+                                //#. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
+                                $('<li class="dropdown-header" role="separator">').append('<span aria-hidden="true">').text(gt('New')),
                                 $('<li>').append(
                                     $('<a href="#" role="button">')
                                     .attr({ 'data-cmd': 'start-private-chat', 'data-id': this.model.id })
-                                        .text('Private chat')
+                                        .text(gt('Private chat'))
                                 ),
                                 $('<li>').append(
                                     $('<a href="#" role="button">')
                                         .attr({ 'data-cmd': 'edit-group-chat', 'data-id': this.model.id })
-                                        .text('Group chat')
+                                        .text(gt('Group chat'))
                                 ),
                                 $('<li>').append(
                                     $('<a href="#" role="button">')
                                         .attr({ 'data-cmd': 'edit-group-chat', 'data-id': this.model.id, 'data-type': 'channel' })
-                                        .text('Public channel')
+                                        .text(gt('Public channel'))
                                 )
                             )
                         ),
@@ -455,15 +457,16 @@ define('io.ox/chat/main', [
                     $('<div class="navigation-actions">').append(
                         $('<button type="button" class="btn-nav" data-cmd="show-recent-conversations">').append(
                             $('<i class="fa fa-clock-o btn-icon">'),
-                            $.txt('Recent conversations')
+                            //#. Used for chats this time, not for mail threads
+                            $.txt(gt('Recent conversations'))
                         ),
                         $('<button type="button" class="btn-nav" data-cmd="show-channels">').append(
                             $('<i class="fa fa-hashtag btn-icon">'),
-                            $.txt('All channels')
+                            $.txt(gt('All channels'))
                         ),
                         $('<button type="button" class="btn-nav" data-cmd="show-all-files">').append(
                             $('<i class="fa fa-paperclip btn-icon">'),
-                            $.txt('All files')
+                            $.txt(gt('All files'))
                         )
                     )
                 ),
@@ -479,12 +482,12 @@ define('io.ox/chat/main', [
             this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('chat/width', 320)).append(
                 $('<div class="auth-container">').append(
                     $('<div>').append(
-                        $('<button class="btn btn-primary">').text('Authorize').on('click', function () {
+                        $('<button class="btn btn-primary">').text(gt('Authorize')).on('click', function () {
                             self.$body.empty().parent().busy();
                             data.session.login().then(function success() {
                                 self.draw();
                             }, function fail(err) {
-                                self.drawAuthorizePane(err.message || 'Cannot connect. Please try again later.');
+                                self.drawAuthorizePane(err.message || gt('Cannot connect. Please try again later.'));
                             }).always(function () {
                                 self.$body.parent().idle();
                             });
@@ -503,7 +506,7 @@ define('io.ox/chat/main', [
         id: 'create',
         index: 100,
         prio: 'hi',
-        title: 'New Chat',
+        title: gt('New Chat'),
         dropdown: 'io.ox/chat/list/toolbar/create',
         caret: false,
         customize: function () {
@@ -532,7 +535,8 @@ define('io.ox/chat/main', [
         custom: true,
         draw: function () {
             this.append(
-                $('<li class="dropdown-header" role="separator">').append('<span aria-hidden="true">').text('New')
+                //#. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
+                $('<li class="dropdown-header" role="separator">').append('<span aria-hidden="true">').text(gt('New'))
             );
         }
     });
@@ -543,7 +547,7 @@ define('io.ox/chat/main', [
         custom: true,
         draw: function () {
             this.append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="start-private-chat" data-action="null">').text('Private chat')
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="start-private-chat" data-action="null">').text(gt('Private chat'))
             );
         }
     });
@@ -554,7 +558,7 @@ define('io.ox/chat/main', [
         custom: true,
         draw: function () {
             this.append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat" data-action="null">').text('Group chat')
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat" data-action="null">').text(gt('Group chat'))
             );
         }
     });
@@ -565,7 +569,7 @@ define('io.ox/chat/main', [
         custom: true,
         draw: function () {
             this.append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat" data-type="channel" data-action="none">').text('Public channel')
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat" data-type="channel" data-action="none">').text(gt('Public channel'))
             );
         }
     });

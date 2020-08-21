@@ -15,8 +15,9 @@ define('io.ox/chat/extensions/register', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/actions/util',
     'io.ox/core/capabilities',
-    'io.ox/chat/data'
-], function (ext, actionsUtil, capabilities, data) {
+    'io.ox/chat/data',
+    'gettext!io.ox/chat'
+], function (ext, actionsUtil, capabilities, data, gt) {
 
     'use strict';
 
@@ -82,18 +83,26 @@ define('io.ox/chat/extensions/register', [
         }
     });
 
-    ['Online', 'Absent', 'Busy', 'Offline'].forEach(function (state, index, arr) {
+    // maybe unneeded when filly integrated with other apps
+    var stateTranslations = {
+        online: gt('Online'),
+        absent: gt('Absent'),
+        busy: gt('Busy'),
+        offline: gt('Offline')
+    };
+
+    ['online', 'absent', 'busy', 'offline'].forEach(function (state, index, arr) {
         ext.point('io.ox/core/appcontrol/right/dropdown').extend({
-            id: 'chat/' + state.toLowerCase(),
+            id: 'chat/' + state,
             index: index + 1,
             extend: function () {
                 if (index === 0) {
-                    this.group('Online state');
+                    this.group(gt('Online state'));
                     this.$ul.find('.dropdown-header').last().attr('data-controller', 'chat');
                     this.$ul.find('[role="group"]').last().attr('data-controller', 'chat');
                 }
-                this.option('state', state.toLowerCase(), function () {
-                    return '<span class="fa state large ' + state.toLowerCase() + '"></span> ' + state;
+                this.option('state', state, function () {
+                    return '<span class="fa state large ' + state + '"></span> ' + stateTranslations.state;
                 }, { radio: true, group: true });
                 if (index === arr.length - 1) {
                     this.divider();
@@ -123,7 +132,7 @@ define('io.ox/chat/extensions/register', [
         index: 450,
         prio: 'hi',
         mobile: 'hi',
-        title: 'Start chat',
+        title: gt('Start chat'),
         ref: 'io.ox/chat/actions/start-chat-from-contacts'
     });
 
@@ -135,9 +144,9 @@ define('io.ox/chat/extensions/register', [
             var isHalo = !baton.app || baton.app.id !== 'io.ox/contacts', node;
             this.append(
                 node = $('<section class="block">').append(
-                    $('<h4>').text('Recent chat messages').addClass(isHalo ? 'widget-title clear-title' : ''),
+                    $('<h4>').text(gt('Recent chat messages')).addClass(isHalo ? 'widget-title clear-title' : ''),
                     $('<div class="ox-chat embedded">'),
-                    $('<button class="btn btn-default open-chat">').text('Open chat')
+                    $('<button class="btn btn-default open-chat">').text(gt('Open chat'))
                 ).hide()
             );
             data.chats.initialized.then(function () {
@@ -177,7 +186,7 @@ define('io.ox/chat/extensions/register', [
         index: 350,
         prio: 'hi',
         mobile: 'hi',
-        title: 'Start chat',
+        title: gt('Start chat'),
         ref: 'io.ox/chat/actions/start-chat-from-contacts'
     });
 
@@ -216,8 +225,8 @@ define('io.ox/chat/extensions/register', [
         mobile: 'lo',
         id: 'start-chat',
         section: 'participants',
-        sectionTitle: 'Participant related actions',
-        title: 'Start chat with participants',
+        sectionTitle: gt('Participant related actions'),
+        title: gt('Start chat with participants'),
         ref: 'io.ox/chat/actions/start-chat-from-appointment'
     });
 
@@ -227,10 +236,10 @@ define('io.ox/chat/extensions/register', [
         draw: function (baton) {
             var $fieldset = $('<fieldset class="details">').hide().append(
                 $('<legend class="io-ox-label">').append(
-                    $('<h2>').text('Recent chat messages')
+                    $('<h2>').text(gt('Recent chat messages'))
                 ),
                 $('<div class="ox-chat embedded">'),
-                $('<button class="btn btn-default open-chat">').text('Open chat')
+                $('<button class="btn btn-default open-chat">').text(gt('Open chat'))
             );
             this.append($fieldset);
             data.chats.initialized.then(function () {
@@ -281,7 +290,7 @@ define('io.ox/chat/extensions/register', [
         index: 450,
         prio: 'hi',
         mobile: 'lo',
-        title: 'Reply via chat',
+        title: gt('Reply via chat'),
         ref: 'io.ox/chat/actions/start-chat-from-mail',
         section: 'standard'
     });
@@ -291,7 +300,7 @@ define('io.ox/chat/extensions/register', [
         index: 450,
         prio: 'hi',
         mobile: 'lo',
-        title: 'Reply all via chat',
+        title: gt('Reply all via chat'),
         ref: 'io.ox/chat/actions/start-group-chat-from-mail',
         section: 'standard'
     });
@@ -314,13 +323,13 @@ define('io.ox/chat/extensions/register', [
                     $('<button class="btn btn-default btn-sm" data-cmd="show-chat">')
                         .attr('data-id', room.get('id'))
                         .css('margin-right', '10px')
-                        .text('Open chat')
+                        .text(gt('Open chat'))
                         .click(function () {
                             require(['io.ox/chat/events'], function (events) {
                                 events.trigger('cmd', { cmd: 'show-chat', id: room.get('id') });
                             });
                         }),
-                    'There is already a chat associated with this email'
+                    gt('There is already a chat associated with this email')
                 );
             }
 

@@ -17,8 +17,9 @@ define('io.ox/chat/data', [
     'static/3rd.party/socket.io.slim.js',
     'io.ox/mail/sanitizer',
     'io.ox/chat/util',
-    'io.ox/core/http'
-], function (events, api, io, sanitizer, util, http) {
+    'io.ox/core/http',
+    'gettext!io.ox/chat'
+], function (events, api, io, sanitizer, util, http, gt) {
 
     'use strict';
 
@@ -187,27 +188,41 @@ define('io.ox/chat/data', [
 
             switch (event.type) {
                 case 'room:created':
-                    return _.printf('%1$s created this conversation', getName(originator));
+                    //#. %1$s: name of the creator
+                    return gt('%1$s created this conversation', getName(originator));
                 case 'channel:joined':
-                    return _.printf('%1$s joined the conversation', getNames(members));
+                    //#. %1$s: name of the new participant
+                    return gt('%1$s joined the conversation', getNames(members));
                 case 'members:added':
-                    return _.printf('%1$s added %2$s to the conversation', getName(originator), getNames(_.difference(members, [originator])));
+                    //#. %1$s: name of the participant that added the new participant
+                    //#. %2$s: name of the added participant
+                    return gt('%1$s added %2$s to the conversation', getName(originator), getNames(_.difference(members, [originator])));
                 case 'members:removed':
-                    return _.printf('%1$s removed %2$s from the conversation', getName(originator), getNames(_.difference(members, [originator])));
+                    //#. %1$s: name of the participant that removed the other participant
+                    //#. %2$s: name of the removed participant
+                    return gt('%1$s removed %2$s from the conversation', getName(originator), getNames(_.difference(members, [originator])));
                 case 'image:changed':
-                    return _.printf('%1$s changed the group image', getName(originator), event.fileId);
+                    //#. %1$s: name of a chat participant
+                    return gt('%1$s changed the group image', getName(originator), event.fileId);
                 case 'title:changed':
-                    return _.printf('%1$s changed the group title to "%2$s"', getName(originator), event.title);
+                    //#. %1$s: name of a chat participant
+                    //#. %2$s: the new title
+                    return gt('%1$s changed the group title to "%2$s"', getName(originator), event.title);
                 case 'changeDescription':
-                    return _.printf('%1$s changed the group description to "%2$s"', getName(originator), event.description);
+                    //#. %1$s: name of a chat participant
+                    //#. %2$s: the new description
+                    return gt('%1$s changed the group description to "%2$s"', getName(originator), event.description);
                 case 'room:left':
-                    return _.printf('%1$s left the conversation', getName(originator));
+                    //#. %1$s: name of a chat participant
+                    return gt('%1$s left the conversation', getName(originator));
                 case 'me':
+                    // no need to translate this
                     return _.printf('%1$s %2$s', getName(originator), event.message);
                 case 'text':
                     return event.message;
                 default:
-                    return _.printf('Unknown system message %1$s', event.type);
+                    //#. %1$s: messagetext
+                    return gt('Unknown system message %1$s', event.type);
             }
         },
 
@@ -593,7 +608,7 @@ define('io.ox/chat/data', [
             var date = moment(last.date);
             return date.calendar(null, {
                 sameDay: 'LT',
-                lastDay: '[Yesterday]',
+                lastDay: '[' + gt('Yesterday') + ']',
                 lastWeek: 'L',
                 sameElse: 'L'
             });
@@ -1143,7 +1158,8 @@ define('io.ox/chat/data', [
     //
 
     function getName(email) {
-        if (email === data.user.email) return '<span class="name">You</span>';
+        //#. shown instead of your name for your own chat messages
+        if (email === data.user.email) return '<span class="name">' + gt('You') + '</span>';
         return getNames([email]);
     }
 
@@ -1152,8 +1168,9 @@ define('io.ox/chat/data', [
             _(list)
             .map(function (email) {
                 var model = data.users.getByMail(email);
-                var name = (model ? model.getName() : 'Unknown user');
-                if (email === data.user.email) name = 'You';
+                var name = (model ? model.getName() : gt('Unknown user'));
+                //#. shown instead of your name for your own chat messages
+                if (email === data.user.email) name = gt('You');
 
                 return '<span class="name">' + name + '</span>';
             })
@@ -1162,8 +1179,10 @@ define('io.ox/chat/data', [
     }
 
     function join(list) {
-        if (list.length <= 2) return list.join(' and ');
-        return list.slice(0, -1).join(', ') + ', and ' + list[list.length - 1];
+        //#. used as a separator text between multiple participants of a chat example: Paul and Bob
+        if (list.length <= 2) return list.join(gt(' and '));
+        //#. used as a separator text between multiple participants of a chat example: Paul and Bob
+        return list.slice(0, -1).join(', ') + gt(', and ') + list[list.length - 1];
     }
 
     return data;

@@ -16,8 +16,9 @@ define('io.ox/chat/views/fileList', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/data',
     'io.ox/backbone/views/toolbar',
-    'io.ox/chat/util'
-], function (ext, DisposableView, data, ToolbarView, util) {
+    'io.ox/chat/util',
+    'gettext!io.ox/chat'
+], function (ext, DisposableView, data, ToolbarView, util, gt) {
 
     'use strict';
 
@@ -28,7 +29,7 @@ define('io.ox/chat/views/fileList', [
         draw: function () {
             this.attr('data-prio', 'hi').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="close-chat">').append(
-                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), 'Chats'
+                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), gt('Chats')
                 )
             );
         }
@@ -39,7 +40,7 @@ define('io.ox/chat/views/fileList', [
         index: 200,
         custom: true,
         draw: function () {
-            this.addClass('toolbar-title').attr('data-prio', 'hi').text('All files');
+            this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('All files'));
         }
     });
 
@@ -74,9 +75,9 @@ define('io.ox/chat/views/fileList', [
         render: function () {
             this.$el.append(
                 $('<div class="header">').append(
-                    $('<h2>').append('All files')
+                    $('<h2>').append(gt('All files'))
                 ),
-                new ToolbarView({ point: 'io.ox/chat/files/toolbar', title: 'All files' }).render(new ext.Baton()).$el,
+                new ToolbarView({ point: 'io.ox/chat/files/toolbar', title: gt('All files') }).render(new ext.Baton()).$el,
                 $('<div class="scrollpane">').append(
                     $('<ul>').append(
                         this.getItems().map(this.renderItem, this)

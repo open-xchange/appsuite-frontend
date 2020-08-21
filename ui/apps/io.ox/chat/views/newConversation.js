@@ -14,8 +14,9 @@
 define('io.ox/chat/views/newConversation', [
     'io.ox/backbone/views/disposable',
     'io.ox/contacts/addressbook/popup',
-    'io.ox/chat/events'
-], function (DisposableView, picker, events) {
+    'io.ox/chat/events',
+    'gettext!io.ox/chat'
+], function (DisposableView, picker, events, gt) {
 
     'use strict';
 
@@ -33,11 +34,11 @@ define('io.ox/chat/views/newConversation', [
                 new picker.View()
                 .on('render', function () {
                     this.$header.append(
-                        $('<h2 class="title">').append('Start new conversation')
+                        $('<h2 class="title">').append(gt('Start new conversation'))
                     );
                     this.$footer.append(
-                        $('<button type="button" class="btn btn-default" data-cmd="new:cancel">').text('Cancel'),
-                        $('<button type="button" class="btn btn-primary" data-cmd="new:start">').text('Start conversation')
+                        $('<button type="button" class="btn btn-default" data-cmd="new:cancel">').text(gt('Cancel')),
+                        $('<button type="button" class="btn btn-primary" data-cmd="new:start">').text(gt('Start conversation'))
                     );
                 })
                 .render().$el

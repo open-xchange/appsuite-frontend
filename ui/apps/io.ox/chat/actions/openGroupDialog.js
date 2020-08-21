@@ -20,8 +20,9 @@ define('io.ox/chat/actions/openGroupDialog', [
     'io.ox/chat/views/addMember',
     'io.ox/backbone/mini-views',
     'io.ox/chat/data',
+    'gettext!io.ox/chat',
     'less!io.ox/contacts/edit/style'
-], function (ext, ModalDialog, ImageUploadView, MemberView, AddMemberView, mini, data) {
+], function (ext, ModalDialog, ImageUploadView, MemberView, AddMemberView, mini, data, gt) {
 
     'use strict';
 
@@ -71,9 +72,9 @@ define('io.ox/chat/actions/openGroupDialog', [
         })
         .extend({
             header: function () {
-                var title = this.model.id ? 'Edit group chat' : 'Create group chat',
+                var title = this.model.id ? gt('Edit group chat') : gt('Create group chat'),
                     url = this.model.getIconUrl ? this.model.getIconUrl() : '';
-                if (this.model.get('type') === 'channel') title = this.model.id ? 'Edit channel' : 'Create new channel';
+                if (this.model.get('type') === 'channel') title = this.model.id ? gt('Edit channel') : gt('Create new channel');
 
                 var title_id = _.uniqueId('title'),
                     pictureModel = this.pictureModel || (this.pictureModel = new Backbone.Model({
@@ -102,13 +103,13 @@ define('io.ox/chat/actions/openGroupDialog', [
             details: function () {
                 var guidDescription = _.uniqueId('form-control-label-');
                 var guidTitle = _.uniqueId('form-control-label-');
-                var type = this.model.get('type') === 'group' ? 'Group' : 'Channel';
+                var label = this.model.get('type') === 'group' ? gt('Group name') : gt('Channel name');
 
                 this.$body.append(
                     $('<div class="row">').append(
                         $('<div class="col-xs-12">').append(
                             $('<div class="form-group">').append(
-                                $('<label class="control-label">').attr('for', guidTitle).text(type + ' name'),
+                                $('<label class="control-label">').attr('for', guidTitle).text(label),
                                 new mini.InputView({ id: guidTitle, model: this.model, name: 'title' }).render().$el
                             ),
                             $('<div class="form-group hidden">').append(
@@ -136,7 +137,7 @@ define('io.ox/chat/actions/openGroupDialog', [
             this.$el.addClass('ox-chat-popup ox-chat');
         })
         .addCancelButton()
-        .addButton({ action: 'save', label: model.id ? 'Edit chat' : 'Create chat' })
+        .addButton({ action: 'save', label: model.id ? gt('Edit chat') : gt('Create chat') })
         .on('save', function () {
             var updates = this.model.has('roomId') ? { roomId: this.model.get('roomId') } : this.model.toJSON(), hiddenAttr = {};
 

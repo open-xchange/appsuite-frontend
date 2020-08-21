@@ -14,8 +14,9 @@
 define('io.ox/chat/views/messages', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/data',
-    'io.ox/chat/views/avatar'
-], function (DisposableView, data, Avatar) {
+    'io.ox/chat/views/avatar',
+    'gettext!io.ox/chat'
+], function (DisposableView, data, Avatar, gt) {
 
     'use strict';
 
@@ -107,8 +108,8 @@ define('io.ox/chat/views/messages', [
             var date = moment(model.get('date'));
 
             var formattedDate = date.calendar(null, {
-                sameDay: '[Today]',
-                lastDay: '[Yesterday]',
+                sameDay: '[' + gt('Today') + ']',
+                lastDay: '[' + gt('Yesterday') + ']',
                 lastWeek: 'LL',
                 sameElse: 'LL'
             });

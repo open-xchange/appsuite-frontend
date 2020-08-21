@@ -15,8 +15,9 @@ define('io.ox/chat/views/searchResult', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/events',
     'io.ox/chat/data',
-    'io.ox/chat/views/chatListEntry'
-], function (DisposableView, events, data, ChatListEntryView) {
+    'io.ox/chat/views/chatListEntry',
+    'gettext!io.ox/chat'
+], function (DisposableView, events, data, ChatListEntryView, gt) {
 
     'use strict';
 
@@ -43,7 +44,7 @@ define('io.ox/chat/views/searchResult', [
             );
             if (this.collection.length === 0) {
                 this.$el.append(
-                    $('<li class="no-results">').text('No search results')
+                    $('<li class="no-results">').text(gt('No search results'))
                 );
             }
             return this;
@@ -87,7 +88,7 @@ define('io.ox/chat/views/searchResult', [
                         members[data.user.email] = 'admin';
                         members[address.email] = 'member';
                         return new data.ChatModel({
-                            lastMessage: { id: '1337', sender: '', content: 'Create new chat', type: 'text' },
+                            lastMessage: { id: '1337', sender: '', content: gt('Create new chat'), type: 'text' },
                             members: members,
                             type: 'private',
                             unreadCount: 0

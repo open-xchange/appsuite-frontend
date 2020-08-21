@@ -16,8 +16,9 @@ define('io.ox/chat/views/channelList', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/chatAvatar',
     'io.ox/chat/data',
-    'io.ox/backbone/views/toolbar'
-], function (ext, DisposableView, ChatAvatar, data, ToolbarView) {
+    'io.ox/backbone/views/toolbar',
+    'gettext!io.ox/chat'
+], function (ext, DisposableView, ChatAvatar, data, ToolbarView, gt) {
 
     'use strict';
 
@@ -28,7 +29,7 @@ define('io.ox/chat/views/channelList', [
         draw: function () {
             this.attr('data-prio', 'hi').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="close-chat">').append(
-                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), 'Chats'
+                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), gt('Chats')
                 )
             );
         }
@@ -39,7 +40,7 @@ define('io.ox/chat/views/channelList', [
         index: 200,
         custom: true,
         draw: function () {
-            this.addClass('toolbar-title').attr('data-prio', 'hi').text('All channels');
+            this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('All channels'));
         }
     });
 
@@ -77,9 +78,9 @@ define('io.ox/chat/views/channelList', [
         render: function () {
             this.$el.append(
                 $('<div class="header">').append(
-                    $('<h2>').append('All channels')
+                    $('<h2>').append(gt('All channels'))
                 ),
-                new ToolbarView({ point: 'io.ox/chat/channel-list/toolbar', title: 'All channels' }).render(new ext.Baton()).$el,
+                new ToolbarView({ point: 'io.ox/chat/channel-list/toolbar', title: gt('All channels') }).render(new ext.Baton()).$el,
                 $('<div class="scrollpane">').append(
                     $('<ul>').append(
                         this.getItems().map(this.renderItem, this)
@@ -90,14 +91,17 @@ define('io.ox/chat/views/channelList', [
         },
 
         renderItem: function (model) {
-            var isMember = model.isMember();
+            var isMember = model.isMember(),
+                numberOfMembers =  (model.get('members') && Object.keys(model.get('members')) || []).length;
+
             return $('<li class="channel">')
                 .attr({ 'data-cmd': 'view-channel', 'data-id': model.get('roomId') })
                 .append(
                     $('<div>').append(
                         new ChatAvatar({ model: model }).render().$el,
                         $('<span class="title">').text(model.getTitle()),
-                        $('<span class="members">').text((model.get('members') && Object.keys(model.get('members')) || []).length + ' member(s)')
+                        //#. %1$d: is the number of members
+                        $('<span class="members">').text(gt.format(gt.ngettext('%1$d member', '%1$d members', numberOfMembers), numberOfMembers))
                     ),
                     $('<div class="description">').text(model.get('description')),
                     $('<button type="button" class="btn btn-default btn-action" >')
@@ -105,7 +109,7 @@ define('io.ox/chat/views/channelList', [
                         .prop('disabled', isMember)
                         .toggleClass('join', !isMember)
                         .toggleClass('hidden', isMember)
-                        .append(isMember ? $('<i class="fa fa-check">') : 'Join')
+                        .append(isMember ? $('<i class="fa fa-check">') : gt('Join'))
                 );
         },
 

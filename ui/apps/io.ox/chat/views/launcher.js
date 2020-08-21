@@ -11,7 +11,11 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-define('io.ox/chat/views/launcher', ['io.ox/chat/data', 'less!io.ox/chat/style'], function (data) {
+define('io.ox/chat/views/launcher', [
+    'io.ox/chat/data',
+    'gettext!io.ox/chat',
+    'less!io.ox/chat/style'
+], function (data, gt) {
 
     return Backbone.View.extend({
 
@@ -31,7 +35,7 @@ define('io.ox/chat/views/launcher', ['io.ox/chat/data', 'less!io.ox/chat/style']
 
         render: function () {
             this.$el.attr('tabindex', -1).empty().append(
-                $('<i class="fa fa-comment launcher-icon" aria-hidden="true">').attr('title', 'Chat'),
+                $('<i class="fa fa-comment launcher-icon" aria-hidden="true">').attr('title', gt('Chat')),
                 this.badge = $('<svg height="8" width="8" class="indicator chat-notification hidden" focusable="false"><circle cx="4" cy="4" r="4"></svg>')
             );
             return this;

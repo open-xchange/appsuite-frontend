@@ -14,8 +14,9 @@
 define('io.ox/chat/views/members', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/avatar',
-    'io.ox/chat/views/state'
-], function (Disposable, AvatarView, StateView) {
+    'io.ox/chat/views/state',
+    'gettext!io.ox/chat'
+], function (Disposable, AvatarView, StateView, gt) {
 
     'use strict';
 
@@ -52,7 +53,8 @@ define('io.ox/chat/views/members', [
 
         render: function () {
             this.$el.empty().append(
-                $('<legend>').text('Participants (' + (this.collection.length - 1) + ')'),
+                //#. %1$d is the number of participants
+                $('<legend>').text(gt('Participants (%1$d)', this.collection.length - 1)),
                 $('<ul class="list-unstyled">').append(
                     this.collection.map(this.renderEntry.bind(this))
                 )
