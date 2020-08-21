@@ -158,7 +158,7 @@ define('io.ox/switchboard/extensions', [
         var $button = $('<button type="button" class="btn btn-link">')
             .prop('disabled', true)
             .on('click', { baton: baton }, function (e) {
-                actionsUtil.invoke(action, e.baton);
+                actionsUtil.invoke(action, e.data.baton);
             })
             .append(
                 $('<i class="fa" aria-hidden="true">').addClass(icon),
