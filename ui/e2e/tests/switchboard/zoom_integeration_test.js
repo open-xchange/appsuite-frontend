@@ -55,12 +55,13 @@ Scenario('User can connect zoom account through appointments', (I, calendar) => 
 
 Scenario('User can connect zoom account through addressbook', (I, users, contacts, dialogs) => {
 
-    const [user1] = users;
+    const [user1, user2] = users;
 
     I.login('app=io.ox/contacts&folder=6', { user: user1 });
     I.waitForElement('.io-ox-contacts-window');
     I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
     I.waitForVisible('.io-ox-contacts-window .tree-container');
+    contacts.selectContact(`${user2.get('sur_name')}, ${user2.get('given_name')}`);
     I.waitForText('Call', 5, '.switchboard-actions');
     I.click('Call');
     I.waitForText('Call via Zoom', 5, '.dropdown.open');
