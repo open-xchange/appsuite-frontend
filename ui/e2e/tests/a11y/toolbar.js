@@ -21,7 +21,8 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Mail - Toolbar Navigation', async function (I, users, mail, toolbar) {
+// TODO: very shaky
+Scenario.skip('Mail - Toolbar Navigation', async function (I, users, mail, toolbar) {
     const [user] = users;
     let selector = '.classic-toolbar-container > ul[role="toolbar"]';
     await I.haveMail({
