@@ -293,6 +293,10 @@ div.hopscotch-bubble {
             background-image: url('apps/themes/default/backgrounds/city.jpg');
             background-position: top;
         }
+        &.img9 {
+            background-image: none;
+            background-color: #101010;
+        }
 
         #io-ox-appcontrol {
             background: #ffffff20;
@@ -374,6 +378,73 @@ div.hopscotch-bubble {
         .vgrid-toolbar {
             padding: 16px 0 0 16px;
             height: 56px;
+        }
+
+        /* dark mode */
+        &.img9 {
+            #io-ox-top-logo img { filter: none; }
+            #io-ox-appcontrol {
+                background-color: #1a1a1a;
+            }
+            #io-ox-appcontrol #io-ox-quicklaunch > button,
+            #io-ox-appcontrol .launcher > a { color: white; }
+            #io-ox-topsearch .form-control {
+                background-color: #000;
+            }
+            .window-sidepanel {
+                color: white !important;
+                background-color: transparent;
+            }
+            .list-view-control {
+                color: white !important;
+                background-image: none;
+            }
+            .io-ox-mail-window .rightside {
+                color: white !important;
+                background-image: none;
+            }
+            .primary-action .btn.btn-primary {
+                background-color: #545454;
+            }
+            .folder-tree.visible-selection .selected > .folder-node {
+                background-color: #333;
+            }
+            .folder-tree.visible-selection .selected > .folder-node * {
+                color: white;
+            }
+            .list-view.visible-selection .list-item.selected {
+                color: white !important;
+                background-color: #333;
+            }
+            .list-view.visible-selection .list-item:hover {
+                color: white !important;
+                background-color: #222;
+            }
+            .weekview-container {
+                background-image: none;
+                .header .info,
+                .weekview-toolbar .weekday,
+                .week-container-label .time.in { color: white; }
+                .appointment-container .day,
+                .appointment-container .day .timeslot {
+                    border-color: #555;
+                }
+            }
+            .contact-grid-index {
+                background-color: #000;
+            }
+            .contact-grid-container {
+                color: white !important;
+                background-image: none;
+            }
+            .io-ox-contacts-window .rightside {
+                color: white !important;
+                background-image: none;
+            }
+            .vgrid-cell.selected {
+                color: white;
+                background-color: #333;
+            }
         }
     }
 }

@@ -140,7 +140,9 @@ define('io.ox/core/main/topbar_right', [
                 .link('background3', 'Ocean', handler.bind(null, 3))
                 .link('background4', 'Gradient', handler.bind(null, 4))
                 .link('background5', 'Green', handler.bind(null, 5))
-                .link('background6', 'City', handler.bind(null, 6));
+                .link('background6', 'City', handler.bind(null, 6))
+                .divider()
+                .link('dark', 'Dark', handler.bind(null, 9));
 
             function handler(n, e) {
                 e.preventDefault();
@@ -148,7 +150,7 @@ define('io.ox/core/main/topbar_right', [
             }
 
             function select(n) {
-                $('#io-ox-core').removeClass('img0 img1 img2 img3 img4 img5 img6 background');
+                $('#io-ox-core').removeClass('img0 img1 img2 img3 img4 img5 img6 img9 background');
                 $('#io-ox-core').addClass('background img' + (n || 0));
                 _.setCookie('background', n);
             }
