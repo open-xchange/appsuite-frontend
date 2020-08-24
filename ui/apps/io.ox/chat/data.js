@@ -185,7 +185,7 @@ define('io.ox/chat/data', [
                 room = data.chats.get(this.get('roomId'));
 
             if (room.get('type') === 'channel' && event.type === 'members:added') event.type = 'channel:joined';
-            if (members.join('') === data.user.email && event.type === 'members:removed') event.type = 'room:left';
+            if (members.join('') === data.user.email && event.type === 'members:removed' && members.join('') === originator) event.type = 'room:left';
 
             switch (event.type) {
                 case 'room:created':
