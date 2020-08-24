@@ -498,7 +498,6 @@ define('io.ox/chat/views/chat', [
 
         markMessageAsRead: function () {
             if (this.hidden) return;
-            if (!this.isScrolledToBottom()) return;
             var lastIndex = this.model.messages.findLastIndex(function (message) {
                 return message.get('sender') !== data.user.email;
             });
