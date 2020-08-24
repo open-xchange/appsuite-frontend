@@ -1176,6 +1176,50 @@ define('io.ox/files/actions', [
         }
     });
 
+    // view menu 'Layout' options' as actions
+    new Action('io.ox/files/actions/layout-list', {
+        action: function (baton) {
+            baton.app.props.set('layout', 'list');
+        }
+    });
+
+    new Action('io.ox/files/actions/layout-icon', {
+        action: function (baton) {
+            baton.app.props.set('layout', 'icon');
+        }
+    });
+
+    new Action('io.ox/files/actions/layout-tile', {
+        action: function (baton) {
+            baton.app.props.set('layout', 'tile');
+        }
+    });
+
+    // view menu  'Options' as actions
+    new Action('io.ox/files/actions/view-checkboxes', {
+        action: function (baton) {
+            var value = 'checkboxes';
+            var newValue = !baton.app.props.get(value);
+            baton.app.props.set(value, newValue);
+        }
+    });
+
+    new Action('io.ox/files/actions/view-folderview', {
+        action: function (baton) {
+            var value = 'folderview';
+            var newValue = !baton.app.props.get(value);
+            baton.app.props.set(value, newValue);
+        }
+    });
+
+    new Action('io.ox/files/actions/view-details', {
+        action: function (baton) {
+            var value = 'details';
+            var newValue = !baton.app.props.get(value);
+            baton.app.props.set(value, newValue);
+        }
+    });
+
     // 'new' dropdown
     ext.point('io.ox/files/toolbar/new').extend(
         {
