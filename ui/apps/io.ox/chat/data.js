@@ -18,12 +18,13 @@ define('io.ox/chat/data', [
     'io.ox/mail/sanitizer',
     'io.ox/chat/util',
     'io.ox/core/http',
-    'gettext!io.ox/chat'
-], function (events, api, io, sanitizer, util, http, gt) {
+    'gettext!io.ox/chat',
+    'settings!io.ox/core'
+], function (events, api, io, sanitizer, util, http, gt, settings) {
 
     'use strict';
 
-    var chatHost =  _.url.hash('chatHost') || ox.serverConfig.chatHost,
+    var chatHost =  _.url.hash('chatHost') || ox.serverConfig.chatHost || settings.get('chatHost'),
         DEFAULT_LIMIT = 40;
 
     var data = {
