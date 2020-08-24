@@ -61,7 +61,7 @@ Scenario('Create appointment with zoom conference', async (I, users, calendar) =
 
     const [user1, user2] = users;
 
-    session('userA', async () => {
+    await session('userA', async () => {
         I.login('app=io.ox/calendar', { user: user1 });
         calendar.newAppointment();
         I.fillField('Subject', 'Appointment with Zoom conference');
@@ -74,7 +74,7 @@ Scenario('Create appointment with zoom conference', async (I, users, calendar) =
         I.click('Create');
     });
 
-    session('userB', () => {
+    await session('userB', () => {
         I.login('app=io.ox/calendar', { user: user2 });
         calendar.waitForApp();
         I.waitForVisible('.appointment');
@@ -84,7 +84,7 @@ Scenario('Create appointment with zoom conference', async (I, users, calendar) =
         I.click('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
     });
 
-    session('userA', () => {
+    await session('userA', () => {
         I.waitForVisible('.appointment');
         I.click('.appointment');
         I.waitForVisible('.io-ox-sidepopup');

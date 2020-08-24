@@ -28,7 +28,7 @@ After(async (users) => {
 Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', async (I, users, tasks, mail, dialogs) => {
     let url;
     // Alice shares a folder with 2 tasks
-    session('Alice', async () => {
+    await session('Alice', async () => {
         I.login('app=io.ox/tasks');
         tasks.waitForApp();
 

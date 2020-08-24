@@ -233,7 +233,7 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
         if (save) I.click('Save', '.io-ox-editor-window .window-footer');
     }
 
-    session('Alice', async () => {
+    await session('Alice', async () => {
         const folder = await I.grabDefaultFolder('infostore');
         await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
 

@@ -29,8 +29,11 @@ After(async (users) => {
 Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing link', async (I, users, calendar, dialogs) => {
     let url;
     I.say('Alice shares a folder with 2 appointments');
-    session('Alice', async () => {
-        I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[0] });
+    await Promise.all([
+        I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[0] }),
+        I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[1] })
+    ]);
+    await session('Alice', async () => {
         I.login('app=io.ox/calendar');
         calendar.newAppointment();
         I.fillField('Subject', 'simple appointment 1');
@@ -88,8 +91,7 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
     };
 
     I.say('Bob receives the share');
-    session('Bob', () => {
-        I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[1] });
+    await session('Bob', async () => {
         I.login('app=io.ox/mail', { user: users[1] });
         I.waitForText('has shared the calendar', undefined, '.list-view');
         I.click(locate('li.list-item'));

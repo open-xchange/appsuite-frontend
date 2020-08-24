@@ -40,7 +40,7 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
     // 1.) User#A: Create an appointment with User#B
     const startDate = moment().startOf('hour').add(1, 'hour');
     const endDate = moment().startOf('hour').add(3, 'hour');
-    session('Alice', async () => {
+    await session('Alice', async () => {
         I.login('app=io.ox/calendar');
         calendar.waitForApp();
         calendar.newAppointment();
@@ -55,7 +55,7 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.waitForDetached('.io-ox-calendar-edit-window');
     });
     // 2.) User#B: Read the iTIP mail
-    session('Bob', async () => {
+    await session('Bob', async () => {
         I.login('app=io.ox/mail', { user: users[1] });
         I.waitForText('New appointment: MySubject', 30);
         mail.selectMail('New appointment: MySubject');
@@ -80,7 +80,7 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.waitForElement(`.io-ox-sidepopup .participant a.${current.className}[title="${users[1].userdata.primaryEmail}"]`);
     });
     // 5.) User#A: Read the iTIP mail
-    session('Alice', async () => {
+    await session('Alice', async () => {
         I.openApp('Mail');
         I.waitForText(`${users[1].userdata.display_name} ${current.emailTitle} the invitation: MySubject`);
         // 6.) User#A: Accept changes
@@ -112,14 +112,14 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.waitForElement(`.io-ox-sidepopup .participant a.declined[title="${users[0].userdata.primaryEmail}"]`);
         I.waitForElement(`.io-ox-sidepopup .participant a.${current.className}[title="${users[1].userdata.primaryEmail}"]`);
     });
-    session('Bob', () => {
+    await session('Bob', () => {
         // NO iTIP mail is sent to User#B.
         I.openApp('Mail');
         I.refreshPage();
         I.dontSee(`${users[0].userdata.display_name} declined the invitation: MySubject`);
     });
     // 10.) User#A: Delete the appointment
-    session('Alice', () => {
+    await session('Alice', () => {
         I.click('Delete');
         I.waitForText('Add a message to the notification email for the other participants');
         I.fillField('comment', 'MyComment');
@@ -128,7 +128,7 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.waitForDetached('.appointment [aria-label^="MySubject"]');
     });
     // 11.) User#B: Read the iTIP mail
-    session('Bob', () => {
+    await session('Bob', () => {
         I.refreshPage(); // maybe create reload function in page object
         I.waitForText('Appointment canceled: MySubject');
         mail.selectMail('Appointment canceled: MySubject');

@@ -27,7 +27,7 @@ After(async (users) => {
 Scenario('[C104306] contact folders using “Permisions” dialog and sharing link', async (I, users, contacts, mail, dialogs) => {
     let url;
     // Alice shares a folder with 2 contacts
-    session('Alice', async () => {
+    await session('Alice', async () => {
         const defaultFolder = await I.grabDefaultFolder('contacts');
         await Promise.all([
             I.haveContact({ display_name: 'Wonderland, Alice', folder_id: defaultFolder, first_name: 'Alice', last_name: 'Wonderland' }),
