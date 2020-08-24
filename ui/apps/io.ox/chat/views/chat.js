@@ -203,7 +203,7 @@ define('io.ox/chat/views/chat', [
                 },
                 add: function (email, name) {
                     //#. %1$s: name of the chat member that is currently typing
-                    this.$el.append($('<div class="name">').attr('data-user-id', email).text(gt('%1$s is typing'), name));
+                    this.$el.append($('<div class="name">').attr('data-user-id', email).text(gt('%1$s is typing', name)));
                 },
                 hide: function (email) {
                     this.reset(email);
