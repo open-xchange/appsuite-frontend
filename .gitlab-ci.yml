@@ -21,6 +21,7 @@ stages:
   - merge
   - report
   - cleanup
+  - trigger
 
 .default_cache:
   cache:
@@ -199,3 +200,12 @@ build dynamic-theme:
         - gitlab-ci/*
         - .gitlab-ci.yml
       when: always
+
+
+triggerappsuite:
+  stage: trigger
+  variables:
+    CWS: ${CI_COMMIT_REF_NAME}
+    GIT_REPO: ${CI_PROJECT_URL}
+    GITLAB_ID: ${CI_PROJECT_ID}
+  trigger: documents/appsuite
