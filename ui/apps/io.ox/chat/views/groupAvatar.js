@@ -12,9 +12,10 @@
  */
 
 define('io.ox/chat/views/groupAvatar', [
-    'io.ox/backbone/views/disposable'
+    'io.ox/backbone/views/disposable',
+    'io.ox/contacts/util'
 ],
-function (DisposableView) {
+function (DisposableView, util) {
 
     'use strict';
 
@@ -40,7 +41,8 @@ function (DisposableView) {
             if (this.model.get('icon')) {
                 this.$el.css('background-image', 'url("' + this.model.getIconUrl() + '")');
             } else {
-                this.$el.append(this.$icon);
+                var data = { first_name: this.model.get('title'), last_name: this.model.get('description') };
+                this.$el.addClass(util.getInitialsColor(util.getInitials(data))).append(this.$icon);
             }
         }
     });
