@@ -178,11 +178,11 @@ define('io.ox/chat/data', [
             return _.escape(this.get('content')).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
         },
 
-        getSystemMessage: function (room) {
+        getSystemMessage: function () {
             var event = JSON.parse(this.get('content'));
             var originator = this.get('sender'),
-                members = event.members || [];
-            if (!room) room = data.chats.get(this.get('roomId'));
+                members = event.members || [],
+                room = data.chats.get(this.get('roomId'));
 
             if (room.get('type') === 'channel' && event.type === 'members:added') event.type = 'channel:joined';
             if (members.join('') === data.user.email && event.type === 'members:removed') event.type = 'room:left';
@@ -295,8 +295,8 @@ define('io.ox/chat/data', [
             return moment(this.get('date')).format('LT');
         },
 
-        getTextBody: function (room) {
-            if (this.isSystem()) return this.getSystemMessage(room);
+        getTextBody: function () {
+            if (this.isSystem()) return this.getSystemMessage();
             if (this.isFile()) return this.getFileText();
             return sanitizer.simpleSanitize(this.get('content'));
         },
@@ -600,7 +600,7 @@ define('io.ox/chat/data', [
             if (!last) return '\u00a0';
             var message = new MessageModel(last);
             if (message.isFile()) return message.getFileText({ download: false });
-            return message.getTextBody(this);
+            return message.getTextBody();
         },
 
         getLastMessageDate: function () {
@@ -794,14 +794,10 @@ define('io.ox/chat/data', [
         },
 
         getHistory: function () {
-            var list = [];
-            this.filter({ active: false }).forEach(function (chat) {
-                if (chat.isMember() || chat.isPrivate()) {
-                    list.push(chat);
-                }
-            });
-
-            return list.slice(0, 100);
+            return this.filter(function (chat) {
+                if (chat.get('active') === false) return false;
+                return chat.isGroup() || chat.isPrivate() || (chat.isChannel() && chat.isMember());
+            }).slice(0, 100);
         },
 
         getChannels: function () {

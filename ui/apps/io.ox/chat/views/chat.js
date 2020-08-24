@@ -68,7 +68,7 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function (baton) {
             var model = baton.model;
-            if (!model.isMember() || model.isPrivate() || (model.isChannel() && !model.get('active'))) return;
+            if (!model.isMember() || model.isPrivate()) return;
             this.attr('data-prio', 'lo').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat">').attr('data-id', model.id).text(gt('Edit chat')).on('click', events.forward)
             );
@@ -81,7 +81,7 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function (baton) {
             var model = baton.model;
-            if (model.isChannel() && !model.get('active')) return;
+            if (!model.get('active')) return;
             this.attr('data-prio', 'lo').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="unsubscribe-chat">').attr('data-id', model.id).text(gt('Hide chat')).on('click', events.forward)
             );
@@ -94,7 +94,7 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function (baton) {
             var model = baton.model;
-            if (!model.isGroup()) return;
+            if (!model.isGroup() || !model.isMember()) return;
             this.attr('data-prio', 'lo').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="leave-group">').attr('data-id', model.id).text(gt('Leave chat')).on('click', events.forward)
             );
@@ -107,7 +107,7 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function (baton) {
             var model = baton.model;
-            if (!model.isChannel() || (model.isChannel() && !model.get('active'))) return;
+            if (!model.isChannel() || !model.isMember()) return;
             this.attr('data-prio', 'lo').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="leave-channel">').attr('data-id', model.id).text(gt('Leave chat')).on('click', events.forward)
             );
@@ -120,7 +120,7 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function (baton) {
             var model = baton.model;
-            if (!(model.isChannel() && !model.get('active'))) return;
+            if (!(model.isChannel() && !model.isMember())) return;
             this.attr('data-prio', 'lo').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="join-channel">').attr('data-id', model.id).text(gt('Join chat')).on('click', events.forward)
             );
@@ -315,17 +315,17 @@ define('io.ox/chat/views/chat', [
                 );
             }
 
-            if (this.model.isPrivate() && this.model.get('active')) {
-                $ul.append(renderItem(gt('Hide chat'), { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
-            } else if (!(this.model.isChannel() && !this.model.get('joined')) && this.model.get('active')) {
-                if (this.model.isMember()) $ul.append(renderItem(gt('Edit chat'), { 'data-cmd': 'edit-group-chat', 'data-id': this.model.id }));
-                $ul.append(renderItem(gt('Hide chat'), { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
-            } else if (this.model.isChannel() && !this.model.get('active')) {
-                $ul.append(renderItem(gt('Join chat'), { 'data-cmd': 'join-channel', 'data-id': this.model.id }));
+            if ((this.model.isPrivate() || this.model.isGroup() || (this.model.isChannel() && this.model.isMember())) && this.model.get('active')) {
+                $ul.append(renderItem('Hide chat', { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
+            }
+            if ((this.model.isGroup() || this.model.isChannel()) && this.model.isMember()) {
+                $ul.append(renderItem('Edit chat', { 'data-cmd': 'edit-group-chat', 'data-id': this.model.id }));
             }
 
             if (!this.model.isPrivate() && this.model.isMember()) {
-                $ul.append(renderItem(gt('Leave chat'), { 'data-cmd': this.model.isChannel() ? 'leave-channel' : 'leave-group', 'data-id': this.model.id }));
+                $ul.append(renderItem('Leave chat', { 'data-cmd': this.model.isChannel() ? 'leave-channel' : 'leave-group', 'data-id': this.model.id }));
+            } else if (this.model.isChannel() && !this.model.get('active')) {
+                $ul.append(renderItem('Join chat', { 'data-cmd': 'join-channel', 'data-id': this.model.id }));
             }
 
             return $ul;
