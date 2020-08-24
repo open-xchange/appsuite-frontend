@@ -34,6 +34,7 @@ define('io.ox/chat/views/messages', [
             this.options = options;
 
             this.listenTo(this.collection, {
+                'expire': this.onExpire,
                 'update': this.onAdd,
                 'reset': this.onReset,
                 'remove': this.onRemove,
@@ -115,6 +116,10 @@ define('io.ox/chat/views/messages', [
             });
 
             return $('<div class="date">').html(formattedDate);
+        },
+
+        onExpire: function () {
+            this.collection.expired = false;
         },
 
         onAdd: function (collection, options) {

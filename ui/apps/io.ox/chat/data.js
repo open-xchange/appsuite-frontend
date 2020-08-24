@@ -938,12 +938,30 @@ define('io.ox/chat/data', [
             this.initialized = new $.Deferred();
         },
 
+        refresh: function () {
+            var newChats = data.chats.filter(function (model) {
+                return model.isNew();
+            });
+            data.chats.fetch().then(function () {
+                data.chats.forEach(function (model) {
+                    if (model.messages.length === 0) return;
+                    var prevLast = model.previous('lastMessage') || {},
+                        last = model.get('lastMessage') || {};
+                    if (prevLast.messageId === last.messageId) return;
+
+                    model.messages.expired = true;
+                    // views which use the messages-collection can prevent the expiry by listening to the expire event
+                    model.messages.trigger('expire');
+                    if (model.messages.expired) model.messages.reset();
+                });
+                data.chats.add(newChats, { at: 0 });
+            });
+        },
+
         connectSocket: function () {
             var socket = data.socket = io.connect(data.SOCKET, { transports: ['websocket'] });
 
-            socket.on('alive', function () {
-                console.log('Connected socket to server');
-            });
+            socket.on('reconnect', this.refresh);
 
             socket.on('delivery:update', function (obj) {
                 var roomId = obj.roomId,
@@ -1153,6 +1171,10 @@ define('io.ox/chat/data', [
     });
 
     data.session = new SessionModel();
+
+    ox.on('refresh^', function () {
+        data.session.refresh();
+    });
 
     //
     // Helpers
