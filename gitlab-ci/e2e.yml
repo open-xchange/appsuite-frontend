@@ -89,7 +89,7 @@ merge filter report:
     PROVISIONING_KEYCLOAK_USER: $KEYCLOAK_ADMIN_USER
     PROVISIONING_KEYCLOAK_PASS: $KEYCLOAK_ADMIN_PASSWORD
     CONTEXT_ID: $CI_JOB_ID
-    CHROME_ARGS: '--no-sandbox --kiosk-printing --disable-web-security'
+    CHROME_ARGS: '--no-sandbox --disable-gpu'
     FILTER_SUITE: ./merged_reports.json
     FILTER_REPORT: filter_report_missing.json
     # services configuration

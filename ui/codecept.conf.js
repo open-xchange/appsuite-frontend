@@ -30,7 +30,8 @@ const helpers = {
             args: [
                 `--unsafely-treat-insecure-origin-as-secure=${process.env.LAUNCH_URL}`,
                 '--kiosk-printing',
-                '--disable-web-security'
+                '--disable-web-security',
+                '--disable-dev-shm-usage'
             ].concat((process.env.CHROME_ARGS || '').split(' '))
         },
         // set HEADLESS=false in your terminal to show chrome window
