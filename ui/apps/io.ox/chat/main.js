@@ -54,7 +54,7 @@ define('io.ox/chat/main', [
     ext.point('io.ox/core/logout').extend({
         id: 'chat',
         logout: function () {
-            return data.session.logout();
+            return data.session.logout().catch($.noop);
         }
     });
 
