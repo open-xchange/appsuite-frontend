@@ -143,7 +143,7 @@ define('io.ox/chat/extensions/register', [
             if (baton.data.created_by === ox.user_id) return;
             var isHalo = !baton.app || baton.app.id !== 'io.ox/contacts', node;
             this.append(
-                node = $('<section class="block">').append(
+                node = $('<section class="block" data-block="chat">').append(
                     $('<h4>').text(gt('Recent chat messages')).addClass(isHalo ? 'widget-title clear-title' : ''),
                     $('<div class="ox-chat embedded">'),
                     $('<button class="btn btn-default open-chat">').text(gt('Open chat'))
@@ -152,14 +152,14 @@ define('io.ox/chat/extensions/register', [
             data.chats.initialized.then(function () {
                 var room = data.chats.find(function (chat) {
                     if (!chat.isPrivate()) return;
-                    return _(chat.get('members')).findWhere({ email: baton.data.email1 });
+                    return !!chat.get('members')[baton.data.email1];
                 });
                 if (!room) return node.remove();
                 room.messages.fetch();
                 return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
                     node.find('button').on('click', function () {
                         require(['io.ox/chat/events'], function (events) {
-                            events.trigger('cmd', { cmd: 'show-chat', id: room.get('id') });
+                            events.trigger('cmd', { cmd: 'show-chat', id: room.get('roomId') });
                         });
                     });
                     node.show().find('.ox-chat').append(
@@ -250,7 +250,7 @@ define('io.ox/chat/extensions/register', [
                 return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
                     $fieldset.find('button').on('click', function () {
                         require(['io.ox/chat/events'], function (events) {
-                            events.trigger('cmd', { cmd: 'show-chat', id: room.get('id') });
+                            events.trigger('cmd', { cmd: 'show-chat', id: room.get('roomId') });
                         });
                     });
                     $fieldset.show().find('.ox-chat').append(
@@ -326,7 +326,7 @@ define('io.ox/chat/extensions/register', [
                         .text(gt('Open chat'))
                         .click(function () {
                             require(['io.ox/chat/events'], function (events) {
-                                events.trigger('cmd', { cmd: 'show-chat', id: room.get('id') });
+                                events.trigger('cmd', { cmd: 'show-chat', id: room.get('roomId') });
                             });
                         }),
                     gt('There is already a chat associated with this email')
