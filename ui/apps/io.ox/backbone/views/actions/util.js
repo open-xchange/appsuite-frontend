@@ -518,10 +518,12 @@ define('io.ox/backbone/views/actions/util', [
     function applyIconTitleTooltip($el, link, baton, enabled) {
         var icon = link.icon,
             title = getTitle(link.title || link.label, baton),
-            tooltip = enabled !== false && (link.tooltip || (icon && title));
+            tooltip = enabled !== false && (link.tooltip || (icon && title)),
+            checkmarkFn = link.checkmarkFn;
         // icon vs title
         if (icon) $el.attr('title', title).append($('<i aria-hidden="true">').addClass(icon));
         else if (title) $el.text(title);
+        if (_.isFunction(checkmarkFn)) $el.prepend($('<i class="fa fa-fw" aria-hidden="true">').addClass(checkmarkFn(baton) ? 'fa-check' : 'fa-none'));
         if (tooltip) $el.addActionTooltip(tooltip);
         // setTimeout so that the node is already added
         if (link.customize) setTimeout(link.customize.bind($el, baton));

@@ -48,21 +48,40 @@ define('io.ox/core/tk/list-contextmenu', [
             // DO NOT ADD e.preventDefault() HERE (see bug 42409)
             e.stopPropagation();
             this.isKeyboardEvent = e.isKeyboardEvent;
+            this.clickedInFreeSpace = ContextMenuUtils.checkEventTargetOutsideList(e);
             this.toggleContextMenu(ContextMenuUtils.positionForEvent(e), e);
         },
 
         toggleContextMenu: function (pos) {
             if (_.device('smartphone')) return;
             if (this.contextMenu && this.contextMenu.$el.hasClass('open')) return;
-            this.renderContextMenu();
+            this.contextMenuRef = this.contextMenuRef || (this.ref + '/contextmenu');
+
+            var currentRef = this.contextMenuRef;
+            // handle context menu in free space, when defined
+            if (this.freeSpaceContextMenuRef) {
+
+                if (this.clickedInFreeSpace) {
+                    // deselect when clicked in free space
+                    this.selection.clear();
+                    currentRef = this.freeSpaceContextMenuRef;
+                }
+
+                if (this.contextMenu) {
+                    this.contextMenu.updatePoint(currentRef);
+                }
+            }
+
+            this.renderContextMenu(currentRef);
+
             this.contextMenu.$menu.data({ top: pos.top, left: pos.left });
             return renderItems.call(this);
         },
 
-        renderContextMenu: function () {
+        renderContextMenu: function (contextMenuRef) {
             if (this.contextMenu) return;
-            this.contextMenuRef = this.contextMenuRef || (this.ref + '/contextmenu');
-            this.contextMenu = new ActionDropdownView({ point: this.contextMenuRef, title: gt('Folder options'), backdrop: true });
+
+            this.contextMenu = new ActionDropdownView({ point: contextMenuRef, title: gt('Folder options'), backdrop: true });
             this.contextMenu.$el.addClass('context-dropdown').insertAfter(this.$el);
         },
 

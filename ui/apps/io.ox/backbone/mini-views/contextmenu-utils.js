@@ -104,7 +104,18 @@ define('io.ox/backbone/mini-views/contextmenu-utils', [
             }
 
             return { target: target, top: top, left: left };
+        },
+
+        // Check if clicked below the list entries in the outside-list area.
+        checkEventTargetOutsideList: function (e) {
+            // target when clicking in a empty folder
+            var emptyList = $(e.target).hasClass('abs notification');
+            // target when clicked below a list
+            var areaBelowList = $(e.target).is('ul');
+
+            return areaBelowList || emptyList;
         }
+
     };
 
     return api;

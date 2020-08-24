@@ -27,6 +27,7 @@ define('io.ox/backbone/views/action-dropdown', [
     // - title (string): dropdown title
     // - simple (bool; default false): defines whether simple collection checks should be used, i.e. no folder-specific stuff
     // - backdrop (bool: default false): use backdrop to capture clicks
+    // - checkmarkFn (function): when provided, a checkmark design is used for the entry - the callback return value determins the state
 
     var ActionDropdownView = DisposableView.extend({
 
@@ -65,6 +66,11 @@ define('io.ox/backbone/views/action-dropdown', [
 
         hasActions: function () {
             return util.hasActions(this.$el);
+        },
+
+        updatePoint: function (newPoint) {
+            if (!newPoint) return;
+            this.options.point = newPoint;
         },
 
         // selection is expected to be array of object
