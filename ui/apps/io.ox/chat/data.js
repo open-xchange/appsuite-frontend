@@ -773,7 +773,7 @@ define('io.ox/chat/data', [
 
         getHistory: function () {
             return this.filter(function (chat) {
-                if (chat.get('active') === false) return false;
+                if (chat.get('active') !== false) return false;
                 return chat.isGroup() || chat.isPrivate() || (chat.isChannel() && chat.isMember());
             }).slice(0, 100);
         },
