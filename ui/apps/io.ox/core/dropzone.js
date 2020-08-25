@@ -33,10 +33,10 @@ define('io.ox/core/dropzone', [], function () {
                     .before(
                         // overlay
                         $('<div id="' + id + '" class="dndmask">')
-                        .on(EVENTS, function (e) {
-                            var event = $.Event(e.type, { 'offsetX': e.offsetX, 'offsetY': e.offsetY });
-                            $('body', iframe.contents()).trigger(event);
-                        })
+                            .on(EVENTS, function (e) {
+                                var event = $.Event(e.type, { 'offsetX': e.offsetX, 'offsetY': e.offsetY });
+                                $('body', iframe.contents()).trigger(event);
+                            })
                     );
         });
     }, 100);
@@ -160,70 +160,126 @@ define('io.ox/core/dropzone', [], function () {
             return _(dt.types).contains('Files') || _(dt.types).contains('application/x-moz-file');
         },
 
-        filterDirectories: function (dataTransfer) {
-            var def = new $.Deferred(),
-                files = _(dataTransfer.files).toArray();
+        getFilesFromWebkitDataTransferItems: function (dataTransfer) {
+            function traverseFileTreePromise(item, path) {
+                var def = new $.Deferred();
 
-            // special handling for newer chrome, firefox or edge
-            // check if items element is there (also needed for the e2e dropzone helper to work)
-            if (dataTransfer.items && ((_.browser.Chrome && _.browser.Chrome > 21) || (_.browser.firefox && _.browser.firefox >= 50) || _.browser.edge)) {
-                var items = dataTransfer.items;
+                if (item.isFile) {
+                    item.file(function (file) {
+                        files.push({
+                            file: file,
+                            fullPath: item.fullPath,
+                            preventFileUpload: false
+                        });
+                        def.resolve(file);
+                    });
+                } else if (item.isDirectory) {
+                    var dirReader = item.createReader();
+                    dirReader.readEntries(function (entries) {
+                        var entriesPromises = [];
 
-                def.resolve(_(files).filter(function (file, index) {
-                    var entry = items[index].webkitGetAsEntry();
-                    if (entry.isDirectory) return false;
+                        if (entries.length === 0) { // Folder is empty
+                            var dummyFile = new File([''], '__ommit__.txt'); // TODO: Remove this hack
+                            var fullPath = item.fullPath + '/' + dummyFile.name; //save full path
+                            dummyFile.filepath = fullPath;
 
-                    return true;
-                }));
-            } else {
-                $.when.apply(this, _(files).map(function (file) {
-                    // a directory has no type and has small size
-                    if (!file.type && file.size <= 16384) {
-                        var loadFile = new $.Deferred();
+                            files.push({
+                                file: dummyFile,
+                                fullPath: fullPath,
+                                preventFileUpload: true
+                            });
+                            def.resolve(dummyFile);
+                        } else {
+                            entries.forEach(function (entr) {
+                                entriesPromises.push(traverseFileTreePromise(entr, path + item.name + '/'));
+                            });
+                        }
 
-                        // try to read the file. if it is a folder, the result will contain an error
-                        var reader = new FileReader();
-                        reader.onloadend = function () {
-                            loadFile.resolve(reader.error);
-                        };
-                        reader.readAsDataURL(file);
-
-                        return loadFile;
-                    }
-
-                    return $.when();
-                })).done(function () {
-                    var args = arguments;
-                    def.resolve(_(files).filter(function (file, index) {
-                        return !args[index];
-                    }));
-                });
-            }
-
-            return def;
-        },
-
-        getFiles: function (e) {
-            var dataTransfer = e.originalEvent.dataTransfer,
-                numFiles = dataTransfer.files.length, // required for safari, which removes the files from that array while processing
-                filter = this.options.filter;
-
-            return this.filterDirectories(dataTransfer).then(function (files) {
-
-                // numFiles !== null detects, when an image from inside appsuite (e.g. compose window) is dragged onto the dropzone
-                if ((!files.length || numFiles !== files.length) && numFiles !== 0) {
-                    require(['io.ox/core/yell', 'gettext!io.ox/core'], function (yell, gt) {
-                        yell('error', gt('Uploading folders is not supported.'));
+                        $.when.apply($, entriesPromises).then(function () {
+                            def.resolve(_.toArray(arguments));
+                        }, function (error) {
+                            def.reject(error);
+                        });
                     });
                 }
 
-                // no regex?
-                if (!_.isRegExp(filter)) return files;
-                // apply regex to filter valid files
-                return _(files).filter(function (file) {
-                    return filter.test(file.name);
+                return def;
+            }
+
+            var files = [];
+            var finalDef = new $.Deferred();
+            var entriesPromises = [];
+            var length = dataTransfer.items.length;
+
+            for (var i = 0; i < length; i++) {
+                var it = dataTransfer.items[i];
+                entriesPromises.push(traverseFileTreePromise(it.webkitGetAsEntry(), ''));
+            }
+
+            $.when.apply($, entriesPromises)
+                .then(function () {
+                    finalDef.resolve(files);
                 });
-            });
+
+            return finalDef;
+        },
+
+        // Deprecated function look : getFilesFromWebkitDataTransferItems
+        getFiles: function (e) {
+            var dt = e.originalEvent.dataTransfer;
+            var length = dt.items.length;
+            var FileEntryArr = [];
+            var files = [];
+            var def = new $.Deferred();
+
+            var handleFile = function (entry) {
+                entry.file(function (file) {
+                    var fileObj = {
+                        file: file,
+                        fullPath: entry.fullPath
+                    };
+
+                    files.push(fileObj);
+                    if (files.length === FileEntryArr.length) {
+                        def.resolve(files);
+                    }
+                });
+                FileEntryArr.push(entry);
+            };
+
+            var deepDiveDir = function (entry) {
+                var reader = entry.createReader();
+                reader.readEntries(function (entries) {
+                    entries.forEach(function (dir) {
+                        if (dir.isFile) {
+                            handleFile(dir);
+                        } else {
+                            deepDiveDir(dir);
+                        }
+                    });
+                });
+            };
+
+            for (var i = 0; i < length; i++) {
+                var entry = null;
+                if (dt.items[i].webkitGetAsEntry) {
+                    entry = dt.items[i].webkitGetAsEntry();
+                } else if (dt.items[i].getAsEntry) {
+                    entry = dt.items[i].getAsEntry();
+                }
+
+                if (!entry) {
+                    return;
+                }
+
+                if (entry.isFile) {
+                    handleFile(entry);
+                } else if (entry.isDirectory) {
+                    deepDiveDir(entry);
+                }
+            }
+
+            return def;
         },
 
         onDragenter: function (e) {
@@ -257,15 +313,12 @@ define('io.ox/core/dropzone', [], function () {
 
         // while we can ignore document's drop event, we need this one
         // to detect that a file was dropped over the dropzone
-        onDrop: function (e) {
+        onDrop: function (event) {
             var self = this;
+            var dataTransfer = event.originalEvent.dataTransfer;
 
-            // final event when a file was dropped over the dropzone
-            this.getFiles(e).then(function success(files) {
-                // call proper event
-                self.trigger(files.length > 0 ? 'drop' : 'invalid', files, e);
-            }, function fail() {
-                self.trigger('invalid', [], e);
+            this.getFilesFromWebkitDataTransferItems(dataTransfer).then(function (fileObjArray) {
+                self.trigger(fileObjArray.length > 0 ? 'drop' : 'invalid', fileObjArray, event);
             });
         },
 
