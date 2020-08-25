@@ -253,7 +253,15 @@ define('io.ox/files/upload/dropzone', [
                     if (!_.isFunction(zone.isEnabled)) {
                         zone.isEnabled = function () {
                             var id = app.folder.get();
-                            return api.pool.getModel(id).can('create');
+                            var model = api.pool.getModel(id);
+                            var isTrash = model ? api.is('trash', model.toJSON()) : false;
+
+                            if (isTrash) {
+                                return false;
+                            }
+
+                            return model.can('create');
+
                         };
                     }
 
