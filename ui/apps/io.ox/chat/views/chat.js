@@ -22,8 +22,9 @@ define('io.ox/chat/views/chat', [
     'io.ox/chat/events',
     'io.ox/chat/data',
     'io.ox/backbone/views/toolbar',
-    'gettext!io.ox/chat'
-], function (ext, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, ToolbarView, gt) {
+    'gettext!io.ox/chat',
+    'io.ox/core/tk/visibility-api-util'
+], function (ext, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, ToolbarView, gt, visibilityApi) {
 
     'use strict';
 
@@ -223,6 +224,16 @@ define('io.ox/chat/views/chat', [
 
             this.onHide = this.onHide.bind(this);
             this.onShow = this.onShow.bind(this);
+
+            if (visibilityApi.isSupported) {
+                this.onChangevisibility = function (e, data) {
+                    (data.currentHiddenState ? this.onHide : this.onShow)();
+                }.bind(this);
+
+                $(visibilityApi).on('visibility-changed', this.onChangevisibility);
+                return;
+            }
+            // Fallback
             $(window).on('blur', this.onHide);
             $(window).on('focus', this.onShow);
         },
@@ -237,6 +248,11 @@ define('io.ox/chat/views/chat', [
         },
 
         onDispose: function () {
+            if (visibilityApi.isSupported) {
+                $(visibilityApi).off('visibility-changed', this.onChangevisibility);
+                return;
+            }
+            // Fallback
             $(window).off('blur', this.onHide);
             $(window).off('focus', this.onShow);
         },
