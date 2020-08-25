@@ -677,11 +677,10 @@ define('io.ox/chat/data', [
 
         postMessage: function (attr, files) {
             if (this.isNew()) return this.postFirstMessage(attr, files);
-            files = _.toArray(files);
             attr.roomId = this.get('roomId');
 
-            var formData = util.makeFormData(_.extend({}, attr, { files: files[0] })),
-                model = files.length > 0 ? messageCache.get(attr) : this.messages.add(attr, { merge: true, parse: true });
+            var formData = util.makeFormData(_.extend({}, attr, { files: files })),
+                model = files ? messageCache.get(attr) : this.messages.add(attr, { merge: true, parse: true });
 
             model.save(attr, {
                 data: formData,
@@ -689,7 +688,7 @@ define('io.ox/chat/data', [
                 contentType: false,
                 success: function (model) {
                     model.setInitialDeliveryState();
-                    if (files.length > 0) this.messages.add(model, { merge: true });
+                    if (files) this.messages.add(model, { merge: true });
                 }.bind(this)
             });
             this.set('active', true);
