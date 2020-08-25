@@ -36,6 +36,21 @@ define('io.ox/chat/data', [
     // User
     //
 
+    var BaseModel = Backbone.Model.extend({
+        sync: function (method, model, options) {
+            options.xhrFields = _.extend({}, options.xhrFields, { withCredentials: true });
+            var jqXHR = Backbone.Collection.prototype.sync.call(this, method, model, options);
+            jqXHR.fail(util.handleSessionLoss);
+            return jqXHR;
+        }
+    });
+
+    var BaseCollection = Backbone.Collection.extend({
+        sync: function () {
+            return BaseModel.prototype.sync.apply(this, arguments);
+        }
+    });
+
     var UserModel = Backbone.Model.extend({
 
         isSystem: function () {
@@ -98,7 +113,7 @@ define('io.ox/chat/data', [
         });
     };
 
-    var MemberCollection = Backbone.Collection.extend({
+    var MemberCollection = BaseCollection.extend({
 
         model: UserModel,
 
@@ -120,11 +135,6 @@ define('io.ox/chat/data', [
 
         toArray: function () {
             return this.pluck('id').sort();
-        },
-
-        sync: function (method, model, options) {
-            options.xhrFields = _.extend({}, options.xhrFields, { withCredentials: true });
-            return Backbone.Collection.prototype.sync.call(this, method, model, options);
         }
 
     });
@@ -320,11 +330,10 @@ define('io.ox/chat/data', [
         updateDelivery: function (state) {
             var url = data.API_ROOT + '/rooms/' + this.get('roomId') + '/delivery/' + this.get('messageId');
             this.set('deliveryState', state);
-            $.ajax({
+            util.ajax({
                 method: 'POST',
                 url: url,
-                data: { state: state },
-                xhrFields: { withCredentials: true }
+                data: { state: state }
             }).catch(function () {
                 this.set('deliveryState', this.previous('deliveryState'));
             }.bind(this));
@@ -438,9 +447,8 @@ define('io.ox/chat/data', [
             }
 
             var endpoint = data.chats.get(this.roomId).isChannel() ? '/channels/' : '/rooms/';
-            return $.ajax({
-                url: data.API_ROOT + endpoint + this.roomId + '/messages' + '?' + $.param(params),
-                xhrFields: { withCredentials: true }
+            return util.ajax({
+                url: data.API_ROOT + endpoint + this.roomId + '/messages' + '?' + $.param(params)
             })
             .then(function (list) {
                 this.trigger(type);
@@ -481,8 +489,7 @@ define('io.ox/chat/data', [
                 var limit = Math.max(collection.length, DEFAULT_LIMIT);
                 return this.load({ limit: limit }, 'load');
             }
-            options.xhrFields = _.extend({}, options.xhrFields, { withCredentials: true });
-            return Backbone.Collection.prototype.sync.call(this, method, collection, options);
+            return BaseCollection.prototype.sync.call(this, method, collection, options);
         },
         url: function () {
             return data.API_ROOT + '/rooms/' + this.roomId + '/messages';
@@ -680,7 +687,6 @@ define('io.ox/chat/data', [
                 data: formData,
                 processData: false,
                 contentType: false,
-                xhrFields: { withCredentials: true },
                 success: function (model) {
                     model.setInitialDeliveryState();
                     if (files.length > 0) this.messages.add(model, { merge: true });
@@ -708,8 +714,7 @@ define('io.ox/chat/data', [
                 options.method = method === 'create' ? 'POST' : 'PATCH';
             }
 
-            options.xhrFields = _.extend({}, options.xhrFields, { withCredentials: true });
-            return Backbone.Model.prototype.sync.call(this, method, model, options).then(function (data) {
+            return BaseModel.prototype.sync.call(this, method, model, options).then(function (data) {
                 if (method === 'create') this.messages.roomId = this.get('roomId');
                 if (data.lastMessage) messageCache.get(data.lastMessage.messageId).setInitialDeliveryState();
                 return data;
@@ -719,7 +724,7 @@ define('io.ox/chat/data', [
 
     data.ChatModel = ChatModel;
 
-    var ChatCollection = Backbone.Collection.extend({
+    var ChatCollection = BaseCollection.extend({
 
         model: ChatModel,
         comparator: function (a, b) {
@@ -741,12 +746,11 @@ define('io.ox/chat/data', [
 
         toggleRecent: function (roomId) {
             var room = this.get(roomId);
-            return $.ajax({
+            return util.ajax({
                 type: 'PUT',
                 url: this.url() + '/' + roomId + '/active/' + !room.get('active'),
                 processData: false,
-                contentType: false,
-                xhrFields: { withCredentials: true }
+                contentType: false
             }).then(function () {
                 room.set('active', !room.get('active'));
             });
@@ -785,10 +789,9 @@ define('io.ox/chat/data', [
         fetchUnlessExists: function (roomId) {
             var model = this.get(roomId);
             if (model) return $.when(model);
-            return $.ajax({
+            return util.ajax({
                 method: 'GET',
-                url: this.url() + '/' + roomId,
-                xhrFields: { withCredentials: true }
+                url: this.url() + '/' + roomId
             }).then(function (data) {
                 return this.add(data);
             }.bind(this));
@@ -803,22 +806,20 @@ define('io.ox/chat/data', [
             members[data.user.email] = 'member';
             model.set({ active: true, members: members });
 
-            return $.ajax({
+            return util.ajax({
                 method: 'POST',
-                url: url,
-                xhrFields: { withCredentials: true }
+                url: url
             });
         },
 
         leaveChannel: function (roomId) {
             var room = this.get(roomId);
             var url = this.url() + '/' + roomId + '/members';
-            return $.ajax({
+            return util.ajax({
                 type: 'DELETE',
                 url: url,
                 processData: false,
-                contentType: false,
-                xhrFields: { withCredentials: true }
+                contentType: false
             }).then(function () {
                 room.set('active', false);
             }).fail(function (err) {
@@ -829,20 +830,14 @@ define('io.ox/chat/data', [
         leaveGroup: function (roomId) {
             var url = this.url() + '/' + roomId + '/members';
 
-            return $.ajax({
+            return util.ajax({
                 type: 'DELETE',
                 url: url,
                 processData: false,
-                contentType: false,
-                xhrFields: { withCredentials: true }
+                contentType: false
             }).fail(function (err) {
                 console.log(err);
             });
-        },
-
-        sync: function (method, model, options) {
-            options.xhrFields = _.extend({}, options.xhrFields, { withCredentials: true });
-            return Backbone.Collection.prototype.sync.call(this, method, model, options);
         }
     });
 
@@ -870,17 +865,12 @@ define('io.ox/chat/data', [
     });
 
 
-    var FilesCollection = Backbone.Collection.extend({
+    var FilesCollection = BaseCollection.extend({
 
         model: FileModel,
 
         url: function () {
             return data.API_ROOT + '/files';
-        },
-
-        sync: function (method, model, options) {
-            options.xhrFields = _.extend({}, options.xhrFields, { withCredentials: true });
-            return Backbone.Collection.prototype.sync.call(this, method, model, options);
         }
     });
 
@@ -1016,16 +1006,16 @@ define('io.ox/chat/data', [
         },
 
         getAuthURL: function () {
-            return $.ajax({
+            return util.ajax({
                 url: data.SOCKET + '/auth/url',
-                xhrFields: { withCredentials: true }
+                handleSessionFail: false
             });
         },
 
         getUserId: function () {
-            return $.ajax({
+            return util.ajax({
                 url: data.SOCKET + '/auth/user',
-                xhrFields: { withCredentials: true }
+                handleSessionFail: false
             }).then(function (chatUser) {
                 return require(['io.ox/core/api/user']).then(function (userAPI) {
                     return userAPI.get({ id: ox.user_id });
@@ -1094,7 +1084,7 @@ define('io.ox/chat/data', [
 
         getConfig: function () {
             if (this.config) return this.config;
-            return $.ajax({
+            return util.ajax({
                 url: data.SOCKET + '/auth/config'
             }).then(function (config) {
                 this.config = config;
@@ -1105,11 +1095,11 @@ define('io.ox/chat/data', [
         authenticateAppsuite: function () {
             return http.GET({ module: 'token', params: { action: 'acquireToken' } }).then(function (res) {
                 if (!res.token) throw new Error('Missing token in response');
-                return $.ajax({
+                return util.ajax({
                     method: 'post',
                     url: data.SOCKET + '/auth/login',
                     data: { token: res.token },
-                    xhrFields: { withCredentials: true }
+                    handleSessionFail: false
                 });
             }).then(function () {
                 return this.getUserId();
@@ -1130,9 +1120,9 @@ define('io.ox/chat/data', [
         },
 
         logout: function () {
-            return $.ajax({
+            return util.ajax({
                 url: data.SOCKET + '/auth/logout',
-                xhrFields: { withCredentials: true }
+                handleSessionFail: false
             });
         }
 
