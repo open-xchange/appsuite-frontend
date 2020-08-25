@@ -143,7 +143,7 @@ define('io.ox/chat/data', [
     // Message
     //
 
-    var MessageModel = Backbone.Model.extend({
+    var MessageModel = BaseModel.extend({
 
         defaults: function () {
             return { content: '', sender: data.user.email, date: +moment(), type: 'text' };
