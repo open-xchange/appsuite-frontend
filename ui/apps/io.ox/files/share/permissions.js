@@ -14,6 +14,7 @@
 
 define('io.ox/files/share/permissions', [
     'io.ox/core/extensions',
+    'io.ox/files/share/wizard',
     'io.ox/backbone/views/disposable',
     'io.ox/core/yell',
     'io.ox/backbone/mini-views',
@@ -37,7 +38,7 @@ define('io.ox/files/share/permissions', [
     'io.ox/core/api/group',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil, groupApi) {
+], function (ext, ShareWizard, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil, groupApi) {
 
     'use strict';
 
@@ -202,6 +203,10 @@ define('io.ox/files/share/permissions', [
 
             model: Permission,
 
+            initialize: function () {
+                this.on('revert', this.revert);
+            },
+
             // method to check if a guest is already in the collection (they receive entity ids that differ from the emails, so this check is needed)
             isAlreadyGuest: function (newGuest) {
                 var guests = this.where({ type: 'guest' }),
@@ -239,6 +244,12 @@ define('io.ox/files/share/permissions', [
                 if (a.isGuest()) return -1;
                 if (b.isGuest()) return +1;
                 return +1;
+            },
+
+            revert: function () {
+                // Remove all entries which were not saved yet.
+                var newEntities = this.where({ new: true });
+                this.remove(newEntities);
             }
         }),
 
@@ -465,6 +476,7 @@ define('io.ox/files/share/permissions', [
                 this.collection = new Permissions();
                 this.listenTo(this.collection, 'reset', this.renderEntities);
                 this.listenTo(this.collection, 'add', this.renderEntity);
+                this.listenTo(this.collection, 'revert', this.onReset);
 
                 this.$el.on('scroll', _.debounce(this.onScroll.bind(this), 50));
             },
@@ -487,6 +499,7 @@ define('io.ox/files/share/permissions', [
                 this.offset = 0;
                 this.$el.empty();
                 this.renderEntities();
+                $('.share-wizard').show();
             },
 
             render: function () {
@@ -512,6 +525,7 @@ define('io.ox/files/share/permissions', [
             },
 
             renderEntity: function (model) {
+                // $(".share-wizard").hide();
                 var children = this.$el.children(),
                     index = this.collection.indexOf(model),
                     newEntity = new PermissionEntityView({ model: model, parentModel: this.model }).render().$el;
@@ -819,8 +833,8 @@ define('io.ox/files/share/permissions', [
         Permissions: Permissions,
 
         // async / id is folder id
-        showFolderPermissions: function (id, options) {
-            that.showByModel(new Backbone.Model({ id: id }), options);
+        showFolderPermissions: function (id, linkModel, options) {
+            that.showByModel(new Backbone.Model({ id: id }), linkModel, options);
         },
 
         // async / obj must provide folder_id and id
@@ -828,12 +842,13 @@ define('io.ox/files/share/permissions', [
             that.showByModel(new Backbone.Model(obj), options);
         },
 
-        showByModel: function (model, options) {
+        showByModel: function (model, linkModel, options) {
+            //var oldModel = model;
             var isFile = model.isFile ? model.isFile() : model.has('folder_id');
             model = new api.Model(isFile ? model.pick('id', 'folder_id') : model.pick('id'));
             model.loadExtendedPermissions({ cache: false })
             .done(function () {
-                that.show(model, options);
+                that.show(model, linkModel, options);
             })
             // workaround: when we don't have permissions anymore for a folder a 'http:error:FLD-0003' is returned.
             // usually we have a handler in files/main.js for this case, but due to the current following conditions no yell is called
@@ -866,7 +881,7 @@ define('io.ox/files/share/permissions', [
             return checkFolder(id);
         },
 
-        show: function (objModel, options) {
+        show: function (objModel, linkModel, options) {
             // folder tree: nested (whitelist) vs. flat
             var nested = folderAPI.isNested(objModel.get('module')),
                 notificationDefault = !this.isOrIsUnderPublicFolder(objModel),
@@ -922,7 +937,8 @@ define('io.ox/files/share/permissions', [
             });
 
             var dialogConfig = new DialogConfigModel(),
-                permissionsView = new PermissionsView({ model: objModel });
+                permissionsView = new PermissionsView({ model: objModel }),
+                shareWizard = new ShareWizard({ files: linkModel });
 
             function hasNewGuests() {
                 var knownGuests = [];
@@ -936,6 +952,11 @@ define('io.ox/files/share/permissions', [
 
             permissionsView.listenTo(permissionsView.collection, 'reset', function () {
                 dialogConfig.set('oldGuests', _.copy(permissionsView.collection.where({ type: 'guest' })));
+            });
+
+            permissionsView.listenTo(permissionsView.collection, 'add', function () {
+                $('.share-wizard').hide();
+                dialog.showFooter();
             });
 
             permissionsView.listenTo(permissionsView.collection, 'add remove', function () {
@@ -1072,73 +1093,85 @@ define('io.ox/files/share/permissions', [
                 }
 
                 dialog.$header.append(
-                    $('<div class="row">').append(
-                        $('<div class="form-group col-sm-6">').append(
-                            $('<div class="input-group">').toggleClass('has-picker', usePicker).append(
-                                $('<label class="sr-only">', { 'for': guid = _.uniqueId('form-control-label-') }).text(gt('Start typing to search for user names')),
-                                typeaheadView.$el.attr({ id: guid }),
-                                usePicker ? new AddressPickerView({
-                                    isPermission: true,
-                                    process: click,
-                                    useGABOnly: !supportsGuests
-                                }).render().$el : []
-                            )
-                        )
-                        // use delegate because typeahead's uses stopPropagation(); apparently not stopImmediatePropagation()
-                        .on('keydown blur', 'input', function addManualInput(e) {
-
-                            // mail does not support sharing folders to guests
-                            // so we skip any manual edits
-                            if (module === 'mail') return;
-
-                            // skip manual edit if invite_guests isn't set
-                            if (!supportsGuests) return;
-
-                            // enter or blur?
-                            if (e.type === 'keydown' && e.which !== 13) return;
-
-                            // use shown input
-                            var value = $.trim($(this).typeahead('val')),
-                                list = coreUtil.getAddresses(value);
-
-                            _.each(list, function (value) {
-                                if (_.isEmpty(value)) return;
-                                // add to collection
-                                permissionsView.collection.add(new Permission({
-                                    bits: getBitsExternal(objModel),
-                                    contact: { email1: value },
-                                    type: 'guest',
-                                    new: true
-                                }));
-                            });
-
-                            // clear input field
-                            $(this).typeahead('val', '');
-                        })
-                    )
+                    $(' <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>')
                 );
 
                 dialog.$body.append(
-                    // add message - not available for mail
-                    $('<div class="share-options form-group">')
-                    .toggle(notificationDefault)
-                    .addClass(_.browser.IE ? 'IE' : 'nonIE')
-                    .append(
-                        $('<label class="control-label sr-only">')
-                            .text(gt('Enter a Message to inform users'))
-                            .attr({ for: guid = _.uniqueId('form-control-label-') }),
-                        // message text
-                        new miniViews.TextView({
-                            name: 'message',
-                            model: dialogConfig
-                        })
-                        .render().$el.addClass('message-text')
-                        .attr({
-                            id: guid,
-                            rows: 3,
-                            //#. placeholder text in share dialog
-                            placeholder: gt('Personal message (optional). This message is sent to all newly invited people.')
-                        })
+                    // Invite people pane
+                    $('<div id="invite-people-pane" class="share-pane invite-people"></div>').append(
+                        // Invite people header
+                        $('<h5></h5>').text(gt('Permissions / Invite people')),
+                        // Add address picker
+                        $('<div class="row">').append(
+                            $('<div class="form-group col-sm-6">').append(
+                                $('<div class="input-group">').toggleClass('has-picker', usePicker).append(
+                                    $('<label class="sr-only">', { 'for': guid = _.uniqueId('form-control-label-') }).text(gt('Start typing to search for user names')),
+                                    typeaheadView.$el.attr({ id: guid }),
+                                    usePicker ? new AddressPickerView({
+                                        isPermission: true,
+                                        process: click,
+                                        useGABOnly: !supportsGuests
+                                    }).render().$el : []
+                                )
+                            )
+                            // use delegate because typeahead's uses stopPropagation(); apparently not stopImmediatePropagation()
+                            .on('keydown blur', 'input', function addManualInput(e) {
+
+                                // mail does not support sharing folders to guests
+                                // so we skip any manual edits
+                                if (module === 'mail') return;
+
+                                // skip manual edit if invite_guests isn't set
+                                if (!supportsGuests) return;
+
+                                // enter or blur?
+                                if (e.type === 'keydown' && e.which !== 13) return;
+
+                                // use shown input
+                                var value = $.trim($(this).typeahead('val')),
+                                    list = coreUtil.getAddresses(value);
+
+                                _.each(list, function (value) {
+                                    if (_.isEmpty(value)) return;
+                                    // add to collection
+                                    permissionsView.collection.add(new Permission({
+                                        bits: getBitsExternal(objModel),
+                                        contact: { email1: value },
+                                        type: 'guest',
+                                        new: true
+                                    }));
+                                });
+
+                                // clear input field
+                                $(this).typeahead('val', '');
+                            })
+                        ),
+                        // add message - not available for mail
+                        $('<div class="share-options form-group">')
+                        .toggle(notificationDefault)
+                        .addClass(_.browser.IE ? 'IE' : 'nonIE')
+                        .append(
+                            $('<label class="control-label sr-only">')
+                                .text(gt('Enter a Message to inform users'))
+                                .attr({ for: guid = _.uniqueId('form-control-label-') }),
+                            // message text
+                            new miniViews.TextView({
+                                name: 'message',
+                                model: dialogConfig
+                            })
+                            .render().$el.addClass('message-text')
+                            .attr({
+                                id: guid,
+                                rows: 3,
+                                //#. placeholder text in share dialog
+                                placeholder: gt('Personal message (optional). This message is sent to all newly invited people.')
+                            })
+                        )
+                    ),
+                    $('<div id="share-link-pane" class="share-pane share-by-link"></div>').append(
+                        $('<h5></h5>').text(gt('Create sharing link')),
+                        // Share link header
+                        shareWizard.render().$el
                     )
                 );
 
@@ -1154,15 +1187,37 @@ define('io.ox/files/share/permissions', [
                 typeaheadView.render();
             }
 
+            /*
+                TODO: WHAT IS supportsChanges?
+            */
             if (supportsChanges) {
                 // add action buttons
                 dialog
-                    .addCancelButton()
+                    //.addCancelButton()
+                    .addButton({ action: 'switch-or-cancel', label: gt('Cancel') })
                     .addButton({ action: 'save', label: options.share ? gt('Share') : gt('Save') });
             } else {
                 dialog
                     .addButton({ action: 'cancel', label: gt('Close') });
             }
+
+            // Cancel invite process and shwo initial dialog
+            // or close dialog.
+            dialog.on('switch-or-cancel', function () {
+                if ($('.share-wizard').is(':visible')) {
+                    dialog.close();
+                } else {
+                    permissionsView.collection.trigger('revert');
+                    //permissionsView.onReset();
+                    $('.share-wizard').show();
+                    dialog.hideFooter();
+                    // Make sure all input elements are
+                    // visible when dialog.idle() runs.
+                    setTimeout(function () {
+                        dialog.idle();
+                    }, 20);
+                }
+            });
 
             dialog.on('save', function () {
 
@@ -1201,7 +1256,7 @@ define('io.ox/files/share/permissions', [
 
             // add permissions view
             // yep every microsoft browser needs this. edge or ie doesn't matter. No support for "resize: vertical" css attribute
-            dialog.$body.addClass(_.browser.IE ? 'IE11' : '').prepend(
+            dialog.$body.addClass(_.browser.IE ? 'IE11' : '').find('#invite-people-pane').append(
                 permissionsView.$el.busy({
                     empty: false,
                     immediate: true
@@ -1215,6 +1270,7 @@ define('io.ox/files/share/permissions', [
                     dialog.idle();
                 }, 50);
             })
+            .hideFooter()
             .busy()
             .open();
         }

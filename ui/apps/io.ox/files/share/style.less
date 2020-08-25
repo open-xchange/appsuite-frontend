@@ -219,15 +219,16 @@
 
         &:after { clear: both; }
 
-        .form-group {
-            margin: 8px 0 0 0;
+        .close {
+            position: absolute;
+            top: 18px;
+            right: 16px;
         }
+    }
 
-        .input-group.has-picker:focus-within {
-            border-color: #66afe9;
-            outline: 0;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
-            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    .modal-header.help {
+        .io-ox-context-help {
+            right: 30px;
         }
     }
 
@@ -247,6 +248,31 @@
         padding: 0;
         display: flex;
         flex-direction: column;
+        
+        .share-pane {
+            h5 {
+                margin-left: 16px;
+            }
+        }
+
+       .share-pane.invite-people {
+            .form-group {
+                margin: 16px 16px 16px;
+            }
+            .input-group.has-picker:focus-within {
+                border-color: #66afe9;
+                outline: 0;
+                -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+                box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+            }
+        }
+
+       .share-pane.share-by-link {
+            border-top: 1px solid #e5e5e5;
+            .share-wizard {
+               margin: 16px 16px 16px;
+            }
+        }
 
         // also used for edge... no support for resize css attribute...
         &.IE11 {
