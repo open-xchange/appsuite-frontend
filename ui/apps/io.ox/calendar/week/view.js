@@ -362,6 +362,11 @@ define('io.ox/calendar/week/view', [
 
         onAddAppointment: function (model) {
             if (settings.get('showDeclinedAppointments', false) === false && util.getConfirmationStatus(model) === 'DECLINED') return;
+            var startOfWeek = moment(this.model.get('startDate')).format('YYYYMMDD'),
+                endOfWeek = moment(this.model.get('startDate')).add(Math.max(0, this.model.get('numColumns') - 1), 'days').format('YYYYMMDD');
+            // check if appointment is out of displayed time, may happen with some strange recurrece rules
+            // endDate is exclusive so if the end date matches the start of the week we will not show the event
+            if (model.get('endDate').value <= startOfWeek || model.get('startDate').value > endOfWeek) return;
             var node = this.renderAppointment(model);
             this.$appointmentContainer.append(node.hide());
             if (!this.onReset) this.adjustPlacement();
