@@ -55,28 +55,6 @@ define('io.ox/chat/data', [
 
         getEmail: function () {
             return this.get('email1') || this.get('email2') || this.get('email3');
-        },
-
-        getState: function () {
-            return this.get('state') || 'offline';
-        },
-
-        setState: function (state) {
-            $.ajax({
-                method: 'POST',
-                url: data.API_ROOT + '/users/state/' + state,
-                xhrFields: { withCredentials: true }
-            }).then(function () {
-                this.set('state', state);
-            }.bind(this));
-        },
-
-        fetchState: function () {
-            if (this.has('state')) return;
-            $.ajax({
-                url: data.API_ROOT + '/users/' + this.getEmail() + '/state',
-                xhrFields: { withCredentials: true }
-            }).done(function (state) { this.set('state', state); }.bind(this));
         }
     });
 
@@ -1016,12 +994,6 @@ define('io.ox/chat/data', [
 
                     if (newMessage.get('type') === 'system') model.parseSystemMessage(message, roomId);
                 });
-            });
-
-            socket.on('user.state:changed', function (event) {
-                if (!data.users.length) return;
-                var model = data.users.getByMail(event.user);
-                if (model) model.set('state', event.state);
             });
 
             socket.on('typing', function (event) {

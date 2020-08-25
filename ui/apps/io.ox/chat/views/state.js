@@ -24,16 +24,15 @@ define('io.ox/chat/views/state', ['io.ox/backbone/views/disposable'], function (
 
         initialize: function () {
             this.listenTo(this.model, 'change:state', this.onChangeState);
-            if (!this.model.isMyself()) this.model.fetchState();
         },
 
         render: function () {
-            this.$el.addClass(this.model.getState());
+            this.$el.addClass('offline');
             return this;
         },
 
         onChangeState: function () {
-            var state = this.model.getState();
+            var state = 'offline';
             this.$el.addClass(state).removeClass(_(states).without(state).join(' '));
         }
     });
