@@ -293,7 +293,8 @@ define('io.ox/core/tk/textproc', [
                     // remove superfluous markers (head & tail)
                     .replace(/(^\0+|\0+$)/g, '')
                     // finally replace block element markers by \n
-                    .replace(/\0+/g, '\n');
+                    // not \0+ or we loose empty newlines that are actually part of the signature, see OXUIB-331 reopen
+                    .replace(/\0\0?/g, '\n');
             }
 
             function finalize(str) {
