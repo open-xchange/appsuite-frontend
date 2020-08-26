@@ -59,7 +59,9 @@ define('io.ox/switchboard/extensions', [
             }.bind(this));
 
             // finally, add presence icon to dropdown node
-            this.$el.append(presence.getPresenceIcon(api.userId));
+            _.defer(function () {
+                this.$toggle.append(presence.getPresenceIcon(api.userId));
+            }.bind(this));
         }
     });
 
