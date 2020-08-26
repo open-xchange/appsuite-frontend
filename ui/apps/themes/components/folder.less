@@ -80,10 +80,8 @@
     &.visible-selection {
 
         .selected > .folder-node {
-            background-color: @foldertree-selected-background;
-            * {
-                color: @foldertree-selected-label-color;
-            }
+            background-color: var(--selected-background);
+            * { color: var(--selected); }
         }
 
         .selectable > .folder-node:hover, .selectable.dnd-over > .folder-node {
@@ -91,16 +89,15 @@
         }
 
         .selectable:focus > .folder-node {
-
-            background-color: @foldertree-selected-focus-background;
+            background-color: var(--selected-background-focus);
             * {
-                color: @foldertree-focused-label-color;
+                color: var(--selected-focus);
             }
             .folder-counter {
-                color: @foldertree-selected-focus-counter-color;
+                color: var(--folder-counter-focus);
             }
             .folder-options {
-                background-color: @foldertree-selected-focus-options-background;
+                background-color: var(--folder-options-background-focus);
             }
         }
     }
@@ -187,7 +184,7 @@
         .folder-icon {
 
             display: none;
-            color: @brand-primary;
+            color: var(--folder-icon);
             font-size: 16px;
 
             &.visible {

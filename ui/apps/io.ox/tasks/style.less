@@ -33,9 +33,10 @@
     }
 
     .status {
-        margin-left: 0.5em;
+        margin-left: 8px;
         float: right;
         margin-top: -1px;
+        border-radius: 4px;
     }
 
     .priority {
@@ -97,7 +98,19 @@
 .vgrid-cell.tasks.selected .progress { border: 1px solid #ddd; }
 .has-focus .vgrid-cell.tasks.selected .progress { border: 1px solid #283f73; }
 
+.task-detail-container {
+    .scrollable-pane {
+        position: absolute;
+        left: 32px;
+        right: 32px;
+        top: 64px;
+        bottom: 0;
+        width: auto;
+    }
+}
+
 .tasks-detailview {
+
     .io-ox-inline-links:first-child { margin: 0 0 26px 0; }
 
     .task-header {
@@ -113,15 +126,15 @@
             height: 0;
         }
         .title {
-            margin: 0 0 10px 0;
+            margin: 0 0 8px 0;
             font-size: 24px;
+            font-weight: bold;
             padding-top: 1px;
         }
     }
 
     .note {
-        border-top: 1px solid #ddd;
-        padding-top: 15px;
+        padding-top: 16px;
         line-height: 24px;
     	margin-bottom: 16px;
     	white-space: pre-wrap;
@@ -135,22 +148,17 @@
         float: right;
         line-height: 20px;
 
-        .state {
-            margin-bottom: 2px;
-            margin-top: 2px;
-        }
     }
 
-    .state, .end-date, .alarm-date, .task-progress {
-    	float: right;
-    	clear: both;
-    	margin-bottom: 4px;
+    .state {
+        margin-bottom: 2px;
+        margin-top: 2px;
+        border-radius: 4px;
     }
 
     .attachments-container {
 
-        border-top: 1px solid #ddd;
-        padding-top: 15px;
+        padding-top: 16px;
         margin-bottom: 7px;
         line-height: 24px;
 
@@ -174,15 +182,13 @@
     }
 
     .task-details {
-        padding: 7px 0 0 0;
-        border-top: 1px solid #ddd;
+        padding: 8px 0 0 0;
         margin: 0 0 8px 0;
     }
 
     .detail-label {
         cursor: default;
-        color: #767676;
-        text-align: left;
+        color: #333;
         padding-top: 8px;
         line-height: 24px;
     }
@@ -212,11 +218,20 @@
         font-weight: bold;
         vertical-align: top;
         white-space: nowrap;
-
         .high, .low, .medium {
-            margin-right: 10px;
-            font-size: 16px;
+            margin-right: 16px;
+            font-size: inherit;
             color: @task-priority;
+        }
+    }
+
+    .progress {
+        height: 8px;
+        background-color: #ddd;
+        max-width: 320px;
+        margin-bottom: 0;
+        .progress-bar {
+            background-color: @brand-primary;
         }
     }
 }

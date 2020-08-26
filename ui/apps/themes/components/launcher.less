@@ -168,7 +168,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         & > button {
             // styles for fa-icon
             font-size: 18px;
-            color: @appcontrol-launcher-color;
+            color: var(--topbar-icon);
             padding: 2px 16px 2px 16px;
             width: 48px;
             // svg styles
@@ -195,7 +195,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         }
     }
     #io-ox-quicklaunch > button {
-        color: @quicklaunch-button-color;
+        color: var(--topbar-icon);
         margin-top: initial;
         & > .lcell > .icon {
             margin-bottom: 4px;
@@ -354,7 +354,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
                 cursor: pointer;
                 font-size: 18px;
                 text-decoration: none;
-                color: @appcontrol-launcher-color;
+                color: var(--topbar-icon);
                 border-radius: @default-border-radius;
 
                 &:hover, &:focus {

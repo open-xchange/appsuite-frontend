@@ -133,31 +133,111 @@ define('io.ox/core/main/topbar_right', [
         index: 100,
         extend: function () {
 
-            this.link('background2', 'No background image', handler.bind(null, 0))
-                .divider()
-                .link('background1', 'Sunset', handler.bind(null, 1))
-                .link('background2', 'Mountains', handler.bind(null, 2))
-                .link('background3', 'Ocean', handler.bind(null, 3))
-                .link('background4', 'Gradient', handler.bind(null, 4))
-                .link('background5', 'Green', handler.bind(null, 5))
-                .link('background6', 'City', handler.bind(null, 6))
-                .divider()
-                .link('dark', 'Dark', handler.bind(null, 9));
+            _(themes).each(function (theme, id) {
+                this.link(id, theme.title, handler.bind(null, id));
+                if (theme.divider) this.divider();
+            }, this);
 
-            function handler(n, e) {
+            function handler(id, e) {
                 e.preventDefault();
-                select(n);
+                select(id);
             }
 
-            function select(n) {
-                $('#io-ox-core').removeClass('img0 img1 img2 img3 img4 img5 img6 img9 background');
-                $('#io-ox-core').addClass('background img' + (n || 0));
-                _.setCookie('background', n);
+            function select(id) {
+                var theme = themes[id];
+                if (!theme) return;
+                var html = document.documentElement;
+                $('#io-ox-core')
+                    .addClass('background')
+                    .toggleClass('dark', !!theme.dark)
+                    .css('background', theme.background || 'none');
+                _(variables).each(function (key) {
+                    html.style.removeProperty('--' + key);
+                });
+                _(theme.variables).each(function (value, key) {
+                    html.style.setProperty('--' + key, value);
+                });
+                _.setCookie('theme', id);
             }
 
-            select(_.getCookie('background'));
+            select(_.getCookie('theme'));
         }
     });
+
+    var variables = [
+        'primary-brand', 'primary-action', 'primary-action-background',
+        'selected-background', 'selected-background-focus', 'selected-background-hover',
+        'topbar-icon', 'topbar-background', 'topbar-search-background',
+        'folder-icon'
+    ];
+
+    var themes = {
+        white: {
+            title: 'No background image',
+            background: 'linear-gradient(0deg, #efedec, #ffffff)',
+            variables: {
+                'topbar-search-background': '#f1f0ee'
+            },
+            divider: true
+        },
+        sunset: {
+            title: 'Sunset',
+            background: 'url("apps/themes/default/backgrounds/sunset.jpg") center/cover',
+            variables: {
+                'primary-brand': '#73878c',
+                'selected-background': '#e3e7e8'
+            }
+        },
+        mountains: {
+            title: 'Mountains',
+            background: 'url("apps/themes/default/backgrounds/mountains.jpg") center/cover',
+            variables: {
+                'primary-brand': '#005e9d',
+                'selected-background': '#dae7f1'
+            }
+        },
+        ocean: {
+            title: 'Ocean',
+            background: 'url("apps/themes/default/backgrounds/ocean.jpg") center/cover',
+            variables: {
+                'primary-brand': '#5e6ca1',
+                'selected-background': '#e7e5f0',
+                'topbar-icon': '#333'
+            }
+        },
+        gradient: {
+            title: 'Gradient',
+            background: 'url("apps/themes/default/backgrounds/gradient.jpg") bottom/auto',
+            variables: {
+                'primary-brand': '#a461b8',
+                'selected-background': '#f7ecf2'
+            }
+        },
+        green: {
+            title: 'Landscape',
+            background: 'url("apps/themes/default/backgrounds/green.jpg") center/cover',
+            variables: {
+                'primary-brand': '#496e61',
+                'selected-background': '#ebf4f1'
+            }
+        },
+        city: {
+            title: 'City',
+            background: 'url("apps/themes/default/backgrounds/city.jpg") top/cover',
+            variables: {
+                'primary-action': '#333',
+                'primary-action-background': '#e1e6ed',
+                'selected-background': '#cbd3df',
+                'topbar-background': 'transparent'
+            },
+            divider: true
+        },
+        dark: {
+            title: 'Dark mode',
+            background: '#101010',
+            dark: true
+        }
+    };
 
     ext.point('io.ox/core/appcontrol/right').extend({
         id: 'notifications',

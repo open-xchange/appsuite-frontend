@@ -129,7 +129,7 @@ define('io.ox/tasks/main', [
             app.pages.addPage({
                 name: 'listView',
                 container: app.getWindow().nodes.main,
-                classes: 'leftside border-right'
+                classes: 'leftside'
             });
             app.pages.addPage({
                 name: 'detailView',
@@ -334,18 +334,11 @@ define('io.ox/tasks/main', [
         },
 
         'grid-options': function (app) {
-            var grid = app.grid;
-            function updateGridOptions() {
 
-                var dropdown = grid.getToolbar().find('.grid-options'),
-                    props = grid.props;
-                if (props.get('order') === 'desc') {
-                    dropdown.find('.fa-arrow-down').css('opacity', 1).end()
-                        .find('.fa-arrow-up').css('opacity', 0.4);
-                } else {
-                    dropdown.find('.fa-arrow-up').css('opacity', 1).end()
-                        .find('.fa-arrow-down').css('opacity', 0.4);
-                }
+            var grid = app.grid;
+
+            function updateGridOptions() {
+                var props = grid.props;
                 //update api property (used cid in api.updateAllCache, api.create)
                 api.options.requests.all.sort = props.get('sort') !== 'urgency' ? props.get('sort') : 317;
                 api.options.requests.all.order = props.get('order');
@@ -672,15 +665,24 @@ define('io.ox/tasks/main', [
             };
         },
 
-        // reverted for 7.10
-        // 'primary-action': function (app) {
-        //     app.addPrimaryAction({
-        //         point: 'io.ox/tasks/sidepanel',
-        //         label: gt('New task'),
-        //         action: 'io.ox/tasks/actions/create',
-        //         toolbar: 'create'
-        //     });
-        // },
+        'primary-action': function (app) {
+            app.addPrimaryAction({
+                point: 'io.ox/tasks/sidepanel',
+                label: gt('New task'),
+                action: 'io.ox/tasks/actions/create',
+                toolbar: 'create'
+            });
+        },
+
+        'top-search': function () {
+            if (!$('#io-ox-topsearch').is(':empty')) return;
+            $('#io-ox-topsearch').append(
+                $('<div class="search-container">').append(
+                    $('<input type="search" class="form-control" placeholder="Search task">'),
+                    $('<i class="fa fa-search">')
+                )
+            );
+        },
 
         'sidepanel': function (app) {
             if (_.device('smartphone')) return;
@@ -688,8 +690,8 @@ define('io.ox/tasks/main', [
                 id: 'tree',
                 index: 100,
                 draw: function (baton) {
-                    // add border & render tree and add to DOM
-                    this.addClass('border-right').append(baton.app.treeView.$el);
+                    // render tree and add to DOM
+                    this.append(baton.app.treeView.$el);
                 }
             });
 
@@ -857,7 +859,9 @@ define('io.ox/tasks/main', [
                 ext.point('io.ox/tasks/swipeDelete').invoke('draw', cell, obj);
             }
         };
-        app.gridContainer = $('<div class="border-right">');
+
+        app.gridContainer = $('<div class="abs grid-container">')
+            .attr({ role: 'navigation', 'aria-label': gt('Tasks') });
 
         grid = new VGrid(app.gridContainer, {
             settings: settings,
@@ -867,8 +871,10 @@ define('io.ox/tasks/main', [
             hideToolbar: _.device('smartphone'),
             // if it's shown, it should be on the top
             toolbarPlacement: 'top',
-            templateOptions: { tagName: 'li', defaultClassName: 'vgrid-cell list-unstyled' }
+            templateOptions: { tagName: 'li', defaultClassName: 'vgrid-cell list-unstyled' },
+            showCheckbox: false
         });
+
         app.gridContainer.find('.vgrid-toolbar').attr('aria-label', gt('Tasks toolbar'));
 
         app.grid = grid;
@@ -912,10 +918,8 @@ define('io.ox/tasks/main', [
             var dropdown = new Dropdown({
                 model: app.grid.props,
                 tagName: 'div',
-                caret: false,
-                label: function () {
-                    return [$('<i class="fa fa-arrow-down" aria-hidden="true">'), $('<i class="fa fa-arrow-up" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Sort options'))];
-                }
+                caret: true,
+                label: gt('Sort')
             })
                 .header(gt('Sort options'))
                 .option('sort', 'urgency', gt('Urgency'))

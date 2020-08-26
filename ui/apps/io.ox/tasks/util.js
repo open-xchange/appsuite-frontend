@@ -259,21 +259,28 @@ define('io.ox/tasks/util', [
                     task.title = '\u2014';
                 }
 
-                function formatTime(value, fullTime) {
-                    if (value === undefined || value === null) return '';
+                // convert UTC timestamps to local time
+                ['end_time', 'start_time', 'alarm', 'date_completed'].forEach(function (field) {
+                    var full_time = task.full_time && (field === 'end_time' || field === 'start_time');
+                    var format = formatTime(task[field], full_time);
+                    task[field] = format.date;
+                    task[field + '_diff'] = format.diff;
+                });
 
-                    if (fullTime) {
-                        // fulltime tasks are timezone independent
-                        return moment.utc(value).format('l');
-                    }
-                    return moment.tz(value, coreSettings.get('timezone')).format('l, LT');
+                function formatTime(value, fullTime) {
+                    var result = { date: '', diff: '' };
+                    if (value === undefined || value === null) return result;
+                    // fulltime tasks are timezone independent
+                    var date = fullTime ? moment.utc(value) : moment.tz(value, coreSettings.get('timezone'));
+                    result.date = date.format(fullTime ? 'l' : 'l, LT');
+                    var duration = moment.duration(date.diff(moment()));
+                    result.diff = duration.asHours() < 24 ? gt('today') : duration.humanize(true);
+                    return result;
                 }
 
-                // convert UTC timestamps to local time
-                task.end_time = formatTime(task.end_time, task.full_time);
-                task.start_time = formatTime(task.start_time, task.full_time);
-                task.alarm = formatTime(task.alarm);
-                task.date_completed = formatTime(task.date_completed);
+                // task.start_time = formatTime(task.start_time, task.full_time);
+                // task.alarm = formatTime(task.alarm);
+                // task.date_completed = formatTime(task.date_completed);
 
                 return task;
             },
@@ -344,6 +351,7 @@ define('io.ox/tasks/util', [
             getPriority: function (data) {
                 if (data) {
                     var p = parseInt(data.priority, 10) || 0,
+                        n = 0,
                         $span = $('<span>');
                     switch (p) {
                         case 0:
@@ -353,14 +361,16 @@ define('io.ox/tasks/util', [
                             $span.addClass('low').attr('title', gt('Low priority'));
                             break;
                         case 2:
+                            n = 1;
                             $span.addClass('medium').attr('title', gt('Medium priority'));
                             break;
                         case 3:
+                            n = 3;
                             $span.addClass('high').attr('title', gt('High priority'));
                             break;
                         // no default
                     }
-                    for (var i = 0; i < p; i++) {
+                    for (var i = 0; i < n; i++) {
                         $span.append($('<i class="fa fa-exclamation" aria-hidden="true">'));
                     }
                     return $span;

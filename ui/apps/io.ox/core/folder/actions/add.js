@@ -70,18 +70,21 @@ define('io.ox/core/folder/actions/add', [
                 var module = this.context.module;
                 if (module === 'event') return gt('Add new calendar');
                 else if (module === 'contacts') return gt('Add new address book');
+                else if (module === 'tasks') return gt('Add new list');
                 return gt('Add new folder');
             },
             getName: function () {
                 var module = this.context.module;
                 if (module === 'event') return gt('New calendar');
                 else if (module === 'contacts') return gt('New address book');
+                else if (module === 'tasks') return gt('New list');
                 return gt('New folder');
             },
             getLabel: function () {
                 var module = this.context.module;
                 if (module === 'event') return gt('Calendar name');
                 else if (module === 'contacts') return gt('Address book name');
+                else if (module === 'tasks') return gt('List name');
                 return gt('Folder name');
             }
         })

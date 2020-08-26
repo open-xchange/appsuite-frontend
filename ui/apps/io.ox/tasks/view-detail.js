@@ -96,44 +96,15 @@ define('io.ox/tasks/view-detail', [
 
     ext.point('io.ox/tasks/detail-view').extend({
         index: 200,
-        id: 'attachments',
-        draw: function (baton) {
-            var task = baton.interpretedData;
-            if (api.uploadInProgress(_.ecid(baton.data))) {
-                var progressview = new attachments.progressView({ cid: _.ecid(task) });
-                this.append(
-                    $('<div class="attachments-container">').append(
-                        progressview.render().$el
-                    )
-                );
-            } else if (task.number_of_attachments > 0) {
-                ext.point('io.ox/tasks/detail-attach').invoke('draw', this, task);
-            }
-        }
-    });
-    ext.point('io.ox/tasks/detail-view').extend({
-        index: 300,
-        id: 'note',
-        draw: function (baton) {
-            var note = calendarUtil.getNote(baton.interpretedData, 'note');
-            note = util.checkMailLinks(note);
-
-            if (note) {
-                this.append(
-                    $('<div class="note">').html(
-                        note
-                    )
-                );
-            }
-        }
-    });
-    ext.point('io.ox/tasks/detail-view').extend({
-        index: 400,
         id: 'details',
         draw: function (baton) {
             var task = baton.interpretedData,
                 fields = {
+                    status: gt('Status'),
+                    percent_completed: gt('Progress'),
+                    end_time: gt('Due'),
                     start_time: gt('Start date'),
+                    note: gt('Description'),
                     target_duration: gt('Estimated duration in minutes'),
                     actual_duration: gt('Actual duration in minutes'),
                     target_costs: gt('Estimated costs'),
@@ -156,13 +127,44 @@ define('io.ox/tasks/view-detail', [
                 // 0 is valid; skip undefined, null, and ''
                 var value = task[key];
                 if (!value && value !== 0) return;
-                if (key === 'target_costs' || key === 'actual_costs') {
-                    value = task.currency ? locale.currency(value, task.currency) : locale.number(value, 2);
+                var $dt = $('<dt class="detail-label">').text(label);
+                var $dd = $('<dd class="detail-value">');
+                switch (key) {
+                    case 'status':
+                        $dd.append(
+                            $('<div>').text(task.status).addClass('state ' + task.badge)
+                        );
+                        break;
+                    case 'end_time':
+                    case 'start_time':
+                        var diff = task[key + '_diff'] ? ' (' + task[key + '_diff'] + ')' : '';
+                        $dd.text(value + diff);
+                        break;
+                    case 'percent_completed':
+                        $dd.append(
+                            //#. %1$s how much of a task is completed in percent, values from 0-100
+                            //#, c-format
+                            $('<div>').text(gt('%1$s %', task.percent_completed)),
+                            $('<div class="progress" aria-hidden="true">').append(
+                                $('<div class="progress-bar">').width(task.percent_completed + '%')
+                            )
+                        );
+                        break;
+                    case 'target_costs':
+                    case 'actual_costs':
+                        value = task.currency ? locale.currency(value, task.currency) : locale.number(value, 2);
+                        $dd.text(value);
+                        break;
+                    case 'note':
+                        var note = calendarUtil.getNote(task, 'note');
+                        note = util.checkMailLinks(note);
+                        if (note) $dd.html(note);
+                        break;
+                    default:
+                        $dd.text(value);
+                        break;
                 }
-                $details.append(
-                    $('<dt class="detail-label">').text(label),
-                    $('<dd class="detail-value">').text(value)
-                );
+                $details.append($dt, $dd);
             });
 
             if ($details.children().length) {
@@ -174,9 +176,28 @@ define('io.ox/tasks/view-detail', [
     });
 
     ext.point('io.ox/tasks/detail-view').extend({
+        index: 300,
+        id: 'attachments',
+        draw: function (baton) {
+            var task = baton.interpretedData;
+            if (api.uploadInProgress(_.ecid(baton.data))) {
+                var progressview = new attachments.progressView({ cid: _.ecid(task) });
+                this.append(
+                    $('<div class="attachments-container">').append(
+                        progressview.render().$el
+                    )
+                );
+            } else if (task.number_of_attachments > 0) {
+                ext.point('io.ox/tasks/detail-attach').invoke('draw', this, task);
+            }
+        }
+    });
+
+    ext.point('io.ox/tasks/detail-view').extend({
         index: 500,
         id: 'participants',
         draw: function (baton) {
+            if (2 > 1) return;
             var pView = new ParticipantsView(baton);
             this.append(pView.draw());
         }
@@ -186,16 +207,15 @@ define('io.ox/tasks/view-detail', [
         index: 100,
         id: 'infopanel',
         draw: function (task) {
-            if (task.end_time) {
-                this.append(
-                    $('<div>').addClass('end-date').text(
-                        //#. %1$s due date of a task
-                        //#, c-format
-                        gt('Due %1$s', task.end_time)
-                    )
-                );
-            }
-
+            // if (task.end_time) {
+            //     this.append(
+            //         $('<div>').addClass('end-date').text(
+            //             //#. %1$s due date of a task
+            //             //#, c-format
+            //             gt('Due %1$s', task.end_time)
+            //         )
+            //     );
+            // }
             //alarm makes no sense if reminders are disabled
             if (task.alarm) {
                 this.append(
@@ -206,19 +226,19 @@ define('io.ox/tasks/view-detail', [
                     )
                 );
             }
-            if (task.percent_completed && task.percent_completed !== 0) {
-                this.append(
-                    $('<div>').addClass('task-progress').text(
-                        //#. %1$s how much of a task is completed in percent, values from 0-100
-                        //#, c-format
-                        gt('Progress %1$s %', task.percent_completed)
-                    )
-                );
-            }
-            this.append(
-                // status
-                $('<div>').text(task.status).addClass('state ' + task.badge)
-            );
+            // if (task.percent_completed && task.percent_completed !== 0) {
+            //     this.append(
+            //         $('<div>').addClass('task-progress').text(
+            //             //#. %1$s how much of a task is completed in percent, values from 0-100
+            //             //#, c-format
+            //             gt('Progress %1$s %', task.percent_completed)
+            //         )
+            //     );
+            // }
+            // this.append(
+            //     // status
+            //     $('<div>').text(task.status).addClass('state ' + task.badge)
+            // );
         }
     });
 

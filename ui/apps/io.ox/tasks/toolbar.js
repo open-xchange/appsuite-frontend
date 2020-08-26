@@ -36,13 +36,13 @@ define('io.ox/tasks/toolbar', [
         //
         // --- HI ----
         //
-        'create': {
-            prio: 'hi',
-            mobile: 'hi',
-            title: gt('New task'),
-            drawDisabled: true,
-            ref: 'io.ox/tasks/actions/create'
-        },
+        // 'create': {
+        //     prio: 'hi',
+        //     mobile: 'hi',
+        //     title: gt('New task'),
+        //     drawDisabled: true,
+        //     ref: 'io.ox/tasks/actions/create'
+        // },
         'edit': {
             prio: 'hi',
             mobile: 'hi',
@@ -133,6 +133,8 @@ define('io.ox/tasks/toolbar', [
         custom: true,
         draw: function (baton) {
 
+            if (2 > 1) return;
+
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ el: this, caret: true, model: baton.app.props, label: gt('View') })
                 .group(gt('Options'))
@@ -151,10 +153,7 @@ define('io.ox/tasks/toolbar', [
 
             // yep strict false (otherwise toolbar does not redraw when changing between empty folders => tasks are created in the wrong folder)
             var toolbarView = new ToolbarView({ point: 'io.ox/tasks/toolbar/links', title: app.getTitle(), strict: false });
-
-            app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                toolbarView.$el
-            );
+            app.right.parent().addClass('classic-toolbar-visible').prepend(toolbarView.$el);
 
             // list is array of object (with id and folder_id)
             app.updateToolbar = function (list) {
