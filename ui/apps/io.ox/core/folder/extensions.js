@@ -825,10 +825,10 @@ define('io.ox/core/folder/extensions', [
                 'hidden':   gt('Hidden calendars')
             },
             'tasks': {
-                'private':  gt('My tasks'),
-                'public':   gt('Public tasks'),
-                'shared':   gt('Shared tasks'),
-                'hidden':   gt('Hidden tasks')
+                'private':  gt('My lists'),
+                'public':   gt('Public lists'),
+                'shared':   gt('Shared lists'),
+                'hidden':   gt('Hidden lists')
             }
         };
 
@@ -948,7 +948,7 @@ define('io.ox/core/folder/extensions', [
                     tagName: 'li',
                     className: 'dropdown',
                     $toggle: $('<a href="#" data-action="add-subfolder" data-toggle="dropdown">').append(
-                        gt('Add new folder'),
+                        gt('Add new list'),
                         $('<i class="fa fa-caret-down" aria-hidden="true">')
                     )
                 });
@@ -1202,6 +1202,7 @@ define('io.ox/core/folder/extensions', [
             id: 'is-selected',
             index: 400,
             draw: function (baton) {
+
                 if (!/^calendar$/.test(baton.data.module)) return;
 
                 var self = this,
@@ -1213,8 +1214,11 @@ define('io.ox/core/folder/extensions', [
                 this.attr('aria-checked', app.folders.isSelected(baton.data.id));
 
                 require(['io.ox/calendar/util'], function (util) {
+
                     var folderColor = util.getFolderColor(baton.data),
-                        foregroundColor = util.getHighContrastForeground(folderColor),
+                        borderColor = util.getBorderColor(folderColor),
+                        backgroundColor = util.getBackgroundColor(folderColor),
+                        foregroundColor = util.getForegroundColor(backgroundColor),
                         target = folderLabel.find('.color-label'),
                         colorName = util.getColorName(folderColor);
 
@@ -1224,7 +1228,7 @@ define('io.ox/core/folder/extensions', [
                     if (target.length === 0) target = $('<div class="color-label" aria-hidden="true">');
                     target
                         .toggleClass('selected', app.folders.isSelected(baton.data.id))
-                        .css({ backgroundColor: folderColor, color: foregroundColor })
+                        .css({ borderColor: borderColor, backgroundColor: backgroundColor, color: foregroundColor })
                         .off('click', toggleFolder)
                         .on('click', { folder: baton.data, app: app, target: target }, toggleFolder);
                     self.off('keydown', toggleFolder).on('keydown', { folder: baton.data, app: app, target: target }, toggleFolder);

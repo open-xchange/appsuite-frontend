@@ -199,25 +199,24 @@
     }
 
     .folder-tree .folder-node .folder-label {
+
         position: relative;
 
         .color-label {
-            width: 16px;
-            height: 16px;
+            width: 24px;
+            height: 24px;
             position: absolute;
-            left: -25px;
+            left: -32px;
             top: 4px;
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            background-clip: border-box;
-            border-radius: @border-radius-small;
-
+            border: 2px solid #555;
+            border-radius: @default-border-radius;
             &.selected:before {
                 display: block;
                 font-family: 'FontAwesome';
                 content: '\f00c';
                 text-align: center;
-                font-size: 13px;
-                line-height: 16px;
+                font-size: 14px;
+                line-height: 20px;
             }
         }
 
@@ -225,7 +224,6 @@
             > * {
                 margin-left: 24px;
             }
-
             .color-label {
                 left: 0;
                 top: 16px;

@@ -265,8 +265,8 @@ div.hopscotch-bubble {
     transition: filter 1s linear, opacity 1s linear;
 
     &.background {
-        background-size: cover;
-        &.img0 {
+        /*background-size: cover;*/
+/*        &.img0 {
             background-image: linear-gradient(0deg, #efedec, #ffffff);
             #io-ox-topsearch .form-control {
                 background-color: #f1f0ee;
@@ -290,20 +290,20 @@ div.hopscotch-bubble {
             background-image: url('apps/themes/default/backgrounds/green.jpg');
         }
         &.img6 {
-            background-image: url('apps/themes/default/backgrounds/city.jpg');
+            background-image: ;
             background-position: top;
         }
         &.img9 {
             background-image: none;
             background-color: #101010;
-        }
+        }*/
 
         #io-ox-appcontrol {
-            background: #ffffff20;
+            background-color: var(--topbar-background);
         }
 
         #io-ox-topsearch .form-control {
-            background-color: white;
+            background-color: var(--topbar-search-background);
         }
 
         #io-ox-screens {
@@ -380,8 +380,22 @@ div.hopscotch-bubble {
             height: 56px;
         }
 
+        .grid-container {
+            .el-gradiente();
+            border-radius: 6px 6px 0 0;
+            &.vgrid {
+                left: 0;
+                right: 8px;
+            }
+        }
+
+        .task-detail-container {
+            border-radius: 6px 6px 0 0;
+            .el-gradiente();
+        }
+
         /* dark mode */
-        &.img9 {
+        &.dark {
             #io-ox-top-logo img { filter: none; }
             #io-ox-appcontrol {
                 background-color: #1a1a1a;
@@ -505,13 +519,13 @@ html:not(.internet-explorer) {
 
 // shared css
 .list-view, .vgrid {
-    .gray { color: #707070; }
+    .gray { color: var(--text-gray); }
     .selected:not(:focus) .gray {
-        color: #333333;
+        color: var(--text);
     }
     .vgrid-cell, .list-item {
         &:hover .gray {
-            color: #555;
+            color: var(--text-hover);
         }
     }
 }

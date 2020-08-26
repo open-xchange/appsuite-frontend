@@ -31,11 +31,11 @@
 
         &.has-focus {
             .vgrid-cell.selected {
-                background-color: @selected-background;
-                * { color: @grid-selected-color; }
-                i { color: @grid-selected-checkbox-color; }
-                &:hover { background-color: lighten(@selected-background, 2%) }
-                &:focus { background-color: @selected-focussed-background; }
+                background-color: var(--selected-background);
+                * { color: var(--selected-focus); }
+                i { color: var(--selected-focus); }
+                &:hover { background-color: var(--selected-background-hover); }
+                &:focus { background-color: var(--selected-background-focus); }
             }
         }
     }
@@ -112,11 +112,12 @@
         .grid-options.dropdown {
             position: absolute;
             right: 0;
-            top: 0;
+            top: 16px;
             a {
                 display: block;
                 padding-right: 16px;
                 padding-left: 16px;
+                color: #333;
                 &:focus, &:focus i {
                     color: @selected-color;
                     background: @selected-background;
