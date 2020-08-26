@@ -20,7 +20,8 @@ const fs = require('fs'),
     readFile = util.promisify(fs.readFile),
     assert = require('assert'),
     FormData = require('form-data'),
-    helperUtil = require('@open-xchange/codecept-helper').util;
+    helperUtil = require('@open-xchange/codecept-helper').util,
+    path = require('path');
 
 Before(async function (users) {
     await users.create();
@@ -30,8 +31,8 @@ After(async function (users) {
     await users.removeAll();
 });
 
-async function importMails(I, path, start, end) {
-    const files = JSON.parse(await readFile(path));
+async function importMails(I, location, start, end) {
+    const files = JSON.parse(await readFile(path.resolve(global.codecept_dir, location)));
     let size = 0;
     // forEach does not handle await correctly
     I.say(start + ':' + end + ':' + files.length, 'blue');

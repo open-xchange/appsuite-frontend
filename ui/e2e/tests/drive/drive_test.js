@@ -13,6 +13,7 @@
 
 /// <reference path="../../steps.d.ts" />
 var fs = require('fs');
+const path = require('path');
 
 Feature('Drive');
 
@@ -75,9 +76,10 @@ Scenario('[C7887] Disable hidden folders and files', async function (I, drive) {
 Scenario('[C45046] Upload new version', async function (I, drive) {
     //Generate TXT file for upload
     let timestamp1 = Math.round(+new Date() / 1000);
-    await fs.promises.writeFile('build/e2e/C45046.txt', timestamp1);
+    const filePath = 'build/e2e/C45046.txt';
+    await fs.promises.writeFile(path.resolve(global.codecept_dir, filePath), timestamp1);
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
-    await I.haveFile(infostoreFolderID, 'build/e2e/C45046.txt');
+    await I.haveFile(infostoreFolderID, filePath);
 
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -89,7 +91,7 @@ Scenario('[C45046] Upload new version', async function (I, drive) {
 
     I.waitForText(timestamp1);
     let timestamp2 = Math.round(+new Date() / 1000);
-    await fs.promises.writeFile('build/e2e/C45046.txt', timestamp2);
+    await fs.promises.writeFile(path.resolve(global.codecept_dir, filePath), timestamp2);
     I.attachFile('.io-ox-viewer input.file-input', 'build/e2e/C45046.txt');
     I.click('Upload');
 

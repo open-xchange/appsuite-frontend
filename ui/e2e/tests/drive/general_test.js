@@ -15,6 +15,7 @@
 
 const fs = require('fs'),
     util = require('util'),
+    path = require('path'),
     readdir = util.promisify(fs.readdir);
 
 Feature('Drive > General');
@@ -262,7 +263,7 @@ Scenario('[C45040] Sort files', async (I, drive) => {
 Scenario('[C45041] Select files', async (I, drive) => {
     const testFolder = await I.haveFolder({ title: 'Selecttest', module: 'infostore', parent: await I.grabDefaultFolder('infostore') }),
         filePath = 'e2e/media/files/0kb/',
-        files = await readdir(filePath);
+        files = await readdir(path.resolve(global.codecept_dir, filePath));
 
     await I.haveFolder({ title: 'Subfolder', module: 'infostore', parent: testFolder });
 
@@ -294,7 +295,7 @@ Scenario('[C45042] Filter files', async (I, drive) => {
 
     const testFolder = await I.haveFolder({ title: 'Filtertest', module: 'infostore', parent: await I.grabDefaultFolder('infostore') }),
         filePath = 'e2e/media/files/0kb/',
-        files = await readdir(filePath);
+        files = await readdir(path.resolve(global.codecept_dir, filePath));
 
     files.forEach((name) => {
         if (name !== '.DS_Store') I.haveFile(testFolder, filePath + name);
