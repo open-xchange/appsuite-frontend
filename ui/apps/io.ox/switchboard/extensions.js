@@ -26,11 +26,15 @@ define('io.ox/switchboard/extensions', [
     'io.ox/switchboard/views/call-history',
     'io.ox/core/capabilities',
     'io.ox/contacts/model',
+    'settings!io.ox/core',
     'gettext!io.ox/switchboard',
     'less!io.ox/switchboard/style'
-], function (ext, presence, api, account, mini, DisposableView, actionsUtil, contactsAPI, ConferenceSelectView, ZoomMeetingView, JitsiMeetingView, callHistory, capabilities, contactsModel, gt) {
+], function (ext, presence, api, account, mini, DisposableView, actionsUtil, contactsAPI, ConferenceSelectView, ZoomMeetingView, JitsiMeetingView, callHistory, capabilities, contactsModel, settings, gt) {
 
     'use strict';
+
+    // no presence state for anonymous guests (check if they are allowed to edit their contact/user data to distinguish between invited by mail or anonymous link)
+    if (capabilities.has('guest') && settings.get('user/internalUserEdit', true) === false) return;
 
     // extend account dropdown
     ext.point('io.ox/core/appcontrol/right/dropdown').extend({
