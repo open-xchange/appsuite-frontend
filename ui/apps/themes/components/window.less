@@ -585,8 +585,9 @@
         left: ~"calc(50% - 400px)";
     }
     &.width-lg {
-        width: 920px;
-        
+        // 920px
+        width: 57.5rem;
+        &:not(.maximized) { max-width: 1140px; }
         // start window in the middle
         left: ~"calc(50% - 460px)";
     }

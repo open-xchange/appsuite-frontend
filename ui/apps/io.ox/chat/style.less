@@ -12,13 +12,13 @@
  */
 
 @width: 320px;
-@pictureSize: 48px;
-@headerHeight: 80px;
+@pictureSize: ~"calc(2rem + 16px)";
+@headerHeight: ~"calc(3rem + 32px)";
 @searchHeight: 40px;
 @controlsHeight: 80px;
 @footerHeight: 64px;
-@avatarSize: 40px;
-@stateSize: 12px;
+@avatarSize: 2.5rem;
+@stateSize: 0.75rem;
 @backgroundColor: #f5f5f5;
 @borderColor: #ccc;
 
@@ -158,6 +158,12 @@
             margin: -1px 0 0 0;
             padding: 0;
         }
+
+        .dropdown {
+            height: 3rem;
+            display: flex;
+            align-items: center;
+        }
     }
 
     .resizebar {
@@ -179,7 +185,7 @@
     .chat-leftside .header {
 
         .picture {
-            .picture(@pictureSize, @pictureSize);
+            .picture(@pictureSize, 3rem);
             margin-right: 16px;
             float: left;
             display: flex;
@@ -204,8 +210,8 @@
 
         .state {
             position: absolute;
-            left: 44px;
-            top: 48px;
+            left: ~"calc(2rem + 12px)";
+            top: ~"calc(2.25rem + 12px)";
         }
     }
 
@@ -422,7 +428,7 @@
     .initials {
         display: inline-block;
         background-color: #eee;
-        .picture(40px, 40px);
+        .picture(2.5rem, 2.5rem);
         color: rgba(0, 0, 0, 0.60);
         font-weight: bold;
         .flex-center();
@@ -441,8 +447,8 @@
         }
         .state {
             position: absolute;
-            top: 29px;
-            left: 28px;
+            top: ~"calc(2rem - 3px)";
+            left: ~"calc(2rem - 4px)";
         }
         .fa-group, .fa-hashtag {
             color: rgba(0, 0, 0, 0.6);
@@ -836,7 +842,7 @@
         text-align: center;
         width: @stateSize;
         height: @stateSize;
-        border-radius: 10px;
+        border-radius: 50%;
         padding-top: 3px;
         &.large {
             height: 16px;
@@ -998,7 +1004,7 @@
     .btn-circle {
         width: @pictureSize;
         height: @pictureSize;
-        border-radius: @pictureSize / 2;
+        border-radius: 50%;
         text-align: center;
         background-color: transparent;
         color: @gray;
