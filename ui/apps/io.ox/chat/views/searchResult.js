@@ -11,7 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/searchResult', ['io.ox/backbone/views/disposable', 'io.ox/chat/events', 'io.ox/chat/data'], function (DisposableView, events, data) {
+define('io.ox/chat/views/searchResult', [
+    'io.ox/backbone/views/disposable',
+    'io.ox/chat/events',
+    'io.ox/chat/data',
+    'io.ox/chat/views/chatListEntry',
+    'gettext!io.ox/chat'
+], function (DisposableView, events, data, ChatListEntryView, gt) {
 
     'use strict';
 
@@ -21,32 +27,80 @@ define('io.ox/chat/views/searchResult', ['io.ox/backbone/views/disposable', 'io.
         className: 'search-result',
 
         initialize: function () {
+            this.collection = new Backbone.Collection();
             this.listenTo(events, 'cmd:search', function (query) {
+                this.query = query;
                 this.search(query);
             });
+            this.listenTo(this.collection, 'add remove reset', _.debounce(this.render.bind(this), 10));
         },
 
         render: function () {
-            this.$el.hide();
+            this.$el.parent().toggleClass('show-search', !!this.query);
+            this.$el.empty().append(
+                this.collection.map(function (model) {
+                    return new ChatListEntryView({ model: model }).render().$el;
+                })
+            );
+            if (this.collection.length === 0) {
+                this.$el.append(
+                    $('<li class="no-results">').text(gt('No search results'))
+                );
+            }
             return this;
         },
 
+        searchAddresses: function (query) {
+            return require(['io.ox/contacts/addressbook/popup']).then(function (picker) {
+                return picker.getAllMailAddresses().then(function (res) {
+                    var result = picker.search(query, res.index, res.hash, true);
+                    return result.filter(function (user) { return user.email !== data.user.email; });
+                });
+            });
+        },
+
+        searchTitles: function (query) {
+            var regexQuery = new RegExp('(\\b' + escape(query) + ')', 'ig');
+            return data.chats.filter(function (model) {
+                var res =  regexQuery.test(model.get('title'));
+                return res;
+            }).map(function (model) {
+                return model.clone();
+            });
+        },
+
         search: function (query) {
-            var url = data.API_ROOT + '/messages?' + $.param({ q: query });
-            $.getJSON(url).done(this.renderResult.bind(this, query));
-        },
+            if (!query) return this.collection.reset();
 
-        renderResult: function (query, result) {
-            this.regexQuery = new RegExp('(\\b' + escape(query) + ')', 'ig');
-            this.$el.empty().append(
-                _(result).map(this.renderItem, this)
-            );
-            this.$el.show();
-        },
+            $.when(
+                this.searchAddresses(query),
+                this.searchTitles(query)
+            ).then(function (addresses, rooms) {
+                var ids = {},
+                    chatsByAddress = addresses.map(function (address) {
+                        // find according room
+                        var room = data.chats.find(function (model) {
+                            if (model.get('type') !== 'private') return;
+                            return _(model.get('members')).findWhere({ email: address.email });
+                        });
+                        if (room) return room;
+                        var members = {};
+                        members[data.user.email] = 'admin';
+                        members[address.email] = 'member';
+                        return new data.ChatModel({
+                            lastMessage: { id: '1337', sender: '', content: gt('Create new chat'), type: 'text' },
+                            members: members,
+                            type: 'private',
+                            unreadCount: 0
+                        });
+                    }).filter(function (room) {
+                        return !ids[room.get('id')];
+                    });
 
-        renderItem: function (data) {
-            var body = _.escape(_.ellipsis(data.body, { max: 200 })).replace(this.regexQuery, '<b>$1</b>');
-            return $('<li>').html(body);
+                var models = [].concat(chatsByAddress).concat(rooms);
+                models = _(models).compact();
+                this.collection.reset(models);
+            }.bind(this));
         }
     });
 

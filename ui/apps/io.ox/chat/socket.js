@@ -68,7 +68,7 @@ define('io.ox/chat/socket', ['io.ox/chat/data'], function (data) {
                         messages: [
                             { id: 1, body: 'Hi', sender: 1, time: getTime(), delivery: 'seen' }
                         ],
-                        unseen: 1
+                        unreadCount: 1
                     });
                     break;
 
@@ -86,14 +86,14 @@ define('io.ox/chat/socket', ['io.ox/chat/data'], function (data) {
                     // add message
                     chat = data.chats.at(_.random(data.chats.length - 1));
                     chat.messages.add({ id: chat.messages.length + 1, body: getMessage(), sender: _.random(1, 5), time: getTime() });
-                    chat.set('unseen', chat.get('unseen') + 1);
+                    chat.set('unreadCount', chat.get('unreadCount') + 1);
                     break;
 
                 case 7:
                     // add system message
                     chat = data.chats.at(_.random(data.chats.length - 1));
                     chat.messages.add({ id: chat.messages.length + 1, body: getSystemMessage(), type: 'system', sender: 0, time: getTime() });
-                    chat.set('unseen', chat.get('unseen') + 1);
+                    chat.set('unreadCount', chat.get('unreadCount') + 1);
                     break;
 
                 case 8:
@@ -101,7 +101,7 @@ define('io.ox/chat/socket', ['io.ox/chat/data'], function (data) {
                     // add image
                     chat = data.chats.at(_.random(data.chats.length - 1));
                     chat.messages.add({ id: chat.messages.length + 1, body: getImage(), type: 'image', sender: _.random(1, 5), time: getTime() });
-                    chat.set('unseen', chat.get('unseen') + 1);
+                    chat.set('unreadCount', chat.get('unreadCount') + 1);
                     break;
 
                 // no default

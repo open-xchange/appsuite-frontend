@@ -20,12 +20,16 @@ define('io.ox/chat/views/empty', ['io.ox/backbone/views/disposable'], function (
         render: function () {
             this.$el.append(
                 $('<div class="start-chat abs">').append(
-                    $('<div class="center">').append(
-                        $('<button type="button" class="btn btn-default btn-circle" data-cmd="start-chat">').append(
+                    $('<div class="center empty-view">').append(
+                        $('<button type="button" class="btn btn-default btn-circle" data-cmd="start-private-chat">').append(
                             $('<i class="fa fa-plus" aria-hidden="true">')
                         ),
-                        $('<br>'),
-                        $('<button type="button" class="btn btn-link" data-cmd="start-chat" tabindex="-1">').text('Start new chat')
+                        $('<button type="button" class="btn btn-default btn-circle" data-cmd="edit-group-chat">').append(
+                            $('<i class="fa fa-group" aria-hidden="true">')
+                        ),
+                        $('<button type="button" class="btn btn-default btn-circle" data-cmd="edit-group-chat" data-type="channel">').append(
+                            $('<i class="fa fa-hashtag" aria-hidden="true">')
+                        )
                     )
                 )
             );

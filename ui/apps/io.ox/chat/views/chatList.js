@@ -14,12 +14,14 @@
 define('io.ox/chat/views/chatList', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/state',
-    'io.ox/chat/data'
-], function (DisposableView, StateView) {
+    'io.ox/chat/views/chatListEntry'
+], function (DisposableView, StateView, ChatListEntryView) {
 
     'use strict';
 
     var ChatListView = DisposableView.extend({
+
+        tagName: 'ul',
 
         className: 'chats',
 
@@ -27,10 +29,9 @@ define('io.ox/chat/views/chatList', [
             this.listenTo(this.collection, {
                 'add': this.onAdd,
                 'remove': this.onRemove,
-                'change:title': this.onChangeTitle,
-                'change:unseen': this.onChangeUnseen,
-                'change:modified': this.onChangeModified,
-                'change:open': this.onChangeOpen
+                'change:active': this.onChangeActive,
+                'change:lastMessage': this.onChangeLastMessage,
+                'sort': this.onSort
             });
         },
 
@@ -41,14 +42,9 @@ define('io.ox/chat/views/chatList', [
         },
 
         renderItem: function (model) {
-            return $('<button type="button" class="btn-nav" data-cmd="show-chat">')
-                .attr('data-cid', model.cid)
-                .toggleClass('unseen', model.get('unseen') > 0)
-                .append(
-                    this.renderIcon(model),
-                    $('<span class="label label-default">').text(model.get('unseen')),
-                    $('<div class="title">').text(model.getTitle())
-                );
+            var node = this.getNode(model);
+            if (node.length) return node;
+            return new ChatListEntryView({ model: model }).render().$el;
         },
 
         renderIcon: function (model) {
@@ -66,49 +62,57 @@ define('io.ox/chat/views/chatList', [
         },
 
         getItems: function () {
-            return this.collection.getOpen();
+            return this.collection.getActive();
         },
 
         getNode: function (model) {
-            return this.$('[data-cid="' + model.cid + '"]');
+            var node = this.$('[data-cid="' + model.get('roomId') + '"]');
+            if (node.length === 0) node = this.$('[data-cid="' + model.cid + '"]');
+            return node;
         },
 
-        onAdd: _.debounce(function (model, collection, options) {
+        onSort: _.debounce(function () {
             if (this.disposed) return;
 
-            this.$el.prepend(
-                options.changes.added
-                .filter(function (model) { return model.isOpen(); })
-                .map(this.renderItem, this)
+            var items = this.getItems().map(this.renderItem, this);
+            this.$el.append(
+                items
             );
         }, 1),
+
+        onAdd: _.debounce(function (model, collection, options) {
+            var all = this.getItems();
+            options.changes.added
+            .filter(function (model) { return model.isActive(); })
+            .forEach(function (model) {
+                var index = all.indexOf(model);
+                if (index === 0) {
+                    this.$el.prepend(this.renderItem(model));
+                } else {
+                    var prevModel = all[index - 1];
+                    this.getNode(prevModel).after(this.renderItem(model));
+                }
+            }.bind(this));
+        }),
 
         onRemove: function (model) {
             this.getNode(model).remove();
         },
 
-        onChangeTitle: function (model) {
-            this.getNode(model).find('.title').text(model.getTitle() || '\u00A0');
+        onChangeActive: function (model, value) {
+            if (value) {
+                this.onAdd(this.model, this.collection, { changes: { added: [model] } });
+            } else {
+                this.onRemove(model);
+            }
         },
 
-        onChangeUnseen: function (model) {
-            var count = model.get('unseen');
-            this.getNode(model).toggleClass('unseen', count > 0).find('.label').text(count);
-        },
-
-        onChangeModified: function (model) {
+        onChangeLastMessage: function (model) {
+            if ((model.previous('lastMessage') || {}).messageId === model.changed.lastMessage.messageId) return;
             var node = this.getNode(model),
                 hasFocus = node[0] === document.activeElement;
             this.$el.prepend(node);
             if (hasFocus) node.focus();
-        },
-
-        onChangeOpen: function (model, value) {
-            if (value) {
-                this.$el.prepend(this.renderItem(model));
-            } else {
-                this.onRemove(model);
-            }
         }
     });
 

@@ -11,9 +11,51 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/fileList', ['io.ox/backbone/views/disposable', 'io.ox/chat/data'], function (DisposableView, data) {
+define('io.ox/chat/views/fileList', [
+    'io.ox/core/extensions',
+    'io.ox/backbone/views/disposable',
+    'io.ox/chat/data',
+    'io.ox/backbone/views/toolbar',
+    'io.ox/chat/util',
+    'gettext!io.ox/chat'
+], function (ext, DisposableView, data, ToolbarView, util, gt) {
 
     'use strict';
+
+    ext.point('io.ox/chat/files/toolbar').extend({
+        id: 'back',
+        index: 100,
+        custom: true,
+        draw: function () {
+            this.attr('data-prio', 'hi').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="close-chat">').append(
+                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), gt('Chats')
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/files/toolbar').extend({
+        id: 'title',
+        index: 200,
+        custom: true,
+        draw: function () {
+            this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('All files'));
+        }
+    });
+
+    ext.point('io.ox/chat/files/toolbar').extend({
+        id: 'switch-to-floating',
+        index: 300,
+        custom: true,
+        draw: function () {
+            this.attr('data-prio', 'hi').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').append(
+                    $('<i class="fa fa-window-maximize" aria-hidden="true">')
+                )
+            );
+        }
+    });
 
     var FileList = DisposableView.extend({
 
@@ -32,10 +74,11 @@ define('io.ox/chat/views/fileList', ['io.ox/backbone/views/disposable', 'io.ox/c
 
         render: function () {
             this.$el.append(
-                $('<div class="header abs">').append(
-                    $('<h2>').append('All files')
+                $('<div class="header">').append(
+                    $('<h2>').append(gt('All files'))
                 ),
-                $('<div class="scrollpane abs">').append(
+                new ToolbarView({ point: 'io.ox/chat/files/toolbar', title: gt('All files') }).render(new ext.Baton()).$el,
+                $('<div class="scrollpane">').append(
                     $('<ul>').append(
                         this.getItems().map(this.renderItem, this)
                     )
@@ -49,9 +92,18 @@ define('io.ox/chat/views/fileList', ['io.ox/backbone/views/disposable', 'io.ox/c
         },
 
         renderItem: function (model, index) {
+            var button = $('<button type="button" data-cmd="show-file">').attr('data-index', index);
+            if (model.isImage()) {
+                button.css('backgroundImage', 'url(' + model.getThumbnailUrl() + ')');
+            } else {
+                button.append(
+                    $('<i class="fa icon">').addClass(util.getClassFromMimetype(model.get('mimetype'))),
+                    $('<div class="filename">').text(model.get('name'))
+                );
+            }
+
             return $('<li>').append(
-                $('<button type="button" data-cmd="show-file">').attr('data-index', index)
-                .css('backgroundImage', 'url(' + model.getThumbnailUrl() + ')')
+                button
             );
         },
 
@@ -62,10 +114,18 @@ define('io.ox/chat/views/fileList', ['io.ox/backbone/views/disposable', 'io.ox/c
         onAdd: _.debounce(function (model, collection, options) {
             if (this.disposed) return;
 
-            this.$('ul').prepend(
+            this.updateIndices();
+            this.$('.scrollpane ul').prepend(
                 options.changes.added.map(this.renderItem, this)
             );
-        }, 1)
+        }, 1),
+
+        updateIndices: function () {
+            this.$('.scrollpane ul li').each(function () {
+                var index = parseInt($(this).children().attr('data-index'), 10);
+                $(this).children().attr('data-index', index + 1);
+            });
+        }
     });
 
     return FileList;

@@ -29,11 +29,17 @@
 
 #io-ox-windowmanager {
     overflow: hidden;
+    display: flex;
 }
 
 #io-ox-windowmanager-pane {
-    left: 0;
-    width: 100%;
+    flex: 1;
+    position: relative;
+}
+
+.io-ox-windowmanager-sticky-panel {
+    flex: 0 0 auto;
+    position: relative;
 }
 
 #io-ox-taskbar-container {

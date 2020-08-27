@@ -12,92 +12,256 @@
  */
 
 define('io.ox/chat/views/chat', [
+    'io.ox/core/extensions',
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/avatar',
     'io.ox/chat/views/chatAvatar',
     'io.ox/chat/views/chatMember',
+    'io.ox/chat/views/messages',
+    'io.ox/chat/views/reference-preview',
     'io.ox/chat/events',
-    'io.ox/chat/data'
-], function (DisposableView, Avatar, ChatAvatar, ChatMember, events, data) {
+    'io.ox/chat/data',
+    'io.ox/backbone/views/toolbar',
+    'gettext!io.ox/chat',
+    'io.ox/core/tk/visibility-api-util'
+], function (ext, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, ToolbarView, gt, visibilityApi) {
 
     'use strict';
 
-    var MESSAGE_LIMIT = 20;
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'back',
+        index: 100,
+        custom: true,
+        draw: function () {
+            this.attr('data-prio', 'hi').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="close-chat">').append(
+                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), gt('Chats')
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'title',
+        index: 200,
+        custom: true,
+        draw: function (baton) {
+            this.addClass('toolbar-title').attr('data-prio', 'hi').text(baton.model.getTitle());
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'switch-to-floating',
+        index: 300,
+        custom: true,
+        draw: function () {
+            this.attr('data-prio', 'hi').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').append(
+                    $('<i class="fa fa-window-maximize" aria-hidden="true">')
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'edit-group',
+        index: 400,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (!model.isMember() || model.isPrivate()) return;
+            this.attr('data-prio', 'lo').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat">').attr('data-id', model.id).text(gt('Edit chat')).on('click', events.forward)
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'close-chat',
+        index: 450,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (!model.get('active')) return;
+            this.attr('data-prio', 'lo').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="unsubscribe-chat">').attr('data-id', model.id).text(gt('Hide chat')).on('click', events.forward)
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'leave-group',
+        index: 500,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (!model.isGroup() || !model.isMember()) return;
+            this.attr('data-prio', 'lo').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="leave-group">').attr('data-id', model.id).text(gt('Leave chat')).on('click', events.forward)
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'leave-channel',
+        index: 600,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (!model.isChannel() || !model.isMember()) return;
+            this.attr('data-prio', 'lo').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="leave-channel">').attr('data-id', model.id).text(gt('Leave chat')).on('click', events.forward)
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'join-channel',
+        index: 650,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (!(model.isChannel() && !model.isMember())) return;
+            this.attr('data-prio', 'lo').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="join-channel">').attr('data-id', model.id).text(gt('Join chat')).on('click', events.forward)
+            );
+        }
+    });
 
     var ChatView = DisposableView.extend({
 
-        className: 'chat',
+        className: 'chat abs',
 
         events: {
             'keydown textarea': 'onEditorKeydown',
-            'input textarea': 'onEditorInput'
+            'input textarea': 'onEditorInput',
+            'click .file-upload-btn': 'onTriggerFileupload',
+            'click .jump-down': 'onJumpDown',
+            'change .file-upload-input': 'onFileupload'
         },
 
         initialize: function (options) {
+            var self = this;
 
+            this.roomId = options.roomId;
             this.room = options.room;
-            this.model = data.chats.get(this.room);
+            this.messageId = options.messageId;
+            this.reference = options.reference;
+            this.model = data.chats.get(this.roomId) || this.room;
+            this.messagesView = new MessagesView({ collection: this.model.messages });
 
             this.listenTo(this.model, {
-                'change:title': this.onChangeTitle
+                'change:title': this.onChangeTitle,
+                'change:unreadCount': this.onChangeUnreadCount,
+                'change:members': this.onChangeMembers
             });
 
             this.listenTo(this.model.messages, {
-                'add': this.onAdd,
-                'remove': this.onRemove,
-                'change:body': this.onChangeBody,
-                'change:time': this.onChangeTime,
-                'change:delivery': this.onChangeDelivery
+                'after:all': this.onUpdatePaginators.bind(this),
+                'paginate': this.toggleAutoScroll.bind(this, false)
             });
 
-            this.model.messages.fetch();
+            this.listenTo(this.messagesView, {
+                'before:add': this.onBeforeAdd,
+                'after:add': this.onAfterAdd
+            });
+
+            this.on('dispose', this.onDispose);
+
+            this.listenTo(events, 'cmd:remove-reference', this.onRemoveReference);
+
+            this.messagesView.messageId = this.messageId;
+            // there are two cases when to reset the collection before usage
+            // 1) We have a messageId but the requested messageId is not in the collection
+            // 2) We don't have a messageId but the collection is not fully fetched
+            if ((this.messageId && !this.model.messages.get(this.messageId)) || (!this.messageId && !this.model.messages.nextComplete)) this.model.messages.reset();
+            _.delay(this.model.messages.fetch.bind(this.model.messages));
 
             // tracking typing
             this.typing = {
                 $el: $('<div class="typing">'),
                 timer: {},
-                show: function (userId) {
-                    var model = data.users.get(userId);
+                show: function (email) {
+                    var model = data.users.getByMail(email);
                     if (!model || model.isMyself()) return;
-                    this.reset(userId);
-                    var $span = this.span(userId);
-                    if (!$span.length) this.add(userId, model.getName());
-                    this.timer[userId] = setTimeout(function () {
+                    this.reset(email);
+                    var $span = this.span(email),
+                        atBottom = self.isScrolledToBottom();
+                    if (!$span.length) this.add(email, model.getName());
+                    if (atBottom) self.scrollToBottom();
+                    this.timer[email] = setTimeout(function () {
                         if (this.disposed) return;
-                        this.hide(userId);
+                        this.hide(email);
                     }.bind(this), 5000);
                 },
-                span: function (userId) {
-                    return this.$el.find('[data-user-id="' + userId + '"]');
+                span: function (email) {
+                    return this.$el.find('[data-user-id="' + email + '"]');
                 },
-                reset: function (userId) {
-                    if (!this.timer[userId]) return;
-                    window.clearTimeout(this.timer[userId]);
-                    delete this.timer[userId];
+                reset: function (email) {
+                    if (!this.timer[email]) return;
+                    window.clearTimeout(this.timer[email]);
+                    delete this.timer[email];
                 },
-                add: function (userId, name) {
-                    this.$el.append($('<div class="name">').attr('data-user-id', userId).text(name + ' is typing'));
+                add: function (email, name) {
+                    //#. %1$s: name of the chat member that is currently typing
+                    this.$el.append($('<div class="name">').attr('data-user-id', email).text(gt('%1$s is typing', name)));
                 },
-                hide: function (userId) {
-                    this.reset(userId);
-                    this.span(userId).remove();
+                hide: function (email) {
+                    this.reset(email);
+                    this.span(email).remove();
                 },
-                toggle: function (userId, state) {
-                    if (state) this.show(userId); else this.hide(userId);
+                toggle: function (email, state) {
+                    if (state) this.show(email); else this.hide(email);
                 }
             };
 
-            this.listenTo(events, 'typing:' + this.model.id, function (userId, state) {
-                this.typing.toggle(userId, state);
+            this.listenTo(events, 'typing:' + this.model.id, function (email, state) {
+                this.typing.toggle(email, state);
             });
 
-            this.$messages = $();
             this.$editor = $();
+            this.autoScroll = _.isUndefined(options.autoScroll) ? true : options.autoScroll;
+
+            this.onHide = this.onHide.bind(this);
+            this.onShow = this.onShow.bind(this);
+
+            if (visibilityApi.isSupported) {
+                this.onChangevisibility = function (e, data) {
+                    (data.currentHiddenState ? this.onHide : this.onShow)();
+                }.bind(this);
+
+                $(visibilityApi).on('visibility-changed', this.onChangevisibility);
+                return;
+            }
+            // Fallback
+            $(window).on('blur', this.onHide);
+            $(window).on('focus', this.onShow);
+        },
+
+        onShow: function () {
+            this.hidden = false;
+            this.markMessageAsRead();
+        },
+
+        onHide: function () {
+            this.hidden = true;
+        },
+
+        onDispose: function () {
+            if (visibilityApi.isSupported) {
+                $(visibilityApi).off('visibility-changed', this.onChangevisibility);
+                return;
+            }
+            // Fallback
+            $(window).off('blur', this.onHide);
+            $(window).off('focus', this.onShow);
         },
 
         render: function () {
+            this.$toolbar = new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: gt('Chat actions') });
+
             this.$el.append(
-                $('<div class="header abs">').append(
+                $('<div class="header">').append(
                     new ChatAvatar({ model: this.model }).render().$el,
                     this.model.isPrivate() ?
                         // private chat
@@ -108,26 +272,60 @@ define('io.ox/chat/views/chat', [
                             new ChatMember({ collection: this.model.members }).render().$el
                         ),
                     // burger menu (pull-right just to have the popup right aligned)
-                    $('<div class="dropdown pull-right">').append(
+                    this.$dropdown = $('<div class="dropdown pull-right">').append(
                         $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
                         .append('<i class="fa fa-bars" aria-hidden="true">'),
                         this.renderDropdown()
                     )
                 ),
-                $('<div class="scrollpane abs">').append(
+                this.$toolbar.render(new ext.Baton({ model: this.model })).$el,
+                this.$scrollpane = $('<div class="scrollpane">').on('scroll', $.proxy(this.onScroll, this)).append(
+                    this.$paginatePrev = $('<div class="paginate prev">').hide(),
                     $('<div class="conversation">').append(
-                        this.$messages = $('<div class="messages">').append(
-                            this.model.messages.last(MESSAGE_LIMIT).map(this.renderMessage, this)
-                        ),
+                        this.messagesView.render().$el,
                         this.typing.$el
-                    )
+                    ),
+                    this.$paginateNext = $('<div class="paginate next">').hide()
                 ),
-                $('<div class="controls abs">').append(
-                    this.$editor = $('<textarea class="form-control" placeholder="Enter message here">')
+                this.$referencePreview = this.reference ? new ReferencePreview({ reference: this.reference }).render().$el : undefined,
+                $('<div class="controls">').append(
+                    this.$jumpDown = $('<button class="btn btn-default btn-circle jump-down">').append(
+                        $('<i class="fa fa-chevron-down" aria-hidden="true">'),
+                        this.$unreadCounter = $('<span class="badge">').text(this.model.get('unreadCount') || '')
+                    ).toggle(this.isJumpDownVisible()),
+                    this.renderEditor()
                 )
             );
 
+            this.onUpdatePaginators();
+            this.markMessageAsRead();
+
+            _.defer(function () {
+                if (this.$editor) this.$editor.focus();
+            }.bind(this));
+
             return this;
+        },
+
+        renderEditor: function () {
+            if (this.isMember()) {
+                this.$editor = $('<textarea class="form-control" placeholder="' + gt('Enter message here') + '">');
+                return [this.$editor,
+                    $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">')
+                        .append('<i class="fa fa-paperclip" aria-hidden="true">'),
+                    $('<input type="file" class="file-upload-input hidden">')];
+            }
+
+            if (this.model.get('type') === 'channel') {
+                return $('<button type="button" class="btn btn-default btn-action join" >')
+                .attr({ 'data-cmd': 'join-channel', 'data-id': this.model.get('roomId') })
+                .append(gt('Join'));
+            }
+        },
+
+        updateEditor: function () {
+            var $controls = this.$el.find('.controls');
+            $controls.empty().append(this.renderEditor());
         },
 
         renderDropdown: function () {
@@ -140,54 +338,94 @@ define('io.ox/chat/views/chat', [
                 );
             }
 
-            // add member
-            if (this.model.isGroup()) {
-                $ul.append(renderItem('Add member', { 'data-cmd': 'add-member', 'data-id': this.model.id }));
+            if ((this.model.isPrivate() || this.model.isGroup() || (this.model.isChannel() && this.model.isMember())) && this.model.get('active')) {
+                $ul.append(renderItem(gt('Hide chat'), { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
+            }
+            if ((this.model.isGroup() || this.model.isChannel()) && this.model.isMember()) {
+                $ul.append(renderItem(gt('Edit chat'), { 'data-cmd': 'edit-group-chat', 'data-id': this.model.id }));
             }
 
-            // close
-            $ul.append(renderItem('Close chat', { 'data-cmd': 'close-chat', 'data-id': this.model.id }));
+            if (!this.model.isPrivate() && this.model.isMember()) {
+                $ul.append(renderItem('Leave chat', { 'data-cmd': this.model.isChannel() ? 'leave-channel' : 'leave-group', 'data-id': this.model.id }));
+            } else if (this.model.isChannel() && !this.model.get('active')) {
+                $ul.append(renderItem('Join chat', { 'data-cmd': 'join-channel', 'data-id': this.model.id }));
+            }
 
             return $ul;
+        },
+
+        updateDropdown: function () {
+            this.$dropdown.find('.dropdown-menu').replaceWith(this.renderDropdown());
+            this.$toolbar.render(new ext.Baton({ model: this.model }));
         },
 
         renderTitle: function () {
             return $('<h2 class="title">').append(this.model.getTitle() || '\u00a0');
         },
 
-        renderMessage: function (model) {
-            return $('<div class="message">')
-                // here we use cid instead of id, since the id might be unknown
-                .attr('data-cid', model.cid)
-                .addClass(model.isSystem() ? 'system' : model.get('type'))
-                .toggleClass('myself', model.isMyself())
-                .append(
-                    // sender avatar & name
-                    this.renderSender(model),
-                    // message boby
-                    $('<div class="body">').addClass().html(model.getBody()),
-                    // time
-                    $('<div class="time">').text(model.getTime()),
-                    // delivery state
-                    $('<div class="fa delivery">').addClass(model.get('delivery'))
-                );
+        isScrolledToBottom: function () {
+            var scrollpane = this.$scrollpane;
+            return scrollpane.scrollTop() + scrollpane.height() > scrollpane.prop('scrollHeight') - 30;
         },
 
-        renderSender: function (model) {
-            if (model.isSystem() || model.isMyself() || model.hasSameSender()) return $();
-            var user = data.users.get(model.get('senderId'));
-            return [new Avatar({ model: user }).render().$el, $('<div class="sender">').text(user.getName())];
+        onBeforeAdd: function () {
+            var firstChild = this.messagesView.$el.children().first(),
+                prevTop = (firstChild.position() || {}).top || 0,
+                // check this before adding the new messages
+                isScrolledDown = this.isScrolledToBottom();
+            this.scrollInfo = { firstChild: firstChild, prevTop: prevTop, isScrolledDown: isScrolledDown };
+        },
+
+        onAfterAdd: function (added) {
+            // determine whether to scroll to new or selected message
+            var scrollpane = this.$scrollpane,
+                firstChild = this.scrollInfo.firstChild,
+                prevTop = this.scrollInfo.prevTop,
+                isScrolledDown = this.scrollInfo.isScrolledDown,
+                multipleMessages = added.length > 1,
+                isCurrentUser = added[0].get('sender') === data.user.email;
+
+            if (multipleMessages || isCurrentUser || isScrolledDown) {
+                if (this.autoScroll) this.scrollToBottom();
+                else if (firstChild.position().top - prevTop) scrollpane.scrollTop(firstChild.position().top - prevTop);
+            }
+
+            this.toggleAutoScroll(true);
+            delete this.scrollInfo;
+
+            this.markMessageAsRead();
         },
 
         scrollToBottom: function () {
-            this.$('.scrollpane').scrollTop(0xFFFF);
-            this.model.set('unseen', 0);
+            var position = 0xFFFF,
+                scrollpane = this.$scrollpane;
+            if (this.messageId) {
+                var model = this.model.messages.get(this.messageId);
+                if (model) {
+                    var elem = this.messagesView.$('[data-cid="' + model.cid + '"]'),
+                        delta = elem.position().top - scrollpane.height() / 2;
+                    position = scrollpane.scrollTop() + delta;
+                    delete this.messageId;
+                }
+            }
+            scrollpane.scrollTop(position);
+        },
+
+        toggleAutoScroll: function (autoScroll) {
+            if (autoScroll === undefined) autoScroll = !this.autoScroll;
+            this.autoScroll = autoScroll;
         },
 
         onEditorKeydown: function (e) {
             if (e.which !== 13) return;
+            if (e.ctrlKey) {
+                // append newline manually if ctrl is pressed
+                this.$editor.val(this.$editor.val() + '\n');
+                return;
+            }
             e.preventDefault();
-            this.onPostMessage(this.$editor.val());
+            var text = this.$editor.val();
+            if (text.trim().length > 0) this.onPostMessage(text);
             this.$editor.val('').focus();
         },
 
@@ -196,47 +434,135 @@ define('io.ox/chat/views/chat', [
             data.socket.emit('typing', { roomId: this.model.id, state: state });
         },
 
-        onPostMessage: function (body) {
-            this.model.postMessage({ body: body });
+        onTriggerFileupload: function () {
+            this.$('.file-upload-input').trigger('click');
+        },
+
+        onFileupload: function () {
+            var $input = this.$('.file-upload-input'),
+                files = _.toArray($input[0].files);
+
+            this.model.postMessage({ content: '' }, files.length === 1 ? files[0] : files);
+
+            $input.val('');
+        },
+
+        onJumpDown: function () {
+            if (!this.model.messages.nextComplete) {
+                this.model.messages.reset();
+                this.model.messages.fetch();
+            } else {
+                this.scrollToBottom();
+            }
+        },
+
+        onPostMessage: function (content) {
+            // reset and fetch messages when in search and collection is not complete
+            if (!this.model.messages.nextComplete) {
+                this.model.messages.reset();
+                this.model.messages.fetch();
+            }
+
+            data.socket.emit('typing', { roomId: this.model.id, state: false });
+
+            var message = { content: content, sender: data.user.email };
+            if (this.reference) message.reference = this.reference;
+            this.model.postMessage(message);
+
+            // remove reference preview
+            this.onRemoveReference();
+        },
+
+        onRemoveReference: function () {
+            if (this.$referencePreview) this.$referencePreview.remove();
+            delete this.$referencePreview;
+            delete this.reference;
         },
 
         onChangeTitle: function (model) {
             this.$('.title').text(model.getTitle() || '\u00a0');
         },
 
-        onAdd: _.debounce(function (model, collection, options) {
-            if (this.disposed) return;
+        onChangeUnreadCount: function () {
+            this.$unreadCounter.text(this.model.get('unreadCount') || '');
+        },
 
-            // render
-            this.$messages.append(
-                options.changes.added.map(this.renderMessage.bind(this))
-            );
-            // too many messages?
-            var children = this.$messages.children();
-            if (children.length > MESSAGE_LIMIT) children.slice(0, children.length - MESSAGE_LIMIT).remove();
-            // proper scroll position
-            this.scrollToBottom();
-        }, 1),
+        onChangeMembers: function () {
+            var event = JSON.parse(this.model.get('lastMessage').content);
+            if (event.members.filter(function (m) { return m === data.user.email; }).length === 0) return;
+            this.updateEditor();
+            this.updateDropdown();
+        },
+
+        onScroll: _.throttle(function () {
+            this.$jumpDown.toggle(this.isJumpDownVisible());
+
+            if (this.$('.messages').is(':empty')) return;
+            (function (view) {
+                if (!view.model.messages.prevComplete) {
+                    var $paginatePrev = view.$paginatePrev;
+                    if ($paginatePrev.hasClass('io-ox-busy')) return;
+                    if ($paginatePrev.position().top < -$paginatePrev.height() * 2) return;
+                    $paginatePrev.busy();
+                    view.model.messages.paginate('older').then(function () {
+                        $paginatePrev.idle();
+                    });
+                }
+            }(this));
+
+            (function (view) {
+                if (!view.model.messages.nextComplete) {
+                    var $paginateNext = view.$paginateNext;
+                    if ($paginateNext.hasClass('io-ox-busy')) return;
+                    if ($paginateNext.position().top - $paginateNext.height() > $paginateNext.parent().height()) return;
+                    $paginateNext.busy();
+                    view.model.messages.paginate('newer').then(function () {
+                        $paginateNext.idle();
+                    });
+                }
+            }(this));
+
+            this.markMessageAsRead();
+        }, 300),
+
+        markMessageAsRead: function () {
+            if (this.hidden) return;
+            var lastIndex = this.model.messages.findLastIndex(function (message) {
+                return message.get('sender') !== data.user.email;
+            });
+            if (lastIndex < 0) return;
+            var message = this.model.messages.at(lastIndex);
+            if (message.get('deliveryState') === 'seen') return;
+            message.updateDelivery('seen');
+        },
+
+        isJumpDownVisible: function () {
+            return this.$scrollpane.scrollTop() + this.$scrollpane.height() < this.$scrollpane.prop('scrollHeight') - 50;
+        },
+
+        onUpdatePaginators: function () {
+            var wasScrolledToBottom = this.isScrolledToBottom();
+
+            this.$('.paginate.prev').idle().toggle(!this.model.messages.prevComplete && this.model.messages.length > 0);
+            this.$('.paginate.next').idle().toggle(!this.model.messages.nextComplete && this.model.messages.length > 0);
+
+            if (wasScrolledToBottom && !this.isScrolledToBottom()) this.scrollToBottom();
+        },
+
+        onComplete: function (direction) {
+            this.$('.paginate.' + direction).idle().hide();
+        },
+
+        isMember: function () {
+            return _.allKeys(this.model.get('members')).filter(function (member) {
+                return member === data.user.email;
+            }).length > 0;
+        },
 
         getMessageNode: function (model, selector) {
             return this.$('.message[data-cid="' + model.cid + '"] ' + (selector || ''));
-        },
-
-        onRemove: function (model) {
-            this.getMessageNode(model).remove();
-        },
-
-        onChangeBody: function (model) {
-            this.getMessageNode(model, '.body').html(model.getBody());
-        },
-
-        onChangeTime: function (model) {
-            this.getMessageNode(model, '.time').text(model.getTime());
-        },
-
-        onChangeDelivery: function (model) {
-            this.getMessageNode(model, '.delivery').attr('class', 'fa delivery ' + model.get('delivery'));
         }
+
     });
 
     return ChatView;

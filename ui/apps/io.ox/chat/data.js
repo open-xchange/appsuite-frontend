@@ -11,23 +11,45 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3rd.party/socket.io.slim.js'], function (events, api, io) {
+define('io.ox/chat/data', [
+    'io.ox/chat/events',
+    'io.ox/contacts/api',
+    'static/3rd.party/socket.io.slim.js',
+    'io.ox/mail/sanitizer',
+    'io.ox/chat/util',
+    'io.ox/core/http',
+    'gettext!io.ox/chat',
+    'settings!io.ox/core'
+], function (events, api, io, sanitizer, util, http, gt, settings) {
 
     'use strict';
 
-    var user_id = parseInt(_.url.hash('chatUser'), 10) || ox.user_id,
-        chatHost = _.url.hash('chatHost');
+    var chatHost =  _.url.hash('chatHost') || ox.serverConfig.chatHost || settings.get('chatHost'),
+        DEFAULT_LIMIT = 40;
 
     var data = {
-        // yes, it contains the user_id; just a POC; no auth
-        API_ROOT: 'https://' + chatHost + '/api/' + user_id,
-        SOCKET: 'https://' + chatHost,
-        user_id: user_id
+        API_ROOT: 'https://' + chatHost + '/api',
+        SOCKET: 'https://' + chatHost
     };
 
     //
     // User
     //
+
+    var BaseModel = Backbone.Model.extend({
+        sync: function (method, model, options) {
+            options.xhrFields = _.extend({}, options.xhrFields, { withCredentials: true });
+            var jqXHR = Backbone.Collection.prototype.sync.call(this, method, model, options);
+            jqXHR.fail(util.handleSessionLoss);
+            return jqXHR;
+        }
+    });
+
+    var BaseCollection = Backbone.Collection.extend({
+        sync: function () {
+            return BaseModel.prototype.sync.apply(this, arguments);
+        }
+    });
 
     var UserModel = Backbone.Model.extend({
 
@@ -36,44 +58,62 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
         },
 
         isMyself: function () {
-            return this.get('id') === data.user_id;
+            var user = data.users.getByMail(data.user.email);
+            return this === user;
         },
 
         getName: function () {
             var first = $.trim(this.get('first_name')), last = $.trim(this.get('last_name'));
             if (first && last) return first + ' ' + last;
-            return first || last || '\u00a0';
+            return first || last || this.get('email') || this.getEmail() || '\u00a0';
         },
 
-        getState: function () {
-            return this.get('state') || 'offline';
-        },
-
-        fetchState: function () {
-            if (this.has('state')) return;
-            $.get({ url: data.API_ROOT + '/users/' + this.get('id') + '/state' })
-                .done(function (state) { this.set('state', state); }.bind(this));
+        getEmail: function () {
+            return this.get('email1') || this.get('email2') || this.get('email3');
         }
     });
 
-    var UserCollection = Backbone.Collection.extend({ model: UserModel });
+    var UserCollection = Backbone.Collection.extend({
+
+        model: UserModel,
+
+        initialize: function () {
+            this.initialized = new $.Deferred();
+            this.once('reset', this.initialized.resolve);
+        },
+
+        // no memoize here to prevent pointing always to undefined
+        getByMail: (function () {
+            var cache = [];
+            return function (email) {
+                if (!cache[email]) {
+                    cache[email] = this.find(function (model) {
+                        return model.get('email1') === email || model.get('email2') === email || model.get('email3') === email;
+                    });
+                }
+                return cache[email];
+            };
+        }())
+
+    });
     data.users = new UserCollection([]);
 
     data.fetchUsers = function () {
-        return api.getAll({ folder: 6, columns: '501,502,524,570' }, false).then(function (result) {
+        return api.getAll({ folder: 6, columns: '1,20,501,502,524,555,556,557,606' }, false).then(function (result) {
             result = _(result).map(function (item) {
-                return {
+                return _.extend({
+                    cid: _.cid(item),
                     id: item.internal_userid,
                     first_name: item.first_name,
                     last_name: item.last_name,
-                    image: !!item['570']
-                };
+                    image: !!item.image1_url
+                }, _(item).pick('email1', 'email2', 'email3'));
             });
             return data.users.reset(result);
         });
     };
 
-    var MemberCollection = Backbone.Collection.extend({
+    var MemberCollection = BaseCollection.extend({
 
         model: UserModel,
 
@@ -87,90 +127,378 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
 
         parse: function (array) {
             return _(array).map(function (item) {
-                return _.isNumber(item) ? data.users.get(item) : item;
+                var user = data.users.getByMail(item.email);
+                if (user) user = user.toJSON();
+                return _.extend({ email1: item.email }, item, user);
             });
         },
 
         toArray: function () {
             return this.pluck('id').sort();
         }
+
     });
 
     //
     // Message
     //
 
-    var MessageModel = Backbone.Model.extend({
+    var MessageModel = BaseModel.extend({
 
         defaults: function () {
-            return { body: '', senderId: data.user_id, sent: +moment(), type: 'text' };
+            return { content: '', sender: data.user.email, date: +moment(), type: 'text' };
+        },
+
+        idAttribute: 'messageId',
+
+        urlRoot: function () {
+            return data.API_ROOT + '/rooms/' + this.get('roomId') + '/messages';
         },
 
         getBody: function () {
             if (this.isSystem()) return this.getSystemMessage();
-            if (this.isImage()) return this.getImage();
+            else if (this.hasPreview()) return this.getFilesPreview();
+            else if (this.isFile()) return this.getFileText();
             return this.getFormattedBody();
         },
 
         getFormattedBody: function () {
-            return _.escape(this.get('body')).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
+            return _.escape(this.get('content')).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
         },
 
         getSystemMessage: function () {
-            var data = JSON.parse(this.get('body'));
-            switch (data.type) {
-                case 'joinMember':
-                    return _.printf('%1$s joined the conversation', getName(data.member));
-                case 'addMember':
-                    return _.printf('%1$s added %2$s to the conversation', getName(data.originator), getNames(data.members));
+            var event = JSON.parse(this.get('content'));
+            var originator = this.get('sender'),
+                members = event.members || [],
+                room = data.chats.get(this.get('roomId'));
+
+            if (room.get('type') === 'channel' && event.type === 'members:added') event.type = 'channel:joined';
+            if (members.join('') === data.user.email && event.type === 'members:removed' && members.join('') === originator) event.type = 'room:left';
+
+            switch (event.type) {
+                case 'room:created':
+                    //#. %1$s: name of the creator
+                    return gt('%1$s created this conversation', getName(originator));
+                case 'channel:joined':
+                    //#. %1$s: name of the new participant
+                    return gt('%1$s joined the conversation', getNames(members));
+                case 'members:added':
+                    //#. %1$s: name of the participant that added the new participant
+                    //#. %2$s: name of the added participant
+                    return gt('%1$s added %2$s to the conversation', getName(originator), getNames(_.difference(members, [originator])));
+                case 'members:removed':
+                    //#. %1$s: name of the participant that removed the other participant
+                    //#. %2$s: name of the removed participant
+                    return gt('%1$s removed %2$s from the conversation', getName(originator), getNames(_.difference(members, [originator])));
+                case 'image:changed':
+                    //#. %1$s: name of a chat participant
+                    return gt('%1$s changed the group image', getName(originator), event.fileId);
+                case 'title:changed':
+                    //#. %1$s: name of a chat participant
+                    //#. %2$s: the new title
+                    return gt('%1$s changed the group title to "%2$s"', getName(originator), event.title);
+                case 'changeDescription':
+                    //#. %1$s: name of a chat participant
+                    //#. %2$s: the new description
+                    return gt('%1$s changed the group description to "%2$s"', getName(originator), event.description);
+                case 'room:left':
+                    //#. %1$s: name of a chat participant
+                    return gt('%1$s left the conversation', getName(originator));
                 case 'me':
-                    return _.printf('%1$s %2$s', getName(data.originator), data.message);
+                    // no need to translate this
+                    return _.printf('%1$s %2$s', getName(originator), event.message);
                 case 'text':
-                    return data.message;
+                    return event.message;
                 default:
-                    return _.printf('Unknown system message %1$s', data.type);
+                    //#. %1$s: messagetext
+                    return gt('Unknown system message %1$s', event.type);
             }
         },
 
-        getImage: function () {
-            return '<img src="' + this.get('body') + '" alt="">';
+        getFileUrl: function (file) {
+            if (data.chats.get(this.get('roomId')).isChannel()) {
+                return data.API_ROOT + '/rooms/' + this.get('roomId') + '/message/' + this.get('messageId') + '/file/' + file.fileId;
+            }
+            return data.API_ROOT + '/files/' + file.fileId;
+        },
+
+        getFilesPreview: function () {
+            var attachment = this.get('files')[0],
+                fileId = attachment.fileId,
+                url = this.getFileUrl(attachment) + '/thumbnail';
+
+            if (!fileId) return;
+            if (!attachment.preview) return;
+
+            var width = attachment.preview.width,
+                height = attachment.preview.height;
+
+            if (height > 400) {
+                var ratio = 400 / height;
+                height *= ratio;
+                width *= ratio;
+            }
+
+            return $('<div class="preview-wrapper">').append(
+                $('<div>')
+                    .attr({
+                        src: url,
+                        'data-cmd': 'show-message-file',
+                        'data-room-id': this.collection.roomId,
+                        'data-file-id': fileId,
+                        'data-message-id': this.get('messageId')
+                    })
+                    .css({
+                        'background-image': 'url("' + url + '")'
+                    })
+            ).css({
+                width: width + 'px',
+                'padding-top': (height / width * 100) + '%'
+            });
+        },
+
+        getFileText: function (opt) {
+            opt = _.extend({
+                icon: true,
+                download: true,
+                text: true
+            }, opt);
+
+            var file = _(this.get('files')).last();
+            if (!file) return;
+
+            return [
+                opt.icon ? $('<i class="fa icon">').addClass(util.getClassFromMimetype(file.mimetype)) : '',
+                opt.text ? $.txt(file.name) : '',
+                opt.download ? $('<a class="download">').attr({
+                    href: this.getFileUrl(file),
+                    download: file.name
+                }).append(
+                    $('<i class="fa fa-download">')
+                ) : ''
+            ];
         },
 
         getTime: function () {
-            return moment(this.get('sent')).format('LT');
+            return moment(this.get('date')).format('LT');
         },
 
         getTextBody: function () {
-            return _.escape(this.get('body'));
+            if (this.isSystem()) return this.getSystemMessage();
+            if (this.isFile()) return this.getFileText();
+            return sanitizer.simpleSanitize(this.get('content'));
         },
 
         isSystem: function () {
-            return this.get('senderId') === 0;
+            return this.get('type') === 'system';
         },
 
         isMyself: function () {
-            return this.get('senderId') === data.user_id;
+            return this.get('sender') === data.user.email;
         },
 
-        isImage: function () {
-            return this.get('type') === 'image';
+        getType: function () {
+            if (this.get('files') && this.get('files')[0].preview) return 'preview';
+            if (this.get('files')) return 'file';
+            if (this.get('type') === 'system') return 'system';
+            return 'text';
         },
 
-        hasSameSender: function () {
+        hasPreview: function () {
+            if (this.get('files') && this.get('files')[0].preview) return true;
+            return false;
+        },
+
+        isFile: function () {
+            return this.get('type') === 'file';
+        },
+
+        hasSameSender: function (limit) {
+            limit = limit ? this.collection.length - limit : 0;
             var index = this.collection.indexOf(this);
-            if (index <= 0) return false;
-            return this.collection.at(index - 1).get('senderId') === this.get('senderId');
+            if (index <= limit) return false;
+            var prev = this.collection.at(index - 1);
+            if (prev.isSystem()) return false;
+            return prev.get('sender') === this.get('sender');
+        },
+
+        getDeliveryState: function () {
+            if (this.isMyself()) return util.getDeliveryStateClass(this.get('deliveryState'));
+            return this.get('deliveryState') || '';
+        },
+
+        updateDelivery: function (state) {
+            var url = data.API_ROOT + '/rooms/' + this.get('roomId') + '/delivery/' + this.get('messageId');
+            this.set('deliveryState', state);
+            util.ajax({
+                method: 'POST',
+                url: url,
+                data: { state: state }
+            }).catch(function () {
+                this.set('deliveryState', this.previous('deliveryState'));
+            }.bind(this));
+        },
+
+        setInitialDeliveryState: function () {
+            var room = data.chats.get(this.get('roomId'));
+            if (!room) return;
+            if (this.get('sender') !== data.user.email) return;
+
+            if (room.get('type') === 'private') {
+                if (this.get('deliveryState')) return;
+                this.set('deliveryState', {
+                    state: 'server',
+                    modified: +moment()
+                });
+            } else if (room.get('type') === 'group') {
+                var deliveryState = _.clone(this.get('deliveryState')) || {};
+                room.members.forEach(function (member) {
+                    if (member.get('email') === data.user.email) return;
+                    deliveryState[member.get('email')] = deliveryState[member.get('email')] || {
+                        state: 'server',
+                        modified: +moment()
+                    };
+                });
+                this.set('deliveryState', deliveryState);
+            }
         }
     });
 
+    var messageCache = (function () {
+        var cache = {},
+            idlessCache = {};
+        return {
+            get: function (attrs, options) {
+                var messageId = attrs.messageId, message = cache[messageId];
+                // try to reuse the messages without ids
+                if (!message) message = idlessCache[attrs.sender + '' + attrs.content];
+
+                if (message) {
+                    message.set(attrs);
+                } else {
+                    message = new MessageModel(attrs, options);
+                    if (messageId) {
+                        cache[messageId] = message;
+                    } else {
+                        var identifier = attrs.sender && attrs.content && attrs.sender + '' + attrs.content;
+                        if (identifier) idlessCache[identifier] = message;
+                        message.once('change:messageId', function () {
+                            if (identifier) delete idlessCache[identifier];
+                            cache[message.get('messageId')] = message;
+                        });
+                    }
+                }
+                return message;
+            },
+            has: function (messageId) {
+                return !!cache[messageId];
+            }
+        };
+    })();
+
+    function getMessageModel(attrs, options) {
+        var model = messageCache.get(attrs, options);
+        model.collection = options.collection;
+        return model;
+    }
+    getMessageModel.prototype.idAttribute = 'messageId';
+
     var MessageCollection = Backbone.Collection.extend({
-        model: MessageModel,
-        comparator: 'sent',
+        model: getMessageModel,
+        comparator: function (a, b) {
+            if (!a.get('messageId')) return 0;
+            if (!b.get('messageId')) return 0;
+            return util.strings.compare(a.get('messageId'), b.get('messageId'));
+        },
         initialize: function (models, options) {
             this.roomId = options.roomId;
+
+            this.on('change:messageId', this.onChangeMessageId);
+        },
+        paginate: function (readDirection) {
+            var id;
+            if (readDirection === 'older') id = this.first().get('messageId');
+            else if (readDirection === 'newer') id = this.last().get('messageId');
+
+            return this.load({ messageId: id, readDirection: readDirection, limit: DEFAULT_LIMIT }, 'paginate');
+        },
+        load: function (params, type, cache) {
+            if (!this.roomId) return;
+
+            type = type || 'load';
+
+            if (cache !== false && type === 'load' && this.length > 0) {
+                if (params.readDirection === 'newer' && this.nextComplete) return $.when();
+                if (!params.readDirection || params.readDirection === 'older' && this.prevComplete) return $.when();
+            }
+
+            this.trigger('before:' + type);
+
+            // special handling for search
+            if (type === 'load' && this.messageId) {
+                params = { readDirection: 'both', messageId: this.messageId, limit: DEFAULT_LIMIT };
+                delete this.messageId;
+            }
+
+            if (!params.messageId) {
+                if (!this.nextComplete) params.limit = DEFAULT_LIMIT;
+                this.nextComplete = true;
+                this.trigger('complete:next');
+            }
+
+            var endpoint = data.chats.get(this.roomId).isChannel() ? '/channels/' : '/rooms/';
+            return util.ajax({
+                url: data.API_ROOT + endpoint + this.roomId + '/messages' + '?' + $.param(params)
+            })
+            .then(function (list) {
+                this.trigger(type);
+                this.add(list, { parse: true });
+                params.readDirection = params.readDirection || 'older';
+                if (params.readDirection === 'both') {
+                    var index = _(list).findIndex({ id: params.messageId });
+                    if (index < params.limit / 2 - 1) {
+                        this.prevComplete = true;
+                        this.trigger('complete:prev');
+                    }
+                    if (index < list.length - params.limit / 2 - 1) {
+                        this.nextComplete = true;
+                        this.trigger('complete:next');
+                    }
+                } else {
+                    var dir = params.readDirection === 'older' ? 'prev' : 'next';
+                    this[dir + 'Complete'] = list.length < params.limit;
+                    if (this[dir + 'Complete']) this.trigger('complete:' + dir);
+                }
+                this.trigger('after:all after:' + type);
+            }.bind(this));
+        },
+        getLast: function () {
+            return this.models[this.models.length - 1];
+        },
+        onChangeMessageId: function (model) {
+            var index = this.indexOf(model),
+                next = this.at(index + 1);
+
+            if (next && util.strings.greaterThan(model.get('messageId'), next.get('messageId'))) {
+                this.remove(model);
+                this.add(model);
+            }
+        },
+        sync: function (method, collection, options) {
+            if (method === 'read') {
+                var limit = Math.max(collection.length, DEFAULT_LIMIT);
+                return this.load({ limit: limit }, 'load');
+            }
+            return BaseCollection.prototype.sync.call(this, method, collection, options);
         },
         url: function () {
             return data.API_ROOT + '/rooms/' + this.roomId + '/messages';
+        },
+        parse: function (array) {
+            [].concat(array).forEach(function (item) {
+                item.roomId = this.roomId;
+            }.bind(this));
+            return array;
         }
     });
 
@@ -180,44 +508,159 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
 
     var ChatModel = Backbone.Model.extend({
 
-        defaults: { open: true, type: 'group', unseen: 0 },
+        defaults: { active: false, type: 'group', unreadCount: 0 },
+
+        idAttribute: 'roomId',
+
+        urlRoot: function () {
+            return data.API_ROOT + '/rooms';
+        },
 
         initialize: function (attr) {
-            this.set('modified', +moment());
+            var self = this;
+            attr = attr || {};
             this.unset('messages', { silent: true });
-            this.members = new MemberCollection(attr.members, { parse: true, roomId: attr.id });
-            this.messages = new MessageCollection([], { roomId: attr.id });
+            this.members = new MemberCollection(this.mapMembers(attr.members), { parse: true, roomId: attr.roomId });
+            this.messages = new MessageCollection([], { roomId: attr.roomId });
+            this.onChangeLastMessage();
+
             // forward specific events
             this.listenTo(this.members, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('member:' + name);
-                this.set('members', this.members.toArray());
             });
+            this.on('change:members', function () {
+                this.members.set(this.mapMembers(this.get('members')), { parse: true, merge: true });
+            });
+            this.on('change:lastMessage', this.onChangeLastMessage);
             this.listenTo(this.messages, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('message:' + name);
+            });
+            this.listenTo(this.messages, 'add', _.debounce(function () {
+                function updateLastMessage() {
+                    if (!this.messages.nextComplete) return;
+                    var lastMessage = this.messages.last();
+                    this.set('lastMessage', lastMessage.toJSON());
+                }
+
+                var lastMessage = this.messages.last();
+                if (!lastMessage) return;
+
+                if (!this.get('lastMessage') || this.get('lastMessage').messageId !== lastMessage.get('messageId') || !lastMessage.has('messageId')) {
+                    if (!lastMessage.has('messageId')) self.listenToOnce(lastMessage, 'change:messageId', updateLastMessage.bind(this));
+                    else updateLastMessage.call(this);
+                }
+            }, 10));
+            this.listenTo(this.messages, 'change:deliveryState', _.debounce(function () {
+                var message = this.messages.last();
+                if (!message) return;
+                if (message.getDeliveryState() === 'seen') this.set('unreadCount', 0);
+            }.bind(this), 0));
+        },
+
+        mapMembers: function (members) {
+            return _(members).map(function (role, member) {
+                return { role: role, email: member };
             });
         },
 
         getTitle: function () {
-            return this.get('title') || _(this.members.reject({ id: data.user_id })).invoke('getName').sort().join('; ');
+            var members = _(this.members.reject(function (m) { return m.get('email1') === data.user.email; }));
+            return this.get('title') || members.invoke('getName').sort().join('; ');
+        },
+
+        onChangeLastMessage: function () {
+            if (!this.get('lastMessage')) return;
+            this.get('lastMessage').roomId = this.get('roomId');
+            if (this.lastMessage && this.lastMessage.get('messageId') === this.get('lastMessage').messageId) return;
+
+            if (this.lastMessage) this.stopListening(this.lastMessage);
+            this.lastMessage = messageCache.get(this.get('lastMessage'));
+            this.listenTo(this.lastMessage, 'change', function () {
+                this.set('lastMessage', this.lastMessage.toJSON());
+            });
         },
 
         getLastMessage: function () {
             var last = this.get('lastMessage');
-            return last ? new MessageModel(last).getTextBody() : '\u00a0';
+            if (!last) return '\u00a0';
+            var message = new MessageModel(last);
+            if (message.isFile()) return message.getFileText({ download: false });
+            return message.getTextBody();
         },
 
         getLastMessageDate: function () {
             var last = this.get('lastMessage');
-            return last ? moment(new MessageModel(last).get('sent')).format('LT') : '\u00a0';
+            if (!last || !last.date) return '\u00a0';
+            var date = moment(last.date);
+            return date.calendar(null, {
+                sameDay: 'LT',
+                lastDay: '[' + gt('Yesterday') + ']',
+                lastWeek: 'L',
+                sameElse: 'L'
+            });
         },
 
         getFirstMember: function () {
             // return first member that is not current user
-            return this.members.reject({ id: data.user_id })[0];
+            return this.members.find(function (member) {
+                return member.get('email') !== data.user.email;
+            });
         },
 
-        isOpen: function () {
-            return this.get('open');
+        isMember: function (email) {
+            email = email || data.user.email;
+            return this.get('members') ? !!this.get('members')[email] : false;
+        },
+
+        parseSystemMessage: function (message, roomId) {
+            var update = JSON.parse(message.content),
+                chat = data.chats.get(roomId),
+                members;
+
+            if (update.type === 'members:removed') {
+                members = _.clone(chat.get('members')) || {};
+                update.members.forEach(function (member) {
+                    delete members[member];
+                });
+                chat.set('members', members);
+            }
+            if (update.type === 'members:added') {
+                members = _.clone(chat.get('members')) || {};
+                update.members.forEach(function (member) {
+                    if (members[member]) return;
+                    members[member] = 'member';
+
+                    if (member !== data.user.email) return;
+                    chat.fetch();
+                    chat.trigger('change:icon', { silent: true });
+                });
+                chat.set('members', members);
+            }
+
+            if (update.type === 'title:changed') chat.set('title', update.title);
+            if (update.type === 'image:changed') {
+                this.set({ icon: update.icon }, { silent: true });
+                chat.trigger('change:icon');
+            }
+        },
+
+        getLastSenderName: function () {
+            var lastMessage = this.get('lastMessage');
+            if (!lastMessage) return '';
+            var sender = lastMessage.sender,
+                member = data.users.getByMail(sender);
+            if (!member) return;
+            return member.getName();
+        },
+
+        getIconUrl: function () {
+            if (!this.get('icon')) return;
+            var endpoint = this.get('type') !== 'channel' ? '/rooms/' : '/channels/';
+            return data.API_ROOT + endpoint + this.get('roomId') + '/icon';
+        },
+
+        isActive: function () {
+            return this.get('active');
         },
 
         isPrivate: function () {
@@ -232,75 +675,169 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
             return this.get('type') === 'channel';
         },
 
-        postMessage: function (attr) {
-            this.messages.add(attr).save();
-            this.set('modified', +moment());
+        postMessage: function (attr, files) {
+            if (this.isNew()) return this.postFirstMessage(attr, files);
+            files = _.toArray(files);
+            attr.roomId = this.get('roomId');
+
+            var formData = util.makeFormData(_.extend({}, attr, { files: files[0] })),
+                model = files.length > 0 ? messageCache.get(attr) : this.messages.add(attr, { merge: true, parse: true });
+
+            model.save(attr, {
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (model) {
+                    model.setInitialDeliveryState();
+                    if (files.length > 0) this.messages.add(model, { merge: true });
+                }.bind(this)
+            });
+            this.set('active', true);
         },
 
-        addMembers: function (ids) {
-            this.members.add(ids, { parse: true });
-            return $.post(this.members.url(), { members: ids });
+        postFirstMessage: function (attr, files) {
+            var hiddenAttr = { message: attr.content, files: files, members: Object.keys(this.get('members')) };
+            delete attr.content;
+            delete attr.members;
+
+            this.save(attr, { hiddenAttr: hiddenAttr }).then(function () {
+                events.trigger('cmd', { cmd: 'show-chat', id: this.get('roomId') });
+            }.bind(this));
         },
 
-        toggle: function (state) {
-            this.set('open', !!state).save({ open: !!state }, { patch: true });
+        sync: function (method, model, options) {
+            if (method === 'create' || method === 'update') {
+                var data = _(method === 'create' ? model.attributes : model.changed).pick('title', 'type', 'members', 'description', 'reference');
+                options.data = util.makeFormData(_.extend(data, options.hiddenAttr));
+                options.processData = false;
+                options.contentType = false;
+                options.method = method === 'create' ? 'POST' : 'PATCH';
+            }
+
+            return BaseModel.prototype.sync.call(this, method, model, options).then(function (data) {
+                if (method === 'create') this.messages.roomId = this.get('roomId');
+                if (data.lastMessage) messageCache.get(data.lastMessage.messageId).setInitialDeliveryState();
+                return data;
+            }.bind(this));
         }
     });
 
-    var ChatCollection = Backbone.Collection.extend({
+    data.ChatModel = ChatModel;
+
+    var ChatCollection = BaseCollection.extend({
 
         model: ChatModel,
-        comparator: 'modified',
+        comparator: function (a, b) {
+            if (!a.get('lastMessage')) return 0;
+            if (!b.get('lastMessage')) return 0;
+            return -util.strings.compare(a.get('lastMessage').messageId, b.get('lastMessage').messageId);
+        },
+        currentChatId: undefined,
 
         url: function () {
             return data.API_ROOT + '/rooms';
         },
 
         initialize: function () {
-            this.on('change:unseen', this.onChangeUnseen);
+            this.on('change:unreadCount', this.onChangeUnreadCount);
+            this.initialized = new $.Deferred();
+            this.once('sync', this.initialized.resolve);
         },
 
-        create: function (attr) {
-            var collection = this,
-                data = { open: true, members: attr.members, title: '', type: attr.type || 'group' };
-            return $.post(this.url(), data).done(function (data) {
-                collection.add(data);
+        toggleRecent: function (roomId) {
+            var room = this.get(roomId);
+            return util.ajax({
+                type: 'PUT',
+                url: this.url() + '/' + roomId + '/active/' + !room.get('active'),
+                processData: false,
+                contentType: false
+            }).then(function () {
+                room.set('active', !room.get('active'));
             });
         },
 
-        onChangeUnseen: function () {
+        onChangeUnreadCount: function () {
             this.trigger('unseen', this.reduce(function (sum, model) {
-                return sum + (model.get('unseen') > 0 ? 1 : 0);
+                if (!model.isActive()) return sum;
+                return sum + model.get('unreadCount');
             }, 0));
         },
 
-        getOpen: function () {
-            return this.filter({ open: true });
+        setCurrent: function (current) {
+            this.currentChatId = current ? current.toString() : undefined;
+        },
+
+        getCurrent: function () {
+            return data.chats.get(this.currentChatId);
+        },
+
+        getActive: function () {
+            return this.filter({ active: true });
         },
 
         getHistory: function () {
-            return this.filter({ open: false, joined: true }).slice(0, 100);
+            return this.filter(function (chat) {
+                if (chat.get('active') !== false) return false;
+                return chat.isGroup() || chat.isPrivate() || (chat.isChannel() && chat.isMember());
+            }).slice(0, 100);
         },
 
         getChannels: function () {
             return this.filter({ type: 'channel' });
         },
 
-        getChannelsUnjoined: function () {
-            return this.filter({ type: 'channel', joined: false });
-        },
-
         fetchUnlessExists: function (roomId) {
             var model = this.get(roomId);
             if (model) return $.when(model);
-            return $.get({ url: this.url() + '/' + roomId }).then(this.add.bind(this));
+            return util.ajax({
+                method: 'GET',
+                url: this.url() + '/' + roomId
+            }).then(function (data) {
+                return this.add(data);
+            }.bind(this));
         },
 
         joinChannel: function (roomId) {
             var model = this.get(roomId);
             if (!model || !model.isChannel()) return;
-            model.addMembers([user_id]);
-            model.set({ joined: true, open: true });
+
+            var url = this.url() + '/' + roomId + '/members';
+            var members = _.clone(model.get('members')) || {};
+            members[data.user.email] = 'member';
+            model.set({ active: true, members: members });
+
+            return util.ajax({
+                method: 'POST',
+                url: url
+            });
+        },
+
+        leaveChannel: function (roomId) {
+            var room = this.get(roomId);
+            var url = this.url() + '/' + roomId + '/members';
+            return util.ajax({
+                type: 'DELETE',
+                url: url,
+                processData: false,
+                contentType: false
+            }).then(function () {
+                room.set('active', false);
+            }).fail(function (err) {
+                console.log(err);
+            });
+        },
+
+        leaveGroup: function (roomId) {
+            var url = this.url() + '/' + roomId + '/members';
+
+            return util.ajax({
+                type: 'DELETE',
+                url: url,
+                processData: false,
+                contentType: false
+            }).fail(function (err) {
+                console.log(err);
+            });
         }
     });
 
@@ -312,17 +849,23 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
 
     var FileModel = Backbone.Model.extend({
 
+        idAttribute: 'fileId',
+
         getThumbnailUrl: function () {
-            return data.API_ROOT + '/files/' + this.get('id') + '/thumbnail';
+            return data.API_ROOT + '/files/' + this.get('fileId') + '/thumbnail';
         },
 
         getPreviewUrl: function () {
-            return data.API_ROOT + '/files/' + this.get('id') + '/thumbnail';
+            return data.API_ROOT + '/files/' + this.get('fileId');
+        },
+
+        isImage: function () {
+            return this.get('files') ? /(jpg|jpeg|gif|bmp|png)/i.test(this.get('files')[0].mimetype) : /(jpg|jpeg|gif|bmp|png)/i.test(this.get('mimetype'));
         }
     });
 
 
-    var FilesCollection = Backbone.Collection.extend({
+    var FilesCollection = BaseCollection.extend({
 
         model: FileModel,
 
@@ -333,69 +876,295 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
 
     data.files = new FilesCollection();
 
+    var RoomFilesCollection = FilesCollection.extend({
+
+        initialize: function (models, opt) {
+            this.roomId = opt.roomId;
+            this.initialized = new $.Deferred();
+            this.once('sync', this.initialized.resolve);
+        },
+
+        url: function () {
+            return data.API_ROOT + '/rooms/' + this.roomId + '/files';
+        }
+
+    });
+
+    data.RoomFilesCollection = RoomFilesCollection;
+
+    //
+    // Session Model
+    //
+
+    var SessionModel = Backbone.Model.extend({
+
+        initialize: function () {
+            this.initialized = new $.Deferred();
+        },
+
+        refresh: function () {
+            var newChats = data.chats.filter(function (model) {
+                return model.isNew();
+            });
+            data.chats.fetch().then(function () {
+                data.chats.forEach(function (model) {
+                    if (model.messages.length === 0) return;
+                    var prevLast = model.previous('lastMessage') || {},
+                        last = model.get('lastMessage') || {};
+                    if (prevLast.messageId === last.messageId) return;
+
+                    model.messages.expired = true;
+                    // views which use the messages-collection can prevent the expiry by listening to the expire event
+                    model.messages.trigger('expire');
+                    if (model.messages.expired) model.messages.reset();
+                });
+                data.chats.add(newChats, { at: 0 });
+            });
+        },
+
+        connectSocket: function () {
+            var socket = data.socket = io.connect(data.SOCKET, { transports: ['websocket'] });
+
+            socket.on('reconnect', this.refresh);
+
+            socket.on('delivery:update', function (obj) {
+                var roomId = obj.roomId,
+                    messageId = obj.messageId,
+                    email = obj.email,
+                    modified = obj.modified,
+                    state = obj.state,
+                    room = data.chats.get(roomId);
+
+                function process(message) {
+                    if (util.strings.greaterThan(message.get('messageId'), messageId)) return;
+                    if (message.isMyself() !== (email !== data.user.email)) return;
+
+                    var deliveryState = message.get('deliveryState') || {},
+                        prevState = (deliveryState[email] || {}).state || deliveryState.state || message.get('deliveryState');
+
+                    if (prevState === 'seen') return;
+                    if (prevState === 'received' && state === 'server') return;
+                    if (prevState === state) return;
+
+                    var changes;
+                    if (!message.isMyself()) changes = state;
+                    else if (room.get('type') === 'private') changes = { state: state, modified: modified };
+                    else {
+                        changes = _.clone(deliveryState);
+                        changes[email] = { state: state, modified: modified };
+                    }
+                    message.set('deliveryState', changes);
+                }
+
+                // update specific message, usually the lastMessage in a room
+                if (messageCache.has(messageId)) process(messageCache.get({ messageId: messageId }));
+                if (room) room.messages.forEach(process);
+            });
+
+            socket.on('message:new', function (attr) {
+                var roomId = attr.roomId,
+                    message = attr.message;
+
+                // stop typing
+                events.trigger('typing:' + roomId, message.sender, false);
+                // fetch room unless it's already known
+                data.chats.fetchUnlessExists(roomId).done(function (model) {
+                    // add new message to room
+                    message.roomId = roomId;
+                    var newMessage = messageCache.get(message);
+
+                    if (model.messages.nextComplete) {
+                        if (!model.messages.get(newMessage)) model.messages.add(newMessage);
+                    } else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
+
+                    if (model.get('type') !== 'channel' && message.sender !== data.user.email) {
+                        model.set({ unreadCount: model.get('unreadCount') + 1 });
+                        newMessage.updateDelivery('received');
+                    }
+
+                    if (newMessage.get('type') === 'system') model.parseSystemMessage(message, roomId);
+                });
+            });
+
+            socket.on('typing', function (event) {
+                events.trigger('typing:' + event.roomId, event.email, event.state);
+            });
+
+            // send heartbeat every minute
+            setInterval(function () { socket.emit('heartbeat'); }, 60000);
+        },
+
+        waitForMessage: function () {
+            var def = new $.Deferred();
+            function listener(event) {
+                if (event.origin !== data.SOCKET) return;
+                def.resolve(event.data);
+                window.removeEventListener('message', listener);
+            }
+            window.addEventListener('message', listener, false);
+            return def;
+        },
+
+        getAuthURL: function () {
+            return util.ajax({
+                url: data.SOCKET + '/auth/url',
+                handleSessionFail: false
+            });
+        },
+
+        getUserId: function () {
+            return util.ajax({
+                url: data.SOCKET + '/auth/user',
+                handleSessionFail: false
+            }).then(function (chatUser) {
+                return require(['io.ox/core/api/user']).then(function (userAPI) {
+                    return userAPI.get({ id: ox.user_id });
+                }).then(function (oxUser) {
+                    if (oxUser.email1 !== chatUser.email) {
+                        throw new Error('Chat email address and appsuite email address do not coincide');
+                    }
+
+                    data.user_id = chatUser.id;
+                    data.user = chatUser;
+                    this.initialized.resolve();
+                    return chatUser;
+                }.bind(this));
+            }.bind(this));
+        },
+
+        checkIdPSession: function (url) {
+            url = url += '&prompt=none';
+            var frame = $('<iframe>').attr('src', url).hide(),
+                def = this.waitForMessage();
+            $('body').append(frame);
+            def.done(function () {
+                frame.remove();
+            });
+            return def;
+        },
+
+        authenticateOIDCSilent: function () {
+            return this.getAuthURL().then(function (url) {
+                return this.checkIdPSession(url);
+            }.bind(this)).then(function (status) {
+                if (!status) throw new Error('No active session');
+                return this.getUserId();
+            }.bind(this));
+        },
+
+        getIdPSession: function (url) {
+            var def = this.waitForMessage(),
+                popup = window.open(url, '_blank', 'width=972,height=660,modal=yes,alwaysRaised=yes');
+            def.done(function () {
+                if (popup) popup.close();
+            });
+            return def;
+        },
+
+        authenticateOIDC: function () {
+            return this.getAuthURL().then(function (url) {
+                return this.getIdPSession(url);
+            }.bind(this)).then(function () {
+                return this.getUserId();
+            }.bind(this));
+        },
+
+        login: function () {
+            return this.getUserId().catch(function () {
+                return this.getConfig().then(function (config) {
+                    if (config.appsuite) return this.authenticateAppsuite();
+                    if (config.oidc) return this.authenticateOIDC();
+                    throw new Error('No suitable authentication method');
+                }.bind(this));
+            }.bind(this)).then(function (user) {
+                this.set('userId', user.id);
+                return user.id;
+            }.bind(this));
+        },
+
+        getConfig: function () {
+            if (this.config) return this.config;
+            return util.ajax({
+                url: data.SOCKET + '/auth/config'
+            }).then(function (config) {
+                this.config = config;
+                return config;
+            });
+        },
+
+        authenticateAppsuite: function () {
+            return http.GET({ module: 'token', params: { action: 'acquireToken' } }).then(function (res) {
+                if (!res.token) throw new Error('Missing token in response');
+                return util.ajax({
+                    method: 'post',
+                    url: data.SOCKET + '/auth/login',
+                    data: { token: res.token },
+                    handleSessionFail: false
+                });
+            }).then(function () {
+                return this.getUserId();
+            }.bind(this));
+        },
+
+        autologin: function () {
+            return this.getUserId().catch(function () {
+                return this.getConfig().then(function (config) {
+                    if (config.appsuite) return this.authenticateAppsuite();
+                    if (config.oidc) return this.authenticateOIDCSilent();
+                    throw new Error('No suitable authentication method');
+                }.bind(this));
+            }.bind(this)).then(function (user) {
+                this.set('userId', user.id);
+                return user.id;
+            }.bind(this));
+        },
+
+        logout: function () {
+            return util.ajax({
+                url: data.SOCKET + '/auth/logout',
+                handleSessionFail: false
+            });
+        }
+
+    });
+
+    data.session = new SessionModel();
+
+    ox.on('refresh^', function () {
+        data.session.refresh();
+    });
+
     //
     // Helpers
     //
 
-    function getName(id) {
-        return getNames([id]);
+    function getName(email) {
+        //#. shown instead of your name for your own chat messages
+        if (email === data.user.email) return '<span class="name">' + gt('You') + '</span>';
+        return getNames([email]);
     }
 
     function getNames(list) {
         return join(
             _(list)
-            .map(function (id) {
-                var model = data.users.get(id);
-                return '<span class="name">' + (model ? model.getName() : 'Unknown user') + '</span>';
+            .map(function (email) {
+                var model = data.users.getByMail(email);
+                var name = (model ? model.getName() : gt('Unknown user'));
+                //#. shown instead of your name for your own chat messages
+                if (email === data.user.email) name = gt('You');
+
+                return '<span class="name">' + name + '</span>';
             })
             .sort()
         );
     }
 
     function join(list) {
-        if (list.length <= 2) return list.join(' and ');
-        return list.slice(0, -1).join(', ') + ', and ' + list[list.length - 1];
+        //#. used as a separator text between multiple participants of a chat example: Paul and Bob
+        if (list.length <= 2) return list.join(gt(' and '));
+        //#. used as a separator text between multiple participants of a chat example: Paul and Bob
+        return list.slice(0, -1).join(', ') + gt(', and ') + list[list.length - 1];
     }
-
-    //
-    // Socket support
-    //
-
-    var socket = data.socket = io.connect(data.SOCKET, { query: 'userId=' + data.user_id });
-
-    socket.on('alive', function () {
-        console.log('Connected socket to server');
-    });
-
-    socket.on('message:change', function (roomId, id, changes) {
-        var collection = data.chats.get(roomId);
-        if (!collection) return;
-        var message = collection.messages.get(id);
-        if (message) message.set(changes);
-    });
-
-    socket.on('message:new', function (roomId, message) {
-        // stop typing
-        events.trigger('typing:' + roomId, message.senderId, false);
-        // fetch room unless it's already known
-        data.chats.fetchUnlessExists(roomId).done(function (model) {
-            // add new message to room
-            model.messages.add(message);
-            model.set({ modified: +moment(), unseen: model.get('unseen') + 1 });
-        });
-    });
-
-    socket.on('user:change:state', function (userId, state) {
-        var model = data.users.get(userId);
-        if (model) model.set('state', state);
-    });
-
-    socket.on('typing', function (roomId, userId, state) {
-        events.trigger('typing:' + roomId, userId, state);
-    });
-
-    // send heartbeat every minute
-    setInterval(function () { socket.emit('heartbeat'); }, 60000);
 
     return data;
 });

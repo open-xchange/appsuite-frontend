@@ -16,15 +16,18 @@ define('io.ox/chat/events', [], function () {
     'use strict';
 
     // simple event aggregator
-    var events = _.extend({}, Backbone.Events);
+    var events = _.extend({
+        forward: function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var node = $(e.currentTarget), data = node.data();
+            if (ox.debug) console.log('cmd', data.cmd, data);
+            events.trigger('cmd cmd:' + data.cmd, data);
+        }
+    }, Backbone.Events);
 
     // forward local command clicks into event hub
-    $(document).on('click', '.ox-chat [data-cmd]', function (e) {
-        e.preventDefault();
-        var node = $(e.currentTarget), data = node.data();
-        if (ox.debug) console.log('cmd', data.cmd, data);
-        events.trigger('cmd cmd:' + data.cmd, data);
-    });
+    $(document).on('click', '.ox-chat [data-cmd]', events.forward);
 
     return events;
 });

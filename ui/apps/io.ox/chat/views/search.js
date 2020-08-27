@@ -11,7 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/search', ['io.ox/backbone/views/disposable', 'io.ox/chat/events'], function (DisposableView, events) {
+define('io.ox/chat/views/search', [
+    'io.ox/backbone/views/disposable',
+    'io.ox/chat/events',
+    'gettext!io.ox/chat'
+], function (DisposableView, events, gt) {
 
     'use strict';
 
@@ -20,22 +24,52 @@ define('io.ox/chat/views/search', ['io.ox/backbone/views/disposable', 'io.ox/cha
         className: 'search',
 
         events: {
-            'keydown input': 'onKeydown'
+            'keyup input': 'onKeyup',
+            'change input': 'onChangeInput',
+            'click button': 'onClear'
+        },
+
+        initialize: function () {
+            this.model = new Backbone.Model({ query: '' });
+            this.listenTo(this.model, 'change:query', this.onChangeQuery);
         },
 
         render: function () {
             this.$el.append(
-                $('<input type="text" spellcheck="false" autocomplete="false" placeholder="Search chat or contact">')
+                $('<input type="text" spellcheck="false" autocomplete="false" placeholder="' + gt('Search or start new chat') + '">'),
+                $('<button type="button" class="btn btn-link">').append($('<i class="fa fa-times-circle" aria-hidden="true">'))
             );
             return this;
         },
 
-        onKeydown: function (e) {
-            if (e.which !== 13) return;
-            e.preventDefault();
+        onKeyup: function (e) {
             var query = $(e.currentTarget).val();
-            events.trigger('cmd:search', query);
+            if (e.which !== 13) return this.delayedSearch(query);
+            e.preventDefault();
+            this.model.set('query', query);
+        },
+
+        onChangeInput: function (e) {
+            var query = $(e.currentTarget).val();
+            this.delayedSearch(query);
+        },
+
+        delayedSearch: _.debounce(function (query) {
+            this.model.set('query', query);
+        }, 500),
+
+        onChangeQuery: function () {
+            this.delayedSearch.cancel();
+            this.$el.toggleClass('closable', !!this.model.get('query'));
+            events.trigger('cmd:search', this.model.get('query'));
+        },
+
+        onClear: function () {
+            this.delayedSearch.cancel();
+            this.$('input').val('');
+            this.model.set('query', '');
         }
+
     });
 
     return SearchView;

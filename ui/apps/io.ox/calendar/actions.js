@@ -170,6 +170,8 @@ define('io.ox/calendar/actions', [
             if (folder.supported_capabilities.indexOf('alarms') === -1) return false;
             // In public folders we must be organizer or attendee, not on behalf
             if (folderAPI.is('public', folder) && !(f.attendee || f.organizer)) return false;
+            // do not show change reminder as this duplicates "edit"
+            if (util.allowedToEdit(data, folder)) return false;
             return true;
         },
         action: function (baton) {
