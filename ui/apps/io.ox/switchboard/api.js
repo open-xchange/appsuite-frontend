@@ -99,6 +99,50 @@ define.async('io.ox/switchboard/api', [
                 params: params,
                 type: params['X-OX-TYPE']
             };
+        },
+
+        reconnect: function () {
+            return http.GET({
+                module: 'token',
+                params: { action: 'acquireToken' }
+            })
+            .then(function (data) {
+                var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
+                appsuiteApiBaseUrl = !appsuiteApiBaseUrl ? '' : '&appsuiteApiBaseUrl=' + appsuiteApiBaseUrl;
+                // Only send redirect uri if not default "/appsuite/api"
+                var appsuiteApiPath = ox.apiRoot === '/appsuite/api' ? '' : '&appsuiteApiPath=' + encodeURIComponent(ox.apiRoot);
+                api.socket = io(api.host + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token + appsuiteApiPath + appsuiteApiBaseUrl, {
+                    transports: ['websocket'],
+                    reconnectionAttempts: 20,
+                    reconnectionDelayMax: 10000 // 10 min. max delay between a reconnect (reached after aprox. 10 retries)
+                })
+                .once('connect', function () {
+                    console.log('%cConnected to switchboard service', 'background-color: green; color: white; padding: 8px;');
+                    api.online = true;
+                })
+                .on('disconnect', function () {
+                    console.log('Switchboard: Disconnected from switchboard service');
+                    api.online = false;
+                })
+                .on('reconnect', function (attemptNumber) {
+                    console.log('Switchboard: Reconnected to switchboard service on attempt #' + attemptNumber + '.');
+                    api.online = true;
+                })
+                .on('reconnect_attempt', function (attemptNumber) {
+                    console.log('Switchboard: Reconnect attempt #' + attemptNumber);
+                })
+                .on('reconnect_failed', function () {
+                    console.log('Switchboard: Reconnect failed. Giving up.');
+                })
+                .on('error', function () {
+                    api.socket.close();
+                    // 10 sec. + Random (0-9 sec)
+                    setTimeout(function () {
+                        api.reconnect();
+                    }, 1000 * (10 + Math.floor(Math.random() * 10)));
+                });
+                return api.socket;
+            });
         }
     };
 
@@ -111,41 +155,7 @@ define.async('io.ox/switchboard/api', [
         api.isInternal = function (id) {
             return regexp.test(id);
         };
-        return http.GET({
-            module: 'token',
-            params: { action: 'acquireToken' }
-        })
-        .then(function (data) {
-            var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
-            appsuiteApiBaseUrl = !appsuiteApiBaseUrl ? '' : '&appsuiteApiBaseUrl=' + appsuiteApiBaseUrl;
-            // Only send redirect uri if not default "/appsuite/api"
-            var appsuiteApiPath = ox.apiRoot === '/appsuite/api' ? '' : '&appsuiteApiPath=' + encodeURIComponent(ox.apiRoot);
-            // TODO
-            // * enable long polling, configure retries, and reconnects
-            api.socket = io(api.host + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token + appsuiteApiPath + appsuiteApiBaseUrl, {
-                transports: ['websocket'],
-                reconnectionAttempts: 20,
-                reconnectionDelayMax: 10000 // 10 min. max delay between a reconnect (reached after aprox. 10 retries)
-            })
-            .once('connect', function () {
-                console.log('%cConnected to switchboard service', 'background-color: green; color: white; padding: 8px;');
-                api.online = true;
-            })
-            .on('disconnect', function () {
-                console.log('Switchboard: Disconnected from switchboard service');
-                api.online = false;
-            })
-            .on('reconnect', function (attemptNumber) {
-                console.log('Switchboard: Reconnected to switchboard service on attempt #' + attemptNumber + '.');
-                api.online = true;
-            })
-            .on('reconnect_attempt', function (attemptNumber) {
-                console.log('Switchboard: Reconnect attempt #' + attemptNumber);
-            })
-            .on('reconnect_failed', function () {
-                console.log('Switchboard: Reconnect failed. Giving up.');
-            });
-
+        return api.reconnect().then(function () {
             return api;
         });
     });
