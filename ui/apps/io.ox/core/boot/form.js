@@ -65,7 +65,7 @@ define('io.ox/core/boot/form', [
         function hideFormElements(elements) {
             // remove all other inputs
             $('#io-ox-login-form div.row')
-                .filter(elements || '.username, .password, .options, .buttons')
+                .filter(elements || '.username, .password, .options, .button')
                 .remove();
         }
 
@@ -123,6 +123,7 @@ define('io.ox/core/boot/form', [
             }
             $('#io-ox-forgot-password, #io-ox-backtosignin').find('a').click(function (e) {
                 e.preventDefault();
+                $('#io-ox-resetpassword-button').attr({ 'data-i18n': 'Next' }).text(gt('Next'));
                 // If restore email is already populated and readOnly, submit the form
                 if ($('#io-ox-login-restoremail, #io-ox-login-username').prop('readOnly')) {
                     $('#io-ox-password-forget-form').submit();
@@ -252,9 +253,9 @@ define('io.ox/core/boot/form', [
                 if (form.header && form.header.bgColor) configCss += '#box-form-header { background: ' + form.header.bgColor + ' } ';
                 if (form.textColor) configCss += '#box-form-body *:not(button) { color: ' + form.textColor + ' } ';
                 if (form.linkColor) configCss += '#box-form a { color: ' + form.linkColor + ' } ';
-                if (form.button && form.button.bgColor) configCss += '#io-ox-login-button { background-color: ' + form.button.bgColor + '; border-color: ' + form.button.bgColor + ' } ';
-                if (form.button && form.button.borderColor) configCss += '#io-ox-login-button { border-color: ' + form.button.borderColor + ' } ';
-                if (form.button && form.button.textColor) configCss += '#io-ox-login-button { color: ' + form.button.textColor + ' } ';
+                if (form.button && form.button.bgColor) configCss += '#box-form button, #io-ox-login-button { background-color: ' + form.button.bgColor + '; border-color: ' + form.button.bgColor + ' } ';
+                if (form.button && form.button.borderColor) configCss += '#box-form button, #io-ox-login-button { border-color: ' + form.button.borderColor + ' } ';
+                if (form.button && form.button.textColor) configCss += '#box-form button, #io-ox-login-button { color: ' + form.button.textColor + ' } ';
             }
 
             var f = lc.footer;

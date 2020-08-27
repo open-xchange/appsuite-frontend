@@ -287,3 +287,21 @@ default:
             textColor: "#333333"
             linkColor: "#3C61AA"
 ```
+
+# Forgot password
+
+There are two methods during the login where you can request a new password: **Default login page** and **Guest login method**
+
+## Default login page
+
+On the initial login screen, a password forgot link can be enabled by setting a value for the attribute 'forgotPassword' in the server configuration `as-config.yml`. The value describes the path to the providers page where a user can reset the password. If the value is not set, the link to reset the password will not be shown.
+
+```yaml
+default:
+    host: all
+    forgotPassword: "path/to/provider-forgot-password-page"
+```
+
+## Guest login method
+
+If you access the login page via the guest login method, e.g. after clicking on a sharing link of a password protected file, you can enter your email address directly. An email with the password reset intructions will be sent by the App Suite.
