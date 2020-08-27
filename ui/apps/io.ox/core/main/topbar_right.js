@@ -92,6 +92,7 @@ define('io.ox/core/main/topbar_right', [
             var view = new UpsellView({
                 tagName: 'li',
                 className: 'launcher',
+                attributes: { role: 'presentation' },
                 id: 'secondary-launcher',
                 requires: 'active_sync || caldav || carddav',
                 customize: function () {
@@ -316,9 +317,11 @@ define('io.ox/core/main/topbar_right', [
         id: 'upsell',
         index: 50,
         extend: function () {
+
             var view = new UpsellView({
                 tagName: 'li',
                 id: 'topbar-dropdown',
+                attributes: { 'role': 'presentation' },
                 requires: 'active_sync || caldav || carddav',
                 title: gt('Upgrade your account'),
                 customize: function () {
@@ -326,12 +329,9 @@ define('io.ox/core/main/topbar_right', [
                 }
             });
 
-            if (view.visible) {
-                this.append(
-                    view.render().$el
-                );
-                this.divider();
-            }
+            if (!view.visible) return;
+            this.$ul.append(view.render().$el);
+            this.divider();
         }
     });
 
