@@ -65,7 +65,15 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
         gt('The service is not available right now.');
         gt('Retry');
         gt('Reload');
-
+        gt('Privacy Policy');
+        gt('Imprint');
+        gt('Confirm new Password');
+        //#. While or after requesting a new password you can go back to the initial login page
+        gt('Back to sign in');
+        //#. While requesting a new password on the login page; %1$s will be replaced by the product name e.g. OX App Suite
+        gt('Please enter your email address associated with %1$s. You will receive an email that contains a link to reset your password.');
+        gt('Next');
+        gt('Email address');
 
     }
 });

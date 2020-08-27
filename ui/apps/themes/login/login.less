@@ -139,7 +139,6 @@ html.baseline {
     }
 
     .help-block {
-        color: #fff;
         margin-bottom: 16px;
     }
 }
@@ -351,7 +350,13 @@ html.baseline {
     }
 
     a {
-        color: #94c1ec;
+        color: @btn-primary-bg;
+    }
+
+    * button {
+        border-color: @btn-primary-border;
+        background-color: @btn-primary-bg;
+        color: @btn-primary-color;
     }
 }
 
@@ -365,12 +370,6 @@ html.baseline {
     background-position: 50% 50% !important;
     background-color: #f5f5f5;
     color: #333333;
-}
-
-#io-ox-login-button {
-    border-color: @btn-primary-border;
-    background-color: @btn-primary-bg;
-    color: @btn-primary-color;
 }
 
 #box-form-body {
@@ -419,7 +418,7 @@ html.baseline {
             min-height: 32px;
         }
 
-        .row.buttons {
+        .row.button {
             display: flex;
             align-items: flex-end;
             margin-top: auto;
@@ -427,6 +426,11 @@ html.baseline {
             div {
                 margin-bottom: 0;
             }
+        }
+
+        #io-ox-backtosignin {
+            margin-top: auto;
+            margin-bottom: auto;
         }
     }
 
@@ -595,10 +599,6 @@ html.baseline {
                             border-radius: 6px;
                             min-height: unset;
                             height: 100%;
-
-                            .form-group {
-                                margin-bottom: 14px;
-                            }
 
                             .row.username, .row.row.password {
                                 label {
