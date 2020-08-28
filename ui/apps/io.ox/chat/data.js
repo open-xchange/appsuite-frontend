@@ -580,6 +580,7 @@ define('io.ox/chat/data', [
             this.listenTo(this.lastMessage, 'change', function () {
                 this.set('lastMessage', this.lastMessage.toJSON());
             });
+            if (this.get('lastMessage').files) data.files.add(this.get('lastMessage').files);
         },
 
         getLastMessage: function () {
