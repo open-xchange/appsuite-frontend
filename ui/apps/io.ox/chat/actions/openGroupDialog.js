@@ -45,6 +45,7 @@ define('io.ox/chat/actions/openGroupDialog', [
             this.editPictureDialog.on('reset', function () {
                 this.model.set('image1_data_url', '');
             }.bind(this));
+            this.editPictureDialog.$title.text(gt('Change image'));
         }
 
     });
