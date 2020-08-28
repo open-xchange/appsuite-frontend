@@ -172,8 +172,10 @@ define('io.ox/chat/data', [
                 members = event.members || [],
                 room = data.chats.get(this.get('roomId'));
 
+            if (!_.isArray(members) && _.isObject(members)) members = Object.keys(members);
+
             if (room.get('type') === 'channel' && event.type === 'members:added') event.type = 'channel:joined';
-            if (members.join('') === data.user.email && event.type === 'members:removed' && members.join('') === originator) event.type = 'room:left';
+            if (event.type === 'members:removed' && members.length === 1 && members[0] === data.user.email && originator === data.user.email) event.type = 'room:left';
 
             switch (event.type) {
                 case 'room:created':
@@ -625,15 +627,12 @@ define('io.ox/chat/data', [
                 chat.set('members', members);
             }
             if (update.type === 'members:added') {
-                members = _.clone(chat.get('members')) || {};
-                update.members.forEach(function (member) {
-                    if (members[member]) return;
-                    members[member] = 'member';
-
-                    if (member !== data.user.email) return;
+                members = _.extend({}, chat.get('members'), update.members);
+                if (update.members[data.user.email]) {
+                    // edge case, when a user has been readded to the group
                     chat.fetch();
                     chat.trigger('change:icon', { silent: true });
-                });
+                }
                 chat.set('members', members);
             }
 
@@ -696,7 +695,7 @@ define('io.ox/chat/data', [
         },
 
         postFirstMessage: function (attr, files) {
-            var hiddenAttr = { message: attr.content, files: files, members: Object.keys(this.get('members')) };
+            var hiddenAttr = { message: attr.content, files: files, members: this.get('members') };
             delete attr.content;
             delete attr.members;
 

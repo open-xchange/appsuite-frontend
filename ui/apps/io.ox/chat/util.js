@@ -89,6 +89,10 @@ define('io.ox/chat/util', [
                     return;
                 }
 
+                if (_.isObject(value)) {
+                    value = JSON.stringify(value);
+                }
+
                 formData.append(key, value);
             });
 

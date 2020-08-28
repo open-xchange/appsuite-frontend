@@ -49,6 +49,14 @@ define('io.ox/chat/actions/openGroupDialog', [
 
     });
 
+    function membersToObject(members) {
+        var obj = {};
+        members.forEach(function (email) {
+            obj[email] = 'member';
+        });
+        return obj;
+    }
+
     function open(obj) {
         var def = new $.Deferred();
         var model = data.chats.get(obj.id) || new Backbone.Model(obj);
@@ -145,7 +153,16 @@ define('io.ox/chat/actions/openGroupDialog', [
             if (this.model.get('title') !== originalModel.get('title')) updates.title = this.model.get('title');
             if (this.model.get('description') !== originalModel.get('description')) updates.description = this.model.get('description');
             if (this.model.get('type') !== 'channel' && !_.isEqual(this.collection.pluck('email1'), Object.keys(this.model.get('members') || {}))) {
-                hiddenAttr.members = this.collection.pluck('email1');
+                var emails = this.collection.pluck('email1');
+                if (this.model.isNew()) {
+                    hiddenAttr.members = membersToObject(emails);
+                } else {
+                    var prevEmails = Object.keys(this.model.get('members')),
+                        addedEmails = _.difference(emails, prevEmails),
+                        removedEmails = _.difference(prevEmails, emails);
+                    if (addedEmails.length > 0) hiddenAttr.add = membersToObject(addedEmails);
+                    if (removedEmails.length > 0) hiddenAttr.remove = removedEmails;
+                }
             }
 
             if (this.pictureModel.get('pictureFileEdited') === '') {

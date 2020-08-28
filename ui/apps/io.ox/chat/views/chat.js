@@ -488,8 +488,12 @@ define('io.ox/chat/views/chat', [
         },
 
         onChangeMembers: function () {
-            var event = JSON.parse(this.model.get('lastMessage').content);
-            if (event.members.filter(function (m) { return m === data.user.email; }).length === 0) return;
+            var event = JSON.parse(this.model.get('lastMessage').content),
+                members = event.members;
+
+            if (!_.isArray(members) && _.isObject(members)) members = Object.keys(members);
+            if (!members || members.indexOf(data.user.email) < 0) return;
+
             this.updateEditor();
             this.updateDropdown();
         },
