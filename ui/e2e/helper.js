@@ -16,6 +16,16 @@ class MyHelper extends Helper {
         return response.data;
     }
 
+    async clearFolders(folders, options) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        return httpClient.put('appsuite/api/folders', [].concat.apply(this, [folders]), {
+            params: {
+                action: 'clear',
+                session: session
+            }
+        });
+    }
+
     async allowClipboardRead() {
         const { browser, config } = this.helpers['Puppeteer'];
         const context = browser.defaultBrowserContext();
