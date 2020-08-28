@@ -76,6 +76,12 @@ define('io.ox/chat/util', [
             }
         },
 
+        isFile: function (obj) {
+            if (obj instanceof File) return true;
+            if (typeof obj.name === 'string' && obj.type) return true;
+            return false;
+        },
+
         makeFormData: function (attr) {
             var formData = new FormData();
 
@@ -89,7 +95,7 @@ define('io.ox/chat/util', [
                     return;
                 }
 
-                if (_.isObject(value)) {
+                if (_.isObject(value) && !util.isFile(value)) {
                     value = JSON.stringify(value);
                 }
 
