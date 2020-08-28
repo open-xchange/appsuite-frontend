@@ -241,6 +241,7 @@ define('io.ox/chat/main', [
 
         showAllFiles: function () {
             this.$body.addClass('open');
+            data.chats.setCurrent(undefined);
             this.$rightside.empty().append(new FileList().render().$el);
         },
 
@@ -265,7 +266,7 @@ define('io.ox/chat/main', [
             var options = {
                 files: fileList.map(function (file) {
                     return _.extend({
-                        url: file.getPreviewUrl(),
+                        url: file.getFileUrl(),
                         // try to fake mail compose attachement
                         space: true
                     }, file.pick('name', 'size', 'id'));
