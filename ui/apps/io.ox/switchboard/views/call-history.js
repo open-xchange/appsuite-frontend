@@ -214,7 +214,8 @@ define('io.ox/switchboard/views/call-history', [
         },
         getCaption: function () {
             switch (this.type) {
-                case 'phone': return this.model.get('name') ? this.model.get('number') : 'Unbekannt';
+                //#. used for unknown callers in our call history
+                case 'phone': return this.model.get('name') ? this.model.get('number') : gt('Unknown');
                 case 'jisti': return 'Jitsi';
                 case 'zoom': return 'Zoom';
                 // no default
