@@ -262,7 +262,8 @@ define('io.ox/onboarding/main', [
         'macos': {
             'driveapp': {
                 'title': gt('OX Drive App'),
-                'url': 'https://itunes.apple.com/de/app/ox-drive/id818195014'
+                'url': 'https://itunes.apple.com/de/app/ox-drive/id818195014',
+                'icon': 'apps/themes/icons/default/apps/mailapp-googleplay.png'
             },
             'storeIcon': 'apps/themes/icons/default/appstore/Mac_App_Store_Badge_$country_165x40.svg'
         },
@@ -381,21 +382,22 @@ define('io.ox/onboarding/main', [
             this.storeIcon = options.storeIcon;
             this.url = options.app.url;
             this.title = options.app.title;
+            if (options.app.icon) {
+                this.appIcon = options.app.icon;
+                this.appIconClass = '';
+            }
         },
         events: {
             'click .applink': 'onClick'
         },
         render: function () {
             this.$el.append(
-                //$('<a href="#" class="app">').append(
                 $('<img class="app-icon applink" role="button">')
                     .addClass(this.appIconClass)
-                    .attr('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='),
-                //),
+                    .attr('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=')
+                    .css('background-image', this.appIcon ? 'url(' + this.appIcon + ')' : ''),
                 $('<p class="app-info">').text(this.title),
-                //$('<a href="#" class="store">').append(
                 $('<img class="store-icon applink" role="button">').attr('src', this.storeIcon)
-                //)
             );
         },
         onClick: function () {
