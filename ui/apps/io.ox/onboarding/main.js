@@ -648,7 +648,15 @@ define('io.ox/onboarding/main', [
         tagName: 'div',
         className: 'progress-container',
 
-        initialize: function () {
+        events: {
+            'click [data-action="reset"]': 'onReset'
+        },
+        onReset: function () {
+            this.wizard.trigger('reset');
+        },
+        initialize: function (connectTour) {
+            this.wizard = connectTour;
+            this.model = connectTour.model;
             this.listenTo(this.model, 'change', _.device('smartphone') ? this.renderMobile : this.render);
         },
         render: function () {
@@ -658,42 +666,44 @@ define('io.ox/onboarding/main', [
                 appTitle = app ? titles[platform][app] : undefined;
 
             this.$el.empty()
-                .append($('<ul class="progress-steps">')
                 .append(
-                    $('<li class="progress-step-one">')
-                        .append(
-                            $('<button type="button" class="btn progress-btn" data-action="back">')
-                            .prop('disabled', true)
+                    $('<ul class="progress-steps">')
+                    .append(
+                        $('<li class="progress-step-one">')
                             .append(
-                                $('<span>').text('1'),
-                                $('<span class="sr-only">').text(platformTitle ? platformTitle : gt('Platform'))
+                                $('<button type="button" class="btn progress-btn" data-action="reset">')
+                                .prop('disabled', true)
+                                .append(
+                                    $('<span>').text('1'),
+                                    $('<span class="sr-only">').text(platformTitle ? platformTitle : gt('Platform'))
+                                )
                             )
-                        )
-                        .addClass(!platform && !app ? 'active' : '')
-                        .append($('<span class="progress-description aria-hidden="true">').text(platformTitle ? platformTitle : gt('Platform'))),
-                    $('<li class="progress-step-two">')
-                        .append(
-                            $('<button type="button" class="btn progress-btn" data-action="back">')
-                            .prop('disabled', true)
+                            .addClass(!platform && !app ? 'active' : '')
+                            .append($('<span class="progress-description aria-hidden="true">').text(platformTitle ? platformTitle : gt('Platform'))),
+                        $('<li class="progress-step-two">')
                             .append(
-                                $('<span>').text('2'),
-                                $('<span class="sr-only">').text(appTitle ? appTitle : gt('App'))
+                                $('<button type="button" class="btn progress-btn" data-action="back">')
+                                .prop('disabled', true)
+                                .append(
+                                    $('<span>').text('2'),
+                                    $('<span class="sr-only">').text(appTitle ? appTitle : gt('App'))
+                                )
                             )
-                        )
-                        .addClass(platform && !app ? 'active' : '')
-                        .append($('<span class="progress-description" aria-hidden="true">').text(appTitle ? appTitle : gt('App'))),
-                    $('<li class="progress-step-three">')
-                        .append(
-                            $('<button type="button" class="btn progress-btn">')
-                            .prop('disabled', true)
+                            .addClass(platform && !app ? 'active' : '')
+                            .append($('<span class="progress-description" aria-hidden="true">').text(appTitle ? appTitle : gt('App'))),
+                        $('<li class="progress-step-three">')
                             .append(
-                                $('<span>').text('3'),
-                                $('<span class="sr-only">').text(gt('Setup'))
+                                $('<button type="button" class="btn progress-btn">')
+                                .prop('disabled', true)
+                                .append(
+                                    $('<span>').text('3'),
+                                    $('<span class="sr-only">').text(gt('Setup'))
+                                )
                             )
-                        )
-                        .addClass(platform && app ? 'active' : '')
-                        .append($('<span class="progress-description" aria-hidden="true">').text(gt('Setup')))
-                ));
+                            .addClass(platform && app ? 'active' : '')
+                            .append($('<span class="progress-description" aria-hidden="true">').text(gt('Setup')))
+                    )
+                );
 
             $('.progress-step-one .btn').prop(platform ? { 'disabled': false } : '');
             $('.progress-step-two .btn').prop(app ? { 'disabled': false } : '');
@@ -705,31 +715,33 @@ define('io.ox/onboarding/main', [
                 appTitle = app ? titles[platform][app] : undefined;
 
             this.$el.empty()
-                .append($('<ul class="progress-steps">')
                 .append(
-                    $('<li class="progress-step-one">')
-                        .append(
-                            $('<button type="button" class="btn progress-btn" data-action="back">')
-                            .prop('disabled', true)
+                    $('<ul class="progress-steps">')
+                    .append(
+                        $('<li class="progress-step-one">')
                             .append(
-                                $('<span>').text('1'),
-                                $('<span class="sr-only">').text(appTitle ? appTitle : gt('App'))
+                                $('<button type="button" class="btn progress-btn" data-action="back">')
+                                .prop('disabled', true)
+                                .append(
+                                    $('<span>').text('1'),
+                                    $('<span class="sr-only">').text(appTitle ? appTitle : gt('App'))
+                                )
                             )
-                        )
-                        .addClass(!app ? 'active' : '')
-                        .append($('<span class="progress-description">').text(appTitle ? appTitle : gt('App'))),
-                    $('<li class="progress-step-three">')
-                        .append(
-                            $('<button type="button" class="btn progress-btn">')
-                            .prop('disabled', true)
+                            .addClass(!app ? 'active' : '')
+                            .append($('<span class="progress-description">').text(appTitle ? appTitle : gt('App'))),
+                        $('<li class="progress-step-three">')
                             .append(
-                                $('<span>').text('2'),
-                                $('<span class="sr-only">').text(gt('Setup'))
+                                $('<button type="button" class="btn progress-btn">')
+                                .prop('disabled', true)
+                                .append(
+                                    $('<span>').text('2'),
+                                    $('<span class="sr-only">').text(gt('Setup'))
+                                )
                             )
-                        )
-                        .addClass(app ? 'active' : '')
-                        .append($('<span class="progress-description">').text(gt('Setup')))
-                ));
+                            .addClass(app ? 'active' : '')
+                            .append($('<span class="progress-description">').text(gt('Setup')))
+                    )
+                );
 
             $('.progress-step-one .btn').prop(app ? { 'disabled': false } : '');
             return this;
@@ -772,10 +784,10 @@ define('io.ox/onboarding/main', [
 
                     // setup model and views
                     connectTour.userData = {};
-                    connectTour.model = new Backbone.Model({ app: undefined, platform: platform, currentStep: connectTour.currentStep });
+                    connectTour.model = new Backbone.Model({ app: undefined, platform: platform });
                     connectTour.platformsView = new PlatformView({ model: connectTour.model });
                     connectTour.appsView = new AppView({ model: connectTour.model });
-                    connectTour.progressView = new ProgressionView({ model: connectTour.model });
+                    connectTour.progressView = new ProgressionView(connectTour);
 
                     // ensure that everything is reset on close
                     connectTour.on('stop', function () {
@@ -788,6 +800,11 @@ define('io.ox/onboarding/main', [
                         connectTour.progressView.remove();
                         connectTour.progressView = null;
                         connectTour = null;
+                    });
+                    connectTour.on('reset', function () {
+                        console.log('reset');
+                        connectTour.model.set({ app: undefined, platform: platform });
+                        connectTour.shift(0 - connectTour.currentStep);
                     });
                     connectTour.appsView.render();
 
@@ -867,9 +884,8 @@ define('io.ox/onboarding/main', [
                         connectTour.model.set('app', undefined);
                     })
                     .end();
-
-
                     connectTour.start();
+                    window.connectTour = connectTour;
                 });
             }
             Wizard.registry.run('connect-wizard');
@@ -883,5 +899,4 @@ define('io.ox/onboarding/main', [
         }
     };
     return wizard;
-
 });
