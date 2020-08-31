@@ -488,6 +488,8 @@ define('io.ox/chat/views/chat', [
         },
 
         onChangeMembers: function () {
+            if (this.model.get('lastMessage') !== 'system') return;
+
             var event = JSON.parse(this.model.get('lastMessage').content),
                 members = event.members;
 
