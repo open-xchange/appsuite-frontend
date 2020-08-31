@@ -330,6 +330,9 @@ define('io.ox/chat/data', [
         },
 
         updateDelivery: function (state) {
+            var room = data.chats.get(this.get('roomId'));
+            if (room.isChannel() && !room.isMember()) return;
+
             var url = data.API_ROOT + '/rooms/' + this.get('roomId') + '/delivery/' + this.get('messageId');
             this.set('deliveryState', state);
             util.ajax({
