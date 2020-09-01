@@ -130,6 +130,9 @@ define('io.ox/settings/accounts/views', [
                     .addCancelButton()
                     .addButton({ action: 'delete', label: gt('Delete account') })
                     .on('delete', function () {
+
+                        var numberOfAccountItems = self.model.collection.length;
+                        var dialogOpt = numberOfAccountItems < 2 ? { emptyDialogQueue: true } : {};
                         var popup = this,
                             req, opt;
 
@@ -149,12 +152,12 @@ define('io.ox/settings/accounts/views', [
                             }).then(
                                 function success() {
                                     if (self.disposed) {
-                                        popup.close();
+                                        popup.close('', dialogOpt);
                                         return;
                                     }
 
                                     self.model.collection.remove(self.model);
-                                    popup.close();
+                                    popup.close('', dialogOpt);
                                 },
                                 function fail() {
                                     popup.close();
