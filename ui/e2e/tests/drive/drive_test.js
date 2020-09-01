@@ -75,11 +75,12 @@ Scenario('[C7887] Disable hidden folders and files', async function (I, drive) {
 
 Scenario('[C45046] Upload new version', async function (I, drive) {
     //Generate TXT file for upload
-    let timestamp1 = Math.round(+new Date() / 1000);
-    const filePath = 'build/e2e/C45046.txt';
-    await fs.promises.writeFile(path.resolve(global.codecept_dir, filePath), timestamp1);
+    let timestamp1 = Math.round(+new Date() / 1000).toString();
+    const filePath = path.resolve(global.output_dir, 'C45046.txt');
+    const relativePath = path.relative(global.codecept_dir, filePath);
+    await fs.promises.writeFile(filePath, timestamp1);
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
-    await I.haveFile(infostoreFolderID, filePath);
+    await I.haveFile(infostoreFolderID, relativePath);
 
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -90,9 +91,9 @@ Scenario('[C45046] Upload new version', async function (I, drive) {
     I.waitForElement('.io-ox-viewer');
 
     I.waitForText(timestamp1);
-    let timestamp2 = Math.round(+new Date() / 1000);
-    await fs.promises.writeFile(path.resolve(global.codecept_dir, filePath), timestamp2);
-    I.attachFile('.io-ox-viewer input.file-input', 'build/e2e/C45046.txt');
+    let timestamp2 = Math.round(+new Date() / 1000).toString();
+    await fs.promises.writeFile(filePath, timestamp2);
+    I.attachFile('.io-ox-viewer input.file-input', relativePath);
     I.click('Upload');
 
     I.waitForText(timestamp2, 30);

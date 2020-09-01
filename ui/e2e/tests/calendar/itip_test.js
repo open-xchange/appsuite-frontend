@@ -13,7 +13,8 @@
 
 /// <reference path="../../steps.d.ts" />
 
-const moment = require('moment');
+const moment = require('moment'),
+    path = require('path');
 
 const actions = new DataTable(['buttonText', 'className', 'emailTitle', 'itipStatus']);
 // itipStatus needs to be adjusted as soon as OXUIB-206 is fixed
@@ -194,10 +195,10 @@ Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, 
     I.waitForText('Download');
     I.handleDownloads();
     I.click('Download');
-    I.amInPath('/build/e2e/downloads/');
+    I.amInPath(path.relative(global.codecept_dir, path.join(global.output_dir, 'downloads')));
     I.waitForFile('testdocument.odt', 10);
     I.seeFile('testdocument.odt');
-    I.seeFileContentsEqualReferenceFile('e2e/media/files/generic/testdocument.odt');
+    I.seeFileContentsEqualReferenceFile(path.resolve(global.codecept_dir, 'e2e/media/files/generic/testdocument.odt'));
     I.logout();
     // 5.) User#A: Read the iTIP mail
     I.login('app=io.ox/mail', { user: users[0] });
@@ -223,10 +224,10 @@ Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, 
     I.waitForText('Download');
     I.handleDownloads();
     I.click('Download');
-    I.amInPath('/build/e2e/downloads/');
+    I.amInPath(path.relative(global.codecept_dir, path.join(global.output_dir, 'downloads')));
     I.waitForFile('testdocument.odt', 10);
     I.seeFile('testdocument.odt');
-    I.seeFileContentsEqualReferenceFile('e2e/media/files/generic/testdocument.odt');
+    I.seeFileContentsEqualReferenceFile(path.resolve(global.codecept_dir, 'e2e/media/files/generic/testdocument.odt'));
 });
 
 Scenario('[C241126] iTIP mails without appointment reference', async function (I, users, mail, calendar) {

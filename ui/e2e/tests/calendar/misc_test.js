@@ -16,6 +16,7 @@
 
 const expect = require('chai').expect,
     moment = require('moment'),
+    path = require('path'),
     _ = require('underscore');
 
 Feature('Calendar');
@@ -760,7 +761,8 @@ Scenario('[C85743] Special-Use flags', async function (I, dialogs) {
 });
 
 Scenario('[C274517] Download multiple attachments (as ZIP)', async function (I, calendar) {
-    I.handleDownloads('../../build/e2e');
+    const filePath = path.relative(global.codecept_dir, global.output_dir);
+    I.handleDownloads();
     const folder = await calendar.defaultFolder();
     const subject = 'Meetup XY';
     const appointment = await I.haveAppointment({
@@ -787,10 +789,10 @@ Scenario('[C274517] Download multiple attachments (as ZIP)', async function (I, 
     I.click('All attachments');
     I.waitForText('Download');
     I.waitForText('Save to Drive');
-    I.seeNumberOfElements('.dropdown.open a[role="menuitem"]', 2);
+    I.waitNumberOfVisibleElements('.dropdown.open a[role="menuitem"]', 2);
 
     I.click('Download', '.dropdown.open');
 
-    I.amInPath('/build/e2e/');
+    I.amInPath(path.relative(global.codecept_dir, path.join(global.output_dir, 'downloads')));
     I.waitForFile('attachments.zip', 5);
 });
