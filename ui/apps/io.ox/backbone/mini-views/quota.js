@@ -111,8 +111,12 @@ define('io.ox/backbone/mini-views/quota', [
                         //#. %2$s is the max storagespace
                         //#, c-format
                         gt('%1$s of %2$s', this.options.sizeFunction(opt.usage), this.options.sizeFunction(opt.quota)) :
-                        //#. Quota maxed out; 100%
-                        gt('100%')
+                        // yes both times the max value, this handles the case where usage is actually highter than max quota.
+                        // we get a proper 100% bar here while still showing how large the quota is. See Bug 29207 and OXUIB-369
+                        //#. %1$s is the storagespace in use
+                        //#. %2$s is the max storagespace
+                        //#, c-format
+                        gt('%1$s of %2$s', this.options.sizeFunction(opt.quota), this.options.sizeFunction(opt.quota))
                 );
             }
         },

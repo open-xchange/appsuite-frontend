@@ -166,8 +166,7 @@ define('io.ox/core/boot/locale', ['gettext', 'io.ox/core/boot/util', 'io.ox/core
                                 )
                                 .val(defaultLocale),
                             $('<div style="position: absolute; top: 0; left: 0; pointer-events: none;">').append(
-                                $('<span id="language-spacer" style="visibility: hidden; white-space: nowrap;">'),
-                                $('<span class="caret" style="margin-left: 8px">')
+                                $('<span id="language-spacer" style="visibility: hidden; white-space: nowrap;">')
                             )
                         )
                     );

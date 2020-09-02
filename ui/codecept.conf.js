@@ -95,7 +95,8 @@ module.exports.config = {
         autocomplete: './e2e/widgetobjects/contact-autocomplete',
         contactpicker: './e2e/widgetobjects/contact-picker',
         mailfilter: './e2e/widgetobjects/settings-mailfilter',
-        search: './e2e/widgetobjects/search'
+        search: './e2e/widgetobjects/search',
+        toolbar: './e2e/widgetobjects/toolbar'
     },
     bootstrap: function (done) {
         // setup chai

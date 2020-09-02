@@ -990,24 +990,26 @@ define('io.ox/calendar/util', [
         },
 
         lightenDarkenColor: _.memoize(function (col, amt) {
-            if (_.isString(col)) col = this.colorToHex(col);
+            if (_.isString(col)) col = that.colorToHex(col);
             col = that.hexToHSL(col);
             col[2] = Math.floor(col[2] * amt);
             col[2] = Math.max(Math.min(100, col[2]), 0);
             return 'hsl(' + col[0] + ',' + col[1] + '%,' + col[2] + '%)';
+        }, function (col, amt) {
+            return col + amt;
         }),
 
-        colorToHex: _.memoize(function (color) {
+        colorToHex: function (color) {
             var data = that.colorToRGB(color);
             return (data[0] << 16) + (data[1] << 8) + data[2];
-        }),
+        },
 
-        colorToHSL: _.memoize(function (color) {
+        colorToHSL: function (color) {
             var hex = that.colorToHex(color);
             return that.hexToHSL(hex);
-        }),
+        },
 
-        colorToRGB: _.memoize(function () {
+        colorToRGB: (function () {
 
             var canvas = document.createElement('canvas'), context = canvas.getContext('2d');
             canvas.width = 1;
@@ -1022,7 +1024,7 @@ define('io.ox/calendar/util', [
             };
         }()),
 
-        hexToHSL: _.memoize(function (color) {
+        hexToHSL: function (color) {
             var r = (color >> 16) / 255,
                 g = ((color >> 8) & 0x00FF) / 255,
                 b = (color & 0x0000FF) / 255,
@@ -1044,7 +1046,7 @@ define('io.ox/calendar/util', [
             }
 
             return [Math.floor(h * 360), Math.floor(s * 100), Math.floor(l * 100)];
-        }),
+        },
 
         getRelativeLuminance: (function () {
 

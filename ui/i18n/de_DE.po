@@ -14595,6 +14595,12 @@ msgstr "Einladen zu %s"
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
 
+#: apps/io.ox/switchboard/settings/pane.js
+#: apps/io.ox/switchboard/zoom.js
+#: module:io.ox/switchboard
+msgid "The Zoom integration service is currently unavailable. Please try again later."
+msgstr "Der Dienst ist momentan nicht erreichbar. Bitte versuchen Sie es später noch einmal."
+
 #~ msgid "Use native notifications"
 #~ msgstr "Systemeigene Benachrichtigungen verwenden"
 

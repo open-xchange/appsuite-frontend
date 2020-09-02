@@ -153,6 +153,23 @@ define('io.ox/switchboard/presence', [
             delete users[userId];
             exports.getPresence(userId);
         }
+        ox.trigger('refresh^');
+        ox.trigger('switchboard:reconnect');
+    });
+
+    api.socket.on('disconnect', function () {
+        for (var userId in users) {
+            if (api.isMyself(userId)) continue;
+            delete users[userId];
+        }
+        // update all DOM nodes for this user
+        var $el = $('.presence[data-id!="' + $.escape(api.userId) + '"]:not(a[data-name="availability"] .presence)')
+            .removeClass('online absent busy offline')
+            .addClass('offline');
+        var title = gt('Offline');
+        $el.find('.icon').attr('title', title);
+        $el.find('.availability').text(title);
+        ox.trigger('switchboard:disconnect');
     });
 
     exports.addUser(api.userId, exports.getMyAvailability(), _.now());

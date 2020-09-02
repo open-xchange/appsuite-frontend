@@ -18,11 +18,13 @@
         color: white;
         width: 16px;
         height: 16px;
-        border-radius: 8px;
+        border-radius: 50%;
         display: inline-flex;
         justify-content: center;
         align-items: center;
         margin-right: 8px;
+        // prevents some artefact pixels to show up under the border, especially visible in firefox in the gab
+        background-clip: content-box;
         i.fa {
             font-size: 10px;
             line-height: 14px;
@@ -56,7 +58,7 @@
     }
 }
 
-#io-ox-topbar-dropdown-icon > .presence {
+#io-ox-topbar-dropdown-icon > .dropdown-toggle > .presence {
     position: absolute;
     top: 32px;
     right: 0;

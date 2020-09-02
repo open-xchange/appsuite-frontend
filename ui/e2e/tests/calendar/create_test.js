@@ -1369,6 +1369,7 @@ Scenario('[C7447] Private appointment with participants', async (I, users, calen
     I.pressKey('Enter');
     I.selectOption({ css: '[data-extension-id="private_flag"] select' }, 'Private');
     I.click('Create');
+    I.waitForDetached(calendar.locators.edit);
 
     const cid = await I.grabAttributeFrom('.appointment', 'data-cid'),
         appointmentSelector = locate(`.appointment[data-cid="${cid}"]`);

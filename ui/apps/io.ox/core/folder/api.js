@@ -795,6 +795,10 @@ define('io.ox/core/folder/api', [
         // resolve in reverse order (root > folder)
         if (done) return $.when(result.reverse());
 
+        // you cannot get the path of virtual folders as they are purely a UI construct
+        // just return the data from the pool if it's there
+        if (isVirtual(id)) return pool.getModel(id).toJSON() ? $.when([pool.getModel(id).toJSON()]) : $.when([]);
+
         return http.GET({
             module: 'folders',
             params: {

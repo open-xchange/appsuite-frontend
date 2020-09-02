@@ -12,6 +12,7 @@
 /// <reference path="../../steps.d.ts" />
 
 const { expect } = require('chai');
+const moment = require('moment');
 
 const options = {
     rules: {
@@ -73,4 +74,23 @@ Scenario('Calendar - List view w/o appointments', async (I) => {
     I.waitForVisible('.io-ox-center.multi-selection-message');
 
     expect(await I.grabAxeReport(undefined, options)).to.be.accessible;
+});
+
+Scenario('Calendar - Month view with appointment clicked', async (I, calendar) => {
+    const time = moment().startOf('day').add(10, 'hours');
+    const format = 'YYYYMMDD[T]HHmmss';
+
+    await I.haveAppointment({
+        folder: await calendar.defaultFolder(),
+        summary: 'test invite accept/decline/accept tentative',
+        startDate: { tzid: 'Europe/Berlin', value: time.format(format) },
+        endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format(format) }
+    });
+
+    I.login('app=io.ox/calendar&perspective=month');
+    calendar.waitForApp();
+    I.waitForVisible('.appointment');
+    I.click('.appointment');
+
+    expect(await I.grabAxeReport()).to.be.accessible;
 });

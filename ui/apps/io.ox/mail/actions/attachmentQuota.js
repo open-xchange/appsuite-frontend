@@ -21,7 +21,6 @@ define('io.ox/mail/actions/attachmentQuota', [
     'use strict';
 
     function checkQuota(file, accumulatedSize) {
-        console.log('checkQuota');
         var list = file,
             properties = coreSettings.get('properties'),
             total = accumulatedSize || 0,

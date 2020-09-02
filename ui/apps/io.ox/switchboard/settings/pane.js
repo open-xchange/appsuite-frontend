@@ -86,13 +86,18 @@ define('io.ox/switchboard/settings/pane', [
         },
         initialize: function () {
             this.listenTo(ox, 'zoom:tokens:added', this.render);
+            this.listenTo(ox, 'switchboard:disconnect switchboard:reconnect', this.render);
         },
         render: function () {
             this.$el.empty().append(this.$account);
-            zoom.getAccount().then(
-                this.renderAccount.bind(this),
-                this.renderMissingAccount.bind(this)
-            );
+            if (api.isOnline()) {
+                zoom.getAccount().then(
+                    this.renderAccount.bind(this),
+                    this.renderMissingAccount.bind(this)
+                );
+            } else {
+                this.renderSwitchboardOffline();
+            }
             return this;
         },
         renderMissingAccount: function () {
@@ -130,12 +135,14 @@ define('io.ox/switchboard/settings/pane', [
                         .text(data.pmi)
                     ),
                     // remove button
-                    $('<button type="button" class="btn btn-link" data-action="remove">')
-                        .attr('aria-label', gt('Remove account'))
-                        .append(
-                            $('<i class="fa fa-trash" aria-hidden="true">')
-                            .attr('title', gt('Remove account'))
-                        )
+                    $('<button type="button" class="btn btn-default" data-action="remove">').text(gt('Remove account'))
+                )
+            );
+        },
+        renderSwitchboardOffline: function () {
+            this.$el.empty().append(
+                $('<p class="alert alert-warning">').text(
+                    gt('The Zoom integration service is currently unavailable. Please try again later.')
                 )
             );
         },

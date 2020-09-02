@@ -343,6 +343,10 @@ define('io.ox/core/folder/view', [
                         _.defer(function () {
                             tree.selection.preselect(id);
                             tree.selection.scrollIntoView(id);
+                            // trigger change event manually for virtual folders, needed for someviews to update correctly after initializing (myshares folder for example)
+                            if (api.isVirtual(id)) {
+                                tree.selection.triggerChange();
+                            }
                         });
                     });
                     // render now

@@ -254,7 +254,7 @@ define('io.ox/core/main/appcontrol', [
         id: 'io-ox-launcher',
         $ul: $('<ul class="launcher-dropdown dropdown-menu dropdown-menu-right" role="menu">'),
         // this should be a link. Otherwise, this can cause strange focus issues on iOS when having the cursor inside an iframe before clicking this (see Bug 63441)
-        $toggle: $('<a href="#" class="launcher-btn btn btn-link dropdown-toggle" dontprocessonmobile="true">').attr('aria-label', gt('Navigate to:')).append($(icons.launcher).attr('title', gt('All Applications'))),
+        $toggle: $('<a href="#" class="launcher-btn btn btn-link dropdown-toggle" tabindex="-1" dontprocessonmobile="true">').attr('aria-label', gt('Navigate to:')).append($(icons.launcher).attr('title', gt('All Applications'))),
         initialize: function () {
             Dropdown.prototype.initialize.apply(this, arguments);
             this.listenTo(this.collection, 'add remove launcher:update launcher:sort', this.update);
@@ -439,6 +439,7 @@ define('io.ox/core/main/appcontrol', [
             var taskbar = $('<ul class="taskbar list-unstyled" role="toolbar">');
             this.append($('<div id="io-ox-toprightbar">').append(taskbar));
             ext.point('io.ox/core/appcontrol/right').invoke('draw', taskbar);
+            _.defer(function () { taskbar.find('.dropdown-toggle:visible:first').removeAttr('tabindex'); });
         }
     });
 

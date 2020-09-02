@@ -68,7 +68,7 @@ define([
 
             it('should show correct values', function () {
                 expect(node.find('li:nth-child(1) .numbers', 'File quota numbers').text()).to.equal('91 MB von 100 MB');
-                expect(node.find('li:nth-child(2) .numbers', 'Mail quota numbers').text()).to.equal('100%');
+                expect(node.find('li:nth-child(2) .numbers', 'Mail quota numbers').text()).to.equal('1 KB von 1 KB');
                 expect(node.find('li:nth-child(3) .numbers', 'Mail count quota numbers').text()).to.equal('5 von 50');
             });
 

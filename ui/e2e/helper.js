@@ -277,6 +277,84 @@ class MyHelper extends Helper {
         }, src, endX, endY);
     }
 
+    async grabFocusFrom(selector) {
+        const driver = this.helpers['Puppeteer'],
+            { page } = driver;
+
+        const el = await driver._locate(selector);
+        if (!el) return false;
+        return !!(await page.accessibility.snapshot({ root: el[0], interestingOnly: false })).focused;
+    }
+
+    async haveFocus(selector) {
+        const driver = this.helpers['Puppeteer'],
+            { page } = driver;
+
+        const el = await driver._locate(selector);
+        if (!el) return false;
+        return !!(await page.accessibility.snapshot({ root: el[0], interestingOnly: false })).focused;
+    }
+
+
+    dontHaveFocus(selector) {
+        return !this.haveFocus(selector);
+    }
+
+    async seeTabbable(selector) {
+        const driver = this.helpers['Puppeteer'],
+            { page } = driver;
+
+        const el = await driver._locate(selector);
+        if (!el) return false;
+        const [{ role }, tabindex] = await Promise.all([
+            page.accessibility.snapshot({ root: el[0], interestingOnly: false }),
+            driver.grabAttributeFrom(selector, 'tabindex')
+        ]);
+        if (tabindex < 0) return false;
+        return /^(button|searchbox|combobox|menuitem|menuitemcheckbox|textbox|link|checkbox)|$/.test(role);
+    }
+
+    dontSeeTabbable(selector) {
+        return !this.seeTabbable(selector);
+    }
+
+    async seeFocusable(selector) {
+        const driver = this.helpers['Puppeteer'],
+            { page } = driver;
+
+        const el = await driver._locate(selector);
+        if (!el) return false;
+        const [{ role }, tabindex] = await Promise.all([
+            page.accessibility.snapshot({ root: el[0], interestingOnly: false }),
+            driver.grabAttributeFrom(selector, 'tabindex')
+        ]);
+        if (tabindex) return true;
+        return /^(button|searchbox|combobox|menuitem|menuitemcheckbox|textbox|link|checkbox)|$/.test(role);
+    }
+
+    dontSeeFocusable(selector) {
+        return !this.seeFocusable(selector);
+    }
+
+    // When we need to click slower than puppeteer
+    // Click on target with mouse down and release after delay
+    async slowClick(targetSelector, delay = 100) {
+        const helper = this.helpers['Puppeteer'];
+        const { page } = helper;
+
+        const [target] = await helper._locate(targetSelector);
+        const targetBB = await target.boundingBox();
+
+        const targetX = targetBB.x + targetBB.width / 2;
+        const targetY = targetBB.y + targetBB.height / 2;
+
+        await page.mouse.move(targetX, targetY);
+        await page.mouse.down();
+        await page.waitFor(delay);
+        await page.mouse.up();
+
+    }
+
 }
 
 module.exports = MyHelper;

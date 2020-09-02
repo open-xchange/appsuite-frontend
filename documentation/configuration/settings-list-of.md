@@ -13,6 +13,16 @@ For example `io.ox/core//someSetting` or `io.ox/mail//anotherMailSetting`.
 
 In this case we have two different namespaces, `io.ox/core` and `io.ox/mail`. The setting `someSetting` only exists in the core namespace, `anotherMailSetting` only in mail accordingly.
 
+# Data types
+Ensure to always use the expected data type for a setting. This table lists some examples when they are set in a 'settings property file' (sometimes referenced as 'ui property file').
+
+| Data type  | Example                                         |
+|------------|-------------------------------------------------|
+| `<bool>`   | io.ox/core//features/dedicatedLogoutButton=true |
+| `<string>` | io.ox/core//features/windowHeaderPosition="top" |
+| `<number>` | io.ox/core//apps/quickLaunchCount=5             |
+| `<array>`  | io.ox/tasks//currencies=["CAD","CHF","EUR"]     |
+
 # Feature toggles
 
 App Suite UI offers different feature toggles. These toggles control the

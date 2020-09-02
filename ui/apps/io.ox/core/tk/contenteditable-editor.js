@@ -598,19 +598,19 @@ define('io.ox/core/tk/contenteditable-editor', [
             // get editor content
             // trim white-space and clean up pseudo XHTML
             // remove empty paragraphs at the end
-            get = function () {
+            get = function (options) {
+                options = options || {};
                 // remove tinyMCE resizeHandles
                 $(ed.getBody()).find('.mce-resizehandle').remove();
 
                 // get content, do not use { format: 'raw' } here or we get tons of <br data-mce-bogus=\"1\"> elements in firefox and create unwanted newlines
-                var content = ed.getContent();
-
+                var content = ed.getContent({ format: options.format || 'raw' });
                 // strip data attributes (incl. bogus attribute)
                 content = stripDataAttributes(content);
                 // clean up
                 content = content
                     .replace(/<(\w+)[ ]?\/>/g, '<$1>')
-                    .replace(/(<div>(<br>)?<\/div>)+$/, '');
+                    .replace(/(<div (([^>]*))?>(<br>)?<\/div>)+$/, '');
 
                 // remove trailing white-space, line-breaks, and empty paragraphs
                 content = content.replace(
@@ -707,7 +707,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             data.content = data.content.replace(/^(<div><br><\/div>)+/, '').replace(/(<div><br><\/div>){2,}$/, '');
             // concat content parts
             if (data.content) content += data.content;
-            else content += '<div><br></div>';
+            else content += '<div class="default-style" style="' + defaultStyle.string + '"><br></div>';
             if (type === 'above' && data.cite) content += data.cite;
             if (data.quote) {
                 // backend appends &nbsp; to the quote which are wrapped in a paragraph by the ui. remove those.
@@ -718,7 +718,7 @@ define('io.ox/core/tk/contenteditable-editor', [
                 // add a blank line between the quoted text and the signature below
                 // but only, if the sigature is directly after the quoted text
                 // then, the user can always insert text between the quoted text and the signature but has no unnecessary empty lines
-                if (!/<div><br><\/div>$/i.test(content) && /<\/blockquote>$/.test(content)) content += '<div><br></div>';
+                if (!/<div><br><\/div>$/i.test(content) && /<\/blockquote>$/.test(content)) content += '<div class="default-style" style="' + defaultStyle.string + '"><br></div>';
                 content += data.cite;
             }
             this.setContent(content);

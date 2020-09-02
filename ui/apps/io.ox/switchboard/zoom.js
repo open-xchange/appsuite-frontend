@@ -37,6 +37,8 @@ define('io.ox/switchboard/zoom', [
                 if (this.model.get('state') !== 'unauthorized') return;
                 this.setState('authorized');
             });
+            this.listenTo(ox, 'switchboard:disconnect', function () { this.setState('offline'); });
+            this.listenTo(ox, 'switchboard:reconnect', function () { this.setState(this.getInitialState()); });
             this.$el.on('click', '[data-action="start-oauth"]', $.proxy(exports.startOAuthHandshake, exports));
         },
 
@@ -46,6 +48,7 @@ define('io.ox/switchboard/zoom', [
         },
 
         getInitialState: function () {
+            if (!api.isOnline()) return 'offline';
             if (!this.isDone()) return 'authorized';
             return 'done';
         },
@@ -76,6 +79,9 @@ define('io.ox/switchboard/zoom', [
                 case 'done':
                     this.renderDone();
                     break;
+                case 'offline':
+                    this.renderOffline();
+                    break;
                 case 'error':
                     this.renderError();
                     this.model.unset('error');
@@ -98,7 +104,7 @@ define('io.ox/switchboard/zoom', [
             );
         },
 
-        // shownn while takling to the API
+        // shown while talking to the API
         renderPending: function () {
             this.$el.append(
                 $('<div class="pending">').append(
@@ -110,10 +116,19 @@ define('io.ox/switchboard/zoom', [
         },
 
         renderError: function () {
-            this.$el.addClass('error').append(
-                $('<p class="message">').append(
-                    $('<i class="fa fa-exclamation-triangle" aria-hidden="true">'),
+            this.$el.append(
+                $('<i class="fa fa-exclamation conference-logo" aria-hidden="true">'),
+                $('<p class="alert alert-warning message">').append(
                     $.txt(this.model.get('error') || gt('Something went wrong. Please try again.'))
+                )
+            );
+        },
+
+        renderOffline: function () {
+            this.$el.append(
+                $('<i class="fa fa-exclamation conference-logo" aria-hidden="true">'),
+                $('<p class="alert alert-warning message">').append(
+                    gt('The Zoom integration service is currently unavailable. Please try again later.')
                 )
             );
         },
@@ -196,7 +211,7 @@ define('io.ox/switchboard/zoom', [
         },
 
         deleteMeeting: function (id) {
-            return exports.api('DELETE', '/meetings/' + id);
+            return exports.api('DELETE', '/meetings/' + id + '?schedule_for_reminder=false');
         }
     };
 

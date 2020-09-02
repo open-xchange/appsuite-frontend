@@ -76,10 +76,10 @@
   resolved "https://registry.yarnpkg.com/@open-xchange/bootstrap-tokenfield/-/bootstrap-tokenfield-0.13.2.tgz#be4e6b75f042bfaa8186a4694e4fbe1c2dda8b08"
   integrity sha512-BPR56hDsEALl0f+7NQvxq9ipX4fC5NKVJcpq5gTv+NyqgwPqMwyBZ+C1ePoIAkwsdzNLVh8sS+LWqoDw0A3gKg==
 
-"@open-xchange/codecept-helper@^0.4.0":
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.4.2.tgz#d9a619c748544f6612fc12fffb8343ea9e4a3939"
-  integrity sha512-J+uHIL57VH4ttyP7N33dZpu/RunHQkbO274WdgtxVj30lkZIFEXUH9jWo0+jzSDP57lDl7VgRt4qkzUBabwvJA==
+"@open-xchange/codecept-helper@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.5.0.tgz#42977f57c7e8a0bb9cdd37efa6de316c6d4d4b9c"
+  integrity sha512-bNI+GjJnoKTqgYbjsAjxzPsG7xAMZzQtbbfJ7Dzr6mL9t9qQ3LVZN4VY7GFW6nKQaN2rcyqRYsrZafsMufP6FQ==
   dependencies:
     axe-core "3.3.2"
     axios "^0.19.0"

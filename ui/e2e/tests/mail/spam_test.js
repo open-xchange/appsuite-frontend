@@ -77,7 +77,9 @@ Scenario('[C114951] Disabled links in spam mail folders', async function (I, use
     I.login(['app=io.ox/mail']);
     mail.waitForApp();
     I.waitForVisible('.io-ox-mail-window');
+    I.waitForText('Spam', 5, '.folder-tree');
     I.selectFolder('Spam');
+    I.waitForText('Rudolf rockt die Kinderkollektion', 10, '.list-view li.list-item');
     mail.selectMail('Rudolf rockt die Kinderkollektion');
     I.waitForElement('.mail-detail-frame');
 
