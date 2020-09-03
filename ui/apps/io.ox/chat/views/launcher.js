@@ -31,7 +31,7 @@ define('io.ox/chat/views/launcher', [
         initialize: function () {
             this.badge = this.$el.find('.chat-notification');
 
-            this.listenTo(data.chats, 'add remove change:unreadCount', this.updateCounter);
+            this.listenTo(data.chats.active, 'add remove change:unreadCount', this.updateCounter);
         },
 
         render: function () {
@@ -43,7 +43,7 @@ define('io.ox/chat/views/launcher', [
         },
 
         updateCounter: function () {
-            var count = data.chats.reduce(function (memo, model) {
+            var count = data.chats.active.reduce(function (memo, model) {
                 if (!model.isActive()) return memo;
                 return memo + model.get('unreadCount');
             }, 0);

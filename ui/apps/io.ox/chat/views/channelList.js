@@ -63,16 +63,17 @@ define('io.ox/chat/views/channelList', [
 
         initialize: function () {
 
-            this.collection = data.chats;
+            this.collection = data.chats.channels;
 
             this.listenTo(this.collection, {
+                'expire': this.onExpire,
                 'add': this.onAdd,
                 'remove': this.onRemove,
                 'change:title': this.onChangeTitle
             });
 
             // get fresh data
-            this.collection.fetch({ url: data.chatApiUrl + '/channels', remove: false });
+            this.collection.fetch({ url: data.chatApiUrl + '/channels' });
         },
 
         render: function () {
@@ -135,6 +136,10 @@ define('io.ox/chat/views/channelList', [
 
         onChangeTitle: function (model) {
             this.getNode(model).find('.title').text(model.getTitle());
+        },
+
+        onExpire: function () {
+            this.collection.expired = false;
         }
     });
 

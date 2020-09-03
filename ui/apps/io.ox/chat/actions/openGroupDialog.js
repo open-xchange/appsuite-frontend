@@ -60,7 +60,8 @@ define('io.ox/chat/actions/openGroupDialog', [
 
     function open(obj) {
         var def = new $.Deferred();
-        var model = data.chats.get(obj.id) || new Backbone.Model(obj);
+        var originalModel = obj.id ? data.chats.get(obj) : new data.ChatModel();
+        var model = originalModel.has('roomId') ? originalModel.clone() : originalModel;
         var members = [data.users.getByMail(data.user.email)];
         if (obj.members) {
             obj.members.forEach(function (email) {
@@ -68,10 +69,9 @@ define('io.ox/chat/actions/openGroupDialog', [
                 if (model) members.push(model);
             });
         }
-        var participants = (model.members || new Backbone.Collection(members)).clone();
-        var originalModel = model.has('roomId') ? model.clone() : new data.ChatModel();
+        var participants = (model.has('roomId') && model.members || new Backbone.Collection(members)).clone();
 
-        model.set('type', model.get('type') || obj.type || 'group');
+        model.set('type', obj.type || model.get('type') || 'group');
 
         new ModalDialog({
             point: 'io.ox/chat/actions/openGroupDialog',
@@ -153,7 +153,7 @@ define('io.ox/chat/actions/openGroupDialog', [
 
             if (this.model.get('title') !== originalModel.get('title')) updates.title = this.model.get('title');
             if (this.model.get('description') !== originalModel.get('description')) updates.description = this.model.get('description');
-            if (this.model.get('type') !== 'channel' && !_.isEqual(this.collection.pluck('email1'), Object.keys(this.model.get('members') || {}))) {
+            if (!_.isEqual(this.collection.pluck('email1'), Object.keys(this.model.get('members') || {}))) {
                 var emails = this.collection.pluck('email1');
                 if (this.model.isNew()) {
                     hiddenAttr.members = membersToObject(emails);
@@ -173,8 +173,9 @@ define('io.ox/chat/actions/openGroupDialog', [
             }
 
             if (Object.keys(updates).length <= 1 && Object.keys(hiddenAttr).length <= 0) return def.resolve(this.model.get('roomId'));
+            if (!originalModel.has('roomId')) originalModel = data.chats.get(Object.assign(this.model.toJSON(), hiddenAttr));
             originalModel.save(updates, { hiddenAttr: hiddenAttr }).then(function () {
-                data.chats.add(originalModel);
+                data.chats.active.add(originalModel);
                 def.resolve(originalModel.get('roomId'));
             });
         })

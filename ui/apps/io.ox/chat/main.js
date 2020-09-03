@@ -163,19 +163,19 @@ define('io.ox/chat/main', [
 
         openPrivateChat: function (cmd) {
             // try to reuse chat
-            var chat = data.chats.find(function (model) {
+            var chat = data.chats.active.find(function (model) {
                 return model.get('type') === 'private' && Object.keys(model.get('members')).indexOf(cmd.email) >= 0;
             });
             if (chat) {
                 if (!chat.get('active')) this.resubscribeChat(chat.get('roomId'));
-                return this.showChat(chat.get('roomId') || chat.cid);
+                return this.showChat(chat.get('roomId'), { model: chat });
             }
 
             var members = {};
             members[data.user.email] = 'admin';
             members[cmd.email] = 'member';
-            var room = data.chats.add({ type: 'private', members: members, active: true }, { at: 0 }),
-                view = new ChatView({ room: room });
+            var room = data.chats.active.add({ type: 'private', members: members, active: true }, { at: 0 }),
+                view = new ChatView({ model: room });
 
             this.showApp();
             this.$rightside.empty().append(view.render().$el);
@@ -193,34 +193,32 @@ define('io.ox/chat/main', [
             .addCancelButton({ left: true })
             .addButton({ action: 'continue', label: 'Yes' })
             .on('continue', function () {
-                data.chats.leaveGroup(groupId);
+                data.chats.active.leaveGroup(groupId);
             })
             .open();
         },
 
         viewChannel: function (cmd) {
-            data.chats.setCurrent(cmd.id);
             this.showChat(cmd.id);
         },
 
         joinChannel: function (cmd) {
-            data.chats.joinChannel(cmd.id);
+            data.chats.channels.joinChannel(cmd.id);
             this.showChat(cmd.id);
         },
 
         leaveChannel: function (id) {
-            data.chats.leaveChannel(id);
+            data.chats.active.leaveChannel(id);
             this.closeChat();
         },
 
         showChat: function (id, opt) {
-            data.chats.setCurrent(id);
-            var view = new ChatView(_.extend({ roomId: id }, _(opt).pick('messageId', 'reference')));
+            var view = new ChatView(_.extend({ roomId: id }, _(opt).pick('messageId', 'reference', 'model')));
             this.showApp();
             this.$rightside.empty().append(view.render().$el);
             this.$body.addClass('open');
             view.scrollToBottom();
-            this.resetCount();
+            this.resetCount(id, opt);
         },
 
         closeChat: function () {
@@ -228,7 +226,6 @@ define('io.ox/chat/main', [
                 new EmptyView().render().$el
             );
             this.$body.removeClass('open');
-            data.chats.setCurrent(undefined);
         },
 
         showRecentConversations: function () {
@@ -243,7 +240,6 @@ define('io.ox/chat/main', [
 
         showAllFiles: function () {
             this.$body.addClass('open');
-            data.chats.setCurrent(undefined);
             this.$rightside.empty().append(new FileList().render().$el);
         },
 
@@ -319,8 +315,8 @@ define('io.ox/chat/main', [
             this.showChat(data.cid, data);
         },
 
-        resetCount: function () {
-            var model = data.chats.getCurrent();
+        resetCount: function (roomId, opt) {
+            var model = data.chats.get(roomId) || opt.model;
             model.set('unreadCount', 0);
         },
 
@@ -330,18 +326,18 @@ define('io.ox/chat/main', [
             this.moveFile(e.which === 37 ? -1 : +1);
         },
 
-        unsubscribeChat: function (id) {
-            var self = this;
-            var model = data.chats.get(id);
+        unsubscribeChat: function (roomId) {
+            var model = data.chats.get(roomId);
             if (!model) return;
-            data.chats.toggleRecent(id);
-            self.closeChat();
-            data.chats.setCurrent(undefined);
+            model.toggleRecent();
+            this.closeChat();
         },
 
-        resubscribeChat: function (id) {
-            data.chats.toggleRecent(id).then(
-                this.showChat.bind(this, id)
+        resubscribeChat: function (roomId) {
+            data.chats.recent.remove(roomId);
+            var model = data.chats.get(roomId);
+            model.toggleRecent().then(
+                this.showChat.bind(this, roomId)
             );
         },
 
@@ -475,7 +471,7 @@ define('io.ox/chat/main', [
                         // search results
                         new SearchResultView().render().$el,
                         // chats
-                        new ChatListView({ collection: data.chats }).render().$el
+                        new ChatListView({ collection: data.chats.active }).render().$el
                     ),
                     // recent, all channels, all files
                     $('<div class="navigation-actions">').append(

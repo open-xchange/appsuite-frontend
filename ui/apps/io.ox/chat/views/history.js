@@ -64,9 +64,10 @@ define('io.ox/chat/views/history', [
 
         initialize: function () {
 
-            this.collection = data.chats;
+            this.collection = data.chats.recent;
 
             this.listenTo(this.collection, {
+                'expire': this.onExpire,
                 'add': this.onAdd,
                 'remove': this.onRemove,
                 'change:active': this.onChangeActive,
@@ -74,7 +75,7 @@ define('io.ox/chat/views/history', [
             });
 
             // get fresh data
-            this.collection.fetch({ remove: false, data: { active: false } });
+            this.collection.fetch();
         },
 
         render: function () {
@@ -86,15 +87,11 @@ define('io.ox/chat/views/history', [
                 new ToolbarView({ point: 'io.ox/chat/history/toolbar', title: gt('History actions') }).render(new ext.Baton()).$el,
                 $('<div class="scrollpane">').append(
                     $('<ul>').append(
-                        this.getItems().map(this.renderItem, this)
+                        this.collection.map(this.renderItem, this)
                     )
                 )
             );
             return this;
-        },
-
-        getItems: function () {
-            return this.collection.getHistory();
         },
 
         renderItem: function (model) {
@@ -122,7 +119,7 @@ define('io.ox/chat/views/history', [
         onAdd: _.debounce(function () {
             if (this.disposed) return;
             this.$('.scrollpane ul').empty().append(
-                this.getItems().map(this.renderItem.bind(this))
+                this.collection.map(this.renderItem.bind(this))
             );
         }, 1),
 
@@ -136,6 +133,10 @@ define('io.ox/chat/views/history', [
 
         onChange: function () {
 
+        },
+
+        onExpire: function () {
+            this.collection.expired = false;
         }
     });
 

@@ -32,6 +32,7 @@ define('io.ox/chat/views/chatList', [
 
         initialize: function () {
             this.listenTo(this.collection, {
+                'expire': this.onExpire,
                 'add': this.onAdd,
                 'remove': this.onRemove,
                 'change:active': this.onChangeActive,
@@ -71,7 +72,7 @@ define('io.ox/chat/views/chatList', [
         },
 
         getNode: function (model) {
-            var node = this.$('[data-cid="' + model.get('roomId') + '"]');
+            var node = this.$('[data-cid="' + model.get('roomId') + '"]') || this.$('[data-cid="' + model.cid + '"]');
             if (node.length === 0) node = this.$('[data-cid="' + model.cid + '"]');
             return node;
         },
@@ -117,6 +118,10 @@ define('io.ox/chat/views/chatList', [
                 hasFocus = node[0] === document.activeElement;
             this.$el.prepend(node);
             if (hasFocus) node.focus();
+        },
+
+        onExpire: function () {
+            this.collection.expired = false;
         }
     });
 

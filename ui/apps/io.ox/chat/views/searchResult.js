@@ -69,7 +69,7 @@ define('io.ox/chat/views/searchResult', [
 
         searchTitles: function (query) {
             var regexQuery = new RegExp('(\\b' + escape(query) + ')', 'i');
-            var collection = data.chats
+            var collection = data.chats.active
                 .filter(function (model) { return regexQuery.test(model.get('title')); })
                 .map(function (model) { return model.clone(); });
             return collection;
@@ -107,7 +107,7 @@ define('io.ox/chat/views/searchResult', [
                 if (messages.length > 0) {
                     chatsByMessage = messages.map(function (message) {
                         // find appropriate room
-                        var room = data.chats.get(message.roomId);
+                        var room = data.chats.active.get(message.roomId);
                         if (!room) return;
                         room = room.clone();
                         room.set('lastMessage', message, { silent: true });
@@ -121,7 +121,7 @@ define('io.ox/chat/views/searchResult', [
 
                 var chatsByAddress = addresses.map(function (address) {
                     // find according room
-                    var room = data.chats.find(function (model) {
+                    var room = data.chats.active.find(function (model) {
                         if (model.get('type') !== 'private') return;
                         return _(model.get('members')).findWhere({ email: address.email });
                     });

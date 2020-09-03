@@ -144,10 +144,9 @@ define('io.ox/chat/views/chat', [
             var self = this;
 
             this.roomId = options.roomId;
-            this.room = options.room;
             this.messageId = options.messageId;
             this.reference = options.reference;
-            this.model = data.chats.get(this.roomId) || this.room;
+            this.model = this.model || data.chats.get(this.roomId);
             this.messagesView = new MessagesView({ collection: this.model.messages });
 
             this.listenTo(this.model, {
@@ -484,7 +483,7 @@ define('io.ox/chat/views/chat', [
         },
 
         onChangeMembers: function () {
-            if (this.model.get('lastMessage') !== 'system') return;
+            if (this.model.get('lastMessage').type !== 'system') return;
 
             var event = JSON.parse(this.model.get('lastMessage').content),
                 members = event.members;

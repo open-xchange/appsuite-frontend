@@ -51,15 +51,15 @@ define('io.ox/chat/socket', ['io.ox/chat/data'], function (data) {
 
             var chat;
 
-            if (!data.chats.length) return;
+            if (!data.chats.active.length) return;
 
             switch (_.random(9)) {
 
                 case 0:
                     if (added++ > 2) return;
                     // add group chat
-                    data.chats.add({
-                        id: data.chats.length + 1,
+                    data.chats.active.add({
+                        id: data.chats.active.length + 1,
                         type: 'group',
                         title: getChatTitle(),
                         members: [1, 2, 3].map(function (id) {
@@ -84,14 +84,14 @@ define('io.ox/chat/socket', ['io.ox/chat/data'], function (data) {
                 case 5:
                 case 6:
                     // add message
-                    chat = data.chats.at(_.random(data.chats.length - 1));
+                    chat = data.chats.active.at(_.random(data.chats.active.length - 1));
                     chat.messages.add({ id: chat.messages.length + 1, body: getMessage(), sender: _.random(1, 5), time: getTime() });
                     chat.set('unreadCount', chat.get('unreadCount') + 1);
                     break;
 
                 case 7:
                     // add system message
-                    chat = data.chats.at(_.random(data.chats.length - 1));
+                    chat = data.chats.active.at(_.random(data.chats.active.length - 1));
                     chat.messages.add({ id: chat.messages.length + 1, body: getSystemMessage(), type: 'system', sender: 0, time: getTime() });
                     chat.set('unreadCount', chat.get('unreadCount') + 1);
                     break;
@@ -99,7 +99,7 @@ define('io.ox/chat/socket', ['io.ox/chat/data'], function (data) {
                 case 8:
                 case 9:
                     // add image
-                    chat = data.chats.at(_.random(data.chats.length - 1));
+                    chat = data.chats.active.at(_.random(data.chats.active.length - 1));
                     chat.messages.add({ id: chat.messages.length + 1, body: getImage(), type: 'image', sender: _.random(1, 5), time: getTime() });
                     chat.set('unreadCount', chat.get('unreadCount') + 1);
                     break;

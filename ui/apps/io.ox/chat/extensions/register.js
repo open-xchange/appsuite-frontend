@@ -79,8 +79,8 @@ define('io.ox/chat/extensions/register', [
                     $('<button class="btn btn-default open-chat">').text(gt('Open chat'))
                 ).hide()
             );
-            data.chats.initialized.then(function () {
-                var room = data.chats.find(function (chat) {
+            data.chats.active.initialized.then(function () {
+                var room = data.chats.active.find(function (chat) {
                     if (!chat.isPrivate()) return;
                     return !!chat.get('members')[baton.data.email1];
                 });
@@ -172,9 +172,9 @@ define('io.ox/chat/extensions/register', [
                 $('<button class="btn btn-default open-chat">').text(gt('Open chat'))
             );
             this.append($fieldset);
-            data.chats.initialized.then(function () {
+            data.chats.active.initialized.then(function () {
                 var reference = 'calendar//' + baton.model.get('id'),
-                    room = data.chats.findWhere({ reference: reference });
+                    room = data.chats.active.findWhere({ reference: reference });
                 if (!room) return $fieldset.remove();
                 room.messages.fetch();
                 return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
@@ -246,7 +246,7 @@ define('io.ox/chat/extensions/register', [
 
             function draw($section, model) {
                 var reference = (model.get('headers') || {})['Message-ID'] || model.cid,
-                    room = data.chats.findWhere({ reference: 'mail//' + reference });
+                    room = data.chats.active.findWhere({ reference: 'mail//' + reference });
                 if (!room) return;
 
                 $section.empty().show().css({ 'border-bottom': '1px solid #ddd', padding: '8px 40px' }).append(
@@ -267,8 +267,8 @@ define('io.ox/chat/extensions/register', [
                 var $section = $('<section>');
                 this.append($section.hide());
 
-                data.chats.initialized.then(cont.bind(null, $section, baton));
-                baton.view.listenTo(data.chats, 'add', draw.bind(null, $section, baton.model));
+                data.chats.active.initialized.then(cont.bind(null, $section, baton));
+                baton.view.listenTo(data.chats.active, 'add', draw.bind(null, $section, baton.model));
             };
         }())
     });
@@ -314,8 +314,8 @@ define('io.ox/chat/extensions/register', [
     }
 
     function startGroupChat(opt) {
-        data.chats.initialized.then(function () {
-            var room = data.chats.findWhere({ reference: opt.reference });
+        data.chats.active.initialized.then(function () {
+            var room = data.chats.active.findWhere({ reference: opt.reference });
             if (!room) throw new Error('No room');
             return require(['io.ox/chat/events']).then(function (events) {
                 events.trigger('cmd', { cmd: 'show-chat', id: room.get('roomId') });
