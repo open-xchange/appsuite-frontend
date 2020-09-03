@@ -54,7 +54,7 @@ define('io.ox/core/pdf/pdfdocument', [
         var pageSizes = [];
 
         // whether to enable range requests support, if not present the default is true
-        var enableRangeRequests = (Settings.get('pdf/enableRangeRequests') !== false);
+        var enableRangeRequests = Settings.get('pdf/enableRangeRequests', true);
 
         // Document initialization / loading parameters object
         var params = {
