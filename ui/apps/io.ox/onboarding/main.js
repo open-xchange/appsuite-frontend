@@ -16,10 +16,11 @@ define('io.ox/onboarding/main', [
     'io.ox/core/tk/wizard',
     'io.ox/backbone/views/disposable',
     'io.ox/core/http',
+    'io.ox/core/capabilities',
     'settings!io.ox/onboarding',
     'gettext!io.ox/core/onboarding',
     'less!io.ox/onboarding/style'
-], function (ext, Wizard, DisposableView, http, settings, gt) {
+], function (ext, Wizard, DisposableView, http, capabilities, settings, gt) {
     'use strict';
 
     var wizard,
@@ -122,97 +123,113 @@ define('io.ox/onboarding/main', [
             'title': gt('Drive App'),
             'icon': 'fa-cloud',
             'app': 'drive',
-            'platform': 'windows'
+            'platform': 'windows',
+            'cap': 'infostore'
         },
         {
             'title': gt('Mail'),
             'icon': 'fa-envelope-o',
             'app': 'mailsync',
-            'platform': 'windows'
+            'platform': 'windows',
+            'cap': 'webmail'
         },
         {
             'title': gt('Email über Android Mail'),
             'icon': 'fa-cloud',
             'app': 'mailsync',
-            'platform': 'android'
+            'platform': 'android',
+            'cap': 'webmail'
         },
         {
             'title': gt('Email über die OX Mail App'),
             'icon': 'fa-envelope-o',
             'app': 'mailapp',
-            'platform': 'android'
+            'platform': 'android',
+            'cap': 'webmail'
         },
         {
             'title': gt('Contacts'),
             'icon': 'fa-users',
             'app': 'addressbook',
-            'platform': 'android'
+            'platform': 'android',
+            'cap': 'contacts'
         },
         {
             'title': gt('Calendar'),
             'icon': 'fa-calendar',
             'app': 'calendar',
-            'platform': 'android'
+            'platform': 'android',
+            'cap': 'calendar'
         },
         {
             'title': gt('Drive'),
             'icon': 'fa-cloud',
             'app': 'driveapp',
-            'platform': 'android'
+            'platform': 'android',
+            'cap': 'infostore'
         },
         {
             'title': gt('Email über Apple Mail'),
             'icon': 'fa-envelope',
             'app': 'mailsync',
-            'platform': 'macos'
+            'platform': 'macos',
+            'cap': 'webmail'
         },
         {
             'title': gt('Contacts'),
             'icon': 'fa-users',
             'app': 'addressbook',
-            'platform': 'macos'
+            'platform': 'macos',
+            'cap': 'contacts'
         },
         {
             'title': gt('Calendar'),
             'icon': 'fa-calendar',
             'app': 'calendar',
-            'platform': 'macos'
+            'platform': 'macos',
+            'cap': 'calendar'
         },
         {
             'title': gt('Drive'),
             'icon': 'fa-cloud',
             'app': 'drive',
-            'platform': 'macos'
+            'platform': 'macos',
+            'cap': 'infostore'
         },
         {
             'title': gt('Email über iOS Mail'),
             'icon': 'fa-envelope',
             'app': 'mailsync',
-            'platform': 'ios'
+            'platform': 'ios',
+            'cap': 'webmail'
         },
         {
             'title': gt('Email über die OX Mail App'),
             'icon': 'fa-envelope-o',
             'app': 'mailapp',
-            'platform': 'ios'
+            'platform': 'ios',
+            'cap': 'webmail'
         },
         {
             'title': gt('Contacts'),
             'icon': 'fa-users',
             'app': 'addressbook',
-            'platform': 'ios'
+            'platform': 'ios',
+            'cap': 'contacts'
         },
         {
             'title': gt('Calendar'),
             'icon': 'fa-calendar',
             'app': 'calendar',
-            'platform': 'ios'
+            'platform': 'ios',
+            'cap': 'calendar'
         },
         {
             'title': gt('Drive'),
             'icon': 'fa-cloud',
             'app': 'driveapp',
-            'platform': 'ios'
+            'platform': 'ios',
+            'cap': 'infostore'
         }
     ]);
 
@@ -516,8 +533,14 @@ define('io.ox/onboarding/main', [
         },
         'android': {
             'mailsync': function () { return new MailSyncView({ incoming: settings.get('incoming'), outgoing: settings.get('outgoing'), userData: config.userData, title: titles.android.mailsync }); },
-            'mailapp': function () { return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('android/mailapp'), storeIcon: getStoreIcon('android'), iconClass: 'mailapp playstore' }) : new DownloadQrView({ url: settings.get('android/mailapp/url') }); },
-            'driveapp': function () { return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('android/driveapp'), storeIcon: getStoreIcon('android'), iconClass: 'driveapp playstore' }) : new DownloadQrView({ url: settings.get('android/driveapp/url') }); },
+            'mailapp': function () {
+                return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('android/mailapp'), storeIcon: getStoreIcon('android'), iconClass: 'mailapp playstore' }) :
+                    new DownloadQrView({ url: settings.get('android/mailapp/url') });
+            },
+            'driveapp': function () {
+                return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('android/driveapp'), storeIcon: getStoreIcon('android'), iconClass: 'driveapp playstore' }) :
+                    new DownloadQrView({ url: settings.get('android/driveapp/url') });
+            },
             'addressbook': function () { return new SyncView({ name: titles.android.addressbook, config: settings.get('carddav') }); },
             'calendar': function () { return new SyncView({ name: titles.android.calendar, config: settings.get('caldav') }); }
         },
@@ -531,8 +554,14 @@ define('io.ox/onboarding/main', [
         },
         'ios': {
             'mailsync': function () { return new DownloadQrView({ url: settings.get('ios/mailsync/url') }); },
-            'mailapp': function () { return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('ios/mailapp'), storeIcon: getStoreIcon('ios'), iconClass: 'mailapp appstore' }) : new DownloadQrView({ url: settings.get('ios/mailapp/url') }); },
-            'driveapp': function () { return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('ios/driveapp'), storeIcon: getStoreIcon('ios'), iconClass: 'driveapp appstore' }) : new DownloadQrView({ url: settings.get('ios/driveapp/url') }); },
+            'mailapp': function () {
+                return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('ios/mailapp'), storeIcon: getStoreIcon('ios'), iconClass: 'mailapp appstore' }) :
+                    new DownloadQrView({ url: settings.get('ios/mailapp/url') });
+            },
+            'driveapp': function () {
+                return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('ios/driveapp'), storeIcon: getStoreIcon('ios'), iconClass: 'driveapp appstore' }) :
+                    new DownloadQrView({ url: settings.get('ios/driveapp/url') });
+            },
             'addressbook': function () { return new SyncView({ name: titles.ios.addressbook, config: settings.get('carddav') }); },
             'calendar': function () { return new SyncView({ name: titles.ios.calendar, config: settings.get('caldav') }); }
         }
@@ -613,7 +642,7 @@ define('io.ox/onboarding/main', [
                 // create List items from selection
                 list
                 .filter(function (model) {
-                    return self.model.get('platform') === undefined || self.model.get('platform') === model.get('platform');
+                    return self.model.get('platform') === undefined || self.model.get('platform') === model.get('platform') && capabilities.has(model.get('cap'));
                 })
                 .map(function (model) {
                     var view = new ListItemView({ model: model });
