@@ -230,6 +230,13 @@ define('io.ox/onboarding/main', [
             'app': 'driveapp',
             'platform': 'ios',
             'cap': 'infostore'
+        },
+        {
+            'title': gt('Mail + Addressbook + Calendar'),
+            'icon': 'fa-users',
+            'app': 'eassync',
+            'platform': 'ios',
+            'cap': 'webmail contacts calendar'
         }
     ]);
 
@@ -275,6 +282,7 @@ define('io.ox/onboarding/main', [
                 'url': 'https://itunes.apple.com/de/app/ox-drive/id798570177'
             },
             'storeIcon': 'apps/themes/icons/default/appstore/App_Store_Badge_$country_135x40.svg'
+            //'mailsync': { 'url': }
         },
         'macos': {
             'driveapp': {
@@ -300,8 +308,17 @@ define('io.ox/onboarding/main', [
 
         initialize: function (options) {
             this.url = options.url;
+            this.type = options.type;
         },
         render: function () {
+            var self = this;
+            if (this.url) return this.renderQr();
+            getDownloadUrl(this.type).then(function (url) {
+                self.url = url;
+                return self.renderQr(url);
+            });
+        },
+        renderQr: function () {
             var self = this;
             createQr(this.url).then(function (qr) {
                 self.$el.append(
@@ -311,7 +328,6 @@ define('io.ox/onboarding/main', [
                 );
                 return self;
             });
-
         }
     });
 
@@ -553,7 +569,7 @@ define('io.ox/onboarding/main', [
             'drive': function () { return new MobileDownloadView({ app: settings.get('macos/driveapp'), storeIcon: getStoreIcon('macos'), iconClass: 'driveapp macappstore' }); }
         },
         'ios': {
-            'mailsync': function () { return new DownloadQrView({ url: settings.get('ios/mailsync/url') }); },
+            'mailsync': function () { return new DownloadQrView({ type: 'mail' }); },
             'mailapp': function () {
                 return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('ios/mailapp'), storeIcon: getStoreIcon('ios'), iconClass: 'mailapp appstore' }) :
                     new DownloadQrView({ url: settings.get('ios/mailapp/url') });
@@ -561,6 +577,10 @@ define('io.ox/onboarding/main', [
             'driveapp': function () {
                 return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('ios/driveapp'), storeIcon: getStoreIcon('ios'), iconClass: 'driveapp appstore' }) :
                     new DownloadQrView({ url: settings.get('ios/driveapp/url') });
+            },
+            'eassync': function () {
+                return _.device('smartphone') ? new DownloadConfigView({ type: 'eassync', config: settings.get('ios/eassync') }) :
+                    new DownloadQrView({ url: settings.get('ios/eassync/url') });
             },
             'addressbook': function () { return new SyncView({ name: titles.ios.addressbook, config: settings.get('carddav') }); },
             'calendar': function () { return new SyncView({ name: titles.ios.calendar, config: settings.get('caldav') }); }
