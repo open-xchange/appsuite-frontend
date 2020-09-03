@@ -334,6 +334,7 @@ define('io.ox/backbone/views/window', [
                         this.$body
                     )
                 );
+                $('#io-ox-screens').addClass('has-sticky-window');
                 return this;
             }
             this.$('.floating-body').append(this.$body);
@@ -465,6 +466,7 @@ define('io.ox/backbone/views/window', [
             else this.$body.closest('.io-ox-windowmanager-sticky-panel').detach();
 
             this.open();
+            $('#io-ox-screens').toggleClass('has-sticky-window', $('#io-ox-windowmanager .io-ox-windowmanager-sticky-panel').length > 0);
         },
 
         minimize: function () {
