@@ -63,6 +63,7 @@ define('io.ox/chat/views/launcher', [
                     win.showApp();
                 });
             }
+            $('#io-ox-screens').toggleClass('has-sticky-window', $('#io-ox-windowmanager .io-ox-windowmanager-sticky-panel>:visible').length > 0);
         }
 
     });

@@ -466,7 +466,7 @@ define('io.ox/backbone/views/window', [
             else this.$body.closest('.io-ox-windowmanager-sticky-panel').detach();
 
             this.open();
-            $('#io-ox-screens').toggleClass('has-sticky-window', $('#io-ox-windowmanager .io-ox-windowmanager-sticky-panel').length > 0);
+            $('#io-ox-screens').toggleClass('has-sticky-window', $('#io-ox-windowmanager .io-ox-windowmanager-sticky-panel>:visible').length > 0);
         },
 
         minimize: function () {
