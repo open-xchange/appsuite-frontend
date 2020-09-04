@@ -35,6 +35,14 @@ define('io.ox/onboarding/main', [
         });
     }
 
+    function getAccountData() {
+        return require(['io.ox/core/api/account']).then(function (api) {
+            return api.get(0).then(function (data) {
+                return data;
+            });
+        });
+    }
+
     function createQr(url) {
         return require(['static/3rd.party/qrcode/qrcode.js']).then(function (qrcode) {
             var qr;
@@ -241,18 +249,7 @@ define('io.ox/onboarding/main', [
     ]);
 
 
-    settings.set({
-
-        'incoming': {
-            'server': 'imap.open-xchange.com',
-            'port': '993',
-            'connection': 'SSL/TLS'
-        },
-        'outgoing': {
-            'server': 'smtp.open-xchange.com',
-            'port': '465',
-            'connection': 'SSL/TLS'
-        },
+    /*     settings.set({
         'caldav': {
             'url': 'https://dav-appsuite-dev.open-xchange.com',
             'login': '123'
@@ -292,14 +289,10 @@ define('io.ox/onboarding/main', [
             },
             'storeIcon': 'apps/themes/icons/default/appstore/Mac_App_Store_Badge_$country_165x40.svg'
         },
-        'windows/drive/url': 'https://appsuite.open-xchange.com',
-        'android/url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail&hl=en',
-        'macos/mailsync/url': 'https://apsuite.open-xchange.com',
-        'macos/drive/url': 'https://apsuite.open-xchange.com',
-        'ios/mailsync/url': 'https://apsuite.open-xchange.com',
-        'ios/url': 'https://apsuite.open-xchange.com'
-
-    });
+        'windows': {
+            'drive_url': 'https://appsuite-dev.open-xchange.com/appsuite/api/drive/client/windows/install?session=' + ox.session
+        }
+    }); */
 
     var DownloadQrView = DisposableView.extend({
 
@@ -352,7 +345,10 @@ define('io.ox/onboarding/main', [
             return this;
         },
         onClick: function () {
-            window.open(this.link);
+            var self = this;
+            require(['io.ox/core/download']).then(function (download) {
+                download.url(self.link);
+            });
         }
     });
 
@@ -364,6 +360,7 @@ define('io.ox/onboarding/main', [
         initialize: function (options) {
             this.type = options.type;
             this.config = options.config;
+            this.userData = options.userData;
         },
 
         events: {
@@ -372,7 +369,7 @@ define('io.ox/onboarding/main', [
         },
 
         render: function () {
-            this.syncView = this.type === 'mail' ? new MailSyncView({ incoming: this.config.incoming, outgoing: this.config.outgoing, userData: this.config.userData }) :
+            this.syncView = this.type === 'mail' ? new MailSyncView({ userData: this.userData }) :
                 new SyncView({ config: this.config });
             this.syncView.renderManualConfig();
 
@@ -444,8 +441,6 @@ define('io.ox/onboarding/main', [
         className: 'content-container',
 
         initialize: function (options) {
-            this.incoming = options.incoming;
-            this.outgoing = options.outgoing;
             this.userData = options.userData;
             this.type = options.title;
         },
@@ -461,44 +456,48 @@ define('io.ox/onboarding/main', [
             return this;
         },
         renderManualConfig: function () {
-            this.$el.append(
-                $('<div class="manual-description">').text(gt('Incoming Server Settings (IMAP)')),
-                $('<pre class="manual-config">')
-                    .append(
-                        $('<div class="title incoming">')
-                            .append(
-                                $('<div class="server">').text(gt('Server')),
-                                $('<div class="port">').text(gt('Port')),
-                                $('<div class="username">').text(gt('Username')),
-                                $('<div class="connection">').text(gt('Connection'))
-                            ),
-                        $('<div class="values incoming">')
-                            .append(
-                                $('<div class="server">').text(this.incoming.server),
-                                $('<div class="port">').text(this.incoming.port),
-                                $('<div class="username">').text(this.userData.get('login_info')),
-                                $('<div class="connection">').text(this.incoming.connection)
-                            )
-                    ),
-                $('<div class="manual-description">').text(gt('Outgoing Server Settings')),
-                $('<pre class="manual-config">')
-                    .append(
-                        $('<div class="title outgoing">')
-                            .append(
-                                $('<div class="server">').text(gt('Server')),
-                                $('<div class="port">').text(gt('Port')),
-                                $('<div class="username">').text(gt('Username')),
-                                $('<div class="connection">').text(gt('Connection'))
-                            ),
-                        $('<div class="values outgoing">')
-                            .append(
-                                $('<div class="server">').text(this.outgoing.server),
-                                $('<div class="port">').text(this.outgoing.port),
-                                $('<div class="username">').text(this.userData.get('login_info')),
-                                $('<div class="connection">').text(this.outgoing.connection)
-                            )
-                    )
-            );
+            var self = this;
+            getAccountData().then(function (data) {
+                self.mailConfig = data;
+                self.$el.append(
+                    $('<div class="manual-description">').text(gt('Incoming Server Settings (IMAP)')),
+                    $('<pre class="manual-config">')
+                        .append(
+                            $('<div class="title incoming">')
+                                .append(
+                                    $('<div class="server">').text(gt('Server')),
+                                    $('<div class="port">').text(gt('Port')),
+                                    $('<div class="username">').text(gt('Username')),
+                                    $('<div class="connection">').text(gt('Connection'))
+                                ),
+                            $('<div class="values incoming">')
+                                .append(
+                                    $('<div class="server">').text(self.mailConfig.mail_server),
+                                    $('<div class="port">').text(self.mailConfig.mail_port),
+                                    $('<div class="username">').text(self.mailConfig.login),
+                                    $('<div class="connection">').text(self.mailConfig.mail_secure ? 'SSL/TLS' : '')
+                                )
+                        ),
+                    $('<div class="manual-description">').text(gt('Outgoing Server Settings')),
+                    $('<pre class="manual-config">')
+                        .append(
+                            $('<div class="title outgoing">')
+                                .append(
+                                    $('<div class="server">').text(gt('Server')),
+                                    $('<div class="port">').text(gt('Port')),
+                                    $('<div class="username">').text(gt('Username')),
+                                    $('<div class="connection">').text(gt('Connection'))
+                                ),
+                            $('<div class="values outgoing">')
+                                .append(
+                                    $('<div class="server">').text(self.mailConfig.transport_server),
+                                    $('<div class="port">').text(self.mailConfig.transport_port),
+                                    $('<div class="username">').text(self.mailConfig.login),
+                                    $('<div class="connection">').text(self.mailConfig.transport_secure ? 'SSL/TLS' : '')
+                                )
+                        )
+                );
+            });
         }
     });
 
@@ -544,11 +543,11 @@ define('io.ox/onboarding/main', [
     //all available setup scenarios
     var scenarios = {
         'windows': {
-            'drive': function () { return new DownloadView({ link: settings.get('windows/drive/url') }); },
-            'mailsync': function () { return new MailSyncView({ incoming: settings.get('incoming'), outgoing: settings.get('outgoing'), userData: config.userData, title: titles.windows.mailsync }); }
+            'drive': function () { return new DownloadView({ link: settings.get('windows/drive_url') }); },
+            'mailsync': function () { return new MailSyncView({ userData: config.userData, title: titles.windows.mailsync }); }
         },
         'android': {
-            'mailsync': function () { return new MailSyncView({ incoming: settings.get('incoming'), outgoing: settings.get('outgoing'), userData: config.userData, title: titles.android.mailsync }); },
+            'mailsync': function () { return new MailSyncView({ userData: config.userData, title: titles.android.mailsync }); },
             'mailapp': function () {
                 return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('android/mailapp'), storeIcon: getStoreIcon('android'), iconClass: 'mailapp playstore' }) :
                     new DownloadQrView({ url: settings.get('android/mailapp/url') });
@@ -561,7 +560,7 @@ define('io.ox/onboarding/main', [
             'calendar': function () { return new SyncView({ name: titles.android.calendar, config: settings.get('caldav') }); }
         },
         'macos': {
-            'mailsync': function () { return new DownloadConfigView({ type: 'mail', config: { incoming: settings.get('incoming'), outgoing: settings.get('outgoing'), userData: config.userData } }); },
+            'mailsync': function () { return new DownloadConfigView({ type: 'mail', userData: config.userData }); },
             //'addressbook': function () { return new SyncView({ type: titles.macos.addressbook, config: settings.get('carddav') }); },
             'addressbook': function () { return new DownloadConfigView({ type: 'carddav', config: settings.get('carddav') }); },
             //'calendar': function () { return new SyncView({ type: titles.macos.calendar, config: settings.get('caldav') }); },
@@ -569,7 +568,10 @@ define('io.ox/onboarding/main', [
             'drive': function () { return new MobileDownloadView({ app: settings.get('macos/driveapp'), storeIcon: getStoreIcon('macos'), iconClass: 'driveapp macappstore' }); }
         },
         'ios': {
-            'mailsync': function () { return new DownloadQrView({ type: 'mail' }); },
+            'mailsync': function () {
+                return _.device('smartphone') ? new DownloadConfigView({ type: 'mail', userData: config.userData }) :
+                    new DownloadQrView({ type: 'mail' });
+            },
             'mailapp': function () {
                 return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('ios/mailapp'), storeIcon: getStoreIcon('ios'), iconClass: 'mailapp appstore' }) :
                     new DownloadQrView({ url: settings.get('ios/mailapp/url') });
@@ -582,8 +584,16 @@ define('io.ox/onboarding/main', [
                 return _.device('smartphone') ? new DownloadConfigView({ type: 'eassync', config: settings.get('ios/eassync') }) :
                     new DownloadQrView({ url: settings.get('ios/eassync/url') });
             },
-            'addressbook': function () { return new SyncView({ name: titles.ios.addressbook, config: settings.get('carddav') }); },
-            'calendar': function () { return new SyncView({ name: titles.ios.calendar, config: settings.get('caldav') }); }
+            'addressbook': function () {
+                return _.device('smartphone') ? new DownloadConfigView({ type: 'carddav', config: settings.get('carddav') }) :
+                    new DownloadQrView({ type: 'carddav' });
+            },
+            //new SyncView({ name: titles.ios.addressbook, config: settings.get('carddav') }); },
+            'calendar': function () {
+                return _.device('smartphone') ? new DownloadConfigView({ type: 'caldav', config: settings.get('caldav') }) :
+                    new DownloadQrView({ type: 'caldav' });
+            }
+            //new SyncView({ name: titles.ios.calendar, config: settings.get('caldav') }); }
         }
     };
 
