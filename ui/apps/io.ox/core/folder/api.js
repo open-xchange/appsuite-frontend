@@ -987,10 +987,11 @@ define('io.ox/core/folder/api', [
                 // id change? (caused by rename or move)
                 if (id !== newId) model.set('id', newId);
                 if (options.cascadePermissions) refresh();
-                // trigger event
+                // trigger events
                 if (!options.silent) {
                     api.trigger('update update:' + id, id, newId, model.toJSON());
                     if ('permissions' in changes) api.trigger('change:permissions', id);
+                    if ('subscribed' in changes) api.trigger('change:subscription', id, changes);
                 }
                 // fetch subfolders of parent folder to ensure proper order after rename/move
                 if (id !== newId || changes.title || changes.folder_id) {
