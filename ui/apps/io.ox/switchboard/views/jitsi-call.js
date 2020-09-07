@@ -26,8 +26,9 @@ define('io.ox/switchboard/views/jitsi-call', [
 
         constructor: function () {
             var meeting = api.createJitsiMeeting();
-            this.model = new Backbone.Model({ type: 'jitsi', state: 'done', joinURL: meeting.joinURL });
             DisposableView.prototype.constructor.apply(this, arguments);
+            // do not overwrite this.model if it was already passed as an argument
+            (this.model || new Backbone.Model()).set({ type: 'jitsi', state: 'done', joinURL: meeting.joinURL });
         },
 
         getJoinURL: function () {
