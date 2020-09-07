@@ -108,13 +108,18 @@ define.async('io.ox/switchboard/api', [
             })
             .then(function (data) {
                 var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
-                appsuiteApiBaseUrl = !appsuiteApiBaseUrl ? '' : '&appsuiteApiBaseUrl=' + appsuiteApiBaseUrl;
                 // Only send redirect uri if not default "/appsuite/api"
-                var appsuiteApiPath = ox.apiRoot === '/appsuite/api' ? '' : '&appsuiteApiPath=' + encodeURIComponent(ox.apiRoot);
-                api.socket = io(api.host + '/?userId=' + encodeURIComponent(api.userId) + '&token=' + data.token + appsuiteApiPath + appsuiteApiBaseUrl, {
+                var appsuiteUrl = new URL(api.host);
+                var searchParams = appsuiteUrl.searchParams;
+                searchParams.set('userId', api.userId);
+                searchParams.set('token', data.token);
+                if (ox.apiRoot !== '/appsuite/api') searchParams.set('appsuiteApiPath', ox.apiRoot);
+                if (appsuiteApiBaseUrl) searchParams.set('appsuiteApiBaseUrl', appsuiteApiBaseUrl);
+
+                api.socket = io(appsuiteUrl.href, {
                     transports: ['websocket'],
                     reconnectionAttempts: 20,
-                    reconnectionDelayMax: 10000 // 10 min. max delay between a reconnect (reached after aprox. 10 retries)
+                    reconnectionDelayMax: 10000 // 10 min. max delay between a reconnect (reached after approx. 10 retries)
                 })
                 .once('connect', function () {
                     console.log('%cConnected to switchboard service', 'background-color: green; color: white; padding: 8px;');
