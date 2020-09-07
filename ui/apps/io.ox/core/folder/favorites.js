@@ -71,7 +71,7 @@ define('io.ox/core/folder/favorites', [
                 // if there was an error we update settings
                 if (list.length !== response.length) _.defer(storeCollection);
                 return list;
-            });
+            }).then(api.renameDefaultCalendarFolders);
         });
 
         // respond to change events
