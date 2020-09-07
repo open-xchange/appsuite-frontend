@@ -302,25 +302,52 @@ define('io.ox/onboarding/main', [
         initialize: function (options) {
             this.url = options.url;
             this.type = options.type;
+            this.config = options.config;
+            this.title = options.title;
         },
+
+        events: {
+            'click .btn.manual-toggle': 'onToggle'
+        },
+
         render: function () {
             var self = this;
+            // url only specified for store links
+            // show manual config additionally
             if (this.url) return this.renderQr();
+
+            this.syncView = this.type === 'mail' ? new MailSyncView({ title: this.title }) :
+                new SyncView({ config: this.config });
+            this.syncView.renderManualConfig();
+
             getDownloadUrl(this.type).then(function (url) {
                 self.url = url;
-                return self.renderQr(url);
+                self.renderQr(url);
+                self.$el.append(
+                    $('<button class="btn btn-link manual-toggle" aria-expanded="false">').text(gt('Manual Configuration'))
+                    .prepend($('<i class="fa fa-chevron-right" aria-hidden="true">')),
+                    self.syncView.$el.hide()
+                );
+                return self;
             });
         },
+
         renderQr: function () {
             var self = this;
             createQr(this.url).then(function (qr) {
-                self.$el.append(
+                self.$el.prepend(
                     $('<div class="description">').append($('<p class="prompt">').text(gt('Please scan this code with your phone\'s camera:'))),
                     $('<img class="qrcode">').attr('src', qr),
                     $('<p class="link-info">').text(gt('Link: ')).append($('<a class="link">').text(self.url).attr('href', self.url))
                 );
                 return self;
             });
+        },
+
+        onToggle: function (e) {
+            $(e.currentTarget).find('i.fa').toggleClass('fa-chevron-right fa-chevron-down').end()
+                .attr('aria-expanded', function (i, v) { return v === 'false'; });
+            this.syncView.$el.toggle();
         }
     });
 
@@ -570,7 +597,7 @@ define('io.ox/onboarding/main', [
         'ios': {
             'mailsync': function () {
                 return _.device('smartphone') ? new DownloadConfigView({ type: 'mail', userData: config.userData }) :
-                    new DownloadQrView({ type: 'mail' });
+                    new DownloadQrView({ type: 'mail', title: titles.ios.mailsync });
             },
             'mailapp': function () {
                 return _.device('smartphone') ? new MobileDownloadView({ app: settings.get('ios/mailapp'), storeIcon: getStoreIcon('ios'), iconClass: 'mailapp appstore' }) :
@@ -586,12 +613,12 @@ define('io.ox/onboarding/main', [
             },
             'addressbook': function () {
                 return _.device('smartphone') ? new DownloadConfigView({ type: 'carddav', config: settings.get('carddav') }) :
-                    new DownloadQrView({ type: 'carddav' });
+                    new DownloadQrView({ type: 'carddav', config: settings.get('carddav') });
             },
             //new SyncView({ name: titles.ios.addressbook, config: settings.get('carddav') }); },
             'calendar': function () {
                 return _.device('smartphone') ? new DownloadConfigView({ type: 'caldav', config: settings.get('caldav') }) :
-                    new DownloadQrView({ type: 'caldav' });
+                    new DownloadQrView({ type: 'caldav', config: settings.get('caldav') });
             }
             //new SyncView({ name: titles.ios.calendar, config: settings.get('caldav') }); }
         }
