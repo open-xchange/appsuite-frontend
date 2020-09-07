@@ -13,16 +13,17 @@
 
 define('io.ox/onboarding/main', [
     'io.ox/core/tk/wizard',
+    'io.ox/core/http',
     'io.ox/onboarding/views',
     'io.ox/onboarding/util',
     'settings!io.ox/onboarding',
     'gettext!io.ox/core/onboarding',
     'less!io.ox/onboarding/style'
-], function (Wizard, views, util, settings, gt) {
+], function (Wizard, http, views, util, settings, gt) {
     'use strict';
 
     var wizard,
-        config = {},
+        config,
         title = gt('Connect your device');
 
     function getUserData() {
@@ -39,6 +40,41 @@ define('io.ox/onboarding/main', [
         return settings.get(platform + '/storeIcon').replace('$country', country);
     }
 
+    function getOnbboardingConfig(actionId) {
+        if (!config) {
+            config = http.GET({
+                module: 'onboarding',
+                params: {
+                    action: 'config'
+                }
+            });
+        }
+
+        return config.then(function (config) {
+            var action = config.actions.find(function (action) {
+                return action.id === actionId;
+            });
+            return action && action.data;
+        });
+    }
+
+    function getCalendarConfig() {
+        var configModel = new Backbone.Model();
+        getOnbboardingConfig('display/davmanual').then(function (data) {
+            configModel.set('url', data.caldav_url);
+            configModel.set('login', data.caldav_login);
+        });
+        return configModel;
+    }
+
+    function getContactsConfig() {
+        var configModel = new Backbone.Model();
+        getOnbboardingConfig('display/davmanual').then(function (data) {
+            configModel.set('url', data.carddav_url);
+            configModel.set('login', data.carddav_login);
+        });
+        return configModel;
+    }
     //all available setup scenarios
     var scenarios = {
         'windows': {
@@ -67,13 +103,17 @@ define('io.ox/onboarding/main', [
                 }
                 return new views.DownloadQrView({ url: settings.get('android/driveapp/url') });
             },
-            'addressbook': function () { return new views.SyncView({ name: util.titles.android.addressbook, config: settings.get('carddav') }); },
-            'calendar': function () { return new views.SyncView({ name: util.titles.android.calendar, config: settings.get('caldav') }); }
+            'addressbook': function () {
+                return new views.SyncView({ name: util.titles.android.addressbook, config: getContactsConfig() });
+            },
+            'calendar': function () {
+                return new views.SyncView({ name: util.titles.android.calendar, config: getCalendarConfig() });
+            }
         },
         'macos': {
             'mailsync': function () { return new views.DownloadConfigView({ type: 'mail', userData: config.userData }); },
-            'addressbook': function () { return new views.DownloadConfigView({ type: 'carddav', config: settings.get('carddav') }); },
-            'calendar': function () { return new views.DownloadConfigView({ type: 'caldav', config: settings.get('caldav') }); },
+            'addressbook': function () { return new views.DownloadConfigView({ type: 'carddav', config: getContactsConfig() }); },
+            'calendar': function () { return new views.DownloadConfigView({ type: 'caldav', config: getCalendarConfig() }); },
             'drive': function () { return new views.MobileDownloadView({ app: settings.get('macos/driveapp'), storeIcon: getStoreIcon('macos'), iconClass: 'driveapp macappstore' }); }
         },
         'ios': {
@@ -119,19 +159,19 @@ define('io.ox/onboarding/main', [
                 if (_.device('smartphone')) {
                     return new views.DownloadConfigView({
                         type: 'carddav',
-                        config: settings.get('carddav')
+                        config: getContactsConfig()
                     });
                 }
-                return new views.DownloadQrView({ type: 'carddav', config: settings.get('carddav') });
+                return new views.DownloadQrView({ type: 'carddav', config: getContactsConfig() });
             },
             'calendar': function () {
                 if (_.device('smartphone')) {
                     return new views.DownloadConfigView({
                         type: 'caldav',
-                        config: settings.get('caldav')
+                        config: getCalendarConfig()
                     });
                 }
-                return new views.DownloadQrView({ type: 'caldav', config: settings.get('caldav') });
+                return new views.DownloadQrView({ type: 'caldav', config: getCalendarConfig() });
             }
         }
     };
@@ -276,8 +316,10 @@ define('io.ox/onboarding/main', [
             console.log(title);
         },
         load: function () {
+            getOnbboardingConfig();
             getUserData().then(function (data) {
                 config.userData = data;
+                console.log(config);
                 wizard.run();
             });
         }

@@ -291,33 +291,32 @@ define('io.ox/onboarding/views', [
         initialize: function (options) {
             this.type = options.name;
             this.config = options.config;
+            this.listenTo(this.config, 'change', this.renderManualConfig);
         },
         render: function () {
             this.$el.append(
                 $('<div class="description">')
                     .append(
-                        $('<p class="info">').text(gt('Synchronize ') + this.type + gt(' data with your device:'))
-                    )
+                        //#, %1s is the type of application e.g. Addressbook or Calendar
+                        $('<p class="info">').text(gt('Synchronize %1$s data with your device:', this.type))
+                    ),
+                $('<pre class="manual-config">')
             );
             this.renderManualConfig();
             return this;
         },
         renderManualConfig: function () {
-            this.$el.append(
-                //$('<button class="manual-description">').text(gt('Manual Configuration')),
-                $('<pre class="manual-config">')
-                        .append(
-                            $('<div class="title">')
-                                .append(
-                                    $('<div class="url">').text(gt('URL')),
-                                    $('<div class="login">').text(gt('Login'))
-                                ),
-                            $('<div class="values">')
-                                .append(
-                                    $('<div class="url">').text(this.config.url),
-                                    $('<div class="login">').text(this.config.login)
-                                )
-                        )
+            this.$('.manual-config').empty().append(
+                $('<div class="title">')
+                    .append(
+                        $('<div class="url">').text(gt('URL')),
+                        $('<div class="login">').text(gt('Login'))
+                    ),
+                $('<div class="values">')
+                    .append(
+                        $('<div class="url">').text(this.config.get('url')),
+                        $('<div class="login">').text(this.config.get('login'))
+                    )
             );
         }
     });
