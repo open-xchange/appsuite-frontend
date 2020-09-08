@@ -519,7 +519,7 @@ define('plugins/core/feedback/register', [
     }
     ext.point('io.ox/core/appcontrol/right/help').extend({
         id: 'feedback',
-        index: 240,
+        index: 150,
         extend: function () {
             if (_.device('smartphone')) return;
             addDropdownEntry.apply(this, arguments);

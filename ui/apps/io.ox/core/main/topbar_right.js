@@ -234,12 +234,22 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    // tours: index 210, 250
-    // feedback: 240
+    // 'feedback' index 150
 
     ext.point('io.ox/core/appcontrol/right/help').extend({
-        id: 'divider-before-about',
-        index: 290,
+        id: 'divider-first',
+        index: 200,
+        extend: function () {
+            this.divider();
+        }
+    });
+
+    // 'intro-tour'  index 210
+    // 'get-started' index 250
+
+    ext.point('io.ox/core/appcontrol/right/help').extend({
+        id: 'divider-second',
+        index: 300,
         extend: function () {
             this.divider();
         }
@@ -249,7 +259,6 @@ define('io.ox/core/main/topbar_right', [
         id: 'about',
         index: 400,
         extend: function () {
-            if (_.device('smartphone')) return;
             extensions.about.apply(this, arguments);
         }
     });
@@ -313,6 +322,9 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
+
+    // 'availability' index 50
+
     ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'upsell',
         index: 50,
@@ -336,7 +348,7 @@ define('io.ox/core/main/topbar_right', [
     });
 
     ext.point('io.ox/core/appcontrol/right/account').extend({
-        id: 'refreshMobile',
+        id: 'refresh-mobile',
         index: 80,
         extend: function () {
             if (!_.device('smartphone')) return;
@@ -349,7 +361,7 @@ define('io.ox/core/main/topbar_right', [
     });
 
     ext.point('io.ox/core/appcontrol/right/account').extend({
-        id: 'settingsMobile',
+        id: 'settings-mobile',
         index: 90,
         extend: function () {
             if (!_.device('smartphone')) return;
@@ -374,11 +386,10 @@ define('io.ox/core/main/topbar_right', [
         id: 'change-user-data',
         index: 150,
         extend: function () {
-
             // check if users can edit their own data (see bug 34617)
             if (settings.get('user/internalUserEdit', true) === false) return;
 
-            this.link('my-contact-data', gt('My contact data'), function (e) {
+            this.link('my-contact-data', gt('Edit personal data'), function (e) {
                 e.preventDefault();
                 require(['io.ox/core/settings/user'], function (userSettings) {
                     userSettings.openModalDialog();
@@ -406,7 +417,7 @@ define('io.ox/core/main/topbar_right', [
     });
 
     ext.point('io.ox/core/appcontrol/right/account').extend({
-        id: 'app-specific-help',
+        id: 'app-specific-help-mobile',
         index: 200,
         extend: function () {
             if (!_.device('smartphone')) return;
@@ -427,14 +438,6 @@ define('io.ox/core/main/topbar_right', [
     });
 
     ext.point('io.ox/core/appcontrol/right/account').extend({
-        id: 'divider-before-about',
-        index: 290,
-        extend: function () {
-            this.divider();
-        }
-    });
-
-    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'about-mobile',
         index: 400,
         extend: function () {
@@ -447,7 +450,7 @@ define('io.ox/core/main/topbar_right', [
         id: 'logout',
         index: 1000,
         extend: function () {
-            this.divider();
+            //this.divider();
             // Group available signout calls here, including appsuite, Guard, etc
             ext.point('io.ox/core/appcontrol/right/account/signouts').invoke('extend', this);
         }
@@ -471,7 +474,7 @@ define('io.ox/core/main/topbar_right', [
             var title = ox.openedInBrowserTab ?
                     gt('Sign out') :
                     //#. tooltip of dropdown menu in topbar (contact image icon)
-                    gt('Support'),
+                    gt('My account'),
                 ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
                 a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('aria-label', title),
                 dropdown = new Dropdown({

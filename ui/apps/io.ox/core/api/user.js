@@ -262,6 +262,7 @@ define('io.ox/core/api/user', [
                 var name = '';
                 if (opt.type === 'name') name = data.display_name || data.email1;
                 else if (opt.type === 'email') name = data.email1 || data.display_name;
+                else if (opt.type === 'email-localpart') name = (data.email1 || data.display_name || '').replace(/@.*$/, '');
                 else if (opt.type === 'initials') name = util.getInitials(data);
                 node.nodeValue = name;
             })
