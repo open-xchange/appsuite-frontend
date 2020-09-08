@@ -25,6 +25,8 @@ define('io.ox/core/api/apps', [
         'io.ox/notes'
     ];
 
+    if (_.device('smartphone')) defaultList.push('io.ox/search');
+
     function validApp(app) { return app && !this.blacklist[app.id]; }
 
     var AppID = Backbone.Model.extend({

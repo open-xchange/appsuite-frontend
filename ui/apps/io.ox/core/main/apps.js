@@ -144,8 +144,9 @@ define('io.ox/core/main/apps', [
         name: 'io.ox/search',
         title: gt('Search'),
         requires: 'search',
+        device: 'smartphone',
         settings: false,
-        visible: false
+        icon: icons['io.ox/search']
     });
 
     // Settings
