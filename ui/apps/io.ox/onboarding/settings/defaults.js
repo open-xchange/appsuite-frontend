@@ -35,13 +35,12 @@ define('io.ox/onboarding/settings/defaults', ['gettext!io.ox/core/onboarding'], 
                 'url': 'https://itunes.apple.com/de/app/ox-drive/id798570177'
             },
             'storeIcon': 'apps/themes/icons/default/appstore/App_Store_Badge_$country_135x40.svg'
-            //'mailsync': { 'url': }
         },
         'macos': {
             'driveapp': {
                 'title': gt('OX Drive App'),
                 'url': 'https://itunes.apple.com/de/app/ox-drive/id818195014',
-                'icon': 'apps/themes/icons/default/apps/mailapp-googleplay.png'
+                'icon': 'apps/themes/icons/default/apps/iOS_Drive_App_Icon.png'
             },
             'storeIcon': 'apps/themes/icons/default/appstore/Mac_App_Store_Badge_$country_165x40.svg'
         },

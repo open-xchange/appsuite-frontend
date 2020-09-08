@@ -16,8 +16,8 @@ define('io.ox/onboarding/register', ['io.ox/core/extensions', 'gettext!io.ox/cor
     'use strict';
 
     ext.point('io.ox/core/appcontrol/right/dropdown').extend({
-        id: 'onboarding_new',
-        index: 10,
+        id: 'connectWizard',
+        index: 110,
         extend: function () {
             this.link('connect-wizard', gt('Connect Wizard'), function () {
                 require(['io.ox/onboarding/main'], function (wizard) {
