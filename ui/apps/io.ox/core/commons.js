@@ -217,10 +217,6 @@ define('io.ox/core/commons', [
                 }
             });
 
-            var name = app.get('name'),
-                // right now, only mail folders supports "total" properly
-                countGridData = name !== 'io.ox/mail';
-
             function getInfoNode() {
                 var visible = app.getWindow && app.getWindow().state.visible;
                 return visible ? grid.getToolbar().find('.grid-info') : $();
@@ -241,7 +237,7 @@ define('io.ox/core/commons', [
                 );
 
                 folderAPI.get(folder_id).done(function success(data) {
-
+                    var countGridData = !folderAPI.supports('count_total', data);
                     var total = countGridData ? grid.getIds().length : data.total,
                         node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
                     grid.meta = {
