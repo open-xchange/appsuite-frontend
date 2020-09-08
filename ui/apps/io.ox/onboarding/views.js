@@ -59,6 +59,10 @@ define('io.ox/onboarding/views', [
             this.type = options.type;
             this.config = options.config;
             this.title = options.title;
+            this.qrCode = new Backbone.Model();
+            this.generatedUrl = !this.url ? new Backbone.Model() : undefined;
+            this.listenTo(this.qrCode, 'change', this.updateQr);
+            this.listenTo(this.generatedUrl, 'change', this.updateUrl);
         },
 
         events: {
@@ -73,30 +77,54 @@ define('io.ox/onboarding/views', [
 
             this.syncView = this.type === 'mail' ? new MailSyncView({ title: this.title }) :
                 new SyncView({ config: this.config });
-            this.syncView.renderManualConfig();
+            this.syncView.render();
 
-            getDownloadUrl(this.type).then(function (url) {
-                self.url = url;
-                self.renderQr(url);
-                self.$el.append(
-                    $('<button class="btn btn-link manual-toggle" aria-expanded="false">').text(gt('Manual Configuration'))
-                    .prepend($('<i class="fa fa-chevron-right" aria-hidden="true">')),
-                    self.syncView.$el.hide()
-                );
-                return self;
-            });
+            this.$el.busy().append(
+                $('<div class="description">').append($('<p class="prompt">').text(gt('Please scan this code with your phone\'s camera:'))),
+                $('<img class="qrcode">'),
+                $('<p class="link-info">').text(gt('Link: ')).append($('<a class="link">')),
+                $('<button class="btn btn-link manual-toggle" aria-expanded="false">').text(gt('Manual Configuration'))
+                .prepend($('<i class="fa fa-chevron-right" aria-hidden="true">')),
+                self.syncView.$el.hide()
+            );
+            this.getQrUrl();
+            return this;
         },
 
         renderQr: function () {
+            this.$el.busy().append(
+                $('<div class="description">').append($('<p class="prompt">').text(gt('Please scan this code with your phone\'s camera:'))),
+                $('<img class="qrcode">'),
+                $('<p class="link-info">').text(gt('Link: ')).append($('<a class="link">').text(this.url).attr('href', this.url))
+            );
+            this.getQr();
+            return this;
+        },
+
+        getQr: function () {
             var self = this;
             createQr(this.url).then(function (qr) {
-                self.$el.prepend(
-                    $('<div class="description">').append($('<p class="prompt">').text(gt('Please scan this code with your phone\'s camera:'))),
-                    $('<img class="qrcode">').attr('src', qr),
-                    $('<p class="link-info">').text(gt('Link: ')).append($('<a class="link">').text(self.url).attr('href', self.url))
-                );
-                return self;
+                self.qrCode.set('src', qr);
             });
+        },
+
+        getQrUrl: function () {
+            var self = this;
+            getDownloadUrl(this.type).then(function (url) {
+                self.url = url;
+                self.generatedUrl.set('url', url);
+                self.getQr();
+            });
+        },
+
+        updateUrl: function () {
+            var url = this.generatedUrl.get('url');
+            this.$('.link-info .link').text(url.slice(0, 75)).attr('href', url);
+        },
+
+        updateQr: function () {
+            this.$('.qrcode').attr('src', this.qrCode.get('src'));
+            this.$el.idle();
         },
 
         onToggle: function (e) {
@@ -153,7 +181,7 @@ define('io.ox/onboarding/views', [
         render: function () {
             this.syncView = this.type === 'mail' ? new MailSyncView({ userData: this.userData }) :
                 new SyncView({ config: this.config });
-            this.syncView.renderManualConfig();
+            this.syncView.render();
 
             this.$el.append(
                 $('<div class="description">').append(
@@ -225,61 +253,88 @@ define('io.ox/onboarding/views', [
         initialize: function (options) {
             this.userData = options.userData;
             this.type = options.title;
+            this.mailConfig = new Backbone.Model();
+            this.listenTo(this.mailConfig, 'change', this.updateMailConfig);
         },
+
         render: function () {
-            this.$el.append(
-                $('<div class="description">')
-                .append(
-                    $('<p class="info">').html(gt('At first, please try to add your mail address ') + '<b>' + this.userData.get('email1') + '</b>' + gt(' to check whether %1$s can automatically configure your email account.', this.type)),
-                    $('<p class="info">').text(gt('If an automatic configuration is not possible, please use the following information to manually setup your mail account:'))
-                )
-            );
+            if (this.userData) {
+                this.$el.append(
+                    $('<div class="description">')
+                    .append(
+                        $('<p class="info">').html(gt('At first, please try to add your mail address ') + '<b>' + this.userData.get('email1') + '</b>' + gt(' to check whether %1$s can automatically configure your email account.', this.type)),
+                        $('<p class="info">').text(gt('If an automatic configuration is not possible, please use the following information to manually setup your mail account:'))
+                    )
+                );
+            }
             this.renderManualConfig();
+            this.getMailConfig();
             return this;
         },
+
         renderManualConfig: function () {
+            this.$el.append(
+                $('<div class="manual-description">').text(gt('Incoming Server Settings (IMAP)')),
+                $('<pre class="manual-config">')
+                    .append(
+                        $('<div class="title incoming">')
+                            .append(
+                                $('<div class="server">').text(gt('Server')),
+                                $('<div class="port">').text(gt('Port')),
+                                $('<div class="username">').text(gt('Username')),
+                                $('<div class="connection">').text(gt('Connection'))
+                            ),
+                        $('<div class="values incoming">')
+                            .append(
+                                $('<div class="server">'),
+                                $('<div class="port">'),
+                                $('<div class="username">'),
+                                $('<div class="connection">')
+                            )
+                    ),
+                $('<div class="manual-description">').text(gt('Outgoing Server Settings')),
+                $('<pre class="manual-config">')
+                    .append(
+                        $('<div class="title outgoing">')
+                            .append(
+                                $('<div class="server">').text(gt('Server')),
+                                $('<div class="port">').text(gt('Port')),
+                                $('<div class="username">').text(gt('Username')),
+                                $('<div class="connection">').text(gt('Connection'))
+                            ),
+                        $('<div class="values outgoing">')
+                            .append(
+                                $('<div class="server">'),
+                                $('<div class="port">'),
+                                $('<div class="username">'),
+                                $('<div class="connection">')
+                            )
+                    )
+            );
+        },
+
+        getMailConfig: function () {
             var self = this;
             getAccountData().then(function (data) {
-                self.mailConfig = data;
-                self.$el.append(
-                    $('<div class="manual-description">').text(gt('Incoming Server Settings (IMAP)')),
-                    $('<pre class="manual-config">')
-                        .append(
-                            $('<div class="title incoming">')
-                                .append(
-                                    $('<div class="server">').text(gt('Server')),
-                                    $('<div class="port">').text(gt('Port')),
-                                    $('<div class="username">').text(gt('Username')),
-                                    $('<div class="connection">').text(gt('Connection'))
-                                ),
-                            $('<div class="values incoming">')
-                                .append(
-                                    $('<div class="server">').text(self.mailConfig.mail_server),
-                                    $('<div class="port">').text(self.mailConfig.mail_port),
-                                    $('<div class="username">').text(self.mailConfig.login),
-                                    $('<div class="connection">').text(self.mailConfig.mail_secure ? 'SSL/TLS' : '')
-                                )
-                        ),
-                    $('<div class="manual-description">').text(gt('Outgoing Server Settings')),
-                    $('<pre class="manual-config">')
-                        .append(
-                            $('<div class="title outgoing">')
-                                .append(
-                                    $('<div class="server">').text(gt('Server')),
-                                    $('<div class="port">').text(gt('Port')),
-                                    $('<div class="username">').text(gt('Username')),
-                                    $('<div class="connection">').text(gt('Connection'))
-                                ),
-                            $('<div class="values outgoing">')
-                                .append(
-                                    $('<div class="server">').text(self.mailConfig.transport_server),
-                                    $('<div class="port">').text(self.mailConfig.transport_port),
-                                    $('<div class="username">').text(self.mailConfig.login),
-                                    $('<div class="connection">').text(self.mailConfig.transport_secure ? 'SSL/TLS' : '')
-                                )
-                        )
-                );
+                self.mailConfig.set(data);
             });
+        },
+
+        updateMailConfig: function () {
+            this.$('.values.incoming').empty()
+                .append(
+                    $('<div class="server">').text(this.mailConfig.get('mail_server')),
+                    $('<div class="port">').text(this.mailConfig.get('mail_port')),
+                    $('<div class="username">').text(this.mailConfig.get('login')),
+                    $('<div class="connection">').text(this.mailConfig.get('mail_secure') ? 'SSL/TLS' : '')
+                );
+            this.$('.values.outgoing').empty()
+            .append(
+                $('<div class="server">').text(this.mailConfig.get('transport_server')),
+                $('<div class="port">').text(this.mailConfig.get('transport_port')),
+                $('<div class="username">').text(this.mailConfig.get('login')),
+                $('<div class="connection">').text(this.mailConfig.get('transport_secure') ? 'SSL/TLS' : '')
+            );
         }
     });
 
@@ -294,14 +349,16 @@ define('io.ox/onboarding/views', [
             this.listenTo(this.config, 'change', this.renderManualConfig);
         },
         render: function () {
-            this.$el.append(
-                $('<div class="description">')
-                    .append(
-                        //#, %1s is the type of application e.g. Addressbook or Calendar
-                        $('<p class="info">').text(gt('Synchronize %1$s data with your device:', this.type))
-                    ),
-                $('<pre class="manual-config">')
-            );
+            if (this.type) {
+                this.$el.append(
+                    $('<div class="description">')
+                        .append(
+                            //#, %1s is the type of application e.g. Addressbook or Calendar
+                            $('<p class="info">').text(gt('Synchronize %1$s data with your device:', this.type))
+                        )
+                );
+            }
+            this.$el.append($('<pre class="manual-config">'));
             this.renderManualConfig();
             return this;
         },

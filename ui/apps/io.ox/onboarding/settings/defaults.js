@@ -14,14 +14,6 @@
 define('io.ox/onboarding/settings/defaults', ['gettext!io.ox/core/onboarding'], function (gt) {
 
     var defaultSettings = {
-        'caldav': {
-            'url': 'https://dav-appsuite-dev.open-xchange.com',
-            'login': '123'
-        },
-        'carddav': {
-            'url': 'https://dav-appsuite-dev.open-xchange.com',
-            'login': '123'
-        },
         'android': {
             'mailapp': {
                 'title': gt('OX Mail App'),

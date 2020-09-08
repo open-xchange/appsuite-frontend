@@ -75,6 +75,15 @@ define('io.ox/onboarding/main', [
         });
         return configModel;
     }
+
+    function getEasConfig() {
+        var configModel = new Backbone.Model();
+        getOnbboardingConfig('display/easmanual').then(function (data) {
+            configModel.set('url', data.eas_url);
+            configModel.set('login', data.eas_login);
+        });
+        return configModel;
+    }
     //all available setup scenarios
     var scenarios = {
         'windows': {
@@ -111,7 +120,7 @@ define('io.ox/onboarding/main', [
             }
         },
         'macos': {
-            'mailsync': function () { return new views.DownloadConfigView({ type: 'mail', userData: config.userData }); },
+            'mailsync': function () { return new views.DownloadConfigView({ type: 'mail' }); },
             'addressbook': function () { return new views.DownloadConfigView({ type: 'carddav', config: getContactsConfig() }); },
             'calendar': function () { return new views.DownloadConfigView({ type: 'caldav', config: getCalendarConfig() }); },
             'drive': function () { return new views.MobileDownloadView({ app: settings.get('macos/driveapp'), storeIcon: getStoreIcon('macos'), iconClass: 'driveapp macappstore' }); }
@@ -147,13 +156,7 @@ define('io.ox/onboarding/main', [
                 return new views.DownloadQrView({ url: settings.get('ios/driveapp/url') });
             },
             'eassync': function () {
-                if (_.device('smartphone')) {
-                    return new views.DownloadConfigView({
-                        type: 'eassync',
-                        config: settings.get('ios/eassync')
-                    });
-                }
-                return new views.DownloadQrView({ url: settings.get('ios/eassync/url') });
+                return new views.SyncView({ name: util.titles.ios.eassync, config: getEasConfig() });
             },
             'addressbook': function () {
                 if (_.device('smartphone')) {

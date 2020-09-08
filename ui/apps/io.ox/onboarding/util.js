@@ -43,7 +43,8 @@ define('io.ox/onboarding/util', [
             'mailapp': gt('OX Mail App'),
             'addressbook': gt('Addressbook'),
             'calendar': gt('Calendar'),
-            'driveapp': gt('OX Drive App')
+            'driveapp': gt('OX Drive App'),
+            'eassync': gt('Mail, Calendar and Addressbook')
         }
     };
 
