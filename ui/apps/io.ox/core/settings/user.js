@@ -13,8 +13,9 @@
 
 define('io.ox/core/settings/user', [
     'io.ox/core/api/user',
-    'io.ox/contacts/model'
-], function (api, contactModel) {
+    'io.ox/contacts/model',
+    'io.ox/contacts/widgets/pictureUpload'
+], function (api, contactModel, PhotoUploadView) {
 
     'use strict';
 
@@ -35,6 +36,13 @@ define('io.ox/core/settings/user', [
                     if (m.reuse('edit', model.attributes)) return;
                     m.getApp(model.attributes).launch();
                 });
+            });
+        },
+
+        openEditPicture: function () {
+            return getCurrentUser().then(function (model) {
+                var view = new PhotoUploadView({ model: model });
+                view.openDialog();
             });
         }
     };

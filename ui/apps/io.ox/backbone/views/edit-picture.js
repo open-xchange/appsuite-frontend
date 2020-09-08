@@ -40,6 +40,8 @@ define('io.ox/backbone/views/edit-picture', [
             })
             .inject({
                 load: function () {
+                    // used for standalone version of pictureUpload
+                    this.model.set('save', false);
                     return $.when().then(function () {
                         var file = this.model.get('pictureFile');
                         if (_.isFunction(file)) file = file();
@@ -228,6 +230,8 @@ define('io.ox/backbone/views/edit-picture', [
                         this.onCancel();
                         break;
                     case 'apply':
+                        // used for standalone version of pictureUpload
+                        this.model.set('save', true);
                         if (!this.$el.hasClass('empty')) return this.onApply();
                         // use existing image was removed so update model
                         if (this.model.get('image1_url')) this.trigger('reset');
