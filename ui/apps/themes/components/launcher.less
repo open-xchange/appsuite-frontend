@@ -351,6 +351,59 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     }
 }
 
+#topbar-settings-dropdown .user {
+    @sidelength: 64px;
+
+    display: flex;
+    .action {
+        display: flex;
+        width: 100%;
+    }
+    .user-picture-container {
+        margin-right: 16px;
+        width: @sidelength;
+    }
+
+    .user-picture {
+        .flex-center;
+        .picture(@sidelength, @sidelength);
+        background-color: #eee;
+        color: rgba(0, 0, 0, 0.60);
+        font-size: 20px;
+        font-weight: bold;
+        background-clip: padding-box;
+        border: 1px solid rgba(0, 0, 0, 0.50);
+
+        .fa { display: none; }
+    }
+
+    // unset user image
+    .action:hover:not([style]) {
+        .fa { display: block; }
+        .initials { display: none; }
+    }
+
+    .text-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        // overflow handling
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        .name {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .name, .mail {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+}
 // Fix for IE dropdown width calculation see OXUIB-184
 .ie11 .launcher-dropdown.dropdown-menu {
     width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 2 !important;

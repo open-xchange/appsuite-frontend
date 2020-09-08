@@ -322,6 +322,63 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
+    ext.point('io.ox/core/appcontrol/right/account').extend({
+        id: 'user',
+        index: 5,
+        extend: function () {
+
+            if (settings.get('user/internalUserEdit', true) === false) return;
+            if (capabilities.has('guest')) return;
+
+            var type = settings.get('user/hidedomainpart', false) ? 'email-localpart' : 'email',
+                container, node;
+
+            container = $('<li class="user">').append(
+                $('<a href="#" data-name="user-picture" class="action" tabindex="-1">')
+                .attr('aria-label', gt('Change user photo'))
+                .append(
+                    node = $('<div class="user-picture-container" aria-hidden="true">'),
+                    $('<div class="text-container">').append(
+                        $('<div class="name">').append(userAPI.getTextNode(ox.user_id, { type: 'name' })),
+                        $('<div class="mail">').append(userAPI.getTextNode(ox.user_id, { type: type }))
+                    )
+                )
+            );
+
+            container.on('click', '.action', function (e) {
+                e.preventDefault();
+                require(['io.ox/core/settings/user'], function (user) {
+                    user.openEditPicture();
+                });
+            });
+
+            updatePicture();
+            // via global address book
+            contactAPI.on('reset:image update:image', updatePicture);
+            // via my contact data
+            userAPI.on('reset:image:' + ox.user_id + ' update:image:' + ox.user_id, updatePicture);
+            userAPI.on('update', updatePicture);
+
+            function updatePicture() {
+                node.empty().append(
+                    contactAPI.pictureHalo(
+                        $('<div class="user-picture" aria-hidden="true">')
+                        .append(
+                            $('<span class="initials">').append(
+                                userAPI.getTextNode(ox.user_id, { type: 'initials' })
+                            ),
+                            $('<i class="fa fa-camera-retro" aria-hidden="true">')
+                        ),
+                        { internal_userid: ox.user_id },
+                        { width: 40, height: 40, fallback: false }
+                    )
+                );
+            }
+
+            this.$ul.append(container);
+            this.divider();
+        }
+    });
 
     // 'availability' index 50
 
