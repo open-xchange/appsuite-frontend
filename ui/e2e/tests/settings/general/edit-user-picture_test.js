@@ -11,6 +11,8 @@
  */
 
 const expect = require('chai').expect;
+const { I, contacts } = inject();
+
 
 Feature('Settings > Basic > User picture');
 
@@ -22,102 +24,191 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('User start with no picture', async function (I, contacts, mail) {
+const NODES = {
+    TOPBAR: '#io-ox-toprightbar .contact-picture',
+    DROPDOWN: '.user-picture',
+    EDIT: '.contact-photo-upload .contact-photo'
+};
+
+async function getBackgroundImage(selector) {
+    const image = await I.grabCssPropertyFrom(selector, 'backgroundImage');
+    return Array.isArray(image) ? image[0] : image;
+}
+
+function editPhoto() {
+    contacts.editMyContact();
+    I.waitForElement('.contact-edit .contact-photo');
+    I.click('.contact-edit .contact-photo');
+    I.waitForVisible('.edit-picture');
+}
+
+function editPhotoStandalone() {
+    I.waitForVisible('.dropdown-toggle[aria-label="My account"]');
+    I.waitForVisible('.contact-picture');
+    I.click('.contact-picture');
+    I.waitForVisible('.user-picture-container');
+    I.click({ css: '[data-name="user-picture"]' }, '.dropdown.open .dropdown-menu');
+    I.waitForVisible('.modal.edit-picture');
+}
+
+Scenario('User starts without picture', async function (I, dialogs, contacts, mail) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
-    // toolbar
-    const image = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'backgroundImage');
-    expect(Array.isArray(image) ? image[0] : image).is.equal('none');
+    I.waitForElement(NODES.TOPBAR);
+    I.waitForElement(NODES.DROPDOWN);
+    expect(await getBackgroundImage(NODES.TOPBAR)).is.equal('none');
+    expect(await getBackgroundImage(NODES.DROPDOWN)).is.equal('none');
 
-    // edit contact data
+    // via click on user image
+    editPhotoStandalone();
+    dialogs.waitForVisible();
+
+    dialogs.clickButton('Remove photo');
+    I.waitForVisible('.modal.edit-picture.empty');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal.edit-picture');
+
+    // via "My user data"
     contacts.editMyContact();
 
     // check if empty
     I.seeElementInDOM('.empty');
     I.waitForText('Click to add photo', 20, '.contact-photo label');
-
     I.click('.contact-edit .contact-photo');
-    I.waitForVisible('.edit-picture');
-    I.seeElementInDOM('.edit-picture.empty');
-    I.click('Cancel');
+    I.waitForVisible('.edit-picture.empty');
+    dialogs.clickButton('Cancel');
     I.click('Discard');
 });
 
-Scenario('User can upload and remove a picture', async function (I, contacts, mail, dialogs) {
+Scenario('User can upload/remove picture', async function (I, contacts, mail, dialogs) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
-    // user image in toolbar?
-    const image1 = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'backgroundImage');
-    expect(Array.isArray(image1) ? image1[0] : image1).is.equal('none');
-
-    // open and check empty-state
-    contacts.editMyContactPhoto();
+    // 0. start with unset user picture
+    I.waitForElement(NODES.TOPBAR);
+    expect(await getBackgroundImage(NODES.TOPBAR)).is.equal('none');
+    editPhoto();
     dialogs.waitForVisible();
 
-    // upload image (2.2 MB)
+    // 1. add user image (2.2 MB)
     I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
-
     I.waitForInvisible('.edit-picture.empty');
     dialogs.clickButton('Apply');
     I.waitForDetached('.edit-picture');
-
-    // picture-uploader
     I.waitForInvisible('.empty', 3);
-
-    let listenerID = I.registerNodeRemovalListener('#io-ox-topbar-dropdown-icon .contact-picture');
     I.click('Save');
     I.waitForDetached('.contact-edit');
-    I.waitForNodeRemoval(listenerID);
-    I.waitForElement('.contact-picture');
 
-    const image2 = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'backgroundImage');
-    expect(Array.isArray(image2) ? image2[0] : image2).to.not.be.empty;
+    I.waitForElement(`${NODES.TOPBAR}[style]`);
+    expect(await getBackgroundImage(NODES.TOPBAR)).to.have.string('uniq');
 
-    contacts.editMyContactPhoto();
-
+    // 2. remove user image
+    editPhoto();
     // TODO: BUG
-    // There are likely to be accessibility issues due to mishandled focus
     dialogs.waitForVisible();
     dialogs.clickButton('Remove photo');
-
-
     I.waitForVisible('.edit-picture.empty');
     dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
-
-    let listenerID2 = I.registerNodeRemovalListener('#io-ox-topbar-dropdown-icon .contact-picture');
     I.click('Save');
     I.waitForDetached('.contact-edit');
-    I.waitForNodeRemoval(listenerID2);
-    I.waitForElement('.contact-picture');
 
-    // check again
-    contacts.editMyContactPhoto();
+    I.waitForElement(`${NODES.TOPBAR}:not([style])`);
+    I.waitForElement(`${NODES.DROPDOWN}:not([style])`);
+    expect(await getBackgroundImage(NODES.TOPBAR)).is.equal('none');
+    expect(await getBackgroundImage(NODES.DROPDOWN)).is.equal('none');
+
+    // 3. check edit view again
+    editPhoto();
     dialogs.waitForVisible();
     I.waitForVisible('.edit-picture.in.empty');
 });
 
-Scenario('User can rotate her/his picture', async function (I, contacts, mail, dialogs) {
-    let image;
-
+Scenario('User can upload/remove picture (standalone version)', async function (I, contacts, mail, dialogs) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
-    // user image in toolbar?
-    image = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'backgroundImage');
-    expect(Array.isArray(image) ? image[0] : image).is.equal('none');
+    // 0. start with unset user picture
+    I.waitForElement(NODES.TOPBAR);
+    I.waitForElement(NODES.DROPDOWN);
+    expect(await getBackgroundImage(NODES.TOPBAR)).is.equal('none');
+    expect(await getBackgroundImage(NODES.DROPDOWN)).is.equal('none');
 
-    // open and check empty-state
-    contacts.editMyContactPhoto();
+    // 1. add user image (2.2 MB)
+    editPhotoStandalone();
+    dialogs.waitForVisible();
+    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+    I.waitForInvisible('.edit-picture.empty', 3);
+    dialogs.clickButton('Apply');
+
+    I.waitForElement(`${NODES.TOPBAR}[style]`);
+    I.waitForElement(`${NODES.DROPDOWN}[style]`);
+    expect(await getBackgroundImage(NODES.TOPBAR)).to.have.string('uniq');
+    expect(await getBackgroundImage(NODES.DROPDOWN)).to.have.string('uniq');
+    let uniq = (await getBackgroundImage(NODES.TOPBAR)).slice(-15, -2);
+
+    // 2. update user image (2.2 MB)
+    editPhotoStandalone();
+    dialogs.waitForVisible();
+    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600-limegreen.png');
+    I.waitForInvisible('.edit-picture.empty', 3);
+    let listenerID = I.registerNodeRemovalListener(NODES.TOPBAR);
+    dialogs.clickButton('Apply');
+    I.waitForNodeRemoval(listenerID);
+    I.wait(0.5);
+
+    I.waitForElement(`${NODES.TOPBAR}[style]`);
+    I.waitForElement(`${NODES.DROPDOWN}[style]`);
+    expect(await getBackgroundImage(NODES.TOPBAR)).to.have.string('uniq').and.not.have.string(uniq);
+    expect(await getBackgroundImage(NODES.DROPDOWN)).to.have.string('uniq').and.not.have.string(uniq);
+
+    // 3. remove user image (but cancel)
+    editPhotoStandalone();
+    dialogs.waitForVisible();
+    dialogs.clickButton('Remove photo');
+    I.waitForVisible('.edit-picture.empty');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal.edit-picture');
+
+    I.waitForElement(`${NODES.TOPBAR}[style]`);
+    I.waitForElement(`${NODES.DROPDOWN}[style]`);
+    expect(await getBackgroundImage(NODES.TOPBAR)).to.have.string('uniq');
+    expect(await getBackgroundImage(NODES.DROPDOWN)).to.have.string('uniq');
+
+    // 4. remove user image
+    editPhotoStandalone();
+    dialogs.waitForVisible();
+    dialogs.clickButton('Remove photo');
+    I.waitForVisible('.edit-picture.empty');
+    dialogs.clickButton('Apply');
+    I.waitForDetached('.modal.edit-picture');
+
+    I.waitForElement(`${NODES.TOPBAR}:not([style])`);
+    I.waitForElement(`${NODES.DROPDOWN}:not([style])`);
+    expect(await getBackgroundImage(NODES.TOPBAR)).is.equal('none');
+    expect(await getBackgroundImage(NODES.DROPDOWN)).is.equal('none');
+
+    // 5. check edit view again
+    editPhotoStandalone();
+    dialogs.waitForVisible();
+    I.waitForVisible('.edit-picture.empty');
+});
+
+Scenario('User can rotate her/his picture', async function (I, contacts, mail, dialogs) {
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+
+    // 0. start with unset user picture
+    I.waitForElement(NODES.TOPBAR);
+    expect(await getBackgroundImage(NODES.TOPBAR)).is.equal('none');
+    editPhoto();
     dialogs.waitForVisible();
 
+    // 1. add user image (2.2 MB)
     I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
     I.waitForInvisible('.edit-picture.empty');
-    image = await I.grabCssPropertyFrom('.contact-photo-upload .contact-photo', 'backgroundImage');
-    expect(Array.isArray(image) ? image[0] : image).to.not.be.empty;
-    I.wait(0.2);
+    expect(await getBackgroundImage(NODES.EDIT)).to.not.be.empty;
     // rotate (portrait to landscape)
     const height = await I.grabAttributeFrom('.cr-image', 'height');
     I.click('.inline-actions button[data-action="rotate-right"]');
@@ -128,8 +219,14 @@ Scenario('User can rotate her/his picture', async function (I, contacts, mail, d
     I.waitForDetached('.modal-dialog');
     I.waitForInvisible('.edit-picture');
 
-    //picture-uploader
+    // 2. Discard
     I.click('Discard');
+    // "Discard change"
     dialogs.waitForVisible();
-    dialogs.clickButton('Discard changes');
+    dialogs.clickButton('Cancel');
+
+    I.click('Save');
+    I.waitForDetached('.contact-edit');
+    I.waitForElement(`${NODES.TOPBAR}[style]`);
+    expect(await getBackgroundImage(NODES.TOPBAR)).to.have.string('uniq');
 });
