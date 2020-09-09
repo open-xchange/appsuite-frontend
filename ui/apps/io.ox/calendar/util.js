@@ -381,7 +381,7 @@ define('io.ox/calendar/util', [
                 ret.push(this.getFullTimeInterval(data, false));
             } else {
                 // make sure to convert to current calendar timezone before displaying
-                ret.push(moment.tz(data.startDate.value, data.startDate.tzid).tz(moment().tz()).format('LT'), moment.tz(data.endDate.value, data.endDate.tzid).tz(moment().tz()).format('LT'));
+                ret.push(moment.tz(data.startDate.value, data.startDate.tzid || moment().tz()).tz(moment().tz()).format('LT'), moment.tz(data.endDate.value, data.endDate.tzid || moment().tz()).tz(moment().tz()).format('LT'));
             }
             return ret;
         },
