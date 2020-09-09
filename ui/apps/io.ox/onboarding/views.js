@@ -119,7 +119,7 @@ define('io.ox/onboarding/views', [
 
         updateUrl: function () {
             var url = this.generatedUrl.get('url');
-            this.$('.link-info .link').text(url.slice(0, 75)).attr('href', url);
+            this.$('.link-info .link').text(url).attr('href', url);
         },
 
         updateQr: function () {
@@ -262,7 +262,9 @@ define('io.ox/onboarding/views', [
                 this.$el.append(
                     $('<div class="description">')
                     .append(
-                        $('<p class="info">').html(gt('At first, please try to add your mail address ') + '<b>' + this.userData.get('email1') + '</b>' + gt(' to check whether %1$s can automatically configure your email account.', this.type)),
+                        //#, %1s primary email address of the curent user
+                        //#, %2s is the type of mail application e.g. Apple Mail
+                        $('<p class="info">').html(gt('At first, please try to add your mail address <b>%1$s</b> to check whether %2$s can automatically configure your email account.', this.userData.get('email1'), this.type)),
                         $('<p class="info">').text(gt('If an automatic configuration is not possible, please use the following information to manually setup your mail account:'))
                     )
                 );
