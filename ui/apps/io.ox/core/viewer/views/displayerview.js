@@ -1399,7 +1399,9 @@ define('io.ox/core/viewer/views/displayerview', [
 
             // don't remove from this.temporaryVersions because the view is not discarded
 
-            this.loadedSlides = cachedRange;
+            // build intersection to assure that the (newly calculated) cachedRange array
+            // doesn't override slides that have not yet been loaded.
+            this.loadedSlides = _.intersection(this.loadedSlides, cachedRange);
         },
 
         onDispose: function () {
