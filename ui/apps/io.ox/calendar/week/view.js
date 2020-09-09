@@ -1746,16 +1746,26 @@ define('io.ox/calendar/week/view', [
             defer(function () {
                 this.fulltimeView.trigger('collection:before:reset');
                 this.appointmentView.trigger('collection:before:reset');
-                // detaching and adding views improves render performance, it is faster to append evertything in bulk instead of adding one node at a time
-                this.fulltimeView.$el.detach();
-                var scrolltop = this.appointmentView.$el.children('.scrollpane').scrollTop();
-                this.appointmentView.$el.detach();
+                var scrolltop = this.appointmentView.$el.children('.scrollpane').scrollTop(),
+                    detached = false;
+
+                // only detach if visible, otherwise the scrollposition is lost (setting the scrollposition on a hidden element does not work. If we don't detach it the scroll position is kept regardless of setting it manually)
+                if (this.fulltimeView.$el.is(':visible')) {
+                    // detaching and adding views improves render performance, it is faster to append evertything in bulk instead of adding one node at a time
+                    this.fulltimeView.$el.detach();
+                    this.appointmentView.$el.detach();
+                    detached = true;
+                }
+
                 this.collection.forEach(function (model) {
                     if (util.isAllday(model) && this.options.showFulltime) this.fulltimeView.trigger('collection:add', model);
                     else this.appointmentView.trigger('collection:add', model);
                 }.bind(this));
-                //attach views again
-                this.$el.append(this.fulltimeView.$el, this.appointmentView.$el);
+
+                if (detached) {
+                    //attach views again
+                    this.$el.append(this.fulltimeView.$el, this.appointmentView.$el);
+                }
                 if (scrolltop) this.appointmentView.$el.children('.scrollpane').scrollTop(scrolltop);
                 this.fulltimeView.trigger('collection:after:reset');
                 this.appointmentView.trigger('collection:after:reset');
