@@ -19,7 +19,7 @@ define('io.ox/onboarding/register', ['io.ox/core/extensions', 'gettext!io.ox/cor
         id: 'connectWizard',
         index: 110,
         extend: function () {
-            this.link('connect-wizard', gt('Connect Wizard'), function () {
+            this.link('connect-wizard', _.device('desktop') ? gt('Connect your device') : gt('Connect this device'), function () {
                 require(['io.ox/onboarding/main'], function (wizard) {
                     wizard.load();
                 });

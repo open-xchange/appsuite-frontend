@@ -61,31 +61,25 @@ define('io.ox/onboarding/views', [
             this.title = options.title;
             this.qrCode = new Backbone.Model();
             this.generatedUrl = !this.url ? new Backbone.Model() : undefined;
+            //#. 1$s type of application to synchronize, e.g. Address Book
+            this.description = options.description || gt('Scan this code with your phone\'s camera to synchronize your %1$s:', this.title);
             this.listenTo(this.qrCode, 'change', this.updateQr);
             this.listenTo(this.generatedUrl, 'change', this.updateUrl);
         },
 
-        events: {
-            'click .btn.manual-toggle': 'onToggle'
-        },
-
         render: function () {
-            var self = this;
             // url only specified for store links
             // show manual config additionally
             if (this.url) return this.renderQr();
 
-            this.syncView = this.type === 'mail' ? new MailSyncView({ title: this.title }) :
+            this.syncView = this.type === 'mail' ? new MailSyncView({}) :
                 new SyncView({ config: this.config });
-            this.syncView.render();
 
             this.$el.busy().append(
-                $('<div class="description">').append($('<p class="prompt">').text(gt('Please scan this code with your phone\'s camera:'))),
+                $('<div class="description">').append($('<p class="prompt">').text(this.description)),
                 $('<img class="qrcode">'),
                 $('<p class="link-info">').text(gt('Link: ')).append($('<a class="link">')),
-                $('<button class="btn btn-link manual-toggle" aria-expanded="false">').text(gt('Manual Configuration'))
-                .prepend($('<i class="fa fa-chevron-right" aria-hidden="true">')),
-                self.syncView.$el.hide()
+                this.syncView.render().$el
             );
             this.getQrUrl();
             return this;
@@ -93,7 +87,8 @@ define('io.ox/onboarding/views', [
 
         renderQr: function () {
             this.$el.busy().append(
-                $('<div class="description">').append($('<p class="prompt">').text(gt('Please scan this code with your phone\'s camera:'))),
+                //#. 1$s name of the product to install, e.g. OX Mail or Drive
+                $('<div class="description">').append($('<p class="prompt">').text(gt('To install %1$s, please scan this code with your phone\'s camera:', this.title))),
                 $('<img class="qrcode">'),
                 $('<p class="link-info">').text(gt('Link: ')).append($('<a class="link">').text(this.url).attr('href', this.url))
             );
@@ -125,12 +120,6 @@ define('io.ox/onboarding/views', [
         updateQr: function () {
             this.$('.qrcode').attr('src', this.qrCode.get('src'));
             this.$el.idle();
-        },
-
-        onToggle: function (e) {
-            $(e.currentTarget).find('i.fa').toggleClass('fa-chevron-right fa-chevron-down').end()
-                .attr('aria-expanded', function (i, v) { return v === 'false'; });
-            this.syncView.$el.toggle();
         }
     });
 
@@ -142,18 +131,22 @@ define('io.ox/onboarding/views', [
         initialize: function (options) {
             this.link = options.link;
         },
+
         events: {
             'click .download': 'onClick'
         },
+
         render: function () {
             this.$el.append(
                 $('<div class="description">').append(
-                    $('<p class="prompt">').text(gt('Please download the application.'))
+                    //#. 1$s name of the product, usually Drive
+                    $('<p class="prompt">').text(gt('Please download the %1$s application.', util.titles.windows.drive))
                 ),
-                $('<button type="button" data-action="download" class="btn-primary download">').text(gt('Download'))
+                $('<button type="button" data-action="download" class="btn btn-primary download">').text(gt('Download'))
             );
             return this;
         },
+
         onClick: function () {
             var self = this;
             require(['io.ox/core/download']).then(function (download) {
@@ -170,29 +163,22 @@ define('io.ox/onboarding/views', [
         initialize: function (options) {
             this.type = options.type;
             this.config = options.config;
-            this.userData = options.userData;
         },
 
         events: {
-            'click .btn.download': 'onClick',
-            'click .btn.manual-toggle': 'onToggle'
+            'click .btn.download': 'onClick'
         },
 
         render: function () {
-            this.syncView = this.type === 'mail' ? new MailSyncView({ userData: this.userData }) :
+            this.syncView = this.type === 'mail' ? new MailSyncView({}) :
                 new SyncView({ config: this.config });
-            this.syncView.render();
 
             this.$el.append(
                 $('<div class="description">').append(
                     $('<p class="info">').text(gt('Please download the configuration to automatically setup your account.'))
                 ),
-                $('<button type="button" data-action="download" class="btn btn-primary download">').text(gt('Download configuration'))
-            );
-            this.$el.append(
-                $('<button class="btn btn-link manual-toggle" aria-expanded="false">').text(gt('Manual Configuration'))
-                .prepend($('<i class="fa fa-chevron-right" aria-hidden="true">')),
-                this.syncView.$el.hide()
+                $('<button type="button" data-action="download" class="btn btn-primary download">').text(gt('Download configuration')),
+                this.syncView.render().$el
             );
             return this;
         },
@@ -203,12 +189,6 @@ define('io.ox/onboarding/views', [
                     download.url(url);
                 });
             });
-        },
-
-        onToggle: function (e) {
-            $(e.currentTarget).find('i.fa').toggleClass('fa-chevron-right fa-chevron-down').end()
-                .attr('aria-expanded', function (i, v) { return v === 'false'; });
-            this.syncView.$el.toggle();
         }
     });
 
@@ -227,19 +207,24 @@ define('io.ox/onboarding/views', [
                 this.appIconClass = '';
             }
         },
+
         events: {
             'click .applink': 'onClick'
         },
+
         render: function () {
             this.$el.append(
-                $('<img class="app-icon applink" role="button">')
+                $('<div class="app-icon-container">').append(
+                    $('<img class="app-icon applink" role="button">')
                     .addClass(this.appIconClass)
                     .attr('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=')
                     .css('background-image', this.appIcon ? 'url(' + this.appIcon + ')' : ''),
-                $('<p class="app-info">').text(this.title),
+                    $('<p class="app-info">').text(this.title)
+                ),
                 $('<img class="store-icon applink" role="button">').attr('src', this.storeIcon)
             );
         },
+
         onClick: function () {
             window.open(this.url);
         }
@@ -257,25 +242,33 @@ define('io.ox/onboarding/views', [
             this.listenTo(this.mailConfig, 'change', this.updateMailConfig);
         },
 
+        events: {
+            'click .btn.manual-toggle': 'onToggle'
+        },
+
         render: function () {
             if (this.userData) {
                 this.$el.append(
                     $('<div class="description">')
                     .append(
                         //#, %1s primary email address of the curent user
-                        //#, %2s is the type of mail application e.g. Apple Mail
-                        $('<p class="info">').html(gt('At first, please try to add your mail address <b>%1$s</b> to check whether %2$s can automatically configure your email account.', this.userData.get('email1'), this.type)),
+                        $('<p class="info">').html(gt('Please try to add your mail address <b>%1$s</b> to check whether your mail client can automatically configure your email account.', this.userData.get('email1'))),
                         $('<p class="info">').text(gt('If an automatic configuration is not possible, please use the following information to manually setup your mail account:'))
                     )
                 );
             }
+            this.$el.append(
+                $('<button class="btn btn-link manual-toggle" aria-expanded="false">').text(gt('Manual Configuration'))
+                .prepend($('<i class="fa fa-chevron-right" aria-hidden="true">')),
+                $('<div class="manual-container">').hide()
+            );
             this.renderManualConfig();
             this.getMailConfig();
             return this;
         },
 
         renderManualConfig: function () {
-            this.$el.append(
+            this.$('.manual-container').append(
                 $('<div class="manual-description">').text(gt('Incoming Server Settings (IMAP)')),
                 $('<pre class="manual-config">')
                     .append(
@@ -284,14 +277,16 @@ define('io.ox/onboarding/views', [
                                 $('<div class="server">').text(gt('Server')),
                                 $('<div class="port">').text(gt('Port')),
                                 $('<div class="username">').text(gt('Username')),
-                                $('<div class="connection">').text(gt('Connection'))
+                                $('<div class="connection">').text(gt('Connection')),
+                                $('<div class="pass">').text(gt('Password'))
                             ),
                         $('<div class="values incoming">')
                             .append(
                                 $('<div class="server">'),
                                 $('<div class="port">'),
                                 $('<div class="username">'),
-                                $('<div class="connection">')
+                                $('<div class="connection">'),
+                                $('<div class="pass">')
                             )
                     ),
                 $('<div class="manual-description">').text(gt('Outgoing Server Settings')),
@@ -302,14 +297,16 @@ define('io.ox/onboarding/views', [
                                 $('<div class="server">').text(gt('Server')),
                                 $('<div class="port">').text(gt('Port')),
                                 $('<div class="username">').text(gt('Username')),
-                                $('<div class="connection">').text(gt('Connection'))
+                                $('<div class="connection">').text(gt('Connection')),
+                                $('<div class="pass">').text(gt('Password'))
                             ),
                         $('<div class="values outgoing">')
                             .append(
                                 $('<div class="server">'),
                                 $('<div class="port">'),
                                 $('<div class="username">'),
-                                $('<div class="connection">')
+                                $('<div class="connection">'),
+                                $('<div class="pass">')
                             )
                     )
             );
@@ -328,15 +325,23 @@ define('io.ox/onboarding/views', [
                     $('<div class="server">').text(this.mailConfig.get('mail_server')),
                     $('<div class="port">').text(this.mailConfig.get('mail_port')),
                     $('<div class="username">').text(this.mailConfig.get('login')),
-                    $('<div class="connection">').text(this.mailConfig.get('mail_secure') ? 'SSL/TLS' : '')
+                    $('<div class="connection">').text(this.mailConfig.get('mail_secure') ? 'SSL/TLS' : ''),
+                    $('<div class="pass">').text(gt('Your account password'))
                 );
             this.$('.values.outgoing').empty()
             .append(
                 $('<div class="server">').text(this.mailConfig.get('transport_server')),
                 $('<div class="port">').text(this.mailConfig.get('transport_port')),
                 $('<div class="username">').text(this.mailConfig.get('login')),
-                $('<div class="connection">').text(this.mailConfig.get('transport_secure') ? 'SSL/TLS' : '')
+                $('<div class="connection">').text(this.mailConfig.get('transport_secure') ? 'SSL/TLS' : ''),
+                $('<div class="pass">').text(gt('Your account password'))
             );
+        },
+
+        onToggle: function (e) {
+            $(e.currentTarget).find('i.fa').toggleClass('fa-chevron-right fa-chevron-down').end()
+                .attr('aria-expanded', function (i, v) { return v === 'false'; });
+            this.$('.manual-container').toggle();
         }
     });
 
@@ -346,37 +351,58 @@ define('io.ox/onboarding/views', [
         className: 'content-container',
 
         initialize: function (options) {
-            this.type = options.name;
             this.config = options.config;
+            this.description = options.description;
             this.listenTo(this.config, 'change', this.renderManualConfig);
         },
+
+        events: {
+            'click .btn.manual-toggle': 'onToggle'
+        },
+
         render: function () {
-            if (this.type) {
+            var needsDescription = !!this.description;
+
+            if (needsDescription) {
                 this.$el.append(
                     $('<div class="description">')
                         .append(
-                            //#, %1s is the type of application e.g. Addressbook or Calendar
-                            $('<p class="info">').text(gt('Synchronize %1$s data with your device:', this.type))
+                            $('<p class="info">').text(this.description)
                         )
                 );
             }
-            this.$el.append($('<pre class="manual-config">'));
+            this.$el.append(
+                $('<button class="btn btn-link manual-toggle" aria-expanded="false">').text(gt('Manual Configuration'))
+                .prepend($('<i class="fa fa-chevron-right" aria-hidden="true">')),
+                $('<div class="manual-container">').toggle(needsDescription)
+            );
             this.renderManualConfig();
             return this;
         },
+
         renderManualConfig: function () {
-            this.$('.manual-config').empty().append(
-                $('<div class="title">')
+            this.$('.manual-container').empty().append(
+                $('<pre class="manual-config">').append(
+                    $('<div class="title">')
                     .append(
                         $('<div class="url">').text(gt('URL')),
-                        $('<div class="login">').text(gt('Login'))
+                        $('<div class="login">').text(gt('Login')),
+                        $('<div class="pass">').text(gt('Password'))
                     ),
-                $('<div class="values">')
+                    $('<div class="values">')
                     .append(
                         $('<div class="url">').text(this.config.get('url')),
-                        $('<div class="login">').text(this.config.get('login'))
+                        $('<div class="login">').text(this.config.get('login')),
+                        $('<div class="pass">').text(gt('Your account password'))
                     )
+                )
             );
+        },
+
+        onToggle: function (e) {
+            $(e.currentTarget).find('i.fa').toggleClass('fa-chevron-right fa-chevron-down').end()
+                .attr('aria-expanded', function (i, v) { return v === 'false'; });
+            this.$('.manual-container').toggle();
         }
     });
 
@@ -393,7 +419,8 @@ define('io.ox/onboarding/views', [
             this.$el.append(
                 $('<div class="description">')
                 .append(
-                    $('<p class="info">').text(gt('This wizard helps you to use App Suite on other devices.')),
+                    //#. variable %1$s is the name of the product, e.g. App Suite
+                    $('<p class="info">').text(gt('This wizard helps you to use %1$s on other devices.', ox.serverConfig.productName)),
                     $('<p class="prompt">').text(gt('Which device do you want to configure?'))
                 ),
                 this.listView.render().$el

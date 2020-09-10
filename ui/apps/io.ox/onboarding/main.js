@@ -88,10 +88,10 @@ define('io.ox/onboarding/main', [
     var scenarios = {
         'windows': {
             'drive': function () { return new views.DownloadView({ link: settings.get('windows/drive_url') }); },
-            'mailsync': function () { return new views.MailSyncView({ userData: config.userData, title: util.titles.windows.mailsync }); }
+            'mailsync': function () { return new views.MailSyncView({ userData: config.userData }); }
         },
         'android': {
-            'mailsync': function () { return new views.MailSyncView({ userData: config.userData, title: util.titles.android.mailsync }); },
+            'mailsync': function () { return new views.MailSyncView({ userData: config.userData }); },
             'mailapp': function () {
                 if (_.device('smartphone')) {
                     return new views.MobileDownloadView({
@@ -100,7 +100,7 @@ define('io.ox/onboarding/main', [
                         iconClass: 'mailapp playstore'
                     });
                 }
-                return new views.DownloadQrView({ url: settings.get('android/mailapp/url') });
+                return new views.DownloadQrView({ title: util.titles.android.mailapp, url: settings.get('android/mailapp/url') });
             },
             'driveapp': function () {
                 if (_.device('smartphone')) {
@@ -110,13 +110,19 @@ define('io.ox/onboarding/main', [
                         iconClass: 'driveapp playstore'
                     });
                 }
-                return new views.DownloadQrView({ url: settings.get('android/driveapp/url') });
+                return new views.DownloadQrView({ title: util.titles.android.driveapp, url: settings.get('android/driveapp/url') });
             },
             'addressbook': function () {
-                return new views.SyncView({ name: util.titles.android.addressbook, config: getContactsConfig() });
+                return new views.SyncView({
+                    description: gt('To synchronize Address Book with your phone, please enter the following settings in your CardDav client:'),
+                    config: getContactsConfig()
+                });
             },
             'calendar': function () {
-                return new views.SyncView({ name: util.titles.android.calendar, config: getCalendarConfig() });
+                return new views.SyncView({
+                    description: gt('To synchronize Calendar with your phone, please enter the following settings in your CalDav client:'),
+                    config: getCalendarConfig()
+                });
             }
         },
         'macos': {
@@ -133,7 +139,11 @@ define('io.ox/onboarding/main', [
                         userData: config.userData
                     });
                 }
-                return new views.DownloadQrView({ type: 'mail', title: util.titles.ios.mailsync });
+                return new views.DownloadQrView({
+                    type: 'mail',
+                    title: util.titles.ios.mailsync,
+                    description: gt('To synchronize your iOS Mail client automatically, scan this code with your phone\'s camera:')
+                });
             },
             'mailapp': function () {
                 if (_.device('smartphone')) {
@@ -143,7 +153,7 @@ define('io.ox/onboarding/main', [
                         iconClass: 'mailapp appstore'
                     });
                 }
-                return new views.DownloadQrView({ url: settings.get('ios/mailapp/url') });
+                return new views.DownloadQrView({ title: util.titles.ios.mailapp, url: settings.get('ios/mailapp/url') });
             },
             'driveapp': function () {
                 if (_.device('smartphone')) {
@@ -153,10 +163,13 @@ define('io.ox/onboarding/main', [
                         iconClass: 'driveapp appstore'
                     });
                 }
-                return new views.DownloadQrView({ url: settings.get('ios/driveapp/url') });
+                return new views.DownloadQrView({ title: util.titles.ios.driveapp, url: settings.get('ios/driveapp/url') });
             },
             'eassync': function () {
-                return new views.SyncView({ name: util.titles.ios.eassync, config: getEasConfig() });
+                return new views.SyncView({
+                    description: gt('To synchronize Mail, Calendar and Address Book via Exchange Active Sync, please enter the following settings:'),
+                    config: getEasConfig()
+                });
             },
             'addressbook': function () {
                 if (_.device('smartphone')) {
@@ -165,7 +178,7 @@ define('io.ox/onboarding/main', [
                         config: getContactsConfig()
                     });
                 }
-                return new views.DownloadQrView({ type: 'carddav', config: getContactsConfig() });
+                return new views.DownloadQrView({ title: util.titles.ios.addressbook, type: 'carddav', config: getContactsConfig() });
             },
             'calendar': function () {
                 if (_.device('smartphone')) {
@@ -174,7 +187,7 @@ define('io.ox/onboarding/main', [
                         config: getCalendarConfig()
                     });
                 }
-                return new views.DownloadQrView({ type: 'caldav', config: getCalendarConfig() });
+                return new views.DownloadQrView({ title: util.titles.ios.calendar, type: 'caldav', config: getCalendarConfig() });
             }
         }
     };
@@ -201,7 +214,7 @@ define('io.ox/onboarding/main', [
 
             if (!Wizard.registry.get('connect-wizard')) {
                 Wizard.registry.add(options, function () {
-                    var connectTour = new Wizard({ disableMobileSupport: true }),
+                    var connectWizard = new Wizard({ disableMobileSupport: true }),
                         platform;
 
                     // set platform if mobile device detected
@@ -214,36 +227,34 @@ define('io.ox/onboarding/main', [
                     }
 
                     // setup model and views
-                    connectTour.userData = {};
-                    connectTour.model = new Backbone.Model({ app: undefined, platform: platform });
-                    connectTour.platformsView = new views.PlatformView({ model: connectTour.model });
-                    connectTour.appsView = new views.AppView({ model: connectTour.model });
-                    connectTour.progressView = new views.ProgressionView(connectTour);
+                    connectWizard.userData = {};
+                    connectWizard.model = new Backbone.Model({ app: undefined, platform: platform });
+                    connectWizard.platformsView = new views.PlatformView({ model: connectWizard.model });
+                    connectWizard.appsView = new views.AppView({ model: connectWizard.model });
+                    connectWizard.progressView = new views.ProgressionView(connectWizard);
 
                     // ensure that everything is reset on close
-                    connectTour.on('stop', function () {
-                        console.log('close');
-                        connectTour.model = null;
-                        connectTour.platformsView.remove();
-                        connectTour.platformsView = null;
-                        connectTour.appsView.remove();
-                        connectTour.appsView = null;
-                        connectTour.progressView.remove();
-                        connectTour.progressView = null;
-                        connectTour = null;
+                    connectWizard.on('stop', function () {
+                        connectWizard.model = null;
+                        connectWizard.platformsView.remove();
+                        connectWizard.platformsView = null;
+                        connectWizard.appsView.remove();
+                        connectWizard.appsView = null;
+                        connectWizard.progressView.remove();
+                        connectWizard.progressView = null;
+                        connectWizard = null;
                     });
-                    connectTour.on('reset', function () {
-                        console.log('reset');
-                        connectTour.model.set({ app: undefined, platform: platform });
-                        connectTour.shift(0 - connectTour.currentStep);
+                    connectWizard.on('reset', function () {
+                        connectWizard.model.set({ app: undefined, platform: platform });
+                        connectWizard.shift(0 - connectWizard.currentStep);
                     });
-                    connectTour.appsView.render();
-                    connectTour.progressView.render();
+                    connectWizard.appsView.render();
+                    connectWizard.progressView.render();
                     // dont start with platforms view on mobile
                     if (!_.device('smartphone')) {
-                        connectTour.platformsView.render();
+                        connectWizard.platformsView.render();
 
-                        connectTour.step({
+                        connectWizard.step({
                             id: 'platform',
                             back: false,
                             next: false,
@@ -253,19 +264,19 @@ define('io.ox/onboarding/main', [
                             // draw list of available platforms
                             drawScaffold.call(this);
                             this.$('.wizard-content').append(
-                                connectTour.progressView.$el,
-                                connectTour.platformsView.$el
+                                connectWizard.progressView.$el,
+                                connectWizard.platformsView.$el
                             );
                             // trigger next step only once
-                            connectTour.model.once('change', function (model) {
+                            connectWizard.model.once('change', function (model) {
                                 if (!model.get('platform')) return;
-                                connectTour.next();
+                                connectWizard.next();
                             });
                         })
                         .on('show', function () { focus.call(this); })
                         .end();
                     }
-                    connectTour.step({
+                    connectWizard.step({
                         id: 'apps',
                         back: false,
                         next: false,
@@ -275,19 +286,19 @@ define('io.ox/onboarding/main', [
                         // draw list of apps for chosen platform
                         drawScaffold.call(this);
                         this.$('.wizard-content').append(
-                            connectTour.progressView.$el,
-                            connectTour.appsView.$el
+                            connectWizard.progressView.$el,
+                            connectWizard.appsView.$el
                         );
 
                         // trigger next step only once
-                        connectTour.model.once('change', function (model) {
+                        connectWizard.model.once('change', function (model) {
                             if (!model.get('app') && !model.get('platform')) return;
-                            connectTour.next();
+                            connectWizard.next();
                         });
                     })
                     .on('show', function () { focus.call(this); })
                     .on('back', function () {
-                        connectTour.model.set('platform', undefined);
+                        connectWizard.model.set('platform', undefined);
                     })
                     .end()
                     .step({
@@ -300,29 +311,27 @@ define('io.ox/onboarding/main', [
                         var self = this;
                         // draw scenario for chosen app and platform
                         drawScaffold.call(this);
-                        var view = scenarios[connectTour.model.get('platform')][connectTour.model.get('app')]();
+                        var view = scenarios[connectWizard.model.get('platform')][connectWizard.model.get('app')]();
                         view.render();
                         self.$('.wizard-content').empty().append(
-                            connectTour.progressView.$el,
+                            connectWizard.progressView.$el,
                             view.$el);
                     })
                     .on('show', function () { focus.call(this); })
                     .on('back', function () {
-                        connectTour.model.set('app', undefined);
+                        connectWizard.model.set('app', undefined);
                     })
                     .end();
-                    connectTour.start();
-                    window.connectTour = connectTour;
+                    connectWizard.start();
+                    window.connectWizard = connectWizard;
                 });
             }
             Wizard.registry.run('connect-wizard');
-            console.log(title);
         },
         load: function () {
             getOnbboardingConfig();
             getUserData().then(function (data) {
                 config.userData = data;
-                console.log(config);
                 wizard.run();
             });
         }

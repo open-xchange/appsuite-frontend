@@ -15,36 +15,41 @@ define('io.ox/onboarding/util', [
     'gettext!io.ox/core/onboarding'
 ], function (gt) {
 
+    var productNames = {
+        //#. 1$s is the name of the mail product, e.g. OX Mail
+        'mail': gt('%1$s', ox.serverConfig.productNameMail),
+        'drive': gt.pgettext('app', 'OX Drive')
+    };
+
     var titles = {
         'windows': {
             'title': gt('Windows'),
-            'drive': gt('Drive App'),
-            'mailsync': gt('Windows Mail'),
-            'emclient': gt('EM Client')
+            'drive': productNames.drive,
+            'mailsync': gt('Mail')
         },
         'android': {
             'title': gt('Android'),
-            'mailsync': gt('Android Mail'),
-            'mailapp': gt('OX Mail App'),
-            'addressbook': gt('Contacts'),
+            'mailsync': gt('Mail'),
+            'mailapp': productNames.mail,
+            'addressbook': gt('Address Book'),
             'calendar': gt('Calendar'),
-            'driveapp': gt('OX Drive App')
+            'driveapp': productNames.drive
         },
         'macos': {
             'title': gt('MacOS'),
-            'drive': gt('Drive App'),
+            'drive': productNames.drive,
             'mailsync': gt('Apple Mail'),
             'calendar': gt('Calendar'),
-            'addressbook': gt('Contacts')
+            'addressbook': gt('Address Book')
         },
         'ios': {
             'title': gt('iOS'),
             'mailsync': gt('iOS Mail'),
-            'mailapp': gt('OX Mail App'),
-            'addressbook': gt('Addressbook'),
+            'mailapp': productNames.mail,
+            'addressbook': gt('Address Book'),
             'calendar': gt('Calendar'),
-            'driveapp': gt('OX Drive App'),
-            'eassync': gt('Mail, Calendar and Addressbook')
+            'driveapp': productNames.drive,
+            'eassync': gt('EAS')
         }
     };
 
@@ -73,7 +78,7 @@ define('io.ox/onboarding/util', [
 
     var appList = new Backbone.Collection([
         {
-            'title': gt('Drive App'),
+            'title': productNames.drive,
             'icon': 'fa-cloud',
             'app': 'drive',
             'platform': 'windows',
@@ -94,14 +99,15 @@ define('io.ox/onboarding/util', [
             'cap': 'webmail'
         },
         {
-            'title': gt('Email with OX Mail App'),
+            //#. 1$s product name of mail application, e.g. OX Mail
+            'title': gt('Email with %1$s', productNames.mail),
             'icon': 'fa-envelope-o',
             'app': 'mailapp',
             'platform': 'android',
             'cap': 'webmail'
         },
         {
-            'title': gt('Contacts'),
+            'title': gt('Address Book'),
             'icon': 'fa-users',
             'app': 'addressbook',
             'platform': 'android',
@@ -115,7 +121,7 @@ define('io.ox/onboarding/util', [
             'cap': 'calendar'
         },
         {
-            'title': gt('Drive'),
+            'title': productNames.drive,
             'icon': 'fa-cloud',
             'app': 'driveapp',
             'platform': 'android',
@@ -129,7 +135,7 @@ define('io.ox/onboarding/util', [
             'cap': 'webmail'
         },
         {
-            'title': gt('Contacts'),
+            'title': gt('Address Book'),
             'icon': 'fa-users',
             'app': 'addressbook',
             'platform': 'macos',
@@ -143,7 +149,7 @@ define('io.ox/onboarding/util', [
             'cap': 'calendar'
         },
         {
-            'title': gt('Drive'),
+            'title': productNames.drive,
             'icon': 'fa-cloud',
             'app': 'drive',
             'platform': 'macos',
@@ -157,14 +163,15 @@ define('io.ox/onboarding/util', [
             'cap': 'webmail'
         },
         {
-            'title': gt('Email with OX Mail App'),
+            //#. 1$s product name of mail application, e.g. OX Mail
+            'title': gt('Email with %1$s', productNames.mail),
             'icon': 'fa-envelope-o',
             'app': 'mailapp',
             'platform': 'ios',
             'cap': 'webmail'
         },
         {
-            'title': gt('Contacts'),
+            'title': gt('Address Book'),
             'icon': 'fa-users',
             'app': 'addressbook',
             'platform': 'ios',
@@ -178,14 +185,14 @@ define('io.ox/onboarding/util', [
             'cap': 'calendar'
         },
         {
-            'title': gt('Drive'),
+            'title': productNames.drive,
             'icon': 'fa-cloud',
             'app': 'driveapp',
             'platform': 'ios',
             'cap': 'infostore'
         },
         {
-            'title': gt('Mail + Addressbook + Calendar'),
+            'title': gt('Exchange Active Sync'),
             'icon': 'fa-users',
             'app': 'eassync',
             'platform': 'ios',
