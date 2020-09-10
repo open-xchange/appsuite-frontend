@@ -436,7 +436,11 @@
                 color: @premium-toolbar-link-color;
             }
 
-            .io-ox-upsell-link { padding-top: 4px; }
+            .io-ox-upsell-link {
+                // display list-item has some issues on firefox, so use block and padding to have the same look in all browsers
+                display: block;
+                padding: 4px 16px 0 16px;
+            }
         }
     }
 }
