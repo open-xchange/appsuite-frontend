@@ -246,7 +246,7 @@ define('io.ox/core/dropzone', [], function () {
                         var entriesPromises = [];
 
                         if (entries.length === 0) { // Folder is empty
-                            var dummyFile = new File([''], '__ommit__.txt'); // TODO: Remove this hack
+                            var dummyFile = new File([''], '__folderDummy__.txt'); // needed for folder creation, don't upload it later
                             var fullPath = item.fullPath + '/' + dummyFile.name; //save full path
                             dummyFile.filepath = fullPath;
 
