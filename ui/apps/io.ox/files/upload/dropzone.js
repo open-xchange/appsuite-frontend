@@ -28,7 +28,8 @@ define('io.ox/files/upload/dropzone', [
         getDropZones: function (baton) {
             var app = baton.app,
                 zone = new dropzone.Inplace({
-                    caption: gt('Drop files here to upload')
+                    folderSupport: true,
+                    caption: gt('Drop files or folders here to upload')
                 });
 
             zone.on({
