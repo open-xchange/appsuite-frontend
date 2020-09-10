@@ -103,8 +103,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
          */
         editDescription: function () {
             this.hasWritePermissions().done(function (baton) {
-                // Tested: false
-                actionsUtil.invoke('io.ox/files/actions/edit-description', baton);
+                actionsUtil.invoke('io.ox/files/actions/edit-description', Ext.Baton({ data: baton, isViewer: true }));
             });
         },
 

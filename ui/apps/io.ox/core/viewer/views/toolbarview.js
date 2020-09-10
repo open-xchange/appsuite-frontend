@@ -102,7 +102,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                         // check if action is available
                         if (!baton.model.isFile()) return;
 
-                        actionsUtil.checkAction('io.ox/files/actions/rename', baton.data).then(
+                        actionsUtil.checkAction('io.ox/files/actions/rename', baton).then(
                             function yep() {
                                 this.attr({
                                     'data-original-title': gt('Rename File'),
