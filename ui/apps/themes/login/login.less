@@ -97,6 +97,26 @@ html.baseline {
     -webkit-transform: translateZ(0); /* activate GPU acceleration */
 }
 
+// duplicate code to prevent loading themes (see /themes/components/dropdown.less)
+.smart-dropdown-container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 100000;
+
+    ul {
+        overflow-y: auto;
+        overflow-x: hidden;
+        li:first-child.divider {
+            display: none;
+        }
+    }
+}
+
+#io-ox-login-screen ~ .smart-dropdown-container {
+    top: 0;
+}
+
 #io-ox-login-screen {
     overflow-y: auto;
     height: 100%;
