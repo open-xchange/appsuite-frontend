@@ -453,7 +453,7 @@ define('io.ox/chat/data', [
 
             var endpoint = data.chats.get(this.roomId).isChannel() ? '/channels/' : '/rooms/';
             return util.ajax({
-                url: data.API_ROOT + endpoint + this.roomId + '/messages' + '?' + $.param(params)
+                url: data.API_ROOT + endpoint + this.roomId + '/messages?' + $.param(params)
             })
             .then(function (list) {
                 this.trigger(type);
