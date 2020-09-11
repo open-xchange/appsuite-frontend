@@ -87,7 +87,7 @@ define('io.ox/onboarding/main', [
     //all available setup scenarios
     var scenarios = {
         'windows': {
-            'drive': function () { return new views.DownloadView({ link: settings.get('windows/drive_url') }); },
+            'drive': function () { return new views.DownloadView({ link: settings.get('windows/driveapp/url') }); },
             'mailsync': function () { return new views.MailSyncView({ userData: config.userData }); }
         },
         'android': {
@@ -96,6 +96,7 @@ define('io.ox/onboarding/main', [
                 if (_.device('smartphone')) {
                     return new views.MobileDownloadView({
                         app: settings.get('android/mailapp'),
+                        title: settings.get('productNames/mail'),
                         storeIcon: getStoreIcon('android'),
                         iconClass: 'mailapp playstore'
                     });
@@ -106,6 +107,7 @@ define('io.ox/onboarding/main', [
                 if (_.device('smartphone')) {
                     return new views.MobileDownloadView({
                         app: settings.get('android/driveapp'),
+                        title: settings.get('productNames/drive'),
                         storeIcon: getStoreIcon('android'),
                         iconClass: 'driveapp playstore'
                     });
@@ -129,12 +131,19 @@ define('io.ox/onboarding/main', [
             'mailsync': function () { return new views.DownloadConfigView({ type: 'mail' }); },
             'addressbook': function () { return new views.DownloadConfigView({ type: 'carddav', config: getContactsConfig() }); },
             'calendar': function () { return new views.DownloadConfigView({ type: 'caldav', config: getCalendarConfig() }); },
-            'drive': function () { return new views.MobileDownloadView({ app: settings.get('macos/driveapp'), storeIcon: getStoreIcon('macos'), iconClass: 'driveapp macappstore' }); }
+            'drive': function () {
+                return new views.MobileDownloadView({
+                    app: settings.get('macos/driveapp'),
+                    title: settings.get('productNames/drive'),
+                    storeIcon: getStoreIcon('macos'),
+                    iconClass: 'driveapp macappstore'
+                });
+            }
         },
         'ios': {
             'mailsync': function () {
                 if (_.device('smartphone')) {
-                    new views.DownloadConfigView({
+                    return new views.DownloadConfigView({
                         type: 'mail',
                         userData: config.userData
                     });
@@ -149,6 +158,7 @@ define('io.ox/onboarding/main', [
                 if (_.device('smartphone')) {
                     return new views.MobileDownloadView({
                         app: settings.get('ios/mailapp'),
+                        title: settings.get('productNames/mail'),
                         storeIcon: getStoreIcon('ios'),
                         iconClass: 'mailapp appstore'
                     });
@@ -159,6 +169,7 @@ define('io.ox/onboarding/main', [
                 if (_.device('smartphone')) {
                     return new views.MobileDownloadView({
                         app: settings.get('ios/driveapp'),
+                        title: settings.get('productNames/drive'),
                         storeIcon: getStoreIcon('ios'),
                         iconClass: 'driveapp appstore'
                     });
@@ -329,6 +340,7 @@ define('io.ox/onboarding/main', [
             Wizard.registry.run('connect-wizard');
         },
         load: function () {
+            settings.load();
             getOnbboardingConfig();
             getUserData().then(function (data) {
                 config.userData = data;

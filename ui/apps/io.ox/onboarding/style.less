@@ -26,7 +26,7 @@
         }
 
 /*         .progress-steps:after{
-            left: unset;
+            left: 12px;
         } */
     }
     .wizard-backdrop {
@@ -83,7 +83,7 @@
                         &:after {
                             content: "";
                             height: 1px;
-                            width: 80%;
+                            width: ~"calc(100% - 99px)";
                             background-color: @gray;
                             position: absolute;
                             top: 24px;
@@ -257,8 +257,12 @@
                 .download {
                     align-self: center;
                     font-size: 18px;
-                    margin: 5% 0 10% 0;
+                    margin: 10% 0 10% 0;
                     padding: 8px;
+
+                    .fa-download {
+                        margin-left: 8px;
+                    }
                 }
 
                 //MobileDownloadView
@@ -291,7 +295,7 @@
                         }
                     }
                     .store-icon {
-                        max-height: 50px;
+                        max-height: 45px;
                     }
                     .app-info {
                         margin: 16px 0 32px 0;

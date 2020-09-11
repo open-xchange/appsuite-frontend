@@ -14,38 +14,40 @@
 define('io.ox/onboarding/settings/defaults', ['gettext!io.ox/core/onboarding'], function (gt) {
 
     var defaultSettings = {
+        'productNames': {
+            //#. 1$s is the name of the mail product, e.g. OX Mail
+            'mail': gt('%1$s', ox.serverConfig.productNameMail),
+            'drive': gt.pgettext('app', 'OX Drive')
+        },
         'android': {
             'mailapp': {
-                'title': gt('OX Mail App'),
                 'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail'
             },
             'driveapp': {
-                'title': gt('OX Drive App'),
                 'url': 'https://play.google.com/store/apps/details?id=com.openexchange.drive.vanilla'
             },
             'storeIcon': 'apps/themes/icons/default/googleplay/google-play-badge_$country.svg'
         },
         'ios': {
             'mailapp': {
-                'title': gt('OX Mail App'),
                 'url': 'https://itunes.apple.com/us/app/ox-mail-v2/id1385582725'
             },
             'driveapp': {
-                'title': gt('OX Drive App'),
                 'url': 'https://itunes.apple.com/de/app/ox-drive/id798570177'
             },
             'storeIcon': 'apps/themes/icons/default/appstore/App_Store_Badge_$country_135x40.svg'
         },
         'macos': {
             'driveapp': {
-                'title': gt('OX Drive App'),
                 'url': 'https://itunes.apple.com/de/app/ox-drive/id818195014',
                 'icon': 'apps/themes/icons/default/apps/iOS_Drive_App_Icon.png'
             },
             'storeIcon': 'apps/themes/icons/default/appstore/Mac_App_Store_Badge_$country_165x40.svg'
         },
         'windows': {
-            'drive_url': 'https://appsuite-dev.open-xchange.com/appsuite/api/drive/client/windows/install?session=' + ox.session
+            'driveapp': {
+                'url': 'https://appsuite-dev.open-xchange.com/appsuite/api/drive/client/windows/install?session=' + ox.session
+            }
         }
     };
 

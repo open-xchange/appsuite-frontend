@@ -139,10 +139,13 @@ define('io.ox/onboarding/views', [
         render: function () {
             this.$el.append(
                 $('<div class="description">').append(
-                    //#. 1$s name of the product, usually Drive
-                    $('<p class="prompt">').text(gt('Please download the %1$s application.', util.titles.windows.drive))
+                    //#. 1$s name of the product, usually OX Drive
+                    $('<p class="prompt">').text(gt('To install %1$s for Windows, download the installation file', util.titles.windows.drive))
                 ),
-                $('<button type="button" data-action="download" class="btn btn-primary download">').text(gt('Download'))
+                //#. 1$s name of the product, usually OX Drive
+                $('<button type="button" data-action="download" class="btn btn-link download">').text(gt('%1$s for Windows Installer', util.titles.windows.drive)).append(
+                    $('<i class="fa fa-download">')
+                )
             );
             return this;
         },
@@ -175,9 +178,11 @@ define('io.ox/onboarding/views', [
 
             this.$el.append(
                 $('<div class="description">').append(
-                    $('<p class="info">').text(gt('Please download the configuration to automatically setup your account.'))
+                    $('<p class="prompt">').text(gt('Please download the configuration to automatically setup your account.'))
                 ),
-                $('<button type="button" data-action="download" class="btn btn-primary download">').text(gt('Download configuration')),
+                $('<button type="button" data-action="download" class="btn btn-link download">').text(gt('Download configuration')).append(
+                    $('<i class="fa fa-download">')
+                ),
                 this.syncView.render().$el
             );
             return this;
@@ -201,7 +206,7 @@ define('io.ox/onboarding/views', [
             this.appIconClass = options.iconClass;
             this.storeIcon = options.storeIcon;
             this.url = options.app.url;
-            this.title = options.app.title;
+            this.title = options.title;
             if (options.app.icon) {
                 this.appIcon = options.app.icon;
                 this.appIconClass = '';

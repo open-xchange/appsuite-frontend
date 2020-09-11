@@ -12,13 +12,13 @@
  */
 
 define('io.ox/onboarding/util', [
+    'settings!io.ox/onboarding',
     'gettext!io.ox/core/onboarding'
-], function (gt) {
+], function (settings, gt) {
 
     var productNames = {
-        //#. 1$s is the name of the mail product, e.g. OX Mail
-        'mail': gt('%1$s', ox.serverConfig.productNameMail),
-        'drive': gt.pgettext('app', 'OX Drive')
+        'mail': settings.get('productNames/mail'),
+        'drive': settings.get('productNames/drive')
     };
 
     var titles = {
@@ -93,7 +93,7 @@ define('io.ox/onboarding/util', [
         },
         {
             'title': gt('Email with Android Mail'),
-            'icon': 'fa-cloud',
+            'icon': 'fa-envelope',
             'app': 'mailsync',
             'platform': 'android',
             'cap': 'webmail'
@@ -104,21 +104,21 @@ define('io.ox/onboarding/util', [
             'icon': 'fa-envelope-o',
             'app': 'mailapp',
             'platform': 'android',
-            'cap': 'webmail'
+            'cap': 'webmail mobile_mail_app'
         },
         {
             'title': gt('Address Book'),
             'icon': 'fa-users',
             'app': 'addressbook',
             'platform': 'android',
-            'cap': 'contacts'
+            'cap': 'contacts carddav'
         },
         {
             'title': gt('Calendar'),
             'icon': 'fa-calendar',
             'app': 'calendar',
             'platform': 'android',
-            'cap': 'calendar'
+            'cap': 'calendar caldav'
         },
         {
             'title': productNames.drive,
@@ -139,14 +139,14 @@ define('io.ox/onboarding/util', [
             'icon': 'fa-users',
             'app': 'addressbook',
             'platform': 'macos',
-            'cap': 'contacts'
+            'cap': 'contacts carddav'
         },
         {
             'title': gt('Calendar'),
             'icon': 'fa-calendar',
             'app': 'calendar',
             'platform': 'macos',
-            'cap': 'calendar'
+            'cap': 'calendar caldav'
         },
         {
             'title': productNames.drive,
@@ -168,21 +168,21 @@ define('io.ox/onboarding/util', [
             'icon': 'fa-envelope-o',
             'app': 'mailapp',
             'platform': 'ios',
-            'cap': 'webmail'
+            'cap': 'webmail mobile_mail_app'
         },
         {
             'title': gt('Address Book'),
             'icon': 'fa-users',
             'app': 'addressbook',
             'platform': 'ios',
-            'cap': 'contacts'
+            'cap': 'contacts carddav'
         },
         {
             'title': gt('Calendar'),
             'icon': 'fa-calendar',
             'app': 'calendar',
             'platform': 'ios',
-            'cap': 'calendar'
+            'cap': 'calendar caldav'
         },
         {
             'title': productNames.drive,
@@ -196,7 +196,7 @@ define('io.ox/onboarding/util', [
             'icon': 'fa-users',
             'app': 'eassync',
             'platform': 'ios',
-            'cap': 'webmail contacts calendar'
+            'cap': 'active_sync'
         }
     ]);
 

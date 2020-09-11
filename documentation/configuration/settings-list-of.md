@@ -257,6 +257,67 @@ Enables a hint on mobiles to inform about the onboarding Wizard (true/false)
 <config>io.ox/core//features/clientOnboardingHint/remaining=`<number>`</config>
 Number of times hint is beeing shown. The protection of this setting needs to be disabled in any case.
 
+### Onboarding
+
+**Capablities needed for different apps**
+To disable or enable different apps for client onboarding, the onboarding wizard checks enabled capabilities.
+The corresponding capabilites for the different apps are:
+- Mail App: `webmail mobile_mail_app`
+- Drive App: `infostore`
+- Calendar/ CalDav: `calendar caldav`
+- Address Book/ CardDav: `contacts carddav`
+- Exchange Active Sync: `active_sync`
+
+<config>io.ox/core//newOnboardingWizard=`<bool>`</config>
+Enabled new onboarding wizard and disables the old one
+
+<config>io.ox/onboarding//productNames/mail=`<string>`</config>
+Name of the webmail product. Defaults to `OX Mail`
+
+<config>io.ox/onboarding//productNames/drive=`<string>`</config>
+Name of the drive product. Defaults to `OX Drive`
+
+<config>io.ox/onboarding//android/storeIcon=`<string>`</config>
+Path to Google Play Store icon
+
+<config>io.ox/onboarding//android/mailapp/url=`<string>`</config>
+Link to mail app in Google Play Store
+
+<config>io.ox/onboarding//android/mailapp/icon=`<string>`</config>
+Path to mail app icon for Android
+
+<config>io.ox/onboarding//android/driveapp/url=`<string>`</config>
+Link to drive app in Google Play Store
+
+<config>io.ox/onboarding//android/driveapp/icon=`<string>`</config>
+Path to drive app icon for Android
+
+<config>io.ox/onboarding//ios/storeIcon=`<string>`</config>
+Path to iOS App Store icon
+
+<config>io.ox/onboarding//ios/mailapp/url=`<string>`</config>
+Link to mail app in iOS App Store
+
+<config>io.ox/onboarding//ios/mailapp/icon=`<string>`</config>
+Path to mail app icon for iOS
+
+<config>io.ox/onboarding//ios/driveapp/url=`<string>`</config>
+Link to drive app in iOS App Store
+
+<config>io.ox/onboarding//ios/driveapp/icon=`<string>`</config>
+Path to drive app icon for iOS
+
+<config>io.ox/onboarding//macos/storeIcon=`<string>`</config>
+Path to Mac App Store icon
+
+<config>io.ox/onboarding//macos/driveapp/url=`<string>`</config>
+Link to drive app in Mac App Store
+
+<config>io.ox/onboarding//macos/driveapp/icon=`<string>`</config>
+Path to drive app icon for MacOS
+
+<config>io.ox/onboarding//windows/driveapp/url=`<string>`</config>
+Link to installation file of drive client for Windows
 
 ## Misc
 

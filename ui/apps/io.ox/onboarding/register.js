@@ -11,7 +11,12 @@
  * @author Maik Schäfer <maik.schaefer@open-xchange.com>
  */
 
-define('io.ox/onboarding/register', ['io.ox/core/extensions', 'gettext!io.ox/core/onboarding'], function (ext, gt) {
+define('io.ox/onboarding/register', [
+    'io.ox/core/extensions',
+    'settings!io.ox/core',
+    'io.ox/core/capabilities',
+    'gettext!io.ox/core/onboarding'
+], function (ext, settings, capabilities, gt) {
 
     'use strict';
 
@@ -19,6 +24,8 @@ define('io.ox/onboarding/register', ['io.ox/core/extensions', 'gettext!io.ox/cor
         id: 'connectWizard',
         index: 110,
         extend: function () {
+            if (capabilities.has('!client-onboarding') || !settings.get('newOnboardingWizard')) return;
+
             this.link('connect-wizard', _.device('desktop') ? gt('Connect your device') : gt('Connect this device'), function () {
                 require(['io.ox/onboarding/main'], function (wizard) {
                     wizard.load();
