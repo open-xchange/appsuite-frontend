@@ -176,7 +176,7 @@ define('io.ox/core/main/topbar_right', [
             }
 
             // multiple items
-            var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
+            var ul = $('<ul id="topbar-help-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
                 a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">')
                     .attr('aria-label', gt('Help'))
                     .append('<i class="fa fa-question launcher-icon" aria-hidden="true">'),
@@ -185,7 +185,7 @@ define('io.ox/core/main/topbar_right', [
                     model: new Backbone.Model({}),
                     attributes: { role: 'presentation' },
                     tagName: 'li',
-                    id: 'io-ox-topbar-dropdown-icon',
+                    id: 'io-ox-topbar-help-dropdown-icon',
                     className: 'launcher dropdown',
                     $ul: ul,
                     $toggle: a
@@ -272,7 +272,7 @@ define('io.ox/core/main/topbar_right', [
                     model: new Backbone.Model({}),
                     attributes: { role: 'presentation' },
                     tagName: 'li',
-                    id: 'io-ox-topbar-dropdown-icon',
+                    id: 'io-ox-topbar-settings-dropdown-icon',
                     className: 'launcher dropdown',
                     $ul: ul,
                     $toggle: a
@@ -508,21 +508,21 @@ define('io.ox/core/main/topbar_right', [
     });
 
     ext.point('io.ox/core/appcontrol/right').extend({
-        id: 'dropdown',
+        id: 'account',
         index: 1000,
         draw: function () {
             var title = ox.openedInBrowserTab ?
                     gt('Sign out') :
                     //#. tooltip of dropdown menu in topbar (contact image icon)
                     gt('My account'),
-                ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
+                ul = $('<ul id="topbar-account-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
                 a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('aria-label', title),
                 dropdown = new Dropdown({
                     // have a simple model to track changes (e.g. availability)
                     model: new Backbone.Model({}),
                     attributes: { role: 'presentation' },
                     tagName: 'li',
-                    id: 'io-ox-topbar-dropdown-icon',
+                    id: 'io-ox-topbar-account-dropdown-icon',
                     className: 'launcher dropdown',
                     $ul: ul,
                     $toggle: a
