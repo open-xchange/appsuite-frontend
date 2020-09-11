@@ -96,7 +96,8 @@ module.exports.config = {
         contactpicker: './e2e/widgetobjects/contact-picker',
         mailfilter: './e2e/widgetobjects/settings-mailfilter',
         search: './e2e/widgetobjects/search',
-        toolbar: './e2e/widgetobjects/toolbar'
+        toolbar: './e2e/widgetobjects/toolbar',
+        topbar: './e2e/widgetobjects/topbar'
     },
     bootstrap: function (done) {
         // setup chai
