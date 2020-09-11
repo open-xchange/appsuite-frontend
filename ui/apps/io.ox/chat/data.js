@@ -211,6 +211,9 @@ define('io.ox/chat/data', [
                     return _.printf('%1$s %2$s', getName(originator), event.message);
                 case 'text':
                     return event.message;
+                case 'decryption:failed':
+                    //#. If it fails to load and decrypt a chat message a system message will be shown
+                    return gt('Message could not be loaded');
                 default:
                     //#. %1$s: messagetext
                     return gt('Unknown system message %1$s', event.type);
