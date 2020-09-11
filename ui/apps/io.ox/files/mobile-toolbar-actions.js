@@ -80,7 +80,7 @@ define('io.ox/files/mobile-toolbar-actions', [
     mobile.createToolbarExtensions(points);
 
     var updateToolbar = _.debounce(function (list) {
-        if (!list) return;
+        if (!list || !list.length) return;
         var cids = list, models = api.resolve(cids, false);
         list = _(models).invoke('toJSON');
         // draw toolbar
