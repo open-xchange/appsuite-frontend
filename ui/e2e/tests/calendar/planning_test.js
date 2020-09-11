@@ -62,7 +62,7 @@ Scenario('use planning view opened from edit view', async function (I, calendar,
 
 Scenario('use planning view as Standalone app', async function (I) {
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible({ css: '.io-ox-calendar-window' });
 
     I.clickToolbar('Scheduling');
 
@@ -102,7 +102,7 @@ Scenario('use planning view as Standalone app', async function (I) {
 // TODO: shaky, msg: 'Cannot read property 'x' of null'
 Scenario('test planning view lasso', async function (I) {
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible({ css: '.io-ox-calendar-window' });
 
     I.clickToolbar('Scheduling');
 
@@ -134,7 +134,7 @@ Scenario('test planning view lasso', async function (I) {
 
 Scenario('create distributionlist from planning view', async function (I) {
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible({ css: '.io-ox-calendar-window' });
 
     I.clickToolbar('Scheduling');
 
@@ -159,7 +159,7 @@ Scenario('create distributionlist from planning view', async function (I) {
 
 Scenario('check planning view options and minimizing behavior', async function (I) {
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible({ css: '.io-ox-calendar-window' });
 
     I.clickToolbar('Scheduling');
 
@@ -209,7 +209,7 @@ Scenario('[C7443] Check availability of participants', async function (I, users,
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible({ css: '.io-ox-calendar-window' });
 
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
@@ -241,7 +241,7 @@ Scenario('[C7444] Check availability of resources', async function (I, calendar)
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible({ css: '.io-ox-calendar-window' });
 
     // just to be sure, cleanup artefacts
     await I.dontHaveResource('Evil Lair');
@@ -283,7 +283,7 @@ Scenario('[C7445] Check availability of resources and participants', async funct
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible({ css: '.io-ox-calendar-window' });
 
     // just to be sure, cleanup artefacts
     await I.dontHaveResource('Eggs');
@@ -332,7 +332,7 @@ Scenario('[C7445] Check availability of resources and participants', async funct
 Scenario('[C252157] Fine grid for high zoom levels ', async function (I, users) {
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible({ css: '.io-ox-calendar-window' });
 
     // just to be sure, cleanup artefacts
     await I.dontHaveResource('Zebra');

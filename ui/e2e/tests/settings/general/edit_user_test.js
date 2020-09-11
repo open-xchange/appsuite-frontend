@@ -155,7 +155,7 @@ Scenario('[C208269] Edit users contact information', async (I, dialogs) => {
     expect(image).not.to.match(/fallback/);
     expect(image).to.match(/^url\(/);
     // also check picture in topbar
-    image = await I.grabBackgroundImageFrom('#io-ox-topbar-dropdown-icon .contact-picture');
+    image = await I.grabBackgroundImageFrom('#io-ox-topbar-account-dropdown-icon .contact-picture');
     expect(image).to.match(/^url\(/);
 
     // personal information

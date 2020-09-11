@@ -37,7 +37,7 @@ module.exports = {
 
     waitForApp() {
         // wait for nodes to be visible
-        I.waitForVisible(locate({ css: '*[data-app-name="io.ox/calendar"]' }).as('Calendar container'), 10);
+        I.waitForVisible(locate({ css: '.io-ox-calendar-window' }).as('Calendar container'), 10);
         I.waitForVisible({ css: '.io-ox-calendar-main .classic-toolbar-container .classic-toolbar' }, 5);
         I.waitForVisible({ css: '.io-ox-calendar-main .tree-container' }, 5);
         I.waitForVisible({ css: '.io-ox-calendar-main .window-sidepanel .date-picker' }, 5);

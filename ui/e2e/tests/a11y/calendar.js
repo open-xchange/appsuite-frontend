@@ -28,7 +28,7 @@ async function openPerspective(I, perspective) {
     });
 
     I.login(['app=io.ox/calendar', 'perspective=' + perspective]);
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
+    I.waitForVisible({ css: '.io-ox-calendar-window' }, 5);
 }
 
 Scenario('Calendar - Day view w/o appointments', async (I) => {

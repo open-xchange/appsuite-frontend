@@ -29,7 +29,7 @@ Scenario('[C303317] Welcome Tour', (I, mail) => {
     mail.waitForApp();
 
     //Open tour dialog
-    I.click('#io-ox-topbar-dropdown-icon');
+    I.click('#io-ox-topbar-help-dropdown-icon');
     I.clickDropdown('Getting started');
 
     //Wait for dialog to open

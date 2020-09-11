@@ -30,7 +30,9 @@ Scenario('Change working time and check in weekview', async function (I, calenda
     I.see('5 PM', '.week-container-label .working-time-border.in .number');
 
     I.say('Swich to settings');
-    I.click('~Settings', '#io-ox-settings-topbar-icon');
+    I.click('~Settings', '#io-ox-topbar-settings-dropdown-icon');
+    I.waitForVisible('#topbar-settings-dropdown');
+    I.click('Settings', '#topbar-settings-dropdown');
     settings.waitForApp();
     I.waitForText('Calendar', 10, '.io-ox-settings-window .leftside .tree-container');
 

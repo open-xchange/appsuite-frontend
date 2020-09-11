@@ -42,7 +42,7 @@ Scenario('Presence state is shown and can be changed', async function (I) {
         I.waitForDetached('.dropdown.open');
         // Check if state is updated in the topbar
         I.waitForVisible(`.taskbar .presence.${classToCheck}`);
-        I.click('~Support');
+        I.click('~My account');
         // Verify that the right status is marked as checked
         I.waitForVisible(`.dropdown.open a[data-value="${classToCheck}"] .fa-check`);
     };
@@ -51,7 +51,7 @@ Scenario('Presence state is shown and can be changed', async function (I) {
 
     // Check default online state
     I.waitForVisible('.presence.online', 20);
-    I.click('~Support');
+    I.click('~My account');
     I.waitForVisible('.dropdown.open a[data-value="online"] .fa-check');
 
     presenceStates.forEach((state) => {
@@ -63,7 +63,7 @@ Scenario('Presence state is shown in mails', async function (I, users, mail) {
     const [user1] = users,
         checkStatus = (statusToClick, classToCheck) => {
             I.say(`Check: ${statusToClick}`);
-            I.click('~Support');
+            I.click('~My account');
             I.clickDropdown(statusToClick);
             I.waitForDetached('.dropdown.open');
             I.waitForVisible(`.mail-detail .presence.${classToCheck}`);
@@ -117,7 +117,6 @@ Scenario('Check presence state of new user', (I, users) => {
 
     session('userA', () => {
         I.login('app=io.ox/contacts', { user: user1 });
-
         I.waitForElement('.io-ox-contacts-window');
         I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
         I.waitForVisible('.io-ox-contacts-window .tree-container');
@@ -130,7 +129,7 @@ Scenario('Check presence state of new user', (I, users) => {
         I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
         I.waitForVisible('.io-ox-contacts-window .tree-container');
         I.waitForVisible(`.vgrid [aria-label="${user1.get('sur_name')}, ${user1.get('given_name')}"] .presence.online`);
-        I.click('~Support');
+        I.click('~My account');
         I.clickDropdown('Busy');
         I.waitForVisible(`.vgrid [aria-label="${user2.get('sur_name')}, ${user2.get('given_name')}"] .presence.busy`);
     });
@@ -138,7 +137,7 @@ Scenario('Check presence state of new user', (I, users) => {
     session('userA', () => {
         //this step fails, since userB presence is not updated currently
         I.waitForVisible(`.vgrid [aria-label="${user2.get('sur_name')}, ${user2.get('given_name')}"] .presence.busy`);
-        I.click('~Support');
+        I.click('~My account');
         I.clickDropdown('Absent');
         I.waitForVisible(`.vgrid [aria-label="${user1.get('sur_name')}, ${user1.get('given_name')}"] .presence.absent`);
     });

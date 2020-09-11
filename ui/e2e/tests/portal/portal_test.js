@@ -153,7 +153,7 @@ Scenario('[C7472] Check if the portalpage is up to date', async function (I, use
     while (element === 0 && retries) {
         retries--;
         I.waitForElement('#io-ox-refresh-icon', 5, '.taskbar');
-        I.click('#io-ox-refresh-icon', '.taskbar');
+        I.click('.taskbar #io-ox-refresh-icon');
         I.waitForElement('.launcher .fa-spin-paused', 5);
         I.wait(0.5);
         element = await I.grabNumberOfVisibleElements({ css: '[aria-label="Inbox"] .item .person' });

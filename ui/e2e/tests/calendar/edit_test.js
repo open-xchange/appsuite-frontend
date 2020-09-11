@@ -837,7 +837,7 @@ Scenario('[C7454] Edit appointment, all-day to one hour', async (I, users, calen
     });
 
     I.login('app=io.ox/calendar&perspective=week:week');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible({ css: '.io-ox-calendar-window' });
     I.clickToolbar('Today');
     I.waitForElement(appointmentSelector, 5);
     I.click(appointmentSelector);
@@ -902,7 +902,7 @@ Scenario('[C7462] Remove a participant', async (I, users, calendar) => {
         ]
     });
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible({ css: '.io-ox-calendar-window' });
     I.clickToolbar('Today');
     I.waitForElement('.appointment-container [aria-label^="' + testrailID + ', ' + testrailID + '"]');
     I.click('.appointment-container [aria-label^="' + testrailID + ', ' + testrailID + '"]');
@@ -1159,7 +1159,7 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async (I, calendar) => {
     });
 
     I.login('app=io.ox/calendar&perspective=week:day');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible({ css: '.io-ox-calendar-window' });
 
     I.waitForElement('.appointment');
     // have to scroll appointment into view for drag & drop to work
@@ -1333,7 +1333,7 @@ Scenario('[C7463] Remove a resource', async (I, calendar) => {
     const haloResourceLink = locate('.halo-resource-link').inside('.participant-list').withText(name);
     const participantName = locate('.participant-name').withText(name);
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible({ css: '.io-ox-calendar-window' });
     I.clickToolbar('Today');
     I.waitForElement('.appointment-container [aria-label^="' + name + ', ' + name + '"]', 5);
     I.click('.appointment-container [aria-label^="' + name + ', ' + name + '"]');

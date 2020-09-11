@@ -46,7 +46,7 @@ Scenario('[7774] Fixed-font for plain-text mails', async (I, users) => {
     I.waitForVisible('.io-ox-mail-settings');
     I.click('Use fixed-width font for text mails');
 
-    I.click('Mail');
+    I.openApp('Mail');
     I.waitForText('plain text');
     I.click('.list-item.selectable');
     I.waitForVisible('h1.subject');

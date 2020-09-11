@@ -52,8 +52,8 @@ Scenario('[C7778] Forwarding mail inline/attachment', async (I, users, mail) => 
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mail/settings/compose', { user });
     I.waitForText('Mail Compose');
     I.click('Attachment');
+    I.openApp('Mail');
 
-    I.click('Mail');
     mail.selectMail('Richtig gutes Zeug');
     I.waitForVisible('h1.subject');
     I.click('Forward');

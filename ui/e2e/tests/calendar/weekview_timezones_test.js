@@ -36,14 +36,16 @@ Scenario('Create appointment and switch timezones', async function (I, dialogs) 
     });
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
+    I.waitForVisible({ css: '.io-ox-calendar-window' }, 5);
 
     // check in view
     I.waitForVisible('.workweek .title');
     I.seeNumberOfElements({ xpath: '//div[contains(concat(" ", @class, " "), "workweek")]//div[@class="title" and text()="test timezones"]' }, 1);
 
     // switch to settings
-    I.click('~Settings', '#io-ox-settings-topbar-icon');
+    I.click('~Settings', '#io-ox-topbar-settings-dropdown-icon');
+    I.waitForVisible('#topbar-settings-dropdown');
+    I.click('Settings', '#topbar-settings-dropdown');
 
     I.waitForVisible('.io-ox-settings-window .leftside [title="Calendar"]');
 
@@ -105,7 +107,9 @@ Scenario('Create appointment and switch timezones', async function (I, dialogs) 
     I.waitForDetached('.io-ox-sidepopup');
 
     // switch to settings
-    I.click('~Settings', '#io-ox-settings-topbar-icon');
+    I.click('~Settings', '#io-ox-topbar-settings-dropdown-icon');
+    I.waitForVisible('#topbar-settings-dropdown');
+    I.click('Settings', '#topbar-settings-dropdown');
 
     I.waitForVisible('.io-ox-settings-window');
 
@@ -119,14 +123,16 @@ Scenario('Create appointment and switch timezones', async function (I, dialogs) 
 
     // inspect in calendar app
     I.openApp('Calendar');
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
+    I.waitForVisible({ css: '.io-ox-calendar-window' }, 5);
 
     I.seeNumberOfElements('.workweek .week-container-label', 1);
     I.dontSee('JST', '.workweek');
     I.see('7 AM', '.week-container-label:not(.secondary-timezone) .working-time-border .number');
 
     // switch to settings
-    I.click('~Settings', '#io-ox-settings-topbar-icon');
+    I.click('~Settings', '#io-ox-topbar-settings-dropdown-icon');
+    I.waitForVisible('#topbar-settings-dropdown');
+    I.click('Settings', '#topbar-settings-dropdown');
 
     I.waitForVisible('.io-ox-settings-window');
 
@@ -138,7 +144,7 @@ Scenario('Create appointment and switch timezones', async function (I, dialogs) 
 
     // switch to calendar
     I.openApp('Calendar');
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
+    I.waitForVisible({ css: '.io-ox-calendar-window' }, 5);
 
     I.seeNumberOfElements('.workweek .weekday', 3);
 });

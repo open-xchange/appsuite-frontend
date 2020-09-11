@@ -21,7 +21,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Hide and show Help topics based on user capabilities', async function (I, users, contacts) {
+Scenario('Hide and show Help topics based on user capabilities', async function (I, users, contacts, topbar) {
 
     const checkIfDisplayNone = async (capability) => {
         I.waitForElement(`.listitem.cap-${capability}`);
@@ -38,10 +38,7 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
     contacts.waitForApp();
 
     //open help window
-    I.waitForElement('.io-ox-context-help');
-    I.click('.io-ox-context-help');
-    I.waitForElement('.io-ox-help-window');
-    I.waitForVisible('.inline-help-iframe');
+    topbar.help();
 
     // Check if help shows info about disabled capability
     await within({ frame: '.inline-help-iframe' }, async () => {
@@ -60,10 +57,7 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
     contacts.waitForApp();
 
     // open help window
-    I.waitForElement('.io-ox-context-help');
-    I.click('.io-ox-context-help');
-    I.waitForElement('.io-ox-help-window');
-    I.waitForVisible('.inline-help-iframe');
+    topbar.help();
 
     // Check if help shows info about disabled capability
     await within({ frame: '.inline-help-iframe' }, async () => {
@@ -86,10 +80,7 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
     contacts.waitForApp();
 
     //open help window
-    I.waitForElement('.io-ox-context-help');
-    I.click('.io-ox-context-help');
-    I.waitForElement('.io-ox-help-window');
-    I.waitForVisible('.inline-help-iframe');
+    topbar.help();
 
     // Check if help shows info about disabled capability
     await within({ frame: '.inline-help-iframe' }, async () => {

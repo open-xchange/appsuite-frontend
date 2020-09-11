@@ -29,7 +29,7 @@ Scenario('Create appointments in workweekview', async function (I, users) {
     await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
+    I.waitForVisible({ css: '.io-ox-calendar-window' }, 5);
 
     I.clickToolbar('View');
     I.click('Workweek');
@@ -80,7 +80,7 @@ Scenario('Create appointments in weekview', async function (I, users) {
     await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
+    I.waitForVisible({ css: '.io-ox-calendar-window' }, 5);
 
     I.clickToolbar('View');
     I.click('Week');
@@ -117,7 +117,7 @@ Scenario('Create appointments in monthview', async function (I, users) {
     await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
+    I.waitForVisible({ css: '.io-ox-calendar-window' }, 5);
 
     I.clickToolbar('View');
     I.click('Month');

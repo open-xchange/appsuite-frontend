@@ -278,7 +278,7 @@ Scenario('[C244785] Open event from invite notification in calendar', async (I, 
 
     // 2. User#B: Login and go to any app except Calendar
     I.login(['app=io.ox/mail'], { user: userB });
-    I.waitForVisible({ css: '*[data-app-name="io.ox/mail"]' });
+    I.waitForVisible({ css: '.io-ox-mail-window' });
 
     // 3. User#B: Open the notification area from top bar
     I.waitForText('1', 30, '#io-ox-notifications-icon');
@@ -363,7 +363,7 @@ Scenario('[C252158] All my public appointments', (I, users, calendar, dialogs) =
     // 5. User#B: Login and go to Calendar
     I.logout();
     I.login(['app=io.ox/calendar&perspective=week:week'], { user: userB });
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible({ css: '.io-ox-calendar-window' });
 
     // 6. User#B: Enable "All my public appointments" view and disable Cal#A
     I.waitForVisible('~Public calendars');
@@ -431,7 +431,7 @@ Scenario('[C265147] Appointment organizer should be marked in attendee list', as
     // 5. Login with User#B
     // 6. Go to Calendar
     I.login(['app=io.ox/calendar&perspective=week:week'], { user: userB });
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible({ css: '.io-ox-calendar-window' });
     I.waitForVisible('.appointment');
 
     // 7. Open Appointment

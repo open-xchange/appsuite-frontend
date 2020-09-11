@@ -82,8 +82,10 @@ Scenario('[C7350] Launch "Settings" application', async function (I) {
     I.login('app=io.ox/mail');
     I.waitForElement('.fa-spin.fa-refresh');
     I.waitForElement('.fa-spin-paused.fa-refresh');
-    I.waitForElement('#io-ox-settings-topbar-icon');
-    I.click('~Settings', '#io-ox-settings-topbar-icon');
+    I.waitForElement('#io-ox-topbar-settings-dropdown-icon');
+    I.click('~Settings', '#io-ox-topbar-settings-dropdown-icon');
+    I.waitForVisible('#topbar-settings-dropdown');
+    I.click('Settings', '#topbar-settings-dropdown');
     I.waitForElement('.settings-detail-pane');
     I.seeElement('.settings-detail-pane');
 });

@@ -20,7 +20,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7496] Language of Greeting', async (I) => {
+Scenario('[C7496] Language of Greeting', async (I, topbar) => {
 
     const expect = require('chai').expect;
 
@@ -39,7 +39,8 @@ Scenario('[C7496] Language of Greeting', async (I) => {
     expect(greeting).to.match(/^Hallo|^Guten Morgen|^Guten Abend/);
 
     //Re-login with fr_FR
-    I.click('#io-ox-settings-topbar-icon');
+    topbar.settings();
+
     I.waitForText('Grundeinstellungen');
     I.waitForText('Sprache');
     I.selectOption('select[name="language"]', 'fr_FR');

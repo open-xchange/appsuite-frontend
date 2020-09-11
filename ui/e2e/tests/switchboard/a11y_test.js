@@ -55,8 +55,8 @@ Scenario('Switchboard - Call history', async (I) => {
 Scenario('Switchboard - Presence', async (I) => {
 
     I.login();
-    I.waitForVisible('~Support');
-    I.click('~Support');
+    I.waitForVisible('~My account');
+    I.click('~My account');
     I.waitForVisible('.dropdown.open');
 
     expect(await I.grabAxeReport()).to.be.accessible;

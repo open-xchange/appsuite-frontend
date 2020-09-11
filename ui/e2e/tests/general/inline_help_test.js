@@ -34,7 +34,7 @@ Scenario.skip('[C274424] Inline Help', async (I) => {
     verifyHelp(I, 'Portal', 'The Portal Components');
 });
 
-function verifyHelp(I, appName, expectedHelp) {
+function verifyHelp(I, appName, expectedHelp, topbar) {
     I.openApp(appName);
 
     // wait until current app is correct
@@ -43,9 +43,7 @@ function verifyHelp(I, appName, expectedHelp) {
         return app && app.get ? app.get('title') === appName : false;
     }, [appName], 5);
 
-    I.waitForElement('.io-ox-context-help');
-    I.click('.io-ox-context-help');
-    I.waitForElement('.io-ox-help-window');
+    topbar.help();
     // TODO: broken, sometimes fails at I.waitForText('User Guide') -> "cannot read property 'innerText' of null"
     within({ frame: '.io-ox-help-window.floating-window .inline-help-iframe' }, () => {
         I.see(expectedHelp, '.title');

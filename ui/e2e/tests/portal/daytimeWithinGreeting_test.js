@@ -20,7 +20,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7497] Daytime within Greeting', async (I) => {
+Scenario('[C7497] Daytime within Greeting', async (I, topbar) => {
 
     const moment = require('moment');
     await I.haveSetting('io.ox/core//autoOpenNotification', false);
@@ -41,7 +41,7 @@ Scenario('[C7497] Daytime within Greeting', async (I) => {
         }
     }
     function changeTimezoneAndGoToPortal(timezone) {
-        I.click('#io-ox-settings-topbar-icon');
+        topbar.settings();
         I.waitForText('Time zone');
         I.selectOption('Time zone', timezone); // -7
         I.waitForVisible('.io-ox-alert');

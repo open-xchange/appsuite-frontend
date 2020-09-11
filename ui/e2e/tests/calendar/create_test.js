@@ -1455,7 +1455,7 @@ Scenario('[C265153] Create appointment with a link in the description', async (I
     I.login('app=io.ox/calendar&perspective=week:week');
     calendar.waitForApp();
 
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible({ css: '.io-ox-calendar-window' });
     I.clickToolbar('Today');
     I.waitForElement('.appointment-container [title="C265153, C265153"]');
     I.click('.appointment-container [title="C265153, C265153"]');

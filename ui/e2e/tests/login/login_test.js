@@ -68,7 +68,7 @@ Scenario('[C7339] Stay signed in checkbox', async function (I, users) {
 
     expect(expiresWithSession(secretCookie), 'browser session cookies do expire with session').to.equal(false);
     I.refreshPage();
-    I.waitForVisible('#io-ox-topbar-dropdown-icon');
+    I.waitForVisible('#io-ox-topbar-account-dropdown-icon');
     I.logout();
 
     I.waitForFocus('#io-ox-login-username', 30);
