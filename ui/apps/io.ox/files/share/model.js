@@ -42,6 +42,23 @@ define('io.ox/files/share/model', [
 
         initialize: function () {
             this.setOriginal();
+            // Set url if already shared
+            this._setUrl();
+        },
+
+        _setUrl: function () {
+            var extendedPermissions = 'com.openexchange.share.extendedObjectPermissions';
+            if (this.attributes.files) {
+                _.each(this.attributes.files, function (file) {
+                    if (file.has(extendedPermissions)) {
+                        _.each(file.get(extendedPermissions), function (permission) {
+                            if (permission.type === 'anonymous' && permission.share_url) {
+                                this.attributes.url = permission.share_url;
+                            }
+                        }, this);
+                    }
+                }, this);
+            }
         },
 
         setOriginal: function (data) {

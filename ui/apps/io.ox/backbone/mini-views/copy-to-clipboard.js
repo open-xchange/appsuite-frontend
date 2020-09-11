@@ -45,8 +45,17 @@ define('io.ox/backbone/mini-views/copy-to-clipboard', [
                 }
             }
 
+            var clipboard = null;
+            if (this.options.buttonStyle !== 'link') {
+                clipboard = $('<i class="fa fa-clipboard clippy" aria-hidden="true">');
+            } else {
+                clipboard = $('<span></span>').text(this.options.buttonLabel);
+                this.$el.removeClass('btn-default');
+                this.$el.addClass('btn-link');
+            }
+
             this.$el.empty().append(
-                $('<i class="fa fa-clipboard clippy" aria-hidden="true">')
+                clipboard
             ).attr({
                 'data-clipboard-target': target,
                 'data-toggle': 'tooltip',

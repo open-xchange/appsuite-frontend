@@ -14,6 +14,8 @@
 
 define('io.ox/files/share/permissions', [
     'io.ox/core/extensions',
+    'io.ox/files/share/share-settings',
+    'io.ox/files/share/public-link',
     'io.ox/files/share/wizard',
     'io.ox/backbone/views/disposable',
     'io.ox/core/yell',
@@ -38,7 +40,7 @@ define('io.ox/files/share/permissions', [
     'io.ox/core/api/group',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ext, ShareWizard, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil, groupApi) {
+], function (ext, shareSettings, PublicLink, ShareWizard, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil, groupApi) {
 
     'use strict';
 
@@ -499,7 +501,6 @@ define('io.ox/files/share/permissions', [
                 this.offset = 0;
                 this.$el.empty();
                 this.renderEntities();
-                $('.share-wizard').show();
             },
 
             render: function () {
@@ -525,7 +526,6 @@ define('io.ox/files/share/permissions', [
             },
 
             renderEntity: function (model) {
-                // $(".share-wizard").hide();
                 var children = this.$el.children(),
                     index = this.collection.indexOf(model),
                     newEntity = new PermissionEntityView({ model: model, parentModel: this.model }).render().$el;
@@ -821,6 +821,54 @@ define('io.ox/files/share/permissions', [
         }
     );
 
+    // Extension point who can access share
+    var POINT_DIALOG = 'io.ox/files/share/dialog';
+    ext.point(POINT_DIALOG + '/share-options').extend({
+        id: 'who-can-share',
+        index: 100,
+        draw: function (model) {
+            var typeTranslations = {
+                0: gt('Only invited people'),
+                1: gt('Only invited people and everyone who has the link')
+            };
+
+            // create dropdown
+            var dropdown = new DropdownView({ model: model, label: gt('Only invited people'), smart: true, buttonToggle: true, caret: true });
+
+            // set dropdown link
+            // if (baton.model.get('expiry_date')) {
+            //     dropdown.$el.find('.dropdown-label').text(new moment(baton.model.get('expiry_date')).format('L'));
+            // }
+
+            // add dropdown options
+            _(typeTranslations).each(function (val, key) {
+                dropdown.option('expires', parseInt(key, 10), val);
+            });
+
+            this.append(
+                $('<div class="access-dropdown"></div>').append(
+                    $('<h5></h5>').text(gt('Who can access this folder?')),
+                    dropdown.render().$el.addClass('dropup')
+                )
+            );
+
+            // baton.model.once('change', function () {
+            //     if (baton.model.get('expiry_date')) {
+            //         baton.model.set('expires', null);
+            //     }
+            // });
+
+            // baton.model.on('change:expires', function (model) {
+            //     if (baton.model.get('expires') !== null) {
+            //         model.set({
+            //             'temporary': true,
+            //             'expiry_date': model.getExpiryDate()
+            //         });
+            //     }
+            // });
+        }
+    });
+
     // helper
     function getBitsExternal(model) {
         return model.isFolder() ? 257 : 1;
@@ -882,6 +930,7 @@ define('io.ox/files/share/permissions', [
         },
 
         show: function (objModel, linkModel, options) {
+
             // folder tree: nested (whitelist) vs. flat
             var nested = folderAPI.isNested(objModel.get('module')),
                 notificationDefault = !this.isOrIsUnderPublicFolder(objModel),
@@ -908,6 +957,7 @@ define('io.ox/files/share/permissions', [
             options.point = 'io.ox/files/share/permissions/dialog';
 
             var dialog = new ModalDialog(options);
+            ext.point(POINT_DIALOG + '/share-options').invoke('draw', dialog.$body, objModel);
 
             var DialogConfigModel = Backbone.Model.extend({
                 defaults: {
@@ -938,6 +988,7 @@ define('io.ox/files/share/permissions', [
 
             var dialogConfig = new DialogConfigModel(),
                 permissionsView = new PermissionsView({ model: objModel }),
+                publicLink = new PublicLink({ files: linkModel }),
                 shareWizard = new ShareWizard({ files: linkModel });
 
             function hasNewGuests() {
@@ -952,10 +1003,11 @@ define('io.ox/files/share/permissions', [
 
             permissionsView.listenTo(permissionsView.collection, 'reset', function () {
                 dialogConfig.set('oldGuests', _.copy(permissionsView.collection.where({ type: 'guest' })));
+                shareWizard.show();
             });
 
             permissionsView.listenTo(permissionsView.collection, 'add', function () {
-                $('.share-wizard').hide();
+                shareWizard.hide();
                 dialog.showFooter();
             });
 
@@ -1092,11 +1144,11 @@ define('io.ox/files/share/permissions', [
                     );
                 }
 
-                dialog.$header.append(
-                    $(' <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>')
-                );
+                var settingsButton = $('<button type="button" class="btn settings-button" aria-label="Settings"><span class="fa fa-cog" aria-hidden="true"></span></button>').on('click', function () { shareSettings.showSettingsDialog(linkModel); });
+                dialog.$header.append(settingsButton);
 
                 dialog.$body.append(
+                    publicLink.render().$el,
                     // Invite people pane
                     $('<div id="invite-people-pane" class="share-pane invite-people"></div>').append(
                         // Invite people header
@@ -1169,7 +1221,6 @@ define('io.ox/files/share/permissions', [
                         )
                     ),
                     $('<div id="share-link-pane" class="share-pane share-by-link"></div>').append(
-                        $('<h5></h5>').text(gt('Create sharing link')),
                         // Share link header
                         shareWizard.render().$el
                     )
@@ -1187,13 +1238,9 @@ define('io.ox/files/share/permissions', [
                 typeaheadView.render();
             }
 
-            /*
-                TODO: WHAT IS supportsChanges?
-            */
             if (supportsChanges) {
                 // add action buttons
                 dialog
-                    //.addCancelButton()
                     .addButton({ action: 'switch-or-cancel', label: gt('Cancel') })
                     .addButton({ action: 'save', label: options.share ? gt('Share') : gt('Save') });
             } else {
@@ -1204,12 +1251,11 @@ define('io.ox/files/share/permissions', [
             // Cancel invite process and shwo initial dialog
             // or close dialog.
             dialog.on('switch-or-cancel', function () {
-                if ($('.share-wizard').is(':visible')) {
+                if (shareWizard.isVisible()) {
                     dialog.close();
                 } else {
                     permissionsView.collection.trigger('revert');
-                    //permissionsView.onReset();
-                    $('.share-wizard').show();
+                    shareWizard.show();
                     dialog.hideFooter();
                     // Make sure all input elements are
                     // visible when dialog.idle() runs.

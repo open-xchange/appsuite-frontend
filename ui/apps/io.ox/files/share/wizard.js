@@ -12,6 +12,7 @@
  */
 
 define('io.ox/files/share/wizard', [
+    'io.ox/backbone/views/modal',
     'io.ox/backbone/views/disposable',
     'io.ox/core/extensions',
     'io.ox/files/share/api',
@@ -31,12 +32,63 @@ define('io.ox/files/share/wizard', [
     'io.ox/core/folder/util',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, groupApi, Tokenfield, yell, settingsUtil, gt, settingsContacts, capabilities, AddressPickerView, CopyToClipboard, util) {
+], function (ModalDialog, DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, groupApi, Tokenfield, yell, settingsUtil, gt, settingsContacts, capabilities, AddressPickerView, CopyToClipboard, util) {
 
     'use strict';
 
     var INDEX = 0,
-        POINT = 'io.ox/files/share/wizard';
+        POINT = 'io.ox/files/share/wizard',
+        POINT_SETTINGS = 'io.ox/files/share/wizard-settings';
+
+    /*
+     * extension point title text
+     */
+    ext.point(POINT + '/fields').extend({
+        id: 'title',
+        index: INDEX += 100,
+        draw: function () {
+            this.append(
+                $('<h5></h5>').text(gt('Create sharing link'))
+            );
+        }
+    });
+
+    /*
+     * extension point turn on/off create sharing link
+     */
+    ext.point(POINT + '/fields').extend({
+        id: 'on-off-swicth',
+        index: INDEX += 100,
+        draw: function (baton) {
+            var CustomSwitch = miniViews.SwitchView.extend({
+                onChange: function () {
+                    if (this.getValue() === false) {
+                        baton.view.hideLink();
+                        baton.view.hideSettingsLink();
+                        baton.view.hideSettings();
+                        baton.view.removeLink();
+                    } else {
+                        baton.view.showLink();
+                        baton.view.showSettingsLink();
+                        baton.model.fetch();
+                    }
+                }
+            });
+            var shareLinkSwitch = new CustomSwitch({
+                name: 'url',
+                model: baton.model,
+                label: '',
+                size: 'small',
+                customValues: {
+                    'true': baton.model.get('url'),
+                    'false': false
+                }
+            });
+            this.append(
+                shareLinkSwitch.render().$el.attr('title', gt('Create sharing link'))
+            );
+        }
+    });
 
     /*
      * extension point descriptive text
@@ -79,7 +131,7 @@ define('io.ox/files/share/wizard', [
                 node.focus();
             });
             if (link === '') {
-                baton.model.fetch();
+                //baton.model.fetch();
             }
         }
     });
@@ -104,14 +156,39 @@ define('io.ox/files/share/wizard', [
     });
 
     /*
-     * extension point for share options
+     * extension point for share link
      */
     ext.point(POINT + '/fields').extend({
+        id: 'settings',
+        index: INDEX += 100,
+        draw: function (baton) {
+            var showHideSettings = $('<a class="share-link-setting" href="#"></a>').text(gt('Settings'));
+            showHideSettings.on('click', function () {
+                baton.view.showSettingsDialog();
+                // if (baton.view.areSettingsVisible()) {
+                //     showHideSettings.text(gt('Settings'));
+                //     baton.view.hideSettings();
+                // } else {
+                //     showHideSettings.text(gt('Hide Settings'));
+                //     baton.view.showSettings();
+                // }
+                return false;
+            });
+            this.append($('<div></div>').append(showHideSettings));
+        }
+    });
+
+    /*
+     * extension point for share options
+     */
+    //ext.point(POINT + '/fields').extend({
+    ext.point(POINT_SETTINGS + '/settings').extend({
         id: 'defaultOptions',
         index: INDEX += 100,
         draw: function (baton) {
             var optionGroup = $('<div class="form-group shareoptions">');
-            ext.point(POINT + '/options').invoke('draw', optionGroup, baton);
+            ext.point(POINT_SETTINGS + '/options').invoke('draw', optionGroup, baton);
+            //ext.point(POINT + '/options').invoke('draw', optionGroup, baton);
             this.append(optionGroup);
         }
     });
@@ -213,7 +290,8 @@ define('io.ox/files/share/wizard', [
      *
      * see SoftwareChange Request SCR-97: [https://jira.open-xchange.com/browse/SCR-97]
      */
-    ext.point(POINT + '/options').extend({
+    //ext.point(POINT + '/options').extend({
+    ext.point(POINT_SETTINGS + '/options').extend({
         id: 'includeSubfolders',
         index: INDEX += 100,
         draw: function (baton) {
@@ -255,7 +333,8 @@ define('io.ox/files/share/wizard', [
     /*
      * extension point for expires dropdown
      */
-    ext.point(POINT + '/options').extend({
+    //ext.point(POINT + '/options').extend({
+    ext.point(POINT_SETTINGS + '/options').extend({
         id: 'temporary',
         index: INDEX += 100,
         draw: function (baton) {
@@ -317,7 +396,8 @@ define('io.ox/files/share/wizard', [
     /*
      * extension point for password protection
      */
-    ext.point(POINT + '/options').extend({
+    //ext.point(POINT + '/options').extend({
+    ext.point(POINT_SETTINGS + '/options').extend({
         id: 'secured',
         index: INDEX += 100,
         draw: function (baton) {
@@ -390,9 +470,36 @@ define('io.ox/files/share/wizard', [
             this.$el.addClass(this.model.get('type'));
 
             // draw all extensionpoints
+            //ext.point(POINT_SWITCH + '/switch').invoke('draw', this.$el, this.baton);
             ext.point(POINT + '/fields').invoke('draw', this.$el, this.baton);
+            //ext.point(POINT_SETTINGS + '/settings').invoke('draw', this.$el.find('#share-link-settings'), this.baton);
+
+            this.hideSettings();
+            if (this.model.get('url')) {
+                this.showLink();
+            } else {
+                this.hideSettingsLink();
+                this.hideLink();
+            }
 
             return this;
+        },
+
+        showSettingsDialog: function () {
+            var dialog = new ModalDialog({
+                async: true,
+                focus: '.link-group>input[type=text]',
+                title: 'Settings',
+                point: 'io.ox/files/actions/share-link-settings',
+                help: 'ox.appsuite.user.sect.dataorganisation.sharing.link.html',
+                smartphoneInputFocus: true,
+                width: 600
+            });
+            dialog
+            .addCancelButton()
+            .addButton({ label: gt('Save'), action: 'cancel' });
+            ext.point(POINT_SETTINGS + '/settings').invoke('draw', dialog.$body, this.baton);
+            dialog.open();
         },
 
         share: function () {
@@ -431,6 +538,53 @@ define('io.ox/files/share/wizard', [
                     groupApi.refreshGroup(2147483647);
                 })
                 .done(model.destroy.bind(model));
+        },
+
+        hide: function () {
+            this.$el.hide();
+        },
+
+        show: function () {
+            this.$el.show();
+        },
+
+        isVisible: function () {
+            return this.$el.is(':visible');
+        },
+
+        showLink: function () {
+            this.$el.find('.help-block').show();
+            this.$el.find('.link-group').show();
+        },
+
+        hideLink: function () {
+            this.$el.find('.help-block').hide();
+            this.$el.find('.link-group').hide();
+        },
+
+        showSettings: function () {
+            this.$el.find('.shareoptions').show();
+            this.$el.find('.recipients').show();
+            this.$el.find('.message').show();
+            this.showSettingsDialog();
+        },
+
+        hideSettingsLink: function () {
+            this.$el.find('.share-link-setting').hide();
+        },
+
+        showSettingsLink: function () {
+            this.$el.find('.share-link-setting').show();
+        },
+
+        hideSettings: function () {
+            this.$el.find('.shareoptions').hide();
+            this.$el.find('.recipients').hide();
+            this.$el.find('.message').hide();
+        },
+
+        areSettingsVisible: function () {
+            return this.$el.find('.shareoptions').is(':visible');
         }
     });
 

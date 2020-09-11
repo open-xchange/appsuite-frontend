@@ -219,10 +219,17 @@
 
         &:after { clear: both; }
 
-        .close {
+        .settings-button {
             position: absolute;
-            top: 18px;
-            right: 16px;
+            top: 12px;
+            right: 4px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            outline: none;
+            border: 0;
+            background: transparent;
+            font-size: 18px;          
         }
     }
 
@@ -248,14 +255,42 @@
         padding: 0;
         display: flex;
         flex-direction: column;
+        max-height: ~"calc(100vh - 520px)";
+        overflow-y: scroll;
         
-        .share-pane {
+        .access-dropdown {
+            margin-left: 16px;
+        }
+
+        .public-link {
             h5 {
                 margin-left: 16px;
             }
+            /*
+                Move input field out of the visible view.
+                This is required, because we can't use 
+                copy to clipboard on input type hidden.
+            */
+            .public-link-url-input {
+                position: fixed;
+                top: -500px;
+                left: -500px;
+                width: 20px;
+            }
+            .fa-link{
+                font-size: 1.75em;
+                color: #6495ed;
+            }
+            .row {
+                margin: 16px;;
+            }
         }
-
-       .share-pane.invite-people {
+        
+        .share-pane.invite-people {
+            min-height: 300px;
+            h5 {
+                margin-left: 16px;
+            }
             .form-group {
                 margin: 16px 16px 16px;
             }
@@ -267,7 +302,7 @@
             }
         }
 
-       .share-pane.share-by-link {
+        .share-pane.share-by-link {
             border-top: 1px solid #e5e5e5;
             .share-wizard {
                margin: 16px 16px 16px;
