@@ -28,7 +28,7 @@ define('io.ox/chat/views/history', [
         custom: true,
         draw: function () {
             this.attr('data-prio', 'hi').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="close-chat">').append(
+                $('<a href="#" role="button" draggable="false" tabindex="-1" data-cmd="close-chat">').append(
                     $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), gt('Chats')
                 )
             );
@@ -51,8 +51,8 @@ define('io.ox/chat/views/history', [
         custom: true,
         draw: function () {
             this.attr('data-prio', 'hi').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').append(
-                    $('<i class="fa fa-window-maximize" aria-hidden="true">')
+                $('<a href="#" role="button" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').attr('aria-label', gt('Detach window')).append(
+                    $('<i class="fa fa-window-maximize" aria-hidden="true">').attr('title', gt('Detach window'))
                 )
             );
         }

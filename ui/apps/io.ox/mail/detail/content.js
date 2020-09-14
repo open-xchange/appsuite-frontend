@@ -624,6 +624,9 @@ define('io.ox/mail/detail/content', [
                     content.innerHTML = baton.source;
                 }
 
+                content.setAttribute('role', 'complementary');
+                content.setAttribute('aria-label', data.subject);
+
                 // process content
                 ext.point('io.ox/mail/detail/content-general').invoke('process', content, baton);
                 if (!baton.isLarge) ext.point('io.ox/mail/detail/content').invoke('process', content, baton);

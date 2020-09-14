@@ -34,7 +34,7 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function () {
             this.attr('data-prio', 'hi').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="close-chat">').append(
+                $('<a href="#" role="button" draggable="false" tabindex="-1" data-cmd="close-chat">').append(
                     $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), gt('Chats')
                 )
             );
@@ -56,8 +56,8 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function () {
             this.attr('data-prio', 'hi').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').append(
-                    $('<i class="fa fa-window-maximize" aria-hidden="true">')
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').attr('aria-label', gt('Detach window')).append(
+                    $('<i class="fa fa-window-maximize" aria-hidden="true">').attr('title', gt('Detach window'))
                 )
             );
         }
@@ -273,8 +273,8 @@ define('io.ox/chat/views/chat', [
                         ),
                     // burger menu (pull-right just to have the popup right aligned)
                     this.$dropdown = $('<div class="dropdown pull-right">').append(
-                        $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
-                        .append('<i class="fa fa-bars" aria-hidden="true">'),
+                        $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').attr('title', gt('More actions'))
+                        .append($('<i class="fa fa-bars" aria-hidden="true">').attr('title', gt('More actions'))),
                         this.renderDropdown()
                     )
                 ),
@@ -309,15 +309,15 @@ define('io.ox/chat/views/chat', [
 
         renderEditor: function () {
             if (this.isMember()) {
-                this.$editor = $('<textarea class="form-control" placeholder="' + gt('Enter message here') + '">');
+                this.$editor = $('<textarea class="form-control">').attr({ 'aria-label': gt('Enter message here'), placeholder: gt('Enter message here') });
                 return [this.$editor,
-                    $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">')
-                        .append('<i class="fa fa-paperclip" aria-hidden="true">'),
+                    $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">').attr('aria-label', gt('Upload file'))
+                        .append($('<i class="fa fa-paperclip" aria-hidden="true">').attr('title', gt('Upload file'))),
                     $('<input type="file" class="file-upload-input hidden">')];
             }
 
             if (this.model.get('type') === 'channel') {
-                return $('<button type="button" class="btn btn-default btn-action join" >')
+                return $('<button type="button" class="btn btn-default btn-action join">')
                 .attr({ 'data-cmd': 'join-channel', 'data-id': this.model.get('roomId') })
                 .append(gt('Join'));
             }
