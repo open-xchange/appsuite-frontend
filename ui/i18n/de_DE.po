@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-09-02 13:58+0200\n"
+"PO-Revision-Date: 2020-09-14 12:06+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -3487,7 +3487,7 @@ msgstr "Öffentlicher Kanal"
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Recent conversations"
-msgstr "Kürzlicher E-Mail-Austausch"
+msgstr "Kürzliche Konversationen"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
 #: apps/io.ox/chat/views/channelList.js
