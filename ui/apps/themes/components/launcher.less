@@ -300,7 +300,9 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     #io-ox-toprightbar,
     #io-ox-toprightbar > ul,
     #io-ox-toprightbar > ul > li,
-    #io-ox-toprightbar > ul > li > a {
+    #io-ox-toprightbar > ul > li > a,
+    #io-ox-toprightbar > ul > li > button,
+    {
         display: inline-flex;
         align-items: center;
         justify-content: flex-end;
@@ -313,7 +315,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         // more space needed on smartphones
         .smartphone & { padding-right: 0}
         .launcher {
-            & > a {
+            & > a, & > button {
                 padding: 16px 11px;
                 cursor: pointer;
                 font-size: 18px;

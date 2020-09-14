@@ -19,9 +19,10 @@ define('io.ox/chat/views/launcher', [
 
     return Backbone.View.extend({
 
-        tagName: 'a',
-        className: 'apptitle',
+        tagName: 'button',
+        className: 'launcher-btn btn btn-link apptitle',
         id: 'io-ox-chat-icon',
+        attributes: { 'aria-label': gt('Chat') },
 
         events: {
             'click': 'onClick'
