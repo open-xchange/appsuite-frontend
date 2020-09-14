@@ -127,6 +127,7 @@ define('io.ox/chat/main', [
             require(['io.ox/contacts/addressbook/popup'], function (picker) {
                 picker.open(
                     function callback(items) {
+                        if (items.length === 0) return;
                         var members = _(items).pluck('email');
                         return self.openPrivateChat({ email: members[0] });
                     },
