@@ -19,8 +19,9 @@ define('io.ox/chat/data', [
     'io.ox/mail/sanitizer',
     'io.ox/chat/util',
     'io.ox/core/http',
-    'gettext!io.ox/chat'
-], function (api, events, contactsApi, switchboardApi, sanitizer, util, http, gt) {
+    'gettext!io.ox/chat',
+    'io.ox/core/notifications'
+], function (api, events, contactsApi, switchboardApi, sanitizer, util, http, gt, notifications) {
 
     'use strict';
 
@@ -689,6 +690,15 @@ define('io.ox/chat/data', [
         isGroup: function () { return this.get('type') === 'group'; },
         isChannel: function () { return this.get('type') === 'channel'; },
 
+        handleError: function (response) {
+            var errorCode = response.responseJSON ? response.responseJSON.errorCode : response.responseText;
+
+            switch (errorCode) {
+                case 'filesize:exceeded': return notifications.yell('error', gt('The uploaded file exceeds the size limit'));
+                default: notifications.yell('error', gt('Something went wrong. Please try again.'));
+            }
+        },
+
         postMessage: function (attr, files) {
             if (this.isNew()) return this.postFirstMessage(attr, files);
             attr.roomId = this.get('roomId');
@@ -704,7 +714,7 @@ define('io.ox/chat/data', [
                 success: function (model) {
                     model.setInitialDeliveryState();
                 }
-            });
+            }).fail(this.handleError.bind(this));
 
             this.set('active', true);
         },
@@ -716,7 +726,7 @@ define('io.ox/chat/data', [
 
             this.save(attr, { hiddenAttr: hiddenAttr }).then(function () {
                 events.trigger('cmd', { cmd: 'show-chat', id: this.get('roomId') });
-            }.bind(this));
+            }.bind(this), this.handleError.bind(this));
         },
 
         toggleRecent: function () {
