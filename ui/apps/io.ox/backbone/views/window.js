@@ -381,7 +381,7 @@ define('io.ox/backbone/views/window', [
 
             this.$('.token-input.tt-input').trigger('updateWidth');
 
-            // save value as new preferrence for this app
+            // save value as new preference for this app
             if (_.device('desktop') && settings.get('features/floatingWindows/preferredMode/enabled', true) && this.model.get('name')) {
                 var preferences = settings.get('features/floatingWindows/preferredMode/apps', {});
                 preferences[this.model.get('name')] = this.model.get('mode');
