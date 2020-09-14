@@ -82,7 +82,7 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function (baton) {
             var model = baton.model;
-            if (!model.get('active')) return;
+            if (!model.get('active') || model.isNew()) return;
             this.attr('data-prio', 'lo').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="unsubscribe-chat">').attr('data-id', model.id).text(gt('Hide chat')).on('click', events.forward)
             );
@@ -275,7 +275,7 @@ define('io.ox/chat/views/chat', [
                         $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').attr('title', gt('More actions'))
                         .append($('<i class="fa fa-bars" aria-hidden="true">').attr('title', gt('More actions'))),
                         this.renderDropdown()
-                    )
+                    ).css('visibility', 'hidden')
                 ),
                 this.$toolbar.render(new ext.Baton({ model: this.model })).$el,
                 this.$scrollpane = $('<div class="scrollpane">').on('scroll', $.proxy(this.onScroll, this)).append(
@@ -298,6 +298,8 @@ define('io.ox/chat/views/chat', [
 
             this.onUpdatePaginators();
             this.markMessageAsRead();
+
+            if (this.$dropdown.find('.dropdown-menu').children().length > 0) this.$dropdown.css('visibility', 'visible');
 
             return this;
         },
@@ -324,7 +326,6 @@ define('io.ox/chat/views/chat', [
         },
 
         renderDropdown: function () {
-
             var $ul = $('<ul class="dropdown-menu">');
 
             function renderItem(text, data) {
@@ -333,7 +334,7 @@ define('io.ox/chat/views/chat', [
                 );
             }
 
-            if ((this.model.isPrivate() || this.model.isGroup() || (this.model.isChannel() && this.model.isMember())) && this.model.get('active')) {
+            if (!this.model.isNew() && (this.model.isPrivate() || this.model.isGroup() || (this.model.isChannel() && this.model.isMember())) && this.model.get('active')) {
                 $ul.append(renderItem(gt('Hide chat'), { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
             }
             if ((this.model.isGroup() || this.model.isChannel()) && this.model.isMember()) {
