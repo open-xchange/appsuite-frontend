@@ -19,8 +19,9 @@ define('io.ox/chat/data', [
     'io.ox/chat/util',
     'io.ox/core/http',
     'gettext!io.ox/chat',
-    'settings!io.ox/core'
-], function (events, api, io, sanitizer, util, http, gt, settings) {
+    'settings!io.ox/core',
+    'io.ox/switchboard/api'
+], function (events, api, io, sanitizer, util, http, gt, settings, switchboard) {
 
     'use strict';
 
@@ -1105,31 +1106,28 @@ define('io.ox/chat/data', [
             });
         },
 
-        authenticateAppsuite: function () {
-            return http.GET({ module: 'token', params: { action: 'acquireToken' } }).then(function (res) {
-                if (!res.token) throw new Error('Missing token in response');
-                return util.ajax({
-                    method: 'post',
-                    url: data.SOCKET + '/auth/login',
-                    data: { token: res.token },
-                    handleSessionFail: false
-                });
-            }).then(function () {
+        checkSwitchboardToken: function () {
+            return util.ajax({
+                method: 'post',
+                url: data.SOCKET + '/auth/login',
+                data: { token: switchboard.token },
+                handleSessionFail: false
+            })
+            .then(function () {
                 return this.getUserId();
             }.bind(this));
         },
 
+        authenticateAppsuite: function () {
+            if (!switchboard.token) {
+                return switchboard.reconnect()
+                    .then(function () { this.checkSwitchboardToken(); }.bind(this));
+            }
+            return this.checkSwitchboardToken();
+        },
+
         autologin: function () {
-            return this.getUserId().catch(function () {
-                return this.getConfig().then(function (config) {
-                    if (config.appsuite) return this.authenticateAppsuite();
-                    if (config.oidc) return this.authenticateOIDCSilent();
-                    throw new Error('No suitable authentication method');
-                }.bind(this));
-            }.bind(this)).then(function (user) {
-                this.set('userId', user.id);
-                return user.id;
-            }.bind(this));
+            return this.login();
         },
 
         logout: function () {

@@ -31,6 +31,7 @@ define.async('io.ox/switchboard/api', [
         socket: undefined,
         userId: undefined,
         domain: '',
+        token: undefined,
 
         // just to make sure we always use the same string
         trim: function (userId) {
@@ -102,12 +103,16 @@ define.async('io.ox/switchboard/api', [
         },
 
         reconnect: function () {
+            var self = this;
             return http.GET({
                 module: 'token',
                 params: { action: 'acquireToken' }
             })
             .then(function (data) {
+                self.token = data.token;
+
                 var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
+
                 // Only send redirect uri if not default "/appsuite/api"
                 var appsuiteUrl = new URL(api.host);
                 var searchParams = appsuiteUrl.searchParams;
