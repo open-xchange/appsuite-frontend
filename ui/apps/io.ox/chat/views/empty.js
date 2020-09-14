@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/empty', ['io.ox/backbone/views/disposable'], function (DisposableView) {
+define('io.ox/chat/views/empty', ['io.ox/backbone/views/disposable', 'gettext!io.ox/chat'], function (DisposableView, gt) {
 
     'use strict';
 
@@ -21,14 +21,14 @@ define('io.ox/chat/views/empty', ['io.ox/backbone/views/disposable'], function (
             this.$el.append(
                 $('<div class="start-chat abs">').append(
                     $('<div class="center empty-view">').append(
-                        $('<button type="button" class="btn btn-default btn-circle" data-cmd="start-private-chat">').append(
-                            $('<i class="fa fa-plus" aria-hidden="true">')
+                        $('<button type="button" class="btn btn-default btn-circle" data-cmd="start-private-chat">').attr('aria-label', gt('Private chat')).append(
+                            $('<i class="fa fa-plus" aria-hidden="true">').attr('title', gt('Private chat'))
                         ),
-                        $('<button type="button" class="btn btn-default btn-circle" data-cmd="edit-group-chat">').append(
-                            $('<i class="fa fa-group" aria-hidden="true">')
+                        $('<button type="button" class="btn btn-default btn-circle" data-cmd="edit-group-chat">').attr('aria-label', gt('Group chat')).append(
+                            $('<i class="fa fa-group" aria-hidden="true">').attr('title', gt('Group chat'))
                         ),
-                        $('<button type="button" class="btn btn-default btn-circle" data-cmd="edit-group-chat" data-type="channel">').append(
-                            $('<i class="fa fa-hashtag" aria-hidden="true">')
+                        $('<button type="button" class="btn btn-default btn-circle" data-cmd="edit-group-chat" data-type="channel">').attr('aria-label', gt('Public channel')).append(
+                            $('<i class="fa fa-hashtag" aria-hidden="true">').attr('title', gt('Public channel'))
                         )
                     )
                 )

@@ -422,23 +422,23 @@ define('io.ox/chat/main', [
                             new StateView({ model: user }).render().$el
                         ),
                         $('<div class="dropdown pull-right">').append(
-                            $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
-                                .append($('<i class="fa fa-plus" aria-hidden="true">')),
-                            $('<ul class="dropdown-menu">').append(
+                            $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').attr('aria-label', gt('New'))
+                                .append($('<i class="fa fa-plus" aria-hidden="true">').attr('title', gt('New'))),
+                            $('<ul class="dropdown-menu" role="menu">').append(
                                 //#. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
                                 $('<li class="dropdown-header" role="separator">').append('<span aria-hidden="true">').text(gt('New')),
-                                $('<li>').append(
-                                    $('<a href="#" role="button">')
+                                $('<li role="presentation">').append(
+                                    $('<a href="#" role="menuitem">')
                                     .attr({ 'data-cmd': 'start-private-chat', 'data-id': this.model.id })
                                         .text(gt('Private chat'))
                                 ),
-                                $('<li>').append(
-                                    $('<a href="#" role="button">')
+                                $('<li role="presentation">').append(
+                                    $('<a href="#" role="menuitem">')
                                         .attr({ 'data-cmd': 'edit-group-chat', 'data-id': this.model.id })
                                         .text(gt('Group chat'))
                                 ),
-                                $('<li>').append(
-                                    $('<a href="#" role="button">')
+                                $('<li role="presentation">').append(
+                                    $('<a href="#" role="menuitem">')
                                         .attr({ 'data-cmd': 'edit-group-chat', 'data-id': this.model.id, 'data-type': 'channel' })
                                         .text(gt('Public channel'))
                                 )
@@ -457,16 +457,16 @@ define('io.ox/chat/main', [
                     // recent, all channels, all files
                     $('<div class="navigation-actions">').append(
                         $('<button type="button" class="btn-nav" data-cmd="show-recent-conversations">').append(
-                            $('<i class="fa fa-clock-o btn-icon">'),
+                            $('<i class="fa fa-clock-o btn-icon" aria-hidden="true">'),
                             //#. Used for chats this time, not for mail threads
                             $.txt(gt('Recent conversations'))
                         ),
                         $('<button type="button" class="btn-nav" data-cmd="show-channels">').append(
-                            $('<i class="fa fa-hashtag btn-icon">'),
+                            $('<i class="fa fa-hashtag btn-icon" aria-hidden="true">'),
                             $.txt(gt('All channels'))
                         ),
                         $('<button type="button" class="btn-nav" data-cmd="show-all-files">').append(
-                            $('<i class="fa fa-paperclip btn-icon">'),
+                            $('<i class="fa fa-paperclip btn-icon" aria-hidden="true">'),
                             $.txt(gt('All files'))
                         )
                     )
