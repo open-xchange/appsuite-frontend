@@ -117,6 +117,21 @@ html.baseline {
     top: 0;
 }
 
+// overwrite some bootstrap styles. Once any theme is loaded, it also loads all of bootstrap. This messes up the layout
+.touch body #io-ox-login-screen { font-size: 14px; }
+
+#io-ox-login-screen {
+    .row label {
+        padding-top: inherit;
+        font-size: inherit;
+        line-height: inherit;
+    }
+    .form-control { padding: 4px 12px; }
+    font-family: @normal-font-family;
+    line-height: 20px;
+}
+// bootstrap overwrite end
+
 #io-ox-login-screen {
     overflow-y: auto;
     height: 100%;
