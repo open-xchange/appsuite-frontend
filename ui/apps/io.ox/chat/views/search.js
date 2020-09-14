@@ -36,7 +36,7 @@ define('io.ox/chat/views/search', [
 
         render: function () {
             this.$el.append(
-                $('<input type="text" spellcheck="false" autocomplete="false" placeholder="' + gt('Search or start new chat') + '">'),
+                $('<input type="text" spellcheck="false" autocomplete="off" placeholder="' + gt('Search or start new chat') + '">'),
                 $('<button type="button" class="btn btn-link">').append($('<i class="fa fa-times-circle" aria-hidden="true">'))
             );
             return this;

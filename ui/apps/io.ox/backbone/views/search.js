@@ -44,7 +44,7 @@ define('io.ox/backbone/views/search', [
 
         render: function () {
             this.$el.append(
-                this.$input = $('<input type="text" class="search-field" spellcheck="false" autocomplete="false">')
+                this.$input = $('<input type="text" class="search-field" spellcheck="false" autocomplete="off">')
                     .attr('placeholder', gt('New search ... (prototype)')),
                 this.$dropdownToggle = $('<button type="button" class="dropdown-toggle"><i class="fa fa-caret-down" aria-hidden="true"></i></button>')
                     .attr({ 'aria-haspopup': true, 'aria-expanded': false }),
