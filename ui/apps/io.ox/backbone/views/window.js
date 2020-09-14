@@ -338,9 +338,7 @@ define('io.ox/backbone/views/window', [
             var isSticky = this.model.get('sticky') === true;
             if (isSticky) {
                 $('#io-ox-windowmanager').append(
-                    $('<div class="io-ox-windowmanager-sticky-panel border-left">').append(
-                        this.$body
-                    )
+                    $('<div class="io-ox-windowmanager-sticky-panel border-left" role="region">').append(this.$body)
                 );
                 $('#io-ox-screens').addClass('has-sticky-window');
                 return this;
