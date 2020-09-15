@@ -14,8 +14,9 @@
 define('io.ox/chat/views/chatList', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/state',
-    'io.ox/chat/views/chatListEntry'
-], function (DisposableView, StateView, ChatListEntryView) {
+    'io.ox/chat/views/chatListEntry',
+    'gettext!io.ox/chat'
+], function (DisposableView, StateView, ChatListEntryView, gt) {
 
     'use strict';
 
@@ -23,7 +24,8 @@ define('io.ox/chat/views/chatList', [
 
         tagName: 'ul',
         attributes: {
-            role: 'listbox'
+            role: 'listbox',
+            'aria-label': gt('Chat list')
         },
 
         className: 'chats',

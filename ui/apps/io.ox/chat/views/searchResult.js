@@ -26,6 +26,10 @@ define('io.ox/chat/views/searchResult', [
 
         tagName: 'ul',
         className: 'search-result',
+        attributes: {
+            role: 'listbox',
+            'aria-label': gt('Chat search results')
+        },
 
         initialize: function () {
             this.collection = new Backbone.Collection();
@@ -38,15 +42,17 @@ define('io.ox/chat/views/searchResult', [
 
         render: function () {
             this.$el.parent().toggleClass('show-search', !!this.query);
-            this.$el.empty().append(
-                this.collection.map(function (model) {
-                    return new ChatListEntryView({ model: model }).render().$el;
-                })
-            );
+            var nodes = this.collection.map(function (model) {
+                return new ChatListEntryView({ model: model }).render().$el;
+            });
+            this.$el.empty().append(nodes);
             if (this.collection.length === 0) {
                 this.$el.append(
-                    $('<li class="no-results">').text(gt('No search results'))
+                    $('<li class="no-results" role="option" tabindex="0">').text(gt('No search results'))
                 );
+            } else {
+                nodes[0].attr('tabindex', 0);
+
             }
             return this;
         },

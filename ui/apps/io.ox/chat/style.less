@@ -311,7 +311,8 @@
         li {
             display: flex;
             cursor: pointer;
-            padding: 4px 8px;
+            padding: 4px 4px 4px 8px;
+            border-right: 4px solid transparent;
 
             &.no-results {
                 cursor: initial;
@@ -323,8 +324,13 @@
                 &:hover { background-color: transparent; }
             }
 
-            &:hover {
+            &:hover, &:focus {
                 background-color: white;
+            }
+
+            &:focus {
+                outline: 0;
+                border-color: @lightblue;
             }
 
             .chats-container {
