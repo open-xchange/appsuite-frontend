@@ -70,9 +70,14 @@ define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], func
                 api.trigger('forbidden');
                 return clearInterval(intervalId);
             }
-            // reschedule data for retransmission
-            api.trigger('fail', data);
-            [].push.apply(api.queue, data);
+            if (xhr.status === 413) {
+                // request data grew too large, clear it
+                api.queue = [];
+            } else {
+                // reschedule data for retransmission
+                api.trigger('fail', data);
+                [].push.apply(api.queue, data);
+            }
         });
     }
 
