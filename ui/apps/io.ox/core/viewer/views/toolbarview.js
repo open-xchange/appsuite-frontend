@@ -662,6 +662,8 @@ define('io.ox/core/viewer/views/toolbarview', [
     }
 
     function imageCount(model) {
+        if (!model.collection) { return 0; }
+
         return model.collection.reduce(function (memo, model) {
             return (model.isImage() ? memo + 1 : memo);
         }, 0);
