@@ -1488,9 +1488,16 @@ define('io.ox/files/api', [
         })
         .then(function (response) {
             // if id changes after update (e.g. rename files of some storage systems) update model id
-            if (_.isObject(response) && model && model.get('id') !== response.id) {
-                model.set('id', response.id);
-                file.id = response.id;
+            if (_.isObject(response) && model) {
+                if (model.get('id') !== response.id) {
+                    model.set('id', response.id);
+                    file.id = response.id;
+                }
+
+                if (model.get('com.openexchange.file.sanitizedFilename') !== response['com.openexchange.file.sanitizedFilename']) {
+                    model.set('com.openexchange.file.sanitizedFilename', response['com.openexchange.file.sanitizedFilename']);
+                    file['com.openexchange.file.sanitizedFilename'] = response['com.openexchange.file.sanitizedFilename'];
+                }
             }
         })
         .always(_.lfo(process, prev, model))
