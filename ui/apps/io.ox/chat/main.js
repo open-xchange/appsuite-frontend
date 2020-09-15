@@ -64,7 +64,9 @@ define('io.ox/chat/main', [
             return _.extend(FloatingWindow.View.prototype.events, {
                 'keydown .left-navigation': 'onLeftNavigationKeydown',
                 'keydown .overlay': 'onOverlayEvent',
-                'click .overlay': 'onOverlayEvent'
+                'click .overlay': 'onOverlayEvent',
+                'focus .chats > li': 'onFocus',
+                'click .chats > li': 'onClick'
             });
         },
 
@@ -251,7 +253,7 @@ define('io.ox/chat/main', [
         },
 
         showMessageFile: function (cmd) {
-            // TODO: consider pagination for nonprototype implementation
+            // TODO: consider pagination for non-prototype implementation
             var files = new data.RoomFilesCollection([], { roomId: cmd.roomId, fileId: cmd.fileId });
             files.fetch();
 
@@ -267,7 +269,7 @@ define('io.ox/chat/main', [
                 files: fileList.map(function (file) {
                     return _.extend({
                         url: file.getFileUrl(),
-                        // try to fake mail compose attachement
+                        // try to fake mail compose attachment
                         space: true
                     }, file.pick('name', 'size', 'id'));
                 }),
@@ -282,18 +284,39 @@ define('io.ox/chat/main', [
 
             require(['io.ox/core/viewer/main'], function (Viewer) {
                 var viewer = new Viewer();
-                // disable file details: data unavailbale for mail attachments
+                // disable file details: data unavailable for mail attachments
                 viewer.launch(options);
             });
         },
 
         onLeftNavigationKeydown: function (e) {
-            if (e.which !== 38 && e.which !== 40) return;
+            if (!/^(13|32|38|40)$/.test(e.which)) return;
+
             e.preventDefault();
-            var items = this.$('.left-navigation [data-cmd]'),
-                index = items.index(document.activeElement) + (e.which === 38 ? -1 : +1);
-            index = Math.max(0, Math.min(index, items.length - 1));
-            items.eq(index).focus().click();
+
+            // Cursor up / down
+            if (/^(38|40)$/.test(e.which)) {
+                var items = this.$('.left-navigation [data-cmd]'),
+                    index = items.index(document.activeElement) + (e.which === 38 ? -1 : +1);
+                index = Math.max(0, Math.min(index, items.length - 1));
+                items.eq(index).focus();
+            }
+
+            // Enter / space
+            if (/^(13|32)$/.test(e.which)) this.onClick();
+
+        },
+
+        onClick: function () {
+            _.defer(function () { $('.chat-rightside textarea').trigger('focus'); });
+        },
+
+        onFocus: function (e) {
+            var node = $(e.currentTarget);
+            var data = node.data();
+            node.attr('tabindex', 0);
+            $(node).siblings('li').each(function () { $(this).attr('tabindex', -1); });
+            this.showChat(data.cid, data);
         },
 
         resetCount: function () {

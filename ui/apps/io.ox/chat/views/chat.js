@@ -300,10 +300,6 @@ define('io.ox/chat/views/chat', [
             this.onUpdatePaginators();
             this.markMessageAsRead();
 
-            _.defer(function () {
-                if (this.$editor) this.$editor.focus();
-            }.bind(this));
-
             return this;
         },
 

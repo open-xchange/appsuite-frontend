@@ -22,6 +22,9 @@ define('io.ox/chat/views/chatList', [
     var ChatListView = DisposableView.extend({
 
         tagName: 'ul',
+        attributes: {
+            role: 'listbox'
+        },
 
         className: 'chats',
 
@@ -75,9 +78,8 @@ define('io.ox/chat/views/chatList', [
             if (this.disposed) return;
 
             var items = this.getItems().map(this.renderItem, this);
-            this.$el.append(
-                items
-            );
+            if (items.length > 0) items[0].attr('tabindex', 0);
+            this.$el.append(items);
         }, 1),
 
         onAdd: _.debounce(function (model, collection, options) {

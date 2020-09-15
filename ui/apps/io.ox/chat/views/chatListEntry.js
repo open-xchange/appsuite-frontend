@@ -24,6 +24,8 @@ define('io.ox/chat/views/chatListEntry', [
             if (!this.model.get('roomId')) {
                 var member = this.model.getFirstMember();
                 return {
+                    tabindex: -1,
+                    role: 'option',
                     'data-cmd': 'open-private-chat',
                     'data-email': member.get('email1') || member.get('email2') || member.get('email3'),
                     'data-cid': this.model.cid
@@ -31,6 +33,8 @@ define('io.ox/chat/views/chatListEntry', [
             }
 
             return {
+                tabindex: -1,
+                role: 'option',
                 'data-cmd': 'show-chat',
                 'data-cid': this.model.get('roomId') || this.model.cid,
                 'data-message-id': this.model.get('searchResult') ? this.model.get('lastMessage').messageId : undefined

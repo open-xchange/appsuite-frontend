@@ -69,7 +69,7 @@ define('io.ox/chat/views/messages', [
                 .append(
                     // sender avatar & name
                     this.renderSender(model),
-                    // message boby
+                    // message body
                     $('<div class="content">').append(
                         $('<div class="body">')
                             .html(model.getBody())
