@@ -53,6 +53,7 @@ define('io.ox/core/boot/load', [
             return $.when(
                 require([ox.base + '/precore.js']),
                 gettext.setLanguage(language),
+                // this namespace also loads dynamic themes code so it's loaded before core namespace but after we have a session etc.
                 manifests.manager.loadPluginsFor('i18n')
             ).then(function () {
                 util.debug('Load UI > current locale and i18n plugins DONE.');
