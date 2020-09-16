@@ -49,7 +49,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 context: {},
                 keyboard: true,
                 maximize: false,
-                smartphoneInputFocus: false
+                smartphoneInputFocus: false,
+                autoFocusOnIdle: true
             }, options);
             // ensure correct width on smartphone
             if (_.device('smartphone') && options.width >= 320) {
@@ -59,6 +60,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.context = options.context;
             // the original constructor will call initialize()
             ExtensibleView.prototype.constructor.apply(this, arguments);
+            this.autoFocusOnIdle = options.autoFocusOnIdle;
             // add structure now
             var title_id = _.uniqueId('title');
             this.$el
@@ -162,13 +164,13 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.$el.modal({ backdrop: o.backdrop || 'static', keyboard: false }).modal('show');
             this.toggleAriaHidden(true);
             this.trigger('open');
-            this.setInitialFocus(o);
+            this.setFocus(o);
             // track open instances
             open.add(this);
             return this;
         },
 
-        setInitialFocus: function (o) {
+        setFocus: function (o) {
             var self = this;
             // set initial focus
             if (o.focus) {
@@ -421,8 +423,13 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         this.enableFormElements();
         this.$body.parent().idle();
         this.$body.removeClass('invisible').css('opacity', '');
-        //if ($.contains(this.el, this.activeElement)) $(this.activeElement).focus();
-        this.setInitialFocus(this.options);
+        if (this.autoFocusOnIdle) {
+            // try to restore focus (active element is stored in busy function)
+            if ($.contains(this.el, this.activeElement)) {
+                $(this.activeElement).focus();
+                // fallback, to keep focus in the dialog
+            } else this.setFocus(this.options);
+        }
         this.activeElement = null;
         return this;
     }

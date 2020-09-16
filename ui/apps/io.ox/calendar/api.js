@@ -1009,7 +1009,7 @@ define('io.ox/calendar/api', [
                     end = params.end;
                 if (params.view === 'list') {
                     start = moment().startOf('day').valueOf();
-                    end = moment().startOf('day').add((collection.offset || 0) + 1, 'month').valueOf();
+                    end = moment().startOf('day').add(collection.range, 'month').valueOf();
                 }
                 if (this.getTimestamp('endDate') <= start) return false;
                 if (this.getTimestamp('startDate') >= end) return false;
