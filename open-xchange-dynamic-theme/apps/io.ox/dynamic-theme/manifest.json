@@ -1,6 +1,6 @@
 [{
     "path": "io.ox/dynamic-theme/register",
-    "namespace": "core",
+    "namespace": "i18n",
     "requires": "dynamic-theme"
 },{
     "path": "io.ox/dynamic-theme/signin",
