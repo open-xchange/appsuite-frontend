@@ -294,9 +294,90 @@ define('io.ox/core/util', [
                 widthWithScroll = $('<div>').css({ width: '100%' }).appendTo($outer).outerWidth();
             $outer.remove();
             return 100 - widthWithScroll;
-        })
+        }),
 
+        // helper function to get userNames from different objects. It helps to get usernames from different contexts
+        // type should be "created" or "modified", default is created
+        // data is the object containing the created_by or modified_by attributes
+        getName: function (data, type) {
+            console.log('getName');
+            if (data === undefined) return $.Deferred().reject({ error: 'Unknown User' });
+            type = type || 'created';
+
+            // try extended data first (no need to request data from the server)
+            var userData = data[type + '_from'];
+
+            var name = checkForName(userData);
+            if (name) return $.when(name);
+
+            // try to get name via user id second
+            userData = data[type + '_by'];
+
+            if (userData !== undefined) {
+                return require(['io.ox/core/api/user']).then(function (userAPI) {
+                    return userAPI.getName(userData);
+                });
+            }
+
+            return $.Deferred().reject({ error: 'Unknown User' });
+        },
+
+        getTextNode: function (data, type) {
+            console.log('getTextNode');
+            if (data === undefined) return '';
+            type = type || 'created';
+            var node = document.createTextNode(''),
+                // try extended data first (no need to request data from the server)
+                userData = data[type + '_from'];
+
+            var name = checkForName(userData);
+            if (name) {
+                node.nodeValue = name;
+                return node;
+            }
+
+            // try to get name via user id second
+            userData = data[type + '_by'];
+
+            if (userData !== undefined) {
+                require(['io.ox/core/api/user']).then(function (userAPI) {
+                    userAPI.get(userData)
+                    .done(function (data) {
+                        node.nodeValue = data.display_name || data.email1 || '';
+                    })
+                    .always(function () {
+                        // use defer! otherwise we return null on cache hit
+                        _.defer(function () {
+                            // don't leak
+                            node = null;
+                        });
+                    });
+                });
+            }
+            return node;
+        }
     };
+
+    // helper to find the first usable name with mail as fallback
+    function checkForName(userData) {
+        var result;
+        if (userData && (userData.displayName || !_.isEmpty(userData.contact))) {
+            // display name first
+            if (userData.displayName) {
+                result = userData.displayName;
+            // try to get name via contact data
+            } else if (userData.contact.firstName && userData.contact.lastName) {
+                result = userData.contact.firstName + ' ' + userData.contact.lastName;
+            } else if (userData.contact.firstName || userData.contact.lastName) {
+                result = userData.contact.firstName || userData.contact.lastName;
+            // email
+            } else if (userData.contact.email1) {
+                result = userData.contact.email1;
+            }
+        }
+
+        return result;
+    }
 
     return that;
 });

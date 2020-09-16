@@ -175,6 +175,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             },
             'files': {
                 '23': 'meta',
+                '51': 'created_from',
+                '52': 'modified_from',
                 '108': 'object_permissions',
                 '109': 'shareable',
                 '700': 'title',
@@ -234,6 +236,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '6': 'last_modified_utc',
                 '20': 'folder_id',
                 '23': 'meta',
+                '51': 'created_from',
+                '52': 'modified_from',
                 '300': 'title',
                 '301': 'module',
                 '302': 'type',

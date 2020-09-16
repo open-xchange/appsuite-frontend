@@ -15,10 +15,10 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
     'io.ox/backbone/views/action-dropdown',
     'io.ox/backbone/views/actions/util',
     'io.ox/files/api',
-    'io.ox/core/api/user',
+    'io.ox/core/util',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, ActionDropdownView, actionsUtil, FilesAPI, UserAPI, Util, gt) {
+], function (PanelBaseView, Ext, ActionDropdownView, actionsUtil, FilesAPI, coreUtil, Util, gt) {
 
     'use strict';
 
@@ -211,8 +211,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         draw: function (baton) {
             var $node;
             this.find('td:last').append($node = $('<div class="createdby">'));
-
-            UserAPI.getName(baton.data.created_by)
+            coreUtil.getName(baton.data)
             .done(function (name) {
                 Util.setClippedLabel($node, name);
             })
