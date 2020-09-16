@@ -66,7 +66,7 @@ define('io.ox/calendar/common-extensions', [
 
         location: function (baton) {
             this.append(
-                $('<span class="location">').append(baton.data.location)
+                $('<span class="location">').text(baton.data.location)
             );
         },
 

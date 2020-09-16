@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-07-24 09:17+0200\n"
+"PO-Revision-Date: 2020-09-03 10:39+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -664,11 +664,6 @@ msgstr "unbekannt"
 msgid "%1$s of %2$s"
 msgstr "%1$s von %2$s"
 
-#. Quota maxed out; 100%
-#: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
-msgid "100%"
-msgstr "100%"
-
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
 msgid "Drag to reorder items"
 msgstr "Zum Neusortieren der Objekte ziehen"
@@ -929,7 +924,8 @@ msgstr "Herunterladen"
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: module:io.ox/core/boot apps/io.ox/multifactor/views/constants.js
 #: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
-#: apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/switchboard/views/zoom-call.js apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -4582,6 +4578,47 @@ msgstr "Der Dienst ist derzeit nicht verfügbar."
 msgid "Reload"
 msgstr "Neu laden"
 
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Privacy Policy"
+msgstr "Datenschutzrichtlinie"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Imprint"
+msgstr "Impressum"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Confirm new Password"
+msgstr "Neues Passwort bestätigen"
+
+#. While or after requesting a new password you can go back to the initial login page
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
+msgid "Back to sign in"
+msgstr "Zurück zum Anmelden"
+
+#. While requesting a new password on the login page; %1$s will be replaced by the product name e.g. OX App Suite
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid ""
+"Please enter your email address associated with %1$s. You will receive an "
+"email that contains a link to reset your password."
+msgstr ""
+"Bitte geben Sie Ihre mit %1$s verknüpfte E-Mail-Adresse ein. Sie erhalten "
+"eine E-Mail, die einen Link zum Zurücksetzen Ihres Passworts enthält."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/core/tk/wizard.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js
+#: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
+#: apps/io.ox/multifactor/views/constants.js apps/io.ox/tours/whats-new.js
+#: apps/io.ox/wizards/upsell.js module:io.ox/wizards
+msgid "Next"
+msgstr "Weiter"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+msgid "Email address"
+msgstr "E-Mail-Adresse"
+
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
 msgstr "Warnhinweis"
@@ -6799,15 +6836,6 @@ msgid "Start tour"
 msgstr "Tour starten"
 
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js
-#: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
-#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
-#: apps/io.ox/tours/whats-new.js apps/io.ox/wizards/upsell.js
-#: module:io.ox/wizards
-msgid "Next"
-msgstr "Weiter"
-
-#: apps/io.ox/core/tk/wizard.js module:io.ox/core
 msgid "Welcome"
 msgstr "Willkommen"
 
@@ -8724,10 +8752,6 @@ msgstr "Kontoname"
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid "Your name"
 msgstr "Ihr Name"
-
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-msgid "Email address"
-msgstr "E-Mail-Adresse"
 
 #. If the user selects 'copy of' in the drafts folder, the subject of the email is prefixed with [Copy].
 #. Please make sure that this is a prefix in every translation since it will be removed when the mail is sent.
@@ -12750,7 +12774,7 @@ msgstr ""
 "Konto zu erstellen."
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/zoom.js
+#: apps/io.ox/switchboard/views/zoom-call.js apps/io.ox/switchboard/zoom.js
 msgid "Connect with Zoom"
 msgstr "Mit Zoom verbinden"
 
@@ -12765,6 +12789,15 @@ msgstr "Persönliche Meeting-ID:"
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "Remove account"
 msgstr "Konto entfernen"
+
+#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/zoom.js
+msgid ""
+"The Zoom integration service is currently unavailable. Please try again "
+"later."
+msgstr ""
+"Der Dienst ist momentan nicht erreichbar. Bitte versuchen Sie es später noch "
+"einmal."
 
 #: apps/io.ox/switchboard/views/call-history.js module:io.ox/switchboard
 msgid "Call history"
@@ -14572,10 +14605,6 @@ msgstr ""
 "Anspruch nehmen."
 
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
-msgid "Back to sign in"
-msgstr "Zurück zum Anmelden"
-
-#: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid "Your timezone"
 msgstr "Ihre Zeitzone"
 
@@ -14595,11 +14624,8 @@ msgstr "Einladen zu %s"
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
 
-#: apps/io.ox/switchboard/settings/pane.js
-#: apps/io.ox/switchboard/zoom.js
-#: module:io.ox/switchboard
-msgid "The Zoom integration service is currently unavailable. Please try again later."
-msgstr "Der Dienst ist momentan nicht erreichbar. Bitte versuchen Sie es später noch einmal."
+#~ msgid "100%"
+#~ msgstr "100%"
 
 #~ msgid "Use native notifications"
 #~ msgstr "Systemeigene Benachrichtigungen verwenden"

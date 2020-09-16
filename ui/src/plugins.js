@@ -451,9 +451,10 @@
                                 load(m, name);
                             });
                         } else {
+                            // this looks weird but works. Encoding prevents malicious code from being run, decoding it in the runCode function later on preserves the original modulename
                             runCode([ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''),
-                                'define("' + modulename + '", function () { console.error("Could not load module ' +
-                                    modulename + '. Defining dummy module.");})'
+                                'define(decodeURIComponent("' + encodeURIComponent(modulename) + '"), function () { console.error("Could not load module " + decodeURIComponent("' +
+                                encodeURIComponent(modulename) + '") + ". Defining dummy module.");})'
                             );
                             context.completeLoad(modulename);
                         }

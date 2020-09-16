@@ -40,7 +40,7 @@ define('io.ox/tasks/common-extensions', [
 
         title: function (baton) {
             this.append(
-                $('<div class="title">').append(
+                $('<div class="title">').text(
                     baton.data.title
                 )
             );
