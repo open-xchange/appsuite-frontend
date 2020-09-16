@@ -282,6 +282,7 @@ define('io.ox/files/share/api', [
             });
         },
 
+        // TODO wird gar nicht genutzt, kann also weg?
         /**
          * get a single shared folder
          * @return { deferred } an object with share data
@@ -290,6 +291,7 @@ define('io.ox/files/share/api', [
             var columns = [
                 'id',
                 'created_by',
+                'created_from',
                 'last_modified',
                 'title',
                 'module',

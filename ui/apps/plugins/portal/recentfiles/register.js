@@ -52,6 +52,7 @@ define('plugins/portal/recentfiles/register', [
                     }
                     // update baton
                     baton.data = files;
+                    //TODO Check this wehn created from is available
                     // get user ids
                     var userIds = _(files).chain().pluck('modified_by').uniq().value();
                     // map userids back to each file
