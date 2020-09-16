@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-09-14 12:06+0200\n"
+"PO-Revision-Date: 2020-09-16 10:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1068,6 +1068,7 @@ msgid "Actions"
 msgstr "Aktionen"
 
 #: apps/io.ox/backbone/views/toolbar.js module:io.ox/core
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/core/extPatterns/links.js
 msgid "More actions"
 msgstr "Weitere Aktionen"
@@ -1078,7 +1079,7 @@ msgstr "Minimierte Fenster"
 
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
 msgid "Stick to the right side"
-msgstr ""
+msgstr "Rechts verankern"
 
 #. window resize
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
@@ -3399,12 +3400,13 @@ msgstr "%1$s hat die Konversation verlassen"
 #: apps/io.ox/chat/data.js module:io.ox/chat
 #, fuzzy
 msgid "Unknown system message %1$s"
-msgstr "Unbekannte Systemmeldung %1$s"
+msgstr "Unbekannte Systemmeldung: %1$s"
 
 #. shown instead of your name for your own chat messages
 #: apps/io.ox/chat/data.js module:io.ox/chat
+#, fuzzy
 msgid "You"
-msgstr ""
+msgstr "Sie"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "Unknown user"
@@ -3412,9 +3414,8 @@ msgstr "Unbekannter Benutzer"
 
 #. used as a separator text between multiple participants of a chat example: Paul and Bob
 #: apps/io.ox/chat/data.js module:io.ox/chat
-#, fuzzy
 msgid ", and "
-msgstr "und"
+msgstr " und "
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 msgid "Start chat"
@@ -3427,19 +3428,17 @@ msgstr "Kürzliche Chat-Nachrichten"
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 #, fuzzy
 msgid "Open chat"
-msgstr "Offener Chat"
+msgstr "Chat öffnen"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 msgid "Start chat with participants"
 msgstr "Chat mit Teilnehmern starten"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
-#, fuzzy
 msgid "Reply via chat"
 msgstr "Antwort per Chat"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
-#, fuzzy
 msgid "Reply all via chat"
 msgstr "Antwort an alle per Chat"
 
@@ -3471,15 +3470,15 @@ msgstr "Möchten Sie den Chat wirklich verlassen?"
 msgid "New"
 msgstr "Neu"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
 msgid "Private chat"
 msgstr "Privater Chat"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
 msgid "Group chat"
 msgstr "Gruppenchat"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
 msgid "Public channel"
 msgstr "Öffentlicher Kanal"
 
@@ -3487,7 +3486,7 @@ msgstr "Öffentlicher Kanal"
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Recent conversations"
-msgstr "Kürzliche Konversationen"
+msgstr "Kürzlicher E-Mail-Austausch"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
 #: apps/io.ox/chat/views/channelList.js
@@ -3512,6 +3511,13 @@ msgstr ""
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "New Chat"
 msgstr "Neuer Chat"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
+#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
+#, fuzzy
+msgid "Detach window"
+msgstr "Fenster lösen"
 
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 #: apps/io.ox/chat/views/chat.js apps/io.ox/chat/views/fileList.js
@@ -3554,8 +3560,13 @@ msgstr "Chat-Aktionen"
 msgid "Enter message here"
 msgstr "Nachricht hier eingeben"
 
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
+msgid "Upload file"
+msgstr "Datei hochladen"
+
 #: apps/io.ox/chat/views/history.js module:io.ox/chat
-#, fuzzy
 msgid "History actions"
 msgstr "Aktivitätsverlauf"
 
@@ -3576,8 +3587,9 @@ msgid "Participants (%1$d)"
 msgstr "Teilnehmer (%1$d)"
 
 #: apps/io.ox/chat/views/search.js module:io.ox/chat
+#, fuzzy
 msgid "Search or start new chat"
-msgstr ""
+msgstr "Suchen oder neuen Chat starten"
 
 #: apps/io.ox/chat/views/searchResult.js module:io.ox/chat
 msgid "No search results"
@@ -5045,7 +5057,6 @@ msgid "Close premium features"
 msgstr "Premium-Funktionen schließen"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
-#, fuzzy
 msgid "Try now!"
 msgstr "Jetzt testen!"
 
@@ -5682,11 +5693,6 @@ msgstr "Freigegebenen Kalender abonnieren"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Import calendar"
 msgstr "Kalender importieren"
-
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/core/import/import.js
-msgid "Upload file"
-msgstr "Datei hochladen"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared by other users"
@@ -7429,7 +7435,7 @@ msgstr "Diese Version anzeigen"
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "Open in pop out viewer"
-msgstr ""
+msgstr "In eigenem Viewer öffnen"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
@@ -13941,7 +13947,6 @@ msgid "Total cost"
 msgstr "Gesamtkosten"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
-#, fuzzy
 msgid "Buy now!"
 msgstr "Jetzt kaufen"
 
