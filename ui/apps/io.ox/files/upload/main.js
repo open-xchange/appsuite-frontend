@@ -259,12 +259,11 @@ define('io.ox/files/upload/main', [
                 );
             })
             .on('stop', function () {
-                mainView.removeClass('toolbar-bottom-visible');
                 // if something went wrong before the start (filesize to big etc.) there is no $el
-                if ($el) {
-                    $el.remove();
-                }
+                if (mainView) { mainView.removeClass('toolbar-bottom-visible'); }
+                if ($el) { $el.remove(); }
             });
+
         this.update = upload.createQueue(_.extend({}, this, {
             progress: function (item, position, files) {
 
