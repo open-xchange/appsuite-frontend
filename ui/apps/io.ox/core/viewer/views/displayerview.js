@@ -131,7 +131,7 @@ define('io.ox/core/viewer/views/displayerview', [
             this.listenTo(this.viewerEvents, 'viewer:zoom:out:swiper', this.onZoomOut);
 
             // listen to version change events
-            this.listenTo(FilesAPI, 'change:version', this.onModelChangeVersion.bind(this));
+            this.listenTo(FilesAPI, 'add:version remove:version change:version', this.onModelChangeVersion.bind(this));
 
             // listen to version display events
             this.listenTo(this.viewerEvents, 'viewer:display:version', this.onDisplayVersion.bind(this));
