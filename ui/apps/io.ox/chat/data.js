@@ -1083,11 +1083,11 @@ define('io.ox/chat/data', [
             }.bind(this));
         },
 
-        login: function () {
+        login: function (options) {
             return this.getUserId().catch(function () {
                 return this.getConfig().then(function (config) {
                     if (config.appsuite) return this.authenticateAppsuite();
-                    if (config.oidc) return this.authenticateOIDC();
+                    if (config.oidc) return options.autoLogin ? this.authenticateOIDCSilent() : this.authenticateOIDC();
                     throw new Error('No suitable authentication method');
                 }.bind(this));
             }.bind(this)).then(function (user) {
@@ -1127,7 +1127,7 @@ define('io.ox/chat/data', [
         },
 
         autologin: function () {
-            return this.login();
+            return this.login({ autoLogin: true });
         },
 
         logout: function () {
