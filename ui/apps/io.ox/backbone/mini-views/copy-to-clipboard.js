@@ -28,14 +28,18 @@ define('io.ox/backbone/mini-views/copy-to-clipboard', [
         },
 
         setup: function () {
-            if (!this.options.targetId && !this.options.input) throw Error('Copy to clipboad nees an id or an input to operate correctly');
+            if (!this.options.targetId && !this.options.input && !this.options.content) throw Error('Copy to clipboard needs an id, content or an input to operate correctly');
         },
 
         render: function () {
-            var self = this, label = gt('Copy to clipboard'), target;
+            var self = this, target, content;
+            var label = this.options.label ? this.options.label : gt('Copy to clipboard');
+            var iconClass = this.options.iconClass ? this.options.iconClass : 'fa fa-clipboard clippy';
 
             if (this.options.targetId) {
                 target = this.options.targetId;
+            } else if (this.options.content) {
+                content = this.options.content;
             } else {
                 target = this.options.input.attr('id');
                 if (!target) {
@@ -45,15 +49,17 @@ define('io.ox/backbone/mini-views/copy-to-clipboard', [
                 }
             }
 
-            this.$el.empty().append(
-                $('<i class="fa fa-clipboard clippy" aria-hidden="true">')
-            ).attr({
+            var icon = $('<i aria-hidden="true">');
+            icon.addClass(iconClass);
+
+            this.$el.empty().append(icon).attr({
                 'data-clipboard-target': target,
                 'data-toggle': 'tooltip',
                 'data-placement': 'bottom',
                 'data-original-title': label,
                 'aria-label': label,
-                'data-container': 'body'
+                'data-container': 'body',
+                'data-clipboard-text': content
             }).prop('disabled', true).tooltip();
 
             require(['static/3rd.party/clipboard.min.js']).then(function (ClipBoard) {
