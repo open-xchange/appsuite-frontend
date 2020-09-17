@@ -50,28 +50,31 @@ define('io.ox/backbone/views/toolbar', [
                 .append(this.createToolbar());
             this.selection = null;
             if (this.options.data) this.setData(this.options.data);
+
+            // _finalizeRender is added to the prototype, but for the _.lfo function
+            // we a different instance for each toolbar.
+            this.finalizeRender = function ($toolbar) { this._finalizeRender($toolbar); };
         },
 
-        render: (function () {
+        _finalizeRender: function ($toolbar) {
+            if (this.disposed) return;
 
-            function finalizeRender($toolbar) {
-                if (this.disposed) return;
-                this.injectMoreDropdown($toolbar);
-                this.replaceToolbar($toolbar);
-                this.initButtons($toolbar);
-                this.ready();
-            }
+            this.injectMoreDropdown($toolbar);
+            this.replaceToolbar($toolbar);
+            this.initButtons($toolbar);
+            this.ready();
+        },
 
-            return function (baton) {
-                if (!baton) return this;
-                var items = this.point.list()
-                    .map(util.processItem.bind(null, baton))
-                    .map(util.createItem.bind(null, baton));
-                var $toolbar = this.createToolbar().append(_(items).pluck('$li'));
-                util.waitForMatches(items, _.lfo(true, this, finalizeRender, $toolbar));
-                return this;
-            };
-        })(),
+        render: function (baton) {
+            if (!baton) return this;
+
+            var items = this.point.list()
+                .map(util.processItem.bind(null, baton))
+                .map(util.createItem.bind(null, baton));
+            var $toolbar = this.createToolbar().append(_(items).pluck('$li'));
+            util.waitForMatches(items, _.lfo(true, this, this.finalizeRender, $toolbar));
+            return this;
+        },
 
         createToolbar: function () {
             var title = this.options.title ? gt('%1$s toolbar. Use cursor keys to navigate.', this.options.title) : gt('Actions. Use cursor keys to navigate.');
