@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-09-16 10:49+0200\n"
+"PO-Revision-Date: 2020-09-17 13:30+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -3396,6 +3396,11 @@ msgstr "%1$s hat die Gruppenbeschreibung in \"%2$s\" geändert."
 msgid "%1$s left the conversation"
 msgstr "%1$s hat die Konversation verlassen"
 
+#. If it fails to load and decrypt a chat message a system message will be shown
+#: apps/io.ox/chat/data.js module:io.ox/chat
+msgid "Message could not be loaded"
+msgstr "Nachricht konnte nicht geladen werden"
+
 #. %1$s: messagetext
 #: apps/io.ox/chat/data.js module:io.ox/chat
 #, fuzzy
@@ -3566,6 +3571,10 @@ msgstr "Nachricht hier eingeben"
 msgid "Upload file"
 msgstr "Datei hochladen"
 
+#: apps/io.ox/chat/views/chatList.js module:io.ox/chat
+msgid "Chat list"
+msgstr "Chat-Liste"
+
 #: apps/io.ox/chat/views/history.js module:io.ox/chat
 msgid "History actions"
 msgstr "Aktivitätsverlauf"
@@ -3590,6 +3599,10 @@ msgstr "Teilnehmer (%1$d)"
 #, fuzzy
 msgid "Search or start new chat"
 msgstr "Suchen oder neuen Chat starten"
+
+#: apps/io.ox/chat/views/searchResult.js module:io.ox/chat
+msgid "Chat search results"
+msgstr "Chat-Suchergebnisse"
 
 #: apps/io.ox/chat/views/searchResult.js module:io.ox/chat
 msgid "No search results"
@@ -7312,6 +7325,17 @@ msgstr "Beschreibung bearbeiten"
 #: module:io.ox/core/viewer
 msgid "Add a description"
 msgstr "Beschreibung hinzufügen"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#, fuzzy
+msgid ""
+"Private link: Only people who have access to the file/folder can use it. Use "
+"it to point to members of your organization to this file/folder."
+msgstr ""
+"Privater Link: Nur Personen, die Zugriff auf die Datei/den Ordner haben, "
+"können ihn verwenden. Verwenden Sie ihn, um Mitglieder Ihrer Organisation "
+"auf diese Datei/diesen Ordner zu verweisen."
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js module:io.ox/files
