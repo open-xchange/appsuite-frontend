@@ -267,7 +267,6 @@ define('io.ox/mail/main', [
         'account-error-handling': function (app) {
 
             app.addAccountErrorHandler = function (folderId, callbackEvent, data, overwrite) {
-                console.log(folderId, callbackEvent, data);
                 var node = app.treeView.getNodeView(folderId),
                     updateNode = function (node) {
                         //#. Shown as a tooltip when a mail account doesn't work correctly. Click brings user to the settings page

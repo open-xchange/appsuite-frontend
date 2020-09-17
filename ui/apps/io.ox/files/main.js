@@ -1598,7 +1598,6 @@ define('io.ox/files/main', [
         'account-error-handling': function (app) {
 
             app.addAccountErrorHandler = function (folderId, callbackEvent, data, overwrite) {
-                console.log(folderId, callbackEvent, data);
                 var node = app.treeView.getNodeView(folderId + '/'),
                     updateNode = function (node) {
                         node.showStatusIcon(gt('There is a problem with this account. Click for more information'), callbackEvent || 'checkAccountStatus', data || node.options.model_id, overwrite);
