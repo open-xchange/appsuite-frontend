@@ -65,8 +65,8 @@ define('io.ox/chat/main', [
                 'keydown .left-navigation': 'onLeftNavigationKeydown',
                 'keydown .overlay': 'onOverlayEvent',
                 'click .overlay': 'onOverlayEvent',
-                'focus ul > li': 'onFocus',
-                'click ul > li': 'onClick'
+                'focus ul.chats > li': 'onFocus',
+                'click ul.chats > li': 'onClick'
             });
         },
 
