@@ -76,11 +76,12 @@ define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], func
                 // last line of defense, maybe messed up content in queue causing
                 // request entity too large error. In this case clear the queue
                 api.queue = [];
-            } else {
-                // reschedule data for retransmission in case switchboard is not available
-                api.trigger('fail', data);
-                [].push.apply(api.queue, data);
+                return;
             }
+            // reschedule data for retransmission in case switchboard is not available
+            api.trigger('fail', data);
+            [].push.apply(api.queue, data);
+
         });
     }
 
