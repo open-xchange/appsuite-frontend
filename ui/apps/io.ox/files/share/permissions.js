@@ -16,7 +16,6 @@ define('io.ox/files/share/permissions', [
     'io.ox/core/extensions',
     'io.ox/files/share/share-settings',
     'io.ox/files/share/public-link',
-    'io.ox/files/share/wizard',
     'io.ox/backbone/views/disposable',
     'io.ox/core/yell',
     'io.ox/backbone/mini-views',
@@ -40,7 +39,7 @@ define('io.ox/files/share/permissions', [
     'io.ox/core/api/group',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ext, shareSettings, PublicLink, ShareWizard, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil, groupApi) {
+], function (ext, shareSettings, PublicLink, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil, groupApi) {
 
     'use strict';
 
@@ -826,23 +825,17 @@ define('io.ox/files/share/permissions', [
     ext.point(POINT_DIALOG + '/share-options').extend({
         id: 'who-can-share',
         index: 100,
-        draw: function (model) {
+        draw: function (linkModel) {
+            linkModel.set('access', linkModel.hasUrl() ? 1 : 0);
+
             var typeTranslations = {
                 0: gt('Only invited people'),
                 1: gt('Only invited people and everyone who has the link')
             };
 
-            // create dropdown
-            var dropdown = new DropdownView({ model: model, label: gt('Only invited people'), smart: true, buttonToggle: true, caret: true });
-
-            // set dropdown link
-            // if (baton.model.get('expiry_date')) {
-            //     dropdown.$el.find('.dropdown-label').text(new moment(baton.model.get('expiry_date')).format('L'));
-            // }
-
-            // add dropdown options
+            var dropdown = new DropdownView({ model: linkModel, label: typeTranslations[linkModel.get('access')], caret: true });
             _(typeTranslations).each(function (val, key) {
-                dropdown.option('expires', parseInt(key, 10), val);
+                dropdown.option('access', parseInt(key, 10), val);
             });
 
             this.append(
@@ -852,20 +845,9 @@ define('io.ox/files/share/permissions', [
                 )
             );
 
-            // baton.model.once('change', function () {
-            //     if (baton.model.get('expiry_date')) {
-            //         baton.model.set('expires', null);
-            //     }
-            // });
-
-            // baton.model.on('change:expires', function (model) {
-            //     if (baton.model.get('expires') !== null) {
-            //         model.set({
-            //             'temporary': true,
-            //             'expiry_date': model.getExpiryDate()
-            //         });
-            //     }
-            // });
+            linkModel.on('change:access', function (model) {
+                dropdown.$el.find('.dropdown-label').text(typeTranslations[model.get('access')]);
+            });
         }
     });
 
@@ -957,7 +939,6 @@ define('io.ox/files/share/permissions', [
             options.point = 'io.ox/files/share/permissions/dialog';
 
             var dialog = new ModalDialog(options);
-            ext.point(POINT_DIALOG + '/share-options').invoke('draw', dialog.$body, objModel);
 
             var DialogConfigModel = Backbone.Model.extend({
                 defaults: {
@@ -988,8 +969,20 @@ define('io.ox/files/share/permissions', [
 
             var dialogConfig = new DialogConfigModel(),
                 permissionsView = new PermissionsView({ model: objModel }),
-                publicLink = new PublicLink({ files: linkModel }),
-                shareWizard = new ShareWizard({ files: linkModel });
+                publicLink = new PublicLink({ files: linkModel });
+
+            ext.point(POINT_DIALOG + '/share-options').invoke('draw', dialog.$body, publicLink.model);
+
+            publicLink.model.on('change:access', function (model) {
+                var accessMode = model.get('access');
+                if (accessMode === 0) {
+                    publicLink.hide();
+                    publicLink.removeLink();
+                } else {
+                    publicLink.show();
+                    publicLink.fetchLink();
+                }
+            });
 
             function hasNewGuests() {
                 var knownGuests = [];
@@ -1003,11 +996,9 @@ define('io.ox/files/share/permissions', [
 
             permissionsView.listenTo(permissionsView.collection, 'reset', function () {
                 dialogConfig.set('oldGuests', _.copy(permissionsView.collection.where({ type: 'guest' })));
-                shareWizard.show();
             });
 
             permissionsView.listenTo(permissionsView.collection, 'add', function () {
-                shareWizard.hide();
                 dialog.showFooter();
             });
 
@@ -1029,13 +1020,15 @@ define('io.ox/files/share/permissions', [
             });
 
             if (objModel.isAdmin()) {
-
                 dialog.$footer.prepend(
                     $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                        settingsUtil.checkbox('sendNotifications', gt('Send notification by email'), dialogConfig).on('change', function (e) {
-                            var input = e.originalEvent.srcElement;
-                            dialogConfig.set('byHand', input.checked);
+                        $('<button class="btn btn-default" aria-label="Unshare"></button>').text(gt('Unshare')).on('click', function () {
+                            // Remove all permissions and public link
                         })
+                        // settingsUtil.checkbox('sendNotifications', gt('Send notification by email'), dialogConfig).on('change', function (e) {
+                        //     var input = e.originalEvent.srcElement;
+                        //     dialogConfig.set('byHand', input.checked);
+                        // })
                     )
                 );
             }
@@ -1144,7 +1137,30 @@ define('io.ox/files/share/permissions', [
                     );
                 }
 
-                var settingsButton = $('<button type="button" class="btn settings-button" aria-label="Settings"><span class="fa fa-cog" aria-hidden="true"></span></button>').on('click', function () { shareSettings.showSettingsDialog(linkModel); });
+                var settingsButton = $('<button type="button" class="btn settings-button" aria-label="Settings"><span class="fa fa-cog" aria-hidden="true"></span></button>').on('click', function () {
+                    // if (publicLink.model.get('url')) {
+                    //     publicLink.model.fetch().then(function () {
+                    //         openSettings();
+                    //     });
+                    // } else {
+                    openSettings();
+                    //}
+                    // // var copy = _.clone(publicLink.model.attributes);
+                    // // var newModel = new Backbone.Model(copy);
+                    // var settingsView = new shareSettings.ShareSettingsView({ model: publicLink.model });
+                    // //var settingsView = new shareSettings.ShareSettingsView({ model: newModel });
+                    // settingsView.on('changePublicLinkSettings', function (model) {
+                    //     // publicLink.model.attributes.secured = model.get('secured');
+                    //     // publicLink.model.attributes.password = model.get('password');
+                    //     console.log('Change ', model);
+                    //     console.log('Existsing ', publicLink.model);
+                    //     // publicLink.model.set('secured', model.get('secured'));
+                    //     // publicLink.model.set('password', model.get('password'));
+                    //     // publicLink.model.set('temporary', model.get('temporary'));
+                    //     // publicLink.model.set('expiry_date', model.get('expiry_date'));
+                    // });
+                    // shareSettings.showSettingsDialog(settingsView);
+                });
                 dialog.$header.append(settingsButton);
 
                 dialog.$body.append(
@@ -1152,7 +1168,7 @@ define('io.ox/files/share/permissions', [
                     // Invite people pane
                     $('<div id="invite-people-pane" class="share-pane invite-people"></div>').append(
                         // Invite people header
-                        $('<h5></h5>').text(gt('Permissions / Invite people')),
+                        $('<h5></h5>').text(gt('Invite people')),
                         // Add address picker
                         $('<div class="row">').append(
                             $('<div class="form-group col-sm-6">').append(
@@ -1219,10 +1235,6 @@ define('io.ox/files/share/permissions', [
                                 placeholder: gt('Personal message (optional). This message is sent to all newly invited people.')
                             })
                         )
-                    ),
-                    $('<div id="share-link-pane" class="share-pane share-by-link"></div>').append(
-                        // Share link header
-                        shareWizard.render().$el
                     )
                 );
 
@@ -1241,63 +1253,84 @@ define('io.ox/files/share/permissions', [
             if (supportsChanges) {
                 // add action buttons
                 dialog
-                    .addButton({ action: 'switch-or-cancel', label: gt('Cancel') })
+                    .addCancelButton()
                     .addButton({ action: 'save', label: options.share ? gt('Share') : gt('Save') });
             } else {
                 dialog
                     .addButton({ action: 'cancel', label: gt('Close') });
             }
 
-            // Cancel invite process and shwo initial dialog
-            // or close dialog.
-            dialog.on('switch-or-cancel', function () {
-                if (shareWizard.isVisible()) {
-                    dialog.close();
-                } else {
-                    permissionsView.collection.trigger('revert');
-                    shareWizard.show();
-                    dialog.hideFooter();
-                    // Make sure all input elements are
-                    // visible when dialog.idle() runs.
-                    setTimeout(function () {
-                        dialog.idle();
-                    }, 20);
+            function openSettings() {
+                // var copy = _.clone(publicLink.model.attributes);
+                // var newModel = new Backbone.Model(copy);
+                var settingsView = new shareSettings.ShareSettingsView({ model: publicLink.model });
+                //var settingsView = new shareSettings.ShareSettingsView({ model: newModel });
+                settingsView.on('changePublicLinkSettings', function (model) {
+                    // publicLink.model.attributes.secured = model.get('secured');
+                    // publicLink.model.attributes.password = model.get('password');
+                    console.log('Change ', model);
+                    console.log('Existsing ', publicLink.model);
+                    // publicLink.model.set('secured', model.get('secured'));
+                    // publicLink.model.set('password', model.get('password'));
+                    // publicLink.model.set('temporary', model.get('temporary'));
+                    // publicLink.model.set('expiry_date', model.get('expiry_date'));
+                });
+                shareSettings.showSettingsDialog(settingsView);
+            }
+
+            function mergePermissionsAndPublicLink(permissions, entity) {
+                var existingEnity = _.findWhere(permissions, { entity: entity });
+                if (!existingEnity) {
+                    permissions.push({ bits: 1, entity: entity, group: false });
                 }
-            });
+                return permissions;
+            }
 
             dialog.on('save', function () {
-
                 var changes, options = dialogConfig.toJSON(), def;
-
-                if (objModel.isFolder()) {
-                    changes = { permissions: permissionsView.collection.toJSON() };
-                    def = folderAPI.update(objModel.get('id'), changes, options);
-                } else {
-                    changes = { object_permissions: permissionsView.collection.toJSON() };
-                    def = filesAPI.update(objModel.pick('folder_id', 'id'), changes, options);
-                }
-
-                def.then(
-                    function success() {
-                        // refresh the guest group (id = int max value)
-                        groupApi.refreshGroup(2147483647);
-                        objModel.reload().then(
-                            function () {
-                                dialog.close();
-                                // we might have new addresses
-                                contactsAPI.trigger('maybeNewContact');
-                            },
-                            function (error) {
-                                dialog.idle();
-                                yell(error);
-                            }
-                        );
-                    },
-                    function fail(error) {
-                        dialog.idle();
-                        yell(error);
+                var entity = publicLink.model.get('entity');
+                var permissions = permissionsView.collection.toJSON();
+                // Order matters. Share must be called before the update call is invoked. Otherwise a file conflict is created.
+                // publicLink.share().then(this.close, function () {
+                publicLink.share().then(function () {
+                    if (entity) {
+                        permissions = mergePermissionsAndPublicLink(permissionsView.collection.toJSON(), entity);
                     }
-                );
+
+                    if (objModel.isFolder()) {
+                        changes = { permissions: permissions };
+                        def = folderAPI.update(objModel.get('id'), changes, options);
+                    } else {
+                        changes = { object_permissions: permissions };
+                        def = filesAPI.update(objModel.pick('folder_id', 'id'), changes, options);
+                    }
+
+                    def.then(
+                        function success() {
+                            // refresh the guest group (id = int max value)
+                            groupApi.refreshGroup(2147483647);
+                            objModel.reload().then(
+                                function () {
+                                    dialog.close();
+                                    // we might have new addresses
+                                    contactsAPI.trigger('maybeNewContact');
+                                },
+                                function (error) {
+                                    dialog.idle();
+                                    yell(error);
+                                }
+                            );
+                        },
+                        function fail(error) {
+                            dialog.idle();
+                            yell(error);
+                        }
+                    );
+                });
+            });
+
+            dialog.on('cancel', function () {
+                publicLink.cancel();
             });
 
             // add permissions view
@@ -1316,7 +1349,6 @@ define('io.ox/files/share/permissions', [
                     dialog.idle();
                 }, 50);
             })
-            .hideFooter()
             .busy()
             .open();
         }

@@ -12,26 +12,17 @@
  */
 
 define('io.ox/files/share/public-link', [
-    'io.ox/backbone/views/modal',
     'io.ox/backbone/views/disposable',
     'io.ox/core/extensions',
     'io.ox/files/share/api',
     'io.ox/files/share/model',
-    'io.ox/backbone/mini-views',
-    'io.ox/backbone/mini-views/dropdown',
-    'io.ox/contacts/api',
     'io.ox/core/api/group',
-    'io.ox/core/tk/tokenfield',
     'io.ox/core/yell',
-    'io.ox/core/settings/util',
     'gettext!io.ox/files',
-    'settings!io.ox/contacts',
-    'io.ox/core/capabilities',
-    'io.ox/backbone/mini-views/addresspicker',
     'io.ox/backbone/mini-views/copy-to-clipboard',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ModalDialog, DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, groupApi, Tokenfield, yell, settingsUtil, gt, settingsContacts, capabilities, AddressPickerView, CopyToClipboard) {
+], function (DisposableView, ext, api, sModel, groupApi, yell, gt, CopyToClipboard) {
 
     'use strict';
 
@@ -59,9 +50,10 @@ define('io.ox/files/share/public-link', [
         index: INDEX += 100,
         draw: function (baton) {
             var link = baton.model.get('url', ''),
-                formID = _.uniqueId('copy-pl-to-clipboard-');
+                formID = _.uniqueId('copy-pl-to-clipboard-'),
+                input = $('<input type="text" class="public-link-url-input">').attr('id', formID).val(link);
             this.append(
-                $('<input type="text" class="public-link-url-input">').attr('id', formID).val(link),
+                input,
                 $('<div class="row"></div>')
                 .append(
                     $('<div class="col-sm-1 col-xs-2 text-center"><i class="fa fa-link" aria-hidden="true"></i></div>'),
@@ -69,6 +61,10 @@ define('io.ox/files/share/public-link', [
                     $('<div class="col-sm-2 col-xs-4 text-right"></div>').append(new CopyToClipboard({ targetId: '#' + formID, buttonStyle: 'link', buttonLabel: gt('Copy link') }).render().$el)
                 )
             );
+            baton.model.on('change:url', function (model) {
+                var url = model.get('url', '');
+                input.val(url);
+            });
         }
     });
 
@@ -78,45 +74,33 @@ define('io.ox/files/share/public-link', [
     var PublicLink = DisposableView.extend({
 
         className: 'public-link',
+        hadUrl: false,
 
         initialize: function (options) {
 
             this.model = new sModel.WizardShare({ files: options.files });
-
             this.baton = ext.Baton({ model: this.model, view: this });
-
             this.listenTo(this.model, 'invalid', function (model, error) {
                 yell('error', error);
             });
+            this.hadUrl = !!this.model.hasUrl();
+            // Fetch possible public settings.
+            // if (this.model.hasUrl()) {
+            //     this.model.fetch();
+            // }
         },
 
         render: function () {
             this.$el.addClass(this.model.get('type'));
             // draw extensionpoints
             ext.point(POINT + '/fields').invoke('draw', this.$el, this.baton);
+            if (!this.hasPublicLink()) {
+                this.hide();
+            }
             return this;
         },
 
-        showSettingsDialog: function () {
-            var dialog = new ModalDialog({
-                async: true,
-                focus: '.link-group>input[type=text]',
-                title: 'Settings',
-                point: 'io.ox/files/actions/share-link-settings',
-                help: 'ox.appsuite.user.sect.dataorganisation.sharing.link.html',
-                smartphoneInputFocus: true,
-                width: 600
-            });
-            dialog
-            .addCancelButton()
-            .addButton({ label: gt('Save'), action: 'cancel' });
-            //ext.point(POINT_SETTINGS + '/settings').invoke('draw', dialog.$body, this.baton);
-            dialog.open();
-        },
-
         share: function () {
-            // we might have new addresses
-            contactsAPI.trigger('maybeNewContact');
             var result;
 
             // Bug 52046: When the password checkbox is enable and the password could not be validated (e.g. it's empty) in the set function from the model,
@@ -136,10 +120,23 @@ define('io.ox/files/share/public-link', [
                     // no yell message needed, therefore return directly, the yell is called in the save function above
                     return $.Deferred().reject();
                 }
+                this.hadUrl = false;
             }
 
             return result.fail(yell);
 
+        },
+
+        cancel: function () {
+            if (!this.hadUrl && this.model.hasUrl()) {
+                this.removeLink();
+            }
+        },
+
+        fetchLink: function () {
+            if (!this.model.hasUrl()) {
+                this.model.fetch();
+            }
         },
 
         removeLink: function () {
@@ -160,43 +157,8 @@ define('io.ox/files/share/public-link', [
             this.$el.show();
         },
 
-        isVisible: function () {
-            return this.$el.is(':visible');
-        },
-
-        showLink: function () {
-            this.$el.find('.help-block').show();
-            this.$el.find('.link-group').show();
-        },
-
-        hideLink: function () {
-            this.$el.find('.help-block').hide();
-            this.$el.find('.link-group').hide();
-        },
-
-        showSettings: function () {
-            this.$el.find('.shareoptions').show();
-            this.$el.find('.recipients').show();
-            this.$el.find('.message').show();
-            this.showSettingsDialog();
-        },
-
-        hideSettingsLink: function () {
-            this.$el.find('.share-link-setting').hide();
-        },
-
-        showSettingsLink: function () {
-            this.$el.find('.share-link-setting').show();
-        },
-
-        hideSettings: function () {
-            this.$el.find('.shareoptions').hide();
-            this.$el.find('.recipients').hide();
-            this.$el.find('.message').hide();
-        },
-
-        areSettingsVisible: function () {
-            return this.$el.find('.shareoptions').is(':visible');
+        hasPublicLink: function () {
+            return this.model.hasUrl();
         }
     });
 

@@ -41,12 +41,13 @@ define('io.ox/files/share/model', [
         idAttribute: 'entity',
 
         initialize: function () {
-            this.setOriginal();
             // Set url if already shared
-            this._setUrl();
+            this._setUrlAndSettings();
+            this.setOriginal();
         },
 
-        _setUrl: function () {
+        _setUrlAndSettings: function () {
+            var hasUrl = false;
             var extendedPermissions = 'com.openexchange.share.extendedObjectPermissions';
             if (this.attributes.files) {
                 _.each(this.attributes.files, function (file) {
@@ -54,12 +55,55 @@ define('io.ox/files/share/model', [
                         _.each(file.get(extendedPermissions), function (permission) {
                             if (permission.type === 'anonymous' && permission.share_url) {
                                 this.attributes.url = permission.share_url;
+                                if (permission.password) {
+                                    this.attributes.password = permission.password;
+                                    this.attributes.secured = true;
+                                    hasUrl = true;
+                                }
+                                if (permission.expiry_date) {
+                                    this.attributes.expires = permission.expires;
+                                    this.attributes.expiry_date = permission.expiry_date;
+                                    this.attributes.temporary = true;
+                                }
                             }
                         }, this);
                     }
                 }, this);
             }
+            return hasUrl;
         },
+
+        // findUrl: function () {
+        //     var hasUrl = false;
+        //     var extendedPermissions = 'com.openexchange.share.extendedObjectPermissions';
+        //     if (this.attributes.files) {
+        //         _.each(this.attributes.files, function (file) {
+        //             if (file.has(extendedPermissions)) {
+        //                 _.each(file.get(extendedPermissions), function (permission) {
+        //                     if (permission.type === 'anonymous' && permission.share_url) {
+        //                         hasUrl = true;
+        //                     }
+        //                 }, this);
+        //             }
+        //         }, this);
+        //     }
+        //     return hasUrl;
+        // },
+
+        hasUrl: function () {
+            return !!this.get('url');
+        },
+
+        // hasUrl: function () {
+        //     if (!this.get('url')) {
+        //         //if (this.findUrl()) {
+        //         //if (this._setUrlAndSettings) {
+        //         this.fetch();
+        //         return true;
+        //         //}
+        //     }
+        //     return false;
+        // },
 
         setOriginal: function (data) {
             this.originalAttributes = data || _.clone(this.attributes);
@@ -151,7 +195,9 @@ define('io.ox/files/share/model', [
             }
 
             // create or update ?
-            if (!this.has('url')) return data;
+            if (!this.has('url')) {
+                return data;
+            }
 
             if (this.get('temporary')) {
                 data.expiry_date = this.getExpiryDate();

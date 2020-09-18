@@ -67,10 +67,10 @@ define('io.ox/files/share/share-settings', [
             // create dropdown
             var dropdown = new Dropdown({ tagName: 'span', model: baton.model, label: typeTranslations[baton.model.get('expires')], caret: true });
 
-            // set dropdown link
-            if (baton.model.get('expiry_date')) {
-                dropdown.$el.find('.dropdown-label').text(new moment(baton.model.get('expiry_date')).format('L'));
-            }
+            // // set dropdown link
+            // if (baton.model.get('expiry_date')) {
+            //     dropdown.$el.find('.dropdown-label').text(new moment(baton.model.get('expiry_date')).format('L'));
+            // }
 
             // add dropdown options
             _(typeTranslations).each(function (val, key) {
@@ -86,11 +86,11 @@ define('io.ox/files/share/share-settings', [
                 dropdown.render().$el.addClass('dropup')
             )));
 
-            baton.model.once('change', function () {
-                if (baton.model.get('expiry_date')) {
-                    baton.model.set('expires', null);
-                }
-            });
+            //baton.model.once('change', function () {
+            // if (baton.model.get('expiry_date')) {
+            //     baton.model.set('expires', null);
+            // }
+            //});
 
             baton.model.on('change:expiry_date', function (model, val) {
                 dropdown.$el.find('.dropdown-label').text(new moment(val).format('L'));
@@ -106,6 +106,15 @@ define('io.ox/files/share/share-settings', [
                     });
                 }
             });
+
+            if (baton.model.get('expiry_date')) {
+                baton.model.set('expires', null);
+            }
+
+            // set dropdown link
+            if (baton.model.get('expiry_date')) {
+                dropdown.$el.find('.dropdown-label').text(new moment(baton.model.get('expiry_date')).format('L'));
+            }
         }
     });
     /*
@@ -286,17 +295,20 @@ define('io.ox/files/share/share-settings', [
 
         initialize: function (options) {
 
-            this.model = new sModel.WizardShare({ files: options.files });
+            this.model = options.model; //new sModel.WizardShare({ files: options.files });
 
             this.baton = ext.Baton({ model: this.model, view: this });
 
             this.listenTo(this.model, 'invalid', function (model, error) {
                 yell('error', error);
             });
+            // // Fetch possible public settings.
+            // if (this.model.hasUrl()) {
+            //     this.model.fetch();
+            // }
         },
 
         render: function () {
-
             this.$el.addClass(this.model.get('type'));
             ext.point(POINT_SETTINGS + '/settings').invoke('draw', this.$el, this.baton);
             return this;
@@ -304,8 +316,10 @@ define('io.ox/files/share/share-settings', [
     });
 
     return {
-        showSettingsDialog: function (publicLinkModel) {
-            var settingsView = new ShareSettingsView({ files: publicLinkModel });
+        ShareSettingsView: ShareSettingsView,
+        showSettingsDialog: function (shareSettingsView) {
+        // showSettingsDialog: function (publicLinkModel) {
+            //var settingsView = new ShareSettingsView({ files: publicLinkModel });
             var dialog = new ModalDialog({
                 async: true,
                 focus: '.link-group>input[type=text]',
@@ -314,9 +328,20 @@ define('io.ox/files/share/share-settings', [
             });
             dialog
             .addCancelButton()
-            .addButton({ label: gt('Save'), action: 'cancel' });
-            dialog.$body.append(settingsView.render().$el);
+            .addButton({ label: gt('Save'), action: 'save' });
+            dialog.on('save', function () {
+                shareSettingsView.trigger('changePublicLinkSettings', shareSettingsView.model);
+                dialog.close();
+            });
+            dialog.$body.append(shareSettingsView.render().$el);
+            // dialog.on('open', function () {
+            //     // wait for dialog to render and busy spinner to appear
+            //     _.delay(function () {
+            //         shareSettingsView.model.fetc();
+            //     }, 50);
+            // });
             dialog.open();
+
         }
     };
 });
