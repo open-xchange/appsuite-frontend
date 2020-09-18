@@ -15,8 +15,9 @@ define('io.ox/chat/views/messages', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/data',
     'io.ox/chat/views/avatar',
+    'io.ox/core/extensions',
     'gettext!io.ox/chat'
-], function (DisposableView, data, Avatar, gt) {
+], function (DisposableView, data, Avatar, ext, gt) {
 
     'use strict';
 
@@ -26,9 +27,36 @@ define('io.ox/chat/views/messages', [
         return emojiRegex.test(str);
     }
 
+    ext.point('io.ox/chat/message/menu').extend({
+        id: 'edit',
+        index: 100,
+        draw: function (baton) {
+            this.append($('<li>').text(gt('Edit message')).on('click', function () {
+                baton.view.hideMenu();
+                debugger;
+            }));
+        }
+    });
+
+    ext.point('io.ox/chat/message/menu').extend({
+        id: 'delete',
+        index: 200,
+        draw: function (baton) {
+            this.append($('<li>').text(gt('Delete message')).on('click', function () {
+                baton.view.hideMenu();
+                debugger;
+            }));
+        }
+    });
+
     return DisposableView.extend({
 
         className: 'messages',
+
+        events: {
+            'mouseenter .content': 'showMenu',
+            'mouseleave .content': 'hideMenu'
+        },
 
         initialize: function (options) {
             this.options = options;
@@ -85,6 +113,22 @@ define('io.ox/chat/views/messages', [
             var date = this.renderDate(model);
             if (date) return [date, message];
             return message;
+        },
+
+        showMenu: function (e) {
+            if (!e || !e.target) return;
+            if (this.menu) this.hideMenu();
+            var target = $(e.target).closest('.content'),
+                model = this.collection.get(target.parent().attr('data-cid'));
+            this.menu = $('<ul class="message-menu list-unstyled">');
+            ext.point('io.ox/chat/message/menu').invoke('draw', this.menu, ext.Baton({ view: this, model: model }));
+            target.prepend(this.menu);
+        },
+
+        hideMenu: function () {
+            if (!this.menu) return;
+            this.menu.remove();
+            this.menu = null;
         },
 
         renderFoot: function (model) {

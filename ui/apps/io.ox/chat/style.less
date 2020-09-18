@@ -539,6 +539,28 @@
         margin-bottom: 8px;
         position: relative;
 
+        
+        .message-menu {
+            position: absolute;
+            left: 16px;
+            bottom: 100%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+            padding: 8px 0;
+            margin-bottom: 0px;
+            background: #fff;
+
+            li {
+                cursor: pointer;
+                padding: 0 16px;
+                color: #000;
+                &:hover {
+                    background: #f5f5f5;
+                }
+            }
+        }
+
         .body {
             word-break: break-word;
             font-size: 14px;
@@ -599,6 +621,11 @@
         &.myself {
             padding: 0 0 0 128px;
             display: flex;
+
+            .message-menu {
+                right: 16px;
+                left: auto;
+            }
 
             .sender {
                 display: none;
