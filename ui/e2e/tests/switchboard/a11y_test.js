@@ -18,15 +18,8 @@ const moment = require('moment');
 Feature('Accessibility > Switchboard');
 
 Before(async function (users) {
-    const { context } = await users.create();
-    let baseUrl;
-    if (process.env.SERVER) {
-        baseUrl = new URL(process.env.SERVER).origin;
-    }
-    await Promise.all([
-        context.hasCapability('switchboard'),
-        context.hasConfig('io.ox/switchboard//appsuiteApiBaseUrl', baseUrl)
-    ]);
+    await users.create();
+    await users[0].context.hasCapability('switchboard');
 });
 
 After(async function (users) {
@@ -62,6 +55,7 @@ Scenario('Switchboard - Call history', async (I) => {
 Scenario('Switchboard - Presence', async (I) => {
 
     I.login();
+    pause()
     I.waitForVisible('~Support');
     I.click('~Support');
     I.waitForVisible('.dropdown.open');
