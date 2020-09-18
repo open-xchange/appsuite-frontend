@@ -22,7 +22,15 @@ Before(async (users) => {
         users.create(),
         users.create()
     ]);
-    await users[0].context.hasCapability('switchboard');
+    const { context } = users[0];
+    let baseUrl;
+    if (process.env.SERVER) {
+        baseUrl = new URL(process.env.SERVER).origin;
+    }
+    await Promise.all([
+        context.hasCapability('switchboard'),
+        context.hasConfig('io.ox/switchboard//appsuiteApiBaseUrl', baseUrl)
+    ]);
 });
 
 After(async (users) => {
