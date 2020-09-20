@@ -55,7 +55,6 @@ Scenario('Switchboard - Call history', async (I) => {
 Scenario('Switchboard - Presence', async (I) => {
 
     I.login();
-    pause()
     I.waitForVisible('~Support');
     I.click('~Support');
     I.waitForVisible('.dropdown.open');
