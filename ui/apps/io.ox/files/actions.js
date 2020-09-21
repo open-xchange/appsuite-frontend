@@ -96,6 +96,42 @@ define('io.ox/files/actions', [
         return _(baton.first()).has('internal_userid');
     }
 
+    function createFilePickerAndUpload(baton, type) {
+        var input;
+
+        // yes, better let an error happen when no type is provided to notice it
+        if (type === 'folder') { input = $('<input type="file" name="file" multiple directory webkitdirectory mozdirectory>'); }
+        if (type === 'file') { input = $('<input type="file" name="file" multiple>'); }
+
+        var elem = $(baton.e.target);
+
+        // remove old input-tags resulting from 'add local file' -> 'cancel'
+        elem.siblings('input').remove();
+
+        elem.after(
+            input
+            .css('display', 'none')
+            .on('change', function (e) {
+                var app = baton.app;
+                var fielList = baton.filter ? baton.filter(e.target.files) : e.target.files;
+                var extendedFileList =  _.map(fielList, function (file) {
+                    return {
+                        file: file,
+                        fullPath: file.webkitRelativePath,
+                        preventFileUpload: false
+                    };
+                });
+
+                require(['io.ox/files/upload/file-folder'], function (fileFolderUpload) {
+                    fileFolderUpload.upload(extendedFileList, app);
+                });
+                input.remove();
+            })
+        );
+
+        input.trigger('click');
+    }
+
     /**
      * Removes items from listView and selects a file
      *
@@ -122,7 +158,7 @@ define('io.ox/files/actions', [
     }
 
     var Action = actionsUtil.Action;
-    // TODO check action Mario
+
     new Action('io.ox/files/actions/upload', {
         folder: 'create',
         matches: function (baton) {
@@ -132,38 +168,24 @@ define('io.ox/files/actions', [
             return true;
         },
         action: function (baton) {
-
-            var elem = $(baton.e.target),
-                input;
-
-            // remove old input-tags resulting from 'add local file' -> 'cancel'
-            elem.siblings('input').remove();
-
-            elem.after(
-                input = $('<input type="file" name="file" multiple>')
-                .css('display', 'none')
-                .on('change', function (e) {
-                    var app = baton.app;
-                    require(['io.ox/files/upload/main'], function (fileUpload) {
-                        e.preventDefault();
-
-                        var list = [];
-                        var files = baton.filter ? baton.filter(e.target.files) : e.target.files;
-
-                        _(files).each(function (file) {
-                            list.push(_.extend(file, { group: 'file' }));
-                        });
-                        var options = _.extend({ folder: baton.folder_id }, baton.file_options);
-                        fileUpload.setWindowNode(app.getWindowNode());
-                        fileUpload.create.offer(list, options);
-                    });
-                    input.remove();
-                })
-            );
-
-            input.trigger('click');
+            createFilePickerAndUpload(baton, 'file');
         }
     });
+
+    new Action('io.ox/files/actions/uploadFolder', {
+        folder: 'create',
+        matches: function (baton) {
+            // hide for virtual folders (other files root, public files root)
+            if (_(['14', '15']).contains(baton.folder_id)) return false;
+            if (isTrash(baton)) return false;
+            return true;
+        },
+        action: function (baton) {
+            createFilePickerAndUpload(baton, 'folder');
+        }
+    });
+
+
     // TODO check action Mario
     new Action('io.ox/files/actions/editor', {
         toggle: !!window.Blob,
@@ -1250,6 +1272,13 @@ define('io.ox/files/actions', [
             id: 'upload',
             title: gt('Upload files'),
             ref: 'io.ox/files/actions/upload',
+            section: 'upload'
+        },
+        {
+            index: 105,
+            id: 'uploadFolder',
+            title: gt('Upload folder'),
+            ref: 'io.ox/files/actions/uploadFolder',
             section: 'upload'
         },
         {

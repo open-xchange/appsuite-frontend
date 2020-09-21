@@ -228,9 +228,9 @@ define('io.ox/core/dropzone', [], function () {
         },
 
         getFilesAndFolders: function (e) {
+            var supportEmptyFolderUpload = false;
             function traverseFileTreePromise(item, path) {
-                var def = new $.Deferred();
-
+                var def = $.Deferred();
                 if (item.isFile) {
                     item.file(function (file) {
                         files.push({
@@ -245,8 +245,11 @@ define('io.ox/core/dropzone', [], function () {
                     dirReader.readEntries(function (entries) {
                         var entriesPromises = [];
 
-                        if (entries.length === 0) { // Folder is empty
-                            var dummyFile = new File([''], '__folderDummy__.txt'); // needed for folder creation, don't upload it later
+                        // Uploading empty folders is currently disabled. But keep the code to change it easily.
+                        // Reason: Uploading folders via filepicker currently (2020) doesn't support uploading empty folders,
+                        // so better have one consistent behavior for folder upload for the user.
+                        if (supportEmptyFolderUpload && entries.length === 0) { // Folder is empty
+                            var dummyFile = new File([''], '__folderDummy__.txt'); // just needed for folder creation, don't upload it later
                             var fullPath = item.fullPath + '/' + dummyFile.name; //save full path
                             dummyFile.filepath = fullPath;
 
@@ -274,7 +277,7 @@ define('io.ox/core/dropzone', [], function () {
             }
             var dataTransfer = e.originalEvent.dataTransfer;
             var files = [];
-            var finalDef = new $.Deferred();
+            var finalDef = $.Deferred();
             var entriesPromises = [];
             var length = dataTransfer.items.length;
 
