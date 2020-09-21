@@ -18,7 +18,7 @@
   "devDependencies": {
     "@codeceptjs/mock-request": "^0.3.0",
     "@open-xchange/appserver": "^0.8.0-pre1",
-    "@open-xchange/codecept-helper": "git+https://gitlab.open-xchange.com/frontend/codecept-helpers.git#feature/oxui-617",
+    "@open-xchange/codecept-helper": "git+https://gitlab.open-xchange.com/frontend/codecept-helpers.git#master",
     "@open-xchange/shared-grunt-config": "^0.15.0-pre5",
     "assemble-less": "^0.7.0",
     "chai": "^4.0.2",

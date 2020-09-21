@@ -76,9 +76,9 @@
   resolved "https://registry.yarnpkg.com/@open-xchange/bootstrap-tokenfield/-/bootstrap-tokenfield-0.13.2.tgz#be4e6b75f042bfaa8186a4694e4fbe1c2dda8b08"
   integrity sha512-BPR56hDsEALl0f+7NQvxq9ipX4fC5NKVJcpq5gTv+NyqgwPqMwyBZ+C1ePoIAkwsdzNLVh8sS+LWqoDw0A3gKg==
 
-"@open-xchange/codecept-helper@git+https://gitlab.open-xchange.com/frontend/codecept-helpers.git#feature/oxui-617":
+"@open-xchange/codecept-helper@git+https://gitlab.open-xchange.com/frontend/codecept-helpers.git#master":
   version "0.5.1"
-  resolved "git+https://gitlab.open-xchange.com/frontend/codecept-helpers.git#93df6565d4fbab4358b1c108b92637179a48fbc9"
+  resolved "git+https://gitlab.open-xchange.com/frontend/codecept-helpers.git#c302d9c40b4d30b02437f6219425aea7cf21ba90"
   dependencies:
     axe-core "3.3.2"
     axios "^0.19.0"
