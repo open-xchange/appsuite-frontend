@@ -172,7 +172,8 @@ define('io.ox/chat/views/chat', [
 
             this.listenTo(this.messagesView, {
                 'before:add': this.onBeforeAdd,
-                'after:add': this.onAfterAdd
+                'after:add': this.onAfterAdd,
+                'delete': this.onDelete
             });
 
             this.on('dispose', this.onDispose);
@@ -400,6 +401,18 @@ define('io.ox/chat/views/chat', [
             delete this.scrollInfo;
 
             this.markMessageAsRead();
+        },
+
+        onDelete: function (message) {
+            this.model.deleteMessage(message).then(function (deletedMessage) {
+                // clear first or set does some 'smart' update which does a merge instead of a replace
+                message.clear({ silent: true }).set(deletedMessage, { silent: true });
+                this.messagesView.getMessageNode(message).replaceWith(this.messagesView.renderMessage(message));
+            }.bind(this), function () {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell('error', gt('Could not delete the message'));
+                });
+            });
         },
 
         scrollToBottom: function () {
