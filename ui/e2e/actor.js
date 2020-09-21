@@ -107,8 +107,10 @@ module.exports = actor({
         return backgroundImage ? backgroundImage : 'none';
     },
 
-    clickDropdown(text) {
+    clickDropdown(text, wait) {
         this.waitForText(text, 10, '.dropdown.open .dropdown-menu');
+        // Just wait a little extra for all event listeners
+        if (wait) this.wait(wait);
         this.retry(5).click(text, '.dropdown.open .dropdown-menu');
     },
 

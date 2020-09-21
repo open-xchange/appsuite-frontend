@@ -25,6 +25,8 @@ Scenario('Getting started tour', async function (I) {
 
     I.login();
     I.waitForVisible('#io-ox-topbar-dropdown-icon');
+    I.waitForElement('#topbar-settings-dropdown');
+    I.wait(1);
     I.click('#io-ox-topbar-dropdown-icon');
     I.waitForText('Getting started');
     I.click('Getting started', '#topbar-settings-dropdown');

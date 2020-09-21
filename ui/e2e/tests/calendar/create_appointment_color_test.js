@@ -63,7 +63,6 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     I.click('Add new calendar', '.folder-tree');
 
     I.clickDropdown('Personal calendar');
-
     dialogs.waitForVisible();
     I.waitForText('Add as public calendar', 5, dialogs.locators.body);
     I.checkOption('Add as public calendar', dialogs.locators.body);
@@ -75,7 +74,7 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     I.selectFolder('New calendar');
     I.retry(3).click(selectInsideFolder({ css: 'a.folder-options' }));
 
-    I.clickDropdown('Permissions / Invite people');
+    I.clickDropdown('Permissions / Invite people', 0.2);
     dialogs.waitForVisible();
     I.waitForElement('.form-control.tt-input', 5, dialogs.locators.header);
     I.fillField('.form-control.tt-input', users[1].get('primaryEmail'));
@@ -98,8 +97,8 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     I.selectFolder('New calendar');
     I.retry(3).click(selectInsideFolder({ css: 'div.color-label' }));
     //check if public appointments are there
-    I.see('testing is fun', '.workweek .appointment .title-container');
-    I.see('testing is awesome', '.workweek .appointment .title-container');
+    I.see('testing is fun', '.workweek .appointment');
+    I.see('testing is awesome', '.workweek .appointment');
     //see if appointment colors still drawn with customized color (See Bug 65410)
     const appointmentColors = (await I.grabCssPropertyFrom('.workweek .appointment', 'backgroundColor'))
         // webdriver resolves with rgba, puppeteer with rgb for some reason
