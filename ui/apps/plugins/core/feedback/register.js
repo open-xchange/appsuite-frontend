@@ -93,7 +93,7 @@ define('plugins/core/feedback/register', [
 
     function toggleButtons(state) {
         $('#io-ox-screens .feedback-button').toggle(state);
-        $('#topbar-settings-dropdown [data-action="feedback"]').parent().toggle(state);
+        $('#topbar-help-dropdown [data-action="feedback"]').parent().toggle(state);
     }
 
     function getAppOptions(useWhitelist) {

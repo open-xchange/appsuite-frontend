@@ -49,7 +49,7 @@ define('io.ox/core/about/about', [
         show: function () {
             var data = ox.serverConfig || {};
 
-            new ModalDialog({ title: data.productName, previousFocus: $('#io-ox-topbar-dropdown-icon > a'), point: 'io.ox/core/about' })
+            new ModalDialog({ title: data.productName, previousFocus: $('#io-ox-topbar-help-dropdown-icon > a'), point: 'io.ox/core/about' })
                 .addButton({ label: gt('Close'), action: 'cancel' })
                 .open();
         }

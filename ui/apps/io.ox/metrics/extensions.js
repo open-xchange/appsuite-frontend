@@ -115,7 +115,7 @@ define('io.ox/metrics/extensions', [
             $('#io-ox-appcontrol .taskbar').on('mousedown', 'li', function (e) {
 
                 // tracked in different extension
-                if ($(e.currentTarget).is('#io-ox-topbar-dropdown-icon')) return;
+                if ($(e.currentTarget).is('#io-ox-topbar-account-dropdown-icon')) return;
                 // ignore bubbled clicks in opened dropdowns
                 if ($(e.currentTarget).hasClass('dropdown') && $(e.currentTarget).hasClass('open')) return;
 
@@ -134,11 +134,11 @@ define('io.ox/metrics/extensions', [
     });
 
     point.extend({
-        id: 'topbar-settings-dropdown',
+        id: 'topbar-account-dropdown',
         register: function () {
             var metrics = this;
 
-            $('#io-ox-topbar-dropdown-icon').on('mousedown', function () {
+            $('#io-ox-topbar-account-dropdown-icon').on('mousedown', function () {
                 // prevent tracking bubbled mousedown events
                 if ($(this).hasClass('open')) return;
                 metrics.trackEvent({
@@ -149,7 +149,7 @@ define('io.ox/metrics/extensions', [
                 });
             });
 
-            $('#topbar-settings-dropdown').on('mousedown', 'a', function (e) {
+            $('#topbar-account-dropdown').on('mousedown', 'a', function (e) {
                 var node = $(e.target).closest('a'),
                     action = node.attr('data-name') || node.attr('data-action') || node.attr('class') || node.parent().attr('class');
 

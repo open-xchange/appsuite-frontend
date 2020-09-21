@@ -594,7 +594,7 @@ define('io.ox/core/main/topbar_right', [
                 if (_.device('reload') && session.isAutoLogin()) return;
 
                 // topbar action, dropdown action
-                var link = this.find('[data-action="sign-out"], #io-ox-topbar-dropdown-icon > a').first();
+                var link = this.find('[data-action="sign-out"], #io-ox-topbar-account-dropdown-icon > a').first();
                 // popover
                 link.popover({
                     // language; not locale
@@ -629,7 +629,7 @@ define('io.ox/core/main/topbar_right', [
             // server prop
             if (!conf.enabled || !conf.remaining) return;
             // banner action, topbar action, dropdown action
-            var link = this.find('#io-ox-topbar-dropdown-icon > a');
+            var link = this.find('#io-ox-topbar-account-dropdown-icon > a');
             // popover
             link.popover({
                 //#. %1$s is the product name
