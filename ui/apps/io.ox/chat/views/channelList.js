@@ -72,7 +72,7 @@ define('io.ox/chat/views/channelList', [
             });
 
             // get fresh data
-            this.collection.fetch({ url: data.API_ROOT + '/channels', remove: false });
+            this.collection.fetch({ url: data.chatApiUrl + '/channels', remove: false });
         },
 
         render: function () {

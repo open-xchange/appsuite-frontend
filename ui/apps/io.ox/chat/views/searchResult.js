@@ -76,7 +76,7 @@ define('io.ox/chat/views/searchResult', [
         },
 
         searchMessages: function (query) {
-            var url = data.API_ROOT + '/search/messages?' + $.param({ query: query });
+            var url = data.chatApiUrl + '/search/messages?' + $.param({ query: query });
             return util.ajax({ url: url })
                 .then(function (data) {
                     if (!data || !data.hits) return [];

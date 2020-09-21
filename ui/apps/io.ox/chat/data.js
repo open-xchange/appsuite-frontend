@@ -19,19 +19,19 @@ define('io.ox/chat/data', [
     'io.ox/chat/util',
     'io.ox/core/http',
     'gettext!io.ox/chat',
-    'settings!io.ox/core',
+    'settings!io.ox/chat',
     'io.ox/switchboard/api'
-], function (events, api, io, sanitizer, util, http, gt, settings, switchboard) {
+], function (events, contactsApi, io, sanitizer, util, http, gt, settings, switchboard) {
 
     'use strict';
 
-    var chatHost =  _.url.hash('chatHost') || ox.serverConfig.chatHost || settings.get('chatHost'),
-        DEFAULT_LIMIT = 40;
+    var chatHost =  _.url.hash('chatHost') || ox.serverConfig.chatHost || settings.get('host');
+    var DEFAULT_LIMIT = 40;
 
-    var data = {
-        API_ROOT: 'https://' + chatHost + '/api',
-        SOCKET: 'https://' + chatHost
-    };
+    var chatUrl = new URL('https://' + chatHost.replace(/^https?:\/\//, ''));
+    var chatApiUrl = chatUrl.href + 'api';
+
+    var data = { chatApiUrl: chatApiUrl };
 
     //
     // User
@@ -100,7 +100,7 @@ define('io.ox/chat/data', [
     data.users = new UserCollection([]);
 
     data.fetchUsers = function () {
-        return api.getAll({ folder: 6, columns: '1,20,501,502,524,555,556,557,606' }, false).then(function (result) {
+        return contactsApi.getAll({ folder: 6, columns: '1,20,501,502,524,555,556,557,606' }, false).then(function (result) {
             result = _(result).map(function (item) {
                 return _.extend({
                     cid: _.cid(item),
@@ -123,7 +123,7 @@ define('io.ox/chat/data', [
         },
 
         url: function () {
-            return data.API_ROOT + '/rooms/' + this.roomId + '/members';
+            return chatApiUrl + '/rooms/' + this.roomId + '/members';
         },
 
         parse: function (array) {
@@ -153,7 +153,7 @@ define('io.ox/chat/data', [
         idAttribute: 'messageId',
 
         urlRoot: function () {
-            return data.API_ROOT + '/rooms/' + this.get('roomId') + '/messages';
+            return chatApiUrl + '/rooms/' + this.get('roomId') + '/messages';
         },
 
         getBody: function () {
@@ -223,9 +223,9 @@ define('io.ox/chat/data', [
 
         getFileUrl: function (file) {
             if (data.chats.get(this.get('roomId')).isChannel()) {
-                return data.API_ROOT + '/channels/' + this.get('roomId') + '/files/' + file.fileId;
+                return chatApiUrl + '/channels/' + this.get('roomId') + '/files/' + file.fileId;
             }
-            return data.API_ROOT + '/files/' + file.fileId;
+            return chatApiUrl + '/files/' + file.fileId;
         },
 
         getFilesPreview: function () {
@@ -337,7 +337,7 @@ define('io.ox/chat/data', [
             var room = data.chats.get(this.get('roomId'));
             if (room.isChannel() && !room.isMember()) return;
 
-            var url = data.API_ROOT + '/rooms/' + this.get('roomId') + '/delivery/' + this.get('messageId');
+            var url = chatApiUrl + '/rooms/' + this.get('roomId') + '/delivery/' + this.get('messageId');
             this.set('deliveryState', state);
             util.ajax({
                 method: 'POST',
@@ -457,7 +457,7 @@ define('io.ox/chat/data', [
 
             var endpoint = data.chats.get(this.roomId).isChannel() ? '/channels/' : '/rooms/';
             return util.ajax({
-                url: data.API_ROOT + endpoint + this.roomId + '/messages?' + $.param(params)
+                url: chatApiUrl + endpoint + this.roomId + '/messages?' + $.param(params)
             })
             .then(function (list) {
                 this.trigger(type);
@@ -501,7 +501,7 @@ define('io.ox/chat/data', [
             return BaseCollection.prototype.sync.call(this, method, collection, options);
         },
         url: function () {
-            return data.API_ROOT + '/rooms/' + this.roomId + '/messages';
+            return chatApiUrl + '/rooms/' + this.roomId + '/messages';
         },
         parse: function (array) {
             [].concat(array).forEach(function (item) {
@@ -522,7 +522,7 @@ define('io.ox/chat/data', [
         idAttribute: 'roomId',
 
         urlRoot: function () {
-            return data.API_ROOT + '/rooms';
+            return chatApiUrl + '/rooms';
         },
 
         initialize: function (attr) {
@@ -663,7 +663,7 @@ define('io.ox/chat/data', [
         getIconUrl: function () {
             if (!this.get('icon')) return;
             var endpoint = this.get('type') !== 'channel' ? '/rooms/' : '/channels/';
-            return data.API_ROOT + endpoint + this.get('roomId') + '/icon';
+            return chatApiUrl + endpoint + this.get('roomId') + '/icon';
         },
 
         isActive: function () {
@@ -741,7 +741,7 @@ define('io.ox/chat/data', [
         currentChatId: undefined,
 
         url: function () {
-            return data.API_ROOT + '/rooms';
+            return chatApiUrl + '/rooms';
         },
 
         initialize: function () {
@@ -860,15 +860,15 @@ define('io.ox/chat/data', [
         getThumbnailUrl: function () {
             var roomId = data.chats.currentChatId,
                 isChannel = roomId && data.chats.get(roomId).isChannel();
-            if (isChannel) return data.API_ROOT + '/channels/' + roomId + '/files/' + this.get('fileId') + 'thumbnail';
-            return data.API_ROOT + '/files/' + this.get('fileId') + '/thumbnail';
+            if (isChannel) return chatApiUrl + '/channels/' + roomId + '/files/' + this.get('fileId') + 'thumbnail';
+            return chatApiUrl + '/files/' + this.get('fileId') + '/thumbnail';
         },
 
         getFileUrl: function () {
             var roomId = data.chats.currentChatId,
                 isChannel = roomId && data.chats.get(roomId).isChannel();
-            if (isChannel) return data.API_ROOT + '/channels/' + roomId + '/files/' + this.get('fileId');
-            return data.API_ROOT + '/files/' + this.get('fileId');
+            if (isChannel) return chatApiUrl + '/channels/' + roomId + '/files/' + this.get('fileId');
+            return chatApiUrl + '/files/' + this.get('fileId');
         },
 
         isImage: function () {
@@ -882,7 +882,7 @@ define('io.ox/chat/data', [
         model: FileModel,
 
         url: function () {
-            return data.API_ROOT + '/files';
+            return chatApiUrl + '/files';
         }
     });
 
@@ -898,8 +898,8 @@ define('io.ox/chat/data', [
 
         url: function () {
             var isChannel = data.chats.get(this.roomId).isChannel();
-            if (isChannel) return data.API_ROOT + '/channels/' + this.roomId + '/files';
-            return data.API_ROOT + '/rooms/' + this.roomId + '/files';
+            if (isChannel) return chatApiUrl + '/channels/' + this.roomId + '/files';
+            return chatApiUrl + '/rooms/' + this.roomId + '/files';
         }
 
     });
@@ -937,7 +937,7 @@ define('io.ox/chat/data', [
         },
 
         connectSocket: function () {
-            var socket = data.socket = io.connect(data.SOCKET, { transports: ['websocket'] });
+            var socket = data.socket = io.connect(chatUrl.href, { transports: ['websocket'] });
 
             socket.on('reconnect', this.refresh);
 
@@ -1011,7 +1011,7 @@ define('io.ox/chat/data', [
         waitForMessage: function () {
             var def = new $.Deferred();
             function listener(event) {
-                if (event.origin !== data.SOCKET) return;
+                if (event.origin !== chatUrl.origin) return;
                 def.resolve(event.data);
                 window.removeEventListener('message', listener);
             }
@@ -1021,14 +1021,14 @@ define('io.ox/chat/data', [
 
         getAuthURL: function () {
             return util.ajax({
-                url: data.SOCKET + '/auth/url',
+                url: chatUrl.href + 'auth/url',
                 handleSessionFail: false
             });
         },
 
         getUserId: function () {
             return util.ajax({
-                url: data.SOCKET + '/auth/user',
+                url: chatUrl.href + 'auth/user',
                 handleSessionFail: false
             }).then(function (chatUser) {
                 return require(['io.ox/core/api/user']).then(function (userAPI) {
@@ -1099,7 +1099,7 @@ define('io.ox/chat/data', [
         getConfig: function () {
             if (this.config) return this.config;
             return util.ajax({
-                url: data.SOCKET + '/auth/config'
+                url: chatUrl.href + 'auth/config'
             }).then(function (config) {
                 this.config = config;
                 return config;
@@ -1109,7 +1109,7 @@ define('io.ox/chat/data', [
         checkSwitchboardToken: function () {
             return util.ajax({
                 method: 'post',
-                url: data.SOCKET + '/auth/login',
+                url: chatUrl.href + 'auth/login',
                 data: { token: switchboard.token },
                 handleSessionFail: false
             })
@@ -1132,7 +1132,7 @@ define('io.ox/chat/data', [
 
         logout: function () {
             return util.ajax({
-                url: data.SOCKET + '/auth/logout',
+                url: chatUrl.href + 'auth/logout',
                 handleSessionFail: false
             });
         }
