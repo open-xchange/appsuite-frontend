@@ -57,7 +57,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         var link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('id'));
 
         return [$('<span style="word-break: break-all">').text(name), new CopyToClipboardView({
-            tagName: 'div',
+            tagName: 'button',
             className: 'copy-link',
             content: link,
             label: gt('Private link: Only people who have access to the file/folder can use it. Use it to point to members of your organization to this file/folder.'),
