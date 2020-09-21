@@ -160,6 +160,7 @@ define('io.ox/chat/data', [
         },
 
         getSystemMessage: function () {
+            if (_.isEmpty(this.get('content'))) return gt('Message was deleted');
             var event = JSON.parse(this.get('content'));
             var originator = this.get('sender'),
                 members = event.members || [],
@@ -720,6 +721,13 @@ define('io.ox/chat/data', [
                     data.chats.active.remove(self);
                     data.chats.recent.add(self);
                 }
+            });
+        },
+
+        deleteMessage: function (message) {
+            return util.ajax({
+                type: 'DELETE',
+                url: this.url() + '/messages/' + message.get('messageId')
             });
         },
 

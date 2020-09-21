@@ -44,7 +44,7 @@ define('io.ox/chat/views/messages', [
         draw: function (baton) {
             this.append($('<li>').text(gt('Delete message')).on('click', function () {
                 baton.view.hideMenu();
-                debugger;
+                baton.view.trigger('delete', baton.model);
             }));
         }
     });
