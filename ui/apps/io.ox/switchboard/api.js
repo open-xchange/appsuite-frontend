@@ -64,7 +64,7 @@ define.async('io.ox/switchboard/api', [
         },
 
         supports: function (type) {
-            var host = settings.get('host');
+            var host = api.host;
             switch (type) {
                 case 'zoom':
                     if (!host) return false;
@@ -109,7 +109,7 @@ define.async('io.ox/switchboard/api', [
             .then(function (data) {
                 var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
                 // Only send redirect uri if not default "/appsuite/api"
-                var appsuiteUrl = new URL(api.host);
+                var appsuiteUrl = new URL('https://' + api.host.replace(/^https?:\/\//, ''));
                 var searchParams = appsuiteUrl.searchParams;
                 searchParams.set('userId', api.userId);
                 searchParams.set('token', data.token);
