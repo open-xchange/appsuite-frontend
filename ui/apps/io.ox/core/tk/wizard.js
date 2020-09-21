@@ -33,22 +33,6 @@ define('io.ox/core/tk/wizard', [
 
     var backdrop = $('<div class="wizard-backdrop abs">');
 
-    /* var container = _.device('smartphone') ?
-        // special node for fullscreen wizards on smartphone
-        $(
-            '<div class="wizard-container abs">' +
-            '  <div class="wizard-navbar">' +
-            '    <div class="wizard-back"></div>' +
-            '    <div class="wizard-title"></div>' +
-            '    <div class="wizard-next"></div>' +
-            '  </div>' +
-            '  <div class="wizard-pages"></div>' +
-            '  <div class="wizard-animation"></div>' +
-            '</div>'
-        ) :
-        // simple container on desktop for flex layout
-        $('<div class="wizard-container abs">');
- */
     function getBounds(elem, padding) {
         padding = padding ? padding : 0;
         var o = elem.offset();

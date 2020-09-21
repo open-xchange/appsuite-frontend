@@ -15,9 +15,8 @@ define('io.ox/onboarding/settings/defaults', ['gettext!io.ox/core/onboarding'], 
 
     var defaultSettings = {
         'productNames': {
-            //#. 1$s is the name of the mail product, e.g. OX Mail
-            'mail': gt('%1$s', ox.serverConfig.productNameMail),
-            'drive': gt.pgettext('app', 'OX Drive')
+            'mail': gt.pgettext('native app', 'OX Mail'),
+            'drive': gt.pgettext('native app', 'OX Drive')
         },
         'android': {
             'mailapp': {

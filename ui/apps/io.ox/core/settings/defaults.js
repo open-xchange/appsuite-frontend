@@ -41,7 +41,7 @@ define('io.ox/core/settings/defaults', function () {
         settings: {
             downloadsDisabled: false
         },
-        newOnboardingWizard: true
+        onboardingWizard: true
     };
 
 });

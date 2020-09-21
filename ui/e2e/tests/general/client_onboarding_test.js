@@ -15,8 +15,11 @@
 
 Feature('General > Client Onboarding');
 
+const { I } = inject();
+
 Before(async (users) => {
     await users.create();
+    await I.haveSetting('io.ox/core//onboardingWizard', false);
 });
 
 After(async (users) => {

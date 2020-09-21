@@ -300,7 +300,7 @@ define('io.ox/core/main/topbar_right', [
         id: 'onboarding',
         index: 200,
         extend: function () {
-            if (_.device('smartphone')) return;
+            if (_.device('smartphone') || settings.get('onboardingWizard')) return;
             extensions.onboarding.apply(this, arguments);
         }
     });
@@ -417,7 +417,7 @@ define('io.ox/core/main/topbar_right', [
         index: 120,
         enable: capabilities.has('client-onboarding'),
         extend: function () {
-            if (!_.device('smartphone')) return;
+            if (!_.device('smartphone') || settings.get('onboardingWizard')) return;
             extensions.onboarding.apply(this, arguments);
         }
     });

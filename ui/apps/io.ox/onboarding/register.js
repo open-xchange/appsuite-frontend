@@ -20,19 +20,33 @@ define('io.ox/onboarding/register', [
 
     'use strict';
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
-        id: 'connectWizard',
-        index: 110,
+    ext.point('io.ox/core/appcontrol/right/settings').extend({
+        id: 'connect-wizard',
+        index: 200,
         extend: function () {
-            if (capabilities.has('!client-onboarding') || !settings.get('newOnboardingWizard')) return;
+            if (_.device('smartphone') || !settings.get('onboardingWizard')) return;
 
-            this.link('connect-wizard', _.device('desktop') ? gt('Connect your device') : gt('Connect this device'), function () {
+            this.link('connect-wizard', gt('Connect your device'), function () {
                 require(['io.ox/onboarding/main'], function (wizard) {
                     wizard.load();
                 });
             });
         }
+    });
 
+    ext.point('io.ox/core/appcontrol/right/account').extend({
+        id: 'connect-wizard-mobile',
+        index: 120,
+        enable: capabilities.has('client-onboarding'),
+        extend: function () {
+            if (!_.device('smartphone') || !settings.get('onboardingWizard')) return;
+
+            this.link('connect-wizard-mobile', gt('Connect this device'), function () {
+                require(['io.ox/onboarding/main'], function (wizard) {
+                    wizard.load();
+                });
+            });
+        }
     });
 
 });

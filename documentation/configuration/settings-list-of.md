@@ -268,7 +268,7 @@ The corresponding capabilites for the different apps are:
 - Address Book/ CardDav: `contacts carddav`
 - Exchange Active Sync: `active_sync`
 
-<config>io.ox/core//newOnboardingWizard=`<bool>`</config>
+<config>io.ox/core//onboardingWizard=`<bool>`</config>
 Enabled new onboarding wizard and disables the old one
 
 <config>io.ox/onboarding//productNames/mail=`<string>`</config>
