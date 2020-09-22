@@ -409,6 +409,7 @@ define('io.ox/core/main/appcontrol', [
             var taskbar = $('<ul class="taskbar list-unstyled" role="toolbar">');
             this.append($('<div id="io-ox-topleftbar">').append(taskbar));
             ext.point('io.ox/core/appcontrol/left').invoke('draw', taskbar);
+            _.defer(function () { taskbar.find('.dropdown-toggle:visible:first').removeAttr('tabindex'); });
         }
     });
 
@@ -450,7 +451,6 @@ define('io.ox/core/main/appcontrol', [
             var taskbar = $('<ul class="taskbar list-unstyled" role="toolbar">');
             this.append($('<div id="io-ox-toprightbar">').append(taskbar));
             ext.point('io.ox/core/appcontrol/right').invoke('draw', taskbar);
-            _.defer(function () { taskbar.find('.dropdown-toggle:visible:first').removeAttr('tabindex'); });
         }
     });
 
