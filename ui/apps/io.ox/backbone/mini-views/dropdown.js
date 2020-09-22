@@ -152,6 +152,13 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 positions.left = Math.min(availableWidth - positions.width - this.margin, positions.left);
             }
 
+            // overflows top
+            if (positions.top < 0) {
+                positions.height = positions.height + positions.top;
+                positions.top = 0;
+                this.$overlay.addClass('scrollable');
+            }
+
             if (this.$toggle.data('fixed')) positions.left = bounds.left;
             this.$ul.css(positions);
         },
@@ -160,6 +167,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             if (this.smart === false) return;
             if (_.device('smartphone') && !this.options.dontProcessOnMobile) return;
             this.setDropdownOverlay();
+            if (this.$overlay.hasClass('scrollable')) this.$ul.scrollTop(this.$ul.height());
         },
 
         onKeyDown: function (e) {
