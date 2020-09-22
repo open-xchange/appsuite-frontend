@@ -556,8 +556,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
         switch (type) {
             case 'GET':
+                o._url += '?' + $.param(_.omit(o.params, _.isUndefined));
+                break;
             case 'POST':
                 o._url += '?' + $.param(_.omit(o.params, _.isUndefined));
+                o.original = o.data;
                 break;
             case 'PUT':
             case 'PATCH':
