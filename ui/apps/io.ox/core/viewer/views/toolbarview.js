@@ -817,7 +817,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          *  the file descriptor.
          */
         onFavoritesChange: function (file) {
-            if (file.id === _.cid(this.model.toJSON())) {
+            if (this.model && this.model.cid === _.cid(file)) {
                 this.updateToolbarDebounced();
             }
         },
