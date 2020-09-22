@@ -179,6 +179,7 @@ define('io.ox/chat/views/chat', [
             this.on('dispose', this.onDispose);
 
             this.listenTo(events, 'cmd:remove-reference', this.onRemoveReference);
+            this.listenTo(events, 'message:changed', this.onMessageChanged);
 
             this.messagesView.messageId = this.messageId;
             // there are two cases when to reset the collection before usage
@@ -404,11 +405,8 @@ define('io.ox/chat/views/chat', [
         },
 
         onDelete: function (message) {
-            this.model.deleteMessage(message).then(function (deletedMessage) {
-                // clear first or set does some 'smart' update which does a merge instead of a replace
-                message.clear({ silent: true }).set(deletedMessage, { silent: true });
-                this.messagesView.getMessageNode(message).replaceWith(this.messagesView.renderMessage(message));
-            }.bind(this), function () {
+            // success will trigger a message:changed event on the websocket. This takes care of view updates etc
+            this.model.deleteMessage(message).fail(function () {
                 require(['io.ox/core/yell'], function (yell) {
                     yell('error', gt('Could not delete the message'));
                 });

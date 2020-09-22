@@ -161,7 +161,9 @@ define('io.ox/chat/data', [
         },
 
         getSystemMessage: function () {
-            if (_.isEmpty(this.get('content'))) return gt('Message was deleted');
+            // deleted flag means early return here
+            if (this.get('deleted')) return gt('Message was deleted');
+
             var event = JSON.parse(this.get('content'));
             var originator = this.get('sender'),
                 members = event.members || [],
@@ -1003,6 +1005,16 @@ define('io.ox/chat/data', [
 
             socket.on('chat:typing', function (event) {
                 events.trigger('typing:' + event.roomId, event.email, event.state);
+            });
+
+            socket.on('message:changed', function (message) {
+                // would be easier if we had a room id in the changed message
+                // update message in collections
+                data.chats.each(function (chat) {
+                    if (chat.messages.get(message.messageId)) {
+                        chat.messages.get(message.messageId).set(message);
+                    }
+                });
             });
 
             // send heartbeat every minute
