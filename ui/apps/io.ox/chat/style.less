@@ -540,30 +540,48 @@
         position: relative;
 
         
-        .message-menu {
+        .menu-backdrop {
             position: absolute;
             left: 16px;
             bottom: 100%;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-            padding: 8px 0;
-            margin-bottom: 0px;
-            background: #fff;
 
-            li {
-                cursor: pointer;
-                padding: 0 16px;
-                color: #000;
-                &:hover {
-                    background: #f5f5f5;
+            .message-menu {
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+                padding: 8px 0;
+                margin-bottom: 4px;
+                background: #fff;
+
+                li {
+                    cursor: pointer;
+                    padding: 0 16px;
+                    color: #000;
+                    &:hover {
+                        background: #f5f5f5;
+                    }
                 }
+            }
+        }
+
+        .actions {
+            display: inline-block;
+            width: 20px;
+            height: 100%;
+            text-align: center;
+            right: -10px;
+            top: ~"calc(50% - 18px)";
+            position: relative;
+
+            i {
+                vertical-align: middle;
             }
         }
 
         .body {
             word-break: break-word;
             font-size: 14px;
+            display: inline-block;
         }
 
         &:last-child {
@@ -604,6 +622,11 @@
                 font-weight: normal;
             }
 
+            .flags {
+                display: inline;
+                margin-left: 4px;
+            }
+
             > * { display: inline-block; }
         }
         .state, .delivery {
@@ -622,7 +645,7 @@
             padding: 0 0 0 128px;
             display: flex;
 
-            .message-menu {
+            .menu-backdrop {
                 right: 16px;
                 left: auto;
             }

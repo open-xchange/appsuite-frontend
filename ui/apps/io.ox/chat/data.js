@@ -277,7 +277,8 @@ define('io.ox/chat/data', [
         },
 
         getTime: function () {
-            return moment(this.get('date')).format('LT');
+            // use time when this message was last changed or when it was created
+            return moment(this.get('edited') || this.get('date')).format('LT');
         },
 
         getTextBody: function () {
@@ -295,6 +296,8 @@ define('io.ox/chat/data', [
         },
 
         getType: function () {
+            // always treat deleted messages as text
+            if (this.get('deleted')) return 'text';
             if (this.hasPreview()) return 'preview';
             if (this.get('files')) return 'file';
             if (this.isSystem()) return 'system';
@@ -315,7 +318,8 @@ define('io.ox/chat/data', [
             var index = this.collection.indexOf(this);
             if (index <= limit) return false;
             var prev = this.collection.at(index - 1);
-            if (prev.isSystem()) return false;
+            // deleted message still have a sender
+            if (prev.isSystem() && !prev.get('deleted')) return false;
             return prev.get('sender') === this.get('sender');
         },
 
@@ -711,6 +715,18 @@ define('io.ox/chat/data', [
             }).fail(this.handleError.bind(this));
 
             this.set('active', true);
+        },
+
+        editMessage: function (newContent, message) {
+            var formData = util.makeFormData({ content: newContent });
+
+            return util.ajax({
+                type: 'PATCH',
+                processData: false,
+                contentType: false,
+                url: this.url() + '/messages/' + message.get('messageId'),
+                data: formData
+            });
         },
 
         postFirstMessage: function (attr, files) {

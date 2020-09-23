@@ -173,7 +173,8 @@ define('io.ox/chat/views/chat', [
             this.listenTo(this.messagesView, {
                 'before:add': this.onBeforeAdd,
                 'after:add': this.onAfterAdd,
-                'delete': this.onDelete
+                'delete': this.onDelete,
+                'editMessage': this.onEditMessage
             });
 
             this.on('dispose', this.onDispose);
@@ -413,6 +414,16 @@ define('io.ox/chat/views/chat', [
             });
         },
 
+        onEditMessage: function (message) {
+            debugger;
+            var messageNode = this.getMessageNode(message);
+            if (messageNode) {
+                this.$scrollpane.scrollTop(messageNode.position.top);
+            }
+            this.$editor.val(message.get('content')).focus();
+            this.editMode = message;
+        },
+
         scrollToBottom: function () {
             var position = 0xFFFF,
                 scrollpane = this.$scrollpane;
@@ -493,9 +504,14 @@ define('io.ox/chat/views/chat', [
 
             data.socket.emit('typing', { roomId: this.model.id, state: false });
 
-            var message = { content: content, sender: data.user.email };
-            if (this.reference) message.reference = this.reference;
-            this.model.postMessage(message);
+            if (this.editMode) {
+                this.model.editMessage(content, this.editMode);
+                this.editMode = false;
+            } else {
+                var message = { content: content, sender: data.user.email };
+                if (this.reference) message.reference = this.reference;
+                this.model.postMessage(message);
+            }
 
             // remove reference preview
             this.onRemoveReference();

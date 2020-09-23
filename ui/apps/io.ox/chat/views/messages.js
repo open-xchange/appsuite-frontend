@@ -33,7 +33,7 @@ define('io.ox/chat/views/messages', [
         draw: function (baton) {
             this.append($('<li>').text(gt('Edit message')).on('click', function () {
                 baton.view.hideMenu();
-                debugger;
+                baton.view.trigger('editMessage', baton.model);
             }));
         }
     });
@@ -54,7 +54,7 @@ define('io.ox/chat/views/messages', [
         className: 'messages',
 
         events: {
-            'mouseenter .content': 'showMenu',
+            'mouseenter .message.myself:not(.system) .actions': 'showMenu',
             'mouseleave .content': 'hideMenu'
         },
 
@@ -92,9 +92,10 @@ define('io.ox/chat/views/messages', [
                 // here we use cid instead of id, since the id might be unknown
                 .attr('data-cid', model.cid)
                 .addClass(model.getType())
-                .toggleClass('myself', !model.isSystem() && model.isMyself())
+                .toggleClass('myself', (!model.isSystem() || model.get('deleted')) && model.isMyself())
                 .toggleClass('highlight', !!model.get('messageId') && model.get('messageId') === this.messageId)
                 .toggleClass('emoji', isOnlyEmoji(body))
+                .toggleClass('deleted', model.get('deleted'))
                 .append(
                     // sender avatar & name
                     this.renderSender(model),
@@ -102,7 +103,9 @@ define('io.ox/chat/views/messages', [
                     $('<div class="content">').append(
                         $('<div class="body">')
                             .html(body)
-                            .append(this.renderFoot(model))
+                            .append(this.renderFoot(model)),
+                        // show some indicator dots when a menu is available
+                        (((!model.isSystem() || model.get('deleted')) && model.isMyself()) ? $('<div class="actions">').append($('<i class="fa fa-ellipsis-v">')) : '')
                     ),
                     //delivery state
                     $('<div class="fa delivery" aria-hidden="true">').addClass(model.getDeliveryState())
@@ -119,10 +122,16 @@ define('io.ox/chat/views/messages', [
             if (!e || !e.target) return;
             if (this.menu) this.hideMenu();
             var target = $(e.target).closest('.content'),
-                model = this.collection.get(target.parent().attr('data-cid'));
-            this.menu = $('<ul class="message-menu list-unstyled">');
-            ext.point('io.ox/chat/message/menu').invoke('draw', this.menu, ext.Baton({ view: this, model: model }));
-            target.prepend(this.menu);
+                model = this.collection.get(target.parent().attr('data-cid')),
+                node = $('<ul class="message-menu list-unstyled">');
+
+            // no menu for deleted messages
+            if (!model || model.get('deleted')) return;
+
+            // backdrop is needed to "bridge" the gap between message and menu node. Otherwise we would get a mouseleave event there that would hide the menu
+            this.menu = $('<div class="menu-backdrop">').append(node);
+            ext.point('io.ox/chat/message/menu').invoke('draw', node, ext.Baton({ view: this, model: model }));
+            target.append(this.menu);
         },
 
         hideMenu: function () {
@@ -134,12 +143,14 @@ define('io.ox/chat/views/messages', [
         renderFoot: function (model) {
             return $('<div class="foot">').append(
                 // time
-                $('<div class="time">').text(model.getTime())
+                $('<div class="time">').text(model.getTime()),
+                // flags
+                $('<div class="flags">').append((model.get('edited') && !model.get('deleted')) ? $('<i class="fa fa-pencil">').attr('title', gt('Message was edited')) : '')
             );
         },
 
         renderSender: function (model) {
-            if (model.isSystem() || model.isMyself() || model.hasSameSender(this.options.limit)) return $();
+            if ((model.isSystem() && !model.get('deleted')) || model.isMyself() || model.hasSameSender(this.options.limit)) return $();
             var user = data.users.getByMail(model.get('sender'));
             return [new Avatar({ model: user }).render().$el, $('<div class="sender">').text(user.getName())];
         },
