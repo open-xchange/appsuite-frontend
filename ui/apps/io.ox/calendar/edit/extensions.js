@@ -222,7 +222,7 @@ define('io.ox/calendar/edit/extensions', [
             this.$el.append(
                 $('<label class="control-label col-xs-12">').attr('for', guid).append(
                     $.txt(gt('Subject')),
-                    input = new mini.InputView({ id: guid, name: 'summary', model: self.model, mandatory: true }).render().$el,
+                    input = new mini.InputView({ id: guid, name: 'summary', model: self.model, autocomplete: false, mandatory: true }).render().$el,
                     new mini.ErrorView({ name: 'summary', model: self.model }).render().$el
                 )
             );
