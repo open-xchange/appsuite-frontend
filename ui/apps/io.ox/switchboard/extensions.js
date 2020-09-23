@@ -394,11 +394,13 @@ define('io.ox/switchboard/extensions', [
         }
     });
 
-    // Settings
-    ext.point('io.ox/settings/pane/tools').extend({
-        id: 'zoom',
-        title: gt('Zoom Integration'),
-        ref: 'io.ox/switchboard',
-        index: 10
-    });
+    if (supportsZoom) {
+        // Settings
+        ext.point('io.ox/settings/pane/tools').extend({
+            id: 'zoom',
+            title: gt('Zoom Integration'),
+            ref: 'io.ox/switchboard',
+            index: 10
+        });
+    }
 });
