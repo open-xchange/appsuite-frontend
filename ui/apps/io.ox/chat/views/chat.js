@@ -144,7 +144,8 @@ define('io.ox/chat/views/chat', [
             'click .file-upload-btn': 'onTriggerFileupload',
             'click .jump-down': 'onJumpDown',
             'change .file-upload-input': 'onFileupload',
-            'click button[data-download]': 'onFileDownload'
+            'click button[data-download]': 'onFileDownload',
+            'click .cancel-btn': 'onCancelEditMode'
         },
 
         initialize: function (options) {
@@ -318,6 +319,8 @@ define('io.ox/chat/views/chat', [
             if (this.isMember()) {
                 this.$editor = $('<textarea class="form-control">').attr({ 'aria-label': gt('Enter message here'), placeholder: gt('Enter message here') });
                 return [this.$editor,
+                    $('<button type="button" class="btn btn-circle cancel-btn">').attr('aria-label', gt('Cancel'))
+                        .append($('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Cancel'))),
                     $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">').attr('aria-label', gt('Upload file'))
                         .append($('<i class="fa fa-paperclip" aria-hidden="true">').attr('title', gt('Upload file'))),
                     $('<input type="file" class="file-upload-input hidden">')];
@@ -412,13 +415,19 @@ define('io.ox/chat/views/chat', [
         },
 
         onEditMessage: function (message) {
-            debugger;
             var messageNode = this.getMessageNode(message);
             if (messageNode) {
                 this.$scrollpane.scrollTop(messageNode.position.top);
             }
             this.$editor.val(message.get('content')).focus();
+            this.$el.find('.controls').addClass('edit-mode');
             this.editMode = message;
+        },
+
+        onCancelEditMode: function () {
+            this.$editor.val('').focus();
+            this.$el.find('.controls').removeClass('edit-mode');
+            this.editMode = false;
         },
 
         scrollToBottom: function () {
@@ -493,6 +502,7 @@ define('io.ox/chat/views/chat', [
             if (this.editMode) {
                 this.model.editMessage(content, this.editMode);
                 this.editMode = false;
+                this.$el.find('.controls').removeClass('edit-mode');
             } else {
                 var message = { content: content, sender: data.user.email };
                 if (this.reference) message.reference = this.reference;

@@ -836,6 +836,35 @@
             margin-left: 8px;
         }
 
+        .cancel-btn {
+            display: none;
+            color: @gray;
+            background: none;
+            position: absolute;
+            font-size: 16px;
+            right: 66px;
+            width: 28px;
+            height: 28px;
+            top: 10px;
+            padding: 0px;
+
+            &:focus, &:hover {
+                color: @lightblue;
+                border-radius: 50%;
+                border: 2px solid @lightblue;
+                background: #fff;
+            }
+        }
+
+        &.edit-mode {
+            .cancel-btn {
+                display: block;
+            }
+            textarea {
+                padding-right: 32px;
+            }
+        }
+
         .jump-down {
             position: absolute;
             top: -60px;
