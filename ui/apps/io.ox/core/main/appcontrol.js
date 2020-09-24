@@ -131,7 +131,7 @@ define('io.ox/core/main/appcontrol', [
             this.$icon.attr('aria-hidden', true);
 
             // reverted for 7.10
-            if (settings.get('coloredIcons', false)) this.$icon.addClass('colored');
+            if (settings.get('coloredIcons', true)) this.$icon.addClass('colored');
 
             if (id === 'io.ox/calendar' || /calendar/.test(this.model.getName())) this.drawDate();
 
