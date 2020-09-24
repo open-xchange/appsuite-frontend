@@ -75,6 +75,32 @@ define('io.ox/switchboard/settings/pane', [
                     )
                 );
             }
+        },
+        {
+            id: 'dialin',
+            index: INDEX += 100,
+            render: function () {
+                this.$el.append(
+                    util.fieldset(
+                        gt('Global dial-in countries'),
+                        $('<p>').text(
+                            gt('Zoom lets you choose which dial-in countries appear in meeting invitations.')
+                        ),
+                        $('<p>').text(
+                            gt('You can edit these dial-in numbers in your Zoom profile.')
+                        ),
+                        $('<p>').append(
+                            $('<a href="" rel="noopener" target="_blank">')
+                            .attr('href', 'https://zoom.us/profile/setting?tab=telephony')
+                            .append(
+                                $.txt(gt('Open Zoom profile')),
+                                $('<i class="fa fa-external-link" aria-hidden="true" style="margin-left: 8px">')
+                            )
+                        )
+                    )
+                );
+            }
+
         }
     );
 

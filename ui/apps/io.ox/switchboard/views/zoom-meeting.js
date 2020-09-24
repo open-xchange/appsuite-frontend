@@ -20,8 +20,7 @@ define('io.ox/switchboard/views/zoom-meeting', [
 
     'use strict';
 
-    var preferredCountry = settings.get('zoom/dialin/preferredCountry', 'DE');
-    var filterCountry = settings.get('zoom/dialin/filterCountry', 'DE');
+    var filterCountry = settings.get('zoom/dialin/filterCountry', '');
 
     var ZoomMeetingView = zoom.View.extend({
 
@@ -58,7 +57,6 @@ define('io.ox/switchboard/views/zoom-meeting', [
                     $.txt(' '),
                     $('<a target="_blank" rel="noopener">').attr('href', url).text(gt.noI18n(url))
                 ),
-                this.createDialinNumbers(),
                 $('<div>').append(
                     $('<a href="#" class="secondary-action" data-action="copy-to-location">')
                         .text(gt('Copy link to location')),
@@ -67,7 +65,7 @@ define('io.ox/switchboard/views/zoom-meeting', [
                         .attr('data-clipboard-text', url)
                         .on('click', false),
                     $('<a href="#" class="secondary-action" data-action="copy-to-description">')
-                        .text(gt('Copy dial-in numbers to description'))
+                        .text(gt('Copy dial-in information to description'))
                 ),
                 $('<div class="alert alert-info hidden recurrence-warning">').text(
                     gt('Zoom meetings expire after 365 days. We recommend to limit the series to one year. Alternatively, you can update the series before the Zoom meeting expires.')
@@ -94,22 +92,6 @@ define('io.ox/switchboard/views/zoom-meeting', [
             }
         },
 
-        createDialinNumbers: function () {
-            var meeting = this.model.get('meeting');
-            if (!preferredCountry || !meeting || !meeting.settings) return $();
-            var dialin = _(meeting.settings.global_dial_in_numbers).find(function (dialin) {
-                return dialin.country === preferredCountry;
-            });
-            if (!dialin) return $();
-            return $('<div class="ellipsis">').append(
-                $('<b>').text(gt('Dial-in number:')),
-                $.txt(' '),
-                $('<a target="_blank" rel="noopener">').attr('callto', dialin.number).text(gt.noI18n(dialin.number)),
-                $.txt(' '),
-                $('<span>').text(gt.noI18n(' (' + dialin.country + ')'))
-            );
-        },
-
         copyToLocation: function (e) {
             e.preventDefault();
             //#. %1$s contains the URL to join the meeting
@@ -118,18 +100,38 @@ define('io.ox/switchboard/views/zoom-meeting', [
 
         copyToDescription: function (e) {
             e.preventDefault();
-            var meeting = this.model.get('meeting');
+            var meeting = this.model.get('meeting'), passcode, onetap, dialinNumbers, description;
             if (!meeting || !meeting.settings) return;
-            var dialinNumbers = _(meeting.settings.global_dial_in_numbers)
-                .filter(function (dialin) {
-                    if (filterCountry === undefined) return true;
-                    return filterCountry === dialin.country;
-                })
-                .map(function (dialin) {
-                    return dialin.country_name + ' (' + (dialin.city || dialin.country) + '): ' + dialin.number;
-                });
-            var description = this.appointment.get('description') || '';
-            this.appointment.set('description', gt('Dial-in numbers') + ':\n' + dialinNumbers.join('\n') + '\n\n' + description);
+            dialinNumbers = _(meeting.settings.global_dial_in_numbers).filter(function (dialin) {
+                if (!filterCountry) return true;
+                return filterCountry === dialin.country;
+            });
+            description = gt('Join Zoom meeting') + ':' + this.getJoinURL() + '\n';
+            if (meeting.password) {
+                //#. %1$s contains a password
+                description += gt('Meeting password: %1$s', meeting.password) + '\n';
+            }
+            if (dialinNumbers.length) {
+                passcode = meeting.h323_password;
+                onetap = dialinNumbers[0].number + ',,' + meeting.id + '#,,,,,,0#' + (passcode ? ',,' + passcode + '#' : '');
+                description += '\n' +
+                    //#. Zoom offers a special number to automatically provide the meeting ID and passcode
+                    //#. German: "Schnelleinwahl mobil"
+                    gt('One tap mobile: %1$s', onetap) + '\n\n' +
+                    //#. %1$s contains a numeric zoom meeting ID
+                    gt('Meeting-ID: %1$s', meeting.id) + '\n' +
+                    //#. %1$s contains a numeric dialin passcode
+                    (passcode ? gt('Dial-in passcode: %1$d', passcode) + '\n' : '') +
+                    '\n' +
+                    gt('Dial by your location') + '\n' +
+                    dialinNumbers.map(function (dialin) {
+                        return '    ' + dialin.country_name + (dialin.city ? ' (' + dialin.city + ')' : '') + ': ' + dialin.number;
+                    })
+                    .join('\n') + '\n';
+            }
+            var existingDescription = this.appointment.get('description');
+            if (existingDescription) description = description + '\n' + existingDescription;
+            this.appointment.set('description', description);
         },
 
         isDone: function () {
