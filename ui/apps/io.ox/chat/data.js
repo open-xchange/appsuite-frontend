@@ -1013,13 +1013,9 @@ define('io.ox/chat/data', [
             });
 
             socket.on('message:changed', function (message) {
-                // would be easier if we had a room id in the changed message
-                // update message in collections
-                data.chats.each(function (chat) {
-                    if (chat.messages.get(message.messageId)) {
-                        chat.messages.get(message.messageId).set(message);
-                    }
-                });
+                var cachedMessage = messageCache.get(message);
+                if (cachedMessage) cachedMessage.set(message);
+                //needs a trigger for file messages
             });
 
             // send heartbeat every minute
