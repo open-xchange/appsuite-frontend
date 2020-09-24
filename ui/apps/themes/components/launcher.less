@@ -108,9 +108,9 @@
     padding: 0;
     margin: 0;
     border: 0;
-    &:focus, &:hover {
-        outline: 0;
-        background: rgba(0, 0, 0, .3);
+    outline: 0;
+    &:focus {
+        background: rgba(0, 0, 0, 0.20);
     }
 }
 
@@ -165,6 +165,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         align-self: auto;
         min-width: 0;
         min-height: auto;
+        padding: 8px 0;
         & > button {
             // styles for fa-icon
             font-size: 18px;
@@ -176,7 +177,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             //width: @appcontrol-height - 16;
             position: relative;
             z-index: 2;
-            height: @appcontrol-height;
+            height: 100%;
             display: inline-block;
             border: 0;
             svg .fill-c1 { fill: #fff; }
@@ -217,7 +218,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     svg.indicator {
         position: absolute;
         z-index: 1;
-        top: 22px;
+        top: 14px;
         left: 32px;
         circle { fill: #eb4400 }
     }
@@ -341,9 +342,12 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         margin: 0;
     }
 
+    #io-ox-toprightbar {
+        padding-right: 12px;
+    }
+
     #io-ox-topleftbar,
     #io-ox-toprightbar {
-        padding-right: 12px; // break alignment on purpose
         // more space needed on smartphones
         .smartphone & { padding-right: 0}
         .launcher {
