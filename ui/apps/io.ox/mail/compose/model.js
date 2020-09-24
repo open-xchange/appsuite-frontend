@@ -141,6 +141,21 @@ define('io.ox/mail/compose/model', [
             if (model.get('id')) attachmentsAPI.remove(this.get('id'), model.get('id'));
         },
 
+        exceedsThreshold: function () {
+            var threshold = settings.get('compose/shareAttachments/threshold', 0),
+                sharedAttachments = this.get('sharedAttachments') || {};
+
+            if (threshold <= 0 || sharedAttachments.enabled) return;
+
+            var actualAttachmentSize = this.get('attachments').reduce(function (memo, model) {
+                // count only attachments relvant for attachments
+                if (model.get('origin') === 'VCARD') return memo;
+                if (model.get('contentDisposition') === 'INLINE') return memo;
+                return memo + model.getSize();
+            }, 0);
+            return actualAttachmentSize > threshold;
+        },
+
         quoteMessage: (function () {
             function mailAddress(item) {
                 if (item.length < 2) return item[0] || '';

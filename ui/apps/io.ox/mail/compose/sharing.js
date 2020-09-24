@@ -214,15 +214,12 @@ define('io.ox/mail/compose/sharing', [
         updateVisibility: function () {
             if (!this.optionsButton) return;
 
-            if (!this.model.saving && mailSettings.get('compose/shareAttachments/threshold', 0) > 0) {
-                var actualAttachmentSize = this.model.get('attachments').getSize();
-                if (actualAttachmentSize > mailSettings.get('compose/shareAttachments/threshold', 0) && this.sharingModel.get('enabled') === false) {
-                    //#. %1$s is usually "Drive Mail" (product name; might be customized)
-                    yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', mailSettings.get('compose/shareAttachments/name')));
-                    this.sharingModel.set('enabled', true);
-                }
+            if (!this.model.saving && this.model.exceedsThreshold()) {
+                //#. %1$s is usually "Drive Mail" (product name; might be customized)
+                yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', mailSettings.get('compose/shareAttachments/name')));
+                this.sharingModel.set('enabled', true);
             }
-            // offer option t ocactivate when attachments are present
+            // offer option to activate when attachments are present
             this.$el.toggle(!!this.model.get('attachments').getValidModels().length);
             // is active
             this.optionsButton.toggleClass('hidden', !this.sharingModel.get('enabled'));

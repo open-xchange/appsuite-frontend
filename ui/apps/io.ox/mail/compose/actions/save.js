@@ -57,7 +57,7 @@ define('io.ox/mail/compose/actions/save', [
         {
             id: 'check-for-auto-enabled-drive-mail',
             index: 400,
-            perform: extensions.checkForAutoEnabledDriveMail({ yell: true })
+            perform: extensions.checkForAutoEnabledDriveMail({ yell: true, restoreWindow: true, stopPropagation: true, removeQueue: true })
         },
         {
             id: 'send',
