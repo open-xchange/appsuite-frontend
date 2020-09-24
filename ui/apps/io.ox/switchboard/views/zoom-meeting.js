@@ -106,7 +106,7 @@ define('io.ox/switchboard/views/zoom-meeting', [
                 if (!filterCountry) return true;
                 return filterCountry === dialin.country;
             });
-            description = gt('Join Zoom meeting') + ':' + this.getJoinURL() + '\n';
+            description = gt('Join Zoom meeting') + ': ' + this.getJoinURL() + '\n';
             if (meeting.password) {
                 //#. %1$s contains a password
                 description += gt('Meeting password: %1$s', meeting.password) + '\n';
