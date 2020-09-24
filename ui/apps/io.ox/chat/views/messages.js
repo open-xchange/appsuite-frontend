@@ -95,7 +95,6 @@ define('io.ox/chat/views/messages', [
                 .toggleClass('myself', (!model.isSystem() || model.get('deleted')) && model.isMyself())
                 .toggleClass('highlight', !!model.get('messageId') && model.get('messageId') === this.messageId)
                 .toggleClass('emoji', isOnlyEmoji(body))
-                .toggleClass('deleted', model.get('deleted'))
                 .append(
                     // sender avatar & name
                     this.renderSender(model),
@@ -105,7 +104,7 @@ define('io.ox/chat/views/messages', [
                             .html(body)
                             .append(this.renderFoot(model)),
                         // show some indicator dots when a menu is available
-                        (((!model.isSystem() || model.get('deleted')) && model.isMyself()) ? $('<div class="actions">').append($('<i class="fa fa-ellipsis-v">')) : '')
+                        (!model.isSystem() && model.isMyself()) ? $('<div class="actions">').append($('<i class="fa fa-ellipsis-v">')) : ''
                     ),
                     //delivery state
                     $('<div class="fa delivery" aria-hidden="true">').addClass(model.getDeliveryState())
@@ -125,8 +124,8 @@ define('io.ox/chat/views/messages', [
                 model = this.collection.get(target.parent().attr('data-cid')),
                 node = $('<ul class="message-menu list-unstyled">');
 
-            // no menu for deleted messages
-            if (!model || model.get('deleted')) return;
+            // no menu for system messages
+            if (!model || model.isSystem()) return;
 
             // backdrop is needed to "bridge" the gap between message and menu node. Otherwise we would get a mouseleave event there that would hide the menu
             this.menu = $('<div class="menu-backdrop">').append(node);
