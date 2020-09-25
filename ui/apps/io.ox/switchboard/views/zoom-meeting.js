@@ -27,8 +27,8 @@ define('io.ox/switchboard/views/zoom-meeting', [
         className: 'conference-view zoom',
 
         events: {
-            'click [data-action="copy-to-location"]': 'copyToLocation',
-            'click [data-action="copy-to-description"]': 'copyToDescription',
+            'click [data-action="copy-to-location"]': 'copyToLocationHandler',
+            'click [data-action="copy-to-description"]': 'copyToDescriptionHandler',
             'click [data-action="recreate"]': 'recreateMeeting'
         },
 
@@ -71,6 +71,9 @@ define('io.ox/switchboard/views/zoom-meeting', [
                     gt('Zoom meetings expire after 365 days. We recommend to limit the series to one year. Alternatively, you can update the series before the Zoom meeting expires.')
                 )
             );
+            // auto copy
+            this.autoCopyToLocation();
+            this.autoCopyToDescription();
             this.onChangeRecurrence();
             var el = this.$('[data-clipboard-text]').get(0);
             require(['static/3rd.party/clipboard.min.js'], function (Clipboard) {
@@ -92,14 +95,34 @@ define('io.ox/switchboard/views/zoom-meeting', [
             }
         },
 
-        copyToLocation: function (e) {
+        copyToLocationHandler: function (e) {
             e.preventDefault();
+            this.copyToLocation();
+        },
+
+        autoCopyToLocation: function () {
+            if (!settings.get('zoom/autoCopyToLocation')) return;
+            if (this.appointment.get('location')) return;
+            this.copyToLocation();
+        },
+
+        copyToLocation: function () {
             //#. %1$s contains the URL to join the meeting
             this.appointment.set('location', gt('Zoom Meeting: %1$s', this.getJoinURL()));
         },
 
-        copyToDescription: function (e) {
+        copyToDescriptionHandler: function (e) {
             e.preventDefault();
+            this.copyToDescription();
+        },
+
+        autoCopyToDescription: function () {
+            if (!settings.get('zoom/autoCopyToDescription')) return;
+            if (this.appointment.get('description')) return;
+            this.copyToDescription();
+        },
+
+        copyToDescription: function () {
             var meeting = this.model.get('meeting'),
                 meetingId, passcode, onetap, dialinNumbers, description;
             if (!meeting || !meeting.settings) return;
