@@ -128,6 +128,7 @@ define('io.ox/files/upload/view', [
                     fileUpload.collection.each(function (model) {
                         //remove all change listeners from the models in the collection
                         model.off('change:progress');
+                        model.off('change:abort');
                     });
                 })
                 .open();
