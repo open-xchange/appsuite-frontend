@@ -75,11 +75,8 @@ upload stable:
 # dependent builds and testing
 triggerappsuite:
   extends: upload
-  variables:
-    CWS: ${CI_COMMIT_REF_NAME}
-    GIT_REPO: ${CI_PROJECT_URL}
-    GITLAB_ID: ${CI_PROJECT_ID}
-  trigger: documents/appsuite
+  script:
+    - "curl -X POST -F token=686e6e702ab5da776a699d39d4b4c7 -F ref=develop -F \"variables[CWS]=$CI_COMMIT_REF_NAME\" -F \"variables[GIT_REPO]=$CI_PROJECT_URL\" -F \"variables[GITLAB_ID]=$CI_PROJECT_ID\" https://gitlab.open-xchange.com/api/v4/projects/1021/trigger/pipeline"
   rules:
     - if: '$CI_COMMIT_TAG || $CI_COMMIT_REF_NAME =~ /^(master-?.*|develop|release-.*|.*DOCS-.*)$/'
       when: on_success
