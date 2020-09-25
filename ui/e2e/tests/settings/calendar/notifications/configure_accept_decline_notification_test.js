@@ -112,42 +112,12 @@ const createAppointment = async (subject, participants) => {
         I.waitForDetached('.page.current .appointment');
     };
 
-Scenario('[C7871] Configure accept/decline notification for creator', (I, users, settings, calendar, dialogs, mail) => {
-    const [userA, userB] = users,
-        clickWithinPopup = async (text) => {
-            await within('.io-ox-sidepopup .inline-toolbar', () => {
-                I.waitForText(text);
-                I.click(text);
-                if (text !== 'Change status') I.waitForDetached(locate('a').withText(text));
-            });
-        },
-        createAppointment = async () => {
-            I.say('Create appointment as userA and invite userB');
-            calendar.waitForApp();
-            calendar.newAppointment();
-            I.fillField('Subject', 'C7871');
-            await calendar.addParticipant(userB.userdata.primaryEmail, false);
-            I.click('Create', calendar.locators.edit);
-            I.waitForDetached(calendar.locators.edit);
-            I.seeElement('.page.current .appointment');
-        },
-        changeStatus = () => {
-            I.say('Change confirmation status as userB');
-            calendar.waitForApp();
-            I.waitForText('C7871', 5, '.page.current .appointment');
-            I.click('C7871');
-            I.waitForVisible('.io-ox-sidepopup .inline-toolbar');
-            clickWithinPopup('Accept');
-            clickWithinPopup('Decline');
-            clickWithinPopup('Change status');
-            dialogs.waitForVisible();
-            dialogs.clickButton('Tentative');
-            I.waitForDetached('.modal-dialog');
-            I.retry(5).click('~Close', '.io-ox-sidepopup');
-        };
+Scenario('[C7871] Configure accept/decline notification for creator', async (I, users, settings, calendar, dialogs, mail) => {
+    const [userA, userB] = users;
+    const subject = 'C7871';
 
     I.say('Login userA and check, if setting notifyAcceptedDeclinedAsCreator is set.');
-    session('userA', async () => {
+    await session('userA', async () => {
         I.login('app=io.ox/settings&folder=virtual/settings/io.ox/calendar', { user: userA });
         settings.waitForApp();
         I.waitForText('Receive notification as appointment creator');
@@ -155,24 +125,20 @@ Scenario('[C7871] Configure accept/decline notification for creator', (I, users,
         I.seeCheckboxIsChecked('notifyAcceptedDeclinedAsCreator');
 
         I.openApp('Calendar', { perspective: 'week:week' });
-        await createAppointment();
+        await createAppointment(subject, userB.userdata.primaryEmail);
     });
 
     I.say('Login userB');
-    session('userB', async () => {
+    await session('userB', async () => {
         I.login('app=io.ox/calendar&perspective=week:week', { user: userB });
-        await changeStatus();
+        await changeStatus(subject, false);
     });
 
     I.say('Verify that all 3 notification emails were recieved as userA.');
-    session('userA', async () => {
-        I.openApp('Mail');
+    await session('userA', async () => {
         I.refreshPage();
-        mail.waitForApp();
-        I.waitForVisible('~Inbox, 3 unread');
-        I.waitForText('accepted the invitation');
-        I.waitForText('declined the invitation');
-        I.waitForText('tentatively accepted');
+        I.waitForVisible('#io-ox-appcontrol', 10);
+        await verifyNotificationMails(true, 3);
 
         I.openFolderMenu('Inbox');
         I.clickDropdown('Mark all messages as read');
@@ -185,39 +151,30 @@ Scenario('[C7871] Configure accept/decline notification for creator', (I, users,
         I.waitForNetworkTraffic();
         I.dontSeeCheckboxIsChecked('notifyAcceptedDeclinedAsCreator');
 
-        I.say('Delete old appointment to get a clean slate');
-        I.openApp('Calendar', { perspective: 'week:week' });
-        calendar.waitForApp();
-        I.waitForText('C7871');
-        I.click('C7871');
-        I.waitForVisible('.io-ox-sidepopup');
-        calendar.deleteAppointment();
-        I.waitForDetached('.io-ox-sidepopup');
-        I.waitForDetached('.page.current .appointment');
+        await deleteAppointment(subject);
 
-        await createAppointment();
+        await createAppointment(subject, userB.userdata.primaryEmail);
     });
 
-    session('userB', async () => {
+    await session('userB', async () => {
         I.triggerRefresh();
-        await changeStatus();
+        await changeStatus(subject, false);
     });
 
     I.say('Verify that no notification email was sent.');
-    session('userA', () => {
-        I.openApp('Mail');
+    await session('userA', async () => {
         I.refreshPage();
-        mail.waitForApp();
-        I.dontSeeElement('.list-view-control .seen-unseen-indicator');
+        I.waitForVisible('#io-ox-appcontrol', 10);
+        await verifyNotificationMails(false);
     });
 });
 
-Scenario('[C7872] Configure accept/decline for participant', (I, users, settings) => {
+Scenario('[C7872] Configure accept/decline for participant', async (I, users, settings) => {
     const [userA, userB, userC] = users,
         subject = '[C7872]';
 
     I.say('Login userC and set notifyAcceptedDeclinedAsParticipant.');
-    session('userC', () => {
+    await session('userC', () => {
         I.login('app=io.ox/settings&folder=virtual/settings/io.ox/calendar', { user: userC });
         settings.waitForApp();
         I.waitForText('Receive notification as appointment participant');
@@ -226,20 +183,20 @@ Scenario('[C7872] Configure accept/decline for participant', (I, users, settings
     });
 
     I.say('Login userA and create appointment with all participants.');
-    session('userA', async () => {
+    await session('userA', async () => {
         I.login('app=io.ox/calendar&perpective=week:week', { user: userA });
         await createAppointment(subject, [userB.userdata.primaryEmail, userC.userdata.primaryEmail]);
     });
 
     I.say('Login userB, verify all participants and change status.');
-    session('userB', async () => {
+    await session('userB', async () => {
         I.login('app=io.ox/calendar&perpective=week:week', { user: userB });
         await verfiyParticipants(subject, [userA, userB, userC]);
         await changeStatus(subject, true);
     });
 
     I.say('As userC verfiy that all notification mails were received.');
-    session('userC', async () => {
+    await session('userC', async () => {
         // there are 4 mails, as the invitation mail is also sent
         I.refreshPage();
         I.waitForVisible('#io-ox-appcontrol', 10);
@@ -253,7 +210,7 @@ Scenario('[C7872] Configure accept/decline for participant', (I, users, settings
         I.dontSeeCheckboxIsChecked('notifyAcceptedDeclinedAsParticipant');
     });
 
-    session('userA', async () => {
+    await session('userA', async () => {
         await deleteAppointment(subject);
 
         I.say('As userA create appointment again with all participants.');
@@ -261,14 +218,14 @@ Scenario('[C7872] Configure accept/decline for participant', (I, users, settings
     });
 
     I.say('As userB, verify all participants and change status again.');
-    session('userB', async () => {
+    await session('userB', async () => {
         I.refreshPage();
         await verfiyParticipants(subject, [userA, userB, userC]);
         await changeStatus(subject, true);
     });
 
     I.say('As userC, verify that no notification mails were received.');
-    session('userC', async () => {
+    await session('userC', async () => {
         I.refreshPage();
         I.waitForVisible('#io-ox-appcontrol', 10);
         await verifyNotificationMails(false);
