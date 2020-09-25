@@ -20,7 +20,9 @@ define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], func
     var api = _.extend({ queue: [], add: _.noop }, Backbone.Events),
         url = settings.get('count/url') || settings.get('tracker/url'),
         enabled = url && !ox.debug && settings.get('count/enabled', true),
-        chunkSize = 100;
+        chunkSize = 100,
+        platform = _(['windows', 'macos', 'ios', 'android']).find(_.device),
+        device = _(['smartphone', 'desktop', 'tablet']).find(_.device);
 
     // count/disabled is _only_ for dev purposes!
     api.disabled = settings.get('count/disabled', !enabled);
@@ -58,6 +60,9 @@ define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], func
     api.stat = function (id) {
         return toggles[id] !== false;
     };
+
+    api.platform = platform;
+    api.device = device;
 
     function send() {
         if (api.queue.length === 0) return;
