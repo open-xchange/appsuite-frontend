@@ -100,7 +100,8 @@ define('io.ox/switchboard/views/zoom-meeting', [
 
         copyToDescription: function (e) {
             e.preventDefault();
-            var meeting = this.model.get('meeting'), passcode, onetap, dialinNumbers, description;
+            var meeting = this.model.get('meeting'),
+                meetingId, passcode, onetap, dialinNumbers, description;
             if (!meeting || !meeting.settings) return;
             dialinNumbers = _(meeting.settings.global_dial_in_numbers).filter(function (dialin) {
                 if (!filterCountry) return true;
@@ -112,14 +113,16 @@ define('io.ox/switchboard/views/zoom-meeting', [
                 description += gt('Meeting password: %1$s', meeting.password) + '\n';
             }
             if (dialinNumbers.length) {
+                meetingId = String(meeting.id).replace(/^(\d{3})(\d{4})(\d+)$/, '$1 $2 $3');
                 passcode = meeting.h323_password;
                 onetap = dialinNumbers[0].number + ',,' + meeting.id + '#,,,,,,0#' + (passcode ? ',,' + passcode + '#' : '');
                 description += '\n' +
                     //#. Zoom offers a special number to automatically provide the meeting ID and passcode
                     //#. German: "Schnelleinwahl mobil"
-                    gt('One tap mobile: %1$s', onetap) + '\n\n' +
+                    //#. %1$s is the country, %2$s contains the number
+                    gt('One tap mobile (%1$s): %2$s', dialinNumbers[0].country_name, onetap) + '\n\n' +
                     //#. %1$s contains a numeric zoom meeting ID
-                    gt('Meeting-ID: %1$s', meeting.id) + '\n' +
+                    gt('Meeting-ID: %1$s', meetingId) + '\n' +
                     //#. %1$s contains a numeric dialin passcode
                     (passcode ? gt('Dial-in passcode: %1$d', passcode) + '\n' : '') +
                     '\n' +
