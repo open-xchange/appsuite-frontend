@@ -26,11 +26,8 @@ define('io.ox/core/count/main', [
 
     if (api.disabled) return;
 
-    var platform = _(['windows', 'macos', 'ios', 'android']).find(_.device),
-        device = _(['smartphone', 'desktop', 'tablet']).find(_.device);
-
     // track browser and unique visit once on setup
     api.add('browser');
-    api.add('device', { platform: platform, device: device });
+    api.add('device', { platform: api.platform, device: api.device });
     api.add('unique', { id: ox.context_id + '/' + ox.user_id });
 });

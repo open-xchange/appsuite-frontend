@@ -43,7 +43,7 @@ define('io.ox/core/count/eyeballtime', [
     }
 
     function send(app) {
-        api.add('ebt', { app: app, uuid: api.uuid, t0: ox.t0 });
+        api.add('ebt', { app: app, uuid: api.uuid, t0: ox.t0, d: api.device });
     }
 
     setInterval(count, 1000);
