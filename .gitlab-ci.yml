@@ -17,11 +17,11 @@ stages:
   - build
   - test
   - deploy
+  - triggerdocs
   - e2e
   - merge
   - report
   - cleanup
-  - trigger
 
 .default_cache:
   cache:
@@ -202,8 +202,10 @@ build dynamic-theme:
       when: always
 
 
+# notify documents projects about changes to allow
+# dependent builds and testing
 triggerappsuite:
-  stage: trigger
+  stage: triggerdocs
   variables:
     CWS: ${CI_COMMIT_REF_NAME}
     GIT_REPO: ${CI_PROJECT_URL}
