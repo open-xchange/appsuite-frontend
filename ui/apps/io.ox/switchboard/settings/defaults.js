@@ -21,7 +21,9 @@ define('io.ox/switchboard/settings/defaults', [], function () {
             useRingtones: true
         },
         zoom: {
-            addMeetingPassword: true
+            addMeetingPassword: true,
+            autoCopyToLocation: true,
+            autoCopyToDescription: false
         }
     };
 });
