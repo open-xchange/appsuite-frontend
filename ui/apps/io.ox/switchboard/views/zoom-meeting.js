@@ -14,9 +14,10 @@
 define('io.ox/switchboard/views/zoom-meeting', [
     'io.ox/switchboard/zoom',
     'io.ox/switchboard/api',
+    'io.ox/core/extensions',
     'settings!io.ox/switchboard',
     'gettext!io.ox/switchboard'
-], function (zoom, api, settings, gt) {
+], function (zoom, api, ext, settings, gt) {
 
     'use strict';
 
@@ -48,29 +49,7 @@ define('io.ox/switchboard/views/zoom-meeting', [
         },
 
         renderDone: function () {
-            // show meeting
-            var url = this.getJoinURL() || 'https://...';
-            this.$el.append(
-                $('<i class="fa fa-video-camera conference-logo" aria-hidden="true">'),
-                $('<div class="ellipsis">').append(
-                    $('<b>').text(gt('Link:')),
-                    $.txt(' '),
-                    $('<a target="_blank" rel="noopener">').attr('href', url).text(gt.noI18n(url))
-                ),
-                $('<div>').append(
-                    $('<a href="#" class="secondary-action" data-action="copy-to-location">')
-                        .text(gt('Copy link to location')),
-                    $('<a href="#" class="secondary-action">')
-                        .text(gt('Copy link to clipboard'))
-                        .attr('data-clipboard-text', url)
-                        .on('click', false),
-                    $('<a href="#" class="secondary-action" data-action="copy-to-description">')
-                        .text(gt('Copy dial-in information to description'))
-                ),
-                $('<div class="alert alert-info hidden recurrence-warning">').text(
-                    gt('Zoom meetings expire after 365 days. We recommend to limit the series to one year. Alternatively, you can update the series before the Zoom meeting expires.')
-                )
-            );
+            this.renderPoint('done');
             // auto copy
             this.autoCopyToLocation();
             this.autoCopyToDescription();
@@ -79,20 +58,6 @@ define('io.ox/switchboard/views/zoom-meeting', [
             require(['static/3rd.party/clipboard.min.js'], function (Clipboard) {
                 new Clipboard(el);
             });
-        },
-
-        renderError: function () {
-            var url = this.getJoinURL();
-            if (url) {
-                this.model.set('error', gt('A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has expired.'));
-                zoom.View.prototype.renderError.call(this);
-                this.$el.append(
-                    $('<button type="button" class="btn btn-default" data-action="recreate">')
-                        .text(gt('Create new Zoom meeting'))
-                );
-            } else {
-                zoom.View.prototype.renderError.call(this);
-            }
         },
 
         copyToLocationHandler: function (e) {
@@ -229,6 +194,128 @@ define('io.ox/switchboard/views/zoom-meeting', [
             var rrule = this.appointment.get('rrule');
             this.$('.recurrence-warning').toggleClass('hidden', !longerThanOneYear(rrule));
         }
+    });
+
+    var points = {
+        auth: {
+            icon: function () {
+                this.$el.append(
+                    $('<i class="fa fa-exclamation conference-logo" aria-hidden="true">')
+                );
+            },
+            hint: function () {
+                this.$el.append(
+                    $('<p>').text(
+                        gt('You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. If you don\'t have an account yet, it is sufficient to create a free one.', ox.serverConfig.productName)
+                    )
+                );
+            },
+            button: function () {
+                this.$el.append(
+                    $('<p>').append(
+                        $('<button type="button" class="btn btn-default" data-action="start-oauth">')
+                            .text(gt('Connect with Zoom'))
+                    )
+                );
+            }
+        },
+        pending: {
+            default: function () {
+                this.$el.append(
+                    $('<div class="pending">').append(
+                        $('<i class="fa fa-video-camera conference-logo" aria-hidden="true">'),
+                        $.txt(gt('Connecting to Zoom ...')),
+                        $('<i class="fa fa-refresh fa-spin" aria-hidden="true">')
+                    )
+                );
+            }
+        },
+        done: {
+            icon: function () {
+                this.$el.append(
+                    $('<i class="fa fa-video-camera conference-logo" aria-hidden="true">')
+                );
+            },
+            link: function () {
+                var url = this.getJoinURL() || 'https://...';
+                this.$el.append(
+                    $('<div class="ellipsis">').append(
+                        $('<b>').text(gt('Link:')),
+                        $.txt(' '),
+                        $('<a target="_blank" rel="noopener">').attr('href', url).text(gt.noI18n(url))
+                    )
+                );
+            },
+            actions: function () {
+                this.$el.append(
+                    $('<div>').append(
+                        $('<a href="#" class="secondary-action" data-action="copy-to-location">')
+                            .text(gt('Copy link to location')),
+                        $('<a href="#" class="secondary-action">')
+                            .text(gt('Copy link to clipboard'))
+                            .attr('data-clipboard-text', this.getJoinURL())
+                            .on('click', false),
+                        $('<a href="#" class="secondary-action" data-action="copy-to-description">')
+                            .text(gt('Copy dial-in information to description'))
+                    )
+                );
+            },
+            warning: function () {
+                this.$el.append(
+                    $('<div class="alert alert-info hidden recurrence-warning">').text(
+                        gt('Zoom meetings expire after 365 days. We recommend to limit the series to one year. Alternatively, you can update the series before the Zoom meeting expires.')
+                    )
+                );
+            }
+        },
+        error: {
+            load: function () {
+                if (!this.getJoinURL()) return;
+                this.model.set('error', gt('A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has expired.'));
+            },
+            icon: function () {
+                this.$el.append(
+                    $('<i class="fa fa-exclamation conference-logo" aria-hidden="true">')
+                );
+            },
+            message: function () {
+                this.$el.append(
+                    $('<p class="alert alert-warning message">').append(
+                        $.txt(this.model.get('error') || gt('Something went wrong. Please try again.'))
+                    )
+                );
+            },
+            recreate: function () {
+                if (!this.getJoinURL()) return;
+                this.$el.append(
+                    $('<button type="button" class="btn btn-default" data-action="recreate">')
+                        .text(gt('Create new Zoom meeting'))
+                );
+            }
+        },
+        offline: {
+            icon: function () {
+                this.$el.append(
+                    $('<i class="fa fa-exclamation conference-logo" aria-hidden="true">')
+                );
+            },
+            default: function () {
+                this.$el.append(
+                    $('<p class="alert alert-warning message">').append(
+                        gt('The Zoom integration service is currently unavailable. Please try again later.')
+                    )
+                );
+            }
+        }
+    };
+
+    _(points).each(function (point, id) {
+        var index = 0;
+        ext.point(ZoomMeetingView.prototype.POINT + '/' + id).extend(
+            _(point).map(function (fn, id) {
+                return { id: id, index: (index += 100), render: fn };
+            })
+        );
     });
 
     function translateMeetingData(data) {
