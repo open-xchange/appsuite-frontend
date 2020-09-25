@@ -82,12 +82,13 @@ define('io.ox/switchboard/settings/pane', [
             render: function () {
                 this.$el.append(
                     util.fieldset(
-                        gt('Global dial-in countries'),
+                        gt('Dial-in numbers'),
                         $('<p>').text(
-                            gt('Zoom lets you choose which dial-in countries appear in meeting invitations.')
+                            //#. pro and business are names
+                            gt('If you have a professional Zoom account, Zoom offers dial-in numbers per country and lets you choose which countries appear in meeting invitations.')
                         ),
                         $('<p>').text(
-                            gt('You can edit these dial-in numbers in your Zoom profile.')
+                            gt('You can edit the list of countries in your Zoom profile.')
                         ),
                         $('<p>').append(
                             $('<a href="" rel="noopener" target="_blank">')
