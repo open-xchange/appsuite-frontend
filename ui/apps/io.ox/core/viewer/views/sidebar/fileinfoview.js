@@ -56,13 +56,22 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
         var link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('id'));
 
-        return [$('<span style="word-break: break-all">').text(name), new CopyToClipboardView({
-            tagName: 'button',
+        var copyLinkButton = new CopyToClipboardView({
             className: 'copy-link',
             content: link,
             label: gt('Private link: Only people who have access to the file/folder can use it. Use it to point to members of your organization to this file/folder.'),
-            iconClass: 'fa fa-link'
-        }).render().$el];
+            iconClass: 'fa fa-link',
+            events: {
+                'click': function () {
+                    this.$el.tooltip('hide');
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell({ type: 'success', message: gt('The link was copied to the clipboard.') });
+                    });
+                }
+            }
+        });
+
+        return [$('<span style="word-break: break-all">').text(name), copyLinkButton.render().$el];
     }
 
     function createDateString(date) {
