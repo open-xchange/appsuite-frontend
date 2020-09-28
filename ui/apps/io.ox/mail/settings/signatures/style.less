@@ -90,4 +90,11 @@ input.error { border-color: #b94a48; }
     .form-group {
         position: relative;
     }
+
+    // prevent overflowing toolbar actions (customized set, OXUIB-464)
+    .tinymce-toolbar .mce-container-body.mce-flow-layout {
+        display: flex;
+        overflow: hidden;
+    }
+
 }
