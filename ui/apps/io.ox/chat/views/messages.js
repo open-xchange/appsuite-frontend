@@ -16,8 +16,10 @@ define('io.ox/chat/views/messages', [
     'io.ox/chat/data',
     'io.ox/chat/views/avatar',
     'io.ox/core/extensions',
-    'gettext!io.ox/chat'
-], function (DisposableView, data, Avatar, ext, gt) {
+    'gettext!io.ox/chat',
+    'io.ox/chat/events',
+    'io.ox/backbone/mini-views/dropdown'
+], function (DisposableView, data, Avatar, ext, gt, events, Dropdown) {
 
     'use strict';
 
@@ -31,10 +33,11 @@ define('io.ox/chat/views/messages', [
         id: 'edit',
         index: 100,
         draw: function (baton) {
-            this.append($('<li>').text(gt('Edit message')).on('click', function () {
-                baton.view.hideMenu();
+            // we cannot edit pictures or system mesages
+            if (baton.model.get('type') !== 'text') return;
+            this.append($('<li role="presentation">').append($('<a href="#" role="menuitem" tabindex="-1">').text(gt('Edit message')).on('click', function () {
                 baton.view.trigger('editMessage', baton.model);
-            }));
+            })));
         }
     });
 
@@ -42,21 +45,15 @@ define('io.ox/chat/views/messages', [
         id: 'delete',
         index: 200,
         draw: function (baton) {
-            this.append($('<li>').text(gt('Delete message')).on('click', function () {
-                baton.view.hideMenu();
+            this.append($('<li role="presentation">').append($('<a href="#" role="menuitem" tabindex="-1">').text(gt('Delete message')).on('click', function () {
                 baton.view.trigger('delete', baton.model);
-            }));
+            })));
         }
     });
 
     return DisposableView.extend({
 
         className: 'messages',
-
-        events: {
-            'mouseenter .message.myself:not(.system) .actions': 'showMenu',
-            'mouseleave .content': 'hideMenu'
-        },
 
         initialize: function (options) {
             this.options = options;
@@ -70,6 +67,9 @@ define('io.ox/chat/views/messages', [
                 'change:files': this.onChangeBody,
                 'change:time': this.onChangeTime,
                 'change:deliveryState': this.onChangeDelivery
+            });
+            this.listenTo(events, {
+                'message:changed': this.onMessageChanged
             });
         },
 
@@ -87,8 +87,9 @@ define('io.ox/chat/views/messages', [
         },
 
         renderMessage: function (model) {
-            var body = model.getBody();
-            var message = $('<div class="message">')
+            var self = this,
+                body = model.getBody(),
+                message = $('<div class="message">')
                 // here we use cid instead of id, since the id might be unknown
                 .attr('data-cid', model.cid)
                 .addClass(model.getType())
@@ -104,7 +105,22 @@ define('io.ox/chat/views/messages', [
                             .html(body)
                             .append(this.renderFoot(model)),
                         // show some indicator dots when a menu is available
-                        (!model.isSystem() && model.isMyself()) ? $('<div class="actions">').append($('<i class="fa fa-ellipsis-v">')) : ''
+                        (function () {
+                            if (model.isSystem() || !model.isMyself()) return '';
+                            var toggle = $('<button type="button" class="btn btn-link dropdown-toggle actions-toggle" aria-haspopup="true" data-toggle="dropdown">')
+                                    .attr('title', gt('Message actions'))
+                                    .append($('<i class="fa fa-ellipsis-v">')),
+                                menu = $('<ul class="dropdown-menu">'),
+                                dropdown = new Dropdown({
+                                    className: 'message-actions-dropdown dropdown',
+                                    dropup: true,
+                                    smart: true,
+                                    $toggle: toggle,
+                                    $ul: menu
+                                });
+                            ext.point('io.ox/chat/message/menu').invoke('draw', menu, ext.Baton({ view: self, model: model }));
+                            return dropdown.render().$el;
+                        })()
                     ),
                     //delivery state
                     $('<div class="fa delivery" aria-hidden="true">').addClass(model.getDeliveryState())
@@ -117,26 +133,53 @@ define('io.ox/chat/views/messages', [
             return message;
         },
 
-        showMenu: function (e) {
-            if (!e || !e.target) return;
-            if (this.menu) this.hideMenu();
-            var target = $(e.target).closest('.content'),
-                model = this.collection.get(target.parent().attr('data-cid')),
-                node = $('<ul class="message-menu list-unstyled">');
-
-            // no menu for system messages
-            if (!model || model.isSystem()) return;
-
-            // backdrop is needed to "bridge" the gap between message and menu node. Otherwise we would get a mouseleave event there that would hide the menu
-            this.menu = $('<div class="menu-backdrop">').append(node);
-            ext.point('io.ox/chat/message/menu').invoke('draw', node, ext.Baton({ view: this, model: model }));
-            target.append(this.menu);
+        onKeydownMenuToggle: function (e) {
+            if (!e || !e.which || !this.menu) return;
+            switch (e.which) {
+                // up arrow
+                case 38:
+                    this.menu.find('li').last().focus();
+                    e.preventDefault();
+                    break;
+                // enter or down arrow
+                case 40:
+                case 13:
+                    this.menu.find('li').first().focus();
+                    e.preventDefault();
+                    break;
+                // no default
+            }
         },
 
-        hideMenu: function () {
-            if (!this.menu) return;
-            this.menu.remove();
-            this.menu = null;
+        onKeydownMenuItem: function (e) {
+            if (!e || !e.which || !this.menu) return;
+            var items = this.menu.find('li'),
+                index = items.index(e.target);
+
+            switch (e.which) {
+                // up arrow
+                case 38:
+                    index = (index === 0 ? items.length - 1 : items.index(e.target) - 1);
+                    items[index].focus();
+                    e.preventDefault();
+                    break;
+                // down arrow
+                case 40:
+                    index = (index === items.length - 1 ? 0 : items.index(e.target) + 1);
+                    items[index].focus();
+                    e.preventDefault();
+                    break;
+                // enter
+                case 13:
+                    $(e.target).trigger('click');
+                    break;
+                // esc
+                case 27:
+                    e.stopPropagation();
+                    this.menu.parent().find('.actions').focus();
+                    break;
+                // no default
+            }
         },
 
         renderFoot: function (model) {
@@ -226,6 +269,12 @@ define('io.ox/chat/views/messages', [
 
         getMessageNode: function (model, selector) {
             return this.$('.message[data-cid="' + model.cid + '"] ' + (selector || ''));
+        },
+
+        // currently used when the message changed it's type. We replace the entire node then
+        onMessageChanged: function (model) {
+            var $message = this.getMessageNode(model);
+            if ($message.length) $message.replaceWith(this.renderMessage(model));
         },
 
         onChangeBody: function (model) {

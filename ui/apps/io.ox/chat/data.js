@@ -710,7 +710,12 @@ define('io.ox/chat/data', [
                 contentType: false,
                 success: function (model) {
                     model.setInitialDeliveryState();
-                    if (files) this.messages.add(model, { merge: true });
+                    if (files) {
+                        // remove message, there is a good change it was added meanwhile by socket message:new, we don't want 2 copies of the same message
+                        // todo don't send message:new to this session
+                        this.messages.remove({ messageId: model.get('messageId') });
+                        this.messages.add(model, { merge: true });
+                    }
                 }.bind(this)
             }).fail(this.handleError.bind(this));
 
@@ -1024,9 +1029,14 @@ define('io.ox/chat/data', [
             });
 
             socket.on('message:changed', function (message) {
-                var cachedMessage = messageCache.get(message);
-                if (cachedMessage) cachedMessage.set(message);
-                //needs a trigger for file messages
+                var cachedMessage = messageCache.get({ messageId: message.messageId });
+                if (cachedMessage) {
+                    var typeChanged = message.type && cachedMessage.get('type') !== message.type;
+                    // if this message changed type we do a silent change and trigger a messageChanged event.
+                    // This way the message node is replaced fully instead of partial changes using multiple change listeners. We want avoid some strange half changed message nodes
+                    cachedMessage.set(message, { silent: typeChanged });
+                    if (typeChanged) events.trigger('message:changed', cachedMessage);
+                }
             });
 
             // send heartbeat every minute
