@@ -53,11 +53,16 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
         });
 
         TabSession.events.listenTo(TabSession.events, 'propagateLogin', function (parameters) {
-            if (!ox.signin && !parameters.relogin) return;
+            if (!(ox.signin || reloginBySameUser(parameters))) return;
             require(['io.ox/core/boot/login/tabSession'], function (tabSessionLogin) {
                 tabSessionLogin(parameters);
             });
         });
+    }
+
+    function reloginBySameUser(parameters) {
+        var isSameUser = (ox.user_id === parameters.user_id) && (ox.user === parameters.user) && (ox.context_id === parameters.context_id);
+        return (parameters.relogin && isSameUser);
     }
 
     // PUBLIC --------------------------------------------------
@@ -99,7 +104,10 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          */
         login: function () {
             var def     = $.Deferred(),
-                timeout;
+                timeout,
+                isTokenLogin = _.url.hash('serverToken') && _.url.hash('clientToken');
+
+            if (isTokenLogin) { return def.reject(); }
 
             if (ox.session && ox.secretCookie && ox.language && ox.theme && ox.user && ox.user_id) {
                 return def.resolve({
@@ -192,7 +200,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
                     });
                     break;
                 case 'propagateLogin':
-                    if (ox.session && !data.parameters.relogin) return;
+                    if (ox.session && !reloginBySameUser(data.parameters)) return;
                     this.events.trigger(data.propagate, data.parameters);
                     break;
                 default:
