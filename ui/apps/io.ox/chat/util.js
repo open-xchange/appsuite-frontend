@@ -11,9 +11,7 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-define('io.ox/chat/util', [
-
-], function () {
+define('io.ox/chat/util', [], function () {
 
     'use strict';
 
@@ -103,22 +101,8 @@ define('io.ox/chat/util', [
             });
 
             return formData;
-        },
-
-        handleSessionFail: function handleSessionFail(jqXHR) {
-            if (jqXHR.status === 401) {
-                require(['io.ox/chat/data'], function (data) {
-                    data.session.autologin();
-                });
-            }
-        },
-
-        ajax: function ajax(opt) {
-            opt.xhrFields = _.extend({}, opt.xhrFields, { withCredentials: true });
-            var jqXHR = $.ajax(opt);
-            if (opt.handleSessionFail !== false) jqXHR.fail(util.handleSessionFail);
-            return jqXHR;
         }
+
     };
 
     return util;

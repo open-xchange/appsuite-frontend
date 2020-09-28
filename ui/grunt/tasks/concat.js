@@ -35,6 +35,7 @@ module.exports = function (grunt) {
                             // load moment before require, because of anonymous define
                             'build/static/3rd.party/moment/moment.js',
                             'build/static/3rd.party/moment/moment-timezone-with-data.js',
+                            'build/static/3rd.party/jwt-decode.js',
                             'node_modules/velocity-animate/velocity.min.js',
                             'src/util.js',
                             'node_modules/requirejs/require.js',

@@ -51,13 +51,6 @@ define('io.ox/chat/main', [
         }
     });
 
-    ext.point('io.ox/core/logout').extend({
-        id: 'chat',
-        logout: function () {
-            return data.session.logout().catch($.noop);
-        }
-    });
-
     var Window = FloatingWindow.View.extend({
 
         events: function () {
@@ -430,7 +423,7 @@ define('io.ox/chat/main', [
             var user = data.users.getByMail(data.user.email),
                 mode = settings.get('chat/mode') || 'sticky';
 
-            data.session.connectSocket();
+            data.session.connectJwtSocket();
 
             // start with BAD style and hard-code stuff
             this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('chat/width', 320)).append(
@@ -505,7 +498,7 @@ define('io.ox/chat/main', [
                     $('<div>').append(
                         $('<button class="btn btn-primary">').text(gt('Authorize')).on('click', function () {
                             self.$body.empty().parent().busy();
-                            data.session.login().then(function success() {
+                            data.session.getUserId().then(function success() {
                                 self.draw();
                             }, function fail(err) {
                                 self.drawAuthorizePane(err.message || gt('Cannot connect. Please try again later.'));
@@ -610,7 +603,7 @@ define('io.ox/chat/main', [
     win.$body.parent().busy();
 
     data.fetchUsers().then(function () {
-        return data.session.autologin();
+        return data.session.getUserId();
     }).always(function () {
         win.$body.parent().idle();
     }).then(function success() {

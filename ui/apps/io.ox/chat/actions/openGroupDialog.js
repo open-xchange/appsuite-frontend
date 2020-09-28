@@ -20,10 +20,10 @@ define('io.ox/chat/actions/openGroupDialog', [
     'io.ox/chat/views/addMember',
     'io.ox/backbone/mini-views',
     'io.ox/chat/data',
-    'io.ox/chat/util',
+    'io.ox/chat/api',
     'gettext!io.ox/chat',
     'less!io.ox/contacts/edit/style'
-], function (ext, ModalDialog, ImageUploadView, MemberView, AddMemberView, mini, data, util, gt) {
+], function (ext, ModalDialog, ImageUploadView, MemberView, AddMemberView, mini, data, api, gt) {
 
     'use strict';
 
@@ -92,7 +92,7 @@ define('io.ox/chat/actions/openGroupDialog', [
                         image1_url: url,
                         file: function () {
                             if (!url) return;
-                            return util.ajax({
+                            return api.request({
                                 url: url,
                                 xhrFields: { responseType: 'blob' }
                             }).then(function (data) {

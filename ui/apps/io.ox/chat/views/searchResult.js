@@ -16,9 +16,9 @@ define('io.ox/chat/views/searchResult', [
     'io.ox/chat/events',
     'io.ox/chat/data',
     'io.ox/chat/views/chatListEntry',
-    'io.ox/chat/util',
+    'io.ox/chat/api',
     'gettext!io.ox/chat'
-], function (DisposableView, events, data, ChatListEntryView, util, gt) {
+], function (DisposableView, events, data, ChatListEntryView, api, gt) {
 
     'use strict';
 
@@ -75,29 +75,10 @@ define('io.ox/chat/views/searchResult', [
             return collection;
         },
 
-        searchMessages: function (query) {
-            var url = data.chatApiUrl + '/search/messages?' + $.param({ query: query });
-            return util.ajax({ url: url })
-                .then(function (data) {
-                    if (!data || !data.hits) return [];
-                    var result = [];
-                    data.hits.forEach(function (hit) {
-                        var message = hit._source;
-                        if (message.type === 'system') return;
-                        message.content = hit.highlight.content[0];
-                        result.push(message);
-                    });
-                    return result;
-                })
-                .catch(function () {
-                    return [];
-                });
-        },
-
         search: function (query) {
             if (!query) return this.collection.reset();
             $.when(
-                this.searchMessages(query),
+                api.elasticSearch(query),
                 this.searchAddresses(query),
                 this.searchTitles(query)
             ).then(function (messages, addresses, rooms) {

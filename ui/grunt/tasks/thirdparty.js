@@ -80,7 +80,8 @@ module.exports = function (grunt) {
                             'resize-polyfill/lib/polyfill-resize.js',
                             'swiper/dist/js/swiper.js',
                             'typeahead.js/dist/typeahead.jquery.js',
-                            'dompurify/dist/purify.min.js'
+                            'dompurify/dist/purify.min.js',
+                            'jwt-decode/build/jwt-decode.js'
                         ],
                         cwd: 'node_modules',
                         dest: 'build/static/3rd.party/'

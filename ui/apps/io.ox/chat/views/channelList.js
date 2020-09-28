@@ -15,10 +15,11 @@ define('io.ox/chat/views/channelList', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/chatAvatar',
+    'io.ox/chat/api',
     'io.ox/chat/data',
     'io.ox/backbone/views/toolbar',
     'gettext!io.ox/chat'
-], function (ext, DisposableView, ChatAvatar, data, ToolbarView, gt) {
+], function (ext, DisposableView, ChatAvatar, api, data, ToolbarView, gt) {
 
     'use strict';
 
@@ -73,7 +74,7 @@ define('io.ox/chat/views/channelList', [
             });
 
             // get fresh data
-            this.collection.fetch({ url: data.chatApiUrl + '/channels' });
+            this.collection.fetch({ url: api.url + '/channels' });
         },
 
         render: function () {
