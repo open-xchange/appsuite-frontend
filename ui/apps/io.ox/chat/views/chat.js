@@ -178,7 +178,6 @@ define('io.ox/chat/views/chat', [
             this.on('dispose', this.onDispose);
 
             this.listenTo(events, 'cmd:remove-reference', this.onRemoveReference);
-            this.listenTo(events, 'message:changed', this.onMessageChanged);
 
             this.messagesView.messageId = this.messageId;
             // there are two cases when to reset the collection before usage
@@ -416,8 +415,9 @@ define('io.ox/chat/views/chat', [
 
         onEditMessage: function (message) {
             var messageNode = this.getMessageNode(message);
+            // scroll to edited message
             if (messageNode) {
-                this.$scrollpane.scrollTop(messageNode.position.top);
+                this.$scrollpane.scrollTop(messageNode[0].offsetTop - this.$scrollpane.height() + messageNode.height() + 4);
             }
             this.$editor.val(message.get('content')).focus();
             this.$el.find('.controls').addClass('edit-mode');
