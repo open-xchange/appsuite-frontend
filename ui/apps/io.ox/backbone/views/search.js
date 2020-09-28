@@ -44,24 +44,15 @@ define('io.ox/backbone/views/search', [
 
         render: function () {
             this.$el.append(
+                $('<i class="fa fa-search" aria-hidden="true">'),
                 this.$input = $('<input type="text" class="search-field" spellcheck="false" autocomplete="off">')
-                    .attr('placeholder', gt('New search ... (prototype)')),
+                    .attr('placeholder', this.options.placeholder || ''),
                 this.$dropdownToggle = $('<button type="button" class="dropdown-toggle"><i class="fa fa-caret-down" aria-hidden="true"></i></button>')
                     .attr({ 'aria-haspopup': true, 'aria-expanded': false }),
                 this.$dropdown = $('<form class="dropdown" autocomplete="off">'),
                 this.$progress = $('<div class="progress">'),
                 this.$autocomplete = $('<ul class="autocomplete address-picker scrollable">')
-            )
-            .popover({
-                container: 'body',
-                content: '<p>This is just a <b>prototype</b> to play around with a visually different and more explicit user interface.</p>' +
-                    '<p>Simple for the 99% use-case (just entering a word or name), still easy to use for explicit queries.</p>' +
-                    '<p>You can open a dropdown by clicking on the caret on the right-hand side.</p>',
-                html: true,
-                placement: 'right',
-                title: 'Please note',
-                trigger: 'manual'
-            });
+            );
             return this.invoke('render');
         },
 

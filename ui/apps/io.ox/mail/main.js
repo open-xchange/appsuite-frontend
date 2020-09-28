@@ -44,6 +44,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/mobile-toolbar-actions',
     'io.ox/mail/toolbar',
     'io.ox/mail/import',
+    'io.ox/mail/search',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
 ], function (util, api, composeAPI, commons, MailListView, ListViewControl, ThreadView, ext, actionsUtil, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, ActionDropdownView, categories, accountAPI, gt, settings, coreSettings, certificateAPI, certUtils) {
@@ -1946,16 +1947,6 @@ define('io.ox/mail/main', [
                 action: 'io.ox/mail/actions/compose',
                 toolbar: 'compose'
             });
-        },
-
-        'top-search': function () {
-            if (!$('#io-ox-topsearch').is(':empty')) return;
-            $('#io-ox-topsearch').append(
-                $('<div class="search-container">').append(
-                    $('<input type="search" class="form-control" placeholder="Search mail">'),
-                    $('<i class="fa fa-search">')
-                )
-            );
         },
 
         'sidepanel': function (app) {
