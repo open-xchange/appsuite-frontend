@@ -27,8 +27,6 @@ define('io.ox/mail/search', [
         index: 10000,
         setup: function (app) {
 
-            console.log('Hier?');
-
             if (!$('#io-ox-topsearch').is(':empty')) return;
             var $container = $('<div class="search-container">');
             $('#io-ox-topsearch').append($container);

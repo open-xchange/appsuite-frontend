@@ -30,7 +30,7 @@ define('io.ox/contacts/addressbook/popup', [
 
     'use strict';
 
-    var names = 'yomiLastName yomiFirstName last_name first_name display_name'.split(' '),
+    var names = 'yomiLastName yomiFirstName last_name first_name nickname display_name'.split(' '),
         addresses = 'email1 email2 email3'.split(' ');
 
     // limits
@@ -172,7 +172,7 @@ define('io.ox/contacts/addressbook/popup', [
 
             options = _.extend({
                 // keep this list really small for good performance!
-                columns: '1,20,500,501,502,505,519,524,555,556,557,592,602,606,616,617',
+                columns: '1,20,500,501,502,505,515,519,524,555,556,557,592,602,606,616,617',
                 exclude: useGlobalAddressBook ? [] : ['6'],
                 limit: LIMITS.fetch,
                 lists: true
@@ -278,7 +278,10 @@ define('io.ox/contacts/addressbook/popup', [
             // do all calculations now; during rendering is more expensive
             var folder_id = String(item.folder_id),
                 department = (useDepartments && folder_id === '6' && $.trim(item.department)) || '',
-                full_name = util.getFullName(item).toLowerCase(),
+                first_name = String(item.first_name || '').trim(),
+                last_name = String(item.last_name || '').trim(),
+                display_name = String(item.display_name || '').trim(),
+                full_name = getFastFullname(first_name, last_name, display_name),
                 initials = util.getInitials(item);
             return {
                 caption: address,
@@ -290,7 +293,8 @@ define('io.ox/contacts/addressbook/popup', [
                 first_name: item.first_name,
                 folder_id: folder_id,
                 full_name: full_name,
-                full_name_html: util.getFullName(item, true),
+                full_name_html: '',
+                //util.getFullName(item, true),
                 image: util.getImage(item) || (!useInitials && api.getFallbackImage()),
                 id: String(item.id),
                 initials: useInitials && initials,
@@ -376,6 +380,22 @@ define('io.ox/contacts/addressbook/popup', [
             });
         }
 
+    }());
+
+    var getFastFullname = (function () {
+
+        var preference = settings.get('fullNameFormat', 'auto');
+
+        function format(first, last) {
+            if (preference === 'firstname lastname') return first + ' ' + last;
+            if (preference === 'lastname, firstname') return last + ', ' + first;
+            return gt('%2$s, %1$s', first, last);
+        }
+
+        return function (first, last, display) {
+            if (last && first) return format(first, last);
+            return last || first || display;
+        };
     }());
 
     //
@@ -943,7 +963,7 @@ define('io.ox/contacts/addressbook/popup', [
         var subset = list.slice(options.offset, options.limit);
         // clear if offset is zero
         if (options.offset === 0) this[0].innerHTML = '';
-        this[0].innerHTML += template({ list: subset });
+        this[0].innerHTML += template({ list: subset, util: util });
         if (options.offset === 0) this.scrollTop(0);
         this.data({ list: list, options: options });
         this.find('.contact-picture[data-original]').each(function () {
