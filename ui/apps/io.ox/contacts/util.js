@@ -14,10 +14,9 @@
 define('io.ox/contacts/util', [
     'io.ox/core/util',
     'io.ox/core/extensions',
-    'static/3rd.party/purify.min.js',
     'settings!io.ox/contacts',
     'gettext!io.ox/contacts'
-], function (util, ext, DOMPurify, settings, gt) {
+], function (util, ext, settings, gt) {
 
     'use strict';
 
@@ -124,11 +123,11 @@ define('io.ox/contacts/util', [
          */
         getFullNameFormat: function (obj) {
 
-            var first_name = $.trim(DOMPurify.sanitize(obj.first_name)),
-                last_name = $.trim(DOMPurify.sanitize(obj.last_name)),
-                display_name = $.trim(DOMPurify.sanitize(obj.display_name || obj.cn)),
-                company = $.trim(DOMPurify.sanitize(obj.company)),
-                title = $.trim(DOMPurify.sanitize(obj.title));
+            var first_name = $.trim(obj.first_name),
+                last_name = $.trim(obj.last_name),
+                display_name = $.trim(obj.display_name || obj.cn),
+                company = $.trim(obj.company),
+                title = $.trim(obj.title);
 
             // combine title, last_name, and first_name
             if (first_name && last_name) {

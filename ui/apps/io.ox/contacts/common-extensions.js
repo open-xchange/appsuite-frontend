@@ -23,17 +23,11 @@ define('io.ox/contacts/common-extensions', [
         fullname: function (baton) {
             var data = baton.data,
                 fullname = $.trim(util.getFullName(data)),
-                name;
-            if (fullname) {
-                name = fullname;
-                // use html output
-                fullname = util.getFullName(data, true);
-            } else {
-                name = $.trim(util.getFullName(data) || data.yomiLastName || data.yomiFirstName || data.display_name || util.getMail(data));
-            }
-            this.append(
-                $('<div class="fullname">').append(name)
-            );
+                name = $.trim(data.yomiLastName || data.yomiFirstName || data.display_name || util.getMail(data));
+
+            return fullname ?
+                this.append($('<div class="fullname">').html(util.getFullName(data, true))) :
+                this.append($('<div class="fullname">').text(name));
         },
 
         bright: function (baton) {
