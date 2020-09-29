@@ -62,7 +62,11 @@ const helpers = {
         contextId: process.env.CONTEXT_ID,
         filestoreId: process.env.FILESTORE_ID,
         smtpServer: process.env.SMTP_SERVER || 'localhost',
-        imapServer: process.env.IMAP_SERVER || 'localhost'
+        imapServer: process.env.IMAP_SERVER || 'localhost',
+        admin: {
+            login: 'oxadminmaster',
+            password: 'secret'
+        }
     },
     FileSystem: {},
     MockRequestHelper: {
@@ -224,8 +228,8 @@ module.exports.config = {
         pauseOnFail: {}
     },
     rerun: {
-        minSuccess: 10,
-        maxReruns: 10
+        minSuccess: process.env.MIN_SUCCESS || 10,
+        maxReruns: process.env.MAX_RERUNS || 10
     },
     name: 'App Suite Core UI'
 };
