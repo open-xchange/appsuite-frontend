@@ -19,9 +19,10 @@ define('io.ox/core/import/import', [
     'io.ox/core/tk/attachments',
     'io.ox/core/folder/api',
     'io.ox/core/api/import',
+    'io.ox/core/api/jobs',
     'io.ox/core/notifications',
     'gettext!io.ox/core'
-], function (mini, ext, ModalDialog, attachments, folderAPI, api, notifications, gt) {
+], function (mini, ext, ModalDialog, attachments, folderAPI, api, jobsAPI, notifications, gt) {
 
     'use strict';
 
@@ -302,6 +303,21 @@ define('io.ox/core/import/import', [
                     });
                 }, function fail(error) {
                     notifications.yell(error);
+                }).then(function (data, jobId) {
+                    // job handling
+                    if (!jobId) return data;
+                    var def = $.Deferred();
+                    jobsAPI.addJob({
+                        id: jobId,
+                        showIn: 'calendar',
+                        successCallback: def.resolve,
+                        failCallback: def.reject
+                    });
+                    notifications.yell('info', gt('This action takes some time, so please be patient, while the import runs in the background.'));
+
+                    self.busy();
+                    self.pause();
+                    return def;
                 }).then(function (data) {
                     if (!data) return self.idle();
                     // get failed records

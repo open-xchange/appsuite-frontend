@@ -23,7 +23,7 @@ define('io.ox/core/api/import', ['io.ox/core/http'], function (http) {
             formData.append('file', data.file);
             return http.UPLOAD({
                 module: 'import',
-                params: { action: data.type, folder: data.folder, ignoreUIDs: data.ignoreUIDs },
+                params: { action: data.type, folder: data.folder, ignoreUIDs: data.ignoreUIDs, allow_enqueue: true },
                 data: formData,
                 fixPost: true
             });
@@ -32,7 +32,7 @@ define('io.ox/core/api/import', ['io.ox/core/http'], function (http) {
             module: 'import',
             action: data.type,
             form: data.form,
-            params: { folder: data.folder, ignoreUIDs: data.ignoreUIDs }
+            params: { folder: data.folder, ignoreUIDs: data.ignoreUIDs, allow_enqueue: true }
         });
     }
 
@@ -52,12 +52,20 @@ define('io.ox/core/api/import', ['io.ox/core/http'], function (http) {
         return importFileCall(data).then(
             function success(result) {
                 // hint: undefined is usually a filtered warning message
-                var data = result.data || [result],
+                var job, data = result.data || [result],
                     failcount = _.reduce(result.data, function (count, item) {
                         return count + (item && item.error ? 1 : 0);
                     }, 0);
+
+                // extract jobId it if it's a long running job
+                if (result && (result.code === 'JOB-0003' || result.job)) {
+                    job = result.job || result.data.job;
+                }
+
                 // import of all entries failed
-                return failcount === data.length ? $.Deferred().reject(data) : data;
+                return failcount === data.length ?
+                    $.Deferred().reject(data) :
+                    $.Deferred().resolve(data, job);
             }
         );
     };
