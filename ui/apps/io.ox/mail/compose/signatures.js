@@ -268,15 +268,13 @@ define('io.ox/mail/compose/signatures', [
                 if (!this.config.get('signature')) return;
                 signature = this.config.get('signature');
             }
-
             var self = this,
                 isHTML = !!this.editor.find,
-                currentSignature = util.cleanUp(signature.content, isHTML);
-
+                isHTMLSignature =  this.config.get('isHTMLSignature'),
+                currentSignature = util.cleanUp(signature.content, isHTMLSignature);
             // remove current signature from editor
-            if (isHTML) {
+            if (isHTML && isHTMLSignature) {
                 this.getSignatureContent().each(function () {
-
                     var node = $(this),
                         text = node.text(),
                         unchanged = self.config.get('signatures').find(function (model) {
@@ -286,6 +284,11 @@ define('io.ox/mail/compose/signatures', [
                     // remove entire block unless it seems edited
                     if (unchanged) node.remove(); else node.removeAttr('class');
                 });
+            } else if (isHTML && !isHTMLSignature) {
+                var linebreaks = '<div><br></div><div><br></div>',
+                    wrappedSignature = '<div>' + currentSignature + '</div>',
+                    sig = (signature.misc.insertion === 'below') ? linebreaks + wrappedSignature : wrappedSignature + linebreaks;
+                this.editor.replaceParagraph(sig, '');
             } else if (currentSignature) {
                 // matches linebreaks in insertPostCite
                 var str = (signature.misc.insertion === 'below') ? '\n\n' + currentSignature : currentSignature + '\n\n';
@@ -304,6 +307,7 @@ define('io.ox/mail/compose/signatures', [
             text = util.cleanUp(signature.content, isHTML);
             if (isHTML) text = this.getParagraph(text, util.looksLikeHTML(text));
             // signature wrapper
+            this.config.set('isHTMLSignature', isHTML);
             if (signature.misc.insertion === 'below') {
                 proc = _.bind(this.editor.insertPostCite || this.editor.appendContent, this.editor);
                 proc(text);
