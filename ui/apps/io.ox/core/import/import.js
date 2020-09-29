@@ -339,6 +339,7 @@ define('io.ox/core/import/import', [
                         // all good; no failures
                         notifications.yell('success', gt('Data imported successfully'));
                         folderAPI.refresh();
+                        self.close();
                     } else if (data.length === failed.length) {
                         // failed
                         // #. Failure message if no data (e.g. appointments) could be imported
@@ -350,7 +351,6 @@ define('io.ox/core/import/import', [
                         self.onPartialFail([].concat(custom, failed));
                         folderAPI.refresh();
                     }
-                    self.close();
                 }, this.onCompleteFail.bind(this));
             })
             .open();
