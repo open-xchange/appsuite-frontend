@@ -230,8 +230,8 @@ module.exports.config = {
         pauseOnFail: {}
     },
     rerun: {
-        minSuccess: 10,
-        maxReruns: 10
+        minSuccess: process.env.MIN_SUCCESS || 10,
+        maxReruns: process.env.MAX_RERUNS || 10
     },
     name: 'App Suite Core UI'
 };

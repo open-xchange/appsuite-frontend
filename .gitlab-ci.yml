@@ -18,6 +18,7 @@ stages:
   - test
   - deploy
   - e2e
+  - merge
   - report
   - cleanup
 
