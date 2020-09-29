@@ -48,7 +48,7 @@ define('io.ox/chat/api', [
         var jwt = ox.switchboardJwt;
         if (jwt) {
             var currentTime = Math.floor(Date.now() / 1000);
-            if (window.jwt_decode(jwt).exp < currentTime - 120) return def.resolve(ox.switchboardJwt);
+            if (window.jwt_decode(jwt).exp > currentTime - 120) return def.resolve(ox.switchboardJwt);
         }
         switchboardApi.socket.emit('jwt-sign', {}, function (jwt) {
             ox.switchboardJwt = jwt;

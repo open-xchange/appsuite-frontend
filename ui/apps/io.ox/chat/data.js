@@ -15,12 +15,12 @@ define('io.ox/chat/data', [
     'io.ox/chat/api',
     'io.ox/chat/events',
     'io.ox/contacts/api',
-    'static/3rd.party/socket.io.slim.js',
+    'io.ox/switchboard/api',
     'io.ox/mail/sanitizer',
     'io.ox/chat/util',
     'io.ox/core/http',
     'gettext!io.ox/chat'
-], function (api, events, contactsApi, io, sanitizer, util, http, gt) {
+], function (api, events, contactsApi, switchboardApi, sanitizer, util, http, gt) {
 
     'use strict';
 
@@ -917,22 +917,12 @@ define('io.ox/chat/data', [
             });
         },
 
-        connectJwtSocket: function () {
-            var self = this;
-            api.getJwtFromSwitchboard().then(function (jwt) {
-                self.connectSocket(jwt);
-            });
-        },
-
-        connectSocket: function (jwt) {
-            var socket = data.socket = io.connect(api.urlRoot, {
-                transports: ['websocket'],
-                extraHeaders: { Authorization: 'Bearer ' + jwt }
-            });
+        connectSocket: function () {
+            var socket = data.socket = switchboardApi.socket;
 
             socket.on('reconnect', this.refresh);
 
-            socket.on('delivery:update', function (obj) {
+            socket.on('chat:delivery:update', function (obj) {
                 var roomId = obj.roomId,
                     messageId = obj.messageId,
                     email = obj.email,
@@ -966,7 +956,8 @@ define('io.ox/chat/data', [
                 if (room) room.messages.forEach(process);
             });
 
-            socket.on('message:new', function (attr) {
+            socket.on('chat:message:new', function (attr) {
+                console.log(attr);
                 var roomId = attr.roomId,
                     message = attr.message;
 
@@ -991,7 +982,7 @@ define('io.ox/chat/data', [
                 });
             });
 
-            socket.on('typing', function (event) {
+            socket.on('chat:typing', function (event) {
                 events.trigger('typing:' + event.roomId, event.email, event.state);
             });
 
