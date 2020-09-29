@@ -692,22 +692,18 @@ define('io.ox/chat/data', [
             attr.roomId = this.get('roomId');
 
             var formData = util.makeFormData(_.extend({}, attr, { files: files })),
-                model = files ? messageCache.get(attr) : this.messages.add(attr, { merge: true, parse: true });
+                model = files ? new MessageModel(attr) : this.messages.add(attr, { merge: true, parse: true });
 
+            // model for files will be added to cache and this.messages via sockets messsage:new event. So no need to do it in the callback here. Temporary model is fine;
             model.save(attr, {
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function (model) {
                     model.setInitialDeliveryState();
-                    if (files) {
-                        // remove message, there is a good change it was added meanwhile by socket message:new, we don't want 2 copies of the same message
-                        // todo don't send message:new to this session
-                        this.messages.remove({ messageId: model.get('messageId') });
-                        this.messages.add(model, { merge: true });
-                    }
-                }.bind(this)
+                }
             });
+
             this.set('active', true);
         },
 

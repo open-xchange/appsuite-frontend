@@ -451,16 +451,23 @@ define('io.ox/chat/views/chat', [
         },
 
         onEditorKeydown: function (e) {
-            if (e.which !== 13) return;
-            if (e.ctrlKey) {
-                // append newline manually if ctrl is pressed
-                this.$editor.val(this.$editor.val() + '\n');
-                return;
+            if (e.which === 27 && this.editMode) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.onCancelEditMode();
             }
-            e.preventDefault();
-            var text = this.$editor.val();
-            if (text.trim().length > 0) this.onPostMessage(text);
-            this.$editor.val('').focus();
+
+            if (e.which === 13) {
+                if (e.ctrlKey) {
+                    // append newline manually if ctrl is pressed
+                    this.$editor.val(this.$editor.val() + '\n');
+                    return;
+                }
+                e.preventDefault();
+                var text = this.$editor.val();
+                if (text.trim().length > 0) this.onPostMessage(text);
+                this.$editor.val('').focus();
+            }
         },
 
         onEditorInput: function () {
