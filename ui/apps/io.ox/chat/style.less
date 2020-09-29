@@ -543,16 +543,15 @@
             display: none;
             height: 100%;
             text-align: center;
-            right: 16px;
+            right: 0;
             top: 0;
             position: absolute;
 
             .actions-toggle {
                 text-align: center;
                 width: 20px;
-                color: #fff;
                 padding: 0;
-
+                color: #000;
                 i {
                     vertical-align: middle;
                 }
@@ -561,6 +560,10 @@
             &.open {
                 display: block;
             }
+        }
+
+        .content {
+            position: relative;
         }
 
         .content:focus-within, .content:hover .message-actions-dropdown {
@@ -631,6 +634,11 @@
             animation-duration: 3s;
         }
         &.myself {
+
+            .message-actions-dropdown .actions-toggle{
+                color: #fff;
+            }
+
             padding: 0 0 0 128px;
             display: flex;
 
