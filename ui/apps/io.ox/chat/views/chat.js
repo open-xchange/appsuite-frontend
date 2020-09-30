@@ -409,7 +409,7 @@ define('io.ox/chat/views/chat', [
 
         onDelete: function (message) {
             // success will trigger a message:changed event on the websocket. This takes care of view updates etc
-            this.model.deleteMessage(message).fail(function () {
+            api.deleteMessage(message).fail(function () {
                 require(['io.ox/core/yell'], function (yell) {
                     yell('error', gt('Could not delete the message'));
                 });
@@ -521,7 +521,7 @@ define('io.ox/chat/views/chat', [
             data.socket.emit('typing', { roomId: this.model.id, state: false });
 
             if (this.editMode) {
-                this.model.editMessage(content, this.editMode);
+                api.editMessage(content, this.editMode);
                 this.editMode = false;
                 this.$el.find('.controls').removeClass('edit-mode');
             } else {
