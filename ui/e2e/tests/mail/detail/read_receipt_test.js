@@ -36,6 +36,8 @@ Scenario('Read receipt block is displayed for read/unread mails (OXUIB-319)', as
     I.fillField('To', users[0].userdata.primaryEmail);
     I.fillField('Subject', subject);
     mail.send();
+
+    // TODO: add check for sent folder for when MWB-633 get's fixed
     I.logout();
 
     I.say('First login: mail is unseen');
