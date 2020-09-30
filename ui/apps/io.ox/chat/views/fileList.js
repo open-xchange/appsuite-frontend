@@ -17,8 +17,9 @@ define('io.ox/chat/views/fileList', [
     'io.ox/chat/data',
     'io.ox/backbone/views/toolbar',
     'io.ox/chat/util',
+    'io.ox/chat/api',
     'gettext!io.ox/chat'
-], function (ext, DisposableView, data, ToolbarView, util, gt) {
+], function (ext, DisposableView, data, ToolbarView, util, api, gt) {
 
     'use strict';
 
@@ -91,20 +92,20 @@ define('io.ox/chat/views/fileList', [
             return this.collection;
         },
 
-        renderItem: function (model, index) {
-            var button = $('<button type="button" data-cmd="show-file">').attr('data-index', index);
+        renderItem: function (model) {
+            var button = $('<button type="button" data-cmd="show-file">').attr('data-file-id', model.get('fileId'));
             if (model.isImage()) {
-                button.css('backgroundImage', 'url(' + model.getThumbnailUrl() + ')');
+                api.requestDataUrl({ url: model.getThumbnailUrl() }).then(function (base64encodedImage) {
+                    button.css('backgroundImage', 'url(\'' + base64encodedImage + '\')');
+                });
             } else {
                 button.append(
-                    $('<i class="fa icon">').addClass(util.getClassFromMimetype(model.get('mimetype'))),
+                    $('<i class="fa icon" aria-hidden="true">').addClass(util.getClassFromMimetype(model.get('mimetype'))),
                     $('<div class="filename">').text(model.get('name'))
                 );
             }
 
-            return $('<li>').append(
-                button
-            );
+            return $('<li>').append(button);
         },
 
         getNode: function (model) {

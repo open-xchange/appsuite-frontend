@@ -59,24 +59,25 @@ define('io.ox/chat/views/messages', [
         },
 
         renderMessage: function (model) {
+            var body = model.getBody();
             var message = $('<div class="message">')
                 // here we use cid instead of id, since the id might be unknown
                 .attr('data-cid', model.cid)
                 .addClass(model.getType())
                 .toggleClass('myself', !model.isSystem() && model.isMyself())
                 .toggleClass('highlight', !!model.get('messageId') && model.get('messageId') === this.messageId)
-                .toggleClass('emoji', isOnlyEmoji(model.getBody()))
+                .toggleClass('emoji', isOnlyEmoji(body))
                 .append(
                     // sender avatar & name
                     this.renderSender(model),
                     // message body
                     $('<div class="content">').append(
                         $('<div class="body">')
-                            .html(model.getBody())
+                            .html(body)
                             .append(this.renderFoot(model))
                     ),
                     //delivery state
-                    $('<div class="fa delivery">').addClass(model.getDeliveryState())
+                    $('<div class="fa delivery" aria-hidden="true">').addClass(model.getDeliveryState())
                 );
 
             if (model.get('messageId') === this.messageId) delete this.messageId;

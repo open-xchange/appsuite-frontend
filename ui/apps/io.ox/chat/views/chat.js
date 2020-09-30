@@ -13,6 +13,7 @@
 
 define('io.ox/chat/views/chat', [
     'io.ox/core/extensions',
+    'io.ox/chat/api',
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/avatar',
     'io.ox/chat/views/chatAvatar',
@@ -24,7 +25,7 @@ define('io.ox/chat/views/chat', [
     'io.ox/backbone/views/toolbar',
     'gettext!io.ox/chat',
     'io.ox/core/tk/visibility-api-util'
-], function (ext, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, ToolbarView, gt, visibilityApi) {
+], function (ext, api, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, ToolbarView, gt, visibilityApi) {
 
     'use strict';
 
@@ -128,6 +129,11 @@ define('io.ox/chat/views/chat', [
         }
     });
 
+    function formDownloadWithJwtAuth(url, token) {
+        $('<form method="post" target="_blank"></form>').attr('action', url).append(
+            $('<input type="hidden" name="jwt">').val(token)).appendTo('body').submit().remove();
+    }
+
     var ChatView = DisposableView.extend({
 
         className: 'chat abs',
@@ -137,7 +143,8 @@ define('io.ox/chat/views/chat', [
             'input textarea': 'onEditorInput',
             'click .file-upload-btn': 'onTriggerFileupload',
             'click .jump-down': 'onJumpDown',
-            'change .file-upload-input': 'onFileupload'
+            'change .file-upload-input': 'onFileupload',
+            'click button[data-download]': 'onFileDownload'
         },
 
         initialize: function (options) {
@@ -563,6 +570,14 @@ define('io.ox/chat/views/chat', [
 
         getMessageNode: function (model, selector) {
             return this.$('.message[data-cid="' + model.cid + '"] ' + (selector || ''));
+        },
+
+        onFileDownload: function (e) {
+            e.preventDefault();
+            var url = $(e.currentTarget).attr('data-download');
+            api.getJwtFromSwitchboard().then(function (token) {
+                formDownloadWithJwtAuth(url, token);
+            });
         }
 
     });

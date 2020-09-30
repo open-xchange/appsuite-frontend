@@ -29,6 +29,16 @@ define('io.ox/chat/api', [
         origin: url.origin
     };
 
+    function blobToDataUri(blob) {
+        var def = $.Deferred();
+        var reader = new FileReader();
+        reader.onloadend = function () {
+            def.resolve(reader.result);
+        };
+        reader.readAsDataURL(blob);
+        return def;
+    }
+
     function failHandler(response) {
         if (response.status === 401) console.error('Chat authentication error: JWT invalid');
     }
@@ -54,7 +64,15 @@ define('io.ox/chat/api', [
         });
     }
 
+    function requestDataUrl(opt) {
+        opt.xhrFields = { responseType: 'blob' };
+        return request(opt).then(function (blob) {
+            return blobToDataUri(blob);
+        });
+    }
+
     api.request = request;
+    api.requestDataUrl = requestDataUrl;
     api.getJwtFromSwitchboard = getJwtFromSwitchboard;
 
     api.updateDelivery = function (roomId, messageId, state) {

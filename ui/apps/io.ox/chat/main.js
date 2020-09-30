@@ -13,6 +13,7 @@
 
 define('io.ox/chat/main', [
     'io.ox/core/extensions',
+    'io.ox/chat/api',
     'io.ox/chat/data',
     'io.ox/chat/events',
     'io.ox/backbone/views/window',
@@ -32,7 +33,7 @@ define('io.ox/chat/main', [
     'settings!io.ox/core',
     'gettext!io.ox/chat',
     'less!io.ox/chat/style'
-], function (ext, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, AvatarView, StateView, settings, gt) {
+], function (ext, api, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, AvatarView, StateView, settings, gt) {
 
     'use strict';
 
@@ -238,8 +239,7 @@ define('io.ox/chat/main', [
         },
 
         showFile: function (cmd) {
-            var selectedFile = data.files.at(cmd.index).get('fileId');
-            this.openPictureViewer(data.files, selectedFile);
+            this.openPictureViewer(data.files, cmd.fileId);
         },
 
         showMessageFile: function (cmd) {
@@ -253,29 +253,33 @@ define('io.ox/chat/main', [
         },
 
         openPictureViewer: function (fileList, selectedFile) {
-            fileList.each(function (file) { file.set('id', file.get('fileId')); });
 
-            var options = {
-                files: fileList.map(function (file) {
-                    return _.extend({
-                        url: file.getFileUrl(),
+            // Viewer needs handling for JWT images, for now only request one image at a time
+            var files = [fileList.get(selectedFile)];
+
+            var promises = files.map(function (file) {
+                return api.requestDataUrl({ url: file.getFileUrl() }).then(function (base64encodedImage) {
+                    return {
+                        id: file.get('fileId'),
+                        name: file.get('name'),
+                        size: file.get('size'),
+                        url: base64encodedImage,
                         // try to fake mail compose attachment
                         space: true
-                    }, file.pick('name', 'size', 'id'));
-                }),
-                opt: {
-                    disableFolderInfo: true,
-                    disableFileDetail: true
-                },
-                selection: {
-                    id: selectedFile
-                }
-            };
+                    };
+                });
+            });
 
-            require(['io.ox/core/viewer/main'], function (Viewer) {
+            $.when(require(['io.ox/core/viewer/main']), $.when.apply(null, promises)).then(function (Viewer) {
+                var fileList = Array.prototype.slice.call(arguments);
+                fileList.shift();
                 var viewer = new Viewer();
                 // disable file details: data unavailable for mail attachments
-                viewer.launch(options);
+                viewer.launch({
+                    files: fileList,
+                    opt: { disableFolderInfo: true, disableFileDetail: true },
+                    selection: { id: selectedFile }
+                });
             });
         },
 
@@ -286,7 +290,7 @@ define('io.ox/chat/main', [
 
             // Cursor up / down
             if (/^(38|40)$/.test(e.which)) {
-                var items = this.$('.left-navigation [data-cmd]'),
+                var items = this.$('.left-navigation [role="option"]'),
                     index = items.index(document.activeElement) + (e.which === 38 ? -1 : +1);
                 index = Math.max(0, Math.min(index, items.length - 1));
                 items.eq(index).focus();
@@ -303,6 +307,8 @@ define('io.ox/chat/main', [
 
         onFocus: function (e) {
             var node = $(e.currentTarget);
+            if (node.attr('tabindex') === '0' && node.attr('data-initial') !== 'true') return;
+            if (node.attr('data-initial')) node.removeAttr('data-initial');
             var data = node.data();
             node.attr('tabindex', 0);
             $(node).siblings('li').each(function () { $(this).attr('tabindex', -1); });

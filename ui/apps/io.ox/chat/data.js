@@ -236,44 +236,40 @@ define('io.ox/chat/data', [
                 width *= ratio;
             }
 
-            return $('<div class="preview-wrapper">').append(
-                $('<div>')
-                    .attr({
-                        src: url,
-                        'data-cmd': 'show-message-file',
-                        'data-room-id': this.collection.roomId,
-                        'data-file-id': fileId,
-                        'data-message-id': this.get('messageId')
-                    })
-                    .css({
-                        'background-image': 'url("' + url + '")'
-                    })
-            ).css({
-                width: width + 'px',
-                'padding-top': (height / width * 100) + '%'
+            var image = $('<div>').attr({
+                src: url,
+                'data-cmd': 'show-message-file',
+                'data-room-id': this.collection.roomId,
+                'data-file-id': fileId,
+                'data-message-id': this.get('messageId')
             });
+
+            api.requestDataUrl({ url: url }).then(function (base64encodedImage) {
+                image.css('backgroundImage', 'url("' + base64encodedImage + '")');
+            });
+
+            var node = $('<div class="preview-wrapper">')
+                .append(image)
+                .css({
+                    width: width + 'px',
+                    'padding-top': (height / width * 100) + '%'
+                });
+            return node;
         },
 
         getFileText: function (opt) {
-            opt = _.extend({
-                icon: true,
-                download: true,
-                text: true
-            }, opt);
+            opt = _.extend({ icon: true, download: true, text: true }, opt);
 
             var file = _(this.get('files')).last();
             if (!file) return;
 
-            return [
-                opt.icon ? $('<i class="fa icon">').addClass(util.getClassFromMimetype(file.mimetype)) : '',
+            var node = [
+                opt.icon ? $('<i class="fa icon" aria-hidden="true">').addClass(util.getClassFromMimetype(file.mimetype)) : '',
                 opt.text ? $.txt(file.name) : '',
-                opt.download ? $('<a class="download">').attr({
-                    href: this.getFileUrl(file),
-                    download: file.name
-                }).append(
-                    $('<i class="fa fa-download">')
-                ) : ''
+                opt.download ? $('<i class="fa fa-download" aria-hidden="true">').attr('title', gt('Download')) : ''
             ];
+
+            return opt.download ? $('<button type="button" class="btn btn-link download">').attr('data-download', this.getFileUrl(file)).append(node) : node;
         },
 
         getTime: function () {
