@@ -271,12 +271,12 @@ define('io.ox/core/main/stages', [
 
             // hide controls in the right section of the top bar
             var rightSectionPoint = ext.point('io.ox/core/appcontrol/right');
-            disableItems(rightSectionPoint, ['refresh', 'notifications', 'settings']);
+            disableItems(rightSectionPoint, ['refresh-mobile', 'notifications', 'settings-dropdown']);
 
 
             // hide top-level entries in the extension point
             var helpDropDownPoint = ext.point('io.ox/core/appcontrol/right/help');
-            filterItems(helpDropDownPoint, ['help', 'about']);
+            filterItems(helpDropDownPoint, ['help', 'feedback', 'divider-first', 'about']);
 
             // hide top-level entries in the extension point
             var settingsDropDownPoint = ext.point('io.ox/core/appcontrol/right/settings');
