@@ -23,11 +23,8 @@ define('io.ox/chat/views/chat', [
     'io.ox/chat/data',
     'io.ox/backbone/views/toolbar',
     'gettext!io.ox/chat',
-    'io.ox/core/tk/visibility-api-util',
-    'io.ox/core/strings',
-    'io.ox/core/notifications',
-    'settings!io.ox/core'
-], function (ext, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, ToolbarView, gt, visibilityApi, strings, notifications, settings) {
+    'io.ox/core/tk/visibility-api-util'
+], function (ext, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, ToolbarView, gt, visibilityApi) {
 
     'use strict';
 
@@ -439,16 +436,7 @@ define('io.ox/chat/views/chat', [
 
         onFileupload: function () {
             var $input = this.$('.file-upload-input'),
-                files = _.toArray($input[0].files),
-                sizeLimit = settings.get('chat/maxFileSize');
-
-            for (var i = 0; i < files.length; i++) {
-                if (files[i].size > sizeLimit) {
-                    notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', files[i].name, strings.fileSize(sizeLimit)));
-                    $input.val('');
-                    return;
-                }
-            }
+                files = _.toArray($input[0].files);
 
             this.model.postMessage({ content: '' }, files.length === 1 ? files[0] : files);
 
