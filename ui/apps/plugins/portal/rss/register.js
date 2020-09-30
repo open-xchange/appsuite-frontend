@@ -45,7 +45,7 @@ define('plugins/portal/rss/register', [
 
                 // fix some special characters
                 _(data).each(function (item) {
-                    item.subject = item.subject.replace(/&nbsp;/g, ' ').replace('&amp;', '&');
+                    item.subject = item.subject.replace(/&nbsp;/g, ' ').replace('&amp;', '&').replace(/&#034;/g, '"');
                 });
 
                 baton.data = {
