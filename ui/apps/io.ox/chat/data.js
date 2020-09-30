@@ -707,18 +707,6 @@ define('io.ox/chat/data', [
             this.set('active', true);
         },
 
-        editMessage: function (newContent, message) {
-            var formData = util.makeFormData({ content: newContent });
-
-            return util.ajax({
-                type: 'PATCH',
-                processData: false,
-                contentType: false,
-                url: this.url() + '/messages/' + message.get('messageId'),
-                data: formData
-            });
-        },
-
         postFirstMessage: function (attr, files) {
             var hiddenAttr = { message: attr.content, files: files, members: this.get('members') };
             delete attr.content;
@@ -740,13 +728,6 @@ define('io.ox/chat/data', [
                     data.chats.active.remove(self);
                     data.chats.recent.add(self);
                 }
-            });
-        },
-
-        deleteMessage: function (message) {
-            return util.ajax({
-                type: 'DELETE',
-                url: this.url() + '/messages/' + message.get('messageId')
             });
         },
 
@@ -1013,7 +994,7 @@ define('io.ox/chat/data', [
                 events.trigger('typing:' + event.roomId, event.email, event.state);
             });
 
-            socket.on('message:changed', function (message) {
+            socket.on('chat:message:changed', function (message) {
                 var cachedMessage = messageCache.get({ messageId: message.messageId });
                 if (cachedMessage) {
                     var typeChanged = message.type && cachedMessage.get('type') !== message.type;
