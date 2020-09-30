@@ -112,7 +112,7 @@ const createAppointment = async (subject, participants) => {
         I.waitForDetached('.page.current .appointment');
     };
 
-Scenario('[C7871] Configure accept/decline notification for creator', async (I, users, settings, calendar, dialogs, mail) => {
+Scenario.skip('[C7871] Configure accept/decline notification for creator', async (I, users, settings, calendar, dialogs, mail) => {
     const [userA, userB] = users;
     const subject = 'C7871';
 

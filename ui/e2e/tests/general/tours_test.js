@@ -21,7 +21,7 @@ After(async function (users) {
 });
 
 // skip for now until pipeline can handle the tour plugin
-Scenario('Getting started tour', async function (I, topbar) {
+Scenario.skip('Getting started tour', async function (I, topbar) {
 
     I.login();
     topbar.tours();
