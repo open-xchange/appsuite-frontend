@@ -107,10 +107,9 @@ Scenario('Changing calendar color should change appointment color that uses cale
 
     I.login('app=io.ox/calendar&perspective="week:workweek"');
     calendar.waitForApp();
-
     I.say('Check colors');
-    I.see('test appointment one', '.workweek .appointment .title');
-    I.see('test appointment two', '.workweek .appointment .title');
+    I.waitForText('test appointment one', 5, '.workweek');
+    I.waitForText('test appointment two', 5, '.workweek');
     I.seeNumberOfElements('.workweek .appointment .title', 2);
 
     I.say('Change color of first appointment');
@@ -134,14 +133,16 @@ Scenario('Changing calendar color should change appointment color that uses cale
     I.waitForText('test appointment one', 5, '.workweek');
 
     I.say('Check correctly applied colors');
-    I.wait(0.2);
+    // wait long enough for color transition to finish
+    I.wait(1);
     // get folder color
     const [folderColor] = await I.grabCssPropertyFrom({ css: 'li.selected[aria-label^="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label' }, 'background-color');
     // get appointment colors
     const [appointmentOneColor] = await I.grabCssPropertyFrom('.workweek .appointment[aria-label*="test appointment one"]', 'background-color');
     const [appointmentTwoColor] = await I.grabCssPropertyFrom('.workweek .appointment[aria-label*="test appointment two"]', 'background-color');
-    I.say(appointmentTwoColor);
+    I.say(`appointmentOneColor: ${appointmentOneColor}`);
+    I.say(`appointmentTwoColor: ${appointmentTwoColor}`);
     expect(folderColor, 'folderColor equals darkGreen').equal(darkGreen);
-    expect(appointmentOneColor, 'appointment one color equals darkRed').equal(darkRed);
+    expect(appointmentOneColor, 'appointment one color equals darkRed').be.oneOf([darkRed, 'rgb(188, 56, 56)', 'rgb(181, 54, 54)']);
     expect(appointmentTwoColor, 'appointment two color equals darkGreen').be.oneOf([darkGreen, 'rgb(49, 93, 34)']);
 });
