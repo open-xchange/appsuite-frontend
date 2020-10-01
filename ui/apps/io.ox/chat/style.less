@@ -28,6 +28,7 @@
 @red: #D32F2F;
 @blue: #3c73aa;
 @lightblue: #0278D4;
+@darkblue: #004f8c;
 @lightgray: #ccc;
 @gray: #707070;
 @black: #303030;
@@ -642,7 +643,7 @@
             padding: 0 0 0 128px;
             display: flex;
 
-            .sender {
+            >.sender {
                 display: none;
             }
             .delivery.server, .delivery.client {
@@ -777,6 +778,18 @@
                 top: 44px;
                 left: -5px;
                 .time { color: #333; }
+            }
+        }
+
+        .message.replied-to-message {
+            padding: 0;
+
+            .content {
+                background-color: @darkblue;
+                width: 100%;
+            }
+            .sender {
+                color: #fff;
             }
         }
     }

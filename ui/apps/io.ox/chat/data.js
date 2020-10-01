@@ -359,6 +359,8 @@ define('io.ox/chat/data', [
         }
     });
 
+    data.MessageModel = MessageModel;
+
     var messageCache = (function () {
         var cache = {},
             idlessCache = {};

@@ -417,7 +417,7 @@ define('io.ox/chat/views/chat', [
 
         onCancelSpecialMode: function () {
             this.$editor.val('').focus();
-            if (this.$messageReference) this.$referenceMessage.remove();
+            if (this.$messageReference) this.$messageReference.remove();
             this.$el.find('.controls').removeClass('edit-mode reply-mode');
             this.specialMode = false;
             this.messageReference = null;
@@ -546,6 +546,9 @@ define('io.ox/chat/views/chat', [
 
             if (this.specialMode === 'edit') {
                 api.editMessage(content, this.messageReference);
+                this.onCancelSpecialMode();
+            } else if (this.specialMode === 'reply') {
+                this.model.postMessage({ content: content, sender: data.user.email, replyTo: { content: this.messageReference.get('content'), sender: this.messageReference.get('sender') } });
                 this.onCancelSpecialMode();
             } else {
                 var message = { content: content, sender: data.user.email };

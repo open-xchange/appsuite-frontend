@@ -107,8 +107,28 @@ define('io.ox/chat/views/messages', [
                 .append(
                     // sender avatar & name
                     this.renderSender(model),
-                    // message body
+                    // replied to message
                     $('<div class="content">').append(
+                        (function () {
+                            if (!model.get('replyTo')) return '';
+                            var replyModel = new data.MessageModel(model.get('replyTo')),
+                                user = data.users.getByMail(replyModel.get('sender')),
+                                replyBody = replyModel.getBody();
+
+                            return $('<div class="replied-to-message message">')
+                                .addClass(replyModel.getType())
+                                .toggleClass('emoji', util.isOnlyEmoji(replyBody))
+                                .append(
+                                    $('<div class="content">').append(
+                                        // sender name
+                                        $('<div class="sender">').text(user.getName()),
+                                        // message body
+                                        $('<div class="body">')
+                                            .html(replyBody)
+                                    )
+                                );
+                        })(),
+                        // message body
                         $('<div class="body">')
                             .html(body)
                             .append(this.renderFoot(model)),
