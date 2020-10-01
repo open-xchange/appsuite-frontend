@@ -565,6 +565,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             editor.css('min-height', availableHeight + 'px');
             iframe.css('min-height', availableHeight + 'px');
+            iframe.contents().find('#tinymce').css('min-height', availableHeight + 'px');
             if (opt.css) editor.css(opt.css);
         }
 
