@@ -134,7 +134,8 @@ Scenario('Changing calendar color should change appointment color that uses cale
     I.waitForText('test appointment one', 5, '.workweek');
 
     I.say('Check correctly applied colors');
-    I.wait(0.2);
+    // wait long enough for color transition to finish
+    I.wait(1);
     // get folder color
     const [folderColor] = await I.grabCssPropertyFrom({ css: 'li.selected[aria-label^="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label' }, 'background-color');
     // get appointment colors
