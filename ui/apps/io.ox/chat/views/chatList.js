@@ -81,7 +81,7 @@ define('io.ox/chat/views/chatList', [
             if (this.disposed) return;
 
             var items = this.getItems().map(this.renderItem, this);
-            if (items.length > 0) items[0].attr({ 'tabindex': 0, 'data-initial': true });
+            if (items.length > 0) items[0].attr({ 'tabindex': 0 });
             this.$el.append(items);
         }, 1),
 

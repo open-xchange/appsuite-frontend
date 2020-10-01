@@ -59,8 +59,8 @@ define('io.ox/chat/main', [
                 'keydown .left-navigation': 'onLeftNavigationKeydown',
                 'keydown .overlay': 'onOverlayEvent',
                 'click .overlay': 'onOverlayEvent',
-                'focus ul.chats > li': 'onFocus',
-                'click ul.chats > li': 'onClick'
+                'focus ul[role="listbox"] > li': 'onFocus',
+                'click ul[role="listbox"] > li': 'onClick'
             });
         },
 
@@ -214,6 +214,12 @@ define('io.ox/chat/main', [
             this.$body.addClass('open');
             view.scrollToBottom();
             this.resetCount(id, opt);
+            $('.chat-leftside').find('li[data-cid="' + id + '"]').attr('tabindex', 0).addClass('active')
+                .siblings('li').each(function () { $(this).attr('tabindex', -1).removeClass('active'); });
+        },
+
+        clearActiveSelection: function () {
+            $('.chat-leftside li[role="option"]').each(function () { $(this).removeClass('active'); });
         },
 
         closeChat: function () {
@@ -225,16 +231,19 @@ define('io.ox/chat/main', [
 
         showRecentConversations: function () {
             this.$body.addClass('open');
+            this.clearActiveSelection();
             this.$rightside.empty().append(new History().render().$el);
         },
 
         showChannels: function () {
             this.$body.addClass('open');
+            this.clearActiveSelection();
             this.$rightside.empty().append(new ChannelList().render().$el);
         },
 
         showAllFiles: function () {
             this.$body.addClass('open');
+            this.clearActiveSelection();
             this.$rightside.empty().append(new FileList().render().$el);
         },
 
@@ -301,18 +310,15 @@ define('io.ox/chat/main', [
 
         },
 
-        onClick: function () {
+        onClick: function (e) {
+            e.stopPropagation();
             _.defer(function () { $('.chat-rightside textarea').trigger('focus'); });
         },
 
         onFocus: function (e) {
             var node = $(e.currentTarget);
-            if (node.attr('tabindex') === '0' && node.attr('data-initial') !== 'true') return;
-            if (node.attr('data-initial')) node.removeAttr('data-initial');
             var data = node.data();
-            node.attr('tabindex', 0);
-            $(node).siblings('li').each(function () { $(this).attr('tabindex', -1); });
-            this.showChat(data.cid, data);
+            if (!node.hasClass('active')) this.showChat(data.cid, data);
         },
 
         resetCount: function (roomId, opt) {

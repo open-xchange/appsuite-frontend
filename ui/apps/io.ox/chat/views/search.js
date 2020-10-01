@@ -48,6 +48,8 @@ define('io.ox/chat/views/search', [
             if (e.which !== 13) return this.delayedSearch(query);
             e.preventDefault();
             this.model.set('query', query);
+            var searchResult = $(e.currentTarget).closest('.chat-leftside').find('.search-result li');
+            if (searchResult.length) searchResult.first().trigger('focus');
         },
 
         onChangeInput: function (e) {

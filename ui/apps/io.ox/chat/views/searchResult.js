@@ -52,7 +52,6 @@ define('io.ox/chat/views/searchResult', [
                 );
             } else {
                 nodes[0].attr('tabindex', 0);
-
             }
             return this;
         },
