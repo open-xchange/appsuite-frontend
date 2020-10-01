@@ -12,12 +12,12 @@
  */
 
 define('io.ox/contacts/util', [
+    'io.ox/contacts/names',
     'io.ox/core/util',
     'io.ox/core/extensions',
-    'static/3rd.party/purify.min.js',
     'settings!io.ox/contacts',
     'gettext!io.ox/contacts'
-], function (util, ext, DOMPurify, settings, gt) {
+], function (names, util, ext, settings, gt) {
 
     'use strict';
 
@@ -40,25 +40,6 @@ define('io.ox/contacts/util', [
         });
     });
 
-    /**
-     * Creates a result for get*Format functions which consists of a single
-     * value.
-     * @param {number} index The 1-based index of the value.
-     * @param {String} value The value to return.
-     * @type { format: string, params: [string] }
-     * @result The result object for a get*Format function.
-     */
-    function single(index, value) {
-        var params = new Array(index);
-        params[index - 1] = value;
-        return { format: '%' + index + '$s', params: params };
-    }
-
-    // vanity fix
-    function getTitle(field) {
-        return (/^(<span class="title">)?(dr\.?|prof\.?)/i).test(field) ? field : '';
-    }
-
     //helper function for birthdays without year
     //calculates the difference between gregorian and julian calendar
     function calculateDayDifference(time) {
@@ -77,31 +58,6 @@ define('io.ox/contacts/util', [
 
     }
 
-    function getFullNameFormatHelper(obj, isMail, htmlOutput) {
-        var copy = obj;
-        if (htmlOutput === true) {
-            copy = {};
-            _(['title', 'first_name', 'last_name', 'company', 'display_name', 'cn']).each(function (id) {
-                var text = $.trim(obj[id]);
-                if (!text) {
-                    // yomi as fallback
-                    if (id === 'last_name' && $.trim(obj.yomiLastName)) {
-                        text = $.trim(obj.yomiLastName);
-                    } else if (id === 'first_name' && $.trim(obj.yomiFirstName)) {
-                        text = $.trim(obj.yomiFirstName);
-                    } else if (id === 'company' && $.trim(obj.yomiCompany)) {
-                        text = $.trim(obj.yomiCompany);
-                    } else {
-                        return;
-                    }
-                }
-                var tagName = id === 'last_name' ? 'strong' : 'span';
-                copy[id] = '<' + tagName + ' class="' + id + '">' + _.escape(text) + '</' + tagName + '>';
-            });
-        }
-        return isMail ? that.getMailFullNameFormat(obj) : that.getFullNameFormat(copy);
-    }
-
     var that = {
 
         // variant of getFullName without title, all lowercase
@@ -111,77 +67,12 @@ define('io.ox/contacts/util', [
             return this.getFullName(obj).toLowerCase();
         },
 
-        /**
-         * Computes the format of a displayed full name.
-         * @param obj {Object} A contact object.
-         * @type {
-         *     format: string,
-         *     params: [first_name, last_name, title, display_name, cn]
-         * }
-         * @returns An object with a format
-         * string and an array of replacements which can be used e.g. as
-         * parameters to gettext.format to obtain the full name.
-         */
-        getFullNameFormat: function (obj) {
-
-            var first_name = $.trim(DOMPurify.sanitize(obj.first_name)),
-                last_name = $.trim(DOMPurify.sanitize(obj.last_name)),
-                display_name = $.trim(DOMPurify.sanitize(obj.display_name || obj.cn)),
-                company = $.trim(DOMPurify.sanitize(obj.company)),
-                title = $.trim(DOMPurify.sanitize(obj.title));
-
-            // combine title, last_name, and first_name
-            if (first_name && last_name) {
-
-                var preference = settings.get('fullNameFormat', 'auto'),
-                    params = [first_name, last_name],
-                    format;
-
-                title = getTitle(title);
-                if (title) params.push(title);
-
-                if (preference === 'firstname lastname') {
-                    format = title ? '%3$s %1$s %2$s' : '%1$s %2$s';
-                } else if (preference === 'lastname, firstname') {
-                    format = title ? '%3$s %2$s, %1$s' : '%2$s, %1$s';
-                } else {
-                    // auto/fallback
-                    format = title ?
-                        //#. Name with title
-                        //#. %1$s is the first name
-                        //#. %2$s is the last name
-                        //#. %3$s is the title
-                        gt('%3$s %2$s, %1$s') :
-                        //#. Name without title
-                        //#. %1$s is the first name
-                        //#. %2$s is the last name
-                        gt('%2$s, %1$s');
-                }
-
-                return { format: format, params: params };
-            }
-
-            // we need last_name and first_name ahead of display_name,
-            // for example, to keep furigana support
-
-            // fallback #1: just last_name
-            if (last_name) return single(2, last_name);
-
-            // fallback #2: just first_name
-            if (first_name) return single(1, first_name);
-
-            // fallback #3: use existing company?
-            if (company) return single(1, company);
-
-            // fallback #4: use existing display name?
-            if (display_name) return single(4, util.unescapeDisplayName(display_name));
-
-            return { format: '', params: [] };
+        getFullName: function (data, htmlOutput) {
+            return names.getFullName(data, { html: htmlOutput });
         },
 
-        getFullName: function (obj, htmlOutput) {
-            var fmt = getFullNameFormatHelper(obj, false, htmlOutput);
-            return _.noI18n.format(fmt.format, fmt.params);
+        getMailFullName: function (data, htmlOutput) {
+            return names.getMailFullName(data, { html: htmlOutput });
         },
 
         // this gets overridden in case of ja_JP
@@ -200,77 +91,6 @@ define('io.ox/contacts/util', [
             }
             // fallback
             return obj.last_name || obj.first_name || '';
-        },
-
-        /**
-         * compute the format of a full name in mail context
-         *
-         * In mail context (and may be others), the full name is formated a
-         * little different than in address book.
-         *
-         * @param obj {Object} a contact object with at least the attributes
-         *      related to the name set
-         *
-         * @returns An object with a format
-         * string and an array of replacements which can be used e.g. as
-         * parameters to gettext.format to obtain the full name.
-         */
-        getMailFullNameFormat: function (obj) {
-            var first_name = $.trim(obj.first_name),
-                last_name = $.trim(obj.last_name),
-                display_name = $.trim(obj.display_name);
-
-            // combine first name and last name
-            if (last_name && first_name) {
-                return {
-                    format:
-                        //#. Name in mail addresses
-                        //#. %1$s is the first name
-                        //#. %2$s is the last name
-                        gt.pgettext('mail address', '%1$s %2$s'),
-                    params: [first_name, last_name]
-                };
-            }
-
-            // we need last_name and first_name ahead of display_name,
-            // for example, to keep furigana support.
-            // and this should be same order as getFullNameFormat()
-
-            // fallback #1: just last_name
-            if (last_name) return single(2, last_name);
-
-            // fallback #2: just first_name
-            if (first_name) return single(1, first_name);
-
-            // fallback #3: use existing display name?
-            if (display_name) {
-                return single(4, util.unescapeDisplayName(display_name));
-            }
-
-            return { format: '', params: [] };
-        },
-
-        getMailFullName: function (obj, htmlOutput) {
-            var fmt = getFullNameFormatHelper(obj, true, htmlOutput);
-            return _.noI18n.format(fmt.format, fmt.params);
-        },
-
-        /**
-         * Returns the mail as a format object similar to getFullnameFormat.
-         * @param obj {Object} A contact object.
-         * @type {
-         *     format: string,
-         *     params: [email1, email2, email3]
-         * }
-         * @returns An object with a format
-         * string and an array of replacements which can be used e.g. as
-         * parameters to gettext.format to obtain the full name.
-         */
-        getMailFormat: function (obj) {
-            if (obj.email1) return single(1, obj.email1);
-            if (obj.email2) return single(2, obj.email2);
-            if (obj.email3) return single(3, obj.email3);
-            return { format: '', params: [] };
         },
 
         getMail: function (obj) {

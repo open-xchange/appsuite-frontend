@@ -19,6 +19,7 @@ define('io.ox/contacts/addressbook/popup', [
     'io.ox/core/extensions',
     'io.ox/contacts/util',
     'io.ox/contacts/api',
+    'io.ox/contacts/names',
     'l10n/ja_JP/io.ox/collation',
     'gettext!io.ox/contacts',
     'gettext!io.ox/core',
@@ -26,11 +27,11 @@ define('io.ox/contacts/addressbook/popup', [
     'settings!io.ox/mail',
     'io.ox/core/yell',
     'less!io.ox/contacts/addressbook/style'
-], function (http, folderAPI, ModalDialog, ListView, ext, util, api, collation, gt, gtCore, settings, mailSettings, yell) {
+], function (http, folderAPI, ModalDialog, ListView, ext, util, api, names, collation, gt, gtCore, settings, mailSettings, yell) {
 
     'use strict';
 
-    var names = 'yomiLastName yomiFirstName last_name first_name nickname display_name'.split(' '),
+    var fields = 'yomiLastName yomiFirstName last_name first_name nickname display_name'.split(' '),
         addresses = 'email1 email2 email3'.split(' ');
 
     // limits
@@ -68,7 +69,7 @@ define('io.ox/contacts/addressbook/popup', [
 
     var buildIndex = (function () {
 
-        var fields = names.concat('email');
+        var fieldsWithEmail = fields.concat('email');
 
         return function (list) {
             var index = {};
@@ -81,7 +82,7 @@ define('io.ox/contacts/addressbook/popup', [
 
         function getWords(item) {
             var words = [];
-            fields.forEach(function (name) {
+            fieldsWithEmail.forEach(function (name) {
                 var value = item[name];
                 if (typeof value === 'string' && value.length) words.push(value);
             });
@@ -247,7 +248,7 @@ define('io.ox/contacts/addressbook/popup', [
                     }
                 } else {
                     // get sort name
-                    names.forEach(function (name) {
+                    fields.forEach(function (name) {
                         // use diplay name as fallback only, to avoid inconsistencies
                         // example if we would not do this: yomiLastname: a => sort_name: a, lastname: a => sortname: a_a, reason behind this is that for yomis no display name is created
                         if (name === 'display_name' && sort_name.length) return;
@@ -278,10 +279,7 @@ define('io.ox/contacts/addressbook/popup', [
             // do all calculations now; during rendering is more expensive
             var folder_id = String(item.folder_id),
                 department = (useDepartments && folder_id === '6' && $.trim(item.department)) || '',
-                first_name = String(item.first_name || '').trim(),
-                last_name = String(item.last_name || '').trim(),
-                display_name = String(item.display_name || '').trim(),
-                full_name = getFastFullname(first_name, last_name, display_name),
+                full_name = names.getFullName(item),
                 initials = util.getInitials(item);
             return {
                 caption: address,
@@ -293,8 +291,7 @@ define('io.ox/contacts/addressbook/popup', [
                 first_name: item.first_name,
                 folder_id: folder_id,
                 full_name: full_name,
-                full_name_html: '',
-                //util.getFullName(item, true),
+                full_name_html: names.getFullName(item, { html: true }),
                 image: util.getImage(item) || (!useInitials && api.getFallbackImage()),
                 id: String(item.id),
                 initials: useInitials && initials,
@@ -302,7 +299,7 @@ define('io.ox/contacts/addressbook/popup', [
                 keywords: (full_name + ' ' + address + ' ' + department).toLowerCase(),
                 last_name: item.last_name,
                 list: processLists(item),
-                mail_full_name: util.getMailFullName(item),
+                mail_full_name: names.getMailFullName(item),
                 // all lower-case to be case-insensitive; replace spaces to better match server-side collation
                 sort_name: sort_name.concat(address).join('_').toLowerCase().replace(/\s/g, '_'),
                 // allow sorters to have special handling for sortnames and addresses
@@ -380,22 +377,6 @@ define('io.ox/contacts/addressbook/popup', [
             });
         }
 
-    }());
-
-    var getFastFullname = (function () {
-
-        var preference = settings.get('fullNameFormat', 'auto');
-
-        function format(first, last) {
-            if (preference === 'firstname lastname') return first + ' ' + last;
-            if (preference === 'lastname, firstname') return last + ', ' + first;
-            return gt('%2$s, %1$s', first, last);
-        }
-
-        return function (first, last, display) {
-            if (last && first) return format(first, last);
-            return last || first || display;
-        };
     }());
 
     //
@@ -963,7 +944,7 @@ define('io.ox/contacts/addressbook/popup', [
         var subset = list.slice(options.offset, options.limit);
         // clear if offset is zero
         if (options.offset === 0) this[0].innerHTML = '';
-        this[0].innerHTML += template({ list: subset, util: util });
+        this[0].innerHTML += template({ list: subset });
         if (options.offset === 0) this.scrollTop(0);
         this.data({ list: list, options: options });
         this.find('.contact-picture[data-original]').each(function () {

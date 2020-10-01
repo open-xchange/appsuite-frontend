@@ -40,38 +40,13 @@ define(['io.ox/contacts/util'], function (util) {
             expect(util.getSortName({})).to.be.empty;
         });
 
-        it('should return a object containing the format ', function () {
-            expect(util.getFullNameFormat(testPerson)).to.deep.equal({ format: '%2$s, %1$s', params: ['Georg', 'Tester'] });
-        });
-
-        it('should return the prepared full name', function () {
-            var a = { first_name: ' ', last_name: 'Tester', display_name: 'Dr. Tester, Georg' },
-                b = { first_name: 'Georg', last_name: ' ', display_name: 'Dr. Tester, Georg' },
-                c = { first_name: ' ', last_name: ' ', display_name: 'Dr. Tester, Georg' };
-            expect(util.getFullName(a)).to.equal('Tester');
-            expect(util.getFullName(b)).to.equal('Georg');
-            expect(util.getFullName(c)).to.equal('Dr. Tester, Georg');
-        });
-
-        it('should ignore first and last name if it just contains blanks', function () {
-            expect(util.getFullName(testPerson)).to.equal('Tester, Georg');
-        });
-
         it('should return the display name if available otherwise combine first and last name ', function () {
             expect(util.getDisplayName(testPerson)).to.equal('Dr. Tester, Georg');
             expect(util.getDisplayName(testPersonWOPic)).to.equal('Tester, Georg');
         });
 
-        it('should return a object containing the format ', function () {
-            expect(util.getMailFullNameFormat(testPerson)).to.deep.equal({ format: '%1$s %2$s', params: ['Georg', 'Tester'] });
-        });
-
         it('should return the display name if available otherwise combine first and last name ', function () {
             expect(util.getMailFullName(testPerson)).to.equal('Georg Tester');
-        });
-
-        it('should return a object containing the format ', function () {
-            expect(util.getMailFormat(testPerson)).to.deep.equal({ format: '%1$s', params: ['georg1@tester.com'] });
         });
 
         it('should return the first available mail address ', function () {
