@@ -666,6 +666,7 @@ define('io.ox/mail/common-extensions', [
 
                 view.listenTo(view.collection, 'add remove reset', view.renderInlineLinks);
                 view.listenTo(baton.model, 'change:imipMail', view.renderInlineLinks);
+                view.listenTo(baton.model, 'change:sharingMail', view.renderInlineLinks);
                 view.renderInlineLinks();
 
                 if (!reuse) {
