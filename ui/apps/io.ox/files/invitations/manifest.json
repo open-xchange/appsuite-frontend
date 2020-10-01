@@ -1,0 +1,4 @@
+{
+    "namespace": "io.ox/mail/detail/view",
+    "requires": "infostore"
+}
