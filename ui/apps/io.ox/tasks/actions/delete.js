@@ -44,14 +44,14 @@ define('io.ox/tasks/actions/delete', [
                     api.remove(data).done(function () {
                         // do not use "gt.ngettext" for plural without count
                         notifications.yell('success', (numberOfTasks === 1) ?
-                            gt('Task has been deleted!') :
-                            gt('Tasks have been deleted!')
+                            gt('Task has been deleted') :
+                            gt('Tasks have been deleted')
                         );
                         popup.close();
                     })
                     .fail(function (result) {
                         if (result.code === 'TSK-0019') { // task was already deleted somewhere else. everythings fine, just show info
-                            notifications.yell('info', gt('Task was already deleted!'));
+                            notifications.yell('info', gt('Task has been deleted already'));
                         } else if (result.error) {
                             // there is an error message from the backend
                             popup.idle();

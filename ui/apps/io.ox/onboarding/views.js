@@ -178,7 +178,7 @@ define('io.ox/onboarding/views', [
 
             this.$el.append(
                 $('<div class="description">').append(
-                    $('<p class="prompt">').text(gt('Please download the configuration to automatically setup your account.'))
+                    $('<p class="prompt">').text(gt('Please download the configuration to automatically set up your account.'))
                 ),
                 $('<button type="button" data-action="download" class="btn btn-link download">').text(gt('Download configuration')).append(
                     $('<i class="fa fa-download">')

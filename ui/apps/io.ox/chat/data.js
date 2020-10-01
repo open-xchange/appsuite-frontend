@@ -209,7 +209,7 @@ define('io.ox/chat/data', [
                     return gt('Message could not be loaded');
                 default:
                     //#. %1$s: messagetext
-                    return gt('Unknown system message %1$s', event.type);
+                    return gt('Unknown system message: %1$s', event.type);
             }
         },
 
@@ -1021,7 +1021,7 @@ define('io.ox/chat/data', [
     //
 
     function getName(email) {
-        //#. shown instead of your name for your own chat messages
+        //#. shown instead of your name for your own chat messages, stand-alone word / not concatenated
         if (email === data.user.email) return '<span class="name">' + gt('You') + '</span>';
         return getNames([email]);
     }
@@ -1032,7 +1032,7 @@ define('io.ox/chat/data', [
             .map(function (email) {
                 var model = data.users.getByMail(email);
                 var name = (model ? model.getName() : gt('Unknown user'));
-                //#. shown instead of your name for your own chat messages
+                //#. shown instead of your name for your own chat messages, stand-alone word / not concatenated
                 if (email === data.user.email) name = gt('You');
 
                 return '<span class="name">' + name + '</span>';

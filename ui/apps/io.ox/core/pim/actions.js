@@ -86,7 +86,7 @@ define('io.ox/core/pim/actions', [
                     attachmentAPI.save(data);
                 });
                 setTimeout(function () {
-                    yell('success', gt('Attachments have been saved!'));
+                    yell('success', gt('Attachments have been saved'));
                 }, 300);
             }
         }

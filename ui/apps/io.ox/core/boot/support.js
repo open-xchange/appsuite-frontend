@@ -98,7 +98,7 @@ define('io.ox/core/boot/support', [
 
                 // warning about all unknown browser-platform combinations, might be chrome on iOS
                 util.feedback('info', function () {
-                    return $('<b>').text(gt('Your browser is not supported!'))
+                    return $('<b>').text(gt('Your browser is not supported'))
                         .add($.txt('\xa0'))
                         //#. Should tell the user that his combination of browser and operating system is not supported
                         .add($('<div data-error="unkown-combination">').text(gt('This browser is not supported on your current platform.')));
@@ -135,7 +135,7 @@ define('io.ox/core/boot/support', [
             draw: function () {
 
                 util.feedback('info', function () {
-                    return $('<b>').text(gt('Your browser is not supported!'))
+                    return $('<b>').text(gt('Your browser is not supported'))
                         .add($.txt('\xa0'))
                         .add(
                             $('<div data-error="outdated-browser">').text(

@@ -786,7 +786,7 @@ define('io.ox/mail/common-extensions', [
                 this.append(
                     $('<div class="notification-item disabled-links">').append(
                         $('<button type="button" class="btn btn-default btn-sm">').text(gt('Enable Links')),
-                        $('<div class="comment">').text(gt('Links have been disabled to protect you against potential spam!')),
+                        $('<div class="comment">').text(gt('Links have been disabled to protect you against potential spam')),
                         $('<button type="button" class="close">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
                     )
                 );
@@ -826,7 +826,7 @@ define('io.ox/mail/common-extensions', [
                 this.append(
                     $('<div class="notification-item external-images">').append(
                         $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show images')),
-                        $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!')),
+                        $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam')),
                         $('<button type="button" class="close">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
                     )
                 );

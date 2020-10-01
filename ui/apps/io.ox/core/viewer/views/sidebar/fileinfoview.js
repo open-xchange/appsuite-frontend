@@ -65,7 +65,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 'click': function () {
                     this.$el.tooltip('hide');
                     require(['io.ox/core/yell'], function (yell) {
-                        yell({ type: 'success', message: gt('The link was copied to the clipboard.') });
+                        yell({ type: 'success', message: gt('The link has been copied to the clipboard.') });
                     });
                 }
             }
