@@ -848,7 +848,42 @@
             }
         }
 
-        &.edit-mode {
+        .reference-message {
+            position: absolute;
+            padding: 0;
+            margin: 0;
+            left: 16px;
+            right: 96px;
+            top: 16px;
+
+            .content {
+                max-width: 100%;
+
+                .sender {
+                    color: #000;
+                    padding: 0;
+                    margin: 0;
+                }
+
+                .body {
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    max-width: 100%;
+                    margin-bottom: -5px;
+                }
+            }
+        }
+
+        &.reply-mode{
+            // 80px textares + 52px reference Message +  8px Padding
+            height: 140px;
+            textarea {
+                padding-top: 60px;
+            }
+        }
+
+        &.edit-mode, &.reply-mode {
             .cancel-btn {
                 display: block;
             }

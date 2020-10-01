@@ -18,23 +18,19 @@ define('io.ox/chat/views/messages', [
     'io.ox/core/extensions',
     'gettext!io.ox/chat',
     'io.ox/chat/events',
+    'io.ox/chat/util',
     'io.ox/backbone/mini-views/dropdown'
-], function (DisposableView, data, Avatar, ext, gt, events, Dropdown) {
+], function (DisposableView, data, Avatar, ext, gt, events, util, Dropdown) {
 
     'use strict';
-
-    var emojiRegex = new RegExp('^[\\u{1f300}-\\u{1f5ff}\\u{1f900}-\\u{1f9ff}\\u{1f600}-\\u{1f64f}\\u{1f680}-\\u{1f6ff}\\u{2600}-\\u{26ff}\\u{2700}-\\u{27bf}\\u{1f1e6}-\\u{1f1ff}\\u{1f191}-\\u{1f251}\\u{1f004}\\u{1f0cf}\\u{1f170}-\\u{1f171}\\u{1f17e}-\\u{1f17f}\\u{1f18e}\\u{3030}\\u{2b50}\\u{2b55}\\u{2934}-\\u{2935}\\u{2b05}-\\u{2b07}\\u{2b1b}-\\u{2b1c}\\u{3297}\\u{3299}\\u{303d}\\u{00a9}\\u{00ae}\\u{2122}\\u{23f3}\\u{24c2}\\u{23e9}-\\u{23ef}\\u{25b6}\\u{23f8}-\\u{23fa}]{1,3}$', 'u');
-
-    function isOnlyEmoji(str) {
-        return emojiRegex.test(str);
-    }
 
     ext.point('io.ox/chat/message/menu').extend({
         id: 'edit',
         index: 100,
         draw: function (baton) {
             // we cannot edit pictures or system mesages
-            if (baton.model.get('type') !== 'text') return;
+            // we can only edit our own messages
+            if (baton.model.get('type') !== 'text' || !baton.model.isMyself()) return;
             this.append($('<li role="presentation">').append($('<a href="#" role="menuitem" tabindex="-1">').text(gt('Edit message')).on('click', function () {
                 baton.view.trigger('editMessage', baton.model);
             })));
@@ -45,8 +41,20 @@ define('io.ox/chat/views/messages', [
         id: 'delete',
         index: 200,
         draw: function (baton) {
+            // we can only delete our own messages
+            if (!baton.model.isMyself()) return;
             this.append($('<li role="presentation">').append($('<a href="#" role="menuitem" tabindex="-1">').text(gt('Delete message')).on('click', function () {
                 baton.view.trigger('delete', baton.model);
+            })));
+        }
+    });
+
+    ext.point('io.ox/chat/message/menu').extend({
+        id: 'reply',
+        index: 300,
+        draw: function (baton) {
+            this.append($('<li role="presentation">').append($('<a href="#" role="menuitem" tabindex="-1">').text(gt('Reply')).on('click', function () {
+                baton.view.trigger('replyToMessage', baton.model);
             })));
         }
     });
@@ -95,7 +103,7 @@ define('io.ox/chat/views/messages', [
                 .addClass(model.getType())
                 .toggleClass('myself', (!model.isSystem() || model.get('deleted')) && model.isMyself())
                 .toggleClass('highlight', !!model.get('messageId') && model.get('messageId') === this.messageId)
-                .toggleClass('emoji', isOnlyEmoji(body))
+                .toggleClass('emoji', util.isOnlyEmoji(body))
                 .append(
                     // sender avatar & name
                     this.renderSender(model),
@@ -106,7 +114,7 @@ define('io.ox/chat/views/messages', [
                             .append(this.renderFoot(model)),
                         // show some indicator dots when a menu is available
                         (function () {
-                            if (model.isSystem() || !model.isMyself()) return '';
+                            if (model.isSystem()) return '';
                             var toggle = $('<button type="button" class="btn btn-link dropdown-toggle actions-toggle" aria-haspopup="true" data-toggle="dropdown">')
                                     .attr('title', gt('Message actions'))
                                     .append($('<i class="fa fa-ellipsis-v">')),
@@ -283,7 +291,7 @@ define('io.ox/chat/views/messages', [
             $message
                 .removeClass('system text preview')
                 .addClass(model.getType())
-                .toggleClass('emoji', isOnlyEmoji(model.getBody()));
+                .toggleClass('emoji', util.isOnlyEmoji(model.getBody()));
             $body
                 .html(model.getBody())
                 .append(this.renderFoot(model));
