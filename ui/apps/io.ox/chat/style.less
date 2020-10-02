@@ -783,13 +783,25 @@
 
         .message.replied-to-message {
             padding: 0;
+            margin: 0px -8px 8px -8px;
 
+            .sender {
+                color: #000;
+                margin-bottom: 0;
+            }
             .content {
-                background-color: @darkblue;
+                padding: 4px 8px;
+                background-color: #cecece;
                 width: 100%;
             }
+        }
+
+        &.myself .message.replied-to-message {
             .sender {
                 color: #fff;
+            }
+            .content {
+                background-color: @darkblue;
             }
         }
     }
