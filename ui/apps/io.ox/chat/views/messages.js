@@ -94,7 +94,7 @@ define('io.ox/chat/views/messages', [
             return this;
         },
 
-        renderMessage: function (model) {
+        renderMessage: function (model, noDate) {
             var self = this,
                 body = model.getBody(),
                 message = $('<div class="message">')
@@ -157,7 +157,7 @@ define('io.ox/chat/views/messages', [
             if (model.get('messageId') === this.messageId) delete this.messageId;
 
             var date = this.renderDate(model);
-            if (date) return [date, message];
+            if (date && !noDate) return [date, message];
             return message;
         },
 
@@ -302,7 +302,7 @@ define('io.ox/chat/views/messages', [
         // currently used when the message changed it's type. We replace the entire node then
         onMessageChanged: function (model) {
             var $message = this.getMessageNode(model);
-            if ($message.length) $message.replaceWith(this.renderMessage(model));
+            if ($message.length) $message.replaceWith(this.renderMessage(model, true));
         },
 
         onChangeBody: function (model) {
