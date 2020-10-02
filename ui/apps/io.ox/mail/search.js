@@ -16,9 +16,10 @@ define('io.ox/mail/search', [
     'io.ox/backbone/views/search',
     'io.ox/core/api/collection-loader',
     'io.ox/mail/api',
+    'io.ox/core/api/account',
     'io.ox/core/http',
     'gettext!io.ox/mail'
-], function (ext, SearchView, CollectionLoader, api, http, gt) {
+], function (ext, SearchView, CollectionLoader, api, accountAPI, http, gt) {
 
     'use strict';
 
@@ -26,10 +27,6 @@ define('io.ox/mail/search', [
         id: 'top-search',
         index: 10000,
         setup: function (app) {
-
-            if (!$('#io-ox-topsearch').is(':empty')) return;
-            var $container = $('<div class="search-container">');
-            $('#io-ox-topsearch').append($container);
 
             var listView = app.listView;
 
@@ -51,7 +48,7 @@ define('io.ox/mail/search', [
                     if (year) {
                         start = Date.UTC(year, 0, 1);
                         end = Date.UTC(year, 11, 31);
-                        filters.push(['and', ['>', { field: 'date' }, String(start)], ['<', { field: 'date' }, String(end)]]);
+                        filters.push(['and', ['>', { field: 'received_date' }, String(start)], ['<', { field: 'received_date' }, String(end)]]);
                     }
                     if (criteria.words) {
                         _(criteria.words.split(' ')).each(function (word) {
@@ -69,14 +66,21 @@ define('io.ox/mail/search', [
                         });
                     }
                     if (criteria.attachment === 'true') filters.push(['=', { field: 'content_type' }, 'multipart/mixed']);
-                    if (criteria.after) filters.push(['>', { field: 'date' }, String(criteria.after)]);
-                    if (criteria.before) filters.push(['<', { field: 'date' }, String(criteria.before)]);
+                    if (criteria.after) filters.push(['>', { field: 'received_date' }, String(criteria.after)]);
+                    if (criteria.before) filters.push(['<', { field: 'received_date' }, String(criteria.before)]);
 
-                    var folder = criteria.folder === 'all' ? api.allMessagesFolder : app.folder.get();
+                    function getFolder(folder) {
+                        switch (folder) {
+                            case 'all': return api.allMessagesFolder;
+                            case 'trash':
+                            case 'sent': return accountAPI.getFoldersByType(folder)[0] || app.folder.get();
+                            default: return app.folder.get();
+                        }
+                    }
 
                     return {
                         action: 'search',
-                        folder: folder,
+                        folder: getFolder(criteria.folder),
                         columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,661,662,X-Open-Xchange-Share-URL',
                         sort: params.sort || '661',
                         order: params.order || 'desc',
@@ -100,19 +104,17 @@ define('io.ox/mail/search', [
                 SECONDARY_PAGE_SIZE: 100
             });
 
-            new SearchView({
-                el: $container[0],
+            var view = new SearchView({
+                app: app,
                 placeholder: gt('Search mail'),
                 point: 'io.ox/mail/search/dropdown'
             })
             .build(function () {
-                var view = this;
-                app.on('folder:change', function () {
-                    view.cancel();
-                });
-                app.folderView.tree.$el.on('click', function () {
-                    view.cancel();
-                });
+                app.getWindow()
+                    .on('show', this.show.bind(this))
+                    .on('hide', this.hide.bind(this));
+                app.on('folder:change', this.cancel.bind(this));
+                app.folderView.tree.$el.on('click', this.cancel.bind(this));
             })
             .on('search', function (criteria) {
                 listView.connect(collectionLoader);
@@ -125,8 +127,9 @@ define('io.ox/mail/search', [
                 listView.connect(api.collectionLoader);
                 listView.model.unset('criteria');
                 gridOptions.removeClass('disabled');
-            })
-            .render();
+            });
+
+            $('#io-ox-topsearch').append(view.render().$el);
         }
     });
 

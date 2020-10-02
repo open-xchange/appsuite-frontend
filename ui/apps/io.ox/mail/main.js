@@ -2235,8 +2235,7 @@ define('io.ox/mail/main', [
         var win = ox.ui.createWindow({
             name: 'io.ox/mail',
             title: 'Inbox',
-            chromeless: true,
-            find: capabilities.has('search')
+            chromeless: true
         });
 
         if (_.url.hash('mailto')) ox.registry.call('mail-compose', 'open');

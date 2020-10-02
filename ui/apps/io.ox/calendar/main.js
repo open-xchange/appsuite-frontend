@@ -31,6 +31,7 @@ define('io.ox/calendar/main', [
     'io.ox/calendar/mobile-toolbar-actions',
     'io.ox/calendar/toolbar',
     'io.ox/calendar/actions',
+    'io.ox/calendar/search',
     'less!io.ox/calendar/style',
     'io.ox/calendar/week/view'
 ], function (commons, ext, capabilities, folderAPI, TreeView, FolderView, DatePicker, settings, gt, ListViewControl, CalendarListView, Bars, PageController, api, addFolderSelectSupport) {
@@ -799,16 +800,6 @@ define('io.ox/calendar/main', [
             });
         },
 
-        'top-search': function () {
-            if (!$('#io-ox-topsearch').is(':empty')) return;
-            $('#io-ox-topsearch').append(
-                $('<div class="search-container">').append(
-                    $('<input type="search" class="form-control" placeholder="Search calendar">'),
-                    $('<i class="fa fa-search">')
-                )
-            );
-        },
-
         'sidepanel': function (app) {
 
             ext.point('io.ox/calendar/sidepanel').extend({
@@ -970,7 +961,6 @@ define('io.ox/calendar/main', [
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/calendar',
-            find: capabilities.has('search'),
             chromeless: true
         }));
 

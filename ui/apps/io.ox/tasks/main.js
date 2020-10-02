@@ -30,6 +30,7 @@ define('io.ox/tasks/main', [
     'io.ox/backbone/views/actions/util',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/tasks/toolbar',
+    'io.ox/tasks/search',
     'io.ox/tasks/mobile-navbar-extensions',
     'io.ox/tasks/mobile-toolbar-actions'
 ], function (api, ext, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI, TreeView, FolderView, Bars, PageController, capabilities, actionsUtil, Dropdown) {
@@ -672,16 +673,6 @@ define('io.ox/tasks/main', [
                 action: 'io.ox/tasks/actions/create',
                 toolbar: 'create'
             });
-        },
-
-        'top-search': function () {
-            if (!$('#io-ox-topsearch').is(':empty')) return;
-            $('#io-ox-topsearch').append(
-                $('<div class="search-container">').append(
-                    $('<input type="search" class="form-control" placeholder="Search task">'),
-                    $('<i class="fa fa-search">')
-                )
-            );
         },
 
         'sidepanel': function (app) {

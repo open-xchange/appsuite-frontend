@@ -33,6 +33,7 @@ define('io.ox/contacts/main', [
     'io.ox/core/folder/view',
     'io.ox/contacts/mobile-navbar-extensions',
     'io.ox/contacts/mobile-toolbar-actions',
+    'io.ox/contacts/search',
     'less!io.ox/contacts/style'
 ], function (util, coreUtil, api, VGrid, viewDetail, ext, actionsUtil, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
 
@@ -858,15 +859,15 @@ define('io.ox/contacts/main', [
             });
         },
 
-        'top-search': function () {
-            if (!$('#io-ox-topsearch').is(':empty')) return;
-            $('#io-ox-topsearch').append(
-                $('<div class="search-container">').append(
-                    $('<input type="search" class="form-control" placeholder="Search contacts">'),
-                    $('<i class="fa fa-search">')
-                )
-            );
-        },
+        // 'top-search': function () {
+        //     if (!$('#io-ox-topsearch').is(':empty')) return;
+        //     $('#io-ox-topsearch').append(
+        //         $('<div class="search-container">').append(
+        //             $('<input type="search" class="form-control" placeholder="Search contacts">'),
+        //             $('<i class="fa fa-search">')
+        //         )
+        //     );
+        // },
 
         'sidepanel': function (app) {
 
@@ -987,8 +988,7 @@ define('io.ox/contacts/main', [
         // get window
         var win = ox.ui.createWindow({
             name: 'io.ox/contacts',
-            chromeless: true,
-            find: capabilities.has('search')
+            chromeless: true
         });
 
         app.setWindow(win);

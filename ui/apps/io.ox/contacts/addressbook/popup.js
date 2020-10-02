@@ -57,11 +57,9 @@ define('io.ox/contacts/addressbook/popup', [
         useLabels = settings.get('picker/useLabels', false),
         closeOnDoubleClick = settings.get('picker/closeOnDoubleClick', true),
         useGlobalAddressBook = settings.get('picker/globalAddressBook', true),
-        //TODO: unify feature toggles: showDepartment is a newer backend toggle, picker/departments is frontend only
-        showDepartment = settings.get('showDepartment'),
-        useDepartments = typeof showDepartment === 'undefined' ? settings.get('picker/departments', true) : showDepartment;
+        useDepartments = settings.get('picker/departments', true);
 
-    if (useDepartments) names.push('department');
+    if (useDepartments) fields.push('department', 'company');
 
     //
     // Build a search index
@@ -173,7 +171,7 @@ define('io.ox/contacts/addressbook/popup', [
 
             options = _.extend({
                 // keep this list really small for good performance!
-                columns: '1,20,500,501,502,505,515,519,524,555,556,557,592,602,606,616,617',
+                columns: '1,20,500,501,502,505,515,519,524,555,556,557,569,592,602,606,616,617',
                 exclude: useGlobalAddressBook ? [] : ['6'],
                 limit: LIMITS.fetch,
                 lists: true
@@ -279,11 +277,13 @@ define('io.ox/contacts/addressbook/popup', [
             // do all calculations now; during rendering is more expensive
             var folder_id = String(item.folder_id),
                 department = (useDepartments && folder_id === '6' && $.trim(item.department)) || '',
+                company = (useDepartments && $.trim(item.company)) || '',
                 full_name = names.getFullName(item),
                 initials = util.getInitials(item);
             return {
                 caption: address,
                 cid: item.folder_id + '.' + item.id + '.' + i,
+                company: company,
                 department: department,
                 display_name: item.display_name,
                 email: address,

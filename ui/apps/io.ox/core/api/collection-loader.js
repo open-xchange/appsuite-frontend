@@ -116,7 +116,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             params = this.getQueryParams(params || {});
             // params are false for virtual folders
             if (params === false) return;
-            params.limit = '0,' + this.PRIMARY_PAGE_SIZE;
+            if (this.useLimit) params.limit = '0,' + this.PRIMARY_PAGE_SIZE;
             collection = this.collection = this.getCollection(params);
             this.loading = false;
 
@@ -147,7 +147,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             var offset = Math.max(0, collection.length - 1);
             params = this.getQueryParams(_.extend({ offset: offset }, params));
             if (this.isBad(params.folder)) return collection;
-            params.limit = offset + ',' + (collection.length + this.SECONDARY_PAGE_SIZE);
+            if (this.useLimit) params.limit = offset + ',' + (collection.length + this.SECONDARY_PAGE_SIZE);
             this.loading = true;
 
             _.defer(process.bind(this), params, 'paginate');
@@ -161,11 +161,13 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             params = this.getQueryParams(_.extend({ offset: 0 }, params));
             if (this.isBad(params.folder)) return collection;
             // see Bug #59875
-            // calculate maxLimit correctly (times paginate was done * secondary_page_size + initial page size)
-            var maxLimit = Math.ceil((collection.length - this.PRIMARY_PAGE_SIZE) / this.SECONDARY_PAGE_SIZE) * this.SECONDARY_PAGE_SIZE + this.PRIMARY_PAGE_SIZE;
-            // in case we have an empty folder (drive), rightHand will be 0. See Bug #60086
-            var rightHand = Math.max(collection.length + (tail || 0), maxLimit);
-            params.limit = '0,' + (rightHand === 0 ? this.PRIMARY_PAGE_SIZE : rightHand);
+            if (this.useLimit) {
+                // calculate maxLimit correctly (times paginate was done * secondary_page_size + initial page size)
+                var maxLimit = Math.ceil((collection.length - this.PRIMARY_PAGE_SIZE) / this.SECONDARY_PAGE_SIZE) * this.SECONDARY_PAGE_SIZE + this.PRIMARY_PAGE_SIZE;
+                // in case we have an empty folder (drive), rightHand will be 0. See Bug #60086
+                var rightHand = Math.max(collection.length + (tail || 0), maxLimit);
+                params.limit = '0,' + (rightHand === 0 ? this.PRIMARY_PAGE_SIZE : rightHand);
+            }
 
             this.loading = true;
 
@@ -188,6 +190,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         // highly emotional and debatable default
         PRIMARY_PAGE_SIZE: 50,
         SECONDARY_PAGE_SIZE: 200,
+        useLimit: true,
 
         cid: function (obj) {
             return _(obj || {}).chain()

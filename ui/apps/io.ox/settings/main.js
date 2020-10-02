@@ -37,7 +37,14 @@ define('io.ox/settings/main', [
     'use strict';
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/settings' }),
+    var app = ox.ui.createApp({
+            name: 'io.ox/settings',
+            title: gt('Settings'),
+            floating: !_.device('smartphone'),
+            resizable: false,
+            closable: true,
+            maximized: true
+        }),
         // app window
         win,
         // nodes
@@ -93,8 +100,11 @@ define('io.ox/settings/main', [
 
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/settings',
-            title: 'Settings',
-            chromeless: true
+            title: gt('Settings'),
+            floating: !_.device('smartphone'),
+            resizable: false,
+            closable: true,
+            maximized: true
         }));
 
         function disableListetSettingsPanes(subgroup) {

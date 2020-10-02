@@ -40,6 +40,7 @@ define('io.ox/files/main', [
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
     'io.ox/files/actions',
+    'io.ox/files/search',
     'less!io.ox/files/style',
     'less!io.ox/core/viewer/style',
     'io.ox/files/toolbar',
@@ -1662,8 +1663,7 @@ define('io.ox/files/main', [
             name: 'io.ox/files',
             id: 'io.ox/files',
             title: 'Drive',
-            chromeless: true,
-            find: capabilities.has('search')
+            chromeless: true
         }));
 
         win.addClass('io-ox-files-main');

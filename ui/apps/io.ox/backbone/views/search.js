@@ -21,15 +21,18 @@ define('io.ox/backbone/views/search', [
     'use strict';
 
     var yelled = false,
-        cache = { items: [], index: [], hash: {} };
+        cache = { items: [], index: [], hash: {} },
+        first = true;
 
     var SearchView = ExtensibleView.extend({
+
+        className: 'search-container',
 
         events: {
             'click .dropdown-toggle': 'onToggle',
             'input .search-field': 'onInput',
             'focus .search-field': 'onFocus',
-            'keydown .search-field': 'onKeyDownSeachField',
+            'keydown .search-field': 'onKeyDownSearchField',
             'keyup': 'onKeyUp',
             'submit .dropdown': 'onSubmit'
         },
@@ -56,7 +59,18 @@ define('io.ox/backbone/views/search', [
             return this.invoke('render');
         },
 
+        hide: function () {
+            this.$el.hide();
+        },
+
+        show: function () {
+            this.$el.show();
+        },
+
         onFirstFocus: function () {
+            // share cache across instances
+            if (!first) return;
+            first = false;
             // load addressbook picker for auto-complete
             var view = this;
             require(['io.ox/contacts/addressbook/popup'], function (picker) {
@@ -66,6 +80,7 @@ define('io.ox/backbone/views/search', [
                     cache.index = response.index;
                     cache.hash = response.hash;
                     SearchView.picker = {
+                        cache: cache,
                         search: picker.search,
                         renderItems: picker.renderItems,
                         resolve: function (cid) {
@@ -127,7 +142,7 @@ define('io.ox/backbone/views/search', [
             return this.$autocomplete.children().length;
         },
 
-        onKeyDownSeachField: function (e) {
+        onKeyDownSearchField: function (e) {
             var selected, item, el, index, children;
             switch (e.which) {
                 // enter
@@ -136,7 +151,7 @@ define('io.ox/backbone/views/search', [
                     if (this.isAutocompleteOpen() && selected.length) {
                         item = SearchView.picker.resolve(selected.attr('data-cid'));
                         index = this.$input.val().lastIndexOf(this.getLastWord());
-                        this.$input.val(this.$input.val().substr(0, index) + item.email).trigger('input');
+                        this.$input.val(this.$input.val().substr(0, index) + (this.getPhraseFromAutoComplete(item) || '')).trigger('input');
                         this.$autocomplete.empty();
                         // move cursor to end
                         el = this.$input[0];
@@ -164,6 +179,10 @@ define('io.ox/backbone/views/search', [
                     break;
                 // no default
             }
+        },
+
+        getPhraseFromAutoComplete: function (item) {
+            return item.email;
         },
 
         onKeyUp: function (e) {
@@ -198,10 +217,19 @@ define('io.ox/backbone/views/search', [
             return this.trigger('cancel');
         },
 
-        input: function (name, label) {
-            return $('<div class="form-group">').append(
-                mini.getInputWithLabel(name, label, this.model)
-            );
+        input: function (name, label, fn) {
+            var id;
+            var pair = mini.getInputWithLabel(name, label, this.model);
+            var $datalist = $();
+            if (_.isFunction(fn)) {
+                id = _.uniqueId('datalist_');
+                $datalist = $('<datalist id="' + id + '">');
+                pair[1].attr('list', id).one('focus', function () {
+                    var options = fn();
+                    $(this).next().append(options);
+                });
+            }
+            return $('<div class="form-group">').append(pair, $datalist);
         },
 
         checkbox: function (name, label) {
@@ -315,7 +343,8 @@ define('io.ox/backbone/views/search', [
     SearchView.picker = {
         search: _.constant([]),
         renderItems: _.noop,
-        resolve: _.noop
+        resolve: _.noop,
+        cache: cache
     };
 
     return SearchView;
