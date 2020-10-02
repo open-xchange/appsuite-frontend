@@ -14,6 +14,7 @@
 
 define('io.ox/files/share/permissions', [
     'io.ox/core/extensions',
+    'io.ox/files/share/permission-pre-selection',
     'io.ox/files/share/share-settings',
     'io.ox/files/share/public-link',
     'io.ox/backbone/views/disposable',
@@ -39,7 +40,7 @@ define('io.ox/files/share/permissions', [
     'io.ox/core/api/group',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ext, shareSettings, PublicLink, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil, groupApi) {
+], function (ext, PermissionPreSelection, shareSettings, PublicLink, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil, groupApi) {
 
     'use strict';
 
@@ -466,6 +467,7 @@ define('io.ox/files/share/permissions', [
         PermissionsView = DisposableView.extend({
 
             tagName: 'div',
+            permissionPreSelection: null,
 
             className: 'permissions-view container-fluid',
 
@@ -512,6 +514,10 @@ define('io.ox/files/share/permissions', [
                 return this;
             },
 
+            setPermissionPreSelectionView: function (view) {
+                this.permissionPreSelection = view;
+            },
+
             renderEntities: function () {
                 this.$el.busy({ immediate: true });
                 this.$el.append(
@@ -525,6 +531,7 @@ define('io.ox/files/share/permissions', [
             },
 
             renderEntity: function (model) {
+                model.set('bits', fileRoles[this.permissionPreSelection.getSelectedPermission()]);
                 var children = this.$el.children(),
                     index = this.collection.indexOf(model),
                     newEntity = new PermissionEntityView({ model: model, parentModel: this.model }).render().$el;
@@ -537,6 +544,10 @@ define('io.ox/files/share/permissions', [
                 } else {
                     this.$el.append(newEntity);
                 }
+            },
+
+            revokeAll: function () {
+                this.$el.find('a[data-name="revoke"]').trigger('click');
             }
         });
 
@@ -822,7 +833,7 @@ define('io.ox/files/share/permissions', [
 
     // Extension point who can access share
     var POINT_DIALOG = 'io.ox/files/share/dialog';
-    ext.point(POINT_DIALOG + '/share-options').extend({
+    ext.point(POINT_DIALOG + '/share-settings').extend({
         id: 'who-can-share',
         index: 100,
         draw: function (linkModel) {
@@ -969,9 +980,11 @@ define('io.ox/files/share/permissions', [
 
             var dialogConfig = new DialogConfigModel(),
                 permissionsView = new PermissionsView({ model: objModel }),
-                publicLink = new PublicLink({ files: linkModel });
+                publicLink = new PublicLink({ files: linkModel }),
+                permissionPreSelection = new PermissionPreSelection();
 
-            ext.point(POINT_DIALOG + '/share-options').invoke('draw', dialog.$body, publicLink.model);
+            permissionsView.setPermissionPreSelectionView(permissionPreSelection);
+            ext.point(POINT_DIALOG + '/share-settings').invoke('draw', dialog.$body, publicLink.model);
 
             publicLink.model.on('change:access', function (model) {
                 var accessMode = model.get('access');
@@ -1023,12 +1036,12 @@ define('io.ox/files/share/permissions', [
                 dialog.$footer.prepend(
                     $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
                         $('<button class="btn btn-default" aria-label="Unshare"></button>').text(gt('Unshare')).on('click', function () {
-                            // Remove all permissions and public link
+                            // Remove all permissions and public link then trigger save.
+                            publicLink.removeLink().then(function () {
+                                permissionsView.revokeAll();
+                                dialog.trigger('save');
+                            });
                         })
-                        // settingsUtil.checkbox('sendNotifications', gt('Send notification by email'), dialogConfig).on('change', function (e) {
-                        //     var input = e.originalEvent.srcElement;
-                        //     dialogConfig.set('byHand', input.checked);
-                        // })
                     )
                 );
             }
@@ -1170,7 +1183,7 @@ define('io.ox/files/share/permissions', [
                         // Invite people header
                         $('<h5></h5>').text(gt('Invite people')),
                         // Add address picker
-                        $('<div class="row">').append(
+                        $('<div class="row vertical-align-center">').append(
                             $('<div class="form-group col-sm-6">').append(
                                 $('<div class="input-group">').toggleClass('has-picker', usePicker).append(
                                     $('<label class="sr-only">', { 'for': guid = _.uniqueId('form-control-label-') }).text(gt('Start typing to search for user names')),
@@ -1212,29 +1225,31 @@ define('io.ox/files/share/permissions', [
 
                                 // clear input field
                                 $(this).typeahead('val', '');
-                            })
-                        ),
-                        // add message - not available for mail
-                        $('<div class="share-options form-group">')
-                        .toggle(notificationDefault)
-                        .addClass(_.browser.IE ? 'IE' : 'nonIE')
-                        .append(
-                            $('<label class="control-label sr-only">')
-                                .text(gt('Enter a Message to inform users'))
-                                .attr({ for: guid = _.uniqueId('form-control-label-') }),
-                            // message text
-                            new miniViews.TextView({
-                                name: 'message',
-                                model: dialogConfig
-                            })
-                            .render().$el.addClass('message-text')
-                            .attr({
-                                id: guid,
-                                rows: 3,
-                                //#. placeholder text in share dialog
-                                placeholder: gt('Personal message (optional). This message is sent to all newly invited people.')
-                            })
+                            }),
+                            $('<div>').text(gt('Invite as: ')),
+                            permissionPreSelection.render().$el
                         )
+                    ),
+                    // add message - not available for mail
+                    $('<div class="file-share-options form-group">')
+                    .toggle(notificationDefault)
+                    .addClass(_.browser.IE ? 'IE' : 'nonIE')
+                    .append(
+                        $('<label class="control-label sr-only">')
+                            .text(gt('Enter a Message to inform users'))
+                            .attr({ for: guid = _.uniqueId('form-control-label-') }),
+                        // message text
+                        new miniViews.TextView({
+                            name: 'message',
+                            model: dialogConfig
+                        })
+                        .render().$el.addClass('message-text')
+                        .attr({
+                            id: guid,
+                            rows: 3,
+                            //#. placeholder text in share dialog
+                            placeholder: gt('Personal message (optional). This message is sent to all newly invited people.')
+                        })
                     )
                 );
 

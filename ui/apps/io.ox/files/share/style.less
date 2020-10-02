@@ -255,11 +255,16 @@
         padding: 0;
         display: flex;
         flex-direction: column;
-        //max-height: ~"calc(100vh - 520px)";
         overflow-y: scroll;
+        overflow-x: hidden;
         
         .access-dropdown {
-            margin-left: 16px;
+            margin: 0 16px;
+            .dropdown {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
         }
 
         .public-link {
@@ -300,11 +305,23 @@
                 -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
                 box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
             }
+            .input-group {
+                width: 100%;
+            }
+            .row.vertical-align-center {
+                display: flex;
+                align-items: center;
+            }
         }
+
+        /**
+         * There is a problem with the classname share-options. This is class will be
+         * set by the browser extension Adblock plus to display none!!!
+         */
 
         // also used for edge... no support for resize css attribute...
         &.IE11 {
-            .share-options {
+            .file-share-options {
                 &.IE {
                     min-width: 100%;
                     max-width: 100%;
@@ -312,7 +329,7 @@
             }
         }
 
-        .share-options {
+        .file-share-options {
             text-align: left;
             border-top: 1px solid #e5e5e5;
             margin: 0;

@@ -105,7 +105,7 @@ Scenario('[C8377] Invite a person', (I, users, drive, dialogs) => {
         I.waitForText('Share folder');
         if (!publicFolder) {
             I.click('Send notification by email');
-            I.waitForInvisible('.share-options', 2);
+            I.waitForInvisible('.file-share-options', 2);
         }
         I.dontSeeCheckboxIsChecked('Send notification by email');
         I.click('~Select contacts');
