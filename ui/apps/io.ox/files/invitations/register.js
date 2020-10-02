@@ -48,6 +48,8 @@ define('io.ox/files/invitations/register', [
         'addable': gt('Link is valid and belongs to a share that is not yet subscribed an can be added'),
         'addable_with_password': gt('Link is valid and belongs to a share that is not yet subscribed an can be added. User needs to enter a password to add the share'),
         'inaccessible': gt('Link is inaccessible and thus can\'t be subscribed'),
+        'unresolvable': gt('Link can\'t be resolved at all and thus can\'t be subscribed'),
+        'forbidden': gt('Subscription of the link is not allowed'),
         'credentials_refresh': gt('Link belongs to a known share but is not accessible at the moment because the remote server indicates that credentials have been updated meanwhile.')
     };
 
@@ -56,6 +58,8 @@ define('io.ox/files/invitations/register', [
         'addable': ['ignore', 'mount'],
         'addable_with_password': ['ignore', 'mount'],
         'inaccessible': ['remount'],
+        'unresolvable': ['ignore'],
+        'forbidden': ['ignore'],
         'credentials_refresh': ['remount']
     };
 
@@ -74,11 +78,6 @@ define('io.ox/files/invitations/register', [
         return pw;
     }
 
-    //
-    // Basic View
-    // expects data to be in the this.model variable and works only on the new events model
-    // if other data (e.g. tasks) are used, overwrite according functions
-    //
     var BasicView = DisposableView.extend({
 
         className: 'itip-item federated-sharing',
@@ -90,7 +89,6 @@ define('io.ox/files/invitations/register', [
 
         initialize: function (options) {
             this.options = _.extend({}, options);
-
             this.module = options.module;
             this.mailModel = options.mailModel;
             this.container = options.container;
@@ -113,30 +111,26 @@ define('io.ox/files/invitations/register', [
 
             switch (this.model.get('state')) {
                 case 'ADDABLE':
-                    data.name = this.model.get('input-name');
+                case 'INACCESSIBLE':
+                case 'UNRESOLVABLE':
+                case 'FORBIDDEN':
                     break;
                 case 'ADDABLE_WITH_PASSWORD':
-                    data.password = this.model.get('input-password');
-                    data.name = this.model.get('input-name');
-                    break;
-                case 'INACCESSIBLE':
-                    data.password = this.model.get('input-password'); // ??? Status uneindeutig
-                    data.name = this.model.get('input-name');
-                    break;
                 case 'CREDENTIALS_REFRESH':
                     data.password = this.model.get('input-password');
-                    data.name = this.model.get('input-name');
                     break;
                 default:
             }
 
-            console.log('%c' + action, 'color: white; background-color: green');
-            console.log(this.model.attributes);
+            // console.log('%c' + action, 'color: white; background-color: green');
+            // console.log(this.model.attributes);
 
             // remove undefined
             data = _.pick(data, _.identity);
             if (!/^(analyze|mount|unmount|remount)$/.test(action)) return $.Deferred().reject({ error: 'unknwon action' });
+            console.log('%c' + 'action', 'color: white; background-color: blue');
             console.log(data);
+            console.log('');
 
             return http.PUT({
                 module: 'share/management',
@@ -161,7 +155,7 @@ define('io.ox/files/invitations/register', [
         renderScaffold: function () {
             return this.$el.append(
                 $('<div class="headline">').append(
-                    $('<span>').text(gt('This email contains a sharing link')), $.txt('. ')
+                    $('<span>').text(gt('This email contains a sharing link')), $.txt('. '), $.txt(this.model.get())
                 ),
                 $('<div class="itip-details">'),
                 $('<div class="itip-comment">'),
@@ -179,7 +173,9 @@ define('io.ox/files/invitations/register', [
         renderDeepLink: function () {
             var folder = this.model.get('folder') || '',
                 module = this.model.get('module') || '';
-            if (!modules[module] || folder.indexOf(this.model.get('service')) === -1) return $();
+            if (!/^(SUBSCRIBED)$/.test(this.model.get('state'))) return $();
+            if (!modules[module]) return $();
+            //if (!modules[module] || folder.indexOf(this.model.get('service')) === -1) return $();
             return $('<a target="_blank" role="button" class="deep-link btn btn-info">')
                 .addClass(modules[module])
                 .attr('href', '/appsuite/ui#!!&app=io.ox/files&folder=' + folder)
@@ -217,7 +213,7 @@ define('io.ox/files/invitations/register', [
         },
 
         renderPasswordField: function () {
-            if (!/^(ADDABLE_WITH_PASSWORD|INACCESSIBLE|CREDENTIALS_REFRESH)$/.test(this.model.get('state'))) return;
+            if (!/^(ADDABLE_WITH_PASSWORD|CREDENTIALS_REFRESH)$/.test(this.model.get('state'))) return;
 
             this.$el.find('.itip-comment').append(
                 common.getInputWithLabel('input-password', gt('Password'), this.model)
@@ -228,18 +224,6 @@ define('io.ox/files/invitations/register', [
                 autocomplete: 'new-password',
                 required: true,
                 placeholder:  gt('required')
-            });
-        },
-
-        renderNameField: function () {
-            if (!/^(ADDABLE|ADDABLE_WITH_PASSWORD|INACCESSIBLE|CREDENTIALS_REFRESH)$/.test(this.model.get('state'))) return;
-
-            this.$el.find('.itip-comment').append(
-                common.getInputWithLabel('input-name', gt('Foldername'), this.model)
-            );
-
-            this.$('[name="input-name"]').val(this.model.get('input-name')).attr({
-                placeholder:  gt('optional')
             });
         },
 
@@ -267,7 +251,6 @@ define('io.ox/files/invitations/register', [
             );
 
             this.renderPasswordField();
-            //this.renderNameField();
 
             return this;
         },
@@ -275,7 +258,7 @@ define('io.ox/files/invitations/register', [
         repaint: function () {
             this.container.analyzeSharingLink()
                 .done(function (data) {
-                    console.log('%c' + 'analyse', 'color: white; background-color: blue');
+                    console.log('%c' + 'repaint', 'color: white; background-color: blue');
                     console.log(data);
                     this.model.set(data);
                     this.render();
@@ -307,7 +290,7 @@ define('io.ox/files/invitations/register', [
 
         hasShareUrl: function () {
             // TODO: also context-internal ones?
-            return /\/[a-f0-9]{48}\//.test(this.getLink());
+            return /\/[a-f0-9]{48}\//.test(this.getLink()) || /&folder=/.test(this.getLink());
         },
 
         getLink: function () {
@@ -315,10 +298,21 @@ define('io.ox/files/invitations/register', [
             return headers['X-Open-Xchange-Share-URL'];
         },
 
+        getType: function () {
+            var headers = this.model.get('headers') || {};
+            return headers['X-Open-Xchange-Share-Type'];
+        },
+
         process: function () {
             return this.analyzeSharingLink().done(function (data) {
                 if (this.disposed) return;
-                console.log(data);
+                data = _.extend({
+                    link: this.getLink(),
+                    type: this.getType()
+                }, data);
+                console.log('%c' + 'analyze', 'color: white; background-color: green');
+                console.log(JSON.stringify(data, undefined, 2));
+                console.log('');
                 this.model.set('sharingMail', true);
                 //var extView = new ExternalView({
                 var extView = new BasicView({
@@ -332,7 +326,7 @@ define('io.ox/files/invitations/register', [
                 );
                 // trigger event so width can be calculated
                 extView.trigger('appended');
-            }.bind(this));
+            }.bind(this)).fail(notifications.yell.bind(notifications.yell));
         }
     });
 
@@ -340,7 +334,7 @@ define('io.ox/files/invitations/register', [
         index: 1000000000001,
         id: 'mount-unmount',
         draw: function (baton) {
-            console.log('%c' + 'mount-unmount', 'color: white; background-color: grey');
+            //console.log('%c' + 'mount-unmount', 'color: white; background-color: grey');
             var view = new SharingView(_.extend({ model: baton.model }, baton.options, { yell: true }));
             this.append(view.render().$el);
         }
