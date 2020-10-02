@@ -110,7 +110,7 @@ define('io.ox/chat/views/messages', [
                     // replied to message
                     $('<div class="content">').append(
                         (function () {
-                            if (!model.get('replyTo')) return '';
+                            if (!model.get('replyTo') || model.get('replyTo').deleted) return '';
                             var replyModel = new data.MessageModel(model.get('replyTo')),
                                 user = data.users.getByMail(replyModel.get('sender')),
                                 replyBody = replyModel.getBody();
@@ -123,7 +123,7 @@ define('io.ox/chat/views/messages', [
                                         // sender name
                                         $('<div class="sender">').text(user.getName()),
                                         // message body
-                                        $('<div class="body">')
+                                        $('<div class="body replied-to">')
                                             .html(replyBody)
                                     )
                                 );
@@ -307,7 +307,8 @@ define('io.ox/chat/views/messages', [
 
         onChangeBody: function (model) {
             var $message = this.getMessageNode(model);
-            var $body = $message.find('.body');
+            // We don't want to change replied to messages, that also have a body
+            var $body = $message.find('.body:not(.replied-to)');
             $message
                 .removeClass('system text preview')
                 .addClass(model.getType())
