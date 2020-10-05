@@ -133,24 +133,26 @@ define('io.ox/chat/views/messages', [
                         // message body
                         $('<div class="body">')
                             .html(body)
-                            .append(this.renderFoot(model)),
-                        // show some indicator dots when a menu is available
-                        (function () {
-                            if (model.isSystem()) return '';
-                            var toggle = $('<button type="button" class="btn btn-link dropdown-toggle actions-toggle" aria-haspopup="true" data-toggle="dropdown">')
-                                    .attr('title', gt('Message actions'))
-                                    .append($('<i class="fa fa-ellipsis-v">')),
-                                menu = $('<ul class="dropdown-menu">'),
-                                dropdown = new Dropdown({
-                                    className: 'message-actions-dropdown dropdown',
-                                    dropup: true,
-                                    smart: true,
-                                    $toggle: toggle,
-                                    $ul: menu
-                                });
-                            ext.point('io.ox/chat/message/menu').invoke('draw', menu, ext.Baton({ view: self, model: model }));
-                            return dropdown.render().$el;
-                        })()
+                            .append(
+                                this.renderFoot(model),
+                                // show some indicator dots when a menu is available
+                                (function () {
+                                    if (model.isSystem()) return '';
+                                    var toggle = $('<button type="button" class="btn btn-link dropdown-toggle actions-toggle" aria-haspopup="true" data-toggle="dropdown">')
+                                            .attr('title', gt('Message actions'))
+                                            .append($('<i class="fa fa-ellipsis-v">')),
+                                        menu = $('<ul class="dropdown-menu">'),
+                                        dropdown = new Dropdown({
+                                            className: 'message-actions-dropdown dropdown',
+                                            dropup: true,
+                                            smart: true,
+                                            $toggle: toggle,
+                                            $ul: menu
+                                        });
+                                    ext.point('io.ox/chat/message/menu').invoke('draw', menu, ext.Baton({ view: self, model: model }));
+                                    return dropdown.render().$el;
+                                })()
+                            )
                     ),
                     //delivery state
                     $('<div class="fa delivery" aria-hidden="true">').addClass(model.getDeliveryState())
