@@ -65,6 +65,7 @@ const createAppointment = async (subject, participants) => {
         const { I, calendar, dialogs } = inject();
         if (!open) {
             calendar.waitForApp();
+            I.waitForDetached('.fa-spin.fa-refresh');
             I.waitForText(subject, 5, '.page.current .appointment');
             I.click(subject);
         }
@@ -112,7 +113,7 @@ const createAppointment = async (subject, participants) => {
         I.waitForDetached('.page.current .appointment');
     };
 
-Scenario.skip('[C7871] Configure accept/decline notification for creator', async (I, users, settings, calendar, dialogs, mail) => {
+Scenario('[C7871] Configure accept/decline notification for creator', async (I, users, settings) => {
     const [userA, userB] = users;
     const subject = 'C7871';
 
@@ -140,9 +141,6 @@ Scenario.skip('[C7871] Configure accept/decline notification for creator', async
         I.waitForVisible('#io-ox-appcontrol', 10);
         await verifyNotificationMails(true, 3);
 
-        I.openFolderMenu('Inbox');
-        I.clickDropdown('Mark all messages as read');
-
         I.say('Unset notifyAcceptedDeclinedAsCreator');
         I.openApp('Settings', { folder: 'virtual/settings/io.ox/calendar' });
         settings.waitForApp();
@@ -157,7 +155,8 @@ Scenario.skip('[C7871] Configure accept/decline notification for creator', async
     });
 
     await session('userB', async () => {
-        I.triggerRefresh();
+        I.refreshPage();
+        I.waitForVisible('.notifications-icon', 10);
         await changeStatus(subject, false);
     });
 
