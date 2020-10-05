@@ -131,7 +131,7 @@ Scenario('Switchboard - Calendar', async (I, calendar) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario.skip('Switchboard - Call history keyboard navigation', async (I, settings) => {
+Scenario('Switchboard - Call history keyboard navigation', async (I, settings) => {
 
     const mail = 'someone@testsomething.com';
     const name = 'someone';
