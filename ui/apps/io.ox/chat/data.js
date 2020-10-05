@@ -750,34 +750,47 @@ define('io.ox/chat/data', [
             }
         },
 
-        postMessage: function (attr, files) {
-            if (this.isNew()) return this.postFirstMessage(attr, files);
+        postMessage: (function () {
+            var lastDeferred = $.when();
+            return function postMessage(attr, file) {
+                lastDeferred = lastDeferred.then(function () {
+                    return this.storeMessage(attr, file).catch();
+                }.bind(this));
+                return lastDeferred;
+            };
+        }()),
+
+        storeMessage: function (attr, file) {
+            if (this.isNew()) return this.storeFirstMessage(attr, file);
             attr.roomId = this.get('roomId');
 
-            var formData = util.makeFormData(_.extend({}, attr, { files: files })),
-                model = files ? new MessageModel(attr) : this.messages.add(attr, { merge: true, parse: true });
+            var formData = util.makeFormData(_.extend({}, attr, { files: file })),
+                model = file ? new MessageModel(attr) : this.messages.add(attr, { merge: true, parse: true });
 
             // model for files will be added to cache and this.messages via sockets messsage:new event. So no need to do it in the callback here. Temporary model is fine;
-            model.save(attr, {
+            return model.save(attr, {
                 data: formData,
                 processData: false,
-                contentType: false,
-                success: function (model) {
-                    model.setInitialDeliveryState();
-                }
-            }).fail(this.handleError.bind(this));
-
-            this.set('active', true);
+                contentType: false
+            }).then(function () {
+                model.setInitialDeliveryState();
+                if (file) this.messages.add(model, { merge: true });
+                this.set('active', true);
+            }.bind(this))
+            .fail(this.handleError.bind(this));
         },
 
-        postFirstMessage: function (attr, files) {
+        storeFirstMessage: function (attr, files) {
             var hiddenAttr = { message: attr.content, files: files, members: this.get('members') };
             delete attr.content;
             delete attr.members;
 
             this.save(attr, { hiddenAttr: hiddenAttr }).then(function () {
                 events.trigger('cmd', { cmd: 'show-chat', id: this.get('roomId') });
-            }.bind(this), this.handleError.bind(this));
+            }.bind(this))
+            .fail(function () {
+                this.handleError.bind(this);
+            });
         },
 
         toggleRecent: function () {

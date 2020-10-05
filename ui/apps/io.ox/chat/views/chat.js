@@ -328,7 +328,7 @@ define('io.ox/chat/views/chat', [
                     .append($('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Cancel')));
                 var attachment = $('<button type="button" class="btn btn-link pull-right file-upload-btn">').attr('aria-label', gt('Upload file'))
                     .append($('<i class="fa fa-paperclip fa-flip-horizontal" aria-hidden="true">').attr('title', gt('Upload file')));
-                var input = $('<input type="file" class="file-upload-input hidden">');
+                var input = $('<input type="file" class="file-upload-input hidden" multiple>');
 
                 return [attachment, input, this.$editor, cancel, send];
             }
@@ -538,7 +538,9 @@ define('io.ox/chat/views/chat', [
                 }
             }
 
-            this.model.postMessage({ content: '' }, files.length === 1 ? files[0] : files);
+            files.forEach(function (file) {
+                this.model.postMessage({ content: '' }, file);
+            }.bind(this));
 
             $input.val('');
         },
