@@ -228,68 +228,102 @@ define('io.ox/core/dropzone', [], function () {
         },
 
         getFilesAndFolders: function (e) {
-            function traverseFileTreePromise(item, path) {
-                var def = $.Deferred();
+            var dataTransfer = e.originalEvent.dataTransfer;
+            var allEntriesAccumulator = [];
+            var droppedItems = dataTransfer.items;
+
+            // Chrome does only read 100 entries per readEntries call,
+            // repeat until the buffer is empty
+            function directoryItemReader(item) {
+                var dirReader = item.createReader();
+                var readerDef = $.Deferred();
+                var allItems = [];
+                var readEntries = function () {
+                    // readEntries returns void, must use callbacks
+                    dirReader.readEntries(
+                        function (items) {
+                            if (items.length) {
+                                allItems = allItems.concat(items);
+                                // next round
+                                readEntries();
+                            } else {
+                                // done
+                                readerDef.resolve(allItems);
+                            }
+                        // error callback
+                        }, function (err) {
+                            readerDef.reject(err);
+                        }
+                    );
+                };
+                readEntries();
+                return readerDef;
+            }
+
+            function traverseTreeAndAccumulateItems(item, path) {
+                // just configuration, see comment further below
+                var supportEmptyFolderUpload = false;
+                var traverseDef = $.Deferred();
+
                 if (item.isFile) {
                     item.file(function (file) {
-                        files.push({
+                        allEntriesAccumulator.push({  // obj structure file
                             file: file,
                             fullPath: item.fullPath,
                             preventFileUpload: false,
                             isEmptyFolder: false
                         });
-                        def.resolve();
+                        traverseDef.resolve();
                     });
+
                 } else if (item.isDirectory) {
-                    var dirReader = item.createReader();
-                    dirReader.readEntries(function (entries) {
-                        var entriesPromises = [];
+                    directoryItemReader(item).then(
+                        function (entries) {
+                            var entriesPromises = [];
+                            var folderIsEmpty = entries.length === 0;
+                            // Uploading empty folders is currently disabled. But keep the code to change it easily.
+                            // Reason: Uploading folders via filepicker currently (2020) doesn't support uploading empty folders,
+                            // so better have one consistent behavior for folder upload for the user.
+                            if (folderIsEmpty && supportEmptyFolderUpload) {
+                                allEntriesAccumulator.push({ // obj structure for emtpy folder
+                                    file: {},
+                                    fullPath: item.fullPath,
+                                    preventFileUpload: true,
+                                    isEmptyFolder: true
+                                });
+                                traverseDef.resolve();
+                            } else {
+                                entries.forEach(function (entr) {
+                                    entriesPromises.push(traverseTreeAndAccumulateItems(entr, path + item.name + '/'));
+                                });
+                            }
 
-                        // Uploading empty folders is currently disabled. But keep the code to change it easily.
-                        // Reason: Uploading folders via filepicker currently (2020) doesn't support uploading empty folders,
-                        // so better have one consistent behavior for folder upload for the user.
-                        if (entries.length === 0 && supportEmptyFolderUpload) { // Folder is empty
-                            files.push({
-                                file: {},
-                                fullPath: item.fullPath,
-                                preventFileUpload: true,
-                                isEmptyFolder: true
+                            $.when.apply($, entriesPromises).then(function () {
+                                traverseDef.resolve(); // hint: finished with all containing items for this folder
+                            }, function (err) {
+                                traverseDef.reject(err);
                             });
-                            def.resolve();
-                        } else {
-                            entries.forEach(function (entr) {
-                                entriesPromises.push(traverseFileTreePromise(entr, path + item.name + '/'));
-                            });
+                        },
+
+                        function (err) {
+                            traverseDef.reject(err);
                         }
-
-                        $.when.apply($, entriesPromises).then(function () {
-                            def.resolve(_.toArray(arguments));
-                        }, function (error) {
-                            def.reject(error);
-                        });
-                    });
+                    );
                 }
 
-                return def;
-            }
-            var supportEmptyFolderUpload = false; // configuration, see comment in traverseFileTreePromise
-            var dataTransfer = e.originalEvent.dataTransfer;
-            var files = [];
-            var finalDef = $.Deferred();
-            var entriesPromises = [];
-            var length = dataTransfer.items.length;
-
-            for (var i = 0; i < length; i++) {
-                var it = dataTransfer.items[i];
-                entriesPromises.push(traverseFileTreePromise(it.webkitGetAsEntry(), ''));
+                return traverseDef;
             }
 
-            $.when.apply($, entriesPromises)
-                .then(function () {
-                    finalDef.resolve(files);
-                });
+            var traverseAllEntriesPromises = _.map(droppedItems, function (droppedItem) {
+                return traverseTreeAndAccumulateItems(droppedItem.webkitGetAsEntry(), '');
+            });
 
-            return finalDef;
+            return $.when.apply($, traverseAllEntriesPromises)
+                .then(
+                    function () {
+                        return allEntriesAccumulator;
+                    }
+                );
         },
 
         onDragenter: function (e) {
