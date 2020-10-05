@@ -577,7 +577,7 @@ define('io.ox/files/api', [
     // guess 23 is "meta"
     // 711 is "number of versions", needed for fixing Bug 52006,
     // number of versions often changes when editing files
-    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707,711,7040';
+    var allColumns = '1,2,3,5,20,23,51,52,108,700,702,703,704,705,707,711,7040';
     var allVersionColumns = http.getAllColumns('files', true);
 
     var attachmentView = coreSettings.get('folder/mailattachments', {});
@@ -671,7 +671,7 @@ define('io.ox/files/api', [
                     module = 'folders';
                     params.action = 'list';
                     // use correct columns for folders (causes errors in backend otherwise, UI just get's null values)
-                    params.columns = '1,2,3,5,20,23';
+                    params.columns = '1,2,3,5,20,23,51,52';
                 }
             }
             if (virtual) {

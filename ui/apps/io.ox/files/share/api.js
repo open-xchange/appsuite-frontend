@@ -290,6 +290,7 @@ define('io.ox/files/share/api', [
             var columns = [
                 'id',
                 'created_by',
+                'created_from',
                 'last_modified',
                 'title',
                 'module',
