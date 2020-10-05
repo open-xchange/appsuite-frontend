@@ -53,6 +53,8 @@ define('io.ox/chat/views/messages', [
         id: 'reply',
         index: 300,
         draw: function (baton) {
+            // no reply to for own messages
+            if (baton.model.isMyself()) return;
             this.append($('<li role="presentation">').append($('<a href="#" role="menuitem" tabindex="-1">').text(gt('Reply')).on('click', function () {
                 baton.view.trigger('replyToMessage', baton.model);
             })));

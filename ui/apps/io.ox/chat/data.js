@@ -218,7 +218,7 @@ define('io.ox/chat/data', [
 
         getFileUrl: function (file) {
             var room = data.chats.get(this.get('roomId'));
-            if (room.isChannel()) return api.url + '/channels/' + this.get('roomId') + '/files/' + file.fileId;
+            if (room && room.isChannel()) return api.url + '/channels/' + this.get('roomId') + '/files/' + file.fileId;
             return api.url + '/files/' + file.fileId;
         },
 
@@ -242,7 +242,7 @@ define('io.ox/chat/data', [
             var image = $('<div>').attr({
                 src: url,
                 'data-cmd': 'show-message-file',
-                'data-room-id': this.collection.roomId,
+                'data-room-id': this.collection ? this.collection.roomId : '',
                 'data-file-id': fileId,
                 'data-message-id': this.get('messageId')
             });

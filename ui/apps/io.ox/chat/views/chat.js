@@ -418,7 +418,7 @@ define('io.ox/chat/views/chat', [
         onCancelSpecialMode: function () {
             this.$editor.val('').focus();
             if (this.$messageReference) this.$messageReference.remove();
-            this.$el.find('.controls').removeClass('edit-mode reply-mode');
+            this.$el.find('.controls').removeClass('edit-mode reply-mode system text preview');
             this.specialMode = false;
             this.messageReference = null;
         },
@@ -463,7 +463,7 @@ define('io.ox/chat/views/chat', [
                 );
 
             this.$editor.before(this.$messageReference).focus();
-            this.$el.find('.controls').addClass('reply-mode');
+            this.$el.find('.controls').addClass('reply-mode ' + message.getType());
             this.specialMode = 'reply';
             this.messageReference = message;
         },
@@ -548,7 +548,7 @@ define('io.ox/chat/views/chat', [
                 api.editMessage(content, this.messageReference);
                 this.onCancelSpecialMode();
             } else if (this.specialMode === 'reply') {
-                this.model.postMessage({ content: content, sender: data.user.email, replyTo: { content: this.messageReference.get('content'), sender: this.messageReference.get('sender') } });
+                this.model.postMessage({ content: content, sender: data.user.email, replyTo: this.messageReference.attributes });
                 this.onCancelSpecialMode();
             } else {
                 var message = { content: content, sender: data.user.email };

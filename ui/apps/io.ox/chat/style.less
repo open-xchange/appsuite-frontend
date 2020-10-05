@@ -794,6 +794,12 @@
                 background-color: #cecece;
                 width: 100%;
             }
+
+            // keep replied to images small
+            .preview-wrapper {
+                max-width: 150px;
+                max-height: 150px;
+            }
         }
 
         &.myself .message.replied-to-message {
@@ -881,6 +887,13 @@
             right: 96px;
             top: 16px;
 
+            &.preview .content {
+                background-color: #eee;
+                border-radius: 8px;
+                display: inline-block;
+                padding: 4px 8px 8px 8px;
+            }
+
             .content {
                 max-width: 100%;
 
@@ -896,15 +909,29 @@
                     overflow: hidden;
                     max-width: 100%;
                     margin-bottom: -5px;
+
+                    // keep previews small in the editor
+                    .preview-wrapper {
+                        max-width: 150px;
+                        max-height: 150px;
+                    }
                 }
             }
         }
 
         &.reply-mode{
-            // 80px textares + 52px reference Message +  8px Padding
+            // 80px textarea + 52px reference Message +  8px Padding
             height: 140px;
             textarea {
                 padding-top: 60px;
+            }
+        }
+
+        &.reply-mode.preview{
+            // 80px textarea + 178px reference Message +  8px Padding
+            height: 266px;
+            textarea {
+                padding-top: 186px;
             }
         }
 
