@@ -119,7 +119,6 @@ define('io.ox/contacts/widgets/pictureUpload', [
             }
             if (!file || !(file.lastModified || file.lastModifiedDate)) {
                 // webcam snapshot
-                console.log('%c' + 'onChangeFile:no-file', 'color: white; background-color: orange');
                 if (this.model.get('save')) this.trigger('standalone:save');
                 return;
             }
@@ -132,7 +131,6 @@ define('io.ox/contacts/widgets/pictureUpload', [
                     image1_data_url: content
                 });
                 // uploaded image
-                console.log('%c' + 'onChangeFile:file', 'color: white; background-color: orange');
                 if (this.model.get('save')) this.trigger('standalone:save');
             }.bind(this));
         },
