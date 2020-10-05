@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C303317] Welcome Tour', (I, mail) => {
+Scenario.skip('[C303317] Welcome Tour', (I, mail) => {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
