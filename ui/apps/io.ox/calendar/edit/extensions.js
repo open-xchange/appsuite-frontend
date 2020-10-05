@@ -897,9 +897,9 @@ define('io.ox/calendar/edit/extensions', [
                     // force true boolean
                     var disabled = !!(folderAPI.pool.getModel(this.model.get('folder')).is('public') || isNotOrganizer || isException);
                     checkboxView.$el.toggleClass('disabled', disabled).find('input').attr('aria-disabled', disabled).prop('disabled', disabled ? 'disabled' : null);
-                    // if checkbox is disabled this means attendeePrivileges must be set to DEFAULT because MODIFY is not supported. Would cause error on save otherwise
-                    // only organizer is allowed to change this
-                    if (disabled && !isNotOrganizer) this.model.set('attendeePrivileges', 'DEFAULT');
+                    // if checkbox is disabled this means attendeePrivileges must be set to DEFAULT because MODIFY is not supported. Would cause error on save otherwisexd
+                    // no changes if you are not the organizer or if this is an exception. We need to leave the value as is
+                    if (disabled && !(isNotOrganizer || isException)) this.model.set('attendeePrivileges', 'DEFAULT');
                 }.bind(this);
 
             onChangeFolder();
