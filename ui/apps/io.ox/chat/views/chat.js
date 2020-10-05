@@ -447,13 +447,15 @@ define('io.ox/chat/views/chat', [
         onFileupload: function () {
             var $input = this.$('.file-upload-input'),
                 files = _.toArray($input[0].files),
-                sizeLimit = settings.get('chat/maxFileSize');
+                sizeLimit = settings.get('chat/maxFileSize', -1);
 
-            for (var i = 0; i < files.length; i++) {
-                if (files[i].size > sizeLimit) {
-                    notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', files[i].name, strings.fileSize(sizeLimit)));
-                    $input.val('');
-                    return;
+            if (sizeLimit > 0) {
+                for (var i = 0; i < files.length; i++) {
+                    if (files[i].size > sizeLimit) {
+                        notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', files[i].name, strings.fileSize(sizeLimit)));
+                        $input.val('');
+                        return;
+                    }
                 }
             }
 
