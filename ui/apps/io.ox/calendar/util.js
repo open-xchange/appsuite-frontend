@@ -1223,35 +1223,43 @@ define('io.ox/calendar/util', [
         showRecurrenceDialog: function (model, options) {
             if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
             if (model.get('recurrenceId')) {
-                options = options || {};
-                var text,
-                    teaser = gt('This appointment is part of a series.'),
-                    dialog = new ModalDialog({
-                        width: 600
-                    }).addCancelButton({ left: true });
-                if (!options.dontAllowExceptions) dialog.addButton({ label: gt('Edit this appointment'), action: 'appointment', className: 'btn-default' });
-
-                if (model.hasFlag('first_occurrence')) {
-                    if (options.dontAllowExceptions) return $.when('series');
-                    text = gt('Do you want to edit the whole series or just this appointment within the series?');
-                    dialog.addButton({ label: gt('Edit series'), action: 'series' });
-                } else if (model.hasFlag('last_occurrence') && !options.allowEditOnLastOccurence) {
-                    return $.when('appointment');
-                } else if (options.dontAllowExceptions) {
-                    text = gt('Do you want to edit this and all future appointments or the whole series?');
-                    dialog.addButton({ label: gt('Series'), action: 'series', className: 'btn-default' });
-                    dialog.addButton({ label: gt('Edit all future appointments'), action: 'thisandfuture' });
-                } else {
-                    text = gt('Do you want to edit this and all future appointments or just this appointment within the series?');
-                    dialog.addButton({ label: gt('Edit all future appointments'), action: 'thisandfuture' });
-                }
-                dialog.build(function () {
-                    this.$title.text(gt('Edit appointment'));
-                    this.$body.append(teaser, '\u00a0', text);
-                }).open();
                 var def = $.Deferred();
-                dialog.on('action', function (value) {
-                    def.resolve(value);
+                require(['io.ox/calendar/api'], function (calendarAPI) {
+                    calendarAPI.get({ id: model.get('seriesId'), folder: model.get('folder') }, false).done(function (masterModel) {
+                        options = options || {};
+                        var text,
+                            teaser = gt('This appointment is part of a series.'),
+                            dialog = new ModalDialog({
+                                width: 600
+                            }).addCancelButton({ left: true });
+                        if (!options.dontAllowExceptions) dialog.addButton({ label: gt('Edit this appointment'), action: 'appointment', className: 'btn-default' });
+
+                        if (model.hasFlag('first_occurrence')) {
+                            if (options.dontAllowExceptions) return def.resolve('series', masterModel);
+                            text = gt('Do you want to edit the whole series or just this appointment within the series?');
+                            dialog.addButton({ label: gt('Edit series'), action: 'series' });
+                        } else if (model.hasFlag('last_occurrence') && !options.allowEditOnLastOccurence) {
+                            return def.resolve('appointment');
+                        } else if (options.dontAllowExceptions) {
+                            text = gt('Do you want to edit this and all future appointments or the whole series?');
+                            dialog.addButton({ label: gt('Series'), action: 'series', className: 'btn-default' });
+                            dialog.addButton({ label: gt('Edit all future appointments'), action: 'thisandfuture' });
+                        } else {
+                            text = gt('Do you want to edit this and all future appointments or just this appointment within the series?');
+                            dialog.addButton({ label: gt('Edit all future appointments'), action: 'thisandfuture' });
+                        }
+                        dialog.build(function () {
+                            this.$title.text(gt('Edit appointment'));
+                            this.$body.append(teaser, '\u00a0', text);
+                        }).open();
+                        dialog.on('action', function (value) {
+                            def.resolve(value, masterModel);
+                        });
+                        return def;
+                    // in some rare cases we have series exceptions without a series master (don't ask me how someone achieves this). We only edit this single appointment then
+                    }).fail(function () {
+                        def.resolve('appointment');
+                    });
                 });
                 return def;
             }
