@@ -54,7 +54,6 @@ run e2e tests:
 # deploy e2e environment to well-known location - can be used to develop e2e tests against
 trigger appsuite-stack deployment pipeline:
   stage: deploy
-  dependencies: []
   variables:
     ENVIRONMENT: $CI_COMMIT_REF_SLUG
   trigger:
