@@ -133,55 +133,6 @@ define('io.ox/chat/views/messages', [
             return message;
         },
 
-        onKeydownMenuToggle: function (e) {
-            if (!e || !e.which || !this.menu) return;
-            switch (e.which) {
-                // up arrow
-                case 38:
-                    this.menu.find('li').last().focus();
-                    e.preventDefault();
-                    break;
-                // enter or down arrow
-                case 40:
-                case 13:
-                    this.menu.find('li').first().focus();
-                    e.preventDefault();
-                    break;
-                // no default
-            }
-        },
-
-        onKeydownMenuItem: function (e) {
-            if (!e || !e.which || !this.menu) return;
-            var items = this.menu.find('li'),
-                index = items.index(e.target);
-
-            switch (e.which) {
-                // up arrow
-                case 38:
-                    index = (index === 0 ? items.length - 1 : items.index(e.target) - 1);
-                    items[index].focus();
-                    e.preventDefault();
-                    break;
-                // down arrow
-                case 40:
-                    index = (index === items.length - 1 ? 0 : items.index(e.target) + 1);
-                    items[index].focus();
-                    e.preventDefault();
-                    break;
-                // enter
-                case 13:
-                    $(e.target).trigger('click');
-                    break;
-                // esc
-                case 27:
-                    e.stopPropagation();
-                    this.menu.parent().find('.actions').focus();
-                    break;
-                // no default
-            }
-        },
-
         renderFoot: function (model) {
             return $('<div class="foot">').append(
                 // time
