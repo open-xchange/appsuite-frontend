@@ -19,9 +19,8 @@ define('io.ox/chat/data', [
     'io.ox/mail/sanitizer',
     'io.ox/chat/util',
     'io.ox/core/http',
-    'gettext!io.ox/chat',
-    'io.ox/core/notifications'
-], function (api, events, contactsApi, switchboardApi, sanitizer, util, http, gt, notifications) {
+    'gettext!io.ox/chat'
+], function (api, events, contactsApi, switchboardApi, sanitizer, util, http, gt) {
 
     'use strict';
 
@@ -213,13 +212,13 @@ define('io.ox/chat/data', [
                     return gt('Message could not be loaded');
                 default:
                     //#. %1$s: messagetext
-                    return gt('Unknown system message: %1$s', event.type);
+                    return gt('Unknown system message %1$s', event.type);
             }
         },
 
         getFileUrl: function (file) {
             var room = data.chats.get(this.get('roomId'));
-            if (room.isChannel()) return api.url + '/channels/' + this.get('roomId') + '/files/' + file.fileId;
+            if (room && room.isChannel()) return api.url + '/channels/' + this.get('roomId') + '/files/' + file.fileId;
             return api.url + '/files/' + file.fileId;
         },
 
@@ -243,7 +242,7 @@ define('io.ox/chat/data', [
             var image = $('<div>').attr({
                 src: url,
                 'data-cmd': 'show-message-file',
-                'data-room-id': this.collection.roomId,
+                'data-room-id': this.collection ? this.collection.roomId : '',
                 'data-file-id': fileId,
                 'data-message-id': this.get('messageId')
             });
@@ -359,6 +358,8 @@ define('io.ox/chat/data', [
             }
         }
     });
+
+    data.MessageModel = MessageModel;
 
     var messageCache = (function () {
         var cache = {},
@@ -688,15 +689,6 @@ define('io.ox/chat/data', [
         isGroup: function () { return this.get('type') === 'group'; },
         isChannel: function () { return this.get('type') === 'channel'; },
 
-        handleError: function (response) {
-            var errorCode = response.responseJSON ? response.responseJSON.errorCode : response.responseText;
-
-            switch (errorCode) {
-                case 'filesize:exceeded': return notifications.yell('error', gt('The uploaded file exceeds the size limit'));
-                default: notifications.yell('error', gt('Something went wrong. Please try again.'));
-            }
-        },
-
         postMessage: function (attr, files) {
             if (this.isNew()) return this.postFirstMessage(attr, files);
             attr.roomId = this.get('roomId');
@@ -711,14 +703,8 @@ define('io.ox/chat/data', [
                 contentType: false,
                 success: function (model) {
                     model.setInitialDeliveryState();
-                    if (files) {
-                        // remove message, there is a good change it was added meanwhile by socket message:new, we don't want 2 copies of the same message
-                        // todo don't send message:new to this session
-                        this.messages.remove({ messageId: model.get('messageId') });
-                        this.messages.add(model, { merge: true });
-                    }
-                }.bind(this)
-            }).fail(this.handleError.bind(this));
+                }
+            });
 
             this.set('active', true);
         },
@@ -730,7 +716,7 @@ define('io.ox/chat/data', [
 
             this.save(attr, { hiddenAttr: hiddenAttr }).then(function () {
                 events.trigger('cmd', { cmd: 'show-chat', id: this.get('roomId') });
-            }.bind(this), this.handleError.bind(this));
+            }.bind(this));
         },
 
         toggleRecent: function () {
@@ -1056,7 +1042,7 @@ define('io.ox/chat/data', [
     //
 
     function getName(email) {
-        //#. shown instead of your name for your own chat messages, stand-alone word / not concatenated
+        //#. shown instead of your name for your own chat messages
         if (email === data.user.email) return '<span class="name">' + gt('You') + '</span>';
         return getNames([email]);
     }
@@ -1067,7 +1053,7 @@ define('io.ox/chat/data', [
             .map(function (email) {
                 var model = data.users.getByMail(email);
                 var name = (model ? model.getName() : gt('Unknown user'));
-                //#. shown instead of your name for your own chat messages, stand-alone word / not concatenated
+                //#. shown instead of your name for your own chat messages
                 if (email === data.user.email) name = gt('You');
 
                 return '<span class="name">' + name + '</span>';

@@ -22,13 +22,11 @@ define('io.ox/chat/views/chat', [
     'io.ox/chat/views/reference-preview',
     'io.ox/chat/events',
     'io.ox/chat/data',
+    'io.ox/chat/util',
     'io.ox/backbone/views/toolbar',
     'gettext!io.ox/chat',
-    'io.ox/core/tk/visibility-api-util',
-    'io.ox/core/strings',
-    'io.ox/core/notifications',
-    'settings!io.ox/core'
-], function (ext, api, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, ToolbarView, gt, visibilityApi, strings, notifications, settings) {
+    'io.ox/core/tk/visibility-api-util'
+], function (ext, api, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, util, ToolbarView, gt, visibilityApi) {
 
     'use strict';
 
@@ -148,7 +146,7 @@ define('io.ox/chat/views/chat', [
             'click .jump-down': 'onJumpDown',
             'change .file-upload-input': 'onFileupload',
             'click button[data-download]': 'onFileDownload',
-            'click .cancel-btn': 'onCancelEditMode'
+            'click .cancel-btn': 'onCancelSpecialMode'
         },
 
         initialize: function (options) {
@@ -175,7 +173,8 @@ define('io.ox/chat/views/chat', [
                 'before:add': this.onBeforeAdd,
                 'after:add': this.onAfterAdd,
                 'delete': this.onDelete,
-                'editMessage': this.onEditMessage
+                'editMessage': this.onEditMessage,
+                'replyToMessage': this.onReplyToMessage
             });
 
             this.on('dispose', this.onDispose);
@@ -416,7 +415,18 @@ define('io.ox/chat/views/chat', [
             });
         },
 
+        onCancelSpecialMode: function () {
+            this.$editor.val('').focus();
+            if (this.$messageReference) this.$messageReference.remove();
+            this.$el.find('.controls').removeClass('edit-mode reply-mode system text preview');
+            this.specialMode = false;
+            this.messageReference = null;
+        },
+
         onEditMessage: function (message) {
+            //clean up
+            this.onCancelSpecialMode();
+
             var messageNode = this.getMessageNode(message);
             // scroll to edited message
             if (messageNode) {
@@ -424,13 +434,38 @@ define('io.ox/chat/views/chat', [
             }
             this.$editor.val(message.get('content')).focus();
             this.$el.find('.controls').addClass('edit-mode');
-            this.editMode = message;
+            this.specialMode = 'edit';
+            this.messageReference = message;
         },
 
-        onCancelEditMode: function () {
-            this.$editor.val('').focus();
-            this.$el.find('.controls').removeClass('edit-mode');
-            this.editMode = false;
+        onReplyToMessage: function (message) {
+            // clean up
+            this.onCancelSpecialMode();
+
+            var messageNode = this.getMessageNode(message),
+                user = data.users.getByMail(message.get('sender'));
+            // scroll to cited message
+            if (messageNode) {
+                this.$scrollpane.scrollTop(messageNode[0].offsetTop - this.$scrollpane.height() + messageNode.height() + 4);
+            }
+
+            this.$messageReference = $('<div class="reference-message message">')
+                .addClass(message.getType())
+                .toggleClass('emoji', util.isOnlyEmoji(message.getBody()))
+                .append(
+                    $('<div class="content">').append(
+                        // sender name
+                        $('<div class="sender">').text(user.getName()),
+                        // message body
+                        $('<div class="body">')
+                            .html(message.getBody())
+                    )
+                );
+
+            this.$editor.before(this.$messageReference).focus();
+            this.$el.find('.controls').addClass('reply-mode ' + message.getType());
+            this.specialMode = 'reply';
+            this.messageReference = message;
         },
 
         scrollToBottom: function () {
@@ -454,10 +489,10 @@ define('io.ox/chat/views/chat', [
         },
 
         onEditorKeydown: function (e) {
-            if (e.which === 27 && this.editMode) {
+            if (e.which === 27 && this.specialMode) {
                 e.preventDefault();
                 e.stopPropagation();
-                this.onCancelEditMode();
+                this.onCancelSpecialMode();
             }
 
             if (e.which === 13) {
@@ -484,18 +519,7 @@ define('io.ox/chat/views/chat', [
 
         onFileupload: function () {
             var $input = this.$('.file-upload-input'),
-                files = _.toArray($input[0].files),
-                sizeLimit = settings.get('chat/maxFileSize', -1);
-
-            if (sizeLimit > 0) {
-                for (var i = 0; i < files.length; i++) {
-                    if (files[i].size > sizeLimit) {
-                        notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', files[i].name, strings.fileSize(sizeLimit)));
-                        $input.val('');
-                        return;
-                    }
-                }
-            }
+                files = _.toArray($input[0].files);
 
             this.model.postMessage({ content: '' }, files.length === 1 ? files[0] : files);
 
@@ -520,10 +544,12 @@ define('io.ox/chat/views/chat', [
 
             data.socket.emit('typing', { roomId: this.model.id, state: false });
 
-            if (this.editMode) {
-                api.editMessage(content, this.editMode);
-                this.editMode = false;
-                this.$el.find('.controls').removeClass('edit-mode');
+            if (this.specialMode === 'edit') {
+                api.editMessage(content, this.messageReference);
+                this.onCancelSpecialMode();
+            } else if (this.specialMode === 'reply') {
+                this.model.postMessage({ content: content, sender: data.user.email, replyTo: this.messageReference.attributes });
+                this.onCancelSpecialMode();
             } else {
                 var message = { content: content, sender: data.user.email };
                 if (this.reference) message.reference = this.reference;

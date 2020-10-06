@@ -28,6 +28,7 @@
 @red: #D32F2F;
 @blue: #3c73aa;
 @lightblue: #0278D4;
+@darkblue: #004f8c;
 @lightgray: #ccc;
 @gray: #707070;
 @black: #303030;
@@ -324,7 +325,7 @@
                 &:hover { background-color: transparent; }
             }
 
-            &:hover, &:focus, &.active {
+            &:hover, &:focus {
                 background-color: white;
             }
 
@@ -642,7 +643,7 @@
             padding: 0 0 0 128px;
             display: flex;
 
-            .sender {
+            >.sender {
                 display: none;
             }
             .delivery.server, .delivery.client {
@@ -779,6 +780,36 @@
                 .time { color: #333; }
             }
         }
+
+        .message.replied-to-message {
+            padding: 0;
+            margin: 0px -8px 8px -8px;
+
+            .sender {
+                color: #000;
+                margin-bottom: 0;
+            }
+            .content {
+                padding: 4px 8px;
+                background-color: #cecece;
+                width: 100%;
+            }
+
+            // keep replied to images small
+            .preview-wrapper {
+                max-width: 150px;
+                max-height: 150px;
+            }
+        }
+
+        &.myself .message.replied-to-message {
+            .sender {
+                color: #fff;
+            }
+            .content {
+                background-color: @darkblue;
+            }
+        }
     }
 
     .icon{
@@ -848,7 +879,63 @@
             }
         }
 
-        &.edit-mode {
+        .reference-message {
+            position: absolute;
+            padding: 0;
+            margin: 0;
+            left: 16px;
+            right: 96px;
+            top: 16px;
+
+            &.preview .content {
+                background-color: #eee;
+                border-radius: 8px;
+                display: inline-block;
+                padding: 4px 8px 8px 8px;
+            }
+
+            .content {
+                max-width: 100%;
+
+                .sender {
+                    color: #000;
+                    padding: 0;
+                    margin: 0;
+                }
+
+                .body {
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    max-width: 100%;
+                    margin-bottom: -5px;
+
+                    // keep previews small in the editor
+                    .preview-wrapper {
+                        max-width: 150px;
+                        max-height: 150px;
+                    }
+                }
+            }
+        }
+
+        &.reply-mode{
+            // 80px textarea + 52px reference Message +  8px Padding
+            height: 140px;
+            textarea {
+                padding-top: 60px;
+            }
+        }
+
+        &.reply-mode.preview{
+            // 80px textarea + 178px reference Message +  8px Padding
+            height: 266px;
+            textarea {
+                padding-top: 186px;
+            }
+        }
+
+        &.edit-mode, &.reply-mode {
             .cancel-btn {
                 display: block;
             }
