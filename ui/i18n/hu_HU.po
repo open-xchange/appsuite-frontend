@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-07-02 11:26+0200\n"
+"PO-Revision-Date: 2020-10-06 11:11+0200\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -9195,6 +9195,14 @@ msgid "Couldn't load editor"
 msgstr "A szerkesztő nem tölthető be."
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Saving..."
+msgstr "Mentés..."
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Saved"
+msgstr "Mentve"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Piszkozat törlése"
@@ -12510,6 +12518,12 @@ msgstr "Új csoport létrehozása"
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid "Remove member"
 msgstr "Tag eltávolítása"
+
+#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
+msgid ""
+"This dialog is limited to %1$d entries and this group exceeds this "
+"limitation. Therefore, some entries are not listed."
+msgstr ""
 
 #. %1$d is the number of members
 #: apps/plugins/administration/groups/settings/pane.js module:io.ox/core

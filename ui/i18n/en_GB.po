@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-07-02 11:21+0200\n"
+"PO-Revision-Date: 2020-10-06 11:07+0200\n"
 "Last-Translator: timothy <timothy@workshop-chapina.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
@@ -9165,6 +9165,14 @@ msgid "Couldn't load editor"
 msgstr "Could not load editor"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Saving..."
+msgstr "Saving..."
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Saved"
+msgstr "Saved"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Delete draft"
@@ -12469,6 +12477,12 @@ msgstr "Create new group"
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid "Remove member"
 msgstr "Remove member"
+
+#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
+msgid ""
+"This dialog is limited to %1$d entries and this group exceeds this "
+"limitation. Therefore, some entries are not listed."
+msgstr ""
 
 #. %1$d is the number of members
 #: apps/plugins/administration/groups/settings/pane.js module:io.ox/core
