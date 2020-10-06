@@ -22,43 +22,27 @@ define('io.ox/files/upload/file-folder', [
 
     var fileFolderUpload = {};
 
-    function handleFilesUpload(updatedTreeArr, fileObjArray, folder, app) {
+    function handleFilesUpload(updatedTreeArr, rootFolder, app) {
         var dirAndFilesObj = {};
-        dirAndFilesObj[folder] = [];
 
-        fileObjArray.forEach(function (entryObj) {
-            if (!entryObj.preventFileUpload) {
-                var file = entryObj.file;
-                var fullPath = entryObj.fullPath;
-
-                if (fullPath[0] === '/') {
-                    fullPath = fullPath.substring(1);
-                }
-
-                var pathSplit = fullPath.split('/');
-                pathSplit.pop();
-                var parentName = pathSplit.length > 0 ? pathSplit[(pathSplit.length - 1)] : null;
-                var parentIndex = parentName ? (pathSplit.length - 1) : null;
-
-                if (parentIndex === null) {
-                    dirAndFilesObj[folder].push(file);
+        updatedTreeArr.forEach(function (treelayer, layerIndex) {
+            treelayer.forEach(function (item) {
+                if (!item.isFile || item.preventFileUpload) return;
+                var itemFolderId;
+                if (layerIndex === 0) { // is root
+                    itemFolderId = rootFolder;
                 } else {
-                    updatedTreeArr[parentIndex].forEach(function (entry) {
-                        if (!entry.isFile && entry.name === parentName) {
-
-                            if (!dirAndFilesObj[entry.id]) {
-                                dirAndFilesObj[entry.id] = [];
-                            }
-
-                            dirAndFilesObj[entry.id].push(file);
-                        }
-                    });
+                    var parentFolderOfItem = updatedTreeArr[layerIndex - 1].find(function (parent) { return parent.isFile === false && item.parentPath === parent.path; });
+                    itemFolderId = parentFolderOfItem.id;
                 }
-            }
+
+                if (!dirAndFilesObj[itemFolderId]) { dirAndFilesObj[itemFolderId] = []; }
+                dirAndFilesObj[itemFolderId].push(item.file);
+            });
         });
 
         var folderIdArr = Object.keys(dirAndFilesObj);
-        var triggerFileUpload = function () {
+        var triggerFileUpload = function () { // trigger upload per level
 
             if (folderIdArr.length > 0) {
                 var dirId = folderIdArr.shift();
@@ -91,7 +75,7 @@ define('io.ox/files/upload/file-folder', [
         var isDirExist = function (index, info) {
             var targetArr = tree[index.toString()];
             return targetArr.find(function (item) {
-                return (item.name === info.name && item.parentIndex === info.parentIndex && item.isFile === info.isFile);
+                return (item.path === info.path && item.parentIndex === info.parentIndex && item.isFile === info.isFile);
             });
         };
 
@@ -103,7 +87,7 @@ define('io.ox/files/upload/file-folder', [
             }
 
             var fpSplit = fp.split('/');
-            fpSplit.forEach(function (dir, index) {
+            fpSplit.forEach(function (dir, index) { // go though each path segment
 
                 var info = {
                     isFile: obj.isEmptyFolder ? false : !fpSplit[(index + 1)],
@@ -111,7 +95,11 @@ define('io.ox/files/upload/file-folder', [
                     parentName: index === 0 ? null : fpSplit[(index - 1)],
                     name: fpSplit[index],
                     index: index,
-                    id: null
+                    id: null,
+                    file: (obj.isEmptyFolder ? false : !fpSplit[(index + 1)]) ? obj.file : null,
+                    path: _.first(fpSplit, index + 1).join('/'),
+                    parentPath: index === 0 ? null : _.first(fpSplit, index).join('/'),
+                    preventFileUpload: obj.preventFileUpload
                 };
 
                 if (tree[index.toString()]) {
@@ -139,15 +127,15 @@ define('io.ox/files/upload/file-folder', [
                 return folder;
             }
 
-            var group = updatedTreeArr[info.parentIndex];
-            if (!group) { return folder; }
+            var parentGroup = updatedTreeArr[info.parentIndex];
+            if (!parentGroup) { return folder; }
 
-            var item = group.find(function (item) {
-                return item.name === info.parentName && item.isFile === false;
+            var parent = parentGroup.find(function (parentItem) { // find parent info item
+                return parentItem.isFile === false && parentItem.path === info.parentPath;
             });
 
-            if (item) {
-                return item.id;
+            if (parent) {
+                return parent.id;
             }
 
             return folder;
@@ -159,7 +147,7 @@ define('io.ox/files/upload/file-folder', [
 
             var triggerCreate = function () {
                 var item = itemArr.shift();
-
+                // FILE
                 if (item.isFile) {
                     newItemArr.push(item);
 
@@ -175,11 +163,11 @@ define('io.ox/files/upload/file-folder', [
                         }
                     }
                 } else {
-
+                // FOLDER
                     folderApi.create(getParentFolderId(item, updatedTreeArr), { title: $.trim(item.name), module: module })
                         .then(
                             function (data) {
-                                item.id = data.id;
+                                item.id = data.id; // update with real folder id
                                 newItemArr.push(item);
 
                                 if (itemArr.length !== 0) {
@@ -187,6 +175,7 @@ define('io.ox/files/upload/file-folder', [
                                 } else {
                                     updatedTreeArr.push(newItemArr);
                                     if (treeArr.length !== 0) {
+
                                         moveFromTreeArrToUpdatedTreeArr();
                                     } else {
                                         folderReady.resolve(updatedTreeArr);
@@ -238,9 +227,10 @@ define('io.ox/files/upload/file-folder', [
             _.map(fileObjArray, function (item) { return item.preventFileUpload ? false : _.pick(item, 'file').file; }),
             function (item) { return item !== false; }
         );
+
         fileUpload.create.validateFiles(allFilesToUpload, { folder: folder })
             .then(function () { return initiateDirCreation(createTreeObj(fileObjArray), folder, module); })
-            .then(function (updatedTreeArr) { handleFilesUpload(updatedTreeArr, fileObjArray, folder, app); });
+            .then(function (updatedTreeArr) { handleFilesUpload(updatedTreeArr, folder, app); });
 
     };
 
