@@ -14,8 +14,9 @@
 
 define('io.ox/mail/actions/source', [
     'gettext!io.ox/mail',
-    'io.ox/mail/api'
-], function (gt, api) {
+    'io.ox/mail/api',
+    'io.ox/core/notifications'
+], function (gt, api, notifications) {
 
     'use strict';
 
@@ -73,6 +74,13 @@ define('io.ox/mail/actions/source', [
                         _.defer(function () {
                             self.$el.find('textarea.mail-source-view').scrollTop(0);
                         });
+                    }).fail(function (e) {
+                        if (e.code === 'MSG-0032') {
+                            var cid = _.cid(data), collection = baton.app.listView.collection;
+                            collection.remove(cid);
+                        } else api.refresh();
+                        notifications.yell(e);
+                        self.close();
                     });
                 })
                 .busy(true)
