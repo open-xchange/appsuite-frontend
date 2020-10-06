@@ -30,7 +30,6 @@ define('io.ox/files/contextmenu', ['io.ox/core/extensions', 'gettext!io.ox/core'
             ['download-folder', '30', gt('Download entire folder')],
             // #4
             ['invite', '40', gt('Permissions / Invite people')],
-            ['getalink', '40', gt('Create sharing link')],
             // #5
             ['rename', '50', gt('Rename')],
             ['move', '50', gt('Move')],

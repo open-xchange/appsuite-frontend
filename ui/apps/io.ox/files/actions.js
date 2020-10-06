@@ -1214,15 +1214,6 @@ define('io.ox/files/actions', [
             caption: gt('Every recipient gets an individual link. Guests can also create and change files.'),
             section: 'invite',
             ref: 'io.ox/files/actions/invite'
-        },
-        {
-            index: 200,
-            id: 'getalink',
-            title: gt('Create sharing link'),
-            //#. sharing: a link will be created
-            caption: gt('Everybody gets the same link. The link just allows to view the file or folder.'),
-            section: 'link',
-            ref: 'io.ox/files/actions/getalink'
         }
     );
 
@@ -1303,14 +1294,6 @@ define('io.ox/files/actions', [
             mobile: 'lo',
             title: gt('Invite people'),
             ref: 'io.ox/files/actions/invite',
-            section: 'share'
-        },
-        {
-            id: 'getalink',
-            prio: 'lo',
-            mobile: 'lo',
-            title: gt('Create sharing link'),
-            ref: 'io.ox/files/actions/getalink',
             section: 'share'
         },
         {

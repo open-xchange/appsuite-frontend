@@ -269,13 +269,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'share',
                     ref: 'io.ox/files/actions/invite'
                 },
-                'sharelink': {
-                    prio: 'none',
-                    mobile: 'lo',
-                    title: gt('Create sharing link'),
-                    section: 'share',
-                    ref: 'io.ox/files/actions/getalink'
-                },
                 'sendbymail': {
                     prio: 'lo',
                     mobile: 'lo',

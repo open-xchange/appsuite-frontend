@@ -984,7 +984,9 @@ define('io.ox/files/share/permissions', [
                 permissionPreSelection = new PermissionPreSelection();
 
             permissionsView.setPermissionPreSelectionView(permissionPreSelection);
-            ext.point(POINT_DIALOG + '/share-settings').invoke('draw', dialog.$body, publicLink.model);
+            if (options.hasLinkSupport !== false) {
+                ext.point(POINT_DIALOG + '/share-settings').invoke('draw', dialog.$body, publicLink.model);
+            }
 
             publicLink.model.on('change:access', function (model) {
                 var accessMode = model.get('access');
@@ -1177,7 +1179,7 @@ define('io.ox/files/share/permissions', [
                 dialog.$header.append(settingsButton);
 
                 dialog.$body.append(
-                    publicLink.render().$el,
+                    (options.hasLinkSupport === false ? '' : publicLink.render().$el),
                     // Invite people pane
                     $('<div id="invite-people-pane" class="share-pane invite-people"></div>').append(
                         // Invite people header
@@ -1276,13 +1278,8 @@ define('io.ox/files/share/permissions', [
             }
 
             function openSettings() {
-                // var copy = _.clone(publicLink.model.attributes);
-                // var newModel = new Backbone.Model(copy);
-                var settingsView = new shareSettings.ShareSettingsView({ model: publicLink.model });
-                //var settingsView = new shareSettings.ShareSettingsView({ model: newModel });
+                var settingsView = new shareSettings.ShareSettingsView({ model: publicLink.model, hasLinkSupport: options.hasLinkSupport });
                 settingsView.on('changePublicLinkSettings', function (model) {
-                    // publicLink.model.attributes.secured = model.get('secured');
-                    // publicLink.model.attributes.password = model.get('password');
                     console.log('Change ', model);
                     console.log('Existsing ', publicLink.model);
                     // publicLink.model.set('secured', model.get('secured'));

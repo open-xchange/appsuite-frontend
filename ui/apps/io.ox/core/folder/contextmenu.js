@@ -453,16 +453,7 @@ define('io.ox/core/folder/contextmenu', [
                 var id = e.data.id;
                 require(['io.ox/files/api', 'io.ox/files/share/permissions'], function (filesApi, controller) {
                     var linkModel = new filesApi.Model(api.pool.getModel(id).toJSON());
-                    controller.showFolderPermissions(id, [linkModel]);
-                });
-            }
-
-            function getALink(e) {
-                e.preventDefault();
-                var id = e.data.id;
-                ox.load(['io.ox/files/api', 'io.ox/files/actions/share']).done(function (filesApi, action) {
-                    var model = new filesApi.Model(api.pool.getModel(id).toJSON());
-                    action.link([model]);
+                    controller.showFolderPermissions(id, [linkModel], { hasLinkSupport: e.data.hasLinkSupport });
                 });
             }
 
@@ -493,21 +484,10 @@ define('io.ox/core/folder/contextmenu', [
                 if (supportsInternal || showInvitePeople) {
                     contextUtils.addLink(this, {
                         action: 'invite',
-                        data: { app: baton.app, id: id },
+                        data: { app: baton.app, id: id, hasLinkSupport: showGetLink },
                         enabled: true,
                         handler: invite,
-                        text: showInvitePeople ? gt('Permissions / Invite people') : gt('Permissions')
-                    });
-                }
-
-                // "Create sharing link" doesn't work for mail folders
-                if (showGetLink) {
-                    contextUtils.addLink(this, {
-                        action: 'get-link',
-                        data: { app: baton.app, id: id },
-                        enabled: true,
-                        handler: getALink,
-                        text: gt('Create sharing link')
+                        text: showInvitePeople ? gt('Invite people') : gt('Permissions')
                     });
                 }
             };

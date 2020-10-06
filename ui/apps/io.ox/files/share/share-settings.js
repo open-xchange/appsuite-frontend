@@ -38,7 +38,7 @@ define('io.ox/files/share/share-settings', [
     /*
      * extension point public link title text
      */
-    ext.point(POINT_SETTINGS + '/settings').extend({
+    ext.point(POINT_SETTINGS + '/settings-public-link').extend({
         id: 'title',
         index: INDEX += 100,
         draw: function () {
@@ -50,7 +50,7 @@ define('io.ox/files/share/share-settings', [
     /*
      * extension point for expires dropdown
      */
-    ext.point(POINT_SETTINGS + '/settings').extend({
+    ext.point(POINT_SETTINGS + '/settings-public-link').extend({
         id: 'temporary',
         index: INDEX += 100,
         draw: function (baton) {
@@ -109,7 +109,7 @@ define('io.ox/files/share/share-settings', [
     /*
      * extension point for password protection
      */
-    ext.point(POINT_SETTINGS + '/settings').extend({
+    ext.point(POINT_SETTINGS + '/settings-public-link').extend({
         id: 'secured',
         index: INDEX += 100,
         draw: function (baton) {
@@ -281,11 +281,12 @@ define('io.ox/files/share/share-settings', [
     var ShareSettingsView = DisposableView.extend({
 
         className: 'share-wizard',
+        hasLinkSupport: true,
 
         initialize: function (options) {
 
             this.model = options.model;
-
+            this.hasLinkSupport = options.hasLinkSupport;
             this.baton = ext.Baton({ model: this.model, view: this });
 
             this.listenTo(this.model, 'invalid', function (model, error) {
@@ -295,6 +296,9 @@ define('io.ox/files/share/share-settings', [
 
         render: function () {
             this.$el.addClass(this.model.get('type'));
+            if (this.hasLinkSupport) {
+                ext.point(POINT_SETTINGS + '/settings-public-link').invoke('draw', this.$el, this.baton);
+            }
             ext.point(POINT_SETTINGS + '/settings').invoke('draw', this.$el, this.baton);
             return this;
         }
