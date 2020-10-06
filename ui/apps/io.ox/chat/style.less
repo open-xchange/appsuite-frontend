@@ -539,9 +539,41 @@
         margin-bottom: 8px;
         position: relative;
 
+        .message-actions-dropdown {
+            display: none;
+            height: 100%;
+            text-align: center;
+            right: 0;
+            top: 0;
+            position: absolute;
+
+            .actions-toggle {
+                text-align: center;
+                width: 20px;
+                padding: 0;
+                color: #000;
+                i {
+                    vertical-align: middle;
+                }
+            }
+
+            &.open {
+                display: block;
+            }
+        }
+
+        .content {
+            position: relative;
+        }
+
+        .content:focus-within, .content:hover .message-actions-dropdown {
+            display: block;
+        }
+
         .body {
             word-break: break-word;
             font-size: 14px;
+            display: inline-block;
         }
 
         &:last-child {
@@ -582,6 +614,11 @@
                 font-weight: normal;
             }
 
+            .flags {
+                display: inline;
+                margin-left: 4px;
+            }
+
             > * { display: inline-block; }
         }
         .state, .delivery {
@@ -597,6 +634,11 @@
             animation-duration: 3s;
         }
         &.myself {
+
+            .message-actions-dropdown .actions-toggle{
+                color: #fff;
+            }
+
             padding: 0 0 0 128px;
             display: flex;
 
@@ -784,6 +826,35 @@
 
         button {
             margin-left: 8px;
+        }
+
+        .cancel-btn {
+            display: none;
+            color: @gray;
+            background: none;
+            position: absolute;
+            font-size: 16px;
+            right: 66px;
+            width: 28px;
+            height: 28px;
+            top: 10px;
+            padding: 0px;
+
+            &:focus, &:hover {
+                color: @lightblue;
+                border-radius: 50%;
+                border: 2px solid @lightblue;
+                background: #fff;
+            }
+        }
+
+        &.edit-mode {
+            .cancel-btn {
+                display: block;
+            }
+            textarea {
+                padding-right: 32px;
+            }
         }
 
         .jump-down {

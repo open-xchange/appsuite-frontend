@@ -15,8 +15,11 @@ define('io.ox/chat/views/messages', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/data',
     'io.ox/chat/views/avatar',
-    'gettext!io.ox/chat'
-], function (DisposableView, data, Avatar, gt) {
+    'io.ox/core/extensions',
+    'gettext!io.ox/chat',
+    'io.ox/chat/events',
+    'io.ox/backbone/mini-views/dropdown'
+], function (DisposableView, data, Avatar, ext, gt, events, Dropdown) {
 
     'use strict';
 
@@ -25,6 +28,28 @@ define('io.ox/chat/views/messages', [
     function isOnlyEmoji(str) {
         return emojiRegex.test(str);
     }
+
+    ext.point('io.ox/chat/message/menu').extend({
+        id: 'edit',
+        index: 100,
+        draw: function (baton) {
+            // we cannot edit pictures or system mesages
+            if (baton.model.get('type') !== 'text') return;
+            this.append($('<li role="presentation">').append($('<a href="#" role="menuitem" tabindex="-1">').text(gt('Edit message')).on('click', function () {
+                baton.view.trigger('editMessage', baton.model);
+            })));
+        }
+    });
+
+    ext.point('io.ox/chat/message/menu').extend({
+        id: 'delete',
+        index: 200,
+        draw: function (baton) {
+            this.append($('<li role="presentation">').append($('<a href="#" role="menuitem" tabindex="-1">').text(gt('Delete message')).on('click', function () {
+                baton.view.trigger('delete', baton.model);
+            })));
+        }
+    });
 
     return DisposableView.extend({
 
@@ -43,6 +68,9 @@ define('io.ox/chat/views/messages', [
                 'change:time': this.onChangeTime,
                 'change:deliveryState': this.onChangeDelivery
             });
+            this.listenTo(events, {
+                'message:changed': this.onMessageChanged
+            });
         },
 
         render: function () {
@@ -59,12 +87,13 @@ define('io.ox/chat/views/messages', [
         },
 
         renderMessage: function (model) {
-            var body = model.getBody();
-            var message = $('<div class="message">')
+            var self = this,
+                body = model.getBody(),
+                message = $('<div class="message">')
                 // here we use cid instead of id, since the id might be unknown
                 .attr('data-cid', model.cid)
                 .addClass(model.getType())
-                .toggleClass('myself', !model.isSystem() && model.isMyself())
+                .toggleClass('myself', (!model.isSystem() || model.get('deleted')) && model.isMyself())
                 .toggleClass('highlight', !!model.get('messageId') && model.get('messageId') === this.messageId)
                 .toggleClass('emoji', isOnlyEmoji(body))
                 .append(
@@ -74,7 +103,24 @@ define('io.ox/chat/views/messages', [
                     $('<div class="content">').append(
                         $('<div class="body">')
                             .html(body)
-                            .append(this.renderFoot(model))
+                            .append(this.renderFoot(model)),
+                        // show some indicator dots when a menu is available
+                        (function () {
+                            if (model.isSystem() || !model.isMyself()) return '';
+                            var toggle = $('<button type="button" class="btn btn-link dropdown-toggle actions-toggle" aria-haspopup="true" data-toggle="dropdown">')
+                                    .attr('title', gt('Message actions'))
+                                    .append($('<i class="fa fa-ellipsis-v">')),
+                                menu = $('<ul class="dropdown-menu">'),
+                                dropdown = new Dropdown({
+                                    className: 'message-actions-dropdown dropdown',
+                                    dropup: true,
+                                    smart: true,
+                                    $toggle: toggle,
+                                    $ul: menu
+                                });
+                            ext.point('io.ox/chat/message/menu').invoke('draw', menu, ext.Baton({ view: self, model: model }));
+                            return dropdown.render().$el;
+                        })()
                     ),
                     //delivery state
                     $('<div class="fa delivery" aria-hidden="true">').addClass(model.getDeliveryState())
@@ -90,12 +136,14 @@ define('io.ox/chat/views/messages', [
         renderFoot: function (model) {
             return $('<div class="foot">').append(
                 // time
-                $('<div class="time">').text(model.getTime())
+                $('<div class="time">').text(model.getTime()),
+                // flags
+                $('<div class="flags">').append((model.get('edited') && !model.get('deleted')) ? $('<i class="fa fa-pencil">').attr('title', gt('Message was edited')) : '')
             );
         },
 
         renderSender: function (model) {
-            if (model.isSystem() || model.isMyself() || model.hasSameSender(this.options.limit)) return $();
+            if ((model.isSystem() && !model.get('deleted')) || model.isMyself() || model.hasSameSender(this.options.limit)) return $();
             var user = data.users.getByMail(model.get('sender'));
             return [new Avatar({ model: user }).render().$el, $('<div class="sender">').text(user.getName())];
         },
@@ -172,6 +220,12 @@ define('io.ox/chat/views/messages', [
 
         getMessageNode: function (model, selector) {
             return this.$('.message[data-cid="' + model.cid + '"] ' + (selector || ''));
+        },
+
+        // currently used when the message changed it's type. We replace the entire node then
+        onMessageChanged: function (model) {
+            var $message = this.getMessageNode(model);
+            if ($message.length) $message.replaceWith(this.renderMessage(model));
         },
 
         onChangeBody: function (model) {

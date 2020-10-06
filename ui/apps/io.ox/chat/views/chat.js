@@ -147,7 +147,8 @@ define('io.ox/chat/views/chat', [
             'click .file-upload-btn': 'onTriggerFileupload',
             'click .jump-down': 'onJumpDown',
             'change .file-upload-input': 'onFileupload',
-            'click button[data-download]': 'onFileDownload'
+            'click button[data-download]': 'onFileDownload',
+            'click .cancel-btn': 'onCancelEditMode'
         },
 
         initialize: function (options) {
@@ -172,7 +173,9 @@ define('io.ox/chat/views/chat', [
 
             this.listenTo(this.messagesView, {
                 'before:add': this.onBeforeAdd,
-                'after:add': this.onAfterAdd
+                'after:add': this.onAfterAdd,
+                'delete': this.onDelete,
+                'editMessage': this.onEditMessage
             });
 
             this.on('dispose', this.onDispose);
@@ -318,6 +321,8 @@ define('io.ox/chat/views/chat', [
             if (this.isMember()) {
                 this.$editor = $('<textarea class="form-control">').attr({ 'aria-label': gt('Enter message here'), placeholder: gt('Enter message here') });
                 return [this.$editor,
+                    $('<button type="button" class="btn btn-circle cancel-btn">').attr('aria-label', gt('Cancel'))
+                        .append($('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Cancel'))),
                     $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">').attr('aria-label', gt('Upload file'))
                         .append($('<i class="fa fa-paperclip" aria-hidden="true">').attr('title', gt('Upload file'))),
                     $('<input type="file" class="file-upload-input hidden">')];
@@ -402,6 +407,32 @@ define('io.ox/chat/views/chat', [
             this.markMessageAsRead();
         },
 
+        onDelete: function (message) {
+            // success will trigger a message:changed event on the websocket. This takes care of view updates etc
+            api.deleteMessage(message).fail(function () {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell('error', gt('Could not delete the message'));
+                });
+            });
+        },
+
+        onEditMessage: function (message) {
+            var messageNode = this.getMessageNode(message);
+            // scroll to edited message
+            if (messageNode) {
+                this.$scrollpane.scrollTop(messageNode[0].offsetTop - this.$scrollpane.height() + messageNode.height() + 4);
+            }
+            this.$editor.val(message.get('content')).focus();
+            this.$el.find('.controls').addClass('edit-mode');
+            this.editMode = message;
+        },
+
+        onCancelEditMode: function () {
+            this.$editor.val('').focus();
+            this.$el.find('.controls').removeClass('edit-mode');
+            this.editMode = false;
+        },
+
         scrollToBottom: function () {
             var position = 0xFFFF,
                 scrollpane = this.$scrollpane;
@@ -423,16 +454,23 @@ define('io.ox/chat/views/chat', [
         },
 
         onEditorKeydown: function (e) {
-            if (e.which !== 13) return;
-            if (e.ctrlKey) {
-                // append newline manually if ctrl is pressed
-                this.$editor.val(this.$editor.val() + '\n');
-                return;
+            if (e.which === 27 && this.editMode) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.onCancelEditMode();
             }
-            e.preventDefault();
-            var text = this.$editor.val();
-            if (text.trim().length > 0) this.onPostMessage(text);
-            this.$editor.val('').focus();
+
+            if (e.which === 13) {
+                if (e.ctrlKey) {
+                    // append newline manually if ctrl is pressed
+                    this.$editor.val(this.$editor.val() + '\n');
+                    return;
+                }
+                e.preventDefault();
+                var text = this.$editor.val();
+                if (text.trim().length > 0) this.onPostMessage(text);
+                this.$editor.val('').focus();
+            }
         },
 
         onEditorInput: function () {
@@ -482,9 +520,15 @@ define('io.ox/chat/views/chat', [
 
             data.socket.emit('typing', { roomId: this.model.id, state: false });
 
-            var message = { content: content, sender: data.user.email };
-            if (this.reference) message.reference = this.reference;
-            this.model.postMessage(message);
+            if (this.editMode) {
+                api.editMessage(content, this.editMode);
+                this.editMode = false;
+                this.$el.find('.controls').removeClass('edit-mode');
+            } else {
+                var message = { content: content, sender: data.user.email };
+                if (this.reference) message.reference = this.reference;
+                this.model.postMessage(message);
+            }
 
             // remove reference preview
             this.onRemoveReference();

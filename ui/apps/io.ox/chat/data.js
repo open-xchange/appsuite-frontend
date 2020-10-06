@@ -161,6 +161,9 @@ define('io.ox/chat/data', [
         },
 
         getSystemMessage: function () {
+            // deleted flag means early return here
+            if (this.get('deleted')) return gt('Message was deleted');
+
             var event = JSON.parse(this.get('content'));
             var originator = this.get('sender'),
                 members = event.members || [],
@@ -274,7 +277,8 @@ define('io.ox/chat/data', [
         },
 
         getTime: function () {
-            return moment(this.get('date')).format('LT');
+            // use time when this message was last changed or when it was created
+            return moment(this.get('edited') || this.get('date')).format('LT');
         },
 
         getTextBody: function () {
@@ -292,6 +296,8 @@ define('io.ox/chat/data', [
         },
 
         getType: function () {
+            // always treat deleted messages as text
+            if (this.get('deleted')) return 'text';
             if (this.hasPreview()) return 'preview';
             if (this.get('files')) return 'file';
             if (this.isSystem()) return 'system';
@@ -312,7 +318,8 @@ define('io.ox/chat/data', [
             var index = this.collection.indexOf(this);
             if (index <= limit) return false;
             var prev = this.collection.at(index - 1);
-            if (prev.isSystem()) return false;
+            // deleted message still have a sender
+            if (prev.isSystem() && !prev.get('deleted')) return false;
             return prev.get('sender') === this.get('sender');
         },
 
@@ -695,15 +702,21 @@ define('io.ox/chat/data', [
             attr.roomId = this.get('roomId');
 
             var formData = util.makeFormData(_.extend({}, attr, { files: files })),
-                model = files ? messageCache.get(attr) : this.messages.add(attr, { merge: true, parse: true });
+                model = files ? new MessageModel(attr) : this.messages.add(attr, { merge: true, parse: true });
 
+            // model for files will be added to cache and this.messages via sockets messsage:new event. So no need to do it in the callback here. Temporary model is fine;
             model.save(attr, {
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function (model) {
                     model.setInitialDeliveryState();
-                    if (files) this.messages.add(model, { merge: true });
+                    if (files) {
+                        // remove message, there is a good change it was added meanwhile by socket message:new, we don't want 2 copies of the same message
+                        // todo don't send message:new to this session
+                        this.messages.remove({ messageId: model.get('messageId') });
+                        this.messages.add(model, { merge: true });
+                    }
                 }.bind(this)
             }).fail(this.handleError.bind(this));
 
@@ -995,6 +1008,17 @@ define('io.ox/chat/data', [
 
             socket.on('chat:typing', function (event) {
                 events.trigger('typing:' + event.roomId, event.email, event.state);
+            });
+
+            socket.on('chat:message:changed', function (message) {
+                var cachedMessage = messageCache.get({ messageId: message.messageId });
+                if (cachedMessage) {
+                    var typeChanged = message.type && cachedMessage.get('type') !== message.type;
+                    // if this message changed type we do a silent change and trigger a messageChanged event.
+                    // This way the message node is replaced fully instead of partial changes using multiple change listeners. We want avoid some strange half changed message nodes
+                    cachedMessage.set(message, { silent: typeChanged });
+                    if (typeChanged) events.trigger('message:changed', cachedMessage);
+                }
             });
 
             // send heartbeat every minute
