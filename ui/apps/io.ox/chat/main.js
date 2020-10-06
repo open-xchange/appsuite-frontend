@@ -306,7 +306,7 @@ define('io.ox/chat/main', [
             }
 
             // Enter / space
-            if (/^(13|32)$/.test(e.which)) this.onClick();
+            if (/^(13|32)$/.test(e.which)) this.onClick(e);
 
         },
 
