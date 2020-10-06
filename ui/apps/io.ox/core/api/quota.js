@@ -35,8 +35,8 @@ define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities', 's
 
             return http.GET({
                 module: 'quota',
-                // always return filestore quota if quota mode is unified
-                params: { action: (settings.get('quotaMode', 'default') === 'unified' ? 'filestore' : this.type) }
+                // return unified quota if quota mode is unified, use it for both, mail and file
+                params: { action: (settings.get('quotaMode', 'default') === 'unified' ? 'unified' : this.type) }
             })
             .then(function (data) {
                 this.fetched = true;
@@ -103,6 +103,7 @@ define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities', 's
 
             http.pause();
             // when using unified quota mail quota is the same as filequota
+            // filequota will actually get the unified quota and fill in the values for both types.
             if (settings.get('quotaMode', 'default') !== 'unified') {
                 this.mailQuota.fetch();
             }
