@@ -235,9 +235,18 @@ define('io.ox/files/toolbar', [
             );
 
             app.updateToolbar = _.debounce(function (selection) {
-                toolbarView.setSelection(selection.map(_.cid), function () {
-                    return this.getContextualData(selection, 'main');
-                }.bind(this));
+                if (!this.listView.collection.complete) {
+                    var dropdownToggle = toolbarView.$el.find('a[data-toggle="dropdown"]');
+                    dropdownToggle.attr('data-toggle', []).addClass('disabled');
+                    this.listView.collection.once('complete', function () {
+                        dropdownToggle.attr('data-toggle', 'dropdown').removeClass('disabled');
+
+                    });
+                } else {
+                    toolbarView.setSelection(selection.map(_.cid), function () {
+                        return this.getContextualData(selection, 'main');
+                    }.bind(this));
+                }
             }, 10);
         }
     });
