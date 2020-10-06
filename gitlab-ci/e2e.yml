@@ -52,23 +52,17 @@ run e2e tests:
       allow_failure: true
 
 # deploy e2e environment to well-known location - can be used to develop e2e tests against
-deploy e2e dev server:
+trigger appsuite-stack deployment pipeline:
   stage: deploy
-  dependencies: []
+  needs:
+    - build ui docker image
   variables:
-    DOCKER_HOST: docker.ui.cloud.open-xchange.com
-    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-    CONTAINER_NAME: e2e-develop
-    SERVER: http://10.20.28.164/appsuite/
-  script:
-    - docker stop $CONTAINER_NAME || true
-    - docker wait $CONTAINER_NAME || true
-    - docker rm $CONTAINER_NAME || true
-    - docker pull $DOCKER_IMAGE
-    - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e $DOCKER_IMAGE e2e
-    - docker container start $CONTAINER_NAME
+    ENVIRONMENT: $CI_COMMIT_REF_SLUG
+  trigger:
+    project: frontend/infrastructure/appsuite-stack
+    strategy: depend
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "develop"'
+    - if: '$CI_COMMIT_REF_SLUG == "develop"'
       when: always
 
 merge filter report and rerun:
