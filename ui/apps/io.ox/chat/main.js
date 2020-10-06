@@ -318,7 +318,7 @@ define('io.ox/chat/main', [
         onFocus: function (e) {
             var node = $(e.currentTarget);
             var data = node.data();
-            if (!node.hasClass('active')) this.showChat(data.cid, data);
+            if (!node.hasClass('active')) return data.cmd === 'show-chat' ? this.showChat(data.cid, data) : this.openPrivateChat(data);
         },
 
         resetCount: function (roomId, opt) {
