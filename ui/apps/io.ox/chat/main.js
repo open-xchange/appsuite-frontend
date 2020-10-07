@@ -276,12 +276,22 @@ define('io.ox/chat/main', [
                         // try to fake mail compose attachment
                         space: true
                     };
+                }, function () {
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell('error', gt('Could not load this file'));
+                    });
                 });
             });
 
             $.when(require(['io.ox/core/viewer/main']), $.when.apply(null, promises)).then(function (Viewer) {
                 var fileList = Array.prototype.slice.call(arguments);
                 fileList.shift();
+
+                // remove files that couldn't be loaded
+                fileList = _.compact(fileList);
+                // no files to show? no need to open the viewer
+                if (fileList.length === 0) return;
+
                 var viewer = new Viewer();
                 // disable file details: data unavailable for mail attachments
                 viewer.launch({
