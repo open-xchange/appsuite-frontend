@@ -129,6 +129,51 @@ legend {
     font-size: 15.5px;
 }
 
+.action-button-rounded {
+    margin: 24px 0 0 0;
+    button {
+        font-size: 13px;
+        line-height: 24px;
+        padding: 0;
+        margin: 0 24px 0 0;
+    }
+    & > .dropdown {
+        display: inline-block;
+    }
+    i.fa:first-child {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid fade(@link-color, 40%);
+        background-color: fade(@link-color, 4%);
+        color: @link-color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+        margin: 0 auto;
+    }
+    i.fa.fa-phone {
+        font-size: 24px;
+    }
+    .btn-link:hover:not(:disabled), .btn-link:focus {
+        outline: 0;
+        text-decoration: none;
+        i.fa:first-child {
+            color: white;
+            background-color: @link-color;
+            border: 0;
+        }
+    }
+    &.horizontal {
+        button {
+            display: flex;
+            align-items: center;
+            i.fa { margin-right: 8px; }
+        }
+    }
+}
+
 .cursor-pointer, .label.pointer { cursor: pointer; }
 
 .badge {

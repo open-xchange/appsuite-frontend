@@ -113,11 +113,13 @@ define('io.ox/chat/actions/openGroupDialog', [
             details: function () {
                 var guidDescription = _.uniqueId('form-control-label-');
                 var guidTitle = _.uniqueId('form-control-label-');
-                var label = this.model.get('type') === 'group' ? gt('Group name') : gt('Channel name');
+                var isChannel = this.model.get('type') === 'channel';
+                var label = !isChannel ? gt('Group name') : gt('Channel name');
 
                 this.$body.append(
                     $('<div class="row">').append(
                         $('<div class="col-xs-12">').append(
+                            isChannel ? $.txt(gt('Channels are public and can be joined by anybody')) : [],
                             $('<div class="form-group">').append(
                                 $('<label class="control-label">').attr('for', guidTitle).text(label),
                                 new mini.InputView({ id: guidTitle, model: this.model, name: 'title' }).render().$el
@@ -147,7 +149,12 @@ define('io.ox/chat/actions/openGroupDialog', [
             this.$el.addClass('ox-chat-popup ox-chat');
         })
         .addCancelButton()
-        .addButton({ action: 'save', label: model.id ? gt('Edit chat') : gt('Create chat') })
+        .addButton((function (model) {
+            var label = gt('Create chat');
+            if (model.get('type') === 'channel') label = gt('Create channel');
+            if (model.id) label = gt('Edit chat');
+            return { action: 'save', label: label };
+        })(model))
         .on('save', function () {
             var updates = this.model.has('roomId') ? { roomId: this.model.get('roomId') } : this.model.toJSON(), hiddenAttr = {};
 

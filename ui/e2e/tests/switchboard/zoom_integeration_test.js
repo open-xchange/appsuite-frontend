@@ -62,7 +62,7 @@ Scenario('User can connect zoom account through addressbook', (I, users, contact
     I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
     I.waitForVisible('.io-ox-contacts-window .tree-container');
     contacts.selectContact(`${user2.get('sur_name')}, ${user2.get('given_name')}`);
-    I.waitForText('Call', 5, '.switchboard-actions');
+    I.waitForText('Call', 5, '.action-button-rounded');
     I.click('Call');
     I.waitForText('Call via Zoom', 5, '.dropdown.open');
     I.click('Call via Zoom');
@@ -80,9 +80,9 @@ Scenario('[OXUIB-420] Compose mail and invite to appointment from addressbook', 
     I.waitForElement('.io-ox-contacts-window');
     I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
     I.waitForVisible('.io-ox-contacts-window .tree-container');
-    I.waitForText('Call', 5, '.switchboard-actions');
+    I.waitForText('Call', 5, '.action-button-rounded');
 
-    I.click('Email', '.switchboard-actions');
+    I.click('Email', '.action-button-rounded');
     I.waitForVisible('.io-ox-mail-compose [placeholder="To"]', 30);
     I.waitForFocus('.io-ox-mail-compose [placeholder="To"]');
     I.click('~Save', '.io-ox-mail-compose-window');
@@ -90,7 +90,7 @@ Scenario('[OXUIB-420] Compose mail and invite to appointment from addressbook', 
     dialogs.clickButton('Discard message');
     I.waitForDetached('.io-ox-mail-compose-window');
 
-    I.click('Invite', '.switchboard-actions');
+    I.click('Invite', '.action-button-rounded');
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
     I.click('~Close', '.io-ox-calendar-edit-window');

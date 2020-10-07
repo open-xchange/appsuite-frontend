@@ -38,7 +38,7 @@ define('plugins/halo/mail/register', [
             });
 
             this.append(
-                $('<h2 class="widget-title clear-title">').text(gt('Recent conversations'))
+                $('<h2 class="widget-title clear-title">').text(gt('Chat history'))
             );
 
             require(['io.ox/core/tk/dialogs', 'io.ox/mail/listview'], function (dialogs, ListView) {

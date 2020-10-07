@@ -42,7 +42,7 @@ define('io.ox/switchboard/call/incoming', [
                         $('<div class="name">').append(call.getCallerName()),
                         $('<div class="email">').text(caller)
                     );
-                    this.$footer.append($('<div class="switchboard-actions">').append(
+                    this.$footer.append($('<div class="action-button-rounded">').append(
                         $('<button type="button" class="btn btn-link ">')
                             .addClass('btn-danger')
                             .attr('data-action', 'decline')

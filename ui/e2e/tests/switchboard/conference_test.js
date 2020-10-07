@@ -80,16 +80,16 @@ Scenario('Create appointment with zoom conference', async (I, users, calendar) =
         I.waitForVisible('.appointment');
         I.click('.appointment');
         I.waitForVisible('.io-ox-sidepopup');
-        I.waitForVisible('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
-        I.click('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
+        I.waitForVisible('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
+        I.click('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
     });
 
     await session('userA', () => {
         I.waitForVisible('.appointment');
         I.click('.appointment');
         I.waitForVisible('.io-ox-sidepopup');
-        I.waitForVisible('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
-        I.click('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
+        I.waitForVisible('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
+        I.click('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
     });
 });
 
@@ -169,7 +169,7 @@ Scenario('Appointment series with zoom conference can be changed into a single a
     I.click('Save', calendar.locators.edit);
     I.waitForDetached(calendar.locators.edit);
     I.waitForVisible('.io-ox-sidepopup');
-    I.waitForDetached('.io-ox-sidepopup .switchboard-actions');
+    I.waitForDetached('.io-ox-sidepopup .action-button-rounded');
     I.dontSee('Join Zoom meeting', '.io-ox-sidepopup');
 });
 
@@ -204,7 +204,7 @@ Scenario('Remove zoom conference from series exception', (I, calendar, dialogs) 
     I.waitForDetached('.io-ox-sidepopup');
     I.click('.page.current .appointment');
     I.waitForVisible('.io-ox-sidepopup');
-    I.dontSeeElement('.io-ox-sidepopup .switchboard-actions');
+    I.dontSeeElement('.io-ox-sidepopup .action-button-rounded');
     I.dontSee('Join Zoom meeting', '.io-ox-sidepopup');
     I.click('~Close', '.io-ox-sidepopup');
 
@@ -260,7 +260,7 @@ Scenario('Remove zoom conference from appointment series and check exception', a
     removeConference();
     I.click('Save', calendar.locators.edit);
     I.waitForDetached(calendar.locators.edit);
-    I.waitForDetached('.io-ox-sidepopup .switchboard-actions');
+    I.waitForDetached('.io-ox-sidepopup .action-button-rounded');
     I.dontSee('Join Zoom meeting');
     I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup');

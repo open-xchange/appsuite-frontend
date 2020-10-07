@@ -75,7 +75,7 @@ define('io.ox/switchboard/call/outgoing', [
                             renderFn = this.conference.createConnectButtons.bind(this);
                         } else {
                             renderFn = function () {
-                                return $('<div class="switchboard-actions">').append(
+                                return $('<div class="action-button-rounded">').append(
                                     this.createButton('default', 'cancel', 'times', gt('Cancel')),
                                     this.createButton('primary', 'connect', 'plug', gt('Connect'))
                                 );
@@ -84,7 +84,7 @@ define('io.ox/switchboard/call/outgoing', [
                         this.$footer.append(renderFn());
                     },
                     renderCallButtons: function () {
-                        this.$footer.append($('<div class="switchboard-actions">').append(
+                        this.$footer.append($('<div class="action-button-rounded">').append(
                             this.createButton('default', 'cancel', 'times', gt('Cancel')),
                             this.createButton('success', 'call', 'phone', gt.pgettext('verb', 'Call'))
                         ));
@@ -92,7 +92,7 @@ define('io.ox/switchboard/call/outgoing', [
                         this.$('button[data-action="call"]').focus();
                     },
                     renderCancelButton: function () {
-                        this.$footer.append($('<div class="switchboard-actions">').append(
+                        this.$footer.append($('<div class="action-button-rounded">').append(
                             this.createButton('default', 'cancel', 'times', gt('Cancel'))
                         ));
                         this.$('button[data-action="cancel"]').focus();

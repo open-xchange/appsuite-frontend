@@ -112,7 +112,6 @@ define.async('io.ox/switchboard/api', [
                 self.token = data.token;
 
                 var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
-
                 // Only send redirect uri if not default "/appsuite/api"
                 var appsuiteUrl = new URL('https://' + api.host.replace(/^https?:\/\//, ''));
                 var searchParams = appsuiteUrl.searchParams;
