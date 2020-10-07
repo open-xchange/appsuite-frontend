@@ -456,8 +456,8 @@ define('io.ox/chat/main', [
                             new AvatarView({ model: user }).render().$el,
                             new StateView({ model: user }).render().$el
                         ),
-                        $('<div class="dropdown pull-right">').append(
-                            $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').attr('aria-label', gt('New'))
+                        $('<div class="dropdown pull-right action-button-rounded">').append(
+                            $('<button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').attr('aria-label', gt('New'))
                                 .append($('<i class="fa fa-plus" aria-hidden="true">').attr('title', gt('New'))),
                             $('<ul class="dropdown-menu" role="menu">').append(
                                 //#. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
@@ -475,7 +475,7 @@ define('io.ox/chat/main', [
                                 $('<li role="presentation">').append(
                                     $('<a href="#" role="menuitem">')
                                         .attr({ 'data-cmd': 'edit-group-chat', 'data-id': this.model.id, 'data-type': 'channel' })
-                                        .text(gt('Public channel'))
+                                        .text(gt('Channel'))
                                 )
                             )
                         ),
@@ -493,8 +493,8 @@ define('io.ox/chat/main', [
                     $('<div class="navigation-actions">').append(
                         $('<button type="button" class="btn-nav" data-cmd="show-recent-conversations">').append(
                             $('<i class="fa fa-clock-o btn-icon" aria-hidden="true">'),
-                            //#. Used for chats this time, not for mail threads
-                            $.txt(gt('Recent conversations'))
+                            //#. A list (history) of older chats, like the browser history of visited sites
+                            $.txt(gt('Chat history'))
                         ),
                         $('<button type="button" class="btn-nav" data-cmd="show-channels">').append(
                             $('<i class="fa fa-hashtag btn-icon" aria-hidden="true">'),
@@ -605,7 +605,7 @@ define('io.ox/chat/main', [
         custom: true,
         draw: function () {
             this.append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat" data-type="channel" data-action="none">').text(gt('Public channel'))
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat" data-type="channel" data-action="none">').text(gt('Channel'))
             );
         }
     });

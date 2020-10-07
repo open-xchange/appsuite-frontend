@@ -93,13 +93,13 @@
     }
 
     .empty-view {
-        button {
-            margin: 0 5px 0 5px;
-        }
+        // button {
+        //     margin: 0 5px 0 5px;
+        // }
 
-        button:nth-child(n+2) {
-            font-size: 20px;
-        }
+        // button:nth-child(n+2) {
+        //     font-size: 20px;
+        // }
     }
 
     .chat-leftside {
@@ -190,11 +190,16 @@
                 margin-bottom: auto;
             }
         }
+        .action-button-rounded {
+            margin-top: 0px;
 
-        .btn-circle {
-            float: right;
-            margin-left: 8px;
+            .btn-link {
+                float: right;
+                margin-left: 8px;
+                margin-right: 0px;
+            }
         }
+
 
         .name {
             font-size: 13px;
@@ -246,7 +251,7 @@
     .start-chat {
         .flex-center();
         .center { text-align: center; }
-        .btn-link { color: @gray; }
+        //.btn-link { color: @gray; }
     }
 
     .left-navigation {
@@ -1072,6 +1077,10 @@
             right: 0;
             top: 9px;
         }
+        .info {
+            text-align: center;
+            color: @gray;
+        }
     }
 
     .files {
@@ -1100,6 +1109,16 @@
                         bottom: 10;
                         .ellipsis();
                         width: calc(100% - 14px);
+                    }
+                }
+                &.info-container {
+                    width: 100%;
+                    position: absolute;
+                    margin-left: -16px;
+                    padding: 0;
+                    .info {
+                        color: @gray;
+                        text-align: center;
                     }
                 }
             }

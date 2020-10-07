@@ -56,8 +56,8 @@ Scenario('[OXUIB-442] Calling contact via jitsi', async (I, users, contacts, dia
         I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
         I.waitForVisible('.io-ox-contacts-window .tree-container');
         contacts.selectContact(`${user2.get('sur_name')}, ${user2.get('given_name')}`);
-        I.waitForText('Call', 5, '.switchboard-actions');
-        I.waitForEnabled(locate('.switchboard-actions .btn').withText('Call'));
+        I.waitForText('Call', 5, '.action-button-rounded');
+        I.waitForEnabled(locate('.action-button-rounded .btn').withText('Call'));
         I.click('Call');
         I.waitForText('Call via Jitsi', 5, '.dropdown.open');
         I.waitForEnabled('.dropdown.open .dropdown-menu a');
@@ -94,8 +94,8 @@ Scenario.skip('Create call and check call history for jitsi', async (I, users, c
         I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
         I.waitForVisible('.io-ox-contacts-window .tree-container');
         contacts.selectContact(`${user2.get('sur_name')}, ${user2.get('given_name')}`);
-        I.waitForText('Call', 5, '.switchboard-actions');
-        I.waitForEnabled(locate('.switchboard-actions .btn').withText('Call'));
+        I.waitForText('Call', 5, '.action-button-rounded');
+        I.waitForEnabled(locate('.action-button-rounded .btn').withText('Call'));
         I.click('Call');
         I.waitForText('Call via Jitsi', 5, '.dropdown.open');
         I.waitForEnabled('.dropdown.open .dropdown-menu a');
@@ -236,8 +236,8 @@ Scenario('Create appointment with jitsi conference', async (I, users, calendar) 
         I.waitForVisible('.appointment');
         I.click('.appointment');
         I.waitForVisible('.io-ox-sidepopup');
-        I.waitForVisible('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
-        I.click('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
+        I.waitForVisible('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
+        I.click('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
         waitAndSwitchTab();
         meetingURL = await I.grabCurrentUrl();
     });
@@ -246,8 +246,8 @@ Scenario('Create appointment with jitsi conference', async (I, users, calendar) 
         I.waitForVisible('.appointment');
         I.click('.appointment');
         I.waitForVisible('.io-ox-sidepopup');
-        I.waitForVisible('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
-        I.click('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
+        I.waitForVisible('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
+        I.click('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
         waitAndSwitchTab();
         let url = await I.grabCurrentUrl();
         expect(meetingURL).to.be.equal(url);

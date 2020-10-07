@@ -78,6 +78,7 @@ define('io.ox/chat/views/fileList', [
         },
 
         render: function () {
+            var items = this.getItems();
             this.$el.append(
                 $('<div class="header">').append(
                     $('<h2>').append(gt('All files'))
@@ -85,13 +86,16 @@ define('io.ox/chat/views/fileList', [
                 new ToolbarView({ point: 'io.ox/chat/files/toolbar', title: gt('All files') }).render(new ext.Baton()).$el,
                 $('<div class="scrollpane">').append(
                     $('<ul>').append(
-                        this.getItems().map(this.renderItem, this)
+                        items.length > 0 ? items.map(this.renderItem, this) : this.renderEmtpy().delay(500).fadeIn(100)
                     )
                 )
             );
             return this;
         },
-
+        renderEmtpy: function () {
+            return $('<li class="info-container">').hide()
+                .append($('<div class="info">').text(gt('There are no files yet')));
+        },
         getItems: function () {
             return this.collection;
         },

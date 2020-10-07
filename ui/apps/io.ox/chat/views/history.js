@@ -41,7 +41,7 @@ define('io.ox/chat/views/history', [
         custom: true,
         draw: function () {
             //#. Used for chats this time, not for mail threads
-            this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('Recent conversations'));
+            this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('Chat history'));
         }
     });
 
@@ -81,19 +81,22 @@ define('io.ox/chat/views/history', [
         render: function () {
             this.$el.append(
                 $('<div class="header">').append(
-                    //#. Used for chats this time, not for mail threads
-                    $('<h2>').append(gt('Recent conversations'))
+                    //#. Used for a list of olders/recent chats
+                    $('<h2>').append(gt('Chat history'))
                 ),
                 new ToolbarView({ point: 'io.ox/chat/history/toolbar', title: gt('History actions') }).render(new ext.Baton()).$el,
                 $('<div class="scrollpane">').append(
                     $('<ul>').append(
-                        this.collection.map(this.renderItem, this)
+                        this.collection.length > 0 ? this.collection.map(this.renderItem, this) : this.renderEmtpy().delay(1500).fadeIn(200)
                     )
                 )
             );
             return this;
         },
-
+        renderEmtpy: function () {
+            return $('<li class="history-list">').hide()
+                .append($('<div class="info">').text(gt('There are no archived chats yet')));
+        },
         renderItem: function (model) {
             return $('<li class="history-list">')
                 .attr('data-cid', model.cid)

@@ -105,7 +105,7 @@ define('io.ox/switchboard/extensions', [
             if (contactsAPI.looksLikeResource(baton.data)) return;
             var support = api.supports('zoom') || api.supports('jitsi');
             if (!support) return;
-            var $actions = $('<div class="switchboard-actions">');
+            var $actions = $('<div class="action-button-rounded">');
             ext.point('io.ox/contacts/detail/actions').invoke('draw', $actions, baton.clone());
             this.append(
                 presence.getPresenceString(baton.data.email1),
@@ -307,7 +307,7 @@ define('io.ox/switchboard/extensions', [
             }
             if (!match) return;
             this.append(
-                $('<div class="switchboard-actions horizontal">').append(
+                $('<div class="action-button-rounded horizontal">').append(
                     // Call
                     $('<button type="button" class="btn btn-link" data-action="join">')
                         .append(

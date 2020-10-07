@@ -78,6 +78,7 @@ define('io.ox/chat/views/channelList', [
         },
 
         render: function () {
+            var channels = this.getItems();
             this.$el.append(
                 $('<div class="header">').append(
                     $('<h2>').append(gt('All channels'))
@@ -85,13 +86,16 @@ define('io.ox/chat/views/channelList', [
                 new ToolbarView({ point: 'io.ox/chat/channel-list/toolbar', title: gt('All channels') }).render(new ext.Baton()).$el,
                 $('<div class="scrollpane">').append(
                     $('<ul>').append(
-                        this.getItems().map(this.renderItem, this)
+                        channels.length > 0 ? channels.map(this.renderItem, this) : this.renderEmtpy().delay(500).fadeIn(100)
                     )
                 )
             );
             return this;
         },
-
+        renderEmtpy: function () {
+            return $('<li class="channel">').hide()
+                .append($('<div class="info">').text(gt('There are no channels yet')));
+        },
         renderItem: function (model) {
             var isMember = model.isMember(),
                 numberOfMembers =  (model.get('members') && Object.keys(model.get('members')) || []).length;

@@ -94,7 +94,7 @@ Scenario('Switchboard - Addressbook', async (I, users, contacts) => {
     I.waitForVisible('.io-ox-contacts-window .tree-container');
 
     contacts.selectContact(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
-    I.waitForText('Call', 5, '.switchboard-actions');
+    I.waitForText('Call', 5, '.action-button-rounded');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
@@ -127,7 +127,7 @@ Scenario('Switchboard - Calendar', async (I, calendar) => {
     I.waitForVisible('.appointment');
     I.click('.appointment');
     I.waitForVisible('.io-ox-sidepopup');
-    I.waitForText('Join Zoom meeting', 5, '.io-ox-sidepopup .switchboard-actions');
+    I.waitForText('Join Zoom meeting', 5, '.io-ox-sidepopup .action-button-rounded');
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
