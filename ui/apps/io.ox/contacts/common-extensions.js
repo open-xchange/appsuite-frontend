@@ -33,7 +33,7 @@ define('io.ox/contacts/common-extensions', [
         bright: function (baton) {
             var text =  baton.data.mark_as_distributionlist ? gt('Distribution list') : $.trim(util.getJob(baton.data));
             this.append(
-                $('<span class="bright">').append(text)
+                $('<span class="bright">').text(text)
             );
         }
 
