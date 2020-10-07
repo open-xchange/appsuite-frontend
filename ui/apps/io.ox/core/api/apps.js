@@ -21,9 +21,11 @@ define('io.ox/core/api/apps', [
     'use strict';
     var defaultList = ['io.ox/mail', 'io.ox/calendar', 'io.ox/contacts',
         'io.ox/files', 'io.ox/portal', 'io.ox/tasks',
-        'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation',
-        'io.ox/notes'
+        'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation'
     ];
+
+    // move app to defaultList, once it is out of prototype state
+    if (ox.debug) defaultList.push('io.ox/notes');
 
     if (_.device('smartphone')) defaultList.push('io.ox/search');
 

@@ -116,16 +116,19 @@ define('io.ox/core/main/apps', [
         refreshable: true
     });
 
-    // Notes
-    ui.createApp({
-        id: 'io.ox/notes',
-        name: 'io.ox/notes',
-        title: gt.pgettext('app', 'Notes'),
-        requires: 'notes && infostore',
-        device: '!smartphone',
-        refreshable: true,
-        searchable: true
-    });
+    // remove debug switch, once it is out of prototype state
+    if (ox.debug) {
+        // Notes
+        ui.createApp({
+            id: 'io.ox/notes',
+            name: 'io.ox/notes',
+            title: gt.pgettext('app', 'Notes'),
+            requires: 'notes && infostore',
+            device: '!smartphone',
+            refreshable: true,
+            searchable: true
+        });
+    }
 
     // Editor
     ui.createApp({

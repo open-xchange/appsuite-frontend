@@ -20,6 +20,9 @@ define('io.ox/notes/main', [
 
     'use strict';
 
+    // remove this, once it is out of prototype state
+    if (!ox.debug) return;
+
     // application object
     var app = ox.ui.createApp({
         name: 'io.ox/notes',
