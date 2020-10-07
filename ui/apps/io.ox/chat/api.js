@@ -116,5 +116,16 @@ define('io.ox/chat/api', [
         return api.request({ processData: false, contentType: false, method: 'PATCH', url: url, data:  util.makeFormData({ content: newContent }) });
     };
 
+    function formDownloadWithJwtAuth(url, token) {
+        $('<form method="post" target="_blank"></form>').attr('action', url).append(
+            $('<input type="hidden" name="jwt">').val(token)).appendTo('body').submit().remove();
+    }
+
+    api.downloadFile = function (url) {
+        api.getJwtFromSwitchboard().then(function (token) {
+            formDownloadWithJwtAuth(url, token);
+        });
+    };
+
     return api;
 });

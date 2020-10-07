@@ -130,11 +130,6 @@ define('io.ox/chat/views/chat', [
         }
     });
 
-    function formDownloadWithJwtAuth(url, token) {
-        $('<form method="post" target="_blank"></form>').attr('action', url).append(
-            $('<input type="hidden" name="jwt">').val(token)).appendTo('body').submit().remove();
-    }
-
     var ChatView = DisposableView.extend({
 
         className: 'chat abs',
@@ -659,9 +654,7 @@ define('io.ox/chat/views/chat', [
         onFileDownload: function (e) {
             e.preventDefault();
             var url = $(e.currentTarget).attr('data-download');
-            api.getJwtFromSwitchboard().then(function (token) {
-                formDownloadWithJwtAuth(url, token);
-            });
+            api.downloadFile(url);
         }
 
     });

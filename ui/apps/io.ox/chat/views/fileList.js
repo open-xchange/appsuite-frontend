@@ -62,6 +62,10 @@ define('io.ox/chat/views/fileList', [
 
         className: 'files abs',
 
+        events: {
+            'click button[data-download]': 'onFileDownload'
+        },
+
         initialize: function () {
 
             this.collection = data.files;
@@ -93,8 +97,9 @@ define('io.ox/chat/views/fileList', [
         },
 
         renderItem: function (model) {
-            var button = $('<button type="button" data-cmd="show-file">').attr('data-file-id', model.get('fileId'));
+            var button = $('<button type="button">').attr('data-file-id', model.get('fileId'));
             if (model.isImage()) {
+                button.attr('data-cmd', 'show-file');
                 api.requestDataUrl({ url: model.getThumbnailUrl() }).then(function (base64encodedImage) {
                     button.css('backgroundImage', 'url(\'' + base64encodedImage + '\')');
                 });
@@ -102,7 +107,7 @@ define('io.ox/chat/views/fileList', [
                 button.append(
                     $('<i class="fa icon" aria-hidden="true">').addClass(util.getClassFromMimetype(model.get('mimetype'))),
                     $('<div class="filename">').text(model.get('name'))
-                );
+                ).attr('data-download', model.getFileUrl());
             }
 
             return $('<li>').append(button);
@@ -126,6 +131,12 @@ define('io.ox/chat/views/fileList', [
                 var index = parseInt($(this).children().attr('data-index'), 10);
                 $(this).children().attr('data-index', index + 1);
             });
+        },
+
+        onFileDownload: function (e) {
+            e.preventDefault();
+            var url = $(e.currentTarget).attr('data-download');
+            api.downloadFile(url);
         }
     });
 
