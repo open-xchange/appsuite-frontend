@@ -194,6 +194,7 @@ Scenario('Create call from call history and check call history after hang up for
     session('userA', () => {
         dialogs.clickButton('Hang up');
         I.waitForDetached('.modal');
+        I.waitForVisible('~Call history');
         I.click('~Call history');
         I.waitForVisible(
             locate('.call-history-item')
@@ -203,6 +204,7 @@ Scenario('Create call from call history and check call history after hang up for
     });
 
     session('userB', () => {
+        I.waitForVisible('~Call history');
         I.click('~Call history');
         I.waitForVisible(
             locate('.call-history-item')

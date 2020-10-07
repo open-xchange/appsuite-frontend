@@ -10,6 +10,7 @@ module.exports = {
 
     waitForApp() {
         I.waitForVisible({ css: '.io-ox-portal' });
+        I.waitForText('Add widget', 10, '.io-ox-portal');
     },
 
     openDropdown() {

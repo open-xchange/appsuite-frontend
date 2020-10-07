@@ -21,7 +21,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7488] [C7484] Add/Remove Inbox widget', async (I, users, dialogs) => {
+Scenario('[C7488] [C7484] Add/Remove Inbox widget', async (I, users, dialogs, portal) => {
     let [user] = users;
     await I.haveMail({
         attachments: [{
@@ -41,12 +41,8 @@ Scenario('[C7488] [C7484] Add/Remove Inbox widget', async (I, users, dialogs) =>
 
     //Add Inbox widget to Portal
     I.login('app=io.ox/portal');
-    I.waitForVisible('.io-ox-portal');
-    I.click('Add widget');
-    I.waitForVisible('.io-ox-portal-settings-dropdown');
-    I.click('Inbox');
-    dialogs.waitForVisible();
-    dialogs.clickButton('Save');
+    portal.waitForApp();
+    portal.addWidget('Inbox');
 
     //Verify mail is shown in the list
     I.waitForElement('~Inbox');
