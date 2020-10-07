@@ -75,6 +75,7 @@ define('io.ox/chat/views/searchResult', [
         },
 
         search: function (query) {
+            var regexQuery = new RegExp('(\\b' + escape(query) + ')', 'ig');
             if (!query) return this.collection.reset();
             $.when(
                 api.elasticSearch(query),
@@ -90,10 +91,10 @@ define('io.ox/chat/views/searchResult', [
                         var room = data.chats.active.get(message.roomId);
                         if (!room) return;
                         room = room.clone();
+                        message.content = message.content.replace(regexQuery, '<em class="hlt1">$1</em>');
                         room.set('lastMessage', message, { silent: true });
                         room.set('searchResult', true);
                         ids[room.get('id')] = true;
-
                         return room;
                     });
                     models = models.concat(chatsByMessage);
