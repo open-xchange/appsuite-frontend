@@ -48,6 +48,7 @@ define('io.ox/core/api/apps', [
             this.launcher = new LauncherCollection(defaultList);
             if (settings.contains('apps/list')) {
                 var list = settings.get('apps/list').split(',');
+                if (_.device('smartphone') && !_(list).contains('io.ox/search')) list.push('io.ox/search');
                 this._launcher = new LauncherCollection(list);
             } else {
                 this._launcher = this.launcher;
