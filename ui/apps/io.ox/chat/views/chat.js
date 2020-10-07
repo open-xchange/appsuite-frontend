@@ -506,10 +506,10 @@ define('io.ox/chat/views/chat', [
             }
         },
 
-        onEditorInput: function () {
+        onEditorInput: _.throttle(function () {
             var state = this.$editor.val() !== '';
-            data.socket.emit('typing', { roomId: this.model.id, state: state });
-        },
+            api.typing(this.model.id, state);
+        }, 2500),
 
         onTriggerFileupload: function () {
             this.$('.file-upload-input').trigger('click');
@@ -544,7 +544,7 @@ define('io.ox/chat/views/chat', [
                 this.model.messages.fetch();
             }
 
-            data.socket.emit('typing', { roomId: this.model.id, state: false });
+            api.typing(this.model.id, false);
 
             if (this.specialMode === 'edit') {
                 api.editMessage(content, this.messageReference);

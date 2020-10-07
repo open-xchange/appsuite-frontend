@@ -127,5 +127,10 @@ define('io.ox/chat/api', [
         });
     };
 
+    api.typing = function (roomId, state) {
+        var url = api.url + '/rooms/' + roomId + '/typing';
+        return request({ method: 'POST', url: url, data: { state: state } });
+    };
+
     return api;
 });
