@@ -1909,6 +1909,11 @@ define('io.ox/core/desktop', [
             var requirements = adaptiveLoader.startAndEnhance(id.replace(/\/main$/, ''), [id]);
             ox.load(requirements, data).then(
                 function (m) {
+                    if (!m || !m.getApp) {
+                        console.error('Couldn\'t launch app', id, m);
+                        def.resolve({});
+                        return;
+                    }
                     m.getApp(data).launch(data).done(function () {
                         def.resolveWith(this, arguments);
                         ox.trigger('loadtime', { app: this, id: id, loadStart: loadStart, loadEnd: Date.now() });
