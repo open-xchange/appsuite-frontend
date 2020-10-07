@@ -95,6 +95,8 @@ merge filter report and rerun:
     - cd ui
     - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
     - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./build/e2e/filter_report_*.json > $FILTER_SUITE
+    # check if the filter suite file exists, otherwise something went wrong in the run e2e tests jobs
+    - "[ -f $FILTER_SUITE ]"
     # ignore any failing tests
     - yarn e2e -i || true
     - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./build/e2e/$FILTER_REPORT $FILTER_SUITE > ./build/e2e/filter_report.json
