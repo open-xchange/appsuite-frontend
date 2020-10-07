@@ -177,6 +177,7 @@
 .feedback-button {
     position: absolute;
     z-index: 50;
+    display: none;
 
     &.feedback-right {
         right: 0;
@@ -202,5 +203,9 @@
         cursor: pointer;
         border-radius: @border-radius-base @border-radius-base 0 0;
         border: 0;
+    }
+
+    &.allowed  {
+        display: block;
     }
 }

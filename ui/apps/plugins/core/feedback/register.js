@@ -92,7 +92,7 @@ define('plugins/core/feedback/register', [
     }
 
     function toggleButtons(state) {
-        $('#io-ox-screens .feedback-button').toggle(state);
+        $('#io-ox-screens .feedback-button').toggleClass('allowed', state);
         $('#topbar-help-dropdown [data-action="feedback"]').parent().toggle(state);
     }
 
