@@ -22,21 +22,21 @@ After(async (users) => {
     await users.removeAll();
 });
 
-var flagged = '.list-item .flag [title="Flagged"]',
+var flagged = '.mail-item .list-item .flag [title="Flagged"]',
     colorFlag = '.list-item .color-flag.flag_10';
 
 // --------------------------------------------------------------------------
 
-Scenario('[C114336] Flag an E-Mail with a color flag (flaggedImplicit)', async (I, users, mail) => {
+Scenario('[C114336] Flag an E-Mail with a color flag (flaggedImplicit)', async (I, mail) => {
 
-    const me = getUtils(I, users);
+    const me = getUtils();
     await me.login({ color: true, star: true });
     mail.selectMail('Icke');
     I.click('~Set color');
     I.wait(0.5);
     I.waitForText('Yellow');
     I.retry(10).click('[data-action="color-yellow"]','.smart-dropdown-container.flag-picker');
-    I.waitForVisible(colorFlag); 
+    I.waitForVisible(colorFlag);
     I.click('~Set color');
     I.wait(0.5);
     I.waitForText('Yellow');
@@ -44,21 +44,22 @@ Scenario('[C114336] Flag an E-Mail with a color flag (flaggedImplicit)', async (
     I.waitForInvisible('.list-item .color-flag');
 });
 
-Scenario('[C114337] Flag an E-Mail as Flagged/Starred (flaggedOnly)', async (I, users) => {
+Scenario('[C114337] Flag an E-Mail as Flagged/Starred (flaggedOnly)', async (I, mail) => {
 
-    var me = getUtils(I, users);
+    var me = getUtils();
     await me.login({ color: false, star: true });
-    me.selectMail();
-    me.clickToolbarAction('flag');
+    mail.selectMail('Icke');
+    I.clickToolbar({ css: '[data-action="io.ox/mail/actions/flag"]:not(.disabled)' });
+    //me.clickToolbarAction('flag');
     I.dontSee({ css: '[data-action="io.ox/mail/actions/color"]' });
     I.waitForElement(flagged);
 });
 
-Scenario('[C114338] Flag an E-Mail with a color flag (flaggedAndColor)', async (I, users) => {
+Scenario('[C114338] Flag an E-Mail with a color flag (flaggedAndColor)', async (I, mail) => {
 
-    var me = getUtils(I, users);
+    var me = getUtils();
     await me.login({ color: true, star: true });
-    me.selectMail();
+    mail.selectMail('Icke');
     me.clickToolbarAction('color');
     me.waitAndClick('.smart-dropdown-container.flag-picker [data-action="color-yellow"]');
     I.waitForElement(colorFlag);
@@ -69,9 +70,9 @@ Scenario('[C114338] Flag an E-Mail with a color flag (flaggedAndColor)', async (
     I.waitForDetached(flagged);
 });
 
-Scenario('[C114339] Flag an E-Mail with Starred flag on an alternative client (flaggedAndColor)', async (I, users) => {
+Scenario('[C114339] Flag an E-Mail with Starred flag on an alternative client (flaggedAndColor)', async (I) => {
 
-    var me = getUtils(I, users);
+    var me = getUtils();
     await me.login({ color: true, star: true }, 8);
     me.setFlags(0, true);
     me.selectMail();
@@ -81,8 +82,8 @@ Scenario('[C114339] Flag an E-Mail with Starred flag on an alternative client (f
 
 // --------------------------------------------------------------------------
 
-function getUtils(I, users) {
-
+function getUtils() {
+    const { I, mail, users } = inject();
     return {
 
         login: async function (options, flags) {
@@ -106,6 +107,7 @@ function getUtils(I, users) {
             this.haveSetting(options);
             I.waitForInvisible('#background-loader');
             I.openApp('Mail');
+            mail.waitForApp();
             I.waitForText('No message selected');
         },
 

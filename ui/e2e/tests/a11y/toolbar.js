@@ -124,7 +124,7 @@ Scenario('Calendar - Toolbar Navigation', async function (I, calendar, toolbar) 
         endDate: { value: time.add(1, 'hour').format(format), tzid: 'Europe/Berlin' }
     });
 
-    I.login('app=io.ox/calendar');
+    I.login('app=io.ox/calendar&perspective=week:week');
     calendar.waitForApp();
 
     // toolbar: unselect-state
