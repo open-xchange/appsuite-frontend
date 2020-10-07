@@ -1034,15 +1034,31 @@ define('io.ox/files/share/permissions', [
 
             });
 
+            function unshareRequested() {
+                var confirmDialog = new ModalDialog({
+                    async: true,
+                    title: gt('Remove shares')
+                });
+                confirmDialog
+                .addCancelButton()
+                .addButton({ label: gt('OK'), action: 'ok' });
+                confirmDialog.on('ok', function () {
+                    // Remove all permissions and public link then trigger save.
+                    publicLink.removeLink().then(function () {
+                        permissionsView.revokeAll();
+                        dialog.trigger('save');
+                    });
+                    confirmDialog.close();
+                });
+                confirmDialog.$body.append($('<h5>')).text(gt('Do you really want to remove all shares?'));
+                confirmDialog.open();
+            }
+
             if (objModel.isAdmin()) {
                 dialog.$footer.prepend(
                     $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
                         $('<button class="btn btn-default" aria-label="Unshare"></button>').text(gt('Unshare')).on('click', function () {
-                            // Remove all permissions and public link then trigger save.
-                            publicLink.removeLink().then(function () {
-                                permissionsView.revokeAll();
-                                dialog.trigger('save');
-                            });
+                            unshareRequested();
                         })
                     )
                 );
