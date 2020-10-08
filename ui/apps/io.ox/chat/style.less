@@ -833,7 +833,7 @@
         top: auto;
         border-top: 1px solid @borderColor;
         background-color: @backgroundColor;
-        padding: 8px;
+        padding: 8px 8px 8px 6px;
     }
 
     .footer {
@@ -861,29 +861,10 @@
             height: 100%;
         }
 
-        button {
-            //margin-left: 8px;
-        }
-        .send-btn, .file-upload-btn { font-size: 18px; }
+        button { font-size: 18px; }
 
         .cancel-btn {
             display: none;
-            color: @gray;
-            background: none;
-            position: absolute;
-            font-size: 16px;
-            right: 66px;
-            width: 28px;
-            height: 28px;
-            top: 10px;
-            padding: 0px;
-
-            &:focus, &:hover {
-                color: @lightblue;
-                border-radius: 50%;
-                border: 2px solid @lightblue;
-                background: #fff;
-            }
         }
 
         .reference-message {
