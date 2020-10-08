@@ -97,8 +97,7 @@ define('io.ox/chat/views/messages', [
         },
 
         renderMessage: function (model, noDate) {
-            var self = this,
-                body = model.getBody(),
+            var body = model.getBody(),
                 message = $('<div class="message">')
                 // here we use cid instead of id, since the id might be unknown
                 .attr('data-cid', model.cid)
@@ -111,47 +110,14 @@ define('io.ox/chat/views/messages', [
                     this.renderSender(model),
                     // replied to message
                     $('<div class="content">').append(
-                        (function () {
-                            if (!model.get('replyTo') || model.get('replyTo').deleted) return '';
-                            var replyModel = new data.MessageModel(model.get('replyTo')),
-                                user = data.users.getByMail(replyModel.get('sender')),
-                                replyBody = replyModel.getBody();
-
-                            return $('<div class="replied-to-message message">')
-                                .addClass(replyModel.getType())
-                                .toggleClass('emoji', util.isOnlyEmoji(replyBody))
-                                .append(
-                                    $('<div class="content">').append(
-                                        // sender name
-                                        $('<div class="sender">').text(user.getName()),
-                                        // message body
-                                        $('<div class="body replied-to">')
-                                            .html(replyBody)
-                                    )
-                                );
-                        })(),
+                        this.renderReply(model),
                         // message body
                         $('<div class="body">')
                             .html(body)
                             .append(
                                 this.renderFoot(model),
                                 // show some indicator dots when a menu is available
-                                (function () {
-                                    if (model.isSystem()) return '';
-                                    var toggle = $('<button type="button" class="btn btn-link dropdown-toggle actions-toggle" aria-haspopup="true" data-toggle="dropdown">')
-                                            .attr('title', gt('Message actions'))
-                                            .append($('<i class="fa fa-ellipsis-v">')),
-                                        menu = $('<ul class="dropdown-menu">'),
-                                        dropdown = new Dropdown({
-                                            className: 'message-actions-dropdown dropdown',
-                                            dropup: true,
-                                            smart: true,
-                                            $toggle: toggle,
-                                            $ul: menu
-                                        });
-                                    ext.point('io.ox/chat/message/menu').invoke('draw', menu, ext.Baton({ view: self, model: model }));
-                                    return dropdown.render().$el;
-                                })()
+                                this.renderMenu(model)
                             )
                     ),
                     //delivery state
@@ -163,6 +129,43 @@ define('io.ox/chat/views/messages', [
             var date = this.renderDate(model);
             if (date && !noDate) return [date, message];
             return message;
+        },
+
+        renderReply: function (model) {
+            if (!model.get('replyTo') || model.get('replyTo').deleted) return '';
+            var replyModel = new data.MessageModel(model.get('replyTo')),
+                user = data.users.getByMail(replyModel.get('sender')),
+                replyBody = replyModel.getBody();
+
+            return $('<div class="replied-to-message message">')
+                .addClass(replyModel.getType())
+                .toggleClass('emoji', util.isOnlyEmoji(replyBody))
+                .append(
+                    $('<div class="content">').append(
+                        // sender name
+                        $('<div class="sender">').text(user.getName()),
+                        // message body
+                        $('<div class="body replied-to">')
+                            .html(replyBody)
+                    )
+                );
+        },
+
+        renderMenu: function (model) {
+            if (model.isSystem()) return '';
+            var toggle = $('<button type="button" class="btn btn-link dropdown-toggle actions-toggle" aria-haspopup="true" data-toggle="dropdown">')
+                    .attr('title', gt('Message actions'))
+                    .append($('<i class="fa fa-ellipsis-v">')),
+                menu = $('<ul class="dropdown-menu">'),
+                dropdown = new Dropdown({
+                    className: 'message-actions-dropdown dropdown',
+                    dropup: true,
+                    smart: true,
+                    $toggle: toggle,
+                    $ul: menu
+                });
+            ext.point('io.ox/chat/message/menu').invoke('draw', menu, ext.Baton({ view: this, model: model }));
+            return dropdown.render().$el;
         },
 
         renderFoot: function (model) {
@@ -270,7 +273,10 @@ define('io.ox/chat/views/messages', [
                 .toggleClass('emoji', util.isOnlyEmoji(model.getBody()));
             $body
                 .html(model.getBody())
-                .append(this.renderFoot(model));
+                .append(
+                    this.renderFoot(model),
+                    this.renderMenu(model)
+                );
         },
 
         onChangeTime: function (model) {
