@@ -252,7 +252,15 @@ define('io.ox/files/upload/main', [
                 ext.point('io.ox/files/upload/toolbar').invoke('draw', $el, ext.Baton({ fileupload: this }));
                 bottomToolbar.append($el);
             }.bind(this))
-            .on('progress', function (e, def, file) {
+            .on('progress', function (e, def, file, positon, files) {
+
+                var queueLength = files && files.length;
+
+                $('.upload-wrapper').find('.items-left').text(
+                    //#. number of left files to complete the upload
+                    gt('%1$s Files left', queueLength - positon)
+                );
+
                 $('.upload-wrapper').find('.file-name').text(
                     //#. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
                     gt('Uploading "%1$s"', file.file.name)
@@ -335,7 +343,10 @@ define('io.ox/files/upload/main', [
         draw: function (baton) {
             this.append(
                 $('<div class="upload-title">').append(
-                    $('<div class="estimated-time">'),
+                    $('<div class="time-container">').append(
+                        $('<span class="estimated-time">'),
+                        $('<span class="items-left">')
+                    ),
                     $('<div class="file-name">')
                 ),
                 $('<div class="upload-details">').append(

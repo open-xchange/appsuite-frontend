@@ -426,10 +426,15 @@ define('io.ox/core/tk/upload', [
             var self = this,
                 newFiles = [].concat(file);
             this.validateFiles(newFiles, options).then(function () {
-                _(newFiles).each(function (file) {
-                    files.push({ file: file, options: options });
-                });
+                self.fillQueue(file, options);
                 self.queueChanged();
+            });
+        };
+
+        this.fillQueue = function (file, options) {
+            var newFiles = [].concat(file);
+            _(newFiles).each(function (file) {
+                files.push({ file: file, options: options });
             });
         };
 

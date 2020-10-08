@@ -728,16 +728,32 @@
 
     .upload-title {
         margin-bottom: 8px;
+        overflow: hidden;
 
-        .file-name,
-        .estimated-time {
+        .file-name {
             white-space: nowrap;
             font-weight: 300;
             .ellipsis();
         }
 
-        .estimated-time {
-            font-style: italic;
+        .time-container {
+            display: flex;
+
+            .estimated-time {
+                font-style: italic;
+                white-space: nowrap;
+                font-weight: 300;
+            }
+
+            .items-left {
+                padding-left: 15px;
+                white-space: nowrap;
+                font-weight: 300;
+                font-style: italic;
+                margin-left: auto;
+                order: 2;
+                .ellipsis();
+            }
         }
     }
 

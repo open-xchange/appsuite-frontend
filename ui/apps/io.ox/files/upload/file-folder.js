@@ -23,11 +23,12 @@ define('io.ox/files/upload/file-folder', [
     var fileFolderUpload = {};
 
     function handleFilesUpload(updatedTreeArr, rootFolder, app) {
-        var dirAndFilesObj = {};
+        var sortedByFolderObj = {};
 
+        // link all files in the tree with their folder id
         updatedTreeArr.forEach(function (treelayer, layerIndex) {
             treelayer.forEach(function (item) {
-                if (!item.isFile || item.preventFileUpload) return;
+                if (!item.isFile || item.preventFileUpload) { return; }
                 var itemFolderId;
                 if (layerIndex === 0) { // is root
                     itemFolderId = rootFolder;
@@ -36,37 +37,21 @@ define('io.ox/files/upload/file-folder', [
                     itemFolderId = parentFolderOfItem.id;
                 }
 
-                if (!dirAndFilesObj[itemFolderId]) { dirAndFilesObj[itemFolderId] = []; }
-                dirAndFilesObj[itemFolderId].push(item.file);
+                if (!sortedByFolderObj[itemFolderId]) { sortedByFolderObj[itemFolderId] = []; }
+                sortedByFolderObj[itemFolderId].push(item.file);
             });
         });
 
-        var folderIdArr = Object.keys(dirAndFilesObj);
-        var triggerFileUpload = function () { // trigger upload per level
+        // push files folderwise to upload queue
+        _.each(sortedByFolderObj, function (files, folderId) {
+            fileUpload.setWindowNode(app.getWindowNode());
 
-            if (folderIdArr.length > 0) {
-                var dirId = folderIdArr.shift();
-                var files = dirAndFilesObj[dirId];
-
-                if (files && files.length > 0) {
-                    fileUpload.setWindowNode(app.getWindowNode());
-
-                    fileUpload.create.offer(files, { folder: dirId });
-                    // make sure every error and sucess from 'fileUpload.create.offer' triggers a stop
-                    filesApi.once('stop:upload', function () {
-                        // don't continue when the upload is not completed, because
-                        // this means there is probably an upload problem (i.e. quota, error, cancel)
-                        var uploadFinished = fileUpload.getTotalProgress() === 1;
-                        if (uploadFinished) { triggerFileUpload(); }
-
-                    });
-                } else { // without files in the folder try the next folder
-                    triggerFileUpload();
-                }
-            }
-        };
-
-        triggerFileUpload();
+            // fill the upload queue before the upload starts to have the right number of files at start
+            // note: compared to 'offer', 'fillQueue' does no validation, this one in 'fileFolderUpload.upload'
+            fileUpload.create.fillQueue(files, { folder: folderId, uploadfolderInfo: { folderName: '', foldersLeft: '' } });
+        });
+        // start the upload with the filled queue
+        fileUpload.create.queueChanged();
     }
 
     function createTreeObj(fileObjArray) {
