@@ -137,6 +137,7 @@ define('io.ox/chat/views/chat', [
         events: {
             'keydown textarea': 'onEditorKeydown',
             'input textarea': 'onEditorInput',
+            'click .send-btn': 'onSend',
             'click .file-upload-btn': 'onTriggerFileupload',
             'click .jump-down': 'onJumpDown',
             'change .file-upload-input': 'onFileupload',
@@ -317,8 +318,10 @@ define('io.ox/chat/views/chat', [
                 return [this.$editor,
                     $('<button type="button" class="btn btn-circle cancel-btn">').attr('aria-label', gt('Cancel'))
                         .append($('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Cancel'))),
-                    $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">').attr('aria-label', gt('Upload file'))
-                        .append($('<i class="fa fa-paperclip" aria-hidden="true">').attr('title', gt('Upload file'))),
+                    $('<button type="button" class="btn btn-link pull-right send-btn">').attr('aria-label', gt('Send'))
+                        .append($('<i class="fa fa-paper-plane" aria-hidden="true">').attr('title', gt('Send'))),
+                    $('<button type="button" class="btn btn-link pull-right file-upload-btn">').attr('aria-label', gt('Upload file'))
+                        .append($('<i class="fa fa-paperclip fa-flip-horizontal" aria-hidden="true">').attr('title', gt('Upload file'))),
                     $('<input type="file" class="file-upload-input hidden">')];
             }
 
@@ -497,9 +500,8 @@ define('io.ox/chat/views/chat', [
                     return;
                 }
                 e.preventDefault();
-                var text = this.$editor.val();
-                if (text.trim().length > 0) this.onPostMessage(text);
-                this.$editor.val('').focus();
+                this.onSend();
+                this.$editor.focus();
             }
         },
 
@@ -529,7 +531,11 @@ define('io.ox/chat/views/chat', [
                 this.scrollToBottom();
             }
         },
-
+        onSend: function () {
+            var text = this.$editor.val();
+            if (text.trim().length > 0) this.onPostMessage(text);
+            this.$editor.val('');
+        },
         onPostMessage: function (content) {
             // reset and fetch messages when in search and collection is not complete
             if (!this.model.messages.nextComplete) {
