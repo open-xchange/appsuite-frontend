@@ -76,13 +76,13 @@ Scenario('[OXUIB-225] Password recovery for account passwords after password cha
 
     I.login();
     I.waitForText('My External');
-    I.seeElement('.modal-dialog');
+    dialogs.waitForVisible();
     dialogs.clickButton('Remind me again');
     I.waitToHide('.modal-dialog');
 
     I.refreshPage();
     I.waitForText('My External');
-    I.seeElement('.modal-dialog');
+    dialogs.waitForVisible();
     dialogs.clickButton('Remove passwords');
     I.waitToHide('.modal-dialog');
 
