@@ -242,6 +242,61 @@ Scenario('[C85688] Send drive-mail with an attachment above the threshold', asyn
     I.waitForElement(locate('.list-view li.list-item').withText(batFile));
 });
 
+Scenario('[C85684] Feature name is configurable', async (I, users, mail, drive) => {
+    const [batman, robin] = users;
+    await batman.hasConfig('com.openexchange.mail.compose.share.name', 'Bat Mail');
+    // Go to Mail -> Compose
+    I.login('app=io.ox/mail', { user: batman });
+    mail.newMail();
+
+    // Add internal recipient, subject and mail text
+    const subject = 'About the Batcave',
+        mailText = 'WE NEED TO TALK ASAP!';
+    I.fillField('To', robin.userdata.primaryEmail);
+    I.fillField('Subject', subject);
+    await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
+        I.fillField('body', mailText);
+        I.pressKey('Enter');
+        I.pressKey('Enter');
+    });
+
+    // Under Attachments choose "Add local file"
+    // Select a file
+    // I use a helper function here and directly feed the file into the input field
+    const batFile = 'testdocument.odt';
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `e2e/media/files/generic/${batFile}`);
+    // Expected Result: Attachment section opens containing a link: "Bat Mail"
+    I.waitForText('ODT', undefined, '.io-ox-mail-compose-window');
+    I.waitForText('Use Bat Mail', undefined, '.io-ox-mail-compose-window');
+
+    // Click "Bat Mail" to enable Bat Mail
+    I.click('Use Bat Mail', '.share-attachments');
+
+    // Expected Result: Bat Mail will get enabled and further options are shown.
+    I.waitForText('Options', undefined, '.io-ox-mail-compose-window .attachments');
+    I.seeCheckboxIsChecked('.io-ox-mail-compose-window .share-attachments input[type="checkbox"]');
+
+    mail.send();
+
+    // Expected Result: Mail gets sent successfully
+    I.selectFolder('Sent');
+    I.waitForText(subject, undefined, '.list-view');
+
+    // Verify a new folder with the name of the mail's subject was created in Drive, containing the mail's attachments
+    const locateClickableFolder = (text) => locate('li.list-item.selectable').withDescendant(locate('div').withText(text));
+    I.openApp('Drive');
+    drive.waitForApp();
+    I.waitForText('Bat Mail', undefined, '.file-list-view');
+    I.waitForVisible(locateClickableFolder('Bat Mail'));
+    I.selectFolder('Bat Mail');
+
+    // Expected Result: Drive -> My files -> Bat Mail -> $subject
+    I.waitForText(subject, undefined, '.file-list-view');
+    I.selectFolder(subject);
+    I.waitForText(batFile, undefined, '.file-list-view');
+
+});
+
 Scenario('[C85690] Expire date can be forced', async function (I, users, mail) {
 
     I.login('app=io.ox/mail');
