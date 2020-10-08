@@ -43,7 +43,7 @@ define('io.ox/chat/views/avatar', [
         },
 
         update: function () {
-            var data = this.model.pick('id', 'first_name', 'last_name', 'image');
+            var data = this.model.pick('id', 'first_name', 'last_name', 'image', 'email1');
             this.$el
                 .text(data.image ? '' : util.getInitials(data))
                 .addClass(util.getInitialsColor(util.getInitials(data)))
