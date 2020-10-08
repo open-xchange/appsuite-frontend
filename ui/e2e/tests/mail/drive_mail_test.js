@@ -334,3 +334,76 @@ Scenario('[C85690] Expire date can be forced', async function (I, users, mail) {
     I.waitForElement('.io-ox-mail-window');
     I.waitForText('Plus Ultra!');
 });
+
+Scenario('[C85686] Send drive-mail to external recipient', async (I, users, mail, drive) => {
+    const [batman, comissioner_gordon] = users;
+
+    // Go to Mail -> Compose
+    I.login('app=io.ox/mail', { user: batman });
+    mail.newMail();
+
+    // Add external recipient, subject and mail text
+    const subject = 'Modernize the Batsignal',
+        mailText = 'Let\'s discuss $subject!',
+        externalRecipient = comissioner_gordon.userdata.primaryEmail.replace('@', '+gordon@');
+    I.fillField('To', externalRecipient);
+    I.fillField('Subject', subject);
+    await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
+        I.fillField('body', mailText);
+        I.pressKey('Enter');
+        I.pressKey('Enter');
+    });
+
+    // Under Attachments choose "Add local file"
+    // Select a file
+    // I use a helper function here and directly feed the file into the input field
+    const batFile = 'testdocument.odt';
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `e2e/media/files/generic/${batFile}`);
+    // Expected Result: Attachment section opens containing a link: "Drive Mail"
+    I.waitForText('ODT', undefined, '.io-ox-mail-compose-window');
+    I.waitForText('Use Drive Mail', undefined, '.io-ox-mail-compose-window');
+
+    // Click "Drive Mail" to enable Drive Mail
+    I.click('Use Drive Mail', '.share-attachments');
+
+    // Expected Result: Drive Mail will get enabled and further options are shown.
+    I.waitForText('Options', undefined, '.io-ox-mail-compose-window .attachments');
+    I.seeCheckboxIsChecked('.io-ox-mail-compose-window .share-attachments input[type="checkbox"]');
+
+    mail.send();
+
+    // Expected Result: Mail gets sent successfully
+    I.selectFolder('Sent');
+    I.waitForText(subject, undefined, '.list-view');
+
+    // Verify a new folder with the name of the mail's subject was created in Drive, containing the mail's attachments
+    const locateClickableFolder = (text) => locate('li.list-item.selectable').withDescendant(locate('div').withText(text));
+    I.openApp('Drive');
+    drive.waitForApp();
+    I.waitForText('Drive Mail', undefined, '.file-list-view');
+    I.waitForVisible(locateClickableFolder('Drive Mail'));
+    I.selectFolder('Drive Mail');
+
+    I.logout();
+
+    // Verify the mail as the recipient
+    I.login('app=io.ox/mail', { user: comissioner_gordon });
+    mail.waitForApp();
+    mail.selectMail(subject);
+
+    // Expected Result: Above the content an information is shown that the sender has shared some files with you plus a link to that files
+    I.see(`${batman.userdata.given_name} ${batman.userdata.sur_name} has shared the following file with you:`);
+    I.see(batFile);
+
+    I.waitForElement('.mail-detail-frame');
+    // Verify link redirects you to the files and the files are accessible.
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        I.click('View file');
+    });
+    I.wait(0.3);
+    I.retry(5).switchToNextTab();
+    I.waitForVisible('.io-ox-files-window', 10);
+    drive.waitForApp();
+    I.waitForText('Shared files');
+    I.waitForElement(locate('.list-view li.list-item').withText(batFile));
+});
