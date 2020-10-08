@@ -179,7 +179,7 @@ define('io.ox/core/main/topbar_right', [
             var ul = $('<ul id="topbar-help-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
                 a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">')
                     .attr('aria-label', gt('Help'))
-                    .append('<i class="fa fa-question launcher-icon" aria-hidden="true">'),
+                    .append('<i class="fa fa-question launcher-icon" aria-hidden="true">').attr('title', gt('Help')),
                 dropdown = new Dropdown({
                     // have a simple model to track changes (e.g. availability)
                     model: new Backbone.Model({}),
@@ -266,7 +266,7 @@ define('io.ox/core/main/topbar_right', [
             var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
                 a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">')
                     .attr('aria-label', gt('Settings'))
-                    .append('<i class="fa fa-cog launcher-icon" aria-hidden="true">'),
+                    .append('<i class="fa fa-cog launcher-icon" aria-hidden="true">').attr('title', gt('Settings')),
                 dropdown = new Dropdown({
                     // have a simple model to track changes (e.g. availability)
                     model: new Backbone.Model({}),
