@@ -161,7 +161,7 @@ define('io.ox/chat/data', [
 
         getSystemMessage: function () {
             // deleted flag means early return here
-            if (this.get('deleted')) return gt('Message was deleted');
+            if (this.get('deleted')) return gt('This message was deleted');
 
             var event = JSON.parse(this.get('content'));
             var originator = this.get('sender'),

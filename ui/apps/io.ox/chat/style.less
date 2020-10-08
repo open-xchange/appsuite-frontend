@@ -506,6 +506,12 @@
         justify-content: flex-end;
     }
 
+    .message.deleted  .fa.delivery:before {
+        color: #333;
+        margin: 0;
+        content: "\f05e"; // ban
+    }
+
     .fa.delivery {
         font-size: 12px;
         line-height: 9px;
@@ -649,13 +655,17 @@
             .delivery.server, .delivery.client {
                 color: @gray;
             }
-            .time {
+            &:not(.deleted) .time {
                 color: #fff;
             }
-            &.text, &.file {
+            &.text:not(.deleted), &.file {
                 .content {
                     color: #fff;
                     background-color: @lightblue;
+                }
+            }
+            &.text, &.file {
+                .content {
                     margin-left: auto;
                 }
             }
