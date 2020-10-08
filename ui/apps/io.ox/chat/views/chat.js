@@ -314,15 +314,16 @@ define('io.ox/chat/views/chat', [
 
         renderEditor: function () {
             if (this.isMember()) {
-                this.$editor = $('<textarea class="form-control">').attr({ 'aria-label': gt('Enter message here'), placeholder: gt('Enter message here') });
-                return [this.$editor,
-                    $('<button type="button" class="btn btn-circle cancel-btn">').attr('aria-label', gt('Cancel'))
-                        .append($('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Cancel'))),
-                    $('<button type="button" class="btn btn-link pull-right send-btn">').attr('aria-label', gt('Send'))
-                        .append($('<i class="fa fa-paper-plane" aria-hidden="true">').attr('title', gt('Send'))),
-                    $('<button type="button" class="btn btn-link pull-right file-upload-btn">').attr('aria-label', gt('Upload file'))
-                        .append($('<i class="fa fa-paperclip fa-flip-horizontal" aria-hidden="true">').attr('title', gt('Upload file'))),
-                    $('<input type="file" class="file-upload-input hidden">')];
+                this.$editor = $('<textarea class="form-control">').attr({ 'aria-label': gt('Message'), placeholder: gt('Message') });
+                var send = $('<button type="button" class="btn btn-link pull-right send-btn">').attr('aria-label', gt('Send'))
+                    .append($('<i class="fa fa-paper-plane" aria-hidden="true">').attr('title', gt('Send')));
+                var cancel = $('<button type="button" class="btn btn-link cancel-btn">').attr('aria-label', gt('Cancel'))
+                    .append($('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Cancel')));
+                var attachment = $('<button type="button" class="btn btn-link pull-right file-upload-btn">').attr('aria-label', gt('Upload file'))
+                    .append($('<i class="fa fa-paperclip fa-flip-horizontal" aria-hidden="true">').attr('title', gt('Upload file')));
+                var input = $('<input type="file" class="file-upload-input hidden">');
+
+                return [attachment, input, this.$editor, cancel, send];
             }
 
             if (this.model.get('type') === 'channel') {

@@ -22,7 +22,7 @@ define('io.ox/chat/views/empty', ['io.ox/backbone/views/disposable', 'gettext!io
                 $('<div class="start-chat abs action-button-rounded">').append(
                     $('<div class="center empty-view">').append(
                         $('<button type="button" class="btn btn-link" data-cmd="start-private-chat">').attr('aria-label', gt('Create private chat')).append(
-                            $('<i class="fa fa-plus" aria-hidden="true">').attr('title', gt('Private chat')),
+                            $('<i class="fa fa-user" aria-hidden="true">').attr('title', gt('Private chat')),
                             $.txt(gt('Create private chat'))
                         ),
                         $('<button type="button" class="btn btn-link" data-cmd="edit-group-chat">').attr('aria-label', gt('Create group chat')).append(
