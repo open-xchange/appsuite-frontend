@@ -278,8 +278,8 @@ define('io.ox/chat/views/chat', [
                             new ChatMember({ collection: this.model.members }).render().$el
                         ),
                     // burger menu (pull-right just to have the popup right aligned)
-                    this.$dropdown = $('<div class="dropdown pull-right">').append(
-                        $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').attr('title', gt('More actions'))
+                    this.$dropdown = $('<div class="dropdown">').append(
+                        $('<button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').attr('title', gt('More actions'))
                         .append($('<i class="fa fa-bars" aria-hidden="true">').attr('title', gt('More actions'))),
                         this.renderDropdown()
                     ).css('visibility', 'hidden')
