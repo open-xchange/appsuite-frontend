@@ -506,7 +506,7 @@ define('io.ox/chat/data', [
             var index = this.indexOf(model),
                 next = this.at(index + 1);
 
-            if (next && util.strings.greaterThan(model.get('messageId'), next.get('messageId'))) {
+            if (next && next.get('messageId') && util.strings.greaterThan(model.get('messageId'), next.get('messageId'))) {
                 this.remove(model);
                 this.add(model);
             }
