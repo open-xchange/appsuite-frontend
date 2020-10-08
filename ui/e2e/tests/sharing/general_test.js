@@ -21,8 +21,10 @@ Before(async (users) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async (users, contexts) => {
     await users.removeAll();
+    await contexts.removeAll();
+
 });
 
 Scenario('[C45021] Generate simple link for sharing', async function (I, drive, dialogs) {
@@ -329,6 +331,101 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
         within('.io-ox-alert-error', () => {
             I.waitForText('You do not have the appropriate permissions to read the document.');
         });
+    });
+});
+
+Scenario('[C45025] Create shared object with multiple users (external users) with different permissions', async function (I, users, contexts, drive, dialogs, mail, autocomplete) {
+    const mailListView = '.list-view.visible-selection.mail-item',
+        smartDropDown = '.smart-dropdown-container.dropdown.open';
+
+    const ctxID = Math.trunc(Math.random() * 123456);
+    const ctx = await contexts.create({ id: ctxID });
+    await Promise.all([
+        users.create(users.getRandom(), ctx),
+        users.create(users.getRandom(), ctx)
+    ]);
+
+    await session('Alice', async () => {
+        const folder = await I.grabDefaultFolder('infostore');
+        await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+
+        I.login('app=io.ox/files');
+        drive.waitForApp();
+        I.waitForText('document.txt');
+        I.rightClick(locate('.filename').withText('document.txt'));
+        I.clickDropdown('Permissions / Invite people');
+
+        dialogs.waitForVisible();
+        await within('.modal-dialog', () => {
+            I.waitForFocus('input[placeholder="Add people"]');
+            I.fillField('input[placeholder="Add people"]', users[1].userdata.primaryEmail);
+            I.seeInField('input[placeholder="Add people"]', users[1].userdata.primaryEmail);
+            I.waitForInvisible(autocomplete.locators.suggestions);
+            I.pressKey('Enter');
+            I.waitForText(users[1].userdata.name, 5, locate('.permission.row').withAttr({ 'aria-label': `${users[1].userdata.primaryEmail}, Guest.` }));
+            I.waitForEnabled('.form-control.tt-input');
+            I.fillField('input[placeholder="Add people"]', users[2].userdata.primaryEmail);
+            I.seeInField('input[placeholder="Add people"]', users[2].userdata.primaryEmail);
+            I.waitForInvisible(autocomplete.locators.suggestions);
+            I.wait(0.2);
+            I.pressKey('Enter');
+            I.waitForText(users[2].userdata.name, 5, locate('.permission.row').withAttr({ 'aria-label': `${users[2].userdata.primaryEmail}, Guest.` }));
+            I.click('Viewer', locate('.permission.row').withAttr({ 'aria-label': `${users[1].userdata.primaryEmail}, Guest.` }));
+        });
+        I.clickDropdown('Reviewer');
+        dialogs.clickButton('Share');
+    });
+
+    await session('Bob as Reviewer', async () => {
+        I.login('app=io.ox/files', { user: users[1] });
+        drive.waitForApp();
+        I.dontSee('document.txt');
+        I.openApp('Mail');
+
+        mail.waitForApp();
+        I.waitForElement(mailListView);
+        I.waitForText(users[0].userdata.name);
+        mail.selectMail(users[0].userdata.name);
+        I.waitForElement('.mail-detail-frame');
+        await within({ frame: '.mail-detail-frame' }, () => {
+            I.waitForText('View file');
+            I.retry(5).click('View file');
+        });
+
+        I.wait(0.3);
+        I.retry(7).switchToNextTab();
+        I.waitForText('Edit', 10, '.viewer-toolbar');
+        I.retry(5).click('Edit', '.viewer-toolbar');
+
+        I.waitForElement('.io-ox-editor textarea.content');
+        I.waitForFocus('.io-ox-editor textarea.content');
+        I.fillField('.io-ox-editor textarea.content', 'here is bob');
+        I.seeInField('.io-ox-editor textarea.content', 'here is bob');
+        I.wait(0.2);
+        I.click('Save', '.io-ox-editor-window .window-footer');
+    });
+
+    await session('Charlie as Viewer', async () => {
+        I.login('app=io.ox/files', { user: users[2] });
+        drive.waitForApp();
+        I.dontSee('document.txt');
+        I.openApp('Mail');
+
+        mail.waitForApp();
+        I.waitForElement(mailListView);
+        I.waitForText(users[0].userdata.name);
+        mail.selectMail(users[0].userdata.name);
+        I.waitForElement('.mail-detail-frame');
+        await within({ frame: '.mail-detail-frame' }, () => {
+            I.waitForText('View file');
+            I.retry(5).click('View file');
+        });
+
+        I.wait(0.3);
+        I.retry(7).switchToNextTab();
+        I.waitForElement('.white-page.letter.plain-text', 10);
+        I.waitForText('here is bob', 5, '.white-page.letter.plain-text');
+        I.dontSee('Edit', '.viewer-toolbar');
     });
 
     // TODO: could be also checked with google accounts etc.
