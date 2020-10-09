@@ -1610,3 +1610,114 @@ Scenario('[OXUIB-244] Mark all day appointments as free not respected for new ap
     I.seeCheckboxIsChecked('All day');
     I.dontSeeCheckboxIsChecked('Show as free');
 });
+
+Scenario('[C265253] Push notifications', async function (I, users, calendar) {
+    const day = moment().add(1, 'month').startOf('month').add(1, 'week').isoWeekday(2).format('M/D/YYYY'), // tuesday within next month for a stable clickable future appointment
+        calendarDay = `//td[contains(@aria-label, "${day}")]`,
+        subjectDay = 'D Meetup',
+        subjectWeek = 'W Meetup',
+        subjectWorkweek = 'Ww Meetup';
+
+    await users.create();
+
+    function createAppointment(subject, startTime) {
+        calendar.waitForApp();
+        calendar.newAppointment();
+        I.retry(5).fillField('Subject', subject);
+        I.fillField('Location', 'Conference Room 123');
+        I.click('.datepicker-day-field');
+        I.waitForFocus('.datepicker-day-field');
+        I.fillField(calendar.locators.startdate, day);
+        I.pressKey('Enter');
+        I.clearField(calendar.locators.starttime);
+        I.fillField(calendar.locators.starttime, startTime);
+        I.pressKey('Enter');
+        I.fillField('input.add-participant.tt-input', users[1].userdata.primaryEmail);
+        I.pressKey('Enter');
+        I.waitForText('Participants (2)');
+        I.click('Create', locate('.window-footer').inside('.window-container.io-ox-calendar-edit-window'));
+        I.waitForDetached('.window-container.io-ox-calendar-edit-window');
+    }
+
+    const goToAppointment = () => {
+        I.waitForElement('~Go to next month', calendar.locators.mini);
+        I.retry(5).click('~Go to next month', calendar.locators.mini);
+        I.retry(5).click(calendarDay, calendar.locators.mini);
+    };
+
+    function removeAppointment(subject) {
+        I.click(locate('div.title').withText(subject));
+        calendar.deleteAppointment();
+    }
+
+    function checkAppointment(subject, removed) {
+        if (removed) I.waitForDetached(subject, 15, '.appointment-container');
+        else {
+            I.waitForVisible('.page.current .appointment', 15);
+            I.waitForText(subject, 15, '.appointment-container');
+        }
+    }
+
+    // Create appt. in dayview
+    await session('Alice', async () => {
+        I.login('app=io.ox/calendar');
+        createAppointment(subjectDay, '01:00 PM');
+        goToAppointment();
+        I.waitForVisible('.page.current .appointment');
+    });
+
+    // Check appt. in dayview and switch to week
+    await session('Bob', async () => {
+        I.login('app=io.ox/calendar&perspective=week:day', { user: users[1] });
+        goToAppointment();
+        checkAppointment(subjectDay);
+        calendar.switchView('Week');
+    });
+
+    await session('Alice', async () => {
+        createAppointment(subjectWeek, '02:00 PM');
+        I.waitForVisible('.page.current .appointment');
+    });
+
+    await session('Bob', async () => {
+        checkAppointment(subjectWeek);
+        calendar.switchView('Workweek');
+    });
+
+    await session('Alice', async () => {
+        createAppointment(subjectWorkweek, '03:00 PM');
+        I.waitForVisible('.page.current .appointment');
+    });
+
+    await session('Bob', async () => {
+        checkAppointment(subjectWorkweek);
+        calendar.switchView('Day');
+    });
+
+    //Remove appointments in different views and check
+    await session('Alice', async () => {
+        removeAppointment(subjectDay);
+    });
+
+    await session('Bob', async () => {
+        checkAppointment(subjectDay, true);
+        calendar.switchView('Week');
+    });
+
+    await session('Alice', async () => {
+        removeAppointment(subjectWeek);
+    });
+
+    await session('Bob', async () => {
+        checkAppointment(subjectWeek, true);
+        calendar.switchView('Workweek');
+    });
+
+    await session('Alice', async () => {
+        removeAppointment(subjectWorkweek);
+    });
+
+    await session('Bob', async () => {
+        checkAppointment(subjectWorkweek, true);
+    });
+});
