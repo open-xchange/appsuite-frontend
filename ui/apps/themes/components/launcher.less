@@ -354,11 +354,15 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
 #topbar-account-dropdown .user {
     @sidelength: 64px;
 
+    padding: 3px 20px;
     display: flex;
-    .action {
+    width: 100%;
+    .action { //, .action:hover, .action:focus {
         display: flex;
-        width: 100%;
+        padding: 0;
+        background: none;
     }
+
     .user-picture-container {
         margin-right: 16px;
         width: @sidelength;
@@ -377,10 +381,21 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         .fa { display: none; }
     }
 
+    // overwrites dropdown defaults
+    // .action:hover, .action:focus { background: none; }
+
     // unset user image
-    .action:hover:not([style]) {
+    .action:hover, .action:focus {
         .fa { display: block; }
         .initials { display: none; }
+    }
+
+    // box shadow outline
+    .action:focus .user-picture {
+        box-shadow: 0 0 8px 2px @link-color;
+        &[style] {
+            box-shadow: 0 0 8px 2px @link-color, 0 0 0 2px white inset;
+        }
     }
 
     .text-container {
