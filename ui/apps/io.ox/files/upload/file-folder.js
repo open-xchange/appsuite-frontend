@@ -57,10 +57,10 @@ define('io.ox/files/upload/file-folder', [
     function createTreeObj(fileObjArray) {
         // a tree from fileObjArray
         var tree = {};
-        var isDirExist = function (index, info) {
-            var targetArr = tree[index.toString()];
+        var dirExistCheck = function (info, targetArr) {
+            if (info.isFile) { return false; }
             return targetArr.find(function (item) {
-                return (item.path === info.path && item.parentIndex === info.parentIndex && item.isFile === info.isFile);
+                return item.isFile === false && info.isFile === false && item.path === info.path && item.parentIndex === info.parentIndex;
             });
         };
 
@@ -73,22 +73,21 @@ define('io.ox/files/upload/file-folder', [
 
             var fpSplit = fp.split('/');
             fpSplit.forEach(function (dir, index) { // go though each path segment
-
+                var isFile = obj.isEmptyFolder ? false : !fpSplit[(index + 1)];
                 var info = {
-                    isFile: obj.isEmptyFolder ? false : !fpSplit[(index + 1)],
+                    isFile: isFile,
                     parentIndex: index === 0 ? null : (index - 1),
                     parentName: index === 0 ? null : fpSplit[(index - 1)],
                     name: fpSplit[index],
                     index: index,
                     id: null,
-                    file: (obj.isEmptyFolder ? false : !fpSplit[(index + 1)]) ? obj.file : null,
+                    file: isFile ? obj.file : null,
                     path: _.first(fpSplit, index + 1).join('/'),
                     parentPath: index === 0 ? null : _.first(fpSplit, index).join('/'),
                     preventFileUpload: obj.preventFileUpload
                 };
-
                 if (tree[index.toString()]) {
-                    if (!isDirExist(index, info)) {
+                    if (!dirExistCheck(info, tree[index.toString()])) {
                         tree[index.toString()].push(info);
                     }
                 } else {
@@ -189,14 +188,18 @@ define('io.ox/files/upload/file-folder', [
         return folderReady;
     }
 
-
     /**
     * Creates a folder structure and uploads all containing files after that.
+    *
+    * Pitfalls:
+    * - The file picker and drag & drop provide different data structures.
+    *   Make sure to normalize the 'fullPath' to the drag&drop behavior.
+    *   Consider single file upload and folder upload via filepicker.
     *
     * @param fileObjArray
     *   An object with the following structure:
     *        file: {}|fileObject (empty when a empty folders, for fileObject see https://developer.mozilla.org/en-US/docs/Web/API/File)
-    *        fullPath: String (see https://wicg.github.io/entries-api/#api-entry)
+    *        fullPath: String (a valid path must be set, also for file upload, compare to https://wicg.github.io/entries-api/#api-entry)
     *        preventFileUpload: true|false (whether the file should be uploaded later)
     *        isEmptyFolder: true|false
     *
