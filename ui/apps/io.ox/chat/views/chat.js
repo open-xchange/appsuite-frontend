@@ -159,7 +159,8 @@ define('io.ox/chat/views/chat', [
             this.listenTo(this.model, {
                 'change:title': this.onChangeTitle,
                 'change:unreadCount': this.onChangeUnreadCount,
-                'change:members': this.onChangeMembers
+                'change:members': this.onChangeMembers,
+                'change:roomId': this.onChangeRoomId
             });
 
             this.listenTo(this.model.messages, {
@@ -661,6 +662,11 @@ define('io.ox/chat/views/chat', [
 
             this.markMessageAsRead();
         }, 300),
+
+        onChangeRoomId: function () {
+            $('[data-cid=' + this.model.cid + ']').attr('data-cmd', 'show-chat');
+            $('[data-cid=' + this.model.cid + ']').attr('data-cid', this.model.get('roomId'));
+        },
 
         markMessageAsRead: function () {
             if (this.hidden) return;
