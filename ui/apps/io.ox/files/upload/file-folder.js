@@ -198,7 +198,7 @@ define('io.ox/files/upload/file-folder', [
     *
     * @param fileObjArray
     *   An object with the following structure:
-    *        file: {}|fileObject (empty when a empty folders, for fileObject see https://developer.mozilla.org/en-US/docs/Web/API/File)
+    *        file: {}|fileObject (empty object for folders, for 'fileObject' see https://developer.mozilla.org/en-US/docs/Web/API/File)
     *        fullPath: String (a valid path must be set, also for file upload, compare to https://wicg.github.io/entries-api/#api-entry)
     *        preventFileUpload: true|false (whether the file should be uploaded later)
     *        isEmptyFolder: true|false
