@@ -18,10 +18,11 @@ define('io.ox/core/commons', [
     'io.ox/core/api/account',
     'io.ox/backbone/mini-views/helplink',
     'settings!io.ox/core',
+    'settings!io.ox/contacts',
     'io.ox/backbone/mini-views/upsell',
     'io.ox/backbone/views/actions/util',
     'io.ox/core/capabilities'
-], function (ext, gt, folderAPI, accountAPI, HelpLinkView, coreSettings, UpsellView, actionsUtil, capabilities) {
+], function (ext, gt, folderAPI, accountAPI, HelpLinkView, coreSettings, contSettings, UpsellView, actionsUtil, capabilities) {
 
     'use strict';
 
@@ -240,6 +241,12 @@ define('io.ox/core/commons', [
                     var countGridData = !folderAPI.supports('count_total', data);
                     var total = countGridData ? grid.getIds().length : data.total,
                         node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
+
+                    // adjust total for GAB if showAdmin is set to false
+                    if (folderAPI.is('contacts', data) && data.id === '6' && !contSettings.get('showAdmin', false)) {
+                        total = total - 1;
+                    }
+
                     grid.meta = {
                         total: total,
                         title: data.title
