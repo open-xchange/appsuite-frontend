@@ -115,12 +115,10 @@ define('io.ox/chat/views/messages', [
                         // message body
                         $('<div class="body">')
                             .html(body)
-                            .append(
-                                this.renderFoot(model),
-                                // show some indicator dots when a menu is available
-                                this.renderMenu(model)
-                            )
+                            .append(this.renderFoot(model))
                     ),
+                    // show some indicator dots when a menu is available
+                    this.renderMenu(model),
                     //delivery state
                     $('<div class="fa delivery" aria-hidden="true">').addClass(model.getDeliveryState())
                 );
@@ -275,8 +273,7 @@ define('io.ox/chat/views/messages', [
             $body
                 .html(model.getBody())
                 .append(
-                    this.renderFoot(model),
-                    this.renderMenu(model)
+                    this.renderFoot(model)
                 );
         },
 

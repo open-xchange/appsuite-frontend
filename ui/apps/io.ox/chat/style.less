@@ -544,24 +544,27 @@
 
         .message-actions-dropdown {
             display: none;
-            height: 100%;
-            text-align: center;
-            right: 0;
-            top: 0;
             position: absolute;
+            top: 0;
+            bottom: 0;
 
             .actions-toggle {
-                text-align: center;
-                width: 20px;
-                padding: 0;
+                height: 100%;
                 color: #000;
+                padding-right: 4px;
+                padding-left: 19px;
                 i {
                     vertical-align: middle;
                 }
             }
 
             &.open {
-                display: block;
+                display: inline-block;
+            }
+
+            // super special next sibling selector
+            &.open + .delivery {
+                display: none;
             }
         }
 
@@ -570,8 +573,13 @@
             text-align: center;
         }
 
-        .content:focus-within, .content:hover .message-actions-dropdown {
-            display: block;
+        &:focus-within, &:hover {
+            &.myself:not(.deleted) .delivery {
+                display: none;
+            }
+            .message-actions-dropdown {
+                display: inline-block;
+            }
         }
 
         .body {
@@ -639,10 +647,6 @@
         }
         &.myself {
 
-            .message-actions-dropdown .actions-toggle{
-                color: #fff;
-            }
-
             padding: 0 0 0 128px;
             display: flex;
 
@@ -679,6 +683,9 @@
             &.highlight .content{
                 animation-name: highlightOwnMessage;
             }
+            .message-actions-dropdown {
+                position: relative;
+            }
         }
         &.preview, &.file {
             margin: 0 64px 8px 0;
@@ -705,6 +712,10 @@
             }
 
             .body, .content { max-width: 100%; }
+
+            .content {
+                display: inline-block;
+            }
 
             .body {
                 position: relative;
