@@ -399,7 +399,6 @@ define('io.ox/core/tk/upload', [
         // returned deferred resolves or get's rejected with a list of error messages
         // TODO: unit test
         this.validateFiles = function (newFiles, options) {
-            var self = this;
             if (!options.folder || (delegate && delegate.type === 'importEML')) return $.when([]);
             return folderAPI.get(options.folder).then(function (folder) {
                 // no quota check
@@ -410,14 +409,12 @@ define('io.ox/core/tk/upload', [
                 });
             }).then(function (errors) {
                 if (errors.length === 0) return [];
-                self.stop(); // needed to stop following folder uploads
                 return require(['io.ox/core/tk/upload-problems']).then(function (Problems) {
                     // show dialog and return rejected deferred with error list when dialog get's closed
                     return Problems.report(newFiles, errors);
                 });
             }, function (err) {
                 notifications.yell(err);
-                self.stop(); // needed to stop following folder uploads
                 return $.Deferred().reject([err]);
             });
         };
