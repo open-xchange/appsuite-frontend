@@ -78,7 +78,11 @@ define('io.ox/chat/views/history', [
             });
 
             // get fresh data
-            this.collection.fetch();
+            this.collection.fetch().fail(function () {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell('error', gt('Recent chats could not be loaded.'));
+                });
+            });
         },
 
         render: function () {

@@ -73,8 +73,9 @@ define('io.ox/chat/actions/openGroupDialog', [
 
         model.set('type', obj.type || model.get('type') || 'group');
 
-        new ModalDialog({
+        var dialog = new ModalDialog({
             point: 'io.ox/chat/actions/openGroupDialog',
+            async: true,
             model: model,
             collection: participants,
             backdrop: true,
@@ -83,7 +84,7 @@ define('io.ox/chat/actions/openGroupDialog', [
         .extend({
             header: function () {
                 var title = this.model.id ? gt('Edit group chat') : gt('Create group chat'),
-                    url = this.model.getIconUrl ? this.model.getIconUrl() : '',
+                    url = this.model.getIconUrl() ? this.model.getIconUrl() : '',
                     imageDef;
                 if (this.model.get('type') === 'channel') title = this.model.id ? gt('Edit channel') : gt('Create new channel');
 
@@ -194,6 +195,13 @@ define('io.ox/chat/actions/openGroupDialog', [
             originalModel.save(updates, { hiddenAttr: hiddenAttr }).then(function () {
                 data.chats.add(originalModel);
                 def.resolve(originalModel.get('roomId'));
+                this.close();
+            }.bind(this)).fail(function () {
+                dialog.idle();
+                require(['io.ox/core/yell'], function (yell) {
+                    if (originalModel.get('roomId')) return yell('error', gt('Changes to this chat could not be saved.'));
+                    yell('error', gt('Chat could not be saved.'));
+                });
             });
         })
         .on('discard', def.reject)

@@ -429,7 +429,7 @@ define('io.ox/chat/views/chat', [
             // success will trigger a message:changed event on the websocket. This takes care of view updates etc
             api.deleteMessage(message).fail(function () {
                 require(['io.ox/core/yell'], function (yell) {
-                    yell('error', gt('Could not delete the message'));
+                    yell('error', gt('The message could not be deleted.'));
                 });
             });
         },
@@ -664,7 +664,6 @@ define('io.ox/chat/views/chat', [
         }, 300),
 
         onChangeRoomId: function () {
-            $('[data-cid=' + this.model.cid + ']').attr('data-cmd', 'show-chat');
             $('[data-cid=' + this.model.cid + ']').attr('data-cid', this.model.get('roomId'));
         },
 

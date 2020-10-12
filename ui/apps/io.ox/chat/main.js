@@ -280,7 +280,7 @@ define('io.ox/chat/main', [
                     };
                 }, function () {
                     require(['io.ox/core/yell'], function (yell) {
-                        yell('error', gt('Could not load this file'));
+                        yell('error', gt('The file could not be loaded.'));
                     });
                 });
             });

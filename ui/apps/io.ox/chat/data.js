@@ -150,6 +150,10 @@ define('io.ox/chat/data', [
                 }, _(item).pick('email1', 'email2', 'email3'));
             });
             return data.users.reset(result);
+        }).fail(function () {
+            require(['io.ox/core/yell'], function (yell) {
+                yell('error', gt('There was an error during authentication.'));
+            });
         });
     };
 
@@ -535,7 +539,12 @@ define('io.ox/chat/data', [
                     if (this[dir + 'Complete']) this.trigger('complete:' + dir);
                 }
                 this.trigger('after:all after:' + type);
-            }.bind(this));
+            }.bind(this))
+            .fail(function () {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell('error', gt('The messages could not be loaded.'));
+                });
+            });
         },
         getLast: function () {
             return this.models[this.models.length - 1];
@@ -774,13 +783,23 @@ define('io.ox/chat/data', [
 
             return this.save(attr, { hiddenAttr: hiddenAttr }).then(function () {
                 events.trigger('cmd', { cmd: 'show-chat', id: this.get('roomId') });
-            }.bind(this), this.handleError.bind(this));
+            }.bind(this), this.handleError.bind(this))
+            .fail(function () {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell('error', gt('The message could not be sent.'));
+                });
+            });
         },
 
         toggleRecent: function () {
             var self = this;
             return api.setRoomState(this.get('roomId'), !self.get('active')).then(function () {
                 self.set('active', !self.get('active'));
+            }).fail(function () {
+                require(['io.ox/core/yell'], function (yell) {
+                    if (self.get('active')) yell('error', gt('The chat could not be hidden. Please try again.'));
+                    else yell('error', gt('The chat could not be reactivated. Please try again.'));
+                });
             });
         },
 
@@ -797,7 +816,13 @@ define('io.ox/chat/data', [
                 if (method === 'create') this.messages.roomId = this.get('roomId');
                 if (data.lastMessage) messageCache.get({ messageId: data.lastMessage.messageId }).setInitialDeliveryState();
                 return data;
-            }.bind(this));
+            }.bind(this))
+            .fail(function () {
+                require(['io.ox/core/yell'], function (yell) {
+                    if (method === 'create') yell('error', gt('The chat could not be started.'));
+                    else if (method === 'update') yell('error', gt('The chat could not be updated.'));
+                });
+            });
         }
     });
 
@@ -838,7 +863,12 @@ define('io.ox/chat/data', [
             var model = this.get(roomId);
             if (model) return $.when(model);
             return api.getChannelByType('rooms', roomId)
-                .then(function (data) { return this.add(data); }.bind(this));
+                .then(function (data) { return this.add(data); }.bind(this))
+                .fail(function () {
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell('error', gt('The chat could not be loaded.'));
+                    });
+                });
         },
 
         joinChannel: function (roomId) {
@@ -855,7 +885,11 @@ define('io.ox/chat/data', [
 
         leaveGroup: function (roomId) {
             return api.leaveChannelByType('rooms', roomId)
-                .fail(function (err) { console.error(err); });
+                .fail(function () {
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell('error', gt('The group could not be left.'));
+                    });
+                });
         },
 
         findPrivateRoom: function (email) {
@@ -886,7 +920,11 @@ define('io.ox/chat/data', [
             var room = this.get(roomId);
             return api.leaveChannelByType('channels', roomId)
                 .then(function () { room.set('active', false); })
-                .fail(function (err) { console.error(err); });
+                .fail(function () {
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell('error', gt('The channel could not be left.'));
+                    });
+                });
         }
     });
 
@@ -1100,7 +1138,12 @@ define('io.ox/chat/data', [
                 data.serverConfig = chatUser.config || {};
                 this.set('userId', chatUser.id);
                 this.initialized.resolve();
-            }.bind(this));
+            }.bind(this))
+            .fail(function () {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell('error', gt('An error occurred. Please try again.'));
+                });
+            });
         }
     });
 

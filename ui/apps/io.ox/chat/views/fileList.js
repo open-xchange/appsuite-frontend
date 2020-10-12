@@ -74,7 +74,11 @@ define('io.ox/chat/views/fileList', [
                 'add': this.onAdd
             });
 
-            this.collection.fetch();
+            this.collection.fetch().fail(function () {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell('error', gt('Files could not be loaded.'));
+                });
+            });
         },
 
         render: function () {

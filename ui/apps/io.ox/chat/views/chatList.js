@@ -43,7 +43,11 @@ define('io.ox/chat/views/chatList', [
 
         render: function () {
             // rendering happens via onAdd
-            this.collection.fetch();
+            this.collection.fetch().fail(function () {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell('error', gt('Chats could not be loaded.'));
+                });
+            });
             return this;
         },
 
