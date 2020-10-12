@@ -86,29 +86,31 @@ define('io.ox/chat/actions/openGroupDialog', [
                     url = this.model.getIconUrl ? this.model.getIconUrl() : '';
                 if (this.model.get('type') === 'channel') title = this.model.id ? gt('Edit channel') : gt('Create new channel');
 
-                var title_id = _.uniqueId('title'),
-                    pictureModel = this.pictureModel || (this.pictureModel = new Backbone.Model({
-                        image1_data_url: url,
-                        image1_url: url,
-                        file: function () {
-                            if (!url) return;
-                            return api.request({
-                                url: url,
-                                xhrFields: { responseType: 'blob' }
-                            }).then(function (data) {
-                                var blob = new Blob([data]);
-                                blob.lastModified = true;
-                                return blob;
-                            }, function () {
-                                return '';
-                            });
-                        }
-                    }));
+                api.requestDataUrl({ url: url }).then(function (base64encodedImage) {
+                    var title_id = _.uniqueId('title'),
+                        pictureModel = this.pictureModel || (this.pictureModel = new Backbone.Model({
+                            image1_data_url: base64encodedImage,
+                            image1_url: base64encodedImage,
+                            file: function () {
+                                if (!url) return;
+                                return api.request({
+                                    url: base64encodedImage,
+                                    xhrFields: { responseType: 'blob' }
+                                }).then(function (data) {
+                                    var blob = new Blob([data]);
+                                    blob.lastModified = true;
+                                    return blob;
+                                }, function () {
+                                    return '';
+                                });
+                            }
+                        }));
 
-                this.$('.modal-header').empty().append(
-                    $('<h1 class="modal-title">').attr('id', title_id).text(title),
-                    new PictureUpload({ model: pictureModel }).render().$el
-                );
+                    this.$('.modal-header').empty().append(
+                        $('<h1 class="modal-title">').attr('id', title_id).text(title),
+                        new PictureUpload({ model: pictureModel }).render().$el
+                    );
+                }.bind(this));
             },
             details: function () {
                 var guidDescription = _.uniqueId('form-control-label-');

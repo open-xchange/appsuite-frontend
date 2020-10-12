@@ -13,9 +13,10 @@
 
 define('io.ox/chat/views/groupAvatar', [
     'io.ox/backbone/views/disposable',
+    'io.ox/chat/api',
     'io.ox/contacts/util'
 ],
-function (DisposableView, util) {
+function (DisposableView, api, util) {
 
     'use strict';
 
@@ -39,7 +40,9 @@ function (DisposableView, util) {
             this.$el.css('background-image', '').empty();
 
             if (this.model.get('icon')) {
-                this.$el.css('background-image', 'url("' + this.model.getIconUrl() + '")');
+                api.requestDataUrl({ url: this.model.getIconUrl() }).then(function (base64encodedImage) {
+                    this.$el.css('backgroundImage', 'url(\'' + base64encodedImage + '\')');
+                }.bind(this));
             } else {
                 var data = { first_name: this.model.get('title'), last_name: this.model.get('description') };
                 this.$el.addClass(util.getInitialsColor(util.getInitials(data))).append(this.$icon);
