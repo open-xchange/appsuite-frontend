@@ -89,6 +89,17 @@ define('io.ox/files/main', [
             events.listenTo(events, 'refresh-file', function (parameters) {
                 api.propagate('refresh:file', _.pick(parameters, 'folder_id', 'id'));
             });
+            events.listenTo(events, 'add-file', function (parameters) {
+                api.propagate('add:file', _.pick(parameters, 'folder_id', 'id'));
+            });
+            events.listenTo(events, 'upload-file', function (parameters) {
+                var folderId = parameters ? parameters.folder_id : null;
+                if (folderId && folderId !== app.folder.get()) {
+                    api.pool.resetFolder(folderId);
+                } else {
+                    app.listView.reload();
+                }
+            });
         },
 
         /*
@@ -1045,8 +1056,13 @@ define('io.ox/files/main', [
                 }
             }, 100));
             // use throttled updates for add:file - in case many small files are uploaded
-            api.on('add:file', _.throttle(function () {
-                app.listView.reload();
+            api.on('add:file', _.throttle(function (file) {
+                // if file not in current folder displayed,
+                if (file && file.folder_id && (file.folder_id !== app.folder.get())) {
+                    api.pool.resetFolder(file.folder_id);
+                } else {
+                    app.listView.reload();
+                }
             }, 10000));
             // always refresh when the last file has finished uploading
             api.on('stop:upload', _.bind(app.listView.reload, app.listView));

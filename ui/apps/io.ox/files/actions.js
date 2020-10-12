@@ -148,7 +148,9 @@ define('io.ox/files/actions', [
                         e.preventDefault();
 
                         var list = [];
-                        _(e.target.files).each(function (file) {
+                        var files = baton.filter ? baton.filter(e.target.files) : e.target.files;
+
+                        _(files).each(function (file) {
                             list.push(_.extend(file, { group: 'file' }));
                         });
                         var options = _.extend({ folder: baton.folder_id }, baton.file_options);
