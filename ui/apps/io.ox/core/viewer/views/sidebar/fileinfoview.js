@@ -12,6 +12,7 @@
  */
 define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/viewer/views/sidebar/panelbaseview',
+    'io.ox/core/api/user',
     'io.ox/core/extensions',
     'io.ox/files/api',
     'io.ox/core/folder/api',
@@ -22,7 +23,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/backbone/mini-views/copy-to-clipboard',
     'settings!io.ox/core',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, FilesAPI, folderAPI, util, mailUtil, capabilities, ViewerUtil, CopyToClipboardView, settings, gt) {
+], function (PanelBaseView, userApi, Ext, FilesAPI, folderAPI, util, mailUtil, capabilities, ViewerUtil, CopyToClipboardView, settings, gt) {
 
     'use strict';
 
@@ -159,13 +160,13 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                         $('<dd class="camera_capture_date">').text(createDateString(model.get('capture_date')))
                     );
                 }
-                console.log('blubber die blub');
+
                 dl.append(
                     // modified
                     $('<dt>').text(gt('Modified')),
                     $('<dd class="modified">').append(
                         $('<span class="modifiedAt">').text(dateString),
-                        $('<span class="modifiedBy">').append(document.createTextNode('\u200B')).append(util.getTextNode(model.attributes, 'modified'))
+                        $('<span class="modifiedBy">').append(document.createTextNode('\u200B')).append(userApi.getTextNodeExtended(model.attributes, 'modified'))
                     )
                 );
 

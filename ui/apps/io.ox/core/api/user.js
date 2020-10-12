@@ -256,7 +256,7 @@ define('io.ox/core/api/user', [
      */
     api.getTextNode = function (id, options) {
         var opt = _.extend({ type: 'name' }, options),
-            node = document.createTextNode('');
+            node = options.node || document.createTextNode('');
         api.get({ id: id })
             .done(function (data) {
                 var name = '';
@@ -316,6 +316,69 @@ define('io.ox/core/api/user', [
             accountAPI.reload();
         });
     });
+
+    // helper functions for federated sharing (sharing from other appsuites or contexts)
+
+    // helper function to get usernames from objects with modified/created_from columns (folders files etc). uses modified/created_by as fallback
+    // type should be "created" or "modified", default is created
+    // data is the object containing the created_by or modified_by attributes
+    api.getNameExtended = function (data, type) {
+        if (data === undefined) return $.Deferred().reject({ error: 'Unknown User' });
+        type = type || 'created';
+
+        // try extended data first (no need to request data from the server)
+        var userData = data[type + '_from'];
+
+        var name = checkForName(userData);
+        if (name) return $.when(name);
+
+        // try to get name via user id second
+        userData = data[type + '_by'];
+
+        if (userData !== undefined) {
+            return api.getName(userData);
+        }
+
+        return $.Deferred().reject({ error: 'Unknown User' });
+    };
+
+    // creates a textnode and fills it with a displayname (inserting the name may be asynchronous if it has to be requeste first)
+    api.getTextNodeExtended = function (data, type) {
+        if (data === undefined) return '';
+        type = type || 'created';
+        var node = document.createTextNode(''),
+            // try extended data first (no need to request data from the server)
+            userData = data[type + '_from'];
+
+        var name = checkForName(userData);
+        if (name) {
+            node.nodeValue = name;
+            return node;
+        }
+
+        // try to get name via user id second
+        userData = data[type + '_by'];
+
+        if (userData !== undefined) {
+            api.getTextNode(userData, { node: node });
+        }
+        return node;
+    };
+
+    // helper to find the first usable name, uses contact util for language specific formats (lastname, firstname | firstname lastname etc)
+    function checkForName(userData) {
+        var result;
+        if (userData && (userData.displayName || !_.isEmpty(userData.contact))) {
+            // try to get name via contact data
+            result = util.getFullName(userData.contact);
+            // display name as Fallback
+            if (!result && userData.displayName) {
+                result = userData.displayName;
+            }
+        }
+
+        return result;
+    }
 
     return api;
 });
