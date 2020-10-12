@@ -177,6 +177,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/uploadFolder', {
         folder: 'create',
+        device: '!(ios || android)',
         matches: function (baton) {
             // hide for virtual folders (other files root, public files root)
             if (_(['14', '15']).contains(baton.folder_id)) return false;
