@@ -545,11 +545,11 @@
         .message-actions-dropdown {
             display: none;
             position: absolute;
-            top: 0;
-            bottom: 0;
+            margin: auto 0;
+            top: ~"calc(50% - 15px)";
+            height: 30px;
 
             .actions-toggle {
-                height: 100%;
                 color: #000;
                 padding-right: 4px;
                 padding-left: 19px;
@@ -679,6 +679,8 @@
                 margin-bottom: auto;
                 display: inline-block;
                 width: 12px;
+                // fixes some issues with moving messages on hover
+                min-width: 12px;
             }
             &.highlight .content{
                 animation-name: highlightOwnMessage;
