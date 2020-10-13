@@ -106,6 +106,7 @@ define('io.ox/chat/views/messages', [
                 .toggleClass('highlight', !!model.get('messageId') && model.get('messageId') === this.messageId)
                 .toggleClass('emoji', util.isOnlyEmoji(body))
                 .toggleClass('deleted', !!model.get('deleted'))
+                .toggleClass('has-reply', !_.isEmpty(model.get('replyTo')) && !model.get('replyTo').deleted)
                 .append(
                     // sender avatar & name
                     this.renderSender(model),

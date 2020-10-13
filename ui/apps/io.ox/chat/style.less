@@ -789,10 +789,12 @@
             }
         }
         &.text.emoji {
-            .content {
+            // use direct child selectors to avoid giant font for inner messages (replies etc)
+            >.content >.body { font-size: 48px; }
+
+            &:not(.has-reply)>.content {
                 background-color: transparent;
                 padding: 2px;
-                .body { font-size: 48px; }
             }
             .foot {
                 top: 44px;
