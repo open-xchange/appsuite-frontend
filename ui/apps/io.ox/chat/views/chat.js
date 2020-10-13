@@ -417,7 +417,7 @@ define('io.ox/chat/views/chat', [
         onCancelSpecialMode: function () {
             this.$editor.val('').focus();
             if (this.$messageReference) this.$messageReference.remove();
-            this.$el.find('.controls').removeClass('edit-mode reply-mode system text preview');
+            this.$el.find('.controls').removeClass('edit-mode reply-mode system text preview emoji');
             this.specialMode = false;
             this.messageReference = null;
         },
@@ -442,7 +442,8 @@ define('io.ox/chat/views/chat', [
             this.onCancelSpecialMode();
 
             var messageNode = this.getMessageNode(message),
-                user = data.users.getByMail(message.get('sender'));
+                user = data.users.getByMail(message.get('sender')),
+                messageBody = message.getBody();
             // scroll to cited message
             if (messageNode) {
                 this.$scrollpane.scrollTop(messageNode[0].offsetTop - this.$scrollpane.height() + messageNode.height() + 4);
@@ -457,12 +458,12 @@ define('io.ox/chat/views/chat', [
                         $('<div class="sender">').text(user.getName()),
                         // message body
                         $('<div class="body">')
-                            .html(message.getBody())
+                            .html(messageBody)
                     )
                 );
 
             this.$editor.before(this.$messageReference).focus();
-            this.$el.find('.controls').addClass('reply-mode ' + message.getType());
+            this.$el.find('.controls').addClass('reply-mode ' + message.getType()).toggleClass('emoji', util.isOnlyEmoji(messageBody));
             this.specialMode = 'reply';
             this.messageReference = message;
         },
