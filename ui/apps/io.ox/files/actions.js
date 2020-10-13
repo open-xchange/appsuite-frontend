@@ -97,9 +97,10 @@ define('io.ox/files/actions', [
     }
 
     function createFilePickerAndUpload(baton, type) {
-        var input;
+        var input = $();
 
-        // yes, better let an error happen when no type is provided to notice it
+        // notify when type is not provided
+        if (!type && ox.debug) { return console.error('No type for upload provided'); }
         if (type === 'folder') { input = $('<input type="file" name="file" multiple directory webkitdirectory mozdirectory>'); }
         if (type === 'file') { input = $('<input type="file" name="file" multiple>'); }
 
