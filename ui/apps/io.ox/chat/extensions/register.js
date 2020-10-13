@@ -329,4 +329,12 @@ define('io.ox/chat/extensions/register', [
         });
     }
 
+    // Settings
+    ext.point('io.ox/settings/pane/tools').extend({
+        id: 'chat',
+        title: gt('Chat'),
+        ref: 'io.ox/chat',
+        index: 50
+    });
+
 });

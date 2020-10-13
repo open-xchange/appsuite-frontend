@@ -27,9 +27,8 @@ define('io.ox/chat/views/chat', [
     'gettext!io.ox/chat',
     'io.ox/core/tk/visibility-api-util',
     'io.ox/core/strings',
-    'io.ox/core/notifications',
-    'settings!io.ox/core'
-], function (ext, api, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, util, ToolbarView, gt, visibilityApi, strings, notifications, settings) {
+    'io.ox/core/notifications'
+], function (ext, api, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, util, ToolbarView, gt, visibilityApi, strings, notifications) {
 
     'use strict';
 
@@ -527,7 +526,7 @@ define('io.ox/chat/views/chat', [
         onFileupload: function () {
             var $input = this.$('.file-upload-input'),
                 files = _.toArray($input[0].files),
-                sizeLimit = settings.get('chat/maxFileSize', -1);
+                sizeLimit = data.serverConfig.maxFileSize || -1;
 
             if (sizeLimit > 0) {
                 for (var i = 0; i < files.length; i++) {

@@ -53,6 +53,38 @@ define('io.ox/chat/data', [
         }
     });
 
+    var UserSettings = BaseModel.extend({
+        defaults: {
+            emailNotification: 'always'
+        },
+
+        initialize: function () {
+            this.on('change', this.onChange);
+        },
+
+        url: api.url + '/user/settings',
+
+        // trick Backbone to use a patch instead of post
+        isNew: function () {
+            return false;
+        },
+
+        onChange: _.throttle(function () {
+            this.saven();
+        }, 5000),
+
+        save: function (yell) {
+            var changed = this.changedAttributes();
+            if (Object.keys(changed).length === 0) return $.when();
+            return BaseModel.prototype.save.call(this, changed, { patch: true }).catch(function (err) {
+                if (yell === false) throw err;
+                require(['io.ox/core/yell'], function (yell) {
+                    yell('error', gt('Could not save settings'));
+                });
+            });
+        }
+    });
+
     var UserModel = Backbone.Model.extend({
 
         isSystem: function () { return this.get('id') === 0; },
@@ -1024,9 +1056,6 @@ define('io.ox/chat/data', [
                     if (typeChanged) events.trigger('message:changed', cachedMessage);
                 }
             });
-
-            // send heartbeat every minute
-            setInterval(function () { socket.emit('heartbeat'); }, 60000);
         },
 
         waitForMessage: function () {
@@ -1043,6 +1072,11 @@ define('io.ox/chat/data', [
         getUserId: function () {
             return api.getUserId().then(function (chatUser) {
                 data.user = chatUser;
+                data.userSettings = new UserSettings(chatUser.settings);
+                var userModel = data.users.getByMail(data.user.email);
+                // manually set the display but do not catch the error
+                data.userSettings.set('displayName', userModel.getName(), { silent: true }).save(false);
+                data.serverConfig = chatUser.config || {};
                 this.set('userId', chatUser.id);
                 this.initialized.resolve();
             }.bind(this));
