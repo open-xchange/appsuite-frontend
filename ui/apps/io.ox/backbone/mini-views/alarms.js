@@ -181,7 +181,8 @@ define('io.ox/backbone/mini-views/alarms', [
                         } else {
                             duration = '-PT15M';
                         }
-                        var node = self.createNodeFromAlarm({ action: 'DISPLAY', trigger: { duration: duration, related: 'START' } });
+                        var action = _(supportedTypes).indexOf('DISPLAY') === -1 ? supportedTypes[0] || 'DISPLAY' : 'DISPLAY',
+                            node = self.createNodeFromAlarm({ action: action, trigger: { duration: duration, related: 'START' } });
                         self.list.append(node);
                         // focus newly added alarm, to offer feedback for screenreaders etc
                         node.find('.alarm-action').focus();
@@ -221,7 +222,7 @@ define('io.ox/backbone/mini-views/alarms', [
                 //#. %1$d: is the number of the reminder
                 $('<legend class="sr-only">').text(gt('Reminder %1$d', index)),
                 row = $('<div class="item">'));
-            if (_(this.supportedTypes).indexOf(alarm.action) === -1) {
+            if (this.supportedTypes.length === 1 || _(this.supportedTypes).indexOf(alarm.action) === -1) {
                 row.append($('<div class="alarm-action" tabindex="0">').text(typeTranslations[alarm.action] || alarm.action).val(alarm.action));
             } else {
                 row.append(

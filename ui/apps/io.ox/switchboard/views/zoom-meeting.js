@@ -14,22 +14,22 @@
 define('io.ox/switchboard/views/zoom-meeting', [
     'io.ox/switchboard/zoom',
     'io.ox/switchboard/api',
+    'io.ox/core/extensions',
     'settings!io.ox/switchboard',
     'gettext!io.ox/switchboard'
-], function (zoom, api, settings, gt) {
+], function (zoom, api, ext, settings, gt) {
 
     'use strict';
 
-    var preferredCountry = settings.get('zoom/dialin/preferredCountry', 'DE');
-    var filterCountry = settings.get('zoom/dialin/filterCountry', 'DE');
+    var filterCountry = settings.get('zoom/dialin/filterCountry', '');
 
     var ZoomMeetingView = zoom.View.extend({
 
         className: 'conference-view zoom',
 
         events: {
-            'click [data-action="copy-to-location"]': 'copyToLocation',
-            'click [data-action="copy-to-description"]': 'copyToDescription',
+            'click [data-action="copy-to-location"]': 'copyToLocationHandler',
+            'click [data-action="copy-to-description"]': 'copyToDescriptionHandler',
             'click [data-action="recreate"]': 'recreateMeeting'
         },
 
@@ -49,30 +49,10 @@ define('io.ox/switchboard/views/zoom-meeting', [
         },
 
         renderDone: function () {
-            // show meeting
-            var url = this.getJoinURL() || 'https://...';
-            this.$el.append(
-                $('<i class="fa fa-video-camera conference-logo" aria-hidden="true">'),
-                $('<div class="ellipsis">').append(
-                    $('<b>').text(gt('Link:')),
-                    $.txt(' '),
-                    $('<a target="_blank" rel="noopener">').attr('href', url).text(gt.noI18n(url))
-                ),
-                this.createDialinNumbers(),
-                $('<div>').append(
-                    $('<a href="#" class="secondary-action" data-action="copy-to-location">')
-                        .text(gt('Copy link to location')),
-                    $('<a href="#" class="secondary-action">')
-                        .text(gt('Copy link to clipboard'))
-                        .attr('data-clipboard-text', url)
-                        .on('click', false),
-                    $('<a href="#" class="secondary-action" data-action="copy-to-description">')
-                        .text(gt('Copy dial-in numbers to description'))
-                ),
-                $('<div class="alert alert-info hidden recurrence-warning">').text(
-                    gt('Zoom meetings expire after 365 days. We recommend to limit the series to one year. Alternatively, you can update the series before the Zoom meeting expires.')
-                )
-            );
+            this.renderPoint('done');
+            // auto copy
+            this.autoCopyToLocation();
+            this.autoCopyToDescription();
             this.onChangeRecurrence();
             var el = this.$('[data-clipboard-text]').get(0);
             require(['static/3rd.party/clipboard.min.js'], function (Clipboard) {
@@ -80,56 +60,69 @@ define('io.ox/switchboard/views/zoom-meeting', [
             });
         },
 
-        renderError: function () {
-            var url = this.getJoinURL();
-            if (url) {
-                this.model.set('error', gt('A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has expired.'));
-                zoom.View.prototype.renderError.call(this);
-                this.$el.append(
-                    $('<button type="button" class="btn btn-default" data-action="recreate">')
-                        .text(gt('Create new Zoom meeting'))
-                );
-            } else {
-                zoom.View.prototype.renderError.call(this);
-            }
-        },
-
-        createDialinNumbers: function () {
-            var meeting = this.model.get('meeting');
-            if (!preferredCountry || !meeting || !meeting.settings) return $();
-            var dialin = _(meeting.settings.global_dial_in_numbers).find(function (dialin) {
-                return dialin.country === preferredCountry;
-            });
-            if (!dialin) return $();
-            return $('<div class="ellipsis">').append(
-                $('<b>').text(gt('Dial-in number:')),
-                $.txt(' '),
-                $('<a target="_blank" rel="noopener">').attr('callto', dialin.number).text(gt.noI18n(dialin.number)),
-                $.txt(' '),
-                $('<span>').text(gt.noI18n(' (' + dialin.country + ')'))
-            );
-        },
-
-        copyToLocation: function (e) {
+        copyToLocationHandler: function (e) {
             e.preventDefault();
+            this.copyToLocation();
+        },
+
+        autoCopyToLocation: function () {
+            if (!settings.get('zoom/autoCopyToLocation')) return;
+            if (this.appointment.get('location')) return;
+            this.copyToLocation();
+        },
+
+        copyToLocation: function () {
             //#. %1$s contains the URL to join the meeting
             this.appointment.set('location', gt('Zoom Meeting: %1$s', this.getJoinURL()));
         },
 
-        copyToDescription: function (e) {
+        copyToDescriptionHandler: function (e) {
             e.preventDefault();
-            var meeting = this.model.get('meeting');
+            this.copyToDescription();
+        },
+
+        autoCopyToDescription: function () {
+            if (!settings.get('zoom/autoCopyToDescription')) return;
+            if (this.appointment.get('description')) return;
+            this.copyToDescription();
+        },
+
+        copyToDescription: function () {
+            var meeting = this.model.get('meeting'),
+                meetingId, passcode, onetap, dialinNumbers, description;
             if (!meeting || !meeting.settings) return;
-            var dialinNumbers = _(meeting.settings.global_dial_in_numbers)
-                .filter(function (dialin) {
-                    if (filterCountry === undefined) return true;
-                    return filterCountry === dialin.country;
-                })
-                .map(function (dialin) {
-                    return dialin.country_name + ' (' + (dialin.city || dialin.country) + '): ' + dialin.number;
-                });
-            var description = this.appointment.get('description') || '';
-            this.appointment.set('description', gt('Dial-in numbers') + ':\n' + dialinNumbers.join('\n') + '\n\n' + description);
+            dialinNumbers = _(meeting.settings.global_dial_in_numbers).filter(function (dialin) {
+                if (!filterCountry) return true;
+                return filterCountry === dialin.country;
+            });
+            description = gt('Join Zoom meeting') + ': ' + this.getJoinURL() + '\n';
+            if (meeting.password) {
+                //#. %1$s contains a password
+                description += gt('Meeting password: %1$s', meeting.password) + '\n';
+            }
+            if (dialinNumbers.length) {
+                meetingId = String(meeting.id).replace(/^(\d{3})(\d{4})(\d+)$/, '$1 $2 $3');
+                passcode = meeting.h323_password;
+                onetap = dialinNumbers[0].number + ',,' + meeting.id + '#,,,,,,0#' + (passcode ? ',,' + passcode + '#' : '');
+                description += '\n' +
+                    //#. Zoom offers a special number to automatically provide the meeting ID and passcode
+                    //#. German: "Schnelleinwahl mobil"
+                    //#. %1$s is the country, %2$s contains the number
+                    gt('One tap mobile (%1$s): %2$s', dialinNumbers[0].country_name, onetap) + '\n\n' +
+                    //#. %1$s contains a numeric zoom meeting ID
+                    gt('Meeting-ID: %1$s', meetingId) + '\n' +
+                    //#. %1$s contains a numeric dialin passcode
+                    (passcode ? gt('Dial-in passcode: %1$d', passcode) + '\n' : '') +
+                    '\n' +
+                    gt('Dial by your location') + '\n' +
+                    dialinNumbers.map(function (dialin) {
+                        return '    ' + dialin.country_name + (dialin.city ? ' (' + dialin.city + ')' : '') + ': ' + dialin.number;
+                    })
+                    .join('\n') + '\n';
+            }
+            var existingDescription = this.appointment.get('description');
+            if (existingDescription) description = description + '\n' + existingDescription;
+            this.appointment.set('description', description);
         },
 
         isDone: function () {
@@ -201,6 +194,128 @@ define('io.ox/switchboard/views/zoom-meeting', [
             var rrule = this.appointment.get('rrule');
             this.$('.recurrence-warning').toggleClass('hidden', !longerThanOneYear(rrule));
         }
+    });
+
+    var points = {
+        auth: {
+            icon: function () {
+                this.$el.append(
+                    $('<i class="fa fa-exclamation conference-logo" aria-hidden="true">')
+                );
+            },
+            hint: function () {
+                this.$el.append(
+                    $('<p>').text(
+                        gt('You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. If you don\'t have an account yet, it is sufficient to create a free one.', ox.serverConfig.productName)
+                    )
+                );
+            },
+            button: function () {
+                this.$el.append(
+                    $('<p>').append(
+                        $('<button type="button" class="btn btn-default" data-action="start-oauth">')
+                            .text(gt('Connect with Zoom'))
+                    )
+                );
+            }
+        },
+        pending: {
+            default: function () {
+                this.$el.append(
+                    $('<div class="pending">').append(
+                        $('<i class="fa fa-video-camera conference-logo" aria-hidden="true">'),
+                        $.txt(gt('Connecting to Zoom ...')),
+                        $('<i class="fa fa-refresh fa-spin" aria-hidden="true">')
+                    )
+                );
+            }
+        },
+        done: {
+            icon: function () {
+                this.$el.append(
+                    $('<i class="fa fa-video-camera conference-logo" aria-hidden="true">')
+                );
+            },
+            link: function () {
+                var url = this.getJoinURL() || 'https://...';
+                this.$el.append(
+                    $('<div class="ellipsis">').append(
+                        $('<b>').text(gt('Link:')),
+                        $.txt(' '),
+                        $('<a target="_blank" rel="noopener">').attr('href', url).text(gt.noI18n(url))
+                    )
+                );
+            },
+            actions: function () {
+                this.$el.append(
+                    $('<div>').append(
+                        $('<a href="#" class="secondary-action" data-action="copy-to-location">')
+                            .text(gt('Copy link to location')),
+                        $('<a href="#" class="secondary-action">')
+                            .text(gt('Copy link to clipboard'))
+                            .attr('data-clipboard-text', this.getJoinURL())
+                            .on('click', false),
+                        $('<a href="#" class="secondary-action" data-action="copy-to-description">')
+                            .text(gt('Copy dial-in information to description'))
+                    )
+                );
+            },
+            warning: function () {
+                this.$el.append(
+                    $('<div class="alert alert-info hidden recurrence-warning">').text(
+                        gt('Zoom meetings expire after 365 days. We recommend to limit the series to one year. Alternatively, you can update the series before the Zoom meeting expires.')
+                    )
+                );
+            }
+        },
+        error: {
+            load: function () {
+                if (!this.getJoinURL()) return;
+                this.model.set('error', gt('A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has expired.'));
+            },
+            icon: function () {
+                this.$el.append(
+                    $('<i class="fa fa-exclamation conference-logo" aria-hidden="true">')
+                );
+            },
+            message: function () {
+                this.$el.append(
+                    $('<p class="alert alert-warning message">').append(
+                        $.txt(this.model.get('error') || gt('Something went wrong. Please try again.'))
+                    )
+                );
+            },
+            recreate: function () {
+                if (!this.getJoinURL()) return;
+                this.$el.append(
+                    $('<button type="button" class="btn btn-default" data-action="recreate">')
+                        .text(gt('Create new Zoom meeting'))
+                );
+            }
+        },
+        offline: {
+            icon: function () {
+                this.$el.append(
+                    $('<i class="fa fa-exclamation conference-logo" aria-hidden="true">')
+                );
+            },
+            default: function () {
+                this.$el.append(
+                    $('<p class="alert alert-warning message">').append(
+                        gt('The Zoom integration service is currently unavailable. Please try again later.')
+                    )
+                );
+            }
+        }
+    };
+
+    _(points).each(function (point, id) {
+        var index = 0;
+        ext.point(ZoomMeetingView.prototype.POINT + '/' + id).extend(
+            _(point).map(function (fn, id) {
+                return { id: id, index: (index += 100), render: fn };
+            })
+        );
     });
 
     function translateMeetingData(data) {

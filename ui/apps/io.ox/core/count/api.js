@@ -19,7 +19,10 @@ define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], func
     // we always need to expose the API even if tracking is disabled
     var api = _.extend({ queue: [], add: _.noop }, Backbone.Events),
         url = settings.get('count/url') || settings.get('tracker/url'),
-        enabled = url && !ox.debug && settings.get('count/enabled', true);
+        enabled = url && !ox.debug && settings.get('count/enabled', true),
+        chunkSize = 100,
+        platform = _(['windows', 'macos', 'ios', 'android']).find(_.device),
+        device = _(['smartphone', 'desktop', 'tablet']).find(_.device);
 
     // count/disabled is _only_ for dev purposes!
     api.disabled = settings.get('count/disabled', !enabled);
@@ -58,10 +61,14 @@ define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], func
         return toggles[id] !== false;
     };
 
+    api.platform = platform;
+    api.device = device;
+
     function send() {
         if (api.queue.length === 0) return;
-        var data = api.queue;
-        api.queue = [];
+        // for large queues ensure we only send chunks of 100 entries to avoid "entity too large" issues
+        var data = api.queue.slice(0, chunkSize);
+        api.queue = api.queue.slice(chunkSize, api.queue.length);
         api.trigger('sync', data);
         if (url === 'debug') return console.debug('count', data);
         $.post({ url: url, contentType: 'application/json', data: JSON.stringify(data), timeout: 10000 }).fail(function (xhr) {
@@ -70,9 +77,16 @@ define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], func
                 api.trigger('forbidden');
                 return clearInterval(intervalId);
             }
-            // reschedule data for retransmission
+            if (xhr.status === 413) {
+                // last line of defense, maybe messed up content in queue causing
+                // request entity too large error. In this case clear the queue
+                api.queue = [];
+                return;
+            }
+            // reschedule data for retransmission in case switchboard is not available
             api.trigger('fail', data);
             [].push.apply(api.queue, data);
+
         });
     }
 

@@ -14,6 +14,7 @@
 define('io.ox/switchboard/settings/pane', [
     'io.ox/core/extensions',
     'io.ox/core/settings/util',
+    'io.ox/core/capabilities',
     'io.ox/backbone/views/extensible',
     'io.ox/backbone/views/disposable',
     'io.ox/switchboard/api',
@@ -21,7 +22,7 @@ define('io.ox/switchboard/settings/pane', [
     'io.ox/contacts/util',
     'settings!io.ox/switchboard',
     'gettext!io.ox/switchboard'
-], function (ext, util, ExtensibleView, DisposableView, api, zoom, contactsUtil, settings, gt) {
+], function (ext, util, capabilities, ExtensibleView, DisposableView, api, zoom, contactsUtil, settings, gt) {
 
     'use strict';
 
@@ -63,18 +64,59 @@ define('io.ox/switchboard/settings/pane', [
             }
         },
         {
-            id: 'checkboxes',
+            id: 'appointments',
+            index: INDEX += 100,
+            render: function () {
+                if (!capabilities.has('calendar')) return;
+                this.$el.append(
+                    util.fieldset(
+                        gt('Appointments'),
+                        util.checkbox('zoom/addMeetingPassword', gt('Always add a random meeting password'), settings),
+                        util.checkbox('zoom/autoCopyToLocation', gt('Automatically copy link to location'), settings),
+                        util.checkbox('zoom/autoCopyToDescription', gt('Automatically copy dial-in information to description'), settings)
+                    )
+                );
+            }
+        },
+        {
+            id: 'calls',
             index: INDEX += 100,
             render: function () {
                 this.$el.append(
                     util.fieldset(
-                        gt('Options'),
-                        util.checkbox('zoom/addMeetingPassword', gt('Always add a random meeting password'), settings),
+                        gt('Incoming calls'),
                         util.checkbox('call/showNativeNotifications', gt('Show desktop notifications'), settings),
                         util.checkbox('call/useRingtones', gt('Play ringtone on incoming call'), settings)
                     )
                 );
             }
+        },
+        {
+            id: 'dialin',
+            index: INDEX += 100,
+            render: function () {
+                this.$el.append(
+                    util.fieldset(
+                        gt('Dial-in numbers'),
+                        $('<p>').text(
+                            //#. pro and business are names
+                            gt('If you have a professional Zoom account, Zoom offers dial-in numbers per country and lets you choose which countries appear in meeting invitations.')
+                        ),
+                        $('<p>').text(
+                            gt('You can edit the list of countries in your Zoom profile.')
+                        ),
+                        $('<p>').append(
+                            $('<a href="" rel="noopener" target="_blank">')
+                            .attr('href', 'https://zoom.us/profile/setting?tab=telephony')
+                            .append(
+                                $.txt(gt('Open Zoom profile')),
+                                $('<i class="fa fa-external-link" aria-hidden="true" style="margin-left: 8px">')
+                            )
+                        )
+                    )
+                );
+            }
+
         }
     );
 

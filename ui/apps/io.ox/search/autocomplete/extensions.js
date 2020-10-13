@@ -55,6 +55,7 @@ define('io.ox/search/autocomplete/extensions', [
                 allowEditing: false,
                 createTokensOnBlur: false,
                 customDefaultModel: true,
+                delimiter: '',
                 // typeahead options
                 maxResults: 20,
                 minLength: Math.max(1, settings.get('search/minimumQueryLength', 1)),

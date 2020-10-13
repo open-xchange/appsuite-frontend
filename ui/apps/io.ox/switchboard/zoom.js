@@ -14,9 +14,10 @@
 define('io.ox/switchboard/zoom', [
     'io.ox/switchboard/api',
     'io.ox/backbone/views/disposable',
+    'io.ox/core/extensions',
     'settings!io.ox/switchboard',
     'gettext!io.ox/switchboard'
-], function (api, DisposableView, settings, gt) {
+], function (api, DisposableView, ext, settings, gt) {
 
     'use strict';
 
@@ -25,6 +26,8 @@ define('io.ox/switchboard/zoom', [
     });
 
     var View = DisposableView.extend({
+
+        POINT: 'io.ox/switchboard/views/zoom-meeting',
 
         constructor: function () {
             this.model = new Backbone.Model({ type: 'zoom', state: 'authorized', joinURL: '' });
@@ -90,50 +93,30 @@ define('io.ox/switchboard/zoom', [
             }
         },
 
+        renderPoint: function (suffix) {
+            ext.point(this.POINT + '/' + suffix).invoke('render', this, new ext.Baton());
+        },
+
         // no OAuth token yet
         renderAuthRequired: function () {
-            this.$el.append(
-                $('<i class="fa fa-exclamation conference-logo" aria-hidden="true">'),
-                $('<p>').text(
-                    gt('You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. If you don\'t have an account yet, it is sufficient to create a free one.', ox.serverConfig.productName)
-                ),
-                $('<p>').append(
-                    $('<button type="button" class="btn btn-default" data-action="start-oauth">')
-                        .text(gt('Connect with Zoom'))
-                )
-            );
+            this.renderPoint('auth');
         },
 
         // shown while talking to the API
         renderPending: function () {
-            this.$el.append(
-                $('<div class="pending">').append(
-                    $('<i class="fa fa-video-camera conference-logo" aria-hidden="true">'),
-                    $.txt(gt('Connecting to Zoom ...')),
-                    $('<i class="fa fa-refresh fa-spin" aria-hidden="true">')
-                )
-            );
+            this.renderPoint('pending');
         },
 
         renderError: function () {
-            this.$el.append(
-                $('<i class="fa fa-exclamation conference-logo" aria-hidden="true">'),
-                $('<p class="alert alert-warning message">').append(
-                    $.txt(this.model.get('error') || gt('Something went wrong. Please try again.'))
-                )
-            );
+            this.renderPoint('error');
         },
 
         renderOffline: function () {
-            this.$el.append(
-                $('<i class="fa fa-exclamation conference-logo" aria-hidden="true">'),
-                $('<p class="alert alert-warning message">').append(
-                    gt('The Zoom integration service is currently unavailable. Please try again later.')
-                )
-            );
+            this.renderPoint('offline');
         },
 
         renderDone: function () {
+            this.renderPoint('done');
         },
 
         createMeeting: function () {
