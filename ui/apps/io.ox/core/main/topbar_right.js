@@ -318,7 +318,7 @@ define('io.ox/core/main/topbar_right', [
 
             container = $('<li class="user">').append(
                 $('<a href="#" data-name="user-picture" class="action" tabindex="-1">')
-                .attr('aria-title', gt('Change user photo'))
+                .attr('title', gt('Change user photo'))
                 .append(
                     node = $('<div class="user-picture-container" aria-hidden="true">')
                 ),
