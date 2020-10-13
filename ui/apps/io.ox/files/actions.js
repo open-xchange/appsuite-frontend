@@ -113,8 +113,8 @@ define('io.ox/files/actions', [
             .css('display', 'none')
             .on('change', function (e) {
                 var app = baton.app;
-                var fielList = baton.filter ? baton.filter(e.target.files) : e.target.files;
-                var extendedFileList =  _.map(fielList, function (file) {
+                var fileList = baton.filter ? baton.filter(e.target.files) : e.target.files;
+                var extendedFileList =  _.map(fileList, function (file) {
                     // normalize with drag&drop: for a file upload, the filepicker does not provide a path,
                     // in contrast to the more modern drag & drop behavior were a path is always provided
                     var normalizedPath = file.webkitRelativePath === '' ? String('/' + file.name) : file.webkitRelativePath;
@@ -126,7 +126,8 @@ define('io.ox/files/actions', [
                 });
 
                 require(['io.ox/files/upload/file-folder'], function (fileFolderUpload) {
-                    fileFolderUpload.upload(extendedFileList, app);
+                    var targetFolder = baton.folder_id;
+                    fileFolderUpload.upload(extendedFileList, targetFolder, app);
                 });
                 input.remove();
             })

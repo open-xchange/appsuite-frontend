@@ -39,7 +39,8 @@ define('io.ox/files/upload/dropzone', [
                     app.listView.$el.fadeIn('fast');
                 },
                 'drop': function (fileObjArray) {
-                    fileFolderUpload.upload(fileObjArray, app);
+                    var targetFolder = app.folder.get();
+                    fileFolderUpload.upload(fileObjArray, targetFolder, app);
                 }
             });
 

@@ -203,11 +203,13 @@ define('io.ox/files/upload/file-folder', [
     *        preventFileUpload: true|false (whether the item should be uploaded later)
     *        isEmptyFolder: true|false
     *
+    * @param folder
+    *  The target folder for the upload.
+    *
     * @param app
     *  The used app.
     */
-    fileFolderUpload.upload = function (fileObjArray, app) {
-        var folder = app.folder.get();
+    fileFolderUpload.upload = function (fileObjArray, folder, app) {
         var model = folderApi.pool.getModel(folder);
         var module = model.attributes.module;
 
