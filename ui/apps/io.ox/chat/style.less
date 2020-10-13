@@ -570,7 +570,6 @@
 
         .content {
             position: relative;
-            text-align: center;
         }
 
         &:focus-within, &:hover {
@@ -772,13 +771,14 @@
         &.system {
             padding: 0 12px;
             margin-bottom: 16px;
-            display: inline-block;
             width: 100%;
-
+            .content {
+                width: 100%;
+                text-align: center;
+            }
             .body {
                 font-size: 13px;
                 color: @gray;
-                text-align: center;
             }
             .name {
                 font-weight: 500;
