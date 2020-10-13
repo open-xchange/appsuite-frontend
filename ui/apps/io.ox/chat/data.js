@@ -967,7 +967,6 @@ define('io.ox/chat/data', [
             });
 
             socket.on('chat:message:new', function (attr) {
-                console.log(attr);
                 var roomId = attr.roomId,
                     message = attr.message;
 
