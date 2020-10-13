@@ -159,7 +159,6 @@ define('io.ox/chat/views/messages', [
                 menu = $('<ul class="dropdown-menu">'),
                 dropdown = new Dropdown({
                     className: 'message-actions-dropdown dropdown',
-                    dropup: true,
                     smart: true,
                     $toggle: toggle,
                     $ul: menu
