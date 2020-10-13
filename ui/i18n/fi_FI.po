@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-07-02 11:23+0200\n"
+"PO-Revision-Date: 2020-10-06 11:08+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -9166,6 +9166,14 @@ msgid "Couldn't load editor"
 msgstr "Editoria ei voitu ladata"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Saving..."
+msgstr "Tallennetaan..."
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Saved"
+msgstr "Tallennettu"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Poista luonnos"
@@ -12469,6 +12477,12 @@ msgstr "Luo uusi ryhmä"
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid "Remove member"
 msgstr "Poista jäsen"
+
+#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
+msgid ""
+"This dialog is limited to %1$d entries and this group exceeds this "
+"limitation. Therefore, some entries are not listed."
+msgstr ""
 
 #. %1$d is the number of members
 #: apps/plugins/administration/groups/settings/pane.js module:io.ox/core

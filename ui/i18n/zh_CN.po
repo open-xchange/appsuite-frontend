@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-07-02 11:35+0200\n"
+"PO-Revision-Date: 2020-10-06 11:21+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -8968,6 +8968,14 @@ msgid "Couldn't load editor"
 msgstr "无法加载编辑器"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Saving..."
+msgstr "保存中..."
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Saved"
+msgstr "已保存"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
 msgid "Delete draft"
 msgstr "删除草稿"
@@ -12204,6 +12212,12 @@ msgstr "创建新群组"
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid "Remove member"
 msgstr "移除成员"
+
+#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
+msgid ""
+"This dialog is limited to %1$d entries and this group exceeds this "
+"limitation. Therefore, some entries are not listed."
+msgstr ""
 
 #. %1$d is the number of members
 #: apps/plugins/administration/groups/settings/pane.js module:io.ox/core

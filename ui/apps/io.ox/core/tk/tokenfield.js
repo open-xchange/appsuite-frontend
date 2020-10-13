@@ -523,6 +523,7 @@ define('io.ox/core/tk/tokenfield', [
                 .tokenfield({
                     createTokensOnBlur: o.createTokensOnBlur,
                     minLength: o.minLength,
+                    delimiter: _.isUndefined(o.delimiter) ? undefined : o.delimiter,
                     allowEditing: o.allowEditing,
                     typeahead: self.typeaheadOptions,
                     html: this.options.html || false,
