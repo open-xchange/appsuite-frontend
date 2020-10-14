@@ -322,7 +322,7 @@ define('plugins/notifications/calendar/register', [
                 subview.resetNotifications(alarmsToAdd);
             });
             //react to changes in settings
-            settings.on('change:autoOpenNotification', function (e, value) {
+            settings.on('change:autoOpenNotification', function (value) {
                 autoOpen = value;
                 subview.model.set('autoOpen', value);
             });
@@ -403,7 +403,7 @@ define('plugins/notifications/calendar/register', [
             });
 
             //react to changes in settings
-            settings.on('change:autoOpenNotification', function (e, value) {
+            settings.on('change:autoOpenNotification', function (value) {
                 subview.model.set('autoOpen', value);
             });
 
