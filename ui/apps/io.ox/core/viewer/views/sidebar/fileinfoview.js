@@ -90,7 +90,6 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
             var model = baton.model;
             var options = baton.options || {};
-            var modifiedBy = model.get('modified_by');
             var dateString = createDateString(model.get('last_modified'));
             var folder_id = model.get('folder_id');
             var media = model.get('media') || {};
@@ -167,7 +166,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                     $('<dt>').text(gt('Modified')),
                     $('<dd class="modified">').append(
                         $('<span class="modifiedAt">').text(dateString),
-                        $('<span class="modifiedBy">').append(document.createTextNode('\u200B')).append(UserAPI.getTextNode(modifiedBy))
+                        $('<span class="modifiedBy">').append(document.createTextNode('\u200B')).append(UserAPI.getTextNodeExtended(model.attributes, 'modified'))
                     )
                 );
 
