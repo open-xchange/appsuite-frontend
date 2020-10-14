@@ -176,6 +176,11 @@ define('io.ox/chat/views/chat', [
                 'replyToMessage': this.onReplyToMessage
             });
 
+            this.on('appended', function () {
+                // view must be appended to the dom for this to work
+                this.chatMemberview.updateToggleButton();
+            });
+
             this.on('dispose', this.onDispose);
 
             this.listenTo(events, 'cmd:remove-reference', this.onRemoveReference);
@@ -269,7 +274,7 @@ define('io.ox/chat/views/chat', [
 
         render: function () {
             this.$toolbar = new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: gt('Chat actions') });
-
+            this.chatMemberview = new ChatMember({ collection: this.model.members });
             this.$el.append(
                 $('<div class="header">').append(
                     new ChatAvatar({ model: this.model }).render().$el,
@@ -279,7 +284,7 @@ define('io.ox/chat/views/chat', [
                         // groups / channels
                         $('<div class="flex-grow">').append(
                             this.renderTitle().addClass('small-line'),
-                            new ChatMember({ collection: this.model.members }).render().$el
+                            this.chatMemberview.render().$el
                         ),
                     // burger menu (pull-right just to have the popup right aligned)
                     this.$dropdown = $('<div class="dropdown">').append(

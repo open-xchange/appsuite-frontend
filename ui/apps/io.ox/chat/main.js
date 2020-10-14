@@ -211,6 +211,7 @@ define('io.ox/chat/main', [
             var view = new ChatView(_.extend({ roomId: id }, _(opt).pick('messageId', 'reference', 'model')));
             this.showApp();
             this.$rightside.empty().append(view.render().$el);
+            view.trigger('appended');
             this.$body.addClass('open');
             view.scrollToBottom();
             this.resetCount(id, opt);
