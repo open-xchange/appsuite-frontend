@@ -17,8 +17,9 @@ define('io.ox/chat/settings/pane', [
     'io.ox/backbone/views/extensible',
     'settings!io.ox/chat',
     'io.ox/chat/data',
-    'gettext!io.ox/chat'
-], function (ext, util, ExtensibleView, settings, data, gt) {
+    'gettext!io.ox/chat',
+    'settings!io.ox/core'
+], function (ext, util, ExtensibleView, settings, data, gt, coreSettings) {
 
     'use strict';
 
@@ -65,8 +66,7 @@ define('io.ox/chat/settings/pane', [
                     ])
                 );
             }
-        },
-        {
+        }, {
             id: 'sound-notifications',
             index: INDEX += 100,
             render: function () {
@@ -83,15 +83,28 @@ define('io.ox/chat/settings/pane', [
                         //#. Should be "töne" in german, used for notification sounds. Not "geräusch"
                         gt('Notification sounds'),
                         util.checkbox('sounds/enabled', gt('Enable notification sounds'), settings),
-                        util.compactSelect('sounds/file', gt('Sound'), settings, soundList)
-                        .prop('disabled', !settings.get('sounds/enabled')),
+                        util.compactSelect('sounds/file', gt('Sound'), settings, soundList),
                         util.compactSelect('sounds/playWhen', gt('Play a sound:'), settings, playWhenOptions)
-                            .prop('disabled', !settings.get('sounds/enabled'))
                     )
                 );
-                this.listenTo(settings, 'change:sounds/enabled', function (value) {
+                function toggle(value) {
                     this.$('[name="sounds/file"],[name="sounds/playWhen"]').prop('disabled', !value ? 'disabled' : '');
-                });
+                }
+                toggle.call(this, settings.get('sounds/enabled'));
+                this.listenTo(settings, 'change:sounds/enabled', toggle.bind(this));
+            }
+        }, {
+            id: 'chat-notifications',
+            index: INDEX += 100,
+            render: function () {
+                this.$el.append(
+                    util.checkbox('showChatNotifications', gt('Show chat desktop notifications'), settings)
+                );
+                function toggle(value) {
+                    this.$('[name="showChatNotifications"]').prop('disabled', !value ? 'disabled' : '');
+                }
+                toggle.call(this, coreSettings.get('showDesktopNotifications'));
+                this.listenTo(settings, 'change:showDesktopNotifications', toggle.bind(this));
             }
         }
     );
