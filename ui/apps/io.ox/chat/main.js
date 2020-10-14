@@ -30,7 +30,7 @@ define('io.ox/chat/main', [
     'io.ox/backbone/views/modal',
     'io.ox/chat/views/avatar',
     'io.ox/chat/views/state',
-    'settings!io.ox/core',
+    'settings!io.ox/chat',
     'gettext!io.ox/chat',
     'less!io.ox/chat/style'
 ], function (ext, api, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, AvatarView, StateView, settings, gt) {
@@ -71,7 +71,7 @@ define('io.ox/chat/main', [
             this.listenTo(this.model, {
                 'change:sticky': function () {
                     if (!this.model.get('sticky')) return;
-                    settings.set('chat/mode', 'sticky').save();
+                    settings.set('mode', 'sticky').save();
                     this.$body.addClass('columns');
                 },
                 'quit': this.hideApp
@@ -360,7 +360,7 @@ define('io.ox/chat/main', [
         toggleWindowMode: function (mode) {
             var cid = this.getCurrentMessageCid();
             win.model.set(mode, true);
-            settings.set('chat/mode', mode).save();
+            settings.set('mode', mode).save();
             this.$body.toggleClass('columns', mode === 'sticky');
             this.scrollToMessage(cid);
         },
@@ -413,7 +413,7 @@ define('io.ox/chat/main', [
             function mouseup() {
                 $(document).off('mousemove.resize mouseup.resize');
                 populateResize();
-                settings.set('chat/width', this.$body.width()).save();
+                settings.set('width', this.$body.width()).save();
             }
 
             function mousedown(e) {
@@ -432,23 +432,25 @@ define('io.ox/chat/main', [
         }()),
 
         hideApp: function () {
+            settings.set('hidden', true);
             if (this.$el.is(':visible')) return this.$el.hide();
             this.$body.hide();
         },
 
         showApp: function () {
+            settings.set('hidden', false);
             this.$el.show();
             this.$body.show();
         },
 
         draw: function () {
             var user = data.users.getByMail(data.user.email),
-                mode = settings.get('chat/mode') || 'sticky';
+                mode = settings.get('mode') || 'sticky';
 
             data.session.connectSocket();
 
             // start with BAD style and hard-code stuff
-            this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('chat/width', 320)).append(
+            this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('width', 320)).append(
                 this.getResizeBar(),
                 $('<div class="chat-leftside">').append(
                     $('<div class="header">').append(
@@ -514,8 +516,8 @@ define('io.ox/chat/main', [
 
         drawAuthorizePane: function (errorMessage) {
             var self = this,
-                mode = settings.get('chat/mode') || 'sticky';
-            this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('chat/width', 320)).append(
+                mode = settings.get('mode') || 'sticky';
+            this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('width', 320)).append(
                 $('<div class="auth-container">').append(
                     $('<div>').append(
                         $('<button class="btn btn-primary">').text(gt('Authorize')).on('click', function () {
@@ -610,7 +612,7 @@ define('io.ox/chat/main', [
         }
     });
 
-    var mode = settings.get('chat/mode') || 'sticky';
+    var mode = settings.get('mode') || 'sticky';
 
     win = new Window({
         title: 'OX Chat',
@@ -621,6 +623,8 @@ define('io.ox/chat/main', [
         closable: true,
         size: 'width-lg'
     }).render().open();
+
+    settings.set('hidden', false);
 
     win.$body.parent().busy();
 

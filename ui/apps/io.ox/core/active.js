@@ -12,7 +12,7 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/core/count/active', [], function () {
+define('io.ox/core/active', [], function () {
 
     'use strict';
 

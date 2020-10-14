@@ -16,12 +16,15 @@ define('io.ox/chat/data', [
     'io.ox/chat/events',
     'io.ox/contacts/api',
     'io.ox/switchboard/api',
+    'io.ox/chat/sounds',
     'io.ox/mail/sanitizer',
     'io.ox/chat/util',
+    'io.ox/core/active',
     'io.ox/core/http',
-    'gettext!io.ox/chat',
-    'io.ox/core/notifications'
-], function (api, events, contactsApi, switchboardApi, sanitizer, util, http, gt, notifications) {
+    'io.ox/core/notifications',
+    'settings!io.ox/chat',
+    'gettext!io.ox/chat'
+], function (api, events, contactsApi, switchboardApi, sounds, sanitizer, util, isActive, http, notifications, settings, gt) {
 
     'use strict';
 
@@ -978,7 +981,9 @@ define('io.ox/chat/data', [
 
             socket.on('chat:message:new', function (attr) {
                 var roomId = attr.roomId,
-                    message = attr.message;
+                    message = attr.message,
+                    mySelf = message.sender === data.user.email,
+                    isHidden = settings.get('hidden');
 
                 // stop typing
                 events.trigger('typing:' + roomId, message.sender, false);
@@ -992,12 +997,16 @@ define('io.ox/chat/data', [
                         if (!model.messages.get(newMessage)) model.messages.add(newMessage);
                     } else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
 
-                    if (model.get('type') !== 'channel' && message.sender !== data.user.email) {
+                    if (model.get('type') !== 'channel' && !mySelf) {
                         model.set({ unreadCount: model.get('unreadCount') + 1 });
                         newMessage.updateDelivery('received');
                     }
 
                     if (newMessage.get('type') === 'system') model.parseSystemMessage(message, roomId);
+                    if (!mySelf && (isActive() || isHidden)) {
+                        console.log('play sound');
+                        sounds.play();
+                    }
                 });
             });
 

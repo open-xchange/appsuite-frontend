@@ -289,9 +289,9 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/main/warning.js',
                             'apps/io.ox/core/main.js',
                             'apps/io.ox/core/links.js',
+                            'apps/io.ox/core/active.js',
                             // tracker
                             'apps/io.ox/core/count/api.js',
-                            'apps/io.ox/core/count/active.js',
                             'apps/io.ox/core/count/timing.js',
                             'apps/io.ox/core/count/errors.js',
                             'apps/io.ox/core/count/eyeballtime.js',
