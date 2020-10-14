@@ -22,7 +22,7 @@ Scenario('[C7368] Delete permission ', async (I, contacts, users, dialogs) => {
     I.openFolderMenu('Contacts');
 
     // Open permission / sharing dialog for contacts folder and add internal user
-    I.clickDropdown('Permissions / Invite people');
+    I.clickDropdown('Share / Permissions');
     dialogs.waitForVisible();
     I.click('~Select contacts');
     I.waitForElement('.list-view.address-picker li.list-item');
@@ -47,7 +47,7 @@ Scenario('[C7368] Delete permission ', async (I, contacts, users, dialogs) => {
     I.click('.folder-arrow', '~Shared address books');
     I.selectFolder(`${sharedUserName}: Contacts`);
     I.openFolderMenu(`${sharedUserName}: Contacts`);
-    I.clickDropdown('Permissions / Invite people');
+    I.clickDropdown('Share / Permissions');
     dialogs.waitForVisible();
     I.waitForText('Author', locate('.permission.row').withAttr({ 'aria-label': `${users[1].get('sur_name')}, Internal user.` }));
     dialogs.clickButton('Close');
@@ -60,7 +60,7 @@ Scenario('[C7368] Delete permission ', async (I, contacts, users, dialogs) => {
     I.waitForText('My address books');
     I.selectFolder('Contacts');
     I.openFolderMenu('Contacts');
-    I.clickDropdown('Permissions / Invite people');
+    I.clickDropdown('Share / Permissions');
     dialogs.waitForVisible();
     I.waitForElement('.btn[title="Actions"]');
     I.click('.btn[title="Actions"]');

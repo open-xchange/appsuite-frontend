@@ -14,6 +14,9 @@
 
 define('io.ox/files/share/permissions', [
     'io.ox/core/extensions',
+    'io.ox/files/share/permission-pre-selection',
+    'io.ox/files/share/share-settings',
+    'io.ox/files/share/public-link',
     'io.ox/backbone/views/disposable',
     'io.ox/core/yell',
     'io.ox/backbone/mini-views',
@@ -38,7 +41,7 @@ define('io.ox/files/share/permissions', [
     'io.ox/files/permission-util',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil, groupApi, pUtil) {
+], function (ext, PermissionPreSelection, shareSettings, PublicLink, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil, groupApi, pUtil) {
 
     'use strict';
 
@@ -209,6 +212,10 @@ define('io.ox/files/share/permissions', [
 
             model: Permission,
 
+            initialize: function () {
+                this.on('revert', this.revert);
+            },
+
             // method to check if a guest is already in the collection (they receive entity ids that differ from the emails, so this check is needed)
             isAlreadyGuest: function (newGuest) {
                 var guests = this.where({ type: 'guest' }),
@@ -246,6 +253,12 @@ define('io.ox/files/share/permissions', [
                 if (a.isGuest()) return -1;
                 if (b.isGuest()) return +1;
                 return +1;
+            },
+
+            revert: function () {
+                // Remove all entries which were not saved yet.
+                var newEntities = this.where({ new: true });
+                this.remove(newEntities);
             }
         }),
 
@@ -337,8 +350,11 @@ define('io.ox/files/share/permissions', [
 
             onRemove: function (e) {
                 e.preventDefault();
-                this.model.collection.remove(this.model);
-                this.remove();
+                // Don't remove owner.
+                if (!this.model.isMyself()) {
+                    this.model.collection.remove(this.model);
+                    this.remove();
+                }
             },
 
             onResend: function (e) {
@@ -461,6 +477,8 @@ define('io.ox/files/share/permissions', [
         PermissionsView = DisposableView.extend({
 
             tagName: 'div',
+            permissionPreSelection: null,
+            initialPermissions: 0,
 
             className: 'permissions-view container-fluid',
 
@@ -472,8 +490,14 @@ define('io.ox/files/share/permissions', [
                 this.collection = new Permissions();
                 this.listenTo(this.collection, 'reset', this.renderEntities);
                 this.listenTo(this.collection, 'add', this.renderEntity);
+                this.listenTo(this.collection, 'revert', this.onReset);
 
                 this.$el.on('scroll', _.debounce(this.onScroll.bind(this), 50));
+                this.initialPermissions = this.model.getPermissions().length;
+            },
+
+            hasChanges: function () {
+                return this.collection.length !== this.initialPermissions;
             },
 
             onScroll: function () {
@@ -506,6 +530,10 @@ define('io.ox/files/share/permissions', [
                 return this;
             },
 
+            setPermissionPreSelectionView: function (view) {
+                this.permissionPreSelection = view;
+            },
+
             renderEntities: function () {
                 this.$el.busy({ immediate: true });
                 this.$el.append(
@@ -519,18 +547,20 @@ define('io.ox/files/share/permissions', [
             },
 
             renderEntity: function (model) {
-                var children = this.$el.children(),
-                    index = this.collection.indexOf(model),
-                    newEntity = new PermissionEntityView({ model: model, parentModel: this.model }).render().$el;
-
-                if (index === 0) {
-                    return this.$el.prepend(newEntity);
-                } else if (index + 1 < children.length) {
-                    this.$el.children().eq(index - 1).after(newEntity);
-                    this.offset = this.offset + 1;
+                var bits = 0;
+                if (this.model.isFile()) {
+                    bits = fileRoles[this.permissionPreSelection.getSelectedPermission()];
                 } else {
-                    this.$el.append(newEntity);
+                    bits = roles[this.permissionPreSelection.getSelectedPermission()].bit;
                 }
+                model.set('bits', bits);
+                var newEntity = new PermissionEntityView({ model: model, parentModel: this.model }).render().$el;
+                newEntity.find('.display_name').append($('<span class="added">').text('ADDED'));
+                return this.$el.prepend(newEntity);
+            },
+
+            revokeAll: function () {
+                this.$el.find('a[data-name="revoke"]').trigger('click');
             }
         });
 
@@ -629,15 +659,15 @@ define('io.ox/files/share/permissions', [
                 } else {
                     dropdown = new DropdownView({ el: $el.addClass('dropdown')[0], caret: true, label: description, title: gt('Current role'), model: baton.model, smart: true, buttonToggle: true })
                         .option('role', 'viewer', function () {
-                            return [$.txt(gt('Viewer')), $.txt(' '), $('<small>').text(gt('(Read only)'))];
+                            return [$.txt(gt('Viewer')), $.txt(' '), $('<br/><small>').text(gt('View files only'))];
                         })
                         .option('role', 'reviewer', function () {
-                            return [$.txt(gt('Reviewer')), $.txt(' '), $('<small>').text(gt('(Read and write)'))];
+                            return [$.txt(gt('Reviewer')), $.txt(' '), $('<br/><small>').text(gt('View and edit files'))];
                         });
                     if (!isFile) {
                         // files cannot be deleted in file-based shares
                         dropdown.option('role', 'author', function () {
-                            return [$.txt(gt('Author')), $.txt(' '), $('<small>').text(gt('(Read, write, and delete)'))];
+                            return [$.txt(gt('Author')), $.txt(' '), $('<br/><small>').text(gt('View, edit and delete files'))];
                         });
                     }
                     if (baton.view.supportsAdminRole()) {
@@ -814,6 +844,43 @@ define('io.ox/files/share/permissions', [
         }
     );
 
+    // Extension point who can access share
+    var POINT_DIALOG = 'io.ox/files/share/dialog';
+    ext.point(POINT_DIALOG + '/share-settings').extend({
+        id: 'who-can-share',
+        index: 100,
+        draw: function (linkModel) {
+            var guid;
+            linkModel.set('access', linkModel.hasUrl() ? 1 : 0);
+
+            var typeTranslations = {
+                0: gt('Invited people only'),
+                1: gt('Anyone with the link and invited people')
+            };
+
+            var select = $('<select>');
+            _(typeTranslations).each(function (val, key) {
+                key = parseInt(key, 10);
+                var option = $('<option>').val(val).text(val);
+                if (key === linkModel.get('access')) {
+                    option.attr('selected', 'selected');
+                }
+                select.append(option);
+            });
+
+            this.append(
+                $('<div class="access-select"></div>').append(
+                    $('<label></label>').attr({ for: guid = _.uniqueId('form-control-label-') }).text(gt('Who can access this folder?')),
+                    $('<div>').addClass('row vertical-align-center').append($('<div>').addClass('form-group col-sm-6').append(select.attr('id', guid)))
+                )
+            );
+
+            select.on('change', function (e) {
+                linkModel.set('access', e.target.value);
+            });
+        }
+    });
+
     // helper
     function getBitsExternal(model) {
         return model.isFolder() ? 257 : 1;
@@ -826,8 +893,8 @@ define('io.ox/files/share/permissions', [
         Permissions: Permissions,
 
         // async / id is folder id
-        showFolderPermissions: function (id, options) {
-            that.showByModel(new Backbone.Model({ id: id }), options);
+        showFolderPermissions: function (id, linkModel, options) {
+            that.showByModel(new Backbone.Model({ id: id }), linkModel, options);
         },
 
         // async / obj must provide folder_id and id
@@ -835,12 +902,13 @@ define('io.ox/files/share/permissions', [
             that.showByModel(new Backbone.Model(obj), options);
         },
 
-        showByModel: function (model, options) {
+        showByModel: function (model, linkModel, options) {
+            //var oldModel = model;
             var isFile = model.isFile ? model.isFile() : model.has('folder_id');
             model = new api.Model(isFile ? model.pick('id', 'folder_id') : model.pick('id'));
             model.loadExtendedPermissions({ cache: false })
             .done(function () {
-                that.show(model, options);
+                that.show(model, linkModel, options);
             })
             // workaround: when we don't have permissions anymore for a folder a 'http:error:FLD-0003' is returned.
             // usually we have a handler in files/main.js for this case, but due to the current following conditions no yell is called
@@ -873,7 +941,8 @@ define('io.ox/files/share/permissions', [
             return checkFolder(id);
         },
 
-        show: function (objModel, options) {
+        show: function (objModel, linkModel, options) {
+
             // folder tree: nested (whitelist) vs. flat
             var nested = folderAPI.isNested(objModel.get('module')),
                 notificationDefault = !this.isOrIsUnderPublicFolder(objModel),
@@ -929,7 +998,25 @@ define('io.ox/files/share/permissions', [
             });
 
             var dialogConfig = new DialogConfigModel(),
-                permissionsView = new PermissionsView({ model: objModel });
+                permissionsView = new PermissionsView({ model: objModel }),
+                publicLink = new PublicLink({ files: linkModel }),
+                permissionPreSelection = new PermissionPreSelection({ model: objModel });
+
+            permissionsView.setPermissionPreSelectionView(permissionPreSelection);
+            if (options.hasLinkSupport !== false) {
+                ext.point(POINT_DIALOG + '/share-settings').invoke('draw', dialog.$body, publicLink.model);
+            }
+
+            publicLink.model.on('change:access', function (model) {
+                var accessMode = model.get('access');
+                if (accessMode === 0) {
+                    publicLink.hide();
+                    publicLink.removeLink();
+                } else {
+                    publicLink.show();
+                    publicLink.fetchLink();
+                }
+            });
 
             function hasNewGuests() {
                 var knownGuests = [];
@@ -943,6 +1030,10 @@ define('io.ox/files/share/permissions', [
 
             permissionsView.listenTo(permissionsView.collection, 'reset', function () {
                 dialogConfig.set('oldGuests', _.copy(permissionsView.collection.where({ type: 'guest' })));
+            });
+
+            permissionsView.listenTo(permissionsView.collection, 'add', function () {
+                dialog.showFooter();
             });
 
             permissionsView.listenTo(permissionsView.collection, 'add remove', function () {
@@ -959,16 +1050,57 @@ define('io.ox/files/share/permissions', [
                     dialogConfig.set('sendNotifications', dialogConfig.get('byHand'));
                     dialogConfig.set('disabled', false);
                 }
+                dialog.$body.find('.file-share-options').toggle(dialogConfig.get('sendNotifications') && permissionsView.collection.length > 0);
 
             });
 
-            if (objModel.isAdmin()) {
+            function unshareRequested() {
+                var confirmDialog = new ModalDialog({
+                    async: true,
+                    title: gt('Remove shares')
+                });
+                confirmDialog
+                .addCancelButton()
+                .addButton({ label: gt('OK'), action: 'ok' });
+                confirmDialog.on('ok', function () {
+                    if (publicLink.hasPublicLink()) {
+                        // Remove all permissions and public link then trigger save.
+                        publicLink.removeLink().then(function () {
+                            revokeAllPermissions();
+                        }).fail(function (err) {
+                            console.log(err);
+                        });
+                    } else {
+                        revokeAllPermissions();
+                    }
+                    confirmDialog.close();
+                    dialog.pause();
+                });
+                confirmDialog.on('cancel', function () {
+                    dialog.idle();
+                });
+                confirmDialog.$body.append($('<h5>')).text(gt('Do you really want to remove all shares?'));
+                confirmDialog.open();
+            }
 
+            function revokeAllPermissions() {
+                permissionsView.revokeAll();
+                dialog.trigger('save');
+            }
+
+            function isShared() {
+                return (objModel.has('com.openexchange.share.extendedObjectPermissions')
+                    && objModel.get('com.openexchange.share.extendedObjectPermissions').length > 0)
+                    || (objModel.has('com.openexchange.share.extendedPermissions')
+                    && objModel.get('com.openexchange.share.extendedPermissions').length > 0)
+                    || publicLink.hasPublicLink();
+            }
+
+            if (objModel.isAdmin()) {
                 dialog.$footer.prepend(
                     $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                        settingsUtil.checkbox('sendNotifications', gt('Send notification by email'), dialogConfig).on('change', function (e) {
-                            var input = e.originalEvent.srcElement;
-                            dialogConfig.set('byHand', input.checked);
+                        $('<button class="btn btn-default" aria-label="Unshare"></button>').text(gt('Unshare')).prop('disabled', !isShared()).on('click', function () {
+                            unshareRequested();
                         })
                     )
                 );
@@ -1049,7 +1181,7 @@ define('io.ox/files/share/permissions', [
                         users: true,
                         groups: true
                     },
-                    placeholder: gt('Add people'),
+                    placeholder: gt('Name or email address'),
                     harmonize: function (data) {
                         data = _(data).map(function (m) {
                             return new pModel.Participant(m);
@@ -1068,71 +1200,75 @@ define('io.ox/files/share/permissions', [
                 });
 
                 if (objModel.isFolder() && options.nested) {
-                    dialog.$footer.append(
-                        $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                            settingsUtil.checkbox('cascadePermissions', gt('Apply to all subfolders'), dialogConfig).on('change', function (e) {
-                                var input = e.originalEvent.srcElement;
-                                dialogConfig.set('cascadePermissions', input.checked);
-                            })
-                        )
-                    );
+                    dialogConfig.set('cascadePermissions', true);
                 }
 
-                dialog.$header.append(
-                    $('<div class="row">').append(
-                        $('<div class="form-group col-sm-6">').append(
-                            $('<div class="input-group">').toggleClass('has-picker', usePicker).append(
-                                $('<label class="sr-only">', { 'for': guid = _.uniqueId('form-control-label-') }).text(gt('Start typing to search for user names')),
-                                typeaheadView.$el.attr({ id: guid }),
-                                usePicker ? new AddressPickerView({
-                                    isPermission: true,
-                                    process: click,
-                                    useGABOnly: !supportsGuests
-                                }).render().$el : []
-                            )
-                        )
-                        // use delegate because typeahead's uses stopPropagation(); apparently not stopImmediatePropagation()
-                        .on('keydown blur', 'input', function addManualInput(e) {
-
-                            // mail does not support sharing folders to guests
-                            // so we skip any manual edits
-                            if (module === 'mail') return;
-
-                            // skip manual edit if invite_guests isn't set
-                            if (!supportsGuests) return;
-
-                            // enter or blur?
-                            if (e.type === 'keydown' && e.which !== 13) return;
-
-                            // use shown input
-                            var value = $.trim($(this).typeahead('val')),
-                                list = coreUtil.getAddresses(value);
-
-                            _.each(list, function (value) {
-                                if (_.isEmpty(value)) return;
-                                // add to collection
-                                permissionsView.collection.add(new Permission({
-                                    bits: getBitsExternal(objModel),
-                                    contact: { email1: value },
-                                    type: 'guest',
-                                    new: true
-                                }));
-                            });
-
-                            // clear input field
-                            $(this).typeahead('val', '');
-                        })
-                    )
-                );
+                var settingsButton = $('<button type="button" class="btn settings-button" aria-label="Settings"><span class="fa fa-cog" aria-hidden="true"></span></button>').on('click', function () {
+                    openSettings();
+                });
+                dialog.$header.append(settingsButton);
 
                 dialog.$body.append(
+                    (options.hasLinkSupport === false ? '' : publicLink.render().$el),
+                    // Invite people pane
+                    $('<div id="invite-people-pane" class="share-pane invite-people"></div>').append(
+                        // Invite people header
+                        $('<h5></h5>').text(gt('Invite people')),
+                        // Add address picker
+                        $('<div class="row vertical-align-center">').append(
+                            $('<div class="form-group col-sm-6">').append(
+                                $('<div class="input-group">').toggleClass('has-picker', usePicker).append(
+                                    $('<label class="sr-only">', { 'for': guid = _.uniqueId('form-control-label-') }).text(gt('Start typing to search for user names')),
+                                    typeaheadView.$el.attr({ id: guid }),
+                                    usePicker ? new AddressPickerView({
+                                        isPermission: true,
+                                        process: click,
+                                        useGABOnly: !supportsGuests
+                                    }).render().$el : []
+                                )
+                            )
+                            // use delegate because typeahead's uses stopPropagation(); apparently not stopImmediatePropagation()
+                            .on('keydown blur', 'input', function addManualInput(e) {
+
+                                // mail does not support sharing folders to guests
+                                // so we skip any manual edits
+                                if (module === 'mail') return;
+
+                                // skip manual edit if invite_guests isn't set
+                                if (!supportsGuests) return;
+
+                                // enter or blur?
+                                if (e.type === 'keydown' && e.which !== 13) return;
+
+                                // use shown input
+                                var value = $.trim($(this).typeahead('val')),
+                                    list = coreUtil.getAddresses(value);
+
+                                _.each(list, function (value) {
+                                    if (_.isEmpty(value)) return;
+                                    // add to collection
+                                    permissionsView.collection.add(new Permission({
+                                        bits: getBitsExternal(objModel),
+                                        contact: { email1: value },
+                                        type: 'guest',
+                                        new: true
+                                    }));
+                                });
+
+                                // clear input field
+                                $(this).typeahead('val', '');
+                            }),
+                            $('<div>').text(gt('Invite as: ')),
+                            permissionPreSelection.render().$el
+                        )
+                    ),
                     // add message - not available for mail
-                    $('<div class="share-options form-group">')
-                    .toggle(notificationDefault)
+                    $('<div class="file-share-options form-group">')
+                    .toggle(false)
                     .addClass(_.browser.IE ? 'IE' : 'nonIE')
                     .append(
-                        $('<label class="control-label sr-only">')
-                            .text(gt('Enter a Message to inform users'))
+                        $('<label>')
+                            .text(gt('Invitation message (optional)'))
                             .attr({ for: guid = _.uniqueId('form-control-label-') }),
                         // message text
                         new miniViews.TextView({
@@ -1144,7 +1280,7 @@ define('io.ox/files/share/permissions', [
                             id: guid,
                             rows: 3,
                             //#. placeholder text in share dialog
-                            placeholder: gt('Personal message (optional). This message is sent to all newly invited people.')
+                            placeholder: gt('Message will be send to all newly invited people')
                         })
                     )
                 );
@@ -1164,56 +1300,112 @@ define('io.ox/files/share/permissions', [
             if (supportsChanges) {
                 // add action buttons
                 dialog
-                    .addCancelButton()
+                    .addButton({ action: 'abort', label: options.share ? gt('Cancel') : gt('Cancel'), className: 'btn-default' })
                     .addButton({ action: 'save', label: options.share ? gt('Share') : gt('Save') });
             } else {
                 dialog
                     .addButton({ action: 'cancel', label: gt('Close') });
             }
 
-            dialog.on('save', function () {
+            function openSettings() {
+                var settingsView = new shareSettings.ShareSettingsView({ model: publicLink, hasLinkSupport: options.hasLinkSupport, applyToSubFolder: objModel.isFolder() && options.nested });
+                shareSettings.showSettingsDialog(settingsView);
+            }
 
-                var changes, options = dialogConfig.toJSON(), def;
-
-                if (objModel.isFolder()) {
-                    changes = { permissions: permissionsView.collection.toJSON() };
-                    def = folderAPI.update(objModel.get('id'), changes, options);
-                } else {
-                    changes = { object_permissions: permissionsView.collection.toJSON() };
-                    def = filesAPI.update(objModel.pick('folder_id', 'id'), changes, options);
+            function mergePermissionsAndPublicLink(permissions, entity, bits) {
+                var existingEnity = _.findWhere(permissions, { entity: entity });
+                if (!existingEnity) {
+                    permissions.push({ bits: bits, entity: entity, group: false });
                 }
+                return permissions;
+            }
 
-                def.then(
-                    function success() {
-                        // refresh the guest group (id = int max value)
-                        groupApi.refreshGroup(2147483647);
-                        objModel.reload().then(
-                            function () {
-                                dialog.close();
-                                // we might have new addresses
-                                contactsAPI.trigger('maybeNewContact');
-                            },
-                            function (error) {
-                                dialog.idle();
-                                yell(error);
-                            }
-                        );
-                    },
-                    function fail(error) {
-                        dialog.idle();
-                        yell(error);
+            dialog.on('save', function () {
+                var changes, options = dialogConfig.toJSON(), def;
+                var entity = publicLink.model.get('entity');
+                var permissions = permissionsView.collection.toJSON();
+                // Order matters. Share must be called before the update call is invoked. Otherwise a file conflict is created.
+                // publicLink.share().then(this.close, function () {
+                publicLink.share().then(function () {
+                    if (entity) {
+                        permissions = mergePermissionsAndPublicLink(permissionsView.collection.toJSON(), entity, objModel.isFolder() ? 257 : 1);
                     }
-                );
+
+                    if (objModel.isFolder()) {
+                        changes = { permissions: permissions };
+                        def = folderAPI.update(objModel.get('id'), changes, options);
+                    } else {
+                        changes = { object_permissions: permissions };
+                        def = filesAPI.update(objModel.pick('folder_id', 'id'), changes, options);
+                    }
+
+                    def.then(
+                        function success() {
+                            // refresh the guest group (id = int max value)
+                            groupApi.refreshGroup(2147483647);
+                            objModel.reload().then(
+                                function () {
+                                    dialog.close();
+                                    // we might have new addresses
+                                    contactsAPI.trigger('maybeNewContact');
+                                },
+                                function (error) {
+                                    dialog.idle();
+                                    yell(error);
+                                }
+                            );
+                        },
+                        function fail(error) {
+                            dialog.idle();
+                            yell(error);
+                        }
+                    );
+                });
+            });
+
+            dialog.on('abort', function () {
+                if (permissionsView.hasChanges() || publicLink.hasChanges()) {
+                    var confirmDialog = new ModalDialog({
+                        async: true,
+                        title: gt('Discard changes')
+                    });
+                    confirmDialog
+                    .addCancelButton()
+                    .addButton({ label: gt('Discard'), action: 'ok' });
+                    confirmDialog.on('ok', function () {
+                        publicLink.cancel();
+                        confirmDialog.close();
+                        dialog.close();
+                    });
+                    confirmDialog.on('cancel', function () {
+                        confirmDialog.close();
+                        dialog.idle();
+                    });
+                    dialog.pause();
+                    confirmDialog.$body.append($('<h5>')).text(gt('Do you really want to discard all changes?'));
+                    confirmDialog.open();
+                } else {
+                    dialog.close();
+                }
             });
 
             // add permissions view
             // yep every microsoft browser needs this. edge or ie doesn't matter. No support for "resize: vertical" css attribute
-            dialog.$body.addClass(_.browser.IE ? 'IE11' : '').prepend(
-                permissionsView.$el.busy({
-                    empty: false,
-                    immediate: true
-                })
-            );
+            if (supportsInvites) {
+                dialog.$body.addClass(_.browser.IE ? 'IE11' : '').find('#invite-people-pane').append(
+                    permissionsView.$el.busy({
+                        empty: false,
+                        immediate: true
+                    })
+                );
+            } else {
+                dialog.$body.addClass(_.browser.IE ? 'IE11' : '').prepend(
+                    permissionsView.$el.busy({
+                        empty: false,
+                        immediate: true
+                    })
+                );
+            }
 
             dialog.on('open', function () {
                 // wait for dialog to render and busy spinner to appear

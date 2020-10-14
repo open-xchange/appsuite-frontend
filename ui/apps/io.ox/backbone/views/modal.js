@@ -238,6 +238,16 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             return this;
         },
 
+        hideFooter: function () {
+            this.$('.modal-footer').hide();
+            return this;
+        },
+
+        showFooter: function () {
+            this.$('.modal-footer').show();
+            return this;
+        },
+
         // Add a button
         //
         // options:

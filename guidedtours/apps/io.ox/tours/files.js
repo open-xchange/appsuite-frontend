@@ -154,42 +154,30 @@ define('io.ox/tours/files', [
                 .end()
             .step()
                 .title(gt('Share files'))
-                .content(gt('Here you can share files with your colleagues and external contacts. You can also collaborate on a document and set different access rights.'))
+                .content(gt('Here you can share files with your colleagues and external contacts. You can also collaborate on a document and set different rights.'))
                 .on('before:show', function () {
                     $('.viewer-toolbar [data-action="io.ox/core/viewer/actions/toolbar/close"]').click();
                 })
 
-                .waitFor('.classic-toolbar-container [data-dropdown="io.ox/files/toolbar/share"]')
-                .spotlight('.classic-toolbar-container [data-dropdown="io.ox/files/toolbar/share"]', { position: 'right' })
-                .hotspot('.classic-toolbar-container [data-dropdown="io.ox/files/toolbar/share"] i', { position: 'left' })
+                .waitFor('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]')
+                .spotlight('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]', { position: 'right' })
+                .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/invite"] i', { position: 'left' })
                 .on('close', cleanup)
                 .end()
             .step()
-                .title(gt('Sharing options'))
-                .content(gt('Choose from two alternatives to share your files and folders. Use Invite people if you want to manage access rights and allow recipients to create and edit files. Or just get a link to let others view and download your files. You can use an expiration date and password protection if you like.'))
-                .spotlight('.classic-toolbar-container .dropdown-menu', { position: 'right' })
-                .hotspot('.classic-toolbar-container .dropdown-menu', { position: 'left' })
-                .hide()
-                .on('before:show', function () {
-                    if ($('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown.open:visible').length === 0) {
-                        $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown').addClass('open').attr('forceOpen', true);
-                    }
-                })
+                .title(gt('Sharing option - Invite people'))
+                .content(gt('Choose from two alternatives to share your files and folder. Use "Only invited people" if you want ot manage access rights and allow recipients to create and edit files. Internal and external participants are also able to collaborate with you on documents at the same time.'))
+                .waitFor('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]')
+                .spotlight('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]', { position: 'right' })
+                .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/invite"] i', { position: 'left' })
                 .end()
 
             .step()
-                .title(gt('Collaborating'))
-                .content(gt('Sharing files by inviting people does not only offer your recipients the option to create and edit files. Internal and external participants are also able to collaborate with you on text documents and spreadsheets at the same time.'))
-                .spotlight('.classic-toolbar-container .dropdown-menu', { position: 'right' })
-                .hotspot('.classic-toolbar-container .dropdown-menu', { position: 'left' })
-                .on('before:show', function () {
-                    if ($('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown.open:visible').length === 0) {
-                        $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown').addClass('open').attr('forceOpen', true);
-                    }
-                })
-                .on('next', function () {
-                    $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown').removeClass('open').attr('forceOpen', false);
-                })
+                .title(gt('Sharing option - Everyone who has the link'))
+                .content(gt('It is also possible to get a sharing link to let others view or download your files. You can use an expiration date and password protection if you like.'))
+                .waitFor('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]')
+                .spotlight('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]', { position: 'right' })
+                .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/invite"] i', { position: 'left' })
                 .end()
             .step()
                 .title(gt('Edit documents'))

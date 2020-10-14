@@ -59,11 +59,11 @@ Scenario('[C308518] Subscribe / Unsubscribe public address book', async (I, cont
     I.selectFolder('All my friends');
     I.waitForText('All my friends', 5, '.folder-name');
     I.openFolderMenu('All my friends');
-    I.clickDropdown('Permissions / Invite people');
+    I.clickDropdown('Share / Permissions');
     dialogs.waitForVisible();
     await within('.modal-dialog', () => {
         I.waitForFocus('.tt-input');
-        I.fillField('.tt-input[placeholder="Add people"]', 'All users');
+        I.fillField('.tt-input[placeholder="Name or email address"]', 'All users');
         I.waitForVisible(locate('.tt-dropdown-menu').withText('All users'));
         I.pressKey('Enter');
         I.waitForVisible(locate('.permissions-view .row').at(2).withText('All users'));

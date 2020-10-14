@@ -70,9 +70,9 @@ Scenario('Subscribe and unsubscribe shared address book', async function (I, use
 
     I.waitForText('New address book');
     I.rightClick({ css: '[aria-label^="New address book"]' });
-    I.waitForText('Permissions / Invite people');
+    I.waitForText('Share / Permissions');
     I.wait(0.2);
-    I.click('Permissions / Invite people');
+    I.click('Share / Permissions');
     I.waitForText('Permissions for folder "New address book"');
     I.waitForDetached(busystate);
     I.wait(0.5);

@@ -31,7 +31,7 @@ define('io.ox/files/share/model', [
                 secured: false,
                 password: '',
                 temporary: false,
-                expires: 2,
+                expires: 6,
                 url: '',
                 is_new: false,
                 includeSubfolders: true // see SoftwareChange Request SCR-97: [https://jira.open-xchange.com/browse/SCR-97]
@@ -41,7 +41,47 @@ define('io.ox/files/share/model', [
         idAttribute: 'entity',
 
         initialize: function () {
+            // Set url if already shared
+            this._setUrlAndSettings();
             this.setOriginal();
+        },
+
+        _setUrlAndSettings: function () {
+            var hasUrl = false;
+            var extendedObjPermissions = 'com.openexchange.share.extendedObjectPermissions';
+            var extendedPermissions = 'com.openexchange.share.extendedPermissions';
+            if (this.attributes.files) {
+                _.each(this.attributes.files, function (file) {
+                    var matchedPermission = null;
+                    if (file.has(extendedPermissions)) {
+                        matchedPermission = extendedPermissions;
+                    } else if (file.has(extendedObjPermissions)) {
+                        matchedPermission = extendedObjPermissions;
+                    }
+                    if (matchedPermission) {
+                        _.each(file.get(matchedPermission), function (permission) {
+                            if (permission.type === 'anonymous' && permission.share_url) {
+                                this.attributes.url = permission.share_url;
+                                if (permission.password) {
+                                    this.attributes.password = permission.password;
+                                    this.attributes.secured = true;
+                                    hasUrl = true;
+                                }
+                                if (permission.expiry_date) {
+                                    this.attributes.expires = permission.expires;
+                                    this.attributes.expiry_date = permission.expiry_date;
+                                    this.attributes.temporary = true;
+                                }
+                            }
+                        }, this);
+                    }
+                }, this);
+            }
+            return hasUrl;
+        },
+
+        hasUrl: function () {
+            return !!this.get('url');
         },
 
         setOriginal: function (data) {
@@ -65,7 +105,7 @@ define('io.ox/files/share/model', [
 
         getExpiryDate: function () {
             var now = moment();
-            switch (this.get('expires')) {
+            switch (parseInt(this.get('expires'), 10)) {
                 case 0:
                     return now.add(1, 'day').valueOf();
                 case 1:
@@ -134,7 +174,9 @@ define('io.ox/files/share/model', [
             }
 
             // create or update ?
-            if (!this.has('url')) return data;
+            if (!this.has('url')) {
+                return data;
+            }
 
             if (this.get('temporary')) {
                 data.expiry_date = this.getExpiryDate();

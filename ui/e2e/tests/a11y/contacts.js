@@ -56,7 +56,7 @@ Scenario('Contacts - Modal Dialog - Import', async (I, contacts, dialogs) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', async (I, contacts) => {
+Scenario('[Z104305] Contacts - Modal Dialog - Public link (with exceptions)', async (I, contacts, dialogs) => {
     // Exceptions:
     // Typeahead missing label (critical)
     // Textinput, password and textarea have missing visual labels (critical)
@@ -64,7 +64,10 @@ Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', asyn
         ['.tt-hint'], ['.tt-input'],
         ['[placeholder="Password"]'],
         ['[placeholder="Message (optional)"]'],
-        ['input[type="text"].form-control']
+        ['input[type="text"].public-link-url-input'],
+        ['.access-dropdown'],
+        ['#invite-people-pane'],
+        ['.public-link']
     ] };
     const defaultFolder = await I.grabDefaultFolder('contacts');
 
@@ -81,16 +84,16 @@ Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', asyn
     I.waitForText('Krawall');
     I.click('Krawall');
     I.openFolderMenu('Krawall');
-    I.clickDropdown('Create sharing link');
-    I.waitForText('Sharing link created for folder');
-    I.waitForFocus('.share-wizard .link-group input[type="text"]');
-
+    I.clickDropdown('Share');
+    dialogs.waitForVisible();
+    I.waitForText('Invited people only', 5);
+    I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+    I.waitForText('Copy link', 5);
     I.say('Axe report');
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
-
+    
     I.say('Cleanup');
-    I.click('Remove link');
-    I.waitForText('The link has been removed');
+    dialogs.clickButton('Cancel');
 });
 
 Scenario('Contacts - New contact window', async (I, contacts) => {

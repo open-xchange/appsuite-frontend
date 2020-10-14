@@ -48,7 +48,7 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         I.waitToHide('.io-ox-calendar-edit');
 
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
 
         dialogs.waitForVisible();
         I.click('~Select contacts');
@@ -61,19 +61,17 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         I.waitForDetached('.address-picker');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.waitForText('Author', 10, '.permissions-view');
-        I.click('Author');
+        I.click('Author', '.share-pane');
         I.clickDropdown('Viewer');
-
+        I.waitForText('Invited people only');
+        I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+        I.waitForText('Copy link', 5);
+        I.click('Copy link');
+        url = await I.grabValueFrom('.public-link-url-input');
+        url = Array.isArray(url) ? url[0] : url;
         dialogs.clickButton('Save');
         I.waitForDetached('.modal-dialog');
-
-        I.click({ css: `.folder-tree [title="Actions for ${users[0].get('sur_name')}, ${users[0].get('given_name')}"]` });
-        I.click(locate('a').withText('Create sharing link').inside('.dropdown'));
-        I.waitForFocus('.share-wizard input[type="text"]');
-        url = await I.grabValueFrom('.share-wizard input[type="text"]');
-        url = Array.isArray(url) ? url[0] : url;
         I.say(url);
-        I.click('Close');
     });
 
     const checkSharedCalendarFolder = () => {
@@ -117,7 +115,7 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
     I.say('Alice revoces access');
     session('Alice', () => {
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
         I.waitForVisible({ css: `[aria-label="${users[1].get('sur_name')}, ${users[1].get('given_name')}, Internal user."]` });
         I.click(locate({ css: 'button[title="Actions"]' }).inside('.modal'));

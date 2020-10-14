@@ -49,8 +49,15 @@ define('io.ox/backbone/mini-views/copy-to-clipboard', [
                 }
             }
 
-            var icon = $('<i aria-hidden="true">');
-            icon.addClass(iconClass);
+            var icon = null;
+            if (this.options.buttonStyle !== 'link') {
+                icon = $('<i aria-hidden="true">');
+                icon.addClass(iconClass);
+            } else {
+                icon = $('<span></span>').text(this.options.buttonLabel);
+                this.$el.removeClass('btn-default');
+                this.$el.addClass('btn-link');
+            }
 
             this.$el.empty().append(icon).attr({
                 'data-clipboard-target': target,

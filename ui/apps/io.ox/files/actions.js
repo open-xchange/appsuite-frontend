@@ -346,27 +346,6 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Jonas
-    new Action('io.ox/files/actions/permissions', {
-        device: '!smartphone',
-        collection: 'one',
-        matches: function (baton) {
-            // get proper id
-            var data = baton.first(),
-                id = baton.collection.has('folders') ? data.id : data.folder_id;
-            return folderAPI.pool.getModel(id).isShareable();
-        },
-        action: function (baton) {
-            require(['io.ox/files/share/permissions'], function (controller) {
-                var model = baton.models[0], data = baton.first();
-                if (model.isFile()) {
-                    controller.showFilePermissions(data);
-                } else {
-                    controller.showFolderPermissions(data.id);
-                }
-            });
-        }
-    });
 
     // TODO check action Kristof
     new Action('io.ox/files/actions/send', {
@@ -818,17 +797,12 @@ define('io.ox/files/actions', [
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
-                var models = _.isArray(baton.models) ? baton.models : [baton.models],
-                    shareType, elem;
+                var models = _.isArray(baton.models) ? baton.models : [baton.models], elem;
                 if (models && models.length) {
+                    var options = { hasLinkSupport: isShareable('link', baton) };
                     elem = baton.app.mysharesListView.$el.find('.list-item.selected');
                     if (elem.length) {
-                        shareType = elem.attr('data-share-type');
-                        if (shareType === 'invited-people') {
-                            action.invite(models);
-                        } else if (shareType === 'public-link') {
-                            action.link(models);
-                        }
+                        action.invite(models, options);
                     }
                 }
             });
@@ -838,43 +812,23 @@ define('io.ox/files/actions', [
     // folder based actions
     // TODO check action Kristof
     new Action('io.ox/files/actions/invite', {
-        capabilities: 'invite_guests',
+        capabilities: 'invite_guests || share_links',
         collection: '!multiple',
         matches: function (baton) {
-            return isShareable('invite', baton);
+            return isShareable('invite', baton) || isShareable('link', baton);
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
+                var options = { hasLinkSupport: isShareable('link', baton) };
                 if (baton.models && baton.models.length) {
                     // share selected file
-                    action.invite(baton.models);
+                    action.invite(baton.models, options);
                 } else {
                     // share current folder
                     // convert folder model into file model
                     var id = baton.app.folder.get(),
                         model = new api.Model(folderAPI.pool.getModel(id).toJSON());
-                    action.invite([model]);
-                }
-            });
-        }
-    });
-    // TODO check action Kristof
-    new Action('io.ox/files/actions/getalink', {
-        capabilities: 'share_links',
-        collection: '!multiple',
-        matches: function (baton) {
-            return isShareable('link', baton);
-        },
-        action: function (baton) {
-            ox.load(['io.ox/files/actions/share']).done(function (action) {
-                if (baton.models && baton.models.length) {
-                    action.link(baton.models);
-                } else {
-                    // share current folder
-                    // convert folder model into file model
-                    var id = baton.app.folder.get(),
-                        model = new api.Model(folderAPI.pool.getModel(id).toJSON());
-                    action.link([model]);
+                    action.invite([model], options);
                 }
             });
         }
@@ -1331,20 +1285,10 @@ define('io.ox/files/actions', [
         {
             index: 100,
             id: 'invite',
-            title: gt('Invite people'),
+            title: gt('Share / Permissions'),
             //#. sharing: a guest user will be created for the owner of that email address
-            caption: gt('Every recipient gets an individual link. Guests can also create and change files.'),
             section: 'invite',
             ref: 'io.ox/files/actions/invite'
-        },
-        {
-            index: 200,
-            id: 'getalink',
-            title: gt('Create sharing link'),
-            //#. sharing: a link will be created
-            caption: gt('Everybody gets the same link. The link just allows to view the file or folder.'),
-            section: 'link',
-            ref: 'io.ox/files/actions/getalink'
         }
     );
 
@@ -1423,16 +1367,8 @@ define('io.ox/files/actions', [
             id: 'invite',
             prio: 'lo',
             mobile: 'lo',
-            title: gt('Invite people'),
+            title: gt('Share / Permissions'),
             ref: 'io.ox/files/actions/invite',
-            section: 'share'
-        },
-        {
-            id: 'getalink',
-            prio: 'lo',
-            mobile: 'lo',
-            title: gt('Create sharing link'),
-            ref: 'io.ox/files/actions/getalink',
             section: 'share'
         },
         {

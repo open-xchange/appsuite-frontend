@@ -24,7 +24,7 @@ Scenario('[C7365] Edit permission ', async (I, contacts, users, dialogs) => {
     I.openFolderMenu('Contacts');
 
     // #2 Open permission / sharing dialog for contacts folder and add internal user
-    I.clickDropdown('Permissions / Invite people');
+    I.clickDropdown('Share / Permissions');
     dialogs.waitForVisible();
     I.click('~Select contacts');
     I.waitForElement('.list-view.address-picker li.list-item');
@@ -50,7 +50,7 @@ Scenario('[C7365] Edit permission ', async (I, contacts, users, dialogs) => {
     I.click('.folder-arrow', '~Shared address books');
     I.selectFolder(`${sharedUserName}: Contacts`);
     I.openFolderMenu(`${sharedUserName}: Contacts`);
-    I.clickDropdown('Permissions / Invite people');
+    I.clickDropdown('Share / Permissions');
     dialogs.waitForVisible();
     I.waitForText('Author', locate('.permission.row').withAttr({ 'aria-label': `${users[1].get('sur_name')}, Internal user.` }));
     dialogs.clickButton('Close');
@@ -63,9 +63,9 @@ Scenario('[C7365] Edit permission ', async (I, contacts, users, dialogs) => {
     I.waitForText('My address books');
     I.selectFolder('Contacts');
     I.openFolderMenu('Contacts');
-    I.clickDropdown('Permissions / Invite people');
+    I.clickDropdown('Share / Permissions');
     dialogs.waitForVisible();
-    I.click('Author');
+    I.click('Author', '.share-pane');
     I.clickDropdown('Viewer');
     dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
@@ -79,7 +79,7 @@ Scenario('[C7365] Edit permission ', async (I, contacts, users, dialogs) => {
     I.see('Shared address books');
     I.selectFolder(`${sharedUserName}: Contacts`);
     I.openFolderMenu(`${sharedUserName}: Contacts`);
-    I.clickDropdown('Permissions / Invite people');
+    I.clickDropdown('Share / Permissions');
     dialogs.waitForVisible();
     I.waitForText('Viewer', locate('.permission.row').withAttr({ 'aria-label': `${users[1].get('sur_name')}, Internal user.` }));
     dialogs.clickButton('Close');
@@ -92,9 +92,9 @@ Scenario('[C7365] Edit permission ', async (I, contacts, users, dialogs) => {
     I.waitForText('My address books');
     I.selectFolder('Contacts');
     I.openFolderMenu('Contacts');
-    I.clickDropdown('Permissions / Invite people');
+    I.clickDropdown('Share / Permissions');
     dialogs.waitForVisible();
-    I.click('Viewer');
+    I.click('Viewer',  '.share-pane');
     I.clickDropdown('Reviewer');
     dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
@@ -108,7 +108,7 @@ Scenario('[C7365] Edit permission ', async (I, contacts, users, dialogs) => {
     I.see('Shared address books');
     I.selectFolder(`${sharedUserName}: Contacts`);
     I.openFolderMenu(`${sharedUserName}: Contacts`);
-    I.clickDropdown('Permissions / Invite people');
+    I.clickDropdown('Share / Permissions');
     dialogs.waitForVisible();
     I.waitForText('Reviewer', locate('.permission.row').withAttr({ 'aria-label': `${users[1].get('sur_name')}, Internal user.` }));
     dialogs.clickButton('Close');

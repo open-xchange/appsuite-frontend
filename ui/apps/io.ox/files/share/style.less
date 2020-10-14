@@ -104,6 +104,58 @@
 
     &.invite .passwordgroup { display: none; }
 
+    
+}
+
+.share-options {
+    padding: 2px 16px !important;
+
+    h5 {
+        font-weight: bold;
+    }
+
+    label {
+        margin-bottom: 0;
+        color: #000;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .checkbox label {
+        font-weight: normal;
+    }
+
+    select {
+        border: 1px solid #cccccc;
+        padding: 4px;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+    .share-wizard .password {
+        margin-bottom: 3px;
+    }
+
+    .share-wizard > div {
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+
+    .share-wizard > h5:nth-of-type(2) {
+        margin-top: 25px;
+    }
+    .share-wizard > div:last-child {
+        margin-bottom: 35px;
+    }
+
+    select[disabled] {
+        background-color: #eeeeee;
+        opacity: 1;
+    }    
+
+    .checkbox.custom {
+        padding-left: 24px;
+    }
 }
 
 .smartphone .form-group.recipients > .input-group { width: 100%; }
@@ -163,7 +215,7 @@
     }
 }
 
-.modal.get-link-dialog {
+.modal {
     .modal-body {
         .input-group.has-picker:focus-within {
             border-color: #66afe9;
@@ -184,6 +236,7 @@
             }
             .password-container {
                 margin-top: -10px;
+                margin-left: 8px;
             }
         }
     }
@@ -219,15 +272,23 @@
 
         &:after { clear: both; }
 
-        .form-group {
-            margin: 8px 0 0 0;
+        .settings-button {
+            position: absolute;
+            top: 12px;
+            right: 4px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            outline: none;
+            border: 0;
+            background: transparent;
+            font-size: 18px;          
         }
+    }
 
-        .input-group.has-picker:focus-within {
-            border-color: #66afe9;
-            outline: 0;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
-            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    .modal-header.help {
+        .io-ox-context-help {
+            right: 30px;
         }
     }
 
@@ -237,7 +298,7 @@
             display: table;
             position: relative;
             float: left;
-            margin-top: 5px;
+            margin-top: 0;
             margin-right: 10px;
             margin-bottom: 0;
         }
@@ -247,10 +308,96 @@
         padding: 0;
         display: flex;
         flex-direction: column;
+        overflow-y: scroll;
+        overflow-x: hidden;
+
+        label {
+            color: #000;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .access-select {
+            label {
+                margin-top: 16px;
+                margin-left: 16px;
+                margin-bottom: 0;
+            }
+            select {
+                width: 100%;
+                border: 1px solid #cccccc;
+                padding: 4px;
+                border-radius: 5px;
+            }
+            .form-group {
+                margin: 0px 10px 16px 16px;
+            }
+        }
+
+        .public-link {
+            /*
+                Move input field out of the visible view.
+                This is required, because we can't use 
+                copy to clipboard on input type hidden.
+            */
+            margin-bottom: 4px;
+            h5 {
+                margin-left: 16px;
+                margin-top: 0;
+                font-weight: bold;
+            }
+            .public-link-url-input {
+                position: fixed;
+                top: -500px;
+                left: -500px;
+                width: 20px;
+            }
+            .fa-link{
+                font-size: 1.75em;
+                color: #000000;
+            }
+            .row {
+                margin: 0;
+                display: flex;
+                align-items: center;
+            }
+        }
+        
+        .share-pane.invite-people {
+            h5 {
+                margin-left: 16px;
+                margin-bottom: -12px;
+                font-weight: bold;
+            }
+            .form-group {
+                margin: 16px 10px 16px 16px;
+            }
+            .input-group.has-picker:focus-within {
+                border-color: #66afe9;
+                outline: 0;
+                -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+                box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+            }
+            .input-group {
+                width: 100%;
+            }
+            .row.vertical-align-center {
+                display: flex;
+                align-items: center;
+                .permission-pre-selection {
+                    padding-left: 0;
+                }
+            }
+        }
+
+        /**
+         * There is a problem with the classname share-options. This is class will be
+         * set by the browser extension Adblock plus to display none!!!
+         */
 
         // also used for edge... no support for resize css attribute...
         &.IE11 {
-            .share-options {
+            .file-share-options {
                 &.IE {
                     min-width: 100%;
                     max-width: 100%;
@@ -258,20 +405,29 @@
             }
         }
 
-        .share-options {
+        .file-share-options {
             text-align: left;
-            border-top: 1px solid #e5e5e5;
-            margin: 0;
+            padding-top: 16px;
+
+            label {
+                margin-left: 16px;
+                margin-bottom: 0;
+                color: #000;
+                font-weight: bold;
+                font-size: 14px;
+            }
 
             textarea {
                 resize: vertical;
                 height: 96px;
                 min-height: 80px;
                 max-height: ~"calc(100vh - 410px)";
-                border: none;
+                border: 1px solid #cccccc;
                 box-shadow: none;
-                padding-left: 12px;
-                padding-right: 12px;
+                border-radius: 5px;
+                margin-left: 16px;
+                margin-right: 16px;
+                width: 95%;
 
                 &::placeholder { color: #767676; }
                 &::-ms-input-placeholder { color: #767676; }
@@ -300,6 +456,7 @@
             min-height: 72px;
             flex: 1;
         }
+
     }
 
     .permission {
@@ -324,11 +481,14 @@
         .role, .detail-dropdown, .entity-actions {
             height: 40px;
             line-height: 40px;
+            small {
+                padding-left: 25px;
+            }
         }
 
         // vertical align with padded dropdown button
         .role:not(.dropdown) {
-            padding: 4px 27px;
+            padding: 2px 27px;
         }
 
         .detail-dropdown,
@@ -345,6 +505,15 @@
             font-weight: bold;
 
             .title, .first_name { font-weight: normal; }
+            .added {
+                background-color: #BDD3F0;
+                border-radius: 5px;
+                font-size: 10px;
+                font-weight: 400;
+                margin-left: 10px;
+                padding: 1px 8px;
+                color: #212175;
+            }
         }
 
         .dropdown.open {
@@ -400,6 +569,12 @@
             }
             i { color: #777; }
         }
+    }
+}
+
+.dropdown.open.role {
+    small {
+        padding-left: 29px;
     }
 }
 

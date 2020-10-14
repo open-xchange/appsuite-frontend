@@ -462,9 +462,9 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
 
     I.waitForText('New calendar');
     I.rightClick({ css: '[aria-label^="New calendar"]' });
-    I.waitForText('Permissions / Invite people');
+    I.waitForText('Share / Permissions');
     I.wait(0.2); // Just wait a little extra for all event listeners
-    I.click('Permissions / Invite people');
+    I.click('Share / Permissions');
     dialogs.waitForVisible();
     I.waitForText('Permissions for folder "New calendar"');
     I.fillField('.modal-dialog .tt-input', users[1].userdata.primaryEmail);
@@ -551,7 +551,7 @@ Scenario('Manage public Calendars', async function (I, users, calendar, dialogs)
 
     await within('.modal-dialog', () => {
         I.waitForFocus('.tt-input');
-        I.fillField('.tt-input[placeholder="Add people"]', 'All users');
+        I.fillField('.tt-input[placeholder="Name or email address"]', 'All users');
         I.waitForVisible(locate('.tt-dropdown-menu').withText('All users'));
         I.pressKey('Enter');
         I.waitForVisible(locate('.permissions-view .row').at(2).withText('All users'));

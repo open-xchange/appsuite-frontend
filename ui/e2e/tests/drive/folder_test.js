@@ -100,14 +100,8 @@ Scenario('[C8376] Add a subfolder', async (I, drive, dialogs) => {
 Scenario('[C8377] Invite a person', (I, users, drive, dialogs) => {
     function share(publicFolder) {
         I.clickToolbar('Share');
-        I.clickDropdown('Invite people');
         dialogs.waitForVisible();
         I.waitForText('Share folder');
-        if (!publicFolder) {
-            I.click('Send notification by email');
-            I.waitForInvisible('.share-options', 2);
-        }
-        I.dontSeeCheckboxIsChecked('Send notification by email');
         I.click('~Select contacts');
         dialogs.waitForVisible();
         I.waitForElement('.modal-body .list-view.address-picker li.list-item'); // check if list items are loaded
@@ -121,7 +115,7 @@ Scenario('[C8377] Invite a person', (I, users, drive, dialogs) => {
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.dontSee('Guest', '.permissions-view');
         I.seeNumberOfElements('.permissions-view .permission.row', 2);
-        I.click('Author');
+        I.click('Author', '.share-pane');
         I.clickDropdown('Viewer');
         dialogs.clickButton('Share');
         I.waitForDetached('.modal-dialog');
@@ -154,7 +148,7 @@ Scenario('[C8377] Invite a person', (I, users, drive, dialogs) => {
         I.waitForElement(locate('.filename').withText('Music').inside('.list-view'));
         I.doubleClick(locate('.filename').withText('Music').inside('.list-view'));
         I.openFolderMenu('Music');
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.waitForText('Viewer', 2, '.permissions-view');
         I.click('Close');
@@ -186,7 +180,7 @@ Scenario('[C8377] Invite a person', (I, users, drive, dialogs) => {
         I.waitForText(publicFolderName, 5, '.list-view');
         I.selectFolder(publicFolderName);
         I.openFolderMenu(publicFolderName);
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.see('Viewer', '.permissions-view .row .role');
     });
@@ -218,11 +212,8 @@ Scenario('[C8378] Invite a group', async (I, users, drive, dialogs) => {
     I.login('app=io.ox/files&folder=' + folder, { user: users[0] });
     drive.waitForApp();
     I.clickToolbar('Share');
-    I.clickDropdown('Invite people');
 
     dialogs.waitForVisible();
-    I.waitForText('Send notification by email', 5, dialogs.locators.footer);
-    I.checkOption('Send notification by email');
     I.fillField('input.tt-input', groupName);
     I.waitForVisible('.tt-dropdown-menu');
     I.pressKey('Enter');
@@ -235,7 +226,7 @@ Scenario('[C8378] Invite a group', async (I, users, drive, dialogs) => {
         I.login('app=io.ox/files&folder=' + folder, { user: users[i] });
         drive.waitForApp();
         I.openFolderMenu(folderName);
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.see('Author', '.permissions-view .row .role');
@@ -326,7 +317,7 @@ Scenario('[C8385] Uninvite a person', async (I, users, drive) => {
     // Person is invited to the folder
     // 1. Choose a folder
     // 2. Click the gear button (context menu)
-    // 3. Choose "Permissions/Invite People" (A new pop up window opens with an overview of the invited people and their permissions.)
+    // 3. Choose "Share / Permissions" (A new pop up window opens with an overview of the invited people and their permissions.)
     // 4. Click the gear button next to Person B that needs to be deleted from the folder. (Context menue opens.)
     // 5. Click on "Revoke access" (The person disappears from the list.)
     // 6. Log in with Person B. (Person B is logged in.)
@@ -381,10 +372,7 @@ Scenario('[C8386] Uninvite a group', async (I, users, drive, dialogs) => {
         I.login('app=io.ox/files&folder=' + folder, { user: users[0] });
         drive.waitForApp();
         I.clickToolbar('Share');
-        I.clickDropdown('Invite people');
         dialogs.waitForVisible();
-        I.waitForText('Send notification by email', 5, dialogs.locators.footer);
-        I.checkOption('Send notification by email');
         I.fillField('input.tt-input', groupName);
         I.waitForVisible('.tt-dropdown-menu');
         I.pressKey('Enter');
@@ -397,7 +385,7 @@ Scenario('[C8386] Uninvite a group', async (I, users, drive, dialogs) => {
         I.login('app=io.ox/files&folder=' + folder, { user: users[1] });
         drive.waitForApp();
         I.openFolderMenu(folderName);
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.see('Author', '.permissions-view .row .role');
@@ -407,8 +395,6 @@ Scenario('[C8386] Uninvite a group', async (I, users, drive, dialogs) => {
 
     session('Alice', () => {
         I.clickToolbar('Share');
-        I.waitForText('Invite people', 5, '.dropdown.open');
-        I.click('Invite people', '.dropdown.open');
         dialogs.waitForVisible();
         I.waitForElement('.modal-dialog .btn[title="Actions"]');
         I.click('.modal-dialog .btn[title="Actions"]');

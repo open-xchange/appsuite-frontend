@@ -40,7 +40,7 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         I.click('.folder-arrow', '~My address books');
 
         I.openFolderMenu('Contacts');
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
 
         I.waitForText('Permissions for folder', 5, dialogs.locators.header);
@@ -53,19 +53,17 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         I.click({ css: 'button[data-action="select"]' });
         I.waitForDetached('.address-picer');
         I.waitForElement(locate('.permissions-view .row').at(2));
-        I.click('Author');
+        I.click('Author', '.share-pane');
         I.clickDropdown('Viewer');
-
+        I.waitForText('Invited people only');
+        I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+        I.waitForText('Copy link', 5);
+        I.click('Copy link');
+        url = await I.grabValueFrom('.public-link-url-input');
+        url = Array.isArray(url) ? url[0] : url;
         dialogs.clickButton('Save');
         I.waitForDetached('.modal-dialog');
-
-        I.openFolderMenu('Contacts');
-        I.clickDropdown('Create sharing link');
-        I.waitForText('Sharing link created for folder');
-        I.waitForFocus('.share-wizard input[type="text"]');
-        url = await I.grabValueFrom('.share-wizard input[type="text"]');
-        url = Array.isArray(url) ? url[0] : url;
-        I.click('Close');
+        //I.click('Close');
     });
 
     // Bob receives the share
@@ -105,33 +103,32 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
 
     session('Alice', () => {
         I.openFolderMenu('Contacts');
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
         I.waitForElement('.btn[title="Actions"]');
         I.click('.btn[title="Actions"]');
         I.clickDropdown('Revoke access');
         dialogs.waitForVisible();
         dialogs.clickButton('Save');
         I.waitForDetached('.modal-dialog');
-
         I.click({ css: '.folder-tree [title="Actions for Contacts"]' });
-        I.clickDropdown('Create sharing link');
+        I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
-        I.waitForText('Sharing link created for folder');
-        I.waitForFocus('.share-wizard input[type="text"]');
-        dialogs.clickButton('Remove link');
+        I.waitForText('Anyone with the link and invited people', 5);
+        I.selectOption('Who can access this folder?', 'Invited people only');
+        I.dontSee('Copy link');
+        dialogs.clickButton('Save');
         I.waitForDetached('.modal-dialog');
-        I.waitForText('The link has been removed');
     });
-
+    
     session('Bob', () => {
         I.triggerRefresh();
         I.retry(5).seeNumberOfElements(locate('.contact').inside('.io-ox-contacts-window'), 0);
         I.dontSee('Builder', '.io-ox-contacts-window');
         I.dontSee('Wonderland', '.io-ox-contacts-window');
     });
-
+    
     session('Eve', () => {
         I.amOnPage(url);
-        I.waitForText('The share you are looking for does not exist.');
+        I.waitForText('The share you are looking for does not exist.', 5);
     });
 });

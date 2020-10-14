@@ -9,7 +9,7 @@
  *
  * @author Christohp Kopp < christohp.kopp@open-xchange.com >
  */
-/// <reference path="../../steps.d.ts" />
+/// <reference path="../../../steps.d.ts" />
 
 Feature('Tasks > Misc');
 
@@ -21,7 +21,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('Subscribe shared folder and Unsubscribe shared folder', async function (I, users) {
+Scenario('[Z104304] Subscribe shared folder and Unsubscribe shared folder', async function (I, users) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false }
@@ -43,9 +43,9 @@ Scenario('Subscribe shared folder and Unsubscribe shared folder', async function
 
     I.waitForText('New folder');
     I.rightClick({ css: '[aria-label^="New folder"]' });
-    I.waitForText('Permissions / Invite people');
+    I.waitForText('Share / Permissions');
     I.wait(0.2);
-    I.click('Permissions / Invite people');
+    I.click('Share / Permissions');
     I.waitForText('Permissions for folder "New folder"');
     I.waitForDetached(busystate);
     I.wait(0.5);

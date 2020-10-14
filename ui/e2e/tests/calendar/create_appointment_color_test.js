@@ -75,7 +75,7 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     I.selectFolder('New calendar');
     I.retry(3).click(selectInsideFolder({ css: 'a.folder-options' }));
 
-    I.clickDropdown('Permissions / Invite people');
+    I.clickDropdown('Share / Permissions');
     dialogs.waitForVisible();
     I.waitForElement('.form-control.tt-input', 5, dialogs.locators.header);
     I.fillField('.form-control.tt-input', users[1].get('primaryEmail'));

@@ -29,8 +29,7 @@ define('io.ox/files/contextmenu', ['io.ox/core/extensions', 'gettext!io.ox/core'
             ['download', '30', gt('Download')],
             ['download-folder', '30', gt('Download entire folder')],
             // #4
-            ['invite', '40', gt('Permissions / Invite people')],
-            ['getalink', '40', gt('Create sharing link')],
+            ['invite', '40', gt('Share / Permissions')],
             // #5
             ['rename', '50', gt('Rename')],
             ['move', '50', gt('Move')],
@@ -43,7 +42,7 @@ define('io.ox/files/contextmenu', ['io.ox/core/extensions', 'gettext!io.ox/core'
             ['restore', '70', gt('Restore')]
         ],
         'io.ox/files/share/myshares/listview/contextmenu': [
-            ['editShare', '10', gt('Edit Share')],
+            ['editShare', '10', gt('Edit share')],
             ['show-in-folder', '10', gt('Show in Drive')],
             ['revoke', '20', gt('Revoke access')]
         ]
@@ -73,7 +72,7 @@ define('io.ox/files/contextmenu', ['io.ox/core/extensions', 'gettext!io.ox/core'
         id: 'invite',
         index: 20,
         section: 20,
-        title: gt('Permissions / Invite people'),
+        title: gt('Share / Permissions'),
         ref: 'io.ox/files/actions/invite'
     });
 

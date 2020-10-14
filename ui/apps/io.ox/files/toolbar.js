@@ -61,7 +61,7 @@ define('io.ox/files/toolbar', [
                 prio: 'hi',
                 mobile: 'lo',
                 title: gt('Share'),
-                dropdown: 'io.ox/files/toolbar/share'
+                ref: 'io.ox/files/actions/invite'
             },
             'viewer': {
                 prio: 'hi',

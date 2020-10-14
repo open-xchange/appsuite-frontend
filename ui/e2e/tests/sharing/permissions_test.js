@@ -38,9 +38,9 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
         I.click('My files', '.folder-tree');
         I.selectFolder('Music');
         I.waitForVisible(locate('.breadcrumb-tail[data-module="infostore"]').withText('Music'));
-        drive.shareItem('Invite people');
-        I.click('Send notification by email');
-        I.dontSeeCheckboxIsChecked('Send notification by email');
+        I.waitForText('Share');
+        I.clickToolbar('Share');
+        dialogs.waitForVisible();
         I.click('~Select contacts');
         I.waitForElement('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));
@@ -54,7 +54,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
         I.waitForElement({ xpath: '//div[contains(@class, "permission row")][1]' });
         I.waitForElement({ xpath: '//div[contains(@class, "permission row")][2]' });
         I.waitForText('Author');
-        I.click('Author');
+        I.click('Author',  '.share-pane');
         I.clickDropdown('Viewer');
         dialogs.clickButton('Share');
         I.waitForDetached('.modal-dialog');
@@ -83,8 +83,6 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
     session('Alice', () => {
         I.click('Edit share');
         I.waitForText('Share folder');
-        I.click('Send notification by email');
-        I.dontSeeCheckboxIsChecked('Send notification by email');
         I.click('Details', locate('.permissions-view .row').at(2));
         I.clickDropdown('Create objects and subfolders');
 
@@ -130,9 +128,9 @@ Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users
 
         //I.shareFolder('Music');
         I.selectFolder('Music');
-        drive.shareItem('Invite people');
-        I.click('Send notification by email');
-        I.dontSeeCheckboxIsChecked('Send notification by email');
+        I.waitForText('Share');
+        I.clickToolbar('Share');
+        dialogs.waitForVisible();
         I.click('~Select contacts');
         I.waitForElement('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));
@@ -144,7 +142,7 @@ Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.dontSee('Guest', '.permissions-view');
         I.seeNumberOfElements('.permissions-view .permission.row', 2);
-        I.click('Author');
+        I.click('Author',  '.share-pane');
         I.clickDropdown('Viewer');
         dialogs.waitForVisible();
         dialogs.clickButton('Share');
@@ -201,7 +199,9 @@ Scenario('[C73919] Copy a shared file to another folder', async function (I, use
     I.waitForDetached('.io-ox-viewer');
     I.see('Versions (2)', '.detail-pane');
 
-    drive.shareItem('Invite people');
+    I.waitForText('Share');
+    I.clickToolbar('Share');
+    dialogs.waitForVisible();
     I.click('~Select contacts');
     I.waitForElement('.modal .list-view.address-picker li.list-item');
     I.fillField('Search', users[1].get('name'));

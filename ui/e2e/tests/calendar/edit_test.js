@@ -219,9 +219,9 @@ Scenario('[C7465] Edit appointment in shared folder as author', async (I, users,
 
     I.waitForText('New calendar');
     I.rightClick({ css: '[aria-label^="New calendar"]' });
-    I.waitForText('Permissions / Invite people');
+    I.waitForText('Share / Permissions');
     I.wait(0.2); // Just wait a little extra for all event listeners
-    I.click('Permissions / Invite people');
+    I.click('Share / Permissions');
     I.waitForText('Permissions for folder "New calendar"');
     I.waitForDetached(busystate);
     I.wait(0.5);
@@ -409,9 +409,9 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
 
     I.waitForText('New calendar');
     I.rightClick({ css: '[aria-label^="New calendar"]' });
-    I.waitForText('Permissions / Invite people');
+    I.waitForText('Share / Permissions');
     I.wait(0.2); // Just wait a little extra for all event listeners
-    I.click('Permissions / Invite people');
+    I.click('Share / Permissions');
     I.waitForText('Permissions for folder "New calendar"');
     I.waitForDetached(busystate);
     I.wait(0.5);

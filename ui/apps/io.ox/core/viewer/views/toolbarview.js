@@ -263,10 +263,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                 // on smartphones the separate dropdown is broken up and the options are added to the actions dropdown
                 'share': {
                     prio: 'hi',
-                    mobile: 'none',
+                    mobile: 'lo',
                     title: gt('Share'),
-                    tooltip: gt('Share this file'),
-                    dropdown: 'io.ox/files/toolbar/share'
+                    tooltip: gt('Share / Permissions'),
+                    ref: 'io.ox/files/actions/invite'
                 },
                 'open': {
                     prio: 'lo',
@@ -282,20 +282,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     title: gt('Print as PDF'),
                     section: 'export',
                     ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
-                },
-                'invite': {
-                    prio: 'none',
-                    mobile: 'lo',
-                    title: gt('Invite people'),
-                    section: 'share',
-                    ref: 'io.ox/files/actions/invite'
-                },
-                'sharelink': {
-                    prio: 'none',
-                    mobile: 'lo',
-                    title: gt('Create sharing link'),
-                    section: 'share',
-                    ref: 'io.ox/files/actions/getalink'
                 },
                 'sendbymail': {
                     prio: 'lo',

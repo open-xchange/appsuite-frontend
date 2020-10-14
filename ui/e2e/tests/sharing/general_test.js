@@ -32,10 +32,15 @@ Scenario('[C45021] Generate simple link for sharing', async function (I, drive, 
     const myfiles = locate('.folder-tree .folder-label').withText('My files');
     I.waitForElement(myfiles);
     I.selectFolder('Music');
-    drive.shareItem('Create sharing link');
-    let url = await I.grabValueFrom('.share-wizard input[type="text"]');
+    I.click('Share');
+    dialogs.waitForVisible();
+    I.waitForText('Invited people only', 5);
+    I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+    I.waitForText('Copy link', 5);
+    I.click('Copy link');
+    url = await I.grabValueFrom('.public-link-url-input');
     url = Array.isArray(url) ? url[0] : url;
-    dialogs.clickButton('Close');
+    dialogs.clickButton('Share');
     I.waitForDetached('.modal-dialog');
     I.logout();
 
@@ -47,6 +52,7 @@ Scenario('[C45021] Generate simple link for sharing', async function (I, drive, 
 
 // TODO: shaky (element (.list-view) is not in DOM or there is no element(.list-view) with text "A subfolder" after 5 sec)
 Scenario('[C252159] Generate link for sharing including subfolders', async function (I, drive, dialogs) {
+    let url = null;
     I.login('app=io.ox/files');
     drive.waitForApp();
 
@@ -73,14 +79,19 @@ Scenario('[C252159] Generate link for sharing including subfolders', async funct
     I.selectFolder('My files');
     I.waitForElement(locate('.filename').withText('Music').inside('.list-view'));
     I.click(locate('.filename').withText('Music').inside('.list-view'));
-    drive.shareItem('Create sharing link');
-    const url = await I.grabValueFrom('.share-wizard input[type="text"]');
-    dialogs.clickButton('Close');
+    I.click('Share');
+    dialogs.waitForVisible();
+    I.waitForText('Invited people only', 5);
+    I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+    I.waitForText('Copy link', 5);
+    I.click('Copy link');
+    url = await I.grabValueFrom('.public-link-url-input');
+    url = Array.isArray(url) ? url[0] : url;
+    dialogs.clickButton('Share');
     I.waitForDetached('.modal-dialog');
     I.logout();
-
     I.say('Check sharing link');
-    I.amOnPage(Array.isArray(url) ? url[0] : url);
+    I.amOnPage(url);
     drive.waitForApp();
     I.waitForText('A subfolder', 5, '.list-view');
     I.seeNumberOfVisibleElements('.list-view li.list-item', 2);
@@ -195,7 +206,7 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
 
     function addUser(user) {
         I.wait(0.2); // gentle wait for auto complete
-        I.fillField('input[placeholder="Add people"]', user.userdata.primaryEmail);
+        I.fillField('input[placeholder="Name or email address"]', user.userdata.primaryEmail);
         I.waitForElement('.participant-wrapper');
         I.pressKey('Enter');
         I.waitForText(user.userdata.name, 5, locate('.permission.row').withAttr({ 'aria-label': `${user.userdata.sur_name}, User, Internal user.` }));
@@ -242,12 +253,12 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
 
         I.waitForText('document.txt');
         I.rightClick(locate('.filename').withText('document.txt'));
-        I.waitForText('Permissions / Invite people', 5, smartDropDown);
-        I.click('Permissions / Invite people', smartDropDown);
+        I.waitForText('Share / Permissions', 5, smartDropDown);
+        I.click('Share / Permissions', smartDropDown);
 
         I.waitForElement('.modal-dialog');
         within('.modal-dialog', () => {
-            I.waitForFocus('input[placeholder="Add people"]');
+            I.waitForFocus('input[placeholder="Name or email address"]');
             addUser(users[1]);
             addUser(users[2]);
             addUser(users[3]);
@@ -293,8 +304,8 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
     session('Alice', () => {
         // set charlies rights to viewer rights
         I.rightClick(locate('.filename').withText('document.txt'));
-        I.waitForText('Permissions / Invite people', 5, smartDropDown);
-        I.click('Permissions / Invite people', smartDropDown);
+        I.waitForText('Share / Permissions', 5, smartDropDown);
+        I.click('Share / Permissions', smartDropDown);
 
         setRights('Reviewer', 'Viewer', users[2]);
         dialogs.clickButton('Share');
@@ -311,8 +322,8 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
 
     session('Alice', () => {
         I.rightClick(locate('.filename').withText('document.txt'));
-        I.waitForText('Permissions / Invite people', 5, smartDropDown);
-        I.click('Permissions / Invite people', smartDropDown);
+        I.waitForText('Share / Permissions', 5, smartDropDown);
+        I.click('Share / Permissions', smartDropDown);
 
         // revoke access of dave
         I.waitForElement('button[title="Actions"]', locate('.permission.row').withAttr({ 'aria-label': `${users[3].userdata.sur_name}, User, Internal user.` }));
@@ -349,19 +360,19 @@ Scenario('[C45025] Create shared object with multiple users (external users) wit
         drive.waitForApp();
         I.waitForText('document.txt');
         I.rightClick(locate('.filename').withText('document.txt'));
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
 
         dialogs.waitForVisible();
         await within('.modal-dialog', () => {
-            I.waitForFocus('input[placeholder="Add people"]');
-            I.fillField('input[placeholder="Add people"]', users[1].userdata.primaryEmail);
-            I.seeInField('input[placeholder="Add people"]', users[1].userdata.primaryEmail);
+            I.waitForFocus('input[placeholder="Name or email address"]');
+            I.fillField('input[placeholder="Name or email address"]', users[1].userdata.primaryEmail);
+            I.seeInField('input[placeholder="Name or email address"]', users[1].userdata.primaryEmail);
             I.waitForInvisible(autocomplete.locators.suggestions);
             I.pressKey('Enter');
             I.waitForText(users[1].userdata.name, 5, locate('.permission.row').withAttr({ 'aria-label': `${users[1].userdata.primaryEmail}, Guest.` }));
             I.waitForEnabled('.form-control.tt-input');
-            I.fillField('input[placeholder="Add people"]', users[2].userdata.primaryEmail);
-            I.seeInField('input[placeholder="Add people"]', users[2].userdata.primaryEmail);
+            I.fillField('input[placeholder="Name or email address"]', users[2].userdata.primaryEmail);
+            I.seeInField('input[placeholder="Name or email address"]', users[2].userdata.primaryEmail);
             I.waitForInvisible(autocomplete.locators.suggestions);
             I.wait(0.2);
             I.pressKey('Enter');
@@ -474,7 +485,7 @@ Scenario('[C110280] Personalized no-reply share mails', async function (I, users
         I.login('app=io.ox/files');
         drive.waitForApp();
         I.clickToolbar('Share');
-        I.clickDropdown('Invite people');
+        I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
         I.waitForElement(locate('input').withAttr({ 'placeholder': 'Add people' }), '.modal-dialog');
         I.fillField(locate('input').withAttr({ 'placeholder': 'Add people' }), users[1].userdata.primaryEmail);

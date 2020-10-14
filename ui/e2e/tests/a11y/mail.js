@@ -130,7 +130,7 @@ Scenario('Mail - Modal Dialog - Permissions (with exceptions)', async (I, mail) 
     // Exceptions:
     // Typeahead missing label (critical)
     // Personal message textarea has a missing label (critical)
-    const excludes = { exclude: [['.tt-hint'], ['.tt-input'], ['.message-text']] };
+    const excludes = { exclude: [['.tt-hint'], ['.tt-input'], ['.message-text'], ['.share-pane h5']] };
 
     I.login('app=io.ox/mail');
     mail.waitForApp();

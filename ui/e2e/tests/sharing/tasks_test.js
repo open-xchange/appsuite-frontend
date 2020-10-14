@@ -43,7 +43,7 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
         tasks.create();
 
         I.openFolderMenu('Tasks');
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
         I.waitForText('Permissions for folder');
 
         I.click('~Select contacts');
@@ -55,7 +55,7 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
         I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
         I.click({ css: 'button[data-action="select"]' });
         I.waitForVisible(locate('.permissions-view .row').at(2));
-        I.click('Author');
+        I.click('Author',  '.share-pane');
         I.waitForText('Viewer', '.dropdown');
         I.click('Viewer');
 
@@ -63,12 +63,16 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
         I.waitForDetached('.modal-dialog');
 
         I.openFolderMenu('Tasks');
-        I.clickDropdown('Create sharing link');
-        I.waitForText('Sharing link created for folder');
-        I.waitForFocus('.share-wizard input[type="text"]');
-        url = await I.grabValueFrom('.share-wizard input[type="text"]');
+        I.clickDropdown('Share');
+        dialogs.waitForVisible();
+        I.waitForText('Invited people only', 5);
+        I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+        I.waitForText('Copy link', 5);
+        I.click('Copy link');
+        url = await I.grabValueFrom('.public-link-url-input');
         url = Array.isArray(url) ? url[0] : url;
-        I.click('Close');
+        dialogs.clickButton('Share');
+        I.waitForDetached('.modal-dialog');
     });
 
     // Bob receives the share
@@ -108,7 +112,7 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
 
     session('Alice', () => {
         I.openFolderMenu('Tasks');
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
         I.waitForElement('.btn[title="Actions"]');
         I.click('.btn[title="Actions"]');
         I.clickDropdown('Revoke access');
@@ -117,10 +121,13 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
         I.waitForDetached('.modal-dialog');
 
         I.click({ css: '.folder-tree [title="Actions for Tasks"]' });
-        I.clickDropdown('Create sharing link');
-        I.waitForText('Sharing link created for folder');
-        I.waitForFocus('.share-wizard input[type="text"]');
-        I.click('Remove link');
+        I.clickDropdown('Share');
+        dialogs.waitForVisible();
+        I.waitForText('Invited people only', 5);
+        I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+        I.waitForText('Copy link', 5);
+        dialogs.clickButton('Cancel');
+        I.waitForDetached('.modal-dialog');
     });
 
     session('Bob', () => {
