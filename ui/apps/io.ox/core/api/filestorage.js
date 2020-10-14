@@ -35,15 +35,17 @@ define('io.ox/core/api/filestorage', [
         idsCache = [],
         //utility function to add to idsCache
         addToIdsCache = function (accounts) {
-            var services = ['googledrive', 'dropbox', 'boxcom', 'onedrive'];
+            // xox cross ox / xctx cross context
+            // there are integers behind those that represent module numbers (8 is files for example) so make sure to check fuzzy enough
+            var services = ['googledrive', 'dropbox', 'boxcom', 'onedrive', 'xox', 'xctx'];
 
             ext.point('io.ox/core/filestorage/service-list').invoke('customize', services);
 
             _(accounts).each(function (account) {
                 account = !!account.get ? account.toJSON() : account;
-                if (_(services).indexOf(account.filestorageService) !== -1) {
-                    idsCache.push(account.qualifiedId);
-                }
+                _(services).each(function (service) {
+                    if (account.filestorageService && account.filestorageService.indexOf(service) === 0) idsCache.push(account.qualifiedId);
+                });
             });
             // we don't want duplicates
             idsCache = _.uniq(idsCache);
