@@ -65,9 +65,9 @@ define('io.ox/participants/chronos-views', [
 
         getDisplayName: function (model, options) {
             options = options || {};
-            var dn = model.get('contact') ? contactsUtil.getFullName(model.get('contact'), options.asHtml) : model.get('cn');
+            var dn = model.get('contact') ? contactsUtil.getFullName(model.get('contact'), options.asHtml) : _.escape(model.get('cn'));
             // 'email only' participant
-            return dn || model.get('cn');
+            return dn || _.escape(model.get('cn'));
         },
 
         render: function () {
