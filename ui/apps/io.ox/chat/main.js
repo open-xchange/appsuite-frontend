@@ -157,6 +157,8 @@ define('io.ox/chat/main', [
         },
 
         openPrivateChat: function (cmd) {
+            if (cmd.email === data.user.email) return;
+
             // try to reuse chat
             var chat = data.chats.active.find(function (model) {
                 return model.get('type') === 'private' && Object.keys(model.get('members')).indexOf(cmd.email) >= 0;
