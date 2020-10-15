@@ -124,6 +124,8 @@ define('io.ox/chat/views/fileList', [
         onAdd: _.debounce(function (model, collection, options) {
             if (this.disposed) return;
 
+            $(this.el).find('.info-container').remove();
+
             this.updateIndices();
             this.$('.scrollpane ul').prepend(
                 options.changes.added.map(this.renderItem, this)
