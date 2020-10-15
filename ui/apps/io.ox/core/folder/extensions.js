@@ -1251,6 +1251,22 @@ define('io.ox/core/folder/extensions', [
                     baton.view.hideStatusIcon();
                 }
             }
+        },
+        {
+            id: 'sharing-errors',
+            index: 500,
+            draw: function (baton) {
+
+                if (!/^infostore$/.test(baton.data.module)) return;
+
+                var accountError = baton.data['com.openexchange.folderstorage.accountError'];
+                if (accountError) {
+                    baton.view.showStatusIcon(accountError.error, 'click:storage-error', baton.data);
+                    ox.trigger('http:error:' + accountError.code, accountError);
+                } else {
+                    baton.view.hideStatusIcon();
+                }
+            }
         }
     );
 
