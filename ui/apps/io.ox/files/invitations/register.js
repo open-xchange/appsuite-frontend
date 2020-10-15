@@ -26,7 +26,7 @@ define('io.ox/files/invitations/register', [
     var i18n = {
         'mount': gt('Add'),
         'unmount': gt('Remove'),
-        'remount': gt('Add:Update'),
+        'remount': gt('Add again'),
         'ignore': gt('Ignore')
     };
 
@@ -47,9 +47,11 @@ define('io.ox/files/invitations/register', [
         'subscribed': gt('Link belongs to a known share and is accessible'),
         'addable': gt('Link is valid and belongs to a share that is not yet subscribed an can be added'),
         'addable_with_password': gt('Link is valid and belongs to a share that is not yet subscribed an can be added. User needs to enter a password to add the share'),
-        'inaccessible': gt('Link is inaccessible and thus can\'t be subscribed'),
-        'unresolvable': gt('Link can\'t be resolved at all and thus can\'t be subscribed'),
+        'inaccessible': gt('Link is temporary inaccessible and thus can\'t be subscribed'),
+        'unresolvable': gt('Link is invalid and thus can\'t be subscribed'),
+        'unsupported': gt('Link is currently unsupported thus can\'t be subscribed'),
         'forbidden': gt('Subscription of the link is not allowed'),
+        'removed': gt('This share was removed by the owner.'),
         'credentials_refresh': gt('Link belongs to a known share but is not accessible at the moment because the remote server indicates that credentials have been updated meanwhile.')
     };
 
@@ -58,7 +60,9 @@ define('io.ox/files/invitations/register', [
         'addable': ['ignore', 'mount'],
         'addable_with_password': ['ignore', 'mount'],
         'inaccessible': ['remount'],
+        'unsupported': ['ignore'],
         'unresolvable': ['ignore'],
+        'removed': ['ignore'],
         'forbidden': ['ignore'],
         'credentials_refresh': ['remount']
     };
