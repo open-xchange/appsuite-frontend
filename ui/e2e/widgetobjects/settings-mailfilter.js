@@ -1,5 +1,5 @@
 
-const { I } = inject();
+const { I, dialogs } = inject();
 
 module.exports = {
 
@@ -19,6 +19,7 @@ module.exports = {
     newRule(name) {
         I.click('Add new rule');
         I.waitForVisible(this.locators.dialog);
+        I.waitForFocus('.modal-dialog .form-control');
         I.see('Create new rule');
         I.see('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.');
         I.see('Please define at least one action.');
@@ -26,32 +27,38 @@ module.exports = {
         I.fillField('rulename', name);
     },
 
-    addCondition(condition, value) {
+    addCondition(condition, value, field = 'values') {
         I.click('Add condition');
-        I.click(condition);
-        I.fillField('values', value);
+        I.clickDropdown(condition);
+        I.waitForDetached('.dropdown.open');
+        I.fillField(field, value);
     },
 
     addSubjectCondition(value) {
         I.click('Add condition');
-        I.click('Subject');
+        I.clickDropdown('Subject');
+        I.waitForDetached('.dropdown.open');
         I.fillField('values', value);
     },
 
     addSimpleAction(label) {
         I.click('Add action');
-        I.click(label);
+        I.clickDropdown(label);
+        I.waitForDetached('.dropdown.open');
     },
 
     addAction(label, value) {
         I.click('Add action');
-        I.click(label);
+        I.clickDropdown(label);
+        I.waitForDetached('.dropdown.open');
         I.fillField(this.locators.lastaction.find('input[name]'), value);
     },
 
     setFlag(flag) {
         I.click('Add action');
-        I.click('Set color flag');
+        I.clickDropdown('Set color flag');
+        I.waitForDetached('.dropdown.open');
+        I.waitForVisible('~Set color');
         I.click('~Set color');
 
         I.waitForVisible('.flag-dropdown');
@@ -59,7 +66,7 @@ module.exports = {
     },
 
     save() {
-        I.click('Save');
+        dialogs.clickButton('Save');
         I.waitForDetached(this.locators.dialog);
         I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
     }
