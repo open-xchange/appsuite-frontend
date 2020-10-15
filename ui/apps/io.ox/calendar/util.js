@@ -1349,13 +1349,15 @@ define('io.ox/calendar/util', [
             options = options || {};
             var attendee = {
                 cuType: attendeeLookupArray[user.type] || 'INDIVIDUAL',
-                cn: user.display_name,
+                cn: user.display_name || user.cn,
                 partStat: 'NEEDS-ACTION'
             };
 
             if (attendee.cuType !== 'RESOURCE') {
                 // guests have a user id but are still considered external, so dont add an entity here (normal users have guest_created_by === 0)
-                if (!user.guest_created_by && (user.user_id !== undefined || user.contact_id) && user.type !== 5) attendee.entity = user.user_id || user.id;
+                if (!user.guest_created_by && (user.user_id !== undefined || user.contact_id) && user.type !== 5) {
+                    attendee.entity = user.user_id || user.id;
+                } else if (user.entity) attendee.entity = user.entity;
                 attendee.email = user.field && user[user.field] ? user[user.field] : (user.email1 || user.mail || user.email);
                 if (!attendee.cn) attendee.cn = attendee.email;
                 attendee.uri = 'mailto:' + attendee.email;
@@ -1377,11 +1379,19 @@ define('io.ox/calendar/util', [
             }
             // not really needed. Added just for convenience. Helps if distribution list should be created
             if (attendee.cuType === 'INDIVIDUAL' || !attendee.cuType) {
-                attendee.contact = {
-                    display_name: user.display_name,
-                    first_name: user.first_name,
-                    last_name: user.last_name
-                };
+                if (user.contact) {
+                    attendee.contact = {
+                        display_name: user.cn || user.display_name,
+                        first_name: user.contact.first_name,
+                        last_name: user.contact.last_name
+                    };
+                } else {
+                    attendee.contact = {
+                        display_name: user.display_name,
+                        first_name: user.first_name,
+                        last_name: user.last_name
+                    };
+                }
             }
             // override with predefined values if given
             return _.extend(attendee, options);
