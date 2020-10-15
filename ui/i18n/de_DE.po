@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-10-02 15:07+0200\n"
+"PO-Revision-Date: 2020-10-15 14:14+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -921,9 +921,9 @@ msgstr "Herunterladen"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/main.js apps/io.ox/chat/views/newConversation.js
-#: module:io.ox/chat apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/download.js
+#: apps/io.ox/calendar/main.js apps/io.ox/chat/views/chat.js module:io.ox/chat
+#: apps/io.ox/chat/views/newConversation.js apps/io.ox/contacts/main.js
+#: module:io.ox/contacts apps/io.ox/core/desktop.js apps/io.ox/core/download.js
 #: apps/io.ox/core/main/logout.js apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/files/main.js module:io.ox/files
@@ -995,6 +995,7 @@ msgstr "Intervall"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 #: apps/io.ox/core/notifications.js module:io.ox/core
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
@@ -3330,6 +3331,7 @@ msgid "Edit group chat"
 msgstr "Gruppenchat bearbeiten"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+#: apps/io.ox/chat/views/empty.js
 msgid "Create group chat"
 msgstr "Gruppenchat erstellen"
 
@@ -3351,13 +3353,32 @@ msgid "Channel name"
 msgstr "Kanalname"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
-#: apps/io.ox/chat/views/chat.js
-msgid "Edit chat"
-msgstr "Chat bearbeiten"
+#, fuzzy
+msgid "Channels are public and can be joined by anybody"
+msgstr "Kanäle sind öffentlich, d.h. jeder kann ihnen beitreten"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid "Create chat"
 msgstr "Chat erstellen"
+
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+#: apps/io.ox/chat/views/empty.js
+msgid "Create channel"
+msgstr "Kanal erstellen"
+
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+#: apps/io.ox/chat/views/chat.js
+msgid "Edit chat"
+msgstr "Chat bearbeiten"
+
+#: apps/io.ox/chat/data.js module:io.ox/chat apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
+msgid "Could not save settings"
+msgstr "Einstellungen konnten nicht gespeichert werden"
+
+#: apps/io.ox/chat/data.js module:io.ox/chat
+msgid "This message was deleted"
+msgstr "Diese Nachricht wurde gelöscht"
 
 #. %1$s: name of the creator
 #: apps/io.ox/chat/data.js module:io.ox/chat
@@ -3410,14 +3431,25 @@ msgstr "Nachricht konnte nicht geladen werden"
 
 #. %1$s: messagetext
 #: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "Unknown system message: %1$s"
+#, fuzzy
+msgid "Unknown system message %1$s"
 msgstr "Unbekannte Systemmeldung: %1$s"
 
-#. shown instead of your name for your own chat messages, stand-alone word / not concatenated
+#: apps/io.ox/chat/data.js module:io.ox/chat
+msgid "The uploaded file exceeds the size limit"
+msgstr "Die hochgeladene Datei überschreitet die maximale Dateigröße"
+
+#: apps/io.ox/chat/data.js module:io.ox/chat
+#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/zoom.js
+msgid "Something went wrong. Please try again."
+msgstr "Ein Fehler ist aufgetreten. Bitte erneut versuchen ."
+
+#. shown instead of your name for your own chat messages
 #: apps/io.ox/chat/data.js module:io.ox/chat
 #, fuzzy
 msgid "You"
-msgstr "Ich"
+msgstr "Sie"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "Unknown user"
@@ -3456,6 +3488,11 @@ msgstr "Antwort an alle per Chat"
 msgid "There is already a chat associated with this email"
 msgstr "Es ist bereits ein Chat mit dieser E-Mail verknüpft"
 
+#: apps/io.ox/chat/extensions/register.js module:io.ox/chat
+#: apps/io.ox/chat/settings/pane.js apps/io.ox/chat/views/launcher.js
+msgid "Chat"
+msgstr "Chat"
+
 #: apps/io.ox/chat/main.js module:io.ox/chat
 #: apps/io.ox/chat/views/newConversation.js
 msgid "Start new conversation"
@@ -3474,6 +3511,10 @@ msgstr "Chat verlassen"
 msgid "Do you really want to leave the chat?"
 msgstr "Möchten Sie den Chat wirklich verlassen?"
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Could not load this file"
+msgstr "Diese Datei konnte nicht geladen werden"
+
 #. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/files/toolbar.js
 #: module:io.ox/files
@@ -3489,14 +3530,16 @@ msgid "Group chat"
 msgstr "Gruppenchat"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-msgid "Public channel"
-msgstr "Öffentlicher Kanal"
+msgid "Channel"
+msgstr "Kanal"
 
+#. A list (history) of older chats, like the browser history of visited sites
 #. Used for chats this time, not for mail threads
+#. Used for a list of olders/recent chats
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 #: apps/plugins/halo/mail/register.js module:plugins/halo
-msgid "Recent conversations"
-msgstr "Kürzlicher E-Mail-Austausch"
+msgid "Chat history"
+msgstr "Chat-Verlauf"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
 #: apps/io.ox/chat/views/channelList.js
@@ -3529,11 +3572,27 @@ msgstr "Neuer Chat"
 msgid "Detach window"
 msgstr "Fenster lösen"
 
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Receive email notifications"
+msgstr "E-Mail-Benachrichtigungen empfangen"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Private chats only"
+msgstr "Nur private Chats"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Always"
+msgstr "Immer"
+
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 #: apps/io.ox/chat/views/chat.js apps/io.ox/chat/views/fileList.js
 #: apps/io.ox/chat/views/history.js
 msgid "Chats"
 msgstr "Chats"
+
+#: apps/io.ox/chat/views/channelList.js module:io.ox/chat
+msgid "There are no channels yet"
+msgstr "Es sind noch keine Kanäle vorhanden"
 
 #. %1$d: is the number of members
 #. %1$d is the number of members
@@ -3567,8 +3626,18 @@ msgid "Chat actions"
 msgstr "Chat-Aktionen"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "Enter message here"
-msgstr "Nachricht hier eingeben"
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+msgid "Message"
+msgstr "Nachricht"
+
+#. 'Send' as confirmation button of a modal dialog to send an email without a subject.
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Send"
+msgstr "Senden"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -3576,22 +3645,47 @@ msgstr "Nachricht hier eingeben"
 msgid "Upload file"
 msgstr "Datei hochladen"
 
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Could not delete the message"
+msgstr "Die Nachricht konnte nicht gelöscht werden"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+msgid ""
+"The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
+"size of %2$s"
+msgstr ""
+"Die Datei \"%1$s\" kann nicht hochgeladen werden. Sie überschreitet die "
+"maximale Dateigröße von %2$s."
+
 #: apps/io.ox/chat/views/chatList.js module:io.ox/chat
 msgid "Chat list"
 msgstr "Chat-Liste"
+
+#: apps/io.ox/chat/views/chatMember.js module:io.ox/chat
+msgid "Show all members"
+msgstr "Alle Mitglieder anzeigen"
+
+#: apps/io.ox/chat/views/empty.js module:io.ox/chat
+msgid "Create private chat"
+msgstr "Privaten Chat anlegen"
+
+#: apps/io.ox/chat/views/fileList.js module:io.ox/chat
+msgid "There are no files yet"
+msgstr "Es sind noch keine Dateien vorhanden"
 
 #: apps/io.ox/chat/views/history.js module:io.ox/chat
 msgid "History actions"
 msgstr "Aktivitätsverlauf"
 
+#: apps/io.ox/chat/views/history.js module:io.ox/chat
+msgid "There are no archived chats yet"
+msgstr "Es sind noch keine archivierten Chats vorhanden"
+
 #. Used as a verb
 #: apps/io.ox/chat/views/history.js module:io.ox/chat
 msgid "Open"
 msgstr "Öffnen"
-
-#: apps/io.ox/chat/views/launcher.js module:io.ox/chat
-msgid "Chat"
-msgstr "Chat"
 
 #. %1$d is the number of participants
 #: apps/io.ox/chat/views/members.js module:io.ox/chat
@@ -3599,6 +3693,29 @@ msgstr "Chat"
 #: apps/io.ox/participants/views.js
 msgid "Participants (%1$d)"
 msgstr "Teilnehmer (%1$d)"
+
+#: apps/io.ox/chat/views/messages.js module:io.ox/chat
+msgid "Edit message"
+msgstr "Nachricht bearbeiten"
+
+#: apps/io.ox/chat/views/messages.js module:io.ox/chat
+msgid "Delete message"
+msgstr "Nachricht löschen"
+
+#: apps/io.ox/chat/views/messages.js module:io.ox/chat
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
+#: apps/io.ox/switchboard/wall.js module:io.ox/switchboard
+#: apps/plugins/portal/twitter/util.js module:plugins/portal
+msgid "Reply"
+msgstr "Antworten"
+
+#: apps/io.ox/chat/views/messages.js module:io.ox/chat
+msgid "Message actions"
+msgstr "Nachrichtenaktionen"
+
+#: apps/io.ox/chat/views/messages.js module:io.ox/chat
+msgid "Message was edited"
+msgstr "Nachricht wurde bearbeitet"
 
 #. search (e.g. by name) for an already existing chat or start a new chat
 #: apps/io.ox/chat/views/search.js module:io.ox/chat
@@ -7878,6 +7995,10 @@ msgstr "Zugriff widerrufen."
 msgid "Upload files"
 msgstr "Dateien hochladen"
 
+#: apps/io.ox/files/actions.js module:io.ox/files
+msgid "Upload folder"
+msgstr "Ordner hochladen"
+
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
 #: apps/io.ox/files/actions.js module:io.ox/files
@@ -8762,8 +8883,8 @@ msgid "Enter Password"
 msgstr "Passwort eingeben"
 
 #: apps/io.ox/files/upload/dropzone.js module:io.ox/files
-msgid "Drop files here to upload"
-msgstr "Zum Hochladen Dateien hier ablegen"
+msgid "Drop files or folders here to upload"
+msgstr "Zum Hochladen Dateien oder Ordner hier ablegen"
 
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "A new version for \"%1$s\" has been added."
@@ -8779,6 +8900,11 @@ msgstr "%1$s hochgeladen"
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
 msgstr "Verbleibende Zeit: %1$s"
+
+#. number of left files to complete the upload
+#: apps/io.ox/files/upload/main.js module:io.ox/files
+msgid "%1$s Files left"
+msgstr "%1$s Dateien übrig"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js module:io.ox/files
@@ -9236,12 +9362,6 @@ msgstr "E-Mail wurde kopiert"
 msgid "Emails have been copied"
 msgstr "E-Mails wurden kopiert"
 
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
-#: apps/io.ox/switchboard/wall.js module:io.ox/switchboard
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Reply"
-msgstr "Antworten"
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/contextmenu.js
 msgid "Reply all"
@@ -9329,14 +9449,6 @@ msgid ""
 msgstr ""
 "Die Datei \"%1$s\" kann nicht hochgeladen werden. Sie überschreitet die "
 "maximale Dateigröße von %2$s für Anhänge."
-
-#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
-"size of %2$s"
-msgstr ""
-"Die Datei \"%1$s\" kann nicht hochgeladen werden. Sie überschreitet die "
-"maximale Dateigröße von %2$s."
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -9734,14 +9846,6 @@ msgstr "Diese E-Mail hat keinen Betreff. Wollen Sie sie trotzdem senden?"
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Add subject"
 msgstr "Betreff hinzufügen"
-
-#. 'Send' as confirmation button of a modal dialog to send an email without a subject.
-#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send"
-msgstr "Senden"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "error"
@@ -11050,10 +11154,6 @@ msgid "End"
 msgstr "Ende"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
-msgid "Message"
-msgstr "Nachricht"
-
-#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Show advanced options"
 msgstr "Erweiterte Optionen anzeigen"
 
@@ -11218,10 +11318,6 @@ msgstr "Standard-Absenderadresse"
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr "Den folgenden Empfänger immer zu Blind Carbon Copy (BCC) hinzufügen"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Could not save settings"
-msgstr "Einstellungen konnten nicht gespeichert werden"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Allow html formatted emails"
@@ -12406,7 +12502,9 @@ msgstr "Ihr Kontopasswort"
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
 #, fuzzy
 msgid "This wizard helps you to use %1$s on other devices."
-msgstr "Mit diesem Assistenten können Sie %1$s auf anderen Geräten verwenden."
+msgstr ""
+"Mit diesem Assistenten können Sie %1$s zur Verwendung auf anderen Geräten "
+"einrichten."
 
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
 msgid "Which device do you want to configure?"
@@ -12425,7 +12523,6 @@ msgid "Platform"
 msgstr "Plattform"
 
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
-#, fuzzy
 msgid "Setup"
 msgstr "Konfiguration"
 
@@ -13060,7 +13157,6 @@ msgstr "Ort: %1$s"
 #. 1st %s = name of last device that was used to log in (e.g. 'Drive Client') | 2nd %s = date of the login
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
 #: module:io.ox/settings
-#, fuzzy
 msgid "%s logged in on %s"
 msgstr "%s angemeldet am %s"
 
@@ -13485,7 +13581,8 @@ msgid "Open Zoom profile"
 msgstr "Zoom-Profil öffnen"
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js apps/io.ox/switchboard/zoom.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+#: apps/io.ox/switchboard/views/zoom-meeting.js
 msgid ""
 "You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
 "If you don't have an account yet, it is sufficient to create a free one."
@@ -13495,7 +13592,8 @@ msgstr ""
 "Konto zu erstellen."
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js apps/io.ox/switchboard/zoom.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+#: apps/io.ox/switchboard/views/zoom-meeting.js
 msgid "Connect with Zoom"
 msgstr "Mit Zoom verbinden"
 
@@ -13512,7 +13610,7 @@ msgid "Remove account"
 msgstr "Konto entfernen"
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/zoom.js
+#: apps/io.ox/switchboard/views/zoom-meeting.js
 msgid ""
 "The Zoom integration service is currently unavailable. Please try again "
 "later."
@@ -13569,9 +13667,40 @@ msgid "Jitsi Meeting: %1$s"
 msgstr "Jitsi-Meeting: %1$s"
 
 #: apps/io.ox/switchboard/views/zoom-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/zoom.js
+#: apps/io.ox/switchboard/views/zoom-meeting.js
 msgid "Connecting to Zoom ..."
 msgstr "Verbinden mit Zoom ..."
+
+#. %1$s contains the URL to join the meeting
+#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Zoom Meeting: %1$s"
+msgstr "Zoom-Meeting: %1$s"
+
+#. %1$s contains a password
+#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting password: %1$s"
+msgstr "Meeting-Passwort: %1$s"
+
+#. Zoom offers a special number to automatically provide the meeting ID and passcode
+#. German: "Schnelleinwahl mobil"
+#. %1$s is the country, %2$s contains the number
+#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
+msgid "One tap mobile (%1$s): %2$s"
+msgstr "Schnelleinwahl mobil (%1$s): %2$s"
+
+#. %1$s contains a numeric zoom meeting ID
+#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting-ID: %1$s"
+msgstr "Meeting-ID: %1$s"
+
+#. %1$s contains a numeric dialin passcode
+#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial-in passcode: %1$d"
+msgstr "Einwahl-Passcode: %1$d"
+
+#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial by your location"
+msgstr "Einwahl nach aktuellem Standort"
 
 #: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
 msgid "Copy link to location"
@@ -13607,44 +13736,9 @@ msgstr ""
 msgid "Create new Zoom meeting"
 msgstr "Neues Zoom-Meeting erstellen"
 
-#. %1$s contains the URL to join the meeting
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Zoom Meeting: %1$s"
-msgstr "Zoom-Meeting: %1$s"
-
-#. %1$s contains a password
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting password: %1$s"
-msgstr "Meeting-Passwort: %1$s"
-
-#. Zoom offers a special number to automatically provide the meeting ID and passcode
-#. German: "Schnelleinwahl mobil"
-#. %1$s is the country, %2$s contains the number
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "One tap mobile (%1$s): %2$s"
-msgstr "Schnelleinwahl mobil (%1$s): %2$s"
-
-#. %1$s contains a numeric zoom meeting ID
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting-ID: %1$s"
-msgstr "Meeting-ID: %1$s"
-
-#. %1$s contains a numeric dialin passcode
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial-in passcode: %1$d"
-msgstr "Einwahl-Passcode: %1$d"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial by your location"
-msgstr "Einwahl nach aktuellem Standort"
-
 #: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
 msgid "New meeting"
 msgstr "Neues Meeting"
-
-#: apps/io.ox/switchboard/zoom.js module:io.ox/switchboard
-msgid "Something went wrong. Please try again."
-msgstr "Ein Fehler ist aufgetreten. Bitte erneut versuchen ."
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/print.js
@@ -15378,7 +15472,22 @@ msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
 
 #, fuzzy
-#~ msgid "Unknown system message %1$s"
+#~ msgid "Message was deleted"
+#~ msgstr "Nachricht wurde gelöscht"
+
+#~ msgid "Public channel"
+#~ msgstr "Öffentlicher Kanal"
+
+#~ msgid "Recent conversations"
+#~ msgstr "Kürzlicher E-Mail-Austausch"
+
+#~ msgid "Enter message here"
+#~ msgstr "Nachricht hier eingeben"
+
+#~ msgid "Drop files here to upload"
+#~ msgstr "Zum Hochladen Dateien hier ablegen"
+
+#~ msgid "Unknown system message: %1$s"
 #~ msgstr "Unbekannte Systemmeldung: %1$s"
 
 #, fuzzy
@@ -16178,9 +16287,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Alternative Email"
 #~ msgstr "Alternative E-Mail-Adresse"
-
-#~ msgid "Always"
-#~ msgstr "Immer"
 
 #~ msgid "An error occurred"
 #~ msgstr "Es trat ein Fehler auf."
