@@ -324,12 +324,15 @@ define('io.ox/core/api/user', [
     // data is the object containing the created_by or modified_by attributes
     api.getNameExtended = function (data, type) {
         if (data === undefined) return $.Deferred().reject({ error: 'Unknown User' });
+
+        // support model and attributes object
+        data = data.get ? data.attributes : data;
         type = type || 'created';
 
         // try extended data first (no need to request data from the server)
-        var userData = data[type + '_from'];
+        var userData = data[type + '_from'],
+            name = checkForName(userData);
 
-        var name = checkForName(userData);
         if (name) return $.when(name);
 
         // try to get name via user id second
@@ -345,12 +348,16 @@ define('io.ox/core/api/user', [
     // creates a textnode and fills it with a displayname (inserting the name may be asynchronous if it has to be requeste first)
     api.getTextNodeExtended = function (data, type) {
         if (data === undefined) return '';
+
+        // support model and attributes object
+        data = data.get ? data.attributes : data;
         type = type || 'created';
+
         var node = document.createTextNode(''),
             // try extended data first (no need to request data from the server)
-            userData = data[type + '_from'];
+            userData = data[type + '_from'],
+            name = checkForName(userData);
 
-        var name = checkForName(userData);
         if (name) {
             node.nodeValue = name;
             return node;
