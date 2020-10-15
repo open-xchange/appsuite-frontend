@@ -212,32 +212,48 @@ define('io.ox/chat/data', [
             switch (event.type) {
                 case 'room:created':
                     //#. %1$s: name of the creator
-                    return gt('%1$s created this conversation', getName(originator));
+                    return originator === data.user.email ?
+                        gt('You created this conversation') :
+                        gt('%1$s created this conversation', getName(originator));
                 case 'channel:joined':
                     //#. %1$s: name of the new participant
-                    return gt('%1$s joined the conversation', getNames(members));
+                    return originator === data.user.email ?
+                        gt('You joined the conversation', getNames(members)) :
+                        gt('%1$s joined the conversation', getNames(members));
                 case 'members:added':
                     //#. %1$s: name of the participant that added the new participant
                     //#. %2$s: name of the added participant
-                    return gt('%1$s added %2$s to the conversation', getName(originator), getNames(_.difference(members, [originator])));
+                    return originator === data.user.email ?
+                        gt('You added %2$s to the conversation', getName(originator), getNames(_.difference(members, [originator]))) :
+                        gt('%1$s added %2$s to the conversation', getName(originator), getNames(_.difference(members, [originator])));
                 case 'members:removed':
                     //#. %1$s: name of the participant that removed the other participant
                     //#. %2$s: name of the removed participant
-                    return gt('%1$s removed %2$s from the conversation', getName(originator), getNames(_.difference(members, [originator])));
+                    return originator === data.user.email ?
+                        gt('You removed %2$s from the conversation', getName(originator), getNames(_.difference(members, [originator]))) :
+                        gt('%1$s removed %2$s from the conversation', getName(originator), getNames(_.difference(members, [originator])));
                 case 'image:changed':
                     //#. %1$s: name of a chat participant
-                    return gt('%1$s changed the group image', getName(originator), event.fileId);
+                    return originator === data.user.email ?
+                        gt('You changed the group image', getName(originator), event.fileId) :
+                        gt('%1$s changed the group image', getName(originator), event.fileId);
                 case 'title:changed':
                     //#. %1$s: name of a chat participant
                     //#. %2$s: the new title
-                    return gt('%1$s changed the group title to "%2$s"', getName(originator), event.title);
+                    return originator === data.user.email ?
+                        gt('You changed the group title to "%2$s"', getName(originator), event.title) :
+                        gt('%1$s changed the group title to "%2$s"', getName(originator), event.title);
                 case 'changeDescription':
                     //#. %1$s: name of a chat participant
                     //#. %2$s: the new description
-                    return gt('%1$s changed the group description to "%2$s"', getName(originator), event.description);
+                    return originator === data.user.email ?
+                        gt('You changed the group description to "%2$s"', getName(originator), event.description) :
+                        gt('%1$s changed the group description to "%2$s"', getName(originator), event.description);
                 case 'room:left':
                     //#. %1$s: name of a chat participant
-                    return gt('%1$s left the conversation', getName(originator));
+                    return originator === data.user.email ?
+                        gt('You left the conversation', getName(originator)) :
+                        gt('%1$s left the conversation', getName(originator));
                 case 'me':
                     // no need to translate this
                     return _.printf('%1$s %2$s', getName(originator), event.message);
@@ -1094,8 +1110,6 @@ define('io.ox/chat/data', [
     //
 
     function getName(email) {
-        //#. shown instead of your name for your own chat messages
-        if (email === data.user.email) return '<span class="name">' + gt('You') + '</span>';
         return getNames([email]);
     }
 
