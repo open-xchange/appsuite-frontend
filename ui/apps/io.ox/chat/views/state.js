@@ -11,7 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/state', ['io.ox/backbone/views/disposable'], function (DisposableView) {
+define('io.ox/chat/views/state', [
+    'io.ox/backbone/views/disposable',
+    'io.ox/chat/data',
+    'io.ox/switchboard/presence',
+    'io.ox/switchboard/api'
+], function (DisposableView, data, presence, switchboardApi) {
 
     'use strict';
 
@@ -23,19 +28,33 @@ define('io.ox/chat/views/state', ['io.ox/backbone/views/disposable'], function (
         className: 'fa state',
 
         initialize: function () {
-            this.listenTo(this.model, 'change:state', this.onChangeState);
+            switchboardApi.socket.on('presence-change', function (userId, presence) {
+                if (this.model && this.model.get('email1') === userId) this.onChangeState(userId, presence.availability);
+            }.bind(this));
+
+            presence.on('change-own-availability', function () {
+                if (this.model && this.model.get('email1') === data.user.email) this.onChangeState(data.user.email, presence.getMyAvailability());
+            }.bind(this));
         },
 
         render: function () {
-            this.$el.addClass('offline');
+            if (this.model.get('email1') === data.user.email) this.$el = presence.getPresenceIcon(data.user.email);
+            else this.$el = presence.getPresenceIcon(this.model.get('email1'));
             return this;
         },
 
-        onChangeState: function () {
-            var state = 'offline';
-            this.$el.addClass(state).removeClass(_(states).without(state).join(' '));
+        renderSimple: function () {
+            if (this.model.get('email1') === data.user.email) this.$el.addClass(presence.getMyAvailability());
+            else this.$el.addClass(presence.getPresence(this.model.get('email1')).availability);
+            return this;
+        },
+
+        onChangeState: function (userId, state) {
+            if (this.$el.hasClass('state')) this.$el.addClass(state).removeClass(_(states).without(state).join(' '));
+            else this.$el = presence.getPresenceIcon(userId);
         }
     });
 
     return StateView;
 });
+

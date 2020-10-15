@@ -28,7 +28,7 @@ define('io.ox/chat/views/badge', ['io.ox/backbone/views/disposable', 'io.ox/chat
             this.$el
                 .attr({ 'data-cmd': 'open-private-chat', 'data-email': this.model.get('email1') })
                 .append(
-                    new StateView({ model: this.model }).render().$el,
+                    new StateView({ model: this.model }).renderSimple().$el,
                     $('<span class="name">').text(this.model.getName())
                 );
             return this;

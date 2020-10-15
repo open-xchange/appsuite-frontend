@@ -458,6 +458,17 @@
         &.pink { background-color: #FFC2DE; }
     }
 
+    .presence {
+        position: absolute;
+        top: 40px;
+        left: 42px;
+    }
+
+    .chat-avatar .presence, .list-unstyled .presence {
+        top: 23px;
+        left: 27px;
+    }
+
     .chat-avatar {
         position: relative;
         .initials, .group{
@@ -853,7 +864,6 @@
     }
 
     .icon{
-        &:before { content: "\f016"; } // file-o
         &.pdf:before { content: "\f1c1"; color: #C01E07; } // file-pdf-o
         &.doc:before { content: '\f0f6'; color: #376CB8; }  // fa-file-text-o
         &.xls:before { content: '\f0ce'; color: #26935D; }  // fa-table
