@@ -1254,7 +1254,7 @@ define('io.ox/core/folder/extensions', [
         },
         {
             id: 'sharing-errors',
-            index: 500,
+            index: 600,
             draw: function (baton) {
 
                 if (!/^infostore$/.test(baton.data.module)) return;
@@ -1266,6 +1266,23 @@ define('io.ox/core/folder/extensions', [
                 } else {
                     baton.view.hideStatusIcon();
                 }
+            }
+        }, {
+            id: 'sharing-highlight',
+            index: 700,
+            draw: function (baton) {
+
+                if (!/^infostore$/.test(baton.data.module)) return;
+
+                var isFederartedShare = /xox\d+|xctx\d+/.test(baton.data.account_id) && baton.data.folder_id === '10';
+                //if (!isFederartedShare) return baton.view.$.selectable.find('.federated-link').remove();
+
+                baton.view.$.selectable.find('.federated-link').remove();
+
+                if (!isFederartedShare) return;
+                baton.view.$.selectable.append($('<span class="federated-link">')
+                    .attr('data-id', baton.view.options.model_id)
+                    .append('<i class="fa fa-globe">'));
             }
         }
     );
