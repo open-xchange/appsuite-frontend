@@ -335,8 +335,7 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
 });
 
 Scenario('[C45025] Create shared object with multiple users (external users) with different permissions', async function (I, users, contexts, drive, dialogs, mail, autocomplete) {
-    const mailListView = '.list-view.visible-selection.mail-item',
-        smartDropDown = '.smart-dropdown-container.dropdown.open';
+    const mailListView = '.list-view.visible-selection.mail-item';
 
     const ctxID = Math.trunc(Math.random() * 123456);
     const ctx = await contexts.create({ id: ctxID });
@@ -471,15 +470,15 @@ Scenario('[C83277] Create shared object with expiration date', async function (I
     });
 });
 
-Scenario('[C110280] Personalized no-reply share mails', async function (I, users, dialogs) {
+Scenario('[C110280] Personalized no-reply share mails', async function (I, users, drive, mail, dialogs) {
     await users.create();
 
-    session('Alice', async () => {
+    await session('Alice', async () => {
         I.login('app=io.ox/files');
-        I.waitForText('Documents', '.generic-sidebar-content');
-        I.rightClick('Documents', '.generic-sidebar-content');
-        I.waitForText('Permissions / Invite people', '.smart-dropdown-container.dropdown.open');
-        I.click('Permissions / Invite people', '.smart-dropdown-container.dropdown.open');
+        drive.waitForApp();
+        I.clickToolbar('Share');
+        I.clickDropdown('Invite people');
+        dialogs.waitForVisible();
         I.waitForElement(locate('input').withAttr({ 'placeholder': 'Add people' }), '.modal-dialog');
         I.fillField(locate('input').withAttr({ 'placeholder': 'Add people' }), users[1].userdata.primaryEmail);
         I.pressKey('Enter');
@@ -487,10 +486,10 @@ Scenario('[C110280] Personalized no-reply share mails', async function (I, users
         dialogs.clickButton('Share');
     });
 
-    session('Bob', async () => {
+    await session('Bob', async () => {
         I.login('app=io.ox/mail', { user: users[1] });
-        I.waitForText(`test.user-${users[0].userdata.sur_name}`);
-        I.click('.list-item.selectable');
+        mail.waitForApp();
+        mail.selectMail(`test.user-${users[0].userdata.sur_name}`);
         I.waitForText(`<${users[0].userdata.primaryEmail}>`, '.mail-detail-pane');
     });
 });
