@@ -83,12 +83,16 @@ define('io.ox/chat/actions/openGroupDialog', [
         .extend({
             header: function () {
                 var title = this.model.id ? gt('Edit group chat') : gt('Create group chat'),
-                    url = this.model.getIconUrl ? this.model.getIconUrl() : '';
+                    url = this.model.getIconUrl ? this.model.getIconUrl() : '',
+                    imageDef;
                 if (this.model.get('type') === 'channel') title = this.model.id ? gt('Edit channel') : gt('Create new channel');
 
-                api.requestDataUrl({ url: url }).then(function (base64encodedImage) {
-                    var title_id = _.uniqueId('title'),
-                        pictureModel = this.pictureModel || (this.pictureModel = new Backbone.Model({
+                this.pictureModel = new Backbone.Model();
+
+                if (url) {
+                    imageDef = api.requestDataUrl({ url: url })
+                    .then(function (base64encodedImage) {
+                        this.pictureModel.set({
                             image1_data_url: base64encodedImage,
                             image1_url: base64encodedImage,
                             file: function () {
@@ -104,13 +108,17 @@ define('io.ox/chat/actions/openGroupDialog', [
                                     return '';
                                 });
                             }
-                        }));
+                        });
+                    }.bind(this));
+                }
 
+                $.when(imageDef).then(function () {
+                    var title_id = _.uniqueId('title');
                     this.$('.modal-header').empty().append(
                         $('<h1 class="modal-title">').attr('id', title_id).text(title),
-                        new PictureUpload({ model: pictureModel }).render().$el
+                        new PictureUpload({ model: this.pictureModel }).render().$el
                     );
-                }.bind(this));
+                });
             },
             details: function () {
                 var guidDescription = _.uniqueId('form-control-label-');
