@@ -146,3 +146,27 @@ Scenario('Check presence state of new user', (I, users) => {
         I.waitForVisible(`.vgrid [aria-label="${user1.get('sur_name')}, ${user1.get('given_name')}"] .presence.absent`);
     });
 });
+
+Scenario('[OXUIB-497] Presence icon is visible after updating contact picture', (I, dialogs) => {
+    I.login();
+
+    // verify presence icon is there
+    I.waitForVisible('.dropdown-toggle[aria-label="My account"] .presence .icon');
+    I.waitForVisible('.contact-picture');
+    I.click('.contact-picture');
+
+    //I.waitForVisible('.dropdown.open');
+    I.waitForVisible('.dropdown.open .action[data-name="user-picture"]');
+    I.click('.action[data-name="user-picture"]');
+
+    // Change user photo
+    dialogs.waitForVisible();
+    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+    I.waitForInvisible('.edit-picture.empty');
+    dialogs.clickButton('Apply');
+    I.waitForDetached('.modal-dialog');
+
+    // verify presence icon is still there
+    I.waitForVisible('.dropdown-toggle[aria-label="My account"] .presence .icon');
+
+});
