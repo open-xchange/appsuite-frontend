@@ -155,7 +155,7 @@ define('io.ox/chat/views/messages', [
             if (model.isSystem()) return '';
             var toggle = $('<button type="button" class="btn btn-link dropdown-toggle actions-toggle" aria-haspopup="true" data-toggle="dropdown">')
                     .attr('title', gt('Message actions'))
-                    .append($('<i class="fa fa-ellipsis-v">')),
+                    .append($('<i class="fa fa-bars">')),
                 menu = $('<ul class="dropdown-menu">'),
                 dropdown = new Dropdown({
                     className: 'message-actions-dropdown dropdown',
