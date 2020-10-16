@@ -68,27 +68,27 @@ define('io.ox/chat/views/chat', [
     });
 
     ext.point('io.ox/chat/detail/toolbar').extend({
-        id: 'edit-group',
-        index: 400,
-        custom: true,
-        draw: function (baton) {
-            var model = baton.model;
-            if (!model.isMember() || model.isPrivate()) return;
-            this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat">').attr('data-id', model.id).text(gt('Edit chat')).on('click', events.forward)
-            );
-        }
-    });
-
-    ext.point('io.ox/chat/detail/toolbar').extend({
         id: 'close-chat',
-        index: 450,
+        index: 400,
         custom: true,
         draw: function (baton) {
             var model = baton.model;
             if (!model.get('active') || model.isNew()) return;
             this.attr('data-prio', 'lo').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="unsubscribe-chat">').attr('data-id', model.id).text(gt('Hide chat')).on('click', events.forward)
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'edit-group',
+        index: 450,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (!model.isMember() || model.isPrivate()) return;
+            this.attr('data-prio', 'lo').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat">').attr('data-id', model.id).text(gt('Edit chat')).on('click', events.forward)
             );
         }
     });
