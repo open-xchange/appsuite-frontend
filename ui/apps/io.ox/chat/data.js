@@ -16,6 +16,7 @@ define('io.ox/chat/data', [
     'io.ox/chat/events',
     'io.ox/contacts/api',
     'io.ox/switchboard/api',
+    'io.ox/switchboard/presence',
     'io.ox/chat/sounds',
     'io.ox/mail/sanitizer',
     'io.ox/chat/util',
@@ -24,7 +25,7 @@ define('io.ox/chat/data', [
     'io.ox/core/notifications',
     'settings!io.ox/chat',
     'gettext!io.ox/chat'
-], function (api, events, contactsApi, switchboardApi, sounds, sanitizer, util, isActive, http, notifications, settings, gt) {
+], function (api, events, contactsApi, switchboardApi, presence, sounds, sanitizer, util, isActive, http, notifications, settings, gt) {
 
     'use strict';
 
@@ -382,8 +383,10 @@ define('io.ox/chat/data', [
         updateDelivery: function (state) {
             var room = data.chats.active.get(this.get('roomId'));
             if (room.isChannel() && !room.isMember()) return;
-
+            var invisible = presence.getMyAvailability() === 'invisible';
             this.set('deliveryState', state);
+            if (invisible) return;
+
             api.updateDelivery(this.get('roomId'), this.get('messageId'), state).catch(function () {
                 this.set('deliveryState', this.previous('deliveryState'));
             }.bind(this));

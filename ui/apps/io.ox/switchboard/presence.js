@@ -66,6 +66,8 @@ define('io.ox/switchboard/presence', [
                     return gt('Busy');
                 case 'absent':
                     return gt('Absent');
+                case 'invisible':
+                    return gt('Invisible');
                 default:
                     if (!presence.lastSeen) return gt('Offline');
                     // get last seen in minutes from now
@@ -87,10 +89,11 @@ define('io.ox/switchboard/presence', [
             var presence = this.getPresence(userId);
             if (changes.availability === presence.availability) return;
             _.extend(presence, changes);
+            var availability = presence.availability === 'invisible' ? 'offline' : presence.availability;
             // update all DOM nodes for this user
             var $el = $('.presence[data-id="' + $.escape(presence.id) + '"]')
                 .removeClass('online absent busy offline')
-                .addClass(presence.availability);
+                .addClass(availability);
             var title = this.getAvailabilityString(presence);
             $el.find('.icon').attr('title', title);
             $el.find('.availability').text(title);
@@ -122,7 +125,8 @@ define('io.ox/switchboard/presence', [
         online: gt('Online'),
         absent: gt('Absent'),
         busy: gt('Busy'),
-        offline: gt('Offline')
+        offline: gt('Offline'),
+        invisible: gt('Invisible')
     };
 
     // create template
@@ -134,7 +138,8 @@ define('io.ox/switchboard/presence', [
     }
 
     function createPresenceIcon(availability) {
-        return tmpl.clone().addClass(availability).children('.icon').attr('title', names[availability]).end();
+        var className = availability === 'invisible' ? 'offline' : availability;
+        return tmpl.clone().addClass(className).children('.icon').attr('title', names[availability]).end();
     }
 
     // respond to events

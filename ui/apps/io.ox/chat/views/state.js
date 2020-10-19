@@ -50,7 +50,8 @@ define('io.ox/chat/views/state', [
         },
 
         onChangeState: function (userId, state) {
-            if (this.$el.hasClass('state')) this.$el.addClass(state).removeClass(_(states).without(state).join(' '));
+            var className = state === 'invisible' ? 'offline' : state;
+            if (this.$el.hasClass('state')) this.$el.addClass(className).removeClass(_(states).without(state).join(' '));
             else this.$el = presence.getPresenceIcon(userId);
         }
     });

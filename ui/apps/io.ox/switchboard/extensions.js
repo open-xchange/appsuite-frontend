@@ -80,7 +80,7 @@ define('io.ox/switchboard/extensions', [
         online: gt('Online'),
         absent: gt('Absent'),
         busy: gt('Busy'),
-        offline: gt('Offline')
+        invisible: gt('Invisible')
     };
 
     // extend list view in contacts
