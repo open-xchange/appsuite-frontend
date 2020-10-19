@@ -118,7 +118,7 @@ define('io.ox/chat/actions/openGroupDialog', [
                         $('<h1 class="modal-title">').attr('id', title_id).text(title),
                         new PictureUpload({ model: this.pictureModel }).render().$el
                     );
-                });
+                }.bind(this));
             },
             details: function () {
                 var guidDescription = _.uniqueId('form-control-label-');
