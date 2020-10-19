@@ -517,7 +517,7 @@ define('io.ox/chat/views/chat', [
         onEditorInput: _.throttle(function () {
             var state = this.$editor.val() !== '';
             api.typing(this.model.id, state);
-        }, 2500),
+        }, 2500, { trailing: false }),
 
         onTriggerFileupload: function () {
             this.$('.file-upload-input').trigger('click');
