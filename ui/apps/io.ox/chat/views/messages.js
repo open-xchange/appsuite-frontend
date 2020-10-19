@@ -167,6 +167,7 @@ define('io.ox/chat/views/messages', [
         },
 
         renderMenu: function (model) {
+            if (this.options.hideActions) return '';
             if (model.isSystem()) return '';
             var toggle = $('<button type="button" class="btn btn-link dropdown-toggle actions-toggle" aria-haspopup="true" data-toggle="dropdown">')
                     .attr('title', gt('Message actions'))
@@ -197,12 +198,19 @@ define('io.ox/chat/views/messages', [
             return [new Avatar({ model: user }).render().$el, $('<div class="sender">').text(user.getName())];
         },
 
-        renderDate: function (model) {
-            var index = model.collection.indexOf(model),
-                prev = index === 0 ? undefined : model.collection.at(index - 1),
-                start = this.options.limit ? Math.max(0, model.collection.length - this.options.limit) : 0;
+        getPrevModel: function (current) {
+            var index = this.collection.indexOf(current) - 1;
+            while (index >= 0) {
+                var prev = this.collection.at(index);
+                if (this.options.filter && this.options.filter(prev)) return prev;
+                index--;
+            }
+        },
 
-            if (index !== start && moment(prev.get('date')).startOf('day').isSameOrAfter(moment(model.get('date')).startOf('day'))) return;
+        renderDate: function (model) {
+            var prev = this.getPrevModel(model);
+
+            if (prev && moment(prev.get('date')).startOf('day').isSameOrAfter(moment(model.get('date')).startOf('day'))) return;
 
             var date = moment(model.get('date'));
 

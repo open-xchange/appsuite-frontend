@@ -16,8 +16,9 @@ define('io.ox/chat/extensions/register', [
     'io.ox/backbone/views/actions/util',
     'io.ox/core/capabilities',
     'io.ox/chat/data',
+    'io.ox/core/api/account',
     'gettext!io.ox/chat'
-], function (ext, actionsUtil, capabilities, data, gt) {
+], function (ext, actionsUtil, capabilities, data, account, gt) {
 
     'use strict';
 
@@ -79,12 +80,8 @@ define('io.ox/chat/extensions/register', [
                     $('<button class="btn btn-default open-chat">').text(gt('Open chat'))
                 ).hide()
             );
-            data.chats.active.initialized.then(function () {
-                var room = data.chats.active.find(function (chat) {
-                    if (!chat.isPrivate()) return;
-                    return !!chat.get('members')[baton.data.email1];
-                });
-                if (!room) return node.remove();
+
+            data.chats.findPrivateRoom(baton.data.email1).then(function success(room) {
                 room.messages.fetch();
                 return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
                     node.find('button').on('click', function () {
@@ -97,12 +94,15 @@ define('io.ox/chat/extensions/register', [
                             collection: room.messages,
                             limit: 10,
                             markAsRead: false,
+                            hideActions: true,
                             filter: function (model) {
                                 return !model.isSystem();
                             }
                         }).render().$el
                     );
                 });
+            }, function fail() {
+                node.remove();
             });
         }
     });
@@ -172,10 +172,8 @@ define('io.ox/chat/extensions/register', [
                 $('<button class="btn btn-default open-chat">').text(gt('Open chat'))
             );
             this.append($fieldset);
-            data.chats.active.initialized.then(function () {
-                var reference = 'calendar//' + baton.model.get('id'),
-                    room = data.chats.active.findWhere({ reference: reference });
-                if (!room) return $fieldset.remove();
+
+            data.chats.findByReference('appointment', baton.model.get('id')).then(function success(room) {
                 room.messages.fetch();
                 return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
                     $fieldset.find('button').on('click', function () {
@@ -188,12 +186,15 @@ define('io.ox/chat/extensions/register', [
                             collection: room.messages,
                             limit: 10,
                             markAsRead: false,
+                            hideActions: true,
                             filter: function (model) {
                                 return !model.isSystem();
                             }
                         }).render().$el
                     );
                 });
+            }, function fail() {
+                $fieldset.remove();
             });
         }
     });
@@ -206,7 +207,7 @@ define('io.ox/chat/extensions/register', [
                 title: baton.model.get('summary'),
                 description: baton.model.get('description'),
                 members: _(baton.model.get('attendees')).pluck('email'),
-                reference: 'calendar//' + baton.model.get('id')
+                reference: { type: 'appointment', id: baton.model.get('id') }
             });
         }
     });
@@ -235,50 +236,12 @@ define('io.ox/chat/extensions/register', [
         section: 'standard'
     });
 
-    ext.point('io.ox/mail/detail').extend({
-        id: 'reference-to-group-chat',
-        index: 450,
-        draw: (function () {
-            function cont($section, baton) {
-                if (baton.data.headers) return draw($section, baton.model);
-                baton.view.listenToOnce(baton.model, 'change:headers', draw.bind(null, $section, baton.model));
-            }
-
-            function draw($section, model) {
-                var reference = (model.get('headers') || {})['Message-ID'] || model.cid,
-                    room = data.chats.active.findWhere({ reference: 'mail//' + reference });
-                if (!room) return;
-
-                $section.empty().show().css({ 'border-bottom': '1px solid #ddd', padding: '8px 40px' }).append(
-                    $('<button class="btn btn-default btn-sm" data-cmd="show-chat">')
-                        .attr('data-id', room.get('id'))
-                        .css('margin-right', '10px')
-                        .text(gt('Open chat'))
-                        .click(function () {
-                            require(['io.ox/chat/events'], function (events) {
-                                events.trigger('cmd', { cmd: 'show-chat', id: room.get('roomId') });
-                            });
-                        }),
-                    gt('There is already a chat associated with this email')
-                );
-            }
-
-            return function (baton) {
-                var $section = $('<section>');
-                this.append($section.hide());
-
-                data.chats.active.initialized.then(cont.bind(null, $section, baton));
-                baton.view.listenTo(data.chats.active, 'add', draw.bind(null, $section, baton.model));
-            };
-        }())
-    });
-
     new Action('io.ox/chat/actions/start-chat-from-mail', {
         capabilities: 'chat',
         collection: 'some',
         action: function (baton) {
-            var from = baton.data.from[0][1];
-            startPrivateChat(from);
+            var field = account.is('sent|drafts', baton.data.folder_id) ? baton.data.to : baton.data.from;
+            startPrivateChat(field[0][1]);
         }
     });
 
@@ -291,8 +254,7 @@ define('io.ox/chat/extensions/register', [
             require(['io.ox/mail/api']).then(function (api) {
                 return api.get(_.cid(baton.data));
             }).then(function (mail) {
-                var reference = mail.headers['Message-ID'] || mail.cid,
-                    addresses = [].concat(mail.from, mail.to, mail.cc, mail.bcc);
+                var addresses = [].concat(mail.from, mail.to, mail.cc, mail.bcc);
 
                 addresses = _(addresses).chain().map(function (address) {
                     return address[1];
@@ -300,8 +262,7 @@ define('io.ox/chat/extensions/register', [
 
                 startGroupChat({
                     title: mail.subject,
-                    members: addresses,
-                    reference: 'mail//' + reference
+                    members: addresses
                 });
             });
         }
@@ -314,9 +275,8 @@ define('io.ox/chat/extensions/register', [
     }
 
     function startGroupChat(opt) {
-        data.chats.active.initialized.then(function () {
-            var room = data.chats.active.findWhere({ reference: opt.reference });
-            if (!room) throw new Error('No room');
+        var def = opt.reference && data.chats.findByReference(opt.reference.type, opt.reference.id) || $.Deferred().reject();
+        def.then(function (room) {
             return require(['io.ox/chat/events']).then(function (events) {
                 events.trigger('cmd', { cmd: 'show-chat', id: room.get('roomId') });
             });

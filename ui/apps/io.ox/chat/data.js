@@ -454,6 +454,42 @@ define('io.ox/chat/data', [
         var cache = {},
             idlessCache = {};
         return {
+            find: function (predicate, attr) {
+                var roomIds = Object.keys(cache).filter(function (key) {
+                        var room = cache[key];
+                        return predicate(room);
+                    }),
+                    rooms = roomIds.map(function (roomId) {
+                        return cache[roomId];
+                    });
+                if (rooms.length) return $.when(rooms[0]);
+                return api.request({
+                    url: api.url + '/search/rooms?' + $.param(attr)
+                }).then(function (data) {
+                    if (!data || !data.length) throw new Error('Chat could not be found');
+                    return data.map(function (attr) {
+                        return this.get(attr);
+                    }.bind(this))[0];
+                }.bind(this));
+            },
+            findWhere: function (attr, requestAttr) {
+                return this.find(function (room) {
+                    return _(attr).every(function (value, key) {
+                        return _.isEqual(value, room.get(key));
+                    });
+                }, requestAttr || attr);
+            },
+            findByReference: function (type, id) {
+                var reference = { type: type, id: id };
+                return this.findWhere({ reference: reference }, { reference: JSON.stringify(reference) });
+            },
+            findPrivateRoom: function (email) {
+                return this.find(function (room) {
+                    if (!room.isPrivate()) return false;
+                    if (!room.get('members')[email]) return;
+                    return true;
+                }, { type: 'private', members: JSON.stringify([data.user.email, email]) });
+            },
             get: function (attrs, options) {
                 if (!attrs) return;
                 if (_.isString(attrs)) attrs = { roomId: attrs };
@@ -909,7 +945,7 @@ define('io.ox/chat/data', [
         }
     });
 
-    data.chats.active = new ChatCollection(undefined, { endpoint: 'rooms' });
+    data.chats.active = new ChatCollection(undefined, { endpoint: 'rooms', data: { active: true } });
     data.chats.channels = new ChatCollection(undefined, { endpoint: 'channels' });
     data.chats.recent = new ChatCollection(undefined, { endpoint: 'rooms', data: { active: false } });
 
