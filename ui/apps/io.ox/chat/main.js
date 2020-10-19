@@ -247,7 +247,9 @@ define('io.ox/chat/main', [
         showAllFiles: function () {
             this.$body.addClass('open');
             this.clearActiveSelection();
-            this.$rightside.empty().append(new FileList().render().$el);
+            data.files.fetch().then(function () {
+                this.$rightside.empty().append(new FileList().render().$el);
+            }.bind(this));
         },
 
         showFile: function (cmd) {
