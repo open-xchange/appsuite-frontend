@@ -30,13 +30,13 @@ After(async (users) => {
 
 
 const presenceStates = [
-    { status: 'Absent', class: 'absent' },
-    { status: 'Busy', class: 'busy' },
-    { status: 'Offline', class: 'offline' }
+    { status: 'Absent', value: 'absent', class: 'absent' },
+    { status: 'Busy', value: 'busy', class: 'busy' },
+    { status: 'Invisible', value: 'invisible', class: 'offline' }
 ];
 
 Scenario('Presence state is shown and can be changed', async function (I) {
-    const checkStatus = (statusToClick, classToCheck) => {
+    const checkStatus = (statusToClick, valueToCheck, classToCheck) => {
         I.say(`Check: ${statusToClick}`);
         I.clickDropdown(statusToClick);
         I.waitForDetached('.dropdown.open');
@@ -44,7 +44,7 @@ Scenario('Presence state is shown and can be changed', async function (I) {
         I.waitForVisible(`.taskbar .presence.${classToCheck}`);
         I.click('~My account');
         // Verify that the right status is marked as checked
-        I.waitForVisible(`.dropdown.open a[data-value="${classToCheck}"] .fa-check`);
+        I.waitForVisible(`.dropdown.open a[data-value="${valueToCheck}"] .fa-check`);
     };
 
     I.login();
@@ -55,7 +55,7 @@ Scenario('Presence state is shown and can be changed', async function (I) {
     I.waitForVisible('.dropdown.open a[data-value="online"] .fa-check');
 
     presenceStates.forEach((state) => {
-        checkStatus(state.status, state.class);
+        checkStatus(state.status, state.value, state.class);
     });
 });
 
@@ -67,7 +67,7 @@ Scenario('Presence state is shown in mails', async function (I, users, mail) {
             I.clickDropdown(statusToClick);
             I.waitForDetached('.dropdown.open');
             I.waitForVisible(`.mail-detail .presence.${classToCheck}`);
-            if (statusToClick === 'Offline') {
+            if (statusToClick === 'Invisible') {
                 I.waitForElement(`.list-view-control .presence.${classToCheck}`);
                 I.dontSeeElement(`.list-view-control .presence.${classToCheck}`);
             } else I.waitForVisible(`.list-view-control .presence.${classToCheck}`);
