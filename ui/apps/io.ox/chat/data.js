@@ -336,7 +336,7 @@ define('io.ox/chat/data', [
         getTextBody: function () {
             if (this.isSystem()) return this.getSystemMessage();
             if (this.isFile()) return this.getFileText();
-            return sanitizer.simpleSanitize(this.get('content'));
+            return $.txt(sanitizer.simpleSanitize(this.get('content')));
         },
 
         isSystem: function () {
