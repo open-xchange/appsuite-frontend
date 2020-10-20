@@ -104,8 +104,7 @@ define('io.ox/chat/views/messages', [
 
         renderMessage: function (model, showDate) {
 
-            var body = model.getBody(),
-                deleted = model.isDeleted(),
+            var deleted = model.isDeleted(),
                 messageId = model.get('messageId'),
                 replyTo = model.get('replyTo');
 
@@ -116,13 +115,14 @@ define('io.ox/chat/views/messages', [
                 .toggleClass('user', model.isUser())
                 .toggleClass('myself', (!model.isSystem() || deleted) && model.isMyself())
                 .toggleClass('highlight', !!messageId && messageId === this.messageId)
-                .toggleClass('emoji', !deleted && util.isOnlyEmoji(body))
+                .toggleClass('emoji', !deleted && model.isEmoji())
                 .toggleClass('deleted', deleted)
                 .toggleClass('editable', model.isEditable())
                 .toggleClass('reply', !_.isEmpty(replyTo) && !replyTo.deleted)
                 .append(
                     // sender avatar & name
                     this.renderSender(model),
+                    this.renderUploadMessage(model),
                     // replied to message
                     $('<div class="content">').append(
                         this.renderReply(model),
@@ -147,7 +147,7 @@ define('io.ox/chat/views/messages', [
             if (!model.get('replyTo') || model.get('replyTo').deleted) return '';
             var replyModel = new data.MessageModel(model.get('replyTo')),
                 user = data.users.getByMail(replyModel.get('sender')),
-                replyBody = replyModel.getBody();
+                replyBody = this.renderMessageContent(replyModel);
 
             return $('<div class="quote">').append(
                 $('<div class="sender">').text(user.getName()),
@@ -155,15 +155,22 @@ define('io.ox/chat/views/messages', [
             );
         },
 
+        renderMessageContent: function (model) {
+            if (model.isSystem()) return model.getSystemMessage();
+            else if (model.hasPreview()) return model.getFilesPreview();
+            else if (model.isFile()) return util.getFileText({ model: model });
+            return model.getFormattedBody();
+        },
+
         renderBody: function (model, lastIndex) {
             var el = $('<div class="body">'),
                 chunkSize = lastIndex ? lastIndex : settings.get('messageChunkLoadSize', 500),
-                body = model.getBody();
+                body = this.renderMessageContent(model);
 
             // +350 so that if we load a message, we load at least 500 more chars a not only e.g. 10
             if (body.length <= chunkSize + 350) return el.html(body).append(this.renderFoot(model));
 
-            var showMoreNode = $('<span class="show-more">').text(gt('Show more')).on('click', function () {
+            var showMoreNode = $('<button type="button" class="btn btn-link show-more">').text(gt('Show more')).on('click', function () {
                 chunkSize += 3 * settings.get('messageChunkLoadSize', 500);
                 this.getMessageNode(model).find('.body').replaceWith(this.renderBody(model, chunkSize));
             }.bind(this));
@@ -176,7 +183,7 @@ define('io.ox/chat/views/messages', [
             if (model.isSystem()) return '';
             var toggle = $('<button type="button" class="btn btn-link dropdown-toggle actions-toggle" aria-haspopup="true" data-toggle="dropdown">')
                     .attr('title', gt('Message actions'))
-                    .append($('<i class="fa fa-bars">')),
+                    .append($('<i class="fa fa-bars" aria-hidden="true">')),
                 menu = $('<ul class="dropdown-menu dropdown-menu-right">'),
                 dropdown = new Dropdown({
                     className: 'message-actions-dropdown dropdown',
@@ -196,6 +203,24 @@ define('io.ox/chat/views/messages', [
             if (edited) flags.push($('<i class="fa fa-pencil" aria-hidden="true">').attr('title', gt('Message was edited')));
             if (!flags.length) return;
             return $('<span class="flags">').append(flags);
+        },
+
+        renderUploadMessage: function (model) {
+            var isMultiple = this.isMultipleUpload(this.options.limit, model),
+                user = data.users.getByMail(model.get('sender'));
+            //#. %1$s: User name of the person that uploaded files
+            if (!model.isMyself() && isMultiple) this.$el.find('.upload').last().text(gt('%1$s uploaded files', user.getName()));
+            if (model.isMyself() || !model.get('files') || isMultiple) return $();
+            //#. %1$s: User name of the person that uploaded a file
+            return $('<div class="upload">').text(gt('%1$s uploaded a file', user.getName()));
+        },
+
+        isMultipleUpload: function (limit, model) {
+            limit = limit ? this.collection.length - limit : 0;
+            var index = this.collection.indexOf(model);
+            if (index <= limit) return false;
+            var prev = this.collection.at(index - 1);
+            return prev.get('sender') === model.get('sender') && prev.get('files') && model.get('files') && true;
         },
 
         renderSender: function (model) {
@@ -305,9 +330,9 @@ define('io.ox/chat/views/messages', [
             $message
                 .removeClass('system text preview')
                 .addClass(model.getType())
-                .toggleClass('emoji', util.isOnlyEmoji(model.getBody()));
+                .toggleClass('emoji', model.isEmoji());
             $body
-                .html(model.getBody())
+                .html(this.renderMessageContent(model))
                 .append(
                     this.renderFoot(model)
                 );

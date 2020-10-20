@@ -458,7 +458,7 @@ define('io.ox/chat/views/chat', [
 
             this.$messageReference = $('<div class="reference-message message">')
                 .addClass(message.getType())
-                .toggleClass('emoji', util.isOnlyEmoji(message.getBody()))
+                .toggleClass('emoji', message.isEmoji())
                 .append(
                     $('<div class="quote">').append(
                         $('<div class="sender">').text(user.getName()),
@@ -467,7 +467,7 @@ define('io.ox/chat/views/chat', [
                 );
 
             this.$editor.before(this.$messageReference).focus();
-            this.$el.find('.controls').addClass('reply-mode ' + message.getType()).toggleClass('emoji', util.isOnlyEmoji(messageBody));
+            this.$el.find('.controls').addClass('reply-mode ' + message.getType()).toggleClass('emoji', message.isEmoji());
             this.specialMode = 'reply';
             this.messageReference = message;
         },

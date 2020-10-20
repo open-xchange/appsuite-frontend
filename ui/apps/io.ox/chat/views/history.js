@@ -17,8 +17,11 @@ define('io.ox/chat/views/history', [
     'io.ox/chat/views/chatAvatar',
     'io.ox/chat/data',
     'io.ox/backbone/views/toolbar',
+    'io.ox/core/strings',
+    'io.ox/mail/sanitizer',
+    'io.ox/chat/util',
     'gettext!io.ox/chat'
-], function (ext, DisposableView, ChatAvatar, data, ToolbarView, gt) {
+], function (ext, DisposableView, ChatAvatar, data, ToolbarView, strings, sanitizer, util, gt) {
 
     'use strict';
 
@@ -87,15 +90,22 @@ define('io.ox/chat/views/history', [
                 new ToolbarView({ point: 'io.ox/chat/history/toolbar', title: gt('History actions') }).render(new ext.Baton()).$el,
                 $('<div class="scrollpane">').append(
                     $('<ul>').append(
-                        this.collection.length > 0 ? this.collection.map(this.renderItem, this) : this.renderEmtpy().delay(1500).fadeIn(200)
+                        this.collection.length > 0 ? this.collection.map(this.renderItem, this) : this.renderEmpty().delay(1500).fadeIn(200)
                     )
                 )
             );
             return this;
         },
-        renderEmtpy: function () {
+        renderEmpty: function () {
             return $('<li class="history-list">').hide()
                 .append($('<div class="info">').text(gt('There are no archived chats yet')));
+        },
+        renderLastMessage: function (model) {
+            var last = model.lastMessage;
+            if (!last) return '\u00a0';
+            if (last.isFile()) return util.renderFile({ model: last });
+            if (last.isSystem()) return last.getSystemMessage();
+            return $.txt(sanitizer.simpleSanitize(last.get('content')));
         },
         renderItem: function (model) {
             return $('<li class="history-list">')
@@ -105,13 +115,13 @@ define('io.ox/chat/views/history', [
                     $('<div class="chats-container">').append(
                         $('<div class="chats-row">').append(
                             $('<div class="title">').text(model.getTitle()),
-                            $('<div class="body">').append(model.getLastMessage()),
-                            $('<button type="button" class="btn btn-default btn-action" >')
-                                .attr({ 'data-cmd': 'open-chat', 'data-id': model.id })
-                                //#. Used as a verb
-                                .text(gt('Open'))
+                            $('<div class="body">').append(this.renderLastMessage(model))
                         )
-                    )
+                    ),
+                    $('<button type="button" class="btn btn-default btn-action" >')
+                        .attr({ 'data-cmd': 'open-chat', 'data-id': model.id })
+                        //#. Used as a verb
+                        .text(gt('Open'))
                 );
         },
 

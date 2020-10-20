@@ -86,13 +86,13 @@ define('io.ox/chat/views/fileList', [
                 new ToolbarView({ point: 'io.ox/chat/files/toolbar', title: gt('All files') }).render(new ext.Baton()).$el,
                 $('<div class="scrollpane">').append(
                     $('<ul>').append(
-                        items.length > 0 ? items.map(this.renderItem, this) : this.renderEmtpy().delay(500).fadeIn(100)
+                        items.length > 0 ? items.map(this.renderItem, this) : this.renderEmpty().delay(500).fadeIn(100)
                     )
                 )
             );
             return this;
         },
-        renderEmtpy: function () {
+        renderEmpty: function () {
             return $('<li class="info-container">').hide()
                 .append($('<div class="info">').text(gt('There are no files yet')));
         },
@@ -109,7 +109,8 @@ define('io.ox/chat/views/fileList', [
                 });
             } else {
                 button.append(
-                    $('<i class="fa icon" aria-hidden="true">').addClass(util.getClassFromMimetype(model.get('mimetype'))),
+                    $('<i class="fa icon" aria-hidden="true">').addClass(util.getClassFromMimetype(model.get('mimetype')))
+                        .attr('title', util.getFileTypeName(model.get('mimetype'), model.get('name'))),
                     $('<div class="filename">').text(model.get('name'))
                 ).attr('data-download', model.getFileUrl());
             }

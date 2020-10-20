@@ -14,8 +14,10 @@
 define('io.ox/chat/views/chatListEntry', [
     'io.ox/chat/views/chatAvatar',
     'io.ox/chat/data',
+    'io.ox/core/strings',
+    'io.ox/mail/sanitizer',
     'io.ox/chat/util'
-], function (ChatAvatar, data, util) {
+], function (ChatAvatar, data, strings, sanitizer, util) {
 
     var ChatListEntryView = Backbone.View.extend({
 
@@ -42,6 +44,9 @@ define('io.ox/chat/views/chatListEntry', [
         },
 
         initialize: function () {
+            this.lastMessage = this.model.lastMessage || this.model.get('lastMessage');
+            if (!this.lastMessage.isFile) this.lastMessage = new data.MessageModel(this.lastMessage);
+
             this.listenTo(this.model, {
                 'change:title': this.onChangeTitle,
                 'change:unreadCount': this.onChangeUnreadCount,
@@ -49,13 +54,33 @@ define('io.ox/chat/views/chatListEntry', [
             });
         },
 
+        renderSender: function () {
+            if (this.lastMessage.isMyself() || this.model.isPrivate() || this.lastMessage.isSystem()) return;
+            return $('<span class="sender">').text(this.model.getLastSenderName() + ':');
+        },
+
+        renderLastMessage: function () {
+            if (!this.lastMessage) return '\u00a0';
+            var content;
+
+            if (this.lastMessage.isFile()) content = util.renderFile({ model: this.lastMessage });
+            else if (this.lastMessage.isSystem()) content = this.lastMessage.getSystemMessage();
+            else content = [this.renderSender(), $.txt(sanitizer.simpleSanitize(this.lastMessage.get('content')))];
+
+            return [
+                $('<div class="text-preview">').append(content),
+                this.renderUnreadCount()
+            ];
+        },
+
+        renderUnreadCount: function () {
+            return $('<div class="label-container">').append(
+                $('<span class="label label-info">').text(this.model.get('unreadCount'))
+            );
+        },
+
         render: function () {
-            var model = this.model,
-                lastMessage = model.get('lastMessage') || {},
-                isPrivate = model.get('type') === 'private',
-                sender = lastMessage.sender || '',
-                isCurrentUser = sender === data.user.email,
-                isSystemMessage = lastMessage ? lastMessage.type === 'system' : false;
+            var model = this.model;
 
             this.$el
                 .empty()
@@ -68,15 +93,8 @@ define('io.ox/chat/views/chatListEntry', [
                             $('<div class="last-modified">').text(model.getLastMessageDate())
                         ),
                         $('<div class="chats-row">').append(
-                            $('<div class="sender">')
-                                .toggleClass('hidden', isCurrentUser || isPrivate || isSystemMessage)
-                                .text(model.getLastSenderName() + ':'),
-                            $('<div class="text-preview">').append(model.getLastMessage()),
-                            $('<div class="fa delivery">')
-                                .toggleClass('hidden', !isCurrentUser || isSystemMessage)
-                                .addClass(isCurrentUser ? util.getDeliveryStateClass(model.get('lastMessage').deliveryState) : ''),
-                            $('<div class="label-container">').append(
-                                $('<span class="label label-info">').text(model.get('unreadCount'))
+                            $('<div class="last-message">').append(
+                                this.renderLastMessage()
                             )
                         )
                     )
@@ -101,8 +119,10 @@ define('io.ox/chat/views/chatListEntry', [
                 lastMessage = model.get('lastMessage') || {},
                 isSystemMessage = lastMessage ? lastMessage.type === 'system' : false;
 
+            this.lastMessage = lastMessage;
+            if (!this.lastMessage.isFile) this.lastMessage = new data.MessageModel(this.lastMessage);
             this.$('.last-modified').text(model.getLastMessageDate());
-            this.$('.text-preview').empty().append(model.getLastMessage());
+            this.$('.last-message').empty().append(this.renderLastMessage());
             this.$('.delivery')
                 .toggleClass('hidden', !isCurrentUser)
                 .removeClass('server received seen')

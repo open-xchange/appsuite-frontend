@@ -204,13 +204,14 @@ define('io.ox/chat/data', [
         getBody: function () {
             if (this.isSystem()) return this.getSystemMessage();
             else if (this.hasPreview()) return this.getFilesPreview();
-            else if (this.isFile()) return this.getFileText();
+            else if (this.isFile()) return util.getFileText({ model: this });
             else if (this.isDeleted()) return gt('This message was deleted');
+
             return this.getFormattedBody();
         },
 
         getFormattedBody: function () {
-            return _.escape(this.get('content')).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
+            return _.escape(this.get('content')).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
         },
 
         getSystemMessage: function () {
@@ -327,21 +328,6 @@ define('io.ox/chat/data', [
             return node;
         },
 
-        getFileText: function (opt) {
-            opt = _.extend({ icon: true, download: true, text: true }, opt);
-
-            var file = _(this.get('files')).last();
-            if (!file) return;
-
-            var node = [
-                opt.icon ? $('<i class="fa icon" aria-hidden="true">').addClass(util.getClassFromMimetype(file.mimetype)) : '',
-                opt.text ? $.txt(file.name) : '',
-                opt.download ? $('<i class="fa fa-download" aria-hidden="true">').attr('title', gt('Download')) : ''
-            ];
-
-            return opt.download ? $('<button type="button" class="btn btn-link download">').attr('data-download', this.getFileUrl(file)).append(node) : node;
-        },
-
         getTime: function () {
             // use time when this message was last changed or when it was created
             return moment(this.get('edited') || this.get('date')).format('LT');
@@ -349,7 +335,7 @@ define('io.ox/chat/data', [
 
         getTextBody: function () {
             if (this.isSystem()) return this.getSystemMessage();
-            if (this.isFile()) return this.getFileText();
+            if (this.isFile()) return util.getFileText({ model: this });
             return $.txt(sanitizer.simpleSanitize(this.get('content')));
         },
 
@@ -389,6 +375,10 @@ define('io.ox/chat/data', [
 
         isFile: function () {
             return this.get('type') === 'file';
+        },
+
+        isEmoji: function () {
+            return util.isOnlyEmoji(this.get('content'));
         },
 
         // checks if previous message is from a) same sender b) same date
@@ -685,7 +675,7 @@ define('io.ox/chat/data', [
                 function updateLastMessage() {
                     if (!this.messages.nextComplete) return;
                     var lastMessage = this.messages.last();
-                    this.set('lastMessage', lastMessage.toJSON());
+                    this.set('lastMessage', lastMessage);
                 }
 
                 var lastMessage = this.messages.last();
@@ -722,7 +712,7 @@ define('io.ox/chat/data', [
             if (this.lastMessage) this.stopListening(this.lastMessage);
             this.lastMessage = messageCache.get(this.get('lastMessage'));
             this.listenTo(this.lastMessage, 'change', function () {
-                this.set('lastMessage', this.lastMessage.toJSON());
+                this.set('lastMessage', this.lastMessage);
             });
             if (this.get('lastMessage').files) data.files.add(this.get('lastMessage').files);
         },
@@ -731,7 +721,7 @@ define('io.ox/chat/data', [
             var last = this.get('lastMessage');
             if (!last) return '\u00a0';
             var message = new MessageModel(last);
-            if (message.isFile()) return message.getFileText({ download: false });
+            if (message.isFile()) return util.getFileText({ model: message, download: false });
             return message.getTextBody();
         },
 
@@ -791,7 +781,7 @@ define('io.ox/chat/data', [
         getLastSenderName: function () {
             var lastMessage = this.get('lastMessage');
             if (!lastMessage) return '';
-            var sender = lastMessage.sender,
+            var sender = lastMessage.sender || lastMessage.get('sender'),
                 member = data.users.getByMail(sender);
             if (!member) return;
             return member.getName();
@@ -835,7 +825,7 @@ define('io.ox/chat/data', [
             var formData = util.makeFormData(_.extend({}, attr, { files: file })),
                 model = file ? new MessageModel(attr) : this.messages.add(attr, { merge: true, parse: true });
 
-            // model for files will be added to cache and this.messages via sockets messsage:new event. So no need to do it in the callback here. Temporary model is fine;
+            // model for files will be added to cache and this.messages via sockets message:new event. So no need to do it in the callback here. Temporary model is fine;
             return model.save(attr, {
                 data: formData,
                 processData: false,
@@ -1120,7 +1110,7 @@ define('io.ox/chat/data', [
 
                     if (model.messages.nextComplete) {
                         if (!model.messages.get(newMessage)) model.messages.add(newMessage);
-                    } else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
+                    } else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage));
 
                     if (model.get('type') !== 'channel' && !mySelf) {
                         model.set({ unreadCount: model.get('unreadCount') + 1 });

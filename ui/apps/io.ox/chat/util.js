@@ -11,7 +11,10 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-define('io.ox/chat/util', [], function () {
+define('io.ox/chat/util', [
+    'io.ox/core/strings',
+    'gettext!io.ox/chat'
+], function (strings, gt) {
 
     'use strict';
 
@@ -19,6 +22,7 @@ define('io.ox/chat/util', [], function () {
         'application/pdf': 'pdf',
         'image/svg': 'svg',
         'application/zip': 'zip',
+        'text/plain': 'txt',
 
         // images
         'image/jpeg': 'image',
@@ -43,6 +47,35 @@ define('io.ox/chat/util', [], function () {
         'application/vnd.ms-powerpoint': 'ppt'
     };
 
+    var fileTypeNames = {
+        'application/pdf': 'PDF',
+        'image/svg': 'SVG',
+        'application/zip': 'ZIP',
+        'text/plain': gt('Text file'),
+
+        // images
+        'image/jpeg': 'JPEG',
+        'image/gif': 'GIF',
+        'image/bmp': 'BMP',
+        'image/png': 'PNG',
+
+        // documents
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document': gt('Text document'),
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.template': gt('Text document'),
+        'application/msword': gt('Text document'),
+
+        // excel
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': gt('Excel document'),
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.template': gt('Excel document'),
+        'application/vnd.ms-excel': 'Excel document',
+
+        // ppt
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation': gt('Presentation'),
+        'application/vnd.openxmlformats-officedocument.presentationml.slideshow': gt('Presentation'),
+        'application/vnd.openxmlformats-officedocument.presentationml.template': gt('Presentation'),
+        'application/vnd.ms-powerpoint': gt('Presentation')
+    };
+
     var emojiRegex = new RegExp('^[\\u{1f300}-\\u{1f5ff}\\u{1f900}-\\u{1f9ff}\\u{1f600}-\\u{1f64f}\\u{1f680}-\\u{1f6ff}\\u{2600}-\\u{26ff}\\u{2700}-\\u{27bf}\\u{1f1e6}-\\u{1f1ff}\\u{1f191}-\\u{1f251}\\u{1f004}\\u{1f0cf}\\u{1f170}-\\u{1f171}\\u{1f17e}-\\u{1f17f}\\u{1f18e}\\u{3030}\\u{2b50}\\u{2b55}\\u{2934}-\\u{2935}\\u{2b05}-\\u{2b07}\\u{2b1b}-\\u{2b1c}\\u{3297}\\u{3299}\\u{303d}\\u{00a9}\\u{00ae}\\u{2122}\\u{23f3}\\u{24c2}\\u{23e9}-\\u{23ef}\\u{25b6}\\u{23f8}-\\u{23fa}]{1,3}$', 'u');
 
     var util = {
@@ -65,7 +98,46 @@ define('io.ox/chat/util', [], function () {
         },
 
         getClassFromMimetype: function (mimetype) {
-            return classNames[mimetype];
+            return classNames[mimetype] || 'file';
+        },
+
+        getFileTypeName: function (mimetype, fileName) {
+            var name = fileTypeNames[mimetype];
+            if (name) return name;
+
+            name = fileName.split('.').length > 1 && fileName.split('.').pop().toUpperCase();
+            return name || gt('File');
+        },
+
+        getFileText: function (opt) {
+            opt = _.extend({ download: true }, opt);
+
+            var model = opt.model,
+                file = _(model.get('files')).last();
+
+            if (!file) return;
+
+            var node = [
+                $('<i class="fa icon" aria-hidden="true">').addClass(util.getClassFromMimetype(file.mimetype)),
+                $('<div>').append(
+                    $('<span class="name">').text(file.name),
+                    $('<span class="info">').text((file.size ? strings.fileSize(file.size, 0) : '') + ' ' + util.getFileTypeName(file.mimetype, file.name))
+                )
+            ];
+
+            return opt.download ? $('<button type="button" class="btn btn-link download">').attr('data-download', model.getFileUrl(file)).append(node) : node;
+        },
+
+        renderFile: function (opt) {
+            var model = opt.model;
+
+            var file = _(model.get('files')).last();
+            if (!file) return;
+
+            return [
+                $('<i class="fa icon" aria-hidden="true">').addClass(util.getClassFromMimetype(file.mimetype)),
+                $('<span class="name">').text(file.name)
+            ];
         },
 
         strings: {

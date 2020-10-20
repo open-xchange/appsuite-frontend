@@ -383,8 +383,20 @@
             color: @gray;
         }
 
+        .last-message {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            white-space: pre;
+            justify-content: space-between;
+        }
+
         .sender {
             margin-right: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            min-width: 0;
         }
 
         .last-modified {
@@ -397,17 +409,6 @@
 
             &.server {
                 margin-right: 0px;
-            }
-        }
-
-        .text-preview {
-            flex: 1;
-            .ellipsis();
-            padding-right: 8px;
-
-            .icon {
-                margin-left: 0.3em;
-                margin-right: 0.5em;
             }
         }
 
@@ -429,6 +430,17 @@
         .fa-check-circle {
             color: @green;
         }
+    }
+
+    .text-preview {
+        .ellipsis();
+        padding-right: 8px;
+
+        .icon {
+            margin-right: 0.5em;
+        }
+
+        .info { display: none; }
     }
 
     .scrollpane {
@@ -692,7 +704,7 @@
         }
 
         &.preview, &.file {
-            margin: 0 64px 8px 0;
+            margin: 0 0 8px 0;
 
             &.myself {
                 margin: 0 0 8px 0;
@@ -748,14 +760,67 @@
                 color: #fff;
             }
 
-            .icon { margin-right: 0.5em; }
-            .fa-download { margin-left: 0.5em; }
+            .icon {
+                margin-right: 0.5em;
+                font-size: 24px;
+                margin-top: auto;
+                margin-bottom: auto;
+            }
 
             &.myself .download {
                 color: #fff;
             }
         }
+        &.file, &.file.myself {
+            .time {
+                display: none;
+            }
 
+            .body {
+                display: flex;
+                width: 100%;
+            }
+
+            .upload {
+                color: @gray;
+                font-size: 11px;
+                margin-bottom: 4px;
+            }
+
+            .content {
+                background-color: unset;
+                border: 2px solid @lightgray;
+                border-radius: 8px;
+                min-width: 55%;
+                max-width: 80%;
+                padding: 0;
+            }
+
+            button {
+                display: flex;
+                padding-right: 0;
+            }
+
+            button > div {
+                color: @gray;
+                display: grid;
+
+                > span {
+                    margin-right: auto;
+                    max-width: 100%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+
+                    &.name { font-weight: 700; }
+                    &.info {
+                        font-size: 11px;
+                        line-height: 12px;
+                    }
+                }
+            }
+
+            .foot { top: 5px; }
+        }
         &.system {
             margin: 16px 0 0 0;
             padding: 3px 16px 5px 16px;
@@ -816,8 +881,12 @@
         }
 
         .show-more {
-            color: #68bbe4;
             margin-left: 8px;
+            padding: 0;
+            line-height: 16px;
+            border: none;
+            position: relative;
+            top: -1px;
         }
     }
 
@@ -895,9 +964,11 @@
 
     .icon{
         &.pdf:before { content: "\f1c1"; color: #C01E07; } // file-pdf-o
-        &.doc:before { content: '\f0f6'; color: #376CB8; }  // fa-file-text-o
-        &.xls:before { content: '\f0ce'; color: #26935D; }  // fa-table
-        &.ppt:before { content: '\f022'; color: #F4502A; }  // fa-list-alt
+        &.file:before { content: '\f016'; color: #707070; }  // fa-file-o
+        &.txt:before { content: '\f0f6'; color: #707070; }  // fa-file-text-o
+        &.doc:before { content: '\f1c2'; color: #376CB8; }  // fa-file-word-o
+        &.xls:before { content: '\f1c3'; color: #26935D; }  // ffa-file-excel-o
+        &.ppt:before { content: '\f1c4'; color: #F4502A; }  // fa-file-powerpoint-o
         &.zip:before { content: '\f187'; color: #FF940A; }  // fa-archive
         &.svg:before { content: '\f1c9'; color: #F4502A; }  // fa-file-code-o
         &.image:before { content: "\f1c5"; } // file-image-o
