@@ -272,12 +272,12 @@ define('io.ox/chat/main', [
             var files = [fileList.get(selectedFile)];
 
             var promises = files.map(function (file) {
-                return api.requestDataUrl({ url: file.getFileUrl() }).then(function (base64encodedImage) {
+                return api.requestBlobUrl({ url: file.getFileUrl() }).then(function (url) {
                     return {
                         id: file.get('fileId'),
                         name: file.get('name'),
                         size: file.get('size'),
-                        url: base64encodedImage,
+                        url: url,
                         // try to fake mail compose attachment
                         space: true
                     };

@@ -90,15 +90,15 @@ define('io.ox/chat/actions/openGroupDialog', [
                 this.pictureModel = new Backbone.Model();
 
                 if (url) {
-                    imageDef = api.requestDataUrl({ url: url })
-                    .then(function (base64encodedImage) {
+                    imageDef = api.requestBlobUrl({ url: url })
+                    .then(function (url) {
                         this.pictureModel.set({
-                            image1_data_url: base64encodedImage,
-                            image1_url: base64encodedImage,
+                            image1_data_url: url,
+                            image1_url: url,
                             file: function () {
                                 if (!url) return;
                                 return api.request({
-                                    url: base64encodedImage,
+                                    url: url,
                                     xhrFields: { responseType: 'blob' }
                                 }).then(function (data) {
                                     var blob = new Blob([data]);

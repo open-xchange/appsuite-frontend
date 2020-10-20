@@ -300,8 +300,8 @@ define('io.ox/chat/data', [
                 'data-message-id': this.get('messageId')
             });
 
-            api.requestDataUrl({ url: url }).then(function (base64encodedImage) {
-                image.css('backgroundImage', 'url("' + base64encodedImage + '")');
+            api.requestBlobUrl({ url: url }).then(function (url) {
+                image.css('backgroundImage', 'url("' + url + '")');
             });
 
             var node = $('<div class="preview-wrapper">')

@@ -104,8 +104,8 @@ define('io.ox/chat/views/fileList', [
             var button = $('<button type="button">').attr('data-file-id', model.get('fileId'));
             if (model.isImage()) {
                 button.attr('data-cmd', 'show-file');
-                api.requestDataUrl({ url: model.getThumbnailUrl() }).then(function (base64encodedImage) {
-                    button.css('backgroundImage', 'url(\'' + base64encodedImage + '\')');
+                api.requestBlobUrl({ url: model.getThumbnailUrl() }).then(function (url) {
+                    button.css('backgroundImage', 'url("' + url + '")');
                 });
             } else {
                 button.append(

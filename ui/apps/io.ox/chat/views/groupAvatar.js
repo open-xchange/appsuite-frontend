@@ -40,8 +40,8 @@ function (DisposableView, api, util) {
             this.$el.css('background-image', '').empty();
 
             if (this.model.get('icon')) {
-                api.requestDataUrl({ url: this.model.getIconUrl() }).then(function (base64encodedImage) {
-                    this.$el.css('backgroundImage', 'url(\'' + base64encodedImage + '\')');
+                api.requestBlobUrl({ url: this.model.getIconUrl() }).then(function (url) {
+                    this.$el.css('backgroundImage', 'url("' + url + '")');
                 }.bind(this));
             } else {
                 var data = { first_name: this.model.get('title'), last_name: this.model.get('description') };
