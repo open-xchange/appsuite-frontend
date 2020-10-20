@@ -404,6 +404,21 @@ define('io.ox/core/folder/extensions', [
             };
         })(),
 
+        // used to manage subscribed/unsubscribed status of folders from federated shares
+        manageSubscriptions: function () {
+            this.append(
+                $('<li class="links list-unstyled" role="treeitem">').append(
+                    $('<ul class="list-unstyled">').append(
+                        $('<li role="presentation">').append(
+                            $('<a href="#" data-action="manage-subscriptions" role="treeitem">').text(gt('Manage Subscriptions')).on('click', function () {
+                                debugger;
+                            })
+                        )
+                    )
+                )
+            );
+        },
+
         subscribe: function (baton) {
             if (baton.extension.capabilities && !upsell.visible(baton.extension.capabilities)) return;
             var self = this;
