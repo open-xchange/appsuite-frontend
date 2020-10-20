@@ -33,6 +33,7 @@ upload:
   stage: deploy
   variables:
     OBS_PROJECT_EXT: $CI_COMMIT_REF_SLUG
+    GIT_DEPTH: 3000
   timeout: 20m
   script:
     # only run subtasks for projects which have been build previously (contain some built project files)
