@@ -227,54 +227,53 @@ define('io.ox/chat/data', [
             if (room.get('type') === 'channel' && event.type === 'members:added') event.type = 'channel:joined';
             if (event.type === 'members:removed' && members.length === 1 && members[0] === originator) event.type = 'room:left';
 
+            var me = originator === data.user.email,
+                originatorName = getName(originator),
+                names = getNames(_.difference(members, [originator])),
+                participantCount = _.difference(members, [originator]).length;
+
             switch (event.type) {
                 case 'room:created':
+                    if (me) return gt('You created this conversation');
                     //#. %1$s: name of the creator
-                    return originator === data.user.email ?
-                        gt('You created this conversation') :
-                        gt('%1$s created this conversation', getName(originator));
+                    return gt('%1$s created this conversation', originatorName);
                 case 'channel:joined':
+                    if (me) return gt('You joined the conversation');
                     //#. %1$s: name of the new participant
-                    return originator === data.user.email ?
-                        gt('You joined the conversation', getNames(members)) :
-                        gt('%1$s joined the conversation', getNames(members));
+                    return gt('%1$s joined the conversation', getNames(members));
                 case 'members:added':
+                    //#. %1$s: name of the added participant or participants and can be a single name or a comma separated list of names
+                    if (me) return gt.ngettext('You added %1$s to the conversation', 'You added %1$s to the conversation', participantCount, names);
                     //#. %1$s: name of the participant that added the new participant
-                    //#. %2$s: name of the added participant
-                    return originator === data.user.email ?
-                        gt('You added %2$s to the conversation', getName(originator), getNames(_.difference(members, [originator]))) :
-                        gt('%1$s added %2$s to the conversation', getName(originator), getNames(_.difference(members, [originator])));
+                    //#. %2$s: name of the added participant or participants and can be a single name or a comma separated list of names
+                    return gt.ngettext('%1$s added %2$s to the conversation', '%1$s added %2$s to the conversation', participantCount, originatorName, names);
                 case 'members:removed':
+                    //#. %1$s: name of the removed participant or participants and can be a single name or a comma separated list of names
+                    if (me) return gt.ngettext('You removed %1$s from the conversation', 'You removed %1$s from the conversation', participantCount, names);
                     //#. %1$s: name of the participant that removed the other participant
-                    //#. %2$s: name of the removed participant
-                    return originator === data.user.email ?
-                        gt('You removed %2$s from the conversation', getName(originator), getNames(_.difference(members, [originator]))) :
-                        gt('%1$s removed %2$s from the conversation', getName(originator), getNames(_.difference(members, [originator])));
+                    //#. %2$s: name of the removed participant or participants and can be a single name or a comma separated list of names
+                    return gt.ngettext('%1$s removed %2$s from the conversation', '%1$s removed %2$s from the conversation', participantCount, originatorName, names);
                 case 'image:changed':
+                    if (me) return gt('You changed the group image');
                     //#. %1$s: name of a chat participant
-                    return originator === data.user.email ?
-                        gt('You changed the group image', getName(originator), event.fileId) :
-                        gt('%1$s changed the group image', getName(originator), event.fileId);
+                    return gt('%1$s changed the group image', originatorName);
                 case 'title:changed':
+                    if (me) return gt('You changed the group title to "%1$s"', event.title);
                     //#. %1$s: name of a chat participant
                     //#. %2$s: the new title
-                    return originator === data.user.email ?
-                        gt('You changed the group title to "%2$s"', getName(originator), event.title) :
-                        gt('%1$s changed the group title to "%2$s"', getName(originator), event.title);
+                    return gt('%1$s changed the group title to "%2$s"', originatorName, event.title);
                 case 'changeDescription':
+                    if (me) return gt('You changed the group description to "%1$s"', event.description);
                     //#. %1$s: name of a chat participant
                     //#. %2$s: the new description
-                    return originator === data.user.email ?
-                        gt('You changed the group description to "%2$s"', getName(originator), event.description) :
-                        gt('%1$s changed the group description to "%2$s"', getName(originator), event.description);
+                    return gt('%1$s changed the group description to "%2$s"', originatorName, event.description);
                 case 'room:left':
+                    if (me) return gt('You left the conversation');
                     //#. %1$s: name of a chat participant
-                    return originator === data.user.email ?
-                        gt('You left the conversation', getName(originator)) :
-                        gt('%1$s left the conversation', getName(originator));
+                    return gt('%1$s left the conversation', originatorName);
                 case 'me':
                     // no need to translate this
-                    return _.printf('%1$s %2$s', getName(originator), event.message);
+                    return _.printf('%1$s %2$s', originatorName, event.message);
                 case 'text':
                     return event.message;
                 case 'decryption:failed':
@@ -1160,25 +1159,27 @@ define('io.ox/chat/data', [
     }
 
     function getNames(list) {
-        return join(
-            _(list)
-            .map(function (email) {
-                var model = data.users.getByMail(email);
-                var name = (model ? model.getName() : gt('Unknown user'));
-                //#. shown instead of your name for your own chat messages
-                if (email === data.user.email) name = gt('You');
+        list = list.map(function (email) {
+            var model = data.users.getByMail(email);
+            var name = (model ? model.getName() : gt('Unknown user'));
+            //#. shown instead of your name for your own chat messages when you're mentioned in a group of names
+            if (email === data.user.email) name = gt('You');
 
-                return '<span class="name" text="' + name + '">';
-            })
-            .sort()
-        );
-    }
+            return name;
+        });
 
-    function join(list) {
-        //#. used as a separator text between multiple participants of a chat example: Paul and Bob
-        if (list.length <= 2) return list.join(gt(' and '));
-        //#. used as a separator text between multiple participants of a chat example: Paul and Bob
-        return list.slice(0, -1).join(', ') + gt(', and ') + list[list.length - 1];
+        var and =
+            //#. used to concatenate two participant names
+            //#. make sure that the leading and trailing spaces are also in the translation
+            gt(' and '),
+            delimiter =
+            //#. This delimiter is used to concatenate a list of participant names
+            //#. make sure, that the trailing space is also in the translation
+            gt(', ');
+
+        list = list.length === 2 ? list.join(and) : list.join(delimiter);
+
+        return $('<span class="name">').text(list).prop('outerHTML');
     }
 
     return data;
