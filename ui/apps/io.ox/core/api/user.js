@@ -336,11 +336,9 @@ define('io.ox/core/api/user', [
         if (name) return $.when(name);
 
         // try to get name via user id second
-        userData = data[type + '_by'];
+        userData = data[type + '_by'] === 0 && api.isMyself(userData) ? ox.user_id : data[type + '_by'];
 
-        if (userData !== undefined) {
-            return api.getName(userData);
-        }
+        if (userData) return api.getName(userData);
 
         return $.Deferred().reject({ error: 'Unknown User' });
     };
@@ -364,12 +362,21 @@ define('io.ox/core/api/user', [
         }
 
         // try to get name via user id second
-        userData = data[type + '_by'];
+        userData = data[type + '_by'] === 0 && api.isMyself(userData) ? ox.user_id : data[type + '_by'];
 
-        if (userData !== undefined) {
-            api.getTextNode(userData, { node: node });
-        }
+        if (userData) api.getTextNode(userData, { node: node });
+
         return node;
+    };
+
+    // extendedProperty is either created_from or created by
+    api.isMyself = function (extendedProperty) {
+        // object was created in this context, so entity or identifier matches user id
+        if (extendedProperty.entity === ox.user_id || extendedProperty.identifier === String(ox.user_id)) return true;
+        // object was not created in this context but we might have created/modified this as a guest (federated sharing)
+        // is there a way to get the primary mail address in a synchronous way without rampup
+        if (extendedProperty.type === 'guest' && extendedProperty.contact && ox.rampup && ox.rampup.user && extendedProperty.contact.email1 === ox.rampup.user.email1) return true;
+        return false;
     };
 
     // helper to find the first usable name, uses contact util for language specific formats (lastname, firstname | firstname lastname etc)
@@ -379,9 +386,9 @@ define('io.ox/core/api/user', [
             // try to get name via contact data
             result = util.getFullName(userData.contact);
             // display name as Fallback
-            if (!result && userData.displayName) {
-                result = userData.displayName;
-            }
+            if (!result && userData.displayName) result = userData.displayName;
+            // mail address as fallback if not myself
+            if (!result && !api.isMyself(userData) && userData.contact && userData.contact.email1) result = userData.contact.email1;
         }
 
         return result;
