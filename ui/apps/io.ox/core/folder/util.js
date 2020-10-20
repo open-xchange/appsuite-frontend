@@ -101,6 +101,8 @@ define('io.ox/core/folder/util', [
                 return data.type === 2 || /^(10|14|15)$/.test(data.id);
             case 'shared':
                 return data.type === 3;
+            case 'federated-sharing':
+                return /^(xox\d+|xctx\d+)/.test(data.account_id);
             case 'system':
                 // some folders have legacy type 7 but are actually system folders, so check module too
                 return data.type === 5 || data.module === 'system';
