@@ -59,6 +59,9 @@ define('io.ox/core/api/apps', [
                 this.trigger.apply(this, args);
             }, this);
         },
+        getByCID: function (cid) {
+            return _.findWhere(this.models, { cid: cid });
+        },
         forLauncher: function getAppsForLauncher() {
             return _.filter(this._launcher.map(this.get.bind(this)), validApp, this);
         }
