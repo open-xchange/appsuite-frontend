@@ -20,13 +20,8 @@ Before(async function (users, contexts) {
     // We put them in two contexts, so they synchronize
     // their calendars via iTIP only
     // The attendee also has an alias
-    // This was shamelessly copied from Björn Kösters edit_external_account_test.js
-    const [JITTER_MIN, JITTER_MAX] = [1000, 2000];
-    const secondContextId = Math.trunc(process.env.CONTEXT_ID)
-        + Math.floor(Math.random()
-        * (JITTER_MAX - JITTER_MIN + 1) + JITTER_MIN);
     await users.create();
-    const secondContext = await contexts.create({ id: secondContextId });
+    const secondContext = await contexts.create();
     await users.create(users.getRandom(), secondContext);
 });
 
