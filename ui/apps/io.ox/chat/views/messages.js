@@ -19,8 +19,9 @@ define('io.ox/chat/views/messages', [
     'gettext!io.ox/chat',
     'io.ox/chat/events',
     'io.ox/chat/util',
-    'io.ox/backbone/mini-views/dropdown'
-], function (DisposableView, data, Avatar, ext, gt, events, util, Dropdown) {
+    'io.ox/backbone/mini-views/dropdown',
+    'settings!io.ox/chat'
+], function (DisposableView, data, Avatar, ext, gt, events, util, Dropdown, settings) {
 
     'use strict';
 
@@ -114,9 +115,7 @@ define('io.ox/chat/views/messages', [
                     $('<div class="content">').append(
                         this.renderReply(model),
                         // message body
-                        $('<div class="body">')
-                            .html(body)
-                            .append(this.renderFoot(model))
+                        this.renderBody(model)
                     ),
                     // show some indicator dots when a menu is available
                     this.renderMenu(model),
@@ -149,6 +148,22 @@ define('io.ox/chat/views/messages', [
                             .html(replyBody)
                     )
                 );
+        },
+
+        renderBody: function (model, lastIndex) {
+            var el = $('<div class="body">'),
+                chunkSize = lastIndex ? lastIndex : settings.get('messageChunkLoadSize', 500),
+                body = model.getBody();
+
+            // +350 so that if we load a message, we load at least 500 more chars a not only e.g. 10
+            if (body.length <= chunkSize + 350) return el.html(body).append(this.renderFoot(model));
+
+            var showMoreNode = $('<span class="show-more">').text(gt('Show more')).on('click', function () {
+                chunkSize += 3 * settings.get('messageChunkLoadSize', 500);
+                this.getMessageNode(model).find('.body').replaceWith(this.renderBody(model, chunkSize));
+            }.bind(this));
+
+            return el.html(body.slice(0, chunkSize) + '...').append(showMoreNode, this.renderFoot(model));
         },
 
         renderMenu: function (model) {

@@ -749,6 +749,7 @@ define('io.ox/chat/data', [
 
             switch (errorCode) {
                 case 'filesize:exceeded': return notifications.yell('error', gt('The uploaded file exceeds the size limit'));
+                case 'messagelength:exceeded': return notifications.yell('error', gt('The message length exceeds the limit and could not be delivered'));
                 default: notifications.yell('error', gt('Something went wrong. Please try again.'));
             }
         },

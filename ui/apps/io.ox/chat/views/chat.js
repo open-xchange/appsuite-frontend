@@ -321,7 +321,7 @@ define('io.ox/chat/views/chat', [
 
         renderEditor: function () {
             if (this.isMember()) {
-                this.$editor = $('<textarea class="form-control">').attr({ 'aria-label': gt('Message'), placeholder: gt('Message') });
+                this.$editor = $('<textarea class="form-control">').attr({ 'aria-label': gt('Message'), placeholder: gt('Message'), 'maxlength': data.serverConfig.maxMsgLength });
                 var send = $('<button type="button" class="btn btn-link pull-right send-btn">').attr('aria-label', gt('Send'))
                     .append($('<i class="fa fa-paper-plane" aria-hidden="true">').attr('title', gt('Send')));
                 var cancel = $('<button type="button" class="btn btn-link cancel-btn">').attr('aria-label', gt('Cancel'))
@@ -559,6 +559,13 @@ define('io.ox/chat/views/chat', [
             this.$editor.val('');
         },
         onPostMessage: function (content) {
+            var maxMessageLength = data.serverConfig.maxMsgLength || -1;
+
+            if (maxMessageLength > 0 && (content.length > maxMessageLength)) {
+                notifications.yell('error', gt('The message cannot be sent because it exceeds the maximum message length of %1$s characters.', maxMessageLength));
+                return;
+            }
+
             // reset and fetch messages when in search and collection is not complete
             if (!this.model.messages.nextComplete) {
                 this.model.messages.reset();
