@@ -503,11 +503,13 @@ define('io.ox/chat/views/chat', [
             }
 
             if (e.which === 13) {
-                if (e.ctrlKey) {
+                if (e.ctrlKey || e.metaKey || e.altKey) {
                     // append newline manually if ctrl is pressed
                     this.$editor.val(this.$editor.val() + '\n');
                     return;
                 }
+                // shift + enter already appends newline
+                if (e.shiftKey) return;
                 e.preventDefault();
                 this.onSend();
                 this.$editor.focus();
