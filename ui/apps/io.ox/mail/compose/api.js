@@ -83,6 +83,10 @@ define('io.ox/mail/compose/api', [
     // composition space
     api.space = {
 
+        all: function () {
+            return http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject,meta' } });
+        },
+
         // limit of 3 currently
         add: function (obj, opt) {
             // reply or forwarding of single/multiple mails
