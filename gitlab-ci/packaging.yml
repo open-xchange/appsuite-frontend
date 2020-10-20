@@ -16,6 +16,8 @@ delete project on obs:
   script:
     - echo ${CI_COMMIT_REF_SLUG} | grep -e "^master" -e "^release" && export OBS_PROJECT=frontend-${CI_COMMIT_REF_NAME} || export OBS_PROJECT=frontend-${CI_COMMIT_REF_SLUG}
     - osc rdelete -r ${OBS_PROJECT} -m "GitLab CI environment stopped"
+  tags:
+    - kubernetes
   environment:
     name: packages/$CI_COMMIT_REF_NAME
     action: stop
@@ -37,6 +39,8 @@ upload:
     - export TASKS=$(ls */build/pkg -d | sed -E "s,([^\/ ]+)\/[^ ]+,:\1:upload,g")
     - test -n "$TASKS" && export TASKS="$TASKS wait4Project"
     - gradle --no-daemon $TASKS
+  tags:
+    - kubernetes
   environment:
     name: packages/$CI_COMMIT_REF_NAME
     on_stop: "delete project on obs"
