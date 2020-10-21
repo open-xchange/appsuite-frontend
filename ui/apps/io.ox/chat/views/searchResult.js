@@ -60,10 +60,15 @@ define('io.ox/chat/views/searchResult', [
 
         searchAddresses: function (query) {
             return require(['io.ox/contacts/addressbook/popup']).then(function (picker) {
-                return picker.getAllMailAddresses().then(function (res) {
+                return picker.getAllMailAddresses({ useGABOnly: false, lists: false }).then(function (res) {
                     return picker
                         .search(query, res.index, res.hash, true)
-                        .filter(function (user) { return user.email !== data.user.email; });
+                        .filter(function (user) {
+                            // filter own user
+                            return user.email !== data.user.email &&
+                            // internal users are only identified by email1
+                            user.field === 'email1' || user.user_id === 0;
+                        });
                 });
             });
         },
