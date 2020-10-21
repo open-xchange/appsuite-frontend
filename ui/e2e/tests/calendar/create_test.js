@@ -31,8 +31,9 @@ Before(async (I, users) => {
         'io.ox/calendar': { showCheckboxes: true }
     });
 });
-After(async (users) => {
+After(async (users, contexts) => {
     await users.removeAll();
+    await contexts.removeAll();
 });
 
 Scenario('Create appointment with all fields', async (I, calendar, dialogs) => {
@@ -1684,3 +1685,49 @@ Scenario('[C7435] Create appointment via email', async function (I, mail, users,
     });
 });
 
+Scenario('[C7427] Create appointment with external participants', async function (I, users, contexts, dialogs, calendar) {
+    const subject = 'Meetup XY',
+        ctx = await contexts.create(),
+        extUser = await users.create(users.getRandom(), ctx);
+
+    function checkViews() {
+        I.say('Check views');
+        ['Day', 'Week', 'Workweek', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
+            I.waitForText(subject, 5, '.page.current .appointment');
+        }));
+    }
+
+    await session('Alice', async () => {
+        I.login('app=io.ox/calendar');
+
+        calendar.waitForApp();
+        calendar.newAppointment();
+        within('.io-ox-calendar-edit-window', () => {
+            I.fillField('Subject', subject);
+            I.fillField('Location', 'Conference Room 123');
+            I.fillField(calendar.locators.starttime, '01:00 PM');
+            I.fillField(calendar.locators.addparticipants, extUser.userdata.primaryEmail);
+            I.pressKey('Enter');
+            I.waitForText('Participants (2)');
+            I.click('Create');
+        });
+        I.waitForDetached('.io-ox-calendar-edit-window');
+
+        checkViews();
+    });
+
+    await session('External User', async () => {
+        I.login('app=io.ox/calendar', { user: extUser });
+        I.openApp('Mail');
+        I.waitForText('New appointment: ' + subject, 30);
+        I.retry(5).click('New appointment: ' + subject);
+        I.waitForElement('.mail-detail-frame');
+
+        I.waitForText('Accept', '.mail-detail-pane');
+        I.click('Accept', '.mail-detail-pane');
+        I.waitForDetached('.mail-detail-frame');
+
+        I.openApp('Calendar');
+        checkViews();
+    });
+});
