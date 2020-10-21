@@ -17,7 +17,8 @@ define('io.ox/chat/views/searchResult', [
     'io.ox/chat/data',
     'io.ox/chat/views/chatListEntry',
     'io.ox/chat/api',
-    'gettext!io.ox/chat'
+    'gettext!io.ox/chat',
+    'static/3rd.party/jquery.mark.min.js'
 ], function (DisposableView, events, data, ChatListEntryView, api, gt) {
 
     'use strict';
@@ -52,6 +53,7 @@ define('io.ox/chat/views/searchResult', [
                 );
             } else {
                 nodes[0].attr('tabindex', 0);
+                $('.search-result .text-preview').mark(this.query);
             }
             return this;
         },
@@ -75,8 +77,8 @@ define('io.ox/chat/views/searchResult', [
         },
 
         search: function (query) {
-            var regexQuery = new RegExp('(\\b' + escape(query) + ')', 'ig');
             if (!query) return this.collection.reset();
+            query = query.trim();
             $.when(
                 api.elasticSearch(query),
                 this.searchAddresses(query),
@@ -91,7 +93,6 @@ define('io.ox/chat/views/searchResult', [
                         var room = data.chats.active.get(message.roomId);
                         if (!room) return;
                         room = room.clone();
-                        message.content = message.content.replace(regexQuery, '<em class="hlt1">$1</em>');
                         room.set('lastMessage', message, { silent: true });
                         room.set('searchResult', true);
                         ids[room.get('id')] = true;
