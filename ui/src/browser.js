@@ -373,7 +373,7 @@
         // be graceful and return true here as default
         var supported = true, checked = [];
         for (var b in us.platformSupport) {
-            if (us.browser[b] && (us.browser[b] <= us.platformSupport[b])) {
+            if (us.browser[b] && (us.browser[b] < us.platformSupport[b])) {
                 supported = false;
                 checked.push(b);
             }
