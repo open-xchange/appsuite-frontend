@@ -94,7 +94,7 @@ define('io.ox/chat/api', [
 
     api.elasticSearch = function (query) {
         return request({ url: api.url + '/search/messages?' + $.param({ query: query }) })
-            .then(function (data) { return data; });
+            .then(function (data) { return data; }, function () { return []; });
     };
 
     api.deleteMessage = function (message) {
