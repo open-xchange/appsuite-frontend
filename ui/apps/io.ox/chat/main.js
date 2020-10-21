@@ -375,7 +375,9 @@ define('io.ox/chat/main', [
             var height = this.$body.find('.scrollpane').height(),
                 currentMessage;
             this.$body.find('.message').each(function () {
-                if ($(this).position().top < height) currentMessage = $(this);
+                var top = $(this).position().top;
+                var isReply = $(this).hasClass('replied-to-message');
+                if (!isReply && top < height) currentMessage = $(this);
             });
 
             return currentMessage ? currentMessage.attr('data-cid') : undefined;
