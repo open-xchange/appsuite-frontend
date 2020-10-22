@@ -382,7 +382,7 @@ define('io.ox/chat/data', [
 
         updateDelivery: function (state) {
             var room = data.chats.active.get(this.get('roomId'));
-            if (room.isChannel() && !room.isMember()) return;
+            if (room && room.isChannel() && !room.isMember()) return;
             var invisible = presence.getMyAvailability() === 'invisible';
             this.set('deliveryState', state);
             if (invisible) return;
