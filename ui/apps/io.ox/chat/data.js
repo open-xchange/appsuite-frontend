@@ -898,12 +898,12 @@ define('io.ox/chat/data', [
             var room = this.get(roomId);
             return api.leaveChannelByType(this.options.endpoint, roomId)
                 .then(function () { room.set('active', false); })
-                .fail(function (err) { console.log(err); });
+                .fail(function (err) { console.error(err); });
         },
 
         leaveGroup: function (roomId) {
             return api.leaveChannelByType(this.options.endpoint, roomId)
-                .fail(function (err) { console.log(err); });
+                .fail(function (err) { console.error(err); });
         }
     });
 
@@ -1066,7 +1066,6 @@ define('io.ox/chat/data', [
 
                     if (newMessage.get('type') === 'system') model.parseSystemMessage(message, roomId);
                     if (!mySelf && (isActive() || isHidden)) {
-                        console.log('play sound');
                         sounds.play();
                     }
                 });

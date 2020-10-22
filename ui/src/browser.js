@@ -313,7 +313,7 @@
         },
 
         // combination of browser & display
-        device: memoize(function (condition, debug) {
+        device: memoize(function (condition) {
             // add support for language checks
             var misc = {}, locale = (ox.locale || 'en_US').toLowerCase();
             misc[locale] = true;
@@ -336,9 +336,6 @@
                 match = match.toLowerCase();
                 return browserLC[match] || display[match] || misc[match];
             });
-            if (debug) {
-                console.debug(condition);
-            }
             try {
                 /*eslint no-new-func: 0*/
                 return new Function('return !!(' + condition + ')')();
