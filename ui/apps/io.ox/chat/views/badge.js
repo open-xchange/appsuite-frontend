@@ -15,7 +15,7 @@ define('io.ox/chat/views/badge', ['io.ox/backbone/views/disposable', 'io.ox/chat
 
     'use strict';
 
-    var Badgeiew = DisposableView.extend({
+    var BadgeView = DisposableView.extend({
 
         tagName: 'button',
         className: 'user-badge',
@@ -39,5 +39,5 @@ define('io.ox/chat/views/badge', ['io.ox/backbone/views/disposable', 'io.ox/chat
         }
     });
 
-    return Badgeiew;
+    return BadgeView;
 });
