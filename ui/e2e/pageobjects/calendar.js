@@ -119,6 +119,7 @@ module.exports = {
         I.waitForVisible(this.locators.addparticipants.inside(context));
         I.waitForEnabled(this.locators.addparticipants.inside(context));
         I.fillField(this.locators.addparticipants.inside(context), name);
+        I.seeInField(this.locators.addparticipants.inside(context), name);
         // tokenfield/typeahead
         exists ?
             autocomplete.select(name, context.replace('.', '')) :

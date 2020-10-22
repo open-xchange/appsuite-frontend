@@ -1731,3 +1731,70 @@ Scenario('[C7427] Create appointment with external participants', async function
         checkViews();
     });
 });
+
+Scenario('[C7426] Create appointment with internal and external participants', async function (I, users, contexts, dialogs, calendar, mail) {
+    const day = moment().add(1, 'month').startOf('month').add(1, 'week').isoWeekday(2).format('M/D/YYYY'), // tuesday within next month for a stable clickable future appointment
+        calendarDay = `//td[contains(@aria-label, "${day}")]`,
+        subject = 'Meetup XY';
+
+    const ctx = await contexts.create(),
+        intUser = await users.create(),
+        extUser = await users.create(users.getRandom(), ctx);
+
+    function checkViews() {
+        I.waitForElement('~Go to next month', calendar.locators.mini);
+        I.retry(5).click('~Go to next month', calendar.locators.mini);
+        I.retry(5).click(calendarDay, calendar.locators.mini);
+        ['Day', 'Week', 'Workweek', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
+            I.waitForText(subject, 5, '.page.current .appointment');
+        }));
+    }
+
+    function checkAppointment() {
+        mail.waitForApp();
+        mail.selectMail('New appointment: ' + subject);
+        I.waitForElement('.mail-detail-frame');
+
+        I.waitForText('Accept', '.mail-detail-pane');
+        I.wait(0.2); // gentle wait for listeners
+        I.retry(5).click('Accept', '.mail-detail-pane');
+        I.waitForDetached('.mail-detail-frame');
+
+        I.openApp('Calendar');
+        calendar.waitForApp();
+        checkViews();
+    }
+
+    await session('Alice', async () => {
+        I.login('app=io.ox/calendar');
+
+        calendar.waitForApp();
+        calendar.newAppointment();
+        await within('.io-ox-calendar-edit-window', async () => {
+            I.retry(5).fillField('Subject', subject);
+            I.fillField('Location', 'Conference Room 123');
+            I.click('.datepicker-day-field');
+            I.waitForFocus('.datepicker-day-field');
+            I.fillField(calendar.locators.startdate, day);
+            I.pressKey('Enter');
+            I.clearField(calendar.locators.starttime);
+            I.fillField(calendar.locators.starttime, '01:00 PM');
+            I.pressKey('Enter');
+            await calendar.addParticipant(intUser.userdata.primaryEmail, true);
+            await calendar.addParticipant(extUser.userdata.primaryEmail, false);
+            I.click('Create');
+        });
+        I.waitForDetached('.io-ox-calendar-edit-window');
+        checkViews();
+    });
+
+    await session('Internal User', async () => {
+        I.login('app=io.ox/mail', { user: intUser });
+        checkAppointment();
+    });
+
+    await session('External User', async () => {
+        I.login('app=io.ox/mail', { user: extUser });
+        checkAppointment();
+    });
+});
