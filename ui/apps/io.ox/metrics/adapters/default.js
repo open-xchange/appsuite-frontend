@@ -31,7 +31,7 @@ define('io.ox/metrics/adapters/default', [
     // piwik uses global var to allow pushing before tracker is fully loaded
     window._paq = window._paq || [];
 
-    if (!api || !lib) console.log('Error: Matomo/Piwik is enabled but no backend URL was configured!');
+    if ((!api || !lib) && ox.debug) console.log('Error: Matomo/Piwik is enabled but no backend URL was configured!');
 
     point.extend({
         id: 'piwik',
