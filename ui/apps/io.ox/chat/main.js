@@ -163,6 +163,11 @@ define('io.ox/chat/main', [
             var chat = data.chats.active.find(function (model) {
                 return model.get('type') === 'private' && Object.keys(model.get('members')).indexOf(cmd.email) >= 0;
             });
+            if (!chat) {
+                chat = data.chats.recent.find(function (model) {
+                    return model.get('type') === 'private' && Object.keys(model.get('members')).indexOf(cmd.email) >= 0;
+                });
+            }
             if (chat) {
                 if (!chat.get('active')) this.resubscribeChat(chat.get('roomId'));
                 return this.showChat(chat.get('roomId'), { model: chat });
