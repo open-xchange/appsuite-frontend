@@ -1066,13 +1066,8 @@ define('io.ox/chat/data', [
                     }
 
                     if (newMessage.get('type') === 'system') model.parseSystemMessage(message, roomId);
-<<<<<<< HEAD
-                    if (!mySelf && (isActive() || isHidden)) {
-                        sounds.play();
-=======
                     if (!mySelf && (!isActive() || settings.get('hidden'))) {
                         events.trigger('sound:play:incoming');
->>>>>>> 9b78afaad7... Chat: Fixed sound handling (only play if user is inactive)
                     }
                 });
             });
