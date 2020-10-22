@@ -24,23 +24,23 @@ define('io.ox/files/invitations/register', [
     'use strict';
 
     var i18n = {
-        'mount': gt('Add'),
-        'unmount': gt('Remove'),
+        'subscribe': gt('Add'),
+        'unsubscribe': gt('Remove'),
         'remount': gt('Add again'),
         'ignore': gt('Ignore')
     };
 
     var buttonClasses = {
-        'mount': 'btn-success accept',
+        'subscribe': 'btn-success accept',
         'remount': 'btn-success accept',
-        'unmount': 'btn-danger',
+        'unsubscribe': 'btn-danger',
         'ignore': ''
     };
 
     var success = {
-        'mount': gt('You have added the shared folder'),
+        'subscribe': gt('You have added the shared folder'),
         'remount': gt('You have updated the share'),
-        'unmount': gt('You have removed the share')
+        'unsubscribe': gt('You have removed the share')
     };
 
     var messages = {
@@ -56,9 +56,9 @@ define('io.ox/files/invitations/register', [
     };
 
     var actions = {
-        'subscribed': ['unmount'],
-        'addable': ['ignore', 'mount'],
-        'addable_with_password': ['ignore', 'mount'],
+        'subscribed': ['unsubscribe'],
+        'addable': ['ignore', 'subscribe'],
+        'addable_with_password': ['ignore', 'subscribe'],
         'inaccessible': ['remount'],
         'unsupported': ['ignore'],
         'unresolvable': ['ignore'],
