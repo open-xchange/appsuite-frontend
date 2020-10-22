@@ -17,7 +17,6 @@ define('io.ox/chat/data', [
     'io.ox/contacts/api',
     'io.ox/switchboard/api',
     'io.ox/switchboard/presence',
-    'io.ox/chat/sounds',
     'io.ox/mail/sanitizer',
     'io.ox/chat/util',
     'io.ox/core/active',
@@ -25,7 +24,7 @@ define('io.ox/chat/data', [
     'io.ox/core/notifications',
     'settings!io.ox/chat',
     'gettext!io.ox/chat'
-], function (api, events, contactsApi, switchboardApi, presence, sounds, sanitizer, util, isActive, http, notifications, settings, gt) {
+], function (api, events, contactsApi, switchboardApi, presence, sanitizer, util, isActive, http, notifications, settings, gt) {
 
     'use strict';
 
@@ -56,10 +55,13 @@ define('io.ox/chat/data', [
 
     var UserSettings = BaseModel.extend({
         defaults: {
-            emailNotification: 'always'
+            emailNotification: 'always',
+            soundFile: 'bongo1.mp3',
+            soundEnabled: true
         },
 
         initialize: function () {
+            this.initialized = new $.Deferred();
             this.on('change', this.onChange);
         },
 
@@ -71,7 +73,7 @@ define('io.ox/chat/data', [
         },
 
         onChange: _.throttle(function () {
-            this.saven();
+            this.save();
         }, 5000),
 
         save: function (yell) {
@@ -1044,8 +1046,7 @@ define('io.ox/chat/data', [
             socket.on('chat:message:new', function (attr) {
                 var roomId = attr.roomId,
                     message = attr.message,
-                    mySelf = message.sender === data.user.email,
-                    isHidden = settings.get('hidden');
+                    mySelf = message.sender === data.user.email;
 
                 // stop typing
                 events.trigger('typing:' + roomId, message.sender, false);
@@ -1065,8 +1066,13 @@ define('io.ox/chat/data', [
                     }
 
                     if (newMessage.get('type') === 'system') model.parseSystemMessage(message, roomId);
+<<<<<<< HEAD
                     if (!mySelf && (isActive() || isHidden)) {
                         sounds.play();
+=======
+                    if (!mySelf && (!isActive() || settings.get('hidden'))) {
+                        events.trigger('sound:play:incoming');
+>>>>>>> 9b78afaad7... Chat: Fixed sound handling (only play if user is inactive)
                     }
                 });
             });

@@ -65,6 +65,16 @@ define('io.ox/chat/settings/pane', [
                     ])
                 );
             }
+        },
+        {
+            id: 'sound-notifications',
+            index: INDEX += 100,
+            render: function () {
+                this.$el.append(
+                    util.checkbox('soundEnabled', gt('Enable notification sounds'), data.userSettings)
+                );
+            }
         }
     );
+
 });

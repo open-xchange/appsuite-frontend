@@ -327,7 +327,7 @@ define('io.ox/chat/views/chat', [
                 var cancel = $('<button type="button" class="btn btn-link cancel-btn">').attr('aria-label', gt('Cancel'))
                     .append($('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Cancel')));
                 var attachment = $('<button type="button" class="btn btn-link pull-right file-upload-btn">').attr('aria-label', gt('Upload file'))
-                    .append($('<i class="fa fa-paperclip fa-flip-horizontal" aria-hidden="true">').attr('title', gt('Upload file')));
+                    .append($('<i class="fa fa-paperclip" aria-hidden="true">').attr('title', gt('Upload file')));
                 var input = $('<input type="file" class="file-upload-input hidden" multiple>');
 
                 return [attachment, input, this.$editor, cancel, send];

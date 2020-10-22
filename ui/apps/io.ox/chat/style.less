@@ -278,7 +278,7 @@
 
     .navigation-actions {
         padding-top: 8px;
-        padding-bottom: 16px;
+        padding-bottom: 8px;
 
         .btn-nav {
             position: relative;
@@ -746,7 +746,7 @@
             justify-content: flex-start;
 
             &.myself {
-                padding-right: 0;
+                padding-right: 6px;
             }
 
             .body, .content { max-width: 100%; }
@@ -761,7 +761,7 @@
             }
 
             .preview-wrapper {
-                max-width: 100%;
+                max-width: 320px;
                 max-height: 400px;
 
                 > div {
@@ -908,7 +908,7 @@
     .controls {
         position: relative;
         display: flex;
-        align-items: center;
+        align-items: flex-end;
         height: @controlsHeight;
 
         textarea {
@@ -918,7 +918,12 @@
             height: 100%;
         }
 
-        button { font-size: 18px; }
+        button {
+            &.file-upload-btn {
+                font-size: 20px;
+            }
+            font-size: 18px;
+        }
 
         .cancel-btn {
             display: none;

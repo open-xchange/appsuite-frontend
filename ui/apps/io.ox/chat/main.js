@@ -640,6 +640,7 @@ define('io.ox/chat/main', [
         win.$body.parent().idle();
     }).then(function success() {
         win.draw();
+        require(['io.ox/chat/sounds']);
     }, function fail() {
         win.$body.parent().idle();
         win.drawAuthorizePane();
