@@ -1685,13 +1685,12 @@ Scenario('[C7435] Create appointment via email', async function (I, mail, users,
     });
 });
 
-Scenario('[C7427] Create appointment with external participants', async function (I, users, contexts, dialogs, calendar) {
+Scenario('[C7427] Create appointment with external participants', async function (I, users, contexts, dialogs, calendar, mail) {
     const subject = 'Meetup XY',
         ctx = await contexts.create(),
         extUser = await users.create(users.getRandom(), ctx);
 
     function checkViews() {
-        I.say('Check views');
         ['Day', 'Week', 'Workweek', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
             I.waitForText(subject, 5, '.page.current .appointment');
         }));
@@ -1702,13 +1701,11 @@ Scenario('[C7427] Create appointment with external participants', async function
 
         calendar.waitForApp();
         calendar.newAppointment();
-        within('.io-ox-calendar-edit-window', () => {
+        await within('.io-ox-calendar-edit-window', async () => {
             I.fillField('Subject', subject);
             I.fillField('Location', 'Conference Room 123');
             I.fillField(calendar.locators.starttime, '01:00 PM');
-            I.fillField(calendar.locators.addparticipants, extUser.userdata.primaryEmail);
-            I.pressKey('Enter');
-            I.waitForText('Participants (2)');
+            await calendar.addParticipant(extUser.userdata.primaryEmail, false);
             I.click('Create');
         });
         I.waitForDetached('.io-ox-calendar-edit-window');
@@ -1717,17 +1714,17 @@ Scenario('[C7427] Create appointment with external participants', async function
     });
 
     await session('External User', async () => {
-        I.login('app=io.ox/calendar', { user: extUser });
-        I.openApp('Mail');
-        I.waitForText('New appointment: ' + subject, 30);
-        I.retry(5).click('New appointment: ' + subject);
+        I.login('app=io.ox/mail', { user: extUser });
+        mail.waitForApp();
+        mail.selectMail('New appointment: ' + subject);
         I.waitForElement('.mail-detail-frame');
 
         I.waitForText('Accept', '.mail-detail-pane');
-        I.click('Accept', '.mail-detail-pane');
+        I.retry(5).click('Accept', '.mail-detail-pane');
         I.waitForDetached('.mail-detail-frame');
 
         I.openApp('Calendar');
+        calendar.waitForApp();
         checkViews();
     });
 });
