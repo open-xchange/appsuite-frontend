@@ -129,7 +129,7 @@ define('io.ox/mail/compose/model', [
         },
 
         attachVCard: function () {
-            composeAPI.space.attachments.vcard(this.get('id')).then(function (vcard) {
+            attachmentsAPI.vcard(this.get('id')).then(function (vcard) {
                 this.get('attachments').add(vcard);
             }.bind(this));
         },
@@ -315,10 +315,10 @@ define('io.ox/mail/compose/model', [
             if (!silent) this.trigger('before:save');
             return composeAPI.space.update(this.get('id'), diff).then(function success() {
                 if (!silent) this.trigger('success:save');
-            }.bind(this), function fail() {
+            }.bind(this), function fail(e) {
                 this.prevAttributes = prevAttributes;
                 if (ox.debug) console.warn('Update composition space failed', this.get('id'));
-                if (!silent) this.trigger('fail:save');
+                if (!silent) this.trigger('fail:save', e);
             }.bind(this));
         },
 

@@ -592,9 +592,9 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.model, 'change', _.throttle(this.onChangeSaved.bind(this, 'dirty'), 100));
             this.listenTo(this.model, 'before:save', this.onChangeSaved.bind(this, 'saving'));
             this.listenTo(this.model, 'success:save', this.onChangeSaved.bind(this, 'saved'));
+            this.listenTo(this.model, 'change:content', this.onChangeContent);
             this.listenTo(this.config, 'change:editorMode', this.toggleEditorMode);
             this.listenTo(this.config, 'change:vcard', this.onAttachVcard);
-            this.listenTo(this.model, 'change:content', this.onChangeContent);
 
             // handler can be found in signatures.js
             this.listenTo(this.config, 'change:signatureId', this.setSignature);
