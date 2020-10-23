@@ -235,7 +235,7 @@ define('io.ox/files/toolbar', [
             );
 
             app.updateToolbar = _.debounce(function (selection) {
-                if (!this.listView.collection.complete) {
+                if (this.listView.isBusy) {
                     var dropdownToggle = toolbarView.$el.find('a[data-toggle="dropdown"]');
                     dropdownToggle.attr('data-toggle', []).addClass('disabled');
                     this.listView.collection.once('complete', function () {
