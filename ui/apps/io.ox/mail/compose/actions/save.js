@@ -64,7 +64,10 @@ define('io.ox/mail/compose/actions/save', [
             index: 1000,
             perform: function (baton) {
                 return baton.model.saveDraft().then(function (res) {
-                    baton.msgref = res.data;
+                    baton.data = {
+                        id: res.data.id,
+                        folder_id: res.data.folderId
+                    };
                 });
             }
         },
@@ -83,7 +86,7 @@ define('io.ox/mail/compose/actions/save', [
             id: 'reload',
             index: 1200,
             perform: function (baton) {
-                var opt = mailUtil.parseMsgref(mailAPI.separator, baton.msgref);
+                var opt = baton.data;
                 switch (baton.model.get('contentType')) {
                     case 'text/plain':
                         opt.view = 'raw';

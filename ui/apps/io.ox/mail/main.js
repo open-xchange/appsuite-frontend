@@ -1904,9 +1904,7 @@ define('io.ox/mail/main', [
                 if (result.error) {
                     return $.Deferred().reject(result).promise();
                 } else if (result.data) {
-                    var base = _(result.data.toString().split(api.separator)),
-                        id = base.last(),
-                        folder = base.without(id).join(api.separator);
+                    var folder = result.data.folderId;
                     $.when(accountAPI.getUnifiedMailboxName(), accountAPI.getPrimaryAddress())
                     .done(function (isUnified, senderAddress) {
                         // check if mail was sent to self to update inbox counters correctly

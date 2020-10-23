@@ -341,6 +341,7 @@ define('io.ox/mail/compose/model', [
             var data = Backbone.Model.prototype.toJSON.call(this),
                 attachments = this.get('attachments');
             if (attachments && attachments.toJSON) data.attachments = attachments.toJSON();
+            delete data.mailPath;
             return data;
         },
 
