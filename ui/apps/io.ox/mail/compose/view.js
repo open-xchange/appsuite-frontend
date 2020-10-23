@@ -790,10 +790,12 @@ define('io.ox/mail/compose/view', [
         discard: function () {
             var self = this,
                 def = $.when(),
-                isDraft = this.model.keepDraftOnClose();
+                isDraft = this.model.keepDraftOnClose(),
+                mailPath = this.model.get('mailPath');
 
+            // TODO-859: smarter decisions for mailPath scenario needed
             // This dialog gets automatically dismissed
-            if ((this.dirty() || isDraft) && !this.config.get('autoDismiss')) {
+            if ((this.dirty() || isDraft || mailPath) && !this.config.get('autoDismiss')) {
                 var discardText = isDraft ? gt.pgettext('dialog', 'Delete draft') : gt.pgettext('dialog', 'Discard message'),
                     saveText = isDraft ? gt('Keep draft') : gt('Save as draft'),
                     modalText = isDraft ? gt('Do you really want to delete this draft?') : gt('Do you really want to discard your message?');
@@ -823,6 +825,7 @@ define('io.ox/mail/compose/view', [
                         var isAutoDiscard = self.config.get('autoDiscard'),
                             editFor = self.model.get('meta').editFor;
                         def.resolve();
+                        // TODO-859: check if this matches mailPath scenario
                         if (!isDraft || !isAutoDiscard || !editFor) return;
                         // only delete autosaved drafts that are not saved manually and have a msgref
                         mailAPI.remove([{ id: editFor.originalId, folder_id: editFor.originalFolderId }]);
