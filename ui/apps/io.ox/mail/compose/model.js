@@ -342,6 +342,7 @@ define('io.ox/mail/compose/model', [
                 attachments = this.get('attachments');
             if (attachments && attachments.toJSON) data.attachments = attachments.toJSON();
             delete data.mailPath;
+            delete data.cid;
             return data;
         },
 

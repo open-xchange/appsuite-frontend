@@ -14,13 +14,14 @@
 define('io.ox/mail/compose/main', [
     'io.ox/core/extensions',
     'io.ox/mail/api',
+    'io.ox/mail/compose/api',
     'io.ox/core/api/account',
     'io.ox/mail/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/mail/actions',
     'io.ox/mail/compose/actions'
-], function (ext, mailAPI, accountAPI, mailUtil, settings, gt) {
+], function (ext, mailAPI, composeAPI, accountAPI, mailUtil, settings, gt) {
 
     'use strict';
 
@@ -216,9 +217,25 @@ define('io.ox/mail/compose/main', [
             win.idle();
             $(window).trigger('resize');  // Needed for proper initial resizing in editors
             win.setTitle(this.model.get('subject') || gt('Compose'));
+            // update app cid for proper matching of draft/space
+            this.cid = this.model.get('cid');
             this.trigger('ready');
         }
     });
+
+    function getAppCID(data) {
+        data = data || {};
+        // use space id (restore case)
+        var id = data.id, mailref;
+        // edit case: prefer "space" instead of "id/folder"
+        if (data.type === 'edit' && data.original) {
+            mailref = _.cid({ id: data.original.id, folder: data.original.folderId });
+            id = composeAPI.space.hash[mailref] || mailref;
+        }
+        // fallback: backbone default
+        if (!id) return;
+        return 'io.ox/mail/compose:' + id + ':edit';
+    }
 
     // multi instance pattern
     function createInstance() {
@@ -275,11 +292,9 @@ define('io.ox/mail/compose/main', [
             var def = $.Deferred();
             obj = _.extend({}, obj);
 
-            if (obj.type === 'edit') {
-                var orig = obj.original,
-                    cid = _.cid({ id: orig.id, folder: orig.folderId });
-                app.cid = 'io.ox/mail/compose:' + cid + ':' + obj.type;
-            }
+            // update app cid
+            var customCID = getAppCID(obj);
+            app.cid = customCID ? customCID : app.cid;
 
             // Set window and toolbars invisible initially
             win.nodes.header.addClass('sr-only');
@@ -356,12 +371,8 @@ define('io.ox/mail/compose/main', [
         getApp: createInstance,
 
         reuse: function (method, data) {
-            // only reuse for draft edit
-            if (data && data.type === 'edit') {
-                var cid = _.cid({ id: data.original.id, folder: data.original.folderId });
-                return ox.ui.App.reuse('io.ox/mail/compose:' + cid + ':edit');
-            }
-            return false;
+            var customCID = getAppCID(data);
+            return customCID ? ox.ui.App.reuse(customCID) : false;
         }
     };
 });

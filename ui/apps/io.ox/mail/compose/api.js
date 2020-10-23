@@ -18,7 +18,7 @@ define('io.ox/mail/compose/api', [
 
     'use strict';
 
-    var api = {};
+    var api = {}, hash = {};
 
     _.extend(api, Backbone.Events);
 
@@ -80,11 +80,42 @@ define('io.ox/mail/compose/api', [
         };
     }());
 
+    // fill mapping cache (mailref to space) and cid constuction
+    var process = (function () {
+        function apply(space) {
+            var editFor = space.meta && space.meta.editFor,
+                mailPath = space.mailPath, mailref;
+            if (editFor) {
+            // db drafts (backward compability)
+                mailref = _.cid({ id: editFor.originalId, folder: editFor.originalFolderId });
+                space.cid = 'io.ox/mail/compose:' + mailref + ':edit';
+            }
+            if (mailPath) {
+            // real drafts
+                mailref = _.cid({ id: mailPath.id, folder: mailPath.folderId });
+                space.cid = 'io.ox/mail/compose:' + space.id + ':edit';
+            }
+            // add to mailref mapping;
+            hash[mailref] = space.id;
+            console.log(space.cid, mailref);
+            return space;
+        }
+
+        return function (data) {
+            //debugger;
+            return _.isArray(data) ? _.map(data, apply) : apply(data);
+        };
+    })();
+
     // composition space
     api.space = {
 
+        hash: hash,
+
+        process: process,
+
         all: function () {
-            return http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject,meta' } });
+            return http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject,meta' } }).then(process);
         },
 
         // limit of 3 currently
@@ -100,21 +131,25 @@ define('io.ox/mail/compose/api', [
                     originalAttachments: opt.attachments
                 },
                 contentType: 'application/json'
+            }).then(process).done(function (result) {
+                api.trigger('add', obj, result);
             });
         },
 
         get: function (id) {
-            return http.GET({ url: 'api/mail/compose/' + id });
+            return http.GET({ url: 'api/mail/compose/' + id }).then(process);
         },
 
         list: function () {
             return http.GET({ url: 'api/mail/compose' });
         },
 
-        remove: function (id) {
+        remove: function (id, data) {
             return http.DELETE({ url: 'api/mail/compose/' + id }).then(function (data) {
                 if (data && data.success) return data;
                 return $.Deferred().reject({ action: 'remove', error: 'unknown', id: id });
+            }).done(function (result) {
+                api.trigger('after:remove', data, result);
             });
         },
 
@@ -195,6 +230,8 @@ define('io.ox/mail/compose/api', [
             return http[_.browser.ie ? 'PUT' : 'PATCH']({
                 url: 'api/mail/compose/' + id,
                 data: $.extend({}, data)
+            }).then(process).done(function (result) {
+                api.trigger('after:update', data, result);
             });
         }
     };
