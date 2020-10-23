@@ -1820,7 +1820,8 @@ define('io.ox/mail/main', [
             app.folder.handleErrors();
         },
 
-        'save-draft': function (app) {
+        'database-drafts': function () {
+            // edit of existing draft
             composeAPI.on('before:send before:save', function (id, data) {
                 var editFor = data.meta.editFor;
                 if (!editFor) return;
@@ -1833,12 +1834,39 @@ define('io.ox/mail/main', [
                     });
                 });
             });
-            composeAPI.on('after:send after:save', function () {
+            // new draft created
+            composeAPI.on('after:save', function (data) {
+                if (data.mailPath) return;
+                var folder = app.folder.get();
+                if (account.is('drafts', folder)) app.listView.reload();
+            });
+            // existing draft removed
+            composeAPI.on('after:send', function (data) {
+                var editFor = data.meta.editFor;
+                if (!editFor) return;
                 var folder = app.folder.get();
                 if (account.is('drafts', folder)) app.listView.reload();
             });
         },
 
+        'real-drafts': function () {
+            // edit of existing draft
+            composeAPI.on('before:send', function removeFromPool(space, data) {
+                if (!data.mailPath) return;
+                var id = (data.mailPath || {}).id,
+                    folder = (data.mailPath || {}).folderId;
+                _(api.pool.getByFolder(folder)).each(function (collection) {
+                    collection.remove(_.cid({ id: id, folder_id: folder }));
+                });
+            });
+
+            // update
+            composeAPI.on('after:send after:update after:remove after:save add', function refreshView(data, result) {
+                if (!data.mailPath && !result.mailPath) return;
+                var folder = app.folder.get();
+                if (account.is('drafts', folder)) app.listView.reload();
+            });
+        },
 
         'mail-progress': function () {
             if (_.device('smartphone')) return;
@@ -1929,7 +1957,14 @@ define('io.ox/mail/main', [
                 }
             }
 
-            composeAPI.on('after:save after:send', function (data, result) {
+            // only needed for db-based drafts
+            composeAPI.on('after:save', function (data, result) {
+                if (data.mailPath) return;
+                resetMailFolders();
+                refreshFolders(data, result);
+            });
+
+            composeAPI.on('after:send', function (data, result) {
                 resetMailFolders();
                 refreshFolders(data, result);
             });
