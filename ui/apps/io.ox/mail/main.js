@@ -1820,6 +1820,72 @@ define('io.ox/mail/main', [
             app.folder.handleErrors();
         },
 
+        // drafts deleted outside of this client
+        'composition-spaces': function () {
+
+            api.on('deleted-mails', function (e, ids) {
+                _.each(ids, function (mail) {
+                    var space = composeAPI.space.hash[mail.cid];
+                    if (!space) return;
+                    quit(ox.ui.apps.getByCID('io.ox/mail/compose:' + space + ':edit'));
+                });
+            });
+
+            ox.on('refresh^', refresh);
+            composeAPI.on('refresh', refresh);
+            function refresh() {
+                var activespaces = {};
+                composeAPI.space.all().then(function transform(list) {
+                    return _.chain(list).map(function (space) {
+                        activespaces[space.cid] = true;
+                        return {
+                            //#. $1$s is the subject of an email
+                            description: gt('Mail: %1$s', space.subject || gt('No subject')),
+                            floating: true,
+                            id: space.id + Math.random().toString(16),
+                            cid: space.cid,
+                            keepOnRestore: false,
+                            module: 'io.ox/mail/compose',
+                            point: space.id,
+                            timestamp: new Date().valueOf(),
+                            ua: navigator.userAgent
+                        };
+                    }).filter(function (space) {
+                        // filter out already loaded ones
+                        return !ox.ui.apps.getByCID(space.cid);
+                    }).value();
+                }).then(function (list) {
+                    // add new ones
+                    return ox.ui.App.restoreLoad({ spaces: list });
+                }).then(function () {
+                    // look for removed spaces
+                    ox.ui.apps.each(function (app) {
+                        // wrong module
+                        if (!app || app.cid.indexOf('io.ox/mail/compose:') !== 0) return;
+                        // still open
+                        if (activespaces[app.cid]) return;
+                        // loaded and active
+                        quit(app);
+                    });
+                });
+            }
+
+            function quit(app) {
+                if (!app) return;
+                var win = app.get('window');
+                // active
+                if (win && app.view && app.view.model) {
+                    return app.view.model.trigger('space:removed');
+                }
+                // not loaded yet
+                var cid = app.cid;
+                return app.quit().done(function () {
+                    var model = ox.ui.floatingWindows.findWhere({ cid: cid });
+                    if (model) model.trigger('close');
+                });
+            }
+        },
+
         'database-drafts': function () {
             // edit of existing draft
             composeAPI.on('before:send before:save', function (id, data) {

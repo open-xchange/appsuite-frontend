@@ -593,6 +593,8 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.model, 'before:save', this.onChangeSaved.bind(this, 'saving'));
             this.listenTo(this.model, 'success:save', this.onChangeSaved.bind(this, 'saved'));
             this.listenTo(this.model, 'change:content', this.onChangeContent);
+            this.listenTo(this.model, 'space:removed', this.onRemovedSpace);
+
             this.listenTo(this.config, 'change:editorMode', this.toggleEditorMode);
             this.listenTo(this.config, 'change:vcard', this.onAttachVcard);
 
@@ -657,6 +659,26 @@ define('io.ox/mail/compose/view', [
             // easy one: when content get's removed completely set signature to 'no signature'
             if (value && value !== '<div style="" class="default-style"><br></div>') return;
             this.config.set('signatureId', '');
+        },
+
+        onRemovedSpace: function () {
+            var view = this, win = this.app.getWindow();
+            if (win) win.busy();
+
+            require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                new ModalDialog({ title: gt('Draft removed'), description: gt('This draft was removed. Please note that restoring does not cover attachments.') })
+                    .addButton({ label: gt('Restore'), className: 'btn-default', action: 'clone' })
+                    .addButton({ label: gt('Discard'), action: 'discard' })
+                    .on('clone', function () {
+                        view.model.clone().done(function () {
+                            if (win) win.idle();
+                        });
+                    })
+                    .on('discard', function () {
+                        view.app.quit();
+                    })
+                    .open();
+            });
         },
 
         ariaLiveUpdate: function (e, msg) {

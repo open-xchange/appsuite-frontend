@@ -846,6 +846,7 @@ define('io.ox/core/desktop', [
                         if (_.device('!smartphone') && (app.options.floating || app.options.closable)) {
                             var model, win;
                             if (app.options.floating) {
+                                // note: cid is stored as model property here
                                 model = new FloatingWindow.Model({ cid: obj.cid, minimized: true, id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon, name: app.options.name });
                                 win = new FloatingWindow.TaskbarElement({ model: model }).render();
                                 FloatingWindow.collection.add(model);

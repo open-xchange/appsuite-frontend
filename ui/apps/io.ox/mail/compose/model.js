@@ -84,6 +84,8 @@ define('io.ox/mail/compose/model', [
                 this.set(data);
                 if (!this.prevAttributes) this.prevAttributes = data;
                 this.listenTo(data.attachments, 'remove', this.onRemoveAttachment);
+                this.listenTo(data.attachments, 'upload:failed', this.onRemovedSpace);
+                this.listenTo(this, 'fail:save', this.onRemovedSpace);
             }.bind(this));
         },
 
@@ -93,6 +95,10 @@ define('io.ox/mail/compose/model', [
 
             // explicitedly call save here to push the initial changes of the ui (quoting/from/bcc) to the composition space
             return this.save(_.device('smartphone'));
+        },
+
+        onRemovedSpace: function (e) {
+            if (e && e.code === 'MSGCS-0007') this.trigger('space:removed', e);
         },
 
         sendOrSave: function (method) {
@@ -275,6 +281,23 @@ define('io.ox/mail/compose/model', [
             }.bind(this));
         },
 
+        clone: function () {
+            // get new id
+            this.unset('id');
+            this.unset('type');
+            this.unset('original');
+            var collection = this.get('attachments');
+            collection.each(function (attachment) {
+                if (!attachment.get('uploaded')) return;
+                collection.remove(attachment);
+            });
+            return composeAPI.space.add({ type: 'new' }, {}).then(function (data) {
+                this.set('id', data.id);
+                this.prevAttributes = {};
+                this.save();
+            }.bind(this));
+        },
+
         /**
          * Traverses the two given objects and only return attributes (and sub attributes) which has been changed.
          * Used to only update necessary parts of the mail model
@@ -333,7 +356,7 @@ define('io.ox/mail/compose/model', [
             return $.when(_(this.get('attachments')).pluck('done').map(function (def) {
                 return $.when(def).catch();
             })).then(function () {
-                return composeAPI.space.remove(this.get('id'));
+                return composeAPI.space.remove(this.get('id'), this.toJSON());
             }.bind(this));
         },
 
