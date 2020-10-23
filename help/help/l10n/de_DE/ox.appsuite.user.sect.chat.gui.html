@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="Benutzeranleitung">
 <link rel="up" href="ox.appsuite.user.chap.chat.html" title="Kapitel 10. Chat">
 <link rel="prev" href="ox.appsuite.user.chap.chat.html" title="Kapitel 10. Chat">
-<link rel="next" href="ox.appsuite.user.sect.chat.conversations.html" title="10.2. Mit Konversationen arbeiten">
+<link rel="next" href="ox.appsuite.user.sect.chat.conversations.html" title="10.2. Mit Chats arbeiten">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -38,8 +38,8 @@
       Dieses Fenster wird für alle <span class="phrase">Chat</span>-Funktionen verwendet:
       </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Suchen und Anzeigen von Kontakten, Gruppenkonversationen und öffentlichen Kanälen</p></li>
-<li class="listitem"><p role="presentation">Anlegen und Bearbeiten von Gruppenkonversationen und von öffentlichen Kanälen</p></li>
+<li class="listitem"><p role="presentation">Suchen und Anzeigen von Kontakten, Gruppen und öffentlichen Kanälen</p></li>
+<li class="listitem"><p role="presentation">Anlegen und Bearbeiten von Gruppen und von öffentlichen Kanälen</p></li>
 <li class="listitem"><p role="presentation">Direktnachrichten austauschen mit einem einzelnen Kontakt, Nachrichten austauschen in einer Gruppe oder in einem öffentlichen Kanal</p></li>
 </ul>
 <p>
@@ -52,31 +52,42 @@
       </p>
 <p class="title">Inhalt</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">In der Titelleiste: Symbol <span class="guibutton"><strong>Stick to the right side</strong></span>
+<li class="listitem"><p role="presentation">In der Titelleiste: Symbol <span class="guibutton"><strong>Rechts verankern</strong></span>
             <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.chat.gui.stick"><img src="../../images/appsuite_user_icon_chat_start.png"></span>. Verankert das Chat-Fenster am rechten Rand.</p></li>
 <li class="listitem"><p role="presentation">Ihr Profilfoto, Ihr Anzeigename</p></li>
 <li class="listitem">
-<p role="presentation">Symbol <span class="guibutton"><strong>Start new conversation</strong></span>
+<p role="presentation">Symbol <span class="guibutton"><strong>Neu</strong></span>
             <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.chat.gui.start"><img src="../../images/appsuite_user_icon_chat_start.png"></span>. 
             Öffnet ein Menü mit diesen Funktionen: 
             </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation">Eine private Konversation mit einem einzelnen Kontakt anlegen</p></li>
-<li class="listitem"><p role="presentation">Eine Gruppenkonversation mit mehreren Teilnehmern anlegen</p></li>
+<li class="listitem"><p role="presentation">Einen privaten Chat mit einem einzelnen Kontakt anlegen</p></li>
+<li class="listitem"><p role="presentation">Einen Gruppenchat mit mehreren Teilnehmern anlegen</p></li>
 <li class="listitem"><p role="presentation">Einen öffentlichen Kanal anlegen, dem andere Kontakte beitreten können</p></li>
 </ul>
 <p role="presentation">
           </p>
 </li>
-<li class="listitem"><p role="presentation">Eingabefeld <span class="guibutton"><strong>Search or start a new chat</strong></span>. 
-            Eintippen eines Suchbegriffs zeigt in der Liste Kontakte, Konversationen und öffentliche Kanäle, die zum Suchbegriff passen.
-          </p></li>
 <li class="listitem">
-<p role="presentation">Die Liste der Konversationen mit Datum oder Uhrzeit und dem Anfang der letzten Nachricht
+<p role="presentation">Eingabefeld <span class="guibutton"><strong>Suchen oder neuen Chat starten</strong></span>. 
+            Eintippen eines Suchbegriffs zeigt in der Liste diese Elemente:
             </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem">
-<p role="presentation">Ein Symbol zeigt den Lesestatus der Nachricht:
+<p role="presentation">Kontakte, Gruppen und öffentliche Kanäle, deren Namen zum Suchbegriff passen</p>
+<p role="presentation">Anklicken eines Kontakts startet einen privaten Chat mit diesem Kontakt</p>
+</li>
+<li class="listitem"><p role="presentation">Chats, die den Suchbegriff enthalten</p></li>
+</ul>
+<p role="presentation">
+          </p>
+</li>
+<li class="listitem">
+<p role="presentation">Die Liste der Chats mit Datum oder Uhrzeit und dem Anfang der letzten Nachricht
+            </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem">
+<p role="presentation">Bei einem privaten Chat oder einem Gruppenchat zeigt ein Symbol den Lesestatus der Nachricht:
                   </p>
 <ul class="itemizedlist" style="list-style-type: square; ">
 <li class="listitem"><p role="presentation">Ein grauer Haken: Die Nachricht ist auf dem Server angekommen.</p></li>
@@ -86,58 +97,58 @@
 <p role="presentation">
                 </p>
 </li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Recent conversations</strong></span>. 
-                  Zeigt im Konversationsfeld die verborgenen Konversationen.
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Chat history</strong></span>. 
+                  Zeigt im Chat-Feld die verborgenen Chats.
                 </p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>All channels</strong></span>. 
-                  Zeigt im Konversationsfeld alle öffentlichen Kanäle. Durch Anklicken von <span class="guibutton"><strong>Join</strong></span> treten Sie einem Kanal bei.
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Alle Kanäle</strong></span>. 
+                  Zeigt im Chat-Feld alle öffentlichen Kanäle. Durch Anklicken von <span class="guibutton"><strong>Join</strong></span> treten Sie einem Kanal bei.
                 </p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>All files</strong></span>. 
-                  Zeigt im Konversationsfeld eine Liste der Dateien, die in den Konversationen verwendet werden.
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Alle Dateien</strong></span>. 
+                  Zeigt im Chat-Feld eine Liste der Dateien, die in den Chats verwendet werden.
                 </p></li>
 </ul>
 <p role="presentation">
           </p>
 </li>
 <li class="listitem">
-<p role="presentation">Der Titel der Konversation, die in der Liste gewählt ist. 
+<p role="presentation">Der Titel des Chats, der in der Liste gewählt ist. 
             </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Name des Kontakts oder Name der Gruppe, Mitglieder der Gruppe</p></li>
 <li class="listitem">
-<p role="presentation">Symbol <span class="guibutton"><strong>More actions</strong></span>
+<p role="presentation">Symbol <span class="guibutton"><strong>Weitere Aktionen</strong></span>
                   <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.chat.gui.chatmenu"><img src="../../images/appsuite_user_icon_actions.png"></span>. Öffnet ein Menü mit diesen Funktionen:
                   </p>
 <ul class="itemizedlist" style="list-style-type: square; ">
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Hide chat</strong></span>. Verbirgt die aktuelle Konversation und die zugehörigen Nachrichten. Um die Konversation wieder 
-                        anzuzeigen, klicken Sie in der Liste auf <span class="guibutton"><strong>Recent conversations</strong></span>.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Chat ausblenden</strong></span>. Verbirgt den aktuellen Chat und die zugehörigen Nachrichten. Um den Chat wieder 
+                        anzuzeigen, klicken Sie in der Liste auf <span class="guibutton"><strong>Chat history</strong></span>.</p></li>
 <li class="listitem">
-<p role="presentation">Bei einer Gruppenkonversation oder einem öffentlichen Kanal:  </p>
-<p role="presentation"><span class="guibutton"><strong>Edit chat</strong></span> öffnet ein Fenster zum Bearbeiten der Konversation.</p>
-<p role="presentation">Durch Anklicken von <span class="guibutton"><strong>Leave chat</strong></span> verlassen Sie die Konversation.</p>
+<p role="presentation">Bei einem Gruppen-Chat oder einem öffentlichen Kanal:</p>
+<p role="presentation"><span class="guibutton"><strong>Chat bearbeiten</strong></span> öffnet ein Fenster zum Bearbeiten des Chats.</p>
+<p role="presentation">Durch Anklicken von <span class="guibutton"><strong>Leave chat</strong></span> verlassen Sie den Chat.</p>
 </li>
 </ul>
 <p role="presentation">
                 </p>
 </li>
 <li class="listitem"><p role="presentation">Das aktuelle Datum</p></li>
-<li class="listitem"><p role="presentation">Bei einer Gruppenkonversation: Die Namen der Mitglieder</p></li>
+<li class="listitem"><p role="presentation">Bei einem Gruppenchat: Die Namen der Mitglieder</p></li>
 </ul>
 <p role="presentation">
           </p>
 </li>
 <li class="listitem">
-<p role="presentation">Das Konversationsfeld 
+<p role="presentation">Das Chat-Feld 
             </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation">Enthält die gesendeten und empfangenen Nachrichten der Konversation, die in der Liste gewählt ist.</p></li>
-<li class="listitem"><p role="presentation">Zeigt Systemmeldungen an, wenn Gruppenkonversationen oder öffentliche Kanäle angelegt oder bearbeitet werden.</p></li>
+<li class="listitem"><p role="presentation">Enthält die gesendeten und empfangenen Nachrichten des Chats, der in der Liste gewählt ist.</p></li>
+<li class="listitem"><p role="presentation">Zeigt Systemmeldungen an, wenn Gruppenchats oder öffentliche Kanäle angelegt oder bearbeitet werden.</p></li>
 </ul>
 <p role="presentation">
           </p>
 </li>
-<li class="listitem"><p role="presentation">Das Nachrichtenfeld zum Eingeben einer Nachricht, die Sie in dieser Konversation senden wollen</p></li>
-<li class="listitem"><p role="presentation">Das Symbol <span class="guibutton"><strong>Anhang</strong></span> zum Hinzufügen von Dateien zu dieser Konversation</p></li>
+<li class="listitem"><p role="presentation">Das Nachrichtenfeld zum Eingeben einer Nachricht, die Sie in diesem Chat senden wollen</p></li>
+<li class="listitem"><p role="presentation">Das Symbol <span class="guibutton"><strong>Anhang</strong></span> zum Hinzufügen von Dateien zu diesem Chat</p></li>
 </ul>
 <p>
     </p>
@@ -145,11 +156,11 @@
       </p>
 <p class="title">Verwandte Themen:</p>
 <ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.conversations.create.html">Konversationen anlegen</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.conversations.edit.html">Konversationen bearbeiten</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.conversations.join.html">Einer Konversation beitreten</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.conversations.hide.html">Eine Konversation verbergen</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.conversations.leave.html">Eine Konversation verlassen</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.conversations.create.html">Chats anlegen</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.conversations.edit.html">Chats bearbeiten</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.conversations.join.html">Einem Chat beitreten</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.conversations.hide.html">Einen Chat ausblenden</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.conversations.leave.html">Einen Chat verlassen</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.text.html">Nachrichten senden oder lesen</a></p>
 </li></ul>
 <p>
