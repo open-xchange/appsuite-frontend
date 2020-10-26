@@ -60,6 +60,15 @@ define('io.ox/core/folder/api', [
                 if (!/^(contacts|calendar|tasks|event)$/.test(item.module)) return false;
                 // rename default calendar
                 if (item.id === String(calSettings.get('chronos/defaultFolderId'))) return true;
+                // shared folders that have createdfrom data available
+                if (util.is('shared', item) && item.created_from && userAPI.checkForName(item.created_from)) {
+                    //#. %1$s is the folder owner
+                    //#. %2$s is the folder title
+                    item.display_title = gt('%1$s: %2$s', userAPI.checkForName(item.created_from), item.title);
+                    return false;
+                }
+                // there is no user 0, that is just a dummy
+                if (item.created_by === 0) return false;
                 // any shared folder that has no name yet
                 return item.display_title === undefined && util.is('shared', item);
             }),
@@ -78,7 +87,7 @@ define('io.ox/core/folder/api', [
             _(renameItems).each(function (item) {
                 if (item.id === String(calSettings.get('chronos/defaultFolderId')) || item.title === gt('Calendar')) {
                     item.display_title = contactUtil.getFullName(hash[item.created_by]) || gt('Default calendar');
-                } else {
+                } else if (hash[item.created_by]) {
                     //#. %1$s is the folder owner
                     //#. %2$s is the folder title
                     item.display_title = gt('%1$s: %2$s', contactUtil.getFullName(hash[item.created_by]), item.title);

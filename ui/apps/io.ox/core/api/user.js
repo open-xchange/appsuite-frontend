@@ -331,7 +331,7 @@ define('io.ox/core/api/user', [
 
         // try extended data first (no need to request data from the server)
         var userData = data[type + '_from'],
-            name = checkForName(userData);
+            name = api.checkForName(userData);
 
         if (name) return $.when(name);
 
@@ -354,7 +354,7 @@ define('io.ox/core/api/user', [
         var node = document.createTextNode(''),
             // try extended data first (no need to request data from the server)
             userData = data[type + '_from'],
-            name = checkForName(userData);
+            name = api.checkForName(userData);
 
         if (name) {
             node.nodeValue = name;
@@ -380,7 +380,7 @@ define('io.ox/core/api/user', [
     };
 
     // helper to find the first usable name, uses contact util for language specific formats (lastname, firstname | firstname lastname etc)
-    function checkForName(userData) {
+    api.checkForName = function (userData) {
         var result;
         if (userData && (userData.displayName || !_.isEmpty(userData.contact))) {
             // try to get name via contact data
@@ -392,7 +392,7 @@ define('io.ox/core/api/user', [
         }
 
         return result;
-    }
+    };
 
     return api;
 });
