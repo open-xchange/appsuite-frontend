@@ -68,10 +68,10 @@ define('io.ox/files/invitations/register', [
     };
 
     var modules = {
-        1: 'deep-link-tasks',
-        2: 'deep-link-calendar',
-        3: 'deep-link-contacts',
-        8: 'deep-link-files'
+        'tasks': 'deep-link-tasks',
+        'calendar': 'deep-link-calendar',
+        'contacts': 'deep-link-contacts',
+        'infostore': 'deep-link-files'
     };
 
     function parsePassword(mailModel) {
