@@ -290,7 +290,9 @@ define('io.ox/contacts/api', [
             listPost: function (data) {
                 _(data).each(function (obj) {
                     // remove from cache if get cache is outdated
-                    api.caches.get.dedust(obj, 'last_modified');
+                    api.caches.get.dedust(obj, 'last_modified').then(function (dedust) {
+                        if (dedust) api.trigger('update:contact', obj);
+                    });
                 });
                 api.trigger('list:ready');
                 return data;

@@ -581,6 +581,14 @@ define('io.ox/contacts/main', [
                 }
             });
         },
+
+        'update:contact': function () {
+            api.on('update:contact', function (e, updated) {
+                if (_.cid(updated) === _.cid(app.currentContact)) {
+                    app.showContact(app.currentContact);
+                }
+            });
+        },
         /*
          * Folder view support
          */
