@@ -52,23 +52,29 @@ define('io.ox/mail/actions/delete', [
         });
     });
 
+    function getMsgRef(model) {
+        // db drafts (msgref) vs. real drafts (mailPath)
+        var mailPath = model.get('mailPath');
+        return mailPath ? _.cid({ id: mailPath.id, folder: mailPath.folderId }) : model.get('msgref');
+    }
+
+    //  TODO-859: could be potentially removed
     function ignoreCurrentlyEdited(list) {
         var hash = {};
         _.each(ox.ui.App.get('io.ox/mail/compose'), function (app) {
             // ignore not fully initialised (minimized) restore point instances
             if (!app.view) return;
-            hash[app.view.model.get('msgref')] = true;
+            hash[getMsgRef(app.view.model)] = true;
         });
         if (!Object.keys(hash).length) return list;
         return _.filter(list, function (mail) {
             if (!accountAPI.is('drafts', mail.folder_id)) return true;
             if (!mail.attachment) return true;
-            return !hash[mail.msgref];
+            return !hash[mail.cid];
         });
     }
 
     return function (baton) {
-
         var list = folderAPI.ignoreSentItems(baton.array()),
             all = list.slice(),
             shiftDelete = baton && baton.options.shiftDelete && settings.get('features/shiftDelete'),
