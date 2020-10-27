@@ -26,20 +26,20 @@ define('io.ox/files/invitations/register', [
     var i18n = {
         'subscribe': gt('Add'),
         'unsubscribe': gt('Remove'),
-        'remount': gt('Add again'),
+        'resubscribe': gt('Add again'),
         'ignore': gt('Ignore')
     };
 
     var buttonClasses = {
         'subscribe': 'btn-success accept',
-        'remount': 'btn-success accept',
+        'resubscribe': 'btn-success accept',
         'unsubscribe': 'btn-danger',
         'ignore': ''
     };
 
     var success = {
         'subscribe': gt('You have added the shared folder'),
-        'remount': gt('You have updated the share'),
+        'resubscribe': gt('You have updated the share'),
         'unsubscribe': gt('You have removed the share')
     };
 
@@ -59,12 +59,12 @@ define('io.ox/files/invitations/register', [
         'subscribed': ['unsubscribe'],
         'addable': ['ignore', 'subscribe'],
         'addable_with_password': ['ignore', 'subscribe'],
-        'inaccessible': ['remount'],
+        'inaccessible': ['resubscribe'],
         'unsupported': ['ignore'],
         'unresolvable': ['ignore'],
         'removed': ['ignore'],
         'forbidden': ['ignore'],
-        'credentials_refresh': ['remount']
+        'credentials_refresh': ['resubscribe']
     };
 
     var modules = {
@@ -131,7 +131,7 @@ define('io.ox/files/invitations/register', [
 
             // remove undefined
             data = _.pick(data, _.identity);
-            if (!/^(analyze|subscribe|unsubscribe|remount)$/.test(action)) return $.Deferred().reject({ error: 'unknwon action' });
+            if (!/^(analyze|subscribe|unsubscribe|resubscribe)$/.test(action)) return $.Deferred().reject({ error: 'unknwon action' });
             console.log('%c' + 'action', 'color: white; background-color: blue');
             console.log(data);
             console.log('');
