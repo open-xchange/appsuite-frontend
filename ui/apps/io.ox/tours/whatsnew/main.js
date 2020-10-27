@@ -64,9 +64,9 @@ define('io.ox/tours/whatsnew/main', [
 
     // dropdown link
     if (settings.get('whatsNew/menuEntry', true)) {
-        ext.point('io.ox/core/appcontrol/right/settings').extend({
+        ext.point('io.ox/core/appcontrol/right/help').extend({
             id: 'whats-new',
-            index: 300,
+            index: 260,
             extend: function () {
                 if (capabilities.has('guest')) return;
                 if (_.device('smartphone')) return;
