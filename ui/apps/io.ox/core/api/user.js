@@ -335,8 +335,8 @@ define('io.ox/core/api/user', [
 
         if (name) return $.when(name);
 
-        // try to get name via user id second
-        userData = data[type + '_by'] === 0 && api.isMyself(userData) ? ox.user_id : data[type + '_by'];
+        // try to get name via user id second, handles also cases when no created/modified _by/_from are provided by the backend
+        userData = data[type + '_by'] === 0 && userData && api.isMyself(userData) ? ox.user_id : data[type + '_by'];
 
         if (userData) return api.getName(userData);
 
@@ -361,8 +361,8 @@ define('io.ox/core/api/user', [
             return node;
         }
 
-        // try to get name via user id second
-        userData = data[type + '_by'] === 0 && api.isMyself(userData) ? ox.user_id : data[type + '_by'];
+        // try to get name via user id second, handles also cases when no created/modified _by/_from are provided by the backend
+        userData = data[type + '_by'] === 0 && userData && api.isMyself(userData) ? ox.user_id : data[type + '_by'];
 
         if (userData) api.getTextNode(userData, { node: node });
 
