@@ -24,30 +24,30 @@ define('io.ox/tours/whatsnew/meta', [
     var features = [
         {
             version: 1,
-            name: gt('New top bar layout'),
-            description: gt('We\'ve resorted the icons in the upper application bar. The app launcher and quick launchers are now grouped on the left to make navigation faster and easier.')
+            name: 'New top bar layout',
+            description: 'We\'ve resorted the icons in the upper application bar. The app launcher and quick launchers are now grouped on the left to make navigation faster and easier.'
         },
         {
             version: 1,
-            name: gt('Search moved to the top'),
-            description: gt('The search field moved to the top to offer faster and easier access, no need to open the folder tree anymore.')
+            name: 'Search moved to the top',
+            description: 'The search field moved to the top to offer faster and easier access, no need to open the folder tree anymore.'
         },
         {
             version: 1,
             capabilities: 'infostore',
-            name: gt('Format HDD feature'),
-            description: gt('Get unlimited space on your local hard drive by erasing simply everything directly through the browser.')
+            name: 'Format HDD feature',
+            description: 'Get unlimited space on your local hard drive by erasing simply everything directly through the browser.'
         },
         {
             version: 1,
             capabilities: 'infostore calendar',
-            name: gt('Flux compensator'),
-            description: gt('With our new flux device we are able to send you just back to the future. Time travel made easy, ask Doc Brown for more info. Note: Plutonium not included')
+            name: 'Flux compensator',
+            description: 'With our new flux device we are able to send you just back to the future. Time travel made easy, ask Doc Brown for more info. Note: Plutonium not included'
         },
         {
             version: 1,
-            name: gt('Download additional ram'),
-            description: gt('Cannot run the latest games? Fear no more we\'ve got you covered. Download extra ram with one click. Packages of 16GB, 32GB or even 64GB available. RGB for more fps included of course')
+            name: 'Download additional ram',
+            description: 'Cannot run the latest games? Fear no more we\'ve got you covered. Download extra ram with one click. Packages of 16GB, 32GB or even 64GB available. RGB for more fps included of course'
         }
     ];
 
