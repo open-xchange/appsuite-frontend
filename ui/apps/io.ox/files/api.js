@@ -24,11 +24,12 @@ define('io.ox/files/api', [
     'io.ox/core/extensions',
     'io.ox/core/api/jobs',
     'io.ox/core/util',
+    'io.ox/files/permission-util',
     'io.ox/find/api',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, userAPI, backbone, Pool, CollectionLoader, capabilities, ext, jobsAPI, util, FindAPI, coreSettings, settings, gt) {
+], function (http, folderAPI, userAPI, backbone, Pool, CollectionLoader, capabilities, ext, jobsAPI, util, pUtil, FindAPI, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -314,25 +315,7 @@ define('io.ox/files/api', [
         },
 
         hasWritePermissions: function () {
-            var def = $.Deferred(),
-                array = this.get('object_permissions') || this.get('com.openexchange.share.extendedObjectPermissions') || [],
-                myself = _(array).findWhere({ entity: ox.user_id, group: false });
-
-            // check if there is a permission for a group, the user is a member of
-            // use max permissions available
-            if (!myself || (myself && myself.bits < 2)) {
-                userAPI.get().done(function (userData) {
-                    def.resolve(array.filter(function (perm) {
-                        return perm.group === true && _.contains(userData.groups, perm.entity);
-                    }).reduce(function (acc, perm) {
-                        return acc || perm.bits >= 2;
-                    }, false));
-                }).fail(function () { def.resolve(false); });
-            } else {
-                def.resolve(!!(myself && (myself.bits >= 2)));
-            }
-
-            return def;
+            return pUtil.hasObjectWritePermissions(this.toJSON());
         }
     });
 
