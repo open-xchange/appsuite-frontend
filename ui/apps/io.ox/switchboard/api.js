@@ -103,20 +103,20 @@ define.async('io.ox/switchboard/api', [
         },
 
         reconnect: function () {
-            var self = this;
             return http.GET({
                 module: 'token',
                 params: { action: 'acquireToken' }
             })
             .then(function (data) {
-                self.token = data.token;
+
+                this.token = data.token;
 
                 var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
                 // Only send redirect uri if not default "/appsuite/api"
                 var appsuiteUrl = new URL('https://' + api.host.replace(/^https?:\/\//, ''));
                 var searchParams = appsuiteUrl.searchParams;
                 searchParams.set('userId', api.userId);
-                searchParams.set('token', data.token);
+                searchParams.set('token', this.token);
                 if (ox.apiRoot !== '/appsuite/api') searchParams.set('appsuiteApiPath', ox.apiRoot);
                 if (appsuiteApiBaseUrl) searchParams.set('appsuiteApiBaseUrl', appsuiteApiBaseUrl);
 
@@ -151,7 +151,7 @@ define.async('io.ox/switchboard/api', [
                     }, 1000 * (10 + Math.floor(Math.random() * 10)));
                 });
                 return api.socket;
-            });
+            }.bind(this));
         }
     };
 

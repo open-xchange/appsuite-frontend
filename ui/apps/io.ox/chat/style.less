@@ -194,7 +194,7 @@
 
         .picture {
             .picture(@pictureSize, @pictureSize);
-            margin-right: 16px;
+            margin-right: 8px;
             float: left;
             display: flex;
 
@@ -329,7 +329,7 @@
         li {
             display: flex;
             cursor: pointer;
-            padding: 4px 4px 4px 8px;
+            padding: 4px 12px 4px 8px;
             border-right: 4px solid transparent;
 
             &.no-results {
@@ -354,7 +354,7 @@
             .chats-container {
                 margin-top: auto;
                 margin-bottom: auto;
-                padding: 8px;
+                padding: 0 0 3px 0;
                 flex: 1;
                 overflow: hidden;
 
@@ -370,7 +370,7 @@
         }
 
         .chat-avatar {
-            margin: 8px;
+            margin: 8px 16px 8px 8px;
         }
 
         .title {
@@ -875,6 +875,9 @@
             }
             .flags {
                 color: white;
+            }
+            &.deleted .flags {
+                color: #333;
             }
         }
 
