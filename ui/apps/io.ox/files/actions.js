@@ -22,11 +22,12 @@ define('io.ox/files/actions', [
     'io.ox/backbone/views/actions/util',
     'io.ox/core/capabilities',
     'io.ox/files/actions/download',
+    'io.ox/files/permission-util',
     'settings!io.ox/files',
     'settings!io.ox/core',
     'gettext!io.ox/files',
     'io.ox/core/yell'
-], function (folderAPI, api, userAPI, shareAPI, util, filestorageApi, ext, actionsUtil, capabilities, download, settings, coreSettings, gt, yell) {
+], function (folderAPI, api, userAPI, shareAPI, util, filestorageApi, ext, actionsUtil, capabilities, download, pUtil, settings, coreSettings, gt, yell) {
 
     'use strict';
 
@@ -492,23 +493,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    function hasObjectWritePermissions(data) {
-        var array = data.object_permissions || data['com.openexchange.share.extendedObjectPermissions'],
-            myself = _(array).findWhere({ entity: ox.user_id });
-        // check if there is a permission for a group, the user is a member of
-        // use max permissions available
-        if ((!myself || (myself && myself.bits < 2)) && _(array).findWhere({ group: true })) {
-            return userAPI.get().then(
-                function (userData) {
-                    myself = _(array).findWhere({ entity: _(_.pluck(array, 'entity')).intersection(userData.groups)[0] });
-                    return !!(myself && (myself.bits >= 2));
-                },
-                function () { return false; }
-            );
-        }
-        return $.when(!!(myself && (myself.bits >= 2)));
-    }
-    // TODO check action Jonas
     new Action('io.ox/files/actions/rename', {
         collection: 'one',
         matches: function (baton) {
@@ -520,7 +504,7 @@ define('io.ox/files/actions', [
             if (baton.collection.has('folders')) return baton.collection.has('rename:folder');
             if (baton.collection.has('modify')) return true;
             // this is async
-            return hasObjectWritePermissions(baton.first());
+            return pUtil.hasObjectWritePermissions(baton.first());
         },
         action: function (baton) {
             var data = baton.first();
@@ -567,7 +551,7 @@ define('io.ox/files/actions', [
             if (!folderAPI.pool.getModel(baton.first().folder_id).supports('extended_metadata')) return false;
             if (baton.isViewer && !isCurrentVersion(baton)) return false;
             if (baton.collection.has('modify')) return true;
-            return hasObjectWritePermissions(baton.first());
+            return pUtil.hasObjectWritePermissions(baton.first());
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/edit-description']).done(function (action) {

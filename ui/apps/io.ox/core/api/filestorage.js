@@ -183,6 +183,10 @@ define('io.ox/core/api/filestorage', [
                     return accountsCache;
                 });
             },
+
+            getAllGuestUserIdentifier: function () {
+                return _.compact(_(accountsCache.pluck('metadata')).map(function (entry) { return entry && entry.guestUserIdentifier; }));
+            },
             // returns a model of the file storage account
             getAccount: function (options, useCache) {
                 useCache = _.defaultValue(useCache, true);
