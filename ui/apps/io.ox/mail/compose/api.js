@@ -86,23 +86,22 @@ define('io.ox/mail/compose/api', [
             var editFor = space.meta && space.meta.editFor,
                 mailPath = space.mailPath, mailref;
             if (editFor) {
-            // db drafts (backward compability)
+                // db drafts (backward compability)
                 mailref = _.cid({ id: editFor.originalId, folder: editFor.originalFolderId });
                 space.cid = 'io.ox/mail/compose:' + mailref + ':edit';
             }
             if (mailPath) {
-            // real drafts
+                // real drafts
                 mailref = _.cid({ id: mailPath.id, folder: mailPath.folderId });
                 space.cid = 'io.ox/mail/compose:' + space.id + ':edit';
             }
             // add to mailref mapping;
             hash[mailref] = space.id;
-            console.log(space.cid, mailref);
+            if (ox.debug) console.log(space.cid, mailref);
             return space;
         }
 
         return function (data) {
-            //debugger;
             return _.isArray(data) ? _.map(data, apply) : apply(data);
         };
     })();
@@ -260,6 +259,15 @@ define('io.ox/mail/compose/api', [
         return process;
     }
 
+    var processAttachment = function (data) {
+        // result: attachtment data with mailPath prop
+        var mailPath = data.compositionSpace.mailPath,
+            mailref = _.cid({ id: mailPath.id, folder: mailPath.folderId });
+        // add to mailref mapping;
+        hash[mailref] = data.compositionSpace.id;
+        return _.extend({}, data.attachments[0], { mailPath: data.compositionSpace.mailPath });
+    };
+
     // composition space
     api.space.attachments = {
 
@@ -268,28 +276,33 @@ define('io.ox/mail/compose/api', [
                 url: ox.apiRoot + '/mail/compose/' + space + '/attachments/original'
             });
         },
+
         vcard: function (space) {
             return http.POST({
                 url: ox.apiRoot + '/mail/compose/' + space + '/attachments/vcard'
-            });
+            }).then(processAttachment);
         },
+
         add: function (space, data, type) {
             var url = ox.apiRoot + '/mail/compose/' + space + '/attachments';
-            return upload(url, data, type);
+            return upload(url, data, type).then(processAttachment);
         },
+
         update: function (space, data, type, attachmentId) {
             var url = ox.apiRoot + '/mail/compose/' + space + '/attachments/' + attachmentId;
-            return upload(url, data, type);
+            return upload(url, data, type).then(processAttachment);
         },
+
         get: function (space, attachment) {
             return http.GET({
                 url: ox.apiRoot + '/mail/compose/' + space + '/attachments/' + attachment
             });
         },
+
         remove: function (space, attachment) {
             return http.DELETE({
                 url: ox.apiRoot + '/mail/compose/' + space + '/attachments/' + attachment
-            });
+            }).then(processAttachment);
         }
     };
 
