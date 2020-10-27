@@ -131,7 +131,7 @@ define('io.ox/files/invitations/register', [
 
             // remove undefined
             data = _.pick(data, _.identity);
-            if (!/^(analyze|mount|unmount|remount)$/.test(action)) return $.Deferred().reject({ error: 'unknwon action' });
+            if (!/^(analyze|subscribe|unsubscribe|remount)$/.test(action)) return $.Deferred().reject({ error: 'unknwon action' });
             console.log('%c' + 'action', 'color: white; background-color: blue');
             console.log(data);
             console.log('');
@@ -336,9 +336,8 @@ define('io.ox/files/invitations/register', [
 
     ext.point('io.ox/mail/detail/notifications').extend({
         index: 1000000000001,
-        id: 'mount-unmount',
+        id: 'subscribe-unsubscribe',
         draw: function (baton) {
-            //console.log('%c' + 'mount-unmount', 'color: white; background-color: grey');
             var view = new SharingView(_.extend({ model: baton.model }, baton.options, { yell: true }));
             this.append(view.render().$el);
         }
