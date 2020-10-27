@@ -123,17 +123,17 @@ Scenario('[C45048] Edit description', async function (I, drive, dialogs) {
 });
 
 Scenario('[C45052] Delete file', async function (I, users, drive, dialogs) {
-    await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.txt');
+    await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.odt');
     I.login('app=io.ox/files', { user: users[0] });
     drive.waitForApp();
 
-    I.waitForElement(locate('.filename').withText('testdocument.txt'));
-    I.click(locate('.filename').withText('testdocument.txt'));
+    I.waitForElement(locate('.filename').withText('testdocument.odt'));
+    I.click(locate('.filename').withText('testdocument.odt'));
     I.clickToolbar('~Delete');
     dialogs.waitForVisible();
     dialogs.clickButton('Delete');
     I.waitForDetached('.modal-dialog');
-    I.waitForDetached(locate('.filename').withText('testdocument.txt'));
+    I.waitForDetached(locate('.filename').withText('testdocument.odt'));
 });
 
 Scenario('[C45061] Delete file versions', async function (I, drive, dialogs) {
