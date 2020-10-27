@@ -21,6 +21,7 @@
 @stateSize: 12px;
 @backgroundColor: #f5f5f5;
 @borderColor: #ccc;
+@borderRadius: 6px;
 
 // state colors
 @green: #02ab07;
@@ -45,14 +46,13 @@
     }
 
     &.columns {
-        border-left: 2px solid @black;
 
+        border-left: 2px solid @black;
         .chat-leftside {
             width: 100%;
             background-color: #fff;
         }
         .chat-rightside { display: none; }
-
         .header { display: none; }
         .chat .header { display: none; }
         .classic-toolbar-container { display: block; }
@@ -63,14 +63,18 @@
         }
 
         .message {
-            padding: 4px 48px 4px 0;
-            &.myself {
-                padding-right: 0;
-                padding-left: 48px;
-            }
+            padding: 4px 48px 4px 16px;
             .avatar { display: none; }
             &.preview {
                 padding-right: 48px;
+            }
+        }
+
+        .visible-bubbles .message {
+            padding: 4px 48px 4px 16px;
+            &.myself {
+                padding-right: 16px;
+                padding-left: 48px;
             }
         }
 
@@ -88,7 +92,7 @@
     }
 
     &:not(.columns) {
-        width: auto!important;
+        width: auto !important;
     }
 
     .chat-leftside {
@@ -412,14 +416,6 @@
             display: none;
         }
 
-        // .label {
-        //     float: right;
-        //     position: relative;
-        //     margin-left: 4px;
-        //     top: 1px;
-        //     display: none;
-        // }
-
         .unseen {
             .text-preview {
                 font-weight: 600;
@@ -525,7 +521,7 @@
     }
 
     .conversation {
-        padding: 16px;
+        padding: 16px 0;
         min-height: 100%;
         display: flex;
         flex-direction: column;
@@ -558,33 +554,116 @@
         }
     }
 
-    .date {
-        font-size: 13px;
-        color: @gray;
-        text-align: center;
-        margin-bottom: 6px;
-        margin-top: 10px;
-        line-height: 16px;
+    .date-container {
+        margin: 24px 0 0 0;
+        padding: 3px 16px 4px 16px;
+        .date {
+            color: #333;
+            font-size: 13px;
+            text-align: center;
+            line-height: 16px;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+        }
     }
 
     .message {
-        padding: 4px 48px 4px 58px;
+
+        line-height: 16px;
+        padding: 0 48px 0 72px;
         position: relative;
 
-        &:not(.myself) .message-actions-dropdown {
-            right: 6px;
+        > .content {
+            position: relative;
         }
+
+        &:focus-within, &:hover {
+            &.editable {
+                background-color: #f5f5f5;
+            }
+            &.editable .delivery {
+                display: none;
+            }
+            .message-actions-dropdown {
+                display: inline-block;
+            }
+        }
+
+        .body {
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 14px;
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+        > .sender {
+            color: #333;
+            font-size: 13px;
+            padding: 19px 0 5px 0;
+            .name {
+                font-weight: bold;
+                margin-right: 8px;
+            }
+            .time {
+                color: @gray;
+            }
+        }
+
+        &.user > .content {
+            padding: 3px 0 1px 0;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+
+        .flags {
+            display: inline-block;
+            font-size: 12px;
+            line-height: 16px;
+            color: @gray;
+            margin-left: 8px;
+        }
+
+        .state {
+            display: none;
+        }
+
+        .delivery {
+            position: absolute;
+            right: 16px;
+            line-height: 16px;
+            bottom: 4px;
+        }
+
+        .initials {
+            position: absolute;
+            top: 20px;
+            left: 16px;
+        }
+
+        &.highlight .content {
+            animation-name: highlightMessage;
+            animation-duration: 3s;
+        }
+
+        &.deleted {
+            color: @gray;
+            font-style: italic;
+        }
+
         .message-actions-dropdown {
             display: none;
             position: absolute;
-            margin: auto 0;
-            top: ~"calc(50% - 15px)";
-            height: 30px;
-
+            right: 16px;
+            bottom: 8px;
+            height: 16px;
+            padding: 0;
             .actions-toggle {
                 color: #333;
-                padding-right: 0px;
-                padding-left: 14px;
+                padding: 0;
+                height: 16px;
+                line-height: 16px;
                 i {
                     vertical-align: middle;
                 }
@@ -600,131 +679,12 @@
             }
         }
 
-        .content {
-            position: relative;
-        }
-
-        &:focus-within, &:hover {
-            &:not(.deleted):not(.replied-to-message):not(.system) {
-                background-color: #f5f5f5a8;
-                border-radius: 4px;
-            }
-            &.myself:not(.deleted) .delivery {
-                display: none;
-            }
-            .message-actions-dropdown {
-                display: inline-block;
-            }
-        }
-
-        .body {
-            white-space: pre-wrap;
-            word-break: break-word;
-            font-size: 14px;
-            display: inline-block;
-        }
-
-        &:last-child {
-            margin-bottom: 0;
-        }
-        .sender, .time {
-            color: @gray;
-            font-size: 12px;
-            line-height: 24px;
-        }
-        .sender {
-            font-weight: bold;
-            line-height: 16px;
-            padding-top: 3px;
-            margin-bottom: 5px;
-        }
-        &.text, &.file {
-            .content {
-                background-color: #eee;
-                border-radius: 8px;
-                display: inline-block;
-                padding: 8px 16px;
-            }
-        }
-        .foot {
-            font-size: 11px;
-            float: right;
-            position: relative;
-            top: 7px;
-            left: 9px;
-            vertical-align: bottom;
-            line-height: 20px;
-
-            .time {
-                font-size: 10px;
-                display: inline-block;
-                margin-left: 8px;
-                font-weight: normal;
-            }
-
-            .flags {
-                display: inline;
-                margin-left: 4px;
-            }
-
-            > * { display: inline-block; }
-        }
-        .state, .delivery {
-            display: none;
-        }
-        .initials {
-            position: absolute;
-            top: 22px;
-            left: 0px;
-        }
-        &.highlight .content {
-            animation-name: highlightMessage;
-            animation-duration: 3s;
-        }
         &.myself {
-
-            padding: 4px 6px 4px 128px;
-            display: flex;
-
-            >.sender {
-                display: none;
-            }
-            .delivery.server, .delivery.client {
-                color: @gray;
-            }
-            &:not(.deleted) .time {
-                color: #fff;
-            }
-            &.text:not(.deleted), &.file {
-                .content {
-                    color: #fff;
-                    background-color: @lightblue;
-                }
-            }
-            &.text, &.file {
-                .content {
-                    margin-left: auto;
-                }
-            }
-            .body {
-                text-align: left;
-            }
-            .delivery {
-                margin-left: 16px;
-                margin-top: auto;
-                margin-bottom: auto;
-                display: inline-block;
-                width: 12px;
-                // fixes some issues with moving messages on hover
-                min-width: 12px;
-            }
-            &.highlight .content{
+            &.highlight .content {
                 animation-name: highlightOwnMessage;
             }
-            .message-actions-dropdown {
-                position: relative;
-            }
         }
+
         &.preview, &.file {
             margin: 0 64px 8px 0;
 
@@ -736,7 +696,7 @@
             img {
                 border: 0;
                 max-width: 100%;
-                border-radius: 8px;
+                border-radius: @borderRadius;
                 cursor: pointer;
             }
         }
@@ -771,28 +731,12 @@
                     right: 0;
                     bottom: 0;
                     background-size: cover;
-                    border-radius: 8px;
+                    border-radius: @borderRadius;
                     cursor: pointer;
                 }
             }
-
-            .foot {
-                position: absolute;
-                top: auto;
-                left: 0;
-                bottom: 0;
-                right: 0;
-                margin: 0;
-                padding: 0 0.5em;
-                text-align: right;
-                height: 2em;
-                border-bottom-left-radius: 8px;
-                border-bottom-right-radius: 8px;
-                background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0) 100%);
-
-                .time { color: #fff; }
-            }
         }
+
         &.file {
             &.myself .body {
                 color: #fff;
@@ -805,55 +749,59 @@
                 color: #fff;
             }
         }
+
         &.system {
-            padding: 0 12px;
-            margin-bottom: 16px;
+            margin: 16px 0 0 0;
+            padding: 3px 16px 5px 16px;
             width: 100%;
             .content {
                 width: 100%;
-                text-align: center;
             }
             .body {
+                text-align: center;
                 font-size: 13px;
                 color: @gray;
             }
             .name {
                 font-weight: 500;
-                color: @black;
             }
             .delivery, .time {
                 display: none;
             }
         }
+
+        &.system + .system {
+            margin-top: 0px;
+        }
+
         &.text.emoji {
             // use direct child selectors to avoid giant font for inner messages (replies etc)
-            >.content >.body { font-size: 48px; }
-
-            &:not(.has-reply)>.content {
-                background-color: transparent;
-                padding: 2px;
+            > .content > .body {
+                font-size: 40px;
+                line-height: 48px;
             }
+
             .foot {
                 top: 44px;
                 left: -5px;
-                .time { color: #333; }
             }
         }
 
-        .message.replied-to-message {
-            padding: 0;
-            margin: 0px -8px 8px -8px;
-
+        .quote {
+            padding: 8px;
+            background-color: #eee;
+            border-radius: @borderRadius;
+            border-left: 4px solid rgba(0, 0, 0, 0.4);
+            margin-bottom: 8px;
             .sender {
-                color: #000;
-                margin-bottom: 0;
+                color: #333;
+                font-size: 12px;
+                font-weight: 500;
+                margin: 0 0 4px 0;
             }
             .content {
-                padding: 4px 8px;
-                background-color: #cecece;
                 width: 100%;
             }
-
             // keep replied to images small
             .preview-wrapper {
                 max-width: 150px;
@@ -861,18 +809,78 @@
             }
         }
 
-        &.myself .message.replied-to-message {
-            .sender {
-                color: #fff;
-            }
-            .content {
-                background-color: @darkblue;
-            }
-        }
-
         .show-more {
             color: #68bbe4;
             margin-left: 8px;
+        }
+    }
+
+    .visible-bubbles .message {
+
+        @background: #eee;
+
+        &.user > .content {
+            background-color: @background;
+            border-radius: @borderRadius;
+            padding: 11px 16px 9px 16px;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+
+        &.user.emoji > .content {
+            background-color: transparent;
+        }
+
+        .quote {
+            background-color: transparent;
+            border-radius: 0;
+            border-left: none;
+            padding: 0;
+            margin-left: -8px;
+            margin-right: -8px;
+            .sender {
+                margin: 0 0 4px 8px;
+            }
+            .content {
+                padding: 8px;
+                background-color: #ddd;
+                border-radius: @borderRadius;
+                border-left: 4px solid rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        &.myself {
+            padding: 0 40px 0 128px;
+            display: flex;
+            &.user > .content {
+                color: #fff;
+                background-color: @lightblue;
+            }
+            &.user.emoji > .content {
+                background-color: transparent;
+            }
+            .quote {
+                .sender {
+                    color: #fff;
+                }
+                .content {
+                    background-color: @darkblue;
+                }
+            }
+            > .sender, > .avatar {
+                display: none;
+            }
+            &.user > .content {
+                margin-left: auto;
+            }
+            .flags {
+                color: white;
+            }
+        }
+
+        &.deleted.user > .content {
+            color: #333;
+            background-color: @background;
         }
     }
 
@@ -939,7 +947,7 @@
 
             &.preview .content {
                 background-color: #eee;
-                border-radius: 8px;
+                border-radius: @borderRadius;
                 display: inline-block;
                 padding: 4px 8px 8px 8px;
             }

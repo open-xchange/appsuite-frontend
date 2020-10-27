@@ -154,7 +154,7 @@ define('io.ox/chat/views/chat', [
             this.messageId = options.messageId;
             this.reference = options.reference;
             this.model = this.model || data.chats.get(this.roomId);
-            this.messagesView = new MessagesView({ collection: this.model.messages });
+            this.messagesView = new MessagesView({ room: this.model, collection: this.model.messages });
 
             this.listenTo(this.model, {
                 'change:title': this.onChangeTitle,

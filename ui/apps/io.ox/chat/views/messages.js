@@ -68,7 +68,8 @@ define('io.ox/chat/views/messages', [
 
         initialize: function (options) {
             this.options = options;
-
+            this.room = this.options.room;
+            this.isChannel = this.room.isChannel();
             this.listenTo(this.collection, {
                 'expire': this.onExpire,
                 'update': this.onAdd,
@@ -82,6 +83,9 @@ define('io.ox/chat/views/messages', [
             this.listenTo(events, {
                 'message:changed': this.onMessageChanged
             });
+            this.$el.on('dblclick', function () {
+                $(this).toggleClass('visible-bubbles');
+            });
         },
 
         render: function () {
@@ -90,24 +94,32 @@ define('io.ox/chat/views/messages', [
                     .chain()
                     .filter(this.options.filter)
                     .last(this.options.limit || Infinity)
-                    .map(this.renderMessage, this)
+                    // call renderMessage this way to avoid unexpected parameter values (e.g. noDate)
+                    .map(function (model) { return this.renderMessage(model); }, this)
                     .flatten()
                     .value()
             );
             return this;
         },
 
-        renderMessage: function (model, noDate) {
+        renderMessage: function (model, showDate) {
+
             var body = model.getBody(),
-                message = $('<div class="message">')
+                deleted = model.isDeleted(),
+                messageId = model.get('messageId'),
+                replyTo = model.get('replyTo');
+
+            var message = $('<div class="message">')
                 // here we use cid instead of id, since the id might be unknown
                 .attr('data-cid', model.cid)
                 .addClass(model.getType())
-                .toggleClass('myself', (!model.isSystem() || model.get('deleted')) && model.isMyself())
-                .toggleClass('highlight', !!model.get('messageId') && model.get('messageId') === this.messageId)
-                .toggleClass('emoji', util.isOnlyEmoji(body))
-                .toggleClass('deleted', !!model.get('deleted'))
-                .toggleClass('has-reply', !_.isEmpty(model.get('replyTo')) && !model.get('replyTo').deleted)
+                .toggleClass('user', model.isUser())
+                .toggleClass('myself', (!model.isSystem() || deleted) && model.isMyself())
+                .toggleClass('highlight', !!messageId && messageId === this.messageId)
+                .toggleClass('emoji', !deleted && util.isOnlyEmoji(body))
+                .toggleClass('deleted', deleted)
+                .toggleClass('editable', model.isEditable())
+                .toggleClass('reply', !_.isEmpty(replyTo) && !replyTo.deleted)
                 .append(
                     // sender avatar & name
                     this.renderSender(model),
@@ -119,14 +131,15 @@ define('io.ox/chat/views/messages', [
                     ),
                     // show some indicator dots when a menu is available
                     this.renderMenu(model),
-                    //delivery state
-                    $('<div class="fa delivery" aria-hidden="true">').addClass(model.getDeliveryState())
+                    // delivery state
+                    !this.isChannel ? $('<div class="fa delivery" aria-hidden="true">').addClass(model.getDeliveryState()) : $()
                 );
 
-            if (model.get('messageId') === this.messageId) delete this.messageId;
+            if (messageId === this.messageId) delete this.messageId;
 
-            var date = this.renderDate(model);
-            if (date && !noDate) return [date, message];
+            var date = showDate !== false && this.renderDate(model);
+            if (date) return [date, message];
+
             return message;
         },
 
@@ -136,18 +149,10 @@ define('io.ox/chat/views/messages', [
                 user = data.users.getByMail(replyModel.get('sender')),
                 replyBody = replyModel.getBody();
 
-            return $('<div class="replied-to-message message">')
-                .addClass(replyModel.getType())
-                .toggleClass('emoji', util.isOnlyEmoji(replyBody))
-                .append(
-                    $('<div class="content">').append(
-                        // sender name
-                        $('<div class="sender">').text(user.getName()),
-                        // message body
-                        $('<div class="body replied-to">')
-                            .html(replyBody)
-                    )
-                );
+            return $('<div class="quote">').append(
+                $('<div class="sender">').text(user.getName()),
+                $('<div class="content">').html(replyBody)
+            );
         },
 
         renderBody: function (model, lastIndex) {
@@ -172,7 +177,7 @@ define('io.ox/chat/views/messages', [
             var toggle = $('<button type="button" class="btn btn-link dropdown-toggle actions-toggle" aria-haspopup="true" data-toggle="dropdown">')
                     .attr('title', gt('Message actions'))
                     .append($('<i class="fa fa-bars">')),
-                menu = $('<ul class="dropdown-menu">'),
+                menu = $('<ul class="dropdown-menu dropdown-menu-right">'),
                 dropdown = new Dropdown({
                     className: 'message-actions-dropdown dropdown',
                     smart: true,
@@ -184,44 +189,52 @@ define('io.ox/chat/views/messages', [
         },
 
         renderFoot: function (model) {
-            return $('<div class="foot">').append(
-                // time
-                $('<div class="time">').text(model.getTime()),
-                // flags
-                $('<div class="flags">').append((model.get('edited') && !model.get('deleted')) ? $('<i class="fa fa-pencil">').attr('title', gt('Message was edited')) : '')
-            );
+            var flags = [];
+            var deleted = model.get('deleted');
+            if (deleted) flags.push($('<i class="fa fa-ban" aria-hidden="true">'));
+            var edited = !deleted && model.get('edited');
+            if (edited) flags.push($('<i class="fa fa-pencil" aria-hidden="true">').attr('title', gt('Message was edited')));
+            if (!flags.length) return;
+            return $('<span class="flags">').append(flags);
         },
 
         renderSender: function (model) {
-            if ((model.isSystem() && !model.get('deleted')) || model.isMyself() || model.hasSameSender(this.options.limit)) return $();
+            if (model.isSystem()) return $();
+            if (model.hasSameSender(this.options.limit)) return $();
             var user = data.users.getByMail(model.get('sender'));
-            return [new Avatar({ model: user }).render().$el, $('<div class="sender">').text(user.getName())];
+            return [
+                new Avatar({ model: user }).render().$el,
+                $('<div class="sender">').append(
+                    $('<span class="name">').text(user.getName()),
+                    $('<span class="time">').text(model.getTime())
+                )
+            ];
         },
 
         getPrevModel: function (current) {
-            var index = this.collection.indexOf(current) - 1;
-            while (index >= 0) {
+            var index = this.collection.indexOf(current);
+            var filter = this.options.filter;
+            while (--index >= 0) {
                 var prev = this.collection.at(index);
-                if (this.options.filter && this.options.filter(prev)) return prev;
-                index--;
+                if (!filter || filter(prev)) return prev;
             }
         },
 
         renderDate: function (model) {
             var prev = this.getPrevModel(model);
-
-            if (prev && moment(prev.get('date')).startOf('day').isSameOrAfter(moment(model.get('date')).startOf('day'))) return;
-
-            var date = moment(model.get('date'));
-
-            var formattedDate = date.calendar(null, {
+            var current = moment(model.get('date'));
+            if (prev && moment(prev.get('date')).startOf('day').isSame(current.startOf('day'))) return;
+            var formattedDate = current.calendar(null, {
                 sameDay: '[' + gt('Today') + ']',
                 lastDay: '[' + gt('Yesterday') + ']',
-                lastWeek: 'LL',
-                sameElse: 'LL'
+                //#. %1$s is a weekday, e.g Monday.
+                //#. "Last" must be in square brackets
+                lastWeek: gt('[Last] %1$s', 'dddd'),
+                sameElse: 'l'
             });
-
-            return $('<div class="date">').html(formattedDate);
+            return $('<div class="date-container">').append(
+                $('<div class="date">').text(formattedDate)
+            );
         },
 
         onExpire: function () {
@@ -282,7 +295,7 @@ define('io.ox/chat/views/messages', [
         // currently used when the message changed it's type. We replace the entire node then
         onMessageChanged: function (model) {
             var $message = this.getMessageNode(model);
-            if ($message.length) $message.replaceWith(this.renderMessage(model, true));
+            if ($message.length) $message.replaceWith(this.renderMessage(model, false));
         },
 
         onChangeBody: function (model) {

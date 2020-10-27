@@ -181,6 +181,11 @@ define('io.ox/chat/data', [
             return { content: '', sender: data.user.email, date: +moment(), type: 'text' };
         },
 
+        initialize: function () {
+            // temp. fix: deleted messages are NOT system messages
+            if (this.get('deleted')) this.set('type', 'text', { silent: true });
+        },
+
         idAttribute: 'messageId',
 
         urlRoot: function () {
@@ -191,6 +196,7 @@ define('io.ox/chat/data', [
             if (this.isSystem()) return this.getSystemMessage();
             else if (this.hasPreview()) return this.getFilesPreview();
             else if (this.isFile()) return this.getFileText();
+            else if (this.isDeleted()) return gt('This message was deleted');
             return this.getFormattedBody();
         },
 
@@ -199,9 +205,6 @@ define('io.ox/chat/data', [
         },
 
         getSystemMessage: function () {
-            // deleted flag means early return here
-            if (this.get('deleted') || !this.get('content')) return gt('This message was deleted');
-
             var event = JSON.parse(this.get('content'));
             var originator = this.get('sender'),
                 members = event.members || [],
@@ -349,6 +352,18 @@ define('io.ox/chat/data', [
             return this.get('sender') === data.user.email;
         },
 
+        isDeleted: function () {
+            return !!this.get('deleted');
+        },
+
+        isEditable: function () {
+            return !this.isSystem() && !this.isDeleted();
+        },
+
+        isUser: function () {
+            return /^(text|file)$/.test(this.getType());
+        },
+
         getType: function () {
             // always treat deleted messages as text
             if (this.get('deleted')) return 'text';
@@ -367,14 +382,17 @@ define('io.ox/chat/data', [
             return this.get('type') === 'file';
         },
 
+        // checks if previous message is from a) same sender b) same date
         hasSameSender: function (limit) {
             limit = limit ? this.collection.length - limit : 0;
             var index = this.collection.indexOf(this);
             if (index <= limit) return false;
             var prev = this.collection.at(index - 1);
-            // deleted message still have a sender
-            if (prev.isSystem() && !prev.get('deleted')) return false;
-            return prev.get('sender') === this.get('sender');
+            if (prev.isSystem()) return false;
+            // a) same sender?
+            if (prev.get('sender') !== this.get('sender')) return false;
+            // b) same date?
+            return moment(this.get('date')).startOf('day').isSame(moment(prev.get('date')).startOf('day'));
         },
 
         getDeliveryState: function () {
@@ -532,7 +550,6 @@ define('io.ox/chat/data', [
         },
         initialize: function (models, options) {
             this.roomId = options.roomId;
-
             this.on('change:messageId', this.onChangeMessageId);
         },
         paginate: function (readDirection) {
