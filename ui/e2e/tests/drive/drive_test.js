@@ -123,17 +123,17 @@ Scenario('[C45048] Edit description', async function (I, drive, dialogs) {
 });
 
 Scenario('[C45052] Delete file', async function (I, users, drive, dialogs) {
-    await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.txt');
     I.login('app=io.ox/files', { user: users[0] });
     drive.waitForApp();
 
-    I.waitForElement(locate('.filename').withText('testdocument.odt'));
-    I.click(locate('.filename').withText('testdocument.odt'));
+    I.waitForElement(locate('.filename').withText('testdocument.txt'));
+    I.click(locate('.filename').withText('testdocument.txt'));
     I.clickToolbar('~Delete');
     dialogs.waitForVisible();
     dialogs.clickButton('Delete');
     I.waitForDetached('.modal-dialog');
-    I.waitForDetached(locate('.filename').withText('testdocument.odt'));
+    I.waitForDetached(locate('.filename').withText('testdocument.txt'));
 });
 
 Scenario('[C45061] Delete file versions', async function (I, drive, dialogs) {
@@ -233,3 +233,67 @@ Scenario('[C45063] Delete current file version', async function (I, drive, dialo
     I.waitForDetached(locate('.io-ox-viewer .viewer-fileversions').withText('Versions (5)'));
     I.waitForText('Versions (4)', 5, '.io-ox-viewer .viewer-fileversions');
 });
+
+
+
+Scenario('[C74325] Rename', async function (I, drive, dialogs) {
+        //Generate TXT file for upload
+        let timestamp1 = Math.round(+new Date() / 1000);
+        await fs.promises.writeFile('build/e2e/C74325.txt', timestamp1);
+        const infostoreFolderID = await I.grabDefaultFolder('infostore');
+        await I.haveFile(infostoreFolderID, 'build/e2e/C74325.txt');
+        
+    
+        I.login('app=io.ox/files');
+        drive.waitForApp();
+        I.waitForElement(locate('.filename').withText('C74325.txt'));
+        I.click(locate('.filename').withText('C74325.txt'));
+        I.clickToolbar('~More actions');
+        I.waitForElement('.dropdown-menu');
+        I.clickDropdown('Rename');
+    
+        
+        dialogs.waitForVisible();
+        I.waitForVisible('input', 5, dialogs.locators.body);
+        I.fillField('.modal-body input', 'C74325Renamed.txt');
+        dialogs.clickButton('Rename');
+        I.waitForDetached('.modal-dialog');
+        I.waitForElement(locate('.filename').withText('C74325Renamed.txt'));     
+    });  
+
+
+
+    Scenario('[C73325] Delete', async function (I, drive, dialogs) {
+        //Generate TXT file for upload
+        let timestamp1 = Math.round(+new Date() / 1000);
+        await fs.promises.writeFile('build/e2e/C73325.txt', timestamp1);
+        const infostoreFolderID = await I.grabDefaultFolder('infostore');
+        await I.haveFile(infostoreFolderID, 'build/e2e/C73325.txt');
+
+        I.login('app=io.ox/files');
+        drive.waitForApp();
+        I.waitForElement(locate('.filename').withText('C73325.txt'));
+        I.click(locate('.filename').withText('C73325.txt'));
+        I.clickToolbar('~Delete');
+        I.dontSee(locate('.filename').withText('C73325.txt'));
+    });
+
+
+
+
+    Scenario('[C7890] Icon view', async function (I, drive, dialogs) {
+        //Generate TXT file for upload
+        let timestamp1 = Math.round(+new Date() / 1000);
+        await fs.promises.writeFile('build/e2e/C7890.txt', timestamp1);
+        const infostoreFolderID = await I.grabDefaultFolder('infostore');
+        await I.haveFile(infostoreFolderID, 'build/e2e/C7890.txt');
+
+        I.login('app=io.ox/files');
+        drive.waitForApp();
+        I.waitForElement(locate('.filename').withText('C7890.txt'));
+        I.click(locate('.filename').withText('C7890.txt'));
+        I.clickToolbar('View');
+        I.clickDropdown('Icons');
+        I.waitForElement(locate('.thumbnail-masking-box'));
+    });
+   
