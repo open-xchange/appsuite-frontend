@@ -281,23 +281,6 @@ define('io.ox/mail/compose/model', [
             }.bind(this));
         },
 
-        clone: function () {
-            // get new id
-            this.unset('id');
-            this.unset('type');
-            this.unset('original');
-            var collection = this.get('attachments');
-            collection.each(function (attachment) {
-                if (!attachment.get('uploaded')) return;
-                collection.remove(attachment);
-            });
-            return composeAPI.space.add({ type: 'new' }, {}).then(function (data) {
-                this.set('id', data.id);
-                this.prevAttributes = {};
-                this.save();
-            }.bind(this));
-        },
-
         /**
          * Traverses the two given objects and only return attributes (and sub attributes) which has been changed.
          * Used to only update necessary parts of the mail model

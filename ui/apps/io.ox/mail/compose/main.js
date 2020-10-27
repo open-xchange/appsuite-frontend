@@ -199,7 +199,7 @@ define('io.ox/mail/compose/main', [
         id: 'update-cid',
         index: INDEX += 100,
         perform: function () {
-            // fallback case: clone actually deleted space
+            // fallback case: clone of actually deleted space
             this.listenTo(this.model, 'change:id', function () {
                 this.cid = getAppCID(this.model.toJSON()) || this.cid;
             }.bind(this));

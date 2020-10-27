@@ -1874,8 +1874,9 @@ define('io.ox/mail/main', [
                 if (!app) return;
                 var win = app.get('window');
                 // active
-                if (win && app.view && app.view.model) {
-                    return app.view.model.trigger('space:removed');
+                if (win && app.view && app.view.model && app.view.config) {
+                    app.view.model.trigger('space:removed');
+                    app.view.config.set('autoDismiss', true);
                 }
                 // not loaded yet
                 var cid = app.cid;

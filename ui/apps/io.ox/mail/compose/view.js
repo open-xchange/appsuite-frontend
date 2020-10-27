@@ -661,25 +661,8 @@ define('io.ox/mail/compose/view', [
             this.config.set('signatureId', '');
         },
 
-        onRemovedSpace: function () {
-            var view = this, win = this.app.getWindow();
-            if (win) win.busy();
-
-            require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-                new ModalDialog({ title: gt('Draft removed'), description: gt('This draft was removed. Please note that restoring does not cover attachments.') })
-                    .addButton({ label: gt('Restore'), className: 'btn-default', action: 'clone' })
-                    .addButton({ label: gt('Discard'), action: 'discard' })
-                    .on('clone', function () {
-                        view.model.clone().done(function () {
-                            if (win) win.idle();
-                        });
-                    })
-                    .on('discard', function () {
-                        view.app.quit();
-                    })
-                    .open();
-            });
-        },
+        // for custom handling (only for active compose apps)
+        onRemovedSpace: $.noop,
 
         ariaLiveUpdate: function (e, msg) {
             this.$('[data-extension-id="arialive"]').text(msg);
