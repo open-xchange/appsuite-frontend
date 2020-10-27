@@ -413,8 +413,30 @@ define('io.ox/core/folder/extensions', [
             this.append(
                 $('<li role="presentation">').append(
                     $('<a href="#" data-action="manage-subscriptions" role="treeitem">').text(gt('Manage Subscriptions')).on('click', function () {
-                        ox.load(['io.ox/core/folder/actions/imap-subscription']).done(function (subscribe) {
-                            subscribe({ root: '9', module: 'infostore', title: gt('Subscribe to shared folders'), capabilityCheck: 'subscribe', hideTrashfolder: true });
+                        require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
+                            // TODO helppage: 'ox.appsuite.user.sect.files.folder.displayshared.html' use product name here?
+                            subscribe.open({
+                                module: 'infostore',
+                                help: 'ox.appsuite.user.sect.files.folder.displayshared.html',
+                                title: gt('Shared drive folders'),
+                                point: 'io.ox/core/folder/subscribe-shared-files-folders',
+                                sections: {
+                                    public: gt('Public drive folders'),
+                                    shared: gt('Shared drive folders')
+                                },
+                                noSync: true,
+                                // subscribe dialog is build for flat foldertrees, add special getData function to make it work for infostore
+                                // no cache or we would overwrite folder collections with unsubscribed folders
+                                getData: function () {
+                                    return $.when(api.list(15, { all: true, cache: false }), api.list(10, { all: true, cache: false })).then(function (publicFolders, sharedFolders) {
+
+                                        return {
+                                            public: publicFolders || [],
+                                            shared: sharedFolders || []
+                                        };
+                                    });
+                                }
+                            });
                         });
                     })
                 )
