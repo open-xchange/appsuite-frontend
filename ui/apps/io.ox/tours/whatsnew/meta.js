@@ -22,6 +22,7 @@ define('io.ox/tours/whatsnew/meta', [
     // versions:
     // '7.10.5': 1
     var features = [
+        /*
         {
             version: 1,
             name: 'New top bar layout',
@@ -46,41 +47,41 @@ define('io.ox/tours/whatsnew/meta', [
         },
         {
             version: 1,
-            name: 'Download additional ram',
-            description: 'Cannot run the latest games? Fear no more we\'ve got you covered. Download extra ram with one click. Packages of 16GB, 32GB or even 64GB available. RGB for more fps included of course'
-        }
+            name: gt('Download additional ram'),
+            description: gt('Cannot run the latest games? Fear no more we\'ve got you covered. Download extra ram with one click. Packages of 16GB, 32GB or even 64GB available. RGB for more fps included of course')
+        }*/
     ];
 
     // language based, uses ox.language variable
     // TODO provide some official default links
     var helpLinks = {
-        fallback: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        ca_ES: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        cs_CZ: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        da_DK: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        de_DE: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        en_GB: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        en_US: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        es_ES: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        es_MX: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        fi_FI: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        fr_CA: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        fr_FR: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        hu_HU: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        it_IT: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        ja_JP: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        lv_LV: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        nb_NO: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        nl_NL: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        pl_PL: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        pt_BR: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        ro_RO: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        ru_RU: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        sk_SK: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        sv_SE: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        tr_TR: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        zh_CN: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        zh_TW: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        fallback: 'https://www.open-xchange.com',
+        ca_ES: 'https://www.open-xchange.com',
+        cs_CZ: 'https://www.open-xchange.com',
+        da_DK: 'https://www.open-xchange.com',
+        de_DE: 'https://www.open-xchange.com',
+        en_GB: 'https://www.open-xchange.com',
+        en_US: 'https://www.open-xchange.com',
+        es_ES: 'https://www.open-xchange.com',
+        es_MX: 'https://www.open-xchange.com',
+        fi_FI: 'https://www.open-xchange.com',
+        fr_CA: 'https://www.open-xchange.com',
+        fr_FR: 'https://www.open-xchange.com',
+        hu_HU: 'https://www.open-xchange.com',
+        it_IT: 'https://www.open-xchange.com',
+        ja_JP: 'https://www.open-xchange.com',
+        lv_LV: 'https://www.open-xchange.com',
+        nb_NO: 'https://www.open-xchange.com',
+        nl_NL: 'https://www.open-xchange.com',
+        pl_PL: 'https://www.open-xchange.com',
+        pt_BR: 'https://www.open-xchange.com',
+        ro_RO: 'https://www.open-xchange.com',
+        ru_RU: 'https://www.open-xchange.com',
+        sk_SK: 'https://www.open-xchange.com',
+        sv_SE: 'https://www.open-xchange.com',
+        tr_TR: 'https://www.open-xchange.com',
+        zh_CN: 'https://www.open-xchange.com',
+        zh_TW: 'https://www.open-xchange.com'
     };
 
     // support customized help links
