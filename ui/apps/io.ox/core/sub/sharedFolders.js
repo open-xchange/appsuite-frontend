@@ -58,7 +58,8 @@ define('io.ox/core/sub/sharedFolders', [
             async: true,
             point: options.point,
             title: options.title,
-            render: false
+            render: false,
+            noSync: options.noSync
         });
 
         dialog
@@ -69,7 +70,7 @@ define('io.ox/core/sub/sharedFolders', [
             })
             .busy(true)
             .open();
-        return getData(dialog).then(loadLandingPage);
+        return getData(dialog, opt).then(loadLandingPage);
     }
 
     function loadLandingPage(data) {
@@ -113,6 +114,8 @@ define('io.ox/core/sub/sharedFolders', [
                 if (!self.opt.dialog.hash[this.get('id')]) self.opt.dialog.hash[this.get('id')] = {};
                 self.opt.dialog.hash[this.get('id')].subscribed = this.get('subscribed');
 
+                if (self.opt.dialog.options.noSync) return;
+
                 if (!val) {
                     var falseValue = _.copy(self.model.get(properties), true);
                     falseValue.value = 'false';
@@ -121,6 +124,7 @@ define('io.ox/core/sub/sharedFolders', [
                 }
             });
 
+            if (opt.dialog.options.noSync) return;
             this.model.on('change:' + properties, function () {
                 if (!self.opt.dialog.hash[this.get('id')]) self.opt.dialog.hash[this.get('id')] = {};
                 self.opt.dialog.hash[this.get('id')][properties] = this.get(properties);
@@ -164,7 +168,7 @@ define('io.ox/core/sub/sharedFolders', [
                 $('<div class="item-name">').append(
                     $('<div>').text(this.model.attributes.display_title || this.model.attributes.title)
                 ),
-                $checkbox = new mini.CustomCheckboxView({
+                this.opt.dialog.options.noSync ? '' : $checkbox = new mini.CustomCheckboxView({
                     name: properties,
                     model: this.model,
                     label: gt('Sync via DAV'),
@@ -174,6 +178,8 @@ define('io.ox/core/sub/sharedFolders', [
                     }
                 }).render().$el.attr('title', gt('sync via DAV'))
             );
+
+            if (this.opt.dialog.options.noSync) return this;
 
             if (!this.model.get('subscribed') || preparedValueFalse.protected === 'true') {
                 $checkbox
@@ -210,7 +216,9 @@ define('io.ox/core/sub/sharedFolders', [
 
 
     function getData(dialog) {
-        return $.when(api.flat({ module: options.module, all: true })).then(function (pageData) {
+
+        // use custom getData function if desired, can be used by modules that do not have a flat foldertree (infostore etc)
+        return $.when(options.getData ? options.getData() : api.flat({ module: options.module, all: true })).then(function (pageData) {
             var dialogData = {};
             var sections = ['private', 'public', 'shared', 'hidden'];
 

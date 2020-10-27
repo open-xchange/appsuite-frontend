@@ -21,8 +21,7 @@ define('io.ox/core/folder/actions/imap-subscription', [
 
     'use strict';
 
-    return function (options) {
-        options = options || {};
+    return function () {
 
         var previous = {}, changes = {};
 
@@ -79,14 +78,12 @@ define('io.ox/core/folder/actions/imap-subscription', [
             button: gt('Save'),
             context: 'subscribe',
             height: 300,
-            module: options.module || 'mail',
+            module: 'mail',
             selection: false,
-            title: options.title || gt('Subscribe to IMAP folders'),
-            help: options.helplink || 'ox.appsuite.user.sect.dataorganisation.sharing.subscribe.html',
+            title: gt('Subscribe to IMAP folders'),
+            help: 'ox.appsuite.user.sect.dataorganisation.sharing.subscribe.html',
             createFolderButton: false,
             alternativeButton: gt('Refresh folders'),
-            root: options.root || '1',
-            hideTrashfolder: options.hideTrashfolder || false,
 
             always: function (dialog) {
 
@@ -127,10 +124,11 @@ define('io.ox/core/folder/actions/imap-subscription', [
             },
 
             customize: function (baton) {
+
                 var data = baton.data,
                     virtual = /^virtual/.test(data.id) || data.id === 'default0/virtual',
                     // top-level folder of external accounts don’t have imap-subscribe capability :\
-                    disabled = virtual || !api.can('read', data) || !api.can(options.capabilityCheck || 'subscribe:imap', data);
+                    disabled = virtual || !api.can('read', data) || !api.can('subscribe:imap', data);
 
                 previous[data.id] = data.subscribed;
                 var guid = _.uniqueId('form-control-label-');
