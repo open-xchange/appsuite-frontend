@@ -14,7 +14,7 @@
 define('io.ox/tours/whatsnew/main', [
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
-    'settings!io.ox/tours',
+    'settings!io.ox/core',
     'io.ox/core/extPatterns/stage',
     'gettext!io.ox/core',
     'io.ox/tours/whatsnew/meta',
