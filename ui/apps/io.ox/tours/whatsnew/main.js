@@ -88,6 +88,7 @@ define('io.ox/tours/whatsnew/main', [
             id: 'whatsnewdialog',
             index: 1100,
             run: function () {
+                if (_.device('karma')) return $.when();
                 showDialog();
                 return $.when();
             }
