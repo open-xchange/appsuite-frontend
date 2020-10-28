@@ -13,7 +13,7 @@
 
 define('io.ox/tours/whatsnew/meta', [
     'gettext!io.ox/core',
-    'settings!io.ox/tours',
+    'settings!io.ox/core',
     'io.ox/core/capabilities'
 ], function (gt, settings, capabilities) {
 
