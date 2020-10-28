@@ -193,6 +193,7 @@ define('io.ox/switchboard/extensions', [
             id: 'zoom',
             index: 100,
             draw: function (baton) {
+                if (!api.online) return;
                 if (!api.supports('zoom')) return;
                 if (!api.isGAB(baton)) return;
                 this.append(createConferenceItem('zoom', gt('Call via Zoom'), baton));
@@ -202,6 +203,7 @@ define('io.ox/switchboard/extensions', [
             id: 'jitsi',
             index: 200,
             draw: function (baton) {
+                if (!api.online) return;
                 if (!api.supports('jitsi')) return;
                 if (!api.isGAB(baton)) return;
                 this.append(createConferenceItem('jitsi', gt('Call via Jitsi'), baton));
