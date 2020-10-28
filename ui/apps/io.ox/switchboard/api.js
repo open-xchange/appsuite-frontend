@@ -103,14 +103,18 @@ define.async('io.ox/switchboard/api', [
         },
 
         reconnect: function () {
-            return http.GET({
+            var def = $.Deferred();
+
+            http.GET({
                 module: 'token',
                 params: { action: 'acquireToken' }
             })
-            .then(function (data) {
-
-                this.token = data.token;
-
+            .always(function (data) {
+                if (data.token) {
+                    this.token = data.token;
+                } else {
+                    console.error('Switchboard: Error during acquireToken!');
+                }
                 var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
                 // Only send redirect uri if not default "/appsuite/api"
                 var appsuiteUrl = new URL('https://' + api.host.replace(/^https?:\/\//, ''));
@@ -145,13 +149,16 @@ define.async('io.ox/switchboard/api', [
                 })
                 .on('error', function () {
                     api.socket.close();
+                    // in case acquireToken call fails (50x) stop here (see OXUIB-525)
+                    if (!this.token) return;
                     // 10 sec. + Random (0-9 sec)
                     setTimeout(function () {
                         api.reconnect();
                     }, 1000 * (10 + Math.floor(Math.random() * 10)));
-                });
-                return api.socket;
+                }.bind(this));
+                def.resolve(api.socket);
             }.bind(this));
+            return def;
         }
     };
 
