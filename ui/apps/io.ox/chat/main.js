@@ -159,30 +159,23 @@ define('io.ox/chat/main', [
         openPrivateChat: function (cmd) {
             if (cmd.email === data.user.email) return;
 
-            // try to reuse chat
-            var chat = data.chats.active.find(function (model) {
-                return model.get('type') === 'private' && Object.keys(model.get('members')).indexOf(cmd.email) >= 0;
-            });
-            if (!chat) {
-                chat = data.chats.recent.find(function (model) {
-                    return model.get('type') === 'private' && Object.keys(model.get('members')).indexOf(cmd.email) >= 0;
-                });
-            }
-            if (chat) {
+            var def = data.chats.findPrivateRoom(cmd.email);
+
+            def.then(function success(chat) {
                 if (!chat.get('active')) this.resubscribeChat(chat.get('roomId'));
                 return this.showChat(chat.get('roomId'), { model: chat });
-            }
+            }.bind(this), function fail() {
+                var members = {};
+                members[data.user.email] = 'admin';
+                members[cmd.email] = 'member';
+                var room = data.chats.active.add({ type: 'private', members: members, active: true }, { at: 0 }),
+                    view = new ChatView({ model: room });
 
-            var members = {};
-            members[data.user.email] = 'admin';
-            members[cmd.email] = 'member';
-            var room = data.chats.active.add({ type: 'private', members: members, active: true }, { at: 0 }),
-                view = new ChatView({ model: room });
-
-            this.showApp();
-            this.$rightside.empty().append(view.render().$el);
-            this.$body.addClass('open');
-            view.scrollToBottom();
+                this.showApp();
+                this.$rightside.empty().append(view.render().$el);
+                this.$body.addClass('open');
+                view.scrollToBottom();
+            }.bind(this));
         },
 
         leaveGroup: function (groupId) {
