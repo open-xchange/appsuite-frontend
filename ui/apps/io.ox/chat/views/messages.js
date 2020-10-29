@@ -144,9 +144,13 @@ define('io.ox/chat/views/messages', [
         },
 
         renderReply: function (model) {
+
             if (!model.get('replyTo') || model.get('replyTo').deleted) return '';
-            var replyModel = new data.MessageModel(model.get('replyTo')),
-                user = data.users.getByMail(replyModel.get('sender')),
+
+            var replyModel = new data.MessageModel(model.get('replyTo'));
+            replyModel.set('roomId', model.get('roomId'));
+
+            var user = data.users.getByMail(replyModel.get('sender')),
                 replyBody = this.renderMessageContent(replyModel);
 
             return $('<div class="quote">').append(
@@ -168,14 +172,14 @@ define('io.ox/chat/views/messages', [
                 body = this.renderMessageContent(model);
 
             // +350 so that if we load a message, we load at least 500 more chars a not only e.g. 10
-            if (body.length <= chunkSize + 350) return el.html(body).append(this.renderFoot(model));
+            if (body.length <= chunkSize + 350) return el.html(body).append(this.renderFlags(model));
 
             var showMoreNode = $('<button type="button" class="btn btn-link show-more">').text(gt('Show more')).on('click', function () {
                 chunkSize += 3 * settings.get('messageChunkLoadSize', 500);
                 this.getMessageNode(model).find('.body').replaceWith(this.renderBody(model, chunkSize));
             }.bind(this));
 
-            return el.html(body.slice(0, chunkSize) + '...').append(showMoreNode, this.renderFoot(model));
+            return el.html(body.slice(0, chunkSize) + '...').append(showMoreNode, this.renderFlags(model));
         },
 
         renderMenu: function (model) {
@@ -195,7 +199,7 @@ define('io.ox/chat/views/messages', [
             return dropdown.render().$el;
         },
 
-        renderFoot: function (model) {
+        renderFlags: function (model) {
             var flags = [];
             var deleted = model.get('deleted');
             if (deleted) flags.push($('<i class="fa fa-ban" aria-hidden="true">'));
@@ -333,9 +337,7 @@ define('io.ox/chat/views/messages', [
                 .toggleClass('emoji', model.isEmoji());
             $body
                 .html(this.renderMessageContent(model))
-                .append(
-                    this.renderFoot(model)
-                );
+                .append(this.renderFlags(model));
         },
 
         onChangeTime: function (model) {

@@ -206,7 +206,6 @@ define('io.ox/chat/data', [
             else if (this.hasPreview()) return this.getFilesPreview();
             else if (this.isFile()) return util.getFileText({ model: this });
             else if (this.isDeleted()) return gt('This message was deleted');
-
             return this.getFormattedBody();
         },
 
@@ -291,41 +290,38 @@ define('io.ox/chat/data', [
         },
 
         getFilesPreview: function () {
+
             var attachment = this.get('files')[0],
                 fileId = attachment.fileId,
                 url = this.getFileUrl(attachment) + '/thumbnail';
 
             if (!fileId) return;
-            if (!attachment.preview) return;
 
-            var width = attachment.preview.width,
-                height = attachment.preview.height;
+            // we start with a dummy GIF to avoid mixed-content warning
+            var $img = $('<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">');
+            var preview = attachment.preview, width, ratio;
 
-            if (height > 400) {
-                var ratio = 400 / height;
-                height *= ratio;
-                width *= ratio;
+            if (preview) {
+                ratio = preview.width / preview.height;
+                width = Math.min(preview.width, 240);
+                // we just need the height to fill the viewport properly
+                $img.attr('height', width * ratio);
             }
 
-            var image = $('<div>').attr({
-                src: url,
-                'data-cmd': 'show-message-file',
-                'data-room-id': this.collection ? this.collection.roomId : '',
-                'data-file-id': fileId,
-                'data-message-id': this.get('messageId')
-            });
+            var $el = $('<div class="thumbnail-container">')
+                .attr({
+                    'data-cmd': 'show-message-file',
+                    'data-room-id': this.get('roomId'),
+                    'data-file-id': fileId,
+                    'data-message-id': this.get('messageId')
+                })
+                .append($img);
 
             api.requestBlobUrl({ url: url }).then(function (url) {
-                image.css('backgroundImage', 'url("' + url + '")');
+                $img.attr('src', url);
             });
 
-            var node = $('<div class="preview-wrapper">')
-                .append(image)
-                .css({
-                    width: width + 'px',
-                    'padding-top': (height / width * 100) + '%'
-                });
-            return node;
+            return $el;
         },
 
         getTime: function () {

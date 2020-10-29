@@ -660,6 +660,20 @@
             left: 16px;
         }
 
+        .thumbnail-container {
+            max-height: 240px;
+            overflow: hidden;
+            img {
+                border: 0;
+                width: 240px;
+                border-radius: @borderRadius;
+            }
+        }
+
+        .thumbnail-container[data-cmd] {
+            cursor: pointer;
+        }
+
         &.highlight .content {
             animation-name: highlightMessage;
             animation-duration: 3s;
@@ -705,19 +719,12 @@
 
         &.preview, &.file {
             margin: 0 0 8px 0;
-
             &.myself {
                 margin: 0 0 8px 0;
                 justify-content: flex-end;
             }
-
-            img {
-                border: 0;
-                max-width: 100%;
-                border-radius: @borderRadius;
-                cursor: pointer;
-            }
         }
+
         &.preview {
             margin: 0 0 8px;
             padding-right: 120px;
@@ -727,31 +734,9 @@
                 padding-right: 6px;
             }
 
-            .body, .content { max-width: 100%; }
-
-            .content {
-                display: inline-block;
-            }
-
             .body {
-                position: relative;
-                display: inline-block;
-            }
-
-            .preview-wrapper {
-                max-width: 320px;
-                max-height: 400px;
-
-                > div {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background-size: cover;
-                    border-radius: @borderRadius;
-                    cursor: pointer;
-                }
+                max-height: 240px;
+                overflow: hidden;
             }
         }
 
@@ -818,8 +803,6 @@
                     }
                 }
             }
-
-            .foot { top: 5px; }
         }
         &.system {
             margin: 16px 0 0 0;
@@ -851,11 +834,6 @@
                 font-size: 40px;
                 line-height: 48px;
             }
-
-            .foot {
-                top: 44px;
-                left: -5px;
-            }
         }
 
         .quote {
@@ -872,11 +850,6 @@
             }
             .content {
                 width: 100%;
-            }
-            // keep replied to images small
-            .preview-wrapper {
-                max-width: 150px;
-                max-height: 150px;
             }
         }
 

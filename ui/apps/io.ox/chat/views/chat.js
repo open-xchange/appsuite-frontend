@@ -478,6 +478,9 @@ define('io.ox/chat/views/chat', [
                     )
                 );
 
+            // remove commands
+            this.$messageReference.find('[data-cmd]').removeAttr('data-cmd');
+
             this.$editor.before(this.$messageReference).focus();
             this.$el.find('.controls').addClass('reply-mode ' + message.getType()).toggleClass('emoji', message.isEmoji());
             this.specialMode = 'reply';
