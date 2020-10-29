@@ -440,5 +440,233 @@ Scenario('[C74445] Remove encryption from File', async function (I, drive, dialo
     I.fillField({ xpath: '//*[@id="ogPassword"]'}, 'New-Password');
     I.click('Close', { xpath: '/html/body/div[7]/div/div/div[3]/button[2]'})
     I.wait(2)
+    //Maybe theres something wrong with the checking part / if it actually got decrypted or not
     I.waitForElement(locate('.filename').withText('C74445.txt'))
     });//by Robin Pierre Bäßler
+
+
+    Scenario('[C74555] Edit as new', async function (I, drive, dialogs) {
+        //Generate TXT file for upload
+        let timestamp1 = Math.round(+new Date() / 1000);
+        await fs.promises.writeFile('build/e2e/C74555.odt', timestamp1);
+        const infostoreFolderID = await I.grabDefaultFolder('infostore');
+        await I.haveFile(infostoreFolderID, 'build/e2e/C74555.odt');
+        
+    
+        I.login('app=io.ox/files');
+        drive.waitForApp();
+    
+        I.waitForElement(locate('.filename').withText('C74555.odt'));
+        I.click(locate('.filename').withText('C74555.odt'));
+        I.clickToolbar('~More actions');
+        I.waitForElement('.dropdown-menu');
+        I.clickDropdown('Edit as new');
+        I.waitForElement('input', 5);
+    });//by Robin Pierre Bäßler
+
+
+
+    Scenario('[C74665] Save as PDF', async function (I, drive, dialogs) {
+        //Generate TXT file for upload
+        await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.odt');
+    
+        I.login('app=io.ox/files');
+        drive.waitForApp();
+        I.waitForElement(locate('.filename').withText('testdocument.odt'));
+        I.click(locate('.filename').withText('testdocument.odt'));
+        I.clickToolbar('~More actions');
+        I.waitForElement('.dropdown-menu');
+        I.clickDropdown('Save as PDF');
+        dialogs.waitForVisible();
+        I.waitForVisible('input', 5, dialogs.locators.body);
+        I.fillField('.modal-body input', 'testdocument');
+        dialogs.clickButton('Save');
+        I.waitForDetached('.modal-dialog');
+        I.wait(1);
+        I.waitForElement((locate('.filename').withText('testdocument.pdf')));
+    });//by Robin Pierre Bäßler
+
+
+    Scenario('[C74775] Add to Favorites', async function (I, drive, dialogs) {
+        //Generate TXT file for upload
+        await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.odt');
+    
+        I.login('app=io.ox/files');
+        drive.waitForApp();
+        I.waitForElement(locate('.filename').withText('testdocument.odt'));
+        I.click(locate('.filename').withText('testdocument.odt'));
+        I.clickToolbar('~More actions');
+        I.waitForElement('.dropdown-menu');
+        I.clickDropdown('Add to favorites');
+        I.wait(1);
+        I.waitForText('Favorites');
+    });//by Robin Pierre Bäßler
+
+
+    Scenario('[C74885] Edit as new (encrypted)', async function (I, drive, dialogs) {
+        //Generate TXT file for upload
+        await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.odt');
+        
+    
+        I.login('app=io.ox/files');
+        drive.waitForApp();
+        //Locate file
+        I.waitForElement(locate('.filename').withText('testdocument.odt'));
+        I.click(locate('.filename').withText('testdocument.odt'));
+        I.clickToolbar('~More actions');
+        I.waitForElement('.dropdown-menu');
+        I.clickDropdown('Edit as new (encrypted)');
+        
+        //Complete Guard Setup
+        I.waitForText('Setup Guard', 5);
+        I.waitForText('Start Setup', 5);
+        I.click('Start Setup', { xpath: '/html/body/div[7]/div/div/div[3]/button' });
+        I.waitForVisible('input', 5);
+        I.fillField({ xpath: '//*[@id="newogpassword"]'}, 'New-Password');
+        I.wait(0.5)
+        I.fillField({ xpath: '//*[@id="newogpassword2"]'}, 'New-Password');
+        I.click('Next', { xpath: '/html/body/div[7]/div/div/div[3]/button[2]' });    
+        I.wait(0.5)
+        I.click('Close', { xpath: '/html/body/div[7]/div/div/div[3]/button[2]' });
+        //Confirm password
+        I.waitForText('Password needed', 5);
+        I.fillField({ xpath: '//*[@id="ogPassword"]'}, 'New-Password');
+        I.click('Close', { xpath: '/html/body/div[7]/div/div/div[3]/button[2]'});
+        //Locate again
+        I.wait(0.5)
+        I.waitForElement(locate('.filename').withText('testdocument.odt'));
+        I.clickToolbar('~More actions');
+        I.waitForElement('.dropdown-menu');
+        I.clickDropdown('Edit as new (encrypted)');
+        //Password again
+        I.waitForText('Password needed', 5);
+        I.fillField({ xpath: '//*[@id="ogPassword"]'}, 'New-Password');
+        I.click('OK', { xpath: '/html/body/div[7]/div/div/div[3]/button[1]'});
+        //Check for opening
+        I.wait(1)
+        
+        I.waitForElement('input', 5);
+    });//by Robin Pierre Bäßler
+
+
+    Scenario('[C74995] Edit encrypted file', async function (I, drive, dialogs) {
+        //Generate TXT file for upload
+        await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.odt');
+        
+        //Login
+        I.login('app=io.ox/files');
+        drive.waitForApp();
+        
+        //Open encrypt dialog
+        I.waitForElement(locate('.filename').withText('testdocument.odt'));
+        I.click(locate('.filename').withText('testdocument.odt'));
+        I.clickToolbar('~More actions');
+        I.waitForElement('.dropdown-menu');
+        I.clickDropdown('Encrypt');
+        I.wait(1);
+       
+        //Complete Guard Setup
+        I.waitForText('Setup Guard', 5);
+        I.waitForText('Start Setup', 5);
+        I.click('Start Setup', { xpath: '/html/body/div[7]/div/div/div[3]/button' });
+        I.waitForVisible('input', 5);
+        I.fillField({ xpath: '//*[@id="newogpassword"]'}, 'New-Password');
+        I.wait(0.5)
+        I.fillField({ xpath: '//*[@id="newogpassword2"]'}, 'New-Password');
+        I.click('Next', { xpath: '/html/body/div[7]/div/div/div[3]/button[2]' });    
+        I.wait(1)
+        I.click('Close', { xpath: '/html/body/div[7]/div/div/div[3]/button[2]' });
+        
+        //Wait for encrypted file
+        I.waitForElement(locate('.filename').withText('testdocument.odt.pgp'));
+        I.click(locate('.filename').withText('testdocument.odt'));
+        I.clickToolbar('Edit');
+        
+        //Password again
+        I.waitForText('Password needed', 5);
+        I.fillField({ xpath: '//*[@id="ogPassword"]'}, 'New-Password');
+        I.click('OK', { xpath: '/html/body/div[7]/div/div/div[3]/button[1]'});
+        
+        
+        //Check for opening
+        I.wait(2)
+        pause()
+        I.waitForElement('input', 8);
+    });//by Robin Pierre Bäßler
+
+
+    Scenario('[C74006] Download encrypted file', async function (I, drive, dialogs) {
+        //Generate TXT file for upload
+        await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.odt');
+        
+        //Login
+        I.login('app=io.ox/files');
+        drive.waitForApp();
+        //Encrypt
+        I.waitForElement(locate('.filename').withText('testdocument.odt'));
+        I.click(locate('.filename').withText('testdocument.odt'));
+        I.clickToolbar('~More actions');
+        I.waitForElement('.dropdown-menu');
+        I.clickDropdown('Encrypt');
+        I.wait(1);
+       
+        //Complete Guard Setup
+        I.waitForText('Setup Guard', 5);
+        I.waitForText('Start Setup', 5);
+        I.click('Start Setup', { xpath: '/html/body/div[7]/div/div/div[3]/button' });
+        I.waitForVisible('input', 5);
+        I.fillField({ xpath: '//*[@id="newogpassword"]'}, 'New-Password');
+        I.wait(0.5)
+        I.fillField({ xpath: '//*[@id="newogpassword2"]'}, 'New-Password');
+        I.click('Next', { xpath: '/html/body/div[7]/div/div/div[3]/button[2]' });    
+        I.wait(1)
+        I.click('Close', { xpath: '/html/body/div[7]/div/div/div[3]/button[2]' });
+        
+        //Download
+        I.waitForElement(locate('.filename').withText('testdocument.odt.pgp'));
+        I.click(locate('.filename').withText('testdocument.odt.pgp'));
+        I.clickToolbar('~Download');
+        I.wait(1.5)
+        //todo: Verify Download
+    });
+
+
+
+    Scenario('[C74116] View encrypted file', async function (I, drive, dialogs) {
+        //Generate TXT file for upload
+        await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.odt');
+        
+        //Login
+        I.login('app=io.ox/files');
+        drive.waitForApp();
+        //Encrypt
+        I.waitForElement(locate('.filename').withText('testdocument.odt'));
+        I.click(locate('.filename').withText('testdocument.odt'));
+        I.clickToolbar('~More actions');
+        I.waitForElement('.dropdown-menu');
+        I.clickDropdown('Encrypt');
+        I.wait(1);
+       
+        //Complete Guard Setup
+        I.waitForText('Setup Guard', 5);
+        I.waitForText('Start Setup', 5);
+        I.click('Start Setup', { xpath: '/html/body/div[7]/div/div/div[3]/button' });
+        I.waitForVisible('input', 5);
+        I.fillField({ xpath: '//*[@id="newogpassword"]'}, 'New-Password');
+        I.wait(0.5)
+        I.fillField({ xpath: '//*[@id="newogpassword2"]'}, 'New-Password');
+        I.click('Next', { xpath: '/html/body/div[7]/div/div/div[3]/button[2]' });    
+        I.wait(1)
+        I.click('Close', { xpath: '/html/body/div[7]/div/div/div[3]/button[2]' });
+        
+        //View encrypted file
+        I.waitForElement(locate('.filename').withText('testdocument.odt.pgp'));
+        I.click(locate('.filename').withText('testdocument.odt.pgp'));
+        I.clickToolbar('~View');
+        //Type password
+        I.waitForText('Password needed', 5);
+        I.fillField({ xpath: '//*[@id="ogPassword"]'}, 'New-Password');
+        I.click('OK', { xpath: '/html/body/div[7]/div/div/div[3]/button[1]'});
+
+        I.waitForElement('.pdf-page', 8)
+    });
