@@ -326,7 +326,12 @@ define('io.ox/mail/compose/main', [
                         app.view.dirty(false);
                         app.view.removeLogoutPoint();
                     }
+
+                    // prevent discarding of space on error
+                    app.model = app.view = undefined;
                     app.quit();
+                    // refresh space to show taskbar item again (in case space still exitsts)
+                    composeAPI.trigger('refresh');
 
                     if (e && e.error) {
                         require(['io.ox/core/yell'], function (yell) {
