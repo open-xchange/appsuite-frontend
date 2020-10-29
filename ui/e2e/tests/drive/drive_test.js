@@ -237,63 +237,208 @@ Scenario('[C45063] Delete current file version', async function (I, drive, dialo
 
 
 Scenario('[C74325] Rename', async function (I, drive, dialogs) {
-        //Generate TXT file for upload
-        let timestamp1 = Math.round(+new Date() / 1000);
-        await fs.promises.writeFile('build/e2e/C74325.txt', timestamp1);
-        const infostoreFolderID = await I.grabDefaultFolder('infostore');
-        await I.haveFile(infostoreFolderID, 'build/e2e/C74325.txt');
-        
+    //Generate TXT file for upload
+    let timestamp1 = Math.round(+new Date() / 1000);
+    await fs.promises.writeFile('build/e2e/C74325.txt', timestamp1);
+    const infostoreFolderID = await I.grabDefaultFolder('infostore');
+    await I.haveFile(infostoreFolderID, 'build/e2e/C74325.txt');
     
-        I.login('app=io.ox/files');
-        drive.waitForApp();
-        I.waitForElement(locate('.filename').withText('C74325.txt'));
-        I.click(locate('.filename').withText('C74325.txt'));
-        I.clickToolbar('~More actions');
-        I.waitForElement('.dropdown-menu');
-        I.clickDropdown('Rename');
+
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    I.waitForElement(locate('.filename').withText('C74325.txt'));
+    I.click(locate('.filename').withText('C74325.txt'));
+    I.clickToolbar('~More actions');
+    I.waitForElement('.dropdown-menu');
+    I.clickDropdown('Rename');
+
     
-        
-        dialogs.waitForVisible();
-        I.waitForVisible('input', 5, dialogs.locators.body);
-        I.fillField('.modal-body input', 'C74325Renamed.txt');
-        dialogs.clickButton('Rename');
-        I.waitForDetached('.modal-dialog');
-        I.waitForElement(locate('.filename').withText('C74325Renamed.txt'));     
-    });  
+    dialogs.waitForVisible();
+    I.waitForVisible('input', 5, dialogs.locators.body);
+    I.fillField('.modal-body input', 'C74325Renamed.txt');
+    dialogs.clickButton('Rename');
+    I.waitForDetached('.modal-dialog');
+    I.waitForElement(locate('.filename').withText('C74325Renamed.txt'));     
+});  //by Robin Pierre Bäßler
 
 
 
-    Scenario('[C73325] Delete', async function (I, drive, dialogs) {
-        //Generate TXT file for upload
-        let timestamp1 = Math.round(+new Date() / 1000);
-        await fs.promises.writeFile('build/e2e/C73325.txt', timestamp1);
-        const infostoreFolderID = await I.grabDefaultFolder('infostore');
-        await I.haveFile(infostoreFolderID, 'build/e2e/C73325.txt');
+Scenario('[C73325] Delete', async function (I, drive, dialogs) {
+    //Generate TXT file for upload    //Duplicate test. didnt realise earlier
+    let timestamp1 = Math.round(+new Date() / 1000);
+    await fs.promises.writeFile('build/e2e/C73325.txt', timestamp1);
+    const infostoreFolderID = await I.grabDefaultFolder('infostore');
+    await I.haveFile(infostoreFolderID, 'build/e2e/C73325.txt');
 
-        I.login('app=io.ox/files');
-        drive.waitForApp();
-        I.waitForElement(locate('.filename').withText('C73325.txt'));
-        I.click(locate('.filename').withText('C73325.txt'));
-        I.clickToolbar('~Delete');
-        I.dontSee(locate('.filename').withText('C73325.txt'));
-    });
-
-
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    I.waitForElement(locate('.filename').withText('C73325.txt'));
+    I.click(locate('.filename').withText('C73325.txt'));
+    I.clickToolbar('~Delete');
+    I.dontSee(locate('.filename').withText('C73325.txt'));
+});//by Robin Pierre Bäßler
 
 
-    Scenario('[C7890] Icon view', async function (I, drive, dialogs) {
-        //Generate TXT file for upload
-        let timestamp1 = Math.round(+new Date() / 1000);
-        await fs.promises.writeFile('build/e2e/C7890.txt', timestamp1);
-        const infostoreFolderID = await I.grabDefaultFolder('infostore');
-        await I.haveFile(infostoreFolderID, 'build/e2e/C7890.txt');
 
-        I.login('app=io.ox/files');
-        drive.waitForApp();
-        I.waitForElement(locate('.filename').withText('C7890.txt'));
-        I.click(locate('.filename').withText('C7890.txt'));
-        I.clickToolbar('View');
-        I.clickDropdown('Icons');
-        I.waitForElement(locate('.thumbnail-masking-box'));
-    });
+
+Scenario('[C7890] Icon view', async function (I, drive, dialogs) {
+    //Generate TXT file for upload
+    let timestamp1 = Math.round(+new Date() / 1000);
+    await fs.promises.writeFile('build/e2e/C7890.txt', timestamp1);
+    const infostoreFolderID = await I.grabDefaultFolder('infostore');
+    await I.haveFile(infostoreFolderID, 'build/e2e/C7890.txt');
+
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    I.waitForElement(locate('.filename').withText('C7890.txt'));
+    I.click(locate('.filename').withText('C7890.txt'));
+    I.clickToolbar('View');
+    I.clickDropdown('Icons');
+    I.waitForElement(locate('.thumbnail-masking-box'));
+});//by Robin Pierre Bäßler
+
+
+
+
+
+Scenario('[C9822] View pictures in Viewer', async function (I, drive, dialogs) {
+    //Use test png for upload
+    await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/images/ox_logo.png');
+    
+    //Login
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+
+    //Steps
+    I.waitForElement(locate('.filename').withText('ox_​logo.png'));
+    I.click(locate('.filename').withText('ox_​logo.png'));
+    I.clickToolbar('~View');
+    I.waitForElement('.io-ox-viewer');
+    I.waitForElement('.viewer-displayer-item.viewer-displayer-image');
+})  //by Robin Pierre Bäßler
+
+
+
+
+
+Scenario('[C9833] Download Picture', async function (I, drive, dialogs) {
+    //Use test png for upload
+    await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/images/ox_logo.png');
+    //Login
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    //Steps
+    I.waitForElement(locate('.filename').withText('ox_​logo.png'));
+    I.click(locate('.filename').withText('ox_​logo.png'));
+    I.clickToolbar('~Download');
+    I.wait(6)
+    //todo: Verify Download
+});
+
+
+
+
+
+Scenario('[C9855] Tile view', async function (I, drive, dialogs) {
+    //Generate TXT file for upload
+    let timestamp1 = Math.round(+new Date() / 1000);
+    await fs.promises.writeFile('build/e2e/C7890.txt', timestamp1);
+    const infostoreFolderID = await I.grabDefaultFolder('infostore');
+    await I.haveFile(infostoreFolderID, 'build/e2e/C7890.txt');
+
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    I.waitForElement(locate('.filename').withText('C7890.txt'));
+    I.click(locate('.filename').withText('C7890.txt'));
+    I.clickToolbar('View');
+    I.clickDropdown('Tiles');
+    I.waitForElement(locate('.thumbnail-masking-box'));
+});//by Robin Pierre Bäßler
+
+
+
+
+
+Scenario('[C74335] Encrypt File', async function (I, drive, dialogs) {
+    //Generate TXT file for upload
+    let timestamp1 = Math.round(+new Date() / 1000);
+    await fs.promises.writeFile('build/e2e/C74335.txt', timestamp1);
+    const infostoreFolderID = await I.grabDefaultFolder('infostore');
+    await I.haveFile(infostoreFolderID, 'build/e2e/C74335.txt');
+    
+
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+
+    I.waitForElement(locate('.filename').withText('C74335.txt'));
+    I.click(locate('.filename').withText('C74335.txt'));
+    I.clickToolbar('~More actions');
+    I.waitForElement('.dropdown-menu');
+    I.clickDropdown('Encrypt');
+    I.wait(1);
    
+
+
+    I.waitForText('Setup Guard', 5);
+    I.waitForText('Start Setup', 5);
+    I.click('Start Setup', { xpath: '/html/body/div[7]/div/div/div[3]/button' });
+
+    I.waitForVisible('input', 5);
+    I.fillField({ xpath: '//*[@id="newogpassword"]'}, 'New-Password');
+    I.fillField({ xpath: '//*[@id="newogpassword2"]'}, 'New-Password');
+    I.click('Next', { xpath: '/html/body/div[7]/div/div/div[3]/button[2]' });    
+
+    I.wait(1)
+    I.click('Close', { xpath: '/html/body/div[7]/div/div/div[3]/button[2]' });
+    
+    I.waitForElement(locate('.filename').withText('C74335.txt.pgp'));
+});  //by Robin Pierre Bäßler  :D
+
+
+
+
+Scenario('[C74445] Remove encryption from File', async function (I, drive, dialogs) {
+    //Generate TXT file for upload
+    let timestamp1 = Math.round(+new Date() / 1000);
+    await fs.promises.writeFile('build/e2e/C74445.txt', timestamp1);
+    const infostoreFolderID = await I.grabDefaultFolder('infostore');
+    await I.haveFile(infostoreFolderID, 'build/e2e/C74445.txt');
+    
+    //Login
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    
+    //Open encrypt dialog
+    I.waitForElement(locate('.filename').withText('C74445.txt'));
+    I.click(locate('.filename').withText('C74445.txt'));
+    I.clickToolbar('~More actions');
+    I.waitForElement('.dropdown-menu');
+    I.clickDropdown('Encrypt');
+    I.wait(1);
+   
+    //Complete Guard Setup
+    I.waitForText('Setup Guard', 5);
+    I.waitForText('Start Setup', 5);
+    I.click('Start Setup', { xpath: '/html/body/div[7]/div/div/div[3]/button' });
+    I.waitForVisible('input', 5);
+    I.fillField({ xpath: '//*[@id="newogpassword"]'}, 'New-Password');
+    I.fillField({ xpath: '//*[@id="newogpassword2"]'}, 'New-Password');
+    I.click('Next', { xpath: '/html/body/div[7]/div/div/div[3]/button[2]' });    
+    I.wait(1)
+    I.click('Close', { xpath: '/html/body/div[7]/div/div/div[3]/button[2]' });
+    
+    //Wait for encrypted file
+    I.waitForElement(locate('.filename').withText('C74445.txt.pgp'));
+
+    //Remove encryption
+    I.click(locate('.filename').withText('C74445.txt.pgp'));
+    I.clickToolbar('~More actions');
+    I.waitForElement('.dropdown-menu');
+    I.clickDropdown('Remove encryption');
+    I.wait(1);
+    I.waitForText('Password needed', 5);
+    I.fillField({ xpath: '//*[@id="ogPassword"]'}, 'New-Password');
+    I.click('Close', { xpath: '/html/body/div[7]/div/div/div[3]/button[2]'})
+    I.wait(2)
+    I.waitForElement(locate('.filename').withText('C74445.txt'))
+    });//by Robin Pierre Bäßler
