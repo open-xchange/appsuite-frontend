@@ -13,16 +13,16 @@
 
 define('io.ox/chat/views/chatList', [
     'io.ox/backbone/views/disposable',
-    'io.ox/chat/views/state',
     'io.ox/chat/views/chatListEntry',
     'gettext!io.ox/chat'
-], function (DisposableView, StateView, ChatListEntryView, gt) {
+], function (DisposableView, ChatListEntryView, gt) {
 
     'use strict';
 
     var ChatListView = DisposableView.extend({
 
         tagName: 'ul',
+
         attributes: {
             role: 'listbox',
             'aria-label': gt('Chat list')
@@ -51,20 +51,6 @@ define('io.ox/chat/views/chatList', [
             var node = this.getNode(model);
             if (node.length) return node;
             return new ChatListEntryView({ model: model }).render().$el;
-        },
-
-        renderIcon: function (model) {
-            switch (model.get('type')) {
-                case 'private':
-                    return $('<span class="btn-icon">').append(
-                        new StateView({ model: model.getFirstMember() }).render().$el.addClass('small')
-                    );
-                case 'group':
-                    return $('<i class="fa fa-group btn-icon" aria-hidden="true">');
-                case 'channel':
-                    return $('<i class="fa fa-hashtag btn-icon" aria-hidden="true">');
-                // no default
-            }
         },
 
         getItems: function () {

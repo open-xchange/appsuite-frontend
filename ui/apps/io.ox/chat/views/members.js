@@ -14,9 +14,9 @@
 define('io.ox/chat/views/members', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/avatar',
-    'io.ox/chat/views/state',
+    'io.ox/switchboard/presence',
     'gettext!io.ox/chat'
-], function (Disposable, AvatarView, StateView, gt) {
+], function (Disposable, AvatarView, presence, gt) {
 
     'use strict';
 
@@ -39,7 +39,7 @@ define('io.ox/chat/views/members', [
             return $('<li>').attr('data-id', model.get('id')).append(
                 $('<div class="picture">').append(
                     new AvatarView({ model: model }).render().$el,
-                    new StateView({ model: model }).render().$el
+                    presence.getPresenceIcon(model.get('email'))
                 ),
                 $('<div class="center">').append(
                     $('<strong>').text(model.getName()),
@@ -68,7 +68,5 @@ define('io.ox/chat/views/members', [
                 model = this.collection.get(id);
             this.collection.remove(model);
         }
-
     });
-
 });

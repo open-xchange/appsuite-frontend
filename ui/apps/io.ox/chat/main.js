@@ -29,11 +29,11 @@ define('io.ox/chat/main', [
     'io.ox/backbone/views/toolbar',
     'io.ox/backbone/views/modal',
     'io.ox/chat/views/avatar',
-    'io.ox/chat/views/state',
+    'io.ox/switchboard/presence',
     'settings!io.ox/chat',
     'gettext!io.ox/chat',
     'less!io.ox/chat/style'
-], function (ext, api, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, AvatarView, StateView, settings, gt) {
+], function (ext, api, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, settings, gt) {
 
     'use strict';
 
@@ -101,7 +101,7 @@ define('io.ox/chat/main', [
                 case 'leave-channel': this.leaveChannel(data.id, false); break;
                 case 'show-chat': this.showChat(data.id || data.cid, data); break;
                 case 'close-chat': this.closeChat(); break;
-                case 'show-recent-conversations': this.showRecentConversations(); break;
+                case 'show-history': this.showHistory(); break;
                 case 'show-channels': this.showChannels(); break;
                 case 'show-all-files': this.showAllFiles(); break;
                 case 'show-file': this.showFile(data); break;
@@ -229,7 +229,7 @@ define('io.ox/chat/main', [
             this.$body.removeClass('open');
         },
 
-        showRecentConversations: function () {
+        showHistory: function () {
             this.$body.addClass('open');
             this.clearActiveSelection();
             this.$rightside.empty().append(new History().render().$el);
@@ -460,7 +460,7 @@ define('io.ox/chat/main', [
                     $('<div class="header">').append(
                         $('<div class="picture">').append(
                             new AvatarView({ model: user }).render().$el,
-                            new StateView({ model: user }).render().$el
+                            presence.getPresenceIcon(user.get('email'))
                         ),
                         $('<div class="dropdown pull-right action-button-rounded">').append(
                             $('<button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').attr('aria-label', gt('New'))
@@ -497,11 +497,6 @@ define('io.ox/chat/main', [
                     ),
                     // recent, all channels, all files
                     $('<div class="navigation-actions">').append(
-                        $('<button type="button" class="btn-nav" data-cmd="show-recent-conversations">').append(
-                            $('<i class="fa fa-clock-o btn-icon" aria-hidden="true">'),
-                            //#. A list (history) of older chats, like the browser history of visited sites
-                            $.txt(gt('Chat history'))
-                        ),
                         $('<button type="button" class="btn-nav" data-cmd="show-channels">').append(
                             $('<i class="fa fa-hashtag btn-icon" aria-hidden="true">'),
                             $.txt(gt('All channels'))
@@ -509,6 +504,11 @@ define('io.ox/chat/main', [
                         $('<button type="button" class="btn-nav" data-cmd="show-all-files">').append(
                             $('<i class="fa fa-paperclip btn-icon" aria-hidden="true">'),
                             $.txt(gt('All files'))
+                        ),
+                        $('<button type="button" class="btn-nav" data-cmd="show-history">').append(
+                            $('<i class="fa fa-clock-o btn-icon" aria-hidden="true">'),
+                            //#. A list (history) of older chats, like the browser history of visited sites
+                            $.txt(gt('Chat history'))
                         )
                     )
                 ),

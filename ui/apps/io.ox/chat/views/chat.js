@@ -277,14 +277,16 @@ define('io.ox/chat/views/chat', [
             this.$el.append(
                 $('<div class="header">').append(
                     new ChatAvatar({ model: this.model }).render().$el,
-                    this.model.isPrivate() ?
+                    (this.model.isPrivate() ?
                         // private chat
-                        this.renderTitle().addClass('flex-grow') :
+                        this.renderTitle() :
                         // groups / channels
-                        $('<div class="flex-grow flex-center">').append(
+                        $('<div>').append(
                             this.renderTitle().addClass('small-line'),
                             this.chatMemberview.render().$el
-                        ),
+                        )
+                    )
+                    .addClass('flex-grow flex-center-vertically'),
                     // burger menu (pull-right just to have the popup right aligned)
                     this.$dropdown = $('<div class="dropdown">').append(
                         $('<button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').attr('title', gt('More actions'))

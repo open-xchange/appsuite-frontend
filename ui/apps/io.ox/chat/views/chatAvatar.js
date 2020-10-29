@@ -14,9 +14,9 @@
 define('io.ox/chat/views/chatAvatar', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/avatar',
-    'io.ox/chat/views/state',
-    'io.ox/chat/views/groupAvatar'
-], function (DisposableView, AvatarView, StateView, GroupAvatarView) {
+    'io.ox/chat/views/groupAvatar',
+    'io.ox/switchboard/presence'
+], function (DisposableView, AvatarView, GroupAvatarView, presence) {
 
     'use strict';
 
@@ -39,7 +39,7 @@ define('io.ox/chat/views/chatAvatar', [
             var model = this.model.getFirstMember();
             this.$el.append(
                 new AvatarView({ model: model }).render().$el,
-                new StateView({ model: model }).render().$el
+                presence.getPresenceIcon(model.get('email'))
             );
         },
 
