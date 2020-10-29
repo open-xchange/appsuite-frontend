@@ -216,10 +216,13 @@ define('io.ox/core/sub/sharedFolders', [
 
             // cleanup
             _.each(sections, function (section) {
-                if (!_.isEmpty(pageData[section]) && pageData[section][0][properties]) {
-                    dialogData[section] = pageData[section];
-                }
 
+                function filter(secOb) { return _.has(secOb, properties); }
+
+                var filteredData = _.filter(pageData[section], filter);
+                if (!_.isEmpty(filteredData)) {
+                    dialogData[section] = filteredData;
+                }
             });
 
             return {
