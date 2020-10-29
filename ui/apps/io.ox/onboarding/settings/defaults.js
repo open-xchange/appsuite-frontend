@@ -45,7 +45,7 @@ define('io.ox/onboarding/settings/defaults', ['gettext!io.ox/core/onboarding'], 
         },
         'windows': {
             'driveapp': {
-                'url': 'https://appsuite-dev.open-xchange.com/appsuite/api/drive/client/windows/install?session=' + ox.session
+                'url': ox.abs + '/appsuite/api/drive/client/windows/install?session=' + ox.session
             }
         }
     };
