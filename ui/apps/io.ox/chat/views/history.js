@@ -67,7 +67,7 @@ define('io.ox/chat/views/history', [
 
         initialize: function () {
 
-            this.collection = data.chats.recent;
+            this.collection = data.chats;
 
             this.listenTo(this.collection, {
                 'expire': this.onExpire,

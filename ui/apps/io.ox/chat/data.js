@@ -213,7 +213,7 @@ define('io.ox/chat/data', [
         },
 
         getSystemMessage: function () {
-            var event = JSON.parse(this.get('content'));
+            var event = JSON.parse(this.get('content') || '{}');
             var originator = this.get('sender'),
                 members = event.members || [],
                 room = data.chats.get(this.get('roomId'));
@@ -395,7 +395,7 @@ define('io.ox/chat/data', [
         },
 
         updateDelivery: function (state) {
-            var room = data.chats.active.get(this.get('roomId'));
+            var room = data.chats.get(this.get('roomId'));
             if (room && room.isChannel() && !room.isMember()) return;
             var invisible = presence.getMyAvailability() === 'invisible';
             this.set('deliveryState', state);
@@ -458,72 +458,6 @@ define('io.ox/chat/data', [
             },
             has: function (messageId) {
                 return !!cache[messageId];
-            }
-        };
-    })();
-
-    data.chats = (function () {
-        var cache = {},
-            idlessCache = {};
-        return {
-            find: function (predicate, attr) {
-                var roomIds = Object.keys(cache).filter(function (key) {
-                        var room = cache[key];
-                        return predicate(room);
-                    }),
-                    rooms = roomIds.map(function (roomId) {
-                        return cache[roomId];
-                    });
-                if (rooms.length) return $.when(rooms[0]);
-                return api.request({
-                    url: api.url + '/search/rooms?' + $.param(attr)
-                }).then(function (data) {
-                    if (!data || !data.length) throw new Error('Chat could not be found');
-                    return data.map(function (attr) {
-                        return this.get(attr);
-                    }.bind(this))[0];
-                }.bind(this));
-            },
-            findWhere: function (attr, requestAttr) {
-                return this.find(function (room) {
-                    return _(attr).every(function (value, key) {
-                        return _.isEqual(value, room.get(key));
-                    });
-                }, requestAttr || attr);
-            },
-            findByReference: function (type, id) {
-                var reference = { type: type, id: id };
-                return this.findWhere({ reference: reference }, { reference: JSON.stringify(reference) });
-            },
-            findPrivateRoom: function (email) {
-                return this.find(function (room) {
-                    if (!room.isPrivate()) return false;
-                    if (!room.get('members')[email]) return;
-                    return true;
-                }, { type: 'private', members: JSON.stringify([data.user.email, email]) });
-            },
-            get: function (attrs, options) {
-                if (!attrs) return;
-                if (_.isString(attrs)) attrs = { roomId: attrs };
-
-                var roomId = attrs.roomId || attrs.id,
-                    identifier = attrs.type && attrs.title && attrs.members && attrs.type + attrs.title + Object.keys(attrs.members).sort(),
-                    room = cache[roomId] || idlessCache[identifier];
-
-                if (room) room.set(attrs);
-                else {
-                    room = new ChatModel(attrs, options);
-                    if (roomId) cache[roomId] = room;
-                    else {
-                        if (identifier) idlessCache[identifier] = room;
-                        room.once('change:roomId', function () {
-                            if (identifier) delete idlessCache[identifier];
-                            cache[room.get('roomId')] = room;
-                        });
-                    }
-                }
-
-                return room;
             }
         };
     })();
@@ -847,13 +781,6 @@ define('io.ox/chat/data', [
             var self = this;
             return api.setRoomState(this.get('roomId'), !self.get('active')).then(function () {
                 self.set('active', !self.get('active'));
-                if (self.get('active')) {
-                    data.chats.active.add(self);
-                    data.chats.recent.remove(self);
-                } else {
-                    data.chats.active.remove(self);
-                    data.chats.recent.add(self);
-                }
             });
         },
 
@@ -876,16 +803,10 @@ define('io.ox/chat/data', [
 
     data.ChatModel = ChatModel;
 
-    function getChatModel(attrs, options) {
-        var model = data.chats.get(attrs, options);
-        model.collection = options.collection;
-        return model;
-    }
-    getChatModel.prototype.idAttribute = 'roomId';
-
     var ChatCollection = BaseCollection.extend({
 
-        model: getChatModel,
+        model: ChatModel,
+
         comparator: function (a, b) {
             if (!a.get('lastMessage')) return 0;
             if (!b.get('lastMessage')) return 0;
@@ -893,16 +814,10 @@ define('io.ox/chat/data', [
         },
 
         url: function () {
-            return api.url + '/' + this.options.endpoint;
+            return api.url + '/rooms';
         },
 
-        sync: function (method, collection, options) {
-            options = _.extend({}, options, this.options);
-            return BaseCollection.prototype.sync.call(this, method, collection, options);
-        },
-
-        initialize: function (models, options) {
-            this.options = options;
+        initialize: function () {
             this.on('change:unreadCount', this.onChangeUnreadCount);
             this.initialized = new $.Deferred();
             this.once('sync', this.initialized.resolve);
@@ -919,14 +834,10 @@ define('io.ox/chat/data', [
             return this.filter({ active: true });
         },
 
-        getChannels: function () {
-            return this.filter({ type: 'channel' });
-        },
-
         fetchUnlessExists: function (roomId) {
             var model = this.get(roomId);
             if (model) return $.when(model);
-            return api.getChannelByType(this.options.endpoint, roomId)
+            return api.getChannelByType('rooms', roomId)
                 .then(function (data) { return this.add(data); }.bind(this));
         },
 
@@ -937,28 +848,50 @@ define('io.ox/chat/data', [
             var members = _.clone(model.get('members')) || {};
             members[data.user.email] = 'member';
             model.set({ active: true, members: members });
-            data.chats.active.add(model);
-            data.chats.channels.remove(model);
+            data.chats.add(model);
 
             return api.joinChannel(roomId);
         },
 
-        leaveChannel: function (roomId) {
-            var room = this.get(roomId);
-            return api.leaveChannelByType(this.options.endpoint, roomId)
-                .then(function () { room.set('active', false); })
+        leaveGroup: function (roomId) {
+            return api.leaveChannelByType('rooms', roomId)
                 .fail(function (err) { console.error(err); });
         },
 
-        leaveGroup: function (roomId) {
-            return api.leaveChannelByType(this.options.endpoint, roomId)
+        findPrivateRoom: function (email) {
+            return this.find(function (room) {
+                if (!room.isPrivate()) return false;
+                if (!room.get('members')[email]) return;
+                return true;
+            });
+        },
+
+        findByReference: function (type, id) {
+            return this.find(function (room) {
+                var reference = room.get('reference');
+                if (!reference) return;
+                if (reference.type !== type) return;
+                if (reference.id !== id) return;
+                return false;
+            });
+        }
+    });
+
+    var ChannelCollection = ChatCollection.extend({
+        url: function () {
+            return api.url + '/channels';
+        },
+
+        leaveChannel: function (roomId) {
+            var room = this.get(roomId);
+            return api.leaveChannelByType('channels', roomId)
+                .then(function () { room.set('active', false); })
                 .fail(function (err) { console.error(err); });
         }
     });
 
-    data.chats.active = new ChatCollection(undefined, { endpoint: 'rooms', data: { active: true } });
-    data.chats.channels = new ChatCollection(undefined, { endpoint: 'channels' });
-    data.chats.recent = new ChatCollection(undefined, { endpoint: 'rooms', data: { active: false } });
+    data.chats = new ChatCollection();
+    data.channels = new ChannelCollection();
 
     //
     // Files
@@ -969,16 +902,10 @@ define('io.ox/chat/data', [
         idAttribute: 'fileId',
 
         getThumbnailUrl: function () {
-            var roomId = data.chats.active.currentChatId,
-                isChannel = roomId && data.chats.active.get(roomId).isChannel();
-            if (isChannel) return api.url + '/channels/' + roomId + '/files/' + this.get('fileId') + 'thumbnail';
             return api.url + '/files/' + this.get('fileId') + '/thumbnail';
         },
 
         getFileUrl: function () {
-            var roomId = data.chats.active.currentChatId,
-                isChannel = roomId && data.chats.active.get(roomId).isChannel();
-            if (isChannel) return api.url + '/channels/' + roomId + '/files/' + this.get('fileId');
             return api.url + '/files/' + this.get('fileId');
         },
 
@@ -995,7 +922,25 @@ define('io.ox/chat/data', [
 
     data.files = new FilesCollection();
 
+    var RoomFile = FileModel.extend({
+        getThumbnailUrl: function () {
+            var roomId = this.collection.roomId,
+                isChannel = roomId && data.chats.get(roomId).isChannel();
+            if (isChannel) return api.url + '/channels/' + roomId + '/files/' + this.get('fileId') + 'thumbnail';
+            return api.url + '/files/' + this.get('fileId') + '/thumbnail';
+        },
+
+        getFileUrl: function () {
+            var roomId = this.collection.roomId,
+                isChannel = roomId && data.chats.get(roomId).isChannel();
+            if (isChannel) return api.url + '/channels/' + roomId + '/files/' + this.get('fileId');
+            return api.url + '/files/' + this.get('fileId');
+        }
+    });
+
     var RoomFilesCollection = FilesCollection.extend({
+
+        model: RoomFile,
 
         initialize: function (models, opt) {
             this.roomId = opt.roomId;
@@ -1004,7 +949,7 @@ define('io.ox/chat/data', [
         },
 
         url: function () {
-            var isChannel = data.chats.active.get(this.roomId).isChannel();
+            var isChannel = data.chats.get(this.roomId).isChannel();
             if (isChannel) return api.url + '/channels/' + this.roomId + '/files';
             return api.url + '/rooms/' + this.roomId + '/files';
         }
@@ -1024,9 +969,9 @@ define('io.ox/chat/data', [
         },
 
         refresh: function () {
-            var newChats = data.chats.active.filter(function (model) { return model.isNew(); });
+            var newChats = data.chats.filter(function (model) { return model.isNew(); });
             $.when.apply($,
-                _([data.chats.active, data.chats.channels, data.chats.recent])
+                _([data.chats, data.channels])
                     .map(function (collection) {
                         collection.expired = true;
                         collection.trigger('expire');
@@ -1034,7 +979,7 @@ define('io.ox/chat/data', [
                         return collection.fetch();
                     })
             ).then(function () {
-                var chats = data.chats.active.chain().union(data.chats.channels, data.chats.recent).unique().value();
+                var chats = data.chats.chain().union(data.channels).unique().value();
                 chats.forEach(function (model) {
                     if (model.messages.length === 0) return;
                     var prevLast = model.previous('lastMessage') || {},
@@ -1047,7 +992,7 @@ define('io.ox/chat/data', [
                     if (model.messages.expired) model.messages.reset();
                 });
             }).then(function () {
-                data.chats.active.add(newChats, { at: 0 });
+                data.chats.add(newChats, { at: 0 });
             });
         },
 
@@ -1098,7 +1043,7 @@ define('io.ox/chat/data', [
                 // stop typing
                 events.trigger('typing:' + roomId, message.sender, false);
                 // fetch room unless it's already known
-                data.chats.active.fetchUnlessExists(roomId).done(function (model) {
+                data.chats.fetchUnlessExists(roomId).done(function (model) {
                     // add new message to room
                     message.roomId = roomId;
                     var newMessage = messageCache.get(message);

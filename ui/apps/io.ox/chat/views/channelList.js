@@ -64,7 +64,7 @@ define('io.ox/chat/views/channelList', [
 
         initialize: function () {
 
-            this.collection = data.chats.channels;
+            this.collection = data.channels;
 
             this.listenTo(this.collection, {
                 'expire': this.onExpire,
@@ -74,11 +74,11 @@ define('io.ox/chat/views/channelList', [
             });
 
             // get fresh data
-            this.collection.fetch({ url: api.url + '/channels' });
+            this.collection.fetch();
         },
 
         render: function () {
-            var channels = this.getItems();
+            var channels = this.collection;
             this.$el.append(
                 $('<div class="header">').append(
                     $('<h2>').text(gt('All channels'))
@@ -119,10 +119,6 @@ define('io.ox/chat/views/channelList', [
                 );
         },
 
-        getItems: function () {
-            return this.collection.getChannels();
-        },
-
         getNode: function (model) {
             return this.$('[data-id="' + $.escape(model.get('roomId')) + '"]');
         },
@@ -131,7 +127,7 @@ define('io.ox/chat/views/channelList', [
             if (this.disposed) return;
 
             this.$('.scrollpane ul').empty().append(
-                this.getItems().map(this.renderItem.bind(this))
+                this.collection.map(this.renderItem.bind(this))
             );
         }, 1),
 

@@ -81,7 +81,10 @@ define('io.ox/chat/extensions/register', [
                 ).hide()
             );
 
-            data.chats.findPrivateRoom(baton.data.email1).then(function success(room) {
+            data.chats.initialized.then(function success() {
+                var room = data.chats.findPrivateRoom(baton.data.email1);
+                if (!room) throw new Error();
+
                 room.messages.fetch();
                 return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
                     node.find('button').on('click', function () {
@@ -91,6 +94,7 @@ define('io.ox/chat/extensions/register', [
                     });
                     node.show().find('.ox-chat').append(
                         new MessagesView({
+                            room: room,
                             collection: room.messages,
                             limit: 10,
                             markAsRead: false,
@@ -101,7 +105,7 @@ define('io.ox/chat/extensions/register', [
                         }).render().$el
                     );
                 });
-            }, function fail() {
+            }).catch(function fail() {
                 node.remove();
             });
         }
@@ -173,7 +177,10 @@ define('io.ox/chat/extensions/register', [
             );
             this.append($fieldset);
 
-            data.chats.findByReference('appointment', baton.model.get('id')).then(function success(room) {
+            data.chats.initialized.then(function success() {
+                var room = data.chats.findByReference('appointment', baton.model.get('id'));
+                if (!room) throw new Error();
+
                 room.messages.fetch();
                 return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
                     $fieldset.find('button').on('click', function () {
@@ -183,6 +190,7 @@ define('io.ox/chat/extensions/register', [
                     });
                     $fieldset.show().find('.ox-chat').append(
                         new MessagesView({
+                            room: room,
                             collection: room.messages,
                             limit: 10,
                             markAsRead: false,

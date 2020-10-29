@@ -192,7 +192,7 @@ define('io.ox/chat/actions/openGroupDialog', [
             if (Object.keys(updates).length <= 1 && Object.keys(hiddenAttr).length <= 0) return def.resolve(this.model.get('roomId'));
             if (!originalModel.has('roomId')) originalModel = data.chats.get(this.model.toJSON());
             originalModel.save(updates, { hiddenAttr: hiddenAttr }).then(function () {
-                data.chats.active.add(originalModel);
+                data.chats.add(originalModel);
                 def.resolve(originalModel.get('roomId'));
             });
         })
