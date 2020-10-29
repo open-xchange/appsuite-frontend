@@ -13,9 +13,9 @@
 
 define('io.ox/chat/views/chatMember', [
     'io.ox/backbone/views/disposable',
-    'io.ox/chat/views/badge',
-    'gettext!io.ox/chat'
-], function (DisposableView, BadgeView, gt) {
+    'io.ox/chat/views/badge'
+    //'gettext!io.ox/chat'
+], function (DisposableView, BadgeView) {
 
     'use strict';
 
@@ -37,11 +37,10 @@ define('io.ox/chat/views/chatMember', [
 
         render: function () {
             this.$el.append(
-                $('<ul class="members">').append(this.collection.map(this.renderMember, this)),
-                $('<button class="expand-members btn btn-link">').attr('title', gt('Show all members')).append($('<i class="fa fa-caret-down">'))
+                $('<ul class="members">').append(this.collection.map(this.renderMember, this))
+                //$('<button class="expand-members btn btn-link">').attr('title', gt('Show all members')).append($('<i class="fa fa-caret-down">'))
             );
-
-            this.updateToggleButton();
+            //this.updateToggleButton();
             return this;
         },
 
@@ -87,12 +86,12 @@ define('io.ox/chat/views/chatMember', [
             this.$el.find('.members').append(
                 $('<li>').append(new BadgeView({ model: model }).render().$el)
             );
-            this.updateToggleButton();
+            //this.updateToggleButton();
         },
 
         onRemove: function (model) {
             this.$el.find('[data-email="' + model.get('email1') + '"]').parent().remove();
-            this.updateToggleButton();
+            //this.updateToggleButton();
         }
     });
 

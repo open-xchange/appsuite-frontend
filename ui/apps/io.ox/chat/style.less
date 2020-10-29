@@ -127,7 +127,7 @@
             flex: 1;
         }
         .header {
-            padding-right: 8px;
+            padding: 8px 16px 7px 16px;
         }
     }
 
@@ -443,6 +443,7 @@
         font-weight: bold;
         .flex-center();
     }
+
     .avatar {
         &.gray { color: #000; }
         &.red { background-color: #FFA0A5; }
@@ -455,13 +456,14 @@
         &.pink { background-color: #FFC2DE; }
     }
 
-    .presence {
+    .picture .presence {
         position: absolute;
         top: 40px;
         left: 42px;
     }
 
     .chat-avatar .presence, .list-unstyled .presence {
+        position: absolute;
         top: 23px;
         left: 27px;
     }
@@ -498,7 +500,11 @@
 
         .header {
             display: flex;
-            h2.small-line { line-height: 24px; }
+            h2.small-line {
+                font-size: 16px;
+                font-weight: bold;
+                line-height: 24px;
+            }
             .chat-avatar {
                 float: left;
                 margin-right: 16px;
@@ -932,6 +938,8 @@
         button {
             &.file-upload-btn {
                 font-size: 20px;
+                width: 40px;
+                margin: 0 12px;
             }
             font-size: 18px;
         }
@@ -944,8 +952,8 @@
             position: absolute;
             padding: 0;
             margin: 0;
-            left: 54px;
-            right: 96px;
+            left: 80px;
+            right: 100px;
             top: 16px;
 
             &.preview .content {
@@ -1032,15 +1040,16 @@
     }
 
     .chat-members-container {
+
         display: flex;
 
         .members {
             overflow: hidden;
-            overflow-x: auto;
-            line-height: 24px;
+            overflow-y: auto;
+            line-height: 16px;
+            max-height: 32px;
             li {
                 display: inline-block;
-                margin-bottom: 8px;
             }
         }
 
@@ -1059,24 +1068,16 @@
     }
 
     .user-badge {
-        border: 0;
-        text-align: left;
         margin-right: 8px;
         max-width: 200px;
-        padding: 0 8px 0 2px;
-        border-radius: 12px;
-        background-color: rgba(0, 0, 0, 0.05);
-        outline: 0;
         .ellipsis();
-        &:focus, &:hover {
-            color: white;
-            background-color: @gray;
-            .state {
-                border-color: rgba(0, 0, 0, 0.20);
-            }
+        .dot .icon {
+            width: 8px;
+            height: 8px;
+            margin-right: 4px;
         }
-        .state {
-            margin: 2px 4px -1px 4px;
+        a {
+            color: #555;
         }
     }
 
@@ -1278,6 +1279,12 @@
     .flex-grow {
         flex: 1;
         overflow: hidden;
+    }
+
+    .flex-center {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     .search-result {

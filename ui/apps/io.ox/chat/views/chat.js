@@ -281,7 +281,7 @@ define('io.ox/chat/views/chat', [
                         // private chat
                         this.renderTitle().addClass('flex-grow') :
                         // groups / channels
-                        $('<div class="flex-grow">').append(
+                        $('<div class="flex-grow flex-center">').append(
                             this.renderTitle().addClass('small-line'),
                             this.chatMemberview.render().$el
                         ),
@@ -460,12 +460,9 @@ define('io.ox/chat/views/chat', [
                 .addClass(message.getType())
                 .toggleClass('emoji', util.isOnlyEmoji(message.getBody()))
                 .append(
-                    $('<div class="content">').append(
-                        // sender name
+                    $('<div class="quote">').append(
                         $('<div class="sender">').text(user.getName()),
-                        // message body
-                        $('<div class="body">')
-                            .html(messageBody)
+                        $('<div class="body">').html(messageBody)
                     )
                 );
 

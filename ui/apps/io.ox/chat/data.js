@@ -90,20 +90,28 @@ define('io.ox/chat/data', [
 
     var UserModel = Backbone.Model.extend({
 
-        isSystem: function () { return this.get('id') === 0; },
+        isSystem: function () {
+            return this.get('id') === 0;
+        },
 
         isMyself: function () {
             var user = data.users.getByMail(data.user.email);
             return this === user;
         },
 
-        getName: function () {
-            var first = $.trim(this.get('first_name')), last = $.trim(this.get('last_name'));
-            if (first && last) return first + ' ' + last;
-            return first || last || this.get('email') || this.getEmail() || '\u00a0';
+        getShortName: function () {
+            return this.get('first_name') || this.getName();
         },
 
-        getEmail: function () { return this.get('email1') || this.get('email2') || this.get('email3'); }
+        getName: function () {
+            var first = this.get('first_name'), last = this.get('last_name');
+            if (first && last) return first + ' ' + last;
+            return first || last || this.get('email') || '\u00a0';
+        },
+
+        getEmail: function () {
+            return this.get('email1') || this.get('email2') || this.get('email3');
+        }
     });
 
     var UserCollection = Backbone.Collection.extend({
@@ -126,8 +134,8 @@ define('io.ox/chat/data', [
                 return cache[email];
             };
         }())
-
     });
+
     data.users = new UserCollection([]);
 
     data.fetchUsers = function () {
@@ -136,8 +144,9 @@ define('io.ox/chat/data', [
                 return _.extend({
                     cid: _.cid(item),
                     id: item.internal_userid,
-                    first_name: item.first_name,
-                    last_name: item.last_name,
+                    first_name: String(item.first_name || '').trim(),
+                    last_name: String(item.last_name || '').trim(),
+                    email: String(item.email1 || item.email2 || item.email3 || '').trim().toLowerCase(),
                     image: !!item.image1_url
                 }, _(item).pick('email1', 'email2', 'email3'));
             });

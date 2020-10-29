@@ -11,13 +11,16 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/badge', ['io.ox/backbone/views/disposable', 'io.ox/chat/views/state'], function (DisposableView, StateView) {
+define('io.ox/chat/views/badge', [
+    'io.ox/backbone/views/disposable',
+    'io.ox/switchboard/presence'
+], function (DisposableView, presence) {
 
     'use strict';
 
     var BadgeView = DisposableView.extend({
 
-        tagName: 'button',
+        tagName: 'span',
         className: 'user-badge',
 
         initialize: function () {
@@ -25,17 +28,18 @@ define('io.ox/chat/views/badge', ['io.ox/backbone/views/disposable', 'io.ox/chat
         },
 
         render: function () {
-            this.$el
-                .attr({ 'data-cmd': 'open-private-chat', 'data-email': this.model.get('email1') })
-                .append(
-                    new StateView({ model: this.model }).renderSimple().$el,
-                    $('<span class="name">').text(this.model.getName())
-                );
+            var email = this.model.get('email');
+            this.$el.append(
+                presence.getPresenceDot(email),
+                $('<a href="#" class="name">')
+                    .attr({ 'data-cmd': 'open-private-chat', 'data-email': email })
+                    .text(this.model.getShortName())
+            );
             return this;
         },
 
         onChangeName: function () {
-            this.$('.name').text(this.model.getName());
+            this.$('.name').text(this.model.getShortName());
         }
     });
 
