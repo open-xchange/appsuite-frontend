@@ -1027,35 +1027,23 @@
             right: 100px;
             top: 16px;
 
-            &.preview .content {
+            &.preview .quote {
                 background-color: #eee;
                 border-radius: @borderRadius;
                 display: inline-block;
                 padding: 4px 8px 8px 8px;
-            }
-
-            .content {
-                max-width: 100%;
-
-                .sender {
-                    color: #000;
-                    padding: 0;
-                    margin: 0;
-                }
 
                 .body {
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    overflow: hidden;
-                    max-width: 100%;
-                    margin-bottom: -5px;
-
                     // keep previews small in the editor
-                    .preview-wrapper {
-                        max-width: 150px;
-                        max-height: 150px;
-                    }
+                    max-width: 150px;
+                    max-height: 150px;
                 }
+            }
+
+            .quote .body{
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
         }
 
@@ -1068,10 +1056,10 @@
         }
 
         &.reply-mode.preview{
-            // 80px textarea + 178px reference Message +  8px Padding
-            height: 266px;
+            // 80px textarea + 185px reference Message +  8px Padding
+            height: 273px;
             textarea {
-                padding-top: 186px;
+                padding-top: 201px;
             }
         }
 
