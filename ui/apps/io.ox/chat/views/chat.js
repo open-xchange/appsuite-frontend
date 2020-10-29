@@ -194,35 +194,45 @@ define('io.ox/chat/views/chat', [
             // tracking typing
             this.typing = {
                 $el: $('<div class="typing">'),
-                timer: {},
+                hash: {},
                 show: function (email) {
                     var model = data.users.getByMail(email);
                     if (!model || model.isMyself()) return;
                     this.reset(email);
-                    var $span = this.span(email),
-                        atBottom = self.isScrolledToBottom();
-                    if (!$span.length) this.add(email, model.getName());
+                    var atBottom = self.isScrolledToBottom();
+                    this.hash[email] = {
+                        name: '<span class="name">' + _.escape(model.getName()) + '</span>',
+                        timeout: setTimeout(function () {
+                            if (this.disposed) return;
+                            this.hide(email);
+                        }.bind(this), 5000)
+                    };
+                    this.render();
                     if (atBottom) self.scrollToBottom();
-                    this.timer[email] = setTimeout(function () {
-                        if (this.disposed) return;
-                        this.hide(email);
-                    }.bind(this), 5000);
-                },
-                span: function (email) {
-                    return this.$el.find('[data-user-id="' + email + '"]');
                 },
                 reset: function (email) {
-                    if (!this.timer[email]) return;
-                    window.clearTimeout(this.timer[email]);
-                    delete this.timer[email];
+                    if (!this.hash[email]) return;
+                    window.clearTimeout(this.hash[email].timeout);
+                    delete this.hash[email];
                 },
-                add: function (email, name) {
-                    //#. %1$s: name of the chat member that is currently typing
-                    this.$el.append($('<div class="name">').attr('data-user-id', email).text(gt('%1$s is typing', name)));
+                render: function () {
+                    var names = _(this.hash).pluck('name');
+                    this.$el.html(this.getNotificationString(names));
+                },
+                getNotificationString: function (names) {
+                    if (!names.length) return '';
+                    //#. %1$s is a member name
+                    if (names.length === 1) return gt('%1$s is typing ...', names[0]);
+                    //#. %1$s and %2$s are member names
+                    if (names.length === 2) return gt('%1$s and %2$s are typing ...', names[0], names[1]);
+                    //#. %1$s, %2$s, and %3$s are member names
+                    if (names.length === 3) return gt('%1$s, %2$s, and %3$s are typing ...', names[0], names[1], names[2]);
+                    //#. %1$s and %2$s are member names, %3$d is the number of further members
+                    return gt('%1$s, %2$s and %3$d others are typing ...', names[0], names[1], names.length - 2);
                 },
                 hide: function (email) {
                     this.reset(email);
-                    this.span(email).remove();
+                    this.render();
                 },
                 toggle: function (email, state) {
                     if (state) this.show(email); else this.hide(email);
