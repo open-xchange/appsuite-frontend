@@ -1170,7 +1170,7 @@ define('io.ox/chat/data', [
                 //#. shown instead of your name for your own chat messages
                 if (email === data.user.email) name = gt('You');
 
-                return '<span class="name">' + name + '</span>';
+                return '<span class="name" text="' + name + '">';
             })
             .sort()
         );
