@@ -24,7 +24,7 @@ define('io.ox/switchboard/call/outgoing', [
 
     return {
         openDialog: function (call) {
-            new Modal({ autoClose: false })
+            return new Modal({ autoClose: false })
                 .inject({
                     renderCallees: function () {
                         var callees = call.getCallees();
@@ -112,6 +112,9 @@ define('io.ox/switchboard/call/outgoing', [
                     },
                     getButton: function (action) {
                         return this.$('button[data-action="' + action + '"]');
+                    },
+                    getJoinURL: function () {
+                        return this.conference.model.get('joinURL');
                     }
                 })
                 .build(function () {
@@ -129,7 +132,7 @@ define('io.ox/switchboard/call/outgoing', [
                     this.conference.trigger('connect');
                 })
                 .on('call', function () {
-                    var url = this.conference.model.get('joinURL');
+                    var url = this.getJoinURL();
                     if (!url) return;
                     window.open(url, 'call');
                     call.set('joinURL', url).propagate();

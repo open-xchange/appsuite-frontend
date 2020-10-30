@@ -132,7 +132,12 @@ define('io.ox/chat/data', [
                 });
                 return cache[email];
             };
-        }())
+        }()),
+
+        getName: function (email) {
+            var model = this.getByMail(email);
+            return model ? model.getName() : '';
+        }
     });
 
     data.users = new UserCollection([]);
@@ -746,9 +751,13 @@ define('io.ox/chat/data', [
         postMessage: (function () {
             var lastDeferred = $.when();
             return function postMessage(attr, file) {
-                lastDeferred = lastDeferred.then(function () {
-                    return this.storeMessage(attr, file).catch();
-                }.bind(this));
+                var consumed = false, consume = function () { consumed = true; };
+                events.trigger('message:post', { attr: attr, room: this, consume: consume });
+                if (!consumed) {
+                    lastDeferred = lastDeferred.then(function () {
+                        return this.storeMessage(attr, file).catch();
+                    }.bind(this));
+                }
                 return lastDeferred;
             };
         }()),

@@ -23,8 +23,8 @@ define.async('io.ox/switchboard/api', [
     'use strict';
 
     var api = {
-        online: false,
 
+        online: false,
         host: settings.get('host'),
 
         // will both be set below

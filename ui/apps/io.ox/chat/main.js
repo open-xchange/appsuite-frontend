@@ -32,7 +32,8 @@ define('io.ox/chat/main', [
     'io.ox/switchboard/presence',
     'settings!io.ox/chat',
     'gettext!io.ox/chat',
-    'less!io.ox/chat/style'
+    'less!io.ox/chat/style',
+    'io.ox/chat/commands'
 ], function (ext, api, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, settings, gt) {
 
     'use strict';
