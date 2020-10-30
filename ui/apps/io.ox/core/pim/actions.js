@@ -52,7 +52,15 @@ define('io.ox/core/pim/actions', [
             // browser support for downloading more than one file at once is pretty bad (see Bug #36212)
             collection: 'one',
             action: function (baton) {
-                var url = attachmentAPI.getUrl(baton.first(), 'download');
+                // chronos has a special download function (bonus point, it works with federated sharing)
+                var item = baton.first(),
+                    url = item.model && item.model.get('folder').indexOf('cal://') === 0 ? ox.apiRoot + '/chronos?' + $.param({
+                        session: ox.session,
+                        action: 'getAttachment',
+                        folder: item.model.get('folder'),
+                        id: item.model.get('id'),
+                        managedId: baton.first().managedId
+                    }) : attachmentAPI.getUrl(item, 'download');
                 if (_.device('ios >= 11')) {
                     downloadAPI.window(url, { antivirus: true });
                 } else {
