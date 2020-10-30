@@ -58,10 +58,14 @@ define('io.ox/files/share/api', [
             return this.has('com.openexchange.share.extended' + (this.isFolder() ? 'Permissions' : 'ObjectPermissions'));
         },
 
-        getOwner: function () {
+        getEntity: function () {
             // mail folders show up with "null" so test if its inside our defaultfolders (prevent shared folders from showing wrong owner)
             // shared folder only have admins, no owner, because it's not possible to determine the right one
             return this.get('created_by') || (folderAPI.is('insideDefaultfolder', this.attributes) ? ox.user_id : null);
+        },
+
+        getIdentifier: function () {
+            return this.get('created_from') && this.get('created_from').identifier;
         },
 
         getDisplayName: function () {
