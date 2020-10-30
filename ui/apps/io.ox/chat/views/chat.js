@@ -75,7 +75,7 @@ define('io.ox/chat/views/chat', [
             var model = baton.model;
             if (!model.get('active') || model.isNew()) return;
             this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="unsubscribe-chat">').attr('data-id', model.id).text(gt('Hide chat')).on('click', events.forward)
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="unsubscribe-chat">').attr('data-id', model.id).text(gt('Close chat')).on('click', events.forward)
             );
         }
     });
@@ -368,7 +368,7 @@ define('io.ox/chat/views/chat', [
             }
 
             if (!this.model.isNew() && (this.model.isPrivate() || this.model.isGroup() || (this.model.isChannel() && this.model.isMember())) && this.model.get('active')) {
-                $ul.append(renderItem(gt('Hide chat'), { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
+                $ul.append(renderItem(gt('Close chat'), { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
             }
             if ((this.model.isGroup() || this.model.isChannel()) && this.model.isMember()) {
                 $ul.append(renderItem(gt('Edit chat'), { 'data-cmd': 'edit-group-chat', 'data-id': this.model.id }));
