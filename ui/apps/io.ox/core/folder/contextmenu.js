@@ -693,21 +693,6 @@ define('io.ox/core/folder/contextmenu', [
             });
         },
 
-        // used by federated sharing folders, might be renamed to delete
-        unsubscribe: function (baton) {
-            // currently only infostore, must be federated sharing and a direkt subfolder of folder 10 or 15
-            if (baton.module === 'infostore' && (String(baton.data.folder_id) === '10' || String(baton.data.folder_id) === '15')) {
-                contextUtils.addLink(this, {
-                    action: 'unsubscribe',
-                    enabled: true,
-                    handler: function () {
-                        api.update(baton.data.id, { subscribed: false });
-                    },
-                    text: gt('Unsubscribe folder')
-                });
-            }
-        },
-
         divider: contextUtils.divider
     };
 
@@ -861,11 +846,6 @@ define('io.ox/core/folder/contextmenu', [
             id: 'restore',
             index: 6600,
             draw: extensions.restoreFolder
-        },
-        {
-            id: 'unsubscribe',
-            index: 6610,
-            draw: extensions.unsubscribe
         },
         {
             id: 'properties',
