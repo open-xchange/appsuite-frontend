@@ -20,6 +20,11 @@ define('io.ox/files/permission-util', [
 
     return {
 
+        // federated sharing: check if identifier belongs to an own subscribed account
+        isOwnIdentity: function (identity) {
+            return _.contains(filestorageApi.getAllGuestUserIdentifier(), identity);
+        },
+
         // return first found user permission for the current user
         getOwnPermission: function (permissions) {
             var mySelf = [];
