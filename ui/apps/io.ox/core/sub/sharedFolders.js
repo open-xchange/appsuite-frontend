@@ -89,7 +89,9 @@ define('io.ox/core/sub/sharedFolders', [
                 api.update(id, obj);
             });
 
-            http.resume();
+            http.resume().done(function () {
+                if (options.refreshFolders && _(data.hash).size() > 0) api.refresh();
+            });
 
         });
 

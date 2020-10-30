@@ -424,6 +424,7 @@ define('io.ox/core/folder/extensions', [
                                     public: gt('Public drive folders'),
                                     shared: gt('Shared drive folders')
                                 },
+                                refreshFolders: true,
                                 noSync: true,
                                 // subscribe dialog is build for flat foldertrees, add special getData function to make it work for infostore
                                 // no cache or we would overwrite folder collections with unsubscribed folders
