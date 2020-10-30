@@ -19,12 +19,11 @@ define('io.ox/chat/data', [
     'io.ox/switchboard/presence',
     'io.ox/mail/sanitizer',
     'io.ox/chat/util',
-    'io.ox/core/active',
     'io.ox/core/http',
     'io.ox/core/notifications',
     'settings!io.ox/chat',
     'gettext!io.ox/chat'
-], function (api, events, contactsApi, switchboardApi, presence, sanitizer, util, isActive, http, notifications, settings, gt) {
+], function (api, events, contactsApi, switchboardApi, presence, sanitizer, util, http, notifications, settings, gt) {
 
     'use strict';
 
@@ -1114,9 +1113,8 @@ define('io.ox/chat/data', [
                     }
 
                     if (newMessage.get('type') === 'system') model.parseSystemMessage(message, roomId);
-                    if (!mySelf && (!isActive() || settings.get('hidden'))) {
-                        events.trigger('sound:play:incoming');
-                    }
+
+                    events.trigger('message:new', { message: newMessage, room: model });
                 });
             });
 
