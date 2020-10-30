@@ -221,7 +221,7 @@ define('io.ox/files/main', [
 
             if (_.device('smartphone')) return;
 
-            app.treeView = new TreeView({ app: app, module: 'infostore', root: settings.get('rootFolderId', 9), contextmenu: true });
+            app.treeView = new TreeView({ app: app, module: 'infostore', root: settings.get('rootFolderId', 9), contextmenu: true, filter: function (id, model) { return !!model.get('subscribed'); } });
             FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
 
