@@ -13,14 +13,13 @@
 
 define('io.ox/chat/notifications', [
     'io.ox/chat/events',
-    'io.ox/chat/data',
     'io.ox/core/active',
     'io.ox/switchboard/presence',
     'settings!io.ox/chat'
-], function (events, data, isActive, presence, settings) {
+], function (events, isActive, presence, settings) {
 
     'use strict';
-
+    var sound, current;
     function onMessageNew(e) {
         var model = e.message;
         // debug
@@ -28,31 +27,39 @@ define('io.ox/chat/notifications', [
         // don't notify on your own messages
         if (model.isMyself()) return;
         // don't notify if the user is currently active and the UI is not hidden
-        if (isActive() && !settings.get('hidden')) return;
+        if (settings.get('sounds/playWhen') !== 'always' && (isActive() && !settings.get('hidden'))) return;
         // don't notify if busy
         if (presence.getMyAvailability() === 'busy') return;
         // play notification sound
         playSound();
     }
-
+    // load and return audio file
+    var getAudio = function (fileName) {
+        if (fileName !== current) {
+            current = fileName;
+            sound = new Audio(ox.base + '/apps/io.ox/chat/sounds/' + fileName);
+        }
+        return sound;
+    };
     // Sound
-    var playSound = _.throttle((function () {
-        var sound, file;
-        return function () {
-            if (data.userSettings.get('soundEnabled') === false) return;
-            if (!sound) {
-                file = data.userSettings.get('soundFile') || 'bongo1.mp3';
-                sound = new Audio(ox.base + '/apps/io.ox/chat/sounds/' + file);
-            }
-            sound.play();
-        };
-    })(), 600);
+    var playSound = _.throttle(function () {
+        if (!settings.get('sounds/enabled')) return;
+        try {
+            getAudio(settings.get('sounds/file')).play();
+        } catch (e) {
+            console.error('Could not play notification sound');
+        }
+    }, 600);
 
     // Native notification
     // TBD
 
     // Look for new messages
-    data.session.initialized.then(function () {
-        events.on('message:new', onMessageNew);
+    events.on('message:new', onMessageNew);
+
+    // audio preview when changing sounds in settings
+    settings.on('change:sounds/file', function () {
+        if (_.device('smartphone')) return;
+        playSound();
     });
 });

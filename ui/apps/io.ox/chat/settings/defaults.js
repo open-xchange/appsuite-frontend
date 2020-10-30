@@ -16,6 +16,11 @@ define('io.ox/chat/settings/defaults', [], function () {
     'use strict';
 
     return {
-        host: false
+        host: false,
+        sounds: {
+            enabled: true,
+            playWhen: 'onlyInactive',
+            file: 'bongo1.mp3'
+        }
     };
 });

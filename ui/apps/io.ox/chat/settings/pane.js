@@ -70,9 +70,28 @@ define('io.ox/chat/settings/pane', [
             id: 'sound-notifications',
             index: INDEX += 100,
             render: function () {
+                var soundList = [
+                    { label: gt('Bongo'), value: 'bongo1.mp3' },
+                    { label: gt('Wood'), value: 'bongo2.mp3' }
+                ];
+                var playWhenOptions = [
+                    { label: gt('For every message'), value: 'always' },
+                    { label: gt('Only if Chat is in the background'), value: 'onlyInactive' }
+                ];
                 this.$el.append(
-                    util.checkbox('soundEnabled', gt('Enable notification sounds'), data.userSettings)
+                    util.fieldset(
+                        //#. Should be "töne" in german, used for notification sounds. Not "geräusch"
+                        gt('Notification sounds'),
+                        util.checkbox('sounds/enabled', gt('Enable notification sounds'), settings),
+                        util.compactSelect('sounds/file', gt('Sound'), settings, soundList)
+                        .prop('disabled', !settings.get('sounds/enabled')),
+                        util.compactSelect('sounds/playWhen', gt('Play a sound:'), settings, playWhenOptions)
+                            .prop('disabled', !settings.get('sounds/enabled'))
+                    )
                 );
+                this.listenTo(settings, 'change:sounds/enabled', function (value) {
+                    this.$('[name="sounds/file"],[name="sounds/playWhen"]').prop('disabled', !value ? 'disabled' : '');
+                });
             }
         }
     );
