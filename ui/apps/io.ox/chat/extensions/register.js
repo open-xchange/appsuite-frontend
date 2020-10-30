@@ -127,20 +127,19 @@ define('io.ox/chat/extensions/register', [
     new Action('io.ox/chat/actions/start-chat-from-contacts', {
         capabilities: 'chat',
         collection: 'some',
+        every: 'email1 || email2 || email3',
         matches: function (baton) {
-            return baton.data.length !== 1 || baton.data[0].internal_userid !== ox.user_id;
+            return baton.data.length > 1 || baton.data[0].internal_userid !== ox.user_id;
         },
         action: function (baton) {
             var users = baton.data.filter(function (user) {
                 return user.internal_userid !== ox.user_id;
             });
-
             if (users.length === 1) {
                 var user = _(users).first();
                 startPrivateChat(user.email1 || user.email2 || user.email3);
                 return;
             }
-
             startGroupChat({
                 members: users.map(function (user) {
                     return user.email1 || user.email2 || user.email3;

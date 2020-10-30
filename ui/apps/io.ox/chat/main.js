@@ -157,6 +157,8 @@ define('io.ox/chat/main', [
         },
 
         openPrivateChat: function (cmd) {
+
+            if (!cmd.email) return console.error('openPrivateChat(): Missing email address');
             if (cmd.email === data.user.email) return;
 
             var chat = data.chats.findPrivateRoom(cmd.email);
