@@ -302,13 +302,11 @@ define('io.ox/chat/data', [
 
             // we start with a dummy GIF to avoid mixed-content warning
             var $img = $('<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">');
-            var preview = attachment.preview, width, ratio;
+            var preview = attachment.preview;
 
             if (preview) {
-                ratio = preview.width / preview.height;
-                width = Math.min(preview.width, 240);
                 // we just need the height to fill the viewport properly
-                $img.attr('height', width * ratio);
+                $img.attr({ width: preview.width, height: preview.height });
             }
 
             var $el = $('<div class="thumbnail-container">')
