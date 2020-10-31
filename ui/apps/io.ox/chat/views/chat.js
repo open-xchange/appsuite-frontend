@@ -26,8 +26,9 @@ define('io.ox/chat/views/chat', [
     'io.ox/backbone/views/toolbar',
     'gettext!io.ox/chat',
     'io.ox/core/strings',
-    'io.ox/core/notifications'
-], function (ext, api, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, util, ToolbarView, gt, strings, notifications) {
+    'io.ox/core/notifications',
+    'io.ox/chat/views/dropzone'
+], function (ext, api, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, util, ToolbarView, gt, strings, notifications, dropzone) {
 
     'use strict';
 
@@ -251,6 +252,14 @@ define('io.ox/chat/views/chat', [
 
             $(window).on('blur', this.onHide);
             $(window).on('focus', this.onShow);
+
+            // DnD support
+            var zone = dropzone.add(this);
+            this.listenTo(zone, 'drop', function (files) {
+                _(files).each(function (file) {
+                    this.model.postMessage({ content: '' }, file);
+                }, this);
+            });
         },
 
         onShow: function () {
