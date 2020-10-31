@@ -137,6 +137,11 @@ define('io.ox/chat/data', [
         getName: function (email) {
             var model = this.getByMail(email);
             return model ? model.getName() : '';
+        },
+
+        getShortName: function (email) {
+            var model = this.getByMail(email);
+            return model ? model.getShortName() : '';
         }
     });
 

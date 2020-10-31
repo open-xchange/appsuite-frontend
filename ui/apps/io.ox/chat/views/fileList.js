@@ -105,21 +105,37 @@ define('io.ox/chat/views/fileList', [
         },
 
         renderItem: function (model) {
-            var button = $('<button type="button">').attr('data-file-id', model.get('fileId'));
+            var preview = $('<div class="preview">');
+            var details = $('<div class="details">');
+            var button = $('<button type="button">')
+                .attr('data-file-id', model.get('fileId'))
+                .append(preview, details);
+            // preview
+            console.log('file', model.toJSON());
             if (model.isImage()) {
                 button.attr('data-cmd', 'show-file');
+                preview.addClass('cursor-zoom-in');
                 api.requestBlobUrl({ url: model.getThumbnailUrl() }).then(function (url) {
-                    button.css('backgroundImage', 'url("' + url + '")');
+                    preview.css('backgroundImage', 'url("' + url + '")');
                 });
             } else {
-                button.append(
-                    $('<i class="fa icon" aria-hidden="true">').addClass(util.getClassFromMimetype(model.get('mimetype')))
-                        .attr('title', util.getFileTypeName(model.get('mimetype'), model.get('name'))),
-                    $('<div class="filename">').text(model.get('name'))
-                ).attr('data-download', model.getFileUrl());
+                button.attr('data-download', model.getFileUrl());
+                preview.addClass('flex-center-vertically').append(
+                    $('<i class="fa icon" aria-hidden="true">')
+                        .addClass(util.getClassFromMimetype(model.get('mimetype')))
+                        .attr('title', util.getFileTypeName(model.get('mimetype'), model.get('name')))
+                );
             }
-
-            return $('<li>').append(button);
+            // details
+            details.append(
+                $('<div class="filename">').text(model.get('name')),
+                $('<div class="filestats">').append(
+                    $('<span class="filedate">').text(data.users.getShortName(model.get('email'))),
+                    $('<span class="filesize">').text('')
+                )
+            );
+            // list item
+            return $('<li class="file">').append(button);
         },
 
         getNode: function (model) {
