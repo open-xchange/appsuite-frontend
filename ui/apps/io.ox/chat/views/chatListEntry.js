@@ -44,8 +44,10 @@ define('io.ox/chat/views/chatListEntry', [
         },
 
         initialize: function () {
-            this.lastMessage = this.model.lastMessage || this.model.get('lastMessage');
-            if (!this.lastMessage.isFile) this.lastMessage = new data.MessageModel(this.lastMessage);
+            if (this.lastMessage) {
+                this.lastMessage = this.model.lastMessage || this.model.get('lastMessage');
+                if (!this.lastMessage.isFile) this.lastMessage = new data.MessageModel(this.lastMessage);
+            }
 
             this.listenTo(this.model, {
                 'change:title': this.onChangeTitle,
