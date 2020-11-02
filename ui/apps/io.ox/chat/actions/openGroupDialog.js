@@ -60,7 +60,7 @@ define('io.ox/chat/actions/openGroupDialog', [
 
     function open(obj) {
         var def = new $.Deferred();
-        var originalModel = obj.id ? data.chats.get(obj) : new data.ChatModel(obj);
+        var originalModel = obj.id ? data.chats.get(obj.id) : new data.ChatModel(obj);
         var model = originalModel.has('roomId') ? originalModel.clone() : originalModel;
         var members = [data.users.getByMail(data.user.email)];
         if (obj.members) {
@@ -191,7 +191,6 @@ define('io.ox/chat/actions/openGroupDialog', [
             }
 
             if (Object.keys(updates).length <= 1 && Object.keys(hiddenAttr).length <= 0) return def.resolve(this.model.get('roomId'));
-            if (!originalModel.has('roomId')) originalModel = data.chats.get(this.model.toJSON());
             originalModel.save(updates, { hiddenAttr: hiddenAttr }).then(function () {
                 data.chats.add(originalModel);
                 def.resolve(originalModel.get('roomId'));
