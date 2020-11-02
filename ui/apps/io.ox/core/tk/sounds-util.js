@@ -56,7 +56,11 @@ define('io.ox/core/tk/sounds-util', [
         loadSound(s).done(function (s) {
             // preview the selected sound by playing it on change
             if (s) {
-                s.play();
+                try {
+                    s.play();
+                } catch (e) {
+                    console.error('Error playing sound', e);
+                }
                 sound = s;
             }
         });
