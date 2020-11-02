@@ -876,6 +876,11 @@ define('io.ox/calendar/util', [
             var user = _(obj.attendees).findWhere({
                 entity: id || ox.user_id
             });
+            if (id && _(id).indexOf('@') !== -1) {
+                user = _(obj.attendees).findWhere({
+                    email: id
+                });
+            }
             if (!user) return;
             return user.comment;
         },
