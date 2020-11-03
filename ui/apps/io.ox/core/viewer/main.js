@@ -99,7 +99,7 @@ define('io.ox/core/viewer/main', [
                 }
 
                 // resolve dependencies now for an instant response
-                require(['io.ox/core/viewer/backbone', 'io.ox/core/viewer/views/mainview'], function (backbone, MainView) {
+                require(['io.ox/core/viewer/backbone', 'io.ox/core/viewer/views/mainview', 'io.ox/core/viewer/bundle'], function (backbone, MainView) {
                     // create file collection and populate it with file models
                     self.fileCollection = new backbone.Collection();
                     self.fileCollection.reset(data.fileList, { parse: true });

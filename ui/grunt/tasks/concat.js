@@ -45,7 +45,6 @@ module.exports = function (grunt) {
                             'src/browser.js',
                             'src/plugins.js',
                             'src/jquery.plugins.js',
-
                             'node_modules/blankshield/blankshield.js',
                             // add bootstrap JavaScript
                             'node_modules/bootstrap/js/transition.js',
@@ -175,7 +174,6 @@ module.exports = function (grunt) {
                             'apps/plugins/halo/register.js',
                             'apps/io.ox/core/settings/defaults.js',
                             'apps/io.ox/core/moment.js',
-                            'apps/io.ox/core/viewer/main.js',
                             'apps/io.ox/core/main/icons.js',
                             'apps/io.ox/core/extPatterns/stage.js',
                             'apps/io.ox/core/sockets.js',
@@ -475,6 +473,48 @@ module.exports = function (grunt) {
                             'node_modules/u2f-api/dist/lib/generated-google-u2f-api.js'
                         ],
                         dest: 'build/apps/io.ox/multifactor/bundle.js',
+                        nonull: true
+                    }
+                ]
+            },
+            viewer: {
+                options: {
+                    banner: 'define("io.ox/core/viewer/bundle", [], function () {\n\n' +
+                                '"use strict";\n\nvar module = {};\n',
+                    footer: '\nreturn module; \n});\n'
+                },
+                files: [
+                    {
+                        src: [
+                            // viewer
+                            'apps/io.ox/core/viewer/views/displayerview.js',
+                            'apps/io.ox/core/viewer/views/mainview.js',
+                            'apps/io.ox/core/viewer/views/sidebarview.js',
+                            'apps/io.ox/core/viewer/views/toolbarview.js',
+                            'apps/io.ox/core/viewer/views/document/thumbailview.js',
+                            'apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js',
+                            'apps/io.ox/core/viewer/views/sidebar/fileinfoview.js',
+                            'apps/io.ox/core/viewer/views/sidebar/fileversionsview.js',
+                            'apps/io.ox/core/viewer/views/sidebar/panelbaseview.js',
+                            'apps/io.ox/core/viewer/views/sidebar/uploadnewversionsview.js',
+                            'apps/io.ox/core/viewer/views/types/audioview.js',
+                            'apps/io.ox/core/viewer/views/types/baseview.js',
+                            'apps/io.ox/core/viewer/views/types/contactview.js',
+                            'apps/io.ox/core/viewer/views/types/defaultview.js',
+                            'apps/io.ox/core/viewer/views/types/descriptionview.js',
+                            'apps/io.ox/core/viewer/views/types/documentview.js',
+                            'apps/io.ox/core/viewer/views/types/imageview.js',
+                            'apps/io.ox/core/viewer/views/types/mailview.js',
+                            'apps/io.ox/core/viewer/views/types/spreadsheetview.js',
+                            'apps/io.ox/core/viewer/views/types/textview.js',
+                            'apps/io.ox/core/viewer/views/types/typesregistry.js',
+                            'apps/io.ox/core/viewer/views/types/typesutil.js',
+                            'apps/io.ox/core/viewer/views/types/videoview.js',
+                            'apps/io.ox/core/viewer/backbone.js',
+                            'apps/io.ox/core/viewer/settings.js',
+                            'apps/io.ox/core/viewer/util.js'
+                        ],
+                        dest: 'build/apps/io.ox/core/viewer/bundle.js',
                         nonull: true
                     }
                 ]
