@@ -435,7 +435,9 @@ define('io.ox/calendar/actions', [
             };
 
             if (!appointment.attendee.entity && folder.created_from) {
-                var prev = _(data.attendees).findWhere({ email: folder.created_from.contact.email1 });
+                var prev = _(data.attendees).find(function (attendee) {
+                    return attendee.extendedParameters && attendee.extendedParameters['X-OX-IDENTIFIER'] === folder.created_from.identifier;
+                });
                 if (prev) {
                     delete appointment.attendee.entity;
                     appointment.attendee.email = prev.email;

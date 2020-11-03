@@ -876,9 +876,10 @@ define('io.ox/calendar/util', [
             var user = _(obj.attendees).findWhere({
                 entity: id || ox.user_id
             });
-            if (id && _(id).indexOf('@') !== -1) {
-                user = _(obj.attendees).findWhere({
-                    email: id
+            // try extendedParameter (federated sharing)
+            if (id && !user) {
+                user = _(obj.attendees).find(function (attendee) {
+                    return attendee.extendedParameters && attendee.extendedParameters['X-OX-IDENTIFIER'] === id;
                 });
             }
             if (!user) return;

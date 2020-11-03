@@ -59,7 +59,7 @@ define('io.ox/calendar/actions/acceptdeny', [
 
                     folder = folderData;
                     // check for which id the user wants to confirm (secretary function)
-                    var confirmId = !o.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by || folder.created_from.contact.email1 : ox.user_id;
+                    var confirmId = !o.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by || folder.created_from.identifier : ox.user_id;
 
                     message = util.getConfirmationMessage(o, confirmId);
 
@@ -156,7 +156,10 @@ define('io.ox/calendar/actions/acceptdeny', [
                                 };
                                 checkConflicts = false;
                             } else {
-                                var previousConfirmation = confirmId ? _(appointmentData.attendees).findWhere({ entity: confirmId }) || _(appointmentData.attendees).findWhere({ email: confirmId }) : undefined;
+                                var previousConfirmation = confirmId ? _(appointmentData.attendees).findWhere({ entity: confirmId }) ||
+                                    _(appointmentData.attendees).find(function (attendee) {
+                                        return attendee.extendedParameters && attendee.extendedParameters['X-OX-IDENTIFIER'] === confirmId;
+                                    }) : undefined;
                                 requestData = {
                                     attendee: previousConfirmation,
                                     id: appointmentData.id,
