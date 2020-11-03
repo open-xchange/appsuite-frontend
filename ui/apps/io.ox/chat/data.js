@@ -53,15 +53,19 @@ define('io.ox/chat/data', [
     });
 
     var UserSettings = BaseModel.extend({
-        defaults: {
-            emailNotification: 'always',
-            soundFile: 'bongo1.mp3',
-            soundEnabled: true
-        },
-
         initialize: function () {
             this.initialized = new $.Deferred();
             this.on('change', this.onChange);
+            this.listenTo(settings, 'change', function () {
+                this.set(JSON.parse(settings.stringify()));
+            }.bind(this));
+
+            // collect some additional infos
+            var userModel = data.users.getByMail(data.user.email);
+            this.set(_.extend({
+                displayName: userModel.getName(),
+                preferredLocale: ox.locale
+            }, JSON.parse(settings.stringify())), { silent: true }).save(false);
         },
 
         url: api.url + '/user/settings',
@@ -1140,12 +1144,6 @@ define('io.ox/chat/data', [
             return api.getUserId().then(function (chatUser) {
                 data.user = chatUser;
                 data.userSettings = new UserSettings(chatUser.settings);
-                var userModel = data.users.getByMail(data.user.email);
-                // manually set the display but do not catch the error
-                data.userSettings.set({
-                    displayName: userModel.getName(),
-                    preferredLocale: ox.locale
-                }, { silent: true }).save(false);
                 data.serverConfig = chatUser.config || {};
                 this.set('userId', chatUser.id);
                 this.initialized.resolve();

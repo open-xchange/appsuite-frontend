@@ -58,7 +58,7 @@ define('io.ox/chat/settings/pane', [
                 if (!data.serverConfig.smtpEnabled) return;
 
                 this.$el.append(
-                    util.compactSelect('emailNotification', gt('Receive email notifications'), data.userSettings, [
+                    util.compactSelect('emailNotification', gt('Receive email notifications'), settings, [
                         { label: gt('Never'), value: 'never' },
                         { label: gt('Private chats only'), value: 'private' },
                         { label: gt('Always'), value: 'always' }
