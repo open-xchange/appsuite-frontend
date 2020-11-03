@@ -118,7 +118,7 @@ define('io.ox/core/boot/load', [
                         cid: space.cid,
                         keepOnRestore: false,
                         module: 'io.ox/mail/compose',
-                        point: space.id,
+                        point: space,
                         timestamp: new Date().valueOf(),
                         ua: navigator.userAgent
                     };

@@ -1846,7 +1846,7 @@ define('io.ox/mail/main', [
                             cid: space.cid,
                             keepOnRestore: false,
                             module: 'io.ox/mail/compose',
-                            point: space.id,
+                            point: space,
                             timestamp: new Date().valueOf(),
                             ua: navigator.userAgent
                         };

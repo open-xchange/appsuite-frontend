@@ -272,24 +272,30 @@ define('io.ox/mail/compose/main', [
         });
 
         app.failRestore = function (point) {
-            var data = { id: point };
-            if (_.isObject(point)) {
-                // common case: mail is already a draft. So we can just edit it
-                if (point.restoreById) {
-                    return app.open({ type: 'edit', original: { folderId: point.folder_id, id: point.id, security: point.security } });
-                }
-                // create composition space from old restore point
-                data = _(point).pick('to', 'cc', 'bcc', 'subject');
-                if (point.from && point.from[0]) data.from = point.from[0];
-                if (point.attachments && point.attachments[0]) {
-                    data.content = point.attachments[0].content;
-                    data.contentType = point.attachments[0].content_type;
-                }
-                data.meta = {};
-                data.meta.security = point.security;
-                data.requestRqe = point.disp_notification_to;
-                data.priority = ['high', 'medium', 'low'][(data.priority || 1) - 1];
+            var data;
+            if (!_.isObject(point)) {
+                return app.open(data);
             }
+
+            // duck check: real draft
+            if (point.meta) {
+                return app.open(_(point).pick('id', 'meta', 'security'));
+            }
+            // common case: mail is already a draft. So we can just edit it
+            if (point.restoreById) {
+                return app.open({ type: 'edit', original: { folderId: point.folder_id, id: point.id, security: point.security } });
+            }
+            // backward compatibility: create composition space from old restore point
+            data = _(point).pick('to', 'cc', 'bcc', 'subject');
+            if (point.from && point.from[0]) data.from = point.from[0];
+            if (point.attachments && point.attachments[0]) {
+                data.content = point.attachments[0].content;
+                data.contentType = point.attachments[0].content_type;
+            }
+            data.meta = {};
+            data.meta.security = point.security;
+            data.requestRqe = point.disp_notification_to;
+            data.priority = ['high', 'medium', 'low'][(data.priority || 1) - 1];
             return app.open(data);
         };
 
