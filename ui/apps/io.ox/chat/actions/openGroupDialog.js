@@ -192,10 +192,10 @@ define('io.ox/chat/actions/openGroupDialog', [
 
             if (Object.keys(updates).length <= 1 && Object.keys(hiddenAttr).length <= 0) return def.resolve(this.model.get('roomId'));
             originalModel.save(updates, { hiddenAttr: hiddenAttr }).then(function () {
+                this.close();
                 data.chats.add(originalModel);
                 def.resolve(originalModel.get('roomId'));
-                this.close();
-            }.bind(this)).fail(function () {
+            }.bind(this), function () {
                 dialog.idle();
                 require(['io.ox/core/yell'], function (yell) {
                     if (originalModel.get('roomId')) return yell('error', gt('Changes to this chat could not be saved.'));
