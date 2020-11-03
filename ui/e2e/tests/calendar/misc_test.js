@@ -520,6 +520,82 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
     I.waitForText(sharedCalendarName);
 });
 
+Scenario('Manage public Calendars', async function (I, users, calendar, dialogs) {
+    const publicCalendarName = `${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New public`;
+
+    I.login('app=io.ox/calendar');
+    calendar.waitForApp();
+    // create public calendar
+    I.say('Create public calendar');
+    I.waitForText('Add new calendar', 5, '.folder-tree');
+    I.click('Add new calendar', '.folder-tree');
+
+    I.clickDropdown('Personal calendar');
+
+    dialogs.waitForVisible();
+    I.fillField('input[placeholder="New calendar"]', publicCalendarName);
+    I.waitForText('Add as public calendar', 5, dialogs.locators.body);
+    I.checkOption('Add as public calendar', dialogs.locators.body);
+    dialogs.clickButton('Add');
+    I.waitForDetached('.modal-dialog');
+
+    I.waitForVisible('~Public calendars');
+    I.click('.fa.fa-caret-right', '~Public calendars');
+
+    I.waitForText(publicCalendarName);
+    I.rightClick({ css: '[aria-label^="' + publicCalendarName + '"]' });
+    I.wait(0.2);
+    I.clickDropdown('Permissions / Invite people');
+    dialogs.waitForVisible();
+    I.waitForElement('.form-control.tt-input', 5, dialogs.locators.header);
+
+    await within('.modal-dialog', () => {
+        I.waitForFocus('.tt-input');
+        I.fillField('.tt-input[placeholder="Add people"]', 'All users');
+        I.waitForVisible(locate('.tt-dropdown-menu').withText('All users'));
+        I.pressKey('Enter');
+        I.waitForVisible(locate('.permissions-view .row').at(2).withText('All users'));
+    });
+
+    dialogs.clickButton('Save');
+    I.waitForDetached('.modal-dialog');
+
+    I.logout();
+
+    I.login('app=io.ox/calendar', { user: users[1] });
+
+    I.retry(5).doubleClick('~Public calendars');
+    I.waitForText(publicCalendarName);
+
+    I.retry(5).click('Add new calendar');
+    I.click('Subscribe shared Calendar');
+
+    dialogs.waitForVisible();
+    I.waitForText('Subscribe shared calendars');
+
+    I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(publicCalendarName)).find({ css: 'input[name="subscribed"]' }));
+    I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(publicCalendarName)).find({ css: 'input[name="used_for_sync"]' }));
+
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
+
+    I.logout();
+
+    // cleanup
+    I.login('app=io.ox/calendar');
+    calendar.waitForApp();
+
+    // remove public calendar
+    I.waitForText(publicCalendarName);
+    I.rightClick({ css: '[aria-label^="' + publicCalendarName + '"]' });
+
+    I.wait(0.2);
+    I.clickDropdown('Delete');
+    dialogs.waitForVisible();
+    I.waitForElement('[data-action="delete"]', 5, dialogs.locators.body);
+    dialogs.clickButton('Delete');
+});
+
 Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Sunday, change to daylight saving', async function (I, calendar) {
     // see: OXUIB-146 Fix daylight saving issues
     const folder = await calendar.defaultFolder();
