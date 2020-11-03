@@ -18,8 +18,9 @@ define('io.ox/mail/compose/model', [
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/mail/sanitizer',
-    'io.ox/mail/util'
-], function (composeAPI, mailAPI, Attachments, settings, gt, sanitizer, mailUtil) {
+    'io.ox/mail/util',
+    'io.ox/core/extensions'
+], function (composeAPI, mailAPI, Attachments, settings, gt, sanitizer, mailUtil, ext) {
 
     'use strict';
 
@@ -241,15 +242,23 @@ define('io.ox/mail/compose/model', [
         }()),
 
         create: function () {
-            if (this.has('id')) {
-                return composeAPI.space.get(this.get('id')).then(function (data) {
-                    // get the content inside the body of the mail
-                    // yes do this also for multipart alternative., to get rid of excess html like doctype etc (you will get strange artefacts otherwise)
-                    // in case this is really plain text (couldn't create a situation where it is, also mw says it should always be html), the sanitizer will simply return it as is, no harm done.
-                    if (data && data.content && (data.contentType === 'text/html' || (data.contentType === 'multipart/alternative'))) {
-                        data.content = sanitizer.simpleSanitize(data.content);
+            var self = this;
+            // restore existing
+            if (self.has('id')) {
+                return composeAPI.space.get(self.get('id')).then(function success(data) {
+                    return self.sanitizeContent(data);
+                }, function fail(data) {
+                    var baton = new ext.Baton({ model: self, result: data });
+                    ext.point('io.ox/mail/compose/actions/get/error').invoke('handler', baton, baton);
+
+                    if (baton.handled) {
+                        return baton.handled.then(function success(data) {
+                            return self.sanitizeContent(data);
+                        });
                     }
-                    return data;
+
+                    console.log('Failed to handle GET composition space error', data);
+                    return $.Deferred().reject(data);
                 });
             }
 
