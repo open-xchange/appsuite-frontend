@@ -114,7 +114,7 @@ define('io.ox/mail/compose/api', [
         process: process,
 
         all: function () {
-            return http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject,meta' } }).then(process);
+            return http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject,meta,security' } }).then(process);
         },
 
         // limit of 3 currently

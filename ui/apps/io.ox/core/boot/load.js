@@ -103,7 +103,7 @@ define('io.ox/core/boot/load', [
 
             // TODO-859: review loading behaviour
             ox.rampup.compositionSpaces = $.when(
-                http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject,meta' } }),
+                http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject,meta,security' } }),
                 require(['gettext!io.ox/mail']),
                 require(['io.ox/mail/compose/api'])
             ).then(function (data, gt, composeAPI) {

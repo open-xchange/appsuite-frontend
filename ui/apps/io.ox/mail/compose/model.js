@@ -42,12 +42,12 @@ define('io.ox/mail/compose/model', [
                     type: 'new',
                     date: '',
                     originalId: '',
-                    originalFolderId: '',
-                    security: {
-                        encrypt: false,
-                        pgpInline: false,
-                        sign: false
-                    }
+                    originalFolderId: ''
+                },
+                security: {
+                    encrypt: false,
+                    pgpInline: false,
+                    sign: false
                 },
                 requestReadReceipt: false,
                 priority: 'normal',
