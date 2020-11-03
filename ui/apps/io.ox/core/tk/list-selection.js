@@ -357,6 +357,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             // All: if all items are selected we dodge by clearing the entire selection
             if (items.length === length) return this.clear();
 
+            // special case: always dodge upwards if end of selection is end of list, see OXUIB-510
+            if (last === tail) direction = 'up';
+
             // up and enough room
             if (direction === 'up' && first > 0) return apply(first - 1, items, focus);
 
