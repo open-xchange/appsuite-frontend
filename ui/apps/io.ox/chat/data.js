@@ -1140,7 +1140,10 @@ define('io.ox/chat/data', [
                 data.userSettings = new UserSettings(chatUser.settings);
                 var userModel = data.users.getByMail(data.user.email);
                 // manually set the display but do not catch the error
-                data.userSettings.set('displayName', userModel.getName(), { silent: true }).save(false);
+                data.userSettings.set({
+                    displayName: userModel.getName(),
+                    preferredLocale: ox.locale
+                }, { silent: true }).save(false);
                 data.serverConfig = chatUser.config || {};
                 this.set('userId', chatUser.id);
                 this.initialized.resolve();
