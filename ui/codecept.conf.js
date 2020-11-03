@@ -1,4 +1,4 @@
-/* eslint-env node, es8 */
+/* eslint-env node, es2017 */
 var defaultContext;
 
 // please create .env file based on .evn-example
@@ -200,7 +200,7 @@ module.exports.config = {
     teardown: async function () {
         if (defaultContext.id !== 10) defaultContext.remove();
 
-        const { contexts } = global.inject();
+        var { contexts } = global.inject();
         await Promise.all(contexts.filter(ctx => ctx.id > 100).map(ctx => ctx.remove()));
 
         //HACK: defer killing selenium, because it's still needed for a few ms
