@@ -1,4 +1,4 @@
-/* eslint-env node, es6  */
+/* eslint-env node, es8 */
 var defaultContext;
 
 // please create .env file based on .evn-example
@@ -197,8 +197,12 @@ module.exports.config = {
             done(err);
         });
     },
-    teardown: function () {
+    teardown: async function () {
         if (defaultContext.id !== 10) defaultContext.remove();
+
+        const { contexts } = global.inject();
+        await Promise.all(contexts.filter(ctx => ctx.id > 100).map(ctx => ctx.remove()));
+
         //HACK: defer killing selenium, because it's still needed for a few ms
         setTimeout(function () {
             require('@open-xchange/codecept-helper').selenium.stop();
