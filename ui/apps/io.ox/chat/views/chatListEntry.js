@@ -44,14 +44,19 @@ define('io.ox/chat/views/chatListEntry', [
         },
 
         initialize: function () {
-            this.lastMessage = this.model.lastMessage || this.model.get('lastMessage');
-            if (this.lastMessage && !this.lastMessage.isFile) this.lastMessage = new data.MessageModel(this.lastMessage);
+            this.lastMessage = this.getLastMessage();
 
             this.listenTo(this.model, {
                 'change:title': this.onChangeTitle,
                 'change:unreadCount': this.onChangeUnreadCount,
                 'change:lastMessage': this.onChangeLastMessage
             });
+        },
+
+        getLastMessage: function () {
+            return new data.MessageModel(_.extend({
+                roomId: this.model.get('roomId')
+            }, this.model.get('lastMessage')));
         },
 
         renderSender: function () {
@@ -116,11 +121,11 @@ define('io.ox/chat/views/chatListEntry', [
             var model = this.model,
                 isPrivate = model.get('type') === 'private',
                 isCurrentUser = model.get('lastMessage').sender === data.user.email,
-                lastMessage = model.get('lastMessage') || {},
+                lastMessage = this.getLastMessage(),
                 isSystemMessage = lastMessage ? lastMessage.type === 'system' : false;
 
             this.lastMessage = lastMessage;
-            if (!this.lastMessage.isFile) this.lastMessage = new data.MessageModel(this.lastMessage);
+
             this.$('.last-modified').text(model.getLastMessageDate());
             this.$('.last-message').empty().append(this.renderLastMessage());
             this.$('.delivery')

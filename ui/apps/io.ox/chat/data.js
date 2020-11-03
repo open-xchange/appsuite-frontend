@@ -440,47 +440,8 @@ define('io.ox/chat/data', [
 
     data.MessageModel = MessageModel;
 
-    var messageCache = (function () {
-        var cache = {},
-            idlessCache = {};
-        return {
-            get: function (attrs, options) {
-                var messageId = attrs.messageId, message = cache[messageId];
-                // try to reuse the messages without ids
-                if (!message) message = idlessCache[attrs.sender + '' + attrs.content];
-
-                if (message) {
-                    message.set(attrs);
-                } else {
-                    message = new MessageModel(attrs, options);
-                    if (messageId) {
-                        cache[messageId] = message;
-                    } else {
-                        var identifier = attrs.sender && attrs.content && attrs.sender + '' + attrs.content;
-                        if (identifier) idlessCache[identifier] = message;
-                        message.once('change:messageId', function () {
-                            if (identifier) delete idlessCache[identifier];
-                            cache[message.get('messageId')] = message;
-                        });
-                    }
-                }
-                return message;
-            },
-            has: function (messageId) {
-                return !!cache[messageId];
-            }
-        };
-    })();
-
-    function getMessageModel(attrs, options) {
-        var model = messageCache.get(attrs, options);
-        model.collection = options.collection;
-        return model;
-    }
-    getMessageModel.prototype.idAttribute = 'messageId';
-
     var MessageCollection = Backbone.Collection.extend({
-        model: getMessageModel,
+        model: MessageModel,
         comparator: function (a, b) {
             if (!a.get('messageId')) return 0;
             if (!b.get('messageId')) return 0;
@@ -564,6 +525,18 @@ define('io.ox/chat/data', [
                 this.add(model);
             }
         },
+        findSimilar: function (obj) {
+            // try to find via id
+            var model = this.get(obj.roomId);
+            if (model) return model;
+            // try to find a new one, with similar attributes
+            return this.find(function (model) {
+                if (!model.isNew()) return false;
+                if (model.get('sender') !== obj.sender) return false;
+                if (model.get('content') !== obj.content) return false;
+                return true;
+            });
+        },
         sync: function (method, collection, options) {
             if (method === 'read') {
                 var limit = Math.max(collection.length, DEFAULT_LIMIT);
@@ -597,44 +570,43 @@ define('io.ox/chat/data', [
         },
 
         initialize: function (attr) {
-            var self = this;
             attr = attr || {};
-            this.unset('messages', { silent: true });
             this.members = new MemberCollection(this.mapMembers(attr.members), { parse: true, roomId: attr.roomId });
             this.messages = new MessageCollection([], { roomId: attr.roomId });
-            this.onChangeLastMessage();
 
             // forward specific events
             this.listenTo(this.members, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('member:' + name);
             });
-            this.on('change:members', function () {
-                this.members.set(this.mapMembers(this.get('members')), { parse: true, merge: true });
-            });
-            this.on('change:lastMessage', this.onChangeLastMessage);
             this.listenTo(this.messages, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('message:' + name);
             });
-            this.listenTo(this.messages, 'add', _.debounce(function () {
-                function updateLastMessage() {
-                    if (!this.messages.nextComplete) return;
-                    var lastMessage = this.messages.last();
-                    this.set('lastMessage', lastMessage);
-                }
 
-                var lastMessage = this.messages.last();
-                if (!lastMessage) return;
+            this.on('change:members', function () {
+                this.members.set(this.mapMembers(this.get('members')), { parse: true, merge: true });
+            });
 
-                if (!this.get('lastMessage') || this.get('lastMessage').messageId !== lastMessage.get('messageId') || !lastMessage.has('messageId')) {
-                    if (!lastMessage.has('messageId')) self.listenToOnce(lastMessage, 'change:messageId', updateLastMessage.bind(this));
-                    else updateLastMessage.call(this);
-                }
-            }, 10));
-            this.listenTo(this.messages, 'change:deliveryState', _.debounce(function () {
-                var message = this.messages.last();
-                if (!message) return;
-                if (message.getDeliveryState() === 'seen') this.set('unreadCount', 0);
-            }.bind(this), 0));
+            this.listenTo(this.messages, 'add', _.debounce(this.onMessageAdd, 10));
+            this.listenTo(this.messages, 'change:content change:files', this.onMessageChange);
+            this.listenTo(this.messages, 'change:deliveryState', _.debounce(this.onChangeDelivery, 0));
+        },
+
+        onMessageAdd: function () {
+            if (!this.messages.nextComplete) return;
+            var lastMessage = this.messages.last();
+            this.set('lastMessage', lastMessage.toJSON());
+        },
+
+        onMessageChange: function (message) {
+            if (!this.get('lastMessage')) return;
+            if (message.get('messageId') !== this.get('lastMessage').messageId) return;
+            this.set('lastMessage', message.toJSON());
+        },
+
+        onChangeDelivery: function () {
+            var message = this.messages.last();
+            if (!message) return;
+            if (message.getDeliveryState() === 'seen') this.set('unreadCount', 0);
         },
 
         mapMembers: function (members) {
@@ -646,19 +618,6 @@ define('io.ox/chat/data', [
         getTitle: function () {
             var members = _(this.members.reject(function (m) { return m.get('email1') === data.user.email; }));
             return this.get('title') || members.invoke('getName').sort().join('; ');
-        },
-
-        onChangeLastMessage: function () {
-            if (!this.get('lastMessage')) return;
-            this.get('lastMessage').roomId = this.get('roomId');
-            if (this.lastMessage && this.lastMessage.get('messageId') === this.get('lastMessage').messageId) return;
-
-            if (this.lastMessage) this.stopListening(this.lastMessage);
-            this.lastMessage = messageCache.get(this.get('lastMessage'));
-            this.listenTo(this.lastMessage, 'change', function () {
-                this.set('lastMessage', this.lastMessage);
-            });
-            if (this.get('lastMessage').files) data.files.add(this.get('lastMessage').files);
         },
 
         getLastMessage: function () {
@@ -826,7 +785,6 @@ define('io.ox/chat/data', [
 
             return BaseModel.prototype.sync.call(this, method, model, options).then(function (data) {
                 if (method === 'create') this.messages.roomId = this.get('roomId');
-                if (data.lastMessage) messageCache.get({ messageId: data.lastMessage.messageId }).setInitialDeliveryState();
                 return data;
             }.bind(this))
             .fail(function () {
@@ -1080,8 +1038,6 @@ define('io.ox/chat/data', [
                     message.set('deliveryState', changes);
                 }
 
-                // update specific message, usually the lastMessage in a room
-                if (messageCache.has(messageId)) process(messageCache.get({ messageId: messageId }));
                 if (room) room.messages.forEach(process);
             });
 
@@ -1096,11 +1052,11 @@ define('io.ox/chat/data', [
                 data.chats.fetchUnlessExists(roomId).done(function (model) {
                     // add new message to room
                     message.roomId = roomId;
-                    var newMessage = messageCache.get(message);
+                    var newMessage = model.messages.findSimilar(message) || new MessageModel(message);
 
                     if (model.messages.nextComplete) {
-                        if (!model.messages.get(newMessage)) model.messages.add(newMessage);
-                    } else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage));
+                        model.messages.add(newMessage);
+                    } else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
 
                     if (model.get('type') !== 'channel' && !mySelf) {
                         model.set({ unreadCount: model.get('unreadCount') + 1 });
@@ -1118,14 +1074,18 @@ define('io.ox/chat/data', [
             });
 
             socket.on('chat:message:changed', function (message) {
-                var cachedMessage = messageCache.get({ messageId: message.messageId });
-                if (cachedMessage) {
-                    var typeChanged = message.type && cachedMessage.get('type') !== message.type;
-                    // if this message changed type we do a silent change and trigger a messageChanged event.
-                    // This way the message node is replaced fully instead of partial changes using multiple change listeners. We want avoid some strange half changed message nodes
-                    cachedMessage.set(message, { silent: typeChanged });
-                    if (typeChanged) events.trigger('message:changed', cachedMessage);
-                }
+                data.chats.fetchUnlessExists(message.roomId).done(function (room) {
+                    var messageModel = room.messages.get(message.messageId);
+                    if (messageModel) {
+                        var typeChanged = message.type && messageModel.get('type') !== message.type;
+                        // if this message changed type we do a silent change and trigger a messageChanged event.
+                        // This way the message node is replaced fully instead of partial changes using multiple change listeners. We want avoid some strange half changed message nodes
+                        messageModel.set(message, { silent: typeChanged });
+                        if (typeChanged) events.trigger('message:changed', messageModel);
+                    } else if (room.get('lastMessage').messageId === message.messageId) {
+                        room.set('lastMessage', _.extend({}, room.get('lastMessage'), message));
+                    }
+                });
             });
         },
 
