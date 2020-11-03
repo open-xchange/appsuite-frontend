@@ -587,10 +587,10 @@ define('io.ox/chat/views/chat', [
                 api.editMessage(content, this.messageReference);
                 this.onCancelSpecialMode();
             } else if (this.specialMode === 'reply') {
-                this.model.postMessage({ content: content, sender: data.user.email, replyTo: this.messageReference.attributes });
+                this.model.postMessage({ content: content, replyTo: this.messageReference.attributes });
                 this.onCancelSpecialMode();
             } else {
-                var message = { content: content, sender: data.user.email };
+                var message = { content: content };
                 if (this.reference) message.reference = this.reference;
                 this.model.postMessage(message);
             }

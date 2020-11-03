@@ -752,6 +752,8 @@ define('io.ox/chat/data', [
             var lastDeferred = $.when();
             return function postMessage(attr, file) {
                 var consumed = false, consume = function () { consumed = true; };
+                // set this here such that message previews can identify the sender, but this will be ignored by the server
+                attr.sender = data.user.email;
                 events.trigger('message:post', { attr: attr, room: this, consume: consume });
                 if (!consumed) {
                     lastDeferred = lastDeferred.then(function () {
