@@ -159,10 +159,12 @@ define('io.ox/chat/views/messages', [
             );
         },
 
+        // why is this identical to model.getbody?
         renderMessageContent: function (model) {
             if (model.isSystem()) return model.getSystemMessage();
             else if (model.hasPreview()) return model.getFilesPreview();
             else if (model.isFile()) return util.getFileText({ model: model });
+            else if (model.isDeleted()) return gt('This message was deleted');
             return model.getFormattedBody();
         },
 
@@ -332,8 +334,9 @@ define('io.ox/chat/views/messages', [
             // We don't want to change replied to messages, that also have a body
             var $body = $message.find('.body:not(.replied-to)');
             $message
-                .removeClass('system text preview')
+                .removeClass('system text preview deleted')
                 .addClass(model.getType())
+                .toggleClass('deleted', model.isDeleted())
                 .toggleClass('emoji', model.isEmoji());
             $body
                 .html(this.renderMessageContent(model))

@@ -595,15 +595,17 @@
             position: relative;
         }
 
-        &:focus-within, &:hover {
-            &.editable {
-                background-color: #f5f5f5;
-            }
-            &.editable .delivery {
-                display: none;
-            }
-            .message-actions-dropdown {
-                display: inline-block;
+        &:not(.deleted) {
+            &:focus-within, &:hover {
+                &.editable {
+                    background-color: #f5f5f5;
+                }
+                &.editable .delivery {
+                    display: none;
+                }
+                .message-actions-dropdown {
+                    display: inline-block;
+                }
             }
         }
 

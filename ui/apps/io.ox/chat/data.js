@@ -203,11 +203,6 @@ define('io.ox/chat/data', [
             return { content: '', sender: data.user.email, date: +moment(), type: 'text' };
         },
 
-        initialize: function () {
-            // temp. fix: deleted messages are NOT system messages
-            if (this.get('deleted')) this.set('type', 'text', { silent: true });
-        },
-
         idAttribute: 'messageId',
 
         urlRoot: function () {
