@@ -281,6 +281,16 @@ define('io.ox/mail/compose/model', [
             }.bind(this));
         },
 
+        sanitizeContent: function (data) {
+            // get the content inside the body of the mail
+            // yes do this also for multipart alternative., to get rid of excess html like doctype etc (you will get strange artefacts otherwise)
+            // in case this is really plain text (couldn't create a situation where it is, also mw says it should always be html), the sanitizer will simply return it as is, no harm done.
+            if (data && data.content && (data.contentType === 'text/html' || (data.contentType === 'multipart/alternative'))) {
+                data.content = sanitizer.simpleSanitize(data.content);
+            }
+            return data;
+        },
+
         /**
          * Traverses the two given objects and only return attributes (and sub attributes) which has been changed.
          * Used to only update necessary parts of the mail model
