@@ -19,8 +19,9 @@ define('io.ox/core/pim/actions', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/actions/util',
     'io.ox/core/viewer/views/types/typesutil',
+    'io.ox/core/folder/api',
     'gettext!io.ox/core'
-], function (attachmentAPI, downloadAPI, filesAPI, yell, ext, actionsUtil, viewerTypes, gt) {
+], function (attachmentAPI, downloadAPI, filesAPI, yell, ext, actionsUtil, viewerTypes, folderAPI, gt) {
 
     'use strict';
 
@@ -91,6 +92,11 @@ define('io.ox/core/pim/actions', [
         save: {
             capabilities: 'infostore',
             collection: 'some',
+            matches: function (baton) {
+                if (!baton.first().model) return true;
+                var folder = folderAPI.pool.getModel(baton.first().model.get('folder'));
+                return !folder.is('federated-sharing');
+            },
             action: function (baton) {
                 // cannot be converted to multiple request because of backend bug (module overides params.module)
                 baton.array().forEach(function (data) {
