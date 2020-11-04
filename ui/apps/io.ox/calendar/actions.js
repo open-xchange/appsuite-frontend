@@ -86,8 +86,7 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/detail/actions/invite', {
-        capabilities: 'calendar',
-        device: '!guest',
+        capabilities: 'calendar !guest',
         collection: 'one',
         every: 'attendees !== undefined',
         action: function (baton) {

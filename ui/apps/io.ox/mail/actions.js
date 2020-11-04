@@ -32,7 +32,7 @@ define('io.ox/mail/actions', [
     var Action = actionsUtil.Action;
 
     new Action('io.ox/mail/actions/compose', {
-        device: '!guest',
+        capabilities: '!guest',
         action: function (baton) {
             ox.registry.call('mail-compose', 'open', null, { folderId: baton.app.folder.get() });
         }
@@ -81,7 +81,7 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/forward', {
-        device: '!guest',
+        capabilities: '!guest',
         collection: 'some && toplevel',
         action: function (baton) {
             var multiple = baton.selection && baton.selection.length > 1;
