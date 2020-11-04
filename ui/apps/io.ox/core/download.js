@@ -283,6 +283,20 @@ define('io.ox/core/download', [
             });
         },
 
+        // all attachments of an appointment
+        chronosMultiple: function (appointmentModel) {
+            var url = ox.apiRoot + '/chronos?' + $.param({
+                session: ox.session,
+                action: 'zipAttachments',
+                folder: appointmentModel.get('folder'),
+                id: appointmentModel.get('id')
+            });
+            form({
+                url: url,
+                body: returnJSON(appointmentModel.get('attachments'))
+            });
+        },
+
         // download multiple attachments as zip file
         pimAttachments: function (list, paramValues) {
             var url = ox.apiRoot + '/attachment?action=zipDocuments&callback=antivirus&session=' + ox.session + '&folder=' + paramValues.folder + '&attached=' + paramValues.attached + '&module=' + paramValues.module;
