@@ -60,10 +60,11 @@ define('io.ox/keychain/secretRecoveryDialog', [
                         self.$body.find('input').val('');
                         self.close();
 
-                        require(['io.ox/core/folder/api'], function (api) {
+                        require(['io.ox/core/folder/api', 'io.ox/core/api/account'], function (api, accountAPI) {
                             api.list('1', { cache: false }).done(function () {
                                 api.virtual.refresh();
                             });
+                            accountAPI.trigger('account:recovered');
                         });
 
                         // process queue
