@@ -75,6 +75,9 @@ define('io.ox/core/pim/actions', [
                 return e.collection.has('multiple');
             },
             multiple: function (list) {
+                // chronos has it's own multiple download
+                if (list[0].model && list[0].model.get('folder').indexOf('cal://') === 0) return downloadAPI.chronosMultiple(list[0].model);
+
                 var param = {
                     folder: list[0].folder,
                     module: list[0].module,
