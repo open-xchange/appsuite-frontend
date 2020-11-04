@@ -19,16 +19,18 @@ define('io.ox/chat/views/chat', [
     'io.ox/chat/views/chatAvatar',
     'io.ox/chat/views/chatMember',
     'io.ox/chat/views/messages',
+    'io.ox/chat/views/content',
     'io.ox/chat/views/reference-preview',
     'io.ox/chat/events',
     'io.ox/chat/data',
     'io.ox/chat/util',
+    'io.ox/core/yell',
     'io.ox/backbone/views/toolbar',
     'gettext!io.ox/chat',
     'io.ox/core/strings',
     'io.ox/core/notifications',
     'io.ox/chat/views/dropzone'
-], function (ext, api, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, util, ToolbarView, gt, strings, notifications, dropzone) {
+], function (ext, api, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ContentView, ReferencePreview, events, data, util, yell, ToolbarView, gt, strings, notifications, dropzone) {
 
     'use strict';
 
@@ -168,12 +170,15 @@ define('io.ox/chat/views/chat', [
                 'paginate': this.toggleAutoScroll.bind(this, false)
             });
 
+            this.listenTo(events, {
+                'cmd:message:delete': this.onMessageDelete,
+                'cmd:message:edit': this.onMessageEdit,
+                'cmd:message:reply': this.onMessageReply
+            });
+
             this.listenTo(this.messagesView, {
                 'before:add': this.onBeforeAdd,
-                'after:add': this.onAfterAdd,
-                'delete': this.onDelete,
-                'editMessage': this.onEditMessage,
-                'replyToMessage': this.onReplyToMessage
+                'after:add': this.onAfterAdd
             });
 
             this.on('appended', function () {
@@ -328,7 +333,14 @@ define('io.ox/chat/views/chat', [
 
         renderEditor: function () {
             if (this.isMember()) {
-                this.$editor = $('<textarea class="form-control">').attr({ 'aria-label': gt('Message'), placeholder: gt('Message'), 'maxlength': data.serverConfig.maxMsgLength });
+                var $container = $('<div class="editor-container">').append(
+                    $('<div class="reference-container">'),
+                    this.$editor = $('<textarea rows="1">').attr({
+                        'aria-label': gt('Message'),
+                        'placeholder': gt('Message'),
+                        'maxlength': data.serverConfig.maxMsgLength
+                    })
+                );
                 var send = $('<button type="button" class="btn btn-link pull-right send-btn">').attr('aria-label', gt('Send'))
                     .append($('<i class="fa fa-paper-plane" aria-hidden="true">').attr('title', gt('Send')));
                 var cancel = $('<button type="button" class="btn btn-link cancel-btn">').attr('aria-label', gt('Cancel'))
@@ -337,7 +349,7 @@ define('io.ox/chat/views/chat', [
                     .append($('<i class="fa fa-paperclip" aria-hidden="true">').attr('title', gt('Upload file')));
                 var input = $('<input type="file" class="file-upload-input hidden" multiple>');
 
-                return [attachment, input, this.$editor, cancel, send];
+                return [attachment, input, $container, cancel, send];
             }
 
             if (this.model.get('type') === 'channel') {
@@ -348,7 +360,7 @@ define('io.ox/chat/views/chat', [
         },
 
         updateEditor: function () {
-            var $controls = this.$el.find('.controls');
+            var $controls = this.$('.controls');
             $controls.empty().append(this.renderEditor());
         },
 
@@ -419,67 +431,56 @@ define('io.ox/chat/views/chat', [
             this.markMessageAsRead();
         },
 
-        onDelete: function (message) {
+        onMessageDelete: function (model) {
             // success will trigger a message:changed event on the websocket. This takes care of view updates etc
-            api.deleteMessage(message).fail(function () {
-                require(['io.ox/core/yell'], function (yell) {
-                    yell('error', gt('The message could not be deleted.'));
-                });
+            api.deleteMessage(model).fail(function () {
+                yell('error', gt('The message could not be deleted.'));
             });
         },
 
         onCancelSpecialMode: function () {
             this.$editor.val('').focus();
             if (this.$messageReference) this.$messageReference.remove();
-            this.$el.find('.controls').removeClass('edit-mode reply-mode system text preview emoji');
+            this.$('.controls').removeClass('edit-mode reply-mode system text preview emoji');
             this.specialMode = false;
             this.messageReference = null;
         },
 
-        onEditMessage: function (message) {
+        onMessageEdit: function (model) {
             //clean up
             this.onCancelSpecialMode();
-
-            var messageNode = this.getMessageNode(message);
+            var messageNode = this.getMessageNode(model);
             // scroll to edited message
             if (messageNode) {
                 this.$scrollpane.scrollTop(messageNode[0].offsetTop - this.$scrollpane.height() + messageNode.height() + 4);
             }
-            this.$editor.val(message.get('content')).focus();
-            this.$el.find('.controls').addClass('edit-mode');
+            this.$editor.val(model.get('content')).focus();
+            this.$('.controls').addClass('edit-mode');
             this.specialMode = 'edit';
-            this.messageReference = message;
+            this.messageReference = model;
         },
 
-        onReplyToMessage: function (message) {
+        onMessageReply: function (model) {
+
             // clean up
             this.onCancelSpecialMode();
 
-            var messageNode = this.getMessageNode(message),
-                user = data.users.getByMail(message.get('sender')),
-                messageBody = message.getBody();
-            // scroll to cited message
-            if (messageNode) {
-                this.$scrollpane.scrollTop(messageNode[0].offsetTop - this.$scrollpane.height() + messageNode.height() + 4);
-            }
+            // scroll to quoted message
+            var $el = this.getMessageNode(model);
+            if ($el.length) $el[0].scrollIntoView(false);
 
-            this.$messageReference = $('<div class="reference-message message">')
-                .addClass(message.getType())
-                .toggleClass('emoji', message.isEmoji())
-                .append(
-                    $('<div class="quote">').append(
-                        $('<div class="sender">').text(user.getName()),
-                        $('<div class="body">').html(messageBody)
-                    )
-                );
+            var user = data.users.getByMail(model.get('sender'));
 
-            // remove commands
-            this.$messageReference.find('[data-cmd]').removeAttr('data-cmd');
-
-            this.$editor.before(this.$messageReference).focus();
-            this.$el.find('.controls').addClass('reply-mode ' + message.getType()).toggleClass('emoji', message.isEmoji());
             this.specialMode = 'reply';
-            this.messageReference = message;
+            this.messageReference = model;
+            this.$messageReference = $('<div class="message-quote">').append(
+                $('<div class="sender">').text(user.getName()),
+                new ContentView({ model: model, inEditor: true }).render().$el
+            );
+
+            this.$('.controls').addClass('reply-mode');
+            this.$('.reference-container').empty().append(this.$messageReference);
+            this.$editor.focus();
         },
 
         scrollToBottom: function () {
@@ -503,6 +504,7 @@ define('io.ox/chat/views/chat', [
         },
 
         onEditorKeydown: function (e) {
+
             if (e.which === 27 && this.specialMode) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -510,21 +512,25 @@ define('io.ox/chat/views/chat', [
             }
 
             if (e.which === 13) {
-                if (e.ctrlKey || e.metaKey || e.altKey) {
-                    // append newline manually if ctrl is pressed
-                    this.$editor.val(this.$editor.val() + '\n');
-                    return;
-                }
-                // shift + enter already appends newline
-                if (e.shiftKey) return;
+                // shift + enter appends newline
+                // other modifiers don't do anything to avoid unwanted messages
+                if (e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) return;
                 e.preventDefault();
                 this.onSend();
-                this.$editor.focus();
+                this.$editor.focus().trigger('input');
             }
         },
 
-        onEditorInput: _.throttle(function () {
-            var state = this.$editor.val() !== '';
+        onEditorInput: function () {
+            var textarea = this.$editor[0],
+                value = textarea.value;
+            textarea.style.height = 'auto';
+            var scrollHeight = textarea.scrollHeight;
+            textarea.style.height = (scrollHeight) + 'px';
+            this.onTyping(value !== '');
+        },
+
+        onTyping: _.throttle(function (state) {
             api.typing(this.model.id, state);
         }, 2500, { trailing: false }),
 
@@ -562,11 +568,13 @@ define('io.ox/chat/views/chat', [
                 this.scrollToBottom();
             }
         },
+
         onSend: function () {
             var text = this.$editor.val();
             if (text.trim().length > 0) this.onPostMessage(text);
             this.$editor.val('');
         },
+
         onPostMessage: function (content) {
             var maxMessageLength = data.serverConfig.maxMsgLength || -1;
 
@@ -584,6 +592,7 @@ define('io.ox/chat/views/chat', [
             api.typing(this.model.id, false);
 
             if (this.specialMode === 'edit') {
+                //this.messageReference.set({ content: content, edited: true });
                 api.editMessage(content, this.messageReference);
                 this.onCancelSpecialMode();
             } else if (this.specialMode === 'reply') {

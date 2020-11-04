@@ -11,10 +11,7 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-define('io.ox/chat/util', [
-    'io.ox/core/strings',
-    'gettext!io.ox/chat'
-], function (strings, gt) {
+define('io.ox/chat/util', ['gettext!io.ox/chat'], function (gt) {
 
     'use strict';
 
@@ -76,7 +73,13 @@ define('io.ox/chat/util', [
         'application/vnd.ms-powerpoint': gt('Presentation')
     };
 
-    var emojiRegex = new RegExp('^[\\u{1f300}-\\u{1f5ff}\\u{1f900}-\\u{1f9ff}\\u{1f600}-\\u{1f64f}\\u{1f680}-\\u{1f6ff}\\u{2600}-\\u{26ff}\\u{2700}-\\u{27bf}\\u{1f1e6}-\\u{1f1ff}\\u{1f191}-\\u{1f251}\\u{1f004}\\u{1f0cf}\\u{1f170}-\\u{1f171}\\u{1f17e}-\\u{1f17f}\\u{1f18e}\\u{3030}\\u{2b50}\\u{2b55}\\u{2934}-\\u{2935}\\u{2b05}-\\u{2b07}\\u{2b1b}-\\u{2b1c}\\u{3297}\\u{3299}\\u{303d}\\u{00a9}\\u{00ae}\\u{2122}\\u{23f3}\\u{24c2}\\u{23e9}-\\u{23ef}\\u{25b6}\\u{23f8}-\\u{23fa}]{1,3}$', 'u');
+    //var emojiRegex = new RegExp('^[\\u{1f300}-\\u{1f5ff}\\u{1f900}-\\u{1f9ff}\\u{1f600}-\\u{1f64f}\\u{1f680}-\\u{1f6ff}\\u{2600}-\\u{26ff}\\u{2700}-\\u{27bf}\\u{1f1e6}-\\u{1f1ff}\\u{1f191}-\\u{1f251}\\u{1f004}\\u{1f0cf}\\u{1f170}-\\u{1f171}\\u{1f17e}-\\u{1f17f}\\u{1f18e}\\u{3030}\\u{2b50}\\u{2b55}\\u{2934}-\\u{2935}\\u{2b05}-\\u{2b07}\\u{2b1b}-\\u{2b1c}\\u{3297}\\u{3299}\\u{303d}\\u{00a9}\\u{00ae}\\u{2122}\\u{23f3}\\u{24c2}\\u{23e9}-\\u{23ef}\\u{25b6}\\u{23f8}-\\u{23fa}]{1,3}$', 'u');
+
+    // Using unicode properties seems to catch more (and needs less code)
+    // support: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Browser_compatibility
+    // Chrome:64 (2018); Edge:79 (2020); Firefox:78 (2020); Safari:11.1 (2018); IE:--
+    // regex is written as a function due to (falsy) eslint (would report invalid regex)
+    var emojiRegex = new RegExp('^(\\p{Emoji_Presentation}|\u200D){1,9}$', 'u');
 
     var util = {
 
@@ -107,25 +110,6 @@ define('io.ox/chat/util', [
 
             name = fileName.split('.').length > 1 && fileName.split('.').pop().toUpperCase();
             return name || gt('File');
-        },
-
-        getFileText: function (opt) {
-            opt = _.extend({ download: true }, opt);
-
-            var model = opt.model,
-                file = _(model.get('files')).last();
-
-            if (!file) return;
-
-            var node = [
-                $('<i class="fa icon" aria-hidden="true">').addClass(util.getClassFromMimetype(file.mimetype)),
-                $('<div>').append(
-                    $('<span class="name">').text(file.name),
-                    $('<span class="info">').text((file.size ? strings.fileSize(file.size, 0) : '') + ' ' + util.getFileTypeName(file.mimetype, file.name))
-                )
-            ];
-
-            return opt.download ? $('<button type="button" class="btn btn-link download">').attr('data-download', model.getFileUrl(file)).append(node) : node;
         },
 
         renderFile: function (opt) {

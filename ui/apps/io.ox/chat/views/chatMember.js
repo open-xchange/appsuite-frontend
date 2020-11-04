@@ -48,7 +48,7 @@ define('io.ox/chat/views/chatMember', [
             // cannot calculate length if invisible
             if (!this.$el.is(':visible')) return;
 
-            var members = this.$el.find('li'),
+            var members = this.$('li'),
                 overflow = false;
             // check if we have started a second row
             for (var i = 0; i < members.length - 1 && overflow === false; i++) {
@@ -83,14 +83,14 @@ define('io.ox/chat/views/chatMember', [
         },
 
         onAdd: function (model) {
-            this.$el.find('.members').append(
+            this.$('.members').append(
                 $('<li>').append(new BadgeView({ model: model }).render().$el)
             );
             //this.updateToggleButton();
         },
 
         onRemove: function (model) {
-            this.$el.find('[data-email="' + model.get('email1') + '"]').parent().remove();
+            this.$('[data-email="' + model.get('email1') + '"]').parent().remove();
             //this.updateToggleButton();
         }
     });

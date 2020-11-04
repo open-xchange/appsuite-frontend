@@ -29,8 +29,7 @@ define('io.ox/chat/views/launcher', [
         },
 
         initialize: function () {
-            this.badge = this.$el.find('.chat-notification');
-
+            this.badge = this.$('.chat-notification');
             this.listenTo(data.chats, 'add remove change:unreadCount', this.updateCounter);
         },
 
@@ -66,6 +65,5 @@ define('io.ox/chat/views/launcher', [
             }
             $('#io-ox-screens').toggleClass('has-sticky-window', $('#io-ox-windowmanager .io-ox-windowmanager-sticky-panel>:visible').length > 0);
         }
-
     });
 });

@@ -39,9 +39,24 @@ define('io.ox/chat/data', [
         sync: function (method, model, options) {
             return api.getJwtFromSwitchboard().then(function (jwt) {
                 options.headers = _.extend({ 'Authorization': 'Bearer ' + jwt }, options.headers);
+                // inject xhr with upload handler
+                var xhr = $.ajaxSettings.xhr();
+                options.xhr = _.constant(xhr);
+                if (xhr.upload && method === 'create') {
+                    xhr.upload.addEventListener('progress', function (e) {
+                        model.trigger('progress', (e.loaded / e.total * 100) >> 0);
+                    }, false);
+                    xhr.upload.addEventListener('error', function () {
+                        model.trigger('progress', 0);
+                    }, false);
+                }
                 var jqXHR = Backbone.Collection.prototype.sync.call(this, method, model, options);
-                jqXHR.fail(util.handleSessionFail);
-                return jqXHR;
+                model.abort = function () {
+                    jqXHR.abort();
+                };
+                return jqXHR.done(function done() {
+                    model.abort = $.noop;
+                });
             });
         }
     });
@@ -215,14 +230,18 @@ define('io.ox/chat/data', [
 
         getBody: function () {
             if (this.isSystem()) return this.getSystemMessage();
-            else if (this.hasPreview()) return this.getFilesPreview();
-            else if (this.isFile()) return util.getFileText({ model: this });
-            else if (this.isDeleted()) return gt('This message was deleted');
+            if (this.hasPreview()) return this.getFilesPreview();
+            if (this.isFile()) return util.getFileText({ model: this });
+            if (this.isDeleted()) return gt('This message was deleted');
             return this.getFormattedBody();
         },
 
         getFormattedBody: function () {
-            return _.escape(this.get('content')).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+            return _.escape(this.get('content'))
+                .replace(/\*(.+?)\*/g, '<b>$1</b>')
+                .replace(/_(.+?)_/g, '<em>$1</em>')
+                .replace(/~(.+?)~/g, '<del>$1</del>')
+                .replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
         },
 
         getSystemMessage: function () {
@@ -300,39 +319,6 @@ define('io.ox/chat/data', [
             return api.url + '/files/' + file.fileId;
         },
 
-        getFilesPreview: function () {
-
-            var attachment = this.get('files')[0],
-                fileId = attachment.fileId,
-                url = this.getFileUrl(attachment) + '/thumbnail';
-
-            if (!fileId) return;
-
-            // we start with a dummy GIF to avoid mixed-content warning
-            var $img = $('<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">');
-            var preview = attachment.preview;
-
-            if (preview) {
-                // we just need the height to fill the viewport properly
-                $img.attr({ width: preview.width, height: preview.height });
-            }
-
-            var $el = $('<div class="thumbnail-container">')
-                .attr({
-                    'data-cmd': 'show-message-file',
-                    'data-room-id': this.get('roomId'),
-                    'data-file-id': fileId,
-                    'data-message-id': this.get('messageId')
-                })
-                .append($img);
-
-            api.requestBlobUrl({ url: url }).then(function (url) {
-                $img.attr('src', url);
-            });
-
-            return $el;
-        },
-
         getTime: function () {
             // use time when this message was last changed or when it was created
             return moment(this.get('edited') || this.get('date')).format('LT');
@@ -356,30 +342,66 @@ define('io.ox/chat/data', [
             return !!this.get('deleted');
         },
 
+        isEdited: function () {
+            return !!this.get('edited');
+        },
+
         isEditable: function () {
-            return !this.isSystem() && !this.isDeleted();
+            return !this.isSystem() && !this.isDeleted() && !this.isUploading();
+        },
+
+        isUploading: function () {
+            return !!this.get('uploading');
+        },
+
+        isFailed: function () {
+            return this.get('deliveryState') === 'failed';
         },
 
         isUser: function () {
-            return /^(text|file)$/.test(this.getType());
+            return !this.isSystem();
         },
 
         getType: function () {
             // always treat deleted messages as text
             if (this.get('deleted')) return 'text';
-            if (this.hasPreview()) return 'preview';
-            if (this.get('files')) return 'file';
             if (this.isSystem()) return 'system';
             return 'text';
         },
 
-        hasPreview: function () {
-            if (this.get('files') && this.get('files')[0].preview) return true;
-            return false;
+        // returns either an uploaded file or a blob object that is currently uploaded
+        // returns undefined if no file is available
+        getFile: function () {
+
+            var blob;
+            if (this.get('uploading') && (blob = this.get('blob'))) {
+                return {
+                    blob: blob,
+                    isBlob: true,
+                    isImage: /^image\//.test(blob.type),
+                    name: blob.name,
+                    size: blob.size,
+                    type: blob.type
+                };
+            }
+
+            var file;
+            if (this.get('files') && (file = this.get('files')[0])) {
+                return {
+                    id: file.fileId,
+                    isBlob: false,
+                    isImage: /^image\//.test(file.mimetype),
+                    preview: file.preview,
+                    name: file.name,
+                    size: 0,
+                    type: file.mimetype,
+                    url: this.getFileUrl(file) + '/thumbnail'
+                };
+            }
         },
 
         isFile: function () {
-            return this.get('type') === 'file';
+            return !!(this.get('files') && this.get('files')[0]);
         },
 
         isEmoji: function () {
@@ -400,8 +422,9 @@ define('io.ox/chat/data', [
         },
 
         getDeliveryState: function () {
-            if (this.isMyself()) return util.getDeliveryStateClass(this.get('deliveryState'));
-            return this.get('deliveryState') || '';
+            var state = this.get('deliveryState') || '';
+            if (state === 'failed') return 'failed';
+            return this.isMyself() ? util.getDeliveryStateClass(state) : state;
         },
 
         updateDelivery: function (state) {
@@ -410,7 +433,6 @@ define('io.ox/chat/data', [
             var invisible = presence.getMyAvailability() === 'invisible';
             this.set('deliveryState', state);
             if (invisible) return;
-
             api.updateDelivery(this.get('roomId'), this.get('messageId'), state).catch(function () {
                 this.set('deliveryState', this.previous('deliveryState'));
             }.bind(this));
@@ -703,11 +725,16 @@ define('io.ox/chat/data', [
 
         handleError: function (response) {
             var errorCode = response.responseJSON ? response.responseJSON.errorCode : response.responseText;
-
             switch (errorCode) {
-                case 'filesize:exceeded': return notifications.yell('error', gt('The uploaded file exceeds the size limit'));
-                case 'messagelength:exceeded': return notifications.yell('error', gt('The message length exceeds the limit and could not be delivered'));
-                default: notifications.yell('error', gt('Something went wrong. Please try again.'));
+                case 'filesize:exceeded':
+                    notifications.yell('error', gt('The uploaded file exceeds the size limit'));
+                    break;
+                case 'messagelength:exceeded':
+                    notifications.yell('error', gt('The message length exceeds the limit and could not be delivered'));
+                    break;
+                default:
+                    notifications.yell('error', gt('Something went wrong. Please try again.'));
+                    break;
             }
         },
 
@@ -720,7 +747,7 @@ define('io.ox/chat/data', [
                 events.trigger('message:post', { attr: attr, room: this, consume: consume });
                 if (!consumed) {
                     lastDeferred = lastDeferred.then(function () {
-                        return this.storeMessage(attr, file).catch();
+                        return this.storeMessage(attr, file).catch(_.constant($.when()));
                     }.bind(this));
                 }
                 return lastDeferred;
@@ -728,30 +755,47 @@ define('io.ox/chat/data', [
         }()),
 
         storeMessage: function (attr, file) {
+
             if (this.isNew()) return this.storeFirstMessage(attr, file);
             attr.roomId = this.get('roomId');
 
-            var formData = util.makeFormData(_.extend({}, attr, { files: file })),
-                model = file ? new MessageModel(attr) : this.messages.add(attr, { merge: true, parse: true });
+            var formData = util.makeFormData(_.extend({}, attr, { files: file }));
+            if (file) attr = _.extend({ uploading: true, blob: file }, attr);
+            var model = this.messages.add(attr, { merge: true, parse: true });
+
+            // for debugging; you need this very often when working on pre-post message appearance
+            if (ox.debug) {
+                if (window.upload === false) return $.when();
+                if (window.fail) {
+                    model.set('deliveryState', 'failed').trigger('progress', 0);
+                    return $.Deferred().reject();
+                }
+            }
 
             // model for files will be added to cache and this.messages via sockets message:new event. So no need to do it in the callback here. Temporary model is fine;
             return model.save(attr, {
                 data: formData,
                 processData: false,
                 contentType: false
-            }).then(function () {
-                model.setInitialDeliveryState();
-                if (file) this.messages.add(model, { merge: true });
-                this.set('active', true);
-            }.bind(this))
-            .fail(this.handleError.bind(this));
+            })
+            .then(
+                function success() {
+                    model.setInitialDeliveryState();
+                    this.set('active', true);
+                }.bind(this),
+                function fail(response) {
+                    // ignore "abort" by the user
+                    if (response.statusText === 'abort') return;
+                    this.handleError(response);
+                    model.set('deliveryState', 'failed').trigger('progress', 0);
+                }.bind(this)
+            );
         },
 
         storeFirstMessage: function (attr, files) {
             var hiddenAttr = { message: attr.content, files: files, members: this.get('members') };
             delete attr.content;
             delete attr.members;
-
             return this.save(attr, { hiddenAttr: hiddenAttr }).then(function () {
                 events.trigger('cmd', { cmd: 'show-chat', id: this.get('roomId') });
             }.bind(this), this.handleError.bind(this))
