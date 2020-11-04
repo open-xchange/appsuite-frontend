@@ -102,6 +102,8 @@ define('io.ox/core/folder/util', [
             case 'shared':
                 return data.type === 3;
             case 'federated-sharing':
+                // for chronos check the calendar provider, account id doesn't work here
+                if (data['com.openexchange.calendar.provider']) return /^(xox\d+|xctx\d+)/.test(data['com.openexchange.calendar.provider']);
                 return /^(xox\d+|xctx\d+)/.test(data.account_id);
             case 'system':
                 // some folders have legacy type 7 but are actually system folders, so check module too
