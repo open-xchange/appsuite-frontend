@@ -167,7 +167,7 @@ publish e2e report:
     - merge filter report and rerun
   script:
     # fail if there is no history being generated. Prevents empty reports from being "published".
-    - ls ui/build/allure-report/history.json > /dev/null
+    - ls ui/build/allure-report/history.tar > /dev/null
     - docker cp ui/build/allure-report/. reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG
     - docker exec reports rm -f /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
     - docker exec reports ln -sf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
