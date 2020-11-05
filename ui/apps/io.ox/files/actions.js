@@ -1275,34 +1275,54 @@ define('io.ox/files/actions', [
     ext.point('io.ox/files/toolbar/new').extend(
         {
             index: 100,
-            id: 'upload',
-            title: gt('Upload files'),
-            ref: 'io.ox/files/actions/upload',
-            section: 'upload'
-        },
-        {
-            index: 105,
-            id: 'uploadFolder',
-            title: gt('Upload folder'),
-            ref: 'io.ox/files/actions/uploadFolder',
-            section: 'upload'
-        },
-        {
-            index: 200,
-            id: 'note',
-            title:
-                //#. Please translate like "take a note", "Notiz" in German, for example.
-                //#. more like "to notice" than "to notify".
-                gt('Add note'),
-            ref: 'io.ox/files/actions/editor-new',
+            id: 'add-folder',
+            title: _.device('smartphone') ?
+                gt('Add new folder') :
+                //#. A folder in a computer system.
+                gt('Folder'),
+            ref: 'io.ox/files/actions/add-folder',
             section: 'add'
         },
         {
             index: 300,
-            id: 'add-folder',
-            title: gt('Add new folder'),
-            ref: 'io.ox/files/actions/add-folder',
+            id: 'note',
+            title:
+
+                _.device('smartphone') ?
+                    //#. Creating a new note item in context of "note taking". "Notiz" in German, for example.
+                    //#. More like "to notice" than "to notify".
+                    gt('New note') :
+                    //#. A note item in context of "note taking". "Notiz" in German, for example.
+                    //#. More like "to notice" than "to notify".
+                    gt('Note'),
+            ref: 'io.ox/files/actions/editor-new',
             section: 'add'
+        }
+    );
+
+    // 'upload' dropdown
+    ext.point('io.ox/files/toolbar/upload').extend(
+        {
+            index: 100,
+            id: 'upload',
+            title: _.device('smartphone') ?
+                //#. An action to upload a local file e.g. to Drive.
+                gt('Upload file') :
+                //#. A file in a computer system.
+                gt('File'),
+            ref: 'io.ox/files/actions/upload',
+            section: 'upload'
+        },
+        {
+            index: 200,
+            id: 'upload-folder',
+            title: _.device('smartphone') ?
+                //#. An action to upload a local folder to Drive.
+                gt('Upload folder') :
+                //#. A folder in a computer system.
+                gt('Folder'),
+            ref: 'io.ox/files/actions/uploadFolder',
+            section: 'upload-folder'
         }
     );
 

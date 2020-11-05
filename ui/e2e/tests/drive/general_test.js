@@ -31,7 +31,7 @@ Scenario('[C8362] Add note', (I, drive) => {
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.clickToolbar('New');
-    I.click('Add note');
+    I.click('Note');
     I.waitForElement({ css: 'input[type="text"].title' });
     I.fillField('Title', 'Test title');
     I.fillField('Note', 'Test body');
@@ -47,9 +47,9 @@ Scenario('[C8362] Add note', (I, drive) => {
 Scenario('[C8364] Upload new file', (I, drive) => {
     I.login('app=io.ox/files');
     drive.waitForApp();
-    I.clickToolbar('New');
-    I.waitForText('Upload files');
-    I.click('Upload files');
+    I.clickToolbar('Upload');
+    I.waitForText('File');
+    I.click('File');
     // the input field is created on demand when Upload files is clicked. This click also closes the dropdown
     I.attachFile({ css: '[aria-label="Drive toolbar. Use cursor keys to navigate."] .dropdown input[name=file]' }, 'e2e/media/files/0kb/document.txt');
     I.waitForText('document.txt');
@@ -342,9 +342,9 @@ Scenario('[C45042] Filter files', async (I, drive) => {
 Scenario('[Bug 63288] Cancel upload does not work in drive', async (I, drive) => {
     I.login('app=io.ox/files');
     drive.waitForApp();
-    I.clickToolbar('New');
-    I.waitForText('Upload files');
-    I.click('Upload files');
+    I.clickToolbar('Upload');
+    I.waitForText('File');
+    I.click('File');
     // slow down network so we can click the cancel upload button
     await I.throttleNetwork('2G');
     // the input field is created on demand when Upload files is clicked. This click also closes the dropdown

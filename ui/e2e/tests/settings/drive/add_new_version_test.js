@@ -36,9 +36,9 @@ Scenario('[C283259] Adding files with identical names - Add new version', async 
     drive.waitForApp();
 
     //Add file with existing name
-    I.clickToolbar('New');
-    I.waitForText('Upload files');
-    I.click('Upload files');
+    I.clickToolbar('Upload');
+    I.waitForText('File');
+    I.click('File');
     I.attachFile({ css: '[aria-label="Drive toolbar. Use cursor keys to navigate."] .dropdown input[name=file]' }, 'e2e/media/files/generic/testdocument.rtf');
     I.waitForText('testdocument.rtf');
 

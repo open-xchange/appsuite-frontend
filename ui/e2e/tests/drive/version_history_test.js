@@ -42,7 +42,7 @@ Scenario('[C8365] Version history', async (I, drive) => {
     await fs.promises.writeFile('build/e2e/C8365.txt', `timestamp2: ${timestamp2}`);
     I.waitForElement('.file-input');
     I.attachFile('.file-input', 'build/e2e/C8365.txt');
-    I.click('Upload');
+    I.click('Upload', '.modal-dialog');
 
     //Verify there's new version of the file
     I.waitForText('Versions (2)');

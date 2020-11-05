@@ -55,12 +55,12 @@ Scenario('[C8374] Public files: Add a file', (I, drive) => {
     drive.waitForApp();
     I.selectFolder('Public files');
     I.clickToolbar('New');
-    I.waitForText('Add new folder');
-    I.dontSee('Upload files');
-    I.dontSee('New text document');
-    I.dontSee('New spreadsheet');
-    I.dontSee('New presentation');
-    I.dontSee('Add note');
+    I.waitForText('Folder');
+    I.dontSee('File');
+    I.dontSee('Text document');
+    I.dontSee('Spreadsheet');
+    I.dontSee('Presentation');
+    I.dontSee('Note');
 });
 
 // Note: The title of this test, does not really reflect what is tested here (again)
@@ -167,7 +167,7 @@ Scenario('[C8377] Invite a person', (I, users, drive, dialogs) => {
         I.waitForText('Public files', 5, '.folder-tree');
         I.selectFolder('Public files');
         I.clickToolbar('New');
-        I.clickDropdown('Add new folder');
+        I.clickDropdown('Folder');
 
         dialogs.waitForVisible();
         I.waitForText('Add new folder', 5, dialogs.locators.header);

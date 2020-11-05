@@ -33,6 +33,14 @@ define('io.ox/files/mobile-toolbar-actions', [
             drawDisabled: true,
             caret: false
         },
+        'upload': {
+            prio: 'hi',
+            mobile: 'hi',
+            icon: 'fa fa-cloud-upload',
+            dropdown: 'io.ox/files/toolbar/upload',
+            drawDisabled: true,
+            caret: false
+        },
         'view-icon': {
             prio: 'hi',
             mobile: 'hi',
@@ -76,7 +84,7 @@ define('io.ox/files/mobile-toolbar-actions', [
         })
     );
 
-    mobile.addAction(points.listView, meta, ['create', 'view-list', 'view-icon', 'view-tile']);
+    mobile.addAction(points.listView, meta, ['create', 'upload', 'view-list', 'view-icon', 'view-tile']);
     mobile.createToolbarExtensions(points);
 
     var updateToolbar = _.debounce(function (list) {

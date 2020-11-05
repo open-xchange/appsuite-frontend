@@ -91,7 +91,7 @@ Scenario('[C45046] Upload new version', async function (I, drive) {
     let timestamp2 = Math.round(+new Date() / 1000);
     await fs.promises.writeFile('build/e2e/C45046.txt', timestamp2);
     I.attachFile('.io-ox-viewer input.file-input', 'build/e2e/C45046.txt');
-    I.click('Upload');
+    I.click('Upload', '.modal-dialog');
 
     I.waitForText(timestamp2, 30);
     I.waitForText('Versions (2)');
