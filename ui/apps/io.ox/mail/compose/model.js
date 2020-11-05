@@ -99,6 +99,12 @@ define('io.ox/mail/compose/model', [
             return this.save(_.device('smartphone'));
         },
 
+        getMailRef: function () {
+            var mailPath = this.get('mailPath');
+            if (!mailPath) return;
+            return _.cid({ id: mailPath.id, folder: mailPath.folderId });
+        },
+
         onChangeMailPath: function (mailPath) {
             // ever writing operation creates a new draft
             if (this.get('mailPath')) this.set('mailPath', mailPath);

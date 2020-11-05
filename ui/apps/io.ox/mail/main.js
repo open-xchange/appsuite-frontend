@@ -1837,7 +1837,12 @@ define('io.ox/mail/main', [
                 _.each(ids, function (mail) {
                     var space = composeAPI.space.hash[mail.cid];
                     if (!space) return;
-                    quit(ox.ui.apps.getByCID('io.ox/mail/compose:' + space + ':edit'));
+                    // current compose app
+                    var app = ox.ui.apps.getByCID('io.ox/mail/compose:' + space + ':edit');
+                    if (!app || !app.model || !mail.cid) return;
+                    // outdated draft?
+                    if (mail.cid !== app.model.getMailRef()) return;
+                    quit(app);
                 });
             });
 
