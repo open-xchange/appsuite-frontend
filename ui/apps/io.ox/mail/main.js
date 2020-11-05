@@ -1834,16 +1834,8 @@ define('io.ox/mail/main', [
         'composition-spaces': function () {
 
             api.on('deleted-mails', function (e, ids) {
-                _.each(ids, function (mail) {
-                    var space = composeAPI.space.hash[mail.cid];
-                    if (!space) return;
-                    // current compose app
-                    var app = ox.ui.apps.getByCID('io.ox/mail/compose:' + space + ':edit');
-                    if (!app || !app.model || !mail.cid) return;
-                    // outdated draft?
-                    if (mail.cid !== app.model.getMailRef()) return;
-                    quit(app);
-                });
+                var hash = composeAPI.space.hash;
+                if (_.some(ids, function (mail) { return hash[mail.cid]; })) _.delay(refresh, 1000);
             });
 
             ox.on('refresh^', refresh);
