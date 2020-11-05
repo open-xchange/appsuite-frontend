@@ -662,7 +662,9 @@ define('io.ox/mail/compose/view', [
         },
 
         // for custom handling (only for active compose apps)
-        onRemovedSpace: $.noop,
+        onRemovedSpace: function () {
+            this.model.removed = true;
+        },
 
         ariaLiveUpdate: function (e, msg) {
             this.$('[data-extension-id="arialive"]').text(msg);
@@ -782,7 +784,7 @@ define('io.ox/mail/compose/view', [
         },
 
         dispose: function () {
-            // remove from queue, to prevent zombies wehn mail is currently sent
+            // remove from queue, to prevent zombies when mail is currently sent
             composeAPI.queue.remove(this.model.get('id'));
             // disable dynamic extensionpoint to trigger saveAsDraft on logout
             this.removeLogoutPoint();

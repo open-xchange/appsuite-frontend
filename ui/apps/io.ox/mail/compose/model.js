@@ -86,8 +86,8 @@ define('io.ox/mail/compose/model', [
                 if (!this.prevAttributes) this.prevAttributes = data;
                 this.listenTo(data.attachments, 'remove', this.onRemoveAttachment);
                 this.listenTo(data.attachments, 'upload:failed', this.onRemovedSpace);
-                this.listenTo(composeAPI, 'mailref:' + data.id, this.onChangeMailPath);
                 this.listenTo(this, 'fail:save', this.onRemovedSpace);
+                this.listenTo(composeAPI, 'mailref:' + data.id, this.onChangeMailPath);
             }.bind(this));
         },
 
@@ -360,6 +360,7 @@ define('io.ox/mail/compose/model', [
         },
 
         destroy: function () {
+            if (this.removed) return;
             if (this.destroyed) return;
             if (!this.get('id')) return;
             this.destroyed = true;
