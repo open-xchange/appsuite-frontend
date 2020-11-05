@@ -27,7 +27,7 @@ After(async (users) => {
 
 
 Scenario('[C7336] Successful Login', async function (I, users) {
-    await I.haveSetting('io.ox/core//autoStart', 'io.ox/mail/main');
+    await users[0].hasConfig('io.ox/core//autoStart', 'io.ox/mail/main');
     I.amOnPage('ui');
     I.setCookie({ name: 'locale', value: 'en_US' });
     I.refreshPage();
