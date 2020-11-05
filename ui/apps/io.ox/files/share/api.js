@@ -389,6 +389,30 @@ define('io.ox/files/share/api', [
                 data: { entities: [entity] },
                 appendColumns: false
             });
+        },
+
+        /**
+         * get a link to open a federated share as guest user
+         * @param  { string }   link
+         * @return { object }   a file descriptor
+         */
+        getFederatedShareLink: function (link, item) {
+            return http.PUT({
+                module: 'share/management',
+                params: {
+                    action: 'getBackwardLink'
+                },
+                data: {
+                    link: link,
+                    item: item.id,
+                    folder: item.folder_id
+                }
+            })
+            .then(
+                function (data) {
+                    return data && data.link;
+                }
+            );
         }
     };
 

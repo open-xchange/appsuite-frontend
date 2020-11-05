@@ -316,6 +316,14 @@ define('io.ox/files/api', [
 
         hasWritePermissions: function () {
             return pUtil.hasObjectWritePermissions(this.toJSON());
+        },
+
+        getItemAccountSynchronous: function () {
+            var parentFolder = this.isFile ? this.get('folder_id') : this.get('id');
+            // for some cases it must be synchronous, so check the
+            // use-case if the folder is already available in every case
+            var folderModel = folderAPI.pool.models[parentFolder];
+            return folderModel.get('account_id');
         }
     });
 

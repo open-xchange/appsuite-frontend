@@ -192,6 +192,35 @@ define('io.ox/files/actions', [
         }
     });
 
+    new Action('io.ox/files/actions/edit-federated', {
+        collection: 'one && modify',
+        matches: function (baton) {
+            var model = baton.models[0];
+
+            if (!model.isOffice()) { return false; }
+            return util.canEditDocFederated(model);
+        },
+        action: function (baton) {
+
+            var model = baton.models[0];
+            var link = filestorageApi.getAccountUrl(model.getItemAccountSynchronous());
+
+            shareAPI.getFederatedShareLink(link, baton.first())
+                .then(function (guestLink) {
+                    /* global blankshield */
+                    if (_.device('noopener')) {
+                        window.open(guestLink, '_blank', 'noopener');
+                    } else {
+                        blankshield.open(guestLink, '_blank');
+                    }
+                },
+                function (error) {
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell('error', error);
+                    });
+                });
+        }
+    });
 
     // TODO check action Mario
     new Action('io.ox/files/actions/editor', {

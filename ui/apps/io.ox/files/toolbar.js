@@ -51,6 +51,12 @@ define('io.ox/files/toolbar', [
                 title: gt('Edit'),
                 ref: 'io.ox/files/actions/editor'
             },
+            'edit-federated': {
+                prio: 'hi',
+                mobile: 'lo',
+                title: gt('Edit'),
+                ref: 'io.ox/files/actions/edit-federated'
+            },
             'share': {
                 prio: 'hi',
                 mobile: 'lo',
