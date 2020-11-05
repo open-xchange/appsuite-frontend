@@ -93,6 +93,7 @@ define('io.ox/mail/compose/api', [
             if (mailPath) {
                 // real drafts
                 mailref = _.cid({ id: mailPath.id, folder: mailPath.folderId });
+                api.trigger('mailref:' + space.id, mailPath);
                 space.cid = 'io.ox/mail/compose:' + space.id + ':edit';
             }
             // add to mailref mapping;
@@ -263,6 +264,7 @@ define('io.ox/mail/compose/api', [
         // result: attachtment data with mailPath prop
         var mailPath = data.compositionSpace.mailPath,
             mailref = _.cid({ id: mailPath.id, folder: mailPath.folderId });
+        api.trigger('mailref:' + data.compositionSpace.id, mailPath);
         // add to mailref mapping;
         hash[mailref] = data.compositionSpace.id;
         return _.extend({}, data.attachments[0], { mailPath: data.compositionSpace.mailPath });

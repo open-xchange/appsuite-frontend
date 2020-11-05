@@ -86,6 +86,7 @@ define('io.ox/mail/compose/model', [
                 if (!this.prevAttributes) this.prevAttributes = data;
                 this.listenTo(data.attachments, 'remove', this.onRemoveAttachment);
                 this.listenTo(data.attachments, 'upload:failed', this.onRemovedSpace);
+                this.listenTo(composeAPI, 'mailref:' + data.id, this.onChangeMailPath);
                 this.listenTo(this, 'fail:save', this.onRemovedSpace);
             }.bind(this));
         },
@@ -96,6 +97,11 @@ define('io.ox/mail/compose/model', [
 
             // explicitedly call save here to push the initial changes of the ui (quoting/from/bcc) to the composition space
             return this.save(_.device('smartphone'));
+        },
+
+        onChangeMailPath: function (mailPath) {
+            // ever writing operation creates a new draft
+            if (this.get('mailPath')) this.set('mailPath', mailPath);
         },
 
         onRemovedSpace: function (e) {
