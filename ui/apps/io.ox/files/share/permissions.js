@@ -617,7 +617,7 @@ define('io.ox/files/share/permissions', [
                     isFile = baton.parentModel.isFile(),
                     isOwner = baton.model.isOwner(baton.parentModel),
                     module = baton.parentModel.get('module'),
-                    supportsWritePrivileges = baton.model.isInternal() || !/^(contacts|calendar|tasks)$/.test(module);
+                    supportsWritePrivileges = baton.model.isInternal() || !/^(contacts|tasks)$/.test(module);
 
                 // apply role for the first time
                 baton.model.set('role', role, { silent: true });
@@ -673,7 +673,7 @@ define('io.ox/files/share/permissions', [
                 var model = baton.model,
                     isAnonymous = model.isAnonymous(),
                     module = baton.parentModel.get('module'),
-                    supportsWritePrivileges = model.isInternal() || !/^(contacts|calendar|tasks)$/.test(module);
+                    supportsWritePrivileges = model.isInternal() || !/^(contacts|tasks)$/.test(module);
 
                 // not available for anonymous links (read-only)
                 if (isAnonymous) {
