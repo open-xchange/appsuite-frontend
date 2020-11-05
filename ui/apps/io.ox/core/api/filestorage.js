@@ -184,9 +184,6 @@ define('io.ox/core/api/filestorage', [
                 });
             },
 
-            getAllGuestUserIdentifier: function () {
-                return _.compact(_(accountsCache.pluck('metadata')).map(function (entry) { return entry && entry.guestUserIdentifier; }));
-            },
             // returns a model of the file storage account
             getAccount: function (options, useCache) {
                 useCache = _.defaultValue(useCache, true);
@@ -406,6 +403,29 @@ define('io.ox/core/api/filestorage', [
                     }
                 }
                 return isExternal;
+            },
+
+            //mainly for federated sharing
+
+            getAllGuestUserIdentifier: function () {
+                // works with the cache to be synchronous, please keep it this way
+                return _.compact(_(accountsCache.pluck('metadata')).map(function (entry) { return entry && entry.guestUserIdentifier; }));
+            },
+
+            getAccountMetaData: function (accountId) {
+                // works with the cache to be synchronous, please keep it this way
+                return accountsCache.findWhere({ qualifiedId: accountId }).get('metadata');
+            },
+
+            getAccountUrl: function (accountId) {
+                // works with the cache to be synchronous, please keep it this way
+                var accountConf = accountsCache.findWhere({ qualifiedId: accountId }).get('configuration');
+                return accountConf && accountConf.url;
+            },
+
+            isFederatedAccount: function (accountId) {
+                // works with the cache to be synchronous, please keep it this way
+                return accountsCache.findWhere({ qualifiedId: accountId }).has('metadata');
             }
         };
 

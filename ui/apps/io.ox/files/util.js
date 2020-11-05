@@ -18,9 +18,10 @@ define('io.ox/files/util', [
     'io.ox/core/capabilities',
     'io.ox/core/folder/api',
     'io.ox/core/notifications',
+    'io.ox/core/api/filestorage',
     'io.ox/files/upload/main',
     'settings!io.ox/files'
-], function (api, ModalDialog, gt, capabilities, folderAPI, Notifications, Upload, settings) {
+], function (api, ModalDialog, gt, capabilities, folderAPI, Notifications, filestorageApi, Upload, settings) {
 
     'use strict';
 
@@ -329,6 +330,27 @@ define('io.ox/files/util', [
 
                 return false;
             });
+        },
+
+        /**
+         * Returns whether a file (type office document) can be edited in its federated guest account.
+         *
+         * @param {Object} fileModel The file model to be checked.
+         *
+         * return {Boolean} True if the file can be edited in the federated guest account
+         */
+        canEditDocFederated: function (fileModel) {
+            // check if file is in federated shared file account
+            if (!filestorageApi.isFederatedAccount(fileModel.getItemAccountSynchronous())) { return false; }
+
+            var accountMeta = filestorageApi.getAccountMetaData(fileModel.getItemAccountSynchronous());
+            var guestCapabilities = accountMeta && accountMeta.guestCapabilities;
+            var canOpenInFederatedContext = false;
+
+            if (fileModel.isWordprocessing()) { canOpenInFederatedContext = _.has(guestCapabilities, 'Text'); }
+            if (fileModel.isSpreadsheet()) { canOpenInFederatedContext = _.has(guestCapabilities, 'Spreadsheet'); }
+            if (fileModel.isPresentation()) { canOpenInFederatedContext = _.has(guestCapabilities, 'Presentation'); }
+            return canOpenInFederatedContext;
         }
     };
 });
