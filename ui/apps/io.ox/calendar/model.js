@@ -240,9 +240,13 @@ define('io.ox/calendar/model', [
                     break;
                 case 'weekly':
                     changes.recurrence_type = 2;
-                    changes.days = _([].concat(rrule.byday)).reduce(function (memo, day) {
-                        return memo + (1 << self.days.indexOf(day));
-                    }, 0);
+                    if (rrule.byday) {
+                        changes.days = _([].concat(rrule.byday)).reduce(function (memo, day) {
+                            return memo + (1 << self.days.indexOf(day));
+                        }, 0);
+                    } else {
+                        changes.days = 1 << date.day();
+                    }
                     break;
                 case 'monthly':
                     changes.recurrence_type = 3;
