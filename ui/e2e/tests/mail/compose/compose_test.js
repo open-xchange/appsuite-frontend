@@ -119,7 +119,7 @@ Scenario('Compose mail with different attachments', async function (I, users, ma
 
     // create textfile in drive
     I.clickToolbar('New');
-    I.click('Add note');
+    I.click('Note');
     I.waitForVisible('.io-ox-editor');
     I.fillField('Title', 'Testdocument.txt');
     I.fillField('Note', 'Some content');
