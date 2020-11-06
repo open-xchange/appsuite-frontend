@@ -507,6 +507,14 @@ define('io.ox/core/folder/node', [
 
         getTitle: function () {
             var title = this.model.get('display_title') || this.options.title || this.model.get('title') || '';
+
+            // domain suffix for federated sharing
+            var indicateFederatedShare = this.model.is('drive') && (this.model.get('folder_id') === '10' || this.model.get('folder_id') === '15') && this.model.is('federated-sharing');
+            if (indicateFederatedShare) {
+                var suffix = this.model.getAccountDisplayName();
+                title = suffix ? title + ' (' + suffix + ')' : title;
+            }
+
             return (this.realNames === true ? this.model.get('folder_name') || title : title);
         },
 
