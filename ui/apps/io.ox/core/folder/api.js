@@ -206,6 +206,20 @@ define('io.ox/core/folder/api', [
             return !!bits.get('admin');
         },
 
+        getAccountDisplayName: function () {
+            //TODO temporary solution - clarify whether to use displayName from account or not
+            //filestorageApi.getAccountDisplayName(this.get('account_id'));
+
+            var fullUrl = filestorageApi.getAccountUrl(this.get('account_id'));
+            var hostName = '';
+            if (fullUrl) {
+                var withoutProtocol = fullUrl.substring(fullUrl.indexOf('/') + 2);
+                hostName = withoutProtocol.substring(0, withoutProtocol.indexOf('/'));
+            }
+            return hostName;
+
+        },
+
         supportsInternalSharing: function () {
             // drive: always enabled
             if (this.is('drive')) return true;

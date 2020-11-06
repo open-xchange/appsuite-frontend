@@ -324,6 +324,24 @@ define('io.ox/files/api', [
             // use-case if the folder is already available in every case
             var folderModel = folderAPI.pool.models[parentFolder];
             return folderModel.get('account_id');
+        },
+
+        isFederatedSharedFolder: function () {
+            var folder = this.isFolder ? this.get('id') : null;
+            if (!folder) { return false; }
+            // for some cases it must be synchronous, so check the
+            // use-case if the folder is already available in every case
+            var folderModel = folderAPI.pool.models[folder];
+            return folderModel && folderModel.is('federated-sharing');
+        },
+
+        getAccountDisplayName: function () {
+            var folder = this.isFolder ? this.get('id') : null;
+            if (!folder) { return false; }
+            // for some cases it must be synchronous, so check the
+            // use-case if the folder is already available in every case
+            var folderModel = folderAPI.pool.models[folder];
+            return folderModel && folderModel.getAccountDisplayName();
         }
     });
 
