@@ -24,8 +24,8 @@ define('io.ox/calendar/week/print', [
 
     function getFilter(start, end) {
         return function (event) {
-            var eventStart = util.getMoment(event.get('startDate')).valueOf(),
-                eventEnd = util.getMoment(event.get('endDate')).valueOf();
+            var eventStart = util.getMomentInLocalTimezone(event.get('startDate')).valueOf(),
+                eventEnd = util.getMomentInLocalTimezone(event.get('endDate')).valueOf();
 
             if (eventEnd <= start) return false;
             if (eventStart >= end) return false;
@@ -34,17 +34,17 @@ define('io.ox/calendar/week/print', [
     }
 
     function sortBy(event) {
-        return util.isAllday(event) ? -1 : util.getMoment(event.get('startDate')).valueOf();
+        return util.isAllday(event) ? -1 : util.getMomentInLocalTimezone(event.get('startDate')).valueOf();
     }
 
     function getIntersection(event, list) {
         var intersecting = _(list).filter(function (ev) {
-            var aStart = util.getMoment(event.get('startDate')).valueOf(),
+            var aStart = util.getMomentInLocalTimezone(event.get('startDate')).valueOf(),
                 // make sure an appointment lasts at least 30 minutes
-                aEnd = moment.max(moment(aStart).add(30, 'minutes'), util.getMoment(event.get('endDate'))).valueOf(),
-                bStart = util.getMoment(ev.get('startDate')).valueOf(),
+                aEnd = moment.max(moment(aStart).add(30, 'minutes'), util.getMomentInLocalTimezone(event.get('endDate'))).valueOf(),
+                bStart = util.getMomentInLocalTimezone(ev.get('startDate')).valueOf(),
                 // make sure an appointment lasts at least 30 minutes
-                bEnd = moment.max(moment(bStart).add(30, 'minutes'), util.getMoment(ev.get('endDate'))).valueOf();
+                bEnd = moment.max(moment(bStart).add(30, 'minutes'), util.getMomentInLocalTimezone(ev.get('endDate'))).valueOf();
             if (util.isAllday(event)) return false;
             if (util.isAllday(ev)) return false;
             if (aEnd <= bStart) return false;
@@ -62,9 +62,9 @@ define('io.ox/calendar/week/print', [
             var parts = [],
                 isAllday = util.isAllday(event),
                 intersection = getIntersection(event, list),
-                startDate = moment.max(util.getMoment(event.get('startDate')), dayStart),
+                startDate = moment.max(util.getMomentInLocalTimezone(event.get('startDate')), dayStart),
                 // make sure appointment lasts at least 30 minutes
-                endDate = moment.max(startDate.clone().add(30, 'minutes'), util.getMoment(event.get('endDate'))),
+                endDate = moment.max(startDate.clone().add(30, 'minutes'), util.getMomentInLocalTimezone(event.get('endDate'))),
                 startRange = Math.max(startDate.hour(), minHour),
                 endRange = Math.max(startDate.hour() + 1, startDate.hour() + endDate.diff(startDate, 'hours') + 1);
 
@@ -99,7 +99,7 @@ define('io.ox/calendar/week/print', [
     }
 
     function getDate(data) {
-        var strings = util.getDateTimeIntervalMarkup(data, { output: 'strings' });
+        var strings = util.getDateTimeIntervalMarkup(data, { output: 'strings', zone: moment().tz() });
         return strings.dateStr + ' ' + strings.timeStr;
     }
 
@@ -123,8 +123,8 @@ define('io.ox/calendar/week/print', [
                             days = [],
                             minHour = 10000000, maxHour = -10000000;
                         collection.forEach(function (event) {
-                            minHour = Math.min(Math.min(minHour, util.getMoment(event.get('startDate')).hour()), util.getMoment(event.get('endDate')).hour());
-                            maxHour = Math.max(Math.max(maxHour, util.getMoment(event.get('startDate')).hour()), util.getMoment(event.get('endDate')).hour());
+                            minHour = Math.min(Math.min(minHour, util.getMomentInLocalTimezone(event.get('startDate')).hour()), util.getMomentInLocalTimezone(event.get('endDate')).hour());
+                            maxHour = Math.max(Math.max(maxHour, util.getMomentInLocalTimezone(event.get('startDate')).hour()), util.getMomentInLocalTimezone(event.get('endDate')).hour());
                         });
                         minHour = Math.max(0, Math.min(parseInt(settings.get('startHour', 8), 10), minHour - 1));
                         maxHour = Math.min(24, Math.max(parseInt(settings.get('endHour', 18), 10), maxHour + 2));
