@@ -190,7 +190,11 @@ define('io.ox/chat/actions/openGroupDialog', [
                 hiddenAttr.icon = this.pictureModel.get('pictureFileEdited');
             }
 
-            if (Object.keys(updates).length <= 1 && Object.keys(hiddenAttr).length <= 0) return def.resolve(this.model.get('roomId'));
+            if (Object.keys(updates).length <= 1 && Object.keys(hiddenAttr).length <= 0) {
+                def.resolve(this.model.get('roomId'));
+                this.close();
+                return;
+            }
             originalModel.save(updates, { hiddenAttr: hiddenAttr }).then(function () {
                 this.close();
                 data.chats.add(originalModel);
