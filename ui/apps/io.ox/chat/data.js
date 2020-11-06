@@ -741,6 +741,9 @@ define('io.ox/chat/data', [
                 case 'messagelength:exceeded':
                     notifications.yell('error', gt('The message length exceeds the limit and could not be delivered'));
                     break;
+                case 'grouplength:exceeded':
+                    notifications.yell('error', gt('The group could not be saved since the name exceeds the length limit'));
+                    break;
                 default:
                     notifications.yell('error', gt('Something went wrong. Please try again.'));
                     break;

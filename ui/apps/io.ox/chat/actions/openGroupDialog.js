@@ -20,10 +20,11 @@ define('io.ox/chat/actions/openGroupDialog', [
     'io.ox/chat/views/addMember',
     'io.ox/backbone/mini-views',
     'io.ox/chat/data',
+    'io.ox/core/notifications',
     'io.ox/chat/api',
     'gettext!io.ox/chat',
     'less!io.ox/contacts/edit/style'
-], function (ext, ModalDialog, ImageUploadView, MemberView, AddMemberView, mini, data, api, gt) {
+], function (ext, ModalDialog, ImageUploadView, MemberView, AddMemberView, mini, data, notifications, api, gt) {
 
     'use strict';
 
@@ -133,7 +134,7 @@ define('io.ox/chat/actions/openGroupDialog', [
                             isChannel ? $.txt(gt('Channels are public and can be joined by anybody')) : [],
                             $('<div class="form-group">').append(
                                 $('<label class="control-label">').attr('for', guidTitle).text(label),
-                                new mini.InputView({ id: guidTitle, model: this.model, name: 'title' }).render().$el
+                                new mini.InputView({ id: guidTitle, model: this.model, name: 'title', maxlength: data.serverConfig.maxGroupLength }).render().$el
                             ),
                             $('<div class="form-group hidden">').append(
                                 $('<label class="control-label">').attr('for', guidDescription).text('Description'),
@@ -167,8 +168,14 @@ define('io.ox/chat/actions/openGroupDialog', [
             return { action: 'save', label: label };
         })(model))
         .on('save', function () {
-            var updates = this.model.has('roomId') ? { roomId: this.model.get('roomId') } : this.model.toJSON(), hiddenAttr = {};
+            var updates = this.model.has('roomId') ? { roomId: this.model.get('roomId') } : this.model.toJSON(),
+                maxGroupLength = data.serverConfig.maxGroupLength || -1,
+                hiddenAttr = {};
 
+            if (maxGroupLength >= 0 && this.model.get('title').length > maxGroupLength) {
+                dialog.idle();
+                return notifications.yell('error', gt('The chat could not be saved since the name exceeds the length limit of %1$s characters', maxGroupLength));
+            }
             if (this.model.get('title') !== originalModel.get('title')) updates.title = this.model.get('title');
             if (this.model.get('description') !== originalModel.get('description')) updates.description = this.model.get('description');
             if (!_.isEqual(this.collection.pluck('email1'), Object.keys(this.model.get('members') || {}))) {
@@ -199,13 +206,12 @@ define('io.ox/chat/actions/openGroupDialog', [
                 this.close();
                 data.chats.add(originalModel);
                 def.resolve(originalModel.get('roomId'));
-            }.bind(this), function () {
+            }.bind(this), function (e) {
                 dialog.idle();
-                require(['io.ox/core/yell'], function (yell) {
-                    if (originalModel.get('roomId')) return yell('error', gt('Changes to this chat could not be saved.'));
-                    yell('error', gt('Chat could not be saved.'));
-                });
-            });
+                if (e.responseJSON.errorCode) return this.model.handleError(e);
+                if (originalModel.get('roomId')) return notifications.yell('error', gt('Changes to this chat could not be saved.'));
+                notifications.yell('error', gt('Chat could not be saved.'));
+            }.bind(this));
         })
         .on('discard', def.reject)
         .open();
