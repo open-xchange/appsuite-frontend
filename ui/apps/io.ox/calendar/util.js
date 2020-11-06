@@ -1417,6 +1417,10 @@ define('io.ox/calendar/util', [
             return moment(date);
         },
 
+        getMomentInLocalTimezone: function (date) {
+            return that.getMoment(date).tz(moment().tz());
+        },
+
         // get the right default alarm for an event
         // note: the default alarm for the birthday calendar is not considered here. There is no use case since you cannot edit those events atm.
         getDefaultAlarms: function (event) {
