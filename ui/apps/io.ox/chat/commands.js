@@ -36,6 +36,7 @@ define('io.ox/chat/commands', [
 
     events.on('message:command:zoom', startCall.bind(null, 'zoom'));
     events.on('message:command:jitsi', startCall.bind(null, 'jitsi'));
+    events.on('message:command:version', printVersion);
 
     function startCall(type, e) {
         e.consume();
@@ -56,5 +57,15 @@ define('io.ox/chat/commands', [
                 });
             });
         });
+    }
+
+    function printVersion(e) {
+        e.consume();
+        e.room.messages.add({ type: 'system',
+            content: JSON.stringify({
+                type: 'text',
+                message: gt('Server version: %1$s', data.serverConfig.version)
+            })
+        }, { merge: true, parse: true });
     }
 });
