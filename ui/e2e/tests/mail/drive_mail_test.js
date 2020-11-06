@@ -164,7 +164,7 @@ Scenario('[C85687] Send drive-mail with expiry date', async (I, users, mail, dia
     I.waitForDetached('.modal-dialog');
 
     // This will be the day presented in the email
-    const tomorrow = moment().add(1, 'day').format('MMMM DD, YYYY');
+    const tomorrow = moment().add(1, 'day').format('MMMM D, YYYY');
 
     mail.send();
 
