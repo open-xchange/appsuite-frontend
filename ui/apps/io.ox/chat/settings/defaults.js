@@ -18,6 +18,7 @@ define('io.ox/chat/settings/defaults', [], function () {
     return {
         host: false,
         emailNotification: 'always',
+        showChatNotifications: true,
         sounds: {
             enabled: true,
             playWhen: 'onlyInactive',

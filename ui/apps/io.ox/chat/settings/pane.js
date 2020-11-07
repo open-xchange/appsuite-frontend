@@ -75,16 +75,16 @@ define('io.ox/chat/settings/pane', [
                     { label: gt('Wood'), value: 'bongo2.mp3' }
                 ];
                 var playWhenOptions = [
-                    { label: gt('For every message'), value: 'always' },
-                    { label: gt('Only if Chat is in the background'), value: 'onlyInactive' }
+                    { label: gt('Play sound for every message'), value: 'always' },
+                    { label: gt('Play sound only if chat is in background'), value: 'onlyInactive' }
                 ];
                 this.$el.append(
                     util.fieldset(
                         //#. Should be "töne" in german, used for notification sounds. Not "geräusch"
                         gt('Notification sounds'),
-                        util.checkbox('sounds/enabled', gt('Enable notification sounds'), settings),
+                        util.checkbox('sounds/enabled', gt('Play notification sound for new messages'), settings),
                         util.compactSelect('sounds/file', gt('Sound'), settings, soundList),
-                        util.compactSelect('sounds/playWhen', gt('Play a sound:'), settings, playWhenOptions)
+                        util.compactSelect('sounds/playWhen', gt('Behavior'), settings, playWhenOptions)
                     )
                 );
                 function toggle(value) {
@@ -98,7 +98,7 @@ define('io.ox/chat/settings/pane', [
             index: INDEX += 100,
             render: function () {
                 this.$el.append(
-                    util.checkbox('showChatNotifications', gt('Show chat desktop notifications'), settings)
+                    util.checkbox('showChatNotifications', gt('Show desktop notifications for new messages'), settings)
                 );
                 function toggle(value) {
                     this.$('[name="showChatNotifications"]').prop('disabled', !value ? 'disabled' : '');
