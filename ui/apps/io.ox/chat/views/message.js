@@ -50,7 +50,8 @@ define('io.ox/chat/views/message', [
                 .append(
                     // sender avatar & name
                     this.renderSender(),
-                    this.renderUploadMessage(),
+                    // TBD: do we really need this?
+                    // this.renderUploadMessage(),
                     // content
                     new ContentView({ model: this.model }).render().$el,
                     // show some indicator dots when a menu is available

@@ -757,16 +757,26 @@
         }
     }
 
-    .message-thumbnail {
-        position: relative;
-        max-height: 240px;
-        overflow: hidden;
-        display: inline-block;
-        border-radius: @borderRadius;
-        img {
-            border: 0;
-            width: 240px;
-            height: auto;
+    .message-thumbnail-container {
+        .name {
+            font-size: 12px;
+            line-height: 16px;
+            color: #707070;
+        }
+        .message-thumbnail {
+            position: relative;
+            max-height: 240px;
+            overflow: hidden;
+            display: inline-block;
+            border-radius: @borderRadius;
+            img {
+                border: 0;
+                width: 240px;
+                height: auto;
+            }
+            img.loading {
+                background-color: #eee;
+            }
         }
         &[data-cmd] {
             cursor: pointer;

@@ -51,10 +51,13 @@ define('io.ox/chat/views/file', [
 
         renderThumbnail: function (file) {
 
-            this.$el.addClass('message-thumbnail');
+            this.$el.addClass('message-thumbnail-container').append(
+                $('<div class="name">').text(file.name)
+            );
 
             // we start with a dummy GIF to avoid mixed-content warning
             var $img = $('<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">');
+            var $thumbnail = $('<div class="message-thumbnail">').append($img);
 
             if (file.isBlob) {
                 if (file.isImage) {
@@ -62,7 +65,7 @@ define('io.ox/chat/views/file', [
                         URL.revokeObjectURL(this.src);
                     });
                 }
-                this.$el.append($img, this.getCancelUploadButton(), this.getProgressBar());
+                this.$el.append($thumbnail, this.getCancelUploadButton(), this.getProgressBar());
                 return;
             }
 
@@ -73,13 +76,15 @@ define('io.ox/chat/views/file', [
             }
 
             this.$el.append(
-                $img.lazyload().one('appear', { url: file.url }, function (e) {
-                    api.requestBlobUrl({ url: e.data.url }).then(function (url) {
-                        $(this).attr('src', url).on('dispose', function () {
-                            URL.revokeObjectURL(this.src);
-                        });
-                    }.bind(this));
-                })
+                $thumbnail.append(
+                    $img.addClass('loading').lazyload().one('appear', { url: file.url }, function (e) {
+                        api.requestBlobUrl({ url: e.data.url }).then(function (url) {
+                            $(this).attr('src', url).removeClass('loading').on('dispose', function () {
+                                URL.revokeObjectURL(this.src);
+                            });
+                        }.bind(this));
+                    })
+                )
             );
 
             if (this.inEditor) {

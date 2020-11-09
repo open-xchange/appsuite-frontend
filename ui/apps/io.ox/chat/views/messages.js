@@ -33,9 +33,11 @@ define('io.ox/chat/views/messages', [
                 'reset': this.onReset,
                 'remove': this.onRemove
             });
-            this.$el.on('dblclick', function () {
-                $(this).toggleClass('visible-bubbles');
-            });
+            // TBD: fix css, then reenable
+            // I guess some users on appsuite-div will accidentally enable it
+            // this.$el.on('dblclick', function () {
+            //     $(this).toggleClass('visible-bubbles');
+            // });
         },
 
         render: function () {
