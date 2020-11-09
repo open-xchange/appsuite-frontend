@@ -1114,8 +1114,11 @@ define('io.ox/chat/data', [
                         model.messages.add(newMessage);
                     } else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
 
-                    if (model.get('type') !== 'channel' && !mySelf) {
+                    if (!mySelf) {
                         model.set({ unreadCount: model.get('unreadCount') + 1 });
+                    }
+
+                    if (model.get('type') !== 'channel' && !mySelf) {
                         newMessage.updateDelivery('received');
                     }
 
