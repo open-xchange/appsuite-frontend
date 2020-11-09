@@ -86,7 +86,7 @@ define('io.ox/chat/views/content', [
 
             var content = this.renderContent();
             // +350 so that if we load a message, we load at least 500 more chars a not only e.g. 10
-            if (content.length <= (this.chunkSize + 350)) return this.$body.html(content);
+            if (this.model.isSystem() || content.length <= (this.chunkSize + 350)) return this.$body.html(content);
 
             return this.$body.html(content.slice(0, this.chunkSize) + '...').append(
                 !this.inEditor ? $('<button type="button" class="btn btn-link show-more">').text(gt('Show more')) : $()

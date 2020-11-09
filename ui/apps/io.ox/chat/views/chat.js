@@ -593,7 +593,7 @@ define('io.ox/chat/views/chat', [
 
             if (this.specialMode === 'edit') {
                 //this.messageReference.set({ content: content, edited: true });
-                api.editMessage(content, this.messageReference);
+                api.editMessage(content, this.messageReference).fail(this.model.handleError);
                 this.onCancelSpecialMode();
             } else if (this.specialMode === 'reply') {
                 this.model.postMessage({ content: content, replyTo: this.messageReference.attributes });
