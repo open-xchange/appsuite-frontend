@@ -318,29 +318,28 @@ define('io.ox/files/api', [
             return pUtil.hasObjectWritePermissions(this.toJSON());
         },
 
-        getItemAccountSynchronous: function () {
-            var parentFolder = this.isFile ? this.get('folder_id') : this.get('id');
-            // for some cases it must be synchronous, so check the
-            // use-case if the folder is already available in every case
-            var folderModel = folderAPI.pool.models[parentFolder];
-            return folderModel.get('account_id');
-        },
-
-        isFederatedSharedFolder: function () {
-            var folder = this.isFolder ? this.get('id') : null;
-            if (!folder) { return false; }
+        getClosestFolderModelSync: function () {
+            var folder = this.isFile() ? this.get('folder_id') : this.get('id');
             // for some cases it must be synchronous, so check the
             // use-case if the folder is already available in every case
             var folderModel = folderAPI.pool.models[folder];
+            return folderModel ? folderModel : {};
+        },
+
+        // should be synchronous to be able to handle popup-blocker in Actions
+        getItemAccountSync: function () {
+            return this.getClosestFolderModelSync().get('account_id');
+        },
+
+        // should be synchronous to be able to handle popup-blocker in Actions
+        isSharedFederatedSync: function () {
+            var folderModel = this.getClosestFolderModelSync();
             return folderModel && folderModel.is('federated-sharing');
         },
 
-        getAccountDisplayName: function () {
-            var folder = this.isFolder ? this.get('id') : null;
-            if (!folder) { return false; }
-            // for some cases it must be synchronous, so check the
-            // use-case if the folder is already available in every case
-            var folderModel = folderAPI.pool.models[folder];
+        // note: currently no use case needed to be sync, but keep it consistent for now
+        getAccountDisplayNameSync: function () {
+            var folderModel = this.getClosestFolderModelSync();
             return folderModel && folderModel.getAccountDisplayName();
         }
     });

@@ -341,9 +341,9 @@ define('io.ox/files/util', [
          */
         canEditDocFederated: function (fileModel) {
             // check if file is in federated shared file account
-            if (!filestorageApi.isFederatedAccount(fileModel.getItemAccountSynchronous())) { return false; }
+            if (!filestorageApi.isFederatedAccount(fileModel.getItemAccountSync())) { return false; }
 
-            var accountMeta = filestorageApi.getAccountMetaData(fileModel.getItemAccountSynchronous());
+            var accountMeta = filestorageApi.getAccountMetaData(fileModel.getItemAccountSync());
             var guestCapabilities = accountMeta && accountMeta.guestCapabilities;
             var canOpenInFederatedContext = false;
 

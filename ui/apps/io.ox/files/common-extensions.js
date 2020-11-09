@@ -71,9 +71,9 @@ define('io.ox/files/common-extensions', [
             if (
                 (parentFolder === '10' || parentFolder === '15') &&  // is folder below My shares or Public files
                 _.isFunction(baton.model.isFolder) && baton.model.isFolder() &&
-                _.isFunction(baton.model.isFederatedSharedFolder) && baton.model.isFederatedSharedFolder()
+                _.isFunction(baton.model.isSharedFederatedSync) && baton.model.isSharedFederatedSync()
             ) {
-                var suffix = baton.model.getAccountDisplayName();
+                var suffix = baton.model.getAccountDisplayNameSync();
                 filename = suffix ? filename + ' (' + suffix + ')' : filename;
             }
 
