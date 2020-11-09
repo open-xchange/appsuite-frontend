@@ -12,6 +12,7 @@
  */
 
 define('io.ox/chat/data', [
+    'io.ox/core/extensions',
     'io.ox/chat/api',
     'io.ox/chat/events',
     'io.ox/contacts/api',
@@ -23,7 +24,7 @@ define('io.ox/chat/data', [
     'io.ox/core/notifications',
     'settings!io.ox/chat',
     'gettext!io.ox/chat'
-], function (api, events, contactsApi, switchboardApi, presence, sanitizer, util, http, notifications, settings, gt) {
+], function (ext, api, events, contactsApi, switchboardApi, presence, sanitizer, util, http, notifications, settings, gt) {
 
     'use strict';
 
@@ -258,7 +259,14 @@ define('io.ox/chat/data', [
             var me = originator === data.user.email,
                 originatorName = getName(originator),
                 names = getNames(_.difference(members, [originator])),
-                participantCount = _.difference(members, [originator]).length;
+                participantCount = _.difference(members, [originator]).length,
+                outerElem = $('<div>'),
+                baton = new ext.Baton({ model: this, event: event });
+
+            ext.point('io.ox/chat/commands/render/' + event.type).invoke('render', outerElem, baton);
+
+            var content = outerElem.prop('innerHTML');
+            if (content) return content;
 
             switch (event.type) {
                 case 'room:created':
@@ -308,6 +316,7 @@ define('io.ox/chat/data', [
                     //#. If it fails to load and decrypt a chat message a system message will be shown
                     return gt('Message could not be loaded');
                 default:
+                    if (event.text) return event.text;
                     //#. %1$s: messagetext
                     return gt('Unknown system message %1$s', event.type);
             }

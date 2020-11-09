@@ -12,11 +12,12 @@
  */
 
 define('io.ox/chat/commands', [
+    'io.ox/core/extensions',
     'io.ox/chat/events',
     'io.ox/switchboard/api',
     'io.ox/chat/data',
     'gettext!io.ox/chat'
-], function (events, api, data, gt) {
+], function (ext, events, api, data, gt) {
 
     'use strict';
 
@@ -34,10 +35,6 @@ define('io.ox/chat/commands', [
 
     // built-in commands
 
-    events.on('message:command:zoom', startCall.bind(null, 'zoom'));
-    events.on('message:command:jitsi', startCall.bind(null, 'jitsi'));
-    events.on('message:command:version', printVersion);
-
     function startCall(type, e) {
         e.consume();
         var members = _(e.room.get('members')).chain().keys().without(api.userId).value();
@@ -53,7 +50,7 @@ define('io.ox/chat/commands', [
                         + ' \uD83D\uDCDE\n'
                         //#. %1$s is a link
                         + gt('Please click the following link to join: %1$s', url);
-                    e.room.postMessage({ content: content + ' ' });
+                    e.room.postMessage({ command: type, content: JSON.stringify({ link: url, text: content }) });
                 });
             });
         });
@@ -68,4 +65,47 @@ define('io.ox/chat/commands', [
             })
         }, { merge: true, parse: true });
     }
+
+    ext.point('io.ox/chat/commands/register').extend({
+        id: 'zoom',
+        register: function () {
+            this.on('message:command:zoom', startCall.bind(null, 'zoom'));
+        }
+    }, {
+        id: 'jitsy',
+        register: function () {
+            this.on('message:command:jitsi', startCall.bind(null, 'jitsi'));
+        }
+    }, {
+        id: 'version',
+        register: function () {
+            this.on('message:command:version', printVersion);
+        }
+    });
+    ext.point('io.ox/chat/commands/register').invoke('register', events);
+
+    function renderCall(baton) {
+        var model = baton.model,
+            event = baton.event,
+            link = $('<a _target="blank">').attr('href', event.link).text(event.link).prop('outerHTML'),
+            caller = data.users.getName(model.get('sender')) || model.get('sender');
+
+        if (!event.link) return;
+
+        this.append(
+            gt('%1$s is calling.', caller)
+                // \uD83D\uDCDE is phone receiver
+                + ' \uD83D\uDCDE\n'
+                //#. %1$s is a link
+                + gt('Please click the following link to join: %1$s', link)
+        );
+    }
+
+    ext.point('io.ox/chat/commands/render/zoom').extend({
+        render: renderCall
+    });
+
+    ext.point('io.ox/chat/commands/render/jitsi').extend({
+        render: renderCall
+    });
 });
