@@ -320,6 +320,8 @@ define('io.ox/mail/compose/model', [
             if (_.isUndefined(old)) return current;
 
             current = current || this.attributes;
+            current = _.omit(current, 'cid', 'mailPath');
+            old = _.omit(old, 'cid', 'mailPath');
 
             return _(current)
                 .chain()
