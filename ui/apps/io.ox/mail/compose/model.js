@@ -373,7 +373,8 @@ define('io.ox/mail/compose/model', [
             return $.when(_(this.get('attachments')).pluck('done').map(function (def) {
                 return $.when(def).catch();
             })).then(function () {
-                return composeAPI.space.remove(this.get('id'), this.toJSON());
+                // using clone here to include mailPath prop for folder refresh
+                return composeAPI.space.remove(this.get('id'), _.clone(this.attributes));
             }.bind(this));
         },
 
