@@ -26,6 +26,17 @@ define('io.ox/core/sub/sharedFolders', [
     var options = {},
         properties;
 
+    function getItemName(descriptor) {
+        var folderModel = new api.FolderModel(descriptor);
+        if (!folderModel) return;
+
+        var suffix = folderModel.is('drive') && folderModel.is('federated-share') && folderModel.getAccountDisplayName()
+            ? ' (' + folderModel.getAccountDisplayName() + ')'
+            : null;
+        var titel = folderModel.get('display_title') || folderModel.get('title');
+        return suffix ? titel + suffix : titel;
+    }
+
     function open(opt) {
         options = opt;
         properties = 'used_for_sync';
@@ -168,7 +179,7 @@ define('io.ox/core/sub/sharedFolders', [
 
                 }).render().$el.attr('title', gt('subscribe to calendar')),
                 $('<div class="item-name">').append(
-                    $('<div>').text(this.model.attributes.display_title || this.model.attributes.title)
+                    $('<div>').text(getItemName(this.model.attributes))
                 ),
                 this.opt.dialog.options.noSync ? '' : $checkbox = new mini.CustomCheckboxView({
                     name: properties,
