@@ -1872,24 +1872,9 @@ define('io.ox/mail/main', [
                         // still open
                         if (activespaces[app.cid]) return;
                         // loaded and active
-                        quit(app);
+                        if (!app) return;
+                        app.onError({ code: 'UI_SPACEMISSING' });
                     });
-                });
-            }
-
-            function quit(app) {
-                if (!app) return;
-                var win = app.get('window');
-                // active
-                if (win && app.view && app.view.model && app.view.config) {
-                    app.view.model.trigger('space:removed');
-                    app.view.config.set('autoDismiss', true);
-                }
-                // not loaded yet
-                var cid = app.cid;
-                return app.quit().done(function () {
-                    var model = ox.ui.floatingWindows.findWhere({ cid: cid });
-                    if (model) model.trigger('close');
                 });
             }
         },

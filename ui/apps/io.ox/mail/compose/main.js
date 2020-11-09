@@ -303,6 +303,8 @@ define('io.ox/mail/compose/main', [
             return 'ox.appsuite.user.sect.email.gui.create.html';
         };
 
+        app.onError = $.noop;
+
         app.open = function (obj, config) {
             var def = $.Deferred();
             obj = _.extend({}, obj);

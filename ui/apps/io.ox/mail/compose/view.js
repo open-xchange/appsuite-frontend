@@ -593,7 +593,7 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.model, 'before:save', this.onChangeSaved.bind(this, 'saving'));
             this.listenTo(this.model, 'success:save', this.onChangeSaved.bind(this, 'saved'));
             this.listenTo(this.model, 'change:content', this.onChangeContent);
-            this.listenTo(this.model, 'space:removed', this.onRemovedSpace);
+            this.listenTo(this.model, 'error', this.onError);
 
             this.listenTo(this.config, 'change:editorMode', this.toggleEditorMode);
             this.listenTo(this.config, 'change:vcard', this.onAttachVcard);
@@ -661,9 +661,8 @@ define('io.ox/mail/compose/view', [
             this.config.set('signatureId', '');
         },
 
-        // for custom handling (only for active compose apps)
-        onRemovedSpace: function () {
-            this.model.removed = true;
+        onError: function (e) {
+            this.app.onError(e);
         },
 
         ariaLiveUpdate: function (e, msg) {

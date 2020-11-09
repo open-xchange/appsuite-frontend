@@ -85,8 +85,8 @@ define('io.ox/mail/compose/model', [
                 this.set(data);
                 if (!this.prevAttributes) this.prevAttributes = data;
                 this.listenTo(data.attachments, 'remove', this.onRemoveAttachment);
-                this.listenTo(data.attachments, 'upload:failed', this.onRemovedSpace);
-                this.listenTo(this, 'fail:save', this.onRemovedSpace);
+                this.listenTo(data.attachments, 'upload:failed', this.onError);
+                this.listenTo(this, 'fail:save', this.onError);
                 this.listenTo(composeAPI, 'mailref:' + data.id, this.onChangeMailPath);
             }.bind(this));
         },
@@ -110,8 +110,8 @@ define('io.ox/mail/compose/model', [
             if (this.get('mailPath')) this.set('mailPath', mailPath);
         },
 
-        onRemovedSpace: function (e) {
-            if (e && e.code === 'MSGCS-0007') this.trigger('space:removed', e);
+        onError: function (e) {
+            this.trigger('error', e);
         },
 
         sendOrSave: function (method) {
