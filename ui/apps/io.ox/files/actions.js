@@ -203,7 +203,7 @@ define('io.ox/files/actions', [
         action: function (baton) {
 
             var model = baton.models[0];
-            var link = filestorageApi.getAccountUrl(model.getItemAccountSynchronous());
+            var link = filestorageApi.getAccountUrl(model.getItemAccountSync());
 
             shareAPI.getFederatedShareLink(link, baton.first())
                 .then(function (guestLink) {
