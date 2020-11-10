@@ -256,7 +256,7 @@ define('io.ox/core/api/user', [
      */
     api.getTextNode = function (id, options) {
         var opt = _.extend({ type: 'name' }, options),
-            node = options.node || document.createTextNode('');
+            node = opt.node || document.createTextNode('');
         api.get({ id: id })
             .done(function (data) {
                 var name = '';
