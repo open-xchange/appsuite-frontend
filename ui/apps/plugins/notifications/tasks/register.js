@@ -123,7 +123,7 @@ define('plugins/notifications/tasks/register', [
                 subview = new Subview(options);
 
             //react to changes in settings
-            settings.on('change:autoOpenNotification', function (e, value) {
+            settings.on('change:autoOpenNotification', function (value) {
                 subview.model.set('autoOpen', value);
             });
 
@@ -211,7 +211,7 @@ define('plugins/notifications/tasks/register', [
                 subview = new Subview(options);
 
             //react to changes in settings
-            settings.on('change:autoOpenNotification', function (e, value) {
+            settings.on('change:autoOpenNotification', function (value) {
                 subview.model.set('autoOpen', value);
             });
 
@@ -356,7 +356,7 @@ define('plugins/notifications/tasks/register', [
                 subview = new Subview(options);
 
             //react to changes in settings
-            settings.on('change:autoOpenNotification', function (e, value) {
+            settings.on('change:autoOpenNotification', function (value) {
                 subview.model.set('autoOpen', value);
             });
         }
