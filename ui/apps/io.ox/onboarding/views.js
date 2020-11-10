@@ -62,7 +62,7 @@ define('io.ox/onboarding/views', [
             this.qrCode = new Backbone.Model();
             this.generatedUrl = !this.url ? new Backbone.Model() : undefined;
             //#. 1$s type of application to synchronize, which is either Address Book or Calendar
-            this.description = options.description || gt('Scan this code with your phone\'s camera to synchronize your %1$s:', this.title);
+            this.description = options.description || gt('Scan this code with your phone\'s camera to synchronize your "%1$s":', this.title);
             this.listenTo(this.qrCode, 'change', this.updateQr);
             this.listenTo(this.generatedUrl, 'change', this.updateUrl);
         },
