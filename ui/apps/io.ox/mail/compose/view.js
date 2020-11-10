@@ -644,6 +644,7 @@ define('io.ox/mail/compose/view', [
                 id: this.logoutPointId,
                 index: 1000 + this.app.guid,
                 logout: function () {
+                    if (self.model.paused) return $.when();
                     return self.model.save();
                 }
             });
@@ -662,7 +663,7 @@ define('io.ox/mail/compose/view', [
         },
 
         onError: function (e) {
-            this.app.onError(e);
+            this.app.pause(e);
         },
 
         ariaLiveUpdate: function (e, msg) {
@@ -794,6 +795,8 @@ define('io.ox/mail/compose/view', [
         },
 
         discard: function () {
+            if (this.model.paused) return $.when();
+
             var self = this,
                 def = $.when(),
                 isDraft = this.model.keepDraftOnClose(),

@@ -303,7 +303,49 @@ define('io.ox/mail/compose/main', [
             return 'ox.appsuite.user.sect.email.gui.create.html';
         };
 
-        app.onError = $.noop;
+        app.pause = function (e) {
+            // keep first error
+            if (app.error) return;
+            var error = _.extend({ code: 'unknown', error: gt('An error occurred. Please try again.') }, e);
+            // custom mappings
+            switch (error.code) {
+                case 'UI-SPACEMISSING':
+                case 'MSGCS-0007':
+                    error.message = gt('The mail draft could not be found on the server. It was sent or deleted in the meantime.');
+                    break;
+                default:
+                    break;
+            }
+            // app is in error state now
+            app.error = error;
+            if (this.model) this.model.paused = true;
+            // reset potential 'Saving...' message
+            if (this.view) this.view.inlineYell('');
+            // disable floating window and show error message
+            var win = this.get('window');
+            if (!win) return;
+            win.busy(undefined, undefined, function () {
+                // prevents busy spinner
+                this.idle();
+                this.find('.footer').addClass('message')
+                    .text(error.message || error.error);
+            });
+        };
+
+        app.resume = function (data) {
+            if (!app.error) return;
+            // reset error state
+            var failRestore = app.error.failRestore;
+            delete app.error;
+            if (this.model) delete this.model.paused;
+            // window handling
+            var win = this.get('window');
+            if (!win) return;
+            win.idle();
+            // failed on app start
+            if (!failRestore || !data) return;
+            app.failRestore(data.point);
+        };
 
         app.open = function (obj, config) {
             var def = $.Deferred();
@@ -330,22 +372,21 @@ define('io.ox/mail/compose/main', [
                     ox.trigger('mail:' + app.model.get('meta').type + ':ready', obj, app);
                 }, function fail(e) {
                     console.error('Startup of mail compose failed', e);
-                    if (app.view) {
-                        app.view.dirty(false);
-                        app.view.removeLogoutPoint();
-                    }
 
-                    // prevent discarding of space on error
-                    app.model = app.view = undefined;
-                    app.quit();
-                    // refresh space to show taskbar item again (in case space still exitsts)
-                    composeAPI.trigger('refresh');
-
-                    if (e && e.error) {
-                        require(['io.ox/core/yell'], function (yell) {
-                            yell(e);
+                    // to many open spaces
+                    if (e.code === 'MSGCS-0011') {
+                        var num = e.error_params[0] || 20;
+                        e.message = gt('You cannot open more than %1$s drafts at the same time.', num);
+                        return this.quit().then(function () {
+                            require(['io.ox/core/yell'], function (yell) {
+                                yell(e);
+                            });
                         });
                     }
+
+                    // custom handlers
+                    app.pause(_.extend({ failRestore: true }, e));
+
                     def.reject(e);
                 });
             });
@@ -354,7 +395,7 @@ define('io.ox/mail/compose/main', [
 
         // destroy
         app.setQuit(function () {
-            if (app.view) return app.view.discard();
+            if (app.view && !app.error) return app.view.discard();
         });
 
         // after view is detroyed

@@ -1844,8 +1844,7 @@ define('io.ox/mail/main', [
                 var activespaces = {};
                 composeAPI.space.all().then(function transform(list) {
                     return _.chain(list).map(function (space) {
-                        activespaces[space.cid] = true;
-                        return {
+                        activespaces[space.cid] = {
                             //#. $1$s is the subject of an email
                             description: gt('Mail: %1$s', space.subject || gt('No subject')),
                             floating: true,
@@ -1857,6 +1856,7 @@ define('io.ox/mail/main', [
                             timestamp: new Date().valueOf(),
                             ua: navigator.userAgent
                         };
+                        return activespaces[space.cid];
                     }).filter(function (space) {
                         // filter out already loaded ones
                         return !ox.ui.apps.getByCID(space.cid);
@@ -1868,12 +1868,11 @@ define('io.ox/mail/main', [
                     // look for removed spaces
                     ox.ui.apps.each(function (app) {
                         // wrong module
-                        if (!app || app.cid.indexOf('io.ox/mail/compose:') !== 0) return;
+                        if (app.cid.indexOf('io.ox/mail/compose:') !== 0) return;
                         // still open
-                        if (activespaces[app.cid]) return;
-                        // loaded and active
-                        if (!app) return;
-                        app.onError({ code: 'UI_SPACEMISSING' });
+                        return activespaces[app.cid] ?
+                            app.resume(activespaces[app.cid]) :
+                            app.pause({ code: 'UI-SPACEMISSING' });
                     });
                 });
             }

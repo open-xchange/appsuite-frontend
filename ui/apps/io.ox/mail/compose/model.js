@@ -111,10 +111,12 @@ define('io.ox/mail/compose/model', [
         },
 
         onError: function (e) {
+            // handled in view
             this.trigger('error', e);
         },
 
         sendOrSave: function (method) {
+            if (this.paused) return $.when();
             var data = this.toJSON(),
                 getFiles = (this.get('attachments') || []).filter(function (model) {
                     return model.get('group') === 'localFile';
@@ -154,7 +156,7 @@ define('io.ox/mail/compose/model', [
         },
 
         onRemoveAttachment: function (model) {
-            if (this.destroyed) return;
+            if (this.destroyed || this.paused) return;
 
             model.trigger('destroy');
             if (model.get('id')) attachmentsAPI.remove(this.get('id'), model.get('id'));
@@ -337,7 +339,7 @@ define('io.ox/mail/compose/model', [
         },
 
         save: function (silent) {
-            if (this.destroyed) return $.when();
+            if (this.destroyed || this.paused) return $.when();
             var prevAttributes = this.prevAttributes,
                 attributes = this.toJSON();
             // remove pending inline images from content
@@ -362,8 +364,7 @@ define('io.ox/mail/compose/model', [
         },
 
         destroy: function () {
-            if (this.removed) return;
-            if (this.destroyed) return;
+            if (this.destroyed || this.paused) return;
             if (!this.get('id')) return;
             this.destroyed = true;
             this.get('attachments').forEach(function (model) { model.trigger('destroy'); });
