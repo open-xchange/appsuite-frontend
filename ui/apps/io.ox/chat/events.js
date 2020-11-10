@@ -19,7 +19,8 @@ define('io.ox/chat/events', [], function () {
     var events = _.extend({
         forward: function (e) {
             e.preventDefault();
-            e.stopPropagation();
+            // if we use stopPropagation dropdowns won't close "naturally"
+            //e.stopPropagation();
             var node = $(e.currentTarget), data = node.data();
             if (ox.debug) console.log('cmd', data.cmd, data);
             events.trigger('cmd cmd:' + data.cmd, data);

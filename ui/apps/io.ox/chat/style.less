@@ -319,15 +319,22 @@
     }
 
     .chats, .search-result {
-        flex-grow: 1;
-        margin-bottom: 32px;
+        h2 {
+            font-size: 14px;
+            line-height: 16px;
+            font-weight: bold;
+            padding: 0;
+            margin: 16px 16px 0 16px;
+        }
+    }
+
+    .chat-list {
         padding: 4px 0;
         list-style-type: none;
-
         li {
             display: flex;
             cursor: pointer;
-            padding: 4px 12px 4px 8px;
+            padding: 0 12px 0 8px;
             border-right: 4px solid transparent;
 
             &.no-results {

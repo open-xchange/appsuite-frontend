@@ -92,6 +92,7 @@ define('io.ox/chat/main', [
         },
 
         onCommand: function (data) {
+            console.log('onCommand', data);
             switch (data.cmd) {
                 case 'start-private-chat': this.startPrivateChat(data); break;
                 case 'edit-group-chat': this.editGroupChat(data); break;
@@ -112,6 +113,7 @@ define('io.ox/chat/main', [
                 case 'add-member': this.addMember(data.id); break;
                 case 'switch-to-floating': this.toggleWindowMode('floating'); break;
                 case 'discard-app': this.hideApp(); break;
+                case 'toggle-favorite': this.toggleFavorite(data.id); break;
                 // no default
             }
         },
@@ -361,6 +363,11 @@ define('io.ox/chat/main', [
             );
         },
 
+        toggleFavorite: function (roomId) {
+            var model = data.chats.get(roomId);
+            if (model) model.toggleFavorite();
+        },
+
         toggleWindowMode: function (mode) {
             var cid = this.getCurrentMessageCid();
             win.model.set(mode, true);
@@ -495,7 +502,8 @@ define('io.ox/chat/main', [
                         // search results
                         new SearchResultView().render().$el,
                         // chats
-                        new ChatListView({ collection: data.chats }).render().$el
+                        new ChatListView({ collection: data.chats, filter: function (model) { return model.isFavorite(); }, header: gt('Favorites') }).render().$el,
+                        new ChatListView({ collection: data.chats, filter: function (model) { return !model.isFavorite(); }, header: gt('Chats') }).render().$el
                     ),
                     // recent, all channels, all files
                     $('<div class="navigation-actions">').append(

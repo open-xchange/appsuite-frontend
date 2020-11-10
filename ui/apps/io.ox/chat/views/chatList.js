@@ -21,27 +21,27 @@ define('io.ox/chat/views/chatList', [
 
     var ChatListView = DisposableView.extend({
 
-        tagName: 'ul',
-
-        attributes: {
-            role: 'listbox',
-            'aria-label': gt('Chat list')
-        },
-
         className: 'chats',
 
-        initialize: function () {
+        initialize: function (options) {
+            this.options = _.extend({ header: gt('Chat list'), filter: _.constant(true) }, options);
             this.listenTo(this.collection, {
                 'expire': this.onExpire,
                 'add': this.onAdd,
                 'remove': this.onRemove,
-                'change:active': this.onChangeActive,
+                'change:active': this.addOrRemove,
+                'change:favorite': this.addOrRemove,
                 'change:lastMessage': this.onChangeLastMessage,
                 'sort': this.onSort
             });
+            this.$ul = $('<ul class="chat-list" role="listbox">').attr('aria-label', this.options.header);
         },
 
         render: function () {
+            this.$el.hide().append(
+                $('<h2>').text(this.options.header),
+                this.$ul
+            );
             // rendering happens via onAdd
             this.collection.fetch().fail(function () {
                 require(['io.ox/core/yell'], function (yell) {
@@ -57,8 +57,12 @@ define('io.ox/chat/views/chatList', [
             return new ChatListEntryView({ model: model }).render().$el;
         },
 
+        toggle: function (items) {
+            this.$el.toggle((items || this.getItems()).length > 0);
+        },
+
         getItems: function () {
-            return this.collection.getActive();
+            return _(this.collection.getActive()).filter(this.options.filter);
         },
 
         getNode: function (model) {
@@ -67,46 +71,47 @@ define('io.ox/chat/views/chatList', [
             return node;
         },
 
+        addOrRemove: function (model) {
+            var visible = model.isActive() && this.options.filter(model);
+            if (visible) this.onAdd(this.model, this.collection, { changes: { added: [model] } });
+            else this.onRemove(model);
+        },
+
         onSort: _.debounce(function () {
             if (this.disposed) return;
-
             var items = this.getItems().map(this.renderItem, this);
             if (items.length > 0) items[0].attr({ 'tabindex': 0 });
-            this.$el.append(items);
+            this.$ul.append(items);
+            this.toggle();
         }, 1),
 
         onAdd: _.debounce(function (model, collection, options) {
             var all = this.getItems();
             options.changes.added
-            .filter(function (model) { return model.isActive(); })
-            .forEach(function (model) {
-                var index = all.indexOf(model);
-                if (index === 0) {
-                    this.$el.prepend(this.renderItem(model));
-                } else {
-                    var prevModel = all[index - 1];
-                    this.getNode(prevModel).after(this.renderItem(model));
-                }
-            }.bind(this));
+                .filter(function (model) { return model.isActive(); })
+                .filter(this.options.filter)
+                .forEach(function (model) {
+                    var index = all.indexOf(model);
+                    if (index === 0) {
+                        this.$ul.prepend(this.renderItem(model));
+                    } else {
+                        var prevModel = all[index - 1];
+                        this.getNode(prevModel).after(this.renderItem(model));
+                    }
+                }.bind(this));
+            this.toggle();
         }),
 
         onRemove: function (model) {
             this.getNode(model).remove();
-        },
-
-        onChangeActive: function (model, value) {
-            if (value) {
-                this.onAdd(this.model, this.collection, { changes: { added: [model] } });
-            } else {
-                this.onRemove(model);
-            }
+            this.toggle();
         },
 
         onChangeLastMessage: function (model) {
             if ((model.previous('lastMessage') || {}).messageId === model.changed.lastMessage.id) return;
             var node = this.getNode(model),
                 hasFocus = node[0] === document.activeElement;
-            this.$el.prepend(node);
+            this.$ul.prepend(node);
             if (hasFocus) node.focus();
         },
 

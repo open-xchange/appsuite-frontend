@@ -26,7 +26,7 @@ define('io.ox/chat/views/searchResult', [
     var SearchResultView = DisposableView.extend({
 
         tagName: 'ul',
-        className: 'search-result',
+        className: 'search-result chat-list',
         attributes: {
             role: 'listbox',
             'aria-label': gt('Chat search results')

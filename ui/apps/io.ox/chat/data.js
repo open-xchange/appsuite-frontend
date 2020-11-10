@@ -592,7 +592,12 @@ define('io.ox/chat/data', [
 
     var ChatModel = Backbone.Model.extend({
 
-        defaults: { active: false, type: 'group', unreadCount: 0 },
+        defaults: {
+            active: false,
+            favorite: false,
+            type: 'group',
+            unreadCount: 0
+        },
 
         idAttribute: 'roomId',
 
@@ -727,7 +732,8 @@ define('io.ox/chat/data', [
             return api.url + endpoint + this.get('roomId') + '/icon';
         },
 
-        isActive: function () { return this.get('active'); },
+        isActive: function () { return !!this.get('active'); },
+        isFavorite: function () { return !!this.get('favorite'); },
         isPrivate: function () { return this.get('type') === 'private'; },
         isGroup: function () { return this.get('type') === 'group'; },
         isChannel: function () { return this.get('type') === 'channel'; },
@@ -828,6 +834,11 @@ define('io.ox/chat/data', [
                     else yell('error', gt('The chat could not be reactivated. Please try again.'));
                 });
             });
+        },
+
+        toggleFavorite: function () {
+            this.set('favorite', !this.isFavorite());
+            // TBD: update server-side
         },
 
         sync: function (method, model, options) {

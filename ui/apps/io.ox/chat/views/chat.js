@@ -84,7 +84,7 @@ define('io.ox/chat/views/chat', [
 
     ext.point('io.ox/chat/detail/toolbar').extend({
         id: 'edit-group',
-        index: 450,
+        index: 500,
         custom: true,
         draw: function (baton) {
             var model = baton.model;
@@ -97,7 +97,7 @@ define('io.ox/chat/views/chat', [
 
     ext.point('io.ox/chat/detail/toolbar').extend({
         id: 'leave-group',
-        index: 500,
+        index: 600,
         custom: true,
         draw: function (baton) {
             var model = baton.model;
@@ -123,7 +123,7 @@ define('io.ox/chat/views/chat', [
 
     ext.point('io.ox/chat/detail/toolbar').extend({
         id: 'join-channel',
-        index: 650,
+        index: 700,
         custom: true,
         draw: function (baton) {
             var model = baton.model;
@@ -160,6 +160,7 @@ define('io.ox/chat/views/chat', [
 
             this.listenTo(this.model, {
                 'change:title': this.onChangeTitle,
+                'change:favorite': this.updateDropdown,
                 'change:unreadCount': this.onChangeUnreadCount,
                 'change:members': this.onChangeMembers,
                 'change:roomId': this.onChangeRoomId
@@ -365,25 +366,35 @@ define('io.ox/chat/views/chat', [
         },
 
         renderDropdown: function () {
-            var $ul = $('<ul class="dropdown-menu">');
 
-            function renderItem(text, data) {
-                return $('<li>').append(
-                    $('<a href="#" role="button">').attr(data).text(text)
+            var $ul = $('<ul class="dropdown-menu dropdown-menu-right">'),
+                model = this.model,
+                isActive = model.isActive(),
+                isNew = model.isNew(),
+                id = model.id;
+
+            if (!isNew && isActive) {
+                var title = model.isFavorite() ? gt('Remove from favorites') : gt('Add to favorites');
+                addItem($ul, title, 'toggle-favorite', id);
+            }
+            if (!isNew && (model.isPrivate() || model.isGroup() || (model.isChannel() && model.isMember())) && isActive) {
+                addItem($ul, gt('Close chat'), 'unsubscribe-chat', id);
+            }
+            if ((model.isGroup() || model.isChannel()) && model.isMember()) {
+                addItem($ul, gt('Edit chat'), 'edit-group-chat', id);
+            }
+            if (!model.isPrivate() && model.isMember()) {
+                addItem($ul, gt('Leave chat'), model.isChannel() ? 'leave-channel' : 'leave-group', id);
+            } else if (model.isChannel() && !model.get('active')) {
+                addItem($ul, gt('Join chat'), 'join-channel', id);
+            }
+
+            function addItem($ul, text, cmd, id) {
+                $ul.append(
+                    $('<li role="presentation">').append(
+                        $('<a href="#" role="button">').attr({ 'data-cmd': cmd, 'data-id': id }).text(text)
+                    )
                 );
-            }
-
-            if (!this.model.isNew() && (this.model.isPrivate() || this.model.isGroup() || (this.model.isChannel() && this.model.isMember())) && this.model.get('active')) {
-                $ul.append(renderItem(gt('Close chat'), { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
-            }
-            if ((this.model.isGroup() || this.model.isChannel()) && this.model.isMember()) {
-                $ul.append(renderItem(gt('Edit chat'), { 'data-cmd': 'edit-group-chat', 'data-id': this.model.id }));
-            }
-
-            if (!this.model.isPrivate() && this.model.isMember()) {
-                $ul.append(renderItem('Leave chat', { 'data-cmd': this.model.isChannel() ? 'leave-channel' : 'leave-group', 'data-id': this.model.id }));
-            } else if (this.model.isChannel() && !this.model.get('active')) {
-                $ul.append(renderItem('Join chat', { 'data-cmd': 'join-channel', 'data-id': this.model.id }));
             }
 
             return $ul;
