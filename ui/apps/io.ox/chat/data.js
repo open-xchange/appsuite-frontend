@@ -318,7 +318,7 @@ define('io.ox/chat/data', [
                 default:
                     if (event.text) return event.text;
                     //#. %1$s: messagetext
-                    return gt('Unknown system message %1$s', event.type);
+                    return gt('Unknown system message: %1$s', event.type);
             }
         },
 

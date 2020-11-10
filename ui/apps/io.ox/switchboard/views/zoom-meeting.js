@@ -250,6 +250,7 @@ define('io.ox/switchboard/views/zoom-meeting', [
                 this.$el.append(
                     $('<div>').append(
                         $('<a href="#" class="secondary-action" data-action="copy-to-location">')
+                        //#. Copy the meeting link into the appointment's location field
                             .text(gt('Copy link to location')),
                         $('<a href="#" class="secondary-action">')
                             .text(gt('Copy link to clipboard'))
