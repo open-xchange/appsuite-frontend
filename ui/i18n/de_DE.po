@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-11-10 11:31+0100\n"
+"PO-Revision-Date: 2020-11-10 12:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -12632,7 +12632,6 @@ msgstr "Exchange Active Sync"
 
 #. 1$s type of application to synchronize, which is either Address Book or Calendar
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
-#, fuzzy
 msgid "Scan this code with your phone's camera to synchronize your \"%1$s\":"
 msgstr ""
 "Zum Synchronisieren Ihres %1$ss scannen Sie diesen Code mit Ihrer "
