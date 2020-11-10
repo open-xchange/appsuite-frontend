@@ -241,60 +241,59 @@ define('io.ox/calendar/perspective', [
             }
 
             util.showRecurrenceDialog(model)
-                .done(function (action) {
-                    switch (action) {
-                        case 'series':
-                            api.get({ id: model.get('seriesId'), folder: model.get('folder') }, false).done(function (masterModel) {
-                                // calculate new dates if old dates are available
-                                var oldStartDate = masterModel.getMoment('startDate');
-                                if (model.hasFlag('overridden')) {
-                                    masterModel.set({
-                                        startDate: model.get('startDate'),
-                                        endDate: model.get('endDate')
-                                    });
-                                } else {
-                                    var startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(prevStartDate, 'ms'), 'ms'),
-                                        endDate = masterModel.getMoment('endDate').add(model.getMoment('endDate').diff(prevEndDate, 'ms'), 'ms'),
-                                        format = util.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
-                                    masterModel.set({
-                                        startDate: { value: startDate.format(format), tzid: masterModel.get('startDate').tzid },
-                                        endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
-                                    });
-                                }
-
-                                util.updateRecurrenceDate(masterModel, oldStartDate);
-                                apiUpdate(masterModel, _.extend(util.getCurrentRangeOptions(), {
-                                    checkConflicts: true
-                                }));
+            .done(function (action, masterModel) {
+                switch (action) {
+                    case 'series':
+                        // calculate new dates if old dates are available
+                        var oldStartDate = masterModel.getMoment('startDate');
+                        if (model.hasFlag('overridden')) {
+                            masterModel.set({
+                                startDate: model.get('startDate'),
+                                endDate: model.get('endDate')
                             });
-                            break;
-                        case 'thisandfuture':
-                            // get recurrence master object
-                            api.get({ id: model.get('seriesId'), folder: model.get('folder') }, false).done(function (masterModel) {
-                                // calculate new dates if old dates are available use temporary new model to store data before the series split
-                                var updateModel = new calendarModel.Model(util.createUpdateData(masterModel, model)),
-                                    oldStartDate = masterModel.getMoment('startDate');
-
-                                updateModel.set({
-                                    startDate: model.get('startDate'),
-                                    endDate: model.get('endDate'),
-                                    rrule: model.get('rrule')
-                                });
-                                util.updateRecurrenceDate(updateModel, oldStartDate);
-                                apiUpdate(updateModel, _.extend(util.getCurrentRangeOptions(), {
-                                    checkConflicts: true,
-                                    recurrenceRange: 'THISANDFUTURE'
-                                }));
+                        } else {
+                            var startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(prevStartDate, 'ms'), 'ms'),
+                                endDate = masterModel.getMoment('endDate').add(model.getMoment('endDate').diff(prevEndDate, 'ms'), 'ms'),
+                                format = util.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
+                            masterModel.set({
+                                startDate: { value: startDate.format(format), tzid: masterModel.get('startDate').tzid },
+                                endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
                             });
-                            break;
-                        case 'appointment':
-                            apiUpdate(model, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true }));
-                            break;
-                        default:
-                            reset();
-                            return;
-                    }
-                });
+                        }
+
+                        util.updateRecurrenceDate(masterModel, oldStartDate);
+                        apiUpdate(masterModel, _.extend(util.getCurrentRangeOptions(), {
+                            checkConflicts: true
+                        }));
+                        break;
+                    case 'thisandfuture':
+                        // calculate new dates if old dates are available use temporary new model to store data before the series split
+                        var updateModel = new calendarModel.Model(util.createUpdateData(masterModel, model));
+
+                        updateModel.set({
+                            startDate: model.get('startDate'),
+                            endDate: model.get('endDate')
+                        });
+
+                        // only if there is a new rrule set (if this and future is called on an exception we don't want to use the rrule from the master)
+                        if (model.get('rrule')) {
+                            updateModel.set('rrule', model.get('rrule'));
+                        }
+
+                        util.updateRecurrenceDate(updateModel, prevStartDate);
+                        apiUpdate(updateModel, _.extend(util.getCurrentRangeOptions(), {
+                            checkConflicts: true,
+                            recurrenceRange: 'THISANDFUTURE'
+                        }));
+                        break;
+                    case 'appointment':
+                        apiUpdate(model, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true }));
+                        break;
+                    default:
+                        reset();
+                        return;
+                }
+            });
         },
 
         // /*

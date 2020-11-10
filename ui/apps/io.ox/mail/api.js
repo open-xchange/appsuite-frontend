@@ -947,6 +947,7 @@ define('io.ox/mail/api', [
                 appendColumns: false
             });
         });
+        folderAPI.reload(list[0].folder_id, accountAPI.getFoldersByType(state ? 'spam' : 'inbox'));
         return http.resume();
     }
 
