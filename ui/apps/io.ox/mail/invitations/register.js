@@ -8,62 +8,64 @@
  *
  * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-
-define('io.ox/files/invitations/register', [
+define('io.ox/mail/invitations/register', [
     'io.ox/backbone/views/disposable',
     'io.ox/core/extensions',
     'io.ox/core/http',
     'io.ox/backbone/mini-views/common',
+    'io.ox/core/capabilities',
     'io.ox/core/notifications',
     'gettext!io.ox/mail',
-    'less!io.ox/calendar/style'
-], function (DisposableView, ext, http, common, notifications, gt) {
+    'less!io.ox/mail/detail/style'
+], function (DisposableView, ext, http, common, capabilities, notifications, gt) {
 
     'use strict';
 
     var i18n = {
-        'subscribe': gt('Add'),
-        'unsubscribe': gt('Remove'),
-        'resubscribe': gt('Add again'),
+        'subscribe': gt('Subscribe'),
+        'unsubscribe': gt('Unsubscribe'),
+        'resubscribe': gt('Subscribe'),
         'ignore': gt('Ignore')
     };
 
     var buttonClasses = {
-        'subscribe': 'btn-success accept',
-        'resubscribe': 'btn-success accept',
-        'unsubscribe': 'btn-danger',
+        'subscribe': 'accept',
+        'resubscribe': 'accept',
+        'unsubscribe': '',
         'ignore': ''
     };
 
     var success = {
-        'subscribe': gt('You have added the shared folder'),
-        'resubscribe': gt('You have updated the share'),
-        'unsubscribe': gt('You have removed the share')
+        'subscribe': gt('You subscribed to this folder'),
+        'resubscribe': gt('You subscribed to this folder'),
+        'unsubscribe': gt('You unsubscribed from this folder')
     };
 
     var messages = {
-        'subscribed': gt('Link belongs to a known share and is accessible'),
-        'addable': gt('Link is valid and belongs to a share that is not yet subscribed an can be added'),
-        'addable_with_password': gt('Link is valid and belongs to a share that is not yet subscribed an can be added. User needs to enter a password to add the share'),
-        'inaccessible': gt('Link is temporary inaccessible and thus can\'t be subscribed'),
-        'unresolvable': gt('Link is invalid and thus can\'t be subscribed'),
-        'unsupported': gt('Link is currently unsupported thus can\'t be subscribed'),
-        'forbidden': gt('Subscription of the link is not allowed'),
-        'removed': gt('This share was removed by the owner.'),
-        'credentials_refresh': gt('Link belongs to a known share but is not accessible at the moment because the remote server indicates that credentials have been updated meanwhile.')
+        'subscribed': '',
+        'addable': '',
+        'unsubscribed': '',
+        'addable_with_password': gt('Please enter password to subscribe.'),
+        'inaccessible': gt('Folder is temporary inaccessible and thus can\'t be subscribed.'),
+        'unresolvable': gt('The link to this folder is invalid and thus can\'t be subscribed.'),
+        'unsupported': gt('The link to this folder is unsupported and can\'t be subscribed.'),
+        'forbidden': gt('Your are not allowed to subscribe to this folder.'),
+        'removed': gt('The shared folder was removed by the owner.'),
+        'credentials_refresh': gt('Credentials have been updated meanwhile. Please enter password to subscribe.')
     };
 
     var actions = {
         'subscribed': ['unsubscribe'],
-        'addable': ['ignore', 'subscribe'],
-        'addable_with_password': ['ignore', 'subscribe'],
-        'inaccessible': ['resubscribe'],
-        'unsupported': ['ignore'],
-        'unresolvable': ['ignore'],
-        'removed': ['ignore'],
-        'forbidden': ['ignore'],
+        'addable': ['subscribe'],
+        'unsubscribed': ['subscribe'],
+        'addable_with_password': ['subscribe'],
+        'inaccessible': [],
+        'unsupported': [],
+        'unresolvable': [],
+        'removed': [],
+        'forbidden': [],
         'credentials_refresh': ['resubscribe']
     };
 
@@ -82,9 +84,9 @@ define('io.ox/files/invitations/register', [
         return pw;
     }
 
-    var BasicView = DisposableView.extend({
+    var DetailView = DisposableView.extend({
 
-        className: 'itip-item federated-sharing',
+        className: 'itip-item',
 
         events: {
             'click .itip-actions button': 'onAction',
@@ -99,6 +101,7 @@ define('io.ox/files/invitations/register', [
             this.showDeeplinks = options.showDeeplinks;
 
             this.listenTo(this.model, 'change:flags change:participants', this.render);
+            if (ox.debug) this.listenTo(this.model, 'change', function () { console.log(this.model.toJSON()); });
         },
 
         onKeydown: function (e) {
@@ -117,6 +120,7 @@ define('io.ox/files/invitations/register', [
                 case 'ADDABLE':
                 case 'INACCESSIBLE':
                 case 'UNRESOLVABLE':
+                case 'UNSUBSCRIBED':
                 case 'FORBIDDEN':
                     break;
                 case 'ADDABLE_WITH_PASSWORD':
@@ -126,15 +130,9 @@ define('io.ox/files/invitations/register', [
                 default:
             }
 
-            // console.log('%c' + action, 'color: white; background-color: green');
-            // console.log(this.model.attributes);
-
             // remove undefined
             data = _.pick(data, _.identity);
             if (!/^(analyze|subscribe|unsubscribe|resubscribe)$/.test(action)) return $.Deferred().reject({ error: 'unknwon action' });
-            console.log('%c' + 'action', 'color: white; background-color: blue');
-            console.log(data);
-            console.log('');
 
             return http.PUT({
                 module: 'share/management',
@@ -159,19 +157,22 @@ define('io.ox/files/invitations/register', [
         renderScaffold: function () {
             return this.$el.append(
                 $('<div class="headline">').append(
-                    $('<span>').text(gt('This email contains a sharing link')), $.txt('. '), $.txt(this.model.get())
+                    $('<span>').text(gt('This email contains a sharing link')), $.txt('. '), $.txt(
+                        /^(subscribed)$/.test(this.model.get('state').toLowerCase()) ?
+                            gt('You are currently subscribed.') :
+                            gt('You are currently not subscribed.')
+                    )
                 ),
-                $('<div class="itip-details">'),
-                $('<div class="itip-comment">'),
-                $('<div class="itip-controls">')
+                $('<div class="details">'),
+                $('<div class="password">'),
+                $('<div class="controls">')
             );
         },
 
         renderStateDescription: function () {
             var state = this.model.get('state'),
                 message = messages[state.toLowerCase()];
-            if (!message) return $();
-            return $('<div class="confirmation-status">').addClass(status.toLowerCase()).text(message);
+            return message ? $.txt(message) : $();
         },
 
         renderDeepLink: function () {
@@ -179,22 +180,19 @@ define('io.ox/files/invitations/register', [
                 module = this.model.get('module') || '';
             if (!/^(SUBSCRIBED)$/.test(this.model.get('state'))) return $();
             if (!modules[module]) return $();
-            //if (!modules[module] || folder.indexOf(this.model.get('service')) === -1) return $();
-            return $('<a target="_blank" role="button" class="deep-link btn btn-info">')
+            return $('<a target="_blank" role="button" class="deep-link btn btn-primary">')
                 .addClass(modules[module])
                 .attr('href', '/appsuite/ui#!!&app=io.ox/files&folder=' + folder)
-                .text(folder)
+                .text(gt('View folder'))
                 .data('folder', folder);
         },
 
         renderSummary: function () {
-            var title = this.getTitle(),
-                separator = $.txt(': ');
-            this.$el.find('.itip-details').append(
-                $('<b>').text(title), separator,
-                // confirmation
-                this.renderStateDescription(),
-                this.renderDeepLink()
+            // this.$el.find('.itip-actions').prepend(
+            //     this.renderDeepLink()
+            // );
+            this.$el.find('.details').append(
+                this.renderStateDescription()
             );
         },
 
@@ -219,7 +217,7 @@ define('io.ox/files/invitations/register', [
         renderPasswordField: function () {
             if (!/^(ADDABLE_WITH_PASSWORD|CREDENTIALS_REFRESH)$/.test(this.model.get('state'))) return;
 
-            this.$el.find('.itip-comment').append(
+            this.$el.find('.password').append(
                 common.getInputWithLabel('input-password', gt('Password'), this.model)
             );
             this.$('[name="input-password"]').val(parsePassword(this.mailModel)).attr({
@@ -244,14 +242,18 @@ define('io.ox/files/invitations/register', [
             this.renderSummary();
 
             // get standard buttons
+            debugger;
             actions = this.getActions();
             buttons = this.getButtons(actions);
             if (buttons.length === 0) return this;
             // use doesn't need any controls to "ignore" the message
             if (actions.length === 1 && actions[0] === 'ignore') return this;
 
-            this.$el.find('.itip-controls').append(
-                $('<div class="itip-actions">').append(buttons)
+            this.$el.find('.controls').append(
+                $('<div class="itip-actions">').append(
+                    this.renderDeepLink(),
+                    buttons
+                )
             );
 
             this.renderPasswordField();
@@ -262,8 +264,6 @@ define('io.ox/files/invitations/register', [
         repaint: function () {
             this.container.analyzeSharingLink()
                 .done(function (data) {
-                    console.log('%c' + 'repaint', 'color: white; background-color: blue');
-                    console.log(data);
                     this.model.set(data);
                     this.render();
                 }.bind(this));
@@ -272,6 +272,8 @@ define('io.ox/files/invitations/register', [
     });
 
     var SharingView = DisposableView.extend({
+
+        className: 'federated-sharing',
 
         initialize: function (options) {
             this.options = _.extend({}, options);
@@ -314,12 +316,9 @@ define('io.ox/files/invitations/register', [
                     link: this.getLink(),
                     type: this.getType()
                 }, data);
-                console.log('%c' + 'analyze', 'color: white; background-color: green');
-                console.log(JSON.stringify(data, undefined, 2));
-                console.log('');
                 this.model.set('sharingMail', true);
                 //var extView = new ExternalView({
-                var extView = new BasicView({
+                var extView = new DetailView({
                     model: new Backbone.Model(data),
                     mailModel: this.model,
                     container: this,
@@ -334,9 +333,10 @@ define('io.ox/files/invitations/register', [
         }
     });
 
+
     ext.point('io.ox/mail/detail/notifications').extend({
         index: 1000000000001,
-        id: 'subscribe-unsubscribe',
+        id: 'federated-sharing',
         draw: function (baton) {
             var view = new SharingView(_.extend({ model: baton.model }, baton.options, { yell: true }));
             this.append(view.render().$el);
