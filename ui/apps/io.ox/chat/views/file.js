@@ -77,7 +77,7 @@ define('io.ox/chat/views/file', [
 
             this.$el.append(
                 $thumbnail.append(
-                    $img.addClass('loading').lazyload().one('appear', { url: file.url }, function (e) {
+                    $img.addClass('loading').lazyload().one('appear', { url: file.thumbnail }, function (e) {
                         api.requestBlobUrl({ url: e.data.url }).then(function (url) {
                             $(this).attr('src', url).removeClass('loading').on('dispose', function () {
                                 URL.revokeObjectURL(this.src);
@@ -113,6 +113,9 @@ define('io.ox/chat/views/file', [
 
             if (file.isBlob) {
                 this.$el.append(this.getCancelUploadButton(), this.getProgressBar());
+            } else {
+                // quick fix (tbd: a11y)
+                this.$el.attr({ 'role': 'button', 'data-download': file.url }).css('cursor', 'pointer');
             }
         },
 

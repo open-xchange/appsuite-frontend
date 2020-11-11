@@ -395,8 +395,9 @@ define('io.ox/chat/data', [
                 };
             }
 
-            var file;
+            var file, url;
             if (this.get('files') && (file = this.get('files')[0])) {
+                url = api.url + '/files/' + file.fileId;
                 return {
                     id: file.fileId,
                     isBlob: false,
@@ -404,8 +405,9 @@ define('io.ox/chat/data', [
                     preview: file.preview,
                     name: file.name,
                     size: 0,
+                    thumbnail: url + '/thumbnail',
                     type: file.mimetype,
-                    url: this.getFileUrl(file) + '/thumbnail'
+                    url: url
                 };
             }
         },

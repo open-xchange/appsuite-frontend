@@ -145,7 +145,7 @@ define('io.ox/chat/views/chat', [
             'click .file-upload-btn': 'onTriggerFileupload',
             'click .jump-down': 'onJumpDown',
             'change .file-upload-input': 'onFileupload',
-            'click button[data-download]': 'onFileDownload',
+            'click [data-download]': 'onFileDownload',
             'click .cancel-btn': 'onCancelSpecialMode'
         },
 
