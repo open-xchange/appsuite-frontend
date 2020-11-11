@@ -14,8 +14,9 @@
 define('io.ox/core/notifications/subview', [
     'io.ox/core/extensions',
     'io.ox/core/notifications',
+    'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (ext, notifications, gt) {
+], function (ext, notifications, settings, gt) {
 
     'use strict';
 
@@ -54,7 +55,7 @@ define('io.ox/core/notifications/subview', [
                     model = new Backbone.Model(model);
                 }
 
-                if (String(requestedModel.get('id')) === String(desktopNotificationFor)) {
+                if (settings.get('showDesktopNotifications', true) && String(requestedModel.get('id')) === String(desktopNotificationFor)) {
                     require(['io.ox/core/desktopNotifications'], function (desktopNotifications) {
                         //this may be to verbose...we'll see how it works
                         desktopNotifications.show(specific(model));
@@ -356,6 +357,7 @@ define('io.ox/core/notifications/subview', [
                         specific = model.get('specificDesktopNotification');
                     //if theres multiple items or no specific notification given, use the generic
                     if (newItems.length > 1 || !specific || !$.isFunction(specific)) {
+                        if (!settings.get('showDesktopNotifications', true)) return true;
                         require(['io.ox/core/desktopNotifications'], function (desktopNotifications) {
                             //this may be to verbose...we'll see how it works
                             desktopNotifications.show(generic);

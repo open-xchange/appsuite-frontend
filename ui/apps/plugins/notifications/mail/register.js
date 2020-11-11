@@ -26,8 +26,9 @@ define('plugins/notifications/mail/register', [
     'io.ox/core/desktopNotifications',
     'io.ox/contacts/api',
     'settings!io.ox/mail',
+    'settings!io.ox/core',
     'io.ox/core/tk/sounds-util'
-], function (api, ext, gt, util, formUtil, folderApi, account, cap, miniViews, desktopNotifications, contactsApi, settings, soundUtil) {
+], function (api, ext, gt, util, formUtil, folderApi, account, cap, miniViews, desktopNotifications, contactsApi, mailSettings, coreSettings, soundUtil) {
 
     'use strict';
 
@@ -199,9 +200,9 @@ define('plugins/notifications/mail/register', [
         // update counters
         update();
         // play sound
-        if (settings.get('playSound')) soundUtil.playSound();
+        if (mailSettings.get('playSound')) soundUtil.playSound();
         // show notification
-        newMailDesktopNotification(message);
+        if (coreSettings.get('showDesktopNotifications', true)) newMailDesktopNotification(message);
     });
 
     return true;
