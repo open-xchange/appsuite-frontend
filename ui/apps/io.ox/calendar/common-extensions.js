@@ -208,7 +208,17 @@ define('io.ox/calendar/common-extensions', [
 
         created: function (baton) {
             if (!baton.data.created && !baton.data.createdBy) return;
-            var entity = (baton.data.createdBy || {}).entity;
+            var entity = (baton.data.createdBy || {}).entity,
+                // if we don't have an entity, this might be an external creator (federated sharing etc)
+                userData = baton.data.createdBy && !entity ? {
+                    $el: $('<span>'),
+                    name: baton.data.createdBy.cn,
+                    email: baton.data.createdBy.email
+                } : {
+                    html: userAPI.getTextNode(entity),
+                    user_id: entity
+                };
+
             this.append(
                 $('<tr>').append(
                     $('<th>').text(gt('Created')),
@@ -217,10 +227,7 @@ define('io.ox/calendar/common-extensions', [
                             $('<span>').text(util.getDate(baton.data.created)),
                             $('<span>').text(' \u2013 ')
                         ] : [],
-                        baton.data.createdBy ? coreUtil.renderPersonalName({
-                            html: userAPI.getTextNode(entity),
-                            user_id: entity
-                        }, baton.data) : []
+                        baton.data.createdBy ? coreUtil.renderPersonalName(userData, baton.data) : []
                     )
                 )
             );
@@ -228,16 +235,23 @@ define('io.ox/calendar/common-extensions', [
 
         modified: function (baton) {
             if (!baton.data.lastModified && !baton.data.modifiedBy) return;
+            // if we don't have an entity, this might be an external creator (federated sharing etc)
+            var userData = baton.data.modifiedBy && !baton.data.modifiedBy.entity ? {
+                $el: $('<span>'),
+                name: baton.data.modifiedBy.cn,
+                email: baton.data.modifiedBy.email
+            } : {
+                html: userAPI.getTextNode(baton.data.modifiedBy.entity),
+                user_id: baton.data.modifiedBy.entity
+            };
+
             this.append(
                 $('<tr>').append(
                     $('<th>').text(gt('Modified')),
                     $('<td class="modified">').append(
                         baton.data.lastModified ? [$('<span>').text(util.getDate(baton.data.lastModified))] : [],
                         baton.data.lastModified && baton.data.modifiedBy ? $('<span>').text(' \u2013 ') : [],
-                        baton.data.modifiedBy ? coreUtil.renderPersonalName({
-                            html: userAPI.getTextNode(baton.data.modifiedBy.entity),
-                            user_id: baton.data.modifiedBy.entity
-                        }, baton.data) : []
+                        baton.data.modifiedBy ? coreUtil.renderPersonalName(userData, baton.data) : []
                     )
                 )
             );
