@@ -24,19 +24,18 @@ actions.add(['Decline', 'declined', 'declined', 'You declined this appointment']
 Feature('Calendar > iTIP');
 
 Before(async (users) => {
-    await Promise.all([
-        users.create(),
-        users.create(users.getRandom(), { id: process.env.CONTEXT_ID + 50 })
-    ]);
+    await users.create();
+
 });
 
-After(async (contexts, users) => {
-    await Promise.all([
-        users.removeAll(),
-        contexts.removeAll()
-    ]);
+After(async (users) => {
+    await users.removeAll();
+
 });
-Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, users, current) {
+
+Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, users, current, contexts) {
+    const ctx = await contexts.create();
+    await users.create(users.getRandom(), ctx);
     // 1.) User#A: Create an appointment with User#B
     const startDate = moment().startOf('hour').add(1, 'hour');
     const endDate = moment().startOf('hour').add(3, 'hour');
@@ -146,9 +145,12 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.openApp('Calendar');
         I.dontSee('MySubject');
     });
+    await ctx.remove();
 });
 
-Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, calendar) {
+Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, calendar, contexts) {
+    const ctx = await contexts.create();
+    await users.create(users.getRandom(), ctx);
     // 1.) User#A: Create an appointment with attachment with User#B
     const startDate = moment().startOf('hour').add(1, 'hour');
     const endDate = moment().startOf('hour').add(3, 'hour');
@@ -227,6 +229,8 @@ Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, 
     I.waitForFile('testdocument.odt', 10);
     I.seeFile('testdocument.odt');
     I.seeFileContentsEqualReferenceFile('e2e/media/files/generic/testdocument.odt');
+
+    await ctx.remove();
 });
 
 Scenario('[C241126] iTIP mails without appointment reference', async function (I, users, mail, calendar) {

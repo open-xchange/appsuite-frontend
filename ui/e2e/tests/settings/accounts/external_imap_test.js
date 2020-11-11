@@ -15,20 +15,17 @@
 
 Feature('Custom mail account');
 
-Before(async function (users, contexts) {
+Before(async function (users) {
     await users.create();
-    const secondContext = await contexts.create();
-    console.log(secondContext.id);
-    console.log('%c contexts', 'background: #222; color: #bada55', { contexts: contexts });
-    await users.create(users.getRandom(), secondContext);
 });
 
-After(async function (users, contexts) {
+After(async function (users) {
     await users.removeAll();
-    await contexts.removeAll();
 });
 
-Scenario('[C7836] Add custom mail account (IMAP)', async (I, users, mail, settings, dialogs) => {
+Scenario('[C7836] Add custom mail account (IMAP)', async (I, users, mail, settings, dialogs, contexts) => {
+    const secondContext = await contexts.create();
+    await users.create(users.getRandom(), secondContext);
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     const [internalUser, externalUser] = users;
     // using a workaround to test auto detection on e2e.os.oxui.de
@@ -84,4 +81,6 @@ Scenario('[C7836] Add custom mail account (IMAP)', async (I, users, mail, settin
     I.selectFolder('Inbox');
     I.triggerRefresh();
     I.retry(10).waitForText('Re: Howdee yihaa!', 12);
+
+    await secondContext.remove();
 });

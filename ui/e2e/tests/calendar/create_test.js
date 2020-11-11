@@ -31,9 +31,8 @@ Before(async (I, users) => {
         'io.ox/calendar': { showCheckboxes: true }
     });
 });
-After(async (users, contexts) => {
+After(async (users) => {
     await users.removeAll();
-    await contexts.removeAll();
 });
 
 Scenario('Create appointment with all fields', async (I, calendar, dialogs) => {
@@ -1727,6 +1726,8 @@ Scenario('[C7427] Create appointment with external participants', async function
         calendar.waitForApp();
         checkViews();
     });
+
+    await ctx.remove();
 });
 
 Scenario('[C7426] Create appointment with internal and external participants', async function (I, users, contexts, dialogs, calendar, mail) {
@@ -1794,6 +1795,8 @@ Scenario('[C7426] Create appointment with internal and external participants', a
         I.login('app=io.ox/mail', { user: extUser });
         checkAppointment();
     });
+
+    await ctx.remove();
 });
 
 Scenario('[OXUIB-182] Choose correct start time on time change dates', function (I, calendar) {

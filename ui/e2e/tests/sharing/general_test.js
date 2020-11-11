@@ -21,10 +21,8 @@ Before(async (users) => {
     await users.create();
 });
 
-After(async (users, contexts) => {
+After(async (users) => {
     await users.removeAll();
-    await contexts.removeAll();
-
 });
 
 Scenario('[C45021] Generate simple link for sharing', async function (I, drive, dialogs) {
@@ -184,7 +182,7 @@ Scenario('[C85625] My Shares default sort order', async function (I, drive, dial
     I.pressKey('Escape');
 });
 
-Scenario('[C45026] Edit shared object with multiple users and modify the permissions for a specific user', async function (I, contexts, users, drive, dialogs) {
+Scenario('[C45026] Edit shared object with multiple users and modify the permissions for a specific user', async function (I, users, drive, dialogs) {
     const mailListView = '.list-view.visible-selection.mail-item',
         smartDropDown = '.smart-dropdown-container.dropdown.open',
         document = '.white-page.letter.plain-text';
@@ -337,8 +335,7 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
 Scenario('[C45025] Create shared object with multiple users (external users) with different permissions', async function (I, users, contexts, drive, dialogs, mail, autocomplete) {
     const mailListView = '.list-view.visible-selection.mail-item';
 
-    const ctxID = Math.trunc(Math.random() * 123456);
-    const ctx = await contexts.create({ id: ctxID });
+    const ctx = await contexts.create();
     await Promise.all([
         users.create(users.getRandom(), ctx),
         users.create(users.getRandom(), ctx)
@@ -426,6 +423,8 @@ Scenario('[C45025] Create shared object with multiple users (external users) wit
         I.waitForText('here is bob', 5, '.white-page.letter.plain-text');
         I.dontSee('Edit', '.viewer-toolbar');
     });
+
+    await ctx.remove();
 });
 
 Scenario('[C83277] Create shared object with expiration date', async function (I, users, drive, dialogs) {
