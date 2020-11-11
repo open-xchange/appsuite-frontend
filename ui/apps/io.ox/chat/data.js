@@ -239,9 +239,10 @@ define('io.ox/chat/data', [
 
         getFormattedBody: function () {
             return _.escape(this.get('content'))
-                .replace(/\*(.+?)\*/g, '<b>$1</b>')
-                .replace(/_(.+?)_/g, '<em>$1</em>')
-                .replace(/~(.+?)~/g, '<del>$1</del>')
+                // for the moment we require white-space before bold/italic/strikethrough
+                .replace(/(^|\s)\*(.+?)\*/g, '<b>$1</b>')
+                .replace(/(^|\s)_(.+?)_/g, '<em>$1</em>')
+                .replace(/(^|\s)~(.+?)~/g, '<del>$1</del>')
                 .replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
         },
 
