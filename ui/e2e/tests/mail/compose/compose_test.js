@@ -228,7 +228,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.say('Create textfile in drive');
     drive.waitForApp();
     I.clickToolbar('New');
-    I.click('Add note');
+    I.clickDropdown('Note');
     I.waitForVisible('.io-ox-editor');
     I.fillField('Title', 'Testdocument.txt');
     I.fillField('Note', 'Some content');

@@ -101,7 +101,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
 
         I.selectFolder('Music');
         I.retry(5).clickToolbar('New');
-        I.clickDropdown('Add new folder');
+        I.clickDropdown('Folder');
         dialogs.waitForVisible();
         I.waitForText('Add new folder', 5, dialogs.locators.header);
         I.fillField('Folder name', 'Hello from Bob');
@@ -194,7 +194,8 @@ Scenario('[C73919] Copy a shared file to another folder', async function (I, use
     drive.waitForViewer();
     I.waitForEnabled({ css: '.io-ox-viewer input.file-input' });
     I.attachFile('.io-ox-viewer input.file-input', 'e2e/media/files/0kb/document.txt');
-    I.click('Upload');
+    dialogs.waitForVisible();
+    dialogs.clickButton('Upload');
     I.waitForText('Versions (2)');
     I.clickToolbar('~Close viewer');
     I.waitForDetached('.io-ox-viewer');

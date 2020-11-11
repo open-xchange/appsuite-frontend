@@ -59,7 +59,7 @@ Scenario('[C252159] Generate link for sharing including subfolders', async funct
     I.waitForDetached('.page.current .busy');
     I.clickToolbar('New');
     I.waitForVisible('.dropdown.open .dropdown-menu');
-    I.clickDropdown('Add new folder');
+    I.clickDropdown('Folder');
     dialogs.waitForVisible();
     I.waitForText('Add new folder', 5, dialogs.locators.header);
     I.fillField('Folder name', 'A subfolder');
@@ -67,7 +67,7 @@ Scenario('[C252159] Generate link for sharing including subfolders', async funct
     I.waitForDetached('.modal-dialog');
     I.clickToolbar('New');
     I.waitForVisible('.dropdown.open .dropdown-menu');
-    I.clickDropdown('Add new folder');
+    I.clickDropdown('Folder');
     dialogs.waitForVisible();
     I.fillField('Folder name', 'Second subfolder');
     dialogs.clickButton('Add');

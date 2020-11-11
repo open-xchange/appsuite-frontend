@@ -161,16 +161,16 @@ Scenario.skip('Create call and check call history for jitsi', async (I, users, c
     });
 });
 
-Scenario('Create call from call history and check call history after hang up for jitsi', (I, users, dialogs) => {
+Scenario('Create call from call history and check call history after hang up for jitsi', async (I, users, dialogs) => {
     const [user1, user2] = users;
     const { primaryEmail, display_name } = user2.userdata;
 
 
-    session('userB', () => {
+    await session('userB', () => {
         I.login({ user: user2 });
     });
 
-    session('userA', () => {
+    await session('userA', () => {
         I.login({ user: user1 });
         I.executeScript((mail, name) => {
             require(['io.ox/switchboard/views/call-history']).then(function (ch) {
@@ -187,14 +187,15 @@ Scenario('Create call from call history and check call history after hang up for
         I.waitForText('Hang up', 5, dialogs.locators.footer);
     });
 
-    session('userB', () => {
+    await session('userB', () => {
         dialogs.waitForVisible();
     });
 
-    session('userA', () => {
+    await session('userA', () => {
         dialogs.clickButton('Hang up');
         I.waitForDetached('.modal');
         I.waitForVisible('~Call history');
+        I.wait(0.2);
         I.click('~Call history');
         I.waitForVisible(
             locate('.call-history-item')
@@ -203,7 +204,7 @@ Scenario('Create call from call history and check call history after hang up for
         );
     });
 
-    session('userB', () => {
+    await session('userB', () => {
         I.waitForVisible('~Call history');
         I.click('~Call history');
         I.waitForVisible(
