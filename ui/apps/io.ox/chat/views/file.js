@@ -111,7 +111,7 @@ define('io.ox/chat/views/file', [
                 $('<div class="info ellipsis">').text(fileSize + ' ' + fileType)
             );
 
-            if (!file.isBlob) {
+            if (file.isBlob) {
                 this.$el.append(this.getCancelUploadButton(), this.getProgressBar());
             }
         },
