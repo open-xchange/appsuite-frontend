@@ -22,8 +22,8 @@ Before(async (users) => {
 After(async (users) => {
     await users.removeAll();
 });
-
-Scenario('[C7778] Forwarding mail inline/attachment', async (I, users, mail) => {
+// Skipped due to OXUIB-554
+Scenario.skip('[C7778] Forwarding mail inline/attachment', async (I, users, mail) => {
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);

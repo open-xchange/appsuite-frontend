@@ -22,8 +22,8 @@ Before(async function (users) {
 After(async function (users) {
     await users.removeAll();
 });
-
-Scenario('Compose and discard with/without prompts', async function (I, users, mail) {
+// Skipped due to OXUIB-554
+Scenario.skip('Compose and discard with/without prompts', async function (I, users, mail) {
     const [user] = users;
 
     // preparations

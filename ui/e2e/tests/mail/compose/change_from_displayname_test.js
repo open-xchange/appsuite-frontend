@@ -49,8 +49,8 @@ Scenario('[OXUIB-142] personal field of primary account should be respected', as
     // Verify the dislay name has changed
     I.see('Entropy McDuck');
 });
-
-Scenario('update account with mail compose app open', async (I, users, mail) => {
+// Skipped due to OXUIB-554
+Scenario.skip('update account with mail compose app open', async (I, users, mail) => {
     let [user] = users;
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
 

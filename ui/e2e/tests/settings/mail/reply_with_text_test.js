@@ -22,8 +22,8 @@ Before(async (users) => {
 After(async (users) => {
     await users.removeAll();
 });
-
-Scenario('[C7776] Insert the original email text to a reply', async (I, users, mail) => {
+// Skipped due to OXUIB-554
+Scenario.skip('[C7776] Insert the original email text to a reply', async (I, users, mail) => {
     const user = users[0];
     const listview = locate('.list-view-control').as('List View');
 

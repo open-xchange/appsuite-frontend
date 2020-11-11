@@ -337,8 +337,8 @@ Scenario('[C7769] Delete signature', async function (I) {
     I.dontSee('Testsignaturecontent');
 
 });
-
-Scenario('[C7770] Set default signature', async function (I, users, mail) {
+// Skipped due to OXUIB-554
+Scenario.skip('[C7770] Set default signature', async function (I, users, mail) {
     const [user] = users;
     await I.haveMail({
         attachments: [{
