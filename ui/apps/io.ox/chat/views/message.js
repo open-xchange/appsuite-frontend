@@ -74,7 +74,8 @@ define('io.ox/chat/views/message', [
             return [
                 new Avatar({ model: user }).render().$el,
                 $('<div class="sender">').append(
-                    $('<span class="name">').text(user.getName()),
+                    // we add a space so that we get nicer result when selecting/copying text
+                    $('<span class="name">').text(user.getName() + ' '),
                     $('<span class="time">').text(this.model.getTime())
                 )
             ];
