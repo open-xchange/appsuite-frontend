@@ -23,6 +23,7 @@ define('io.ox/chat/settings/defaults', [], function () {
             enabled: true,
             playWhen: 'onlyInactive',
             file: 'bongo1.mp3'
-        }
+        },
+        density: 'default'
     };
 });

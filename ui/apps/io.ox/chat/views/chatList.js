@@ -54,7 +54,7 @@ define('io.ox/chat/views/chatList', [
         renderItem: function (model) {
             var node = this.getNode(model);
             if (node.length) return node;
-            return new ChatListEntryView({ model: model }).render().$el;
+            return new ChatListEntryView({ model: model }).$el;
         },
 
         toggle: function (items) {

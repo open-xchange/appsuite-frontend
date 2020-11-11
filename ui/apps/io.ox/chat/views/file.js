@@ -65,7 +65,7 @@ define('io.ox/chat/views/file', [
                         URL.revokeObjectURL(this.src);
                     });
                 }
-                this.$el.append($thumbnail, this.getCancelUploadButton(), this.getProgressBar());
+                this.$el.append($thumbnail.append(this.getCancelUploadButton(), this.getProgressBar()));
                 return;
             }
 

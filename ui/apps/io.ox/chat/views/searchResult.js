@@ -44,7 +44,7 @@ define('io.ox/chat/views/searchResult', [
         render: function () {
             this.$el.parent().toggleClass('show-search', !!this.query);
             var nodes = this.collection.map(function (model) {
-                return new ChatListEntryView({ model: model }).render().$el;
+                return new ChatListEntryView({ model: model }).$el;
             });
             this.$el.empty().append(nodes);
             if (this.collection.length === 0) {

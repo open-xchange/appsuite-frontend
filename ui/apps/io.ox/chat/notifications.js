@@ -58,7 +58,12 @@ define('io.ox/chat/notifications', [
                 current = name;
                 audio = new Audio(ox.base + '/apps/io.ox/chat/sounds/' + name);
             }
-            if (audio) audio.play();
+            try {
+                if (audio) audio.play();
+            } catch (e) {
+                // play() might throw an exception if the browser is inactive for too long
+                if (ox.debug) console.error(e);
+            }
         }
 
         // audio preview when changing sounds in settings

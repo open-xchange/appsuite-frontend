@@ -52,12 +52,29 @@ define('io.ox/chat/settings/pane', [
                     util.header(gt('Chat'))
                 );
             }
-        }, {
+        },
+        {
+            id: 'density',
+            index: INDEX += 100,
+            render: function () {
+                this.$el.append(
+                    util.fieldset(
+                        gt('View options'),
+                        //#. Visual List density (German "Kompaktheitsgrad"); can be compact, default, or detailed
+                        util.compactSelect('density', gt('List density'), settings, [
+                            { label: gt('Compact'), value: 'compact' },
+                            { label: gt('Default'), value: 'default' },
+                            { label: gt('Detailed'), value: 'detailed' }
+                        ])
+                    )
+                );
+            }
+        },
+        {
             id: 'email-notifications',
             index: INDEX += 100,
             render: function () {
                 if (!data.serverConfig.smtpEnabled) return;
-
                 this.$el.append(
                     util.compactSelect('emailNotification', gt('Receive email notifications'), settings, [
                         { label: gt('Never'), value: 'never' },
@@ -66,7 +83,8 @@ define('io.ox/chat/settings/pane', [
                     ])
                 );
             }
-        }, {
+        },
+        {
             id: 'sound-notifications',
             index: INDEX += 100,
             render: function () {
