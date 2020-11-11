@@ -38,13 +38,6 @@ define('io.ox/files/toolbar', [
                 title: gt('New'),
                 dropdown: 'io.ox/files/toolbar/new'
             },
-            'upload': {
-                prio: 'hi',
-                mobile: 'hi',
-                //#. Label of a dropdown. Contains actions for uploading local items.
-                title: gt('Upload'),
-                dropdown: 'io.ox/files/toolbar/upload'
-            },
             'edit': {
                 prio: 'hi',
                 mobile: 'lo',
@@ -56,6 +49,13 @@ define('io.ox/files/toolbar', [
                 mobile: 'lo',
                 title: gt('Edit'),
                 ref: 'io.ox/files/actions/edit-federated'
+            },
+            'upload': {
+                prio: 'hi',
+                mobile: 'hi',
+                //#. Label of a dropdown. Contains actions for uploading local items.
+                title: gt('Upload'),
+                dropdown: 'io.ox/files/toolbar/upload'
             },
             'share': {
                 prio: 'hi',

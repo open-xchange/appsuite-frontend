@@ -396,23 +396,17 @@ define('io.ox/files/share/api', [
          * @param  { string }   link
          * @return { object }   a file descriptor
          */
-        getFederatedShareLink: function (link, item) {
-            return http.PUT({
-                module: 'share/management',
-                params: {
-                    action: 'getBackwardLink'
-                },
-                data: {
-                    link: link,
-                    item: item.id,
-                    folder: item.folder_id
-                }
-            })
-            .then(
-                function (data) {
-                    return data && data.link;
-                }
-            );
+        getFederatedSharingRedirectUrl: function (link, item) {
+
+            var baseUrl = window.ox.abs + window.ox.root;
+            var apiUrl = '/api/share/management?action=backwardLink';
+            var sessionParam = '&session=' + encodeURIComponent(ox.session);
+            var redirectParam = '&redirect=true';
+            var shareLinkParam = '&link=' + encodeURIComponent(link);
+            var folderParam = '&folder=' + encodeURIComponent(item.folder_id);
+            var itemParam =  '&item=' + encodeURIComponent(item.id);
+
+            return baseUrl + apiUrl + sessionParam + redirectParam + shareLinkParam + folderParam + itemParam;
         }
     };
 

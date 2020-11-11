@@ -201,24 +201,11 @@ define('io.ox/files/actions', [
             return util.canEditDocFederated(model);
         },
         action: function (baton) {
-
             var model = baton.models[0];
             var link = filestorageApi.getAccountUrl(model.getItemAccountSync());
-
-            shareAPI.getFederatedShareLink(link, baton.first())
-                .then(function (guestLink) {
-                    /* global blankshield */
-                    if (_.device('noopener')) {
-                        window.open(guestLink, '_blank', 'noopener');
-                    } else {
-                        blankshield.open(guestLink, '_blank');
-                    }
-                },
-                function (error) {
-                    require(['io.ox/core/yell'], function (yell) {
-                        yell('error', error);
-                    });
-                });
+            var guestLink = shareAPI.getFederatedSharingRedirectUrl(link, baton.first());
+            /* global blankshield */
+            blankshield.open(guestLink, '_blank');
         }
     });
 
