@@ -16,9 +16,10 @@ define('io.ox/chat/views/content', [
     'io.ox/chat/views/file',
     'io.ox/chat/data',
     'io.ox/chat/util',
+    'io.ox/chat/formatting',
     'settings!io.ox/chat',
     'gettext!io.ox/chat'
-], function (DisposableView, FileView, data, util, settings, gt) {
+], function (DisposableView, FileView, data, util, formatting, settings, gt) {
 
     'use strict';
 
@@ -77,33 +78,43 @@ define('io.ox/chat/views/content', [
 
         renderBody: function () {
 
+            var model = this.model;
             var deleted = this.model.isDeleted();
+            this.$body.toggleClass('deleted', deleted).empty();
 
-            this.$body
-                .toggleClass('deleted', deleted)
-                .toggleClass('emoji', !deleted && this.model.isEmoji())
-                .empty();
-
-            var content = this.renderContent();
-            // +350 so that if we load a message, we load at least 500 more chars a not only e.g. 10
-            if (this.model.isSystem() || content.length <= (this.chunkSize + 350)) return this.$body.html(content);
-
-            return this.$body.html(content.slice(0, this.chunkSize) + '...').append(
-                !this.inEditor ? $('<button type="button" class="btn btn-link show-more">').text(gt('Show more')) : $()
-            );
+            if (model.get('cancelled')) {
+                this.$body.text(gt('Sending has been cancelled'));
+            } else if (model.isDeleted()) {
+                this.$body.text(gt('This message was deleted'));
+            } else if (model.isSystem()) {
+                this.$body.append(model.getSystemMessage());
+            } else {
+                var content = model.get('content');
+                // +350 so that if we load a message, we load at least 500 more chars a not only e.g. 10
+                if (model.isSystem() || content.length <= (this.chunkSize + 350)) {
+                    this.setBodyContent(content);
+                    this.$body.html(formatting.apply(content));
+                } else {
+                    this.setBodyContent(content.slice(0, this.chunkSize) + '...');
+                    if (!this.inEditor) this.$body.append($('<button type="button" class="btn btn-link show-more">').text(gt('Show more')));
+                }
+            }
         },
 
-        renderContent: function () {
-            var model = this.model;
-            if (model.get('cancelled')) return gt('Sending has been cancelled');
-            if (model.isDeleted()) return gt('This message was deleted');
-            if (model.isSystem()) return model.getSystemMessage();
-            return model.getFormattedBody();
+        setBodyContent: function (content) {
+            var deleted = this.model.isDeleted();
+            var onlyEmoji = !deleted && formatting.onlyEmoji(content);
+            content = formatting.apply(content);
+            var containsEmoji = !onlyEmoji && formatting.containsEmoji(content);
+            this.$body
+                .toggleClass('emoji', onlyEmoji)
+                .toggleClass('contains-emoji', containsEmoji)
+                .html(content);
         },
 
         onShowMore: function () {
             this.chunkSize += 3 * initialChunkSize;
-            this.$('.body').replaceWith(this.renderBody());
+            this.renderBody();
         },
 
         renderFlags: function () {

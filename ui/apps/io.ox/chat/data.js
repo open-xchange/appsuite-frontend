@@ -414,7 +414,11 @@ define('io.ox/chat/data', [
         },
 
         isEmoji: function () {
-            return util.isOnlyEmoji(this.get('content'));
+            return formatting.isOnlyEmoji(this.get('content'));
+        },
+
+        containsEmoji: function () {
+            return formatting.containsEmoji(this.get('content'));
         },
 
         // checks if previous message is from a) same sender b) same date
