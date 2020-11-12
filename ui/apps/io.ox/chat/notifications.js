@@ -33,8 +33,8 @@ define('io.ox/chat/notifications', [
         var model = e.message;
         // debug
         if (ox.debug) console.log('new message', model);
-        // don't notify on your own messages
-        if (model.isMyself()) return;
+        // don't notify on your own or system messages
+        if (model.isMyself() || model.isSystem()) return;
         // don't notify if busy
         if (presence.getMyAvailability() === 'busy') return;
         // don't notify if the user is currently active and the UI is not hidden
