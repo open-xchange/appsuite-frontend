@@ -729,7 +729,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         // hint: does not detects the cite block
         this.getContentParts = function () {
             var content = this.getContent(),
-                isForwardUnquoted = opt.view.model.get('mode') === 'forward' && mailSettings.get('forwardunquoted', false),
+                isForwardUnquoted = opt.view.model.type === 'forward' && mailSettings.get('forwardunquoted', false),
                 index = content.indexOf(isForwardUnquoted ? '----' : '<blockquote type="cite">');
             // special case: initially replied/forwarded text mail
             if (content.substring(0, 15) === '<blockquote type="cite"><div>') index = 0;
