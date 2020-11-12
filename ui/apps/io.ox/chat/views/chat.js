@@ -145,7 +145,6 @@ define('io.ox/chat/views/chat', [
             'click .file-upload-btn': 'onTriggerFileupload',
             'click .jump-down': 'onJumpDown',
             'change .file-upload-input': 'onFileupload',
-            'click [data-download]': 'onFileDownload',
             'click .cancel-btn': 'onCancelSpecialMode'
         },
 
@@ -718,14 +717,7 @@ define('io.ox/chat/views/chat', [
 
         getMessageNode: function (model, selector) {
             return this.$('.message[data-cid="' + model.cid + '"] ' + (selector || ''));
-        },
-
-        onFileDownload: function (e) {
-            e.preventDefault();
-            var url = $(e.currentTarget).attr('data-download');
-            api.downloadFile(url);
         }
-
     });
 
     return ChatView;

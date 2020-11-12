@@ -114,13 +114,18 @@ define('io.ox/chat/views/file', [
             if (file.isBlob) {
                 this.$el.append(this.getCancelUploadButton(), this.getProgressBar());
             } else {
-                // quick fix (tbd: a11y)
-                this.$el.attr({ 'role': 'button', 'data-download': file.url }).css('cursor', 'pointer');
+                this.$el.append(this.getDownloadButton(file.url));
             }
         },
 
+        getDownloadButton: function (url) {
+            return $('<button type="button" class="file-action download">')
+                .attr({ 'data-cmd': 'download', 'data-url': url, 'title': gt('Download file') })
+                .append('<i class="fa fa-download" aria-hidden="true">');
+        },
+
         getCancelUploadButton: function () {
-            return $('<button type="button" class="cancel-upload">')
+            return $('<button type="button" class="file-action cancel-upload">')
                 .hide()
                 .attr('title', gt('Cancel file upload'))
                 .append('<i class="fa fa-times" aria-hidden="true">');

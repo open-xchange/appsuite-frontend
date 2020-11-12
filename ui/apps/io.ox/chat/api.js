@@ -108,8 +108,10 @@ define('io.ox/chat/api', [
     };
 
     function formDownloadWithJwtAuth(url, token) {
-        $('<form method="post" target="_blank"></form>').attr('action', url).append(
-            $('<input type="hidden" name="jwt">').val(token)).appendTo('body').submit().remove();
+        $('<form method="post" target="_blank">')
+            .attr('action', url)
+            .append($('<input type="hidden" name="jwt">').val(token))
+            .appendTo('body').submit().remove();
     }
 
     api.downloadFile = function (url) {

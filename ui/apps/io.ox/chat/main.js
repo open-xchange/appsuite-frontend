@@ -92,7 +92,6 @@ define('io.ox/chat/main', [
         },
 
         onCommand: function (data) {
-            console.log('onCommand', data);
             switch (data.cmd) {
                 case 'start-private-chat': this.startPrivateChat(data); break;
                 case 'edit-group-chat': this.editGroupChat(data); break;
@@ -114,6 +113,7 @@ define('io.ox/chat/main', [
                 case 'switch-to-floating': this.toggleWindowMode('floating'); break;
                 case 'discard-app': this.hideApp(); break;
                 case 'toggle-favorite': this.toggleFavorite(data.id); break;
+                case 'download': this.download(data); break;
                 // no default
             }
         },
@@ -374,6 +374,11 @@ define('io.ox/chat/main', [
             settings.set('mode', mode).save();
             this.$body.toggleClass('columns', mode === 'sticky');
             this.scrollToMessage(cid);
+        },
+
+        // we offer this via command because it's needed at different places, e.g. messages and file overview
+        download: function (data) {
+            api.downloadFile(data.url);
         },
 
         getCurrentMessageCid: function () {

@@ -62,10 +62,6 @@ define('io.ox/chat/views/fileList', [
 
         className: 'files abs',
 
-        events: {
-            'click button[data-download]': 'onFileDownload'
-        },
-
         initialize: function () {
 
             this.collection = data.files;
@@ -119,7 +115,7 @@ define('io.ox/chat/views/fileList', [
                     preview.css('backgroundImage', 'url("' + url + '")');
                 });
             } else {
-                button.attr('data-download', model.getFileUrl());
+                button.attr({ 'data-cmd': 'download', 'data-url': model.getFileUrl() });
                 preview.addClass('flex-center-vertically').append(
                     $('<i class="fa icon" aria-hidden="true">')
                         .addClass(util.getClassFromMimetype(model.get('mimetype')))
@@ -158,12 +154,6 @@ define('io.ox/chat/views/fileList', [
                 var index = parseInt($(this).children().attr('data-index'), 10);
                 $(this).children().attr('data-index', index + 1);
             });
-        },
-
-        onFileDownload: function (e) {
-            e.preventDefault();
-            var url = $(e.currentTarget).attr('data-download');
-            api.downloadFile(url);
         }
     });
 
