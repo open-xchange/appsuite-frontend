@@ -197,8 +197,8 @@ define('io.ox/core/links', [
                 tmp = node.attr('href').substr(7).split(/\?/, 2);
                 // address
                 address = tmp[0];
-                // use link text as display name
-                name = node.text();
+                //  use the address as display name because it is not sure that the text is the name
+                name = tmp[0];
                 // process additional parameters; all lower-case (see bug #31345)
                 params = _.deserialize(tmp[1]);
                 for (var key in params) params[key.toLowerCase()] = params[key];
