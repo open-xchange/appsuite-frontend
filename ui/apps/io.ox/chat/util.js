@@ -112,12 +112,8 @@ define('io.ox/chat/util', ['gettext!io.ox/chat'], function (gt) {
             return name || gt('File');
         },
 
-        renderFile: function (opt) {
-            var model = opt.model;
-
-            var file = _(model.get('files')).last();
+        renderFile: function (file) {
             if (!file) return;
-
             return [
                 $('<i class="fa icon" aria-hidden="true">').addClass(util.getClassFromMimetype(file.mimetype)),
                 $('<span class="name">').text(file.name)

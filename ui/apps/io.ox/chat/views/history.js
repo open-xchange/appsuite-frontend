@@ -107,7 +107,7 @@ define('io.ox/chat/views/history', [
         renderLastMessage: function (model) {
             var last = model.lastMessage;
             if (!last) return '\u00a0';
-            if (last.isFile()) return util.renderFile({ model: last });
+            if (last.isFile()) return util.renderFile(_(last.get('files')).last());
             if (last.isSystem()) return last.getSystemMessage();
             return $.txt(sanitizer.simpleSanitize(last.get('content')));
         },

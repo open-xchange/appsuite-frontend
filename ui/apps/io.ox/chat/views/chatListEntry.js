@@ -78,10 +78,15 @@ define('io.ox/chat/views/chatListEntry', [
         },
 
         renderLastMessage: function () {
-            if (!this.lastMessage) return $.txt('\u00a0');
-            if (this.lastMessage.isFile()) return util.renderFile({ model: this.lastMessage });
-            if (this.lastMessage.isSystem()) return this.lastMessage.getSystemMessage();
-            return [this.renderSender(), $.txt(sanitizer.simpleSanitize(this.lastMessage.get('content')))];
+            var message = this.lastMessage;
+            if (!message) return $.txt('\u00a0');
+            if (message.isFile()) return util.renderFile(_(message.get('files')).last());
+            if (message.isUploading()) {
+                var blob = message.get('blob');
+                return util.renderFile({ name: blob.name, mimetype: blob.type });
+            }
+            if (message.isSystem()) return message.getSystemMessage();
+            return [this.renderSender(), $.txt(sanitizer.simpleSanitize(message.get('content')))];
         },
 
         render: function () {

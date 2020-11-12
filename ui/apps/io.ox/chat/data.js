@@ -398,7 +398,7 @@ define('io.ox/chat/data', [
                 return {
                     id: file.fileId,
                     isBlob: false,
-                    isImage: /^image\//.test(file.mimetype),
+                    isImage: !!file.preview && /^image\//.test(file.mimetype),
                     preview: file.preview,
                     name: file.name,
                     size: file.size || 0,
@@ -806,6 +806,7 @@ define('io.ox/chat/data', [
             .then(
                 function success() {
                     model.setInitialDeliveryState();
+                    model.set('uploading', false);
                     this.set('active', true);
                 }.bind(this),
                 function fail(response) {
