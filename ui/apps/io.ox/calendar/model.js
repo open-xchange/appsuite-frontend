@@ -280,7 +280,7 @@ define('io.ox/calendar/model', [
                 'change:flags': this.onChangeFlags
             });
             // ios has some strange date inputs that cause odd behavior when autocorrection is enabled, see OXUIB-506
-            if (_.device('ios')) {
+            if (!_.device('ios')) {
                 this.on({
                     'change:startDate': this.onChangeStartDate,
                     'change:endDate': this.onChangeEndDate
