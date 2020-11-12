@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/formatting', [], function () {
+define('io.ox/chat/formatting', ['io.ox/chat/data'], function (data) {
 
     'use strict';
 
@@ -20,7 +20,7 @@ define('io.ox/chat/formatting', [], function () {
     var regItalic = /(^|\s)_(.+?)_/g;
     var regStrikethrough = /(^|\s)~(.+?)~/g;
     var regURL = /(https?:\/\/\S+)/g;
-    var regEmoticon = /(^|\s)(((:|;)-?(\(|\)|D))|&lt;3|\(y\))/g;
+    var regEmoticon = /(^|\s)(((:|;)-?(\(|\)|D|\|))|&lt;3|\(y\))/g;
     var regShortcode = /(^|\s):(\w+):/g;
 
     var emoticons = {
@@ -52,8 +52,12 @@ define('io.ox/chat/formatting', [], function () {
     var regEmojiReplace = new RegExp('(\\p{Emoji_Presentation}|\u200D)+', 'ug');
     var regEmoji = new RegExp('\\p{Emoji_Presentation}', 'u');
 
+    // mentions
+    var regMention = /(^|\s)@(\w+)/g;
+
     function apply(str) {
         return _.escape(str)
+            .replace(regMention, replaceMention)
             .replace(regEmoticon, mapReplace.bind(emoticons))
             .replace(regShortcode, mapReplace.bind(shortcodes))
             .replace(regEmojiReplace, '<span class="emoji">$1</span>')
@@ -76,9 +80,34 @@ define('io.ox/chat/formatting', [], function () {
         return regEmoji.test(str);
     }
 
+    function replaceMention(all, whiteSpace, mention) {
+        var className = 'mention' + (isMentioningMe(mention) ? ' me' : '');
+        return whiteSpace + '<span class="' + className + '">@' + mention.toLowerCase() + '</span>';
+    }
+
+    var isMentioningMe = (function () {
+
+        var me = '';
+        var getRegMention = _.memoize(function (mention) {
+            return new RegExp('\\b' + _.escapeRegExp(mention), 'i');
+        });
+
+        return function (mention) {
+            if (!me) {
+                var user = data.users.getByMail(data.user.email);
+                me = ['nickname', 'first_name', 'last_name']
+                    .map(function (field) { return user.get(field); })
+                    .filter(Boolean)
+                    .join(' ');
+            }
+            return me.search(getRegMention(mention)) > -1;
+        };
+    }());
+
     return {
         apply: apply,
         onlyEmoji: onlyEmoji,
-        containsEmoji: containsEmoji
+        containsEmoji: containsEmoji,
+        isMentioningMe: isMentioningMe
     };
 });

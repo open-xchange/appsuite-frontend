@@ -93,7 +93,7 @@ define('io.ox/chat/views/content', [
                 // +350 so that if we load a message, we load at least 500 more chars a not only e.g. 10
                 if (model.isSystem() || content.length <= (this.chunkSize + 350)) {
                     this.setBodyContent(content);
-                    this.$body.html(formatting.apply(content));
+                    this.$body.html(this.applyFormatting(content));
                 } else {
                     this.setBodyContent(content.slice(0, this.chunkSize) + '...');
                     if (!this.inEditor) this.$body.append($('<button type="button" class="btn btn-link show-more">').text(gt('Show more')));
@@ -101,10 +101,14 @@ define('io.ox/chat/views/content', [
             }
         },
 
+        applyFormatting: function (content) {
+            return formatting.apply(content);
+        },
+
         setBodyContent: function (content) {
             var deleted = this.model.isDeleted();
             var onlyEmoji = !deleted && formatting.onlyEmoji(content);
-            content = formatting.apply(content);
+            content = this.applyFormatting(content);
             var containsEmoji = !onlyEmoji && formatting.containsEmoji(content);
             this.$body
                 .toggleClass('emoji', onlyEmoji)

@@ -15,7 +15,6 @@ define('io.ox/chat/data', [
     'io.ox/core/extensions',
     'io.ox/chat/api',
     'io.ox/chat/events',
-    'io.ox/chat/formatting',
     'io.ox/contacts/api',
     'io.ox/switchboard/api',
     'io.ox/switchboard/presence',
@@ -25,7 +24,7 @@ define('io.ox/chat/data', [
     'io.ox/core/notifications',
     'settings!io.ox/chat',
     'gettext!io.ox/chat'
-], function (ext, api, events, formatting, contactsApi, switchboardApi, presence, sanitizer, util, http, notifications, settings, gt) {
+], function (ext, api, events, contactsApi, switchboardApi, presence, sanitizer, util, http, notifications, settings, gt) {
 
     'use strict';
 
@@ -169,13 +168,14 @@ define('io.ox/chat/data', [
     data.users = new UserCollection([]);
 
     data.fetchUsers = function () {
-        return contactsApi.getAll({ folder: 6, columns: '1,20,501,502,524,555,556,557,606' }, false).then(function (result) {
+        return contactsApi.getAll({ folder: 6, columns: '1,20,501,502,515,524,555,556,557,606' }, false).then(function (result) {
             result = _(result).map(function (item) {
                 return _.extend({
                     cid: _.cid(item),
                     id: item.internal_userid,
                     first_name: String(item.first_name || '').trim(),
                     last_name: String(item.last_name || '').trim(),
+                    nickname: String(item.nickname || '').trim(),
                     email: String(item.email1 || item.email2 || item.email3 || '').trim().toLowerCase(),
                     image: !!item.image1_url
                 }, _(item).pick('email1', 'email2', 'email3'));
@@ -235,11 +235,7 @@ define('io.ox/chat/data', [
             if (this.hasPreview()) return this.getFilesPreview();
             if (this.isFile()) return util.getFileText({ model: this });
             if (this.isDeleted()) return gt('This message was deleted');
-            return this.getFormattedBody();
-        },
-
-        getFormattedBody: function () {
-            return formatting.apply(this.get('content'));
+            return _.escape(this.get('content'));
         },
 
         getSystemMessage: function () {
@@ -413,14 +409,6 @@ define('io.ox/chat/data', [
             return !!(this.get('files') && this.get('files')[0]);
         },
 
-        isEmoji: function () {
-            return formatting.isOnlyEmoji(this.get('content'));
-        },
-
-        containsEmoji: function () {
-            return formatting.containsEmoji(this.get('content'));
-        },
-
         // checks if previous message is from a) same sender b) same date
         hasSameSender: function (limit) {
             limit = limit ? this.collection.length - limit : 0;
@@ -431,7 +419,7 @@ define('io.ox/chat/data', [
             // a) same sender?
             if (prev.get('sender') !== this.get('sender')) return false;
             // b) same date?
-            return moment(this.get('date')).startOf('day').isSame(moment(prev.get('date')).startOf('day'));
+            return moment(this.get('date')).startOf('hour').isSame(moment(prev.get('date')).startOf('hour'));
         },
 
         getDeliveryState: function () {
