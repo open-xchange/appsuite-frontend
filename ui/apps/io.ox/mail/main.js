@@ -1920,12 +1920,14 @@ define('io.ox/mail/main', [
 
             // update
             composeAPI.on('after:send after:update after:remove after:save add', function refreshFolder(data, result) {
-                if (!data.mailPath && !result.mailPath) return;
+                var mailPath = data.mailPath || result.mailPath;
+                if (!mailPath) return;
                 // immediate reload when currently selected
                 var folder = app.folder.get();
                 if (account.is('drafts', folder)) return app.listView.reload();
                 // delayed reload on next select
-                _(api.pool.getByFolder(result.mailPath.folderId)).each(function (collection) {
+
+                _(api.pool.getByFolder(mailPath.folderId)).each(function (collection) {
                     collection.expire();
                 });
             });
