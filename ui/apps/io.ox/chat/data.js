@@ -751,6 +751,9 @@ define('io.ox/chat/data', [
                 case 'grouplength:exceeded':
                     notifications.yell('error', gt('The group could not be saved since the name exceeds the length limit'));
                     break;
+                case 'title:duplicate':
+                    notifications.yell('error', gt('A channel with the same name already exists'));
+                    break;
                 default:
                     notifications.yell('error', gt('Something went wrong. Please try again.'));
                     break;
