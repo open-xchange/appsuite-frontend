@@ -22,9 +22,9 @@ define('io.ox/chat/formatting', [], function () {
     return {
         apply: function (str) {
             return _.escape(str)
-                .replace(regBold, '<b>$1</b>')
-                .replace(regItalic, '<em>$1</em>')
-                .replace(regStrikethrough, '<del>$1</del>')
+                .replace(regBold, '$1<b>$2</b>')
+                .replace(regItalic, '$1<em>$2</em>')
+                .replace(regStrikethrough, '$1<del>$2</del>')
                 .replace(regURL, '<a href="$1" target="_blank" rel="noopener">$1</a>');
         }
     };
