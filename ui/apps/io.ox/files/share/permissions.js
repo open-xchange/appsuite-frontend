@@ -35,9 +35,10 @@ define('io.ox/files/share/permissions', [
     'io.ox/backbone/mini-views/addresspicker',
     'io.ox/core/util',
     'io.ox/core/api/group',
+    'io.ox/files/permission-util',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil, groupApi) {
+], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil, groupApi, pUtil) {
 
     'use strict';
 
@@ -70,8 +71,6 @@ define('io.ox/files/share/permissions', [
         // Simple Permission
         Permission = Backbone.Model.extend({
 
-            idAttribute: 'entity',
-
             defaults: {
                 group: false,
                 bits: 0
@@ -85,7 +84,8 @@ define('io.ox/files/share/permissions', [
             },
 
             isMyself: function () {
-                return this.get('type') === 'user' && this.get('entity') === ox.user_id;
+                var isFederatedShare = this.get('entity') === undefined;
+                return this.get('type') === 'user' && (isFederatedShare ? pUtil.isOwnIdentity(this.get('identifier')) : this.get('entity') === ox.user_id);
             },
 
             isGroup: function () {
@@ -114,8 +114,10 @@ define('io.ox/files/share/permissions', [
             },
 
             isOwner: function (parentModel) {
-                if (!this.get('entity') || !parentModel || !_.isFunction(parentModel.getOwner)) return;
-                return this.get('entity') === parentModel.getOwner();
+                if (!(this.get('entity') || this.get('identifier')) || !parentModel || !_.isFunction(parentModel.getEntity) || !_.isFunction(parentModel.getIdentifier)) return;
+
+                var isFederatedShare = this.get('entity') === undefined;
+                return isFederatedShare ? this.get('identifier') === parentModel.getIdentifier() : this.get('entity') === parentModel.getEntity();
             },
 
             getDisplayName: function (htmlOutput) {
@@ -156,6 +158,7 @@ define('io.ox/files/share/permissions', [
 
             // bits    Number  A number as described in Permission flags.
             // entity  Number  (ignored for type “anonymous” or “guest”) User ID of the user or group to which this permission applies.
+            // identifier   String  (used as entity for federated sharing)
             // group   Boolean (ignored for type “anonymous” or “guest”) true if entity refers to a group, false if it refers to a user.
             // type    String  (required if no internal “entity” defined) The recipient type, i.e. one of “guest”, “anonymous”
             // email_address   String  (for type “guest”) The e-mail address of the recipient
@@ -168,9 +171,9 @@ define('io.ox/files/share/permissions', [
                     data = {
                         bits: this.get('bits')
                     };
-
-                if (this.has('entity')) {
+                if (this.has('entity') || this.has('identifier')) {
                     data.entity = this.get('entity');
+                    data.identifier = this.get('identifier');
                     data.group = type === 'group';
                 } else {
                     switch (type) {
@@ -199,6 +202,10 @@ define('io.ox/files/share/permissions', [
 
         // Permission Collection
         Permissions = Backbone.Collection.extend({
+
+            modelId: function (attrs) {
+                return attrs.entity ? String(attrs.entity) : attrs.identifier;
+            },
 
             model: Permission,
 
@@ -610,7 +617,7 @@ define('io.ox/files/share/permissions', [
                     isFile = baton.parentModel.isFile(),
                     isOwner = baton.model.isOwner(baton.parentModel),
                     module = baton.parentModel.get('module'),
-                    supportsWritePrivileges = baton.model.isInternal() || !/^(contacts|calendar|tasks)$/.test(module);
+                    supportsWritePrivileges = baton.model.isInternal() || !/^(contacts|tasks)$/.test(module);
 
                 // apply role for the first time
                 baton.model.set('role', role, { silent: true });
@@ -666,7 +673,7 @@ define('io.ox/files/share/permissions', [
                 var model = baton.model,
                     isAnonymous = model.isAnonymous(),
                     module = baton.parentModel.get('module'),
-                    supportsWritePrivileges = model.isInternal() || !/^(contacts|calendar|tasks)$/.test(module);
+                    supportsWritePrivileges = model.isInternal() || !/^(contacts|tasks)$/.test(module);
 
                 // not available for anonymous links (read-only)
                 if (isAnonymous) {

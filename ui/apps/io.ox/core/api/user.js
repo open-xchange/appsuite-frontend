@@ -256,7 +256,7 @@ define('io.ox/core/api/user', [
      */
     api.getTextNode = function (id, options) {
         var opt = _.extend({ type: 'name' }, options),
-            node = document.createTextNode('');
+            node = opt.node || document.createTextNode('');
         api.get({ id: id })
             .done(function (data) {
                 var name = '';
@@ -316,6 +316,83 @@ define('io.ox/core/api/user', [
             accountAPI.reload();
         });
     });
+
+    // helper functions for federated sharing (sharing from other appsuites or contexts)
+
+    // helper function to get usernames from objects with modified/created_from columns (folders files etc). uses modified/created_by as fallback
+    // type should be "created" or "modified", default is created
+    // data is the object containing the created_by or modified_by attributes
+    api.getNameExtended = function (data, type) {
+        if (data === undefined) return $.Deferred().reject({ error: 'Unknown User' });
+
+        // support model and attributes object
+        data = data.get ? data.attributes : data;
+        type = type || 'created';
+
+        // try extended data first (no need to request data from the server)
+        var userData = data[type + '_from'],
+            name = api.checkForName(userData);
+
+        if (name) return $.when(name);
+
+        // try to get name via user id second, handles also cases when no created/modified _by/_from are provided by the backend
+        userData = data[type + '_by'] === 0 && userData && api.isMyself(userData) ? ox.user_id : data[type + '_by'];
+
+        if (userData) return api.getName(userData);
+
+        return $.Deferred().reject({ error: 'Unknown User' });
+    };
+
+    // creates a textnode and fills it with a displayname (inserting the name may be asynchronous if it has to be requeste first)
+    api.getTextNodeExtended = function (data, type) {
+        if (data === undefined) return '';
+
+        // support model and attributes object
+        data = data.get ? data.attributes : data;
+        type = type || 'created';
+
+        var node = document.createTextNode(''),
+            // try extended data first (no need to request data from the server)
+            userData = data[type + '_from'],
+            name = api.checkForName(userData);
+
+        if (name) {
+            node.nodeValue = name;
+            return node;
+        }
+
+        // try to get name via user id second, handles also cases when no created/modified _by/_from are provided by the backend
+        userData = data[type + '_by'] === 0 && userData && api.isMyself(userData) ? ox.user_id : data[type + '_by'];
+
+        if (userData) api.getTextNode(userData, { node: node });
+
+        return node;
+    };
+
+    // extendedProperty is either created_from or created by
+    api.isMyself = function (extendedProperty) {
+        // object was created in this context, so entity or identifier matches user id
+        if (extendedProperty.entity === ox.user_id || extendedProperty.identifier === String(ox.user_id)) return true;
+        // object was not created in this context but we might have created/modified this as a guest (federated sharing)
+        // is there a way to get the primary mail address in a synchronous way without rampup
+        if (extendedProperty.type === 'guest' && extendedProperty.contact && ox.rampup && ox.rampup.user && extendedProperty.contact.email1 === ox.rampup.user.email1) return true;
+        return false;
+    };
+
+    // helper to find the first usable name, uses contact util for language specific formats (lastname, firstname | firstname lastname etc)
+    api.checkForName = function (userData) {
+        var result;
+        if (userData && (userData.displayName || !_.isEmpty(userData.contact))) {
+            // try to get name via contact data
+            result = util.getFullName(userData.contact);
+            // display name as Fallback
+            if (!result && userData.displayName) result = userData.displayName;
+            // mail address as fallback if not myself
+            if (!result && !api.isMyself(userData) && userData.contact && userData.contact.email1) result = userData.contact.email1;
+        }
+
+        return result;
+    };
 
     return api;
 });

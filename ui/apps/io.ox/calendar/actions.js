@@ -434,6 +434,17 @@ define('io.ox/calendar/actions', [
                 partStat: accept ? 'ACCEPTED' : 'DECLINED'
             };
 
+            if (!appointment.attendee.entity && folder.created_from) {
+                var prev = _(data.attendees).find(function (attendee) {
+                    return attendee.extendedParameters && attendee.extendedParameters['X-OX-IDENTIFIER'] === folder.created_from.identifier;
+                });
+                if (prev) {
+                    delete appointment.attendee.entity;
+                    appointment.attendee.email = prev.email;
+                    appointment.attendee.uri = prev.uri;
+                }
+            }
+
             if (accept) {
                 // default reminder
                 appointment.alarms = util.getDefaultAlarms(data);

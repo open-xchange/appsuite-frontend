@@ -251,6 +251,7 @@ define('io.ox/core/tk/attachments', [
                             att.folder = att.folder[att.folder.length - 1];
                             att.module = 1;
                             att.attached = parseInt(baton.model.get('id'), 10);
+                            att.model = baton.model;
                             return att;
                         });
                     }

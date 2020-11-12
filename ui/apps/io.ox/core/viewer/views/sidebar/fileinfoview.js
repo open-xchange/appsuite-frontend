@@ -90,19 +90,30 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
             var model = baton.model;
             var options = baton.options || {};
-            var modifiedBy = model.get('modified_by');
             var dateString = createDateString(model.get('last_modified'));
             var folder_id = model.get('folder_id');
             var media = model.get('media') || {};
             var dl = $('<dl>');
             var isAttachmentView = !_.isEmpty(model.get('com.openexchange.file.storage.mail.mailMetadata'));
 
+
             dl.append(
                 // filename
                 $('<dt>').text(gt('Name')),
                 $('<dd class="file-name">').append(
                     renderFileName(model, options)
-                ),
+                )
+            );
+
+            if (model.isSharedFederatedSync()) {
+                dl.append(
+                    //#. label for the server location, showing the hostname of a federsted share in Drive, in german probably 'Standort'
+                    $('<dt>').text(gt('Location')),
+                    $('<dd class="host-name">').text(model.getAccountDisplayNameSync())
+                );
+            }
+
+            dl.append(
                 // size
                 $('<dt>').text(gt('Size')),
                 $('<dd class="size">').text(ViewerUtil.renderItemSize(model))
@@ -167,7 +178,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                     $('<dt>').text(gt('Modified')),
                     $('<dd class="modified">').append(
                         $('<span class="modifiedAt">').text(dateString),
-                        $('<span class="modifiedBy">').append(document.createTextNode('\u200B')).append(UserAPI.getTextNode(modifiedBy))
+                        $('<span class="modifiedBy">').append(document.createTextNode('\u200B')).append(UserAPI.getTextNodeExtended(model.attributes, 'modified'))
                     )
                 );
 

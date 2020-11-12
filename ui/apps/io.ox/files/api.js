@@ -24,11 +24,12 @@ define('io.ox/files/api', [
     'io.ox/core/extensions',
     'io.ox/core/api/jobs',
     'io.ox/core/util',
+    'io.ox/files/permission-util',
     'io.ox/find/api',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, userAPI, backbone, Pool, CollectionLoader, capabilities, ext, jobsAPI, util, FindAPI, coreSettings, settings, gt) {
+], function (http, folderAPI, userAPI, backbone, Pool, CollectionLoader, capabilities, ext, jobsAPI, util, pUtil, FindAPI, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -314,25 +315,32 @@ define('io.ox/files/api', [
         },
 
         hasWritePermissions: function () {
-            var def = $.Deferred(),
-                array = this.get('object_permissions') || this.get('com.openexchange.share.extendedObjectPermissions') || [],
-                myself = _(array).findWhere({ entity: ox.user_id, group: false });
+            return pUtil.hasObjectWritePermissions(this.toJSON());
+        },
 
-            // check if there is a permission for a group, the user is a member of
-            // use max permissions available
-            if (!myself || (myself && myself.bits < 2)) {
-                userAPI.get().done(function (userData) {
-                    def.resolve(array.filter(function (perm) {
-                        return perm.group === true && _.contains(userData.groups, perm.entity);
-                    }).reduce(function (acc, perm) {
-                        return acc || perm.bits >= 2;
-                    }, false));
-                }).fail(function () { def.resolve(false); });
-            } else {
-                def.resolve(!!(myself && (myself.bits >= 2)));
-            }
+        getClosestFolderModelSync: function () {
+            var folder = this.isFile() ? this.get('folder_id') : this.get('id');
+            // for some cases it must be synchronous, so check the
+            // use-case if the folder is already available in every case
+            var folderModel = folderAPI.pool.models[folder];
+            return folderModel ? folderModel : {};
+        },
 
-            return def;
+        // should be synchronous to be able to handle popup-blocker in Actions
+        getItemAccountSync: function () {
+            return this.getClosestFolderModelSync().get('account_id');
+        },
+
+        // should be synchronous to be able to handle popup-blocker in Actions
+        isSharedFederatedSync: function () {
+            var folderModel = this.getClosestFolderModelSync();
+            return folderModel && folderModel.is('federated-sharing');
+        },
+
+        // note: currently no use case needed to be sync, but keep it consistent for now
+        getAccountDisplayNameSync: function () {
+            var folderModel = this.getClosestFolderModelSync();
+            return folderModel && folderModel.getAccountDisplayName();
         }
     });
 
@@ -577,7 +585,7 @@ define('io.ox/files/api', [
     // guess 23 is "meta"
     // 711 is "number of versions", needed for fixing Bug 52006,
     // number of versions often changes when editing files
-    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707,711,7040';
+    var allColumns = '1,2,3,5,20,23,51,52,108,700,702,703,704,705,707,711,7040';
     var allVersionColumns = http.getAllColumns('files', true);
 
     var attachmentView = coreSettings.get('folder/mailattachments', {});
@@ -671,7 +679,7 @@ define('io.ox/files/api', [
                     module = 'folders';
                     params.action = 'list';
                     // use correct columns for folders (causes errors in backend otherwise, UI just get's null values)
-                    params.columns = '1,2,3,5,20,23';
+                    params.columns = '1,2,3,5,20,23,51,52';
                 }
             }
             if (virtual) {

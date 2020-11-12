@@ -19,8 +19,9 @@ define('io.ox/core/pim/actions', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/actions/util',
     'io.ox/core/viewer/views/types/typesutil',
+    'io.ox/core/folder/api',
     'gettext!io.ox/core'
-], function (attachmentAPI, downloadAPI, filesAPI, yell, ext, actionsUtil, viewerTypes, gt) {
+], function (attachmentAPI, downloadAPI, filesAPI, yell, ext, actionsUtil, viewerTypes, folderAPI, gt) {
 
     'use strict';
 
@@ -52,7 +53,15 @@ define('io.ox/core/pim/actions', [
             // browser support for downloading more than one file at once is pretty bad (see Bug #36212)
             collection: 'one',
             action: function (baton) {
-                var url = attachmentAPI.getUrl(baton.first(), 'download');
+                // chronos has a special download function (bonus point, it works with federated sharing)
+                var item = baton.first(),
+                    url = item.model && item.model.get('folder').indexOf('cal://') === 0 ? ox.apiRoot + '/chronos?' + $.param({
+                        session: ox.session,
+                        action: 'getAttachment',
+                        folder: item.model.get('folder'),
+                        id: item.model.get('id'),
+                        managedId: baton.first().managedId
+                    }) : attachmentAPI.getUrl(item, 'download');
                 if (_.device('ios >= 11')) {
                     downloadAPI.window(url, { antivirus: true });
                 } else {
@@ -67,6 +76,9 @@ define('io.ox/core/pim/actions', [
                 return e.collection.has('multiple');
             },
             multiple: function (list) {
+                // chronos has it's own multiple download
+                if (list[0].model && list[0].model.get('folder').indexOf('cal://') === 0) return downloadAPI.chronosMultiple(list[0].model);
+
                 var param = {
                     folder: list[0].folder,
                     module: list[0].module,
@@ -80,6 +92,11 @@ define('io.ox/core/pim/actions', [
         save: {
             capabilities: 'infostore',
             collection: 'some',
+            matches: function (baton) {
+                if (!baton.first().model) return true;
+                var folder = folderAPI.pool.getModel(baton.first().model.get('folder'));
+                return !folder.is('federated-sharing');
+            },
             action: function (baton) {
                 // cannot be converted to multiple request because of backend bug (module overides params.module)
                 baton.array().forEach(function (data) {

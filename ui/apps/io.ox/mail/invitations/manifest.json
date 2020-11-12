@@ -1,0 +1,4 @@
+{
+    "namespace": "io.ox/mail/detail/view",
+    "requires": "(infostore && (filestorage_xox || filestorage_xctx)) || (calendar && calendar_xctx2)"
+}

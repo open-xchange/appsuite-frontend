@@ -32,8 +32,8 @@ define('io.ox/calendar/actions/create', [
     }
 
     function showDialog(params, folder) {
-
-        userAPI.get({ id: folder.created_by }).done(function (user) {
+        var dev = ((folder.created_from && util.getFullName(folder.created_from)) ? $.Deferred().resolve(folder.created_from) : folder.userAPI.get({ id: folder.created_by }));
+        dev.done(function (user) {
             new ModalDialog({
                 title: gt('Appointments in shared calendars'),
                 width: '550', // standard 500px is too small in some languages (e.g. german)

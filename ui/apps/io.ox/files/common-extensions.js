@@ -65,6 +65,18 @@ define('io.ox/files/common-extensions', [
 
                 filename += ' (' + gt('Locked') + ')';
             }
+
+            // hostname suffix for federated share
+            var parentFolder = baton.model.get('folder_id');
+            if (
+                (parentFolder === '10' || parentFolder === '15') &&  // is folder below My shares or Public files
+                _.isFunction(baton.model.isFolder) && baton.model.isFolder() &&
+                _.isFunction(baton.model.isSharedFederatedSync) && baton.model.isSharedFederatedSync()
+            ) {
+                var suffix = baton.model.getAccountDisplayNameSync();
+                filename = suffix ? filename + ' (' + suffix + ')' : filename;
+            }
+
             // fix long names
             if (ellipsis) {
 

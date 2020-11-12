@@ -366,8 +366,16 @@ define('io.ox/core/folder/extensions', [
             );
         },
 
+        treeLinksFiles: function () {
+            if (ext.point('io.ox/core/foldertree/files/treelinks').list().length === 0) return;
+
+            var node = $('<ul class="list-unstyled" role="group">');
+            ext.point('io.ox/core/foldertree/files/treelinks').invoke('draw', node);
+            this.append($('<li class="links list-unstyled" role="treeitem">').append(node));
+        },
+
         addStorageAccount: (function () {
-            var links = $('<li class="links list-unstyled" role="treeitem">');
+            var node = $('<li role="presentation">');
 
             function getAvailableNonOauthServices() {
                 var services = ['nextcloud', 'webdav', 'owncloud'];
@@ -378,21 +386,17 @@ define('io.ox/core/folder/extensions', [
                 getAvailableServices().done(function (services) {
                     var availableNonOauthServices = getAvailableNonOauthServices();
                     if (services.length > 0 || availableNonOauthServices.length) {
-                        links.empty().show().append(
-                            $('<ul class="list-unstyled">').append(
-                                $('<li role="presentation">').append(
-                                    $('<a href="#" data-action="add-storage-account" role="treeitem">').text(gt('Add storage account')).on('click', { 'cap': availableNonOauthServices }, openAddStorageAccount)
-                                )
-                            )
+                        node.empty().show().append(
+                            $('<a href="#" data-action="add-storage-account" role="treeitem">').text(gt('Add storage account')).on('click', { 'cap': availableNonOauthServices }, openAddStorageAccount)
                         );
                     } else {
-                        links.hide();
+                        node.hide();
                     }
                 });
             }
 
             return function () {
-                this.append(links);
+                this.append(node);
 
                 require(['io.ox/core/api/filestorage'], function (filestorageApi) {
                     // remove old listeners
@@ -403,6 +407,42 @@ define('io.ox/core/folder/extensions', [
                 });
             };
         })(),
+
+        // used to manage subscribed/unsubscribed status of folders from federated shares
+        manageSubscriptions: function () {
+            this.append(
+                $('<li role="presentation">').append(
+                    $('<a href="#" data-action="manage-subscriptions" role="treeitem">').text(gt('Manage Subscriptions')).on('click', function () {
+                        require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
+                            // TODO helppage: 'ox.appsuite.user.sect.files.folder.displayshared.html' use product name here?
+                            subscribe.open({
+                                module: 'infostore',
+                                help: 'ox.appsuite.user.sect.files.folder.displayshared.html',
+                                title: gt('Shared drive folders'),
+                                point: 'io.ox/core/folder/subscribe-shared-files-folders',
+                                sections: {
+                                    public: gt('Public drive folders'),
+                                    shared: gt('Shared drive folders')
+                                },
+                                refreshFolders: true,
+                                noSync: true,
+                                // subscribe dialog is build for flat foldertrees, add special getData function to make it work for infostore
+                                // no cache or we would overwrite folder collections with unsubscribed folders
+                                getData: function () {
+                                    return $.when(api.list(15, { all: true, cache: false }), api.list(10, { all: true, cache: false })).then(function (publicFolders, sharedFolders) {
+
+                                        return {
+                                            public: publicFolders || [],
+                                            shared: sharedFolders || []
+                                        };
+                                    });
+                                }
+                            });
+                        });
+                    })
+                )
+            );
+        },
 
         subscribe: function (baton) {
             if (baton.extension.capabilities && !upsell.visible(baton.extension.capabilities)) return;
@@ -536,8 +576,8 @@ define('io.ox/core/folder/extensions', [
                 options.filter = function (id, model) {
                     // get response of previously defined filter function
                     var unfiltered = (previous ? previous.apply(this, arguments) : true);
-                    // exclude external accounts
-                    return unfiltered && !api.isExternalFileStorage(model);
+                    // exclude external accounts and trashfolder if requested
+                    return unfiltered && !api.isExternalFileStorage(model) && (!tree.options.hideTrashfolder || !api.is('trash', model.attributes));
                 };
             }
             this.append(
@@ -716,10 +756,30 @@ define('io.ox/core/folder/extensions', [
             id: 'remote-accounts',
             index: 300,
             draw: extensions.fileStorageAccounts
-        }, {
-            id: 'add-external-account',
+        },
+        {
+            id: 'tree-links-files',
             index: 400,
+            draw: extensions.treeLinksFiles
+        }
+    );
+
+    ext.point('io.ox/core/foldertree/files/treelinks').extend(
+        {
+            id: 'add-external-account',
+            index: 100,
             draw: extensions.addStorageAccount
+        }, {
+            id: 'manage-subscriptions',
+            index: 200,
+            draw: extensions.manageSubscriptions
+        }
+    );
+
+    ext.point('io.ox/core/foldertree/infostore/subscribe').extend(
+        {
+            id: 'root-folders',
+            draw: extensions.rootFolders
         }
     );
 
@@ -1246,6 +1306,22 @@ define('io.ox/core/folder/extensions', [
                 var accountError = baton.data['com.openexchange.calendar.accountError'];
                 if (accountError) {
                     baton.view.showStatusIcon(accountError.error, 'click:account-error', baton.data);
+                    ox.trigger('http:error:' + accountError.code, accountError);
+                } else {
+                    baton.view.hideStatusIcon();
+                }
+            }
+        },
+        {
+            id: 'sharing-errors',
+            index: 600,
+            draw: function (baton) {
+
+                if (!/^infostore$/.test(baton.data.module)) return;
+
+                var accountError = baton.data['com.openexchange.folderstorage.accountError'];
+                if (accountError) {
+                    baton.view.showStatusIcon(accountError.error, 'click:storage-error', baton.data);
                     ox.trigger('http:error:' + accountError.code, accountError);
                 } else {
                     baton.view.hideStatusIcon();

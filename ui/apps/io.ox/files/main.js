@@ -232,6 +232,40 @@ define('io.ox/files/main', [
             });
         },
 
+        'storage-errors': function (app) {
+            app.treeView.on('click:storage-error', function (folder) {
+                var accountError = folder['com.openexchange.folderstorage.accountError'];
+                if (!accountError) return;
+                console.log(folder);
+                require(['io.ox/backbone/views/modal', 'io.ox/core/notifications'], function (ModalDialog) {
+                    new ModalDialog({
+                        point: 'io.ox/files/storage/account-errors',
+                        //#. title of dialog when contact subscription needs to be recreated on error
+                        title: gt('Access error')
+                    })
+                    .extend({
+                        default: function () {
+                            this.$body.append(
+                                $('<div class="info-text">')
+                                    .css('word-break', 'break-word')
+                                    .text(accountError.error + ' ' + accountError.error_desc)
+                                    .addClass(accountError.code.toLowerCase())
+                            );
+                        }
+                    })
+                    .addCloseButton()
+                    // .addButton({ label: gt('Edit subscription'), action: 'subscription', className: 'btn-primary' })
+                    // .on('subscription', function () {
+                    //     var options = { id: 'io.ox/core/sub' };
+                    //     ox.launch('io.ox/settings/main', options).done(function () {
+                    //         this.setSettingsPane(options);
+                    //     });
+                    // })
+                    .open();
+                });
+            });
+        },
+
         /**
          * PDF preconversion of office documents on file upload and when a new file version is added
          */

@@ -69,7 +69,7 @@ define('io.ox/settings/accounts/views', [
             getTitle: function () {
                 // mail accounts are special, displayName might be different from account name, want account name, here
                 var titleAttribute = this.model.get('accountType') === 'mail' ? 'name' : 'displayName';
-
+                if (/xox\d+|xctx\d+/.test(this.model.get('filestorageService'))) titleAttribute = 'qualifiedId';
                 return this.model.get(titleAttribute);
             },
 
