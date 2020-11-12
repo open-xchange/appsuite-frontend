@@ -108,7 +108,9 @@ define('io.ox/chat/views/chatList', [
         },
 
         onChangeLastMessage: function (model) {
-            if ((model.previous('lastMessage') || {}).messageId === model.changed.lastMessage.id) return;
+            var previousMessageId = (model.previous('lastMessage') || {}).messageId,
+                currentMessageId = (model.changed.lastMessage || {}).messageId;
+            if (previousMessageId === currentMessageId) return;
             var node = this.getNode(model),
                 hasFocus = node[0] === document.activeElement;
             this.$ul.prepend(node);
