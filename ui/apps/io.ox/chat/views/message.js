@@ -38,7 +38,8 @@ define('io.ox/chat/views/message', [
         render: function () {
 
             var model = this.model,
-                messageId = model.get('messageId');
+                messageId = model.get('messageId'),
+                isChannel = data.chats.get(this.model.get('roomId')).isChannel();
 
             // here we use cid instead of id, since the id might be unknown
             this.$el.attr('data-cid', model.cid)
@@ -57,7 +58,7 @@ define('io.ox/chat/views/message', [
                     // show some indicator dots when a menu is available
                     this.renderMenu(),
                     // delivery state
-                    !this.isChannel ? $('<div class="fa delivery" aria-hidden="true">').addClass(model.getDeliveryState()) : $()
+                    !isChannel && !this.model.isSystem() ? $('<div class="fa delivery" aria-hidden="true">').addClass(model.getDeliveryState()) : $()
                 );
 
             this.onChangeState();
@@ -101,6 +102,10 @@ define('io.ox/chat/views/message', [
         onChangeState: function () {
             var visible = !this.model.isDeleted() && !this.model.isUploading() && !this.model.isFailed();
             this.$('.actions-toggle, .delivery').toggle(visible);
+
+            var deliveryState = this.model.getDeliveryState();
+            if (!deliveryState) return;
+            this.$('.delivery').removeClass('server received seen').addClass(deliveryState);
         },
 
         renderUploadMessage: function () {
