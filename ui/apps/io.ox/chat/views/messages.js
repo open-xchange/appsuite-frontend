@@ -102,7 +102,7 @@ define('io.ox/chat/views/messages', [
             if (firstPrev && moment(lastAdded.get('date')).startOf('day').isSame(moment(firstPrev.get('date')).startOf('day'))) {
                 var $firstPrev = $('.messages').find('[data-cid=' + firstPrev.cid + ']'),
                     $daylabel = $firstPrev.prev();
-                if ($daylabel.hasClass('date')) {
+                if ($daylabel.hasClass('date-container')) {
                     $daylabel.remove();
                     $firstPrev.replaceWith(this.renderMessage(firstPrev));
                 }
