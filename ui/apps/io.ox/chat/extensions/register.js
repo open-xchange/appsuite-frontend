@@ -32,7 +32,7 @@ define('io.ox/chat/extensions/register', [
         id: 'chat',
         index: 125,
         draw: function () {
-            if (!capabilities.has('chat')) return;
+            if (!capabilities.has('chat') || _.device('smartphone')) return;
 
             var node = $('<li role="presentation" class="launcher">').hide();
             this.append(node);

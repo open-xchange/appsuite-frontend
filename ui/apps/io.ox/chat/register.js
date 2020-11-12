@@ -16,6 +16,7 @@ define('io.ox/chat/register', [], function () {
     'use strict';
 
     ox.on('core:ready', function () {
+        if (_.device('smartphone')) return;
         require(['io.ox/chat/main']);
     });
 });
