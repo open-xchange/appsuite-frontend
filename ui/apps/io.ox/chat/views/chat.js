@@ -156,7 +156,6 @@ define('io.ox/chat/views/chat', [
             this.reference = options.reference;
             this.model = this.model || data.chats.get(this.roomId);
             this.messagesView = new MessagesView({ room: this.model, collection: this.model.messages });
-
             this.listenTo(this.model, {
                 'change:title': this.onChangeTitle,
                 'change:favorite': this.updateDropdown,
@@ -184,6 +183,8 @@ define('io.ox/chat/views/chat', [
             this.on('appended', function () {
                 // view must be appended to the dom for this to work
                 this.chatMemberview.updateToggleButton();
+                // restore textarea height for draft content
+                this.$editor.trigger('input');
             });
 
             this.on('dispose', this.onDispose);
@@ -322,7 +323,6 @@ define('io.ox/chat/views/chat', [
                     this.renderEditor()
                 )
             );
-
             this.onUpdatePaginators();
             this.markMessageAsRead();
 
@@ -339,7 +339,7 @@ define('io.ox/chat/views/chat', [
                         'aria-label': gt('Message'),
                         'placeholder': gt('Message'),
                         'maxlength': data.serverConfig.maxMsgLength
-                    })
+                    }).val(this.model.get('draft') || '')
                 );
                 var send = $('<button type="button" class="btn btn-link pull-right send-btn">').attr('aria-label', gt('Send'))
                     .append($('<i class="fa fa-paper-plane" aria-hidden="true">').attr('title', gt('Send')));
@@ -514,13 +514,11 @@ define('io.ox/chat/views/chat', [
         },
 
         onEditorKeydown: function (e) {
-
             if (e.which === 27 && this.specialMode) {
                 e.preventDefault();
                 e.stopPropagation();
                 this.onCancelSpecialMode();
             }
-
             if (e.which === 13) {
                 // shift + enter appends newline
                 // other modifiers don't do anything to avoid unwanted messages
@@ -534,6 +532,7 @@ define('io.ox/chat/views/chat', [
         onEditorInput: function () {
             var textarea = this.$editor[0],
                 value = textarea.value;
+            this.model.set('draft', value, { silent: true });
             textarea.style.height = 'auto';
             var scrollHeight = textarea.scrollHeight;
             textarea.style.height = (scrollHeight) + 'px';
@@ -583,6 +582,7 @@ define('io.ox/chat/views/chat', [
             var text = this.$editor.val();
             if (text.trim().length > 0) this.onPostMessage(text);
             this.$editor.val('');
+            this.model.unset('draft', { silent: true });
         },
 
         onPostMessage: function (content) {
