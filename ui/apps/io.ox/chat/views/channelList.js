@@ -73,6 +73,13 @@ define('io.ox/chat/views/channelList', [
                 'change:title': this.onChangeTitle
             });
 
+            // add all channels from chat collection first, so we do have 2 different models for the same channel
+            // only needed once
+            if (!this.collection.synced) {
+                this.collection.add(data.chats.filter({ type: 'channel' }));
+                this.collection.synced = true;
+            }
+
             // get fresh data
             this.collection.fetch();
         },
