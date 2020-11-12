@@ -81,7 +81,7 @@ define('io.ox/chat/api', [
     };
 
     api.leaveChannelByType = function (type, roomId) {
-        var url = api.url + '/' + type + '/' + roomId + '/members';
+        var url = api.url + '/rooms/' + roomId + '/members';
         return request({ method: 'DELETE', url: url, processData: false, contentType: false });
     };
 
