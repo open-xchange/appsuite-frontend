@@ -47,13 +47,13 @@ define('io.ox/mail/invitations/register', [
         'subscribed': '',
         'addable': '',
         'unsubscribed': '',
-        'addable_with_password': gt('Please enter password to subscribe.'),
-        'inaccessible': gt('Folder is temporary inaccessible and thus can\'t be subscribed.'),
-        'unresolvable': gt('The link to this folder is invalid and thus can\'t be subscribed.'),
+        'addable_with_password': gt('Please enter the password to subscribe.'),
+        'inaccessible': gt('The folder cannot be subscribed to as it is currently unavailable.'),
+        'unresolvable': gt('The folder cannot be subscribed because the link is invalid.'),
         'unsupported': gt('The link to this folder is unsupported and can\'t be subscribed.'),
         'forbidden': gt('Your are not allowed to subscribe to this folder.'),
         'removed': gt('The shared folder was removed by the owner.'),
-        'credentials_refresh': gt('Credentials have been updated meanwhile. Please enter password to subscribe.')
+        'credentials_refresh': gt('The password was changed recently. Please enter the new password.')
     };
 
     var actions = {
