@@ -925,8 +925,19 @@ define('io.ox/chat/data', [
             return api.joinChannel(roomId);
         },
 
+        leaveChannel: function (roomId) {
+            var room = this.get(roomId);
+            return api.leaveRoom(roomId)
+                .then(function () { room.set('active', false); })
+                .fail(function () {
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell('error', gt('The channel could not be left.'));
+                    });
+                });
+        },
+
         leaveGroup: function (roomId) {
-            return api.leaveChannelByType('rooms', roomId)
+            return api.leaveRoom(roomId)
                 .fail(function () {
                     require(['io.ox/core/yell'], function (yell) {
                         yell('error', gt('The group could not be left.'));
@@ -956,17 +967,6 @@ define('io.ox/chat/data', [
     var ChannelCollection = ChatCollection.extend({
         url: function () {
             return api.url + '/channels';
-        },
-
-        leaveChannel: function (roomId) {
-            var room = this.get(roomId);
-            return api.leaveChannelByType('channels', roomId)
-                .then(function () { room.set('active', false); })
-                .fail(function () {
-                    require(['io.ox/core/yell'], function (yell) {
-                        yell('error', gt('The channel could not be left.'));
-                    });
-                });
         }
     });
 

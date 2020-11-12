@@ -210,7 +210,7 @@ define('io.ox/chat/main', [
         },
 
         leaveChannel: function (id) {
-            data.channels.leaveChannel(id);
+            data.chats.leaveChannel(id);
             this.closeChat();
         },
 
