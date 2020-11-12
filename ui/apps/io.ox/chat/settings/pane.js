@@ -89,8 +89,9 @@ define('io.ox/chat/settings/pane', [
             index: INDEX += 100,
             render: function () {
                 var soundList = [
-                    { label: gt('Bongo'), value: 'bongo1.mp3' },
-                    { label: gt('Wood'), value: 'bongo2.mp3' }
+                    { label: gt('Plop'), value: 'plop.mp3' },
+                    { label: gt('Click'), value: 'click.mp3' },
+                    { label: gt('Bongo'), value: 'bongo.mp3' }
                 ];
                 var playWhenOptions = [
                     { label: gt('Play sound for every message'), value: 'always' },

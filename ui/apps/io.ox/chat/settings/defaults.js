@@ -21,8 +21,8 @@ define('io.ox/chat/settings/defaults', [], function () {
         showChatNotifications: true,
         sounds: {
             enabled: true,
-            playWhen: 'onlyInactive',
-            file: 'bongo1.mp3'
+            playWhen: 'always',
+            file: 'plop.mp3'
         },
         density: 'default'
     };

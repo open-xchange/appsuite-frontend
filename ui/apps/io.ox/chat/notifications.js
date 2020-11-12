@@ -56,6 +56,7 @@ define('io.ox/chat/notifications', [
             if (name !== current) {
                 current = name;
                 audio = new Audio(ox.base + '/apps/io.ox/chat/sounds/' + name);
+                audio.volume = 0.4;
             }
             try {
                 if (audio) audio.play();
@@ -73,11 +74,7 @@ define('io.ox/chat/notifications', [
 
         return _.throttle(function () {
             if (!settings.get('sounds/enabled')) return;
-            try {
-                play(settings.get('sounds/file'));
-            } catch (e) {
-                console.error('Could not play notification sound');
-            }
+            play(settings.get('sounds/file'));
         }, 600);
 
     }());
