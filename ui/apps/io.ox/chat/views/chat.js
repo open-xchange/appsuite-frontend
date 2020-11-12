@@ -259,6 +259,9 @@ define('io.ox/chat/views/chat', [
             $(window).on('blur', this.onHide);
             $(window).on('focus', this.onShow);
 
+            // apply throttle within initialize other we have a shared throttled function across all instances
+            this.onScroll = _.throttle(this.onScroll, 300);
+
             // DnD support
             var zone = dropzone.add(this);
             this.listenTo(zone, 'drop', function (files) {
@@ -645,7 +648,9 @@ define('io.ox/chat/views/chat', [
             this.updateDropdown();
         },
 
-        onScroll: _.throttle(function () {
+        onScroll: function () {
+
+            if (this.disposed) return;
             this.$jumpDown.toggle(this.isJumpDownVisible());
 
             if (this.$('.messages').is(':empty')) return;
@@ -674,7 +679,7 @@ define('io.ox/chat/views/chat', [
             }(this));
 
             this.markMessageAsRead();
-        }, 300),
+        },
 
         onChangeRoomId: function () {
             $('[data-cid=' + this.model.cid + ']').attr('data-cid', this.model.get('roomId'));
