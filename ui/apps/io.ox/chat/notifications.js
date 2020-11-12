@@ -19,10 +19,9 @@ define('io.ox/chat/notifications', [
     'io.ox/chat/data',
     'io.ox/contacts/api',
     'io.ox/chat/util',
-    'io.ox/core/desktopNotifications',
     'settings!io.ox/chat',
     'gettext!io.ox/chat'
-], function (api, events, isActive, presence, data, contactsApi, util, desktopNotifications, settings, gt) {
+], function (api, events, isActive, presence, data, contactsApi, util, settings, gt) {
 
     'use strict';
 
@@ -136,18 +135,20 @@ define('io.ox/chat/notifications', [
 
         return _.throttle(function (e) {
             if (!settings.get('showChatNotifications')) return;
-            var notification = {},
-                model = e.room,
+            var model = e.room,
                 opt = {
                     isMultiple: model.isGroup() || model.isChannel(),
                     message: e.message,
                     originator: data.users.getByMail(e.message.get('sender')).getName()
                 };
-            notification.body = getBody(opt);
-            notification.title = opt.isMultiple ? model.get('title') : opt.originator;
-            getIcon(model, opt).always(function (icon) {
-                notification.icon = icon;
-                desktopNotifications.show(notification);
+
+            getIcon(model, opt).always(function (iconUrl) {
+                var title = opt.isMultiple ? model.get('title') : opt.originator,
+                    notification = {
+                        body: getBody(opt),
+                        icon: iconUrl
+                    };
+                return new Notification(title, notification);
             });
         }, 600);
     }());

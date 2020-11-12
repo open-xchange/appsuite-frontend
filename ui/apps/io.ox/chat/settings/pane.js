@@ -19,7 +19,7 @@ define('io.ox/chat/settings/pane', [
     'io.ox/chat/data',
     'gettext!io.ox/chat',
     'settings!io.ox/core'
-], function (ext, util, ExtensibleView, settings, data, gt, coreSettings) {
+], function (ext, util, ExtensibleView, settings, data, gt) {
 
     'use strict';
 
@@ -118,11 +118,6 @@ define('io.ox/chat/settings/pane', [
                 this.$el.append(
                     util.checkbox('showChatNotifications', gt('Show desktop notifications for new messages'), settings)
                 );
-                function toggle(value) {
-                    this.$('[name="showChatNotifications"]').prop('disabled', !value ? 'disabled' : '');
-                }
-                toggle.call(this, coreSettings.get('showDesktopNotifications'));
-                this.listenTo(settings, 'change:showDesktopNotifications', toggle.bind(this));
             }
         }
     );
