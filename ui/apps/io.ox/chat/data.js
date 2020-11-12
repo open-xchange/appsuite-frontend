@@ -15,6 +15,7 @@ define('io.ox/chat/data', [
     'io.ox/core/extensions',
     'io.ox/chat/api',
     'io.ox/chat/events',
+    'io.ox/chat/formatting',
     'io.ox/contacts/api',
     'io.ox/switchboard/api',
     'io.ox/switchboard/presence',
@@ -24,7 +25,7 @@ define('io.ox/chat/data', [
     'io.ox/core/notifications',
     'settings!io.ox/chat',
     'gettext!io.ox/chat'
-], function (ext, api, events, contactsApi, switchboardApi, presence, sanitizer, util, http, notifications, settings, gt) {
+], function (ext, api, events, formatting, contactsApi, switchboardApi, presence, sanitizer, util, http, notifications, settings, gt) {
 
     'use strict';
 
@@ -238,12 +239,7 @@ define('io.ox/chat/data', [
         },
 
         getFormattedBody: function () {
-            return _.escape(this.get('content'))
-                // for the moment we require white-space before bold/italic/strikethrough
-                .replace(/(^|\s)\*(.+?)\*/g, '<b>$1</b>')
-                .replace(/(^|\s)_(.+?)_/g, '<em>$1</em>')
-                .replace(/(^|\s)~(.+?)~/g, '<del>$1</del>')
-                .replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+            return formatting.apply(this.get('content'));
         },
 
         getSystemMessage: function () {
@@ -405,7 +401,7 @@ define('io.ox/chat/data', [
                     isImage: /^image\//.test(file.mimetype),
                     preview: file.preview,
                     name: file.name,
-                    size: 0,
+                    size: file.size || 0,
                     thumbnail: url + '/thumbnail',
                     type: file.mimetype,
                     url: url
