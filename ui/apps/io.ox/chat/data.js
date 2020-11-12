@@ -754,6 +754,9 @@ define('io.ox/chat/data', [
                 case 'title:duplicate':
                     notifications.yell('error', gt('A channel with the same name already exists'));
                     break;
+                case 'groupname:empty':
+                    notifications.yell('error', gt('The group could not be saved since the name can not be empty'));
+                    break;
                 default:
                     notifications.yell('error', gt('Something went wrong. Please try again.'));
                     break;

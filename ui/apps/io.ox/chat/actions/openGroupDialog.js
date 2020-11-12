@@ -170,13 +170,19 @@ define('io.ox/chat/actions/openGroupDialog', [
         .on('save', function () {
             var updates = this.model.has('roomId') ? { roomId: this.model.get('roomId') } : this.model.toJSON(),
                 maxGroupLength = data.serverConfig.maxGroupLength || -1,
-                hiddenAttr = {};
+                hiddenAttr = {},
+                newTitle = this.model.get('title').trim();
 
-            if (maxGroupLength >= 0 && this.model.get('title').length > maxGroupLength) {
+            if (!newTitle) { // not empty
+                dialog.idle();
+                return notifications.yell('error', gt('The group could not be saved since the name can not be empty'));
+            }
+            if (maxGroupLength >= 0 && newTitle.length > maxGroupLength) { // not exceeding limit
                 dialog.idle();
                 return notifications.yell('error', gt('The chat could not be saved since the name exceeds the length limit of %1$s characters', maxGroupLength));
             }
-            if (this.model.get('title') !== originalModel.get('title')) updates.title = this.model.get('title');
+            if (newTitle !== originalModel.get('title')) updates.title = newTitle; // only save when title changed
+
             if (this.model.get('description') !== originalModel.get('description')) updates.description = this.model.get('description');
             if (!_.isEqual(this.collection.pluck('email1'), Object.keys(this.model.get('members') || {}))) {
                 var emails = this.collection.pluck('email1');
