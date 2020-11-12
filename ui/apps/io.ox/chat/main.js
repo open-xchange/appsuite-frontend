@@ -168,7 +168,8 @@ define('io.ox/chat/main', [
 
             if (chat) {
                 if (!chat.get('active')) this.resubscribeChat(chat.get('roomId'));
-                return this.showChat(chat.get('roomId'), { model: chat });
+                // we need to fall back to the cid in case, the room has not been saved yet
+                return this.showChat(chat.get('roomId') || chat.cid, { model: chat });
             }
 
             var members = {};
