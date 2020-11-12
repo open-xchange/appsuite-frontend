@@ -213,8 +213,9 @@ define('io.ox/chat/actions/openGroupDialog', [
                 data.chats.add(originalModel);
                 def.resolve(originalModel.get('roomId'));
             }.bind(this), function (e) {
+                originalModel.set(originalModel.previousAttributes());
                 dialog.idle();
-                if (e.responseJSON.errorCode) return this.model.handleError(e);
+                if (e.responseJSON) return this.model.handleError(e);
                 if (originalModel.get('roomId')) return notifications.yell('error', gt('Changes to this chat could not be saved.'));
                 notifications.yell('error', gt('Chat could not be saved.'));
             }.bind(this));
