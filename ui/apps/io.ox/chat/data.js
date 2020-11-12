@@ -250,7 +250,8 @@ define('io.ox/chat/data', [
             var event = JSON.parse(this.get('content') || '{}');
             var originator = this.get('sender'),
                 members = event.members || [],
-                room = data.chats.get(this.get('roomId'));
+                // also support unjoined channels
+                room = data.chats.get(this.get('roomId')) || data.channels.get(this.get('roomId'));
 
             if (!_.isArray(members) && _.isObject(members)) members = Object.keys(members);
 
@@ -516,7 +517,8 @@ define('io.ox/chat/data', [
                 this.trigger('complete:next');
             }
 
-            var endpoint = data.chats.get(this.roomId).isChannel() ? '/channels/' : '/rooms/';
+            // unjoined channels are not yet in the chats collection but we still allow previews, so check the channels collection too
+            var endpoint = (data.chats.get(this.roomId) || data.channels.get(this.roomId)).isChannel() ? '/channels/' : '/rooms/';
             return api.request({
                 url: api.url + endpoint + this.roomId + '/messages?' + $.param(params)
             })

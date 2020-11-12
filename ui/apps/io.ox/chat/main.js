@@ -200,7 +200,8 @@ define('io.ox/chat/main', [
         },
 
         viewChannel: function (cmd) {
-            this.showChat(cmd.id);
+            // give model in options otherwise functions only look in already joined chats collection
+            this.showChat(cmd.id, { model: data.channels.get(cmd.id) });
         },
 
         joinChannel: function (cmd) {
