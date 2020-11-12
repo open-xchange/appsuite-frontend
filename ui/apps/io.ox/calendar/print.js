@@ -204,12 +204,12 @@ define('io.ox/calendar/print', [
 
     function getDate(data) {
         var recurrenceString = util.getRecurrenceString(data),
-            date = util.getDateTimeIntervalMarkup(data, { output: 'strings' }).dateStr;
+            date = util.getDateTimeIntervalMarkup(data, { output: 'strings', zone: moment().tz() }).dateStr;
         return date + (recurrenceString !== '' ? ' \u2013 ' + recurrenceString : '');
     }
 
     function getTime(data) {
-        return util.getDateTimeIntervalMarkup(data, { output: 'strings' }).timeStr;
+        return util.getDateTimeIntervalMarkup(data, { output: 'strings', zone: moment().tz() }).timeStr;
     }
 
     function process(data) {
