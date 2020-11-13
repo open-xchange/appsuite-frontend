@@ -543,6 +543,8 @@ define('io.ox/chat/views/chat', [
         },
 
         onTyping: _.throttle(function (state) {
+            // prevent typings for new private chats which have no roomId yet
+            if (!this.model.id) return;
             api.typing(this.model.id, state);
         }, 2500, { trailing: false }),
 
