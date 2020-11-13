@@ -21,7 +21,6 @@ Before(async (users) => {
 After(async (users) => {
     await users.removeAll();
 });
-const expect = require('chai').expect;
 const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
 const editor = locate('.io-ox-mail-compose-window .editor iframe');
 const taskbaritem = locate('.taskbar-button');
@@ -53,7 +52,6 @@ Scenario('[RD001] Refresh draft folder on change', async function (I, mail) {
 });
 
 Scenario('[RD002] Restore open space on "edit draft"', async function (I, mail) {
-
     await I.haveSetting('io.ox/mail//autoSaveAfter', 5000);
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
 
@@ -103,45 +101,73 @@ Scenario('[RD002] Restore open space on "edit draft"', async function (I, mail) 
     I.waitForFunction(() => window.$('.io-ox-mail-compose-window').length === 1);
 });
 
-Scenario('[RD003] Handle deleted drafts/spaces', async function (I, mail) {
-
-    await I.haveSetting('io.ox/mail//autoSaveAfter', 2000);
+Scenario('[RD003: Handle deleted spaces', async function (I, mail) {
+    await I.haveSetting('io.ox/mail//autoSaveAfter', 1000);
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
-
-    let cidbefore, cidafter;
 
     I.login('app=io.ox/mail');
     mail.waitForApp();
+    I.wait(0.5);
     I.selectFolder('Drafts');
 
-    // creates space (inital save)
-    I.say('1. creates space (inital save)');
+    // creates spaces (inital save)
+    I.say('1. create spaces');
     mail.newMail();
+    I.fillField('Subject', 'first space');
+    I.waitForElement(locate('.list-view li.list-item').withText('first space'));
+    // WORKAROUND: "newMail" helper fails for second mail
+    I.refreshPage();
+
+    mail.waitForApp();
+    I.selectFolder('Drafts');
+    mail.newMail();
+    I.fillField('Subject', 'second space');
+    I.waitForElement(locate('.list-view li.list-item').withText('second space'));
+
+    // refresh page to cover "failRestore" and "active" case
+    I.say('2. refresh page to cover "failRestore" and "active" case');
+    I.refreshPage();
+    mail.waitForApp();
+    I.selectFolder('Drafts');
+
+    // restore and minimize first space again
+    I.say('3. restore and minimize first space again');
+    I.waitForElement(locate('.taskbar-button').withText('first space'));
+    I.click(locate('.taskbar-button').withText('first space'));
+    I.waitForElement(editor);
     I.click('~Minimize', '.io-ox-mail-compose-window');
-    I.waitForElement(taskbaritem);
     I.waitForInvisible(editor);
     I.wait(0.5);
-    cidbefore = await I.executeScript(() => { return _.last(ox.ui.apps.models).cid; });
 
-    // delete space by deleting draft
-    I.say('2. delete space by deleting draft');
-    mail.selectMail('No subject');
+    // delete spaces by deleting drafts
+    I.say('4. delete spaces by deleting drafts');
+    mail.selectMail('first space');
+    I.waitForElement('.classic-toolbar [data-action="io.ox/mail/actions/delete"]');
+    I.click('.classic-toolbar [data-action="io.ox/mail/actions/delete"]');
+    mail.selectMail('second space');
     I.waitForElement('.classic-toolbar [data-action="io.ox/mail/actions/delete"]');
     I.click('.classic-toolbar [data-action="io.ox/mail/actions/delete"]');
 
-    // wait for notitifation dialog
-    I.say('3. wait for notitication dialog');
-    I.click(taskbaritem);
+    // see error message
+    I.say('5. see error message');
+    I.click(taskbaritem.withText('first space'));
     I.waitForElement(editor);
-    I.waitForElement('.modal.flex');
+    I.waitForElement('.io-ox-mail-compose-window.active .window-blocker .message');
+    I.click('~Minimize', '.io-ox-mail-compose-window.active');
+    I.waitForInvisible(editor);
+    I.wait(0.5);
 
-    // clone and update cid
-    I.say(`4. clone and update cid (old: ${cidbefore})`);
-    I.click('Restore');
-    I.waitForElement('.io-ox-mail-compose-window .io-ox-busy');
-    I.waitForDetached('.io-ox-mail-compose-window .io-ox-busy');
-    cidafter = await I.executeScript(() => { return _.last(ox.ui.apps.models).cid; });
+    I.click(taskbaritem.withText('second space'));
+    I.waitForElement(editor);
+    I.waitForElement('.io-ox-mail-compose-window.active .window-blocker .message');
+    I.click('~Minimize', '.io-ox-mail-compose-window.active');
+    I.waitForInvisible(editor);
+    I.wait(0.5);
 
-    I.say(`5. check cid (new: ${cidafter})`);
-    expect(cidbefore).is.not.equal(cidafter);
+    // see removed taskbar item after refresh
+    I.say('6. see removed taskbar item after refresh');
+    I.refreshPage();
+    mail.waitForApp();
+    I.dontSeeElement(taskbaritem.withText('first space'));
+    I.dontSeeElement(taskbaritem.withText('second space'));
 });

@@ -304,8 +304,6 @@ define('io.ox/mail/compose/main', [
         };
 
         app.pause = function (e) {
-            // keep first error
-            if (app.error) return;
             var error = _.extend({ code: 'unknown', error: gt('An error occurred. Please try again.') }, e);
             // custom mappings
             switch (error.code) {
