@@ -668,8 +668,12 @@ define('io.ox/chat/data', [
                 sameElse: 'L'
             });
         },
+
         getLastMessageForUser: function (id) {
-            var index = this.messages.findLastIndex({ sender: id });
+            // look for the last own, undeleted message
+            var index = this.messages.findLastIndex(function (message) {
+                return message.get('sender') === id && message.get('deleted') !== true;
+            });
             if (!index) return;
             return this.messages.models[index];
         },
