@@ -815,6 +815,7 @@ define('io.ox/chat/data', [
             delete attr.content;
             delete attr.members;
             return this.save(attr, { hiddenAttr: hiddenAttr }).then(function () {
+                data.chats.add(this, { at: 0 });
                 events.trigger('cmd', { cmd: 'show-chat', id: this.get('roomId') });
             }.bind(this), this.handleError.bind(this))
             .fail(function () {

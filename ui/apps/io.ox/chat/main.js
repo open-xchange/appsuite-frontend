@@ -175,7 +175,7 @@ define('io.ox/chat/main', [
             var members = {};
             members[data.user.email] = 'admin';
             members[cmd.email] = 'member';
-            var room = data.chats.add({ type: 'private', members: members, active: true }, { at: 0 }),
+            var room = new data.ChatModel({ type: 'private', members: members, active: true }),
                 view = new ChatView({ model: room });
 
             this.showApp();
