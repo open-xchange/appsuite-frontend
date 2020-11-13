@@ -22,7 +22,7 @@ define('io.ox/files/upload/file-folder', [
 
     var fileFolderUpload = {};
 
-    function handleFilesUpload(updatedTreeArr, rootFolder, app) {
+    function handleFilesUpload(updatedTreeArr, rootFolder, app, options) {
         var sortedByFolderObj = {};
 
         // link all files in the tree with their folder id
@@ -47,8 +47,8 @@ define('io.ox/files/upload/file-folder', [
             fileUpload.setWindowNode(app.getWindowNode());
 
             // fill the upload queue before the upload starts to have the right number of files at start
-            // note: compared to 'offer', 'fillQueue' does no validation, this one in 'fileFolderUpload.upload'
-            fileUpload.create.fillQueue(files, { folder: folderId, uploadfolderInfo: { folderName: '', foldersLeft: '' } });
+            // note: compared to 'offer', 'fillQueue' does no validation, validation is done in 'fileFolderUpload.upload'
+            fileUpload.create.fillQueue(files, _.extend({ folder: folderId, uploadfolderInfo: { folderName: '', foldersLeft: '' } }, options));
         });
         // start the upload with the filled queue
         fileUpload.create.queueChanged();
@@ -209,7 +209,7 @@ define('io.ox/files/upload/file-folder', [
     * @param app
     *  The used app.
     */
-    fileFolderUpload.upload = function (fileObjArray, folder, app) {
+    fileFolderUpload.upload = function (fileObjArray, folder, app, options) {
         var model = folderApi.pool.getModel(folder);
         var module = model.attributes.module;
 
@@ -220,7 +220,7 @@ define('io.ox/files/upload/file-folder', [
 
         fileUpload.create.validateFiles(allFilesToUpload, { folder: folder })
             .then(function () { return initiateDirCreation(createTreeObj(fileObjArray), folder, module); })
-            .then(function (updatedTreeArr) { handleFilesUpload(updatedTreeArr, folder, app); });
+            .then(function (updatedTreeArr) { handleFilesUpload(updatedTreeArr, folder, app, options); });
 
     };
 

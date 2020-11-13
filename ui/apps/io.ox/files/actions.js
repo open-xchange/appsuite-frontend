@@ -129,7 +129,8 @@ define('io.ox/files/actions', [
 
                 require(['io.ox/files/upload/file-folder'], function (fileFolderUpload) {
                     var targetFolder = baton.folder_id;
-                    fileFolderUpload.upload(extendedFileList, targetFolder, app);
+                    var options = baton.file_options;
+                    fileFolderUpload.upload(extendedFileList, targetFolder, app, options);
                 });
                 input.remove();
             })
