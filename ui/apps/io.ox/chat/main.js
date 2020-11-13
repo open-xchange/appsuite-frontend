@@ -218,8 +218,8 @@ define('io.ox/chat/main', [
             var view = new ChatView(_.extend({ roomId: id }, _(opt).pick('messageId', 'reference', 'model')));
             this.showApp();
             this.$rightside.empty().append(view.render().$el);
-            view.trigger('appended');
             this.$body.addClass('open');
+            view.trigger('appended');
             view.scrollToBottom();
             this.resetCount(id, opt);
             $('.chat-leftside').find('li[data-cid="' + id + '"]').attr('tabindex', 0).addClass('active')
