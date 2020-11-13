@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-11-10 12:35+0100\n"
+"PO-Revision-Date: 2020-11-13 12:56+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -682,6 +682,7 @@ msgstr "%1$s an Position %2$s von %3$s verschoben"
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#: apps/io.ox/chat/main.js module:io.ox/chat
 #: apps/io.ox/core/folder/favorites.js apps/io.ox/files/favorites.js
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Favorites"
@@ -1107,13 +1108,14 @@ msgstr "Wollen Sie die Termine im Detail oder als kompakte Liste drucken?"
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/freetime/timeView.js apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/freetime/timeView.js apps/io.ox/chat/settings/pane.js
+#: module:io.ox/chat apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Compact"
 msgstr "Kompakt"
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Detailed"
 msgstr "Detailliert"
 
@@ -1432,7 +1434,8 @@ msgstr "In öffentlichem Kalender anlegen"
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
+#: apps/io.ox/mail/invitations/register.js apps/io.ox/onboarding/views.js
+#: module:io.ox/core/onboarding
 msgid "Password"
 msgstr "Passwort"
 
@@ -1506,6 +1509,7 @@ msgstr "iCal-Feed abonnieren"
 
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 msgid "Subscribe"
 msgstr "Abonnieren"
 
@@ -1622,6 +1626,7 @@ msgstr "Termin-Details"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/perspective.js apps/io.ox/chat/data.js module:io.ox/chat
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "An error occurred. Please try again."
 msgstr "Es trat ein Fehler auf. Bitte versuchen Sie es später erneut."
 
@@ -1704,9 +1709,12 @@ msgstr "Verwerfen"
 msgid "Subject"
 msgstr "Betreff"
 
+#. label for the server location, showing the hostname of a federsted share in Drive, in german probably 'Standort'
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/calendar/util.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
 msgid "Location"
 msgstr "Ort"
 
@@ -2060,6 +2068,7 @@ msgid "Reject changes"
 msgstr "Änderungen ablehnen"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 msgid "Ignore"
 msgstr "Ignorieren"
 
@@ -3374,6 +3383,21 @@ msgid "Edit chat"
 msgstr "Chat bearbeiten"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+#: apps/io.ox/chat/data.js
+#, fuzzy
+msgid "The group could not be saved since the name can not be empty"
+msgstr ""
+"Die Gruppe konnte nicht gespeichert werden, da der Name nicht leer sein darf"
+
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+msgid ""
+"The chat could not be saved since the name exceeds the length limit of %1$s "
+"characters"
+msgstr ""
+"Der Chat konnte nicht gespeichert werden, da der Name die Längenbeschränkung "
+"von %1$s Zeichen überschreitet"
+
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid "Changes to this chat could not be saved."
 msgstr "Änderungen an diesem Chat konnten nicht gespeichert werden."
 
@@ -3519,6 +3543,16 @@ msgstr ""
 "werden"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
+msgid "The group could not be saved since the name exceeds the length limit"
+msgstr ""
+"Die Gruppe konnte nicht gespeichert werden, da der Name die "
+"Längenbeschränkung überschreitet"
+
+#: apps/io.ox/chat/data.js module:io.ox/chat
+msgid "A channel with the same name already exists"
+msgstr "Ein Kanal mit diesem Namen ist bereits vorhanden"
+
+#: apps/io.ox/chat/data.js module:io.ox/chat
 #: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/zoom.js
 msgid "Something went wrong. Please try again."
@@ -3551,12 +3585,12 @@ msgid "The chat could not be loaded."
 msgstr "Der Chat konnte nicht geladen werden."
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "The group could not be left."
-msgstr "Die Gruppe konnte nicht verlassen werden."
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The channel could not be left."
 msgstr "Der Kanal konnte nicht verlassen werden."
+
+#: apps/io.ox/chat/data.js module:io.ox/chat
+msgid "The group could not be left."
+msgstr "Die Gruppe konnte nicht verlassen werden."
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "Unknown user"
@@ -3638,6 +3672,12 @@ msgid "Channel"
 msgstr "Kanal"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
+#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
+#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
+msgid "Chats"
+msgstr "Chats"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
 #: apps/io.ox/chat/views/channelList.js
 msgid "All channels"
 msgstr "Alle Kanäle"
@@ -3680,6 +3720,21 @@ msgid "Picture"
 msgstr "Bild"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "View options"
+msgstr "Anzeigeoptionen"
+
+#. Visual List density (German "Kompaktheitsgrad"); can be compact, default, or detailed
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "List density"
+msgstr "Kompaktheitsgrad"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+msgid "Default"
+msgstr "Standard"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Receive email notifications"
 msgstr "E-Mail-Benachrichtigungen empfangen"
 
@@ -3692,13 +3747,16 @@ msgid "Always"
 msgstr "Immer"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-msgid "Bongo"
-msgstr "Bongo"
+msgid "Plop"
+msgstr "Plopp"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-#: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
-msgid "Wood"
-msgstr "Holz"
+msgid "Click"
+msgstr "Klick"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Bongo"
+msgstr "Bongo"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Play sound for every message"
@@ -3756,12 +3814,6 @@ msgstr "Präsentation"
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "File"
 msgstr "Datei"
-
-#: apps/io.ox/chat/views/channelList.js module:io.ox/chat
-#: apps/io.ox/chat/views/chat.js apps/io.ox/chat/views/fileList.js
-#: apps/io.ox/chat/views/history.js
-msgid "Chats"
-msgstr "Chats"
 
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 msgid "There are no channels yet"
@@ -3836,6 +3888,22 @@ msgid "Upload file"
 msgstr "Datei hochladen"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
+#: apps/io.ox/core/folder/favorites.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
+#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
+msgid "Remove from favorites"
+msgstr "Aus Favoriten entfernen"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+#: apps/io.ox/core/folder/favorites.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
+#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
+msgid "Add to favorites"
+msgstr "Zu Favoriten hinzufügen"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "The message could not be deleted."
 msgstr "Die Nachricht konnte nicht gelöscht werden."
 
@@ -3865,12 +3933,12 @@ msgid "Chats could not be loaded."
 msgstr "Chats konnten nicht geladen werden."
 
 #: apps/io.ox/chat/views/content.js module:io.ox/chat
-msgid "Show more"
-msgstr "Weitere anzeigen"
-
-#: apps/io.ox/chat/views/content.js module:io.ox/chat
 msgid "Sending has been cancelled"
 msgstr "Das Versenden wurde abgebrochen"
+
+#: apps/io.ox/chat/views/content.js module:io.ox/chat
+msgid "Show more"
+msgstr "Weitere anzeigen"
 
 #: apps/io.ox/chat/views/content.js module:io.ox/chat
 msgid "Delivery failed"
@@ -3883,6 +3951,10 @@ msgstr "Datei hier ablegen, um sie zu senden"
 #: apps/io.ox/chat/views/empty.js module:io.ox/chat
 msgid "Create private chat"
 msgstr "Privaten Chat anlegen"
+
+#: apps/io.ox/chat/views/file.js module:io.ox/chat
+msgid "Download file"
+msgstr "Datei herunterladen"
 
 #: apps/io.ox/chat/views/file.js module:io.ox/chat
 msgid "Cancel file upload"
@@ -5818,15 +5890,15 @@ msgstr "Ordner umbenennen"
 msgid "Rename"
 msgstr "Umbenennen"
 
-#: apps/io.ox/core/folder/api.js module:io.ox/core
-msgid "Default calendar"
-msgstr "Standardkalender"
-
 #. %1$s is the folder owner
 #. %2$s is the folder title
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 msgid "%1$s: %2$s"
 msgstr "%1$s: %2$s"
+
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+msgid "Default calendar"
+msgstr "Standardkalender"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
@@ -5977,6 +6049,20 @@ msgid "Add storage account"
 msgstr "Speicherkonto hinzufügen"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Manage Subscriptions"
+msgstr "Abonnements verwalten"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+msgid "Shared drive folders"
+msgstr "Freigegebene Drive-Ordner"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+msgid "Public drive folders"
+msgstr "Öffentliche Drive-Ordner"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Subscribe address book"
 msgstr "Adressbuch abonnieren"
 
@@ -6067,20 +6153,6 @@ msgstr "Sie haben diesen Ordner für andere Benutzer freigegeben"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "This folder has subscriptions"
 msgstr "Dieser Ordner enthält Abonnements"
-
-#: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
-msgid "Remove from favorites"
-msgstr "Aus Favoriten entfernen"
-
-#: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
-msgid "Add to favorites"
-msgstr "Zu Favoriten hinzufügen"
 
 #. Used for the total count of objects or mails in a folder
 #: apps/io.ox/core/folder/node.js module:io.ox/core
@@ -7002,11 +7074,6 @@ msgid "Unicolor"
 msgstr "Einfarbig"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-msgid "Default"
-msgstr "Standard"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Multicolor"
 msgstr "Mehrfarbig"
 
@@ -7457,6 +7524,10 @@ msgstr "Klingel"
 #: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
 msgid "Marimba"
 msgstr "Marimba"
+
+#: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
+msgid "Wood"
+msgstr "Holz"
 
 #: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
 msgid "Chimes"
@@ -8579,6 +8650,11 @@ msgstr ""
 #: apps/io.ox/files/listview.js module:io.ox/files
 msgid "Error: Failed to load files"
 msgstr "Fehler: Dateien konnten nicht geladen werden"
+
+#. title of dialog when contact subscription needs to be recreated on error
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid "Access error"
+msgstr "Zugriffsfehler"
 
 #. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
@@ -10228,16 +10304,16 @@ msgid "Compose"
 msgstr "Verfassen"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
-msgid "Save and close"
-msgstr "Speichern und schließen"
-
-#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
 "The mail draft could not be found on the server. It was sent or deleted in "
 "the meantime."
 msgstr ""
 "Der E-Mail-Entwurf konnte nicht auf dem Server gefunden werden. Er wurde "
 "zwischenzeitlich verschickt oder gelöscht."
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Save and close"
+msgstr "Speichern und schließen"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -10625,6 +10701,80 @@ msgstr "E-Mail wurde importiert"
 #: apps/io.ox/mail/import.js module:io.ox/mail
 msgid "Drop EML file here for import"
 msgstr "Zum Importieren EML-Datei hier ablegen"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#, fuzzy
+msgid "Unsubscribe"
+msgstr "Abmelden"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#, fuzzy
+msgid "You subscribed to this folder"
+msgstr "Sie haben diesen Ordner abonniert"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#, fuzzy
+msgid "You unsubscribed from this folder"
+msgstr "Sie haben das Abonnement für diesen Ordner beendet"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#, fuzzy
+msgid "Please enter the password to subscribe."
+msgstr "Bitte geben Sie das Passwort ein, um sich anzumelden."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#, fuzzy
+msgid "The folder cannot be subscribed to as it is currently unavailable."
+msgstr ""
+"Der Ordner kann nicht abonniert werden, da er derzeit nicht verfügbar ist."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#, fuzzy
+msgid "The folder cannot be subscribed because the link is invalid."
+msgstr "Der Ordner kann nicht abonniert werden, da der Link ungültig ist."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#, fuzzy
+msgid "The link to this folder is unsupported and can't be subscribed."
+msgstr ""
+"Der Link zu diesem Ordner wird nicht unterstützt und kann nicht abonniert "
+"werden."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#, fuzzy
+msgid "Your are not allowed to subscribe to this folder."
+msgstr "Sie dürfen diesen Ordner nicht abonnieren."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The shared folder was removed by the owner."
+msgstr "Der freigegebene Ordner wurde vom Besitzer entfernt."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The password was changed recently. Please enter the new password."
+msgstr ""
+"Das Kennwort wurde kürzlich geändert. Bitte geben Sie das neue Kennwort ein."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "This email contains a sharing link"
+msgstr "Diese E-Mail enthält einen Freigabelink"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#, fuzzy
+msgid "You are currently subscribed."
+msgstr "Sie sind derzeit angemeldet."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#, fuzzy
+msgid "You are currently not subscribed."
+msgstr "Sie sind derzeit nicht angemeldet."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "View folder"
+msgstr "Ordner anzeigen"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "required"
+msgstr "erforderlich"
 
 #: apps/io.ox/mail/listview.js module:io.ox/mail
 msgid "Error: Failed to load messages"
@@ -13752,7 +13902,7 @@ msgstr "Immer ein zufälliges Meeting-Passwort hinzufügen"
 #. Automatically copies the meeting link into an appointment's location field
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "Automatically copy link to location"
-msgstr "Link automatisch in \\\"Ort\\\" kopieren"
+msgstr "Link automatisch in \"Ort\" kopieren"
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "Automatically copy dial-in information to description"
@@ -13913,7 +14063,7 @@ msgstr "Einwahl nach aktuellem Standort"
 #. Copy the meeting link into the appointment's location field
 #: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
 msgid "Copy link to location"
-msgstr "Link in \\\"Ort\\\" kopieren"
+msgstr "Link in \"Ort\" kopieren"
 
 #: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
 msgid "Copy link to clipboard"
