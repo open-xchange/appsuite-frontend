@@ -817,6 +817,10 @@ define('io.ox/chat/data', [
             return this.save(attr, { hiddenAttr: hiddenAttr }).then(function () {
                 data.chats.add(this, { at: 0 });
                 events.trigger('cmd', { cmd: 'show-chat', id: this.get('roomId') });
+                /*
+                TBD: we need to do this here since the rightside is empty()'d and re-rendered completely, see cmd: show-chat
+                */
+                _.defer(function () { $('.chat-rightside textarea').trigger('focus'); });
             }.bind(this), this.handleError.bind(this))
             .fail(function () {
                 require(['io.ox/core/yell'], function (yell) {

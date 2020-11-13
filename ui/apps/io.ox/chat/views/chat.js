@@ -375,23 +375,24 @@ define('io.ox/chat/views/chat', [
                 isNew = model.isNew(),
                 id = model.id;
 
+            if (isNew) addItem(gt('Close chat'), 'close-chat');
             if (!isNew && isActive) {
                 var title = model.isFavorite() ? gt('Remove from favorites') : gt('Add to favorites');
-                addItem($ul, title, 'toggle-favorite', id);
+                addItem(title, 'toggle-favorite');
             }
             if (!isNew && (model.isPrivate() || model.isGroup() || (model.isChannel() && model.isMember())) && isActive) {
-                addItem($ul, gt('Close chat'), 'unsubscribe-chat', id);
+                addItem(gt('Close chat'), 'unsubscribe-chat');
             }
             if ((model.isGroup() || model.isChannel()) && model.isMember()) {
-                addItem($ul, gt('Edit chat'), 'edit-group-chat', id);
+                addItem(gt('Edit chat'), 'edit-group-chat');
             }
             if (!model.isPrivate() && model.isMember()) {
-                addItem($ul, gt('Leave chat'), model.isChannel() ? 'leave-channel' : 'leave-group', id);
+                addItem(gt('Leave chat'), model.isChannel() ? 'leave-channel' : 'leave-group');
             } else if (model.isChannel() && !model.get('active')) {
-                addItem($ul, gt('Join chat'), 'join-channel', id);
+                addItem(gt('Join chat'), 'join-channel');
             }
 
-            function addItem($ul, text, cmd, id) {
+            function addItem(text, cmd) {
                 $ul.append(
                     $('<li role="presentation">').append(
                         $('<a href="#" role="button">').attr({ 'data-cmd': cmd, 'data-id': id }).text(text)

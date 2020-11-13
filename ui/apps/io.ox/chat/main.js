@@ -182,6 +182,7 @@ define('io.ox/chat/main', [
             this.$rightside.empty().append(view.render().$el);
             this.$body.addClass('open');
             view.scrollToBottom();
+            this.clearActiveSelection();
         },
 
         leaveGroup: function (groupId) {
