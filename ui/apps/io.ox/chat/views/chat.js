@@ -475,7 +475,6 @@ define('io.ox/chat/views/chat', [
         },
 
         onMessageReply: function (model) {
-
             // clean up
             this.onCancelSpecialMode();
 
@@ -518,10 +517,17 @@ define('io.ox/chat/views/chat', [
         },
 
         onEditorKeydown: function (e) {
+            // esc quits edit and reply
             if (e.which === 27 && this.specialMode) {
                 e.preventDefault();
                 e.stopPropagation();
                 this.onCancelSpecialMode();
+            }
+            // cursor up handling to edit last own message
+            // check if user has already typed something
+            if (e.which === 38 && !this.specialMode && !this.model.get('draft')) {
+                var last = this.model.getLastMessageForUser(data.user.email);
+                if (last) this.onMessageEdit(last);
             }
             if (e.which === 13) {
                 // shift + enter appends newline

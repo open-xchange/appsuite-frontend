@@ -668,6 +668,11 @@ define('io.ox/chat/data', [
                 sameElse: 'L'
             });
         },
+        getLastMessageForUser: function (id) {
+            var index = this.messages.findLastIndex({ sender: id });
+            if (!index) return;
+            return this.messages.models[index];
+        },
 
         getFirstMember: function () {
             // return first member that is not current user
