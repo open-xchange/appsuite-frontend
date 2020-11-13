@@ -347,9 +347,9 @@ define('io.ox/files/util', [
             var guestCapabilities = accountMeta && accountMeta.guestCapabilities;
             var canOpenInFederatedContext = false;
 
-            if (fileModel.isWordprocessing()) { canOpenInFederatedContext = _.has(guestCapabilities, 'Text'); }
-            if (fileModel.isSpreadsheet()) { canOpenInFederatedContext = _.has(guestCapabilities, 'Spreadsheet'); }
-            if (fileModel.isPresentation()) { canOpenInFederatedContext = _.has(guestCapabilities, 'Presentation'); }
+            if (fileModel.isWordprocessing()) { canOpenInFederatedContext = guestCapabilities.indexOf('text') > 0; }
+            if (fileModel.isSpreadsheet()) { canOpenInFederatedContext = guestCapabilities.indexOf('spreadsheet') > 0; }
+            if (fileModel.isPresentation()) { canOpenInFederatedContext = guestCapabilities.indexOf('presentation') > 0; }
             return canOpenInFederatedContext;
         }
     };
