@@ -264,6 +264,7 @@ define('io.ox/mail/compose/api', [
         // result: attachtment data with mailPath prop
         var mailPath = data.compositionSpace.mailPath || {},
             mailref = _.cid({ id: mailPath.id, folder: mailPath.folderId });
+        api.trigger('mailref:changed', { mailPath: mailPath });
         api.trigger('mailref:' + data.compositionSpace.id, mailPath);
         // add to mailref mapping;
         hash[mailref] = data.compositionSpace.id;

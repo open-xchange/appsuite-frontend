@@ -242,7 +242,6 @@ define('io.ox/mail/invitations/register', [
             this.renderSummary();
 
             // get standard buttons
-            debugger;
             actions = this.getActions();
             buttons = this.getButtons(actions);
             if (buttons.length === 0) return this;

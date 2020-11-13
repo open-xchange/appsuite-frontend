@@ -1919,7 +1919,7 @@ define('io.ox/mail/main', [
             });
 
             // update
-            composeAPI.on('after:send after:update after:remove after:save add', function refreshFolder(data, result) {
+            composeAPI.on('after:send after:update after:remove after:save add mailref:changed', function refreshFolder(data, result) {
                 var mailPath = data.mailPath || result.mailPath;
                 if (!mailPath) return;
                 // immediate reload when currently selected
