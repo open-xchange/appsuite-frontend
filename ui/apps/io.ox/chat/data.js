@@ -394,7 +394,7 @@ define('io.ox/chat/data', [
                 return {
                     id: file.fileId,
                     isBlob: false,
-                    isImage: !!file.preview && /^image\//.test(file.mimetype),
+                    isImage: !!file.preview,
                     preview: file.preview,
                     name: file.name,
                     size: file.size || 0,
