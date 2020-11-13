@@ -39,7 +39,7 @@ define('io.ox/chat/views/message', [
 
             var model = this.model,
                 messageId = model.get('messageId'),
-                isChannel = data.chats.get(this.model.get('roomId')).isChannel();
+                isChannel = (data.chats.get(this.model.get('roomId')) || data.channels.get(this.model.get('roomId'))).isChannel();
 
             // here we use cid instead of id, since the id might be unknown
             this.$el.attr('data-cid', model.cid)
