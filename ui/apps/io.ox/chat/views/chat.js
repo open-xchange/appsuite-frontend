@@ -21,6 +21,7 @@ define('io.ox/chat/views/chat', [
     'io.ox/chat/views/messages',
     'io.ox/chat/views/content',
     'io.ox/chat/views/reference-preview',
+    'io.ox/chat/views/typing',
     'io.ox/chat/events',
     'io.ox/chat/data',
     'io.ox/chat/util',
@@ -30,7 +31,7 @@ define('io.ox/chat/views/chat', [
     'io.ox/core/strings',
     'io.ox/core/notifications',
     'io.ox/chat/views/dropzone'
-], function (ext, api, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ContentView, ReferencePreview, events, data, util, yell, ToolbarView, gt, strings, notifications, dropzone) {
+], function (ext, api, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ContentView, ReferencePreview, typing, events, data, util, yell, ToolbarView, gt, strings, notifications, dropzone) {
 
     'use strict';
 
@@ -149,7 +150,6 @@ define('io.ox/chat/views/chat', [
         },
 
         initialize: function (options) {
-            var self = this;
 
             this.roomId = options.roomId;
             this.messageId = options.messageId;
@@ -197,58 +197,6 @@ define('io.ox/chat/views/chat', [
             // 2) We don't have a messageId but the collection is not fully fetched
             if ((this.messageId && !this.model.messages.get(this.messageId)) || (!this.messageId && !this.model.messages.nextComplete)) this.model.messages.reset();
             _.delay(this.model.messages.fetch.bind(this.model.messages));
-
-            // tracking typing
-            this.typing = {
-                $el: $('<div class="typing">'),
-                hash: {},
-                show: function (email) {
-                    var model = data.users.getByMail(email);
-                    if (!model || model.isMyself()) return;
-                    this.reset(email);
-                    var atBottom = self.isScrolledToBottom();
-                    this.hash[email] = {
-                        name: '<span class="name">' + _.escape(model.getName()) + '</span>',
-                        timeout: setTimeout(function () {
-                            if (this.disposed) return;
-                            this.hide(email);
-                        }.bind(this), 5000)
-                    };
-                    this.render();
-                    if (atBottom) self.scrollToBottom();
-                },
-                reset: function (email) {
-                    if (!this.hash[email]) return;
-                    window.clearTimeout(this.hash[email].timeout);
-                    delete this.hash[email];
-                },
-                render: function () {
-                    var names = _(this.hash).pluck('name');
-                    this.$el.html(this.getNotificationString(names));
-                },
-                getNotificationString: function (names) {
-                    if (!names.length) return '';
-                    //#. %1$s is a member name
-                    if (names.length === 1) return gt('%1$s is typing ...', names[0]);
-                    //#. %1$s and %2$s are member names
-                    if (names.length === 2) return gt('%1$s and %2$s are typing ...', names[0], names[1]);
-                    //#. %1$s, %2$s, and %3$s are member names
-                    if (names.length === 3) return gt('%1$s, %2$s, and %3$s are typing ...', names[0], names[1], names[2]);
-                    //#. %1$s and %2$s are member names, %3$d is the number of further members
-                    return gt('%1$s, %2$s and %3$d others are typing ...', names[0], names[1], names.length - 2);
-                },
-                hide: function (email) {
-                    this.reset(email);
-                    this.render();
-                },
-                toggle: function (email, state) {
-                    if (state) this.show(email); else this.hide(email);
-                }
-            };
-
-            this.listenTo(events, 'typing:' + this.model.id, function (email, state) {
-                this.typing.toggle(email, state);
-            });
 
             this.$editor = $();
             this.autoScroll = _.isUndefined(options.autoScroll) ? true : options.autoScroll;
@@ -313,7 +261,7 @@ define('io.ox/chat/views/chat', [
                     this.$paginatePrev = $('<div class="paginate prev">').hide(),
                     $('<div class="conversation">').append(
                         this.messagesView.render().$el,
-                        this.typing.$el
+                        new typing.View({ roomId: this.model.id }).render().$el
                     ),
                     this.$paginateNext = $('<div class="paginate next">').hide()
                 ),

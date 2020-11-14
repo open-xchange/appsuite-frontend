@@ -14,12 +14,13 @@
 define('io.ox/chat/views/chatListEntry', [
     'io.ox/chat/views/chatAvatar',
     'io.ox/chat/data',
+    'io.ox/chat/events',
     'io.ox/core/strings',
     'io.ox/mail/sanitizer',
     'io.ox/chat/util',
     'io.ox/switchboard/presence',
     'settings!io.ox/chat'
-], function (ChatAvatar, data, strings, sanitizer, util, presence, settings) {
+], function (ChatAvatar, data, events, strings, sanitizer, util, presence, settings) {
 
     var density = settings.get('density', 'default');
     settings.on('change:density', function (value) {
@@ -59,6 +60,27 @@ define('io.ox/chat/views/chatListEntry', [
             });
             this.listenTo(settings, 'change:density', this.applyDensity);
             this.applyDensity();
+            this.listenTo(events, 'typing:' + this.model.id + ':summary', function (summary) {
+                switch (density) {
+                    case 'compact':
+                    case 'default':
+                        if (this.model.isPrivate()) {
+                            this.$('.title').text(summary.text || this.model.getTitle());
+                        } else {
+                            this.$('.title').empty().append(
+                                this.model.getTitle(),
+                                $('<span class="typing">').text(summary.text)
+                            );
+                        }
+                        break;
+                    case 'detailed':
+                        this.$('.last-message').empty().append(
+                            summary.text ? $.txt(summary.text) : this.renderLastMessage()
+                        );
+                        break;
+                    // no default
+                }
+            });
         },
 
         applyDensity: function () {

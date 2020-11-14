@@ -1173,6 +1173,8 @@ define('io.ox/chat/data', [
             });
 
             socket.on('chat:typing', function (event) {
+                if (!event.roomId) return;
+                events.trigger('typing', event);
                 events.trigger('typing:' + event.roomId, event.email, event.state);
             });
 
