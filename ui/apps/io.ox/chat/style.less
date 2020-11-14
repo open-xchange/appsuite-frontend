@@ -312,6 +312,18 @@
         }
     }
 
+    .density-compact .navigation-actions {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        .btn-nav {
+            padding: 4px 16px 4px 40px;
+        }
+        .btn-icon {
+            font-size: 14px;
+            left: 16px;
+        }
+    }
+
     .scrollpane > ul, ul.members {
         list-style-type: none;
         margin: 0;
@@ -361,7 +373,7 @@
             .chats-container {
                 margin-top: auto;
                 margin-bottom: auto;
-                padding: 0 0 3px 0;
+                padding: 0;
                 flex: 1;
                 overflow: hidden;
                 .chats-row {
@@ -481,7 +493,7 @@
                 width: 16px;
                 text-align: center;
                 margin-right: 8px;
-                font-size: 14x;
+                font-size: 14px;
                 font-weight: bold;
             }
             .title {
@@ -856,6 +868,18 @@
             position: relative;
             top: -1px;
         }
+
+        .hyperino {
+            color: #7a34ff;
+            font: normal 900 48px/64px Arial, "Helvetica Neue";
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.20);
+            transform: skew(-30deg);
+        }
+
+        code {
+            padding: 0 4px;
+            border-radius: 4px;
+        }
     }
 
     .message-thumbnail-container {
@@ -925,10 +949,6 @@
             color: #333;
             background-color: rgba(0, 0, 0, 0.10);
         }
-    }
-
-    .message-content {
-
     }
 
     .message-quote {

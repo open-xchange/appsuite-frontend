@@ -83,6 +83,8 @@ define('io.ox/chat/main', [
             this.listenTo(settings, 'change:groupByType', function () {
                 this.$('.left-navigation').replaceWith(this.getLeftNavigation());
             });
+
+            this.listenTo(settings, 'change:density', this.onChangeDensity);
         },
 
         onStick: function () {
@@ -477,7 +479,7 @@ define('io.ox/chat/main', [
             // start with BAD style and hard-code stuff
             this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('width', 320)).append(
                 this.getResizeBar(),
-                $('<div class="chat-leftside">').append(
+                $('<div class="chat-leftside">').addClass('density-' + settings.get('density', 'default')).append(
                     $('<div class="header">').append(
                         $('<div class="picture">').append(
                             new AvatarView({ model: user }).render().$el,
@@ -532,6 +534,7 @@ define('io.ox/chat/main', [
                     new EmptyView().render().$el
                 )
             );
+            this.onChangeDensity();
         },
 
         getLeftNavigation: function () {
@@ -575,6 +578,12 @@ define('io.ox/chat/main', [
                     )
                 )
             );
+        },
+
+        onChangeDensity: function () {
+            this.$('.chat-leftside')
+                .removeClass('density-default density-compact density-detailed')
+                .addClass('density-' + settings.get('density', 'default'));
         }
 
     });
