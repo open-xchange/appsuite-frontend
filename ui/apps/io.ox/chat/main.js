@@ -79,6 +79,10 @@ define('io.ox/chat/main', [
             });
 
             this.listenTo(events, 'cmd', this.onCommand);
+
+            this.listenTo(settings, 'change:groupByType', function () {
+                this.$('.left-navigation').replaceWith(this.getLeftNavigation());
+            });
         },
 
         onStick: function () {
@@ -506,13 +510,7 @@ define('io.ox/chat/main', [
                     ),
                     new ToolbarView({ point: 'io.ox/chat/list/toolbar', title: 'Chat actions' }).render(new ext.Baton()).$el,
                     new searchView().render().$el,
-                    $('<div class="left-navigation">').append(
-                        // search results
-                        new SearchResultView().render().$el,
-                        // chats
-                        new ChatListView({ collection: data.chats, filter: function (model) { return model.isFavorite(); }, header: gt('Favorites') }).render().$el,
-                        new ChatListView({ collection: data.chats, filter: function (model) { return !model.isFavorite(); }, header: gt('Chats') }).render().$el
-                    ),
+                    this.getLeftNavigation(),
                     // recent, all channels, all files
                     $('<div class="navigation-actions">').append(
                         $('<button type="button" class="btn-nav" data-cmd="show-channels">').append(
@@ -534,6 +532,27 @@ define('io.ox/chat/main', [
                     new EmptyView().render().$el
                 )
             );
+        },
+
+        getLeftNavigation: function () {
+            var $el = $('<div class="left-navigation">').append(
+                new SearchResultView().render().$el,
+                new ChatListView({ collection: data.chats, filter: function (m) { return m.isFavorite(); }, header: gt('Favorites') }).render().$el
+            );
+            if (settings.get('groupByType', false)) {
+                // by type
+                $el.append(
+                    new ChatListView({ collection: data.chats, filter: function (m) { return !m.isFavorite() && m.isPrivate(); }, header: gt('Private chats') }).render().$el,
+                    new ChatListView({ collection: data.chats, filter: function (m) { return !m.isFavorite() && m.isGroup(); }, header: gt('Group chats') }).render().$el,
+                    new ChatListView({ collection: data.chats, filter: function (m) { return !m.isFavorite() && m.isChannel(); }, header: gt('Channels') }).render().$el
+                );
+            } else {
+                // one view for all (default)
+                $el.append(
+                    new ChatListView({ collection: data.chats, filter: function (m) { return !m.isFavorite(); }, header: gt('Chats') }).render().$el
+                );
+            }
+            return $el;
         },
 
         drawAuthorizePane: function (errorMessage) {

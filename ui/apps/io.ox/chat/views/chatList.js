@@ -24,7 +24,13 @@ define('io.ox/chat/views/chatList', [
         className: 'chats',
 
         initialize: function (options) {
+
             this.options = _.extend({ header: gt('Chat list'), filter: _.constant(true) }, options);
+
+            // via initialize, never on prototype level
+            this.onAdd = _.debounce(this.onAdd);
+            this.onSort = _.debounce(this.onSort);
+
             this.listenTo(this.collection, {
                 'expire': this.onExpire,
                 'add': this.onAdd,
@@ -34,11 +40,20 @@ define('io.ox/chat/views/chatList', [
                 'change:lastMessage': this.onChangeLastMessage,
                 'sort': this.onSort
             });
+
             this.$ul = $('<ul class="chat-list" role="listbox">').attr('aria-label', this.options.header);
         },
 
         render: function () {
-            this.$el.hide().append(
+            // render existing items
+            var items = this.getItems();
+            this.toggle(items);
+            this.$ul.append(
+                items.map(function (model) {
+                    return new ChatListEntryView({ model: model }).$el;
+                })
+            );
+            this.$el.append(
                 $('<h2>').text(this.options.header),
                 this.$ul
             );
@@ -77,15 +92,16 @@ define('io.ox/chat/views/chatList', [
             else this.onRemove(model);
         },
 
-        onSort: _.debounce(function () {
+        onSort: function () {
             if (this.disposed) return;
             var items = this.getItems().map(this.renderItem, this);
             if (items.length > 0) items[0].attr({ 'tabindex': 0 });
             this.$ul.append(items);
             this.toggle();
-        }, 1),
+        },
 
-        onAdd: _.debounce(function (model, collection, options) {
+        onAdd: function (model, collection, options) {
+            if (this.disposed) return;
             var all = this.getItems();
             options.changes.added
                 .filter(function (model) { return model.isActive(); })
@@ -100,7 +116,7 @@ define('io.ox/chat/views/chatList', [
                     }
                 }.bind(this));
             this.toggle();
-        }),
+        },
 
         onRemove: function (model) {
             this.getNode(model).remove();

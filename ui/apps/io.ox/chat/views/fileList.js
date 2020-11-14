@@ -107,7 +107,6 @@ define('io.ox/chat/views/fileList', [
                 .attr('data-file-id', model.get('fileId'))
                 .append(preview, details);
             // preview
-            console.log('file', model.toJSON());
             if (model.isImage()) {
                 button.attr('data-cmd', 'show-file');
                 preview.addClass('cursor-zoom-in');
@@ -140,9 +139,7 @@ define('io.ox/chat/views/fileList', [
 
         onAdd: _.debounce(function (model, collection, options) {
             if (this.disposed) return;
-
             $(this.el).find('.info-container').remove();
-
             this.updateIndices();
             this.$('.scrollpane ul').prepend(
                 options.changes.added.map(this.renderItem, this)

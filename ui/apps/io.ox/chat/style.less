@@ -331,6 +331,7 @@
     .chat-list {
         padding: 4px 0;
         list-style-type: none;
+        margin: 0;
         li {
             display: flex;
             cursor: pointer;
@@ -668,16 +669,19 @@
             font-size: 14px;
         }
 
-        .body.emoji {
-            font-size: 40px;
-            line-height: 48px;
-        }
-
         .body.contains-emoji {
             line-height: 24px;
             .emoji {
                 font-size: 22px;
                 vertical-align: top;
+            }
+        }
+
+        .body.contains-emoji.only-emoji {
+            line-height: 48px;
+            .emoji {
+                font-size: 40px;
+                vertical-align: initial;
             }
         }
 
@@ -690,15 +694,26 @@
             margin-bottom: 0;
         }
 
+        blockquote {
+            font-size: inherit;
+            line-height: inherit;
+            padding: 8px;
+            background-color: #eee;
+            border-radius: @borderRadius;
+            border-left: 4px solid rgba(0, 0, 0, 0.4);
+            margin-bottom: 8px;
+        }
+
         .mention {
-            color: #007adc;
+            color: #0062af;
             background-color: #e9f5ff;
+            font-size: 13px;
             font-weight: 600;
             border-radius: 4px;
             padding: 2px 6px;
             &.me {
                 color: white;
-                background-color: #007adc;
+                background-color: #0062af;
             }
         }
 
@@ -965,7 +980,7 @@
             &:empty {
                 display: none;
             }
-            &.emoji, &.file {
+            &.only-emoji, &.file {
                 background-color: transparent !important;
             }
         }

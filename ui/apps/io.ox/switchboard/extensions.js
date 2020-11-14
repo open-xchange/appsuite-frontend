@@ -123,8 +123,28 @@ define('io.ox/switchboard/extensions', [
 
     ext.point('io.ox/contacts/detail/actions').extend(
         {
-            id: 'call',
+            id: 'email',
             index: 100,
+            draw: function (baton) {
+                if (!capabilities.has('webmail')) return;
+                this.append(
+                    createButton('io.ox/contacts/actions/send', 'fa-envelope', gt('Email'), baton)
+                );
+            }
+        },
+        {
+            id: 'chat',
+            index: 120,
+            draw: function (baton) {
+                if (!capabilities.has('chat')) return;
+                this.append(
+                    createButton('io.ox/chat/actions/start-chat-from-contacts', 'fa-comment', gt('Chat'), baton)
+                );
+            }
+        },
+        {
+            id: 'call',
+            index: 300,
             draw: function (baton) {
                 var $ul = $('<ul class="dropdown-menu">');
                 ext.point('io.ox/contacts/detail/actions/call').invoke('draw', $ul, baton.clone());
@@ -144,19 +164,10 @@ define('io.ox/switchboard/extensions', [
                 );
             }
         },
-        {
-            id: 'email',
-            index: 200,
-            draw: function (baton) {
-                if (!capabilities.has('webmail')) return;
-                this.append(
-                    createButton('io.ox/contacts/actions/send', 'fa-envelope', gt('Email'), baton)
-                );
-            }
-        },
+
         {
             id: 'invite',
-            index: 300,
+            index: 400,
             draw: function (baton) {
                 if (!capabilities.has('calendar')) return;
                 this.append(

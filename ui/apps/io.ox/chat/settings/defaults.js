@@ -24,6 +24,8 @@ define('io.ox/chat/settings/defaults', [], function () {
             playWhen: 'always',
             file: 'plop.mp3'
         },
+        groupByType: false,
+        sortBy: 'activity',
         density: 'default'
     };
 });

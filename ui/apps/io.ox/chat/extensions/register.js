@@ -209,6 +209,9 @@ define('io.ox/chat/extensions/register', [
     new Action('io.ox/chat/actions/start-chat-from-appointment', {
         capabilities: 'chat',
         collection: 'some',
+        requires: function () {
+            return !!data.user;
+        },
         action: function (baton) {
             startGroupChat({
                 title: baton.model.get('summary'),
@@ -246,6 +249,9 @@ define('io.ox/chat/extensions/register', [
     new Action('io.ox/chat/actions/start-chat-from-mail', {
         capabilities: 'chat',
         collection: 'some',
+        requires: function () {
+            return !!data.user;
+        },
         action: function (baton) {
             var field = account.is('sent|drafts', baton.data.folder_id) ? baton.data.to : baton.data.from;
             startPrivateChat(field[0][1]);
@@ -255,18 +261,17 @@ define('io.ox/chat/extensions/register', [
     new Action('io.ox/chat/actions/start-group-chat-from-mail', {
         capabilities: 'chat',
         collection: 'some',
+        requires: function () {
+            return !!data.user;
+        },
         action: function (baton) {
-            if (!data.user) return console.log('Please authenticate in chat first');
-
             require(['io.ox/mail/api']).then(function (api) {
                 return api.get(_.cid(baton.data));
             }).then(function (mail) {
                 var addresses = [].concat(mail.from, mail.to, mail.cc, mail.bcc);
-
                 addresses = _(addresses).chain().map(function (address) {
                     return address[1];
                 }).compact().unique().without(data.user.email).value();
-
                 startGroupChat({
                     title: mail.subject,
                     members: addresses

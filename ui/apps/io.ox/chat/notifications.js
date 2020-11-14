@@ -31,7 +31,7 @@ define('io.ox/chat/notifications', [
     function onMessageNew(e) {
         var model = e.message;
         // debug
-        if (ox.debug) console.log('new message', model);
+        if (ox.debug) console.debug('new message', model);
         // don't notify on your own or system messages
         if (model.isMyself() || model.isSystem()) return;
         // don't notify if busy

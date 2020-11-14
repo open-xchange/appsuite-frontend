@@ -22,7 +22,7 @@ define('io.ox/chat/events', [], function () {
             // if we use stopPropagation dropdowns won't close "naturally"
             //e.stopPropagation();
             var node = $(e.currentTarget), data = node.data();
-            if (ox.debug) console.log('cmd', data.cmd, data);
+            if (ox.debug) console.debug('cmd', data.cmd, data);
             events.trigger('cmd cmd:' + data.cmd, data);
         }
     }, Backbone.Events);

@@ -618,6 +618,11 @@ define('io.ox/chat/data', [
             this.listenTo(this.messages, 'add', _.debounce(this.onMessageAdd, 10));
             this.listenTo(this.messages, 'change:content change:files', this.onMessageChange);
             this.listenTo(this.messages, 'change:deliveryState', _.debounce(this.onChangeDelivery, 0));
+
+            this.sortName = this.getTitle();
+            this.on('change:members change:title', function () {
+                this.sortName = this.getTitle();
+            });
         },
 
         onMessageAdd: function () {
@@ -883,12 +888,6 @@ define('io.ox/chat/data', [
 
         model: ChatModel,
 
-        comparator: function (a, b) {
-            if (!a.get('lastMessage')) return 0;
-            if (!b.get('lastMessage')) return 0;
-            return -util.strings.compare(a.get('lastMessage').messageId, b.get('lastMessage').messageId);
-        },
-
         url: function () {
             return api.url + '/rooms';
         },
@@ -897,6 +896,26 @@ define('io.ox/chat/data', [
             this.on('change:unreadCount', this.onChangeUnreadCount);
             this.initialized = new $.Deferred();
             this.once('sync', this.initialized.resolve);
+            this.setComparator(settings.get('sortBy', 'activity'));
+            this.listenTo(settings, 'change:sortBy', function (value) {
+                this.setComparator(value);
+                this.sort();
+            });
+        },
+
+        setComparator: function (sortBy) {
+            this.comparator = sortBy === 'alphabetical' ? this.sortByTitle : this.sortByLastMessage;
+        },
+
+        sortByTitle: function (a, b) {
+            return a.sortName > b.sortName ? +1 : -1;
+        },
+
+        sortByLastMessage: function (a, b) {
+            var aLastMessage = a.get('lastMessage');
+            var bLastMessage = b.get('lastMessage');
+            if (!a || !b) return 0;
+            return -util.strings.compare(aLastMessage.messageId, bLastMessage.messageId);
         },
 
         onChangeUnreadCount: function () {

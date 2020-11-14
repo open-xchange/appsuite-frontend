@@ -20,6 +20,7 @@ define('io.ox/chat/formatting', ['io.ox/chat/data'], function (data) {
     var regItalic = /(^|\s)_(.+?)_/g;
     var regStrikethrough = /(^|\s)~(.+?)~/g;
     var regURL = /(https?:\/\/\S+)/g;
+    var regBlockquote = /((\n&gt;( [^\n]+| *))+)/g;
     var regEmoticon = /(^|\s)(((:|;)-?(\(|\)|D|\|))|&lt;3|\(y\))/g;
     var regShortcode = /(^|\s):(\w+):/g;
 
@@ -55,21 +56,34 @@ define('io.ox/chat/formatting', ['io.ox/chat/data'], function (data) {
     // mentions
     var regMention = /(^|\s)@(\w+)/g;
 
+
     function apply(str) {
-        return _.escape(str)
-            .replace(regMention, replaceMention)
+        var result = { original: str };
+        result.content = _.escape('\n' + str)
             .replace(regEmoticon, mapReplace.bind(emoticons))
-            .replace(regShortcode, mapReplace.bind(shortcodes))
+            .replace(regShortcode, mapReplace.bind(shortcodes));
+        // emoji flags
+        result.containsEmoji = regEmoji.test(result.content);
+        result.onlyEmoji = result.containsEmoji && regOnlyEmoji.test(result.content);
+        // continue
+        result.content = result.content
             .replace(regEmojiReplace, '<span class="emoji">$1</span>')
+            .replace(regMention, replaceMention)
             .replace(regBold, '$1<b>$2</b>')
             .replace(regItalic, '$1<em>$2</em>')
             .replace(regStrikethrough, '$1<del>$2</del>')
-            .replace(regURL, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+            .replace(regURL, '<a href="$1" target="_blank" rel="noopener">$1</a>')
+            .replace(regBlockquote, replaceBlockquote)
+            .trim();
+        return result;
+    }
+
+    function replaceBlockquote(all, quote) {
+        return '<blockquote>' + quote.replace(/\n&gt;\s/g, '\n').trim() + '</blockquote>';
     }
 
     function mapReplace(all, whiteSpace, hit) {
-        var emoji = this[hit];
-        return whiteSpace + (emoji ? '<span class="emoji">' + emoji + '</span>' : hit);
+        return whiteSpace + (this[hit] || hit);
     }
 
     function onlyEmoji(str) {
