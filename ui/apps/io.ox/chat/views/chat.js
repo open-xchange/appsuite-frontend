@@ -143,6 +143,7 @@ define('io.ox/chat/views/chat', [
             'keydown textarea': 'onEditorKeydown',
             'input textarea': 'onEditorInput',
             'click .send-btn': 'onSend',
+            'click .toggle-emoji': 'onToggleEmoji',
             'click .file-upload-btn': 'onTriggerFileupload',
             'click .jump-down': 'onJumpDown',
             'change .file-upload-input': 'onFileupload',
@@ -294,13 +295,15 @@ define('io.ox/chat/views/chat', [
                 );
                 var send = $('<button type="button" class="btn btn-link pull-right send-btn">').attr('aria-label', gt('Send'))
                     .append($('<i class="fa fa-paper-plane" aria-hidden="true">').attr('title', gt('Send')));
+                var emoji = $('<button type="button" class="btn btn-link pull-right toggle-emoji">').attr('aria-label', gt('Add emoji'))
+                    .append($('<i class="fa fa-smile-o" aria-hidden="true">').attr('title', gt('Add emoji')));
                 var cancel = $('<button type="button" class="btn btn-link cancel-btn">').attr('aria-label', gt('Cancel'))
                     .append($('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Cancel')));
                 var attachment = $('<button type="button" class="btn btn-link pull-right file-upload-btn">').attr('aria-label', gt('Upload file'))
                     .append($('<i class="fa fa-paperclip" aria-hidden="true">').attr('title', gt('Upload file')));
                 var input = $('<input type="file" class="file-upload-input hidden" multiple>');
 
-                return [attachment, input, $container, cancel, send];
+                return [attachment, input, $container, cancel, emoji, send];
             }
 
             if (this.model.get('type') === 'channel') {
@@ -679,6 +682,31 @@ define('io.ox/chat/views/chat', [
 
         getMessageNode: function (model, selector) {
             return this.$('.message[data-cid="' + model.cid + '"] ' + (selector || ''));
+        },
+
+        onToggleEmoji: function () {
+            if (this.emojiView) {
+                this.emojiView.toggle();
+            } else {
+                if (this.emojiView === false) return;
+                this.emojiView = false;
+                require(['io.ox/core/emoji/view'], function (EmojiView) {
+                    this.emojiView = new EmojiView({});
+                    this.listenTo(this.emojiView, 'insert', this.insertEmoji);
+                    this.$el.append(this.emojiView.render().$el);
+                }.bind(this));
+            }
+        },
+
+        insertEmoji: function (unicode) {
+            var val = this.$editor.val();
+            var start = this.$editor[0].selectionStart;
+            if (start !== undefined) {
+                val = val.substr(0, start) + unicode + val.substr(start);
+            } else {
+                val += unicode;
+            }
+            this.$editor.val(val);
         }
     });
 

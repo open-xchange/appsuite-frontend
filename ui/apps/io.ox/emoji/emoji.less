@@ -29,26 +29,22 @@ img.emoji {
 
 .mceIcon.mce_emoji { background-position:-60px -20px; }
 
-//work-around for Bug 34943 - the second rule can be removed for 7.8.0
-.mceEmojiPane, .mce-container .mceEmojiPane {
+// work-around for Bug 34943 - the second rule can be removed for 7.8.0
+// was .mceEmojiPane, .mce-container .mceEmojiPane
+.mce-container .mceEmojiPane, .emoji-picker {
+    height: 400px;
+    width: 354px;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f5;
+    border-radius: 6px;
+}
 
-    @background: #f5f5f5;
-
-    height: 309px;
-    width: 296px;
-    vertical-align: top;
-
-    .emoji-header, .emoji-icons, .emoji-footer {
-        position: absolute;
-        left: 0;
-        right: 0;
-    }
+.emoji-picker {
 
     .emoji-header {
         height: 32px;
         border-bottom: 1px solid #ddd;
-        background-color: @background;
-        bottom: auto;
         padding: 0 16px;
         .emoji-category {
             font-weight: bold;
@@ -57,20 +53,19 @@ img.emoji {
     }
 
     .emoji-icons {
-        top: 32px + 1;
-        bottom: 40px + 16 + 1;
+        flex: 1;
         padding: 16px;
         white-space: normal;
-        overflow: auto;
+        overflow-y: auto;
         background-color: white;
     }
 
     .reset-recents {
-        color: @black;
         background: #eee;
         padding: 0;
         width: 100%;
         color: #333;
+        font-size: 14px;
         line-height: 32px;
         text-align: center;
         box-sizing: border-box;
@@ -79,31 +74,33 @@ img.emoji {
         margin-top: 8px;
     }
 
-    .emoji {
+    button {
+        /* we need a different font, otherwise we see broken emojis */
+        font: 32px/40px "Helvetica Neue", Helvetica, Arial, sans-serif;
         color: @black;
-        font-size: 32px;
-        line-height: 40px;
         display: inline-block;
-        cursor: pointer;
         width: 40px;
         text-align: center;
         text-decoration: none;
-        margin-right: 4px;
-        &:focus, &:hover {
-            background-color: #ccc;
+        background-color: transparent;
+        border-radius: 4px;
+        padding: 0;
+        border: 0;
+        margin: 0;
+        outline: 0;
+        &:focus {
+            background-color: @link-color;
         }
     }
 
     .emoji-footer {
-        top: auto;
-        bottom: 0;
-        height: 40px;
         padding: 8px 16px;
         white-space: normal;
         border-top: 1px solid #ddd;
         overflow: hidden;
-        background-color: @background;
-        .emoji {
+        display: flex;
+        justify-content: space-between;
+        button {
             filter: saturate(0);
         }
         .active {
@@ -125,5 +122,3 @@ img.emoji {
         a { cursor: pointer; }
     }
 }
-
-

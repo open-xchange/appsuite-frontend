@@ -1140,6 +1140,11 @@
             display: none;
         }
 
+        .editor-controls {
+            position: absolute;
+            right: 16px;
+        }
+
         .message-thumbnail {
             max-width: 120px;
             max-height: 120px;
@@ -1189,6 +1194,22 @@
                 &:empty { display: none; }
             }
         }
+    }
+
+    .emoji-picker {
+        position: absolute;
+        right: 16px;
+        bottom: 64px;
+        border: 1px solid #eee;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    &.columns .toggle-emoji {
+        display: none;
+    }
+
+    &.columns .controls .file-upload-btn {
+        margin: 0;
     }
 
     .chat-members-container {

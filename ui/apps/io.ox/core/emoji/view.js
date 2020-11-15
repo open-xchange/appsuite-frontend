@@ -30,11 +30,11 @@ define('io.ox/core/emoji/view', [
     var EmojiView = Backbone.View.extend({
 
         tagName: 'div',
-        className: 'mceEmojiPane',
+        className: 'emoji-picker',
 
         events: {
-            'click .emoji-icons .emoji': 'onInsertEmoji',
-            'click .emoji-footer .emoji': 'onSelectCategory',
+            'click .emoji-icons button': 'onInsertEmoji',
+            'click .emoji-footer button': 'onSelectCategory',
             'click .emoji-option, .emoji-tab': 'onSelectEmojiCollection',
             'click .reset-recents': 'onResetRecents'
         },
@@ -43,7 +43,7 @@ define('io.ox/core/emoji/view', [
         onInsertEmoji: function (e) {
             var unicode = $(e.target).text();
             util.addRecent(unicode);
-            this.editor.execCommand('mceInsertContent', false, unicode);
+            if (this.editor) this.editor.execCommand('mceInsertContent', false, unicode);
             this.trigger('insert', unicode);
         },
 
@@ -62,32 +62,26 @@ define('io.ox/core/emoji/view', [
         },
 
         initialize: function (options) {
-
             this.editor = options.editor;
             this.subject = options.subject || false;
             this.isRendered = false;
             this.isOpen = false;
             this.currentCategory = '';
-
+            if (this.editor) this.$el.addClass('mceEmojiPane');
             // for optional run-time access
             this.$el.data('view', this);
         },
 
         render: function () {
 
-            // outer container first to fix firefox's problems with position: relative in table cells
-            var node = $('<div class="table-cell-fix">');
-
-            node.append(
+            this.$el.append(
                 $('<div class="emoji-header">').append(
-                    // category name
                     $('<span class="emoji-category">')
                 ),
                 $('<div class="emoji-icons">'),
                 $('<div class="emoji-footer">')
             );
 
-            this.$el.append(node);
             this.drawCategories();
             this.setCategory();
             this.isRendered = true;
@@ -99,7 +93,7 @@ define('io.ox/core/emoji/view', [
         drawCategories: function () {
 
             function draw(category) {
-                return $('<button class="emoji">')
+                return $('<button type="button">')
                     .attr('data-category', category.name)
                     .attr('title', /*#, dynamic */ gt(category.name))
                     .text(category.unicode);
@@ -126,7 +120,7 @@ define('io.ox/core/emoji/view', [
 
             node.append(
                 list.map(function (unicode) {
-                    return $('<button class="emoji">').text(unicode);
+                    return $('<button type="button">').text(unicode);
                 })
             );
 
