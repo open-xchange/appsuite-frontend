@@ -699,14 +699,19 @@ define('io.ox/chat/views/chat', [
         },
 
         insertEmoji: function (unicode) {
-            var val = this.$editor.val();
-            var start = this.$editor[0].selectionStart;
-            if (start !== undefined) {
-                val = val.substr(0, start) + unicode + val.substr(start);
+            var editor = this.$editor[0];
+            var value = editor.value;
+            var pos = editor.selectionStart;
+            var activeElement = document.activeElement;
+            if (pos !== undefined) {
+                editor.value = value.substr(0, pos) + unicode + value.substr(pos);
+                editor.focus();
+                pos += unicode.length;
+                editor.setSelectionRange(pos, pos);
+                if (activeElement) activeElement.focus();
             } else {
-                val += unicode;
+                editor.value += unicode;
             }
-            this.$editor.val(val);
         }
     });
 
