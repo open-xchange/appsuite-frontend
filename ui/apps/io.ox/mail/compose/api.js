@@ -96,6 +96,8 @@ define('io.ox/mail/compose/api', [
                 api.trigger('mailref:' + space.id, mailPath);
                 space.cid = 'io.ox/mail/compose:' + space.id + ':edit';
             }
+            // fallback for db draft from scratch
+            space.cid = space.cid || ('io.ox/mail/compose:' + space.id + ':edit');
             // add to mailref mapping;
             hash[mailref] = space.id;
             if (ox.debug) console.log(space.cid, mailref);
