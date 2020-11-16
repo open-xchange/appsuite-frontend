@@ -14,14 +14,13 @@
 define('io.ox/mail/compose/main', [
     'io.ox/core/extensions',
     'io.ox/mail/api',
-    'io.ox/mail/compose/api',
     'io.ox/core/api/account',
     'io.ox/mail/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/mail/actions',
     'io.ox/mail/compose/actions'
-], function (ext, mailAPI, composeAPI, accountAPI, mailUtil, settings, gt) {
+], function (ext, mailAPI, accountAPI, mailUtil, settings, gt) {
 
     'use strict';
 
@@ -239,7 +238,7 @@ define('io.ox/mail/compose/main', [
         // edit case: prefer "space" instead of "id/folder"
         if (data.type === 'edit' && data.original) {
             mailref = _.cid({ id: data.original.id, folder: data.original.folderId });
-            id = composeAPI.space.hash[mailref] || mailref;
+            id = ox.ui.spaces[mailref] || mailref;
         }
         // fallback: backbone default
         if (!id) return;

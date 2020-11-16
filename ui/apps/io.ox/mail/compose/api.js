@@ -18,7 +18,9 @@ define('io.ox/mail/compose/api', [
 
     'use strict';
 
-    var api = {}, hash = {};
+    var api = {};
+
+    ox.ui.spaces = ox.ui.spaces || {};
 
     _.extend(api, Backbone.Events);
 
@@ -99,7 +101,7 @@ define('io.ox/mail/compose/api', [
             // fallback for db draft from scratch
             space.cid = space.cid || ('io.ox/mail/compose:' + space.id + ':edit');
             // add to mailref mapping;
-            hash[mailref] = space.id;
+            ox.ui.spaces[mailref] = space.id;
             if (ox.debug) console.log(space.cid, mailref);
             return space;
         }
@@ -112,7 +114,7 @@ define('io.ox/mail/compose/api', [
     // composition space
     api.space = {
 
-        hash: hash,
+        hash: ox.ui.spaces,
 
         process: process,
 
@@ -269,7 +271,7 @@ define('io.ox/mail/compose/api', [
         api.trigger('mailref:changed', { mailPath: mailPath });
         api.trigger('mailref:' + data.compositionSpace.id, mailPath);
         // add to mailref mapping;
-        hash[mailref] = data.compositionSpace.id;
+        ox.ui.spaces[mailref] = data.compositionSpace.id;
         return _.extend({}, data.attachments[0], { mailPath: mailPath });
     };
 

@@ -100,6 +100,7 @@ define('io.ox/core/boot/load', [
         run: function () {
             // guests don't have webmail for example
             if (!capabilities.has('webmail')) return;
+            ox.ui.spaces = ox.ui.spaces || {};
 
             // TODO-859: review loading behaviour
             ox.rampup.compositionSpaces = $.when(
