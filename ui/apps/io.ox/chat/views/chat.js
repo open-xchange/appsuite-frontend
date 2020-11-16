@@ -564,7 +564,6 @@ define('io.ox/chat/views/chat', [
             api.typing(this.model.id, false);
 
             if (this.specialMode === 'edit') {
-                //this.messageReference.set({ content: content, edited: true });
                 api.editMessage(content, this.messageReference).fail(this.model.handleError);
                 this.onCancelSpecialMode();
             } else if (this.specialMode === 'reply') {

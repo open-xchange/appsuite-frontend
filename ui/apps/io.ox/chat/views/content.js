@@ -40,7 +40,7 @@ define('io.ox/chat/views/content', [
                 'change:content': this.onChangeBody,
                 'change:time': this.onChangeTime,
                 'change:deliveryState': this.onChangeDelivery,
-                'change:flags': this.onChangeFlags
+                'change:edited': this.onChangeFlags
             });
             this.listenTo(this.model, 'change:deliveryState', this.onChangeFlags);
             this.chunkSize = initialChunkSize;
@@ -120,7 +120,7 @@ define('io.ox/chat/views/content', [
             var failed = this.model.get('deliveryState') === 'failed';
             if (failed) return this.$flags.append($('<span class="flag-failed">').text(gt('Delivery failed')));
             var edited = !this.model.isDeleted() && this.model.isEdited();
-            if (edited) this.$flags.append($('<span>').text('Edited'));
+            if (edited) this.$flags.append($('<span>').text(gt('Edited')));
         },
 
         onChangeBody: function () {
@@ -132,7 +132,7 @@ define('io.ox/chat/views/content', [
         },
 
         onChangeFlags: function () {
-            this.$('.flags').replaceWith(this.renderFlags());
+            this.renderFlags();
         }
     });
 
