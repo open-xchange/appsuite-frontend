@@ -1,4 +1,4 @@
-image: gitlab.open-xchange.com:4567/docker/docker:latest
+image: docker:latest
 
 workflow:
   rules:
