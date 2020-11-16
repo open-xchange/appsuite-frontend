@@ -404,11 +404,12 @@ define('io.ox/chat/views/chat', [
         },
 
         onCancelSpecialMode: function () {
-            this.$editor.val('').focus();
+            if (this.specialMode === 'edit') this.$editor.val('');
             if (this.$messageReference) this.$messageReference.remove();
             this.$('.controls').removeClass('edit-mode reply-mode system text preview emoji');
             this.specialMode = false;
             this.messageReference = null;
+            _.defer(function () { this.$editor.focus(); }.bind(this));
         },
 
         onMessageEdit: function (model) {
@@ -444,7 +445,6 @@ define('io.ox/chat/views/chat', [
 
             this.$('.controls').addClass('reply-mode');
             this.$('.reference-container').empty().append(this.$messageReference);
-            this.$editor.focus();
         },
 
         scrollToBottom: function () {
