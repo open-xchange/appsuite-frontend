@@ -1727,7 +1727,6 @@ Scenario('[C7427] Create appointment with external participants', async function
         checkViews();
     });
 
-    await ctx.remove();
 });
 
 Scenario('[C7426] Create appointment with internal and external participants', async function (I, users, contexts, dialogs, calendar, mail) {
@@ -1796,7 +1795,6 @@ Scenario('[C7426] Create appointment with internal and external participants', a
         checkAppointment();
     });
 
-    await ctx.remove();
 });
 
 Scenario('[OXUIB-182] Choose correct start time on time change dates', function (I, calendar) {

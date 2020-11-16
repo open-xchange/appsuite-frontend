@@ -423,8 +423,6 @@ Scenario('[C45025] Create shared object with multiple users (external users) wit
         I.waitForText('here is bob', 5, '.white-page.letter.plain-text');
         I.dontSee('Edit', '.viewer-toolbar');
     });
-
-    await ctx.remove();
 });
 
 Scenario('[C83277] Create shared object with expiration date', async function (I, users, drive, dialogs) {

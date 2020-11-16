@@ -145,7 +145,6 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.openApp('Calendar');
         I.dontSee('MySubject');
     });
-    await ctx.remove();
 });
 
 Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, calendar, contexts) {
@@ -230,7 +229,6 @@ Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, 
     I.seeFile('testdocument.odt');
     I.seeFileContentsEqualReferenceFile('e2e/media/files/generic/testdocument.odt');
 
-    await ctx.remove();
 });
 
 Scenario('[C241126] iTIP mails without appointment reference', async function (I, users, mail, calendar) {
