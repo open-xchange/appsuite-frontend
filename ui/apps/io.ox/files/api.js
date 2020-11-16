@@ -334,7 +334,7 @@ define('io.ox/files/api', [
         // should be synchronous to be able to handle popup-blocker in Actions
         isSharedFederatedSync: function () {
             var folderModel = this.getClosestFolderModelSync();
-            return folderModel && folderModel.is('federated-sharing');
+            return !_.isEmpty(folderModel) && folderModel.is('federated-sharing');
         },
 
         // note: currently no use case needed to be sync, but keep it consistent for now
