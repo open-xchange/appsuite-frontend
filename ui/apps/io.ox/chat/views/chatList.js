@@ -57,12 +57,6 @@ define('io.ox/chat/views/chatList', [
                 $('<h2>').text(this.options.header),
                 this.$ul
             );
-            // rendering happens via onAdd
-            this.collection.fetch().fail(function () {
-                require(['io.ox/core/yell'], function (yell) {
-                    yell('error', gt('Chats could not be loaded.'));
-                });
-            });
             return this;
         },
 

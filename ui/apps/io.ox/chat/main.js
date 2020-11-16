@@ -30,11 +30,12 @@ define('io.ox/chat/main', [
     'io.ox/backbone/views/modal',
     'io.ox/chat/views/avatar',
     'io.ox/switchboard/presence',
+    'io.ox/core/yell',
     'settings!io.ox/chat',
     'gettext!io.ox/chat',
     'less!io.ox/chat/style',
     'io.ox/chat/commands'
-], function (ext, api, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, settings, gt) {
+], function (ext, api, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, settings, gt) {
 
     'use strict';
 
@@ -234,6 +235,7 @@ define('io.ox/chat/main', [
             this.resetCount(id, opt);
             $('.chat-leftside').find('li[data-cid="' + id + '"]').attr('tabindex', 0).addClass('active')
                 .siblings('li').each(function () { $(this).attr('tabindex', -1).removeClass('active'); });
+            settings.set('lastRoomId', id).save();
         },
 
         clearActiveSelection: function () {
@@ -296,9 +298,7 @@ define('io.ox/chat/main', [
                         space: true
                     };
                 }, function () {
-                    require(['io.ox/core/yell'], function (yell) {
-                        yell('error', gt('The file could not be loaded.'));
-                    });
+                    yell('error', gt('The file could not be loaded.'));
                 });
             });
 
@@ -537,7 +537,24 @@ define('io.ox/chat/main', [
                     new EmptyView().render().$el
                 )
             );
+
             this.onChangeDensity();
+
+            // load chat rooms here -- not in every ChatListView
+            data.chats.fetch().then(
+                function () {
+                    _.delay(this.onChatsLoaded.bind(this));
+                }.bind(this),
+                function () {
+                    yell('error', gt('Chats could not be loaded.'));
+                }
+            );
+        },
+
+        onChatsLoaded: function () {
+            var showLastRoom = settings.get('selectLastRoom', true);
+            var lastRoomId = showLastRoom && settings.get('lastRoomId');
+            if (lastRoomId && data.chats.get(lastRoomId)) this.showChat(lastRoomId);
         },
 
         getLeftNavigation: function () {
@@ -681,22 +698,27 @@ define('io.ox/chat/main', [
 
     win.$body.parent().busy();
 
-    data.fetchUsers().then(function () {
-        return data.session.getUserId();
-    }).always(function () {
-        win.$body.parent().idle();
-    }).then(function success() {
-        win.draw();
-        require(['io.ox/chat/notifications']);
-    }, function fail() {
-        win.$body.parent().idle();
-        win.drawAuthorizePane();
-    });
+    data.fetchUsers()
+        .then(function () {
+            return data.session.getUserId();
+        })
+        .always(function () {
+            win.$body.parent().idle();
+        })
+        .then(
+            function success() {
+                win.draw();
+                require(['io.ox/chat/notifications']);
+            },
+            function fail() {
+                win.$body.parent().idle();
+                win.drawAuthorizePane();
+            }
+        );
 
     ox.chat = {
         data: data
     };
 
     return win;
-
 });

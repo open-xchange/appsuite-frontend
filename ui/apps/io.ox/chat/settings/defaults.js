@@ -26,6 +26,7 @@ define('io.ox/chat/settings/defaults', [], function () {
         },
         groupByType: false,
         sortBy: 'activity',
-        density: 'default'
+        density: 'default',
+        selectLastRoom: true
     };
 });

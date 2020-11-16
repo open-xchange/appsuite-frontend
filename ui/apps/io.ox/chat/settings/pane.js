@@ -60,6 +60,7 @@ define('io.ox/chat/settings/pane', [
                 this.$el.append(
                     util.fieldset(
                         gt('View options'),
+                        util.checkbox('selectLastRoom', gt('Select last chat on start'), settings),
                         util.checkbox('groupByType', gt('Group chats by type'), settings),
                         //#. Sort chats by ... (alphabetical|last activity)
                         util.radio('sortBy', gt('Sort chats by'), settings, [
