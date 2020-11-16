@@ -100,9 +100,8 @@ define('io.ox/chat/views/message', [
         },
 
         onChangeState: function () {
-            var visible = !this.model.isDeleted() && !this.model.isUploading() && !this.model.isFailed();
-            this.$('.actions-toggle, .delivery').toggle(visible);
-
+            var hidden = this.model.isDeleted() || this.model.isUploading() || this.model.isFailed();
+            this.$('.actions-toggle, .delivery').toggleClass('hidden', hidden);
             var deliveryState = this.model.getDeliveryState();
             if (!deliveryState) return;
             this.$('.delivery').removeClass('server received seen').addClass(deliveryState);
