@@ -1865,14 +1865,26 @@ define('io.ox/mail/main', [
                     return ox.ui.App.restoreLoad({ spaces: list });
                 }).then(function () {
                     // look for removed spaces
-                    ox.ui.apps.each(function (app) {
-                        // wrong module
-                        if (app.cid.indexOf('io.ox/mail/compose:') !== 0) return;
-                        // still open
-                        return activespaces[app.cid] ?
-                            app.resume(activespaces[app.cid]) :
+                    _.each(ox.ui.App.get('io.ox/mail/compose'), function (app) {
+                        var space = activespaces[app.cid];
+                        // update taskbar items title (changed outside client)
+                        if (space && space.point) {
+                            var model = getTaskBarModel(space.point.cid);
+                            if (model) model.set('title', space.description);
+                        }
+                        // update state
+                        return space ?
+                            app.resume(space) :
                             app.pause({ code: 'UI-SPACEMISSING' });
                     });
+                }).catch(function (e) {
+                    if (ox.debug) console.error(e);
+                });
+            }
+
+            function getTaskBarModel(cid) {
+                return _.find(ox.ui.floatingWindows.models, function (model) {
+                    return model.get('cid') === cid;
                 });
             }
         },
