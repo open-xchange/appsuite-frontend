@@ -32,7 +32,13 @@ define('io.ox/calendar/actions/create', [
     }
 
     function showDialog(params, folder) {
-        var dev = ((folder.created_from && util.getFullName(folder.created_from)) ? $.Deferred().resolve(folder.created_from) : folder.userAPI.get({ id: folder.created_by }));
+        var dev = ((folder.created_from && util.getFullName(folder.created_from)) ? $.when($.when({
+            cn: folder.created_from.display_name,
+            email: folder.created_from.contact.email1,
+            uri: 'mailto:' + folder.created_from.contact.email1,
+            entity: folder.created_from.entity,
+            contact: folder.created_from.contact
+        })) : folder.userAPI.get({ id: folder.created_by }));
         dev.done(function (user) {
             new ModalDialog({
                 title: gt('Appointments in shared calendars'),
