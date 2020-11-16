@@ -52,27 +52,46 @@ define('io.ox/mail/actions/delete', [
         });
     });
 
-    function getMsgRef(model) {
-        // db drafts (msgref) vs. real drafts (mailPath)
-        var mailPath = model.get('mailPath');
-        return mailPath ? _.cid({ id: mailPath.id, folder: mailPath.folderId }) : model.get('msgref');
-    }
+    // check for open composition spaces (does not cover 'empty folder' action yet)
+    var promptForCurrentlyEdited = (function () {
 
-    //  TODO-859: could be potentially removed
-    function ignoreCurrentlyEdited(list) {
-        var hash = {};
-        _.each(ox.ui.App.get('io.ox/mail/compose'), function (app) {
-            // ignore not fully initialised (minimized) restore point instances
-            if (!app.view) return;
-            hash[getMsgRef(app.view.model)] = true;
-        });
-        if (!Object.keys(hash).length) return list;
-        return _.filter(list, function (mail) {
-            if (!accountAPI.is('drafts', mail.folder_id)) return true;
-            if (!mail.attachment) return true;
-            return !hash[mail.cid];
-        });
-    }
+        function ignoreCurrentlyEdited(list) {
+            if (!Object.keys(ox.ui.spaces).length) return list;
+            return _.filter(list, function (mail) {
+                return !ox.ui.spaces[mail.cid];
+            });
+        }
+
+        return function promptForCurrentlyEdited(all, list) {
+            var filtered = ignoreCurrentlyEdited(list),
+                diff = all.length - filtered.length;
+            // do not show dialog an proceed
+            if (!diff) return $.when();
+
+            var def = $.Deferred();
+            require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                var dialog = new ModalDialog({
+                    title: gt('Are you sure?'),
+                    description: gt.ngettext(
+                        //#. %1$d is the number of mails
+                        'This would also delete a currently edited draft.',
+                        'This would also delete %1$d currently edited drafts.', diff, diff
+                    ),
+                    async: true,
+                    backdrop: true
+                })
+                .addCancelButton()
+                .addButton({ action: 'force', label: gt('Delete') })
+                .open();
+
+                dialog.on('cancel', def.reject);
+                dialog.on('force', def.resolve);
+                dialog.on('action', dialog.close);
+            });
+            return def;
+        };
+
+    })();
 
     return function (baton) {
         var list = folderAPI.ignoreSentItems(baton.array()),
@@ -82,36 +101,30 @@ define('io.ox/mail/actions/delete', [
                 return accountAPI.is('trash', o.folder_id);
             }));
 
-        // pragmatic approach for bug 55442 cause mail is so special (weak spot: empty folder)
-        list = ignoreCurrentlyEdited(list);
-        if (all.length !== list.length) {
-            notifications.yell({
-                headline: gt('Note'),
-                type: 'info',
-                message: gt('Currently edited drafts with attachments can not be deleted until you close the correspondig mail compose window.')
-            });
-            // no messages left
-            if (!list.length) return;
-            all = list.slice();
-        }
+        // delete also currently edited drafts and it's corresponding composition spaces?
+        promptForCurrentlyEdited(all, list).then(function proceed() {
+            // permanently delete?
+            if (showPrompt) {
+                require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                    //#. 'Delete mail' as modal dialog header to confirm to delete a mail.
+                    new ModalDialog({ title: gt('Delete mail'), description: getQuestion(list) })
+                        .addCancelButton()
+                        .addButton({ label: gt('Delete'), action: 'delete' })
+                        .on('delete', function () { api.remove(list, all).fail(notifications.yell); })
+                        // trigger back event, used for mobile swipe delete reset
+                        .on('cancel', function () { ox.trigger('delete:canceled', list); })
+                        .open();
+                });
+            } else {
+                api.remove(list, all, shiftDelete).fail(function (e) {
+                    // mail quota exceeded? see above
+                    if (e.code === 'MSG-0039') return;
+                    notifications.yell(e);
+                });
+            }
+        }, function cancel() {
+            ox.trigger('delete:canceled', all);
+        });
 
-        if (showPrompt) {
-            require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-                //#. 'Delete mail' as modal dialog header to confirm to delete a mail.
-                new ModalDialog({ title: gt('Delete mail'), description: getQuestion(list) })
-                    .addCancelButton()
-                    .addButton({ label: gt('Delete'), action: 'delete' })
-                    .on('delete', function () { api.remove(list, all).fail(notifications.yell); })
-                    // trigger back event, used for mobile swipe delete reset
-                    .on('cancel', function () { ox.trigger('delete:canceled', list); })
-                    .open();
-            });
-        } else {
-            api.remove(list, all, shiftDelete).fail(function (e) {
-                // mail quota exceeded? see above
-                if (e.code === 'MSG-0039') return;
-                notifications.yell(e);
-            });
-        }
     };
 });
