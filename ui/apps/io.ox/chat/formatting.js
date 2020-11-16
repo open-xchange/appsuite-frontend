@@ -34,7 +34,7 @@ define('io.ox/chat/formatting', ['io.ox/chat/data'], function (data) {
     // Chrome:64 (2018); Edge:79 (2020); Firefox:78 (2020); Safari:11.1 (2018); IE:--
     // regex is written as a function due to (falsy) eslint (would report invalid regex)
     var regOnlyEmoji = new RegExp('^(\\p{Emoji_Presentation}|\u200D){1,9}$', 'u');
-    var regEmojiReplace = new RegExp('(\\p{Emoji_Presentation}|\u200D)+', 'ug');
+    var regEmojiReplace = new RegExp('((\\p{Emoji_Presentation}|\u200D)+)', 'ug');
     var regEmoji = new RegExp('\\p{Emoji_Presentation}', 'u');
 
     var emoticons = {
