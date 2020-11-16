@@ -15,21 +15,21 @@
 
 Feature('Calendar > iTIP - Alias Handling');
 
-Before(async function (users) {
+Before(async function (users, contexts) {
     await users.create();
+    const secondContext = await contexts.create();
+    await users.create(users.getRandom(), secondContext);
 });
 
 After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C223834] iTIP mail alias handling', async function (I, users, mail, calendar, contexts) {
+Scenario('[C223834] iTIP mail alias handling', async function (I, users, mail, calendar) {
     // We need two users. The organizer and the attendee
     // We put them in two contexts, so they synchronize
     // their calendars via iTIP only
     // The attendee also has an alias
-    const secondContext = await contexts.create();
-    await users.create(users.getRandom(), secondContext);
     const [organizer, attendee] = users;
     // We'll use "plus addressing" or "sub addressing" to generate the alias
     // Commonly bla+something@example.com is routed to bla@example.com
@@ -51,6 +51,7 @@ Scenario('[C223834] iTIP mail alias handling', async function (I, users, mail, c
     I.logout();
     I.login('app=io.ox/mail', { user: attendee });
     mail.waitForApp();
+    I.waitForText('New appointment: C223834', 10);
     mail.selectMail('New appointment: C223834');
     I.waitForText('Accept');
     I.click('Accept');
@@ -59,8 +60,7 @@ Scenario('[C223834] iTIP mail alias handling', async function (I, users, mail, c
     I.logout();
     I.login('app=io.ox/mail', { user: organizer });
     mail.waitForApp();
+    I.waitForText('accepted the invitation: C223834', 10);
     mail.selectMail(attendees_alias_display_name + ' accepted the invitation: C223834');
     I.waitForText(attendees_alias_address);
-
-    await secondContext.remove();
 });
