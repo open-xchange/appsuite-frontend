@@ -38,18 +38,6 @@ define('io.ox/files/toolbar', [
                 title: gt('New'),
                 dropdown: 'io.ox/files/toolbar/new'
             },
-            'edit': {
-                prio: 'hi',
-                mobile: 'lo',
-                title: gt('Edit'),
-                ref: 'io.ox/files/actions/editor'
-            },
-            'edit-federated': {
-                prio: 'hi',
-                mobile: 'lo',
-                title: gt('Edit'),
-                ref: 'io.ox/files/actions/edit-federated'
-            },
             'upload': {
                 prio: 'hi',
                 mobile: 'hi',
@@ -62,6 +50,18 @@ define('io.ox/files/toolbar', [
                 mobile: 'lo',
                 title: gt('Share'),
                 ref: 'io.ox/files/actions/invite'
+            },
+            'edit': {
+                prio: 'hi',
+                mobile: 'lo',
+                title: gt('Edit'),
+                ref: 'io.ox/files/actions/editor'
+            },
+            'edit-federated': {
+                prio: 'hi',
+                mobile: 'lo',
+                title: gt('Edit'),
+                ref: 'io.ox/files/actions/edit-federated'
             },
             'viewer': {
                 prio: 'hi',
