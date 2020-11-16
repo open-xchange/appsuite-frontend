@@ -87,7 +87,7 @@ define('io.ox/chat/commands', [
     function renderCall(baton) {
         var model = baton.model,
             event = baton.event,
-            link = $('<a _target="blank">').attr('href', event.link).text(event.link).prop('outerHTML'),
+            link = $('<a target="_blank" rel="noopener">').attr('href', event.link).text(event.link).prop('outerHTML'),
             caller = data.users.getName(model.get('sender')) || model.get('sender');
 
         if (!event.link) return;
