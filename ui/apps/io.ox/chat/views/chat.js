@@ -497,13 +497,12 @@ define('io.ox/chat/views/chat', [
             textarea.style.height = 'auto';
             var scrollHeight = textarea.scrollHeight;
             textarea.style.height = (scrollHeight) + 'px';
-            this.onTyping(value !== '');
+            if (value) this.onTyping();
         },
 
-        onTyping: _.throttle(function (state) {
-            // prevent typings for new private chats which have no roomId yet
+        onTyping: _.throttle(function () {
             if (!this.model.id) return;
-            api.typing(this.model.id, state);
+            api.typing(this.model.id, true);
         }, 2500, { trailing: false }),
 
         onTriggerFileupload: function () {
