@@ -106,7 +106,8 @@ define('io.ox/chat/settings/pane', [
                 this.$el.append(
                     util.fieldset(
                         //#. Should be "töne" in german, used for notification sounds. Not "geräusch"
-                        gt('Notification sounds'),
+                        gt('Notifications'),
+                        util.checkbox('showChatNotifications', gt('Show desktop notifications for new messages'), settings),
                         util.checkbox('sounds/enabled', gt('Play notification sound for new messages'), settings),
                         util.compactSelect('sounds/file', gt('Sound'), settings, soundList),
                         util.compactSelect('sounds/playWhen', gt('Behavior'), settings, playWhenOptions)
@@ -117,14 +118,6 @@ define('io.ox/chat/settings/pane', [
                 }
                 toggle.call(this, settings.get('sounds/enabled'));
                 this.listenTo(settings, 'change:sounds/enabled', toggle.bind(this));
-            }
-        }, {
-            id: 'chat-notifications',
-            index: INDEX += 100,
-            render: function () {
-                this.$el.append(
-                    util.checkbox('showChatNotifications', gt('Show desktop notifications for new messages'), settings)
-                );
             }
         }
     );
