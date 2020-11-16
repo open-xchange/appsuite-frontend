@@ -567,7 +567,8 @@ define('io.ox/chat/views/chat', [
                 api.editMessage(content, this.messageReference).fail(this.model.handleError);
                 this.onCancelSpecialMode();
             } else if (this.specialMode === 'reply') {
-                this.model.postMessage({ content: content, replyTo: this.messageReference.attributes });
+                var replyTo = this.messageReference.omit('edited', 'replyTo');
+                this.model.postMessage({ content: content, replyTo: replyTo });
                 this.onCancelSpecialMode();
             } else {
                 var message = { content: content };

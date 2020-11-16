@@ -40,7 +40,8 @@ define('io.ox/chat/views/content', [
                 'change:content': this.onChangeBody,
                 'change:time': this.onChangeTime,
                 'change:deliveryState': this.onChangeDelivery,
-                'change:edited': this.onChangeFlags
+                'change:edited': this.onChangeFlags,
+                'change:deleted': this.onChangeDeleted
             });
             this.listenTo(this.model, 'change:deliveryState', this.onChangeFlags);
             this.chunkSize = initialChunkSize;
@@ -133,6 +134,10 @@ define('io.ox/chat/views/content', [
 
         onChangeFlags: function () {
             this.renderFlags();
+        },
+
+        onChangeDeleted: function () {
+            if (this.model.isDeleted()) this.$('.message-quote').remove();
         }
     });
 
