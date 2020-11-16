@@ -542,7 +542,7 @@ Allow enabling unified inbox for an account at the "Add Mail account" dialog
 <config>io.ox/mail//features/authenticity=`<bool>`</config>
 Enables the authenticity feature. Please note that `com.openexchange.mail.authenticity.enabled` on MW has to be turned on as well. (default: false)
 
-<-- currently hardcoded as 'fail_neutral_trusted' and 'protected' by MW and not adjustable by any property file change or user interaction.
+<!-- currently hardcoded as 'fail_neutral_trusted' and 'protected' by MW and not adjustable by any property file change or user interaction.
 <config>io.ox/mail//authenticity/level=`<string>`</config>
 If authenticity is enabled on MW and UI (see `features/authenticity`) and this value is not marked as proteced, the user can select a level which
 controls how strict the authenticty results are shown at UI side. (default: `none`, values: `none`, `fail_neutral_trusted` and `all`)
