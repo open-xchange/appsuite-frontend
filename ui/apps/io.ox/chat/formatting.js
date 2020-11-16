@@ -20,6 +20,8 @@ define('io.ox/chat/formatting', ['io.ox/chat/data'], function (data) {
     var regItalic = /(^|\s)_(.+?)_/g;
     var regStrikethrough = /(^|\s)~(.+?)~/g;
     var regInlineCode = /(^|\s)&#x60;(.+?)&#x60;/g;
+    // eslint complains about s flag which is needed otherwise
+    var regMultilineCode = new RegExp('(^|\\s)&#x60;&#x60;&#x60;(.+?)&#x60;&#x60;&#x60;', 'gs');
     var regURL = /(https?:\/\/\S+)/g;
     var regBlockquote = /((\n&gt;( [^\n]+| *))+)/g;
     var regMention = /(^|\s)@(\w+)/g;
@@ -71,6 +73,7 @@ define('io.ox/chat/formatting', ['io.ox/chat/data'], function (data) {
             .replace(regBold, '$1<b>$2</b>')
             .replace(regItalic, '$1<em>$2</em>')
             .replace(regStrikethrough, '$1<del>$2</del>')
+            .replace(regMultilineCode, '$1<pre class="code">$2</pre>')
             .replace(regInlineCode, '$1<code>$2</code>')
             .replace(regURL, '<a href="$1" target="_blank" rel="noopener">$1</a>')
             .replace(regHyperino, '<div class="hyperino">HYPERINO</div>')
