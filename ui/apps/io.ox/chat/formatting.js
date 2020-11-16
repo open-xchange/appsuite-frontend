@@ -23,11 +23,11 @@ define('io.ox/chat/formatting', ['io.ox/chat/data'], function (data) {
     // eslint complains about s flag which is needed otherwise
     var regMultilineCode = new RegExp('(^|\\s)&#x60;&#x60;&#x60;(.+?)&#x60;&#x60;&#x60;', 'gs');
     var regURL = /(https?:\/\/\S+)/g;
-    var regBlockquote = /((\n&gt;( [^\n]+| *))+)/g;
+    var regBlockquote = /(((^|\n)&gt;( [^\n]+| *))+)/g;
     var regMention = /(^|\s)@(\w+)/g;
     var regEmoticon = /(^|\s)(((:|;)-?(\(|\)|D|\|))|&lt;3|\(y\))/g;
     var regShortcode = /(^|\s):(\w+):/g;
-    var regHyperino = /^\nHyperino$/i;
+    var regHyperino = /^Hyperino$/i;
 
     // Using unicode properties seems to catch more (and needs less code)
     // support: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Browser_compatibility
@@ -60,7 +60,7 @@ define('io.ox/chat/formatting', ['io.ox/chat/data'], function (data) {
 
     function apply(str) {
         var result = { original: str };
-        result.content = _.escape('\n' + str)
+        result.content = _.escape(str)
             .replace(regEmoticon, mapReplace.bind(emoticons))
             .replace(regShortcode, mapReplace.bind(shortcodes));
         // emoji flags

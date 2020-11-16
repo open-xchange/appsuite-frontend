@@ -59,9 +59,12 @@ define('io.ox/chat/main', [
             return _.extend(FloatingWindow.View.prototype.events, {
                 'keydown .left-navigation': 'onLeftNavigationKeydown',
                 'keydown .overlay': 'onOverlayEvent',
-                'click .overlay': 'onOverlayEvent',
-                'focus ul[role="listbox"] > li': 'onFocus',
-                'click ul[role="listbox"] > li': 'onClick'
+                'click .overlay': 'onOverlayEvent'
+                // We need to solve this differently
+                // these lines conflict with the "show-chat" command
+                // users might not be able to switch between certain chats
+                // 'focus ul[role="listbox"] > li': 'onFocus',
+                // 'click ul[role="listbox"] > li': 'onClick'
             });
         },
 
