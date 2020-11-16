@@ -533,9 +533,7 @@ define('io.ox/chat/main', [
                         )
                     )
                 ),
-                this.$rightside = $('<div class="chat-rightside">').append(
-                    new EmptyView().render().$el
-                )
+                this.$rightside = $('<div class="chat-rightside">')
             );
 
             this.onChangeDensity();
@@ -554,7 +552,9 @@ define('io.ox/chat/main', [
         onChatsLoaded: function () {
             var showLastRoom = settings.get('selectLastRoom', true);
             var lastRoomId = showLastRoom && settings.get('lastRoomId');
-            if (lastRoomId && data.chats.get(lastRoomId)) this.showChat(lastRoomId);
+            if (lastRoomId && data.chats.get(lastRoomId)) return this.showChat(lastRoomId);
+            // fill right side only if not selecting last room (to avoid flicker)
+            this.$rightside.append(new EmptyView().render().$el);
         },
 
         getLeftNavigation: function () {
