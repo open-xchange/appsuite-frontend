@@ -119,14 +119,14 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         dialogs.clickButton('Save');
         I.waitForDetached('.modal-dialog');
     });
-    
+
     session('Bob', () => {
         I.triggerRefresh();
         I.retry(5).seeNumberOfElements(locate('.contact').inside('.io-ox-contacts-window'), 0);
         I.dontSee('Builder', '.io-ox-contacts-window');
         I.dontSee('Wonderland', '.io-ox-contacts-window');
     });
-    
+
     session('Eve', () => {
         I.amOnPage(url);
         I.waitForText('The share you are looking for does not exist.', 5);

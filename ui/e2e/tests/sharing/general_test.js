@@ -38,13 +38,13 @@ Scenario('[C45021] Generate simple link for sharing', async function (I, drive, 
     I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
     I.waitForText('Copy link', 5);
     I.click('Copy link');
-    url = await I.grabValueFrom('.public-link-url-input');
+    let url = await I.grabValueFrom('.public-link-url-input');
     url = Array.isArray(url) ? url[0] : url;
     dialogs.clickButton('Share');
     I.waitForDetached('.modal-dialog');
     I.logout();
 
-    I.amOnPage(Array.isArray(url) ? url[0] : url);
+    I.amOnPage(url);
     drive.waitForApp();
     I.dontSee('Documents', '.list-view');
     I.see('Music', '.folder-tree .selected');

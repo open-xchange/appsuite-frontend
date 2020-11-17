@@ -24,19 +24,19 @@ After(async (users) => {
 });
 
 Scenario('[C7864] Set time scale interval', async (I, calendar) => {
-    const checkAppointment = (start, end) => {
-            I.waitForVisible(calendar.locators.edit);
-            I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
-            I.seeInField(calendar.locators.starttime, start);
-            I.seeInField(calendar.locators.endtime, end);
-            I.click('Discard');
-            I.waitForDetached(calendar.locators.edit);
-        },
-        // use native scrollIntoView function, as it is more reliable
-        scrollToTimeslot = (number) => {
-            document.querySelector(`.page.current .timeslot:nth-child(${number})`).scrollIntoView();
-            return true;
-        };
+    function checkAppointment(start, end) {
+        I.waitForVisible(calendar.locators.edit);
+        I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
+        I.seeInField(calendar.locators.starttime, start);
+        I.seeInField(calendar.locators.endtime, end);
+        I.click('Discard');
+        I.waitForDetached(calendar.locators.edit);
+    }
+    // use native scrollIntoView function, as it is more reliable
+    function scrollToTimeslot(number) {
+        document.querySelector(`.page.current .timeslot:nth-child(${number})`).scrollIntoView();
+        return true;
+    }
 
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/calendar');
     I.waitForVisible('#settings-interval');

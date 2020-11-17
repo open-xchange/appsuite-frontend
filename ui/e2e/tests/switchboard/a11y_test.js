@@ -34,18 +34,16 @@ Scenario('Switchboard - Call history', async (I) => {
 
     I.login('app=io.ox/mail');
     I.waitForText('Empty', 5, '.list-view');
-    await I.executeScript((mail, name) => {
-        return require(['io.ox/switchboard/views/call-history']).then(function (ch) {
-            ch.add(
-                [
-                    { email: mail, incoming: true, missed: false, name: name, type: 'zoom' },
-                    { email: mail, incoming: true, missed: true, name: name, type: 'zoom' },
-                    { email: mail, incoming: true, missed: false, name: name, type: 'zoom' },
-                    { email: mail, incoming: true, missed: true, name: name, type: 'zoom' }
-                ]
-            );
-        });
-    }, primaryEmail, display_name);
+    await I.executeScript((mail, name) => require(['io.ox/switchboard/views/call-history']).then(function (ch) {
+        ch.add(
+            [
+                { email: mail, incoming: true, missed: false, name: name, type: 'zoom' },
+                { email: mail, incoming: true, missed: true, name: name, type: 'zoom' },
+                { email: mail, incoming: true, missed: false, name: name, type: 'zoom' },
+                { email: mail, incoming: true, missed: true, name: name, type: 'zoom' }
+            ]
+        );
+    }), primaryEmail, display_name);
     I.waitForVisible('~Call history');
     I.click('~Call history');
     I.waitForVisible('.dropdown.open');
@@ -70,11 +68,9 @@ Scenario('Switchboard - Call dialog', async (I, dialogs) => {
 
     I.login('app=io.ox/mail');
     I.waitForText('Empty', 5, '.list-view');
-    await I.executeScript((mail, name) => {
-        return require(['io.ox/switchboard/views/call-history']).then(function (ch) {
-            ch.add({ email: mail, incoming: true, missed: true, name: name, type: 'zoom' });
-        });
-    }, primaryEmail, display_name);
+    await I.executeScript((mail, name) => require(['io.ox/switchboard/views/call-history']).then(function (ch) {
+        ch.add({ email: mail, incoming: true, missed: true, name: name, type: 'zoom' });
+    }), primaryEmail, display_name);
 
     I.waitForVisible('~Call history');
     I.click('~Call history');

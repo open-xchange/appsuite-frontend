@@ -32,7 +32,7 @@ Scenario('[C7481] Add a file', async (I, users, portal) => {
     //Add Recently changed files widget to Portal
     I.login('app=io.ox/portal');
     portal.waitForApp();
-    portal.addWidget('Recently changed files')
+    portal.addWidget('Recently changed files');
     I.waitForElement('~Recently changed files');
     I.waitForText('testdocument.odt', 5, '.widget[aria-label="Recently changed files"]');
     I.click('.item .title', '.widget[aria-label="Recently changed files"]');

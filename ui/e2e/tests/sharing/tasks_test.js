@@ -55,7 +55,7 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
         I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
         I.click({ css: 'button[data-action="select"]' });
         I.waitForVisible(locate('.permissions-view .row').at(2));
-        I.click('Author',  '.share-pane');
+        I.click('Author', '.share-pane');
         I.waitForText('Viewer', '.dropdown');
         I.click('Viewer');
 

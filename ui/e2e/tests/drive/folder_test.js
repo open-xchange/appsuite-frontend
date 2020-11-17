@@ -98,7 +98,7 @@ Scenario('[C8376] Add a subfolder', async (I, drive, dialogs) => {
 });
 
 Scenario('[C8377] Invite a person', (I, users, drive, dialogs) => {
-    function share(publicFolder) {
+    function share() {
         I.clickToolbar('Share');
         dialogs.waitForVisible();
         I.waitForText('Share folder');
@@ -171,7 +171,7 @@ Scenario('[C8377] Invite a person', (I, users, drive, dialogs) => {
 
         drive.waitForApp();
         I.selectFolder(publicFolderName);
-        share(true);
+        share();
     });
 
     session('Bob', () => {

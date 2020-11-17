@@ -35,12 +35,12 @@ Scenario('[C114336] Flag an E-Mail with a color flag (flaggedImplicit)', async (
     I.click('~Set color');
     I.wait(0.5);
     I.waitForText('Yellow');
-    I.retry(10).click('[data-action="color-yellow"]','.smart-dropdown-container.flag-picker');
+    I.retry(10).click('[data-action="color-yellow"]', '.smart-dropdown-container.flag-picker');
     I.waitForVisible(colorFlag);
     I.click('~Set color');
     I.wait(0.5);
     I.waitForText('Yellow');
-    I.retry(10).click('[data-action="color-none"]','.smart-dropdown-container.flag-picker');
+    I.retry(10).click('[data-action="color-none"]', '.smart-dropdown-container.flag-picker');
     I.waitForInvisible('.list-item .color-flag');
 });
 

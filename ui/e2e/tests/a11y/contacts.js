@@ -91,7 +91,7 @@ Scenario('[Z104305] Contacts - Modal Dialog - Public link (with exceptions)', as
     I.waitForText('Copy link', 5);
     I.say('Axe report');
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
-    
+
     I.say('Cleanup');
     dialogs.clickButton('Cancel');
 });

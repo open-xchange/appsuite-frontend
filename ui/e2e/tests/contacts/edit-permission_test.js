@@ -94,7 +94,7 @@ Scenario('[C7365] Edit permission ', async (I, contacts, users, dialogs) => {
     I.openFolderMenu('Contacts');
     I.clickDropdown('Share / Permissions');
     dialogs.waitForVisible();
-    I.click('Viewer',  '.share-pane');
+    I.click('Viewer', '.share-pane');
     I.clickDropdown('Reviewer');
     dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');

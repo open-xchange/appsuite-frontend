@@ -25,7 +25,7 @@ After(async function (users) {
 
 
 // Tests proper labeling and focus after changing the startDate of appointments in the listview
-Scenario('Reorder appointments with labels in list view', async function (I, calendar, users) {
+Scenario('Reorder appointments with labels in list view', async function (I, calendar) {
 
     /**
     * The following cases are tested within this test:
@@ -53,7 +53,7 @@ Scenario('Reorder appointments with labels in list view', async function (I, cal
     const refDate = moment().startOf('day').add(10, 'hour');
     const listItemSelector = (type, index) => {
         return locate(`.list-view .list-item:nth-child(${index + 1}).${type}`).as(index + '. list item (' + type + ')');
-    };;
+    };
     const folder = locate(`.folder [data-id="cal://0/${appointmentDefaultFolder}"]`);
 
     I.say('I have 4 appointments');
@@ -67,7 +67,7 @@ Scenario('Reorder appointments with labels in list view', async function (I, cal
             tzid: 'Europe/Berlin',
             value: refDate.clone().add(2, 'hour').format('YYYYMMDD[T]HHmmss')
         },
-        summary: "Appointment 1"
+        summary: 'Appointment 1'
     });
 
     await I.haveAppointment({
@@ -80,42 +80,42 @@ Scenario('Reorder appointments with labels in list view', async function (I, cal
             tzid: 'Europe/Berlin',
             value: refDate.clone().add(2, 'day').add(4, 'hour').format('YYYYMMDD[T]HHmmss')
         },
-        summary: "Appointment 2"
+        summary: 'Appointment 2'
     });
 
     await I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
         startDate: {
             tzid: 'Europe/Berlin',
-            value: refDate.clone().add(4, 'day').add(6, 'hour').format('YYYYMMDD[T]HHmmss')},
+            value: refDate.clone().add(4, 'day').add(6, 'hour').format('YYYYMMDD[T]HHmmss') },
         endDate: {
             tzid: 'Europe/Berlin',
             value: refDate.clone().add(4, 'day').add(8, 'hour').format('YYYYMMDD[T]HHmmss')
         },
-        summary: "Appointment 3"
+        summary: 'Appointment 3'
     });
 
     await I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
         startDate: {
             tzid: 'Europe/Berlin',
-            value: refDate.clone().add(6, 'day').add(8, 'hour').format('YYYYMMDD[T]HHmmss')},
+            value: refDate.clone().add(6, 'day').add(8, 'hour').format('YYYYMMDD[T]HHmmss') },
         endDate: {
             tzid: 'Europe/Berlin',
             value: refDate.clone().add(6, 'day').add(10, 'hour').format('YYYYMMDD[T]HHmmss')
         },
-        summary: "Appointment 4"
+        summary: 'Appointment 4'
     });
     await I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
         startDate: {
             tzid: 'Europe/Berlin',
-            value: refDate.clone().add(8, 'day').add(10, 'hour').format('YYYYMMDD[T]HHmmss')},
+            value: refDate.clone().add(8, 'day').add(10, 'hour').format('YYYYMMDD[T]HHmmss') },
         endDate: {
             tzid: 'Europe/Berlin',
             value: refDate.clone().add(8, 'day').add(12, 'hour').format('YYYYMMDD[T]HHmmss')
         },
-        summary: "Appointment 5"
+        summary: 'Appointment 5'
     });
 
     // login
@@ -140,7 +140,7 @@ Scenario('Reorder appointments with labels in list view', async function (I, cal
     I.see(refDate.clone().add(8, 'day').format('l'), listItemSelector('list-item-label', 9));
 
     function changeStartDate(index, date) {
-        I.say('Change start date of ' + index + '. list-item in list to ' + date)
+        I.say('Change start date of ' + index + '. list-item in list to ' + date);
         const appointmentSelector = listItemSelector('appointment', index);
 
         // Open edit window
@@ -161,7 +161,7 @@ Scenario('Reorder appointments with labels in list view', async function (I, cal
 
     // Case 1a: First appointment
     I.say('Check Case 1a: Change first appointment of list without merge');
-    changeStartDate(2, refDate.clone().add(1, 'day').format('l'))
+    changeStartDate(2, refDate.clone().add(1, 'day').format('l'));
     I.waitForFocus('~Edit appointment');
     I.waitNumberOfVisibleElements('.list-view .list-item-label', 5);
     I.seeNumberOfVisibleElements('.list-view .appointment', 5);
@@ -172,7 +172,7 @@ Scenario('Reorder appointments with labels in list view', async function (I, cal
 
     // Case 1b: In-between appointment
     I.say('Check Case 1b: Change in-between appointment of list without merge');
-    changeStartDate(4, refDate.clone().add(3, 'day').format('l'))
+    changeStartDate(4, refDate.clone().add(3, 'day').format('l'));
     I.waitForFocus('~Edit appointment');
     I.waitNumberOfVisibleElements('.list-view .list-item-label', 5);
     I.seeNumberOfVisibleElements('.list-view .appointment', 5);
@@ -183,7 +183,7 @@ Scenario('Reorder appointments with labels in list view', async function (I, cal
 
     // Case 1c: Last appointment
     I.say('Check Case 1c: Change last appointment of list without merge');
-    changeStartDate(10, refDate.clone().add(9, 'day').format('l'))
+    changeStartDate(10, refDate.clone().add(9, 'day').format('l'));
     I.waitForFocus('~Edit appointment');
     I.waitNumberOfVisibleElements('.list-view .list-item-label', 5);
     I.seeNumberOfVisibleElements('.list-view .appointment', 5);
@@ -197,7 +197,7 @@ Scenario('Reorder appointments with labels in list view', async function (I, cal
 
     // Case 2a: Merge last appointment of group with group below
     I.say('Check Case 2a: Merge last appointment of group with appointment below');
-    changeStartDate(4, refDate.clone().add(4, 'day').format('l'))
+    changeStartDate(4, refDate.clone().add(4, 'day').format('l'));
     I.waitForFocus('~Edit appointment');
     I.waitNumberOfVisibleElements('.list-view .list-item-label', 4);
     I.seeNumberOfVisibleElements('.list-view .appointment', 5);
@@ -209,7 +209,7 @@ Scenario('Reorder appointments with labels in list view', async function (I, cal
 
     // Case 2b: Merge last appointment of group with group above
     I.say('Check Case 2b: Merge last appointment of group with appointment above');
-    changeStartDate(7, refDate.clone().add(4, 'day').format('l'))
+    changeStartDate(7, refDate.clone().add(4, 'day').format('l'));
     I.waitForFocus('~Edit appointment');
     I.waitNumberOfVisibleElements('.list-view .list-item-label', 3);
     I.seeNumberOfVisibleElements('.list-view .appointment', 5);
@@ -222,7 +222,7 @@ Scenario('Reorder appointments with labels in list view', async function (I, cal
 
     // Case 2c: Split last appointment of group to new group
     I.say('Check case 2c: Split last appointment of group to new group');
-    changeStartDate(6, refDate.clone().add(5, 'day').format('l'))
+    changeStartDate(6, refDate.clone().add(5, 'day').format('l'));
     I.waitForFocus('~Edit appointment');
     I.waitNumberOfVisibleElements('.list-view .list-item-label', 4);
     I.seeNumberOfVisibleElements('.list-view .appointment', 5);
@@ -232,7 +232,7 @@ Scenario('Reorder appointments with labels in list view', async function (I, cal
 
     // Case 2d: Split last appointment of group to existing group
     I.say('Check case 2d: Split last appointment of group to existing group');
-    changeStartDate(5, refDate.clone().add(5, 'day').format('l'))
+    changeStartDate(5, refDate.clone().add(5, 'day').format('l'));
     I.waitForFocus('~Edit appointment');
     I.waitNumberOfVisibleElements('.list-view .list-item-label', 4);
     I.seeNumberOfVisibleElements('.list-view .appointment', 5);
@@ -242,7 +242,7 @@ Scenario('Reorder appointments with labels in list view', async function (I, cal
 
     // Case 2e: Split first appointment of group to existing group
     I.say('Check case 2e: Split first appointment of group to existing group');
-    changeStartDate(6, refDate.clone().add(4, 'day').format('l'))
+    changeStartDate(6, refDate.clone().add(4, 'day').format('l'));
     I.waitForFocus('~Edit appointment');
     I.waitNumberOfVisibleElements('.list-view .list-item-label', 4);
     I.seeNumberOfVisibleElements('.list-view .appointment', 5);
@@ -252,7 +252,7 @@ Scenario('Reorder appointments with labels in list view', async function (I, cal
 
     // Case 2f: Split first appointment of group to new group
     I.say('Check case 2f: Split first appointment of group to new group');
-    changeStartDate(4, refDate.clone().add(3, 'day').format('l'))
+    changeStartDate(4, refDate.clone().add(3, 'day').format('l'));
     I.waitForFocus('~Edit appointment');
     I.waitNumberOfVisibleElements('.list-view .list-item-label', 5);
     I.seeNumberOfVisibleElements('.list-view .appointment', 5);
