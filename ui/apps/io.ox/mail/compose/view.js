@@ -821,7 +821,7 @@ define('io.ox/mail/compose/view', [
 
                 var dialogOptions = { title: discardText, description: modalText };
                 // up to 540px because of 3 buttons, french needs this for example
-                if (!_.device('smartphone')) dialogOptions.width = '540px';
+                if (!_.device('smartphone')) dialogOptions.width = '560px';
 
                 new ModalDialog(dialogOptions)
                     .addCancelButton()
