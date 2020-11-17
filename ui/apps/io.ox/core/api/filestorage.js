@@ -414,19 +414,29 @@ define('io.ox/core/api/filestorage', [
 
             getAccountMetaData: function (accountId) {
                 // works with the cache to be synchronous, please keep it this way
-                return accountsCache.findWhere({ qualifiedId: accountId }).get('metadata');
+                var account = accountsCache.findWhere({ qualifiedId: accountId });
+                return account ? account.get('metadata') : null;
             },
 
             getAccountUrl: function (accountId) {
                 // works with the cache to be synchronous, please keep it this way
-                var accountConf = accountsCache.findWhere({ qualifiedId: accountId }).get('configuration');
-                return accountConf && accountConf.url;
+                var account = accountsCache.findWhere({ qualifiedId: accountId });
+                var accountConf = account ? account.get('configuration') : null;
+                return accountConf ? accountConf.url : null;
             },
 
             isFederatedAccount: function (accountId) {
                 // works with the cache to be synchronous, please keep it this way
-                return accountsCache.findWhere({ qualifiedId: accountId }).has('metadata');
+                var accountMeta = api.getAccountMetaData(accountId);
+                return accountMeta ? _.has(accountMeta, 'guestUserIdentifier') : null;
+            },
+
+            getAccountDisplayName: function (accountId) {
+                // works with the cache to be synchronous, please keep it this way
+                var account = accountsCache.findWhere({ qualifiedId: accountId });
+                return account ? account.get('displayName') : null;
             }
+
         };
 
     // add event support
