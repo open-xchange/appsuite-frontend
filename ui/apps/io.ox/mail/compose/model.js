@@ -73,7 +73,8 @@ define('io.ox/mail/compose/model', [
                         })
                         .value();
                 }.bind(this));
-
+                // check for prefilled subject
+                if (this.get('subject') && !data.subject) data.subject = this.get('subject');
                 var collection = new Attachments.Collection();
                 collection.space = data.id;
                 collection.reset(_(data.attachments).map(function (attachment) {
