@@ -52,7 +52,7 @@ define('io.ox/chat/views/message', [
                 .addClass(model.getType())
                 .toggleClass('user', model.isUser())
                 .toggleClass('myself', !model.isSystem() && model.isMyself())
-                .toggleClass('highlight', !!messageId && messageId === this.messageId)
+                .toggleClass('highlight', !!messageId && messageId === this.options.messageId)
                 .toggleClass('editable', model.isEditable())
                 .append(
                     // sender avatar & name

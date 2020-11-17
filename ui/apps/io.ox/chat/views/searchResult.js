@@ -53,7 +53,7 @@ define('io.ox/chat/views/searchResult', [
                 );
             } else {
                 nodes[0].attr('tabindex', 0);
-                $('.search-result .text-preview').mark(this.query);
+                $('.search-result .last-message').mark(this.query);
             }
             return this;
         },
