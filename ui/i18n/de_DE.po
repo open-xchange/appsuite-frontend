@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-11-13 12:56+0100\n"
+"PO-Revision-Date: 2020-11-17 14:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -894,10 +894,10 @@ msgstr "Foto entfernen"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
-#: apps/io.ox/files/actions/share.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
-#: module:io.ox/mail apps/io.ox/mail/common-extensions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/actions/source.js module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js
 #: apps/io.ox/mail/mailfilter/autoforward/indicator.js
 #: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js
 #: apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
@@ -929,9 +929,9 @@ msgstr "Herunterladen"
 #: apps/io.ox/core/main/logout.js apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/files/main.js module:io.ox/files
-#: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
+#: apps/io.ox/files/upload/view.js apps/io.ox/mail/categories/edit.js
+#: module:io.ox/mail apps/io.ox/mail/compose/actions/extensions.js
 #: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/main.js
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: module:io.ox/core/boot apps/io.ox/multifactor/views/constants.js
@@ -999,6 +999,7 @@ msgstr "Intervall"
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "Never"
@@ -1431,7 +1432,7 @@ msgstr "In öffentlichem Kalender anlegen"
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/core/boot/i18n.js
 #: module:io.ox/core/boot apps/io.ox/core/relogin.js module:io.ox/core
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #: apps/io.ox/mail/invitations/register.js apps/io.ox/onboarding/views.js
@@ -1655,8 +1656,9 @@ msgstr "Termin anlegen"
 #: module:io.ox/calendar apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/edit-description.js module:io.ox/files
 #: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/share-settings.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -1689,6 +1691,7 @@ msgstr "Anlegen"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter apps/io.ox/tasks/edit/view-template.js
@@ -1919,7 +1922,8 @@ msgstr "Termin"
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/editor/main.js
-#: module:io.ox/editor apps/io.ox/tasks/edit/main.js module:io.ox/tasks
+#: module:io.ox/editor apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 msgid "Discard changes"
 msgstr "Änderungen verwerfen"
 
@@ -3628,6 +3632,7 @@ msgstr "Antwort an alle per Chat"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 #: apps/io.ox/chat/settings/pane.js apps/io.ox/chat/views/launcher.js
+#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 msgid "Chat"
 msgstr "Chat"
 
@@ -3672,12 +3677,6 @@ msgid "Channel"
 msgstr "Kanal"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
-msgid "Chats"
-msgstr "Chats"
-
-#: apps/io.ox/chat/main.js module:io.ox/chat
 #: apps/io.ox/chat/views/channelList.js
 msgid "All channels"
 msgstr "Alle Kanäle"
@@ -3694,6 +3693,29 @@ msgstr "Alle Dateien"
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Chat history"
 msgstr "Chat-Verlauf"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Chats could not be loaded."
+msgstr "Chats konnten nicht geladen werden."
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Private chats"
+msgstr "Private Chats"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+#, fuzzy
+msgid "Group chats"
+msgstr "Gruppenchats"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Channels"
+msgstr "Kanäle"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
+#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
+msgid "Chats"
+msgstr "Chats"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "Authorize"
@@ -3722,6 +3744,29 @@ msgstr "Bild"
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "View options"
 msgstr "Anzeigeoptionen"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+#, fuzzy
+msgid "Select last chat on start"
+msgstr "Letzten Chat beim Start auswählen"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+#, fuzzy
+msgid "Group chats by type"
+msgstr "Gruppenchats nach Typ"
+
+#. Sort chats by ... (alphabetical|last activity)
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Sort chats by"
+msgstr "Chats sortieren nach"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Last activity"
+msgstr "Letzte Aktivität"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Alphabetical"
+msgstr "Alphabetisch"
 
 #. Visual List density (German "Kompaktheitsgrad"); can be compact, default, or detailed
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
@@ -3768,9 +3813,13 @@ msgstr "Ton nur abspielen, wenn sich der Chat im Hintergrund befindet"
 
 #. Should be "töne" in german, used for notification sounds. Not "geräusch"
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Notification sounds"
-msgstr "Benachrichtigungstöne"
+#: apps/io.ox/core/notifications.js module:io.ox/core
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Show desktop notifications for new messages"
+msgstr "Desktopbenachrichtigungen für neue Nachrichten anzeigen"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Play notification sound for new messages"
@@ -3785,10 +3834,6 @@ msgstr "Ton"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Behavior"
 msgstr "Verhalten"
-
-#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-msgid "Show desktop notifications for new messages"
-msgstr "Desktopbenachrichtigungen für neue Nachrichten anzeigen"
 
 #: apps/io.ox/chat/util.js module:io.ox/chat
 msgid "Text file"
@@ -3841,26 +3886,6 @@ msgstr "Chat schließen"
 msgid "Join chat"
 msgstr "Chat beitreten"
 
-#. %1$s is a member name
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "%1$s is typing ..."
-msgstr "%1$s gibt eine Nachricht ein ..."
-
-#. %1$s and %2$s are member names
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "%1$s and %2$s are typing ..."
-msgstr "%1$s und %2$s geben eine Nachricht ein ..."
-
-#. %1$s, %2$s, and %3$s are member names
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "%1$s, %2$s, and %3$s are typing ..."
-msgstr "%1$s, %2$s und %3$s geben eine Nachricht ein ..."
-
-#. %1$s and %2$s are member names, %3$d is the number of further members
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "%1$s, %2$s and %3$d others are typing ..."
-msgstr "%1$s, %2$s und %3$d weitere Personen geben eine Nachricht ein ..."
-
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "Chat-Aktionen"
@@ -3878,6 +3903,10 @@ msgstr "Nachricht"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "Senden"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Add emoji"
+msgstr "Emoji hinzufügen"
 
 #. An action to upload a local file e.g. to Drive.
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
@@ -3928,10 +3957,6 @@ msgstr ""
 msgid "Chat list"
 msgstr "Chat-Liste"
 
-#: apps/io.ox/chat/views/chatList.js module:io.ox/chat
-msgid "Chats could not be loaded."
-msgstr "Chats konnten nicht geladen werden."
-
 #: apps/io.ox/chat/views/content.js module:io.ox/chat
 msgid "Sending has been cancelled"
 msgstr "Das Versenden wurde abgebrochen"
@@ -3943,6 +3968,10 @@ msgstr "Weitere anzeigen"
 #: apps/io.ox/chat/views/content.js module:io.ox/chat
 msgid "Delivery failed"
 msgstr "Zustellung fehlgeschlagen"
+
+#: apps/io.ox/chat/views/content.js module:io.ox/chat
+msgid "Edited"
+msgstr "Bearbeitet"
 
 #: apps/io.ox/chat/views/dropzone.js module:io.ox/chat
 msgid "Drop file here to send it"
@@ -4035,6 +4064,26 @@ msgstr "Keine Suchergebnisse"
 #: apps/io.ox/chat/views/searchResult.js module:io.ox/chat
 msgid "Create new chat"
 msgstr "Neuen Chat erstellen"
+
+#. %1$s is a member name
+#: apps/io.ox/chat/views/typing.js module:io.ox/chat
+msgid "%1$s is typing ..."
+msgstr "%1$s gibt eine Nachricht ein ..."
+
+#. %1$s and %2$s are member names
+#: apps/io.ox/chat/views/typing.js module:io.ox/chat
+msgid "%1$s and %2$s are typing ..."
+msgstr "%1$s und %2$s geben eine Nachricht ein ..."
+
+#. %1$s, %2$s, and %3$s are member names
+#: apps/io.ox/chat/views/typing.js module:io.ox/chat
+msgid "%1$s, %2$s, and %3$s are typing ..."
+msgstr "%1$s, %2$s und %3$s geben eine Nachricht ein ..."
+
+#. %1$s and %2$s are member names, %3$d is the number of further members
+#: apps/io.ox/chat/views/typing.js module:io.ox/chat
+msgid "%1$s, %2$s and %3$d others are typing ..."
+msgstr "%1$s, %2$s und %3$d weitere Personen geben eine Nachricht ein ..."
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
@@ -5966,23 +6015,15 @@ msgid "Import"
 msgstr "Importieren"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-msgid "Sharing"
-msgstr "Freigaben"
-
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/files/contextmenu.js
-msgid "Permissions / Invite people"
-msgstr "Berechtigungen / Personen einladen"
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
+#, fuzzy
+msgid "Share / Permissions"
+msgstr "Freigeben / Berechtigungen"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Permissions"
 msgstr "Berechtigungen"
-
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-msgid "Create sharing link"
-msgstr "Freigabelink erstellen"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
@@ -6633,10 +6674,6 @@ msgstr "Keine Benachrichtigungen"
 msgid "Close notification area"
 msgstr "Infobereich schließen"
 
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Notifications"
-msgstr "Benachrichtigungen"
-
 #. Hides all current notifications (invitations, reminder etc.) for half an hour.
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Notify me again later"
@@ -6681,6 +6718,7 @@ msgstr "Gast"
 
 #. Role: create folder + read/write/delete all
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permission-pre-selection.js
 #: apps/io.ox/files/share/permissions.js
 msgid "Author"
 msgstr "Autor"
@@ -6786,7 +6824,7 @@ msgid "The user has administrative rights"
 msgstr "Der Benutzer hat administrative Rechte"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "Auf alle Unterordner anwenden"
 
@@ -7494,7 +7532,8 @@ msgid "Don't remind me again"
 msgstr "Nicht wieder erinnern"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "OK"
 msgstr "OK"
 
@@ -7769,7 +7808,8 @@ msgstr ""
 "Organisation auf diese Datei/diesen Ordner zu verweisen."
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer
+#: module:io.ox/core/viewer apps/io.ox/files/share/public-link.js
+#: module:io.ox/files
 msgid "The link has been copied to the clipboard."
 msgstr "Der Link wurde in die Zwischenablage kopiert."
 
@@ -8000,21 +8040,12 @@ msgid "Share"
 msgstr "Freigeben"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Share this file"
-msgstr "Diese Datei freigeben"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Open attachment"
 msgstr "Anhang öffnen"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Print as PDF"
 msgstr "Als PDF drucken"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#: apps/io.ox/files/actions.js module:io.ox/files
-msgid "Invite people"
-msgstr "Personen einladen"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/actions.js module:io.ox/files
@@ -8297,24 +8328,6 @@ msgstr "Neue Notiz"
 msgid "Upload folder"
 msgstr "Ordner hochladen"
 
-#. sharing: a guest user will be created for the owner of that email address
-#: apps/io.ox/files/actions.js module:io.ox/files
-msgid ""
-"Every recipient gets an individual link. Guests can also create and change "
-"files."
-msgstr ""
-"Jeder Empfänger erhält einen individuellen Link. Auch Gäste können Dateien "
-"anlegen und ändern."
-
-#. sharing: a link will be created
-#: apps/io.ox/files/actions.js module:io.ox/files
-msgid ""
-"Everybody gets the same link. The link just allows to view the file or "
-"folder."
-msgstr ""
-"Jeder erhält denselben Link. Der Link ermöglicht nur das Anzeigen der Datei "
-"oder des Ordners."
-
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Lock"
 msgstr "Sperren"
@@ -8499,41 +8512,6 @@ msgstr ""
 msgid "Save as PDF"
 msgstr "Als PDF speichern"
 
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Send link"
-msgstr "Link senden"
-
-#. informs user about the consequences when creating a rule for selected mail
-#. %1$d number of items (files or folders)
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-#, c-format
-msgid "Sharing link created for %1$d item"
-msgid_plural "Sharing link created for %1$d items"
-msgstr[0] "Freigabelink für ein Objekt wurde erstellt"
-msgstr[1] "Freigabelink für %1$d Objekte wurde erstellt"
-
-#. informs user about the consequences when creating a rule for selected mail
-#. %1$s file name
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-#, c-format
-msgid "Sharing link created for file \"%1$s\""
-msgstr "Freigabelink für Datei \"%1$s\" wurde erstellt"
-
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s folder name
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-#, c-format
-msgid "Sharing link created for folder \"%1$s\""
-msgstr "Freigabelink für Ordner \"%1$s\" wurde erstellt"
-
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Remove link"
-msgstr "Link entfernen"
-
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "The link has been removed"
-msgstr "Der Link wurde entfernt"
-
 #: apps/io.ox/files/actions/upload-new-version.js module:io.ox/files
 msgid "Select file"
 msgstr "Datei wählen"
@@ -8573,7 +8551,8 @@ msgid "Locked"
 msgstr "Gesperrt"
 
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
-msgid "Edit Share"
+#: apps/io.ox/files/share/toolbar.js module:io.ox/files
+msgid "Edit share"
 msgstr "Freigabe bearbeiten"
 
 #. 'Revoke access' as header of a modal dialog to confirm to revoke access of an application.
@@ -8582,6 +8561,10 @@ msgstr "Freigabe bearbeiten"
 #: module:io.ox/files apps/io.ox/settings/apps/settings/pane.js
 msgid "Revoke access"
 msgstr "Zugriff widerrufen"
+
+#: apps/io.ox/files/contextmenu.js module:io.ox/core
+msgid "Create sharing link"
+msgstr "Freigabelink erstellen"
 
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js module:io.ox/files
@@ -8933,6 +8916,7 @@ msgstr "Anzahl der aktuellen Versionen behalten"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/public-link.js
 msgid "Public link"
 msgstr "Öffentlicher Link"
 
@@ -8949,18 +8933,37 @@ msgid "Internal users"
 msgstr "Interne Benutzer"
 
 #: apps/io.ox/files/share/model.js module:io.ox/core
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Please set password"
 msgstr "Bitte legen Sie ein Passwort fest"
 
 #. Role: view folder + read all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Viewer"
 msgstr "Viewer"
 
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "View files only"
+msgstr "Nur Dateien anzeigen"
+
 #. Role: view folder + read/write all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Reviewer"
 msgstr "Überarbeiter"
+
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "View and edit files"
+msgstr "Dateien anzeigen und bearbeiten"
+
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+#, fuzzy
+msgid "View, edit and delete files"
+msgstr "Dateien anzeigen, bearbeiten und löschen"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "The notification has been resent"
@@ -8978,18 +8981,6 @@ msgstr "Gruppe"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "Aktuelle Rolle"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "(Read only)"
-msgstr "(Nur Lesen)"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "(Read and write)"
-msgstr "(Lesen und Schreiben)"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "(Read, write, and delete)"
-msgstr "(Lesen, Schreiben und Löschen)"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Detailed access rights"
@@ -9067,6 +9058,19 @@ msgstr "Benutzer"
 msgid "Resend invitation"
 msgstr "Einladung erneut senden"
 
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Invited people only"
+msgstr "Nur eingeladene Personen"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+msgid "Anyone with the link and invited people"
+msgstr "Jeder mit dem Link und eingeladene Personen"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this folder?"
+msgstr "Wer kann auf diesen Ordner zugreifen?"
+
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -9090,94 +9094,114 @@ msgid "Permissions for %1$s \"%2$s\""
 msgstr "Berechtigungen für %1$s \"%2$s\""
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Send notification by email"
-msgstr "Benachrichtigung per E-Mail senden"
+msgid "Remove shares"
+msgstr "Freigaben entfernen"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Add people"
-msgstr "Personen hinzufügen"
+msgid "Do you really want to remove all shares?"
+msgstr "Möchten Sie wirklich alle Freigaben entfernen?"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Enter a Message to inform users"
-msgstr "Geben Sie zum Informieren der Benutzer eine Nachricht ein"
+#, fuzzy
+msgid "Unshare"
+msgstr "Freigabe aufheben"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Name or email address"
+msgstr "Name oder E-Mail-Adresse"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Invite people"
+msgstr "Personen einladen"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Invite as: "
+msgstr "Einladen als: "
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Invitation message (optional)"
+msgstr "Einladungsnachricht (optional)"
 
 #. placeholder text in share dialog
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid ""
-"Personal message (optional). This message is sent to all newly invited "
-"people."
-msgstr ""
-"Persönliche Nachricht (optional). Diese Nachricht wird an alle neu "
-"eingeladenen Personen gesendet."
+#, fuzzy
+msgid "Message will be send to all newly invited people"
+msgstr "Nachricht wird an alle neu eingeladenen Personen gesendet"
 
-#: apps/io.ox/files/share/toolbar.js module:io.ox/files
-msgid "Edit share"
-msgstr "Freigabe bearbeiten"
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Do you really want to discard all changes?"
+msgstr "Möchten Sie wirklich alle Änderungen verwerfen?"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid ""
-"You can copy and paste this link in an email, instant messenger or social "
-"network. Please note that anyone with this link can access the share."
-msgstr ""
-"Sie können diesen Link kopieren und in eine E-Mail, den Instant Messenger "
-"oder ein soziales Netzwerk einfügen. Bitte beachten Sie, dass jeder im "
-"Besitz dieses Links auf die Freigabe zugreifen kann."
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+#, fuzzy
+msgid "Anyone on the internet with the link can view the file."
+msgstr "Jeder im Internet mit dem Link kann die Datei anzeigen."
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Add recipients ..."
-msgstr "Empfänger hinzufügen ..."
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Copy link"
+msgstr "Link kopieren"
 
-#. placeholder text in share dialog
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Message (optional)"
-msgstr "Nachricht (optional)"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+#, fuzzy
+msgid "Link options"
+msgstr "Link-Optionen"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Share with subfolders"
-msgstr "Mit Unterordnern freigeben"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+#, fuzzy
+msgid "One day"
+msgstr "Einen Tag"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "one day"
-msgstr "ein Tag"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+#, fuzzy
+msgid "One week"
+msgstr "Eine Woche"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "one week"
-msgstr "eine Woche"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+#, fuzzy
+msgid "One month"
+msgstr "Einen Monat"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "one month"
-msgstr "ein Monat"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+#, fuzzy
+msgid "Three months"
+msgstr "Drei Monate"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "three months"
-msgstr "drei Monate"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+#, fuzzy
+msgid "Six months"
+msgstr "Sechs Monate"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "six months"
-msgstr "sechs Monate"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+#, fuzzy
+msgid "One year"
+msgstr "Ein Jahr"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "one year"
-msgstr "ein Jahr"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+msgid "Expiration"
+msgstr "Ablaufdatum"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Expires in"
-msgstr "Läuft ab in"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Password (optional)"
+msgstr "Passwort (optional)"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-#: apps/io.ox/settings/security/certificates/settings/utils.js
-#: module:io.ox/settings/certificates
-msgid "Expires on"
-msgstr "Läuft ab am"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Password required"
-msgstr "Passwort erforderlich"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Enter Password"
 msgstr "Passwort eingeben"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Share with subfolders"
+msgstr "Mit Unterordnern freigeben"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Invite options"
+msgstr "Einladungsoptionen"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Send notification by email"
+msgstr "Benachrichtigung per E-Mail senden"
 
 #: apps/io.ox/files/upload/dropzone.js module:io.ox/files
 msgid "Drop files or folders here to upload"
@@ -10438,11 +10462,6 @@ msgid "%1$d year"
 msgid_plural "%1$d years"
 msgstr[0] "Ein Jahr"
 msgstr[1] "%1$d Jahre"
-
-#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "Expiration"
-msgstr "Ablaufdatum"
 
 #. label of a selectbox: automatically delete files after a share/sharing-link expired?
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -11714,6 +11733,11 @@ msgstr "Anfragen für Lesebestätigungen anzeigen"
 msgid "Show folder with all unseen messages"
 msgstr "Ordner mit allen ungelesenen Nachrichten anzeigen"
 
+#. Should be "töne" in german, used for notification sounds. Not "geräusch"
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Notification sounds"
+msgstr "Benachrichtigungstöne"
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Play sound on incoming mail"
 msgstr "Bei eingehender E-Mail Ton abspielen"
@@ -12830,6 +12854,7 @@ msgstr ""
 "kann."
 
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
+#, fuzzy
 msgid ""
 "If an automatic configuration is not possible, please use the following "
 "information to manually setup your mail account:"
@@ -13584,6 +13609,11 @@ msgstr "Allgemeiner Name"
 #: module:io.ox/settings/certificates
 msgid "Expired"
 msgstr "Abgelaufen"
+
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Expires on"
+msgstr "Läuft ab am"
 
 #: apps/io.ox/settings/security/certificates/settings/utils.js
 #: module:io.ox/settings/certificates
@@ -15834,6 +15864,112 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Sharing"
+#~ msgstr "Freigaben"
+
+#~ msgid "Permissions / Invite people"
+#~ msgstr "Berechtigungen / Personen einladen"
+
+#~ msgid "Share this file"
+#~ msgstr "Diese Datei freigeben"
+
+#~ msgid ""
+#~ "Every recipient gets an individual link. Guests can also create and "
+#~ "change files."
+#~ msgstr ""
+#~ "Jeder Empfänger erhält einen individuellen Link. Auch Gäste können "
+#~ "Dateien anlegen und ändern."
+
+#~ msgid ""
+#~ "Everybody gets the same link. The link just allows to view the file or "
+#~ "folder."
+#~ msgstr ""
+#~ "Jeder erhält denselben Link. Der Link ermöglicht nur das Anzeigen der "
+#~ "Datei oder des Ordners."
+
+#~ msgid "Send link"
+#~ msgstr "Link senden"
+
+#~ msgid "Sharing link created for %1$d item"
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "Freigabelink für ein Objekt wurde erstellt"
+#~ msgstr[1] "Freigabelink für %1$d Objekte wurde erstellt"
+
+#~ msgid "Sharing link created for file \"%1$s\""
+#~ msgstr "Freigabelink für Datei \"%1$s\" wurde erstellt"
+
+#~ msgid "Sharing link created for folder \"%1$s\""
+#~ msgstr "Freigabelink für Ordner \"%1$s\" wurde erstellt"
+
+#~ msgid "Remove link"
+#~ msgstr "Link entfernen"
+
+#~ msgid "The link has been removed"
+#~ msgstr "Der Link wurde entfernt"
+
+#~ msgid "Edit Share"
+#~ msgstr "Freigabe bearbeiten"
+
+#~ msgid "(Read only)"
+#~ msgstr "(Nur Lesen)"
+
+#~ msgid "(Read and write)"
+#~ msgstr "(Lesen und Schreiben)"
+
+#~ msgid "(Read, write, and delete)"
+#~ msgstr "(Lesen, Schreiben und Löschen)"
+
+#~ msgid "Add people"
+#~ msgstr "Personen hinzufügen"
+
+#~ msgid "Enter a Message to inform users"
+#~ msgstr "Geben Sie zum Informieren der Benutzer eine Nachricht ein"
+
+#~ msgid ""
+#~ "Personal message (optional). This message is sent to all newly invited "
+#~ "people."
+#~ msgstr ""
+#~ "Persönliche Nachricht (optional). Diese Nachricht wird an alle neu "
+#~ "eingeladenen Personen gesendet."
+
+#~ msgid ""
+#~ "You can copy and paste this link in an email, instant messenger or social "
+#~ "network. Please note that anyone with this link can access the share."
+#~ msgstr ""
+#~ "Sie können diesen Link kopieren und in eine E-Mail, den Instant Messenger "
+#~ "oder ein soziales Netzwerk einfügen. Bitte beachten Sie, dass jeder im "
+#~ "Besitz dieses Links auf die Freigabe zugreifen kann."
+
+#~ msgid "Add recipients ..."
+#~ msgstr "Empfänger hinzufügen ..."
+
+#~ msgid "Message (optional)"
+#~ msgstr "Nachricht (optional)"
+
+#~ msgid "one day"
+#~ msgstr "ein Tag"
+
+#~ msgid "one week"
+#~ msgstr "eine Woche"
+
+#~ msgid "one month"
+#~ msgstr "ein Monat"
+
+#~ msgid "three months"
+#~ msgstr "drei Monate"
+
+#~ msgid "six months"
+#~ msgstr "sechs Monate"
+
+#~ msgid "one year"
+#~ msgstr "ein Jahr"
+
+#~ msgid "Expires in"
+#~ msgstr "Läuft ab in"
+
+#~ msgid "Password required"
+#~ msgstr "Passwort erforderlich"
 
 #~ msgid "Unknown system message %1$s"
 #~ msgstr "Unbekannte Systemmeldung: %1$s"
