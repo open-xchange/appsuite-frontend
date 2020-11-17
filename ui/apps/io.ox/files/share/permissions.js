@@ -861,7 +861,7 @@ define('io.ox/files/share/permissions', [
             var select = $('<select>');
             _(typeTranslations).each(function (val, key) {
                 key = parseInt(key, 10);
-                var option = $('<option>').val(val).text(val);
+                var option = $('<option>').val(key).text(val);
                 if (key === linkModel.get('access')) {
                     option.attr('selected', 'selected');
                 }
@@ -876,7 +876,7 @@ define('io.ox/files/share/permissions', [
             );
 
             select.on('change', function (e) {
-                linkModel.set('access', e.target.value);
+                linkModel.set('access', parseInt(e.target.value, 10));
             });
         }
     });
@@ -1327,7 +1327,7 @@ define('io.ox/files/share/permissions', [
                 // Order matters. Share must be called before the update call is invoked. Otherwise a file conflict is created.
                 // publicLink.share().then(this.close, function () {
                 publicLink.share().then(function () {
-                    if (entity) {
+                    if (entity && publicLink.hasChanges()) {
                         permissions = mergePermissionsAndPublicLink(permissionsView.collection.toJSON(), entity, objModel.isFolder() ? 257 : 1);
                     }
 

@@ -107,6 +107,10 @@ define('io.ox/files/share/public-link', [
         share: function () {
             var result;
 
+            if (!this.hasChanges()) {
+                return $.Deferred().resolve();
+            }
+
             // Bug 52046: When the password checkbox is enable and the password could not be validated (e.g. it's empty) in the set function from the model,
             // we have the previous, not up-to-date model data, but also an validationError to indicate that there was a error.
             // So the validation in the save function would work with the old model data. Therefore don't call save() when there
@@ -150,7 +154,10 @@ define('io.ox/files/share/public-link', [
                     // refresh the guest group (id = int max value)
                     groupApi.refreshGroup(2147483647);
                 })
-                .done(model.destroy.bind(model));
+                .done(
+                    this.model.set('url', null)
+                    //model.destroy.bind(model)
+                );
         },
 
         hide: function () {
