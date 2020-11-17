@@ -25,6 +25,12 @@ define('io.ox/chat/views/message', [
 ], function (DisposableView, ContentView, data, Avatar, events, util, Dropdown, ext, settings, gt) {
 
     'use strict';
+    // maybe move this to a own file when more icons are introduced
+    /*eslint no-multi-str: 0*/
+    var deliveryIcon = '<svg version="1.1" viewBox="0 0 13 8" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">\
+        <g fill="none" fill-rule="evenodd"><g transform="translate(-9 -9)"><g transform="translate(9.3308 9.482)"\
+        stroke="#333" stroke-linejoin="round"><polyline id="firstCheck" points="0.9132 3.738 3.2524 6.0905 8.0929 1.0988"/>\
+        <polyline id="secondCheck" points="5.7437 4.5731 7.2524 6.0905 12 1.0988"/></g></svg>';
 
     var MessageView = DisposableView.extend({
 
@@ -58,7 +64,7 @@ define('io.ox/chat/views/message', [
                     // show some indicator dots when a menu is available
                     this.renderMenu(),
                     // delivery state
-                    !isChannel && !this.model.isSystem() ? $('<div class="fa delivery" aria-hidden="true">').addClass(model.getDeliveryState()) : $()
+                    !isChannel && !this.model.isSystem() ? $(deliveryIcon).addClass('delivery').addClass(model.getDeliveryState()) : $()
                 );
 
             this.onChangeState();
