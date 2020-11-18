@@ -16,11 +16,10 @@ define('io.ox/chat/views/chatListEntry', [
     'io.ox/chat/data',
     'io.ox/chat/events',
     'io.ox/core/strings',
-    'io.ox/mail/sanitizer',
     'io.ox/chat/util',
     'io.ox/switchboard/presence',
     'settings!io.ox/chat'
-], function (ChatAvatar, data, events, strings, sanitizer, util, presence, settings) {
+], function (ChatAvatar, data, events, strings, util, presence, settings) {
 
     var density = settings.get('density', 'default');
     settings.on('change:density', function (value) {
@@ -74,8 +73,8 @@ define('io.ox/chat/views/chatListEntry', [
                         }
                         break;
                     case 'detailed':
-                        this.$('.last-message').empty().append(
-                            summary.text ? $.txt(summary.text) : this.renderLastMessage()
+                        this.$('.last-message').empty().text(
+                            summary.text ? summary.text : this.model.getLastMessageText()
                         );
                         break;
                     // no default
@@ -92,23 +91,6 @@ define('io.ox/chat/views/chatListEntry', [
 
         getLastMessage: function () {
             return new data.MessageModel(_.extend({ roomId: this.model.get('roomId') }, this.model.get('lastMessage')));
-        },
-
-        renderSender: function () {
-            if (this.lastMessage.isMyself() || this.model.isPrivate() || this.lastMessage.isSystem()) return;
-            return $('<span class="sender">').text(this.model.getLastSenderName() + ':');
-        },
-
-        renderLastMessage: function () {
-            var message = this.lastMessage;
-            if (!message) return $.txt('\u00a0');
-            if (message.isFile()) return util.renderFile(_(message.get('files')).last());
-            if (message.isUploading()) {
-                var blob = message.get('blob');
-                return util.renderFile({ name: blob.name, mimetype: blob.type });
-            }
-            if (message.isSystem()) return message.getSystemMessage();
-            return [this.renderSender(), $.txt(sanitizer.simpleSanitize(message.get('content')))];
         },
 
         render: function () {
@@ -154,7 +136,7 @@ define('io.ox/chat/views/chatListEntry', [
                         $('<div class="last-modified">').text(this.model.getLastMessageDate())
                     ),
                     $('<div class="chats-row">').append(
-                        $('<div class="last-message ellipsis">').append(this.renderLastMessage()),
+                        $('<div class="last-message ellipsis">').text(this.model.getLastMessageText()),
                         this.renderUnread()
                     )
                 )
@@ -195,25 +177,22 @@ define('io.ox/chat/views/chatListEntry', [
         },
 
         onChangeLastMessage: function () {
-            var model = this.model,
-                isPrivate = model.get('type') === 'private',
-                isCurrentUser = model.get('lastMessage').sender === data.user.email,
-                lastMessage = this.getLastMessage(),
-                isSystemMessage = lastMessage ? lastMessage.type === 'system' : false;
-
-            this.lastMessage = lastMessage;
-
-            this.$('.last-modified').text(model.getLastMessageDate());
-            this.$('.last-message').empty().append(this.renderLastMessage());
-            this.$('.delivery')
-                .toggleClass('hidden', !isCurrentUser)
-                .removeClass('server received seen')
-                .addClass(isCurrentUser ? util.getDeliveryStateClass(model.get('lastMessage').deliveryState) : '');
-            this.$('.sender')
-                .toggleClass('hidden', isCurrentUser || isPrivate || isSystemMessage)
-                .text(model.getLastSenderName() + ':');
+            // var model = this.model;
+            //     isPrivate = model.get('type') === 'private',
+            //     isCurrentUser = model.get('lastMessage').sender === data.user.email,
+            //     lastMessage = this.getLastMessage(),
+            //     isSystemMessage = lastMessage ? lastMessage.type === 'system' : false;
+            // this.lastMessage = lastMessage;
+            this.$('.last-modified').text(this.model.getLastMessageDate());
+            this.$('.last-message').text(this.model.getLastMessageText());
+            // this.$('.delivery')
+            //     .toggleClass('hidden', !isCurrentUser)
+            //     .removeClass('server received seen')
+            //     .addClass(isCurrentUser ? util.getDeliveryStateClass(model.get('lastMessage').deliveryState) : '');
+            // this.$('.sender')
+            //     .toggleClass('hidden', isCurrentUser || isPrivate || isSystemMessage)
+            //     .text(model.getLastSenderName() + ':');
         }
-
     });
 
     return ChatListEntryView;

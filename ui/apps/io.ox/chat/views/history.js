@@ -18,10 +18,9 @@ define('io.ox/chat/views/history', [
     'io.ox/chat/data',
     'io.ox/backbone/views/toolbar',
     'io.ox/core/strings',
-    'io.ox/mail/sanitizer',
     'io.ox/chat/util',
     'gettext!io.ox/chat'
-], function (ext, DisposableView, ChatAvatar, data, ToolbarView, strings, sanitizer, util, gt) {
+], function (ext, DisposableView, ChatAvatar, data, ToolbarView, strings, util, gt) {
 
     'use strict';
 
@@ -100,17 +99,12 @@ define('io.ox/chat/views/history', [
             );
             return this;
         },
+
         renderEmpty: function () {
             return $('<li class="history-list">').hide()
                 .append($('<div class="info">').text(gt('There are no archived chats yet')));
         },
-        renderLastMessage: function (model) {
-            var last = model.lastMessage;
-            if (!last) return '\u00a0';
-            if (last.isFile()) return util.renderFile(_(last.get('files')).last());
-            if (last.isSystem()) return last.getSystemMessage();
-            return $.txt(sanitizer.simpleSanitize(last.get('content')));
-        },
+
         renderItem: function (model) {
             return $('<li class="history-list">')
                 .attr('data-cid', model.cid)
@@ -119,7 +113,7 @@ define('io.ox/chat/views/history', [
                     $('<div class="chats-container">').append(
                         $('<div class="chats-row">').append(
                             $('<div class="title">').text(model.getTitle()),
-                            $('<div class="body">').append(this.renderLastMessage(model))
+                            $('<div class="body">').text(model.getLastMessageText())
                         )
                     ),
                     $('<button type="button" class="btn btn-default btn-action" >')

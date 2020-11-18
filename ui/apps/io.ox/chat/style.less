@@ -396,6 +396,7 @@
         .typing {
             color: #707070;
             font-style: italic;
+            font-weight: normal;
             white-space: nowrap;
             margin-left: 4px;
         }
@@ -745,6 +746,7 @@
             padding: 3px 0 1px 0;
             display: inline-block;
             margin-bottom: 4px;
+            max-width: 100%;
         }
 
         .flags {
@@ -842,6 +844,7 @@
             }
             .name {
                 font-weight: 500;
+                color: #333;
             }
             .delivery, .time {
                 display: none;
@@ -944,10 +947,11 @@
     }
 
     .message-quote {
+        color: #707070;
         padding: 8px;
-        background-color: #eee;
+        background-color: #f0f0f0;
         border-radius: @borderRadius;
-        border-left: 4px solid rgba(0, 0, 0, 0.4);
+        border-left: 4px solid rgba(0, 0, 0, 0.30);
         margin-bottom: 8px;
         .sender {
             color: #333;
@@ -984,6 +988,36 @@
         // super special next sibling selector
         &.open + .delivery {
             display: none;
+        }
+    }
+
+    .incoming-call {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 15px 15px 15px 71px;
+        height: 72px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-color: white;
+        text-decoration: none;
+        i.fa-phone {
+            position: absolute;
+            font-size: 24px;
+            line-height: 40px;
+            width: 40px;
+            height: 40px;
+            color: white;
+            background-color: green;
+            border-radius: 50%;
+            left: 15px;
+            text-align: center;
+        }
+        .caller {
+            font-weight: bold;
+        }
+        .join-link {
+            color: #707070;
         }
     }
 

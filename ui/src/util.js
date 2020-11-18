@@ -1051,6 +1051,11 @@
         return (s || '').replace(/([$^*+?!:=.|(){}[\]\\])/g, function () { return ('\\' + arguments[1]); });
     };
 
+    _.stripTags = function (str) {
+        if (!str) return '';
+        return String(str).replace(/<(\/(div|p)|br|img)>/gi, ' ').replace(/<.+?>/g, '');
+    };
+
     _.sanitize = {
         option: function (value) {
             return (value || '').replace(/[^a-z0-9:._-]/ig, '').trim();

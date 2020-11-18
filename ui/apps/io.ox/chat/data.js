@@ -15,16 +15,16 @@ define('io.ox/chat/data', [
     'io.ox/core/extensions',
     'io.ox/chat/api',
     'io.ox/chat/events',
+    'io.ox/chat/system-message',
     'io.ox/contacts/api',
     'io.ox/switchboard/api',
     'io.ox/switchboard/presence',
-    'io.ox/mail/sanitizer',
     'io.ox/chat/util',
     'io.ox/core/http',
     'io.ox/core/notifications',
     'settings!io.ox/chat',
     'gettext!io.ox/chat'
-], function (ext, api, events, contactsApi, switchboardApi, presence, sanitizer, util, http, notifications, settings, gt) {
+], function (ext, api, events, systemMessage, contactsApi, switchboardApi, presence, util, http, notifications, settings, gt) {
 
     'use strict';
 
@@ -230,90 +230,8 @@ define('io.ox/chat/data', [
             return api.url + '/rooms/' + this.get('roomId') + '/messages';
         },
 
-        getBody: function () {
-            if (this.isSystem()) return this.getSystemMessage();
-            if (this.hasPreview()) return this.getFilesPreview();
-            if (this.isFile()) return util.getFileText({ model: this });
-            if (this.isDeleted()) return gt('This message was deleted');
-            return _.escape(this.get('content'));
-        },
-
         getSystemMessage: function () {
-            var event = JSON.parse(this.get('content') || '{}');
-            var originator = this.get('sender'),
-                members = event.members || [],
-                // also support unjoined channels
-                room = data.chats.get(this.get('roomId')) || data.channels.get(this.get('roomId'));
-
-            if (!_.isArray(members) && _.isObject(members)) members = Object.keys(members);
-
-            if (room.get('type') === 'channel' && event.type === 'members:added') event.type = 'channel:joined';
-            if (event.type === 'members:removed' && members.length === 1 && members[0] === originator) event.type = 'room:left';
-
-            var me = originator === data.user.email,
-                originatorName = getName(originator),
-                names = getNames(_.difference(members, [originator])),
-                participantCount = _.difference(members, [originator]).length,
-                outerElem = $('<div>'),
-                baton = new ext.Baton({ model: this, event: event });
-
-            ext.point('io.ox/chat/commands/render/' + event.type).invoke('render', outerElem, baton);
-
-            var content = outerElem.prop('innerHTML');
-            if (content) return content;
-
-            switch (event.type) {
-                case 'room:created':
-                    if (me) return gt('You created this conversation');
-                    //#. %1$s: name of the creator
-                    return gt('%1$s created this conversation', originatorName);
-                case 'channel:joined':
-                    if (me) return gt('You joined the conversation');
-                    //#. %1$s: name of the new participant
-                    return gt('%1$s joined the conversation', getNames(members));
-                case 'members:added':
-                    //#. %1$s: name of the added participant or participants and can be a single name or a comma separated list of names
-                    if (me) return gt.ngettext('You added %1$s to the conversation', 'You added %1$s to the conversation', participantCount, names);
-                    //#. %1$s: name of the participant that added the new participant
-                    //#. %2$s: name of the added participant or participants and can be a single name or a comma separated list of names
-                    return gt.ngettext('%1$s added %2$s to the conversation', '%1$s added %2$s to the conversation', participantCount, originatorName, names);
-                case 'members:removed':
-                    //#. %1$s: name of the removed participant or participants and can be a single name or a comma separated list of names
-                    if (me) return gt.ngettext('You removed %1$s from the conversation', 'You removed %1$s from the conversation', participantCount, names);
-                    //#. %1$s: name of the participant that removed the other participant
-                    //#. %2$s: name of the removed participant or participants and can be a single name or a comma separated list of names
-                    return gt.ngettext('%1$s removed %2$s from the conversation', '%1$s removed %2$s from the conversation', participantCount, originatorName, names);
-                case 'image:changed':
-                    if (me) return gt('You changed the group image');
-                    //#. %1$s: name of a chat participant
-                    return gt('%1$s changed the group image', originatorName);
-                case 'title:changed':
-                    if (me) return gt('You changed the group title to "%1$s"', event.title);
-                    //#. %1$s: name of a chat participant
-                    //#. %2$s: the new title
-                    return gt('%1$s changed the group title to "%2$s"', originatorName, event.title);
-                case 'changeDescription':
-                    if (me) return gt('You changed the group description to "%1$s"', event.description);
-                    //#. %1$s: name of a chat participant
-                    //#. %2$s: the new description
-                    return gt('%1$s changed the group description to "%2$s"', originatorName, event.description);
-                case 'room:left':
-                    if (me) return gt('You left the conversation');
-                    //#. %1$s: name of a chat participant
-                    return gt('%1$s left the conversation', originatorName);
-                case 'me':
-                    // no need to translate this
-                    return _.printf('%1$s %2$s', originatorName, event.message);
-                case 'text':
-                    return event.message;
-                case 'decryption:failed':
-                    //#. If it fails to load and decrypt a chat message a system message will be shown
-                    return gt('Message could not be loaded');
-                default:
-                    if (event.text) return event.text;
-                    //#. %1$s: messagetext
-                    return gt('Unknown system message: %1$s', event.type);
-            }
+            return systemMessage.render(this, data);
         },
 
         getFileUrl: function (file) {
@@ -325,12 +243,6 @@ define('io.ox/chat/data', [
         getTime: function () {
             // use time when this message was last changed or when it was created
             return moment(this.get('edited') || this.get('date')).format('LT');
-        },
-
-        getTextBody: function () {
-            if (this.isSystem()) return this.getSystemMessage();
-            if (this.isFile()) return util.getFileText({ model: this });
-            return $.txt(sanitizer.simpleSanitize(this.get('content')));
         },
 
         isSystem: function () {
@@ -654,12 +566,17 @@ define('io.ox/chat/data', [
             return this.get('title') || members.invoke('getName').sort().join('; ');
         },
 
-        getLastMessage: function () {
+        // returns unescaped text -- do NOT use with append() or html()
+        getLastMessageText: function () {
             var last = this.get('lastMessage');
             if (!last) return '\u00a0';
-            var message = new MessageModel(last);
-            if (message.isFile()) return util.getFileText({ model: message, download: false });
-            return message.getTextBody();
+            var message = new MessageModel(_.extend({ roomId: this.get('roomId') }, last));
+            if (message.isSystem()) return _.stripTags(message.getSystemMessage());
+            var file = message.getFile();
+            if (file) return (file.isImage ? '📷' : '📄') + ' ' + file.name;
+            var showSender = !message.isMyself() && !this.isPrivate() && !message.isSystem();
+            var sender = showSender && data.users.getByMail(message.get('sender'));
+            return (sender ? sender.getName() + ': ' : '') + message.get('content');
         },
 
         getLastMessageDate: function () {
@@ -767,6 +684,12 @@ define('io.ox/chat/data', [
                     notifications.yell('error', gt('Something went wrong. Please try again.'));
                     break;
             }
+        },
+
+        // just locally; not posting the message
+        addSystemMessage: function (data) {
+            var json = _.isString(data) ? data : JSON.stringify(data);
+            this.messages.add({ type: 'system', content: json }, { merge: true, parse: true });
         },
 
         postMessage: (function () {
@@ -1220,41 +1143,12 @@ define('io.ox/chat/data', [
 
     data.session = new SessionModel();
 
+    // temp. hack to pass "data" to system-message (this whole structure needs a clean up)
+    systemMessage.pass(data);
+
     ox.on('refresh^', function () {
         data.session.refresh();
     });
-
-    //
-    // Helpers
-    //
-
-    function getName(email) {
-        return getNames([email]);
-    }
-
-    function getNames(list) {
-        list = list.map(function (email) {
-            var model = data.users.getByMail(email);
-            var name = (model ? model.getName() : gt('Unknown user'));
-            //#. shown instead of your name for your own chat messages when you're mentioned in a group of names
-            if (email === data.user.email) name = gt('You');
-
-            return name;
-        });
-
-        var and =
-            //#. used to concatenate two participant names
-            //#. make sure that the leading and trailing spaces are also in the translation
-            gt(' and '),
-            delimiter =
-            //#. This delimiter is used to concatenate a list of participant names
-            //#. make sure, that the trailing space is also in the translation
-            gt(', ');
-
-        list = list.length === 2 ? list.join(and) : list.join(delimiter);
-
-        return $('<span class="name">').text(list).prop('outerHTML');
-    }
 
     return data;
 });

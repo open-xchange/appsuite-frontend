@@ -21,6 +21,7 @@ define('io.ox/chat/commands', [
 
     'use strict';
 
+    var commands = {};
     var regex = /^\s*\/(\w+)$/;
 
     events.on('message:post', function (e) {
@@ -30,13 +31,75 @@ define('io.ox/chat/commands', [
     });
 
     events.on('message:command', function (e) {
-        events.trigger('message:command:' + e.command, { room: e.room, consume: e.consume });
+        e.consume();
+        var command = commands[e.command];
+        if (!command) return e.room.addSystemMessage({ command: e.command, type: 'text', message: gt('Unknown command: %1$s', e.command) });
+        var payload = { room: e.room, consume: e.consume };
+        command.callback(payload);
+        events.trigger('message:command:' + e.command, payload);
     });
+
+    // Register command
+    // Mandatory parameters: command and callback
+    // Nice to have: description
+    function register(options) {
+        if (!options || !options.command || !_.isFunction(options.callback)) {
+            return console.error('Unable to register command', options);
+        }
+        commands[options.command] = options;
+    }
 
     // built-in commands
 
+    register({
+        command: 'commands',
+        callback: function (e) {
+            var list = _(commands)
+                .chain()
+                .values()
+                .sortBy('command')
+                .map(function (data) {
+                    return '\n<b>/' + data.command + '</b> ' + _.escape(data.description || '');
+                })
+                .value();
+            e.room.addSystemMessage({ command: 'commands', type: 'text', message: gt('Supported commands: %1$s', list) });
+        },
+        description: gt('List all commands')
+    });
+
+    // register({
+    //     command: 'format',
+    //     callback: function (e) {
+    //         e.room.addSystemMessage({ command: 'format', type: 'text', message: 'Test!' });
+    //     },
+    //     description: gt('Show formatting options'),
+    //     render: function (options) {
+    //     }
+    // });
+
+    register({
+        command: 'version',
+        callback: function (e) {
+            e.room.addSystemMessage({ command: 'version', type: 'text', message: gt('Server version: %1$s', data.serverConfig.version) });
+        },
+        description: gt('Show server version')
+    });
+
+    register({
+        command: 'zoom',
+        callback: startCall.bind(null, 'zoom'),
+        description: gt('Start a Zoom meeting'),
+        render: renderCall
+    });
+
+    register({
+        command: 'jitsi',
+        callback: startCall.bind(null, 'jitsi'),
+        description: gt('Start a Jitsi meeting'),
+        render: renderCall
+    });
+
     function startCall(type, e) {
-        e.consume();
         var members = _(e.room.get('members')).chain().keys().without(api.userId).value();
         require(['io.ox/switchboard/call/api'], function (call) {
             call.start(type, members).then(function (dialog) {
@@ -56,56 +119,33 @@ define('io.ox/chat/commands', [
         });
     }
 
-    function printVersion(e) {
-        e.consume();
-        e.room.messages.add({ type: 'system',
-            content: JSON.stringify({
-                type: 'text',
-                message: gt('Server version: %1$s', data.serverConfig.version)
-            })
-        }, { merge: true, parse: true });
-    }
+    function renderCall(options) {
 
-    ext.point('io.ox/chat/commands/register').extend({
-        id: 'zoom',
-        register: function () {
-            this.on('message:command:zoom', startCall.bind(null, 'zoom'));
-        }
-    }, {
-        id: 'jitsy',
-        register: function () {
-            this.on('message:command:jitsi', startCall.bind(null, 'jitsi'));
-        }
-    }, {
-        id: 'version',
-        register: function () {
-            this.on('message:command:version', printVersion);
-        }
-    });
-    ext.point('io.ox/chat/commands/register').invoke('register', events);
+        var model = options.model;
+        var json = options.json;
+        var href = _.escape(json.link);
+        if (!href) return $();
+        var sender = model.get('sender');
+        var caller = data.users.getName(sender) || sender;
 
-    function renderCall(baton) {
-        var model = baton.model,
-            event = baton.event,
-            link = $('<a target="_blank" rel="noopener">').attr('href', event.link).text(event.link).prop('outerHTML'),
-            caller = data.users.getName(model.get('sender')) || model.get('sender');
-
-        if (!event.link) return;
-
-        this.append(
-            gt('%1$s is calling.', caller)
-                // \uD83D\uDCDE is phone receiver
-                + ' \uD83D\uDCDE\n'
-                //#. %1$s is a link
-                + gt('Please click the following link to join: %1$s', link)
+        return $('<a class="content incoming-call" target="_blank" rel="noopener">').attr('href', href).append(
+            $('<i class="fa fa-phone" aria-hidden="true">'),
+            $('<div class="caller ellipsis">').text(gt('%1$s is calling', caller)),
+            $('<div class="join-link ellipsis">').text(href)
         );
     }
 
-    ext.point('io.ox/chat/commands/render/zoom').extend({
-        render: renderCall
-    });
+    return {
 
-    ext.point('io.ox/chat/commands/render/jitsi').extend({
-        render: renderCall
-    });
+        register: register,
+
+        get: function (id) {
+            return commands[id];
+        },
+
+        getRender: function (id) {
+            var command = commands[id];
+            return command && command.render;
+        }
+    };
 });

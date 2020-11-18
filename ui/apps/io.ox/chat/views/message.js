@@ -18,11 +18,12 @@ define('io.ox/chat/views/message', [
     'io.ox/chat/views/avatar',
     'io.ox/chat/events',
     'io.ox/chat/util',
+    'io.ox/chat/commands',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/extensions',
     'settings!io.ox/chat',
     'gettext!io.ox/chat'
-], function (DisposableView, ContentView, data, Avatar, events, util, Dropdown, ext, settings, gt) {
+], function (DisposableView, ContentView, data, Avatar, events, util, commands, Dropdown, ext, settings, gt) {
 
     'use strict';
     // maybe move this to a own file when more icons are introduced
@@ -55,13 +56,10 @@ define('io.ox/chat/views/message', [
                 .toggleClass('highlight', !!messageId && messageId === this.options.messageId)
                 .toggleClass('editable', model.isEditable())
                 .append(
-                    // sender avatar & name
                     this.renderSender(),
                     // TBD: do we really need this?
                     // this.renderUploadMessage(),
-                    // content
-                    new ContentView({ model: this.model }).render().$el,
-                    // show some indicator dots when a menu is available
+                    this.renderContent(),
                     this.renderMenu(),
                     // delivery state
                     !isChannel && !this.model.isSystem() ? $(deliveryIcon).addClass('delivery').addClass(model.getDeliveryState()) : $()
@@ -86,6 +84,18 @@ define('io.ox/chat/views/message', [
                     $('<span class="time">').text(this.model.getTime())
                 )
             ];
+        },
+
+        renderContent: function () {
+            try {
+                var json = this.model.isSystem() && JSON.parse(this.model.get('content'));
+                var render = json && commands.getRender(json.command || 'zoom');
+                return render ?
+                    render({ model: this.model, json: json }) :
+                    new ContentView({ model: this.model }).render().$el;
+            } catch (e) {
+                if (ox.debug) console.error(e);
+            }
         },
 
         renderMenu: function () {
