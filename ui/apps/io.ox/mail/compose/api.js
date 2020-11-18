@@ -256,7 +256,7 @@ define('io.ox/mail/compose/api', [
                 data: formData
             }),
             process = upload.then(function (res) {
-                return res.data;
+                return processAttachment(res.data);
             });
 
         // keep abort function as attribute of the returning promise
@@ -292,12 +292,12 @@ define('io.ox/mail/compose/api', [
 
         add: function (space, data, type) {
             var url = ox.apiRoot + '/mail/compose/' + space + '/attachments';
-            return upload(url, data, type).then(processAttachment);
+            return upload(url, data, type);
         },
 
         update: function (space, data, type, attachmentId) {
             var url = ox.apiRoot + '/mail/compose/' + space + '/attachments/' + attachmentId;
-            return upload(url, data, type).then(processAttachment);
+            return upload(url, data, type);
         },
 
         get: function (space, attachment) {
