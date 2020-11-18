@@ -201,7 +201,8 @@ module.exports.config = {
         if (defaultContext.id !== 10) defaultContext.remove();
 
         var { contexts } = global.inject();
-        await Promise.all(contexts.filter(ctx => ctx.id > 100).map(ctx => ctx.remove()));
+
+        await Promise.all(contexts.filter(ctx => ctx.id > 100).map(ctx => ctx.remove().catch(e => console.error(e.message))));
 
         //HACK: defer killing selenium, because it's still needed for a few ms
         setTimeout(function () {
