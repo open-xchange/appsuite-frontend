@@ -82,24 +82,42 @@ define('io.ox/files/favorite/listview', [
                 if (model.folder_name) {
                     folders.push(model.id);
                 } else {
-                    files.push(model);
+                    files.push({
+                        id: model.attributes.id,
+                        folder_id: model.attributes.folder_id
+                    });
                 }
             });
-            require(['io.ox/files/api']).then(function (FilesAPI) {
-                return FilesAPI.getList(files, { errors: true, cache: cache, onlyAttributes: true }).then(function (favoriteFiles) {
-                    return FolderAPI.multiple(folders, { errors: true, cache: cache }).then(function (favoriteFolders) {
 
-                        // Elements to be shown in the listView
-                        var resetElements = [];
-                        _.each(favoriteFolders, function (elem) {
-                            resetElements.push(elem);
-                        });
-                        _.each(favoriteFiles, function (elem) {
-                            resetElements.push(elem);
-                        });
-                        self.collection.reset(resetElements);
-                    });
+            var folderDef = $.Deferred();
+            var fileDef = $.Deferred();
+
+            FilesAPI.getList(files, { errors: true, cache: cache, fullModels: true }).then(function (responses) {
+                var fileList = _(responses).filter(function (response) {
+                    return !response.error;
                 });
+                fileDef.resolve(fileList);
+            });
+
+            FolderAPI.multiple(folders, { errors: true, cache: cache }).then(function (favoriteFolders) {
+                folderDef.resolve(favoriteFolders);
+            });
+
+            return $.when(folderDef, fileDef).then(function (favoriteFolders, favoriteFiles) {
+                // Folders/Filse to be shown in the listView
+                var resetElements = [];
+
+                _.each(favoriteFolders, function (folder) {
+                    var folderModel = FolderAPI.pool.getModel(folder.id);
+
+                    resetElements.push(new FilesAPI.Model(folderModel.toJSON()));
+                });
+
+                _.each(favoriteFiles, function (elem) {
+                    resetElements.push(elem);
+                });
+
+                self.collection.reset(resetElements);
             });
         },
         sortBy: function () {

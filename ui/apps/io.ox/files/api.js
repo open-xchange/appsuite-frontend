@@ -1037,11 +1037,15 @@ define('io.ox/files/api', [
          *   Return FileDescriptor or Model List
          *  @param {Boolean} options.cache
          *   Use cache or nocache
+         *  @param {Boolean} options.errors
+         *   If false(default) and one file has an error (e.g. file not found) the promise fail and the result is an error
+         *   If true the promise not fail and returns all files. If a file has an error the object for the file is the error and
+         *   the file id.
          */
         return function (ids, options) {
 
             var uncached = ids, collection = pool.get('detail');
-            options = _.extend({ cache: true }, options);
+            options = _.extend({ cache: true, errors: false }, options);
 
             // empty?
             if (ids.length === 0) return $.when([]);
@@ -1052,21 +1056,56 @@ define('io.ox/files/api', [
             // all cached?
             if (options.fullModels && uncached.length === 0) return $.when(_(ids).map(has, collection));
             if (uncached.length === 0) return $.when(_(ids).map(getter, collection));
+            // options.erros === false. If an error in one file occurred
+            if (!options.errors) {
+                return http.fixList(uncached, http.PUT({
+                    module: 'files',
+                    params: { action: 'list', columns: allColumns, timezone: 'UTC' },
+                    data: http.simplify(uncached)
+                }))
+                .then(function (array) {
+                    // add new items to the pool
+                    _(array.filter(Boolean)).each(mergeDetailInPool);
+                    // reconstruct results
+                    if (options.fullModels) {
+                        return _(ids).map(has, collection);
+                    }
+                    return _(ids).map(getter, collection);
+                });
+            }
 
-            return http.fixList(uncached, http.PUT({
-                module: 'files',
-                params: { action: 'list', columns: allColumns, timezone: 'UTC' },
-                data: http.simplify(uncached)
-            }))
-            .then(function (array) {
-                // add new items to the pool
-                _(array.filter(Boolean)).each(mergeDetailInPool);
-                // reconstruct results
-                if (options.fullModels) {
-                    return _(ids).map(has, collection);
-                }
-                return _(ids).map(getter, collection);
-            });
+            try {
+                http.pause();
+                return $.when.apply($, _.map(ids, function (file) {
+                    return api.get(file, { cache: options.cache }).pipe(
+                        null,
+                        function fail(error) {
+                            // need to create a copy of the error, because http.resume will throw the same error if the /PUT multiple fails (see Bug 57323)
+                            error = _.extend({}, error);
+                            error.file = file;
+                            return $.when(error);
+                        }
+                    );
+                })).pipe(function () {
+                    var responses = _(arguments).toArray();
+
+                    return _.map(responses, function (response) {
+                        // add file attributes
+                        if (!!response && !response.error) {
+                            if (options.fullModels) {
+                                return has.call(collection, response);
+                            }
+                            return getter.call(collection, response);
+
+                        }
+                        return response;
+                    });
+
+                });
+            } finally {
+                http.resume();
+            }
+
         };
 
     }());

@@ -34,9 +34,7 @@ define('io.ox/files/favorites', [
     var // register collection
         collectionId = 'virtual/favorites/infostore',
         model = folderAPI.pool.getModel(collectionId),
-        collection = folderAPI.pool.getCollection(collectionId),
-        // track folders without permission or that no longer exist
-        invalid = {};
+        collection = folderAPI.pool.getCollection(collectionId);
 
     // Add infos for the filesview
     model.set('title', gt('Favorites'));
@@ -217,7 +215,6 @@ define('io.ox/files/favorites', [
     }
 
     function refreshCollection() {
-        var cache = !collection.expired && collection.fetched;
 
         // get saved favorites from setting
         var folderSettings = settings.get(FOLDERS_INFOSTORE_PATH, []);
@@ -226,22 +223,23 @@ define('io.ox/files/favorites', [
         var folderDef = $.Deferred();
         var fileDef = $.Deferred();
 
-        folderAPI.multiple(folderSettings, { errors: true, cache: cache }).then(function (response) {
+        folderAPI.multiple(folderSettings, { errors: true, cache: false }).then(function (responses) {
             // remove non-existent entries
-            var responseList = _(response).filter(function (item) {
+            var folderList = _(responses).filter(function (item) {
                 if (item.error && /^(FLD-0008|FLD-0003|ACC-0002|FLD-1004|IMAP-1002|FILE_STORAGE-0004)$/.test(item.code)) {
-                    invalid[item.id] = true;
                     return false;
                 }
-                delete invalid[item.id];
                 return true;
             });
 
-            folderDef.resolve(responseList);
+            folderDef.resolve(folderList);
         });
 
-        filesAPI.getList(fileSettings, { errors: true, cache: cache, fullModels: true }).then(function (response) {
-            fileDef.resolve(response);
+        filesAPI.getList(fileSettings, { cache: false, errors: true, fullModels: true }).then(function (responses) {
+            var fileList = _(responses).filter(function (response) {
+                return !response.error;
+            });
+            fileDef.resolve(fileList);
         });
 
         return $.when(folderDef, fileDef).then(function (favoriteFolders, favoriteFiles) {
@@ -252,24 +250,29 @@ define('io.ox/files/favorites', [
                 if (folder) {
                     folderAPI.injectIndex.bind(folderAPI, folder);
                     var folderModel = folderAPI.pool.getModel(folder.id);
-                    // convert folder model into file model
-                    folderModel = new filesAPI.Model(folderModel.toJSON());
-                    filesAPI.pool.add('detail', folderModel.toJSON());
-                    returnList.push(folderModel);
+                    if (!folderAPI.is('trash', model.toJSON())) {
+                        // convert folder model into file model
+                        folderModel = new filesAPI.Model(folderModel.toJSON());
+                        filesAPI.pool.add('detail', folderModel.toJSON());
+                        returnList.push(folderModel);
 
-                    folders.push(folder.id);
+                        folders.push(folder.id);
+                    }
                 }
             });
 
             _.each(favoriteFiles, function (file) {
                 if (file) {
-                    folderAPI.injectIndex.bind(folderAPI, file);
-                    returnList.push(file);
+                    var model = folderAPI.pool.getModel(file.attributes.folder_id);
+                    if (!folderAPI.is('trash', model.toJSON())) {
+                        folderAPI.injectIndex.bind(folderAPI, file);
+                        returnList.push(file);
 
-                    files.push({
-                        id: file.attributes.id,
-                        folder_id: file.attributes.folder_id
-                    });
+                        files.push({
+                            id: file.attributes.id,
+                            folder_id: file.attributes.folder_id
+                        });
+                    }
                 }
             });
 
