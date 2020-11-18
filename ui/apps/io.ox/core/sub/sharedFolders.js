@@ -92,19 +92,46 @@ define('io.ox/core/sub/sharedFolders', [
     }
 
     function openDialog(data) {
-        data.dialog.on('subscribe', function () {
-            data.dialog.close();
-
+        var updateSubscriptions = function (ignoreWarning) {
             http.pause();
 
             _.each(data.hash, function (obj, id) {
-                api.update(id, obj);
+                api.update(id, obj, ignoreWarning);
             });
 
             http.resume().done(function () {
+                // finish this once MW is done
+                // leaving this in so translations can be done already
+                var insertSpecialFederatedSharingWarningHere = false;
+                if (insertSpecialFederatedSharingWarningHere) {
+                    new ModalDialog({
+                        top: 60,
+                        width: 600,
+                        center: false,
+                        async: false
+                    })
+                    .addCancelButton()
+                    .addButton({ label: gt('OK'), action: 'confirm' })
+                    .build(function () {
+                        //#. confirmation when the last folder associated with a domain is unsubscribed
+                        //#. %1$s folder that was unsubscribed
+                        //#. %2$s domain like google.com etc
+                        this.$body.append(gt('After unsubscribing from "%1$s", all folders from the domain "%2$s" will be removed. You can subscribe again by using the invitation mail.', 'testfolder', 'testdomain'));
+                    })
+                    .on('confirm', function () {
+                        updateSubscriptions(true);
+                    })
+                    .open();
+                    return;
+                }
+
                 if (options.refreshFolders && _(data.hash).size() > 0) api.refresh();
             });
+        };
 
+        data.dialog.on('subscribe', function () {
+            data.dialog.close();
+            updateSubscriptions();
         });
 
         ext.point(options.point).invoke('render', data.dialog);
