@@ -132,14 +132,20 @@ define('io.ox/mail/invitations/register', [
 
             // remove undefined
             data = _.pick(data, _.identity);
-            if (!/^(analyze|subscribe|unsubscribe|resubscribe)$/.test(action)) return $.Deferred().reject({ error: 'unknwon action' });
+            if (!/^(analyze|subscribe|unsubscribe|resubscribe)$/.test(action)) return $.Deferred().reject({ error: 'unknown action' });
 
             return http.PUT({
                 module: 'share/management',
                 params: { action: action },
                 data: data
             }).then(
-                function done() {
+                function done(result) {
+                    // add/remove new accounts in the filestorage cache
+                    if (action !== 'analyze' && result && result.account !== undefined) {
+                        require(['io.ox/core/api/filestorage'], function (filestorageApi) {
+                            filestorageApi.getAllAccounts(false);
+                        });
+                    }
                     // api refresh
                     var yell = self.options.yell;
                     if (yell !== false) {
