@@ -135,6 +135,13 @@ define('io.ox/chat/views/chat', [
         }
     });
 
+    function isUnderFileSizeLimit(file) {
+        var sizeLimit = data.serverConfig.maxFileSize || -1;
+        if (file.size < sizeLimit) return true;
+        notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', file.name, strings.fileSize(sizeLimit)));
+        return false;
+    }
+
     var ChatView = DisposableView.extend({
 
         className: 'chat abs',
@@ -214,8 +221,8 @@ define('io.ox/chat/views/chat', [
             // DnD support
             var zone = dropzone.add(this);
             this.listenTo(zone, 'drop', function (files) {
-                _(files).each(function (file) {
-                    this.model.postMessage({ content: '' }, file);
+                files.forEach(function (file) {
+                    if (isUnderFileSizeLimit(file)) this.model.postMessage({ content: '' }, file);
                 }, this);
             });
         },
@@ -509,25 +516,23 @@ define('io.ox/chat/views/chat', [
             this.$('.file-upload-input').trigger('click');
         },
 
-        onFileupload: function () {
-            var $input = this.$('.file-upload-input'),
-                files = _.toArray($input[0].files),
-                sizeLimit = data.serverConfig.maxFileSize || -1;
+        onFileuploadNew: function () {
+            var $input = this.$('.file-upload-input');
+            var files = $input[0].files;
+            if (files.length <= 0) return;
+            for (var i = 0; i <= files.length - 1; i++) this.model.postMessage({ content: '' }, files.item(i));
+            $input.val('');
+        },
 
-            if (sizeLimit > 0) {
-                for (var i = 0; i < files.length; i++) {
-                    if (files[i].size > sizeLimit) {
-                        notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', files[i].name, strings.fileSize(sizeLimit)));
-                        $input.val('');
-                        return;
-                    }
+        onFileupload: function () {
+            var $input = this.$('.file-upload-input');
+            var files = $input[0].files;
+            if (files.length > 0) {
+                for (var i = 0; i <= files.length - 1; i++) {
+                    var file = files.item(i);
+                    if (isUnderFileSizeLimit(file)) this.model.postMessage({ content: '' }, file);
                 }
             }
-
-            files.forEach(function (file) {
-                this.model.postMessage({ content: '' }, file);
-            }.bind(this));
-
             $input.val('');
         },
 
