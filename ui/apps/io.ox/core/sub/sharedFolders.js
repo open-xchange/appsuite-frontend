@@ -70,7 +70,8 @@ define('io.ox/core/sub/sharedFolders', [
             point: options.point,
             title: options.title,
             render: false,
-            noSync: options.noSync
+            noSync: options.noSync,
+            tooltip: options.tooltip
         });
 
         dialog
@@ -177,7 +178,7 @@ define('io.ox/core/sub/sharedFolders', [
                     model: this.model,
                     label: ''
 
-                }).render().$el.attr('title', gt('subscribe to calendar')),
+                }).render().$el.attr('title', this.opt.dialog.options.tooltip || gt('subscribe to calendar')),
                 $('<div class="item-name">').append(
                     $('<div>').text(getItemName(this.model.attributes))
                 ),

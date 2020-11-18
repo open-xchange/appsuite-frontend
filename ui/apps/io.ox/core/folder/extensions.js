@@ -239,6 +239,7 @@ define('io.ox/core/folder/extensions', [
                 module: module,
                 help: isContact ? 'ox.appsuite.user.sect.contacts.folder.displayshared.html' : 'ox.appsuite.user.sect.tasks.folder.displayshared.html',
                 title: isContact ? gt('Shared address books') : gt('Shared task folders'),
+                tooltip: isContact ? gt('subscribe address book') : gt('subscribe task folder'),
                 point: isContact ? 'io.ox/core/folder/subscribe-shared-address-books' : 'io.ox/core/folder/subscribe-shared-tasks-folders',
                 sections: {
                     public: isContact ? gt('Public address books') : gt('Public tasks folders'),
@@ -425,6 +426,7 @@ define('io.ox/core/folder/extensions', [
                                     shared: gt('Shared drive folders')
                                 },
                                 refreshFolders: true,
+                                tooltip: gt('subscribe folder'),
                                 noSync: true,
                                 // subscribe dialog is build for flat foldertrees, add special getData function to make it work for infostore
                                 // no cache or we would overwrite folder collections with unsubscribed folders
