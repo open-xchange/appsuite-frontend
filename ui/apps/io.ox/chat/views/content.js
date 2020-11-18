@@ -38,6 +38,8 @@ define('io.ox/chat/views/content', [
             this.inEditor = this.options.inEditor;
             this.listenTo(this.model, {
                 'change:content': this.onChangeBody,
+                // type change can happen when a message is deleted file->text preview->text. behave as if the content changed
+                'change:type': this.onChangeBody,
                 'change:time': this.onChangeTime,
                 'change:deliveryState': this.onChangeDelivery,
                 'change:edited': this.onChangeFlags,
@@ -137,7 +139,11 @@ define('io.ox/chat/views/content', [
         },
 
         onChangeDeleted: function () {
-            if (this.model.isDeleted()) this.$('.message-quote').remove();
+            if (this.model.isDeleted()) {
+                this.$('.message-quote').remove();
+                this.$file.remove();
+                this.$file = $();
+            }
         }
     });
 

@@ -1183,11 +1183,7 @@ define('io.ox/chat/data', [
                 data.chats.fetchUnlessExists(message.roomId).done(function (room) {
                     var messageModel = room.messages.get(message.messageId);
                     if (messageModel) {
-                        var typeChanged = message.type && messageModel.get('type') !== message.type;
-                        // if this message changed type we do a silent change and trigger a messageChanged event.
-                        // This way the message node is replaced fully instead of partial changes using multiple change listeners. We want avoid some strange half changed message nodes
-                        messageModel.set(message, { silent: typeChanged });
-                        if (typeChanged) events.trigger('message:changed', messageModel);
+                        messageModel.set(message);
                     } else if (room.get('lastMessage').messageId === message.messageId) {
                         room.set('lastMessage', _.extend({}, room.get('lastMessage'), message));
                     }
