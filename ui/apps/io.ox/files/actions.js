@@ -196,8 +196,6 @@ define('io.ox/files/actions', [
         collection: 'one && modify',
         matches: function (baton) {
             var model = baton.models[0];
-
-            if (!model.isOffice()) { return false; }
             return util.canEditDocFederated(model);
         },
         action: function (baton) {
@@ -421,7 +419,12 @@ define('io.ox/files/actions', [
     // TODO check action Mario
     new Action('io.ox/files/actions/default', {
         action: function (baton) {
-            actionsUtil.invoke('io.ox/files/actions/viewer', baton);
+            var model = baton.models && baton.models[0];
+            if (util.canEditDocFederated(model)) {
+                actionsUtil.invoke('io.ox/files/actions/edit-federated', baton);
+            } else {
+                actionsUtil.invoke('io.ox/files/actions/viewer', baton);
+            }
         }
     });
 

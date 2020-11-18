@@ -340,6 +340,10 @@ define('io.ox/files/util', [
          * return {Boolean} True if the file can be edited in the federated guest account
          */
         canEditDocFederated: function (fileModel) {
+            // early out
+            if (!fileModel) { return false; }
+            if (!fileModel.isOffice()) { return false; }
+
             // check if file is in federated shared file account
             if (!filestorageApi.isFederatedAccount(fileModel.getItemAccountSync())) { return false; }
 
@@ -347,9 +351,14 @@ define('io.ox/files/util', [
             var guestCapabilities = accountMeta && accountMeta.guestCapabilities;
             var canOpenInFederatedContext = false;
 
-            if (fileModel.isWordprocessing()) { canOpenInFederatedContext = guestCapabilities.indexOf('text') > 0; }
-            if (fileModel.isSpreadsheet()) { canOpenInFederatedContext = guestCapabilities.indexOf('spreadsheet') > 0; }
-            if (fileModel.isPresentation()) { canOpenInFederatedContext = guestCapabilities.indexOf('presentation') > 0; }
+            // Temporary workaround for use-case 'edit federated' in 7.10.5:
+            // Use local edit when office availible, and when not, check whether
+            // it can be edited in the federated context and open the guest drive as a fallback.
+            // Therefore the e.g. "!capabilities.has('text')" check was added, remove this part
+            // below when restoring the old behavior.
+            if (fileModel.isWordprocessing()) { canOpenInFederatedContext = !capabilities.has('text') && guestCapabilities.indexOf('text') > 0; }
+            if (fileModel.isSpreadsheet()) { canOpenInFederatedContext = !capabilities.has('spreadsheet') && guestCapabilities.indexOf('spreadsheet') > 0; }
+            if (fileModel.isPresentation()) { canOpenInFederatedContext = !capabilities.has('presentation') && guestCapabilities.indexOf('presentation') > 0; }
             return canOpenInFederatedContext;
         }
     };
